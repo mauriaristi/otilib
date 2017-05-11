@@ -2,6 +2,9 @@
 
 OTILIB. This repository contains the source code of an implementation of the OTI method in different programming languages.
 
+
+The wonderfull world of OTIs
+
 ### What is this repository for? ###
 
 * Quick summary

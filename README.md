@@ -66,10 +66,10 @@ Requirements:
 * Direct comments to the library should be addressed to Mauricio Aristizabal to [this e-mail](mailto:mauriaristi@gmail.com) with the subject: "[OTILIB]:*concern*: your subject "
 
 *concern* refers to one of the following (choose accordingly):
---> *CodeTroubleC*: C code bugs
---> *CodeTroublePy*: Python code bugs
---> *DocTrouble*: Documentation bugs
---> *ExampleTrouble*: Trouble in one of the examples.
+- *CodeTroubleC*: C code bugs
+- *CodeTroublePy*: Python code bugs
+- *DocTrouble*: Documentation bugs
+- *ExampleTrouble*: Trouble in one of the examples.
 
 
 ***

@@ -2,7 +2,7 @@
 
 **OTILIB** 
 
-This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages. OTI algebra is the extension from the imaginary numbers perspective to the Truncated Taylor Polynomials. They provide a concise extension of the Dual numbers ($a+b\epsilon,\;\epsilon^2=0$) and are applicable to computing high order derivatives computer programmed functions
+This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages. OTI algebra is the extension from the imaginary numbers perspective to the Truncated Taylor Polynomials. They provide a concise extension of the Dual numbers ( a + b eps, eps^2 = 0 ) and are applicable to computing high order derivatives computer programmed functions
 
 ***
 
@@ -26,8 +26,7 @@ The wonderful world of OTIs
 ## What is this repository for? 
 
 * Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* Version: 1.0
 
 
 ***

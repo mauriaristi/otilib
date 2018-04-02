@@ -1,0 +1,65 @@
+
+
+int n=100;
+
+mesh Th=square(n,n);
+savemesh(Th, "squareFreeFem.mesh");
+
+fespace Uh(Th,P2); 
+//Uh u,v,uu,vv; 
+Uh ux, uy, vx, vy;
+
+fespace Ph(Th,P1); 
+
+//Ph p,pp;
+Ph p,q;
+
+
+varf mat(p,q) = //int2d(Th)( dx(ux)*dx(vx) + dy(ux)*dy(vx)  ) ;//+ 
+                //int2d(Th)( dx(uy)*dx(vy) + dy(uy)*dy(vy)  ) ;// + 
+                //int2d(Th)( dx(p)*vx      + dy(p)*vy       ) ;// + 
+                //int2d(Th)( q*dx(ux)      + q*dy(uy)       ) ;// + 
+                int2d(Th)( p*q                   ) ;//+ 
+                //on(3,ux =  1) + on(3,uy = 0) +
+                //on(4,ux =  0) + on(4,uy = 0) +
+                //on(1,ux =  0) + on(1,uy = 0) +
+                //on(2,ux =  0) + on(2,uy = 0);
+
+
+//plot(Th,wait=1);
+
+//matrix A = mat([Uh,Uh,Ph],[Uh,Uh,Ph]);
+//varf mat([ux,uy],[vx,vy]) = int2d(Th)( dx(ux)*dx(vx) + dy(ux)*dy(vx)  )+
+//                            int2d(Th)( dx(uy)*dx(vy) + dy(uy)*dy(vy)  ) +
+//                            on(3,ux =  1) + on(3,uy = 0) +
+//                            on(4,ux =  0) + on(4,uy = 0) +
+//                            on(1,ux =  0) + on(1,uy = 0) +
+//                            on(2,ux =  0) + on(2,uy = 0);
+
+//matrix A = mat(Uh,Uh);
+
+//cout << "A = " << A << endl;
+
+
+solve stokes([ux,uy,p],[vx,vy,q]) = 
+    int2d(Th)( dx(ux)*dx(vx) + dy(ux)*dy(vx)  ) + 
+    int2d(Th)( dx(uy)*dx(vy) + dy(uy)*dy(vy)  ) + 
+    int2d(Th)( dx(p)*vx      + dy(p)*vy       ) + 
+    int2d(Th)( q*dx(ux)      + q*dy(uy)       ) + 
+    int2d(Th)( (-1e-10)*p*q                   ) + 
+    on(3,ux =  1) + on(3,uy = 0) +
+    on(4,ux =  0) + on(4,uy = 0) +
+    on(1,ux =  0) + on(1,uy = 0) +
+    on(2,ux =  0) + on(2,uy = 0) ;
+
+
+//   int2d(Th)( dx(u)*dx(uu) + dy(u)*dy(uu) ) +
+//   int2d(Th)( dx(v)*dx(vv) + dy(v)*dy(vv) ) +
+//   int2d(Th)( dx(p)*uu + dy(p)*vv         ) + 
+//   int2d(Th)( pp*dx(u) + pp*dy(v)         ) +
+//   int2d(Th)( (-1e-10)*p*pp               ) +
+//   on(1,2,4,u=0,v=0) + on(3,u=1,v=0);
+
+//plot(Th,wait=1);
+
+plot([ux,uy],ux,wait=1);

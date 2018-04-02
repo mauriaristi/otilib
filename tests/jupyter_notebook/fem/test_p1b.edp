@@ -1,0 +1,24 @@
+
+
+
+mesh Th = square(1,1);
+
+plot(Th);
+
+
+fespace Vh(Th,P2); 
+Vh X, Y;
+
+X = x;
+Y = y;
+
+real intX  = int2d(Th)(X);
+
+cout<<" the value is: " << intX << endl;
+
+
+cout << "X coords:     \n" << X[] << endl<< endl;
+cout << "Y coords:     \n" <<  Y[] << endl;
+
+
+plot([X,Y],wait=1);

@@ -1,0 +1,107 @@
+
+
+//
+//               +-----------------+
+//               |                 |
+//     Tleft     |                 |  Tright
+//               |                 |
+//               |                 |
+//               +-----------------+
+//
+load "iovtk" 
+
+
+
+real rho = 1.5;
+real Q   = 5.0;
+real Bi1 = 0.1;
+real Bi2 = 1.0;
+
+mesh Th = square(20,10,[1.0+(rho-1.0)*x,y]);
+
+
+fespace Vh(Th,P1);
+
+Vh Theta,w,ThetaAnalytic,diff;
+
+real K1 = (2.0*Bi2*Q-Bi1*Bi2*Q+2.0*Bi1*Q*rho-4.0*Bi1*Bi2+Bi1*Bi2*Q*rho^2);
+real KDiv = (Bi1*Bi2*rho*log(rho)+Bi1+Bi2*rho);
+real K2 = (2.0*Q*rho^2-4.0*Bi2*rho+Bi2*Q*rho^3-2.0*Bi2*Q*rho*log(rho)+
+	       Bi1*Bi2*Q*rho*log(rho)-2.0*Q+Bi1*Q);
+
+
+ThetaAnalytic = -0.25*Q*x^2 + 0.25*rho*log(x)*K1/KDiv + 0.25*K2/KDiv;
+
+problem heat(Theta,w)=
+   -int2d(Th)(    x * dx(Theta) * dx(w) )
+   -int2d(Th)(    x * dy(Theta) * dy(w) )
+   +int2d(Th)(    x * Q * w             )
+   -int1d(Th,4)(  x * w * Bi1 * Theta   )
+   -int1d(Th,2)(  x * w * Bi2 * Theta   )
+   -int1d(Th,2)(  x * w * Bi2           );
+
+
+heat;
+cout<<"Sol left: "<<Theta(1.0,0.0)<<endl;
+cout<<"Sol right: "<<Theta(1.5,0.0)<<endl;
+
+diff = ThetaAnalytic-Theta;
+// savevtk("heat_freefem.vtk",Th,T,dataname="T");
+
+{
+
+	string filename= "heat_freefem.vtk";	
+		
+	ofstream file(filename);              // Set vtk output file
+
+	file << "# vtk DataFile Version 4.1"  << endl << endl; // VTK's
+	file << "ASCII"                       << endl;         // polydata
+	file << "DATASET POLYDATA"            << endl << endl; // header
+
+	// Save points (vertices).
+	int numPoints = Th.nv;
+	file << "POINTS " << numPoints << " DOUBLE" << endl;
+	for (int i = 0; i < numPoints; i++){
+	  file << Th(i).x << " " << Th(i).y << " " << 0.0 << endl;
+	}
+	file << endl;
+
+	// Save triangles.
+	int numTriangs = Th.nt;
+	file << "POLYGONS " << numTriangs << " " << 4*numTriangs << endl;
+	for (int i = 0; i < numTriangs; i++){
+	  file << "3 " << Th[i][0] << " " << Th[i][1] << " " << Th[i][2] << endl;
+	}
+	file << endl;
+
+	// Save solution.
+	file << "POINT_DATA " << numPoints << endl;
+	file << "SCALARS " << "Theta" << " double" << endl;
+	file << "LOOKUP_TABLE default" << endl;
+	for (int i = 0; i < numPoints; i++){
+	  file << Theta(Th(i).x, Th(i).y) << endl;
+	}
+
+	// Save solution.
+	file << "SCALARS " << "ThetaAnalytic" << " double" << endl;
+	file << "LOOKUP_TABLE default" << endl;
+	for (int i = 0; i < numPoints; i++){
+	  file << ThetaAnalytic(Th(i).x, Th(i).y) << endl;
+	}
+
+
+
+	// Save solution.
+	file << "VECTORS " << "vec_T" << " double" << endl;
+	for (int i = 0; i < numPoints; i++){
+	  file <<" 0 0 "<<Theta(Th(i).x, Th(i).y) << endl;
+	}
+
+
+	file << endl;
+
+}
+
+plot(Th,diff);
+plot(Th,Theta,wait=1,cmm="Hello");
+

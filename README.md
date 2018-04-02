@@ -7,21 +7,21 @@ This is the repository for the implementation of Order Truncated Imaginary numbe
 ***
 
 ## Current Programming languages: 
-* **C**
-* **Python (3 or newer)**
+* **C** (C11)
+* **Python** (Version 3 or newerUsing cython)
 
-The following programming languages are to be implemented in a near future:
+The following programming languages are to be implemented in a very near future:
 
 * Fortran
-* C++
+* C++ (C++11)
 
-Other welcome implementations for further utilization of the method:
+Far-future implementation we are looking forward are:
 
-* Java / Javascript
 * Matlab
+* Java / Javascript
 * Julia
 
-The wonderfull world of OTIs
+The wonderful world of OTIs
 
 ## What is this repository for? 
 
@@ -41,8 +41,14 @@ The wonderfull world of OTIs
 * How to run tests
 * Deployment instructions
 
+### Requirements
 
-* Python version 3:
+#### **C** version
+
+The current version only depends on ```stdlib.h``` and ```math.h```
+
+#### Python version 3:
+
 
 Requirements:
 - Numpy
@@ -70,8 +76,6 @@ Requirements:
 ***
 
 
-## What is this repository for? 
+## Other things 
 
-* Quick summary
-* Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)

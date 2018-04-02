@@ -2,7 +2,7 @@
 
 **OTILIB** 
 
-This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages. OTI algebra is the extension from the imaginary numbers perspective to the Truncated Taylor Polynomials. They provide a concise extension of the Dual numbers ( a + b eps, eps^2 = 0 ) and are applicable to computing high order derivatives computer programmed functions
+This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages. OTI algebra is the extension from the imaginary numbers perspective to the Truncated Taylor Polynomials. They provide a concise extension of the Dual numbers ( a + b eps, eps^2 = 0 ) and are applicable to computing high order derivatives computer programmed functions.
 
 ***
 
@@ -12,14 +12,14 @@ This is the repository for the implementation of Order Truncated Imaginary numbe
 
 The following programming languages are to be implemented in a very near future:
 
-* Fortran
-* C++ (C++11)
+* **Fortran** (F95 or newer)
+* **C++** (C++11)
 
 Far-future implementation we are looking forward are:
 
-* Matlab
-* Java / Javascript
-* Julia
+* **Matlab**
+* **Java** / **Javascript**
+* **Julia**
 
 The wonderful world of OTIs
 

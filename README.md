@@ -2,7 +2,7 @@
 
 **OTILIB** This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages.
 
-## Current Programming languages: ## 
+## Current Programming languages: 
 * **C**
 * **Python (3 or newer)**
 
@@ -15,21 +15,17 @@ Other welcome implementations for further utilization of the method:
 
 * Java / Javascript
 * Matlab
-* 
-
-
-#
-
+* Julia
 
 The wonderfull world of OTIs
 
-### What is this repository for? ###
+### What is this repository for? 
 
 * Quick summary
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
-### How do I get set up? ###
+### How do I get set up? 
 
 * Summary of set up
 * Configuration

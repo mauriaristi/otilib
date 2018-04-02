@@ -49,7 +49,7 @@ Requirements:
 
 ### Who do I talk to? ###
 
-* Direct comments to the library should be addressed to Mauricio Aristizabal -> mauriaristi@gmail.com with the subject: "[OTILIB]:*concern*: your subject "
+* Direct comments to the library should be addressed to Mauricio Aristizabal to [this e-mail](mailto:mauriaristi@gmail.com) with the subject: "[OTILIB]:*concern*: your subject "
 
 *concern* refers to one of the following (choose accordingly):
 --> CodeTroubleC:     C code bugs

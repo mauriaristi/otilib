@@ -1,6 +1,24 @@
 # README #
 
-OTILIB. This repository contains the source code of an implementation of the OTI method in different programming languages.
+**OTILIB** This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages.
+
+## Current Programming languages: ## 
+* **C**
+* **Python (3 or newer)**
+
+The following programming languages are to be implemented in a near future:
+
+* Fortran
+* C++
+
+Other welcome implementations for further utilization of the method:
+
+* Java / Javascript
+* Matlab
+* 
+
+
+#
 
 
 The wonderfull world of OTIs
@@ -27,6 +45,7 @@ Requirements:
 - Numpy
 - Scipy
 - partitionsets
+- 
 
 ### Contribution guidelines ###
 

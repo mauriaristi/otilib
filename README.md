@@ -1,4 +1,4 @@
-# README #
+# OVERVIEW #
 
 **OTILIB** This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages.
 
@@ -41,15 +41,26 @@ Requirements:
 - Numpy
 - Scipy
 - partitionsets
-- 
 
 ### Contribution guidelines ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* To be defined
+
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* Direct comments to the library should be addressed to Mauricio Aristizabal -> mauriaristi@gmail.com with the subject: "[OTILIB]:*concern*: your subject "
+
+*concern* refers to one of the following (choose accordingly):
+--> CodeTroubleC:     C code bugs
+--> CodeTroublePy:   Python code bugs
+--> DocTrouble:         Documentation bugs
+--> ExampleTrouble:  Trouble in one of the examples.
+
+
+
+### What is this repository for? 
+
+* Quick summary
+* Version
+* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)

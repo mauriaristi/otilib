@@ -8,7 +8,7 @@ This is the repository for the implementation of Order Truncated Imaginary numbe
 
 ## Current Programming languages: 
 * **C** (C11)
-* **Python** (Version 3 or newerUsing cython)
+* **Python** (Version 3 or newer. We are currently using [Cython](http://cython.org)
 
 The following programming languages are to be implemented in a very near future:
 

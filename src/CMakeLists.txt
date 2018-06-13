@@ -106,10 +106,6 @@ target_link_libraries (otifem oti)
 
 FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/tmp_src)
 
-
-# FILE(COPY  cython/setup.py python/whereotilib.py  python/auxFunctions.py
-# 	DESTINATION "${PROJECT_BINARY_DIR}/tmp_src/" )
-
 # Copy the pure python files of the library to the library folder.
 FILE(COPY  python/whereotilib.py  python/auxFunctions.py
 	DESTINATION "${PROJECT_BINARY_DIR}/lib/" )
@@ -119,20 +115,22 @@ configure_file (
   "${PROJECT_SOURCE_DIR}/src/cython/setup.py.in"
   "${PROJECT_BINARY_DIR}/tmp_src/setup.py"
   )
+# include_directories( ${PROJECT_SOURCE_DIR}/include )
 
+# cython_add_module( otilib cython/otilib.pyx)
 
 ADD_CUSTOM_TARGET(otipython ALL
 	DEPENDS oti otifem)
 
-# 2. Execute Cython setup call 
+# # 2. Execute Cython setup call 
 ADD_CUSTOM_COMMAND (
 	TARGET     otipython
 	# POST_BUILD
-	COMMAND    CFLAGS="-I${PROJECT_SOURCE_DIR}/include" 
-	           LDFLAGS="-L${PROJECT_BINARY_DIR}/lib"   
-	           python3 ${PROJECT_BINARY_DIR}/tmp_src/setup.py build_ext -b${PROJECT_BINARY_DIR}/lib
+	# COMMAND    CFLAGS="-I${PROJECT_SOURCE_DIR}/include" 
+	#            LDFLAGS="-L${PROJECT_BINARY_DIR}/lib"   
+	COMMAND python3 ${PROJECT_BINARY_DIR}/tmp_src/setup.py build_ext -b${PROJECT_BINARY_DIR}/lib
 )
-# CFLAGS="-I../../include" LDFLAGS="-L../../build/lib" python3 setup.py build_ext -b../../build/lib
+# # CFLAGS="-I../../include" LDFLAGS="-L../../build/lib" python3 setup.py build_ext -b../../build/lib
 
 
 

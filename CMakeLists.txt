@@ -23,6 +23,7 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake )
 
 # Include the CMake script copyfiles.cmake. 
 include( copyfiles )
+include( UseCython )
 
 
 

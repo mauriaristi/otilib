@@ -13,11 +13,27 @@ except:
     print("copy from www.cython.org and install it")
     sys.exit(1) 
 
+
+
+# Set new environment flags.
+os.environ['CFLAGS'] = "-I@PROJECT_SOURCE_DIR@/include"
+os.environ['LDFLAGS']= "-L@PROJECT_BINARY_DIR@/lib"
+
+
+extensions = [Extension("otilib",
+	sources = ["@PROJECT_SOURCE_DIR@/src/cython/otilib.pyx"],
+	include_dirs = [numpy.get_include(), "@PROJECT_SOURCE_DIR@/include/","."],
+	# include_path=["@PROJECT_SOURCE_DIR@/include/"],
+	)]
+
+
 # finally, we can pass all this to distutils
 setup(
   name="OTILIB",
-  ext_modules  = cythonize('@PROJECT_SOURCE_DIR@/src/cython/*.pyx',   include_path=["@PROJECT_SOURCE_DIR@/include/"]),
-  include_dirs = [numpy.get_include(), "@PROJECT_SOURCE_DIR@/include/","."],
+  # ext_modules  = cythonize('@PROJECT_SOURCE_DIR@/src/cython/*.pyx',   include_path=["@PROJECT_SOURCE_DIR@/include/"]),
+  ext_modules = cythonize(extensions,   include_path=["@PROJECT_SOURCE_DIR@/include/"]),
+  # zip_safe    = False,
+  # include_dirs = [numpy.get_include(), "@PROJECT_SOURCE_DIR@/include/","."],
 )
 
 # CFLAGS="-I../../include"  \

@@ -23,9 +23,9 @@
 # Library to handle sparse Order Truncated Imaginary Numbers in Python, with a particular
 # focus on automatic differentiation. \n\n
 #
-# <b> Current Version </b>: 0.8      \n
+# <b> Current Version </b>: 0.9      \n
 # <b> First Created </b>: 04/20/2016 \n
-# <b> Last Modified </b>: 09/15/2017 \n
+# <b> Last Modified </b>: 06/13/2018 \n
 #
 # <b>Contributors</b>: \n
 # Mauricio Aristizabal Cano\n

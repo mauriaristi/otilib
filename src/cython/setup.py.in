@@ -1,0 +1,25 @@
+
+import sys, os
+from distutils.core import setup
+from distutils.extension import Extension
+import numpy 
+
+# we'd better have Cython installed, or it's a no-go
+try:
+    from Cython.Distutils import build_ext 
+    from Cython.Build import cythonize
+except:
+    print("You don't seem to have Cython installed. Please get a")
+    print("copy from www.cython.org and install it")
+    sys.exit(1) 
+
+# finally, we can pass all this to distutils
+setup(
+  name="OTILIB",
+  ext_modules  = cythonize('@PROJECT_SOURCE_DIR@/src/cython/*.pyx',   include_path=["@PROJECT_SOURCE_DIR@/include/"]),
+  include_dirs = [numpy.get_include(), "@PROJECT_SOURCE_DIR@/include/","."],
+)
+
+# CFLAGS="-I../../include"  \
+# LDFLAGS="-L../../build/lib"     \
+# python3 setup.py build_ext -i

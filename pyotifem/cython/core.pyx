@@ -1,8 +1,38 @@
+# cython: boundscheck=False 
+# cython: wraparound=False 
+# cython: nonecheck=False 
+# cython: language_level=3
+# cython: profile=True
+# cython: linetrace=True
+# cython: binding=True
+# cython: embedsignature=False
+# distutils: define_macros=CYTHON_TRACE_NOGIL=1
+# distutils: libraries = oti otifem
+# distutils: extra_compile_args = -arch i386 -arch x86_64
+# filename: otifem.pyx
+
+import numpy as np                  # General numerical library
+cimport numpy as np                 # C-level functions of numpy
+from c_otilib cimport *             # OTI lib in C.
+cimport cython                      #
+
+from pyoti.core import   number_types, dHelp, getLatexDir 
+from pyoti.core cimport  p_dH, ZERO, ONE, get_cython_dHelp, dHelp
+from pyoti.core cimport  c_ptr_to_np_1darray_double 
+
+cdef dHelp h = get_cython_dHelp()
 
 
 
+from pyoti.otimat   import  otimat,solve, solveLU
+from pyoti.ndarray  import  ndarray, zeros
+from pyoti.sndarray import sndarray, spzeros, sarray
+from pyoti.sparse   import sotinum, se
 
-
+from pyoti.otimat   cimport otimat
+from pyoti.ndarray  cimport ndarray, zeros
+from pyoti.sndarray cimport sndarray, spzeros, sarray, c_sotiarray_print
+from pyoti.sparse cimport sotinum
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -19,104 +49,6 @@ cdef class feproblem:
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
   
-  # Global variables:
-  cdef public otimat   K     # Stiffness Matrix
-  cdef public otimat   Knobc # Stiffness Matrix before boundary conditions.
-  cdef public ndarray  f     # Force vector
-  cdef public ndarray  fnobc # Force vector before Boundary Conditions.
-  cdef public ndarray  u     # General Solution Vector.
-  cdef public mesh     mesh
-
-  # Only for usable for the 
-  cdef void** defFunc           # Constant holders for the assembly loop.  
-  
-
-  cdef public uint64_t intorder
-  cdef np.ndarray      derCompFlags
-
-  # Operations associated with K
-  cdef public list Koper
-
-  # Operations associated with f
-  cdef public list Foper
-
-  # Other important things
-  cdef public list      solFunc 
-  cdef public list     testFunc 
-  cdef public list     undefFuncToCheck  # Undefined functions that require to be checked before 
-                                         # assembly.
-  cdef public uint8_t DOF   # Degrees of Freedom.
-
-  cdef public fefunction problem
-
-  # Flagging convention
-  cdef public uint64_t flags 
-
-  cdef public uint64_t m      # Number of variables in the problem 
-    # Conventions:
-    # Bit  0 - Is the system assembled? True - 1  False - 0
-    # Bit  1 - 
-    # Bit  2 - 
-    # Bit  3 - 
-    # Bit  4 - 
-    # Bit  5 - 
-    # Bit  6 - 
-    # Bit  7 - 
-    # Bit  8 - 
-    # Bit  9 - 
-    # Bit 10 - 
-
-  cdef public uint64_t eDOF              # Elemental degrees of freedom
-  cdef public list     eDOFBound
-  cdef np.ndarray      eDOF_per_sol      # Elemental degrees of freedom per element.
-  cdef public list     eDOF_per_solBound # Elemental degrees of freedom per element Boundary.
-  cdef np.ndarray      nDOF_per_sol      # Global degrees of freedom per element.
-  cdef public list     nDOF_per_solBound
-  cdef public uint64_t globalDOF
-  cdef public list     globalDOFBound
-  cdef np.ndarray      nDOF_global_per_systemDOF
-  cdef public list     nDOF_global_per_systemDOFBound  
-  cdef np.ndarray      eOffset_per_StateVariable
-  cdef public list     eOffset_per_StateVariableBound
-  cdef np.ndarray      eId_per_DOF
-  cdef public list     eId_per_DOFBound
-  cdef uint8_t     boundaryFlag
-  
-
-  cdef public list       functionList 
-  cdef np.ndarray  expandedOperations
-  cdef public uint64_t  tmp_indx # defines the number of temporal elements in the operations.
-  cdef public uint64_t  noper
-  cdef public uint64_t  noperK
-  cdef public uint64_t  noperf
-  cdef public uint64_t  noperBC
-  cdef public uint64_t  noperDirichlet
-  cdef public uint64_t  noperNeumann
-  cdef public uint64_t  ndeffunc
-  cdef public uint64_t nIntPts
-
-  cdef public list defFuncList
-  cdef uint64_t    nDefFunc
-  cdef uint64_t    nOTIs
-  cdef uint64_t    nReals
-  cdef public list tmpIndx     # Temporal lists.
-  cdef public list tmpIndxFunc # Temporal lists.
-  cdef public list tmpIndxPos  # temporal list
-  cdef public list tmpTypes
-  cdef public list tmpShapesOffsets
-  cdef public list integrables
-  cdef public list uniqueOper
-
-  cdef public uint8_t order
-
-
-
-  cdef np.ndarray      expOperK
-  cdef np.ndarray      expOperf
-  cdef np.ndarray      expOperBCDir
-  cdef np.ndarray      expOperBCNeu
-  
-
   
 
 
@@ -2983,46 +2915,7 @@ cdef class mesh:
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
 
-  cdef public dict     cells        # Elements
-  cdef public dict     point_data   # Contains information of the points
-  cdef public dict     cell_data    # Contains information of the elements
-  cdef public dict     field_data   # Contains labels.
-  cdef public dict     nameIds      # Contains labels.
-  cdef public uint8_t  ndim         # Characteristic number of dimensions in the mesh.
-  cdef public sndarray xcoords      # Nodal coordinates as sndarrays.
-  cdef public sndarray ycoords      # Nodal coordinates as sndarrays.
-  cdef public sndarray zcoords      # Nodal coordinates as sndarrays.
-  cdef public uint8_t  otiorder     # order of the oti numbers it contains.
-  cdef public int64_t  baseGeomType # Basic geometric type
 
-  cdef public list elemTable        # List of elements in each dimension 
-                                    #[ 0D elems ->    ... ,
-                                    #  1D elems ->    ... ,
-                                    #  2D elems ->    ... ,
-                                    #  3D elems ->    ... ]
-
-  cdef np.ndarray   domainEls       # Elements that define the domain.
-  cdef np.ndarray   normalx         # x component of the boundary normal
-  cdef np.ndarray   normaly         # y component of the boundary normal
-  cdef np.ndarray   normalz         # z component of the boundary normal
-  cdef public  int64_t domainType    # Geometric type of the domain.
-  cdef public uint64_t domainElDofs  # D.O.Fs of the domain element.
-  cdef public  list boundaEls       # Elements that define the boundary elements.
-  cdef public  list boundaType      # Geometric type of the boundaries.
-  cdef public  list boundaElsIds    # Ids of the boundary elements 
-  cdef public  list elsIds
- 
-  cdef public list fespaces         # List of finite element spaces that are currently in the mesh.
-                                    # Is this required? or maybe only add the element types only?
- 
-  cdef public list elTypes          # List of interpolating functions defined for the triangulation.
-
-  cdef public uint64_t operationCount
-
-  cdef public fefunction x
-  cdef public fefunction y
-  cdef public fefunction z
-  cdef public uint8_t    xyzInit    # flag for initialization of x,y,z
 
   #---------------------------------------------------------------------------------------------------
 
@@ -4556,10 +4449,6 @@ cdef class fespace2:
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
 
-  cdef public mesh    mesh        # Triangulation related to this space.
-  cdef public elBase  elType     # Element type that defines the interpolation functions.
-  cdef public uint8_t fespaceId  # Id of the finite element space in the mesh.
-
 
   #---------------------------------------------------------------------------------------------------
 
@@ -4692,31 +4581,6 @@ cdef class fefunction:
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
 
-  cdef public fespace2    baseSpace     # Finite element space at which the variable is associated.
-  
-  cdef public int64_t     interpDer     # Interpolation derivative that is required in this operation.
-
-  cdef public uint64_t    intorder      # Polynomial order. The interpolation basis define an order.
-                                        # Then, the operations will increase the order of the 
-                                        # equivalent polynomials. That will modify the integration 
-                                        # parameters for numerical computations.
-
-  cdef public uint64_t    funcid        # Global Id of the function. 
-
-  cdef public int64_t     nature        # Nature of the function: 
-                                        #    feNatTest, feNatUndef, feNatDef
-
-  cdef public list shape      
-  cdef public list shapeBounds                
-  cdef public list position             # position in the matrix.
-  
-  cdef public object   data             # Data of the object, if defined already.
-  cdef public list     baseFunc         # A list to know which vars are associated to the number.
-
-
-  cdef np.ndarray  Koper                # Operations defined for Stiffness matrix.
-  cdef np.ndarray  foper                # Operations defined for Force vector.
-  cdef np.ndarray  essentialOper        # Operations defined for boundary conditions.
 
   #---------------------------------------------------------------------------------------------------
 
@@ -6060,10 +5924,7 @@ cdef class elBase:
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
 
-  cdef int a
-  cdef public uint8_t elorder # Element type order
-  cdef elemProps_t elemProps  # Properties of the element.
-  cdef public list  boundEls
+
 
   #---------------------------------------------------------------------------------------------------
 
@@ -7181,7 +7042,7 @@ cpdef list fem_getOrderedFuncList(list funcList):
 
 
 #*****************************************************************************************************
-cdef str c_fem_get_enum_string(int64_t enumId):
+cdef object c_fem_get_enum_string(int64_t enumId):
   """
   PURPOSE:    Returns a string with the name of the corresponding enum value given.
 
@@ -7333,7 +7194,7 @@ cdef str c_fem_get_enum_string(int64_t enumId):
 
 
 #***************************************************************************************************** 
-cdef str c_darray_print(darray_t* array):
+cdef object c_darray_print(darray_t* array):
   """
   PURPOSE:  To print a representation of the sotiarray object that could be
             used to create new dualnum objects, in a compact form.
@@ -7393,7 +7254,7 @@ cdef str c_darray_print(darray_t* array):
 #-----------------------------------------------------------------------------------------------------
 
 #***************************************************************************************************** 
-cdef str c_elemprops_print(elemProps_t* array,style = 1):
+cdef object c_elemprops_print(elemProps_t* array,style = 1):
   """
   PURPOSE:  To print a representation of the sotiarray object that could be
             used to create new dualnum objects, in a compact form.
@@ -7442,7 +7303,7 @@ cdef str c_elemprops_print(elemProps_t* array,style = 1):
 #-----------------------------------------------------------------------------------------------------
 
 #***************************************************************************************************** 
-cdef str c_femarray_print(femarray_t* array,style = 1):
+cdef object c_femarray_print(femarray_t* array,style = 1):
   """
   PURPOSE:  To print a representation of the sotiarray object that could be
             used to create new dualnum objects, in a compact form.
@@ -7472,7 +7333,7 @@ cdef str c_femarray_print(femarray_t* array,style = 1):
 #-----------------------------------------------------------------------------------------------------
 
 #***************************************************************************************************** 
-cdef str c_elemprops_print_perElement(elemProps_t* array,style = 1):
+cdef object c_elemprops_print_perElement(elemProps_t* array,style = 1):
   """
   PURPOSE:  To print a representation of the sotiarray object that could be
             used to create new dualnum objects, in a compact form.

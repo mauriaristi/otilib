@@ -51,7 +51,8 @@ option (GENERATE_CYTHON
 # add the CYTHON part?
 #
 if (GENERATE_CYTHON)
-  add_subdirectory (pyoti)  
+  add_subdirectory (pyoti)
+  add_subdirectory (pyotifem)  
 endif (GENERATE_CYTHON)
 
 

@@ -95,47 +95,58 @@ target_link_libraries (otifem oti)
 
 
 
-# -------------------------------------------------------------------
-# --------------------- BUILD OTILIB - PYTHON -----------------------
-# -------------------------------------------------------------------
+# # -------------------------------------------------------------------
+# # --------------------- BUILD OTILIB - PYTHON -----------------------
+# # -------------------------------------------------------------------
 
-# 1. Copy python files to the lib directory.
-
-
-# Change to generate the proper file in compile time.
-
-FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/tmp_src)
-
-# Copy the pure python files of the library to the library folder.
-FILE(COPY  python/whereotilib.py  python/auxFunctions.py
-	DESTINATION "${PROJECT_BINARY_DIR}/lib/" )
+# # 1. Copy python files to the lib directory.
 
 
-configure_file (
-  "${PROJECT_SOURCE_DIR}/src/cython/setup.py.in"
-  "${PROJECT_BINARY_DIR}/tmp_src/setup.py"
-  )
-# include_directories( ${PROJECT_SOURCE_DIR}/include )
+# # Change to generate the proper file in compile time.
 
-# cython_add_module( otilib cython/otilib.pyx)
+# FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/tmp_src)
 
-ADD_CUSTOM_TARGET(otipython ALL
-	DEPENDS oti otifem)
+# # Copy the pure python files of the library to the library folder.
+# FILE(COPY  python/whereotilib.py  python/auxFunctions.py
+# 	DESTINATION "${PROJECT_BINARY_DIR}/lib/" )
 
-# # 2. Execute Cython setup call 
-ADD_CUSTOM_COMMAND (
-	TARGET     otipython
-	# POST_BUILD
-	# COMMAND    CFLAGS="-I${PROJECT_SOURCE_DIR}/include" 
-	#            LDFLAGS="-L${PROJECT_BINARY_DIR}/lib"   
-	COMMAND python3 ${PROJECT_BINARY_DIR}/tmp_src/setup.py build_ext -b${PROJECT_BINARY_DIR}/lib
-)
-# # CFLAGS="-I../../include" LDFLAGS="-L../../build/lib" python3 setup.py build_ext -b../../build/lib
+# FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/lib/oti)
 
+# FILE(COPY  python/__init__.py
+# 	DESTINATION "${PROJECT_BINARY_DIR}/lib/oti" )
 
+# configure_file (
+#   "${PROJECT_SOURCE_DIR}/src/cython/setup.py.in"
+#   "${PROJECT_BINARY_DIR}/tmp_src/setup.py"
+#   )
+# # include_directories( ${PROJECT_SOURCE_DIR}/include )
 
+# # cython_add_module( otilib cython/otilib.pyx)
 
+# ADD_CUSTOM_TARGET(otipython-core ALL
+# 	DEPENDS oti)
 
-# -------------------------------------------------------------------
-# --------------------- BUILD OTILIB - PYTHON -----------------------
-# -------------------------------------------------------------------
+# # # 2. Execute Cython setup call 
+# ADD_CUSTOM_COMMAND (
+# 	TARGET     otipython-core
+# 	# POST_BUILD
+# 	# COMMAND    CFLAGS="-I${PROJECT_SOURCE_DIR}/include" 
+# 	#            LDFLAGS="-L${PROJECT_BINARY_DIR}/lib"   
+# 	COMMAND python3 ${PROJECT_BINARY_DIR}/tmp_src/setup.py build_ext -b${PROJECT_BINARY_DIR}/lib 
+# )
+# # # CFLAGS="-I../../include" LDFLAGS="-L../../build/lib" python3 setup.py build_ext -b../../build/lib
+# SET(filesToRemove 
+# 	${PROJECT_BINARY_DIR}/lib/oti/*.so 
+# 	${PROJECT_BINARY_DIR}/lib/whereotilib.py
+# 	${PROJECT_BINARY_DIR}/lib/auxFunctions.py
+# 	${PROJECT_BINARY_DIR}/tmp_src/setup.py)
+# set_directory_properties( PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "whereotilib.py;auxFunctions.py"  )
+
+# # set_property(DIRECTORY "${PROJECT_BINARY_DIR}/tmp_src"
+# # 	APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "setup.py")
+# # set_property(DIRECTORY "${PROJECT_BINARY_DIR}/lib/oti"
+# # 	APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "*.so")
+
+# # -------------------------------------------------------------------
+# # --------------------- BUILD OTILIB - PYTHON -----------------------
+# # -------------------------------------------------------------------

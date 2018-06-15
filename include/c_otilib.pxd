@@ -30,7 +30,7 @@ ctypedef   fused real_t:                  #-
 #-----------------------------------------------------------------------------------------------------
 #-----------------------------------   IMPORT EXTERNAL C FUNCTIONS   ---------------------------------
 #-----------------------------------------------------------------------------------------------------
-cdef extern from "oti/oti.h" :
+cdef extern from "oti/oti.h" nogil:
 
   ctypedef struct directionHelper:
     uint16_t*     p_dirA  # Array with all basis      Shape: (    Ndir,  order)

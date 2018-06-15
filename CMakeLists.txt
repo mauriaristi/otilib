@@ -50,18 +50,14 @@ option (GENERATE_CYTHON
 
 # add the CYTHON part?
 #
-# if (GENERATE_CYTHON)
-  # include_directories ("${PROJECT_BINARY_DIR}/include")
-  # add_subdirectory (MathFunctions "${PROJECT_BINARY_DIR}/lib")
-  # set (EXTRA_LIBS ${EXTRA_LIBS} MathFunctions)
-  
-# endif (GENERATE_CYTHON)
+if (GENERATE_CYTHON)
+  add_subdirectory (pyoti)  
+endif (GENERATE_CYTHON)
 
 
-# should we do the Cython part too?
+# should we do the Fortran part too?
 option (GENERATE_FORTRAN
         "Generate the Fortran library wrapper" OFF) 
-
 
 
 

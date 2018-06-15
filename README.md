@@ -31,9 +31,18 @@ The wonderful world of OTIs
 
 ***
 
-## Quick set up? 
+## Quick set up.
 
 * Summary of set up
+Run:
+```
+cd path/to/src/otilib
+mkdir build
+cd build
+cmake ..
+make
+```
+
 * Configuration
 * Dependencies
 * Database configuration
@@ -47,7 +56,6 @@ The wonderful world of OTIs
 The current version only depends on ```stdlib.h``` and ```math.h```
 
 #### Python version 3:
-
 
 Requirements:
 - Numpy

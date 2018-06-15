@@ -1,0 +1,54 @@
+
+import sys, os
+from distutils.core import setup
+from distutils.extension import Extension
+import numpy 
+
+# we'd better have Cython installed, or it's a no-go
+try:
+    from Cython.Distutils import build_ext 
+    from Cython.Build import cythonize
+except:
+    print("You don't seem to have Cython installed. Please get a")
+    print("copy from www.cython.org and install it")
+    sys.exit(1) 
+
+
+
+# Set new environment flags.
+os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@"
+os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@"
+
+
+extensions = [ \
+Extension("pyoti.core",
+	sources = ["@CYTHON_SOUCE_DIR@/core.pyx"],
+	include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]),
+Extension("pyoti.dense",
+	sources = ["@CYTHON_SOUCE_DIR@/dense.pyx"],
+	include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]),
+Extension("pyoti.ndarray",
+  sources = ["@CYTHON_SOUCE_DIR@/ndarray.pyx"],
+  include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]),
+Extension("pyoti.otimat",
+  sources = ["@CYTHON_SOUCE_DIR@/otimat.pyx"],
+  include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]),
+# Extension("pyoti.sparse",
+#   sources = ["@CYTHON_SOUCE_DIR@/sparse.pyx"],
+#   include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]),
+]
+
+# @CYTHON_SOURCES_NAMES@
+# finally, we can pass all this to distutils
+setup(
+  name="oti",
+  packages=["oti"],
+  author = "Mauricio Aristizabal Cano",
+  version = "0.9",
+  # ext_modules  = cythonize('@PROJECT_SOURCE_DIR@/src/cython/*.pyx',   include_path=["@PROJECT_SOURCE_DIR@/include/"]),
+  ext_modules = cythonize(extensions, 
+    include_path=["@CYTHONIZE_INCLUDE_DIR@"],
+    build_dir="@CYTHONIZE_BUILD_DIR@"),
+  # zip_safe    = False, # Only in case of Setuptools
+)
+# python3 setup.py build_ext -i #(If building inplace) 

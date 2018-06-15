@@ -4,4 +4,3 @@
 # If required, use the sparse version of the library as 
 
 import pyoti.dense as pyoti
-

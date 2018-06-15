@@ -14,20 +14,8 @@
 
 import numpy as np                  # General numerical library
 cimport numpy as np                 # C-level functions of numpy
-from libc.stdlib cimport malloc,free# import memory managment functions.
-from libc.stdlib cimport realloc    #    "              "
-from libc.string cimport memcpy     # fast memory block copy.
-from libc.string cimport memset     # fast memory instantiation.
-# from warnings import warn           # Warnings
-# from math import factorial          # Compute factorials
-# import scipy.sparse as spr          # Manipulator of sparse matrices
-# from scipy.special import comb      # Classic combinatorials
-# from partitionsets import partition # Compute partitions of sets
-# import whereotilib                  # A pure python script to get the current path of this folder.
 from c_otilib cimport *             # OTI lib in C.
 cimport cython                      #
-# from cpython cimport PyObject       #
-# from cpython cimport Py_INCREF      #
 
 from pyoti.core import   number_types, getDirArray, printOrderPos, dHelp,getDirExpA
 from pyoti.core cimport  p_dH, ZERO, ONE, get_cython_dHelp, dHelp, c_getDirExpA
@@ -44,11 +32,9 @@ cdef class sotinum:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
-  
-  
-  
-  cdef sotinum_t num
-  cdef uint8_t FLAGS
+  #
+  #                                     --< Look in "sparse.pxd" >--
+  #
   #---------------------------------------------------------------------------------------------------  
 
 
@@ -885,15 +871,15 @@ cdef class sotinum:
     global p_dH
 
     cdef sotinum S
-    cdef fefunction S2
+    # cdef fefunction S2
     cdef sotinum O
     cdef sotinum_t res
-    cdef fefunction res2
+    # cdef fefunction res2
 
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
 
-    if type1 == type2:   # Case 2. Mult to spr_otinum.
+    if type1 is type2:   # Case 2. Mult to spr_otinum.
       
       S = self
       O = other_in
@@ -913,14 +899,44 @@ cdef class sotinum:
       
       c_soti_mulf(&S.num, np.float64(self), &res)
 
-    elif type2 == sndarray:
+    else: 
+      # Try to call other's __mul__ method
+      if (type1 is sotinum):
 
-      return sndarray.__mul__(other_in, self)
+        try:
 
-    elif type2 == fefunction:
+          other_in.__mul__(self)
+
+        except:
+
+          raise ValueError("[sotinum]: Operator overload not defined for types"+str(type(self))+
+                            " and " + str(type(other_in))  )
+
+        # end try
+
+      else:
+
+        try:
+
+          self.__mul__(other_in)
+
+        except:
+
+          raise ValueError("[sotinum]: Operator overload not defined for types"+str(type(other_in))+
+                            " and " + str(type(self))  )
+
+        # end try
+
+      # end if 
+
+    #   type2 == sndarray:
+
+    #   return sndarray.__mul__(other_in, self)
+
+    # elif type2 == fefunction:
       
       
-      return fefunction.__mul__(other_in,self)
+    #   return fefunction.__mul__(other_in,self)
       
 
     # elif type1 == fevar:
@@ -1555,8 +1571,8 @@ cdef class sotinum:
     cdef uint64_t indx
 
     # create the real direction arrays:
-    cdef uint16_t[::1] dirA = np.zeros(maxorder,dtype = np.uint16)
-    cdef uint8_t[::1]  expA = np.zeros(maxorder,dtype = np.uint8)
+    cdef np.ndarray[uint16_t,ndim=1] dirA = np.zeros(maxorder,dtype = np.uint16)
+    cdef np.ndarray[uint8_t ,ndim=1] expA = np.zeros(maxorder,dtype = np.uint8)
     
     for i in range(len(tmp_expA)):
       
@@ -1564,7 +1580,6 @@ cdef class sotinum:
       expA[i] = tmp_expA[i]
 
     # end for 
-
 
     return self.getDerivByDirExp(dirA,expA)
 
@@ -2165,7 +2180,7 @@ cpdef  sotinum ssqrt(sotinum val):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef str c_soti_print(sotinum_t* num):
+cdef object c_soti_print(sotinum_t* num):
   """
   PURPOSE:  get string of a sotinum_t
    

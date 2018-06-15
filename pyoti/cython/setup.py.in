@@ -33,9 +33,12 @@ Extension("pyoti.ndarray",
 Extension("pyoti.otimat",
   sources = ["@CYTHON_SOUCE_DIR@/otimat.pyx"],
   include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]),
-# Extension("pyoti.sparse",
-#   sources = ["@CYTHON_SOUCE_DIR@/sparse.pyx"],
-#   include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]),
+Extension("pyoti.sparse",
+  sources = ["@CYTHON_SOUCE_DIR@/sparse.pyx"],
+  include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]),
+Extension("pyoti.sndarray",
+  sources = ["@CYTHON_SOUCE_DIR@/sndarray.pyx"],
+  include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]),
 ]
 
 # @CYTHON_SOURCES_NAMES@

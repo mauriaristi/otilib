@@ -17,7 +17,7 @@
 
 
 typedef struct {
-    double*         p_coefs;  // Array with all exponents. Shape: ( Ndir,  order)
+    double*         p_coefs;  // Array with all exponents. Shape: ( Ndir,  order) 
     uint64_t           Ndir;  // Number of directions in the number.
     uint8_t           order;  // Maximum order of the number.
 } otinum_t;

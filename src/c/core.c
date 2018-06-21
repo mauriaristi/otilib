@@ -1037,6 +1037,646 @@ void c_helper_free(directionHelper* p_dH , uint8_t maxorder ){
 // -------------------------------------     FUNCTIONS     --------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void c_load2Dnpy_ui64(const char* filepath, uint64_t** p_array, 
+                                            uint64_t* p_shapex, uint64_t* p_shapey){
+    /*
+    c_load2Dnpy_ui16( filepath, p_array, p_shapex, p_shapey)
+
+    Loads a 2d array from a .npy file.
+
+    INPUTS:
+
+        -> filepath: Path where the *.npy file is located.
+        -> p_array:  Address of the pointer that will hold the data.
+        -> p_shapex: Address of the element that will contain the shape x.
+        -> p_shapey: Address of the element that will contain the shape x.
+        
+    USAGE:
+
+        uint16_t* array_with_data;
+        uint64_t shapex, shapey;
+
+        c_load2Dnpy_ui16("../data/", &array_with_data, &shapex, &shapey);
+        
+
+    OUTPUTS:
+        -> The result is the direction array pointer with the loaded data.
+    */ 
+    // ************************************************************************************************
+
+    char *filename ;
+    char basename[] = "data/";
+    char *holder;
+    char *holderSmall;
+    FILE *cfPtr = NULL; //  file pointer
+    uint16_t header_size;
+    uint64_t shapex=0, shapey=0, size=0;
+    
+
+
+    // Malloc memory for strings:
+    holder        = (char *)malloc(256*sizeof(char));
+    holderSmall   = (char *)malloc( 16*sizeof(char));
+    
+    if(filename != NULL && holder != NULL){
+        // LOAD ARRAY:
+    
+        #ifdef VERB // Indicator of verbosity from compiler.
+        printf("Loading Filename: %s\n", filepath);
+        #endif
+
+        if ((cfPtr = fopen( filepath, "rb" )) != NULL){
+
+            // Read the first 8 bytes of the file:
+            // expected: ?NUMPYab     a,b is the version of the filepath
+            fread(holder, sizeof(char), 8, cfPtr);
+            holder[6] = '\0';
+
+            // Read header size
+            fread(&header_size, sizeof(uint16_t), 1, cfPtr);
+
+            // Read header
+            fread(holder, sizeof(char), header_size, cfPtr);
+            holder[header_size] = '\0';
+
+            sscanf(holder,"{'descr': %s 'fortran_order': %s 'shape': (%llu,%llu), }",
+                holderSmall, holderSmall, &shapex, &shapey);
+            
+            p_shapey[0] = shapey;
+            p_shapex[0] = shapex;
+            size = shapex*shapey;
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("shape: %llu, %llu \n",shapex,shapey);
+            #endif
+            
+            // Allocate memory            
+            p_array[0] = ( uint64_t* )malloc( size * sizeof(uint64_t) );
+
+            if (p_array[0] != NULL){
+
+                fread(p_array[0], sizeof(uint64_t), size, cfPtr);
+
+            }else{
+
+                printf("\nERROR: Not enough memory for loading array in %s.\n Exiting\n", filepath);
+                exit(-1);
+
+            }
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("Successfully loaded \" %s \" file.\n",filepath);
+            #endif
+
+        }else{
+
+            printf("Error. No file \" %s \"found.\n",filepath);
+            exit(-1);    // Exit program
+
+        }
+
+        fclose(cfPtr);
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+// ****************************************************************************************************
+void c_load2Dnpy_ui16(const char* filepath, uint16_t** p_array, 
+                                            uint64_t* p_shapex, uint64_t* p_shapey){
+    /*
+    c_load2Dnpy_ui16( filepath, p_array, p_shapex, p_shapey)
+
+    Loads a 2d array from a .npy file.
+
+    INPUTS:
+
+        -> filepath: Path where the *.npy file is located.
+        -> p_array:  Address of the pointer that will hold the data.
+        -> p_shapex: Address of the element that will contain the shape x.
+        -> p_shapey: Address of the element that will contain the shape x.
+        
+    USAGE:
+
+        uint16_t* array_with_data;
+        uint64_t shapex, shapey;
+
+        c_load2Dnpy_ui16("../data/", &array_with_data, &shapex, &shapey);
+
+
+    OUTPUTS:
+        -> The result is the direction array pointer with the loaded data.
+    */ 
+    // ************************************************************************************************
+
+    char *filename ;
+    char basename[] = "data/";
+    char *holder;
+    char *holderSmall;
+    FILE *cfPtr = NULL; //  file pointer
+    uint16_t header_size;
+    uint64_t shapex=0, shapey=0, size=0;
+    
+
+
+    // Malloc memory for strings:
+    holder        = (char *)malloc(256*sizeof(char));
+    holderSmall   = (char *)malloc( 16*sizeof(char));
+    
+    if(filename != NULL && holder != NULL){
+        // LOAD ARRAY:
+    
+        #ifdef VERB // Indicator of verbosity from compiler.
+        printf("Loading Filename: %s\n", filepath);
+        #endif
+
+        if ((cfPtr = fopen( filepath, "rb" )) != NULL){
+
+            // Read the first 8 bytes of the file:
+            // expected: ?NUMPYab     a,b is the version of the filepath
+            fread(holder, sizeof(char), 8, cfPtr);
+            holder[6] = '\0';
+
+            // Read header size
+            fread(&header_size, sizeof(uint16_t), 1, cfPtr);
+
+            // Read header
+            fread(holder, sizeof(char), header_size, cfPtr);
+            holder[header_size] = '\0';
+
+            sscanf(holder,"{'descr': %s 'fortran_order': %s 'shape': (%llu,%llu), }",
+                holderSmall, holderSmall, &shapex, &shapey);
+            
+            p_shapey[0] = shapey;
+            p_shapex[0] = shapex;
+            size = shapex*shapey;
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("shape: %llu, %llu \n",shapex,shapey);
+            #endif
+            
+            // Allocate memory            
+            p_array[0] = ( uint16_t* )malloc( size * sizeof(uint16_t) );
+
+            if (p_array[0] != NULL){
+
+                fread(p_array[0], sizeof(uint16_t), size, cfPtr);
+
+            }else{
+
+                printf("\nERROR: Not enough memory for loading array in %s.\n Exiting\n", filepath);
+                exit(-1);
+
+            }
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("Successfully loaded \" %s \" file.\n",filepath);
+            #endif
+
+        }else{
+
+            printf("Error. No file \" %s \"found.\n",filepath);
+            exit(-1);    // Exit program
+
+        }
+
+        fclose(cfPtr);
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void c_load2Dnpy_ui8(const char* filepath, uint8_t** p_array, 
+                                            uint64_t* p_shapex, uint64_t* p_shapey){
+    /*
+    c_load2Dnpy_ui8( filepath, p_array, p_shapex, p_shapey)
+
+    Loads a 2d array from a .npy file.
+
+    INPUTS:
+
+        -> filepath: Path where the *.npy file is located.
+        -> p_array:  Address of the pointer that will hold the data.
+        -> p_shapex: Address of the element that will contain the shape x.
+        -> p_shapey: Address of the element that will contain the shape x.
+        
+    USAGE:
+
+        uint16_t* array_with_data;
+        uint64_t shapex, shapey;
+
+        c_load2Dnpy_ui16("../data/", &array_with_data, &shapex, &shapey);
+
+
+    OUTPUTS:
+        -> The result is the direction array pointer with the loaded data.
+    */ 
+    // ************************************************************************************************
+
+    char *filename ;
+    char basename[] = "data/";
+    char *holder;
+    char *holderSmall;
+    FILE *cfPtr = NULL; //  file pointer
+    uint16_t header_size;
+    uint64_t shapex=0, shapey=0, size=0;
+    
+
+
+    // Malloc memory for strings:
+    holder        = (char *)malloc(256*sizeof(char));
+    holderSmall   = (char *)malloc( 16*sizeof(char));
+    
+    if(filename != NULL && holder != NULL){
+        // LOAD ARRAY:
+    
+        #ifdef VERB // Indicator of verbosity from compiler.
+        printf("Loading Filename: %s\n", filepath);
+        #endif
+
+        if ((cfPtr = fopen( filepath, "rb" )) != NULL){
+
+            // Read the first 8 bytes of the file:
+            // expected: ?NUMPYab     a,b is the version of the filepath
+            fread(holder, sizeof(char), 8, cfPtr);
+            holder[6] = '\0';
+
+            // Read header size
+            fread(&header_size, sizeof(uint16_t), 1, cfPtr);
+
+            // Read header
+            fread(holder, sizeof(char), header_size, cfPtr);
+            holder[header_size] = '\0';
+
+            sscanf(holder,"{'descr': %s 'fortran_order': %s 'shape': (%llu,%llu), }",
+                holderSmall, holderSmall, &shapex, &shapey);
+            
+            p_shapey[0] = shapey;
+            p_shapex[0] = shapex;
+            size = shapex*shapey;
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("shape: %llu, %llu \n",shapex,shapey);
+            #endif
+            
+            // Allocate memory            
+            p_array[0] = ( uint8_t* )malloc( size * sizeof(uint8_t) );
+
+            if (p_array[0] != NULL){
+
+                fread(p_array[0], sizeof(uint8_t), size, cfPtr);
+
+            }else{
+
+                printf("\nERROR: Not enough memory for loading array in %s.\n Exiting\n", filepath);
+                exit(-1);
+
+            }
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("Successfully loaded \" %s \" file.\n",filepath);
+            #endif
+
+        }else{
+
+            printf("Error. No file \" %s \"found.\n",filepath);
+            exit(-1);    // Exit program
+
+        }
+
+        fclose(cfPtr);
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void c_load2Dnpy_ui64(const char* filepath, uint64_t** p_array, 
+                                            uint64_t* p_shapex, uint64_t* p_shapey){
+    /*
+    c_load2Dnpy_ui16( filepath, p_array, p_shapex, p_shapey)
+
+    Loads a 2d array from a .npy file.
+
+    INPUTS:
+
+        -> filepath: Path where the *.npy file is located.
+        -> p_array:  Address of the pointer that will hold the data.
+        -> p_shapex: Address of the element that will contain the shape x.
+        -> p_shapey: Address of the element that will contain the shape x.
+        
+    USAGE:
+
+        uint16_t* array_with_data;
+        uint64_t shapex, shapey;
+
+        c_load2Dnpy_ui16("../data/", &array_with_data, &shapex, &shapey);
+        
+
+    OUTPUTS:
+        -> The result is the direction array pointer with the loaded data.
+    */ 
+    // ************************************************************************************************
+
+    char *filename ;
+    char basename[] = "data/";
+    char *holder;
+    char *holderSmall;
+    FILE *cfPtr = NULL; //  file pointer
+    uint16_t header_size;
+    uint64_t shapex=0, shapey=0, size=0;
+    
+
+
+    // Malloc memory for strings:
+    holder        = (char *)malloc(256*sizeof(char));
+    holderSmall   = (char *)malloc( 16*sizeof(char));
+    
+    if(filename != NULL && holder != NULL){
+        // LOAD ARRAY:
+    
+        #ifdef VERB // Indicator of verbosity from compiler.
+        printf("Loading Filename: %s\n", filepath);
+        #endif
+
+        if ((cfPtr = fopen( filepath, "rb" )) != NULL){
+
+            // Read the first 8 bytes of the file:
+            // expected: ?NUMPYab     a,b is the version of the filepath
+            fread(holder, sizeof(char), 8, cfPtr);
+            holder[6] = '\0';
+
+            // Read header size
+            fread(&header_size, sizeof(uint16_t), 1, cfPtr);
+
+            // Read header
+            fread(holder, sizeof(char), header_size, cfPtr);
+            holder[header_size] = '\0';
+
+            sscanf(holder,"{'descr': %s 'fortran_order': %s 'shape': (%llu,%llu), }",
+                holderSmall, holderSmall, &shapex, &shapey);
+            
+            p_shapey[0] = shapey;
+            p_shapex[0] = shapex;
+            size = shapex*shapey;
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("shape: %llu, %llu \n",shapex,shapey);
+            #endif
+            
+            // Allocate memory            
+            p_array[0] = ( uint64_t* )malloc( size * sizeof(uint64_t) );
+
+            if (p_array[0] != NULL){
+
+                fread(p_array[0], sizeof(uint64_t), size, cfPtr);
+
+            }else{
+
+                printf("\nERROR: Not enough memory for loading array in %s.\n Exiting\n", filepath);
+                exit(-1);
+
+            }
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("Successfully loaded \" %s \" file.\n",filepath);
+            #endif
+
+        }else{
+
+            printf("Error. No file \" %s \"found.\n",filepath);
+            exit(-1);    // Exit program
+
+        }
+
+        fclose(cfPtr);
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+// ****************************************************************************************************
+void c_load2Dnpy_ui16(const char* filepath, uint16_t** p_array, 
+                                            uint64_t* p_shapex, uint64_t* p_shapey){
+    /*
+    c_load2Dnpy_ui16( filepath, p_array, p_shapex, p_shapey)
+
+    Loads a 2d array from a .npy file.
+
+    INPUTS:
+
+        -> filepath: Path where the *.npy file is located.
+        -> p_array:  Address of the pointer that will hold the data.
+        -> p_shapex: Address of the element that will contain the shape x.
+        -> p_shapey: Address of the element that will contain the shape x.
+        
+    USAGE:
+
+        uint16_t* array_with_data;
+        uint64_t shapex, shapey;
+
+        c_load2Dnpy_ui16("../data/", &array_with_data, &shapex, &shapey);
+
+
+    OUTPUTS:
+        -> The result is the direction array pointer with the loaded data.
+    */ 
+    // ************************************************************************************************
+
+    char *filename ;
+    char basename[] = "data/";
+    char *holder;
+    char *holderSmall;
+    FILE *cfPtr = NULL; //  file pointer
+    uint16_t header_size;
+    uint64_t shapex=0, shapey=0, size=0;
+    
+
+
+    // Malloc memory for strings:
+    holder        = (char *)malloc(256*sizeof(char));
+    holderSmall   = (char *)malloc( 16*sizeof(char));
+    
+    if(filename != NULL && holder != NULL){
+        // LOAD ARRAY:
+    
+        #ifdef VERB // Indicator of verbosity from compiler.
+        printf("Loading Filename: %s\n", filepath);
+        #endif
+
+        if ((cfPtr = fopen( filepath, "rb" )) != NULL){
+
+            // Read the first 8 bytes of the file:
+            // expected: ?NUMPYab     a,b is the version of the filepath
+            fread(holder, sizeof(char), 8, cfPtr);
+            holder[6] = '\0';
+
+            // Read header size
+            fread(&header_size, sizeof(uint16_t), 1, cfPtr);
+
+            // Read header
+            fread(holder, sizeof(char), header_size, cfPtr);
+            holder[header_size] = '\0';
+
+            sscanf(holder,"{'descr': %s 'fortran_order': %s 'shape': (%llu,%llu), }",
+                holderSmall, holderSmall, &shapex, &shapey);
+            
+            p_shapey[0] = shapey;
+            p_shapex[0] = shapex;
+            size = shapex*shapey;
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("shape: %llu, %llu \n",shapex,shapey);
+            #endif
+            
+            // Allocate memory            
+            p_array[0] = ( uint16_t* )malloc( size * sizeof(uint16_t) );
+
+            if (p_array[0] != NULL){
+
+                fread(p_array[0], sizeof(uint16_t), size, cfPtr);
+
+            }else{
+
+                printf("\nERROR: Not enough memory for loading array in %s.\n Exiting\n", filepath);
+                exit(-1);
+
+            }
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("Successfully loaded \" %s \" file.\n",filepath);
+            #endif
+
+        }else{
+
+            printf("Error. No file \" %s \"found.\n",filepath);
+            exit(-1);    // Exit program
+
+        }
+
+        fclose(cfPtr);
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void c_load2Dnpy_ui8(const char* filepath, uint8_t** p_array, 
+                                            uint64_t* p_shapex, uint64_t* p_shapey){
+    /*
+    c_load2Dnpy_ui8( filepath, p_array, p_shapex, p_shapey)
+
+    Loads a 2d array from a .npy file.
+
+    INPUTS:
+
+        -> filepath: Path where the *.npy file is located.
+        -> p_array:  Address of the pointer that will hold the data.
+        -> p_shapex: Address of the element that will contain the shape x.
+        -> p_shapey: Address of the element that will contain the shape x.
+        
+    USAGE:
+
+        uint16_t* array_with_data;
+        uint64_t shapex, shapey;
+
+        c_load2Dnpy_ui16("../data/", &array_with_data, &shapex, &shapey);
+
+
+    OUTPUTS:
+        -> The result is the direction array pointer with the loaded data.
+    */ 
+    // ************************************************************************************************
+
+    char *filename ;
+    char basename[] = "data/";
+    char *holder;
+    char *holderSmall;
+    FILE *cfPtr = NULL; //  file pointer
+    uint16_t header_size;
+    uint64_t shapex=0, shapey=0, size=0;
+    
+
+
+    // Malloc memory for strings:
+    holder        = (char *)malloc(256*sizeof(char));
+    holderSmall   = (char *)malloc( 16*sizeof(char));
+    
+    if(filename != NULL && holder != NULL){
+        // LOAD ARRAY:
+    
+        #ifdef VERB // Indicator of verbosity from compiler.
+        printf("Loading Filename: %s\n", filepath);
+        #endif
+
+        if ((cfPtr = fopen( filepath, "rb" )) != NULL){
+
+            // Read the first 8 bytes of the file:
+            // expected: ?NUMPYab     a,b is the version of the filepath
+            fread(holder, sizeof(char), 8, cfPtr);
+            holder[6] = '\0';
+
+            // Read header size
+            fread(&header_size, sizeof(uint16_t), 1, cfPtr);
+
+            // Read header
+            fread(holder, sizeof(char), header_size, cfPtr);
+            holder[header_size] = '\0';
+
+            sscanf(holder,"{'descr': %s 'fortran_order': %s 'shape': (%llu,%llu), }",
+                holderSmall, holderSmall, &shapex, &shapey);
+            
+            p_shapey[0] = shapey;
+            p_shapex[0] = shapex;
+            size = shapex*shapey;
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("shape: %llu, %llu \n",shapex,shapey);
+            #endif
+            
+            // Allocate memory            
+            p_array[0] = ( uint8_t* )malloc( size * sizeof(uint8_t) );
+
+            if (p_array[0] != NULL){
+
+                fread(p_array[0], sizeof(uint8_t), size, cfPtr);
+
+            }else{
+
+                printf("\nERROR: Not enough memory for loading array in %s.\n Exiting\n", filepath);
+                exit(-1);
+
+            }
+
+            #ifdef VERB // Indicator of verbosity from compiler.
+            printf("Successfully loaded \" %s \" file.\n",filepath);
+            #endif
+
+        }else{
+
+            printf("Error. No file \" %s \"found.\n",filepath);
+            exit(-1);    // Exit program
+
+        }
+
+        fclose(cfPtr);
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
 
 // ****************************************************************************************************
 void c_loadDirA(char* strLocation, uint8_t order,   uint16_t ndir, uint16_t** dirA, uint64_t* Ndir){

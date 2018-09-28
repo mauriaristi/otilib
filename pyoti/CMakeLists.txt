@@ -38,6 +38,17 @@ SET(CYTHON_SOURCES_NAMES dense.pyx core.pyx)
 SET(CYTHONIZE_BUILD_DIR   "${PROJECT_BINARY_DIR}/tmp_src"   )
 SET(CYTHONIZE_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include"   )
 
+if(APPLE)
+	# Apple requires the arquitecture to be defined.
+	SET(DUTILS_ECARG1 "-arch i386"  )
+	SET(DUTILS_ECARG2 "-arch x86_64")
+else(APPLE)
+	# these are dummy arguments for distutils, because linux does
+	# not require setting this
+	SET(DUTILS_ECARG1 "-I.")
+	SET(DUTILS_ECARG2 "-I.")
+endif(APPLE)
+
 configure_file (
   "${PROJECT_SOURCE_DIR}/pyoti/cython/setup.py.in"
   "${PROJECT_BINARY_DIR}/tmp_src/setup.py"

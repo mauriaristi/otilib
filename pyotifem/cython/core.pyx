@@ -8,7 +8,7 @@
 # cython: embedsignature=False
 # distutils: define_macros=CYTHON_TRACE_NOGIL=1
 # distutils: libraries = oti otifem
-# distutils: extra_compile_args = -arch i386 -arch x86_64
+## distutils: extra_compile_args = -arch i386 -arch x86_64
 # filename: otifem.pyx
 
 import numpy as np                  # General numerical library

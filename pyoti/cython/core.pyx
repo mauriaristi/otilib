@@ -6,9 +6,9 @@
 # cython: linetrace=True
 # cython: binding=True
 # cython: embedsignature=False
-# distutils: define_macros=CYTHON_TRACE_NOGIL=1
-# distutils: libraries = oti 
-# distutils: extra_compile_args = -arch i386 -arch x86_64
+## distutils: define_macros=CYTHON_TRACE_NOGIL=1
+## distutils: libraries = oti 
+## distutils: extra_compile_args = -arch i386 -arch x86_64 
 # filename: core.pyx
 
 #-----------------------------------------------------------------------------------------------------

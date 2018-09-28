@@ -2,7 +2,9 @@
 #
 # Created by:
 # Mauricio Aristizabal Cano
-# Date: June 12 2018
+#
+# Date created: June 12 2018
+# Last modified: September 26 2018
 #
 # This file sets up CMake to run the appropriate commands to 
 # compile the OTI number library project
@@ -10,12 +12,7 @@
 cmake_minimum_required (VERSION 2.8)
 
 
-
-
-
 project (oti)
-
-
 
 
 # Make the scripts available in the 'cmake' directory.
@@ -25,14 +22,17 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake )
 include( copyfiles )
 include( UseCython )
 
+# Uncomment this for macOS
+if(APPLE)
+	# This is for the case of apple macOS
+	set(CMAKE_C_COMPILER "/usr/bin/clang")
+elseif(UNIX)
+	# This is for the case of unix OS
+	set(CMAKE_C_COMPILER "/usr/bin/gcc")
+endif(APPLE)
+ 
 
 
-
-
-
-
-
-set (CMAKE_C_COMPILER "/usr/bin/clang")
 set(CMAKE_MACOSX_RPATH 1)
 
 # The version number.

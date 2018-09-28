@@ -27,8 +27,11 @@
 # set(CMAKE_C_FLAGS_DEBUG "-O2 -g")
 # set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall")
 
+# To compile with macOs uncomment the following line 
+#SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
 
-SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
+# To compile with linux uncomment the following line
+SET(GCC_COVERAGE_COMPILE_FLAGS "-g -fwrapv -O3 -Wall -Wstrict-prototypes")
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
@@ -40,8 +43,14 @@ add_library (oti        c/core.c
 	                    c/otinum_dense.c
 	                    c/otinum_spr.c
 	                    c/otinum_spr_array.c)
-SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")
+	                    
+	                    
+	                    
+# To compile with macOs uncomment the following line           
+#SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")
 
+# To compile with linux uncomment the following line
+SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "")
 
 # -------------------------------------------------------------------
 # --------------------------- BUILD OTI -----------------------------
@@ -73,9 +82,12 @@ SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 add_library (otifem        c/otifem.c 
 	                       c/otifem_array.c)
-SET_TARGET_PROPERTIES(otifem PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")
 
+# To compile with macOs uncomment the following line  
+#SET_TARGET_PROPERTIES(otifem PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")
 
+# To compile with linux uncomment the following line
+SET_TARGET_PROPERTIES(otifem PROPERTIES LINK_FLAGS "")
 
 
 target_link_libraries (otifem oti)

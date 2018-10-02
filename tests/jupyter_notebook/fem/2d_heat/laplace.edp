@@ -1,0 +1,38 @@
+
+
+//
+//               +-----------------+
+//               |                 |
+//     Tleft     |                 |  Tright
+//               |                 |
+//               |                 |
+//               +-----------------+
+//
+
+
+
+
+
+mesh Th = square(20,10);
+
+
+fespace Vh(Th,P1);
+
+Vh T, v;
+
+
+problem laplace(T,v)=
+   int2d(Th)(   -dx(T) * dx(v) ) +
+   int2d(Th)(   -dy(T) * dy(v) ) +
+   int1d(Th,1)(  10.0*v   ) + 
+   on(4,T=5) +// Tleft
+   on(2,T=10);
+   //
+   
+
+
+laplace;
+
+plot(Th,T, wait=1);
+//plot(Th,Theta,wait=1,cmm="Hello");
+

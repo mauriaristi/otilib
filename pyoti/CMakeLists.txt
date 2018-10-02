@@ -73,17 +73,6 @@ ADD_CUSTOM_COMMAND (
 	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/auxFunctions.py ${CYTHON_BUILD_DIR}/
 )
 
-
-
-
-# set_directory_properties( PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "whereotilib.py;auxFunctions.py"  )
-
-
-# set_property(DIRECTORY "${PROJECT_BINARY_DIR}/tmp_src"
-# 	APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "setup.py")
-# set_property(DIRECTORY "${PROJECT_BINARY_DIR}/lib/oti"
-# 	APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "*.so")
-
 # -------------------------------------------------------------------
 # --------------------- BUILD OTILIB - PYTHON -----------------------
 # -------------------------------------------------------------------

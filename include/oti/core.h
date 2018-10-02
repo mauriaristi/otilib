@@ -123,117 +123,124 @@ enum c_oti_errors {
 
 // added to c_otilib.pxd
 
-uint64_t c_helper_multMultiIndxFast(uint64_t* indx, uint8_t nindx, uint8_t order, 
-                                directionHelper* p_dH, uint8_t* error);
+uint64_t  c_helper_multMultiIndxFast( uint64_t* indx, uint8_t nindx, uint8_t order, 
+                                      directionHelper* p_dH, uint8_t* error);
 
-void c_helper_ordDirExpA(uint16_t* p_dirA, uint8_t* multiple, uint8_t order, 
-                        uint16_t* p_ndirA, uint8_t* p_nexpA);
+void      c_helper_ordDirExpA( uint16_t* p_dirA, uint8_t* multiple, uint8_t order, 
+                               uint16_t* p_ndirA, uint8_t* p_nexpA);
 
-void c_helper_getMultpl(uint8_t* p_expA, uint8_t order, directionHelper* p_dH, uint64_t* Nmultpl);
+void      c_helper_getMultpl( uint8_t* p_expA, uint8_t order, directionHelper* p_dH, 
+                              uint64_t* Nmultpl);
 
-uint64_t c_helper_multIndxFast(uint64_t indx1, uint64_t indx2, uint8_t order, directionHelper* p_dH, 
-                               uint8_t* error);
+uint64_t  c_helper_multIndxFast( uint64_t indx1, uint64_t indx2, uint8_t order, 
+                                 directionHelper* p_dH, uint8_t* error);
 
-void c_helper_load(  uint8_t maxorder, char* strLocation, directionHelper** p_dH);
+void      c_helper_load( uint8_t maxorder, char* strLocation, directionHelper** p_dH);
 
-void c_helper_free(directionHelper* p_dH , uint8_t maxorder );
+void      c_helper_free( directionHelper* p_dH , uint8_t maxorder );
 
-uint64_t c_helper_findIndex(uint16_t* p_dirA,  uint8_t* p_expA, uint8_t order, directionHelper* p_dH);
+uint64_t  c_helper_findIndex( uint16_t* p_dirA,  uint8_t* p_expA, uint8_t order, 
+                              directionHelper* p_dH);
 
-uint64_t c_helper_multIndx(uint64_t indx1, uint64_t indx2, uint8_t order, directionHelper* p_dH, 
-                            uint8_t* error);
+uint64_t  c_helper_multIndx( uint64_t indx1, uint64_t indx2, uint8_t order, 
+                             directionHelper* p_dH, uint8_t* error);
 
-uint16_t* c_helper_getDirA(uint64_t indx, uint8_t order, directionHelper* p_dH);
+uint16_t* c_helper_getDirA( uint64_t indx, uint8_t order, directionHelper* p_dH);
 
-uint8_t*  c_helper_getExpA(uint64_t indx, uint8_t order, directionHelper* p_dH);
+uint8_t*  c_helper_getExpA( uint64_t indx, uint8_t order, directionHelper* p_dH);
 
-uint8_t* c_helper_getUExpA( uint8_t order, uint8_t n, directionHelper* p_dH); // inline
+uint8_t*  c_helper_getUExpA( uint8_t order, uint8_t n, directionHelper* p_dH); // inline
 
 uint16_t* c_helper_getUDirA( uint8_t order, uint8_t n, directionHelper* p_dH); // inline
 
-uint64_t c_helper_findMaxDir(uint64_t index, uint8_t order, directionHelper* p_dH);
+uint64_t  c_helper_findMaxDir(uint64_t index, uint8_t order, directionHelper* p_dH);
 
-uint64_t c_helper_getNels( uint64_t m, uint8_t order, directionHelper* p_dH);
+uint64_t  c_helper_getNels( uint64_t m, uint8_t order, directionHelper* p_dH);
 
-uint64_t c_helper_getNParts( uint8_t order, directionHelper* p_dH); // inline
+uint64_t  c_helper_getNParts( uint8_t order, directionHelper* p_dH); // inline
 
-uint16_t c_helper_getSet( uint8_t order,uint64_t i,uint64_t j, directionHelper* p_dH); // inline
+uint16_t  c_helper_getSet( uint8_t order,uint64_t i,uint64_t j, directionHelper* p_dH); // inline
 
-void c_helper_insertIndx(uint64_t* p_indxArray,uint64_t indx,uint64_t *size,
-    double * p_coefArray, double coef);
+void      c_helper_insertIndx( uint64_t* p_indxArray,uint64_t indx,uint64_t *size,
+                               double * p_coefArray, double coef);
 
-uint64_t c_ndir(uint64_t nvar,uint8_t order);
+uint64_t  c_ndir( uint64_t nvar,uint8_t order);
 
-uint16_t c_maxUI16(uint64_t a,uint64_t b);
+uint16_t  c_maxUI16( uint64_t a,uint64_t b);
 
-void c_printArrayDBL(double* ptr_,uint64_t n);
+void      c_printArrayDBL( double* ptr_,uint64_t n);
 
-void c_printArrayUI64(uint64_t* ptr_,uint64_t n);
+void      c_printArrayUI64( uint64_t* ptr_,uint64_t n);
 
-void c_minUI64(uint64_t a,uint64_t b,uint64_t* minnum,uint64_t* maxnum );
+void      c_minUI64( uint64_t a,uint64_t b,uint64_t* minnum,uint64_t* maxnum );
 
-uint64_t c_multDirections_dH(uint64_t indx1m1, uint64_t indx2m1, directionHelper* p_dH, uint8_t* error );
+uint64_t  c_multDirections_dH( uint64_t indx1m1, uint64_t indx2m1, directionHelper* p_dH, 
+                               uint8_t* error );
 
 uint64_t c_binarySearch_dH( uint16_t*  ptr_dirA, uint8_t*  ptr_expA, directionHelper* p_dH);
 
-void c_loadDirA( char* strLocation,uint8_t order, uint16_t ndir, uint16_t** dirA, uint64_t* Ndir);
+void     c_loadDirA( char* strLocation,uint8_t order, uint16_t ndir, uint16_t** dirA, 
+                     uint64_t* Ndir);
 
-void c_loadExpA( char* strLocation,uint8_t order, uint16_t ndir, uint8_t** expA, uint64_t* Ndir);
+void     c_loadExpA( char* strLocation,uint8_t order, uint16_t ndir, uint8_t** expA, 
+                     uint64_t* Ndir);
 
-void c_loadCount( char* strLocation,uint8_t order, uint16_t ndir, uint64_t** count);
+void     c_loadCount( char* strLocation,uint8_t order, uint16_t ndir, uint64_t** count);
 
-void c_loadParts( char* strLocation,uint8_t order, uint16_t ndir, uint16_t** p_parts, uint64_t* Nparts);
+void     c_loadParts( char* strLocation,uint8_t order, uint16_t ndir, uint16_t** p_parts, 
+                      uint64_t* Nparts);
 
-void c_loadDirHelper(  char* strLocation, uint8_t order, uint16_t ndir, uint8_t nhelps, directionHelper* dirHelp);
+void     c_loadDirHelper( char* strLocation, uint8_t order, uint16_t ndir, uint8_t nhelps, 
+                          directionHelper* dirHelp);
 
-void c_freeDirHelper(  directionHelper* dirHelp);
+void     c_freeDirHelper(  directionHelper* dirHelp);
 
-uint64_t c_fastpow(uint64_t b,uint16_t exp);
+uint64_t c_fastpow( uint64_t b,uint16_t exp);
 
-uint64_t c_fastfact(uint8_t exp);
+uint64_t c_fastfact( uint8_t exp);
 
-uint64_t c_convToIndex(uint16_t* ptr_dirA,uint8_t* ptr_expA, uint8_t order);
+uint64_t c_convToIndex( uint16_t* ptr_dirA,uint8_t* ptr_expA, uint8_t order);
 
-void     c_printArrayUI16(uint16_t* ptr_,uint8_t size);
+void     c_printArrayUI16( uint16_t* ptr_,uint8_t size);
 
-void     c_printArrayUI8(uint8_t* ptr_,uint8_t size);
+void     c_printArrayUI8( uint8_t* ptr_,uint8_t size);
 
 void     c_mapDirArray( uint16_t*  ptr_dirA1, uint16_t*  ptr_dirA2,   uint8_t  order,
-                    uint16_t* ptr_mdirA1, uint16_t* ptr_mdirA2, uint16_t* ptr_mapder);
+                        uint16_t* ptr_mdirA1, uint16_t* ptr_mdirA2, uint16_t* ptr_mapder);
 
 void     c_mapDirArrayNoMapder( uint16_t*  ptr_dirA1, uint16_t*  ptr_dirA2,   uint8_t  order,
-                    uint16_t* ptr_mdirA1, uint16_t* ptr_mdirA2);
+                                uint16_t* ptr_mdirA1, uint16_t* ptr_mdirA2);
 
-uint64_t c_binarySearch(  uint16_t* ptr_dirArray, uint8_t* ptr_expArray,
-                          uint16_t* ptr_dirA,     uint8_t* ptr_expA,     uint8_t order,
-                          uint64_t  N, uint16_t* ptr_mdirA1, uint16_t* ptr_mdirA2);
+uint64_t c_binarySearch( uint16_t* ptr_dirArray, uint8_t* ptr_expArray,
+                         uint16_t* ptr_dirA,     uint8_t* ptr_expA,     uint8_t order,
+                         uint64_t  N, uint16_t* ptr_mdirA1, uint16_t* ptr_mdirA2);
 
-void     c_convToDirExp(uint64_t index, uint8_t order, uint16_t* ptr_dirA, uint8_t* ptr_expA);
+void     c_convToDirExp( uint64_t index, uint8_t order, uint16_t* ptr_dirA, uint8_t* ptr_expA);
 
 void     c_reMapDirArray( uint16_t*  ptr_mdirA1, uint16_t* ptr_mapder, uint8_t order,
                       uint16_t* ptr_dirA1);
 
-uint8_t  c_sumUI8(uint8_t* ptr_,uint8_t n);
+uint8_t  c_sumUI8( uint8_t* ptr_,uint8_t n);
 
-uint64_t c_multDirections(uint16_t* ptr_dirArray, uint8_t* ptr_expArray,
-                        uint16_t* ptr_dirA1,  uint8_t* ptr_expA1,
-                        uint16_t* ptr_dirA2,  uint8_t* ptr_expA2, 
-                        uint16_t* ptr_mdirA1, uint8_t* ptr_mexpA1,
-                        uint16_t* ptr_mdirA2, uint16_t* ptr_mdirA3, 
-                        uint16_t* ptr_mapder, 
-                        uint8_t order, uint64_t N, uint8_t* error );
+uint64_t c_multDirections( uint16_t* ptr_dirArray, uint8_t* ptr_expArray,
+                           uint16_t* ptr_dirA1,  uint8_t* ptr_expA1,
+                           uint16_t* ptr_dirA2,  uint8_t* ptr_expA2, 
+                           uint16_t* ptr_mdirA1, uint8_t* ptr_mexpA1,
+                           uint16_t* ptr_mdirA2, uint16_t* ptr_mdirA3, 
+                           uint16_t* ptr_mapder, 
+                           uint8_t order, uint64_t N, uint8_t* error );
 
-uint64_t c_binarySearchUI64(  uint64_t* ptr_indxArray, uint64_t indx,uint64_t  N);
+uint64_t c_binarySearchUI64( uint64_t* ptr_indxArray, uint64_t indx,uint64_t  N);
 
-void     c_mapPartition(uint16_t part,  uint16_t*  ptr_dir,  uint8_t  order, 
-                    uint16_t*  ptr_map);
+void     c_mapPartition( uint16_t part,  uint16_t*  ptr_dir,  uint8_t  order, 
+                         uint16_t*  ptr_map);
 
-void     c_orderDirExpArray(uint16_t* dirA,    uint8_t*    multExpA ,uint8_t pos,
-             uint16_t* newDirA, uint8_t* newExpA, uint8_t order);
+void     c_orderDirExpArray( uint16_t* dirA,    uint8_t*    multExpA ,uint8_t pos,
+                             uint16_t* newDirA, uint8_t* newExpA, uint8_t order);
 
-void* c_malloc_ptr(uint64_t numberOfElements, uint64_t sizeOfElement);
+void*    c_malloc_ptr( uint64_t numberOfElements, uint64_t sizeOfElement);
 
-void c_free_ptr(void** ptrAddress);
+void     c_free_ptr( void** ptrAddress);
 
 
 // ----------------------------------------------------------------------------------------------------

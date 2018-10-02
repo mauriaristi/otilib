@@ -1,0 +1,82 @@
+
+
+
+real d = 0.01;
+int n = 10;
+real cb=1, ca=1, tip=0.1, tt = 1.0;
+border L1( t=0,ca-d) { x=-cb;                    y=-d-t;     label = 1 ;}
+border L2( t=0,ca-d) { x=-cb;                    y=ca-t;     label = 2 ;}
+border B(  t=0,2   ) { x=cb*(t-1);               y=-ca;      label = 3 ;}
+border C1( t=0,1   ) { x=-ca*(1-t)+(tip-tt*d)*t; y=d;        label = 4 ;} 
+border C21(t=0,1   ) { x=(tip-tt*d)*(1-t)+tip*t; y=d*(1-t);  label = 5 ;} 
+border C22(t=0,1   ) { x=(tip-tt*d)*t+tip*(1-t); y=-d*t;     label = 6 ;} 
+border C3( t=0,1   ) { x=(tip-tt*d)*(1-t)-ca*t;  y=-d;       label = 7 ;} 
+border C4( t=0,2*d ) { x=-ca;                    y=-d+t;     label = 8 ;}
+border R(  t=0,2   ) { x=cb;                     y=cb*(t-1); label = 9 ;} 
+border T(  t=0,2   ) { x=cb*(1-t);               y=ca;       label = 10;} 
+
+mesh Th = buildmesh (L1(n/2)+L2(n/2)+B(n)
+                       +C1(4*n)+C21(n/10)+C22(n/10)+C3(4*n)+R(n)+T(n));
+
+
+// plot(Th,wait=1);
+fespace Vh(Th,P2);
+Vh ux,vx,uy,vy, umag;
+real epsval = 0.1;
+func myfun = 1000*(sqrt(abs(x-tip)^2+y^2)<epsval);//(2-sqrt(abs(x-tip)^2+y^2))^10;
+
+real sqrt2=sqrt(2.);
+
+macro epsilon(u1,u2) [dx(u1),dy(u2),(dy(u1)+dx(u2))/sqrt2] //
+macro div(u,v) ( dx(u)+dy(v) )   //
+// 
+real E      = 21e1  ;
+real nu     = 0.3 ;
+real mu     = E/(2*(1+nu)); 
+real lambda = E*nu/((1+nu)*(1-2*nu)), f = -1;
+// 
+// 
+real c1 = E*nu/((1+nu)*(1-2*nu));
+real c2 = 2.*mu                 ;
+real c3 = mu                    ;
+// 
+// 
+// 
+solve lame([ux,uy],[vx,vy]) =
+    int2d(Th)( c1*dx(ux)*dx(vx) + c1*dx(ux)*dy(vy)) + 
+    int2d(Th)( c1*dy(uy)*dx(vx) + c1*dy(uy)*dy(vy)) + 
+    int2d(Th)( c2*dx(ux)*dx(vx) + c2*dy(uy)*dy(vy)) + 
+    int2d(Th)( c3*dy(ux)*dy(vx) + c3*dy(ux)*dx(vy)) + 
+    int2d(Th)( c3*dx(uy)*dy(vx) + c3*dx(uy)*dx(vy)) +
+//    int2d(Th)(-1.0*vx           - 0.0*vy          ) +  
+    on( 1, 2, 3, 9,10, ux = 0, uy = 0 ) +
+    on(4,7,uy=0)+
+    on( 5, 6,          ux = 1, uy = 0 );
+// c1 = 1.0;
+// c2 = 1.0;
+//solve heat(ux,vx) = int2d(Th)( c1*dx(ux) * dx(vx) + c2*dy(ux) * dy(vx)) +
+// 	on(1,2,3,9,10,ux = 0) + // outer boundaries
+// 	on(5,6, ux = 1.0 );     // Crack tip
+
+// solve heat(ux,vx) = 
+//    int2d(Th)(dxx(ux)*dxx(vx) + dyx(ux)*dyx(vx))+
+// 	int2d(Th)( -myfun*vx ) +
+// 	on(1,2,3,9,10,ux = 0.0) ;//+ // outer boundaries
+// 	//on(5,6, ux = 0.0 );     // Crack tip
+
+// 
+// 
+// 
+umag = sqrt(ux^2+uy^2);
+// plot(Th,[ux,uy],wait=1);
+//plot(Th,ux,   wait=1, fill = true);
+//umag = myfun;
+//plot(Th,umag,   wait=1, fill = true);
+//plot(Th,ux,   wait=1, fill = true);
+//plot(Th,umag,   wait=1, fill = true);
+
+//uy = ux;
+plot(Th,ux,   wait=1, fill = true);
+plot(Th,uy,   wait=1, fill = true);
+plot(Th,umag,   wait=1, fill = true);
+plot(Th,[ux,uy],   wait=1, fill = true);

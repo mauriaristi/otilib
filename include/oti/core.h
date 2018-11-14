@@ -57,6 +57,26 @@ typedef struct {
 
 } directionHelper;
 
+
+typedef struct {
+    uint64_t*     p_fulldir;  // 2D Array with explicit                     Shape: (    Ndir,   order)
+    uint64_t**  p_multtabls;  // 1D Array of 2D multiplication tables       Shape: (       1,   Nmult)
+    uint16_t*       p_ndirs;  // 1D Array with the Ndir given a m <= Nbases Shape: (       1,  Nbasis)
+    uint16_t*       p_mdirA;  // Temporal direction array. Shape: (      nn,   order) -> nn: number of 
+    uint8_t*        p_mexpA;  // Temporal exponent array.  Shape: (      nn,   order)        temp els
+    uint16_t*      p_mapder;  // Temporal mapping array.   Shape: (      nn, 2*order)   
+    uint8_t*       p_multpl;  // Array to hold multiples.  Shape: ( 2^order,   order)
+    double*          p_fder;  // Preallocated array for general function evaluation. size: order+1
+    double*         p_coefs;  // Preallocated array for general multiplication coefs. Shape: (Ndir,1)
+    uint64_t*        p_indx;  // Preallocated array for general multiplication indx.  Shape: (Ndir,1)
+    uint64_t           Ndir;  // Number of directions in the helper..
+    uint64_t          Nmult;  // Number of multiplication tables.
+    uint16_t         Nbasis;  // Maximum number of basis in the helper.
+    uint8_t           order;  // Order of all directions in this set. 
+
+} directionHelper2;
+
+
 typedef struct{
     uint64_t*     p_data; // Data Array.
     uint64_t*     p_cols; // Array of corresponding column index of the data array.

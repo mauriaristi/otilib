@@ -6,6 +6,111 @@
 
 
 
+// ****************************************************************************************************
+void c_loadDirHelper2( char* strLocation, uint8_t order,   uint16_t nbasis, uint8_t nhelps, 
+    directionHelper2* dHelp){          
+    /*
+    loadDirHelper( order,  ndir,  dHelp)
+
+    Loads a direction helper from a file.Applies the binary search to find what is the position at which the 
+    pair dirs,exps exist on an array of size N that contains it.
+
+    INPUTS:
+        
+        -> order:    Order to be loaded in memory.
+            Example: 3
+
+        ->  nbasis:    Number of basis directions to load.
+            Example: 100
+
+        ->nhelps:   Number of help arrays to be allocated in the array.
+
+        ->dHelp:    Adress of the helper to be loaded.
+
+    OUTPUTS:
+        -> The result is the direction helper with the loaded data.
+    */ 
+    // ************************************************************************************************
+
+    // Initialize known values
+    /*
+    typedef struct {
+        uint64_t*     p_fulldir;  // 2D Array with explicit                     Shape: (    Ndir,   order)
+        uint64_t**  p_multtabls;  // 1D Array of 2D multiplication tables       Shape: (       1,   Nmult)
+        uint16_t*       p_ndirs;  // 1D Array with the Ndir given a m <= Nbases Shape: (       1,  Nbasis)
+        uint16_t*       p_mdirA;  // Temporal direction array. Shape: (      nn,   order) -> nn: number of 
+        uint8_t*        p_mexpA;  // Temporal exponent array.  Shape: (      nn,   order)        temp els
+        uint16_t*      p_mapder;  // Temporal mapping array.   Shape: (      nn, 2*order)   
+        uint8_t*       p_multpl;  // Array to hold multiples.  Shape: ( 2^order,   order)
+        double*          p_fder;  // Preallocated array for general function evaluation. size: order+1
+        double*         p_coefs;  // Preallocated array for general multiplication coefs. Shape: (Ndir,1)
+        uint64_t*        p_indx;  // Preallocated array for general multiplication indx.  Shape: (Ndir,1)
+        uint64_t           Ndir;  // Number of directions in the helper..
+        uint64_t          Nmult;  // Number of multiplication tables.
+        uint16_t         Nbasis;  // Maximum number of basis in the helper.
+        uint8_t           order;  // Order of all directions in this set. 
+    } directionHelper2;
+    */
+
+    char filename[1000], holder[100];
+
+    strcpy(filename,strLocation);
+    strcat(filename,"fulldir_n");
+    sprintf(holder, "%hhu", order);
+    strcat(filename,holder);
+    strcat(filename,"_m");
+    sprintf(holder, "%hu", nbasis);
+    strcat(filename,holder);
+    strcat(filename,".npy");
+    // Load Fulldir.
+    load_npy(char* filename, (void**) &dHelp->p_fulldir, &ndim, &shape);
+    // Load ndirs.
+    
+    // Load multtabls.
+    
+
+    c_loadDirA( strLocation, order, nbasis, &dHelp->p_dirA, &dHelp->Ndir  );
+    c_loadExpA( strLocation, order, nbasis, &dHelp->p_expA, &dHelp->Ndir  );
+    c_loadParts(strLocation, order, nbasis, &dHelp->p_part, &dHelp->Npart );
+    c_loadCount(strLocation, order, nbasis, &dHelp->p_countOTI);
+    c_loadMult( strLocation, order, nbasis, &dHelp->p_multRes, &dHelp->p_multInd, &dHelp->Nmult);
+
+    dHelp->Nbasis = nbasis;
+    dHelp->order  =  order;
+    dHelp->nn     = nhelps;
+    
+    dHelp->p_udirA  = (uint16_t*)malloc(  nhelps*order*sizeof(uint16_t)    ); 
+    dHelp->p_uexpA  = (uint8_t* )malloc(  nhelps*order*sizeof(uint8_t )    ); 
+    dHelp->p_rdirA  = (uint16_t*)malloc(  nhelps*order*sizeof(uint16_t)    ); 
+    dHelp->p_rexpA  = (uint8_t* )malloc(  nhelps*order*sizeof(uint8_t )    ); 
+    dHelp->p_mdirA  = (uint16_t*)malloc(  nhelps*order*sizeof(uint16_t)    ); 
+    dHelp->p_mexpA  = (uint8_t* )malloc(  nhelps*order*sizeof(uint8_t )    ); 
+    dHelp->p_mapder = (uint16_t*)malloc(2*nhelps*order*sizeof(uint16_t)    ); 
+    dHelp->p_multpl = (uint8_t* )malloc( c_fastpow(2,order)*order*sizeof(uint8_t )); 
+    dHelp->p_fder   = (double*  )malloc( (order+1    )*sizeof(double  )    );
+    dHelp->p_coefs  = (double*  )malloc( (dHelp->Ndir)*sizeof(double  )    );
+    dHelp->p_indx   = (uint64_t*)malloc( (dHelp->Ndir)*sizeof(uint64_t)    );
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -934,6 +1039,71 @@ inline uint16_t c_helper_getSet( uint8_t order,uint64_t i,uint64_t j, directionH
 
 // ****************************************************************************************************
 void c_helper_load(  uint8_t maxorder, char* strLocation, directionHelper** p_dH){          
+    /*
+    directionHelper* c_loadHelpers(  uint8_t maxorder )
+
+    Load a set of helpers from order 1 until maxorder with specified number of  basis for each order.
+
+    INPUTS:
+        
+        -> maxorder:    Maximum order of helper to be loaded.
+            Example: 3
+
+    OUTPUTS:
+        -> The result is an array of helpers of length = order with the loaded data.
+    */ 
+    // ************************************************************************************************
+
+    
+    // uint16_t ndir[]   = {65535, // ------------------   1 -> Probably not necessary
+    //                       1000, // ------------------   2
+    //                        100, // ------------------   3
+    //                         10, // ------------------   4
+    //                         10, // ------------------   5
+    //                         10, // ------------------   6
+    //                         10, // ------------------   7 
+    //                         10, // ------------------   8
+    //                         10, // ------------------   9
+    //                         10  // ------------------  10
+    // };
+
+    uint16_t ndir[]   = {65535, // ------------------   1 -> Probably not necessary
+                          1000, // ------------------   2
+                           100, // ------------------   3
+                            10, // ------------------   4
+                            10, // ------------------   5
+                            10, // ------------------   6
+                            10, // ------------------   7 
+                            10, // ------------------   8
+                            10, // ------------------   9
+                            10  // ------------------  10
+    };
+
+    uint8_t  nhelps =  3;
+
+    p_dH[0] = (directionHelper* )malloc(maxorder*sizeof(directionHelper));
+
+    if (p_dH == NULL){
+      printf("Error. Not enough memory for helper array. Exiting\n");
+      exit(-1);
+    }
+    
+    for( int i = 1; i<=maxorder; i++){
+        
+      c_loadDirHelper(strLocation,i,ndir[i-1], nhelps, &(*p_dH)[i-1]);
+
+    }
+
+#ifdef VERB // Indicator of verbosity from compiler.
+    printf("Successfully loaded  %d helpers.\n",maxorder);
+#endif
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void c_helper_load(  uint8_t maxorder, char* strLocation, directionHelper2** p_dH){          
     /*
     directionHelper* c_loadHelpers(  uint8_t maxorder )
 

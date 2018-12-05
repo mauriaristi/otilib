@@ -100,7 +100,7 @@ typedef struct {
 
 typedef struct {
    dhelp_t* p_dh; ///< Array of direction helpers. Shape: (1 , ndh)
-   ndhelps_t ndh; ///< Number of direction helpers.
+   ndh_t ndh;     ///< Number of direction helpers.
 } dhelpl_t;       ///< Direction Helper list type.
 
 typedef struct{
@@ -136,21 +136,21 @@ typedef struct{
 /// Enumerators to assign a code to constants
 enum c_oti_errors {  
   // Define operations identifiers.
-  OTI_success      =     0,   // Success
-  OTI_OutOfMemory  =    -1,   // Out of memory.
-  OTI_BadIndx      =    -2,   // indexing error.
-  OTI_NonPreComp   =    -3,   // No precomputed data is available.
+  OTI_success      =     0,   ///< Success
+  OTI_OutOfMemory  =    -1,   ///< Out of memory.
+  OTI_BadIndx      =    -2,   ///< indexing error.
+  OTI_NonPreComp   =    -3,   ///< No precomputed data is available.
 
-  OTI_FEM_InvalidBaseId = -100,         // invalid base Id. It pops up when for example 
-                                        // for P0 elements that only have 1 basis function
-                                        // you ask for basis 2 (that does not exist).
+  OTI_FEM_InvalidBaseId = -100,         ///< invalid base Id. It pops up when for example 
+                                        /// for P0 elements that only have 1 basis function
+                                        /// you ask for basis 2 (that does not exist).
 
-  OTI_FEM_InvalidElementType = -101,    // Invalid basic element type 
+  OTI_FEM_InvalidElementType = -101,    ///< Invalid basic element type 
                                         // (elLine, elTria, elQuad, elTetr, elHexa).
 
-  OTI_FEM_NotImplemented     = -102,    // Operation not yet implemented.
+  OTI_FEM_NotImplemented     = -102,    ///< Operation not yet implemented.
 
-  OTI_undetErr     = -20000             // Undetermined error.
+  OTI_undetErr     = -20000             ///< Undetermined error.
   
 };
 
@@ -171,22 +171,356 @@ enum c_oti_errors {
 // ----------------------------------------------------------------------------------------------------
 // to add to c_otilib.pxd
 
-void      loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape);
 
-void      dhelp_load_singl( char* strLocation, uint8_t order,   uint16_t nbasis, uint8_t nhelps, 
-    dhelp_t* dHelp);
+// ----------------------------------------------------------------------------------------------------
+// ---------------------------------   ARRAY FUNCTIONS    ---------------------------------------------
+// ----------------------------------------------------------------------------------------------------
+uint8_t  array2d_getel_ui8_t( uint8_t*  arr,uint64_t ncols, uint64_t i, uint64_t j );
 
-void      loadnpy_multtabls( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH);
+uint16_t array2d_getel_ui16_t(uint16_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
 
-void      loadnpy_ndirs( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH);
+uint32_t array2d_getel_ui32_t(uint32_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
 
-void      loadnpy_fulldir( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH);
+uint64_t array2d_getel_ui64_t(uint64_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
 
-void      dhelp_freeItem(  dhelp_t* p_dH);
+double   array2d_getel_f64_t( double*   arr,uint64_t ncols, uint64_t i, uint64_t j );
 
-void      dhelp_freeList(dhelp_t** p_dH, uint8_t nhelpers);
+float    array2d_getel_f32_t( float*    arr,uint64_t ncols, uint64_t i, uint64_t j );
+// ----------------------------------------------------------------------------------------------------
+// ---------------------------------   ARRAY FUNCTIONS    ---------------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
-void      dhelp_load( char* strLocation, dhelp_t** p_dH);
+
+// ----------------------------------------------------------------------------------------------------
+// ---------------------------------    MATH FUNCTIONS    ---------------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the two argument inverse tangent function. 
+
+@param x Evaluation point.
+@param y Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_atan2(double x, double y, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the base b logarith, function. 
+
+@param x Evaluation point.
+@param base Base of the logarithm.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_logb(double x, int base,ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the base 10 logarithm function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_log10(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the inverse hyperbolic tangent function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_atanh(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the inverse hyperbolic sine function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_asinh(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the inverse hyperbolic cosine function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_acosh(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the hyperbolic tangent function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_tanh(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the square root function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_sqrt(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the hyperbolic cosine function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_cosh(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the hyperbolic sine function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_sinh(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the inverse sine function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_asin(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the inverse cosine function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_acos(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the inverse tangent function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_atan(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the tangent function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_tan(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the cosine function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_cos(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the sine function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_sin(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Derivatives of the Natural logarithm function. 
+
+@param x Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/ 
+void der_r_log(double x , ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Derivatives of Exponential function.
+
+@param x Evaluation point.
+@param order Maximum order of derivative to be computed.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/ 
+void der_r_exp(double x, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Real derivatives of the power function. In particular useful for non integer exponents.
+
+Evaluating    \f$    x^e    \f$
+
+@param x Evaluation base of the power function.
+@param e Exponent to power x.
+@param order Maximum order of derivative to be retreived.
+@param[out] derivs Array with the derivative information. It must come allocated.
+******************************************************************************************************/ 
+void der_r_pow(double x, double e, ord_t order, double* derivs);
+// ----------------------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------------------
+// ---------------------------------    MATH FUNCTIONS    ---------------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+// ----------------------------------------------------------------------------------------------------
+// ---------------------------------   LOADNPY FUNCTIONS  ---------------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Loads a '.npy' array to C format.
+
+@param[in] filename String with the filename of to load. Must contain the path.
+@param[out] data Address of the pointer that will hold the data. Will be allocated in this function.
+@param[out] ndim Number of dimensions of the array.
+@param[out] shape Address to the pointer that will hold the array.
+******************************************************************************************************/ 
+void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape);
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Loads the multiplication tables. Given the corresponding order and number of basis, it loads the
+file located at the given folder.
+
+@param[in] strLocation String with the folder that contains the npy file with fulldir.    
+@param[in] order Order to be loaded. Example: 3.
+@param[in] nbasis Number of basis. Example: 10
+@param[out] p_dH Address of the helper to be loaded. Memory is allocated in this function.
+******************************************************************************************************/ 
+void loadnpy_multtabls( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Loads the number of directions array. Given the truncation order and number of basis, it loads 
+the file from the given folder.
+
+@param[in] strLocation String with the folder that contains the *.npy file with fulldir.
+@param[in] order Order to be loaded. Example: 3.
+@param[in] nbasis Number of basis. Example: 10.
+@param[out] p_dH Address of the helper to be loaded. Memory is allocated in this function.
+******************************************************************************************************/ 
+void loadnpy_ndirs( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH);
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Loads the full direction matrix. Given the truncation order and number of basis, it loads the  
+file from the given folder.
+
+@param[in] strLocation String with the folder that contains the *.npy file with fulldir.
+@param[in] order Order to be loaded. Example: 3.
+@param[in] nbasis Number of basis. Example: 10.
+@param[out] p_dH Address of the helper to be loaded. Memory is allocated in this function.
+******************************************************************************************************/ 
+void loadnpy_fulldir( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH);
+// ----------------------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------------------
+// ---------------------------------   LOADNPY FUNCTIONS  ---------------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+// ----------------------------------------------------------------------------------------------------
+// ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+/**************************************************************************************************//**
+@brief Loads a direction helper from a set of files within the specified folder. 
+     
+@param strLocation String with the folder where the data is located. Example "../../data"
+@param order Order to be loaded in memory. Example: 3
+@param nbasis Number of basis directions to load. Example: 100
+@param nhelps Number of help arrays to be allocated in the array.
+@param[out] p_dH Address of the helper to be loaded.
+******************************************************************************************************/ 
+void dhelp_load_singl( char* strLoc, ord_t order, ndir_t nbasis, uint8_t nhelps, dhelp_t* p_dH);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+/**************************************************************************************************//**
+@brief Frees all arrays in the given dhelp_t.
+
+@param p_dH  Allocated direction helper.
+******************************************************************************************************/ 
+void dhelp_freeItem(  dhelp_t* p_dH);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Free all helpers that where loaded.
+
+@param dhl List of helpers
+@param nhelpers Number of direction helpers.
+******************************************************************************************************/ 
+void dhelp_freeList(dhelpl_t* dhl, uint8_t nhelpers);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Load a set of 10 helpers from order 1 until order 10 with 10 bases.
+    
+@param strLocation: Path to the folder that contains the files to load.
+@param[out] dhl: Direction helper list with the loaded data.
+******************************************************************************************************/ 
+void dhelp_load( char* strLocation, dhelpl_t* dhl);
+// ----------------------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------------------
+// ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
 
 
 // added to c_otilib.pxd

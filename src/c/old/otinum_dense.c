@@ -102,34 +102,34 @@ void c_oti_logb(otinum_t* num, int base, directionHelper* p_dH, otinum_t* res){
                 derivs[0]  =  log(x0)/log(base);
 
             case 1:
-                derivs[1]  =  1./(x0*log(base));
+                derivs[1]  =  1/(x0*log(base));
 
             case 2:
-                derivs[2]  =  -1./(pow(x0, 2)*log(base));
+                derivs[2]  =  -1/(pow(x0, 2)*log(base));
                 
             case 3:
-                derivs[3]  =  2./(pow(x0, 3)*log(base));
+                derivs[3]  =  2/(pow(x0, 3)*log(base));
                 
             case 4:
-                derivs[4]  =  -6./(pow(x0, 4)*log(base));
+                derivs[4]  =  -6/(pow(x0, 4)*log(base));
                 
             case 5:
-                derivs[5]  =  24./(pow(x0, 5)*log(base));
+                derivs[5]  =  24/(pow(x0, 5)*log(base));
                 
             case 6:
-                derivs[6]  =  -120./(pow(x0, 6)*log(base));
+                derivs[6]  =  -120/(pow(x0, 6)*log(base));
                             
             case 7:
-                derivs[7]  =  720./(pow(x0, 7)*log(base));
+                derivs[7]  =  720/(pow(x0, 7)*log(base));
                 
             case 8:
-                derivs[8]  =  -5040./(pow(x0, 8)*log(base));
+                derivs[8]  =  -5040/(pow(x0, 8)*log(base));
                 
             case 9:
-                derivs[9]  =  40320./(pow(x0, 9)*log(base));
+                derivs[9]  =  40320/(pow(x0, 9)*log(base));
                 
             case 10:
-                derivs[10] =  -362880./(pow(x0, 10)*log(base));
+                derivs[10] =  -362880/(pow(x0, 10)*log(base));
                 
         }
      
@@ -160,34 +160,34 @@ void c_oti_log10(otinum_t* num, directionHelper* p_dH, otinum_t* res){
                 derivs[0]  =  log(x0)/log(10);
 
             case 1:
-                derivs[1]  =  1./(x0*log(10));
+                derivs[1]  =  1/(x0*log(10));
 
             case 2:
-                derivs[2]  =  -1./(pow(x0, 2)*log(10));
+                derivs[2]  =  -1/(pow(x0, 2)*log(10));
                 
             case 3:
-                derivs[3]  =  2./(pow(x0, 3)*log(10));
+                derivs[3]  =  2/(pow(x0, 3)*log(10));
                 
             case 4:
-                derivs[4]  =  -6./(pow(x0, 4)*log(10));
+                derivs[4]  =  -6/(pow(x0, 4)*log(10));
                 
             case 5:
-                derivs[5]  =  24./(pow(x0, 5)*log(10));
+                derivs[5]  =  24/(pow(x0, 5)*log(10));
                 
             case 6:
-                derivs[6]  =  -120./(pow(x0, 6)*log(10));
+                derivs[6]  =  -120/(pow(x0, 6)*log(10));
                             
             case 7:
-                derivs[7]  =  720./(pow(x0, 7)*log(10));
+                derivs[7]  =  720/(pow(x0, 7)*log(10));
                 
             case 8:
-                derivs[8]  =  -5040./(pow(x0, 8)*log(10));
+                derivs[8]  =  -5040/(pow(x0, 8)*log(10));
                 
             case 9:
-                derivs[9]  =  40320./(pow(x0, 9)*log(10));
+                derivs[9]  =  40320/(pow(x0, 9)*log(10));
                 
             case 10:
-                derivs[10] =  -362880./(pow(x0, 10)*log(10));
+                derivs[10] =  -362880/(pow(x0, 10)*log(10));
                 
         }
      

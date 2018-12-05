@@ -14,6 +14,7 @@
 // --------------------------------    END EXTERNAL LIBRARIES     -------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+
 // ----------------------------------------------------------------------------------------------------
 // ---------------------------------------      DEFINES         ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
@@ -24,6 +25,24 @@
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------------      END DEFINES         ----------------------------------------
 // ----------------------------------------------------------------------------------------------------
+
+
+
+// ----------------------------------------------------------------------------------------------------
+// --------------------------------------       TYPEDEFS         --------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
+typedef double     coeff_t; ///< Coefficient type.
+typedef uint64_t   imdir_t; ///< Imaginary direction type.
+typedef uint64_t    ndir_t; ///< Number of Imaginary directions type.
+typedef uint16_t   bases_t; ///< Imaginary bases type. 
+typedef uint8_t      ord_t; ///< Order type.
+typedef uint8_t      ndh_t; ///< Number of direction helpers type.
+
+// ----------------------------------------------------------------------------------------------------
+// --------------------------------------     END TYPEDEFS       --------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
 
 
 // ----------------------------------------------------------------------------------------------------
@@ -45,8 +64,8 @@ typedef struct {
     uint8_t*        p_mexpA;  // Temporal exponent array.  Shape: (      nn,   order)        temp els
     uint16_t*      p_mapder;  // Temporal mapping array.   Shape: (      nn, 2*order)   
     uint8_t*       p_multpl;  // Array to hold multiples.  Shape: ( 2^order,   order)
-    double*          p_fder;  // Preallocated array for general function evaluation. size: order+1
-    double*         p_coefs;  // Preallocated array for general multiplication coefs. Shape: (Ndir,1)
+    coeff_t*         p_fder;  // Preallocated array for general function evaluation. size: order+1
+    coeff_t*        p_coefs;  // Preallocated array for general multiplication coefs. Shape: (Ndir,1)
     uint64_t*        p_indx;  // Preallocated array for general multiplication indx.  Shape: (Ndir,1)
     uint64_t           Ndir;  // Number of directions in the helper.
     uint64_t          Npart;  // Number of partitions in the helper.
@@ -60,22 +79,29 @@ typedef struct {
 
 
 typedef struct {
-    uint16_t*     p_fulldir;  // 2D Array with explicit                     Shape: (    Ndir,   order)
-    uint64_t**  p_multtabls;  // 1D Array of 2D multiplication tables       Shape: (       1,   Nmult)
-    uint64_t*       p_ndirs;  // 1D Array with the Ndir given a m <= Nbases Shape: (       1,  Nbasis)
-    uint16_t*       p_mdirA;  // Temporal direction array. Shape: (      nn,   order) -> nn: number of 
-    uint8_t*        p_mexpA;  // Temporal exponent array.  Shape: (      nn,   order)        temp els
-    uint16_t*      p_mapder;  // Temporal mapping array.   Shape: (      nn, 2*order)   
-    uint8_t*       p_multpl;  // Array to hold multiples.  Shape: ( 2^order,   order)
-    double*          p_fder;  // Preallocated array for general function evaluation. size: order+1
-    double*         p_coefs;  // Preallocated array for general multiplication coefs. Shape: (Ndir,1)
-    uint64_t*        p_indx;  // Preallocated array for general multiplication indx.  Shape: (Ndir,1)
-    uint64_t           Ndir;  // Number of directions in the helper..
-    uint16_t          Nmult;  // Number of multiplication tables.
-    uint16_t         Nbasis;  // Maximum number of basis in the helper.
-    uint8_t           order;  // Order of all directions in this set. 
+   // Arrays
+    bases_t*      p_fulldir;  ///< 2D Array with explicit                     Shape: (    Ndir,   order)
+    imdir_t**   p_multtabls;  ///< 1D Array of 2D multiplication tables       Shape: (       1,   Nmult)
+    ndir_t*         p_ndirs;  ///< 1D Array with the Ndir given a m <= Nbases Shape: (       1,  Nbasis)
+    uint16_t*       p_mdirA;  ///< Temporal direction array. Shape: (      nn,   order) -> nn: number of 
+    uint8_t*        p_mexpA;  ///< Temporal exponent array.  Shape: (      nn,   order)        temp els
+    uint16_t*      p_mapder;  ///< Temporal mapping array.   Shape: (      nn, 2*order)   
+    uint8_t*       p_multpl;  ///< Array to hold multiples.  Shape: ( 2^order,   order)
+    coeff_t*         p_fder;  ///< Preallocated array for general function evaluation. size: order+1
+    coeff_t*        p_coefs;  ///< Preallocated array for general multiplication coefs. Shape: (Ndir,1)
+    uint64_t*        p_indx;  ///< Preallocated array for general multiplication indx.  Shape: (Ndir,1)
+  // Integer elements
+    ndir_t             Ndir;  ///< Number of directions in the helper.
+    ord_t             Nmult;  ///< Number of multiplication tables. (Usually, it's order/2 )
+    bases_t          Nbasis;  ///< Maximum number of basis in the helper.
+    ord_t             order;  ///< Order of all directions in this set. 
 
-} directionHelper2;
+} dhelp_t; ///< Direction Helper type.
+
+typedef struct {
+   dhelp_t* p_dh; ///< Array of direction helpers. Shape: (1 , ndh)
+   ndhelps_t ndh; ///< Number of direction helpers.
+} dhelpl_t;       ///< Direction Helper list type.
 
 typedef struct{
     uint64_t*     p_data; // Data Array.
@@ -107,7 +133,7 @@ typedef struct{
 // -----------------------------------------      ENUMS        ----------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-// Enumerators to assign a code to FEM constants
+/// Enumerators to assign a code to constants
 enum c_oti_errors {  
   // Define operations identifiers.
   OTI_success      =     0,   // Success
@@ -145,22 +171,22 @@ enum c_oti_errors {
 // ----------------------------------------------------------------------------------------------------
 // to add to c_otilib.pxd
 
-void      load_npy(char* filename, void** data, uint8_t* ndim, uint64_t* shape);
+void      loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape);
 
-void      c_loadDirHelper2( char* strLocation, uint8_t order,   uint16_t nbasis, uint8_t nhelps, 
-    directionHelper2* dHelp);
+void      dhelp_load_singl( char* strLocation, uint8_t order,   uint16_t nbasis, uint8_t nhelps, 
+    dhelp_t* dHelp);
 
-void      c_loadMulttabls( char* strLocation, uint8_t order, uint16_t nbasis, directionHelper2* p_dH);
+void      loadnpy_multtabls( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH);
 
-void      c_loadNdirs( char* strLocation, uint8_t order, uint16_t nbasis, directionHelper2* p_dH);
+void      loadnpy_ndirs( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH);
 
-void      c_loadFulldir( char* strLocation, uint8_t order, uint16_t nbasis, directionHelper2* p_dH);
+void      loadnpy_fulldir( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH);
 
-void      c_freeDirHelper2(  directionHelper2* p_dH);
+void      dhelp_freeItem(  dhelp_t* p_dH);
 
-void      c_helper_free2(directionHelper2** p_dH, uint8_t nhelpers);
+void      dhelp_freeList(dhelp_t** p_dH, uint8_t nhelpers);
 
-void      c_helper_load2( char* strLocation, directionHelper2** p_dH);
+void      dhelp_load( char* strLocation, dhelp_t** p_dH);
 
 
 // added to c_otilib.pxd

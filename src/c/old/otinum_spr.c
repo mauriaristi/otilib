@@ -1,11 +1,94 @@
-#include "oti/otinum_dense.h"
+#include "oti/otinum_spr.h"
 
 // ----------------------------------------------------------------------------------------------------
-// ---------------------------------     OTINUM FUNCTIONS     -----------------------------------------
+// -------------------------------     SPROTINUM FUNCTIONS     ----------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void c_soti_printf(sotinum_t* num){
+    /*
+    c_soti_printf(sotinum_t* num)
+
+    Function that prints an sparse oti in c..
+
+    INPUTS:
+
+        ->   p_arr1:    Array
+
+        ->   elem:      Element with the information of the solution.
+        
+        -> p_arrRes:    Result of operation.
+
+        ->     p_dH:    Direction helper
+
+    */ 
+    // ************************************************************************************************
+
+    printf("soti(o: %hhu, sz: %llu, ",num->order,num->size);
+    // printf("coefs at %p \n",num->p_coefs);
+    c_printArrayDBL(num->p_coefs,num->size);
+    printf(", ");
+    // printf("indx at %p \n",num->p_indx);
+    c_printArrayUI64(num->p_indx,num->size);
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void c_soti_fdiv(double numx, sotinum_t* numy, sotinum_t* res, directionHelper* p_dH){
+    /*
+    PURPOSE:  Inverse Tangent function counting all quadrants for OTI numbers.
+
+    */
+    //*************************************************************************************************
+
+    sotinum_t tmp;
+
+    c_soti_pow(numy,-1.0, p_dH, &tmp); // 1 / y
+
+    c_soti_mulf(&tmp,numx,res); 
+    
+    c_soti_free(&tmp);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_atan2(otinum_t* numx, otinum_t* numy, directionHelper* p_dH, otinum_t* res){
+void c_soti_divf(sotinum_t* numx, double numy, sotinum_t* res){
+    /*
+    PURPOSE:  Inverse Tangent function counting all quadrants for OTI numbers.
+
+    */
+    //*************************************************************************************************
+
+    c_soti_mulf(numx,(1.0/numy),res);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void c_soti_div(sotinum_t* numx, sotinum_t* numy, sotinum_t* res, directionHelper* p_dH){
+    /*
+    PURPOSE:  Inverse Tangent function counting all quadrants for OTI numbers.
+
+    */
+    //*************************************************************************************************
+    
+    sotinum_t tmp;
+
+    c_soti_pow(numy,-1.0,p_dH, &tmp); // 1 / y
+
+    c_soti_mul(numx,&tmp,res,p_dH); 
+    
+    c_soti_free(&tmp);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void c_soti_atan2(sotinum_t* numx, sotinum_t* numy, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Inverse Tangent function counting all quadrants for OTI numbers.
 
@@ -14,34 +97,26 @@ void c_oti_atan2(otinum_t* numx, otinum_t* numy, directionHelper* p_dH, otinum_t
     double* derivs = p_dH[numx->order-1].p_fder; // holder for the derivatives in the helper.
     double x0    ;
     uint8_t i;
-    otinum_t tmp;
+    sotinum_t tmp;
 
 
     // first perform the division of the numbers
 
     // 1/y
-    c_oti_pow(numy,-1.0,p_dH, res);
+    c_soti_pow(numy,-1.0,p_dH, res);
 
-    // Allocate memory for the result:
-    tmp.p_coefs = (double* )malloc(numx->Ndir*sizeof(double)) ;
-    if( tmp.p_coefs == NULL ){
-        printf("---- MemoryError ----\n");
-        exit(-1);
-    }
-    tmp.order = numx->order;
-    tmp.Ndir = numx->Ndir;
+    
     //x*(1/y) 
-    c_oti_mul(numx, res, &tmp, p_dH);
-    free(res->p_coefs);
-    res->p_coefs = NULL;
+    c_soti_mul(numx, res, &tmp, p_dH);
+    c_soti_free(res);
 
-    x0 = tmp.p_coefs[0];
+    x0 = c_soti_getReal(&tmp);
 
     for( i=0; i<(numx->order+1); i++){
     
         switch(i){
             case 0:
-                derivs[0] =  atan2(numx->p_coefs[0],numy->p_coefs[0]);
+                derivs[0] =  atan2(c_soti_getReal(numx),c_soti_getReal(numy));
 
             case 1:
                 derivs[1] =  1.0/(pow(x0, 2) + 1);
@@ -78,21 +153,21 @@ void c_oti_atan2(otinum_t* numx, otinum_t* numy, directionHelper* p_dH, otinum_t
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, &tmp, p_dH, res);
-    free(tmp.p_coefs);
+    c_soti_derivFunc(derivs, &tmp, p_dH, res);
+    c_soti_free(&tmp);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_logb(otinum_t* num, int base, directionHelper* p_dH, otinum_t* res){
+void c_soti_logb(sotinum_t* num, int base, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  logarithm of base b function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     uint8_t i;
 
     for( i=0; i<(num->order+1); i++){
@@ -102,55 +177,55 @@ void c_oti_logb(otinum_t* num, int base, directionHelper* p_dH, otinum_t* res){
                 derivs[0]  =  log(x0)/log(base);
 
             case 1:
-                derivs[1]  =  1./(x0*log(base));
+                derivs[1]  =  1/(x0*log(base));
 
             case 2:
-                derivs[2]  =  -1./(pow(x0, 2)*log(base));
+                derivs[2]  =  -1/(pow(x0, 2)*log(base));
                 
             case 3:
-                derivs[3]  =  2./(pow(x0, 3)*log(base));
+                derivs[3]  =  2/(pow(x0, 3)*log(base));
                 
             case 4:
-                derivs[4]  =  -6./(pow(x0, 4)*log(base));
+                derivs[4]  =  -6/(pow(x0, 4)*log(base));
                 
             case 5:
-                derivs[5]  =  24./(pow(x0, 5)*log(base));
+                derivs[5]  =  24/(pow(x0, 5)*log(base));
                 
             case 6:
-                derivs[6]  =  -120./(pow(x0, 6)*log(base));
+                derivs[6]  =  -120/(pow(x0, 6)*log(base));
                             
             case 7:
-                derivs[7]  =  720./(pow(x0, 7)*log(base));
+                derivs[7]  =  720/(pow(x0, 7)*log(base));
                 
             case 8:
-                derivs[8]  =  -5040./(pow(x0, 8)*log(base));
+                derivs[8]  =  -5040/(pow(x0, 8)*log(base));
                 
             case 9:
-                derivs[9]  =  40320./(pow(x0, 9)*log(base));
+                derivs[9]  =  40320/(pow(x0, 9)*log(base));
                 
             case 10:
-                derivs[10] =  -362880./(pow(x0, 10)*log(base));
+                derivs[10] =  -362880/(pow(x0, 10)*log(base));
                 
         }
      
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-void c_oti_log10(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_log10(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  logarithm of base 10 function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     uint8_t i;
 
     for( i=0; i<(num->order+1); i++){
@@ -160,54 +235,54 @@ void c_oti_log10(otinum_t* num, directionHelper* p_dH, otinum_t* res){
                 derivs[0]  =  log(x0)/log(10);
 
             case 1:
-                derivs[1]  =  1./(x0*log(10));
+                derivs[1]  =  1/(x0*log(10));
 
             case 2:
-                derivs[2]  =  -1./(pow(x0, 2)*log(10));
+                derivs[2]  =  -1/(pow(x0, 2)*log(10));
                 
             case 3:
-                derivs[3]  =  2./(pow(x0, 3)*log(10));
+                derivs[3]  =  2/(pow(x0, 3)*log(10));
                 
             case 4:
-                derivs[4]  =  -6./(pow(x0, 4)*log(10));
+                derivs[4]  =  -6/(pow(x0, 4)*log(10));
                 
             case 5:
-                derivs[5]  =  24./(pow(x0, 5)*log(10));
+                derivs[5]  =  24/(pow(x0, 5)*log(10));
                 
             case 6:
-                derivs[6]  =  -120./(pow(x0, 6)*log(10));
+                derivs[6]  =  -120/(pow(x0, 6)*log(10));
                             
             case 7:
-                derivs[7]  =  720./(pow(x0, 7)*log(10));
+                derivs[7]  =  720/(pow(x0, 7)*log(10));
                 
             case 8:
-                derivs[8]  =  -5040./(pow(x0, 8)*log(10));
+                derivs[8]  =  -5040/(pow(x0, 8)*log(10));
                 
             case 9:
-                derivs[9]  =  40320./(pow(x0, 9)*log(10));
+                derivs[9]  =  40320/(pow(x0, 9)*log(10));
                 
             case 10:
-                derivs[10] =  -362880./(pow(x0, 10)*log(10));
+                derivs[10] =  -362880/(pow(x0, 10)*log(10));
                 
         }
      
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_atanh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_atanh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Inverse Hyperbolic tangent function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     uint8_t i;
 
     for( i=0; i<(num->order+1); i++){
@@ -251,20 +326,20 @@ void c_oti_atanh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_asinh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_asinh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Inverse Hyperbolic sine function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     uint8_t i;
 
     for( i=0; i<(num->order+1); i++){
@@ -310,20 +385,20 @@ void c_oti_asinh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_acosh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_acosh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Hyperbolic inverse cosine function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     double x2m1 = pow(x0, 2.) - 1.;
     double sqx2m1 = pow(x2m1, 0.5);
     uint8_t i;
@@ -369,20 +444,20 @@ void c_oti_acosh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_tanh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_tanh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Hyperbolic tangent function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     double tanhx0 = tanh(x0);
     double tanh2  = pow(tanhx0, 2); 
     double tanh2m1 = tanh2 - 1;
@@ -429,13 +504,13 @@ void c_oti_tanh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_sqrt(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_sqrt(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Square root function for OTI numbers.
 
@@ -443,7 +518,7 @@ void c_oti_sqrt(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
     // double x0 = num->p_coefs[0];
-    double sqx = sqrt(num->p_coefs[0]);
+    double sqx = sqrt(c_soti_getReal(num));
     uint8_t i;
 
     for( i=0; i<(num->order+1); i++){
@@ -487,20 +562,20 @@ void c_oti_sqrt(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_cosh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_cosh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Hyperbolic Cosine function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     double ch = cosh(x0);
     double sh = sinh(x0);
     uint8_t i;
@@ -546,20 +621,20 @@ void c_oti_cosh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_sinh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_sinh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Hyperbolic Sine function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     double ch = cosh(x0);
     double sh = sinh(x0);
     uint8_t i;
@@ -605,21 +680,21 @@ void c_oti_sinh(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-void c_oti_asin(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_asin(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Inverse Sine function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     uint8_t i;
 
     for( i=0; i<(num->order+1); i++){
@@ -664,7 +739,7 @@ void c_oti_asin(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -672,14 +747,14 @@ void c_oti_asin(otinum_t* num, directionHelper* p_dH, otinum_t* res){
 
 
 // ****************************************************************************************************
-void c_oti_acos(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_acos(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Inverse Cosine function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     uint8_t i;
 
     for( i=0; i<(num->order+1); i++){
@@ -724,7 +799,7 @@ void c_oti_acos(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -733,14 +808,14 @@ void c_oti_acos(otinum_t* num, directionHelper* p_dH, otinum_t* res){
 
 
 // ****************************************************************************************************
-void c_oti_atan(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_atan(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Inverse Tangent function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     double x02   = pow(x0,2.0);
     double x02p1 = x02+1.0;
     uint8_t i;
@@ -786,20 +861,20 @@ void c_oti_atan(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_tan(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_tan(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Tangent function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder; // holder for the derivatives in the helper.
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     double tanx0 = tan(x0);
     double tanx02p1 = pow(tanx0,2.0) + 1.0 ;
     uint8_t i;
@@ -883,7 +958,7 @@ void c_oti_tan(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -892,14 +967,14 @@ void c_oti_tan(otinum_t* num, directionHelper* p_dH, otinum_t* res){
 
 
 // ****************************************************************************************************
-void c_oti_cos(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_cos(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Cosine function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder;
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     uint8_t i;
     uint8_t s = 0;
     double sign = 1.;
@@ -922,20 +997,20 @@ void c_oti_cos(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_sin(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_sin(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Sine function for OTI numbers.
 
     */
     //*************************************************************************************************
     double* derivs = p_dH[num->order-1].p_fder;
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     uint8_t i;
     uint8_t s = 1;
     double sign = -1.;
@@ -958,7 +1033,7 @@ void c_oti_sin(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -966,7 +1041,7 @@ void c_oti_sin(otinum_t* num, directionHelper* p_dH, otinum_t* res){
 
 
 // ****************************************************************************************************
-void c_oti_log(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_log(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Natural logarithm function for OTI numbers. 
 
@@ -974,7 +1049,7 @@ void c_oti_log(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     //*************************************************************************************************
     
     double* derivs = p_dH[num->order-1].p_fder;
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     double sign = -1.;
     double factor = 1.;
     uint8_t i;    
@@ -996,7 +1071,7 @@ void c_oti_log(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -1004,7 +1079,7 @@ void c_oti_log(otinum_t* num, directionHelper* p_dH, otinum_t* res){
 
 
 // ****************************************************************************************************
-void c_oti_exp(otinum_t* num, directionHelper* p_dH, otinum_t* res){
+void c_soti_exp(sotinum_t* num, directionHelper* p_dH, sotinum_t* res){
     /*
     PURPOSE:  Exponential function for OTI numbers. -> e**x, x is otinum
 
@@ -1012,7 +1087,7 @@ void c_oti_exp(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     //*************************************************************************************************
     
     double* derivs = p_dH[num->order-1].p_fder;
-    double value = exp(num->p_coefs[0]);
+    double value = exp(c_soti_getReal(num));
     uint8_t i;    
 
     for (i=0; i<(num->order+1); i++){
@@ -1022,17 +1097,15 @@ void c_oti_exp(otinum_t* num, directionHelper* p_dH, otinum_t* res){
     }
   
     // Compute all the derivatives 
-    c_oti_derivFunc(derivs, num, p_dH, res);
+    c_soti_derivFunc(derivs, num, p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 
 
-
-
 // ****************************************************************************************************
-void c_oti_pow(otinum_t* num, double exponent, directionHelper* p_dH,otinum_t* res){
+void c_soti_pow(sotinum_t* num, double exponent, directionHelper* p_dH,sotinum_t* res){
     /*
     PURPOSE:  Power function for OTI numbers, for non integer exponents.
 
@@ -1041,7 +1114,7 @@ void c_oti_pow(otinum_t* num, double exponent, directionHelper* p_dH,otinum_t* r
     
     double* derivs = p_dH[num->order-1].p_fder;
     double power_i = exponent;
-    double x0 = num->p_coefs[0];
+    double x0 = c_soti_getReal(num);
     uint8_t flag = 0;
     double factor = 1.;
     uint8_t i;
@@ -1078,237 +1151,16 @@ void c_oti_pow(otinum_t* num, double exponent, directionHelper* p_dH,otinum_t* r
     }
   
   // Compute all the derivatives 
-  c_oti_derivFunc(derivs, num, p_dH, res);
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-void c_oti_collapseDirA(uint16_t* array, uint8_t order, uint16_t* dirA, uint8_t* expA){
-
-
-
-    uint16_t oldValue = array[0];
-    uint8_t  count = 0;
-    uint8_t  iDir  = 0;
-    uint8_t  i;
-
-    for (i=0; i<order; i++ ){   // TODO: Check when it is in collapse if
-                                // if array.size is order.
-
-        if( array[i] == 0){
-
-            continue;
-
-        }else if (array[i] == oldValue){
-          
-            count++;
-
-        }else{
-          
-            expA[iDir] = count;
-            dirA[iDir] = oldValue;
-            iDir += 1;
-            oldValue = array[i];
-            count = 1;
-
-        }
-
-    }
-
-    expA[iDir] = count;
-    dirA[iDir] = oldValue;
-    iDir++;
-
-    // Put zeros in all other values of the array, if it is the case:
-
-    if (iDir != order){// Check size of dirA
-        
-        for(i=iDir; i<order; i++){
-
-          expA[i] = 0;
-          dirA[i] = 0;
-
-        }
-
-    }
+  c_soti_derivFunc(derivs, num,  p_dH, res);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-void c_oti_expandDirA(uint16_t* p_dirA,uint8_t* p_expA, uint8_t order, uint16_t* p_expandArr){
-
-
-    
-    uint8_t i=0, count = 0, idir = 0;
-
-    for (;i<order;i++){
-        
-        p_expandArr[i] = p_dirA[idir];
-        count++;
-
-        if (count == p_expA[idir]){
-
-            count = 0;
-            idir++;
-
-        }
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-double c_oti_FaaDiBruno(uint64_t indx, double* fder, otinum_t* g, directionHelper* p_dH){
+void c_soti_derivFunc(double* fder, sotinum_t* g, directionHelper* p_dH, sotinum_t* feval){
     /*
-    double c_oti_FaaDiBruno(uint64_t indx, double* fder, otinum_t* g, directionHelper* p_dH)
-    
-    Apply the Faa di Bruno formula to find the coefficient that corresponds to a specific partial
-    derivative of f.
-
-    To differentiate a function f that depends on another function
-    g which depends on several variables. 
-
-    i.e. f( g(x1,...,xn) )
-
-    g comes evaluated and it is represented by an OTI number.
-
-    INPUTS:
-
-        -> indx:    Direction to compute Faa di Bruno formula
-        
-        ->  fder:   Array of values holding all the derivatives of f with respect to g up to 
-                    g.order. 
-        
-        ->  g:      oti number that represents g(x1,...,xn).
-
-        ->  p_dH:  list of helpers.
-
-  
-    WARNING:    This is a very rudimentary implementation. If you have time to
-                contribute, this is a function that might be very crucial to 
-                optimize.
-
-    */
-
-    double sum_ = 0.;
-    double mult ;
-    uint8_t orderg = g->order;
-    uint16_t* dirA  = c_helper_getDirA(indx,orderg,p_dH);  // 
-    uint8_t* expA   = c_helper_getExpA(indx,orderg,p_dH);  // 
-    uint16_t* dirA_ = c_helper_getUDirA(orderg,0,p_dH);    // It is expensive to create arrays
-    uint8_t* expA_  = c_helper_getUExpA(orderg,0,p_dH);    // at each iteration. Consider 
-    uint64_t i, j, k, el, count, nsets;                    // inputing the allocated arrays  
-    uint16_t seti;
-    uint8_t order = c_sumUI8(expA,orderg);
-    uint16_t* expandedArray = c_helper_getUDirA(orderg,1,p_dH);
-    uint16_t* mdir          = c_helper_getUDirA(orderg,2,p_dH);  
-    double factor = 1.0;
-    uint64_t index;
-    uint64_t nevals = c_helper_getNParts(order,p_dH);
-
-
-
-    // printf("IN FAADIBRUNO\n");
-    // Expand the directions according to the exponents
-    c_oti_expandDirA(dirA, expA, order, expandedArray);
-
-    // for part in partition.Partition( expandArray(dirA,expA) )
-    for(i=0;i<nevals; i++ ){ 
-
-        mult = 1.0;
-        nsets = 0;
-
-        for (j=0;j<order;j++){ // Subpart j
-
-
-            seti = c_helper_getSet(order,i,j,p_dH); // get the j'th set of the partition i.
-
-            if (seti == 0){ //if partition is == 0 set is full of zeros, therefore avoid computation.
-                continue;
-            }
-
-            nsets++; //counts the number of sets in the partition.
-
-            el = 0;      // gets the element  at which 
-            count = 0;
-
-            while (seti != 0){    // values of the sets are stored in the bits of seti
-
-                if( seti & 1){
-
-                    mdir[count] = expandedArray[el];
-                    count+=1;
-
-                }
-                
-
-                seti = (seti>>1);
-                el++;
-
-            }
-
-            // fill up the other values as zeros:
-
-            for (k=count;k<orderg;k++){
-
-                mdir[k] = 0;
-
-            }
-
-            c_oti_collapseDirA(mdir, orderg, dirA_, expA_);
-
-            index = c_helper_findIndex(dirA_,expA_,orderg,p_dH);
-            factor = 1.;
-
-            for( k =0; k<orderg; k++){
-          
-                if( expA_[k] != 0){ // Not a necessary check
-                
-                    factor *= c_fastfact(expA_[k]);
-
-                }
-
-            }
-
-            mult *= g->p_coefs[index]*factor;
-
-        }
-
-        sum_ +=  fder[nsets]  *  mult;
-
-    }
-    
-    factor = 1.0;
-
-    for( k =0; k<orderg; k++){
-          
-        if( expA[k] != 0){ // not a necessary check
-        
-            factor *= c_fastfact(expA[k]);
-
-        }
-
-    }
-
-    // printf("sum -> %g\n",sum_);
-    // printf("factor -> %g\n",factor);
-
-    return sum_/factor;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void c_oti_derivFunc(double* fder, otinum_t* g, directionHelper* p_dH, otinum_t* feval){
-    /*
-    void c_oti_derivFunc(double* fder, otinum_t* g, otinum_t* feval)
+    void c_soti_derivFunc(double* fder, otinum_t* g, otinum_t* feval)
     
     Given the derivatives of a function f(g) with respect to g, finds the evaluation of the function 
     when g is an oti number.
@@ -1327,228 +1179,726 @@ void c_oti_derivFunc(double* fder, otinum_t* g, directionHelper* p_dH, otinum_t*
         
         ->  g:      oti number that represents g(x1,...,xn).
 
+        -> iter:   Number of iterations to be evaluated. Best for exponentiation evaluation.
+
         ->  feval:  Evaluated function f(g) where g is an oti number.
 
-  
-    WARNING:    This is a very rudimentary implementation. If you have time to
-                contribute, this is a function that might be very crucial to 
-                optimize.
-
     */
+
     uint8_t order = g->order;
-    uint64_t Ndir = g->Ndir;
-    uint8_t i = 0;
-    // uint16_t nval = c_helper_findMaxDir(Ndir-1,order,p_dH);
-    // uint64_t max_i = c_helper_getNels(nval, order, p_dH); 
+    uint8_t i=0;
 
-    // Allocate memory for the result:
-    feval->p_coefs = (double* )malloc(Ndir*sizeof(double)) ;
-    if( feval->p_coefs == NULL ){
-        printf("---- MemoryError ----\n");
-        exit(-1);
-    }
-    feval->order = order;
-    feval->Ndir = Ndir;
+    sotinum_t tmp1, tmp2, tmp3;
+    sotinum_t gp1, gp2, gp4, gp8;
 
-    // Assign real component:
-    feval->p_coefs[0] = fder[0];
+    // Prepare for the evaluation
+    
+    if(g->size >= 1){
 
-    for (i=1; i<Ndir; i++){
-        if (order == 1){
-            feval->p_coefs[i] = fder[1]*g->p_coefs[i];
-        } else {
-            feval->p_coefs[i] = c_oti_FaaDiBruno(i,fder,g,p_dH);
+        gp1 = *g;
+
+        if (gp1.p_indx[0]==0){
+
+            // forget about real part
+            gp1.p_indx = &gp1.p_indx[1];
+            gp1.p_coefs = &gp1.p_coefs[1];
+            gp1.size -= 1;
+
         }
+
+        if (fder[0] == 0.0){
+
+            c_soti_createEmpty(feval, 0, order);
+
+        } else {
+
+            c_soti_createEmpty(feval, 1, order);
+            feval->p_coefs[0] = fder[0];
+            feval->p_indx[0]  = 0;
+
+        }
+
+        c_soti_createEmpty(&gp2 , 0, order);
+        c_soti_createEmpty(&gp4 , 0, order);
+        c_soti_createEmpty(&gp8 , 0, order);
+        
+        // printf("C: Order Given: %hhu\n",order);
+
+        for (i=1; i<=order; i++){
+
+            if (i ==  1){
+                
+                if (fder[1]!=0.0){
+                    c_soti_copy(  &tmp1, &gp1    );
+                    c_soti_smulf( &tmp1, fder[1] );
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval,p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp3);
+                }
+
+            } else if (i ==  2){
+                
+                // printf("C: i=2\n");
+                c_soti_mul(&gp1, &gp1, &gp2, p_dH);
+
+                if (fder[2]!=0.0){
+                    
+                    c_soti_copy(&tmp1,&gp2);
+                    c_soti_smulf(&tmp1,fder[2]/2.0);
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval, p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp3);
+                }
+
+            } else if (i ==  3){
+
+                if (fder[3]!=0.0){
+                    c_soti_mul(&gp2, &gp1, &tmp1, p_dH);
+                    c_soti_smulf(&tmp1,fder[3]/6.0);
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval,p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp3);
+                }
+
+
+            } else if (i ==  4){
+
+                c_soti_mul(&gp2, &gp2, &gp4, p_dH);
+
+                if (fder[3]!=0.0){
+                    c_soti_copy(&tmp1,&gp4);
+                    c_soti_smulf(&tmp1,fder[4]/24.0);
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval,p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp3);
+                }
+
+            } else if (i ==  5){
+
+                if (fder[5]!=0.0){
+
+                    c_soti_mul(&gp4, &gp1, &tmp1, p_dH);
+                    c_soti_smulf(&tmp1,fder[5]/120.0);
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval,p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp3);
+                }
+
+            } else if (i ==  6){
+
+
+                if (fder[6]!=0.0){
+                    c_soti_mul(&gp4, &gp2, &tmp1, p_dH);
+                    c_soti_smulf(&tmp1,fder[6]/720.0);
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval,p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp3);
+                }
+
+            } else if (i ==  7){
+
+                if (fder[7]!=0.0){
+                    c_soti_mul(&gp4, &gp2, &tmp2, p_dH);
+                    c_soti_mul(&tmp2, &gp1, &tmp1, p_dH);
+                    c_soti_smulf(&tmp1,fder[7]/5040.0);
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval,p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp2);
+                    c_soti_free(&tmp3);
+                }
+
+
+            } else if (i ==  8){
+
+
+                c_soti_mul(&gp4, &gp4, &gp8, p_dH);
+
+                if (fder[8]!=0.0){
+                    c_soti_copy(&tmp1,&gp8);
+                    c_soti_smulf(&tmp1, fder[8]/40320.0);
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval,p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp3);
+                }
+
+            } else if (i ==  9){
+
+                if (fder[9]!=0.0){
+                    c_soti_mul(&gp8, &gp1, &tmp1, p_dH);
+                    c_soti_smulf(&tmp1, fder[9]/362880.0);
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval,p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp3);
+                }
+
+            } else if (i == 10){
+
+                if (fder[10]!=0.0){
+                    c_soti_mul(&gp8, &gp1, &tmp1, p_dH);
+                    c_soti_smulf(&tmp1, fder[10]/3628800.0);
+                    tmp3 = *feval;
+                    c_soti_sum(&tmp3, &tmp1, feval,p_dH);
+                    c_soti_free(&tmp1);
+                    c_soti_free(&tmp3);
+                }
+
+            }
+
+        }
+        
+        c_soti_free(&gp2);
+        c_soti_free(&gp4);
+        c_soti_free(&gp8);
+
+    } else {
+
+        if(fder[0]!=0.0){
+
+            // Create number without internal derivatives (because all are zero)
+            c_soti_createEmpty(feval,1,g->order);
+            feval->p_coefs[0] = fder[0];
+            feval->p_indx[0]  =       0;
+
+        } else {
+
+            // create empty number
+            c_soti_createEmpty(feval,0,g->order);
+
+        }
+        
     }
-
-
+    
 
 
 }
 // ----------------------------------------------------------------------------------------------------
 
-// typedef struct{
-//     uint64_t*     p_data;
-//     uint64_t*     p_cols;
-//     uint64_t*     p_rows;
-//     uint64_t       sizex;
-//     uint64_t       nrows;
-//     uint64_t     nonzero;
-// } coomat_ui64_t;
-
 
 // ****************************************************************************************************
-coomat_ui64_t c_oti_matform( uint64_t nvar, uint8_t order, directionHelper* p_dH){
+double c_soti_getReal(sotinum_t* num){
     /*
-    uint64_t* c_oti_matform(otinum_t* num, uint64_t size, directionHelper* p_dH)
+    PURPOSE:  Get the real coefficient of the given  sparse otinum.
 
-    Obtain the dense matrix representation of the oti number num.
-
-    INPUTS:
-
-        -> nvar:   Number of independent variables.
-
-        -> order:  Order of derivatives.
-
-        -> p_dH:   List of helpers.
-
-    OUTPUTS:
-
-        The operation gives a uint64_t* such that it contains the matrix form of the oti number.
-
-        Each non zero element in the matrix is the index of the OTI number coefficient that should
-        be placed in that position.
-
-        The shape of the matrix is (size x size)
-
-    */ 
-    // ************************************************************************************************
-    uint64_t i,j,k,ii,Ndir;
-    coomat_ui64_t mat;     // matrix pointer, Coo format
-    uint8_t error;
-    uint64_t nnonzero = c_ndir(2*nvar, order);
-
+    */
+    //*************************************************************************************************
     
-    // Allocate memory to hold the results:
-    mat.p_data = (uint64_t*)malloc(nnonzero*sizeof(uint64_t));
-    if (mat.p_data == NULL){
-        printf("--- MemoryError ---\n");
-        exit(1);
-    }
+    double res = 0.0;
 
-    mat.p_cols = (uint64_t*)malloc(nnonzero*sizeof(uint64_t));
-    if (mat.p_cols == NULL){
-        printf("--- MemoryError ---\n");
-        exit(1);
-    }
+    if (num->size > 0){
 
-    mat.p_rows = (uint64_t*)malloc(nnonzero*sizeof(uint64_t));
-    if (mat.p_rows == NULL){
-        printf("--- MemoryError ---\n");
-        exit(1);
-    }
+        if( num->p_indx[0] == 0){
 
-    
-    // Initialize in zero.
-    memset(mat.p_data, 0, nnonzero*sizeof(uint64_t));
-
-    Ndir = c_ndir(nvar, order);
+            res = num->p_coefs[0];
         
-    mat.sizex   = Ndir;
-    mat.sizey   = Ndir;
-    mat.nonzero = nnonzero;
-
-
-    // Holder of the position of the coefficient vectors
-    ii=0;
-    for( i = 0; i < Ndir; i++){
-
-        for( j = 0; j < Ndir; j++){
-            
-            k = c_helper_multIndxFast( i, j, order, p_dH, &error);
-            
-            if (k>Ndir){
-
-                break;
-
-            }
-
-            if (error == 0){
-                // k*size+j
-                mat.p_data[ii] = i+1;  // +1 because a 0 can be accounted for errors in sparse matrix
-                mat.p_rows[ii] = k;
-                mat.p_cols[ii] = j;
-                ii++;
-                
-            }
-
         }
 
     }
-    
-    return mat;
 
-}    
+    return res;
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 
 
 // ****************************************************************************************************
-double* c_oti_num2mat(otinum_t* num, uint64_t size, directionHelper* p_dH){
+void c_soti_ipowfast(sotinum_t* num1, uint8_t exp, sotinum_t* res, directionHelper* p_dH){
     /*
-    void c_oti_num2mat(otinum_t* num, uint64_t size, directionHelper* p_dH)
+    void c_soti_ipowfast(sotinum_t* num1, uint8_t exp, sotinum_t* res)
+    
+    Fast Power of soti to an integer power. NOTE: This is  efficient for 
+    positive exponents lower or equal than 10!.
 
-    Obtain the dense matrix representation of the oti number num.
 
     INPUTS:
 
-        ->num:    Address of the number to be created. 
+        -> num1:    Direction to compute Faa Di Bruno formula
+        
+        -> exp:     exponent. 
 
-        ->size:    Size of the matrix (can be different to the num.Ndir).
-
-        -> p_dH:   List of helpers
+        ->  p_dH:   list of helpers.
 
     OUTPUTS:
 
-        The operation gives a double* such that it contains the matrix form of the oti number.
+        -> res:    Holder with the rresulting number.
+       res = num1 ** exp          // Python syntax.
 
-        The shape of the matrix is (size x size)
+       // It actually performs the following
 
-    */ 
-    // ************************************************************************************************
-    uint64_t i,j,k,Ndir = num->Ndir;
-    double * mat;   // matrix pointer
-    uint8_t error,order = num->order;
+       res = num1*num1*...*num1   // exp times
 
-    
-    // Allocate memory to hold the results:
-    mat = (double*)malloc(size*size*sizeof(double));
-    if (mat == NULL){
-        printf("--- MemoryError ---\n");
-        exit(1);
+    */
+
+
+
+    uint8_t flag = 0;
+
+    sotinum_t numr[4];
+
+
+    // printf(" ---> C: exp received: %hhu \n\n",exp);
+
+    if (exp == 0){
+
+        // printf(" ---> C: Case 0 \n");
+        // Result is 1. 
+        c_soti_createEmpty(&numr[0],1,num1->order);
+        numr[0].p_coefs[0] = 1;
+        numr[0].p_indx[0]  = 0;
+        flag = 0;
+
+    } else if (exp ==  1){
+
+        // printf(" ---> C: Case 1 \n");
+        // Result is the same number 
+        c_soti_copy(&numr[0],num1); 
+        flag = 0;
+
+    } else if (exp ==  2){
+
+        // printf(" ---> C: Case 2 \n");
+        // The square of the number num1 x num1
+        c_soti_mul(num1, num1, &numr[0], p_dH);
+        flag = 0;
+
+    } else if (exp ==  3){
+
+        // printf(" ---> C: Case 3 \n");
+        // The third power of num1: (num1 x num1) x num1
+        c_soti_mul(num1, num1, &numr[0], p_dH);
+        c_soti_mul(&numr[0], num1, &numr[1], p_dH);
+        c_soti_free(&numr[0]);
+        flag = 1;
+
+    } else if (exp ==  4){
+
+        // printf(" ---> C: Case 4 \n");
+        // The fourth power of num1: (num1 x num1) x (num1 x num1)
+        c_soti_mul(num1, num1, &numr[0], p_dH);
+        c_soti_mul(&numr[0], &numr[0], &numr[1], p_dH);
+        c_soti_free(&numr[0]);
+        flag = 1;
+
+    } else if (exp ==  5){
+
+        // printf(" ---> C: Case 5 \n");
+        // The fifth power of num1: (num1 x num1) x (num1 x num1) x num1
+        c_soti_mul(num1, num1, &numr[0], p_dH);
+        c_soti_mul(&numr[0], &numr[0], &numr[1], p_dH);
+        c_soti_free(&numr[0]);
+        c_soti_mul(&numr[1], num1, &numr[2], p_dH);
+        c_soti_free(&numr[1]);
+        flag = 2;
+
+    } else if (exp ==  6){
+
+        // printf(" ---> C: Case 6 \n");
+        // The sixth power of num1: (num1 x num1) x (num1 x num1) x (num1 x num1)
+        c_soti_mul(num1, num1, &numr[0], p_dH);
+        c_soti_mul(&numr[0], &numr[0], &numr[1], p_dH);
+        c_soti_mul(&numr[1], &numr[0], &numr[2], p_dH);
+        c_soti_free(&numr[0]);
+        c_soti_free(&numr[1]);
+        flag = 2;
+
+    } else if (exp ==  7){
+
+        // printf(" ---> C: Case 7 \n");
+        // The seventh power of num1: (num1 x num1) x (num1 x num1) x (num1 x num1) x num1
+        c_soti_mul(num1, num1, &numr[0], p_dH);
+        c_soti_mul(&numr[0], &numr[0], &numr[1], p_dH);
+        c_soti_mul(&numr[1], &numr[0], &numr[2], p_dH);
+        c_soti_mul(&numr[2], num1, &numr[3], p_dH);
+        c_soti_free(&numr[0]);
+        c_soti_free(&numr[1]);
+        c_soti_free(&numr[2]);
+        flag = 3;
+
+
+    } else if (exp ==  8){
+
+        // printf(" ---> C: Case 8 \n");
+        // The eigth power of num1: (num1 x num1) x (num1 x num1) x (num1 x num1) x (num1 x num1)
+        c_soti_mul(num1, num1, &numr[0], p_dH);
+        c_soti_mul(&numr[0], &numr[0], &numr[1], p_dH);
+        c_soti_mul(&numr[1], &numr[1], &numr[2], p_dH);
+        c_soti_free(&numr[0]);
+        c_soti_free(&numr[1]);
+        flag = 2;
+
+    } else if (exp ==  9){
+
+        // printf(" ---> C: Case 9 \n");
+        // The ninth power of num1: (num1 x num1) x (num1 x num1) x (num1 x num1) x (num1 x num1)
+        c_soti_mul(num1, num1, &numr[0], p_dH);
+        c_soti_mul(&numr[0], &numr[0], &numr[1], p_dH);
+        c_soti_mul(&numr[1], &numr[1], &numr[2], p_dH);
+        c_soti_mul(&numr[2], num1, &numr[3], p_dH);
+        c_soti_free(&numr[0]);
+        c_soti_free(&numr[1]);
+        c_soti_free(&numr[2]);        
+        flag = 3;
+
+    } else if (exp == 10){
+
+        // printf(" ---> C: Case 10 \n");
+
+        // The seventh power of num1: (num1 x num1) x (num1 x num1) x (num1 x num1) x (num1 x num1)
+        c_soti_mul(num1, num1, &numr[0], p_dH);
+        c_soti_mul(&numr[0], &numr[0], &numr[1], p_dH);
+        c_soti_mul(&numr[1], &numr[1], &numr[2], p_dH);
+        c_soti_mul(&numr[2], &numr[0], &numr[3], p_dH);
+        c_soti_free(&numr[0]);
+        c_soti_free(&numr[1]);
+        c_soti_free(&numr[2]);        
+        flag = 3;
     }
-    
-    // Initialize in zero.
-    memset(mat, 0, size*size*sizeof(double));
-    
+           
+    *res = numr[flag];
 
-    for( i = 0; i < Ndir; i++){
-
-        for( j = 0; j < size; j++){
-            
-            k = c_helper_multIndxFast( i, j, order, p_dH, &error);
-
-            
-            if (k>size){
-                
-                break;
-
-            }
-
-            if (error == 0){
-
-                mat[k*size+j] = num->p_coefs[i];
-                
-            }
-
-        }
-
-    }
-    
-    return mat;
-
-}    
+}
 // ----------------------------------------------------------------------------------------------------
 
 
 
 
 // ****************************************************************************************************
-void c_oti_mulf(otinum_t* num1, double num2, otinum_t* res){
+void c_soti_ipow(sotinum_t* num1, uint8_t exp, sotinum_t* res, directionHelper* p_dH){
     /*
-    void c_oti_mul(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH)
+    void c_soti_ipow(sotinum_t* num1, uint8_t exp, sotinum_t* res)
+    
+    Power a soti to an integer power. NOTE: This is  efficient for exponents lower or equal than 10!.
 
-    multiply an oti number times a real coefficient.
+
+    INPUTS:
+
+        -> num1:    Direction to compute Faa Di Bruno formula
+        
+        -> exp:     exponent. 
+
+        ->  p_dH:   list of helpers.
+
+    OUTPUTS:
+
+        -> res:    Holder with the rresulting number.
+       res = num1 ** exp          // Python syntax.
+
+       // It actually performs the following
+
+       res = num1*num1*...*num1   // exp times
+
+    */
+
+    
+    // uint64_t* indxOrder = NULL;
+    // uint64_t* multIndx  = NULL; // Index to be multiplied
+    // uint8_t order = num1->order;
+    // uint8_t orderSum = 0;
+
+    uint64_t   i = 0;
+    uint8_t flag = 0;
+
+    sotinum_t numr[2];
+
+
+    // indxOrder = (uint64_t*)malloc(num1->size*sizeof(uint64_t));
+    // if (indxOrder == NULL){
+    //     printf("--- MemoryError ---\n");
+    //     exit(1);
+    // }
+
+    // for (i=0; i<num1->size; i++){
+    //     indxOrder[i] = c_sumUI8(&p_dH[order-1].p_expA[(num1->p_indx[i]-1)*order],order);
+    // }
+
+    // orderSum = (exp-1)*indxOrder[0];
+
+    c_soti_copy( &numr[0], num1); // Copy initial value
+
+    for( i=1; i<exp; i++){
+
+        if (flag == 0 ){
+
+            c_soti_mul(&numr[0], num1, &numr[1], p_dH);
+            c_soti_free(&numr[0]);
+            flag = 1;
+
+        } else{
+
+            c_soti_mul(&numr[1], num1, &numr[0], p_dH);
+            c_soti_free(&numr[1]);
+            flag = 0;
+
+        }
+        
+    }
+
+    if (flag == 0 ){
+        
+        *res = numr[0];
+
+    } else{
+        
+        *res = numr[1];
+
+    }
+    // 
+    // c_soti_copy( res, num1);
+    
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+// ****************************************************************************************************
+void c_soti_neg( sotinum_t* num1, sotinum_t* res){
+    /*
+    void c_soti_copy(sotinum_t* num1, sotinum_t* res)
+
+    negate soti.
+
+    INPUTS:
+
+        ->num1:    Address of one operand. 
+                                                Both must have the same order.
+        
+        ->res:     Address of the result holder. The result is allocated in this function.
+
+    OUTPUTS:
+
+        The operation is equivalent to:
+
+        - res = -num1.copy()    
+
+    */ 
+    // ************************************************************************************************
+    
+    uint64_t i;
+    c_soti_createEmpty(res, num1->size, num1->order);
+
+    if (num1->size != 0){
+
+        // memcpy(res->p_coefs,num1->p_coefs,num1->size*sizeof(double)  );
+        memcpy(res->p_indx, num1->p_indx ,num1->size*sizeof(uint64_t)); 
+        
+        for (i=0; i<num1->size; i++){
+
+            res->p_coefs[i] = -num1->p_coefs[i];
+        
+        }
+
+    }    
+
+}    
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void c_soti_copy(sotinum_t* res, sotinum_t* num1){
+    /*
+    void c_soti_copy(sotinum_t* res, sotinum_t* num1)
+
+    Copy soti.
+
+    INPUTS:
+
+        ->num1:    Address of one operand. 
+                                                Both must have the same order.
+        
+        ->res:     Address of the result holder. The result is allocated in this function.
+
+    OUTPUTS:
+
+        The operation is equivalent to:
+
+        - res = num1.copy()     
+
+    */ 
+    // ************************************************************************************************
+    
+
+    c_soti_createEmpty(res, num1->size, num1->order);
+
+    if (num1->size != 0){
+
+        memcpy(res->p_coefs,num1->p_coefs,num1->size*sizeof(double)  );
+        memcpy(res->p_indx, num1->p_indx ,num1->size*sizeof(uint64_t)); 
+
+    }    
+
+}    
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void c_soti_fsub(sotinum_t* num1, double num2, sotinum_t* res){
+    /*
+    void c_soti_subf(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH)
+
+    subtract oti and real numbers.
+
+    INPUTS:
+
+        ->num1:    Address of one operand. 
+                                                Both must have the same order.
+        ->num2:    real.
+
+        ->res:     Address of the result holder. The result is allocated in this function.
+
+    OUTPUTS:
+
+        The operation is equivalent to:
+
+        - res = num1 - num2
+
+    */ 
+    // ************************************************************************************************
+    
+    uint64_t i;
+    uint8_t order = num1->order;
+
+    
+
+    // check if num1 or num2 are zero
+    if (num1->size == 0 && num2 == 0.0){
+
+        c_soti_createEmpty(res, 0, order);
+
+    } else if(num1->size == 0) {
+
+        c_soti_createEmpty(res, 1, order);
+
+        res->p_coefs[0] = num2;
+        res->p_indx[0]  = 0   ;  
+ 
+
+    } else {    
+
+        if (num1->p_indx[0] == 0){
+
+            c_soti_createEmpty(res, num1->size, order);
+            memcpy(res->p_indx, num1->p_indx ,num1->size*sizeof(uint64_t)); 
+
+            for (i=0; i<num1->size;i++){
+
+                res->p_coefs[i] = -num1->p_coefs[i];
+
+            }
+
+            res->p_coefs[0] += num2;
+
+        } else {
+
+            c_soti_createEmpty(res, num1->size+1, order);
+            memcpy(&res->p_indx[1], num1->p_indx ,num1->size*sizeof(uint64_t)); 
+
+            for (i=0; i<num1->size;i++){
+
+                res->p_coefs[i+1] = -num1->p_coefs[i];
+
+            }
+
+            res->p_coefs[0] = num2;
+            res->p_indx[0]  = 0;
+
+        }
+        
+    }
+    
+
+}    
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void c_soti_subf(sotinum_t* num1, double num2, sotinum_t* res){
+    /*
+    void c_soti_subf(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH)
+
+    subtract oti and real numbers.
+
+    INPUTS:
+
+        ->num1:    Address of one operand. 
+                                                Both must have the same order.
+        ->num2:    real.
+
+        ->res:     Address of the result holder. The result is allocated in this function.
+
+    OUTPUTS:
+
+        The operation is equivalent to:
+
+        - res = num1 - num2
+
+    */ 
+    // ************************************************************************************************
+    
+
+    uint8_t order = num1->order;
+
+    
+
+    // check if num1 or num2 are zero
+    if (num1->size == 0 && num2 == 0.0){
+
+        c_soti_createEmpty(res, 0, order);
+
+    } else if(num1->size == 0) {
+
+        c_soti_createEmpty(res, 1, order);
+
+        res->p_coefs[0] = -num2;
+        res->p_indx[0]  = 0   ;  
+ 
+
+    } else {    
+
+        if (num1->p_indx[0] == 0){
+
+            c_soti_createEmpty(res, num1->size, order);
+            memcpy(res->p_coefs,num1->p_coefs,num1->size*sizeof(double)  );
+            memcpy(res->p_indx, num1->p_indx ,num1->size*sizeof(uint64_t)); 
+            res->p_coefs[0] -= num2;
+
+        } else {
+
+            c_soti_createEmpty(res, num1->size+1, order);
+            memcpy(&res->p_coefs[1],num1->p_coefs,num1->size*sizeof(double)  );
+            memcpy(&res->p_indx[1], num1->p_indx ,num1->size*sizeof(uint64_t)); 
+            res->p_coefs[0] = -num2;
+            res->p_indx[0]  = 0;
+
+        }
+        
+    }
+    
+    
+
+}    
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void c_soti_sub(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, directionHelper* p_dH){
+    /*
+    void c_soti_sub(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH)
+
+    subtract two oti numbers
 
     INPUTS:
 
@@ -1556,10 +1906,211 @@ void c_oti_mulf(otinum_t* num1, double num2, otinum_t* res){
                                                 Both must have the same order.
         ->num2:    Address of the other operand.
 
-        ->res:     Address of the result holder. Must come allocated with the maximum number of 
-                   directions. Cannot be the same address as num1.
+        ->res:     Address of the result holder. Must not come allocated. 
+                   Cannot be the same address as num1 or num2
 
         -> p_dH:   List of helpers
+
+    OUTPUTS:
+
+        The operation is equivalent to:
+
+        - res = num1 - num2
+
+    */ 
+    // ************************************************************************************************
+    uint64_t i, i1=0, i2=0, size_res=0;
+    uint8_t order = num1->order;
+
+    double*   p_tmpcoefs = p_dH[num1->order-1].p_coefs;
+    uint64_t*  p_tmpindx = p_dH[num1->order-1].p_indx ;
+    uint64_t     ndirmax = p_dH[num1->order-1].Ndir   ;
+
+    // Find the maximum number of coefficients in 
+    uint64_t niter_max  = MIN(num1->size+num2->size, ndirmax); // Maximum number of iterations
+
+    // check if num1 or num2 are zero
+    if (num1->size == 0 && num2->size == 0){
+
+        c_soti_createEmpty(res, size_res, order);
+
+    } else if(num1->size == 0) {
+
+        c_soti_createEmpty(res, num2->size, order);
+        memcpy(res->p_coefs,num2->p_coefs,num2->size*sizeof(double)  );
+        memcpy(res->p_indx, num2->p_indx ,num2->size*sizeof(uint64_t));  
+
+    } else if(num2->size == 0) {
+
+        c_soti_createEmpty(res, num1->size, order);
+        memcpy(res->p_coefs,num1->p_coefs,num1->size*sizeof(double)  );
+        memcpy(res->p_indx, num1->p_indx ,num1->size*sizeof(uint64_t)); 
+
+    } else {    
+
+        for( i = 0; i < niter_max; i++){
+
+            if(i1 >= num1->size &&   i2 >= num2->size){
+                break;
+            }
+
+            if(i1 >= num1->size){
+
+                // All remaining elements are not in num1.
+                
+                p_tmpcoefs[i] = -num2->p_coefs[i2];
+                p_tmpindx[i]  = num2->p_indx[i2];
+                i2++;
+                size_res++;
+
+            } else if(i2 >= num2->size){
+
+                // All remaining elements are not in num2.
+                
+                p_tmpcoefs[i] = num1->p_coefs[i1];
+                p_tmpindx[i]  = num1->p_indx[i1];
+                i1++;
+                size_res++;
+
+
+            } else {
+
+                // Here i1 and i2 are looking for some value.
+                
+                if (num1->p_indx[i1] == num2->p_indx[i2]){
+
+
+                    p_tmpcoefs[i] = num1->p_coefs[i1]-num2->p_coefs[i2];
+                    p_tmpindx[i]  = num2->p_indx[i2];
+
+                    i1++;
+                    i2++;
+                    size_res++;
+
+                } else {
+
+                    if (num1->p_indx[i1] < num2->p_indx[i2]){  // index of num1 goes first.
+
+                        p_tmpcoefs[i] = num1->p_coefs[i1];
+                        p_tmpindx[i]  = num1->p_indx[i1];
+                        i1++;
+                        size_res++;
+
+                    } else {
+
+                        p_tmpcoefs[i] = -num2->p_coefs[i2];
+                        p_tmpindx[i]  = num2->p_indx[i2];
+                        i2++;
+                        size_res++;
+
+                    }
+
+                }
+
+            }
+
+                     
+        }
+        // Create new sprotinum
+        
+        c_soti_createEmpty(res, size_res, order);
+        
+        if (size_res>0){
+            memcpy(res->p_coefs,p_tmpcoefs,size_res*sizeof(double)  );
+            memcpy(res->p_indx, p_tmpindx ,size_res*sizeof(uint64_t));    
+        }
+    }
+
+
+}    
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+// ****************************************************************************************************
+void c_soti_sumf(sotinum_t* num1, double num2, sotinum_t* res){
+    /*
+    void c_soti_suml(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH)
+
+    sum oti and real numbers.
+
+    INPUTS:
+
+        ->num1:    Address of one operand. 
+                                                Both must have the same order.
+        ->num2:    real.
+
+        ->res:     Address of the result holder. The result is allocated in this function.
+
+    OUTPUTS:
+
+        The operation is equivalent to:
+
+        - res = num1 + num2
+
+    */ 
+    // ************************************************************************************************
+    
+
+    uint8_t order = num1->order;
+
+    // check if num1 or num2 are zero
+    if (num1->size == 0 && num2 == 0.0){
+
+        c_soti_createEmpty(res, 0, order);
+
+    } else if(num1->size == 0) {
+
+        c_soti_createEmpty(res, 1, order);
+
+        res->p_coefs[0] = num2;
+        res->p_indx[0]  = 0   ;  
+ 
+
+    } else {    
+
+        if (num1->p_indx[0] == 0){
+
+            c_soti_createEmpty(res, num1->size, order);
+            memcpy(res->p_coefs,num1->p_coefs,num1->size*sizeof(double)  );
+            memcpy(res->p_indx, num1->p_indx ,num1->size*sizeof(uint64_t)); 
+            res->p_coefs[0] += num2;
+
+        } else {
+
+            c_soti_createEmpty(res, num1->size+1, order);
+            memcpy(&res->p_coefs[1],num1->p_coefs,num1->size*sizeof(double)  );
+            memcpy(&res->p_indx[1], num1->p_indx ,num1->size*sizeof(uint64_t)); 
+            res->p_coefs[0] = num2;
+            res->p_indx[0]  = 0;
+
+        }
+        
+    }
+    
+    
+
+}    
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void c_soti_smulf(sotinum_t* num1, double num2){
+    /*
+    void c_soti_smulf(otinum_t* num1, double num2, otinum_t* res, directionHelper* p_dH)
+
+    Self multiply an oti number times a real coefficient.
+
+    INPUTS:
+
+        ->num1:    Address of one operand. 
+                                                Both must have the same order.
+        ->num2:    real.
+
+        ->res:     Address of the result holder. The result is allocated in this function.
 
     OUTPUTS:
 
@@ -1571,18 +2122,75 @@ void c_oti_mulf(otinum_t* num1, double num2, otinum_t* res){
     // ************************************************************************************************
     uint64_t i;
     
-    // Initialize the result holder.
-    if (res->p_coefs!=num1->p_coefs){
-        
-        memcpy(res->p_coefs,num1->p_coefs,res->Ndir*sizeof(double));
+    // c_soti_createEmpty(res, num1->size, num1->order);
+
+    if(num1->size!= 0 && num2 != 0.0){
+
+        for( i = 0; i < num1->size; i++){
             
+            num1->p_coefs[i]*=num2;
+        }    
+
+    } else {
+
+        c_soti_free(num1);
+
     }
     
+    
 
-    for( i = 0; i < res->Ndir; i++){
+}    
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void c_soti_mulf(sotinum_t* num1, double num2, sotinum_t* res){
+    /*
+    void c_soti_mulf(otinum_t* num1, double num2, otinum_t* res, directionHelper* p_dH)
+
+    multiply an oti number times a real coefficient.
+
+    INPUTS:
+
+        ->num1:    Address of one operand. 
+                                                Both must have the same order.
+        ->num2:    real.
+
+        ->res:     Address of the result holder. The result is allocated in this function.
+
+    OUTPUTS:
+
+        The operation is equivalent to:
+
+        - res = num1 * num2
+
+    */ 
+    // ************************************************************************************************
+    uint64_t i;
+    
+    
+
+    if(num1->size != 0 && num2 != 0.0){
+
+        c_soti_createEmpty(res, num1->size, num1->order);
+
+        // Initialize the result holder.
+        memcpy(res->p_coefs,num1->p_coefs,res->size*sizeof(double)  );
+        memcpy(res->p_indx ,num1->p_indx ,res->size*sizeof(uint64_t));
+
+
+        for( i = 0; i < res->size; i++){
+            
+            res->p_coefs[i]*=num2;
+        }    
+
+    } else {
         
-        res->p_coefs[i]*=num2;
+        c_soti_createEmpty(res, 0, num1->order);
+
     }
+    
     
 
 }    
@@ -1590,9 +2198,9 @@ void c_oti_mulf(otinum_t* num1, double num2, otinum_t* res){
 
 
 // ****************************************************************************************************
-void c_oti_mul(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH){
+void c_soti_mul(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, directionHelper* p_dH){
     /*
-    void c_oti_mul(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH)
+    void c_soti_mul(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH)
 
     multiply two oti numbers
 
@@ -1615,40 +2223,208 @@ void c_oti_mul(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p
 
     */ 
     // ************************************************************************************************
-    uint64_t i, j, indx;
+    uint64_t i, j, ii, jj, indx;
+    uint64_t ncoefs; // Always considers real to be present.
     uint8_t err=1, order = num1->order;
+
+    double*   p_tmpcoefs = p_dH[num1->order-1].p_coefs;
+    uint64_t*  p_tmpindx = p_dH[num1->order-1].p_indx ;
+    uint64_t     ndirmax = MIN(p_dH[num1->order-1].Ndir,num1->size*num2->size);
+
+    // printf("tmpIndx ptr: %x, tmpCoefs Ptr: %x \n",p_tmpindx, p_tmpcoefs);
+    // printf("number of directions %llu\n",ndirmax);
+    // printf("Received num1 with size %llu and order %hhu\n",num1->size,num1->order);
+    // printf("Received num2 with size %llu and order %hhu\n",num2->size,num2->order);
     
-    // Initialize in zeros the result holder.
-    for( i = 0; i < res->Ndir;  i++ ){
-
-        res->p_coefs[i] = 0.0;
-
-    }
-
-    for( i = 0; i < num1->Ndir; i++){
+    if( num1->size == 0 || num2->size == 0){
         
-        for( j = 0; j < num2->Ndir; j++){
+        ncoefs = 0;
 
-            // Multiply directions.
+    }else{
 
-            indx = c_helper_multIndxFast(i,j,order,p_dH,&err);
+        ncoefs = 0;
+        // Initialize in zero the result holder
+        memset(p_tmpcoefs, 0, ndirmax*sizeof(double)  );
+        memset(p_tmpindx , 0, ndirmax*sizeof(uint64_t));
 
-            if (err == 0){   // If error flag is off
+        for( ii = 0; ii < num1->size; ii++){
+            
+            for( jj = 0; jj < num2->size; jj++){
 
-                res->p_coefs[indx] += num1->p_coefs[i] * num2->p_coefs[j];
+                // Multiply directions.
+                i = num1->p_indx[ii];
+                j = num2->p_indx[jj];
+                indx = c_helper_multIndxFast(i,j,order,p_dH,&err);
+
+                if (err == 0){   // If error flag is off
+                    //printf("i = %llu, j = %llu, indx = %llu\n",i,j,indx);
+                    c_helper_insertIndx(p_tmpindx,indx,&ncoefs, 
+                        p_tmpcoefs,
+                        num1->p_coefs[ii] * num2->p_coefs[jj]);
+                                                                            
+                    // p_tmpcoefs[indx] += num1->p_coefs[ii] * num2->p_coefs[jj];
+
+                }
+
             }
-
+                     
         }
-                 
     }
     
+    // Create new sprotinum
+    
+    c_soti_createEmpty(res, ncoefs, order);
+    
+    if (ncoefs != 0){
+
+        // Copy all indices
+        memcpy(res->p_coefs, p_tmpcoefs, ncoefs*sizeof(double)  );
+        memcpy(res->p_indx , p_tmpindx,  ncoefs*sizeof(uint64_t));
+        // for (ii = 0;ii<ncoefs;ii++){
+        //     res->p_coefs[ii] = p_tmpcoefs[p_tmpindx[ii]];
+        // }
+
+    }
 
 }    
 // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-inline void c_oti_free(otinum_t* numHolder){
+void c_soti_sum(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, directionHelper* p_dH){
+    /*
+    void c_soti_sum(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH)
+
+    sum two oti numbers
+
+    INPUTS:
+
+        ->num1:    Address of one operand. 
+                                                Both must have the same order.
+        ->num2:    Address of the other operand.
+
+        ->res:     Address of the result holder. Must not come allocated. 
+                   Cannot be the same address as num1 or num2
+
+        -> p_dH:   List of helpers
+
+    OUTPUTS:
+
+        The operation is equivalent to:
+
+        - res = num1 + num2
+
+    */ 
+    // ************************************************************************************************
+    uint64_t i, i1=0, i2=0, size_res=0;
+    uint8_t order = num1->order;
+
+    double*   p_tmpcoefs = p_dH[num1->order-1].p_coefs;
+    uint64_t*  p_tmpindx = p_dH[num1->order-1].p_indx ;
+    uint64_t     ndirmax = p_dH[num1->order-1].Ndir   ;
+
+    // Find the maximum number of coefficients in 
+    uint64_t niter_max  = MIN(num1->size+num2->size, ndirmax); // Maximum number of iterations
+
+    // check if num1 or num2 are zero
+    if (num1->size == 0 && num2->size == 0){
+
+        c_soti_createEmpty(res, size_res, order);
+
+    } else if(num1->size == 0) {
+
+        c_soti_createEmpty(res, num2->size, order);
+        memcpy(res->p_coefs,num2->p_coefs,num2->size*sizeof(double)  );
+        memcpy(res->p_indx, num2->p_indx ,num2->size*sizeof(uint64_t));  
+
+    } else if(num2->size == 0) {
+
+        c_soti_createEmpty(res, num1->size, order);
+        memcpy(res->p_coefs,num1->p_coefs,num1->size*sizeof(double)  );
+        memcpy(res->p_indx, num1->p_indx ,num1->size*sizeof(uint64_t)); 
+
+    } else {    
+        // printf("Adding two elements here!\n");
+        for( i = 0; i < niter_max; i++){
+
+            if(i1 >= num1->size &&   i2 >= num2->size){
+                break;
+            }
+
+            if(i1 >= num1->size){
+
+                // All remaining elements are not in num1.
+                
+                p_tmpcoefs[i] = num2->p_coefs[i2];
+                p_tmpindx[i]  = num2->p_indx[i2];
+                i2++;
+                size_res++;
+
+            } else if(i2 >= num2->size){
+
+                // All remaining elements are not in num2.
+                
+                p_tmpcoefs[i] = num1->p_coefs[i1];
+                p_tmpindx[i]  = num1->p_indx[i1];
+                i1++;
+                size_res++;
+
+
+            } else {
+
+                // Here i1 and i2 are looking for some value.
+                
+                if (num1->p_indx[i1] == num2->p_indx[i2]){
+
+
+                    p_tmpcoefs[i] = num2->p_coefs[i2]+num1->p_coefs[i1];
+                    p_tmpindx[i]  = num2->p_indx[i2];
+
+                    i1++;
+                    i2++;
+                    size_res++;
+
+                } else {
+
+                    if (num1->p_indx[i1] < num2->p_indx[i2]){  // index of num1 goes first.
+
+                        p_tmpcoefs[i] = num1->p_coefs[i1];
+                        p_tmpindx[i]  = num1->p_indx[i1];
+                        i1++;
+                        size_res++;
+
+                    } else {
+
+                        p_tmpcoefs[i] = num2->p_coefs[i2];
+                        p_tmpindx[i]  = num2->p_indx[i2];
+                        i2++;
+                        size_res++;
+
+                    }
+
+                }
+
+            }
+
+                     
+        }
+        // Create new sprotinum
+        
+        c_soti_createEmpty(res, size_res, order);
+        
+        if (size_res>0){
+            memcpy(res->p_coefs,p_tmpcoefs,size_res*sizeof(double)  );
+            memcpy(res->p_indx, p_tmpindx ,size_res*sizeof(uint64_t));    
+        }
+    }
+
+
+}    
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+inline void c_soti_free(sotinum_t* numHolder){
     /*
     c_freeOti(numHolder)
 
@@ -1665,13 +2441,54 @@ inline void c_oti_free(otinum_t* numHolder){
     if (numHolder->p_coefs != NULL){
 
         free(numHolder->p_coefs); 
+        numHolder->p_coefs = NULL;
 
     }
+
+    if (numHolder->p_indx != NULL){
+
+        free(numHolder->p_indx); 
+        numHolder->p_indx = NULL;
+
+    }
+    numHolder->size = 0;
+
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void c_oti_createEmpty(otinum_t* numHolder,   uint64_t ndir, uint8_t order){
+void c_soti_createFromReal(double num, sotinum_t* numHolder, uint8_t order){
+    /*
+    c_soti_createFromReal( num, numHolder,  order)
+
+    C-level memory allocation for a real-only oti number.
+
+    INPUTS:
+        -> num:         Real coefficient.
+
+        ->numHolder:    Address of the number to be allocated.
+        
+        ->    order:    Order to be loaded in memory.
+            Example: 3
+
+        
+
+    OUTPUTS:
+        -> The result is the numHolder with the memory allocated and with the structure set up.
+    */ 
+    // ************************************************************************************************
+    
+    c_soti_createEmpty( numHolder, 1, order);
+
+    numHolder->p_coefs[0] = num;
+    numHolder->p_indx[0] = 0;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void c_soti_createEmpty(sotinum_t* numHolder,   uint64_t ncoefs, uint8_t order){
     /*
     c_oti_createEmpty(numHolder, ndir, order)
 
@@ -1684,565 +2501,49 @@ void c_oti_createEmpty(otinum_t* numHolder,   uint64_t ndir, uint8_t order){
         ->    order:    Order to be loaded in memory.
             Example: 3
 
-        ->     ndir:    Number of directions of the number.
+        ->     coefs:    Number of nonzero coefficients in the number.
             Example: 100
 
     OUTPUTS:
         -> The result is the numHolder with the memory allocated.
     */ 
     // ************************************************************************************************
-    numHolder->p_coefs = (double*)malloc(ndir*sizeof(double));
-    if (numHolder->p_coefs == NULL){
-        printf("--- MemoryError ---\n");
-        exit(1);
+    
+    if (ncoefs == 0){
+
+        numHolder->p_indx  = NULL ;
+        numHolder->p_coefs = NULL ;
+
+    } else{
+
+        numHolder->p_indx = (uint64_t*)c_malloc_ptr(ncoefs,sizeof(uint64_t));
+        
+        numHolder->p_coefs = (double*)c_malloc_ptr(ncoefs ,sizeof(double) );
+
     }
-    numHolder->Ndir  = ndir;
+
+    
+    numHolder->size  = ncoefs;
     numHolder->order = order;
 }
 // ----------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-void c_oti_changeOrderToNew(otinum_t* num, uint8_t neword, directionHelper* p_dH , otinum_t* res){
-    /*
-    c_otiChangeOrder(num1, neword, p_dH)
-    
-    Change the order of num to neword without changing the original number.
-    
-
-    INPUTS:
-
-        ->num:      Address of the number to be changedOrder. 
-                                                
-        ->neword:   New Order.
-
-        ->p_dH:     Address of the helper stack. 
-    
-    OUTPUTS:
-
-        The operation will replace the data in num.
-
-    */ 
-    // ************************************************************************************************
-
-    uint16_t* oldDirA;
-    uint16_t* newDirA;
-    uint8_t*  oldExpA;
-    uint8_t*  newExpA;
-    uint64_t newIndx;
-    uint64_t m_max, newSizeOfCoefs;
-    uint64_t i,k, Ndir = num->Ndir;
-    uint8_t j, order = num->order;
-    double*  newCoefs;
-
-
-    if (neword != order){
-
-        m_max = c_helper_findMaxDir(Ndir-1,order,p_dH);
-        newSizeOfCoefs = c_helper_getNels(m_max,neword,p_dH);
-        newCoefs = (double*)malloc(newSizeOfCoefs*sizeof(double));
-
-        if (neword>order){
-
-            
-            // WARNING: THE VALUES IN COEFS HAVE NOT BEEN INITIALIZED!!!
-            k=0;
-
-
-            newDirA = c_helper_getUDirA(neword,0,p_dH);
-            newExpA = c_helper_getUExpA(neword,0,p_dH);
-
-            for (i = 0; i < Ndir; i++ ){
-
-                oldDirA = c_helper_getDirA(i,order,p_dH);
-                oldExpA = c_helper_getExpA(i,order,p_dH);
-                
-                 
-
-                // Fill the values of new DirA
-                memcpy(newDirA,oldDirA,order*sizeof(double));            
-                memcpy(newExpA,oldExpA,order*sizeof(double));
-
-                // Fill the rest with zeros
-                for (j=order; j<neword;j++){
-                    
-                    newDirA[j] = 0;
-                    newExpA[j] = 0;
-
-                }
-
-                newIndx = c_helper_findIndex(newDirA,newExpA,neword,p_dH);
-                newCoefs[newIndx] = num->p_coefs[i];
-
-                
-                if (k != newIndx){
-                    // Set all the values between the last value placed and newIndx -> 0.0
-
-                    for (;k<newIndx;k++){
-
-                        newCoefs[k] = 0.0;
-
-                    }
-
-                    // k leaves this loop with the same value as newIndx.
-                    
-
-                }
-
-                k++;
-
-
-                
-            }
-
-            // Set all other numbers to zero.
-
-            for (;k<newSizeOfCoefs;k++){
-                newCoefs[k] = 0.0;
-            }
-
-
-            
-            res->p_coefs = newCoefs;
-            res->order = neword;
-            res->Ndir = newSizeOfCoefs;
-
-        } else {  // neworder<order
-
-            oldDirA = c_helper_getUDirA( order, 0, p_dH);
-            oldExpA = c_helper_getUExpA( order, 0, p_dH); 
-
-            for (i = 0; i < newSizeOfCoefs; i++ ){
-
-                newDirA = c_helper_getDirA(i, neword, p_dH);
-                newExpA = c_helper_getExpA(i, neword, p_dH);
-
-                memcpy( oldDirA, newDirA, neword*sizeof(double));            
-                memcpy( oldExpA, newExpA, neword*sizeof(double));
-
-                // Fill the rest with zeros
-                for (j=neword; j<order;j++){
-                    
-                    oldDirA[j] = 0;
-                    oldExpA[j] = 0;
-
-                }
-
-                newIndx = c_helper_findIndex(oldDirA,oldExpA,order,p_dH);
-                newCoefs[i] = num->p_coefs[newIndx];
-                
-                
-            }
-
-
-            num->p_coefs = newCoefs;
-            num->order = neword;
-            num->Ndir = newSizeOfCoefs;
-
-        }
-
-    }
-
-
-}
-
-
-void c_oti_changeOrder(otinum_t* num, uint8_t neword, directionHelper* p_dH ){
-    /*
-    c_otiChangeOrder(num1, neword, p_dH)
-    
-    Change the order of num to neword.
-    
-
-    INPUTS:
-
-        ->num:      Address of the number to be changedOrder. 
-                                                
-        ->neword:   New Order.
-
-        ->p_dH:     Address of the helper stack. 
-    
-    OUTPUTS:
-
-        The operation will replace the data in num.
-
-    */ 
-    // ************************************************************************************************
-
-    uint16_t* oldDirA;
-    uint16_t* newDirA;
-    uint8_t*  oldExpA;
-    uint8_t*  newExpA;
-    uint64_t newIndx;
-    uint64_t m_max, newSizeOfCoefs;
-    uint64_t i,k, Ndir = num->Ndir;
-    uint8_t j, order = num->order;
-    double*  newCoefs;
-
-
-    if (neword != order){
-
-        m_max = c_helper_findMaxDir(Ndir-1,order,p_dH);
-        newSizeOfCoefs = c_helper_getNels(m_max,neword,p_dH);
-
-
-        if (neword>order){
-
-            newCoefs = (double*)malloc(newSizeOfCoefs*sizeof(double));
-            // WARNING: THE VALUES IN COEFS HAVE NOT BEEN INITIALIZED!!!
-            k=0;
-
-
-            newDirA = c_helper_getUDirA(neword,0,p_dH);
-            newExpA = c_helper_getUExpA(neword,0,p_dH);
-
-            for (i = 0; i < Ndir; i++ ){
-
-                oldDirA = c_helper_getDirA(i,order,p_dH);
-                oldExpA = c_helper_getExpA(i,order,p_dH);
-                
-                 
-
-                // Fill the values of new DirA
-                memcpy(newDirA,oldDirA,order*sizeof(double));            
-                memcpy(newExpA,oldExpA,order*sizeof(double));
-
-                // Fill the rest with zeros
-                for (j=order; j<neword;j++){
-                    
-                    newDirA[j] = 0;
-                    newExpA[j] = 0;
-
-                }
-
-                newIndx = c_helper_findIndex(newDirA,newExpA,neword,p_dH);
-                newCoefs[newIndx] = num->p_coefs[i];
-
-                
-                if (k != newIndx){
-                    // Set all the values between the last value placed and newIndx -> 0.0
-
-                    for (;k<newIndx;k++){
-
-                        newCoefs[k] = 0.0;
-
-                    }
-
-                    // k leaves this loop with the same value as newIndx.
-                    
-
-                }
-
-                k++;
-
-
-                
-            }
-
-            // Set all other numbers to zero.
-
-            for (;k<newSizeOfCoefs;k++){
-                newCoefs[k] = 0.0;
-            }
-
-
-            free(num->p_coefs);
-            num->p_coefs = newCoefs;
-            num->order = neword;
-            num->Ndir = newSizeOfCoefs;
-
-        } else {  // neworder<order
-
-            oldDirA = c_helper_getUDirA( order, 0, p_dH);
-            oldExpA = c_helper_getUExpA( order, 0, p_dH); 
-
-            for (i = 0; i < newSizeOfCoefs; i++ ){
-
-                newDirA = c_helper_getDirA(i, neword, p_dH);
-                newExpA = c_helper_getExpA(i, neword, p_dH);
-
-                memcpy( oldDirA, newDirA, neword*sizeof(double));            
-                memcpy( oldExpA, newExpA, neword*sizeof(double));
-
-                // Fill the rest with zeros
-                for (j=neword; j<order;j++){
-                    
-                    oldDirA[j] = 0;
-                    oldExpA[j] = 0;
-
-                }
-
-                newIndx = c_helper_findIndex(oldDirA,oldExpA,order,p_dH);
-                num->p_coefs[i] = num->p_coefs[newIndx];
-                
-                
-            }
-
-            // Realloc to new size.
-            num->p_coefs = (double* )realloc(num->p_coefs,newSizeOfCoefs*sizeof(double));
-            num->order = neword;
-            num->Ndir = newSizeOfCoefs;
-
-        }
-
-    }
-
-
-}
-
-
-
-// ****************************************************************************************************
-void c_oti_e(double real,uint16_t basis, uint8_t order, uint16_t nbasis, 
-            directionHelper* p_dH, otinum_t* res){
-    /*
-    void c_oti_e(double real,uint16_t basis, uint8_t order, otinum_t* res)
-
-    Create an oti number with real coefficient "real" and with unitary perturbation in imaginary 
-    direction "basis".
-
-    INPUTS:
-
-        -> double real:     Real coefficient.
-
-        -> uint16_t basis:  Number that represents the imaginary direction to hold the perturbation.
-
-        -> uint8_t order:   Order of the OTI number desired
-
-        -> uint16_t nbasis: Number of basis(determines the size of the oti number).
-        
-        -> directionHelper* p_dH: 
-
-        -> otinum_t* res:   Pointer to the oti number result. Must not come allocated!
-    
-    OUTPUTS:
-
-        The operation allocates memory and sets the corresponding values of the oti number.
-
-    */ 
-    // ************************************************************************************************
-    
-
-
-    
-
-}    
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-// ****************************************************************************************************
-inline void c_oti_sumf(otinum_t* num1, double other){
-    /*
-    void c_oti_sumf(otinum_t* num1, otinum_t* num2, otinum_t* res)
-
-    Sum an oti number with a float (double).
-
-    INPUTS:
-
-        ->num1:    Address of the summand. 
-                                                Both must have the same order.
-        ->num2:    Address of the summand.
-
-        ->res:     Address of the result holder. Must come allocated with the maximum number of 
-                   directions.
-
-    OUTPUTS:
-
-        The operation is equivalent to:
-
-        res = num1 + num2
-
-    */ 
-    // ************************************************************************************************
-    
-
-    num1->p_coefs[0] += other;
-
-}    
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-void c_oti_sum(otinum_t* num1, otinum_t* num2, otinum_t* res){
-    /*
-    void c_oti_sum(otinum_t* num1, otinum_t* num2, otinum_t* res)
-
-    Sum two oti numbers
-
-    INPUTS:
-
-        ->num1:    Address of the summand. 
-                                                Both must have the same order.
-        ->num2:    Address of the summand.
-
-        ->res:     Address of the result holder. Must come allocated with the maximum number of 
-                   directions.
-
-    OUTPUTS:
-
-        The operation is equivalent to:
-
-        res = num1 + num2
-
-    */ 
-    // ************************************************************************************************
-
-
-    // c_minUI64(num1->Ndir, num2->Ndir, &minNdir,&maxNdir);
-
-
-    for(uint64_t i = 0; i< res->Ndir; i++){
-        
-        if( i < num1->Ndir){
-            
-            res->p_coefs[i] = num1->p_coefs[i];
-
-        }else{
-            
-            res->p_coefs[i] = 0.0;
-
-        }
-
-        if( i < num2->Ndir){
-            
-            res->p_coefs[i] += num2->p_coefs[i];
-
-        }
-
-    }
-    
-
-}    
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void c_oti_sub(otinum_t* num1, otinum_t* num2, otinum_t* res){
-    /*
-    void c_oti_sum(otinum_t* num1, otinum_t* num2, otinum_t* res)
-
-    Subtract two oti numbers
-
-    INPUTS:
-
-        ->num1:    Address of the summand. 
-                                                Both must have the same order.
-        ->num2:    Address of the summand.
-
-        ->res:     Address of the result holder. Must come allocated with the maximum number of 
-                   directions.
-
-    OUTPUTS:
-
-        The operation is equivalent to:
-
-        res = num1 - num2
-
-    */ 
-    // ************************************************************************************************
-
-
-    // c_minUI64(num1->Ndir, num2->Ndir, &minNdir,&maxNdir);
-
-
-    for(uint64_t i = 0; i< res->Ndir; i++){
-        
-        if( i < num1->Ndir){
-            
-            res->p_coefs[i] = num1->p_coefs[i];
-
-        }else{
-            
-            res->p_coefs[i] = 0.0;
-
-        }
-
-        if( i < num2->Ndir){
-            
-            res->p_coefs[i] -= num2->p_coefs[i];
-
-        }
-
-    }
-    
-
-}    
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-void c_oti_neg(otinum_t* num1){
-    /*
-    void c_oti_sum(otinum_t* num1, otinum_t* num2, otinum_t* res)
-
-    Sum two oti numbers
-
-    INPUTS:
-
-        ->num1:    Address of the summand. 
-                                                Both must have the same order.
-        ->num2:    Address of the summand.
-
-        ->res:     Address of the result holder. Must come allocated with the maximum number of 
-                   directions.
-
-    OUTPUTS:
-
-        The operation is equivalent to:
-
-        - num1 
-
-    */ 
-    // ************************************************************************************************
-
-
-    for(uint64_t i = 0; i< num1->Ndir; i++){
-        
-        num1->p_coefs[i] *= -1.0;
-                 
-    }
-    
-
-}    
+// -----------------------------     END SPROTINUM FUNCTIONS     --------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
 
 
 
 
-// ****************************************************************************************************
-inline void c_oti_copy(otinum_t* numDest, otinum_t* numSrc){
-    /*
-    void c_oti_copy(otinum_t* numDest, otinum_t* numSrc)
-
-    Copies the information from numSrc to numDest
-
-    INPUTS:
-
-        ->numHolder:    Address of the number to be freed.
-
-    */ 
-    // ************************************************************************************************
-
-    numDest->p_coefs = (double*)malloc(numSrc->Ndir*sizeof(double));
-    
-    if (numDest->p_coefs == NULL){
-        printf("--- MemoryError ---\n");
-        exit(1);
-    }
-
-    memcpy(numDest->p_coefs ,numSrc->p_coefs ,numSrc->Ndir*sizeof(double));
-    numDest->Ndir  = numSrc->Ndir;
-    numDest->order = numSrc->order;
-}    
-// ----------------------------------------------------------------------------------------------------
 
 
 
-// ----------------------------------------------------------------------------------------------------
-// -------------------------------     END OTINUM FUNCTIONS     ---------------------------------------
-// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 
 

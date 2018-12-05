@@ -1,53 +1,28 @@
 #include "oti/core.h"
 
 
-
 // ----------------------------------------------------------------------------------------------------
-// ---------------------------------------  ARRAY FUNCTIONS  ------------------------------------------
-// ----------------------------------------------------------------------------------------------------
-
-uint8_t array1d_getel_ui8(uint8_t* arr, uint64_t i){
-    return arr[i];
-}
-
-
-void array2d_getel_ui8_t(arr,uint64_t ncols,uint64_t i, uint64_t j){
-   return arr[i*j];
-}
-
-void array3d_getel(,i,j,k){
-
-}
-
-
-
-// ----------------------------------------------------------------------------------------------------
-// ---------------------------------    END ARRAY FUNCTIONS  ------------------------------------------
-// ----------------------------------------------------------------------------------------------------
-
-
-// ----------------------------------------------------------------------------------------------------
-// ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
+// ---------------------------------     HELPER 2 FUNCTIONS  ------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void loadnpy_fulldir( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH){
+void c_loadFulldir( char* strLocation, uint8_t order, uint16_t nbasis, directionHelper2* p_dH){
     /*
-    loadnpy_fulldir( strLocation, order,  nbasis,  dHelp)
+    c_loadFulldir( strLocation, order,  nbasis,  dHelp)
 
-    Loads the full direction array for order "order" and number of basis given in "nbasis" from 
-    the given folder.
+    Loads the fulldir array for order "order" and number of basis given in "nbasis" from a file that
+    is located at the folder given in strLocation.
 
     INPUTS:
-    @param strLocation String with the folder that contains the npy file with fulldir.
+        -> strLocation: String with the location of the folder that contains the npy file with fulldir.
         
-    @param order    Order to be loaded.
+        -> order:    Order to be loaded.
             Example: 3
 
-    @param nbasis    Number of basis.
+        ->  nbasis:    Number of basis.
             Example: 10
 
-    @param p_dH    Address of the helper to be loaded.
+        ->p_dH:    Adress of the helper to be loaded.
 
     OUTPUTS:
         -> The result is the direction helper containing the loaded data.
@@ -72,7 +47,7 @@ void loadnpy_fulldir( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t
 
     // Load array.
 
-    loadnpy(filename, (void**) &p_dH->p_fulldir, &ndim, shape);
+    load_npy(filename, (void**) &p_dH->p_fulldir, &ndim, shape);
     p_dH->Ndir = shape[0];
     p_dH->order= order;
 
@@ -81,21 +56,23 @@ void loadnpy_fulldir( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void loadnpy_multtabls( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH){
-    /**
-    Loads the multiplication table arrays for order "order" and number of basis given in "nbasis"  
-    from files located at the given folder.
+void c_loadMulttabls( char* strLocation, uint8_t order, uint16_t nbasis, directionHelper2* p_dH){
+    /*
+    c_loadFulldir( strLocation, order,  nbasis,  dHelp)
+
+    Loads the multtab arrays for order "order" and number of basis given in "nbasis" from the files 
+    located at the folder given in strLocation.
 
     INPUTS:
-    @param strLocation String with the folder that contains the npy file with fulldir.
+        -> strLocation: String with the location of the folder that contains the npy file with fulldir.
         
-    @param order    Order to be loaded.
+        -> order:    Order to be loaded.
             Example: 3
 
-    @param nbasis    Number of basis.
+        ->  nbasis:    Number of basis.
             Example: 10
 
-    @param p_dH    Address of the helper to be loaded.
+        ->p_dH:    Adress of the helper to be loaded.
 
     OUTPUTS:
         -> The result is the direction helper containing the loaded data.
@@ -131,7 +108,7 @@ void loadnpy_multtabls( char* strLocation, uint8_t order, uint16_t nbasis, dhelp
             
 
             // Load the numpy array.
-            loadnpy(filename, (void**) &p_dH->p_multtabls[k], &ndim, shape);
+            load_npy(filename, (void**) &p_dH->p_multtabls[k], &ndim, shape);
 
         }
 
@@ -142,21 +119,23 @@ void loadnpy_multtabls( char* strLocation, uint8_t order, uint16_t nbasis, dhelp
 
 
 // ****************************************************************************************************
-void loadnpy_ndirs( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* p_dH){
-    /**
-    @brief Loads the ndirs array for order "order" and number of basis given in "nbasis" from a file that
+void c_loadNdirs( char* strLocation, uint8_t order, uint16_t nbasis, directionHelper2* p_dH){
+    /*
+    c_loadNdirs( strLocation, order,  nbasis,  dHelp)
+
+    Loads the fulldir array for order "order" and number of basis given in "nbasis" from a file that
     is located at the folder given in strLocation.
 
     INPUTS:
-    @param strLocation String with the folder that contains the npy file with ndirs.
+        -> strLocation: String with the location of the folder that contains the npy file with fulldir.
         
-    @param order    Order to be loaded.
+        -> order:    Order to be loaded.
             Example: 3
 
-    @param nbasis  Number of basis.
+        ->  nbasis:  Number of basis.
             Example: 10
 
-    @param p_dH      Address of the helper to be loaded.
+        ->p_dH:      Adress of the helper to be loaded.
 
     OUTPUTS:
         -> The result is the direction helper containing the loaded data.
@@ -178,34 +157,34 @@ void loadnpy_ndirs( char* strLocation, uint8_t order, uint16_t nbasis, dhelp_t* 
     strcat(filename,".npy");
     
     // Load the array.
-    loadnpy(filename, (void**) &p_dH->p_ndirs, &ndim, shape);    
+    load_npy(filename, (void**) &p_dH->p_ndirs, &ndim, shape);    
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-void dhelp_load_singl( char* strLocation, ord_t order, ndir_t nbasis, uint8_t nhelps, 
-    dhelp_t* p_dH){          
-   /**  
-    @brief Loads a direction helper from a set of files within the specified folder. 
-     
-     INPUTS:
-     @param strLocation String with the folder where the data is located. 
-            Example "../../data"
-             
-     @param order Order to be loaded in memory.
+void c_loadDirHelper2( char* strLocation, uint8_t order,   uint16_t nbasis, uint8_t nhelps, 
+    directionHelper2* p_dH){          
+    /*
+    c_loadDirHelper2( strLocation, order, nbasis, nhelps, p_dH)
+
+    Loads a direction helper from a set of files within the folder specified in strLocation. 
+
+    INPUTS:
+        
+        -> order:    Order to be loaded in memory.
             Example: 3
-     
-     @param nbasis Number of basis directions to load.
+
+        ->  nbasis:    Number of basis directions to load.
             Example: 100
-     
-     @param nhelps   Number of help arrays to be allocated in the array.
-     
-     @param p_dH:    Address of the helper to be loaded.
-     
-     OUTPUTS:
-         -> The result is the direction helper with the loaded data.
+
+        ->nhelps:   Number of help arrays to be allocated in the array.
+
+        ->p_dH:    Adress of the helper to be loaded.
+
+    OUTPUTS:
+        -> The result is the direction helper with the loaded data.
     */ 
     // ************************************************************************************************
 
@@ -218,12 +197,12 @@ void dhelp_load_singl( char* strLocation, ord_t order, ndir_t nbasis, uint8_t nh
         double*          p_fder;  // Preallocated array for general function evaluation. size: order+1
         double*         p_coefs;  // Preallocated array for general multiplication coefs. Shape: (Ndir,1)
         uint64_t*        p_indx;  // Preallocated array for general multiplication indx.  Shape: (Ndir,1)
-    } dhelp_t;
+    } directionHelper2;
     */    
 
-    loadnpy_fulldir(   strLocation, order, nbasis, p_dH);
-    loadnpy_ndirs(     strLocation, order, nbasis, p_dH);
-    loadnpy_multtabls( strLocation, order, nbasis, p_dH);
+    c_loadFulldir(   strLocation, order, nbasis, p_dH);
+    c_loadNdirs(     strLocation, order, nbasis, p_dH);
+    c_loadMulttabls( strLocation, order, nbasis, p_dH);
        
     // dHelp->p_udirA  = (uint16_t*)malloc(  nhelps*order*sizeof(uint16_t)    ); 
     // dHelp->p_uexpA  = (uint8_t* )malloc(  nhelps*order*sizeof(uint8_t )    ); 
@@ -241,48 +220,16 @@ void dhelp_load_singl( char* strLocation, ord_t order, ndir_t nbasis, uint8_t nh
 // ----------------------------------------------------------------------------------------------------
 
 
-
-
-
 // ****************************************************************************************************
-void dhelp_imdir2str(imdir_t imdir, ord_t ord, dhelpl_t* dhl, char* str){          
-    /**
-    @brief Generate the string representing the imaginary direction given in the inputs
+void c_helper_load2( char* strLocation, directionHelper2** p_dH){          
+    /*
+    c_helper_load2(strLocation, p_dH)
+
+    Load a set of 10 helpers from order 1 until order 10 with 10 bases.
 
     INPUTS:
         
-    @param imdir Imaginary direction Id.
-
-    @param ord Order of the Imaginary direction.
-    
-    @param dhl Direction helper list element.
-
-    OUTPUTS:
-        -> The result is an array of helpers of length = order with the loaded data.
-
-    TODO: Check for inconsistencies.
-    */ 
-    // ************************************************************************************************
-
-    // Get the 
-        
-    for (int i=0; i<ord; i++){
-        sprintf(str,"%hu,",dhl->p_dh[ord].p_fulldir[ord*(imdir-1)+i]);
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-void dhelp_load( char* strLocation, dhelpl_t* dhl){          
-    /**
-    @brief Load a set of 10 helpers from order 1 until order 10 with 10 bases.
-
-    INPUTS:
-        
-    @param strLocation: Path to the folder that contains the files to load.
+        -> strLocation: Path to the folder that contains the files to load.
 
     OUTPUTS:
         -> The result is an array of helpers of length = order with the loaded data.
@@ -303,7 +250,7 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
     //                                   10  // ------------------  10
     // };          
 
-    dhl->ndh = 10;               // Number of elements in the ndirs array
+    uint8_t nhelpers = 10;               // Number of elements in the ndirs array
 
     uint16_t nbases_per_ord[]   = {  10, // ------------------   1 
                                      10, // ------------------   3
@@ -319,16 +266,16 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
 
     uint8_t  nhelps =  3;
 
-    dhl->p_dH = (dhelp_t* )malloc(nhelpers*sizeof(dhelp_t));
+    p_dH[0] = (directionHelper2* )malloc(nhelpers*sizeof(directionHelper2));
 
-    if (dhl->p_dH == NULL){
+    if (p_dH == NULL){
       printf("Error. Not enough memory for helper array. Exiting\n");
-      exit(OTI_OutOfMemory);
+      exit(-1);
     }
     
     for( int i = 1; i<=nhelpers; i++){
       
-      dhelp_load_singl(strLocation,i,nbases_per_ord[i-1], nhelps, &(dhl->p_dH[i-1]));
+      c_loadDirHelper2(strLocation,i,nbases_per_ord[i-1], nhelps, &(*p_dH)[i-1]);
 
     }
 
@@ -338,12 +285,15 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
 
 
 // ****************************************************************************************************
-void dhelp_freeItem(  dhelp_t* p_dH){          
-    /**
-    @brief Frees all arrays in dHelp struct.
+void c_freeDirHelper2(  directionHelper2* p_dH){          
+    /*
+    freeDirHelper( p_dH)
+
+    Frees all arrays in dHelp struct.
 
     INPUTS:
-    @param p_dH  Allocated direction helper.
+        
+        -> p_dH:  Allocated direction helper.
     */ 
     // ************************************************************************************************
     
@@ -375,14 +325,15 @@ void dhelp_freeItem(  dhelp_t* p_dH){
 
 
 // ****************************************************************************************************
-void dhelp_freeList(dhelp_t** p_dH, uint8_t nhelpers ){          
-    /**
-    @brief Free all helpers that where loaded.
+void c_helper_free2(directionHelper2** p_dH, uint8_t nhelpers ){          
+    /*
+    void c_helper_free2(directionHelper* p_dH , uint8_t maxorder )
+
+    Free all helpers that where loaded.
 
     INPUTS:
-    @param p_dH List of helpers
-    
-    @param nhelpers Number of direction helpers.
+        -> p_dH:        Array of helpers
+            Example: 3
 
     OUTPUTS:
         -> The result is an array of helpers of length = order with the loaded data.
@@ -393,7 +344,7 @@ void dhelp_freeList(dhelp_t** p_dH, uint8_t nhelpers ){
     
     for( int i = 1; i<=nhelpers; i++){
       // printf("freeing %d\n",i );
-      dhelp_freeItem(&(*p_dH)[i-1]);
+      c_freeDirHelper2(&(*p_dH)[i-1]);
     }
 
     free(*p_dH);
@@ -402,19 +353,21 @@ void dhelp_freeList(dhelp_t** p_dH, uint8_t nhelpers ){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
-    /**
-    @brief Loads a '.npy' array to C format.
+void load_npy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
+    /*
+    load_npy( order,  ndir)
+
+    Loads a '.npy' array to C format.
 
     INPUTS:
         
-    @param filename  String with the filename of to load. Must contain the path.
+        -> filename:    Filename of the file to load. Must contain the path.
             
-    @param data  Address of the pointer that will hold the data. Will be allocated in this function.
+        ->     data:    Address of the pointer that will hold the data. Will be allocated in this function.
 
-    @param ndim  Number of dimensions of the array.
+        ->     ndim:    Number of dimensions of the array.
 
-    @param shape  Address to the pointer that will hold the array.
+        ->    shape:    Address to the pointer that will hold the array.
 
     OUTPUTS:
         -> The result is the direction array pointer with the loaded data.
@@ -629,7 +582,7 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
-// --------------------------------     END DHELP FUNCTIONS   -----------------------------------------
+// -------------------------------     END HELPER 2 FUNCTIONS   ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
 

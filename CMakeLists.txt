@@ -31,8 +31,6 @@ elseif(UNIX)
 	set(CMAKE_C_COMPILER "/usr/bin/gcc")
 endif(APPLE)
  
-
-
 set(CMAKE_MACOSX_RPATH 1)
 
 # The version number.
@@ -46,7 +44,7 @@ set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall")
 
 # should we do the Cython part too?
 option (GENERATE_CYTHON 
-        "Also generate the Cython implementation" ON) 
+        "Also generate the Cython implementation" OFF) 
 
 # add the CYTHON part?
 #
@@ -54,6 +52,15 @@ if (GENERATE_CYTHON)
   add_subdirectory (pyoti)
   add_subdirectory (pyotifem)  
 endif (GENERATE_CYTHON)
+
+
+# should we do the Cython part too?
+option (GENERATE_C_TESTS
+        "Generate C tests files" YES) 
+
+if (GENERATE_C_TESTS)
+  add_subdirectory (tests/c)
+endif (GENERATE_C_TESTS)
 
 
 # should we do the Fortran part too?

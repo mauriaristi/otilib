@@ -271,7 +271,9 @@ void loadnpy_fulldir( char* strLocation, ord_t order, ndir_t nbasis, dhelp_t* p_
 // ----------------------------------------------------------------------------------------------------
 // ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
 // ----------------------------------------------------------------------------------------------------
-
+int64_t comb(int64_t a, int64_t b);
+int64_t dhelp_ndirTotal(bases_t nbases,ord_t order);
+int64_t dhelp_ndirOrder(bases_t nbases,ord_t order);
 
 
 

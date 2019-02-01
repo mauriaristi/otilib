@@ -18,7 +18,7 @@
 typedef struct {
     coeff_t          re;  // Real Coefficient.
     coeff_t*       p_im;  // Array with imaginary direction coefficients.
-    ndir_t         Ndir;  // Number of bases in the OTI number.
+    bases_t      Nbases;  // Number of bases in the OTI number.
     ord_t         order;  // Truncation order of the OTI number.
 } otinum_t;
 

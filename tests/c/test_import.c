@@ -54,6 +54,11 @@ int main(int argc, char *argv[]){
 
 	printf("CPU time per multiplication: %g us\n",cpu_time_used);    
 
+	// Test Combinatorics:
+	printf("Computing combinatorics...\n");    
+	printf("comb(%ld, %ld) = %ld \n",15,5,dhelp_comb(15,5));    
+	printf("Total number of directions for nbases %ld, order %ld = %ld \n",15,5,dhelp_ndirTotal(15,5));  
+	printf("Number of directions with order %ld for nbases %ld = %ld \n",5,15,dhelp_ndirOrder(15,5));    
 
 
 	printf("Unloading directions helpers\n");

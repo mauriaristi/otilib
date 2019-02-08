@@ -38,6 +38,7 @@ typedef uint64_t    ndir_t; ///< Number of Imaginary directions type.
 typedef uint16_t   bases_t; ///< Imaginary bases type. 
 typedef uint8_t      ord_t; ///< Order type.
 typedef uint8_t      ndh_t; ///< Number of direction helpers type.
+typedef uint8_t     flag_t; ///< Flag type.
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------------     END TYPEDEFS       --------------------------------------
@@ -140,7 +141,7 @@ typedef struct{
 // ----------------------------------------------------------------------------------------------------
 
 /// Enumerators to assign a code to constants
-enum c_oti_errors {  
+enum oti_errors {  
   // Define operations identifiers.
   OTI_success      =     0,   ///< Success
   OTI_OutOfMemory  =    -1,   ///< Out of memory.
@@ -271,11 +272,33 @@ void loadnpy_fulldir( char* strLocation, ord_t order, ndir_t nbasis, dhelp_t* p_
 // ----------------------------------------------------------------------------------------------------
 // ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
 // ----------------------------------------------------------------------------------------------------
-int64_t comb(int64_t a, int64_t b);
-int64_t dhelp_ndirTotal(bases_t nbases,ord_t order);
-int64_t dhelp_ndirOrder(bases_t nbases,ord_t order);
 
+/**************************************************************************************************//**
+@brief Returns the number of possible combinations of a elements into subsets of size b.
 
+@param[in] a Size of whole set.
+@param[in] b Size of subsets.
+******************************************************************************************************/ 
+int64_t dhelp_comb(int64_t a, int64_t b);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Returns the total number of directions given the number of bases and truncation order
+
+@param[in] nbases Total number of bases
+@param[in] order  Truncation order
+******************************************************************************************************/ 
+ndir_t dhelp_ndirTotal(bases_t nbases,ord_t order);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Returns the number of directions of a certain truncation order given the number of bases.
+
+@param[in] nbases Total number of bases
+@param[in] order  Truncation order
+******************************************************************************************************/ 
+ndir_t dhelp_ndirOrder(bases_t nbases,ord_t order);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Loads a direction helper from a set of files within the specified folder. 

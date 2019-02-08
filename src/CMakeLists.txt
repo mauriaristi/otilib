@@ -39,11 +39,12 @@ SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
 
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 add_library (oti        c/core.c 
-						c/base_math.c )
+						c/base_math.c
 	                    # c/darray.c 
-	                    # c/otinum_dense.c
+	                    c/otinum_dense.c
 	                    # c/otinum_spr.c
-	                    # c/otinum_spr_array.c)
+	                    # c/otinum_spr_array.c
+	                    )
 	                    
 	                    
 	                    

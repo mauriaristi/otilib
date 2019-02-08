@@ -243,8 +243,8 @@ void dhelp_freeItem(  dhelp_t* p_dH){
 
 
 
-
-int64_t dhelp_comb(int64_t a, int64_t b){
+// ****************************************************************************************************
+inline int64_t dhelp_comb(int64_t a, int64_t b){
     
     int64_t niter = a - MAX(a-b,b);
     int64_t num = 1, den=1;
@@ -258,11 +258,12 @@ int64_t dhelp_comb(int64_t a, int64_t b){
     return num/den;
 
 }
+// ----------------------------------------------------------------------------------------------------
 
 
 
 // ****************************************************************************************************
-int64_t dhelp_ndirTotal(bases_t nbases,ord_t order){
+ndir_t dhelp_ndirTotal(bases_t nbases,ord_t order){
 
     return dhelp_comb( nbases + order , nbases );
 
@@ -271,7 +272,7 @@ int64_t dhelp_ndirTotal(bases_t nbases,ord_t order){
 
 
 // ****************************************************************************************************
-int64_t dhelp_ndirOrder(bases_t nbases,ord_t order){
+ndir_t dhelp_ndirOrder(bases_t nbases,ord_t order){
 
     return dhelp_comb( nbases + order - 1 , nbases-1 );
 

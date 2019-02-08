@@ -39,7 +39,11 @@ SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
 
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 add_executable(test_import test_import.c)
+
 target_link_libraries (test_import oti)
+
+add_executable(test_otinum test_otinum.c)
+target_link_libraries (test_otinum oti)
 # SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "")
 
 # -------------------------------------------------------------------

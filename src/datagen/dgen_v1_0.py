@@ -21,7 +21,7 @@ def genPrecompData(max_basis_k=[3,3,3,3,3],maindir=''):
     
     precDir.append(order_i_dir)
 #     precNdir.append(order_i_dir.copy().reshape((max_basis_k[0],)))
-    precNdir.append(np.arange(0,m+1,dtype = np.uint16))
+    precNdir.append(np.arange(0,m+1,dtype = np.uint64))
     
     # Save files in Numpy format.
     pathname = maindir+"/"

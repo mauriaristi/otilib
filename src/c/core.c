@@ -264,14 +264,18 @@ inline int64_t dhelp_comb(int64_t a, int64_t b){
 // ****************************************************************************************************
 ndir_t dhelp_extract_ndirOrder(bases_t nbases,ord_t order,dhelpl_t dhl){
 
+    // printf("\n ---- Extracting %hu bases and %hhu order\n", nbases, order);
+
     if (order == 0){
 
         return 1;
 
-    } else if ( order <= (dhl.ndh+1)){
+    } else if ( order <= (dhl.ndh + 1) ){
         
         if ( nbases <= dhl.p_dh[order-1].Nbasis){
 
+            // printf("\n ---- Number of directions: %lu\n", dhl.p_dh[order-1].p_ndirs[nbases]);
+            // printf("\n ---- In if\n");
             // Extract only when the number of bases exists in the precomputed data.
             return dhl.p_dh[order-1].p_ndirs[nbases];
 

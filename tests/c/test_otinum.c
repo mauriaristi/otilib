@@ -37,25 +37,28 @@ int main(int argc, char *argv[]){
 
 	oti_print(&num, dhl);
 
-	// Test addition:
+	// Test addition with real
 	num2 = oti_sum_real(a,&num,dhl);
 	oti_print(&num2, dhl);	
 
+	// Test addition with another oti number.
 	num1 = oti_sum(&num, &num2, dhl);
 	oti_print(&num1,dhl);
-
-
 	oti_free( &num2 );
 
+	// Test multiplication with real.
 	num2 = oti_mul_real(3.5, &num1, dhl);
 	oti_print(&num2,dhl);
-
 	oti_free( &num2 );
 
+	// Test multiplication between OTI numbers.
 	num2 = oti_mul(&num, &num1, dhl);
 	oti_print(&num2,dhl);
 
-	oti_free( &num );
+
+
+	// Free all numbers.
+	oti_free( &num  );
 	oti_free( &num1 );
 	oti_free( &num2 );
 

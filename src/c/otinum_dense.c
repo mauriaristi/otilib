@@ -19,8 +19,14 @@ void oti_get_order_coeffs(ord_t order, otinum_t* num, coeff_t** start, ndir_t* n
 
     if (order <= num->order){
         
-        *ndir        = dhelp_extract_ndirOrder(num->nbases, order  , dhl)    ;
-        ndir_to_ord  = dhelp_extract_ndirTotal(num->nbases, order-1, dhl) - 1;    
+        printf("\nUsing Extract: (order) "_PNDIRT _ENDL,dhelp_extract_ndirOrder(num->nbases, order  , dhl));
+        printf("Using Extract: (total) "_PNDIRT _ENDL,dhelp_extract_ndirTotal(num->nbases, order-1, dhl) - 1);
+
+        printf("Using Standard: (order) "_PNDIRT _ENDL,dhelp_ndirOrder(num->nbases, order  )    );
+        printf("Using Standard: (order) "_PNDIRT _ENDL,dhelp_ndirTotal(num->nbases, order-1) - 1);
+
+        *ndir        = dhelp_ndirOrder(num->nbases, order  )    ;
+        ndir_to_ord  = dhelp_ndirTotal(num->nbases, order-1) - 1;
         *start       = & num->p_im[ndir_to_ord] ;
 
     } else {
@@ -57,21 +63,21 @@ otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
         coeff_t* p_im_res = NULL;
         ndir_t ndirres = 0;
 
-        printf("Multiplying to obtain elements of order %hhu\n",ord_res);
+        printf("\nMultiplying to obtain elements of order %hhu\n",ord_res);
 
         oti_get_order_coeffs(ord_res, &res, &p_im_res, &ndirres,  dhl);
-        printf("Writing %lu elements starting from %g\n",ndirres, p_im_res[0]);        
+        printf("\nWriting %lu elements starting from %g\n",ndirres, p_im_res[0]);        
 
         // Do 0 X ord_res
         oti_get_order_coeffs(ord_res, num2, &p_im_2, &ndir2,  dhl);
         for (ndir_t i=0; i<ndir2; i++){
             p_im_res[i] = p_im_2[i]*num1->re;
         }
-        printf("Writing %lu elements starting from %g\n",ndir2, p_im_2[0]);
+        printf("\nWriting %lu elements starting from %g\n",ndir2, p_im_2[0]);
 
         // Do ord_res X 0
         oti_get_order_coeffs(ord_res, num1, &p_im_1, &ndir1,  dhl);
-        printf("Writing %lu elements starting from %g\n",ndir1, p_im_1[0]);
+        printf("\nWriting %lu elements starting from %g\n",ndir1, p_im_1[0]);
         for (ndir_t i=0; i<ndir2; i++){
             p_im_res[i] += p_im_1[i]*num2->re;
         }

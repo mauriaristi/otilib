@@ -250,6 +250,7 @@ inline int64_t dhelp_comb(int64_t a, int64_t b){
     int64_t num = 1, den=1;
 
     for(int64_t i = 0; i<niter; i++){
+
         den = den * (i+1) ;
         num = num * (a-i) ;
 
@@ -260,7 +261,53 @@ inline int64_t dhelp_comb(int64_t a, int64_t b){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+ndir_t dhelp_extract_ndirOrder(bases_t nbases,ord_t order,dhelpl_t dhl){
 
+    if (order == 0){
+
+        return 1;
+
+    } else if ( order <= (dhl.ndh+1)){
+        
+        if ( nbases <= dhl.p_dh[order-1].Nbasis){
+
+            // Extract only when the number of bases exists in the precomputed data.
+            return dhl.p_dh[order-1].p_ndirs[nbases];
+
+        } else {
+
+            printf("ERROR: nbases greater than the available precomputed data.\n");
+            exit(OTI_NonPreComp);
+
+        }
+
+    } else {
+
+        printf("ERROR: Order greater than the available orders in the precomputed data.\n");
+        exit(OTI_NonPreComp);
+
+    }
+
+} 
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+ndir_t dhelp_extract_ndirTotal(bases_t nbases, ord_t order, dhelpl_t dhl){
+
+    ndir_t ndir_total = 1;
+
+    for(ord_t ord = 1; ord <= order; ord++){
+
+        //extract each order
+        ndir_total += dhelp_extract_ndirOrder( nbases, ord, dhl );
+
+    }
+
+    return ndir_total;
+    
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 ndir_t dhelp_ndirTotal(bases_t nbases,ord_t order){

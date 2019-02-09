@@ -11,66 +11,150 @@
 
 
 
+
 // ****************************************************************************************************
-void oti_redefine( nbases_t nbases, ord_t order, otinum_t* num, dhelpl_t dhl){
+void oti_get_order_coeffs(ord_t order, otinum_t* num, coeff_t** start, ndir_t* ndir, dhelpl_t dhl ){
 
-    flag_t flag_reallocate = 0; // 0 not required, 1 after, 2 before, 
+    ndir_t ndir_to_ord=0;
 
-    ndir_t new_ndir = dhelp_ndirTotal( nbases , order ) - 1 ;
+    if (order <= num->order){
+        
+        *ndir  = dhelp_extract_ndirOrder(num->nbases, order, dhl);    
+        ndir_to_ord  = dhelp_extract_ndirTotal(num->nbases, order-1, dhl) - 1;    
+        *start = &num->p_im[ndir_to_ord];
+
+    } else {
+        
+        *start = NULL;
+        ndir   = 0;
+    }
     
-    if (new_ndir != num->ndir ){
-        // The system must be re-allocated.
 
-        // Check if reallocation is required before or after.
-        if (nbases > num->nbases || order > num->order){
-            
-            flag_reallocate = 2;
-            
-        } else if (nbases < num->nbases || order < num->order){
 
-            flag_reallocate = 1;
+}
+// ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
+
+    otinum_t res;
+        
+    // Allocate num1. Better to initialize as a 0.
+    oti_createEmpty( num1->nbases, num1->order, &res, dhl);
+    
+    //  0 X 0
+    res.re = num1->re*num2->re;
+
+    for ( ord_t ord_res = 1; ord_res <= res.order; ord_res++){
+
+        coeff_t* p_im_1 = NULL;
+        ndir_t ndir1 = 0;
+
+        coeff_t* p_im_2 = NULL;
+        ndir_t ndir2 = 0;
+
+        coeff_t* p_im_res = NULL;
+        ndir_t ndirres = 0;
+
+        printf("Multiplying to obtain elements of order %hhu\n",ord_res);
+
+        oti_get_order_coeffs(ord_res, &res, &p_im_res, &ndirres,  dhl);
+        printf("Writing %lu elements starting from %g\n",ndirres, p_im_res[0]);        
+
+        // Do 0 X ord_res
+        oti_get_order_coeffs(ord_res, num2, &p_im_2, &ndir2,  dhl);
+        for (ndir_t i=0; i<ndir2; i++){
+            p_im_res[i] = p_im_2[i]*num1->re;
+        }
+        printf("Writing %lu elements starting from %g\n",ndir2, p_im_2[0]);
+
+        // Do ord_res X 0
+        oti_get_order_coeffs(ord_res, num1, &p_im_1, &ndir1,  dhl);
+        printf("Writing %lu elements starting from %g\n",ndir1, p_im_1[0]);
+        for (ndir_t i=0; i<ndir2; i++){
+            p_im_res[i] += p_im_1[i]*num2->re;
         }
 
-    }
 
-    if (flag_reallocate == 2){
+        for (ord_t ord_mul1 = 1; ord_mul1 <= ord_res/2; ord_mul1++){
 
-        num->p_im = (coeff_t*) realloc( num->p_im, new_ndir*sizeof(coeff_t) );
+            ord_t ord_mul2 = ord_res - ord_mul1;
+            printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
 
-        if (num->p_im == NULL){
-            printf("ERROR: Not capable to reallocate memory.");
-            exit(OTI_OutOfMemory)
         }
-
-    }
-
-
-    if( nbases != num->nbases ){
-        // Coefficients must be moved.
-
         
 
     }
 
-    if( order > num->order ){
-        // Coefficients must be moved.
+    return res;
 
-        //
+}
+// ----------------------------------------------------------------------------------------------------
 
-    } else if( order < num->order ){
+// ****************************************************************************************************
+otinum_t oti_mul_real(coeff_t a, otinum_t* num1, dhelpl_t dhl){
 
-    if (flag_reallocate == 1){
+    otinum_t res;
+        
+    // Allocate num1.
+    oti_createEmpty( num1->nbases, num1->order, &res, dhl);
+    
+    res.re = num1->re*a;
 
-        num->p_im = (coeff_t*) realloc( num->p_im, new_ndir*sizeof(coeff_t) );
+    for ( ndir_t i = 0; i < num1->ndir; i++){
 
-        if (num->p_im == NULL){
-            printf("ERROR: Not capable to reallocate memory.");
-            exit(OTI_OutOfMemory)
-        }
+        res.p_im[i] = num1->p_im[i]*a;
 
     }
-     
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+otinum_t oti_sum(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
+
+    otinum_t res;
+        
+    // Allocate num1.
+    oti_createEmpty( num1->nbases, num1->order, &res, dhl);
+    
+    res.re = num1->re + num2->re;
+
+    if (num1->ndir == num2->ndir){
+
+        for ( ndir_t i = 0; i < num1->ndir; i++){
+
+            res.p_im[i] = num1->p_im[i] + num2->p_im[i];
+
+        }
+
+    } else {
+
+        printf("Error: Not supported.\n");
+        exit(OTI_undetErr);
+    }
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+otinum_t oti_sum_real(coeff_t a, otinum_t* num1, dhelpl_t dhl){
+
+    otinum_t res;
+        
+    // Allocate num1.
+    oti_createEmpty( num1->nbases, num1->order, &res, dhl);
+
+    // Copy information from num1 to res.
+    memcpy( res.p_im, num1->p_im, num1->ndir*sizeof(coeff_t) );
+    
+    res.re = num1->re + a;
+
+    return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -142,7 +226,7 @@ void oti_print( otinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-char* oti_free( otinum_t* num ){
+void oti_free( otinum_t* num ){
     
     if (num->p_im != NULL){
 

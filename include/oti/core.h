@@ -273,6 +273,29 @@ void loadnpy_fulldir( char* strLocation, ord_t order, ndir_t nbasis, dhelp_t* p_
 // ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+
+/**************************************************************************************************//**
+@brief Returns the number of directions of a certain order given the number of bases from the 
+precomputed data.
+
+@param[in] nbases Total number of bases
+@param[in] order  Truncation order
+@param[in] dhl    Direction helper list
+******************************************************************************************************/ 
+ndir_t dhelp_extract_ndirOrder(bases_t nbases,ord_t order,dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Returns the total number of directions given the number of bases and truncation order from the
+precomputed data
+
+@param[in] nbases Total number of bases
+@param[in] order  Truncation order
+@param[in] dhl    Direction helper list
+******************************************************************************************************/ 
+ndir_t dhelp_extract_ndirTotal(bases_t nbases,ord_t order,dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 /**************************************************************************************************//**
 @brief Returns the number of possible combinations of a elements into subsets of size b.
 

@@ -35,15 +35,73 @@ typedef struct {
 
 
 
-/**************************************************************************************************//**
-@brief Resize in memory the given OTI number.
 
-@param[in] nbases New number of imaginary bases.
-@param[in] order New truncation order of the number.
-@param[inout] num Address of the otin number to be modified.    
+
+
+
+/**************************************************************************************************//**
+@brief This function returns the starting poisition of the coefficients of the given order
+
+@param[in] order Order of interest.
+@param[in] num OTI number to look for order.
+@param[inout] start Address of the starting coefficients (this will be returned).
+@param[inout] ndir Total number of elements for the given order.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-void oti_redefine( nbases_t nbases, ord_t order, otinum_t* num, dhelpl_t dhl);
+void oti_get_order_coeffs(ord_t order, otinum_t* num, coeff_t** start, ndir_t* ndir, dhelpl_t dhl );
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Multiplication between two oti numbers.
+
+@param[in] num1 Oti number
+@param[in] num2 Oti number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Multiplication of an oti numbers and a real number
+
+@param[in] a Real number.
+@param[in] num2 Oti number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+otinum_t oti_mul_real(coeff_t a, otinum_t* num1, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Addition of two oti numbers.
+
+@param[in] num1 Oti number
+@param[in] num2 Oti number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+otinum_t oti_sum(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Addition of one oti number and a scalar number.
+
+@param[in] a Real number
+@param[in] num1 Oti number. 
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+otinum_t oti_sum_real(coeff_t a, otinum_t* num1, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Addition of one oti number and a scalar number, driven by an already created oti number.
+
+@param[in] nbases New number of imaginary bases.
+@param[in] num1 New truncation order of the number.
+@param[inout] num Address of the oti number to receive the result.    
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+void oti_sum_real_r(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -92,7 +150,7 @@ void oti_print( otinum_t* num, dhelpl_t dhl);
 
 @param[in] num Address of the oti number.  
 ******************************************************************************************************/ 
-char* oti_free( otinum_t* num );
+void oti_free( otinum_t* num );
 // ----------------------------------------------------------------------------------------------------
 
 

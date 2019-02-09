@@ -19,10 +19,10 @@ int main(int argc, char *argv[]){
 
 
 	printf("Testing creation of oti number.\n");
-	otinum_t num;
+	otinum_t num, num1, num2;
 	coeff_t a = 0.5;
 	bases_t nbases = 2;
-	ord_t order  = 2;
+	ord_t order  = 3;
 
 	// Allocate memory first.
 	oti_createEmpty( nbases, order, &num, dhl);
@@ -31,14 +31,33 @@ int main(int argc, char *argv[]){
 	oti_setFromReal( a, &num, dhl);
 
 	// Set element 
-	imdir_t idx_to_set = 2;
-	ord_t   ord_to_set  = 2;
-	oti_setIm_IdxOrd( a, 3, 2, &num, dhl);
-
+	imdir_t idx_to_set = 0;
+	ord_t   ord_to_set = 3;
+	oti_setIm_IdxOrd( a, idx_to_set, ord_to_set, &num, dhl);
 
 	oti_print(&num, dhl);
 
+	// Test addition:
+	num2 = oti_sum_real(a,&num,dhl);
+	oti_print(&num2, dhl);	
+
+	num1 = oti_sum(&num, &num2, dhl);
+	oti_print(&num1,dhl);
+
+
+	oti_free( &num2 );
+
+	num2 = oti_mul_real(3.5, &num1, dhl);
+	oti_print(&num2,dhl);
+
+	oti_free( &num2 );
+
+	num2 = oti_mul(&num, &num1, dhl);
+	oti_print(&num2,dhl);
+
 	oti_free( &num );
+	oti_free( &num1 );
+	oti_free( &num2 );
 
 	
 

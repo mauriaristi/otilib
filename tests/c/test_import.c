@@ -58,7 +58,11 @@ int main(int argc, char *argv[]){
 	printf("Computing combinatorics...\n");    
 	printf("comb(%ld, %ld) = %ld \n",15,5,dhelp_comb(15,5));    
 	printf("Total number of directions for nbases %ld, order %ld = %ld \n",15,5,dhelp_ndirTotal(15,5));  
+	printf("Total number of directions for nbases %ld, order %ld = %ld \n",10,5,dhelp_ndirTotal(10,5));  
+	printf("Extracted total num of dir for nbases %ld, order %ld = %ld \n",10,5,dhelp_extract_ndirTotal(10,5, dhelpl));  
 	printf("Number of directions with order %ld for nbases %ld = %ld \n",5,15,dhelp_ndirOrder(15,5));    
+	printf("Number of directions with order %ld for nbases %ld = %ld \n",5,4,dhelp_ndirOrder(5,4));    
+	printf("Extracted Num of dir with order %ld for nbases %ld = %ld \n",5,4,dhelp_extract_ndirOrder(5,4,dhelpl));    
 
 
 	printf("Unloading directions helpers\n");

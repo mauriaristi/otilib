@@ -19,14 +19,15 @@ void oti_get_order_coeffs(ord_t order, otinum_t* num, coeff_t** start, ndir_t* n
 
     if (order <= num->order){
         
-        *ndir  = dhelp_extract_ndirOrder(num->nbases, order, dhl);    
+        *ndir        = dhelp_extract_ndirOrder(num->nbases, order  , dhl)    ;
         ndir_to_ord  = dhelp_extract_ndirTotal(num->nbases, order-1, dhl) - 1;    
-        *start = &num->p_im[ndir_to_ord];
+        *start       = & num->p_im[ndir_to_ord] ;
 
     } else {
         
         *start = NULL;
         ndir   = 0;
+
     }
     
 

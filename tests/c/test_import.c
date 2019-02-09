@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
 	clock_t start, end;
     double cpu_time_used;
     
-    start = clock();
+    start = clock(); 
 	for(imdir_t i = 0; i<Ni; i++){
 		for(imdir_t j = 0; j<Nj; j++){
 

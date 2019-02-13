@@ -53,7 +53,7 @@ add_library (oti        c/core.c
 
 # To compile with linux uncomment the following line
 SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "")
-
+target_link_libraries(oti m)
 # -------------------------------------------------------------------
 # --------------------------- BUILD OTI -----------------------------
 # -------------------------------------------------------------------

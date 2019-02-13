@@ -169,10 +169,11 @@ typedef struct{
 /// Enumerators to assign a code to constants
 enum oti_errors {  
   // Define operations identifiers.
-  OTI_success      =     0,   ///< Success
-  OTI_OutOfMemory  =    -1,   ///< Out of memory.
-  OTI_BadIndx      =    -2,   ///< indexing error.
-  OTI_NonPreComp   =    -3,   ///< No precomputed data is available.
+  OTI_success         =     0,   ///< Success
+  OTI_OutOfMemory     =    -1,   ///< Out of memory.
+  OTI_BadIndx         =    -2,   ///< indexing error.
+  OTI_NonPreComp      =    -3,   ///< No precomputed data is available.
+  OTI_NotImplemented  =    -4,   ///< Not implemented.
 
   OTI_FEM_InvalidBaseId = -100,         ///< invalid base Id. It pops up when for example 
                                         /// for P0 elements that only have 1 basis function
@@ -300,6 +301,42 @@ void loadnpy_fulldir( char* strLocation, ord_t order, ndir_t nbasis, dhelp_t* p_
 // ----------------------------------------------------------------------------------------------------
 
 
+
+/**************************************************************************************************//**
+@brief Multiplies A set of oti coefficients for a given pair of orders.
+
+@param[in] p_im1    Coefficients to be multiplied.
+@param[in] ndir1    Number of directions in p_im1.
+@param[in] ord1     Order of directions in p_im1.
+@param[in] p_im2    Coefficients to be multiplied.
+@param[in] ndir2    Number of directions in p_im1.
+@param[in] ord2     Order of directions in p_im1.
+@param[in] p_imres  Coefficients to be multiplied.
+@param[in] ndirres  Number of directions in result.
+@param[in] dhl      Direction helper list
+******************************************************************************************************/ 
+void dhelp_dense_mult(coeff_t* p_im1, ndir_t ndir1, ord_t ord1, // Input 1
+                      coeff_t* p_im2, ndir_t ndir2, ord_t ord2, // Input 2
+                      coeff_t* p_imres, ndir_t ndirres,         // Result
+                      dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Multiplies a set of coefficients by a real number for the case of a dense oti number.
+
+@param[in] p_im1    Coefficients to be multiplied.
+@param[in] ndir1    Number of directions in p_im1.
+@param[in] a        Coefficient to be multiplied
+@param[in] p_imres  Coefficients to be multiplied.
+@param[in] ndirres  Number of directions in result.
+@param[in] dhl      Direction helper list
+******************************************************************************************************/ 
+void dhelp_dense_mult_real(coeff_t* p_im1, ndir_t ndir1, // Input 1
+                      coeff_t a,                         // Input 2
+                      coeff_t* p_imres, ndir_t ndirres,  // Result
+                      dhelpl_t dhl);                     // Helper                                      // Helper
+// ----------------------------------------------------------------------------------------------------
+
 /**************************************************************************************************//**
 @brief Returns the number of directions of a certain order given the number of bases from the 
 precomputed data.
@@ -308,7 +345,7 @@ precomputed data.
 @param[in] order  Truncation order
 @param[in] dhl    Direction helper list
 ******************************************************************************************************/ 
-ndir_t dhelp_extract_ndirOrder(bases_t nbases,ord_t order,dhelpl_t dhl);
+ndir_t dhelp_extract_ndirOrder(bases_t nbases, ord_t order,dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -319,7 +356,7 @@ precomputed data
 @param[in] order  Truncation order
 @param[in] dhl    Direction helper list
 ******************************************************************************************************/ 
-ndir_t dhelp_extract_ndirTotal(bases_t nbases,ord_t order,dhelpl_t dhl);
+ndir_t dhelp_extract_ndirTotal(bases_t nbases, ord_t order,dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -337,7 +374,7 @@ int64_t dhelp_comb(int64_t a, int64_t b);
 @param[in] nbases Total number of bases
 @param[in] order  Truncation order
 ******************************************************************************************************/ 
-ndir_t dhelp_ndirTotal(bases_t nbases,ord_t order);
+ndir_t dhelp_ndirTotal(bases_t nbases, ord_t order);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -346,7 +383,7 @@ ndir_t dhelp_ndirTotal(bases_t nbases,ord_t order);
 @param[in] nbases Total number of bases
 @param[in] order  Truncation order
 ******************************************************************************************************/ 
-ndir_t dhelp_ndirOrder(bases_t nbases,ord_t order);
+ndir_t dhelp_ndirOrder(bases_t nbases, ord_t order);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

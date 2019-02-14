@@ -43,16 +43,22 @@ set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall")
  
 
 # should we do the Cython part too?
-option (GENERATE_CYTHON 
-        "Also generate the Cython implementation" OFF) 
+option (GENERATE_CYTHON_OTI 
+        "Generate the Cython implementation of OTI numbers" YES)
+# "Also generate the Cython implementation" OFF) 
 
 # add the CYTHON part?
 #
-if (GENERATE_CYTHON)
+if (GENERATE_CYTHON_OTI)
   add_subdirectory (pyoti)
-  add_subdirectory (pyotifem)  
-endif (GENERATE_CYTHON)
+endif (GENERATE_CYTHON_OTI)
 
+option (GENERATE_CYTHON_OTIFEM 
+        "Generate the Cython implementation of OTIFEM" OFF)
+
+if (GENERATE_CYTHON_OTIFEM)
+  add_subdirectory (pyotifem)  
+endif (GENERATE_CYTHON_OTIFEM)
 
 # should we do the Cython part too?
 option (GENERATE_C_TESTS

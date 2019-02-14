@@ -122,17 +122,22 @@ int main(int argc, char *argv[]){
 	oti_free( &x );oti_free( &sinx );
 
 
-	x = oti_createZero(nbases,order,dhl);
-	y = oti_createZero(nbases,order,dhl);
+	x = oti_createZero(nbases,10,dhl);
+	y = oti_createZero(nbases,10,dhl);
 
-	oti_setFromReal(0.75, &x, dhl);
-	oti_setFromReal(3.5 , &y, dhl);
+	oti_setFromReal(0.75 , &x, dhl);
+	oti_setFromReal(3.5  , &y, dhl);
 
 	// Add peturbations
 	oti_setIm_IdxOrd( 1.0, 0, 1, &x, dhl);
 	oti_setIm_IdxOrd( 1.0, 1, 1, &y, dhl);
 
-	oti_free( &x );oti_free( &y );	
+
+	xy = oti_div(&y, &x, dhl);
+	printf("\n Result of y/x:\n");
+	oti_print(&xy, dhl);
+
+	oti_free( &x );oti_free( &y );	oti_free( &xy );
 
 	printf("Unloading directions helpers\n");
 	dhelp_free( &dhl );

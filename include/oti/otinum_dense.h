@@ -315,7 +315,35 @@ otinum_t oti_sub_realoti(coeff_t a, otinum_t* num2, dhelpl_t dhl);
 otinum_t oti_sub(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Division of a real by an oti number.
 
+@param[in] num Oti number
+@param[in] den Oti number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+otinum_t oti_div_realoti(coeff_t num, otinum_t* den, dhelpl_t dhl );
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Division of a real by an oti number.
+
+@param[in] num Oti number
+@param[in] den Oti number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+otinum_t oti_div_otireal(otinum_t* num, coeff_t den, dhelpl_t dhl );
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Division between two oti numbers.
+
+@param[in] num Oti number
+@param[in] den Oti number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+otinum_t oti_div(otinum_t* num, otinum_t* den, dhelpl_t dhl );
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Multiplication between two oti numbers.
@@ -326,8 +354,6 @@ otinum_t oti_sub(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
 ******************************************************************************************************/ 
 otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
-
-
 
 /**************************************************************************************************//**
 @brief Multiplication of an oti numbers and a real number
@@ -383,12 +409,35 @@ void oti_sum_real_r(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl);
 /**************************************************************************************************//**
 @brief  Set the value of an imaginary coefficient given the index and order.
 
-@param[in] nbases Number of imaginary bases.
-@param[in] order Truncation order of the number.
+@param[in] a Coefficient to be implemented.
+@param[in] idx index of the imaginary direction.
+@param[in] order Order of the imagianry direction.
 @param[inout] num Address of the otin number to be modified.    
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 void oti_setIm_IdxOrd( coeff_t a, imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief  Get the imaginary direction coefficient given the index and order.
+
+@param[in] idx Number of imaginary bases.
+@param[in] order Truncation order of the number.
+@param[in] num Address of the otin number to be modified.    
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+coeff_t oti_get( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief  Get the derivative corresponding to the index and order.
+
+@param[in] idx Number of imaginary bases.
+@param[in] order Truncation order of the number.
+@param[in] num Address of the otin number to be modified.    
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+coeff_t oti_get_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

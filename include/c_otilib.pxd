@@ -1,463 +1,224 @@
 #file c_otilib.pxd
 
-
+from libc.stdint cimport uint8_t, uint16_t,uint32_t, uint64_t, int64_t
 #-----------------------------------------------------------------------------------------------------
 #--------------------------------------     TYPE DECLARATIONS     ------------------------------------
 #-----------------------------------------------------------------------------------------------------
-ctypedef   double             float64_t   # 64 bit Float
-ctypedef   unsigned char        uint8_t   #  8 bit unsigned int
-ctypedef   unsigned short      uint16_t   # 16 bit unsigned int
-ctypedef   unsigned long       uint32_t   # 32 bit unsigned int
-ctypedef   unsigned long long  uint64_t   # 64 bit unsigned int
-ctypedef   char                  int8_t   #  8 bit int
-ctypedef   short                int16_t   # 16 bit int
-ctypedef   long                 int32_t   # 32 bit int
-ctypedef   long long            int64_t   # 64 bit int
-ctypedef   fused real_t:                  #-             
-  double                                  # |                             
-  float                                   # |_ Fused type to handle numeric inputs.                              
-  short                                   # |                                
-  long                                    # |        
-  long long                               #-         
+ctypedef double    coeff_t 
+ctypedef uint64_t  imdir_t
+ctypedef uint64_t   ndir_t
+ctypedef uint16_t  bases_t
+ctypedef uint8_t     ord_t
+ctypedef uint8_t     ndh_t
+ctypedef uint8_t    flag_t
 #-----------------------------------------------------------------------------------------------------
-
- 
-
-
-
-
 
 #-----------------------------------------------------------------------------------------------------
 #-----------------------------------   IMPORT EXTERNAL C FUNCTIONS   ---------------------------------
 #-----------------------------------------------------------------------------------------------------
 cdef extern from "oti/oti.h" nogil:
+  # Defs from "core.h"
+  ctypedef struct imdir2d_t:
+    imdir_t* p_arr     
+    uint64_t shape[2]
 
-  ctypedef struct directionHelper:
-    uint16_t*     p_dirA  # Array with all basis      Shape: (    Ndir,  order)
-    uint8_t*      p_expA  # Array with all exponents  Shape: (    Ndir,  order)
-    uint16_t*     p_part  # Array with all partitions Shape: (   Npart,  order)
-    uint64_t*  p_multRes  # Array with the multiplication results.
-    uint64_t*  p_multInd  # Array with the multiplication indices.
-    uint64_t* p_countOTI  # Array with the number of elements for each number of variables possible.
-    uint16_t*    p_udirA  # User direction array.     Shape: ( nn,  order)
-    uint8_t*     p_uexpA  # User exponent  array.     Shape: ( nn,  order)
-    uint16_t*    p_rdirA  # Result direction array.   Shape: ( nn,  order)
-    uint8_t*     p_rexpA  # Result exponent  array.   Shape: ( nn,  order)
-    uint16_t*    p_mdirA  # Temporal direction array. Shape: ( nn,  order) -> nn: number of 
-    uint8_t*     p_mexpA  # Temporal exponent array.  Shape: ( nn,  order)        temp els
-    uint16_t*   p_mapder  # Temporal mapping array.   Shape: ( nn,2*order)   
-    uint8_t*    p_multpl  # Array to hold multiples.  Shape: ( 2^order,  order)
-    double*       p_fder  # Preallocated array for general function evaluation.
-    double*      p_coefs  # Preallocated array for general multiplication coefs. Shape: (Ndir,1)
-    uint64_t*     p_indx  # Preallocated array for general multiplication indx.  Shape: (Ndir,1)
-    uint64_t        Ndir  # Number of directions in the helper.
-    uint64_t       Npart  # Number of partitions in the helper.
-    uint64_t       Nmult  # Size of the multiplication vectors.
-    uint16_t      Nbasis  # Maximum number of basis in the helper.
-    uint8_t           nn  # Number of user arrays  
-    uint8_t        order  # Order of all directions in this set. 
+  ctypedef struct dhelp_t:
+    bases_t*      p_fulldir
+    imdir2d_t*  p_multtabls
+    ndir_t*         p_ndirs
+    coeff_t*         p_fder
+    coeff_t*        p_coefs
+    imdir_t*         p_indx
+    ndir_t             Ndir
+    ord_t             Nmult
+    bases_t          Nbasis
+    ord_t             order
+  
+  ctypedef struct dhelpl_t:
+    dhelp_t* p_dh
+    ndh_t     ndh
 
-
-
+  # Defs from "otinum_dense.h"
   ctypedef struct otinum_t:
-    double*      p_coefs # Array with all exponents. Shape:    ( 1, Ndir)
-    uint64_t        Ndir # Number of directions in the number.
-    uint8_t        order # Maximum order of the number.
-
-
-  ctypedef struct sotinum_t:
-    double*      p_coefs # Array with all Coefficients. Shape: ( 1, Ndir)
-    uint64_t*     p_indx # Directions associated to each coefficient.
-    uint64_t        size # Number of directions in the number.
-    uint8_t        order # Maximum order of the number.
+    coeff_t          re
+    coeff_t**      p_im
+    ndir_t*      p_ndpo
+    ndir_t         ndir
+    bases_t      nbases
+    ord_t         order
 
   ctypedef struct coomat_ui64_t: 
-    uint64_t*     p_data # Data Array.
-    uint64_t*     p_cols # Array of corresponding column index of the data array.
-    uint64_t*     p_rows # Array of corresponding row index of the data array.
-    uint64_t       sizex # Number of rows.
-    uint64_t       sizey # Number of cols.
-    uint64_t     nonzero # Number of non zero elements in the matrix.
+    uint64_t*     p_data 
+    uint64_t*     p_cols 
+    uint64_t*     p_rows 
+    uint64_t       sizex 
+    uint64_t       sizey 
+    uint64_t     nonzero 
 
   ctypedef struct csrmat_ui64_t:
-    uint64_t*     p_data # Data array
-    uint64_t*  p_indices # Array of column indices of each data entry.
-    uint64_t*   p_indptr # Array pointing the range of data values per matrix row.
-    uint64_t       sizex # Number of rows.
-    uint64_t       sizey # Number of cols.
-    uint64_t     nonzero # Number of non zero elements.
+    uint64_t*     p_data 
+    uint64_t*  p_indices 
+    uint64_t*   p_indptr 
+    uint64_t       sizex 
+    uint64_t       sizey 
+    uint64_t     nonzero 
   
-  ctypedef struct sotiarray_t:
-    sotinum_t*    p_data # Data array
-    uint64_t       ncols # Number of rows.
-    uint64_t       nrows # Number of cols.
-    uint64_t        size # Total size of the array.
-    uint8_t        order # Order of the OTI numbers.
-  
-  ctypedef struct darray_t:
-    double*       p_data # Data array
-    uint64_t       ncols # Number of rows.
-    uint64_t       nrows # Number of cols.
-    uint64_t        size # Total size of the array.
-  
+
+  #---------------------------------------------------------------------------------------------------
+
+  # Include functions from "core.h"
+  #---------------------------------------------------------------------------------------------------
+  uint8_t  array2d_getel_ui8_t( uint8_t*  arr,uint64_t ncols, uint64_t i, uint64_t j );
+
+  uint16_t array2d_getel_ui16_t(uint16_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
+
+  uint32_t array2d_getel_ui32_t(uint32_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
+
+  uint64_t array2d_getel_ui64_t(uint64_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
+
+  double   array2d_getel_f64_t( double*   arr,uint64_t ncols, uint64_t i, uint64_t j );
+
+  float    array2d_getel_f32_t( float*    arr,uint64_t ncols, uint64_t i, uint64_t j );
+
+  void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape);
+
+  void loadnpy_multtabls( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH);
+
+  void loadnpy_ndirs( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH);
+
+  void loadnpy_fulldir( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH);
+
+  void dhelp_dense_mult(coeff_t* p_im1, ndir_t ndir1, ord_t ord1, 
+                        coeff_t* p_im2, ndir_t ndir2, ord_t ord2, 
+                        coeff_t* p_imres, ndir_t ndirres,         
+                        dhelpl_t dhl);
+
+  void dhelp_dense_mult_real(coeff_t* p_im1, ndir_t ndir1,
+                        coeff_t a,                        
+                        coeff_t* p_imres, ndir_t ndirres, 
+                        dhelpl_t dhl);                     
+
+  ndir_t dhelp_extract_ndirOrder(bases_t nbases, ord_t order,dhelpl_t dhl);
+
+  ndir_t dhelp_extract_ndirTotal(bases_t nbases, ord_t order,dhelpl_t dhl);
+
+  int64_t dhelp_comb(int64_t a, int64_t b);
+
+  ndir_t dhelp_ndirTotal(bases_t nbases, ord_t order);
+
+  ndir_t dhelp_ndirOrder(bases_t nbases, ord_t order);
+
+  void dhelp_load_singl( char* strLoc, ord_t order, bases_t nbasis, uint8_t nhelps, dhelp_t* p_dH);
+
+  void dhelp_multDir(imdir_t indx1, ord_t ord1, imdir_t indx2, ord_t ord2, 
+      imdir_t* p_ixres, ord_t* p_ores, dhelpl_t dhl);
+
+  void dhelp_freeItem(  dhelp_t* p_dH);
+
+  void dhelp_free( dhelpl_t* dhl);
+
+  void dhelp_load( char* strLocation, dhelpl_t* dhl);
+
+  void dhelp_print( dhelp_t* p_dH);
+
+  void dhelp_printList( const dhelpl_t dhl);
+
+  bases_t* dhelp_get_imdir( imdir_t idx, ord_t order, dhelpl_t dhl);
   #---------------------------------------------------------------------------------------------------
 
 
+  # Include functions from "otinum_dense.h"
   #---------------------------------------------------------------------------------------------------
-  void c_sotiarray_setAllItems( sotinum_t* num, sotiarray_t* p_array)
+  otinum_t oti_atanh(otinum_t* num, dhelpl_t dhl);
 
-  void c_soti_createFromReal(double num, sotinum_t* numHolder, uint8_t order)
+  otinum_t oti_asinh(otinum_t* num, dhelpl_t dhl);
 
-  void c_darray_getItem(darray_t* p_array, uint64_t i, uint64_t j, double* num)
+  otinum_t oti_acosh(otinum_t* num, dhelpl_t dhl);
 
-  void c_darray_setItem( double num, uint64_t i, uint64_t j, darray_t* p_array)
+  otinum_t oti_tanh(otinum_t* num, dhelpl_t dhl);
 
-  int64_t c_darray_zeros(darray_t* p_array, uint64_t nrows, uint64_t ncols)
+  otinum_t oti_sqrt(otinum_t* num, dhelpl_t dhl);
 
-  void c_darray_free(darray_t* p_array)
+  otinum_t oti_cosh(otinum_t* num, dhelpl_t dhl);
 
-  int64_t c_darray_createEmpty(darray_t* p_array, uint64_t nrows, uint64_t ncols)
+  otinum_t oti_sinh(otinum_t* num, dhelpl_t dhl);
 
-  void c_sotiarray_setItemR_indx( double num, uint64_t i, sotiarray_t* p_array)
+  otinum_t oti_asin(otinum_t* num, dhelpl_t dhl);
 
-  void c_sotiarray_setItemOTI_indx( sotinum_t* num, uint64_t i, sotiarray_t* p_array)
-  
-  void c_sotiarray_oti_div(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, 
-                          directionHelper* p_dH)
+  otinum_t oti_acos(otinum_t* num, dhelpl_t dhl);
 
-  void c_sotiarray_matdiv_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                          directionHelper* p_dH)
+  otinum_t oti_atan(otinum_t* num, dhelpl_t dhl);
 
-  void c_sotiarray_div_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes)
+  otinum_t oti_tan(otinum_t* num, dhelpl_t dhl);
 
-  void c_sotiarray_R_div(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes, 
-                          directionHelper* p_dH)
+  otinum_t oti_cos(otinum_t* num, dhelpl_t dhl);
 
-  void c_sotiarray_div_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, 
-                          directionHelper* p_dH)
+  otinum_t oti_sin(otinum_t* num, dhelpl_t dhl );
 
-  void c_soti_fdiv(double numx, sotinum_t* numy, sotinum_t* res, directionHelper* p_dH)
+  otinum_t oti_logb(otinum_t* num, double base, dhelpl_t dhl);
 
-  void c_soti_divf(sotinum_t* numx, double numy,  sotinum_t* res)
+  otinum_t oti_log10(otinum_t* num, dhelpl_t dhl);
 
-  void c_soti_div(sotinum_t* numx, sotinum_t* numy, sotinum_t* res, directionHelper* p_dH)
+  otinum_t oti_log(otinum_t* num, dhelpl_t dhl);
 
-  void c_sotiarray_invert(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, directionHelper* p_dH)
+  otinum_t oti_exp(otinum_t* num, dhelpl_t dhl);
 
-  void c_sotiarray_det(sotiarray_t* p_arr1, sotinum_t* p_res, directionHelper* p_dH)
+  otinum_t oti_pow(otinum_t* num, double e, dhelpl_t dhl);
 
-  void c_sotiarray_transpose(sotiarray_t* p_arr1, sotiarray_t* p_arrRes)
+  otinum_t oti_feval(coeff_t* feval_re, otinum_t* num, dhelpl_t dhl );
 
-  void c_sotiarray_mul_sotiarr(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
+  void oti_trunc_ssum(otinum_t* num1,  
+                     ord_t ord, otinum_t* res,  dhelpl_t dhl );
 
-  void c_sotiarray_neg(sotiarray_t* p_arr1, sotiarray_t* p_arrRes)
+  void oti_trunc_mul(otinum_t* num1, ord_t ord1, 
+                   otinum_t* num2, ord_t ord2, 
+                   otinum_t* res, dhelpl_t dhl );
 
-  void c_sotiarray_matsub_Roti(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes)
-  
-  void c_sotiarray_matsub_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes)
-  
-  void c_sotiarray_matsub_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, \
-                          directionHelper* p_dH)
-  
-  void c_sotiarray_oti_sub(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, 
-                          directionHelper* p_dH)
-  
-  void c_sotiarray_R_sub(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes)
-  
-  void c_sotiarray_sub_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, \
-                          directionHelper* p_dH)
-  
-  void c_sotiarray_sub_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes)
-  
-  void c_sotiarray_mul_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, \
-                          directionHelper* p_dH)
-  
-  void c_sotiarray_mul_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes)
-  
-  void c_sotiarray_sum_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, \
-                          directionHelper* p_dH)
-  
-  void c_sotiarray_sum_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes)
-  
-  double c_soti_getReal(sotinum_t* num)
-  
-  void c_printArrayDBL(double* ptr_,uint64_t n)
+  void oti_trunc_smul_real(coeff_t a, ord_t ord, otinum_t* num, dhelpl_t dhl);
 
-  void c_sotiarray_matmul_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes, \
-                        directionHelper* p_dH)
+  otinum_t oti_neg(otinum_t* num1, dhelpl_t dhl);
 
-  void c_sotiarray_matmul_Roti(darray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, \
-                          directionHelper* p_dH)
+  otinum_t oti_sub_otireal(otinum_t* num1, coeff_t a, dhelpl_t dhl);
 
-  void c_sotiarray_matmul_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, \
-                          directionHelper* p_dH)
+  otinum_t oti_sub_realoti(coeff_t a, otinum_t* num2, dhelpl_t dhl);
 
-  void c_sotiarray_matsum_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes)
+  otinum_t oti_sub(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
 
-  void c_sotiarray_matsum_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, \
-                          directionHelper* p_dH)
+  otinum_t oti_div(otinum_t* num, otinum_t* den, dhelpl_t dhl );
 
-  void c_sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* num)
+  otinum_t oti_div_otireal(otinum_t* num, coeff_t den, dhelpl_t dhl );
 
-  void c_sotiarray_setItemR( double num, uint64_t i, uint64_t j,sotiarray_t* p_array)
+  otinum_t oti_div_realoti(coeff_t num, otinum_t* den, dhelpl_t dhl );
 
-  void c_sotiarray_setItemOTI( sotinum_t* num, uint64_t i, uint64_t j,sotiarray_t* p_array)
+  otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
 
-  void c_sotiarray_zeros(sotiarray_t* p_array, uint64_t shapex, uint64_t shapey, uint8_t order)
+  otinum_t oti_mul_real(coeff_t a, otinum_t* num1, dhelpl_t dhl);
 
-  void c_sotiarray_free(sotiarray_t* p_array)
+  otinum_t oti_sum(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
 
-  void c_sotiarray_createEmpty(sotiarray_t* p_array, uint64_t shapex, uint64_t shapey, uint8_t order)
+  otinum_t oti_copy(otinum_t* num, dhelpl_t dhl);
 
-  void c_soti_atan2(sotinum_t* numx, sotinum_t* numy, directionHelper* p_dH, sotinum_t* res)
+  otinum_t oti_sum_real(coeff_t a, otinum_t* num1, dhelpl_t dhl);
 
-  void c_soti_logb(sotinum_t* num, int base, directionHelper* p_dH, sotinum_t* res)
+  void oti_sum_real_r(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl);
 
-  void c_soti_log10(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
+  void oti_setIm_IdxOrd( coeff_t a, imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
 
-  void c_soti_atanh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
+  coeff_t oti_get( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
 
-  void c_soti_asinh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
+  coeff_t oti_get_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
 
-  void c_soti_acosh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
+  otinum_t oti_createZero( bases_t nbases, ord_t order, dhelpl_t dhl);
 
-  void c_soti_tanh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
+  otinum_t oti_createEmpty( bases_t nbases, ord_t order, dhelpl_t dhl);
 
-  void c_soti_sqrt(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
+  void oti_set( otinum_t* num, otinum_t* res, dhelpl_t dhl);
 
-  void c_soti_cosh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
+  void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl);
 
-  void c_soti_sinh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
+  void oti_print( otinum_t* num, dhelpl_t dhl);
 
-  void c_soti_asin(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
-
-  void c_soti_acos(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
-
-  void c_soti_atan(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
-
-  void c_soti_tan(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
-
-  void c_soti_cos(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
-
-  void c_soti_sin(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
-
-  void c_soti_log(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)
-
-  void c_soti_exp(sotinum_t* num, directionHelper* p_dH, sotinum_t* res)  
-
-  void c_soti_derivFunc(double* fder, sotinum_t* g, directionHelper* p_dH, sotinum_t* feval)
-
-  void c_soti_smulf(sotinum_t* num1, double num2)
-
-  void c_soti_copy(sotinum_t* res, sotinum_t* num1)
-
-  uint64_t c_helper_multMultiIndxFast(uint64_t* indx, uint8_t nindx, uint8_t order, \
-                                directionHelper* p_dH, uint8_t* error)
-
-  void c_soti_pow(sotinum_t* num, double exponent, directionHelper* p_dH,sotinum_t* res)
-
-  void c_soti_ipowfast(sotinum_t* num1, uint8_t exp, sotinum_t* res, directionHelper* p_dH)
-
-  void c_soti_ipow(sotinum_t* num1, uint8_t exp, sotinum_t* res, directionHelper* p_dH)
-
-  void c_soti_fsub(sotinum_t* num1, double num2, sotinum_t* res)
-
-  void c_soti_neg( sotinum_t* num1, sotinum_t* res)
-
-  void c_soti_subf(sotinum_t* num1, double num2, sotinum_t* res)
-  
-  void c_soti_sub(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, directionHelper* p_dH)
-  
-  void c_soti_sumf(sotinum_t* num1, double num2, sotinum_t* res)
-  
-  void c_soti_mulf(sotinum_t* num1, double num2, sotinum_t* res)
-  
-  void c_soti_mul(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, directionHelper* p_dH)
-  
-  void c_soti_sum(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, directionHelper* p_dH)
-  
-  void c_soti_free(sotinum_t* numHolder)
-  
-  void c_soti_createEmpty(sotinum_t* numHolder, uint64_t ncoefs, uint8_t order)
-  
-  void c_helper_insertIndx(uint64_t* p_indxArray,uint64_t indx,uint64_t *size, \
-                          double * p_coefArray, double coef)
-
-  coomat_ui64_t c_oti_matform( uint64_t nvar, uint8_t order, directionHelper* p_dH)
-
-  uint64_t c_ndir(uint64_t nvar,uint8_t order)
-
-  void c_oti_atan2(otinum_t* numx, otinum_t* numy, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_logb(otinum_t* num, int base, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_log10(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_atanh(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_asinh(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_acosh(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_tanh(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_sqrt(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_cosh(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_sinh(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_asin(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_acos(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_atan(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_tan(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_cos(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_sin(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_log(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_exp(otinum_t* num, directionHelper* p_dH, otinum_t* res)
-
-  void c_oti_pow(otinum_t* num, double exponent, directionHelper* p_dH,otinum_t* res)
-
-  double c_oti_FaaDiBruno(uint64_t indx, double* fder, otinum_t* g, directionHelper* p_dH)
-
-  void c_oti_derivFunc(double* fder, otinum_t* g, directionHelper* p_dH, otinum_t* feval)
-
-  void c_oti_collapseDirA(uint16_t* array, uint8_t order, uint16_t* dirA, uint8_t* expA)
-
-  void c_oti_expandDirA(uint16_t* p_dirA,uint8_t* p_expA, uint8_t order, uint16_t* p_expandArr)
-
-  void c_helper_ordDirExpA(uint16_t* p_dirA, uint8_t* multiple, uint8_t order, \
-                        uint16_t* p_ndirA, uint8_t* p_nexpA)
-  
-  void c_helper_getMultpl(uint8_t* p_expA, uint8_t order, directionHelper* p_dH, uint64_t* Nmultpl)
-
-  uint16_t c_maxUI16(uint64_t a,uint64_t b)
-  
-  double* c_oti_num2mat(otinum_t* num, uint64_t size, directionHelper* p_dH)
-
-  void c_oti_mulf(otinum_t* num1, double num2, otinum_t* res)
-
-  void c_oti_mul(otinum_t* num1, otinum_t* num2, otinum_t* res, directionHelper* p_dH)
-
-  void c_oti_sub(otinum_t* num1, otinum_t* num2, otinum_t* res)
-
-  void c_oti_neg(otinum_t* num1)
-
-  void c_oti_sum(otinum_t* num1, otinum_t* num2, otinum_t* res)
-
-  void c_oti_copy(otinum_t* numDest, otinum_t* numSrc)
-
-  void c_oti_free(otinum_t* numHolder)
-
-  void c_oti_createEmpty(otinum_t* numHolder,   uint64_t ndir, uint8_t order)
-
-  void c_oti_changeOrderToNew(otinum_t* num, uint8_t neword, directionHelper* p_dH , otinum_t* res)
-
-  void c_oti_changeOrder(otinum_t* num, uint8_t neword, directionHelper* p_dH )
-
-  uint64_t c_helper_multIndxFast(uint64_t indx1, uint64_t indx2, uint8_t order, \
-             directionHelper* p_dH, uint8_t* error)
-
-  void c_printArrayUI64(uint64_t* ptr_,uint64_t n)
-
-  void c_minUI64(uint64_t a,uint64_t b,uint64_t* minnum,uint64_t* maxnum )
-  
-  void c_helper_load(  uint8_t maxorder,  char* strLocation, directionHelper** p_dH)
-
-  void c_helper_free(directionHelper* p_dH , uint8_t maxorder )
-
-  uint64_t c_helper_findIndex(uint16_t* p_dirA,  uint8_t* p_expA, uint8_t order, directionHelper* p_dH)
-  
-  uint64_t c_helper_multIndx(uint64_t indx1, uint64_t indx2, uint8_t order, directionHelper* p_dH, \
-                            uint8_t* error)
-  
-  uint8_t* c_helper_getExpA(uint64_t indx, uint8_t order, directionHelper* p_dH)
-  
-  uint16_t* c_helper_getDirA(uint64_t indx, uint8_t order, directionHelper* p_dH)
-  
-  uint8_t* c_helper_getUExpA( uint8_t order, uint8_t n, directionHelper* p_dH)
-  
-  uint16_t* c_helper_getUDirA( uint8_t order, uint8_t n, directionHelper* p_dH)
-  
-  uint64_t c_helper_findMaxDir(uint64_t index, uint8_t order, directionHelper* p_dH)
-  
-  uint64_t c_helper_getNels( uint64_t m, uint8_t order, directionHelper* p_dH)
-  
-  uint64_t c_helper_getNParts( uint8_t order, directionHelper* p_dH)
-  
-  uint16_t c_helper_getSet( uint8_t order,uint64_t i,uint64_t j, directionHelper* p_dH)
-
-  uint64_t c_multDirections_dH(uint64_t indx1m1, uint64_t indx2m1, directionHelper* p_dH, uint8_t* error )
-
-  uint64_t c_binarySearch_dH( uint16_t*  ptr_dirA, uint8_t*  ptr_expA, directionHelper* p_dH)
-
-  void c_loadDirA( char* strLocation,uint8_t order, uint16_t ndir, uint16_t** dirA, uint32_t* Ndir)
-
-  void c_loadExpA( char* strLocation,uint8_t order, uint16_t ndir, uint8_t** expA, uint32_t* Ndir)
-
-  void c_loadCount( char* strLocation,uint8_t order, uint16_t ndir, uint64_t** count)
-
-  void c_loadParts( char* strLocation,uint8_t order, uint16_t ndir, uint16_t** p_parts, uint32_t* Nparts)
-
-  void c_loadDirHelper(  char* strLocation, uint8_t order,   uint16_t ndir, uint8_t nhelps, directionHelper* dirHelp)
-
-  void c_freeDirHelper(  directionHelper* dirHelp)
-
-  uint64_t c_fastpow(uint64_t b,uint16_t exp)
-
-  uint64_t c_fastfact(uint8_t exp)
-
-  uint64_t c_convToIndex(uint16_t* ptr_dirA,uint8_t* ptr_expA, uint8_t order) 
-
-  void c_mapDirArray( uint16_t*  ptr_dirA1, uint16_t*  ptr_dirA2,   uint8_t  order,\
-                      uint16_t* ptr_mdirA1, uint16_t* ptr_mdirA2, uint16_t* ptr_mapder)
-
-  void c_mapDirArrayNoMapder( uint16_t*  ptr_dirA1, uint16_t*  ptr_dirA2,   uint8_t  order,\
-                      uint16_t* ptr_mdirA1, uint16_t* ptr_mdirA2)
-
-  uint64_t c_binarySearch(  uint16_t* ptr_dirArray, uint8_t* ptr_expArray,\
-                          uint16_t* ptr_dirA,     uint8_t* ptr_expA,     uint8_t order,\
-                          uint64_t  N, uint16_t* ptr_mdirA1, uint16_t* ptr_mdirA2)
-
-  void c_convToDirExp(uint64_t index, uint8_t order, uint16_t* ptr_dirA, uint8_t* ptr_expA)
-
-  void c_test(uint16_t * pointer,uint8_t size)
-
-  void c_reMapDirArray( uint16_t*  ptr_mdirA1, uint16_t* ptr_mapder, uint8_t order,\
-                      uint16_t* ptr_dirA1) 
-
-  uint64_t c_multDirections(uint16_t* ptr_dirArray, uint8_t* ptr_expArray, \
-                        uint16_t* ptr_dirA1,  uint8_t* ptr_expA1,   \
-                        uint16_t* ptr_dirA2,  uint8_t* ptr_expA2,   \
-                        uint16_t* ptr_mdirA1, uint8_t* ptr_mexpA1,  \
-                        uint16_t* ptr_mdirA2, uint16_t* ptr_mdirA3, \
-                        uint16_t* ptr_mapder, \
-                        uint8_t order, uint64_t N, uint8_t* error )
-
-  uint64_t c_binarySearchUI64(  uint64_t* ptr_indxArray, uint64_t indx,uint64_t  N)
-
-  uint8_t c_sumUI8(uint8_t* ptr_,uint8_t n)
-
-
-  void c_mapPartition(uint16_t part,  uint16_t*  ptr_dir,  uint8_t  order, \
-                    uint16_t*  ptr_map) 
-
-  
-
-  void c_orderDirExpArray(uint16_t* dirA,    uint8_t*    multExpA ,uint8_t pos,\
-             uint16_t* newDirA, uint8_t* newExpA, uint8_t order)
-
-  void* c_malloc_ptr(uint64_t numberOfElements, uint64_t sizeOfElement)
-
-  void c_free_ptr(void** ptrAddress)
+  void oti_free( otinum_t* num );
 
 
 #-----------------------------------------------------------------------------------------------------

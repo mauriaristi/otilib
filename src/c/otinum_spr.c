@@ -8,22 +8,158 @@
 
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+
+    sotinum_t res;
+
+    res = soti_createEmpty();
+
+    return 
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_div_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl){
+
+    return soti_mul_real(1.0/val,num,dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_sub_realoti( coeff_t val, sotinum_t* num, dhelpl_t dhl){
+
+    sotinum_t res = soti_neg(num,dhl);
+    
+    res.re += val;
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_sub_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl){
+
+    return soti_sum_real(-val,num,dhl);
+}
+// ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl){
+    
+    return soti_mul_real(-1.0,num,dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+sotinum_t soti_mul_real(coeff_t val, sotinum_t* num, dhelpl_t dhl){
+    
+    sotinum_t res = soti_copy(num,dhl);
 
+    res.re *= val;
 
+    for (ord_t i=0; i<res.order; i++){
+        
+        for (ndir_t j = 0; j<res.p_nnz[i]; j++){
 
+            res.p_im[i][j] *= val;
 
+        }
 
+    }
 
+    return res;
 
+}
+// ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+sotinum_t soti_sum_real(coeff_t val, sotinum_t* num, dhelpl_t dhl){
+    
+    sotinum_t res = soti_copy(num,dhl);
 
+    res.re += val;
 
+    return res;
 
+}
+// ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl){
+
+    sotinum_t res;
+
+    res.order = num->order;
+    res.re    = num->re;
+
+    if (res.order != 0){
+
+        res.p_im  = (coeff_t**)malloc( res.order * sizeof(coeff_t*) );
+        res.p_idx = (imdir_t**)malloc( res.order * sizeof(imdir_t*) );
+        res.p_nnz = (ndir_t*)malloc( res.order * sizeof(ndir_t) );
+        res.p_size= (ndir_t*)malloc( res.order * sizeof(ndir_t) );
+
+        if (res.p_im  == NULL || res.p_idx == NULL || res.p_nnz == NULL || res.p_size == NULL ){
+
+            printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
+            exit(OTI_OutOfMemory);
+
+        }
+
+        for (ord_t i = 0; i<res.order; i++){
+            
+            // Set number of non-zero and allocated size to 0.
+            res.p_nnz[i]  = num->p_nnz[i]; 
+            res.p_size[i] = num->p_size[i];
+
+            if (num->p_size[i] != 0){
+            
+                res.p_im[i] = (coeff_t*)malloc(num->p_size[i]*sizeof(coeff_t)); 
+                res.p_idx[i]= (imdir_t*)malloc(num->p_size[i]*sizeof(imdir_t)); 
+
+                if (res.p_im[i] == NULL || res.p_idx[i] == NULL ){
+
+                    printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
+                    exit(OTI_OutOfMemory);
+
+                }
+
+                if ( res.p_nnz[i]!=0 ){
+
+                    // copy data.
+                    memcpy(res.p_im[i], num->p_im[i], res.p_nnz[i]*sizeof(coeff_t));
+                    memcpy(res.p_idx[i],num->p_idx[i],res.p_nnz[i]*sizeof(imdir_t));
+
+                }
+            
+            } else {
+
+                res.p_im[i]  = NULL;
+                res.p_idx[i] = NULL;
+
+            }
+        
+        }
+
+    } else {
+
+        res.p_im  = NULL;
+        res.p_idx = NULL;
+        res.p_nnz = NULL;
+        res.p_size= NULL;
+
+    }
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 void soti_insert_item( ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, 

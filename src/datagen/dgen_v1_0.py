@@ -24,7 +24,7 @@ def genPrecompData(max_basis_k=[3,3,3,3,3],maindir=''):
     precNdir.append(np.arange(0,m+1,dtype = np.uint64))
     
     # Save files in Numpy format.
-    pathname = maindir#+"/"
+    pathname = maindir+"/"
 
     filename = 'fulldir_n'+str(1)+'_m'+str(m)
     np.save(pathname+filename,order_i_dir)      # all OTI directions of order 'order'.
@@ -68,7 +68,7 @@ def genPrecompData(max_basis_k=[3,3,3,3,3],maindir=''):
         
         
         # Save files in Numpy format.
-        pathname = maindir#+"/"
+        pathname = maindir+"/"
         
         filename = 'fulldir_n'+str(order)+'_m'+str(m)
         np.save(pathname+filename,order_i_dir)      # all OTI directions of order 'order'.
@@ -84,8 +84,10 @@ def genPrecompData(max_basis_k=[3,3,3,3,3],maindir=''):
 # end function
 
 def genPrecompMult( order, m, precDir, precNdir,maindir=''):
+    
     print('order: ',order)
     ii=0
+    
     for ord1 in range(1,order//2+1):
         ord2 = int(order-ord1)
         print('multiplication of orders: ', ord1, ord2)
@@ -118,20 +120,21 @@ def genPrecompMult( order, m, precDir, precNdir,maindir=''):
         # end for 
         
         # Save files in Numpy format.
-        pathname = maindir#+"/"
+        pathname = maindir+"/"
         
         filename = 'multtabl_n'+str(order)+'_m'+str(m)+'_'+str(ii)
         np.save(pathname+filename,multresi)      # all OTI directions of order 'order'.
         
         ii+=1
-        
+    
+    # end for 
         
 # end function
 
 def multiplyDirs(dir1,dir2,precDir,precNdir):
-    # print('dir1: ',dir1)
+    # print('dir1: ',dir1) 
     # print('dir2: ',dir2)
-    concat = np.concatenate((dir1,dir2))# creates a new array...
+    concat = np.concatenate((dir1, dir2))# creates a new array...
     # print(concat)
     newdir = np.sort(concat)
     # print(newdir)
@@ -156,7 +159,7 @@ def multiplyDirs(dir1,dir2,precDir,precNdir):
 
 
 ndirs = [10,10,10,10,10,10,10,10,10,10]
-outDir = 'data/'
+outDir = '../../build/data/'
 
 # [65535,10000,100,100,10,10,10,10,10,10]
 (precDir,precNdir) = genPrecompData(max_basis_k=ndirs,maindir=outDir)

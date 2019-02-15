@@ -71,7 +71,7 @@ cdef class dHelp:
     """
     #*************************************************************************************************
     # cdef str PATH_TO_FILES = whereotilib.getpath()+'../' # "/.../.../spr_otilibvX.Y/"
-    cdef str PATH_TO_FILES = '/home/maristi7/coding/otilib/src/datagen/data'
+    cdef str PATH_TO_FILES = whereotilib.getpath()+'../data'
     cdef char* c_string = <char*>malloc(1024*sizeof(char))
     cdef uint64_t i   
 

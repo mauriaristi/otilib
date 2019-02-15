@@ -44,6 +44,54 @@ int main(int argc, char *argv[]){
 		soti_get_item(2,2,&num1,dhl) );
 
 
+
+	printf("\nResult after copying.\n");
+	num2 = soti_copy(&num1,dhl);
+	soti_print(&num2,dhl);
+
+	
+	printf("\nResult after adding real coefficient.\n");
+	num3 = soti_sum_real(c , &num2, dhl);
+	soti_print(&num3,dhl);	
+
+	soti_free(&num3);
+	printf("\nResult after multiplying by real coefficient.\n");
+	num3 = soti_mul_real(c , &num2, dhl);
+	soti_print(&num3,dhl);
+	soti_free(&num2);
+
+	printf("\nResult after negating sotinum.\n");
+	num2 = soti_neg(&num3, dhl);
+	soti_print(&num2,dhl);
+
+	soti_free(&num2);
+	printf("\nResult after subtracting sotinum - real.\n");
+	num2 = soti_sub_otireal(&num3, a, dhl);
+	soti_print(&num2,dhl);
+
+	soti_free(&num2);
+	printf("\nResult after subtracting real - sotinum.\n");
+	num2 = soti_sub_realoti( c, &num3, dhl);
+	soti_print(&num2,dhl);
+
+	soti_free(&num2);
+	printf("\nResult after dividing sotinum by real number.\n");
+	num2 = soti_div_otireal(&num3, b, dhl);
+	soti_print(&num2,dhl);
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// ---------------------------------- binary search ----------------------------
 	uint64_t arr[] ={4,5,8,9,10,17,21,34};
 	// uint64_t arr[] ={4};
 	uint64_t item = 105;
@@ -57,12 +105,12 @@ int main(int argc, char *argv[]){
 		printf("Item %lu is in array and is at position: %lu -->Element extracted: %lu\n",
 			item, pos,arr[pos]);
 	}
-	
+	// ---------------------------------- binary search ----------------------------
 
 
 
 
-	soti_free(&num1);
+	soti_free(&num1); soti_free(&num2); soti_free(&num3);
 
 	printf("\nUnloading directions helpers\n");
 	dhelp_free( &dhl );

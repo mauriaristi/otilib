@@ -34,7 +34,65 @@ typedef struct {
 // ----------------------------------------------------------------------------------------------------
 // ------------------------------------     DECLARATIONS     ------------------------------------------
 // ----------------------------------------------------------------------------------------------------
-// to add to c_otilib.pxd
+
+
+/**************************************************************************************************//**
+@brief Function that divides an oti number by a real number.
+
+@param[in] num OTI number.
+@param[in] val Real number to be added
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_div_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Function that subtracts an oti number to a real number.
+
+@param[in] val Real number to be added
+@param[in] num OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_sub_realoti( coeff_t val, sotinum_t* num, dhelpl_t dhl);
+
+/**************************************************************************************************//**
+@brief Function that subtracts a real number to an oti number.
+
+@param[in] num OTI number.
+@param[in] val Real number to be added
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_sub_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Function that negates an oti number.
+
+@param[in] num OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Function that multiplies an oti number to a real number.
+
+@param[in] val Real number to be added
+@param[in] num OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_mul_real(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Function that adds an oti number to a real number.
+
+@param[in] val Real number to be added
+@param[in] num OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_sum_real(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Function that inserts the corresponding value in the arrays defining the oti number. If the 
@@ -71,6 +129,15 @@ void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Copy to another sparse oti elements.
+
+@param[in] num OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

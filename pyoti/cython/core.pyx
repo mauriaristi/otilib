@@ -310,7 +310,8 @@ cpdef list imdir(hum_dir):
   
       else:
   
-        raise ValueError("Unsupported direction.")
+        raise ValueError("Unsupported direction. Basis "+str(imb)+
+          " larger than maximum supported "+str(h.dhl.p_dh[i-1].Nbasis))
   
       # end if 
   
@@ -318,7 +319,8 @@ cpdef list imdir(hum_dir):
   
   else:
   
-    raise ValueError("Unsupported direction.")
+    raise ValueError( "Unsupported direction. Order "+str(order)+
+      " greater than the maximum supported order "+str(h.dhl.ndh) )
   
   # end if 
   

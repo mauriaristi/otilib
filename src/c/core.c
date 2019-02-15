@@ -133,18 +133,50 @@ void loadnpy_ndirs( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_d
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void dhelp_load_tmps( dhelp_t* p_dH){
+
+    // Allocate pointers
+    p_dH->p_im = (coeff_t**) malloc(p_dH->Ntmps*sizeof(coeff_t*));
+    p_dH->p_idx= (imdir_t**) malloc(p_dH->Ntmps*sizeof(imdir_t*));
+
+    if ( p_dH->p_im == NULL || p_dH->p_idx == NULL ){
+
+      printf("ERROR: Not enough memory for temporal arrays. Exiting...\n");
+      exit(OTI_OutOfMemory);
+
+    }
+
+    for (ndir_t i = 0; i<p_dH->Ntmps; i++){
+
+        p_dH->p_im[i] = (coeff_t*) malloc(p_dH->Ndir*sizeof(coeff_t));
+        p_dH->p_idx[i]= (imdir_t*) malloc(p_dH->Ndir*sizeof(imdir_t));
+
+        if ( p_dH->p_im == NULL || p_dH->p_idx == NULL ){
+            printf("ERROR: Not enough memory for temporal arrays. Exiting...\n");
+            exit(OTI_OutOfMemory);
+        }
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void dhelp_load_singl( char* strLocation, ord_t order, bases_t nbasis, uint8_t nhelps, 
-    dhelp_t* p_dH){ 
+void dhelp_load_singl( char* strLocation, ord_t order, bases_t nbasis, ndir_t ntemps, 
+    ndir_t allocSize, dhelp_t* p_dH){ 
 
-    p_dH->Nbasis = nbasis;
+    p_dH->Nbasis     = nbasis;
+    p_dH->Ntmps      = ntemps;
+    p_dH->allocSize  = allocSize;
 
     // Load arrays from files.
     loadnpy_fulldir(   strLocation, order, nbasis, p_dH);
     loadnpy_ndirs(     strLocation, order, nbasis, p_dH);    
     loadnpy_multtabls( strLocation, order, nbasis, p_dH);
 
+    // Load temporals
+    dhelp_load_tmps( p_dH );
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -242,30 +274,45 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
     dhl->ndh = 10;               // Number of elements in the ndirs array
 
                                       //                    Order
-    bases_t nbases_per_ord[]   = {10, // ------------------   1 
-                                  10, // ------------------   3
-                                  10, // ------------------   2
-                                  10, // ------------------   4
-                                  10, // ------------------   5
-                                  10, // ------------------   6
-                                  10, // ------------------   7 
-                                  10, // ------------------   8
-                                  10, // ------------------   9
-                                  10  // ------------------  10
-                                     };
+    bases_t nbases_ord[]   = {10, // ------------------   1 
+                              10, // ------------------   2
+                              10, // ------------------   3
+                              10, // ------------------   4
+                              10, // ------------------   5
+                              10, // ------------------   6
+                              10, // ------------------   7 
+                              10, // ------------------   8
+                              10, // ------------------   9
+                              10  // ------------------  10
+    };
+
+
+    ndir_t allocSzs_ord[]   = { 2, // ------------------   1 
+                                3, // ------------------   2
+                                4, // ------------------   3
+                                0, // ------------------   4
+                                0, // ------------------   5
+                                0, // ------------------   6
+                                0, // ------------------   7 
+                                0, // ------------------   8
+                                0, // ------------------   9
+                                0  // ------------------  10
+    };
 
     dhl->p_dh = (dhelp_t* )malloc(dhl->ndh*sizeof(dhelp_t));
 
     if (dhl->p_dh == NULL){
+
       printf("ERROR: Not enough memory for helper array. Exiting...\n");
       exit(OTI_OutOfMemory);
+
     }
 
-    uint8_t  nhelps =  3; // Number of arrays for temporal variables.
+    ndir_t  ntmps =  3; // Number of arrays for temporal variables.
     
     for( int i = 1; i<=dhl->ndh; i++){
       
-      dhelp_load_singl(strLocation, i, nbases_per_ord[i-1], nhelps, &(dhl->p_dh[i-1]));
+      dhelp_load_singl(strLocation, i, nbases_ord[i-1], ntmps,allocSzs_ord[i-1], &(dhl->p_dh[i-1]));
 
     }
 
@@ -298,6 +345,28 @@ void dhelp_freeItem(  dhelp_t* p_dH){
 
         free(p_dH->p_multtabls);
     }    
+
+    if (p_dH->p_im != NULL){
+
+        for (i=0;i<p_dH->Ntmps;i++){
+
+            free(p_dH->p_im[i]);
+
+        }
+
+        free(p_dH->p_im);
+    }  
+
+    if (p_dH->p_idx != NULL){
+
+        for (i=0;i<p_dH->Ntmps;i++){
+
+            free(p_dH->p_idx[i]);
+
+        }
+
+        free(p_dH->p_idx);
+    }  
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -703,4 +772,75 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------     END DHELP FUNCTIONS   -----------------------------------------
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+// ****************************************************************************************************
+uint64_t binSearchUI64( uint64_t elem,  uint64_t* p_arr, uint64_t  size,flag_t* flag){          
+    
+    uint64_t min_i = 0;
+    uint64_t max_i = size;
+    uint64_t pos = min_i+(max_i-min_i)/2; // Automatically truncates the result.
+    *flag = 0;
+    
+    // Case length 0.
+    if(min_i==max_i){
+        
+        return 0;
+
+    }
+    
+    // Case when the element is not contained within the array or it is the first element.
+    if (elem <= p_arr[min_i]){
+        
+        if (elem == p_arr[min_i]){
+
+            *flag = 1;
+
+        }
+        
+        return min_i;
+
+    } else if (elem > p_arr[max_i-1]){
+        
+        return max_i;
+
+    }
+
+    
+
+    
+    while(  (max_i-min_i)>2  ){
+
+        
+        if (elem > p_arr[pos]){
+
+            min_i = pos;
+
+        }else{
+
+            max_i = pos+1;
+
+        }
+        // Convert both arrays to 
+
+        pos = min_i+(max_i-min_i)/2 ;
+
+    }
+
+    if (p_arr[pos] == elem){
+
+        *flag = 1;
+
+    }
+
+    return pos;
+
+
+}
 // ----------------------------------------------------------------------------------------------------

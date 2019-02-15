@@ -64,6 +64,8 @@ typedef uint8_t     flag_t; ///< Flag type.
 #define _PINT8T  "%hhd"
 
 #define _ENDL "\n"
+
+#define _REALLOC_SIZE 10
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------------      END DEFINES         ----------------------------------------
 // ----------------------------------------------------------------------------------------------------
@@ -76,36 +78,6 @@ typedef uint8_t     flag_t; ///< Flag type.
 // --------------------------------------      STRUCTURES        --------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-// typedef struct {
-//     uint16_t*        p_dirA;  // Array with all basis      Shape: (    Ndir,   order)
-//     uint8_t*         p_expA;  // Array with all exponents. Shape: (    Ndir,   order)
-//     uint16_t*        p_part;  // Array with all partitions Shape: (   Npart,   order)
-//     uint64_t*     p_multRes;  // Array with the multiplication results.
-//     uint64_t*     p_multInd;  // Array with the multiplication indices.
-//     uint64_t*    p_countOTI;  // Array with the number of elements for each number of variables possible.
-//     uint16_t*       p_udirA;  // User direction array.     Shape: (      nn,   order)
-//     uint8_t*        p_uexpA;  // User exponent  array.     Shape: (      nn,   order)
-//     uint16_t*       p_rdirA;  // Result direction array.   Shape: (      nn,   order)
-//     uint8_t*        p_rexpA;  // Result exponent  array.   Shape: (      nn,   order)
-//     uint16_t*       p_mdirA;  // Temporal direction array. Shape: (      nn,   order) -> nn: number of 
-//     uint8_t*        p_mexpA;  // Temporal exponent array.  Shape: (      nn,   order)        temp els
-//     uint16_t*      p_mapder;  // Temporal mapping array.   Shape: (      nn, 2*order)   
-//     uint8_t*       p_multpl;  // Array to hold multiples.  Shape: ( 2^order,   order)
-//     coeff_t*         p_fder;  // Preallocated array for general function evaluation. size: order+1
-//     coeff_t*        p_coefs;  // Preallocated array for general multiplication coefs. Shape: (Ndir,1)
-//     uint64_t*        p_indx;  // Preallocated array for general multiplication indx.  Shape: (Ndir,1)
-//     uint64_t           Ndir;  // Number of directions in the helper.
-//     uint64_t          Npart;  // Number of partitions in the helper.
-//     uint64_t          Nmult;  // Size of the multiplication vectors.
-//     uint16_t         Nbasis;  // Maximum number of basis in the helper.
-//     uint8_t              nn;  // Number of user arrays  
-//     uint8_t           order;  // Order of all directions in this set. 
-
-// } directionHelper;
-
-
-
-
 typedef struct {
    imdir_t* p_arr;     ///< Array of imaginary directions
    uint64_t shape[2];  ///< Shape of the array.
@@ -117,11 +89,11 @@ typedef struct {
     bases_t*      p_fulldir;  ///< 2D Array with explicit                     Shape: (    Ndir,   order)
     imdir2d_t*   p_multtabls; ///< 1D Array of 2D multiplication tables       Shape: (       1,   Nmult)
     ndir_t*         p_ndirs;  ///< 1D Array with the Ndir given a m <= Nbases Shape: (       1,  Nbasis)
-    coeff_t*         p_fder;  ///< Preallocated array for general function evaluation. size: order+1
-    coeff_t*        p_coefs;  ///< Preallocated array for general multiplication coefs. Shape: (Ndir,1)
-    imdir_t*         p_indx;  ///< Preallocated array for general multiplication indx.  Shape: (Ndir,1)
-
+    coeff_t**          p_im;  ///< Preallocated array for general multiplication coefs. Shape: (Ntmps,Ndir)
+    imdir_t**         p_idx;  ///< Preallocated array for general multiplication indx.  Shape: (Ntmps,Ndir)
   // Integer elements
+    ndir_t        allocSize;  ///< Allocation size of arrays for this order. (useful for sotinum)
+    ndir_t            Ntmps;  ///< Number of temporal arrays in the helper.
     ndir_t             Ndir;  ///< Number of directions in the helper.
     ord_t             Nmult;  ///< Number of multiplication tables. (Usually, it's order/2 )
     bases_t          Nbasis;  ///< Maximum number of basis in the helper.
@@ -237,7 +209,6 @@ float    array2d_getel_f32_t( float*    arr,uint64_t ncols, uint64_t i, uint64_t
 // ---------------------------------   LOADNPY FUNCTIONS  ---------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-
 /**************************************************************************************************//**
 @brief Loads a '.npy' array to C format.
 
@@ -300,8 +271,6 @@ void loadnpy_fulldir( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p
 // ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-
-
 /**************************************************************************************************//**
 @brief Multiplies A set of oti coefficients for a given pair of orders.
 
@@ -334,7 +303,7 @@ void dhelp_dense_mult(coeff_t* p_im1, ndir_t ndir1, ord_t ord1, // Input 1
 void dhelp_dense_mult_real(coeff_t* p_im1, ndir_t ndir1, // Input 1
                       coeff_t a,                         // Input 2
                       coeff_t* p_imres, ndir_t ndirres,  // Result
-                      dhelpl_t dhl);                     // Helper                                      // Helper
+                      dhelpl_t dhl);                     // Helper  
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -395,7 +364,8 @@ ndir_t dhelp_ndirOrder(bases_t nbases, ord_t order);
 @param nhelps Number of help arrays to be allocated in the array.
 @param[out] p_dH Address of the helper to be loaded.
 ******************************************************************************************************/ 
-void dhelp_load_singl( char* strLoc, ord_t order, bases_t nbasis, uint8_t nhelps, dhelp_t* p_dH);
+void dhelp_load_singl( char* strLoc, ord_t order, bases_t nbasis, uint64_t nhelps, ndir_t allocSize,
+  dhelp_t* p_dH);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -451,6 +421,14 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
+@brief Load the temporal arrays from the helper.
+
+@param p_dH: Pointer to a Direction helper
+******************************************************************************************************/ 
+void dhelp_load_tmps( dhelp_t* p_dH);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
 @brief Print the data of a direction helper.
 
 @param p_dH: Pointer to a Direction helper
@@ -466,10 +444,23 @@ void dhelp_printList( const dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
-// ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
+// --------------------------------- END DHELP FUNCTIONS  ---------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
 
+
+
+/**************************************************************************************************//**
+@brief Function that searches the index of a given element in an ordered array. If the element is not 
+in the array, the algorithm outputs a flag that tells the item must be inserted at the given position
+to preserve order.
+
+@param[in] elem Element to be sought.
+@param[in] p_arr Array (uint64_t).
+@param[in] size Dimension of the array.
+******************************************************************************************************/ 
+uint64_t binSearchUI64(  uint64_t elem, uint64_t* p_arr, uint64_t size, flag_t* flag);
+// ----------------------------------------------------------------------------------------------------
 
 
 // ----------------------------------------------------------------------------------------------------

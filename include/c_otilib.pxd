@@ -26,9 +26,10 @@ cdef extern from "oti/oti.h" nogil:
     bases_t*      p_fulldir
     imdir2d_t*  p_multtabls
     ndir_t*         p_ndirs
-    coeff_t*         p_fder
-    coeff_t*        p_coefs
-    imdir_t*         p_indx
+    coeff_t**          p_im
+    imdir_t**         p_idx
+    ndir_t        allocSize
+    ndir_t            Ntmps
     ndir_t             Ndir
     ord_t             Nmult
     bases_t          Nbasis
@@ -108,7 +109,8 @@ cdef extern from "oti/oti.h" nogil:
 
   ndir_t dhelp_ndirOrder(bases_t nbases, ord_t order);
 
-  void dhelp_load_singl( char* strLoc, ord_t order, bases_t nbasis, uint8_t nhelps, dhelp_t* p_dH);
+  void dhelp_load_singl( char* strLoc, ord_t order, bases_t nbasis, uint64_t nhelps, 
+      ndir_t allocSize, dhelp_t* p_dH);
 
   void dhelp_multDir(imdir_t indx1, ord_t ord1, imdir_t indx2, ord_t ord2, 
       imdir_t* p_ixres, ord_t* p_ores, dhelpl_t dhl);

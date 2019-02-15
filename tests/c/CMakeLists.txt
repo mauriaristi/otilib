@@ -44,6 +44,9 @@ target_link_libraries (test_import oti)
 
 add_executable(test_otinum test_otinum.c)
 target_link_libraries (test_otinum oti)
+
+add_executable(test_sotinum test_sotinum.c)
+target_link_libraries (test_sotinum oti)
 # SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "")
 
 # -------------------------------------------------------------------

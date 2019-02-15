@@ -50,6 +50,8 @@ void loadnpy_fulldir( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p
     uint64_t shape[2]={1,1};
     uint8_t   ndim;
 
+    // printf("Loading dhelp Full dir\n");
+
     // Concatenate the filename.
     strcpy(filename,strLocation);
     strcat(filename,"/fulldir_n");
@@ -59,7 +61,9 @@ void loadnpy_fulldir( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p
     sprintf(holder, _PBASEST, nbasis);
     strcat(filename,holder);
     strcat(filename,".npy");
-    
+
+    // printf("%s\n",filename);
+
     // Load array.
     loadnpy(filename, (void**) &p_dH->p_fulldir, &ndim, shape);
     p_dH->Ndir = shape[0];
@@ -117,6 +121,8 @@ void loadnpy_ndirs( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_d
     uint64_t shape[2]={1,1};
     uint8_t   ndim;
 
+    // printf("Loading ndirs\n");
+
     // Concatenate the filename
     strcpy(filename,strLocation);
     strcat(filename,"/ndirs_n");
@@ -127,6 +133,9 @@ void loadnpy_ndirs( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_d
     strcat(filename,holder);
     strcat(filename,".npy");
     
+
+    // printf("%s\n",filename);
+
     // Load the array.
     loadnpy(filename, (void**) &p_dH->p_ndirs, &ndim, shape);    
 
@@ -311,7 +320,7 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
     ndir_t  ntmps =  3; // Number of arrays for temporal variables.
     
     for( int i = 1; i<=dhl->ndh; i++){
-      
+      // printf("Loading dhelp %d\n",i);
       dhelp_load_singl(strLocation, i, nbases_ord[i-1], ntmps,allocSzs_ord[i-1], &(dhl->p_dh[i-1]));
 
     }
@@ -602,6 +611,7 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
 
         if (cfPtr != NULL){
 
+            // printf("Successfully opened %s\n",filename);
             // Read the first 8 bytes of the file:
             // expected: ?NUMPYab     a,b is the version of the filename
             fread_res=fread(magic_read, sizeof(char), 6, cfPtr);
@@ -645,6 +655,8 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
 
                 }
                 
+                // printf("Here, before pt\n");
+                // printf("%s\n",header);
                 // Read the header:
                 pt = strtok(header,":");
                 // Read descr:
@@ -660,12 +672,16 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
                 pt = strtok(NULL, ":");
                 // printf( " %s\n", pt );
                 strcpy(shape_str_tmp,pt);
+                // printf( " %s\n", shape_str_tmp );
 
                 pt = strtok(NULL, ":"); // Becomes null.
 
+
+                // printf("%s\n",descr_tmp);
                 pt = strtok(descr_tmp,",");
                 // printf( " %s\n", pt );
                 strcpy(descr,pt);
+                // printf("%s\n",descr);
                 pt = strtok(NULL, ":");
                 pt = strtok(NULL, ":");
 
@@ -674,15 +690,22 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
                 // printf( " %s\n", pt );
                 pt = strtok(NULL, ":");
                 pt = strtok(NULL, ":");
-
+                // printf("before strok %s\n",shape_str_tmp);
                 pt = strtok(shape_str_tmp,")");
-                strcpy(shape_str_tmp,pt);
+                // printf("after strok %s\n",shape_str_tmp);
+                strcpy(descr_tmp,pt); // TODO: Do not overlap
+                // printf("after strcpy %s\n",shape_str_tmp);
                 while(pt!=NULL){
                     pt = strtok(NULL, ")");
                 }
-                pt = strtok(shape_str_tmp,"(");
+                // printf("after %s\n",shape_str_tmp);
+
+                pt = strtok(descr_tmp,"(");
+
+                // printf("after %s\n",descr_tmp);                
                 pt = strtok(NULL, "(");
-                strcpy(shape_str_tmp,pt);
+                // printf("after %s\n",pt);  
+                strcpy(shape_str_tmp,pt); // TODO: DO not overlap
                 strcpy(shape_str,shape_str_tmp);
                 // printf( " %s\n", shape_str );
                 pt = strtok(NULL, "(");

@@ -24,7 +24,7 @@ def genPrecompData(max_basis_k=[3,3,3,3,3],maindir=''):
     precNdir.append(np.arange(0,m+1,dtype = np.uint64))
     
     # Save files in Numpy format.
-    pathname = maindir+"/"
+    pathname = maindir#+"/"
 
     filename = 'fulldir_n'+str(1)+'_m'+str(m)
     np.save(pathname+filename,order_i_dir)      # all OTI directions of order 'order'.
@@ -68,7 +68,7 @@ def genPrecompData(max_basis_k=[3,3,3,3,3],maindir=''):
         
         
         # Save files in Numpy format.
-        pathname = maindir+"/"
+        pathname = maindir#+"/"
         
         filename = 'fulldir_n'+str(order)+'_m'+str(m)
         np.save(pathname+filename,order_i_dir)      # all OTI directions of order 'order'.
@@ -118,7 +118,7 @@ def genPrecompMult( order, m, precDir, precNdir,maindir=''):
         # end for 
         
         # Save files in Numpy format.
-        pathname = maindir+"/"
+        pathname = maindir#+"/"
         
         filename = 'multtabl_n'+str(order)+'_m'+str(m)+'_'+str(ii)
         np.save(pathname+filename,multresi)      # all OTI directions of order 'order'.

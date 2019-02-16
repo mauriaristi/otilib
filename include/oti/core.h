@@ -220,6 +220,17 @@ float    array2d_getel_f32_t( float*    arr,uint64_t ncols, uint64_t i, uint64_t
 void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Saves a 1 or 2d array in *.npy (v1.0) format
+
+@param[in] filename String with the filename of to load. Must contain the path.
+@param[in] dtype Data type id: 0:uint8_t, 2: uint16_t, 3: uint32_t, 4: uint64_t
+@param[in] data Address of the pointer that holds the data. 
+@param[in] shapex Number of elements in first dimension
+@param[in] shapey Number of elements in second dimension. If 1d, this should be 1.
+******************************************************************************************************/ 
+void savenpy(char* filename, uint8_t dtype, void* data, uint64_t shapex, uint64_t shapey);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Loads the multiplication tables. Given the corresponding order and number of basis, it loads the
@@ -442,6 +453,41 @@ void dhelp_print( dhelp_t* p_dH);
 ******************************************************************************************************/ 
 void dhelp_printList( const dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Multiply two imaginary directions.
+
+@param dir1: Array of bases forming the first direction
+@param ord1: Order of the first direction
+@param dir2: Array of bases forming the second direction
+@param ord2: Order of the second direction
+@param dhl: Direction helper list with the loaded data.
+******************************************************************************************************/ 
+imdir_t dhelp_precompute_multiply(bases_t* dir1,ord_t ord1, bases_t* dir2,ord_t ord2, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl);
+// ----------------------------------------------------------------------------------------------------
+
+void dhelp_precompute_fulldir(ord_t order, bases_t nbases, dhelpl_t* dhl);
+// ----------------------------------------------------------------------------------------------------
+
+void dhelp_precompute_ndirs(ord_t order, bases_t nbases, dhelpl_t* dhl);
+// ----------------------------------------------------------------------------------------------------
+
+void dhelp_save_fulldir(char* directory, bases_t base, ord_t order, dhelpl_t dhl );
+// ----------------------------------------------------------------------------------------------------
+
+void dhelp_save_ndirs(char* directory, bases_t base, ord_t order,  dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+void dhelp_save_multtabls(char* directory, bases_t base, ord_t order,  dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder );
+// ----------------------------------------------------------------------------------------------------
+
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------- END DHELP FUNCTIONS  ---------------------------------------------

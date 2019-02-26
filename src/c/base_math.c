@@ -102,9 +102,9 @@ void der_r_log10(double x0, ord_t order, double* derivs){
     for( i=0; i<(order+1); i++){
         switch(i){
             case 0:
-                derivs[0]  =  log(x0)/log(10);
+                derivs[0]  =  log(x0)/log(10.);
             case 1:
-                derivs[1]  =  1./(x0*log(10));
+                derivs[1]  =  1./(x0*log(10.));
             case 2:
                 derivs[2]  =  -1./(pow(x0,2)*log(10.));                
             case 3:

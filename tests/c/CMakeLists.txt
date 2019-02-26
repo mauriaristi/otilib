@@ -45,6 +45,9 @@ target_link_libraries (test_import oti)
 add_executable(test_otinum test_otinum.c)
 target_link_libraries (test_otinum oti)
 
+add_executable(test_imdir_mult test_imdir_mult.c)
+target_link_libraries (test_imdir_mult oti)
+
 add_executable(test_sotinum test_sotinum.c)
 target_link_libraries (test_sotinum oti)
 

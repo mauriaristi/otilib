@@ -146,10 +146,18 @@ void loadnpy_ndirs( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_d
 void dhelp_load_tmps( dhelp_t* p_dH){
 
     // Allocate pointers
-    p_dH->p_im = (coeff_t**) malloc(p_dH->Ntmps*sizeof(coeff_t*));
-    p_dH->p_idx= (imdir_t**) malloc(p_dH->Ntmps*sizeof(imdir_t*));
+    p_dH->p_im  = ( coeff_t**) malloc(p_dH->Ntmps*sizeof( coeff_t*));
+    p_dH->p_idx = ( imdir_t**) malloc(p_dH->Ntmps*sizeof( imdir_t*)); 
+    
+    p_dH->p_ims = (coeff_t***) malloc(p_dH->Ntmps*sizeof(coeff_t**));
+    p_dH->p_ids = (imdir_t***) malloc(p_dH->Ntmps*sizeof(imdir_t**));
 
-    if ( p_dH->p_im == NULL || p_dH->p_idx == NULL ){
+    p_dH->p_nnz = (  ndir_t**) malloc(p_dH->Ntmps*sizeof(  ndir_t*));
+    p_dH->p_size= (  ndir_t**) malloc(p_dH->Ntmps*sizeof(  ndir_t*));
+
+    if ( p_dH->p_im  == NULL || p_dH->p_idx  == NULL ||
+         p_dH->p_ims == NULL || p_dH->p_ids  == NULL ||
+         p_dH->p_nnz == NULL || p_dH->p_size == NULL   ){
 
       printf("ERROR: Not enough memory for temporal arrays. Exiting...\n");
       exit(OTI_OutOfMemory);
@@ -158,10 +166,18 @@ void dhelp_load_tmps( dhelp_t* p_dH){
 
     for (ndir_t i = 0; i<p_dH->Ntmps; i++){
 
-        p_dH->p_im[i] = (coeff_t*) malloc(p_dH->Ndir*sizeof(coeff_t));
-        p_dH->p_idx[i]= (imdir_t*) malloc(p_dH->Ndir*sizeof(imdir_t));
+        p_dH->p_im[i]   = (coeff_t*) malloc( p_dH->Ndir*sizeof(coeff_t));
+        p_dH->p_idx[i]  = (imdir_t*) malloc( p_dH->Ndir*sizeof(imdir_t));
 
-        if ( p_dH->p_im == NULL || p_dH->p_idx == NULL ){
+        p_dH->p_ims[i]  = (coeff_t**) malloc( p_dH->order*sizeof(coeff_t*));
+        p_dH->p_ids[i]  = (imdir_t**) malloc( p_dH->order*sizeof(imdir_t*));
+
+        p_dH->p_nnz[i]  = ( ndir_t*) malloc(p_dH->order*sizeof( ndir_t));
+        p_dH->p_size[i] = ( ndir_t*) malloc(p_dH->order*sizeof( ndir_t));
+
+        if ( p_dH->p_im[i]  == NULL || p_dH->p_idx[i] == NULL ||
+             p_dH->p_ims[i] == NULL || p_dH->p_ids[i] == NULL ||
+             p_dH->p_size[i]== NULL || p_dH->p_nnz[i] == NULL   ){
             printf("ERROR: Not enough memory for temporal arrays. Exiting...\n");
             exit(OTI_OutOfMemory);
         }
@@ -331,19 +347,22 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
 
 
 // ****************************************************************************************************
-void dhelp_freeItem(  dhelp_t* p_dH){          
+void dhelp_freeItem( dhelp_t* p_dH){          
     
     uint64_t i;
     
-    // Initialize known values
+    // Free helper arrays values
+
     if (p_dH->p_fulldir != NULL){
         free(p_dH->p_fulldir);
     }
     
+
     if (p_dH->p_ndirs != NULL){
         free(p_dH->p_ndirs);
     }
     
+
     if (p_dH->p_multtabls != NULL){
 
         for (i=0;i<p_dH->Nmult;i++){
@@ -355,6 +374,8 @@ void dhelp_freeItem(  dhelp_t* p_dH){
         free(p_dH->p_multtabls);
     }    
 
+
+    // Free temporal arrays.
     if (p_dH->p_im != NULL){
 
         for (i=0;i<p_dH->Ntmps;i++){
@@ -366,6 +387,7 @@ void dhelp_freeItem(  dhelp_t* p_dH){
         free(p_dH->p_im);
     }  
 
+
     if (p_dH->p_idx != NULL){
 
         for (i=0;i<p_dH->Ntmps;i++){
@@ -376,6 +398,54 @@ void dhelp_freeItem(  dhelp_t* p_dH){
 
         free(p_dH->p_idx);
     }  
+
+
+    if (p_dH->p_nnz != NULL){
+
+        for (i=0;i<p_dH->Ntmps;i++){
+        
+            free(p_dH->p_nnz[i]);
+
+        }
+
+        
+        free(p_dH->p_nnz);
+    } 
+
+
+    if (p_dH->p_size != NULL){
+
+        for (i=0;i<p_dH->Ntmps;i++){
+
+            free(p_dH->p_size[i]);
+
+        }
+
+        free(p_dH->p_size);
+    } 
+
+
+    if (p_dH->p_ids != NULL){
+
+        for (i=0;i<p_dH->Ntmps;i++){
+
+            free(p_dH->p_ids[i]);
+
+        }
+
+        free(p_dH->p_ids);
+    }
+
+    if (p_dH->p_ims != NULL){
+
+        for (i=0;i<p_dH->Ntmps;i++){
+
+            free(p_dH->p_ims[i]);
+
+        }
+
+        free(p_dH->p_ims);
+    }
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -557,7 +627,7 @@ void dhelp_print( dhelp_t* p_dH){
 void dhelp_free(dhelpl_t* dhl){          
     
     for( int i = 1; i<=dhl->ndh; i++){
-      
+      // printf("Order: "_PORDT"\n",i);
       dhelp_freeItem( &dhl->p_dh[i-1] );
 
     }

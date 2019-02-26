@@ -35,6 +35,25 @@ typedef struct {
 // ------------------------------------     DECLARATIONS     ------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Add two sparse oti numbers.
+
+@param[in] num1 OTI number.
+@param[in] num2 OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Generate a temporal array with the allocated data
+
+@param[in] ntmp Number of temporal array to be retreived.
+@param[in] order Truncation order.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Function that divides an oti number by a real number.
@@ -181,83 +200,20 @@ memory of the other elements correspond to zero value coefficients in the imagin
 sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl); 
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Allocate a new sparse oti number in memory using a specified allocated size.
+
+@param[in] nnz Array of length order containing the sizes per order to be allocated.
+@param[in] order Truncation order.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 
+// ----------------------------------------------------------------------------------------------------
+
 
 // added to c_otilib.pxd
 
 
-// void c_soti_fdiv(double numx, sotinum_t* numy, sotinum_t* res, directionHelper* p_dH);
-
-// void c_soti_divf(sotinum_t* numx, double numy, sotinum_t* res);
-
-// void c_soti_div(sotinum_t* numx, sotinum_t* numy, sotinum_t* res, directionHelper* p_dH);
-
-// double c_soti_getReal(sotinum_t* num);
-
-// void c_soti_atan2(sotinum_t* numx, sotinum_t* numy, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_logb(sotinum_t* num, int base, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_log10(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_atanh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_asinh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_acosh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_tanh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_sqrt(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_cosh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_sinh(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_asin(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_acos(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_atan(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_tan(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_cos(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_sin(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_log(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
-
-// void c_soti_exp(sotinum_t* num, directionHelper* p_dH, sotinum_t* res);
- 
-// void c_soti_derivFunc(double* fder, sotinum_t* g, directionHelper* p_dH, sotinum_t* feval);
-
-// void c_soti_smulf(sotinum_t* num1, double num2);
-
-// void c_soti_copy(sotinum_t* res, sotinum_t* num1);
-
-// void c_soti_pow(sotinum_t* num, double exponent, directionHelper* p_dH,sotinum_t* res);
-
-// void c_soti_ipowfast(sotinum_t* num1, uint8_t exp, sotinum_t* res, directionHelper* p_dH); 
-
-// void c_soti_ipow(sotinum_t* num1, uint8_t exp, sotinum_t* res, directionHelper* p_dH);
-
-// void c_soti_neg( sotinum_t* num1, sotinum_t* res);
-
-// void c_soti_fsub(sotinum_t* num1, double num2, sotinum_t* res);
-
-// void c_soti_subf(sotinum_t* num1, double num2, sotinum_t* res);
-
-// void c_soti_sub(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, directionHelper* p_dH);
-
-// void c_soti_sumf(sotinum_t* num1, double num2, sotinum_t* res);
-
-// void c_soti_mulf(sotinum_t* num1, double num2, sotinum_t* res);
-
-// void c_soti_mul(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, directionHelper* p_dH);
-
-// void c_soti_sum(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, directionHelper* p_dH);
-
-// void c_soti_free(sotinum_t* numHolder);
 
 
 // ----------------------------------------------------------------------------------------------------

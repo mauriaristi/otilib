@@ -8,16 +8,162 @@
 
 // ----------------------------------------------------------------------------------------------------
 
+
 // ****************************************************************************************************
-// sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
+    
+    sotinum_t res;
+    ord_t i=0;
 
-//     sotinum_t res;
+    if (order > dhl.ndh){
+        printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
+        exit(OTI_undetErr);
+    }
+    if (ntmp >= dhl.p_dh[order-1].Ntmps){
+        printf("ERROR: Trying to get a temporal that does not exist.\n");
+        exit(OTI_undetErr);   
+    }
 
-//     res = soti_createEmpty();
+    res.p_im   = dhl.p_dh[order-1].p_ims[ntmp]; 
+    res.p_idx  = dhl.p_dh[order-1].p_ids[ntmp]; 
+    res.p_nnz  = dhl.p_dh[order-1].p_nnz[ntmp]; 
+    res.p_size = dhl.p_dh[order-1].p_size[ntmp]; 
+    res.order  = order; 
 
-//     return 
+    for (i=0; i<order; i++){
 
-// }
+        res.p_im[i]  = dhl.p_dh[i].p_im[ntmp];
+        res.p_idx[i] = dhl.p_dh[i].p_idx[ntmp];
+        res.p_nnz[i] = 0;
+        res.p_size[i]= dhl.p_dh[i].Ndir;
+
+    }
+
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+
+    sotinum_t res, tmp;
+    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t ordi;
+    ndir_t j1,j2, jres;
+    imdir_t dir1, dir2;
+
+    tmp = soti_get_tmp(0,res_ord,dhl); // creates a sotinum with no elements in imaginary directions.
+
+    tmp.re = num1->re + num2->re;
+
+    for(ordi=0; ordi<res_ord; ordi++){
+
+        
+        if (ordi < num1->order && ordi < num2->order){
+            
+            j1   = 0; 
+            j2   = 0;
+            jres = 0;
+            
+            while( 1 ){
+            
+                if (j1<num1->p_nnz[ordi] && j2<num2->p_nnz[ordi]){
+                    
+                    dir1 = num1->p_idx[ordi][j1];
+                    dir2 = num2->p_idx[ordi][j2];
+                    
+                    if (dir1 == dir2){
+                        
+                        tmp.p_im[ordi][jres] = num1->p_im[ordi][j1]+num2->p_im[ordi][j2];
+                        tmp.p_idx[ordi][jres] = dir1;
+                        tmp.p_nnz[ordi]++;
+                        j1++; j2++; jres++;
+
+                    }else if(dir1<dir2){
+
+                        tmp.p_im[ordi][jres] = num1->p_im[ordi][j1];
+                        tmp.p_idx[ordi][jres] = dir1;
+                        tmp.p_nnz[ordi]++;
+                        jres++; j1++;
+
+                    } else{
+
+                        tmp.p_im[ordi][jres] = num2->p_im[ordi][j2];
+                        tmp.p_idx[ordi][jres] = dir2;
+                        tmp.p_nnz[ordi]++;  
+                        jres++; j2++;
+                    }
+
+                } else if(j1<num1->p_nnz[ordi]){
+
+                    // faster if  the cycle is performed here.
+                    tmp.p_im[ordi][jres]  = num1->p_im[ordi][j1];
+                    tmp.p_idx[ordi][jres] = num1->p_idx[ordi][j1];
+                    tmp.p_nnz[ordi]++;
+                    jres++; j1++;
+
+                } else if(j2<num2->p_nnz[ordi]){   
+
+                    // faster if  the cycle is performed here.
+                    tmp.p_im[ordi][jres]  = num2->p_im[ordi][j2];
+                    tmp.p_idx[ordi][jres] = num2->p_idx[ordi][j2];
+                    tmp.p_nnz[ordi]++;
+                    jres++; j2++;
+
+                } else {
+
+                    break;
+
+                }
+            
+            }
+
+
+        } else if (ordi < num1->order){
+
+            j1   = 0; 
+            jres = 0;
+            
+            for(j1=0;j1 < num1->p_nnz[ordi]; j1++){
+
+                tmp.p_im[ordi][jres]  = num1->p_im[ordi][j1];
+                tmp.p_idx[ordi][jres] = num1->p_idx[ordi][j1];
+                tmp.p_nnz[ordi]++;
+                jres++; j1++;
+
+            }
+
+        } else {
+
+            j2   = 0;
+            jres = 0;
+            
+            for(j2=0;j2 < num2->p_nnz[ordi]; j2++){
+
+                tmp.p_im[ordi][jres]  = num2->p_im[ordi][j2];
+                tmp.p_idx[ordi][jres] = num2->p_idx[ordi][j2];
+                tmp.p_nnz[ordi]++;
+                jres++; j2++;
+                
+            }
+
+        }
+
+    }
+
+    // reset the size values of the tmp number    
+    for(ordi=0; ordi<res_ord; ordi++){
+
+        tmp.p_size[ordi] = MAX(dhl.p_dh[ordi].allocSize,tmp.p_nnz[ordi]);
+    }
+
+    res = soti_copy(&tmp, dhl);
+
+    return res;
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************

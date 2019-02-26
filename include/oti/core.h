@@ -93,6 +93,11 @@ typedef struct {
     ndir_t*         p_ndirs;  ///< 1D Array with the Ndir given a m <= Nbases Shape: (       1,  Nbasis)
     coeff_t**          p_im;  ///< Preallocated array for general multiplication coefs. Shape: (Ntmps,Ndir)
     imdir_t**         p_idx;  ///< Preallocated array for general multiplication indx.  Shape: (Ntmps,Ndir)
+    
+    coeff_t***        p_ims;  ///< Array for temporal oti nums. Shape: (1, order)
+    imdir_t***        p_ids;  ///< Array for temporal oti nums. Shape: (1, order)
+    ndir_t**          p_nnz;  ///< Array for temporal oti nums. Shape: (1, order)
+    ndir_t**         p_size;  ///< Array for temporal oti nums. Shape: (1, order)
   // Integer elements
     ndir_t        allocSize;  ///< Allocation size of arrays for this order. (useful for sotinum)
     ndir_t            Ntmps;  ///< Number of temporal arrays in the helper.
@@ -447,6 +452,17 @@ void dhelp_load_tmps( dhelp_t* p_dH);
 @param p_dH: Pointer to a Direction helper
 ******************************************************************************************************/ 
 void dhelp_print( dhelp_t* p_dH);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Print an imaginary direction given by its index and order.
+
+@param indx: Direction index.
+@param order: Direction order.
+@param dhl: Direction helper list with the loaded data.
+******************************************************************************************************/ 
+void dhelp_printImdir(imdir_t indx, ord_t order, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Print the list of direction helpers.

@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[]){
 	// Declarations
-	char data_folder[] = "/home/maristi7/coding/otilib/src/datagen/data"; // Useful for linux and macos distributions.
+	char data_folder[] = "../../data"; // Useful for linux and macos distributions.
 	dhelpl_t dhl; // Direction helper.
 
 
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]){
 	soti_set_item(a,0,0,&num1,dhl); // Set real coefficient
 	soti_set_item(b,0,1,&num1,dhl); // Set Imaginary coefficient e(1)
 	soti_set_item(c,1,2,&num1,dhl); // Set imaginary coefficient e([1,2])
-	printf("\nResult after setting real an imaginary coefficients.\n");
+	printf("\nResult after setting real and imaginary coefficients.\n");
 	soti_print(&num1, dhl);	
 
 	printf("\nResult of getting real coefficient "_PCOEFFT _ENDL,
@@ -78,6 +78,19 @@ int main(int argc, char *argv[]){
 	printf("\nResult after dividing sotinum by real number.\n");
 	num2 = soti_div_otireal(&num3, b, dhl);
 	soti_print(&num2,dhl);
+
+	soti_set_item(c*3.3,3,3,&num3,dhl); 
+	soti_print(&num3,dhl);
+
+	soti_set_item(a*3.3,3,1,&num2,dhl); 
+	soti_set_item(b*3.3,0,3,&num2,dhl); 
+	soti_print(&num2,dhl);
+
+
+	soti_free(&num1);
+	printf("\nResult after adding two sotinums.\n");
+	num1 = soti_sum(&num3,&num2,dhl);
+	soti_print(&num1,dhl);
 
 
 

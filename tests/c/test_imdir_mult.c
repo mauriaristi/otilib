@@ -362,7 +362,7 @@ int main(int argc, char *argv[]){
 	imdir_t idx_res2 = 0;
 	ord_t   ord_res2 = 0;
 
-	ord_t  ord1=1, ord2=2;
+	ord_t  ord1=1, ord2=1;
 	
 	// imdir_t idx1[] = {0, 3, 4, 7     };
 	imdir_t idx1[] = {0, 1, 2, 3, 4, 5, 6};

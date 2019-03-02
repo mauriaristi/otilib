@@ -22,13 +22,12 @@ void dhelp_mult_sparse(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
 
 
 
-
-void add_coeff(coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
-			   coeff_t im,imdir_t idx){
+// ****************************************************************************************************
+inline void dhelp_add_coeff( coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres, 
+	coeff_t im, imdir_t idx ){
 
 	// This function assumes that the 
 	
-
 	if (p_idxres == idx){
 		
 		p_imres[(*ndirres)-1] += im;
@@ -37,11 +36,15 @@ void add_coeff(coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
 	
 		p_imres[(*ndirres)] = im;
 		p_idxres[(*ndirres)] = idx;
-		(*ndirres) += 1;	
+		(*ndirres) += 1;
 
 	}
-}
 
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
 void search_prev_dir_old(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t ord1, // Input 1
                        coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2, // Input 2 
                        coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           // Result
@@ -83,7 +86,7 @@ void search_prev_dir_old(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
                                     prev_idx, idx_res, next_i1, next_i2,
                        				dhl);
 
-					// printf("-adding %lu, from ( %lu x %lu )\n",idx_res, p_idx1[next_i1], p_idx2[next_i2]);
+					// Add Direction
 					printf("-adding %lu\n",idx_res);
 					*ndirres += 1;
 
@@ -92,9 +95,7 @@ void search_prev_dir_old(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
                                     p_imres, p_idxres, ndirres, // Result
                                     idx_res, next_idx, next_i1, curr_i2,
                        				dhl);
-					// Add direction.
-					// add_direction(p_imres, p_idxres, ndirres,
-					// 			  );
+					
 					
 				} else {
 					search_prev_dir_old(p_im1, p_idx1, ndir1, ord1, // Input 1
@@ -120,12 +121,11 @@ void search_prev_dir_old(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
 		return;
 
 	}
-	
-
 
 }
+// ----------------------------------------------------------------------------------------------------
 
-
+// ****************************************************************************************************
 void search_prev_dir(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t ord1, // Input 1
                        coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2, // Input 2 
                        coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           // Result
@@ -201,19 +201,15 @@ void search_prev_dir(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
                         prev_idx, next_idx, next_i1, curr_i2,
            				tmp_multtabl);	
 		}
-		
 
 		return;
 
 	}
-	
-
 
 }
+// ----------------------------------------------------------------------------------------------------
 
-
-
-
+// ****************************************************************************************************
 void dhelp_mult_sparse(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t ord1, // Input 1
                        coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2, // Input 2
                        coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           // Result
@@ -302,6 +298,7 @@ void dhelp_mult_sparse(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
 	}
 
 }
+// ----------------------------------------------------------------------------------------------------
 
 
 

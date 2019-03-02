@@ -222,8 +222,54 @@ cdef extern from "oti/oti.h" nogil:
 
   void oti_free( otinum_t* num );
 
+  #---------------------------------------------------------------------------------------------------
+
+
+  # Include functions from "otinum_spr.h"
+  #---------------------------------------------------------------------------------------------------
+
+  sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+
+  sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
+
+  sotinum_t soti_div_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+
+  sotinum_t soti_sub_realoti( coeff_t val, sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_sub_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+
+  sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_mul_real(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_sum_real(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+
+  void soti_insert_item(ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+
+  void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+
+  coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl);
+
+  void soti_print(sotinum_t* num, dhelpl_t dhl);
+
+  void soti_free(sotinum_t* num);
+
+  sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl);
+  
+  sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl); 
+  
+  sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 
+
+  #---------------------------------------------------------------------------------------------------
+
+
+  # Include functions from "otinum_dense.h"
+  #---------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------
+
 
 
 

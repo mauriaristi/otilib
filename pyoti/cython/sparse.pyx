@@ -17,11 +17,12 @@ cimport numpy as np                 # C-level functions of numpy
 from c_otilib cimport *             # OTI lib in C.
 cimport cython                      #
 
-from pyoti.core import   number_types, getDirArray, printOrderPos, dHelp,getDirExpA
-from pyoti.core cimport  p_dH, ZERO, ONE, get_cython_dHelp, dHelp, c_getDirExpA
+from pyoti.core import   number_types, dHelp
+from pyoti.core cimport  ZERO, ONE, get_cython_dHelp, dHelp, imdir
 from pyoti.core cimport  c_ptr_to_np_1darray_double
 
 cdef dHelp h = get_cython_dHelp()
+cdef dhelpl_t dhl = h.dhl
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -39,7 +40,7 @@ cdef class sotinum:
 
 
   #***************************************************************************************************
-  def __init__(self,indx,coefs, uint8_t order,uint8_t FLAGS = 1):
+  def __init__(self, coeff_t coefs, ord_t order, uint8_t FLAGS = 1):
     """
     PURPOSE:      Constructor of the spr_otinum class.
 
@@ -73,40 +74,9 @@ cdef class sotinum:
     """
     #*************************************************************************************************
 
-    cdef uint64_t i, ncoefs, nindx
     #Add warning for higher orders and orders that are not required
     self.FLAGS = FLAGS
-    if type(coefs) in number_types:
-      
-      c_soti_createEmpty(&self.num,1,order)
-
-      self.num.p_coefs[0] = coefs
-      self.num.p_indx[0]  = indx
     
-    else:
-      
-      np_indx  = np.array(indx, dtype = np.uint64)
-      np_coefs = np.array(coefs,dtype = np.float64) 
-      
-      nindx = len(indx)
-      ncoefs= len(coefs)
-      if nindx != ncoefs:
-        raise ValueError("Lengths of index and coefficient array do not match.")
-
-      c_soti_createEmpty(&self.num, ncoefs, order)
-
-      for i in range(ncoefs):
-        self.num.p_coefs[i] = coefs[i]
-        self.num.p_indx[i]  =  indx[i]
-      
-      # TODO: Add warning and error if no enough coefficients are added 
-      # to the coefs vector
-      # 
-      # Add also a code that enables the index array to be only a list with 
-      # elements of type int (python integer, not numpy integer).
-      #
-
-    # end if
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -122,7 +92,7 @@ cdef class sotinum:
     # print("Deallocating memory of sotinum.")
     if self.FLAGS & 1: # If memory is owned by this otinum.
 
-      c_soti_free(&self.num)
+      soti_free(&self.num)
       self.num.p_coefs = NULL
       self.num.p_indx  = NULL
       self.num.size = 0

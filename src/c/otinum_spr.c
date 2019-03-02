@@ -46,6 +46,84 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
+sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+
+    sotinum_t res, tmp, tmp1, tmp2, tmp3;
+    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t ordi;
+    ndir_t j1,j2, jres;
+    imdir_t dir1, dir2;
+
+    // Retreive sotinum temporals.
+    // All tmps are created with no elements in imaginary directions (but allocated).
+    tmp = soti_get_tmp(0,res_ord,dhl); 
+    tmp1= soti_get_tmp(1,res_ord,dhl);
+    tmp2= soti_get_tmp(2,res_ord,dhl);
+    tmp3= soti_get_tmp(3,res_ord,dhl);
+    
+
+    // Multiply real coefficients.
+    tmp.re = num1->re * num2->re;
+
+    // for(ordi=1; ordi<=res_ord; ordi++){
+
+
+    //     // First multiply  re x ordi        
+    //     dhelp_dense_mult_real(num2->p_im[ordi-1],num2->p_ndpo[ordi-1],
+    //         num1->re,
+    //         res.p_im[ordi-1],res.p_ndpo[ordi-1],
+    //         dhl);
+
+    //     // Then multiply   ordi x re
+    //     dhelp_dense_mult_real(num1->p_im[ordi-1],num1->p_ndpo[ordi-1],
+    //         num2->re,
+    //         res.p_im[ordi-1],res.p_ndpo[ordi-1],
+    //         dhl);
+
+    //     for (ord_t ord_mul1 = 1; ord_mul1 <= ordi/2; ord_mul1++){
+
+    //         ord_t ord_mul2 = ordi - ord_mul1;
+    //         // printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
+
+    //         dhelp_dense_mult( num1->p_im[ord_mul1-1], num1->p_ndpo[ord_mul1-1], ord_mul1, 
+    //                   num2->p_im[ord_mul2-1], num2->p_ndpo[ord_mul2-1], ord_mul2,
+    //                   res.p_im[ordi-1], res.p_ndpo[ordi]-1,
+    //                   dhl);
+
+    //         if (ord_mul1 != ord_mul2){
+                
+    //             // printf("Multiplying %hhu X %hhu\n",ord_mul2,ord_mul1);                
+
+    //             dhelp_dense_mult( num1->p_im[ord_mul2-1], num1->p_ndpo[ord_mul2-1], ord_mul2, 
+    //                       num2->p_im[ord_mul1-1], num2->p_ndpo[ord_mul1-1], ord_mul1,
+    //                       res.p_im[ordi-1], res.p_ndpo[ordi]-1,
+    //                       dhl);
+
+    //         }  
+
+    //     }
+        
+
+        
+        
+
+    // }
+
+    // reset the size values of the tmp number    
+    for(ordi=0; ordi<res_ord; ordi++){
+
+        tmp.p_size[ordi] = MAX(dhl.p_dh[ordi].allocSize,tmp.p_nnz[ordi]);
+    }
+
+    res = soti_copy(&tmp, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
 sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp;

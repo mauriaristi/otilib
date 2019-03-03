@@ -40,42 +40,17 @@ cdef class sotinum:
 
 
   #***************************************************************************************************
-  def __init__(self, coeff_t coefs, ord_t order, uint8_t FLAGS = 1):
+  def __init__(self, coeff_t re_coef, ord_t order, uint8_t FLAGS = 1):
     """
-    PURPOSE:      Constructor of the spr_otinum class.
-
-    DESCRIPTION:  Creates a new OTI number given a list of coefficients.
-
-    PARAMETERS:
-                  indx:   Array of integers containing the corresponding  
-                          directions of each coefficient.
-
-                  coefs:  List of coefficients. 
-                  
-                  order:  Integer that sets the maximum order of the number.
-                  
-                      Example:  indx  = [0, 1, ],
-                                coefs = [1, 2, 3],
-                                order = 2
-                                
-                      creates a OTI number:
-                      1.0 + 2.0 * e([1]) + 3.0 * e([[1,2],3])     
-
-    RESULT:       
-            The next attributes are allocated:
-                  obj.indx:     the index of positions of the multicomplex 
-                                number.
-                  obj.coefs:    a numpy 1D array that contains the
-                                coefficients corresponding to the obj.indx.
-                                
-                  obj.maxorder: an integer that indicates the order of the 
-                                system.
-                  
+    DESCRIPTION: Constructor of a sparse OTI number.
     """
     #*************************************************************************************************
+    global dhl
 
-    #Add warning for higher orders and orders that are not required
+    # Add warning for higher orders and orders that are not required
     self.FLAGS = FLAGS
+
+    num1 = soti_createReal(re_coeff, order, dhl);
     
 
   #---------------------------------------------------------------------------------------------------  
@@ -111,46 +86,46 @@ cdef class sotinum:
   #---------------------------------------------------------------------------------------------------
   
 
-  #***************************************************************************************************
-  @property
-  def  size(self): 
-    """
-    PURPOSE:      Return the number of directions in the otinum.
+  # #***************************************************************************************************
+  # @property
+  # def  size(self): 
+  #   """
+  #   PURPOSE:      Return the number of directions in the otinum.
 
-    DESCRIPTION:  Reads the component Ndir of otinum_t num.
+  #   DESCRIPTION:  Reads the component Ndir of otinum_t num.
                   
-    """
-    #*************************************************************************************************
+  #   """
+  #   #*************************************************************************************************
 
-    return self.num.size
+  #   return self.num.size
 
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  @property
-  def  coefs(self): 
-    """
-    PURPOSE:      Return the coefficients in a python friendly object. 
+  # #***************************************************************************************************
+  # @property
+  # def  coefs(self): 
+  #   """
+  #   PURPOSE:      Return the coefficients in a python friendly object. 
 
-    DESCRIPTION:  Creates a numpy array object using the raw p_coef pointer.
-                  This is a view of the number's coefficients. Changing a value in the numpy array 
-                  changes the number in the number's coefficient.
-                  The given numpy array does not own the pointer, the object can be treated as 
-                  volatile, which means that in can be reasigned to another memory, and it does not
-                  be easily,
-                  not a view of the pointer. Be careful.
+  #   DESCRIPTION:  Creates a numpy array object using the raw p_coef pointer.
+  #                 This is a view of the number's coefficients. Changing a value in the numpy array 
+  #                 changes the number in the number's coefficient.
+  #                 The given numpy array does not own the pointer, the object can be treated as 
+  #                 volatile, which means that in can be reasigned to another memory, and it does not
+  #                 be easily,
+  #                 not a view of the pointer. Be careful.
                   
-    """
-    #*************************************************************************************************
+  #   """
+  #   #*************************************************************************************************
     
-    # print(hex(<uint64_t>self.num.p_coefs))
-    # cdef np.ndarray[double, ndim=1]  myarray = c_ptr_to_np_1darray_double(self.num.p_coefs, self.num.Ndir)
-    # myarray.base = <PyObject*>self
-    # return myarray
+  #   # print(hex(<uint64_t>self.num.p_coefs))
+  #   # cdef np.ndarray[double, ndim=1]  myarray = c_ptr_to_np_1darray_double(self.num.p_coefs, self.num.Ndir)
+  #   # myarray.base = <PyObject*>self
+  #   # return myarray
 
-    return c_ptr_to_np_1darray_double(self.num.p_coefs, self.num.size)
+  #   return c_ptr_to_np_1darray_double(self.num.p_coefs, self.num.size)
 
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @property
@@ -190,10 +165,14 @@ cdef class sotinum:
     # create new empty object:
     cdef sotinum otin = <sotinum> sotinum.__new__(sotinum)
 
-    otin.num.p_coefs = num[0].p_coefs
-    otin.num.p_indx  = num[0].p_indx
-    otin.num.size    = num[0].size
-    otin.num.order   = num[0].order
+
+    otin.num.re     = num[ZERO].re    
+    otin.num.p_im   = num[ZERO].p_im  
+    otin.num.p_idx  = num[ZERO].p_idx 
+    otin.num.p_nnz  = num[ZERO].p_nnz 
+    otin.num.p_size = num[ZERO].p_size
+    otin.num.order  = num[ZERO].order 
+
     otin.FLAGS = FLAGS
     
     return otin
@@ -204,90 +183,24 @@ cdef class sotinum:
   #*************************************************************************************************** 
   def __repr__(self):
     """
-    PURPOSE:  To print a representation of the dualnum object that could be
-              used to create new dualnum objects, in a compact form.
-  
-    EXAMPLE:  
-              >>> spr_otinum([0,1,2,5],[1,2,3,4],2)
-              spr_otinum([0,1,2,5],[1.,2.,3.,4.],2)
-              
-              >>> spr_otinum([0,1,2,4],[1,2,3,4],1)
-              spr_otinum([0,1,2,4],[1.,2.,3.,4.],1)
+    PURPOSE:  To print a representation of the sotinum object in a compact form.
     """
     #*************************************************************************************************
-    cdef uint64_t i, nsteps = 2
+    global h
+    global p_dH
 
-    head      = 'sotinum('
-    body      = ''
+    cdef ndir_t ndir_total = 1, i;
 
-    if self.num.size < 25:
-      
-      body += '['
-      
-      for i in range(self.num.size):
-      
-        body+= str(self.num.p_indx[i])+","
-      
-      # end for
-      if self.num.size >0:
-        i = len(body)-1
-      else:
-        i = len(body)
-      # end if 
-      body=body[:i]+'], ['      
+    for i in range(0, self.num.order):
 
-      for i in range(self.num.size):
-      
-        body+= str(self.num.p_coefs[i])+","
-      
-      # end for
-      
-      if self.num.size >0:
-        i = len(body)-1
-      else:
-        i = len(body)
-      # end if 
-      body=body[:i]+']'
+      ndir_total += self.num.p_nnz[i]
 
-    else:
+    # end for
 
-      body += '['
+    head = 'sotinum('
+    body = str(self.num.re) + ", nnz: " + str(ndir_total) + ', order: ' + str(self.num.order)
+    tail = ')'
 
-      for i in range(nsteps):
-
-        body+= str(self.num.p_indx[i])+","
-
-      # end for 
-
-      body+=" ..., "
-
-      for i in range(nsteps):
-        body+= str(self.num.p_indx[self.num.size-1-i])+","
-      # end for
-
-      i = len(body)
-      body=body[:i]+'], '
-
-
-      body += '['
-
-      for i in range(nsteps):
-
-        body+= str(self.num.p_coefs[i])+","
-
-      # end for 
-
-      body+=" ..., "
-
-      for i in range(nsteps):
-        body+= str(self.num.p_coefs[self.num.size-1-i])+","
-      # end for
-
-      i = len(body)
-      body=body[:i]+']'
-
-    # end if
-    tail = ', '+str(self.num.order)+')'
     return (head + body + tail)
 
   #---------------------------------------------------------------------------------------------------  
@@ -296,249 +209,117 @@ cdef class sotinum:
   #***************************************************************************************************
   def __str__(self):
     """
-    PURPOSE: To print a representation of the spr_otinum object that could 
+    PURPOSE: To print a representation of the sotinum object that could 
              be easy to read and understand.  
     
-    EXAMPLE:  
-              >>> spr_otinum([0,1,2,5],[1,2,3,4],2)
-              1.0 + 2.0 * e(1) + 3.0 * e([[1,2]]) + 4.0 * e([1,2])
-              
-              >>> spr_otinum([0,1,2,4],[1,2,3,4],1)
-              1.0 + 2.0 * e(1) + 3.0 * e(2) + 4.0 * e(3)
     """
     #*************************************************************************************************
     
-    cdef uint64_t i
+    global dhl
+    global h
+
+    
+    cdef ord_t ordi, j
+    cdef ndir_t i;
+    cdef bases_t* dirs;
 
     head      = ''
     body      = ''
     
-    if self.num.size == 0 :
-      body += '0.0'
-    # end if 
+    body += '%g'%self.num.re
 
-    for i in range(0,self.num.size):
-      
-      humDir = getDirArray(self.num.p_indx[i],self.num.order)
-      
-      coef = str('%+g' %self.num.p_coefs[i])
-      
-      e_dir = printOrderPos(humDir)
-      
-      if i == 0 :
-        
-        sign = ''
-       
-        if coef[0]=='-':
-          
-          sign = coef[0] + ' '
-          
-        # end if
+    for ordi in range(0,self.num.order):
 
-      else: 
+      for i in range(self.num.p_nnz[ordi]):
         
-        sign = coef[0] + ' '
+        num = '%+g'%self.num.p_im[ordi][i] 
+        body += ' '+num[0]+" "+num[1:]
+        body += ' * e(' 
         
-      # end if
+        body += str(h.get_compact_fulldir(self.num.p_idx[i],ordi+1)).replace(' ','')
+        body += ")"
       
-      body = body + sign + coef[1:] + e_dir + ' '
+      # end for
+
+    # end for 
       
-    # end for
-    
     tail = ''
     
     return (head + body + tail)
 
   #---------------------------------------------------------------------------------------------------  
 
-#   #***************************************************************************************************
-#   def __getitem__(self, uint64_t index):
-#     """
-#     PURPOSE:  To get the value of a spr_otinum coefficient.
+  #***************************************************************************************************
+  def __getitem__(self, list index):
+    """
+    PURPOSE:  To get the value of a spr_otinum coefficient.
 
-#     EXAMPLE:  >>> a = 1.0 + 2.0 * e(2) + 3.0 * e([1,3])
-#               >>> a
-#               spr_otinum([0,4,17], [1.,2.,3.], 2)
-#               >>> 
-#               >>> a[0]
-#               1.0
-#               >>> a[4]
-#               2.0
-#               >>> a[17]
-#               3.0
-#               >>> a[2]
-#               0.0
-#     """
-#     #*************************************************************************************************
-#     cdef float64_t num = 0.
-#     cdef uint64_t  i
+    EXAMPLE:  >>> a = 1.0 + 2.0 * e(2) + 3.0 * e([1,3])
+              >>> a
+              spr_otinum([0,4,17], [1.,2.,3.], 2)
+              >>> 
+              >>> a[0]
+              1.0
+              >>> a[4]
+              2.0
+              >>> a[17]
+              3.0
+              >>> a[2]
+              0.0
+    """
+    #*************************************************************************************************
+    global dhl
 
-#     # Check if there are elements in the system
-#     if self.indx.size == 0:
+    cdef imdir_t idx = item[ZERO]
+    cdef ord_t order = item[ONE]
+    return soti_get_item( idx, order, &self.num, dhl)
 
-#       return num
+  #---------------------------------------------------------------------------------------------------  
 
-#     # end 
-  
-#     if index == 0:
 
-#       if self.indx[ZERO] == 0:
-      
-#         return self.coefs[ZERO]
-      
-#       else:
-      
-#         return num
-      
-#       #end if
+  #***************************************************************************************************
+  def __setitem__(self, list index, coeff_t value):
+    """
+    PURPOSE:  To set the value of a spr_otinum coefficient.
+
+    EXAMPLE:  >>> a = 1.0 + 2.0 * e(2) + 3.0 * e([1,3])
+              >>> a
+              spr_otinum([0,4,17], [1.,2.,3.], 2)
+              >>> 
+              >>> a[0]+=10
+              >>> a
+              spr_otinum([0,4,17], [10.,2.,3.], 2)
+              >>> a[4] = 7
+              >>> a
+              spr_otinum([0,4,17], [10.,7.,3.], 2)
+              >>> a[2] = 5
+              >>> a
+              spr_otinum([0,2,4,17], [10.,5.,7.,3.], 2)
+    """
+    #*************************************************************************************************
     
-#     #end if
+    global dhl
 
-#     i=binarySearch(self.indx,index)
+    cdef int i = 0, j = 1
+    cdef imdir_t index = item[i]
+    cdef ord_t   order = item[j]
 
-#     if i!=self.indx.size:             
+    soti_set_item( value, index, order, &self.num, dhl)
 
-
-#       if self.indx[i] == index :
-
-#         num = self.coefs[i]    
-
-#       # end if
-
-#     # end if
-    
-#     return num
-
-#   #---------------------------------------------------------------------------------------------------  
-
-
-#   #***************************************************************************************************
-#   def __setitem__(self, uint64_t index, float64_t value):
-#     """
-#     PURPOSE:  To set the value of a spr_otinum coefficient.
-
-#     EXAMPLE:  >>> a = 1.0 + 2.0 * e(2) + 3.0 * e([1,3])
-#               >>> a
-#               spr_otinum([0,4,17], [1.,2.,3.], 2)
-#               >>> 
-#               >>> a[0]+=10
-#               >>> a
-#               spr_otinum([0,4,17], [10.,2.,3.], 2)
-#               >>> a[4] = 7
-#               >>> a
-#               spr_otinum([0,4,17], [10.,7.,3.], 2)
-#               >>> a[2] = 5
-#               >>> a
-#               spr_otinum([0,2,4,17], [10.,5.,7.,3.], 2)
-#     """
-#     #*************************************************************************************************
-    
-#     cdef np.ndarray[uint64_t,ndim = 1,mode='c']  tmp_indx  = np.array(self.indx)
-#     cdef np.ndarray[float64_t,ndim = 1,mode='c'] tmp_coefs = np.array(self.coefs)
-
-
-#     if index == 0:
-#       if self.indx.size > 0:
-        
-#         if self.indx[0] == 0:
-        
-#           self.coefs[0] = value
-        
-#         else:
-          
-#           # insert new item in indx vector.
-#           tmp_coefs = np.insert(tmp_coefs,0,value)
-#           tmp_indx = np.insert(tmp_indx,0,0)
-
-#           # redefine the arrays
-
-#           self.indx  = tmp_indx 
-#           self.coefs = tmp_coefs
-
-#         #end if
-
-#         # Check if there were zeros added.
-#         self.checkZeros()
-
-#         return
-
-#       else:
-
-#         # insert new item in indx vector.
-#         tmp_coefs = np.insert(tmp_coefs,0,value)
-#         tmp_indx = np.insert(tmp_indx,0,0)
-
-#         # redefine the arrays
-
-#         self.indx  = tmp_indx 
-#         self.coefs = tmp_coefs
-
-
-#       # end if 
-    
-#     #end if
-
-#     i=binarySearch(self.indx,index)
-    
-#     if i!=self.indx.size:
-      
-#       if self.indx[i] == index:
-
-#         self.coefs[i] = value
-
-#       elif i == 0:
-
-#         tmp_coefs = np.insert(tmp_coefs,0,value)
-#         tmp_indx = np.insert(tmp_indx,0,index)
-
-#         # redefine the arrays
-#         self.indx  = tmp_indx 
-#         self.coefs = tmp_coefs
-
-#       else:
-
-#         tmp_coefs = np.insert(tmp_coefs,i,value)
-#         tmp_indx = np.insert(tmp_indx,i,index)
-
-#         # redefine the arrays
-#         self.indx  = tmp_indx 
-#         self.coefs = tmp_coefs
-
-#       # end if
-
-#     else:
-      
-#       tmp_coefs = np.insert(tmp_coefs,i,value)
-#       tmp_indx = np.insert(tmp_indx,i,index)
-
-#       # redefine the arrays
-#       self.indx  = tmp_indx 
-#       self.coefs = tmp_coefs
-
-#     # end if
-    
-#     # Check if there were zeros added.
-#     self.checkZeros()
-
-#   #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
   #***************************************************************************************************
   def __neg__(self):
     """
-    PURPOSE:      To define how to turn a spr_otinum into its opposite
-                  (negative)
+    PURPOSE:      Negate a sotinum
 
-    DESCRIPTION:  It overloads the operator "-".
-    
-    EXAMPLE:      >>> a = spr_otinum([0,4,17], [10.,7.,3.], 2)
-                  >>> -a
-                  spr_otinum([0,4,17], [-10.,-7.,-3.], 2)
     """
     #*************************************************************************************************
-    cdef sotinum_t res
+    
+    global dhl
 
-    c_soti_neg(&self.num,&res)
+    cdef sotinum_t res = soti_neg(&self.num, dhl)
 
     return sotinum.create(&res)
 
@@ -548,117 +329,42 @@ cdef class sotinum:
   #***************************************************************************************************
   def __add__(self, other_in):
     """
-    PURPOSE:      To define how to sum two otinum numbers.
+    PURPOSE:      Add sotinum with other things.
 
-    DESCRIPTION:  It overloads the sum operator "+". It allows the addition
-                  of oti numbers of different orders, or even the 
-                  addition of a oti number and a scalar. 
-    
-    EXAMPLE:      >>> a = otinum( [1.,3.,5.], 2)
-                  >>> b = otinum( [7.,9.,11.], 2)
-                  >>> a + b
-                  otinum( [8.,12.,16.], 2)
-                  
-                  >>> a = otinum([1.,3.,5.], 2)
-                  >>> a + 15
-                  otinum([16.,3.,5.], 2)
-
-    PERFORMANCE OPTION:
-
-                  Be careful that this is very slow because to make it more robust, it checks all 
-                  input types. For better performance use method add <not __add__>.
-
-
-    EXAMPLE:
-                  >>> a = otinum( [1.,3.,5.], 2)
-                  >>> b = otinum( [7.,9.,11.], 2)
-                  >>> a.sum(b)
-                  otinum( [8.,12.,16.], 2)
-
-                  >>> a = otinum([1.,3.,5.], 2)
-                  >>> a.sumr(15)   # Accepts everything
-                  otinum([16.,3.,5.], 2)
     """
     #*************************************************************************************************
-    global h
-    global p_dH
+    
+    global dhl
     cdef: 
-      uint64_t i = 0, minNdir, maxNdir
-      sotinum_t res
-      sotinum_t p_S
-      # uint8_t flag_p_S=0
-      sotinum_t p_O
-      # uint8_t flag_p_O=0
-      sotinum_t p_res
-      sotinum S
-      sotinum O
-
+      otinum_t res
+      otinum tmp1, tmp2
+      
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
 
     # type1 = self.__class__     # takes ~50 ns ... 
     # type2 = other_in.__class__ # takes ~50 ns ...
-
-
+    
     if ( type1 is type2) : # Case Sum between OTIs.
-
-      S = self
-      O = other_in
-      p_S = S.num   # create views of the otinum_t
-      p_O = O.num   #
-
-      if p_S.order != p_O.order:
-        
-        raise ValueError("Order must be the same.")
-
-      #   # Preserve the maximum order.
-      #   if p_S.order > p_O.order:
-
-      #     c_oti_changeOrderToNew(&O.num, p_S.order, p_dH, &p_O) 
-      #     flag_p_O = 1
-
-      #   else:
-
-      #     c_oti_changeOrderToNew(&S.num, p_O.order, p_dH, &p_S)
-      #     flag_p_S = 1
-
-      #   # end if
-
-      # end if
-
-      # c_minUI64(p_O.Ndir,p_S.Ndir,&minNdir, &maxNdir)
-      # c_soti_createEmpty(&p_res, maxNdir,  p_S.order)
-      c_soti_sum(&p_S, &p_O, &p_res,p_dH)
-
-      # if flag_p_S == 1:
-      #   # print("Address of self",hex(<uint64_t> &S.num))
-      #   # print("Address of p_S",hex(<uint64_t> p_S))
-      #   c_soti_free(&p_S)
-
-      # if flag_p_O == 1:
-      #   # print("Address of self",<uint64_t> &O.num)
-      #   # print("Address of p_O",<uint64_t> p_O)
-      #   c_soti_free(&p_O)
-
-        
-
-    # TODO: Add support for interfacing with otinum
+      tmp1 = self
+      tmp2 = other_in
+      res =  soti_sum(&tmp1.num, &tmp2.num, dhl);
     
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
-      S = self
-      c_soti_sumf(&S.num, np.float64(other_in), &p_res)
+      tmp1 = self
+      res = soti_sum_real( other_in, &tmp1.num, dhl);
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
-      O = other_in
-      c_soti_sumf(&O.num, np.float64(self), &p_res)
+      tmp1 = other_in
+      res = soti_sum_real( self, &tmp1.num, dhl);      
 
-    # end if  
+    # end if 
+      
+      
+    return otinum.create(&res)
 
-    # end if. Type cases.
-    
-    return sotinum.create(&p_res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -674,19 +380,11 @@ cdef class sotinum:
                   addition of spr_otinum numbers of different orders, and 
                   the addition of a spr_otinum number and a scalar. 
     
-    EXAMPLE:      >>> a = spr_otinum([0,4,17], [1.,3.,5.], 2)
-                  >>> b = spr_otinum([0,2,4], [7.,9.,11.], 2)
-                  >>> a += b
-                  >>> a 
-                  spr_otinum([0,2,4,17], [8.,9.,14.,5.], 2)
-                  >>> b
-                  spr_otinum([0,2,4], [7.,9.,11.], 2)
     """
     #*************************************************************************************************
     
-    self =  self + other_in
 
-    return self
+    return self + other_in
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -710,85 +408,36 @@ cdef class sotinum:
                   spr_otinum([0,4,17], [-14.,3.,5.], 2)
     """
   #************************************************************************
-    global h
-    global p_dH
+    global dhl
     cdef: 
-      uint64_t i = 0, minNdir, maxNdir
-      sotinum_t res
-      sotinum_t p_S
-      # uint8_t flag_p_S=0
-      sotinum_t p_O
-      # uint8_t flag_p_O=0
-      sotinum_t p_res, p_rest
-      sotinum S
-      sotinum O
-
+      otinum_t res
+      otinum tmp1, tmp2
+      
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
 
     # type1 = self.__class__     # takes ~50 ns ... 
     # type2 = other_in.__class__ # takes ~50 ns ...
-
-
+    
     if ( type1 is type2) : # Case Sum between OTIs.
-
-      S = self
-      O = other_in
-      p_S = S.num   # create views of the otinum_t
-      p_O = O.num   #
-
-      if p_S.order != p_O.order:
-        
-        raise ValueError("Order must be the same.")
-        
-      #   # Preserve the maximum order.
-      #   if p_S.order > p_O.order:
-
-      #     c_oti_changeOrderToNew(&O.num, p_S.order, p_dH, &p_O) 
-      #     flag_p_O = 1
-
-      #   else:
-
-      #     c_oti_changeOrderToNew(&S.num, p_O.order, p_dH, &p_S)
-      #     flag_p_S = 1
-
-      #   # end if
-
-      # end if
-
-      # c_minUI64(p_O.Ndir,p_S.Ndir,&minNdir, &maxNdir)
-      # c_soti_createEmpty(&p_res, maxNdir,  p_S.order)
-      c_soti_sub(&p_S, &p_O, &p_res,p_dH)
-
-      # if flag_p_S == 1:
-      #   # print("Address of self",hex(<uint64_t> &S.num))
-      #   # print("Address of p_S",hex(<uint64_t> p_S))
-      #   c_soti_free(&p_S)
-
-      # if flag_p_O == 1:
-      #   # print("Address of self",<uint64_t> &O.num)
-      #   # print("Address of p_O",<uint64_t> p_O)
-      #   c_soti_free(&p_O)
-
-        
-
-    # TODO: Add support for interfacing with otinum
+      tmp1 = self
+      tmp2 = other_in
+      res =  soti_sub(&tmp1.num, &tmp2.num, dhl);
     
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
-      S = self
-      c_soti_subf(&S.num, np.float64(other_in), &p_res)
+      tmp1 = self
+      res = soti_sub_realoti( other_in, &tmp1.num, dhl);
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
-      O = other_in
-      c_soti_fsub(&O.num, np.float64(self), &p_res)
+      tmp1 = other_in
+      res = soti_sub_otireal( self, &tmp1.num, dhl);      
 
-    # end if  
-
-    # end if. Type cases.
-    
-    return sotinum.create(&p_res)
+    # end if 
+      
+      
+    return otinum.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
  

@@ -52,6 +52,16 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 @param[in] num2 OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
+sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Add two sparse oti numbers.
+
+@param[in] num1 OTI number.
+@param[in] num2 OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
 sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 

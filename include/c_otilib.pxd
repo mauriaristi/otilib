@@ -17,6 +17,7 @@ ctypedef uint8_t    flag_t
 #-----------------------------------   IMPORT EXTERNAL C FUNCTIONS   ---------------------------------
 #-----------------------------------------------------------------------------------------------------
 cdef extern from "oti/oti.h" nogil:
+  
   # Defs from "core.h"
   ctypedef struct imdir2d_t:
     imdir_t* p_arr     
@@ -63,6 +64,16 @@ cdef extern from "oti/oti.h" nogil:
     uint64_t       sizex 
     uint64_t       sizey 
     uint64_t     nonzero 
+
+  # Defs from "otinum_spr.h"
+  ctypedef struct sotinum_t:
+    coeff_t          re
+    coeff_t**      p_im
+    imdir_t**     p_idx
+    ndir_t*       p_nnz
+    ndir_t*      p_size
+    ord_t         order
+
   
 
   #---------------------------------------------------------------------------------------------------
@@ -228,6 +239,8 @@ cdef extern from "oti/oti.h" nogil:
   # Include functions from "otinum_spr.h"
   #---------------------------------------------------------------------------------------------------
 
+  sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  
   sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 
   sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);

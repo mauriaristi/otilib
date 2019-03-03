@@ -283,15 +283,9 @@ cdef class otinum:
   #*************************************************************************************************** 
   def __repr__(self):
     """
-    PURPOSE:  To print a representation of the dualnum object that could be
+    PURPOSE:  To print a representation of the otinum object that could be
               used to create new dualnum objects, in a compact form.
   
-    EXAMPLE:  
-              >>> spr_otinum([0,1,2,5],[1,2,3,4],2)
-              spr_otinum([0,1,2,5],[1.,2.,3.,4.],2)
-              
-              >>> spr_otinum([0,1,2,4],[1,2,3,4],1)
-              spr_otinum([0,1,2,4],[1.,2.,3.,4.],1)
     """
     #*************************************************************************************************
     global h
@@ -309,15 +303,9 @@ cdef class otinum:
   #***************************************************************************************************
   def __str__(self):
     """
-    PURPOSE: To print a representation of the spr_otinum object that could 
+    PURPOSE: To print a representation of the otinum object that could 
              be easy to read and understand.  
     
-    EXAMPLE:  
-              >>> spr_otinum([0,1,2,5],[1,2,3,4],2)
-              1.0 + 2.0 * e(1) + 3.0 * e([[1,2]]) + 4.0 * e([1,2])
-              
-              >>> spr_otinum([0,1,2,4],[1,2,3,4],1)
-              1.0 + 2.0 * e(1) + 3.0 * e(2) + 4.0 * e(3)
     """
     #*************************************************************************************************
     global dhl
@@ -456,46 +444,6 @@ cdef class otinum:
   #---------------------------------------------------------------------------------------------------  
 
 
-
-#   #***************************************************************************************************
-#   cdef otinum neg(self):
-#     """
-#     PURPOSE:      Fast c-version of operator -
-#                   (negative)
-    
-#     EXAMPLE:      >>> a = otinum([10.,7.,3.], 2)
-#                   >>> a.neg()
-#                   otinum([-10.,-7.,-3.], 2)
-#     """
-#     #*************************************************************************************************
-#     global h
-#     global p_dH
-
-#     cdef uint64_t i
-#     cdef otinum_t newnum
-
-#     # Allocate memory for new pointer
-#     newnum.p_coefs = <double*> malloc(self.num.Ndir*sizeof(double))
-#     if not newnum.p_coefs:
-#       raise MemoryError()
-#     # end if 
-    
-#     # Copy data
-#     newnum.Ndir = self.num.Ndir
-#     newnum.order= self.num.order
-#     memcpy(newnum.p_coefs,self.num.p_coefs,self.num.Ndir*sizeof(double))
-
-#     for i in range(self.num.Ndir):
-    
-#       newnum.p_coefs[i] *= -1.0
-
-#     # end for
-
-#     return otinum.create(&newnum)
-
-#   #--------------------------------------------------------------------------------------------------- 
-
-
 #   #***************************************************************************************************
 #   cpdef otinum selfNeg(self):
 #     """
@@ -539,7 +487,6 @@ cdef class otinum:
     #*************************************************************************************************
     global dhl
 
-    cdef uint64_t i
     cdef otinum_t newnum = oti_neg(&self.num, dhl)
 
     return otinum.create(&newnum)

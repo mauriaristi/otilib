@@ -44,7 +44,10 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
     
     sotinum_t res;
     ord_t i=0;
-
+    if (order == 0){
+        res = soti_createEmpty(0,dhl);
+        return res;
+    }
     if (order > dhl.ndh){
         printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
         exit(OTI_undetErr);

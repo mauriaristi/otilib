@@ -289,6 +289,24 @@ void loadnpy_fulldir( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p
 // ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+
+
+/**************************************************************************************************//**
+@brief Copies coefficients and directions. Must be already allocated.
+
+@param[in] p_im1    Coefficients to be multiplied.
+@param[in] p_idx1   Imaginary directions to be multiplied.
+@param[in] ndir1    Number of directions in p_im1.
+@param[in] p_imres  Resulting coefficients.
+@param[in] p_idxres Resulting imaginary directions.
+@param[in] ndirres  Number of directions in result.
+@param[in] dhl      Direction helper list
+******************************************************************************************************/ 
+void dhelp_sparse_copy(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                       coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+                       dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 /**************************************************************************************************//**
 @brief Adds two sets of coefficients. Must be of same order.
 
@@ -339,6 +357,48 @@ void dhelp_search_prev_dir( coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, 
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
+@brief Subtract two sets of coefficients.
+
+@param[in] p_im1    Coefficients.
+@param[in] p_idx1   Imaginary directions.
+@param[in] ndir1    Number of directions in p_im1.
+@param[in] p_im2    Coefficients.
+@param[in] p_idx2   Imaginary directions.
+@param[in] ndir2    Number of directions in p_im2.
+@param[in] p_imres  Resulting coefficients.
+@param[in] p_idxres Resulting imaginary directions.
+@param[in] ndirres  Number of directions in result.
+@param[in] dhl      Direction helper list
+******************************************************************************************************/ 
+void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
+                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
+                           dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Adds two sets of coefficients.
+
+@param[in] p_im1    Coefficients.
+@param[in] p_idx1   Imaginary directions.
+@param[in] ndir1    Number of directions in p_im1.
+@param[in] p_im2    Coefficients.
+@param[in] p_idx2   Imaginary directions.
+@param[in] ndir2    Number of directions in p_im2.
+@param[in] p_imres  Resulting coefficients.
+@param[in] p_idxres Resulting imaginary directions.
+@param[in] ndirres  Number of directions in result.
+@param[in] dhl      Direction helper list
+******************************************************************************************************/ 
+void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
+                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
+                           dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+/**************************************************************************************************//**
 @brief Multiplies A set of oti coefficients for a given pair of orders.
 
 @param[in] p_im1    Coefficients to be multiplied.
@@ -358,6 +418,28 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
                        coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2,
                        coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,          
                        dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Multiplies A set of oti coefficients for a given pair of orders.
+
+@param[in] p_im1    Coefficients to be multiplied.
+@param[in] p_idx1   Imaginary directions to be multiplied.
+@param[in] ndir1    Number of directions in p_im1.
+@param[in] ord1     Order of directions in p_im1.
+@param[in] p_im2    Coefficients to be multiplied.
+@param[in] p_idx2   Imaginary directions to be multiplied.
+@param[in] ndir2    Number of directions in p_im2.
+@param[in] ord2     Order of directions in p_im2.
+@param[in] p_imres  Resulting coefficients.
+@param[in] p_idxres Resulting imaginary directions.
+@param[in] ndirres  Number of directions in result.
+@param[in] dhl      Direction helper list
+******************************************************************************************************/ 
+void dhelp_sparse_mult_real(coeff_t val,
+                            coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,          
+                            dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

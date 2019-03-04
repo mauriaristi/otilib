@@ -1381,7 +1381,7 @@ void dhelp_search_prev_dir(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
      
     ndir_t  next_i1;
     ndir_t  next_i2;
-    ord_t   ord_res;
+    // ord_t   ord_res;
     imdir_t idx_res;
 
     if (curr_i1 == ndir1-1){
@@ -1446,6 +1446,162 @@ void dhelp_search_prev_dir(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
+                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
+                           dhelpl_t dhl){
+
+    ndir_t j1, j2, jres;
+    imdir_t dir1, dir2;
+
+    j1   = 0; 
+    j2   = 0;
+    jres = 0;
+    
+    while( 1 ){
+    
+        if ( j1 < ndir1 && j2 < ndir2 ){
+            
+            dir1 = p_idx1[j1];
+            dir2 = p_idx2[j2];
+            
+            if (dir1 == dir2){
+                
+                p_imres[jres] = p_im1[j1] - p_im2[j2];
+                p_idxres[jres] = dir1;
+                j1++; j2++; jres++;
+
+            } else if ( dir1 < dir2 ){
+
+                p_imres[jres] = p_im1[j1];
+                p_idxres[jres] = dir1;
+                jres++; j1++;
+
+            } else {
+
+                p_imres[jres]  = -p_im2[j2];
+                p_idxres[jres] = dir2;
+                jres++; j2++;
+
+            }
+
+        } else if ( j1 < ndir1 ){
+
+            while( j1 < ndir1 ){
+
+                p_imres[jres]  = p_im1[j1];
+                p_idxres[jres] = p_idx1[j1];
+                jres++; j1++;    
+
+            }
+
+            break;
+
+        } else if ( j2 < ndir2 ){   
+
+            while ( j2 < ndir2 ){
+
+                p_imres[jres]  = -p_im2[j2];
+                p_idxres[jres] = p_idx2[j2];
+                jres++; j2++;    
+
+            }
+
+            break;            
+
+        } else {
+
+            break;
+
+        }
+    
+    }
+
+    (*ndirres) = jres;
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
+                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
+                           dhelpl_t dhl){
+
+    ndir_t j1, j2, jres;
+    imdir_t dir1, dir2;
+
+    j1   = 0; 
+    j2   = 0;
+    jres = 0;
+    
+    while( 1 ){
+    
+        if ( j1 < ndir1 && j2 < ndir2 ){
+            
+            dir1 = p_idx1[j1];
+            dir2 = p_idx2[j2];
+            
+            if (dir1 == dir2){
+                
+                p_imres[jres] = p_im1[j1] + p_im2[j2];
+                p_idxres[jres] = dir1;
+                j1++; j2++; jres++;
+
+            } else if ( dir1 < dir2 ){
+
+                p_imres[jres] = p_im1[j1];
+                p_idxres[jres] = dir1;
+                jres++; j1++;
+
+            } else {
+
+                p_imres[jres]  = p_im2[j2];
+                p_idxres[jres] = dir2;
+                jres++; j2++;
+
+            }
+
+        } else if ( j1 < ndir1 ){
+
+            while( j1 < ndir1 ){
+
+                p_imres[jres]  = p_im1[j1];
+                p_idxres[jres] = p_idx1[j1];
+                jres++; j1++;    
+
+            }
+
+            break;
+
+        } else if ( j2 < ndir2 ){   
+
+            while ( j2 < ndir2 ){
+
+                p_imres[jres]  = p_im2[j2];
+                p_idxres[jres] = p_idx2[j2];
+                jres++; j2++;    
+
+            }
+
+            break;            
+
+        } else {
+
+            break;
+
+        }
+    
+    }
+
+    (*ndirres) = jres;
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 // ****************************************************************************************************
 void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t ord1, // Input 1
@@ -1545,7 +1701,36 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void dhelp_sparse_mult_real( coeff_t val,
+                       coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                       coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,         
+                       dhelpl_t dhl){                            // Helper
 
+    (*ndirres) = ndir1;
+
+    for (ndir_t i = 0; i<ndir1; i++){
+
+        p_imres[i]  = val*p_im1[i];
+        p_idxres[i] = p_idx1[i];
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void dhelp_sparse_copy(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                       coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           // Result
+                       dhelpl_t dhl){                            // Helper
+
+    memcpy(p_imres,  p_im1,  ndir1*sizeof(coeff_t) );
+    memcpy(p_idxres, p_idx1, ndir1*sizeof(imdir_t) );
+
+    (*ndirres) = ndir1;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------     END DHELP FUNCTIONS   -----------------------------------------

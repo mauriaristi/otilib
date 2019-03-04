@@ -368,7 +368,7 @@ otinum_t oti_sum(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Addition of two oti numbers.
+@brief Copy an OTI number.
 
 @param[in] num1 Oti number to be copied.
 @param[in] dhl Direction helper list object.

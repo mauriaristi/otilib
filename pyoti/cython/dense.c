@@ -7972,7 +7972,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_36e(CYTHON_UNUSED PyObject *__pyx_self, 
  * 
  *     res = oti_createZero(max(bases_hd,nbases), max(order_hd,order), dhl)             # <<<<<<<<<<<<<<
  * 
- *   return otinum.create(&res)
+ * 
  */
   __Pyx_TraceLine(1484,0,__PYX_ERR(0, 1484, __pyx_L1_error))
   /*else*/ {
@@ -7994,16 +7994,16 @@ static PyObject *__pyx_pf_5pyoti_5dense_36e(CYTHON_UNUSED PyObject *__pyx_self, 
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense.pyx":1486
- *     res = oti_createZero(max(bases_hd,nbases), max(order_hd,order), dhl)
+  /* "../../pyoti/cython/dense.pyx":1487
+ * 
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
  * 
  * # #-----------------------------------------------------------------------------------------------------
  */
-  __Pyx_TraceLine(1486,0,__PYX_ERR(0, 1486, __pyx_L1_error))
+  __Pyx_TraceLine(1487,0,__PYX_ERR(0, 1487, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_otinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1486, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_otinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1487, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;

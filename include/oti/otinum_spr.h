@@ -46,7 +46,7 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Add two sparse oti numbers.
+@brief Subtract two sparse oti numbers.
 
 @param[in] num1 OTI number.
 @param[in] num2 OTI number.
@@ -171,13 +171,23 @@ coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Copy to another sparse oti elements.
+@brief Copy to another (new) sparse oti elements.
 
 @param[in] num OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Copy to another sparse oti elements (already created).
+
+@param[in] num OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 
 /**************************************************************************************************//**
 @brief Print function for oti numbers

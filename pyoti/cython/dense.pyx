@@ -1482,6 +1482,7 @@ def e( hum_dir ,ord_t order = 0,bases_t nbases = 0):
   else:
 
     res = oti_createZero(max(bases_hd,nbases), max(order_hd,order), dhl)    
+    
 
   return otinum.create(&res)
 

@@ -17,7 +17,7 @@ cimport numpy as np                 # C-level functions of numpy
 from c_otilib cimport *             # OTI lib in C.
 cimport cython                      #
 
-from pyoti.core import   number_types, dHelp
+from pyoti.core import   number_types, dHelp, imdir
 from pyoti.core cimport  ZERO, ONE, get_cython_dHelp, dHelp, imdir
 from pyoti.core cimport  c_ptr_to_np_1darray_double
 
@@ -40,7 +40,7 @@ cdef class sotinum:
 
 
   #***************************************************************************************************
-  def __init__(self, coeff_t re_coef, ord_t order, uint8_t FLAGS = 1):
+  def __init__(self, coeff_t re_coeff, ord_t order, uint8_t FLAGS = 1):
     """
     DESCRIPTION: Constructor of a sparse OTI number.
     """
@@ -68,17 +68,6 @@ cdef class sotinum:
     if self.FLAGS & 1: # If memory is owned by this otinum.
 
       soti_free(&self.num)
-      self.num.p_coefs = NULL
-      self.num.p_indx  = NULL
-      self.num.size = 0
-      self.num.order = 0
-
-    else:
-
-      self.num.p_coefs = NULL
-      self.num.p_indx  = NULL
-      self.num.size = 0
-      self.num.order = 0
 
     #end if 
     # print("Finished deallocating sotinum")
@@ -236,7 +225,7 @@ cdef class sotinum:
         body += ' '+num[0]+" "+num[1:]
         body += ' * e(' 
         
-        body += str(h.get_compact_fulldir(self.num.p_idx[i],ordi+1)).replace(' ','')
+        body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
         body += ")"
       
       # end for
@@ -252,49 +241,24 @@ cdef class sotinum:
   #***************************************************************************************************
   def __getitem__(self, list index):
     """
-    PURPOSE:  To get the value of a spr_otinum coefficient.
+    PURPOSE:  To get the value of a sotinum coefficient.
 
-    EXAMPLE:  >>> a = 1.0 + 2.0 * e(2) + 3.0 * e([1,3])
-              >>> a
-              spr_otinum([0,4,17], [1.,2.,3.], 2)
-              >>> 
-              >>> a[0]
-              1.0
-              >>> a[4]
-              2.0
-              >>> a[17]
-              3.0
-              >>> a[2]
-              0.0
     """
     #*************************************************************************************************
     global dhl
 
-    cdef imdir_t idx = item[ZERO]
-    cdef ord_t order = item[ONE]
+    cdef imdir_t idx = index[ZERO]
+    cdef ord_t order = index[ONE]
     return soti_get_item( idx, order, &self.num, dhl)
 
   #---------------------------------------------------------------------------------------------------  
 
 
   #***************************************************************************************************
-  def __setitem__(self, list index, coeff_t value):
+  def __setitem__(self, list item, coeff_t value):
     """
-    PURPOSE:  To set the value of a spr_otinum coefficient.
+    PURPOSE:  To set the value of a sotinum coefficient.
 
-    EXAMPLE:  >>> a = 1.0 + 2.0 * e(2) + 3.0 * e([1,3])
-              >>> a
-              spr_otinum([0,4,17], [1.,2.,3.], 2)
-              >>> 
-              >>> a[0]+=10
-              >>> a
-              spr_otinum([0,4,17], [10.,2.,3.], 2)
-              >>> a[4] = 7
-              >>> a
-              spr_otinum([0,4,17], [10.,7.,3.], 2)
-              >>> a[2] = 5
-              >>> a
-              spr_otinum([0,2,4,17], [10.,5.,7.,3.], 2)
     """
     #*************************************************************************************************
     
@@ -336,8 +300,8 @@ cdef class sotinum:
     
     global dhl
     cdef: 
-      otinum_t res
-      otinum tmp1, tmp2
+      sotinum_t res
+      sotinum tmp1, tmp2
       
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
@@ -363,7 +327,7 @@ cdef class sotinum:
     # end if 
       
       
-    return otinum.create(&res)
+    return sotinum.create(&res)
 
 
   #---------------------------------------------------------------------------------------------------  
@@ -410,8 +374,8 @@ cdef class sotinum:
   #************************************************************************
     global dhl
     cdef: 
-      otinum_t res
-      otinum tmp1, tmp2
+      sotinum_t res
+      sotinum tmp1, tmp2
       
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
@@ -427,17 +391,24 @@ cdef class sotinum:
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
       tmp1 = self
-      res = soti_sub_realoti( other_in, &tmp1.num, dhl);
+      res = soti_sub_otireal(&tmp1.num, other_in, dhl);
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = soti_sub_otireal( self, &tmp1.num, dhl);      
+      res = soti_sub_realoti(self, &tmp1.num, dhl);   
+
+    # else:
+
+    #   ?return other_in - self
+
+    #   default:
+
 
     # end if 
       
       
-    return otinum.create(&res)
+    return sotinum.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
  
@@ -486,86 +457,36 @@ cdef class sotinum:
     """
     #*************************************************************************************************
     
-    global h
-    global p_dH
-
-    cdef sotinum S
-    # cdef fefunction S2
-    cdef sotinum O
-    cdef sotinum_t res
-    # cdef fefunction res2
-
+    global dhl
+    cdef: 
+      sotinum_t res
+      sotinum tmp1, tmp2
+      
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
 
-    if type1 is type2:   # Case 2. Mult to spr_otinum.
-      
-      S = self
-      O = other_in
+    # type1 = self.__class__     # takes ~50 ns ... 
+    # type2 = other_in.__class__ # takes ~50 ns ...
 
-      c_soti_mul(&S.num, &O.num, &res, p_dH) 
 
-      
-    elif type2 in number_types:   # Case 1. Mult to real scalar. 
-      
-      S = self
-      
-      c_soti_mulf(&S.num, np.float64(other_in), &res) 
+    if ( type1 is type2) : # Case Sum between OTIs.
+
+      tmp1 = self
+      tmp2 = other_in
+      res = soti_mul( &tmp1.num, &tmp2.num, dhl)
     
-    elif type1 in number_types:   # Case 1.5. Reverse Mult to real scalar.
+    elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
-      S = other_in
+      tmp1 = self
+      res = soti_mul_real( other_in, &tmp1.num, dhl);
+
+    elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
-      c_soti_mulf(&S.num, np.float64(self), &res)
+      tmp1 = other_in
+      res = soti_mul_real( self, &tmp1.num, dhl);       
 
-    else: 
-      # Try to call other's __mul__ method
-      if (type1 is sotinum):
+    # end if 
 
-        try:
-
-          other_in.__mul__(self)
-
-        except:
-
-          raise ValueError("[sotinum]: Operator overload not defined for types"+str(type(self))+
-                            " and " + str(type(other_in))  )
-
-        # end try
-
-      else:
-
-        try:
-
-          self.__mul__(other_in)
-
-        except:
-
-          raise ValueError("[sotinum]: Operator overload not defined for types"+str(type(other_in))+
-                            " and " + str(type(self))  )
-
-        # end try
-
-      # end if 
-
-    #   type2 == sndarray:
-
-    #   return sndarray.__mul__(other_in, self)
-
-    # elif type2 == fefunction:
-      
-      
-    #   return fefunction.__mul__(other_in,self)
-      
-
-    # elif type1 == fevar:
-
-    #   return fevar.__mul__(self,other_in)
-      
-      
-    # End if. Type cases.
-    
-    
     return sotinum.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
@@ -591,10 +512,7 @@ cdef class sotinum:
     """
     #*************************************************************************************************
 
-    
-    self = self * other_in
-
-    return self
+    return self * other_in
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -617,7 +535,7 @@ cdef class sotinum:
     #*************************************************************************************************
     
     
-    global h
+    global dhl
     global p_dH
 
     cdef sotinum S
@@ -629,23 +547,18 @@ cdef class sotinum:
 
     if type1 == type2:   # Case 2. Mult to spr_otinum.
       
-      S = self
-      O = other_in
-
-      c_soti_div(&S.num, &O.num, &res, p_dH) 
+      raise NotImplementedError("Not yet implemented.")
 
       
     elif type2 in number_types:   # Case 1. Mult to real scalar. 
       
       S = self
       
-      c_soti_divf(&S.num, np.float64(other_in), &res) 
+      soti_div_otireal(&S.num,other_in,dhl)
     
     elif type1 in number_types:   # Case 1.5. Reverse Mult to real scalar.
       
-      S = other_in
-      
-      c_soti_fdiv(np.float64(self), &S.num, &res, p_dH)
+      raise NotImplementedError('Not yet implemented.')
       
     # End if. Type cases.
 
@@ -654,57 +567,57 @@ cdef class sotinum:
   #---------------------------------------------------------------------------------------------------  
 
 
-  #***************************************************************************************************
-  def __pow__(self, n,z):
-    """
-    PURPOSE:      To provide power function.
+  # #***************************************************************************************************
+  # def __pow__(self, n,z):
+  #   """
+  #   PURPOSE:      To provide power function.
   
-    DESCRIPTION:  It defines how to make a soti number to the power of n.
+  #   DESCRIPTION:  It defines how to make a soti number to the power of n.
   
-    EXAMPLE:      >>> a = spr_otinum([0,4,17], [1.,3.,5.], 2)
-                  >>> a**3
-                  spr_otinum([0,4,8,17], [1.,9.,27.,15.], 2)
-    """
-    #*************************************************************************************************
+  #   EXAMPLE:      >>> a = spr_otinum([0,4,17], [1.,3.,5.], 2)
+  #                 >>> a**3
+  #                 spr_otinum([0,4,8,17], [1.,9.,27.,15.], 2)
+  #   """
+  #   #*************************************************************************************************
     
-    global h
-    global p_dH
-    cdef sotinum_t res
-    cdef sotinum S = self
+  #   global h
+  #   global p_dH
+  #   cdef sotinum_t res
+  #   cdef sotinum S = self
 
-    # print(" Exponent:", n)
+  #   # print(" Exponent:", n)
 
-    # c_soti_ipowfast(&S.num, n, &res, p_dH)
-    c_soti_pow(&S.num, n, p_dH, &res)
+  #   # c_soti_ipowfast(&S.num, n, &res, p_dH)
+  #   c_soti_pow(&S.num, n, p_dH, &res)
     
-    return sotinum.create(&res)
+  #   return sotinum.create(&res)
 
-  #---------------------------------------------------------------------------------------------------  
+  # #---------------------------------------------------------------------------------------------------  
 
 
-  #***************************************************************************************************
-  def power(self, n):
-    """
-    PURPOSE:      To provide power function.
+  # #***************************************************************************************************
+  # def power(self, n):
+  #   """
+  #   PURPOSE:      To provide power function.
   
-    DESCRIPTION:  It defines how to make a soti number to the power of n.
+  #   DESCRIPTION:  It defines how to make a soti number to the power of n.
   
-    EXAMPLE:      >>> a = spr_otinum([0,4,17], [1.,3.,5.], 2)
-                  >>> a**3
-                  spr_otinum([0,4,8,17], [1.,9.,27.,15.], 2)
-    """
-    #*************************************************************************************************
+  #   EXAMPLE:      >>> a = spr_otinum([0,4,17], [1.,3.,5.], 2)
+  #                 >>> a**3
+  #                 spr_otinum([0,4,8,17], [1.,9.,27.,15.], 2)
+  #   """
+  #   #*************************************************************************************************
     
-    global h
-    global p_dH
-    cdef sotinum_t res
-    cdef sotinum S = self
+  #   global h
+  #   global p_dH
+  #   cdef sotinum_t res
+  #   cdef sotinum S = self
     
-    c_soti_ipow(&S.num, n, &res, p_dH)
+  #   c_soti_ipow(&S.num, n, &res, p_dH)
     
-    return sotinum.create(&res)
+  #   return sotinum.create(&res)
 
-  #--------------------------------------------------------------------------------------------------- 
+  # #--------------------------------------------------------------------------------------------------- 
 
 #   #***************************************************************************************************
 #   def copy(self):
@@ -1145,64 +1058,64 @@ cdef class sotinum:
 #   #---------------------------------------------------------------------------------------------------  
 
 
-  #***************************************************************************************************
-  def getDeriv(self, dirArray):
-    """
-    PURPOSE:      to retrieve the n'th derivative according to the taylor 
-                  series expansion with dual numbers.
+  # #***************************************************************************************************
+  # def getDeriv(self, dirArray):
+  #   """
+  #   PURPOSE:      to retrieve the n'th derivative according to the taylor 
+  #                 series expansion with dual numbers.
                 
-    DESCRIPTION:  Simply given the combinations of derivatives with the 
-                  dirArray, the function multiplys the terms that require
-                  extra factors to get the desired derivatives.
+  #   DESCRIPTION:  Simply given the combinations of derivatives with the 
+  #                 dirArray, the function multiplys the terms that require
+  #                 extra factors to get the desired derivatives.
     
-    EXAMPLE:      >>> a = spr_otinum([0,1,2,4,5,8],[1,2,3,4,5,6],2)
-                  >>>
-                  >>> getDerivative(a,[0])
-                  1.
-                  >>> getDerivative(a,[1])
-                  2.
-                  >>> getDerivative(a,[[1,2]])
-                  6.
-                  >>> getDerivative(a,[2])
-                  4.
-                  >>> getDerivative(a,[1,2])
-                  5.
-                  >>> getDerivative(a,[[2,2]])
-                  12.
+  #   EXAMPLE:      >>> a = spr_otinum([0,1,2,4,5,8],[1,2,3,4,5,6],2)
+  #                 >>>
+  #                 >>> getDerivative(a,[0])
+  #                 1.
+  #                 >>> getDerivative(a,[1])
+  #                 2.
+  #                 >>> getDerivative(a,[[1,2]])
+  #                 6.
+  #                 >>> getDerivative(a,[2])
+  #                 4.
+  #                 >>> getDerivative(a,[1,2])
+  #                 5.
+  #                 >>> getDerivative(a,[[2,2]])
+  #                 12.
 
-    """
-    #*************************************************************************************************
+  #   """
+  #   #*************************************************************************************************
 
-    if type(dirArray)==int:
+  #   if type(dirArray)==int:
       
-      indxArray = [dirArray]
+  #     indxArray = [dirArray]
       
-    else:
+  #   else:
       
-      indxArray = dirArray
+  #     indxArray = dirArray
       
-    # end if
+  #   # end if
 
     
-    tmp_dirA,tmp_expA = getDirExpA(dirArray)
-    cdef uint8_t maxorder = np.sum(tmp_expA)
-    cdef uint8_t i
-    cdef uint64_t indx
+  #   tmp_dirA,tmp_expA = getDirExpA(dirArray)
+  #   cdef uint8_t maxorder = np.sum(tmp_expA)
+  #   cdef uint8_t i
+  #   cdef uint64_t indx
 
-    # create the real direction arrays:
-    cdef np.ndarray[uint16_t,ndim=1] dirA = np.zeros(maxorder,dtype = np.uint16)
-    cdef np.ndarray[uint8_t ,ndim=1] expA = np.zeros(maxorder,dtype = np.uint8)
+  #   # create the real direction arrays:
+  #   cdef np.ndarray[uint16_t,ndim=1] dirA = np.zeros(maxorder,dtype = np.uint16)
+  #   cdef np.ndarray[uint8_t ,ndim=1] expA = np.zeros(maxorder,dtype = np.uint8)
     
-    for i in range(len(tmp_expA)):
+  #   for i in range(len(tmp_expA)):
       
-      dirA[i] = tmp_dirA[i]
-      expA[i] = tmp_expA[i]
+  #     dirA[i] = tmp_dirA[i]
+  #     expA[i] = tmp_expA[i]
 
-    # end for 
+  #   # end for 
 
-    return self.getDerivByDirExp(dirA,expA)
+  #   return self.getDerivByDirExp(dirA,expA)
 
-  #---------------------------------------------------------------------------------------------------  
+  # #---------------------------------------------------------------------------------------------------  
 
 
 #   #***************************************************************************************************
@@ -1343,516 +1256,460 @@ cdef class sotinum:
 
 
 #*****************************************************************************************************
-def se(dirArray,uint8_t order = 1):
+def e( hum_dir ,ord_t order = 0,bases_t nbases = 0):
   """
-  PURPOSE:  To create a dual number with value 1 at the specified
-            dual direction, in a human friendly manner.
+  PURPOSE:  To create a sotinum with value 1 at the specified imaginary direction
+            in a human friendly manner
 
-  EXAMPLE:  >>> e(2)
-            1.0 * e(2)
-            
-            >>> e([1,2])
-            1.0 * e([1,2])
-            
-            >>> e([1,[2,3]])
-            1.0 * e([1,[2,3]])
   """
   #***************************************************************************************************
   
 
-  global h
-  global p_dH
+  global dhl
 
-  cdef uint8_t orderi
-  cdef uint16_t* p_dirA
-  cdef uint8_t* p_expA
-  cdef uint8_t i
-  cdef uint64_t indx
-  cdef sotinum_t num
-
-  if type(dirArray)==int:
-    
-    
-    c_soti_createEmpty(&num,1,order)
-    
-
-    if order == 1:
-
-      indx = dirArray
-
-    else:
-
-      p_dirA = h.c_getUDirA(order,n=1)
-      p_expA = h.c_getUExpA(order,n=1)
-      
-      p_dirA[ZERO] = dirArray
-      p_expA[ZERO] = 1
-
-      for i in range(1,order):
-
-        p_dirA[i] = 0
-        p_expA[i] = 0
-
-      # end for 
-
-      indx = c_helper_findIndex(p_dirA,p_expA,order,p_dH)
-
-    # end if 
-    
-    num.p_coefs[0] = 1.0
-    num.p_indx[0]  = indx
-    
-    return sotinum.create(&num)
-    
-  # end if
-
-
-
-  # CASE dirArray is list:::
-    
-  c_getDirExpA(dirArray, &p_dirA, &p_expA, &orderi)
-
-
-  orderi = max(order,orderi)
-
+  cdef imdir_t indx_hd
+  cdef ord_t order_hd
+  cdef bases_t bases_hd
+  cdef sotinum_t res
   
-  c_soti_createEmpty(&num,1,orderi)
+  [indx_hd, order_hd] = imdir(hum_dir)
 
-  if orderi == 0:
-      
-    indx = 0
+  if order_hd <= order:
+
+    res = soti_createReal(0.0, order, dhl)
+
+    # Set the coefficient to 1.
+    soti_set_item(1.0, indx_hd, order_hd, &res, dhl)
 
   else:
 
-    indx = h.c_findIndx(p_dirA,p_expA,num.order)
+    res = soti_createReal(0.0, order_hd, dhl)
 
-  # end if
-
-  num.p_coefs[0] = 1.0
-  num.p_indx[0]  = indx
- 
-  return sotinum.create(&num)
-
-#-----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#*****************************************************************************************************
-cpdef  sotinum scos(sotinum val):
-  """
-  PURPOSE:  Mathematical function of cosine for OTI numbers
-   
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-
-  global p_dH
-  cdef sotinum_t res
-  
-  c_soti_cos(&val.num, p_dH, &res)
+    # Set the coefficient to 1.
+    soti_set_item(1.0, indx_hd, order_hd, &res, dhl) 
 
   return sotinum.create(&res)
+
 #-----------------------------------------------------------------------------------------------------
 
 
-#*****************************************************************************************************
-cpdef  sotinum ssin(sotinum val):
-  """
-  PURPOSE:  Mathematical function of sine for OTI numbers.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# #*****************************************************************************************************
+# cpdef  sotinum scos(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of cosine for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_sin(&val.num, p_dH, &res)
+#   c_soti_cos(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
 
-#*****************************************************************************************************
-cpdef  sotinum stan(sotinum val):
-  """
-  PURPOSE:  Mathematical function of tangent for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum ssin(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of sine for OTI numbers.
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_tan(&val.num, p_dH, &res)
+#   c_soti_sin(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum satan(sotinum val):
-  """
-  PURPOSE:  Mathematical function of arctangent for OTI numbers
+
+# #*****************************************************************************************************
+# cpdef  sotinum stan(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of tangent for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_atan(&val.num, p_dH, &res)
+#   c_soti_tan(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum satan2(sotinum valx, sotinum valy):
-  """
-  PURPOSE:  Mathematical function of arctangent for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum satan(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of arctangent for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_atan2(&valx.num, &valy.num, p_dH, &res)
+#   c_soti_atan(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum sacos(sotinum val):
-  """
-  PURPOSE:  Mathematical function of inverse cosine for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum satan2(sotinum valx, sotinum valy):
+#   """
+#   PURPOSE:  Mathematical function of arctangent for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_acos(&val.num, p_dH, &res)
+#   c_soti_atan2(&valx.num, &valy.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum sasin(sotinum val):
-  """
-  PURPOSE:  Mathematical function of inverse sine for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum sacos(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of inverse cosine for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_asin(&val.num, p_dH, &res)
+#   c_soti_acos(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum ssinh(sotinum val):
-  """
-  PURPOSE:  Mathematical function of hyperbolic sine for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum sasin(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of inverse sine for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_sinh(&val.num, p_dH, &res)
+#   c_soti_asin(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum sasinh(sotinum val):
-  """
-  PURPOSE:  Mathematical function of inverse hyperbolic sine for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum ssinh(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of hyperbolic sine for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_asinh(&val.num, p_dH, &res)
+#   c_soti_sinh(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum scosh(sotinum val):
-  """
-  PURPOSE:  Mathematical function of hyperbolic cosine for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum sasinh(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of inverse hyperbolic sine for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_cosh(&val.num, p_dH, &res)
+#   c_soti_asinh(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum sacosh(sotinum val):
-  """
-  PURPOSE:  Mathematical function of inverse hyperbolic cosine for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum scosh(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of hyperbolic cosine for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_acosh(&val.num, p_dH, &res)
+#   c_soti_cosh(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum stanh(sotinum val):
-  """
-  PURPOSE:  Mathematical function of hyperbolic tangent for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum sacosh(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of inverse hyperbolic cosine for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_tanh(&val.num, p_dH, &res)
+#   c_soti_acosh(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum satanh(sotinum val):
-  """
-  PURPOSE:  Mathematical function of Inverse hyperbolic tangent for OTI numbers
+# #*****************************************************************************************************
+# cpdef  sotinum stanh(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of hyperbolic tangent for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************
-  global p_dH
-  cdef sotinum_t res
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  c_soti_atanh(&val.num, p_dH, &res)
+#   c_soti_tanh(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-
-#*****************************************************************************************************
-cpdef  sotinum slogb(sotinum val, int base):
-  """
-  PURPOSE:  Natural logarithm base b for OTI numbers.
+# #*****************************************************************************************************
+# cpdef  sotinum satanh(sotinum val):
+#   """
+#   PURPOSE:  Mathematical function of Inverse hyperbolic tangent for OTI numbers
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************  
-
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************
+#   global p_dH
+#   cdef sotinum_t res
   
-  global p_dH
-  cdef sotinum_t res
-  
+#   c_soti_atanh(&val.num, p_dH, &res)
 
-  c_soti_logb(&val.num, base, p_dH, &res)
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
 
-#*****************************************************************************************************
-cpdef  sotinum slog10(sotinum val):
-  """
-  PURPOSE:  Natural logarithm base 10 for OTI numbers.
+# #*****************************************************************************************************
+# cpdef  sotinum slogb(sotinum val, int base):
+#   """
+#   PURPOSE:  Natural logarithm base b for OTI numbers.
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************  
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************  
 
   
-  global p_dH
-  cdef sotinum_t res
+#   global p_dH
+#   cdef sotinum_t res
   
 
-  c_soti_log10(&val.num, p_dH, &res)
+#   c_soti_logb(&val.num, base, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-
-#*****************************************************************************************************
-cpdef  sotinum slog(sotinum val):
-  """
-  PURPOSE:  Natural logarithm for OTI numbers.
+# #*****************************************************************************************************
+# cpdef  sotinum slog10(sotinum val):
+#   """
+#   PURPOSE:  Natural logarithm base 10 for OTI numbers.
    
-  EXAMPLE:   
-  """
-  #***************************************************************************************************  
-  #Natural Logarithm
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************  
+
   
-  global p_dH
-  cdef sotinum_t res
+#   global p_dH
+#   cdef sotinum_t res
   
 
-  c_soti_log(&val.num, p_dH, &res)
+#   c_soti_log10(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
 
-#*****************************************************************************************************
-cpdef  sotinum sexp(sotinum val):
-  """
-  PURPOSE:  Exponential function for OTI numbers.
+# #*****************************************************************************************************
+# cpdef  sotinum slog(sotinum val):
+#   """
+#   PURPOSE:  Natural logarithm for OTI numbers.
    
-  EXAMPLE:   
-  """
-  #*************************************************************************************************** 
+#   EXAMPLE:   
+#   """
+#   #***************************************************************************************************  
+#   #Natural Logarithm
   
-  # create an array that contains the 
-  # Compute all derivatives of the function 
-  # up to max order of the number.
-  global p_dH
-  cdef sotinum_t res
+#   global p_dH
+#   cdef sotinum_t res
   
 
-  c_soti_exp(&val.num, p_dH, &res)
+#   c_soti_log(&val.num, p_dH, &res)
 
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
 
-#*****************************************************************************************************
-cpdef  sotinum spower(sotinum val, double exponent):
-  """
-  PURPOSE:  Power function for OTI numbers, for non integer exponents.
+# #*****************************************************************************************************
+# cpdef  sotinum sexp(sotinum val):
+#   """
+#   PURPOSE:  Exponential function for OTI numbers.
    
-  EXAMPLE:   
-  """
-  #*************************************************************************************************** 
-  global p_dH
-  cdef sotinum_t res
-
-  c_soti_pow(&val.num, exponent, p_dH, &res)
-
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
-
-#*****************************************************************************************************
-cpdef  sotinum ssqrt(sotinum val):
-  """
-  PURPOSE:  Square root function for OTI numbers, for non integer exponents.
-   
-  EXAMPLE:   
-  """
-  #*************************************************************************************************** 
-  global p_dH
-  cdef sotinum_t res
-
-  c_soti_sqrt(&val.num, p_dH, &res)
-
-  return sotinum.create(&res)
-#-----------------------------------------------------------------------------------------------------
-
-#*****************************************************************************************************
-cdef object c_soti_print(sotinum_t* num):
-  """
-  PURPOSE:  get string of a sotinum_t
-   
-  EXAMPLE:   
-  """
-  #*************************************************************************************************** 
-  cdef uint64_t i
-
-  head      = ''
-  body      = ''
+#   EXAMPLE:   
+#   """
+#   #*************************************************************************************************** 
   
-  if num[0].size == 0 :
+#   # create an array that contains the 
+#   # Compute all derivatives of the function 
+#   # up to max order of the number.
+#   global p_dH
+#   cdef sotinum_t res
+  
 
-    body += '  %.4f' %0.0
+#   c_soti_exp(&val.num, p_dH, &res)
 
-  # end if 
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
 
-  for i in range(0,num[0].size):
+
+# #*****************************************************************************************************
+# cpdef  sotinum spower(sotinum val, double exponent):
+#   """
+#   PURPOSE:  Power function for OTI numbers, for non integer exponents.
+   
+#   EXAMPLE:   
+#   """
+#   #*************************************************************************************************** 
+#   global p_dH
+#   cdef sotinum_t res
+
+#   c_soti_pow(&val.num, exponent, p_dH, &res)
+
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
+
+# #*****************************************************************************************************
+# cpdef  sotinum ssqrt(sotinum val):
+#   """
+#   PURPOSE:  Square root function for OTI numbers, for non integer exponents.
+   
+#   EXAMPLE:   
+#   """
+#   #*************************************************************************************************** 
+#   global p_dH
+#   cdef sotinum_t res
+
+#   c_soti_sqrt(&val.num, p_dH, &res)
+
+#   return sotinum.create(&res)
+# #-----------------------------------------------------------------------------------------------------
+
+# #*****************************************************************************************************
+# cdef object c_soti_print(sotinum_t* num):
+#   """
+#   PURPOSE:  get string of a sotinum_t
+   
+#   EXAMPLE:   
+#   """
+#   #*************************************************************************************************** 
+#   cdef uint64_t i
+
+#   head      = ''
+#   body      = ''
+  
+#   if num[0].size == 0 :
+
+#     body += '  %.4f' %0.0
+
+#   # end if 
+
+#   for i in range(0,num[0].size):
     
-    humDir = getDirArray(num[0].p_indx[i],num[0].order)
+#     humDir = getDirArray(num[0].p_indx[i],num[0].order)
     
-    coef = str('%+.4f' %num[0].p_coefs[i])
+#     coef = str('%+.4f' %num[0].p_coefs[i])
     
-    e_dir = printOrderPos(humDir)
+#     e_dir = printOrderPos(humDir)
     
-    if i == 0 :
+#     if i == 0 :
       
-      sign = ''
+#       sign = ''
      
-      if coef[0]=='-':
+#       if coef[0]=='-':
         
-        sign = coef[0] + ' '
+#         sign = coef[0] + ' '
 
-      else:
+#       else:
         
-        sign = '  '        
+#         sign = '  '        
         
-      # end if
+#       # end if
 
-    else: 
+#     else: 
       
-      sign = coef[0] + ' '
+#       sign = coef[0] + ' '
        
-    # end if
+#     # end if
     
-    body = body + sign + coef[1:] + e_dir
+#     body = body + sign + coef[1:] + e_dir
     
-  # end for
-  body += '('+ str(num[0].order)+')'
-  tail = ''
+#   # end for
+#   body += '('+ str(num[0].order)+')'
+#   tail = ''
   
-  return (head + body + tail)
-#-----------------------------------------------------------------------------------------------------
+#   return (head + body + tail)
+# #-----------------------------------------------------------------------------------------------------
 
 
 

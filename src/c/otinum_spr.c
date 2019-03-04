@@ -10,6 +10,36 @@
 
 
 // ****************************************************************************************************
+void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
+    
+    ndir_t i;
+    ord_t ordi;
+    // TODO: Add case when the two elements have different orders.
+    // TODO: Add memory management when needed in this copy function.
+    if (src->order > dest->order){
+        printf("ERROR: Currently copy function of sotinum  is not implemented for order change.\n");
+    }
+
+    // Reset sizes for dest:
+    for (ordi=0; ordi<dest->order; ordi++){
+
+        dest->p_nnz[ordi] = 0;
+
+    }
+
+    for (ordi=0; ordi<src->order; ordi++){
+
+        memcpy(dest->p_im[ordi], src->p_im[ordi], src->p_nnz[ordi]*sizeof(coeff_t) );
+        memcpy(dest->p_idx[ordi],src->p_idx[ordi],src->p_nnz[ordi]*sizeof(imdir_t) );
+
+        dest->p_nnz[ordi] = src->p_nnz[ordi];
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
     
     sotinum_t res;
@@ -48,66 +78,114 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
 // ****************************************************************************************************
 sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
-    sotinum_t res, tmp, tmp1, tmp2, tmp3;
+    sotinum_t res, tmp, tmp2, tmp3;
     ord_t res_ord = MAX(num1->order,num2->order);
     ord_t ordi;
-    ndir_t j1,j2, jres;
-    imdir_t dir1, dir2;
 
     // Retreive sotinum temporals.
     // All tmps are created with no elements in imaginary directions (but allocated).
-    tmp = soti_get_tmp(0,res_ord,dhl); 
-    tmp1= soti_get_tmp(1,res_ord,dhl);
-    tmp2= soti_get_tmp(2,res_ord,dhl);
-    tmp3= soti_get_tmp(3,res_ord,dhl);
+    tmp = soti_get_tmp(0,res_ord,dhl); // will hold the final result.
+    tmp2= soti_get_tmp(2,res_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_tmp(3,res_ord,dhl); // Will hold the temporary result.
     
 
     // Multiply real coefficients.
     tmp.re = num1->re * num2->re;
 
-    // for(ordi=1; ordi<=res_ord; ordi++){
+    printf("Multiplying order %hhu x %hhu\n", num1->order, num2->order);
+
+    for(ord_t order=1; order<=res_ord; order++){
+
+        ordi = order-1;
+
+        // First multiply  re x ordi         
+        if ( order <= num2->order){
+            
+            // Perform multiplication
+            dhelp_sparse_mult_real(num1->re,
+                               num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+                               tmp2.p_im[ordi], tmp2.p_idx[ordi], &tmp2.p_nnz[ordi],       
+                               dhl);  
+            
+            // make safe copy of tmp
+            dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
+                              tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
+                              dhl);
+
+            // Add results to tmp.
+            dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
+                                  tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+
+        }
 
 
-    //     // First multiply  re x ordi        
-    //     dhelp_dense_mult_real(num2->p_im[ordi-1],num2->p_ndpo[ordi-1],
-    //         num1->re,
-    //         res.p_im[ordi-1],res.p_ndpo[ordi-1],
-    //         dhl);
+        // Then multiply   ordi x re
+        if ( order <= num1->order){
+            
+            // Perform multiplication
+            dhelp_sparse_mult_real(num2->re,
+                               num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+                               tmp2.p_im[ordi], tmp2.p_idx[ordi], &tmp2.p_nnz[ordi],       
+                               dhl);  
+            
+            // make safe copy of tmp
+            dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
+                              tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
+                              dhl);
 
-    //     // Then multiply   ordi x re
-    //     dhelp_dense_mult_real(num1->p_im[ordi-1],num1->p_ndpo[ordi-1],
-    //         num2->re,
-    //         res.p_im[ordi-1],res.p_ndpo[ordi-1],
-    //         dhl);
+            // Add results to tmp.
+            dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
+                                  tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-    //     for (ord_t ord_mul1 = 1; ord_mul1 <= ordi/2; ord_mul1++){
+        }
 
-    //         ord_t ord_mul2 = ordi - ord_mul1;
-    //         // printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
+        for (ord_t ord_mul1 = 1; ord_mul1 <= ordi/2; ord_mul1++){
 
-    //         dhelp_dense_mult( num1->p_im[ord_mul1-1], num1->p_ndpo[ord_mul1-1], ord_mul1, 
-    //                   num2->p_im[ord_mul2-1], num2->p_ndpo[ord_mul2-1], ord_mul2,
-    //                   res.p_im[ordi-1], res.p_ndpo[ordi]-1,
-    //                   dhl);
+            ord_t ord_mul2 = ordi - ord_mul1;
+            // printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
 
-    //         if (ord_mul1 != ord_mul2){
+            if ( ord_mul1 <= num1->order && ord_mul2 <= num2->order){
                 
-    //             // printf("Multiplying %hhu X %hhu\n",ord_mul2,ord_mul1);                
+                dhelp_sparse_mult(num1->p_im[ord_mul1-1], num1->p_idx[ord_mul1-1], num1->p_nnz[ord_mul1-1],ord_mul1,
+                                  num2->p_im[ord_mul2-1], num2->p_idx[ord_mul2-1], num2->p_nnz[ord_mul2-1],ord_mul2,
+                                  tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
+                    // make safe copy of tmp
+                dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
+                                  tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
+                                  dhl);
 
-    //             dhelp_dense_mult( num1->p_im[ord_mul2-1], num1->p_ndpo[ord_mul2-1], ord_mul2, 
-    //                       num2->p_im[ord_mul1-1], num2->p_ndpo[ord_mul1-1], ord_mul1,
-    //                       res.p_im[ordi-1], res.p_ndpo[ordi]-1,
-    //                       dhl);
+                // Add results to tmp.
+                dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
+                                      tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
+                                      tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-    //         }  
+            }
+            
 
-    //     }
-        
+            if (ord_mul1 != ord_mul2){
+                
+                if ( ord_mul2 <= num1->order && ord_mul1 <= num2->order){
+                    dhelp_sparse_mult(num1->p_im[ord_mul2-1], num1->p_idx[ord_mul2-1], num1->p_nnz[ord_mul2-1],ord_mul2,
+                                      num2->p_im[ord_mul1-1], num2->p_idx[ord_mul1-1], num2->p_nnz[ord_mul1-1],ord_mul1,
+                                      tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
+                        // make safe copy of tmp
+                    dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
+                                      tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
+                                      dhl);
 
-        
-        
+                    // Add results to tmp.
+                    dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
+                                          tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
+                                          tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+                }
 
-    // }
+            }  
+
+        }
+
+    }
 
     // reset the size values of the tmp number    
     for(ordi=0; ordi<res_ord; ordi++){
@@ -129,103 +207,30 @@ sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     sotinum_t res, tmp;
     ord_t res_ord = MAX(num1->order,num2->order);
     ord_t ordi;
-    ndir_t j1,j2, jres;
-    imdir_t dir1, dir2;
 
     tmp = soti_get_tmp(0,res_ord,dhl); // creates a sotinum with no elements in imaginary directions.
 
     tmp.re = num1->re + num2->re;
 
     for(ordi=0; ordi<res_ord; ordi++){
-
         
         if (ordi < num1->order && ordi < num2->order){
             
-            j1   = 0; 
-            j2   = 0;
-            jres = 0;
-            
-            while( 1 ){
-            
-                if (j1<num1->p_nnz[ordi] && j2<num2->p_nnz[ordi]){
-                    
-                    dir1 = num1->p_idx[ordi][j1];
-                    dir2 = num2->p_idx[ordi][j2];
-                    
-                    if (dir1 == dir2){
-                        
-                        tmp.p_im[ordi][jres] = num1->p_im[ordi][j1]+num2->p_im[ordi][j2];
-                        tmp.p_idx[ordi][jres] = dir1;
-                        tmp.p_nnz[ordi]++;
-                        j1++; j2++; jres++;
-
-                    }else if(dir1<dir2){
-
-                        tmp.p_im[ordi][jres] = num1->p_im[ordi][j1];
-                        tmp.p_idx[ordi][jres] = dir1;
-                        tmp.p_nnz[ordi]++;
-                        jres++; j1++;
-
-                    } else{
-
-                        tmp.p_im[ordi][jres] = num2->p_im[ordi][j2];
-                        tmp.p_idx[ordi][jres] = dir2;
-                        tmp.p_nnz[ordi]++;  
-                        jres++; j2++;
-                    }
-
-                } else if(j1<num1->p_nnz[ordi]){
-
-                    // faster if  the cycle is performed here.
-                    tmp.p_im[ordi][jres]  = num1->p_im[ordi][j1];
-                    tmp.p_idx[ordi][jres] = num1->p_idx[ordi][j1];
-                    tmp.p_nnz[ordi]++;
-                    jres++; j1++;
-
-                } else if(j2<num2->p_nnz[ordi]){   
-
-                    // faster if  the cycle is performed here.
-                    tmp.p_im[ordi][jres]  = num2->p_im[ordi][j2];
-                    tmp.p_idx[ordi][jres] = num2->p_idx[ordi][j2];
-                    tmp.p_nnz[ordi]++;
-                    jres++; j2++;
-
-                } else {
-
-                    break;
-
-                }
-            
-            }
-
+            dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
         } else if (ordi < num1->order){
 
-            j1   = 0; 
-            jres = 0;
-            
-            for(j1=0;j1 < num1->p_nnz[ordi]; j1++){
-
-                tmp.p_im[ordi][jres]  = num1->p_im[ordi][j1];
-                tmp.p_idx[ordi][jres] = num1->p_idx[ordi][j1];
-                tmp.p_nnz[ordi]++;
-                jres++; j1++;
-
-            }
+            dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+                                  NULL, NULL, 0,
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
         } else {
 
-            j2   = 0;
-            jres = 0;
-            
-            for(j2=0;j2 < num2->p_nnz[ordi]; j2++){
-
-                tmp.p_im[ordi][jres]  = num2->p_im[ordi][j2];
-                tmp.p_idx[ordi][jres] = num2->p_idx[ordi][j2];
-                tmp.p_nnz[ordi]++;
-                jres++; j2++;
-                
-            }
+            dhelp_sparse_add_dirs(num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+                                  NULL, NULL, 0,
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
 
         }
 
@@ -250,8 +255,6 @@ sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     sotinum_t res, tmp;
     ord_t res_ord = MAX(num1->order,num2->order);
     ord_t ordi;
-    ndir_t j1,j2, jres;
-    imdir_t dir1, dir2;
 
     tmp = soti_get_tmp(0,res_ord,dhl); // creates a sotinum with no elements in imaginary directions.
 
@@ -262,91 +265,21 @@ sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
         
         if (ordi < num1->order && ordi < num2->order){
             
-            j1   = 0; 
-            j2   = 0;
-            jres = 0;
-            
-            while( 1 ){
-            
-                if (j1<num1->p_nnz[ordi] && j2<num2->p_nnz[ordi]){
-                    
-                    dir1 = num1->p_idx[ordi][j1];
-                    dir2 = num2->p_idx[ordi][j2];
-                    
-                    if (dir1 == dir2){
-                        
-                        tmp.p_im[ordi][jres] = num1->p_im[ordi][j1]-num2->p_im[ordi][j2];
-                        tmp.p_idx[ordi][jres] = dir1;
-                        tmp.p_nnz[ordi]++;
-                        j1++; j2++; jres++;
-
-                    }else if(dir1<dir2){
-
-                        tmp.p_im[ordi][jres] = num1->p_im[ordi][j1];
-                        tmp.p_idx[ordi][jres] = dir1;
-                        tmp.p_nnz[ordi]++;
-                        jres++; j1++;
-
-                    } else{
-
-                        tmp.p_im[ordi][jres] = -num2->p_im[ordi][j2];
-                        tmp.p_idx[ordi][jres] = dir2;
-                        tmp.p_nnz[ordi]++;  
-                        jres++; j2++;
-                    }
-
-                } else if(j1<num1->p_nnz[ordi]){
-
-                    // faster if  the cycle is performed here.
-                    tmp.p_im[ordi][jres]  = num1->p_im[ordi][j1];
-                    tmp.p_idx[ordi][jres] = num1->p_idx[ordi][j1];
-                    tmp.p_nnz[ordi]++;
-                    jres++; j1++;
-
-                } else if(j2<num2->p_nnz[ordi]){   
-
-                    // faster if  the cycle is performed here.
-                    tmp.p_im[ordi][jres]  = -num2->p_im[ordi][j2];
-                    tmp.p_idx[ordi][jres] = num2->p_idx[ordi][j2];
-                    tmp.p_nnz[ordi]++;
-                    jres++; j2++;
-
-                } else {
-
-                    break;
-
-                }
-            
-            }
-
+            dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
         } else if (ordi < num1->order){
 
-            j1   = 0; 
-            jres = 0;
-            
-            for(j1=0;j1 < num1->p_nnz[ordi]; j1++){
-
-                tmp.p_im[ordi][jres]  = num1->p_im[ordi][j1];
-                tmp.p_idx[ordi][jres] = num1->p_idx[ordi][j1];
-                tmp.p_nnz[ordi]++;
-                jres++; j1++;
-
-            }
+            dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+                                  NULL, NULL, 0,
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
         } else {
 
-            j2   = 0;
-            jres = 0;
-            
-            for(j2=0;j2 < num2->p_nnz[ordi]; j2++){
-
-                tmp.p_im[ordi][jres]  = -num2->p_im[ordi][j2];
-                tmp.p_idx[ordi][jres] = num2->p_idx[ordi][j2];
-                tmp.p_nnz[ordi]++;
-                jres++; j2++;
-                
-            }
+            dhelp_sparse_sub_dirs(NULL, NULL, 0,
+                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
 
         }
 

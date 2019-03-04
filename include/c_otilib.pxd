@@ -238,7 +238,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "otinum_spr.h"
   #---------------------------------------------------------------------------------------------------
-
+  sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  
   sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
   
   sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);

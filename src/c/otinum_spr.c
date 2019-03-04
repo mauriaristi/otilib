@@ -79,6 +79,9 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
 sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp, tmp2, tmp3;
+    sotinum_t* tmpsrc= &tmp ;
+    sotinum_t* tmpdest=&tmp3;
+    sotinum_t* tmpswap;
     ord_t res_ord = MAX(num1->order,num2->order);
     ord_t ordi;
 
@@ -108,14 +111,22 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
                                dhl);  
             
             // make safe copy of tmp
-            dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
-                              tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
-                              dhl);
+            // dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
+            //                   tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
+            //                   dhl);
+            
 
             // Add results to tmp.
+            // dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
+            //                       tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
+            //                       tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+            
+            // Swap pointers
+            tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;
+
             dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                                  tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+                                  tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
+                                  tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
 
         }
 
@@ -129,15 +140,22 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
                                tmp2.p_im[ordi], tmp2.p_idx[ordi], &tmp2.p_nnz[ordi],       
                                dhl);  
             
-            // make safe copy of tmp
-            dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
-                              tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
-                              dhl);
+            // // make safe copy of tmp
+            // dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
+            //                   tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
+            //                   dhl);
 
-            // Add results to tmp.
+            // // Add results to tmp.
+            // dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
+            //                       tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
+            //                       tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+            
+            // Swap pointers
+            tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;
+            
             dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                                  tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+                                  tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
+                                  tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
 
         }
 
@@ -151,15 +169,22 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
                 dhelp_sparse_mult(num1->p_im[ord_mul1-1], num1->p_idx[ord_mul1-1], num1->p_nnz[ord_mul1-1],ord_mul1,
                                   num2->p_im[ord_mul2-1], num2->p_idx[ord_mul2-1], num2->p_nnz[ord_mul2-1],ord_mul2,
                                   tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
-                    // make safe copy of tmp
-                dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
-                                  tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
-                                  dhl);
+                //     // make safe copy of tmp
+                // dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
+                //                   tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
+                //                   dhl);
 
-                // Add results to tmp.
+                // // Add results to tmp.
+                // dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
+                //                       tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
+                //                       tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+                
+                // Swap pointers
+                tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;
+                
                 dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                                      tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
-                                      tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+                                      tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
+                                      tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
 
             }
             
@@ -170,15 +195,22 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
                     dhelp_sparse_mult(num1->p_im[ord_mul2-1], num1->p_idx[ord_mul2-1], num1->p_nnz[ord_mul2-1],ord_mul2,
                                       num2->p_im[ord_mul1-1], num2->p_idx[ord_mul1-1], num2->p_nnz[ord_mul1-1],ord_mul1,
                                       tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
-                        // make safe copy of tmp
-                    dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
-                                      tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
-                                      dhl);
+                    //     // make safe copy of tmp
+                    // dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
+                    //                   tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
+                    //                   dhl);
 
-                    // Add results to tmp.
+                    // // Add results to tmp.
+                    // dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
+                    //                       tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
+                    //                       tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+                    
+                    // Swap pointers
+                    tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;
+                    
                     dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                                          tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
-                                          tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+                                          tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
+                                          tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
                 }
 
             }  
@@ -190,10 +222,10 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     // reset the size values of the tmp number    
     for(ordi=0; ordi<res_ord; ordi++){
 
-        tmp.p_size[ordi] = MAX(dhl.p_dh[ordi].allocSize,tmp.p_nnz[ordi]);
+        tmpdest->p_size[ordi] = MAX(dhl.p_dh[ordi].allocSize,tmpdest->p_nnz[ordi]);
     }
 
-    res = soti_copy(&tmp, dhl);
+    res = soti_copy(tmpdest, dhl);
 
     return res;
 

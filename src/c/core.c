@@ -1553,16 +1553,29 @@ void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                 j1++; j2++; jres++;
 
             } else if ( dir1 < dir2 ){
+                
+                // while(dir1 < dir2 && j1 < ndir1){
 
-                p_imres[jres] = p_im1[j1];
-                p_idxres[jres] = dir1;
-                jres++; j1++;
+                //     dir1 = p_idx1[j1];
+
+                    p_imres[jres] = p_im1[j1];
+                    p_idxres[jres] = dir1;
+                    jres++; j1++;    
+
+                // }
+                
 
             } else {
 
-                p_imres[jres]  = p_im2[j2];
-                p_idxres[jres] = dir2;
-                jres++; j2++;
+                // while(dir2 < dir1 && j2 < ndir2){
+
+                //     dir2 = p_idx2[j2];
+
+                    p_imres[jres]  = p_im2[j2];
+                    p_idxres[jres] = dir2;
+                    jres++; j2++;
+
+                // }
 
             }
 
@@ -1613,6 +1626,14 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
     ord_t     tmp_ord      = ord1 + ord2;
     imdir2d_t tmp_multtabl ;
 
+    coeff_t* p_im_tmp1  = dhl.p_dh[tmp_ord-1].p_im[3] ;
+    coeff_t* p_im_tmp2  = dhl.p_dh[tmp_ord-1].p_im[4] ;
+    coeff_t* p_im_tmp3  = dhl.p_dh[tmp_ord-1].p_im[5] ;
+
+    imdir_t* p_idx_tmp1 = dhl.p_dh[tmp_ord-1].p_idx[3] ;
+    imdir_t* p_idx_tmp2 = dhl.p_dh[tmp_ord-1].p_idx[4] ;
+    imdir_t* p_idx_tmp3 = dhl.p_dh[tmp_ord-1].p_idx[5] ;
+    ndir_t   ndirtmp=0;
     
     imdir_t idx_next_res = 0;
     (*ndirres) = 0;
@@ -1631,8 +1652,7 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
 
     if (ndir1 >0 && ndir2 >0){
 
-        // Sort input directions by order.
-        
+        // Sort input directions by length.        
         if(ndir1 < ndir2){
 
             p_immin  = p_im1;
@@ -1695,12 +1715,19 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
                 }
                 
                 // Add index to temporal result.
-                p_imres_tmp1[j] = p_immin[i] * p_immax[j];
-                p_idxres_tmp1[j] = idx_next_res;
+                p_im_tmp1[j] = p_immin[i] * p_immax[j];
+                p_idx_tmp1[j] = idx_next_res;
                 
             }
 
+
             // Add to temporal holding the result.
+            dhelp_sparse_copy(p_imres, p_idxres, *ndirres,
+                       p_im_tmp2, p_idx_tmp2, &ndirtmp,dhl);
+            
+            dhelp_sparse_add_dirs(p_im_tmp2, p_idx_tmp2, ndirtmp,
+                           p_im_tmp1, p_idx_tmp1, ndirmax,
+                           p_imres, p_idxres, ndirres, dhl);
 
         }
     }
@@ -1830,8 +1857,14 @@ void dhelp_sparse_copy(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                        coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           // Result
                        dhelpl_t dhl){                            // Helper
 
-    memcpy(p_imres,  p_im1,  ndir1*sizeof(coeff_t) );
-    memcpy(p_idxres, p_idx1, ndir1*sizeof(imdir_t) );
+    
+    if( ndir1 != 0 ){
+        
+        memcpy(p_imres,  p_im1,  ndir1*sizeof(coeff_t) );
+        memcpy(p_idxres, p_idx1, ndir1*sizeof(imdir_t) );    
+
+    }
+    
 
     (*ndirres) = ndir1;
 

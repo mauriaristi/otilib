@@ -1449,7 +1449,7 @@ void dhelp_search_prev_dir(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 
 
 // ****************************************************************************************************
-void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+inline void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
@@ -1510,7 +1510,7 @@ void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 
             }
 
-            break;            
+            break;
 
         } else {
 
@@ -1527,7 +1527,7 @@ void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 
 
 // ****************************************************************************************************
-void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+inline void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
@@ -1535,7 +1535,7 @@ void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
     ndir_t j1, j2, jres;
     imdir_t dir1, dir2;
 
-    j1   = 0; 
+    j1   = 0;
     j2   = 0;
     jres = 0;
     
@@ -1569,7 +1569,7 @@ void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 
                 // while(dir2 < dir1 && j2 < ndir2){
 
-                //     dir2 = p_idx2[j2];
+                    // dir2 = p_idx2[j2];
 
                     p_imres[jres]  = p_im2[j2];
                     p_idxres[jres] = dir2;
@@ -1581,11 +1581,11 @@ void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 
         } else if ( j1 < ndir1 ){
 
-            while( j1 < ndir1 ){
+            for( ; j1 < ndir1; j1++ ){
 
                 p_imres[jres]  = p_im1[j1];
                 p_idxres[jres] = p_idx1[j1];
-                jres++; j1++;    
+                jres++;  
 
             }
 
@@ -1593,11 +1593,11 @@ void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 
         } else if ( j2 < ndir2 ){   
 
-            while ( j2 < ndir2 ){
+            for ( ; j2 < ndir2; j2++ ){
 
                 p_imres[jres]  = p_im2[j2];
                 p_idxres[jres] = p_idx2[j2];
-                jres++; j2++;    
+                jres++;   
 
             }
 
@@ -1629,13 +1629,30 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
     coeff_t* p_im_tmp1  = dhl.p_dh[tmp_ord-1].p_im[3] ;
     coeff_t* p_im_tmp2  = dhl.p_dh[tmp_ord-1].p_im[4] ;
     coeff_t* p_im_tmp3  = dhl.p_dh[tmp_ord-1].p_im[5] ;
+    
+
 
     imdir_t* p_idx_tmp1 = dhl.p_dh[tmp_ord-1].p_idx[3] ;
     imdir_t* p_idx_tmp2 = dhl.p_dh[tmp_ord-1].p_idx[4] ;
     imdir_t* p_idx_tmp3 = dhl.p_dh[tmp_ord-1].p_idx[5] ;
+    
+
+    // Define temporal swappers.
+    coeff_t* p_im_tmpsrc = p_im_tmp2;
+    coeff_t* p_im_tmpdest= p_im_tmp3;
+    coeff_t* p_im_tmpswap;
+    imdir_t* p_idx_tmpsrc = p_idx_tmp2;
+    imdir_t* p_idx_tmpdest= p_idx_tmp3;
+    imdir_t* p_idx_tmpswap;
+
     ndir_t   ndirtmp=0;
+    ndir_t   ndirtmpsrc=0;
+    ndir_t   ndirtmpdest=0;
+    ndir_t   ndirtmpswap;
     
     imdir_t idx_next_res = 0;
+    imdir_t idx_i;
+    coeff_t im_i;
     (*ndirres) = 0;
 
     flag_t flag =0;
@@ -1699,38 +1716,62 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
         // Check previous elements from next direction.:
         for (ndir_t i = 0; i<ndirmin; i++){
 
+            idx_i = p_idxmin[i];
+            im_i = p_immin[i];
+
             for (ndir_t j = 0; j<ndirmax; j++){
 
                 // Multiply the elements
                 if (flag){
                     
                     idx_next_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
-                        p_idxmax[j],p_idxmin[i]); 
+                        p_idxmax[j],idx_i); 
 
                 } else {
 
                     idx_next_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
-                        p_idxmin[i],p_idxmax[j]); 
+                        idx_i,p_idxmax[j]); 
 
                 }
                 
                 // Add index to temporal result.
-                p_im_tmp1[j] = p_immin[i] * p_immax[j];
+                p_im_tmp1[j] = im_i * p_immax[j];
                 p_idx_tmp1[j] = idx_next_res;
                 
             }
 
 
-            // Add to temporal holding the result.
-            dhelp_sparse_copy(p_imres, p_idxres, *ndirres,
-                       p_im_tmp2, p_idx_tmp2, &ndirtmp,dhl);
+            // // Add to temporal holding the result.
+            // dhelp_sparse_copy(p_imres, p_idxres, *ndirres,
+            //            p_im_tmp2, p_idx_tmp2, &ndirtmp,dhl);
             
-            dhelp_sparse_add_dirs(p_im_tmp2, p_idx_tmp2, ndirtmp,
+            // dhelp_sparse_add_dirs(p_im_tmp2, p_idx_tmp2, ndirtmp,
+            //                p_im_tmp1, p_idx_tmp1, ndirmax,
+            //                p_imres, p_idxres, ndirres, dhl);
+
+            // Swap terms.
+            p_im_tmpswap = p_im_tmpsrc; 
+            p_im_tmpsrc  = p_im_tmpdest; 
+            p_im_tmpdest = p_im_tmpswap;
+
+            p_idx_tmpswap = p_idx_tmpsrc; 
+            p_idx_tmpsrc  = p_idx_tmpdest; 
+            p_idx_tmpdest = p_idx_tmpswap;
+            
+            ndirtmpswap = ndirtmpsrc; 
+            ndirtmpsrc  = ndirtmpdest; 
+            ndirtmpdest = ndirtmpswap;
+            
+            dhelp_sparse_add_dirs(p_im_tmpsrc, p_idx_tmpsrc, ndirtmpsrc,
                            p_im_tmp1, p_idx_tmp1, ndirmax,
-                           p_imres, p_idxres, ndirres, dhl);
+                           p_im_tmpdest, p_idx_tmpdest, &ndirtmpdest, dhl);
 
         }
+        
     }
+
+    dhelp_sparse_copy(p_im_tmpdest, p_idx_tmpdest, ndirtmpdest,
+                       p_imres, p_idxres, ndirres,dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------

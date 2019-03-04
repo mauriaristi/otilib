@@ -7857,13 +7857,11 @@ static PyObject *__pyx_pf_5pyoti_5dense_36e(CYTHON_UNUSED PyObject *__pyx_self, 
   PyObject *__pyx_t_3 = NULL;
   __pyx_t_8c_otilib_imdir_t __pyx_t_4;
   __pyx_t_8c_otilib_ord_t __pyx_t_5;
-  int __pyx_t_6;
-  int __pyx_t_7;
+  __pyx_t_8c_otilib_bases_t __pyx_t_6;
+  __pyx_t_8c_otilib_bases_t __pyx_t_7;
   __pyx_t_8c_otilib_bases_t __pyx_t_8;
-  __pyx_t_8c_otilib_bases_t __pyx_t_9;
-  __pyx_t_8c_otilib_bases_t __pyx_t_10;
-  __pyx_t_8c_otilib_ord_t __pyx_t_11;
-  __pyx_t_8c_otilib_ord_t __pyx_t_12;
+  __pyx_t_8c_otilib_ord_t __pyx_t_9;
+  __pyx_t_8c_otilib_ord_t __pyx_t_10;
   __Pyx_TraceFrameInit(__pyx_codeobj__29)
   __Pyx_RefNannySetupContext("e", 0);
   __Pyx_TraceCall("e", __pyx_f[0], 1456, 0, __PYX_ERR(0, 1456, __pyx_L1_error));
@@ -7913,7 +7911,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_36e(CYTHON_UNUSED PyObject *__pyx_self, 
  * 
  *   bases_hd = (dhelp_get_imdir( indx_hd, order_hd, dhl))[order_hd-1]             # <<<<<<<<<<<<<<
  * 
- *   if order_hd >= order and bases_hd >= nbases:
+ *   res = oti_createZero(max(bases_hd,nbases), max(order_hd,order), dhl)
  */
   __Pyx_TraceLine(1473,0,__PYX_ERR(0, 1473, __pyx_L1_error))
   __pyx_v_bases_hd = (dhelp_get_imdir(__pyx_v_indx_hd, __pyx_v_order_hd, __pyx_v_5pyoti_5dense_dhl)[(__pyx_v_order_hd - 1)]);
@@ -7921,89 +7919,47 @@ static PyObject *__pyx_pf_5pyoti_5dense_36e(CYTHON_UNUSED PyObject *__pyx_self, 
   /* "../../pyoti/cython/dense.pyx":1475
  *   bases_hd = (dhelp_get_imdir( indx_hd, order_hd, dhl))[order_hd-1]
  * 
- *   if order_hd >= order and bases_hd >= nbases:             # <<<<<<<<<<<<<<
+ *   res = oti_createZero(max(bases_hd,nbases), max(order_hd,order), dhl)             # <<<<<<<<<<<<<<
  * 
- *     res = oti_createZero(bases_hd, order_hd, dhl)
+ *   # Set the coefficient to 1.
  */
   __Pyx_TraceLine(1475,0,__PYX_ERR(0, 1475, __pyx_L1_error))
-  __pyx_t_7 = ((__pyx_v_order_hd >= __pyx_v_order) != 0);
-  if (__pyx_t_7) {
+  __pyx_t_6 = __pyx_v_nbases;
+  __pyx_t_7 = __pyx_v_bases_hd;
+  if (((__pyx_t_6 > __pyx_t_7) != 0)) {
+    __pyx_t_8 = __pyx_t_6;
   } else {
-    __pyx_t_6 = __pyx_t_7;
-    goto __pyx_L4_bool_binop_done;
+    __pyx_t_8 = __pyx_t_7;
   }
-  __pyx_t_7 = ((__pyx_v_bases_hd >= __pyx_v_nbases) != 0);
-  __pyx_t_6 = __pyx_t_7;
-  __pyx_L4_bool_binop_done:;
-  if (__pyx_t_6) {
-
-    /* "../../pyoti/cython/dense.pyx":1477
- *   if order_hd >= order and bases_hd >= nbases:
- * 
- *     res = oti_createZero(bases_hd, order_hd, dhl)             # <<<<<<<<<<<<<<
- * 
- *     # Set the coefficient to 1.
- */
-    __Pyx_TraceLine(1477,0,__PYX_ERR(0, 1477, __pyx_L1_error))
-    __pyx_v_res = oti_createZero(__pyx_v_bases_hd, __pyx_v_order_hd, __pyx_v_5pyoti_5dense_dhl);
-
-    /* "../../pyoti/cython/dense.pyx":1480
- * 
- *     # Set the coefficient to 1.
- *     oti_setIm_IdxOrd(1.0,indx_hd,order_hd,&res,dhl)             # <<<<<<<<<<<<<<
- * 
- *   else:
- */
-    __Pyx_TraceLine(1480,0,__PYX_ERR(0, 1480, __pyx_L1_error))
-    oti_setIm_IdxOrd(1.0, __pyx_v_indx_hd, __pyx_v_order_hd, (&__pyx_v_res), __pyx_v_5pyoti_5dense_dhl);
-
-    /* "../../pyoti/cython/dense.pyx":1475
- *   bases_hd = (dhelp_get_imdir( indx_hd, order_hd, dhl))[order_hd-1]
- * 
- *   if order_hd >= order and bases_hd >= nbases:             # <<<<<<<<<<<<<<
- * 
- *     res = oti_createZero(bases_hd, order_hd, dhl)
- */
-    goto __pyx_L3;
+  __pyx_t_5 = __pyx_v_order;
+  __pyx_t_9 = __pyx_v_order_hd;
+  if (((__pyx_t_5 > __pyx_t_9) != 0)) {
+    __pyx_t_10 = __pyx_t_5;
+  } else {
+    __pyx_t_10 = __pyx_t_9;
   }
+  __pyx_v_res = oti_createZero(__pyx_t_8, __pyx_t_10, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense.pyx":1484
- *   else:
+  /* "../../pyoti/cython/dense.pyx":1478
  * 
- *     res = oti_createZero(max(bases_hd,nbases), max(order_hd,order), dhl)             # <<<<<<<<<<<<<<
+ *   # Set the coefficient to 1.
+ *   oti_setIm_IdxOrd(1.0,indx_hd,order_hd,&res,dhl)             # <<<<<<<<<<<<<<
  * 
- * 
+ *   return otinum.create(&res)
  */
-  __Pyx_TraceLine(1484,0,__PYX_ERR(0, 1484, __pyx_L1_error))
-  /*else*/ {
-    __pyx_t_8 = __pyx_v_nbases;
-    __pyx_t_9 = __pyx_v_bases_hd;
-    if (((__pyx_t_8 > __pyx_t_9) != 0)) {
-      __pyx_t_10 = __pyx_t_8;
-    } else {
-      __pyx_t_10 = __pyx_t_9;
-    }
-    __pyx_t_5 = __pyx_v_order;
-    __pyx_t_11 = __pyx_v_order_hd;
-    if (((__pyx_t_5 > __pyx_t_11) != 0)) {
-      __pyx_t_12 = __pyx_t_5;
-    } else {
-      __pyx_t_12 = __pyx_t_11;
-    }
-    __pyx_v_res = oti_createZero(__pyx_t_10, __pyx_t_12, __pyx_v_5pyoti_5dense_dhl);
-  }
-  __pyx_L3:;
+  __Pyx_TraceLine(1478,0,__PYX_ERR(0, 1478, __pyx_L1_error))
+  oti_setIm_IdxOrd(1.0, __pyx_v_indx_hd, __pyx_v_order_hd, (&__pyx_v_res), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense.pyx":1487
- * 
+  /* "../../pyoti/cython/dense.pyx":1480
+ *   oti_setIm_IdxOrd(1.0,indx_hd,order_hd,&res,dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
  * 
  * # #-----------------------------------------------------------------------------------------------------
  */
-  __Pyx_TraceLine(1487,0,__PYX_ERR(0, 1487, __pyx_L1_error))
+  __Pyx_TraceLine(1480,0,__PYX_ERR(0, 1480, __pyx_L1_error))
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_otinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1487, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_otinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1480, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;

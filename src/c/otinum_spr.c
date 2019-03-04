@@ -92,7 +92,7 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     // Multiply real coefficients.
     tmp.re = num1->re * num2->re;
 
-    printf("Multiplying order %hhu x %hhu\n", num1->order, num2->order);
+    // printf("Multiplying order %hhu x %hhu\n", num1->order, num2->order);
 
     for(ord_t order=1; order<=res_ord; order++){
 
@@ -141,9 +141,9 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
         }
 
-        for (ord_t ord_mul1 = 1; ord_mul1 <= ordi/2; ord_mul1++){
+        for (ord_t ord_mul1 = 1; ord_mul1 <= order/2; ord_mul1++){
 
-            ord_t ord_mul2 = ordi - ord_mul1;
+            ord_t ord_mul2 = order - ord_mul1;
             // printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
 
             if ( ord_mul1 <= num1->order && ord_mul2 <= num2->order){

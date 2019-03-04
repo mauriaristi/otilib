@@ -1471,18 +1471,11 @@ def e( hum_dir ,ord_t order = 0,bases_t nbases = 0):
   [indx_hd, order_hd] = imdir(hum_dir)
   
   bases_hd = (dhelp_get_imdir( indx_hd, order_hd, dhl))[order_hd-1]
+  
+  res = oti_createZero(max(bases_hd,nbases), max(order_hd,order), dhl)
 
-  if order_hd >= order and bases_hd >= nbases:
-
-    res = oti_createZero(bases_hd, order_hd, dhl)
-
-    # Set the coefficient to 1.
-    oti_setIm_IdxOrd(1.0,indx_hd,order_hd,&res,dhl)
-
-  else:
-
-    res = oti_createZero(max(bases_hd,nbases), max(order_hd,order), dhl)    
-    
+  # Set the coefficient to 1.
+  oti_setIm_IdxOrd(1.0,indx_hd,order_hd,&res,dhl)    
 
   return otinum.create(&res)
 

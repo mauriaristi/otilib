@@ -9,6 +9,85 @@
 // ----------------------------------------------------------------------------------------------------
 
 
+
+
+// ****************************************************************************************************
+
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl){
+
+    for ( ord_t ordi = ord-1; ordi < res->order; ordi++){
+
+        for (ndir_t i=0; i<res->p_nnz[ordi]; i++){
+            
+            res->p_im[ordi][i] *= a;
+
+        }
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void soti_trunc_mul(sotinum_t* num1, ord_t ord1, 
+                   sotinum_t* num2, ord_t ord2, 
+                   sotinum_t* res, dhelpl_t dhl ){
+    
+    sotinum_t tmp, tmp2, tmp3;
+    sotinum_t* tmpsrc= &tmp ;
+    sotinum_t* tmpdest=&tmp3;
+    sotinum_t* tmpswap;
+    ord_t ordi;
+
+    ord_t res_ord = MAX(num1->order,num2->order);
+    
+    tmp = soti_get_tmp(0,res_ord,dhl); // will hold the final result.
+    tmp2= soti_get_tmp(1,res_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_tmp(2,res_ord,dhl); // Will hold the temporary result.
+
+    for (ord_t ord_mul1 =ord1; ord_mul1 <= res->order; ord_mul1++){
+
+        for (ord_t ord_mul2 = res_ord-ord_mul1; ord_mul2 >= ord2; ord_mul2--){
+
+            // printf("Multiplying order "_PORDT" times "_PORDT _ENDL, ord_mul1,ord_mul2);
+            ord_t ord_res = ord_mul1 + ord_mul2;
+            ordi = ord_res -1;
+
+            dhelp_sparse_mult(num1->p_im[ord_mul1-1], num1->p_idx[ord_mul1-1], num1->p_nnz[ord_mul1-1],ord_mul1,
+                              num2->p_im[ord_mul2-1], num2->p_idx[ord_mul2-1], num2->p_nnz[ord_mul2-1],ord_mul2,
+                              tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
+
+            tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
+
+            dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
+                                  tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
+                                  tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
+
+        }   
+
+    }
+
+    // reset the size values of the tmp number    
+    for(ordi=0; ordi<res_ord; ordi++){
+
+        tmpdest->p_size[ordi] = MAX(dhl.p_dh[ordi].allocSize,tmpdest->p_nnz[ordi]);
+    }
+
+    // res = soti_copy(tmpdest, dhl);
+
+    // return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
 // ****************************************************************************************************
 void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     
@@ -93,7 +172,8 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     
 
     // Multiply real coefficients.
-    tmp.re = num1->re * num2->re;
+    tmpdest->re = num1->re * num2->re;
+    tmpsrc->re  = tmpdest->re;
 
     // printf("Multiplying order %hhu x %hhu\n", num1->order, num2->order);
 
@@ -110,19 +190,9 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
                                tmp2.p_im[ordi], tmp2.p_idx[ordi], &tmp2.p_nnz[ordi],       
                                dhl);  
             
-            // make safe copy of tmp
-            // dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
-            //                   tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
-            //                   dhl);
-            
-
-            // Add results to tmp.
-            // dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-            //                       tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
-            //                       tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
             
             // Swap pointers
-            tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;
+            tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
 
             dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
                                   tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
@@ -140,15 +210,6 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
                                tmp2.p_im[ordi], tmp2.p_idx[ordi], &tmp2.p_nnz[ordi],       
                                dhl);  
             
-            // // make safe copy of tmp
-            // dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
-            //                   tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
-            //                   dhl);
-
-            // // Add results to tmp.
-            // dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-            //                       tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
-            //                       tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
             
             // Swap pointers
             tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;
@@ -169,18 +230,9 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
                 dhelp_sparse_mult(num1->p_im[ord_mul1-1], num1->p_idx[ord_mul1-1], num1->p_nnz[ord_mul1-1],ord_mul1,
                                   num2->p_im[ord_mul2-1], num2->p_idx[ord_mul2-1], num2->p_nnz[ord_mul2-1],ord_mul2,
                                   tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
-                //     // make safe copy of tmp
-                // dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
-                //                   tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
-                //                   dhl);
-
-                // // Add results to tmp.
-                // dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                //                       tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
-                //                       tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-                
+                                
                 // Swap pointers
-                tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;
+                tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
                 
                 dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
                                       tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
@@ -195,15 +247,7 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
                     dhelp_sparse_mult(num1->p_im[ord_mul2-1], num1->p_idx[ord_mul2-1], num1->p_nnz[ord_mul2-1],ord_mul2,
                                       num2->p_im[ord_mul1-1], num2->p_idx[ord_mul1-1], num2->p_nnz[ord_mul1-1],ord_mul1,
                                       tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
-                    //     // make safe copy of tmp
-                    // dhelp_sparse_copy(tmp.p_im[ordi],  tmp.p_idx[ordi],  tmp.p_nnz[ordi],
-                    //                   tmp3.p_im[ordi], tmp3.p_idx[ordi], &tmp3.p_nnz[ordi],
-                    //                   dhl);
-
-                    // // Add results to tmp.
-                    // dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                    //                       tmp3.p_im[ordi], tmp3.p_idx[ordi], tmp3.p_nnz[ordi],
-                    //                       tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+                    
                     
                     // Swap pointers
                     tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;

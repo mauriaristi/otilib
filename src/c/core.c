@@ -333,7 +333,7 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
 
     }
 
-    ndir_t  ntmps =  5; // Number of arrays for temporal variables.
+    ndir_t  ntmps =  10; // Number of arrays for temporal variables.
     
     for( int i = 1; i<=dhl->ndh; i++){
       // printf("Loading dhelp %d\n",i);
@@ -1608,6 +1608,112 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
                        coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2, // Input 2
                        coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           // Result
                        dhelpl_t dhl){                            // Helper
+
+
+    ord_t     tmp_ord      = ord1 + ord2;
+    imdir2d_t tmp_multtabl ;
+
+    
+    imdir_t idx_next_res = 0;
+    (*ndirres) = 0;
+
+    flag_t flag =0;
+    
+    coeff_t* p_immin;
+    imdir_t* p_idxmin;
+    ndir_t   ndirmin;
+    ord_t    ordmin;
+
+    coeff_t* p_immax;
+    imdir_t* p_idxmax;
+    ndir_t  ndirmax;
+    ord_t ordmax;
+
+    if (ndir1 >0 && ndir2 >0){
+
+        // Sort input directions by order.
+        
+        if(ndir1 < ndir2){
+
+            p_immin  = p_im1;
+            p_idxmin = p_idx1;
+            ndirmin  = ndir1;
+            ordmin   = ord1;
+
+            p_immax  = p_im2;
+            p_idxmax = p_idx2;
+            ndirmax  = ndir2;
+            ordmax   = ord2;
+
+        } else {
+            
+            p_immin  = p_im2;
+            p_idxmin = p_idx2;
+            ndirmin  = ndir2;
+            ordmin   = ord2;
+
+            p_immax  = p_im1;
+            p_idxmax = p_idx1;
+            ndirmax  = ndir1;
+            ordmax   = ord1;
+
+        }
+
+        if (ordmax < ordmin){
+            flag=1;
+        }
+
+        // Get the relevant multiplication table.
+        if ( flag ){
+            
+            tmp_multtabl = dhl.p_dh[tmp_ord-1].p_multtabls[ordmax-1];
+
+        } else {
+            
+            tmp_multtabl = dhl.p_dh[tmp_ord-1].p_multtabls[ordmin-1];
+
+        }
+        
+        
+        
+        // Check previous elements from next direction.:
+        for (ndir_t i = 0; i<ndirmin; i++){
+
+            for (ndir_t j = 0; j<ndirmax; j++){
+
+                // Multiply the elements
+                if (flag){
+                    
+                    idx_next_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
+                        p_idxmax[j],p_idxmin[i]); 
+
+                } else {
+
+                    idx_next_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
+                        p_idxmin[i],p_idxmax[j]); 
+
+                }
+                
+                // Add index to temporal result.
+                p_imres_tmp1[j] = p_immin[i] * p_immax[j];
+                p_idxres_tmp1[j] = idx_next_res;
+                
+            }
+
+            // Add to temporal holding the result.
+
+        }
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void dhelp_sparse_mult_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t ord1, // Input 1
+                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2, // Input 2
+                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           // Result
+                           dhelpl_t dhl){                            // Helper
 
 
     ord_t     tmp_ord      = ord1 + ord2;

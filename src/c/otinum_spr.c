@@ -85,8 +85,8 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     // Retreive sotinum temporals.
     // All tmps are created with no elements in imaginary directions (but allocated).
     tmp = soti_get_tmp(0,res_ord,dhl); // will hold the final result.
-    tmp2= soti_get_tmp(2,res_ord,dhl); // Will hold the temporary result.
-    tmp3= soti_get_tmp(3,res_ord,dhl); // Will hold the temporary result.
+    tmp2= soti_get_tmp(1,res_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_tmp(2,res_ord,dhl); // Will hold the temporary result.
     
 
     // Multiply real coefficients.

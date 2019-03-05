@@ -1524,10 +1524,66 @@ inline void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  n
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
+                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
+                           dhelpl_t dhl){
+
+    ndir_t j1, j2, jres;
+    imdir_t dir1, dir2;
+    coeff_t im1, im2;
+
+    flag_t upd_1, upd_2;
+
+    j1   = 0;
+    j2   = 0;
+    jres = 0;
+    
+    while(  j1 < ndir1 && j2 < ndir2 ){
+        
+        upd_1=(dir1<=dir2);
+        upd_2=(dir2<=dir1);
+
+        dir1 = p_idx1[j1];
+        im1  = p_im1[j1];
+
+        dir2 = p_idx2[j2];
+        im2  = p_im2[j2];        
+                
+        p_imres[jres]  = upd_1*im1  + upd_2*im2;
+        p_idxres[jres] = upd_1*dir1 + (dir2<dir1)*dir2;
+
+        j1+=upd_1; 
+        j2+=upd_2; 
+
+        jres++;
+    
+    }
+
+    for( ; j1 < ndir1; j1++ ){
+
+        p_imres[jres]  = p_im1[j1];
+        p_idxres[jres] = p_idx1[j1];
+        jres++;  
+
+    }
+
+    for ( ; j2 < ndir2; j2++ ){
+
+        p_imres[jres]  = p_im2[j2];
+        p_idxres[jres] = p_idx2[j2];
+        jres++;   
+
+    }
+
+    (*ndirres) = jres;
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-inline void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){

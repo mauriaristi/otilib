@@ -158,7 +158,7 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+sotinum_t soti_mul_new(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp, tmp2, tmp3;
     sotinum_t* tmpsrc= &tmp ;
@@ -282,7 +282,7 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp, tmp2, tmp3;
     sotinum_t* tmpsrc= &tmp ;
@@ -397,6 +397,8 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     }
 
     res = soti_copy(tmpdest, dhl);
+
+    // res.order = 0;
 
     return res;
 

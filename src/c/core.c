@@ -1525,7 +1525,7 @@ inline void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  n
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+inline void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
@@ -1540,17 +1540,17 @@ void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir
     j2   = 0;
     jres = 0;
     
-    while(  j1 < ndir1 && j2 < ndir2 ){
-        
-        upd_1=(dir1<=dir2);
-        upd_2=(dir2<=dir1);
+    while(  j1 < ndir1 && j2 < ndir2 ){        
 
         dir1 = p_idx1[j1];
         im1  = p_im1[j1];
 
         dir2 = p_idx2[j2];
         im2  = p_im2[j2];        
-                
+        
+        upd_1=(dir1<=dir2);
+        upd_2=(dir2<=dir1);
+
         p_imres[jres]  = upd_1*im1  + upd_2*im2;
         p_idxres[jres] = upd_1*dir1 + (dir2<dir1)*dir2;
 

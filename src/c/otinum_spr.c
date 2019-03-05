@@ -165,6 +165,124 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     sotinum_t* tmpdest=&tmp3;
     sotinum_t* tmpswap;
     ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t ordlim1, ordlim2;
+    ord_t ordi1, ordi2,ordires;
+
+    // Retreive sotinum temporals.
+    // All tmps are created with no elements in imaginary directions (but allocated).
+    tmp = soti_get_tmp(0,res_ord,dhl); // will hold the final result.
+    tmp2= soti_get_tmp(1,res_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_tmp(2,res_ord,dhl); // Will hold the temporary result.
+    
+
+    // Multiply real coefficients.
+    tmpdest->re = num1->re * num2->re;
+    tmpsrc->re  = tmpdest->re;
+
+    if (num1->re != 0.0){
+    
+        for (ordi1 = 0; ordi1<num2->order; ordi1++){
+
+            // Perform multiplication
+            dhelp_sparse_mult_real(num1->re,
+                               num2->p_im[ordi1], num2->p_idx[ordi1], num2->p_nnz[ordi1],
+                               tmp2.p_im[ordi1], tmp2.p_idx[ordi1], &tmp2.p_nnz[ordi1],       
+                               dhl);  
+            
+            
+            // Swap pointers
+            tmpswap=tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
+
+            dhelp_sparse_add_dirs(tmp2.p_im[ordi1], tmp2.p_idx[ordi1], tmp2.p_nnz[ordi1],
+                                  tmpsrc->p_im[ordi1], tmpsrc->p_idx[ordi1], tmpsrc->p_nnz[ordi1],
+                                  tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
+
+        }
+
+    }
+
+
+    if (num2->re != 0.0){
+    
+        for (ordi1 = 0; ordi1<num1->order; ordi1++){
+
+            // Perform multiplication
+            dhelp_sparse_mult_real(num2->re,
+                               num1->p_im[ordi1], num1->p_idx[ordi1], num1->p_nnz[ordi1],
+                               tmp2.p_im[ordi1], tmp2.p_idx[ordi1], &tmp2.p_nnz[ordi1],       
+                               dhl);  
+            
+            // Swap pointers
+            tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
+            
+            dhelp_sparse_add_dirs(tmp2.p_im[ordi1], tmp2.p_idx[ordi1], tmp2.p_nnz[ordi1],
+                                  tmpsrc->p_im[ordi1], tmpsrc->p_idx[ordi1], tmpsrc->p_nnz[ordi1],
+                                  tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
+
+        }
+
+    }
+
+    
+    ordlim1 = MIN(num1->order, res_ord -1);
+    
+    printf("\nLim ord1: %hhu\n",ordlim1);
+    
+    for(ordi1=0; ordi1<ordlim1; ordi1++){
+
+        ordlim2 = MIN(num2->order, res_ord - (ordi1+1) );
+
+        tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
+
+        printf("Lim ord2: %hhu\n",ordlim2);
+        for (ordi2=0; ordi2<ordlim2; ordi2++){
+
+            ordires = ordi1 + ordi2 +1;
+            printf("Multipliyng: %hhu x %hhu = %hhu\n",ordi1+1,ordi2+1,ordires+1);
+
+            dhelp_sparse_mult(num1->p_im[ordi1], num1->p_idx[ordi1], num1->p_nnz[ordi1],ordi1+1,
+                              num2->p_im[ordi2], num2->p_idx[ordi2], num2->p_nnz[ordi2],ordi2+1,
+                              tmp2.p_im[ordires],tmp2.p_idx[ordires],&tmp2.p_nnz[ordires], dhl);
+                            
+            
+            
+            dhelp_sparse_add_dirs(tmp2.p_im[ordires], tmp2.p_idx[ordires], tmp2.p_nnz[ordires],
+                                  tmpsrc->p_im[ordires], tmpsrc->p_idx[ordires], tmpsrc->p_nnz[ordires],
+                                  tmpdest->p_im[ordires], tmpdest->p_idx[ordires], &tmpdest->p_nnz[ordires], dhl);
+            printf("nnz tmp2: %lu, tmpsrc: %lu, tmpdest: %lu\n",
+                tmp2.p_nnz[ordires],tmpsrc->p_nnz[ordires],tmpdest->p_nnz[ordires]);
+
+        }
+
+        for(ordires=0; ordires<res_ord; ordires++){
+            
+            printf("NNZ order %lu\n",tmpdest->p_nnz[ordires]);
+
+        }
+
+    }
+
+    // reset the size values of the tmp number    
+    for(ordi1=0; ordi1<res_ord; ordi1++){
+        // printf("NNZ order %lu\n",tmpdest->p_nnz[ordi1]);
+        tmpdest->p_size[ordi1] = MAX(dhl.p_dh[ordi1].allocSize,tmpdest->p_nnz[ordi1]);
+    }
+
+    res = soti_copy(tmpdest, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+
+    sotinum_t res, tmp, tmp2, tmp3;
+    sotinum_t* tmpsrc= &tmp ;
+    sotinum_t* tmpdest=&tmp3;
+    sotinum_t* tmpswap;
+    ord_t res_ord = MAX(num1->order,num2->order);
     ord_t ordi;
 
     // Retreive sotinum temporals.
@@ -185,7 +303,7 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
         ordi = order-1;
 
         // First multiply  re x ordi         
-        if ( order <= num2->order){
+        if ( order <= num2->order && num1->re != 0.0){
             
             // Perform multiplication
             dhelp_sparse_mult_real(num1->re,
@@ -195,7 +313,7 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
             
             
             // Swap pointers
-            tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
+            tmpswap=tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
 
             dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
                                   tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
@@ -205,7 +323,7 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
 
         // Then multiply   ordi x re
-        if ( order <= num1->order){
+        if ( order <= num1->order && num2->re != 0.0){
             
             // Perform multiplication
             dhelp_sparse_mult_real(num2->re,

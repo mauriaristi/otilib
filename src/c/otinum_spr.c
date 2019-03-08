@@ -655,7 +655,7 @@ void soti_insert_item( ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinu
 
     // check feasability
     if (order > dhl.ndh){
-        printf("ERROR: Not possible to set an element of order greaer than the helpers\n");
+        printf("ERROR: Not possible to set an element of order greater than the helpers\n");
         exit(OTI_BadIndx);
     }
 

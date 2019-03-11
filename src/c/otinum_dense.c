@@ -239,9 +239,12 @@ otinum_t oti_pow(otinum_t* num, double e, dhelpl_t dhl){
 // ****************************************************************************************************
 void oti_trunc_smul_real(coeff_t a, ord_t ord, otinum_t* res, dhelpl_t dhl){
 
-    for ( ord_t ordi = ord-1; ordi < res->order; ordi++){
+    ord_t ordi;
+    ndir_t i;  
 
-        for (ndir_t i=0; i<res->p_ndpo[ordi]; i++){
+    for ( ordi = ord-1; ordi < res->order; ordi++){
+
+        for ( i=0; i<res->p_ndpo[ordi]; i++){
             
             res->p_im[ordi][i] *= a;
 
@@ -257,10 +260,12 @@ void oti_trunc_ssum(otinum_t* num1,
                     ord_t ord, otinum_t* res, dhelpl_t dhl ){
     
     // Initialize
+    ord_t ordi;
+    ndir_t i; 
 
-    for ( ord_t ordi = ord-1; ordi < res->order; ordi++){
+    for (  ordi = ord-1; ordi < res->order; ordi++){
 
-        for (ndir_t i=0; i < res->p_ndpo[ordi]; i++){
+        for ( i=0; i < res->p_ndpo[ordi]; i++){
             
             res->p_im[ordi][i] += num1->p_im[ordi][i];
 
@@ -276,15 +281,15 @@ void oti_trunc_mul(otinum_t* num1, ord_t ord1,
                    otinum_t* num2, ord_t ord2, 
                    otinum_t* res, dhelpl_t dhl ){
     
-    
+    ord_t ord_mul1, ord_mul2;
     // // Initialize
     // oti_setFromReal( 0.0, res, dhl);
 
     // printf("Finding combinations for order "_PORDT _ENDL, res->order);
 
-    for (ord_t ord_mul1 =ord1; ord_mul1 <= res->order; ord_mul1++){
+    for ( ord_mul1 =ord1; ord_mul1 <= res->order; ord_mul1++){
 
-        for (ord_t ord_mul2 = res->order-ord_mul1; ord_mul2 >= ord2; ord_mul2--){
+        for ( ord_mul2 = res->order-ord_mul1; ord_mul2 >= ord2; ord_mul2--){
 
             // printf("Multiplying order "_PORDT" times "_PORDT _ENDL, ord_mul1,ord_mul2);
             ord_t ord_res = ord_mul1 + ord_mul2;
@@ -323,6 +328,8 @@ otinum_t oti_div_realoti(coeff_t num, otinum_t* den, dhelpl_t dhl ){
 // ****************************************************************************************************
 otinum_t oti_div(otinum_t* num, otinum_t* den, dhelpl_t dhl ){
     
+    ord_t i;
+
     coeff_t y = num->re, x = den->re;
     coeff_t deriv_x, deriv_y;
     otinum_t res  = oti_createZero( num->nbases, num->order, dhl);
@@ -340,7 +347,7 @@ otinum_t oti_div(otinum_t* num, otinum_t* den, dhelpl_t dhl ){
 
     // if (num->order >= 1){
 
-    for (ord_t i = 1; i<=num->order; i++){
+    for ( i = 1; i<=num->order; i++){
     
         
         // do the part for y.
@@ -387,6 +394,8 @@ otinum_t oti_div(otinum_t* num, otinum_t* den, dhelpl_t dhl ){
 // ****************************************************************************************************
 otinum_t oti_feval(coeff_t* feval_re, otinum_t* num, dhelpl_t dhl ){
     
+    ord_t i;
+
     coeff_t factor = 1.0, val = 0.0;
     otinum_t res  = oti_createZero( num->nbases, num->order, dhl);
     otinum_t tmp1 = oti_createZero( num->nbases, num->order, dhl);
@@ -397,7 +406,7 @@ otinum_t oti_feval(coeff_t* feval_re, otinum_t* num, dhelpl_t dhl ){
     // Set real value of result.
     res.re = feval_re[0];
 
-    for (ord_t i = 1; i<=num->order; i++){
+    for ( i = 1; i<=num->order; i++){
 
         factor *= i;
 
@@ -450,15 +459,18 @@ otinum_t oti_sub_realoti(coeff_t a, otinum_t* num2, dhelpl_t dhl){
 // ****************************************************************************************************
 otinum_t oti_neg(otinum_t* num1, dhelpl_t dhl){
 
+    ord_t ordi;
+    ndir_t i;
+
     otinum_t res = oti_copy( num1, dhl);
     
     res.re *= -1;
 
     if (num1->order != 0){
 
-        for ( ord_t ordi = 0; ordi < res.order; ordi++){
+        for (  ordi = 0; ordi < res.order; ordi++){
 
-            for (ndir_t i=0; i < res.p_ndpo[ordi]; i++){
+            for ( i=0; i < res.p_ndpo[ordi]; i++){
                 
                 res.p_im[ordi][i] *= -1;
 
@@ -476,15 +488,18 @@ otinum_t oti_neg(otinum_t* num1, dhelpl_t dhl){
 // ****************************************************************************************************
 otinum_t oti_sub(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 
+    ord_t ordi;
+    ndir_t i;
+
     otinum_t res = oti_copy( num1, dhl);
     
     res.re -= num2->re;
 
     if (num1->nbases == num2->nbases && num1->order == num2->order){
 
-        for ( ord_t ordi = 0; ordi < res.order; ordi++){
+        for (  ordi = 0; ordi < res.order; ordi++){
 
-            for (ndir_t i=0; i < res.p_ndpo[ordi]; i++){
+            for ( i=0; i < res.p_ndpo[ordi]; i++){
                 
                 res.p_im[ordi][i] -= num2->p_im[ordi][i];
 
@@ -508,11 +523,12 @@ otinum_t oti_sub(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 
     otinum_t res = oti_createZero( num1->nbases, num1->order, dhl);
-    
+    ord_t ord_res;
+    ord_t ord_mul1;
     //  0 X 0
     res.re = num1->re * num2->re;
 
-    for ( ord_t ord_res = 1; ord_res <= res.order; ord_res++){
+    for (  ord_res = 1; ord_res <= res.order; ord_res++){
 
 
         // First multiply  re x ord_res        
@@ -527,7 +543,7 @@ otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
             res.p_im[ord_res-1],res.p_ndpo[ord_res-1],
             dhl);
 
-        for (ord_t ord_mul1 = 1; ord_mul1 <= ord_res/2; ord_mul1++){
+        for ( ord_mul1 = 1; ord_mul1 <= ord_res/2; ord_mul1++){
 
             ord_t ord_mul2 = ord_res - ord_mul1;
             // printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
@@ -564,13 +580,15 @@ otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 // ****************************************************************************************************
 otinum_t oti_mul_real(coeff_t a, otinum_t* num1, dhelpl_t dhl){
 
+    ord_t ordi;
+    ndir_t i;
     otinum_t res = oti_copy( num1, dhl);
     
     res.re *= a;
 
-    for ( ord_t ordi = 0; ordi < res.order; ordi++){
+    for (  ordi = 0; ordi < res.order; ordi++){
 
-        for (ndir_t i=0; i<res.p_ndpo[ordi]; i++){
+        for ( i=0; i<res.p_ndpo[ordi]; i++){
             
             res.p_im[ordi][i] *= a;
 
@@ -586,15 +604,17 @@ otinum_t oti_mul_real(coeff_t a, otinum_t* num1, dhelpl_t dhl){
 // ****************************************************************************************************
 otinum_t oti_sum(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 
+    ord_t ordi;
+    ndir_t i;
     otinum_t res = oti_copy( num1, dhl);
     
     res.re += num2->re;
 
     if (num1->nbases == num2->nbases && num1->order == num2->order){
 
-        for ( ord_t ordi = 0; ordi < res.order; ordi++){
+        for ( ordi = 0; ordi < res.order; ordi++){
 
-            for (ndir_t i=0; i < res.p_ndpo[ordi]; i++){
+            for (i=0; i < res.p_ndpo[ordi]; i++){
                 
                 res.p_im[ordi][i] += num2->p_im[ordi][i];
 
@@ -628,10 +648,11 @@ otinum_t oti_sum_real(coeff_t a, otinum_t* num1, dhelpl_t dhl){
 // ****************************************************************************************************
 void oti_set(otinum_t* num, otinum_t* res, dhelpl_t dhl){
 
+    ord_t ord;
     res->re = num->re;
     
     // Copy information from num1 to res.
-    for(ord_t ord = 0; ord<num->order; ord++){
+    for( ord = 0; ord<num->order; ord++){
 
         memcpy( res->p_im[ord], num->p_im[ord], res->p_ndpo[ord]*sizeof(coeff_t) );
 
@@ -643,6 +664,7 @@ void oti_set(otinum_t* num, otinum_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 otinum_t oti_copy(otinum_t* num, dhelpl_t dhl){
     
+    ord_t ord;
     otinum_t res;
         
     // Allocate num1.
@@ -651,7 +673,7 @@ otinum_t oti_copy(otinum_t* num, dhelpl_t dhl){
     res.re = num->re;
     
     // Copy information from num1 to res.
-    for(ord_t ord = 0; ord<num->order; ord++){
+    for( ord = 0; ord<num->order; ord++){
 
         res.p_ndpo[ord] = num->p_ndpo[ord];
 
@@ -749,7 +771,8 @@ void oti_setIm_IdxOrd( coeff_t a, imdir_t idx, ord_t order, otinum_t* num, dhelp
 
 // ****************************************************************************************************
 void oti_print( otinum_t* num, dhelpl_t dhl){
-
+    ord_t ord ;
+    ndir_t dir;
     // char* string = NULL;
     printf("  Order: %hhu, nbases: %hu, ndir: %lu, re: %11.4e\n",
         num->order, num->nbases, num->ndir, num->re);
@@ -757,11 +780,11 @@ void oti_print( otinum_t* num, dhelpl_t dhl){
 
     printf("    0 ,         0 ,%11.4e\n",num->re);
 
-    for(ord_t ord = 0; ord<num->order; ord++){
+    for( ord = 0; ord<num->order; ord++){
 
         ndir_t ndir_i = num->p_ndpo[ord];
 
-        for (ndir_t dir=0; dir< ndir_i; dir++){
+        for ( dir=0; dir< ndir_i; dir++){
 
             printf(" %4hhu , %9lu ,%11.4e\n",ord+1, dir, num->p_im[ord][dir]);
 
@@ -775,10 +798,11 @@ void oti_print( otinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 void oti_free( otinum_t* num ){
     
+    ord_t ordi ;
     if (num->p_im != NULL){
 
 
-        for (ord_t ordi = 0; ordi<num->order; ordi++){
+        for ( ordi = 0; ordi<num->order; ordi++){
 
             free( num->p_im[ordi] );
 
@@ -814,13 +838,13 @@ otinum_t oti_createZero( bases_t nbases, ord_t order, dhelpl_t dhl){
 
 // ****************************************************************************************************
 void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl){
-    
+    ord_t ordi;
     num->re = a;
     
     // Set all imaginary directions to 0
     if (num->order != 0){
         
-        for (ord_t ordi = 0; ordi < num->order; ordi++){
+        for ( ordi = 0; ordi < num->order; ordi++){
             
             memset( num->p_im[ordi], 0, num->p_ndpo[ordi]*sizeof(coeff_t) );
         
@@ -834,7 +858,8 @@ void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
     
-    otinum_t num; 
+    otinum_t num;
+    ord_t ordi; 
     
     // Get the number of imaginary directions for nbases and order.
     num.ndir = 0; // Excludes the real direction.
@@ -855,7 +880,7 @@ otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
             exit(OTI_OutOfMemory);
         }
 
-        for (ord_t ordi = 0; ordi<num.order; ordi++){
+        for (ordi = 0; ordi<num.order; ordi++){
 
             num.p_ndpo[ordi] = dhelp_extract_ndirOrder( num.nbases, ordi+1, dhl );
             // num.p_ndpo[ordi] = dhelp_ndirOrder( num.nbases, ordi+1 );

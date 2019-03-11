@@ -145,6 +145,7 @@ void loadnpy_ndirs( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_d
 // ****************************************************************************************************
 void dhelp_load_tmps( dhelp_t* p_dH){
 
+    ndir_t i;
     // Allocate pointers
     p_dH->p_im  = ( coeff_t**) malloc(p_dH->Ntmps*sizeof( coeff_t*));
     p_dH->p_idx = ( imdir_t**) malloc(p_dH->Ntmps*sizeof( imdir_t*)); 
@@ -164,7 +165,7 @@ void dhelp_load_tmps( dhelp_t* p_dH){
 
     }
 
-    for (ndir_t i = 0; i<p_dH->Ntmps; i++){
+    for (i = 0; i<p_dH->Ntmps; i++){
 
         p_dH->p_im[i]   = (coeff_t*) malloc( p_dH->Ndir*sizeof(coeff_t));
         p_dH->p_idx[i]  = (imdir_t*) malloc( p_dH->Ndir*sizeof(imdir_t));
@@ -215,6 +216,7 @@ void dhelp_dense_mult(coeff_t* p_im1, ndir_t ndir1, ord_t ord1, // Input 1
     
     imdir2d_t tmp_multtabl ;
     ndir_t ndir_i1, ndir_i2;
+    imdir_t i,j;
     coeff_t* p_dir1;
     coeff_t* p_dir2;
         
@@ -233,9 +235,9 @@ void dhelp_dense_mult(coeff_t* p_im1, ndir_t ndir1, ord_t ord1, // Input 1
         p_dir2 = p_im1;
     }
 
-    for (imdir_t i =0; i<ndir_i1; i++){
+    for ( i =0; i<ndir_i1; i++){
 
-        for (imdir_t j =0; j<ndir_i2; j++){
+        for ( j =0; j<ndir_i2; j++){
         
             imdir_t imdir_res = 
                 array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],i,j);
@@ -255,10 +257,10 @@ void dhelp_dense_mult_real(coeff_t* p_im1, ndir_t ndir1, // Input 1
                       coeff_t a,                         // Input 2
                       coeff_t* p_imres, ndir_t ndirres,  // Result
                       dhelpl_t dhl){                     // Helper
-
+    ndir_t i;
     if (ndir1 == ndirres){
         
-        for (ndir_t i =0; i<ndir1; i++){
+        for ( i =0; i<ndir1; i++){
             
             p_imres[i] +=  a*p_im1[i] ;
 
@@ -278,12 +280,12 @@ void dhelp_imdir2str(imdir_t imdir, ord_t ord, dhelpl_t* dhl, char* str){
     
 
     //TODO: Check for inconsistencies.
-    
+    int i;
     
 
     // Get the 
         
-    for (int i=0; i<ord; i++){
+    for ( i=0; i<ord; i++){
         sprintf(str,"%hu,",dhl->p_dh[ord].p_fulldir[ord*(imdir-1)+i]);
     }
 
@@ -295,7 +297,7 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
     
     // TODO: Make a reload function that is capable of loading different set of files.
     // TODO: Add a default configuration file that indicates the number of elements to be loaded
-    
+    int i;
     dhl->ndh = 10;               // Number of elements in the ndirs array
 
                                       //                    Order
@@ -335,7 +337,7 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
 
     ndir_t  ntmps =  10; // Number of arrays for temporal variables.
     
-    for( int i = 1; i<=dhl->ndh; i++){
+    for( i = 1; i<=dhl->ndh; i++){
       // printf("Loading dhelp %d\n",i);
       dhelp_load_singl(strLocation, i, nbases_ord[i-1], ntmps,allocSzs_ord[i-1], &(dhl->p_dh[i-1]));
 
@@ -457,8 +459,9 @@ inline int64_t dhelp_comb(int64_t a, int64_t b){
     
     int64_t niter = a - MAX(a-b,b);
     int64_t num = 1, den=1;
+    int64_t i;
 
-    for(int64_t i = 0; i<niter; i++){
+    for(i = 0; i<niter; i++){
 
         den = den * (i+1) ;
         num = num * (a-i) ;
@@ -509,8 +512,8 @@ ndir_t dhelp_extract_ndirOrder(bases_t nbases,ord_t order,dhelpl_t dhl){
 ndir_t dhelp_extract_ndirTotal(bases_t nbases, ord_t order, dhelpl_t dhl){
 
     ndir_t ndir_total = 1;
-
-    for(ord_t ord = 1; ord <= order; ord++){
+    ord_t ord;
+    for( ord = 1; ord <= order; ord++){
 
         //extract each order
         ndir_total += dhelp_extract_ndirOrder( nbases, ord, dhl );
@@ -585,8 +588,10 @@ void dhelp_multDir(imdir_t  indx1,   ord_t  ord1,   imdir_t indx2, ord_t ord2,
 // ****************************************************************************************************
 void dhelp_printImdir(imdir_t indx, ord_t order, dhelpl_t dhl){          
 
+    ord_t i;
+
     printf("e(");
-    for(ord_t i = 0; i<order; i++){
+    for(i = 0; i<order; i++){
         
         printf(_PBASEST ",", array2d_getel_ui16_t(dhl.p_dh[order-1].p_fulldir, order, indx, i));
 
@@ -599,7 +604,9 @@ void dhelp_printImdir(imdir_t indx, ord_t order, dhelpl_t dhl){
 // ****************************************************************************************************
 void dhelp_printList(const dhelpl_t dhl){          
     
-    for(int i =0; i<dhl.ndh; i++){
+    ord_t i;
+
+    for( i =0; i<dhl.ndh; i++){
 
         dhelp_print( &dhl.p_dh[i] );
 
@@ -625,8 +632,9 @@ void dhelp_print( dhelp_t* p_dH){
 
 // ****************************************************************************************************
 void dhelp_free(dhelpl_t* dhl){          
-    
-    for( int i = 1; i<=dhl->ndh; i++){
+    int i;
+
+    for( i = 1; i<=dhl->ndh; i++){
       // printf("Order: "_PORDT"\n",i);
       dhelp_freeItem( &dhl->p_dh[i-1] );
 
@@ -1034,6 +1042,7 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
     ord_t n_multtabls = order / 2, o1, o2,j ;
     bases_t* dirs1;
     bases_t* dirs2;
+    ord_t table;
     
     dhl->p_dh[order-1].Nmult = n_multtabls;
     dhl->p_dh[order-1].p_multtabls = (imdir2d_t*)malloc( n_multtabls*sizeof(imdir2d_t) );
@@ -1046,7 +1055,7 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
     }
 
 
-    for(ord_t table = 0; table<n_multtabls; table++ ){
+    for(table = 0; table<n_multtabls; table++ ){
 
         o1 = table+1;
         o2 = order-table-1;
@@ -1274,6 +1283,7 @@ void dhelp_save_multtabls(char* directory, bases_t base, ord_t order,  dhelpl_t 
 void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder ){
 
     dhelpl_t dhl;
+    ord_t order,ntabls;
     // char fullpathname[1024];
     // char filename[1024], holder[1024];
 
@@ -1285,7 +1295,7 @@ void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder ){
       exit(OTI_OutOfMemory);
 
     }
-    for (ord_t order = 1; order<=maxorder; order++){
+    for ( order = 1; order<=maxorder; order++){
         
 
         
@@ -1322,11 +1332,11 @@ void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder ){
 
     printf("Exiting:\n");
     
-    for (ord_t order = 1; order<=maxorder; order++){
+    for ( order = 1; order<=maxorder; order++){
         free(dhl.p_dh[order-1].p_fulldir);
         free(dhl.p_dh[order-1].p_ndirs);
         
-        for (ord_t ntabls = 0; ntabls < dhl.p_dh[order-1].Nmult; ntabls++){
+        for (ntabls = 0; ntabls < dhl.p_dh[order-1].Nmult; ntabls++){
             free(dhl.p_dh[order-1].p_multtabls[ntabls].p_arr);  
         }
         free(dhl.p_dh[order-1].p_multtabls);    
@@ -1525,7 +1535,7 @@ inline void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  n
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+inline void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
@@ -1583,7 +1593,7 @@ inline void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_
 
 
 // ****************************************************************************************************
-void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+void dhelp_sparse_add_dirs_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
@@ -1681,6 +1691,7 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
 
     ord_t     tmp_ord      = ord1 + ord2;
     imdir2d_t tmp_multtabl ;
+    ndir_t i,j;
 
     coeff_t* p_im_tmp1  = dhl.p_dh[tmp_ord-1].p_im[3] ;
     coeff_t* p_im_tmp2  = dhl.p_dh[tmp_ord-1].p_im[4] ;
@@ -1770,12 +1781,12 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
         
         
         // Check previous elements from next direction.:
-        for (ndir_t i = 0; i<ndirmin; i++){
+        for ( i = 0; i<ndirmin; i++){
 
             idx_i = p_idxmin[i];
             im_i = p_immin[i];
 
-            for (ndir_t j = 0; j<ndirmax; j++){
+            for ( j = 0; j<ndirmax; j++){
 
                 // Multiply the elements
                 if (flag){
@@ -1842,6 +1853,7 @@ void dhelp_sparse_mult_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
 
     ord_t     tmp_ord      = ord1 + ord2;
     imdir2d_t tmp_multtabl ;
+    ndir_t i,j;
 
     imdir_t idx_curr_res = 0;
     imdir_t idx_next_res = 0;
@@ -1904,9 +1916,9 @@ void dhelp_sparse_mult_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
 
         idx_curr_res = idx_next_res;    
         // Check previous elements from next direction.:
-        for (ndir_t i = 0; i<ndirmin; i++){
+        for (i = 0; i<ndirmin; i++){
 
-            for (ndir_t j = 0; j<ndirmax; j++){
+            for (j = 0; j<ndirmax; j++){
 
                 idx_next_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
                     p_idxmin[i],p_idxmax[j]); 
@@ -1937,9 +1949,10 @@ void dhelp_sparse_mult_real( coeff_t val,
                        coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,         
                        dhelpl_t dhl){                            // Helper
 
+    ndir_t i;
     (*ndirres) = ndir1;
 
-    for (ndir_t i = 0; i<ndir1; i++){
+    for ( i = 0; i<ndir1; i++){
 
         p_imres[i]  = val*p_im1[i];
         p_idxres[i] = p_idx1[i];

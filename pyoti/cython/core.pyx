@@ -2,8 +2,8 @@
 # cython: wraparound=False 
 # cython: nonecheck=False 
 # cython: language_level=3
-# cython: profile=True
-# cython: linetrace=True
+# cython: profile=False
+# cython: linetrace=False
 # cython: binding=True
 # cython: embedsignature=False
 ## distutils: define_macros=CYTHON_TRACE_NOGIL=1
@@ -16,7 +16,7 @@
 #-----------------------------------------------------------------------------------------------------
 
 import numpy as np                        # General numerical library
-cimport numpy as np                       # C-level functions of numpy
+cimport numpy as np                       # C-level functions of numpy 
 from libc.stdlib cimport malloc,free      # import memory managment functions.
 from libc.stdlib cimport realloc          #    "              "
 from libc.string cimport memcpy           # fast memory block copy.

@@ -172,9 +172,11 @@ int main(int argc, char *argv[]){
 	ord_t ordmin = MIN(ord1,ord2);
 	imdir2d_t tmp_multtabl = dhl.p_dh[ord1+ord2-1].p_multtabls[ordmin-1];
 
-	for (ndir_t i = 0; i<ndir1; i++){
+	ndir_t i,j;
+	
+	for ( i = 0; i<ndir1; i++){
 
-		for (ndir_t j =0; j<ndir2; j++){
+		for ( j =0; j<ndir2; j++){
 			
 			
 			dhelp_multDir( idx1[i],ord1, idx2[j],ord2 ,&idx_res, &ord_res , dhl);
@@ -214,9 +216,9 @@ int main(int argc, char *argv[]){
     ndirres++;
     idx_curr_res = idx_next_res;	
 	// Check previous elements from next direction.:
-	for (ndir_t i = 0; i<ndir1; i++){
+	for ( i = 0; i<ndir1; i++){
 
-		for (ndir_t j =0; j<ndir2; j++){
+		for ( j =0; j<ndir2; j++){
 
 			dhelp_multDir( idx1[i],ord1, idx2[j],ord2 ,&idx_next_res, &ord_res , dhl);
 
@@ -245,7 +247,7 @@ int main(int argc, char *argv[]){
 		               im1,idx1,ndir1,ord1, 
                        p_im_res, p_idx_res, &ndirres,          
                        dhl);
-	for (ndir_t i = 0; i<ndirres; i++){
+	for ( i = 0; i<ndirres; i++){
 		printf("%4lu, %f\n",p_idx_res[i],p_im_res[i]);
 	} 
 	printf("Total second pass multiplications: %lu vs total performed: %lu\n",ndir1*ndir2,ndirres);

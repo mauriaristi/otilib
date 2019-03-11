@@ -59,8 +59,9 @@ int main(int argc, char *argv[]){
     double cpu_time_used;
     
     start = clock(); 
-	for(imdir_t i = 0; i<Ni; i++){
-		for(imdir_t j = 0; j<Nj; j++){
+    imdir_t i,j;
+	for( i = 0; i<Ni; i++){
+		for( j = 0; j<Nj; j++){
 			// printf("Multiplying ");
 			// dhelp_printImdir(i,ordi,dhl);		
 			// printf(" X ");

@@ -2,12 +2,12 @@
 # cython: wraparound=False 
 # cython: nonecheck=False 
 # cython: language_level=3
-# cython: profile=True
+# cython: profile=False
 # cython: linetrace=True
 # cython: binding=True
 # cython: embedsignature=False
-# distutils: define_macros=CYTHON_TRACE_NOGIL=1
-# distutils: libraries = oti 
+## distutils: define_macros=CYTHON_TRACE_NOGIL=1
+## distutils: libraries = oti 
 ## distutils: extra_compile_args = -arch i386 -arch x86_64
 # filename: sparse.pyx
 
@@ -64,13 +64,12 @@ cdef class sotinum:
                   
     """
     #*************************************************************************************************
-    # print("Deallocating memory of sotinum.")
+    
     if self.FLAGS & 1: # If memory is owned by this otinum.
 
       soti_free(&self.num)
 
     #end if 
-    # print("Finished deallocating sotinum")
     
   #---------------------------------------------------------------------------------------------------
   

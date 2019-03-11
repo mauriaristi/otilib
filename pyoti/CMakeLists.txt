@@ -40,8 +40,11 @@ SET(CYTHONIZE_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include"   )
 
 if(APPLE)
 	# Apple requires the arquitecture to be defined.
-	SET(DUTILS_ECARG1 "-arch i386"  )
-	SET(DUTILS_ECARG2 "-arch x86_64")
+	# SET(DUTILS_ECARG1 "-arch i386"  )
+	# SET(DUTILS_ECARG2 "-arch x86_64")
+
+	SET(DUTILS_ECARG1 "-I.")
+	SET(DUTILS_ECARG2 "-I.")
 else(APPLE)
 	# these are dummy arguments for distutils, because linux does
 	# not require setting this
@@ -62,7 +65,9 @@ ADD_CUSTOM_TARGET(oticython ALL
 # # 2. Execute Cython setup call 
 ADD_CUSTOM_COMMAND (
 	TARGET  oticython
-	COMMAND python3 ${CYTHON_SETUP_DIR}/setup.py build_ext -b${PROJECT_BINARY_DIR} 
+	# COMMAND python3 ${CYTHON_SETUP_DIR}/setup.py build_ext -b${PROJECT_BINARY_DIR} 
+	# COMMAND CC=icc python3 ${CYTHON_SETUP_DIR}/setup.py build_ext -b${PROJECT_BINARY_DIR} 
+	COMMAND ${CYTHON_CMD_CALL_PREC} python3 ${CYTHON_SETUP_DIR}/setup.py build_ext -b${PROJECT_BINARY_DIR} 
 )
 
 ADD_CUSTOM_COMMAND (

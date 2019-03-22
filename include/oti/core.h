@@ -732,6 +732,12 @@ to preserve order.
 uint64_t binSearchUI64(  uint64_t elem, uint64_t* p_arr, uint64_t size, flag_t* flag);
 // ----------------------------------------------------------------------------------------------------
 
+void printArrayDBL(double* ptr_,uint64_t n);
+void printArrayUI64(uint64_t* ptr_,uint64_t n);
+void printArrayUI16(uint16_t* ptr_,uint8_t n);
+void printArrayUI8(uint8_t* ptr_,uint8_t n);
+
+
 
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------------     END DECLARATIONS     ----------------------------------------

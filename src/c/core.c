@@ -1540,6 +1540,65 @@ inline void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  n
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
 
+    ndir_t  offset, j2, jres;
+    imdir_t dir1, dir2;
+    coeff_t im1, im2;
+
+    flag_t flag1;
+    
+    // Copy all elements fron dir1 to the result:a*a
+    memcpy(p_imres ,p_im1 ,ndir1*sizeof(coeff_t));
+    memcpy(p_idxres,p_idx1,ndir1*sizeof(imdir_t));
+    *ndirres = ndir1;
+
+    offset   = 0;
+    j2   = 0;
+    jres = 0;
+    
+    for( j2=0; j2 < ndir2; j2++ ){ 
+        
+        
+        // printf("Seraching %lu\n",p_idx2[j2]);
+        // offset = jres;
+        jres += binSearchUI64( p_idx2[j2], &p_idxres[jres], *ndirres-jres, &flag1);
+        // jres = binSearchUI64( p_idx2[j2], p_idxres,        *ndirres,      &flag1);
+
+        if (flag1){
+            // The elment exists in res, add them together
+            // printf("Found same indx, adding up\n");
+            p_imres[jres] += p_im2[j2];
+
+        } else {
+            // Insert the element in the list at the proper position.
+            // printf("Found different indx, inserting new element\n");
+            memmove( &p_idxres[jres+1], &p_idxres[jres], (*ndirres-jres)*sizeof(imdir_t));
+            memmove( &p_imres[jres+1],  &p_imres[jres],  (*ndirres-jres)*sizeof(coeff_t));
+            
+            p_imres[jres]  = p_im2[j2] ;
+            p_idxres[jres] = p_idx2[j2];
+            (*ndirres)    += 1;
+
+
+        }
+        // printArrayDBL( p_imres, *ndirres);printf("\n");
+        // printArrayUI64(p_idxres,*ndirres);printf("\n\n");
+
+        
+        
+
+    }
+
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+inline void dhelp_sparse_add_dirs_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
+                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
+                           dhelpl_t dhl){
+
     ndir_t j1, j2, jres;
     imdir_t dir1, dir2;
     coeff_t im1, im2;
@@ -1593,7 +1652,7 @@ inline void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  n
 
 
 // ****************************************************************************************************
-void dhelp_sparse_add_dirs_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+void dhelp_sparse_add_dirs_older(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
@@ -1986,6 +2045,121 @@ void dhelp_sparse_copy(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 // ----------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void printArrayDBL(double* ptr_,uint64_t n){
+    /*
+
+    c_printArrayUI16( ptr_, size):
+
+    Function that prints an array of unsigned integers of 64 bits of size n.
+
+    */
+    // ************************************************************************************************
+
+    printf("[");
+
+    for (uint64_t i = 0; i<n ; i++){
+
+        printf(" %g,",ptr_[i]);
+    }
+
+    printf("]");
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void printArrayUI64(uint64_t* ptr_,uint64_t n){
+    /*
+
+    c_printArrayUI16( ptr_, size):
+
+    Function that prints an array of unsigned integers of 64 bits of size n.
+
+    */
+    // ************************************************************************************************
+
+    printf("[");
+
+    for (uint64_t i = 0; i<n ; i++){
+
+        printf(" %llu,",ptr_[i]);
+    }
+
+    printf("]");
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void printArrayUI16(uint16_t* ptr_,uint8_t n){
+    /*
+
+    c_printArrayUI16( ptr_, size):
+
+    Function that prints an array of unsigned integers of 16 bits of size n.
+
+    */
+    // ************************************************************************************************
+
+    printf("[");
+
+    for (int i = 0; i<n ; i++){
+
+        printf(" %hu,",ptr_[i]);
+    }
+
+    printf("]");
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void printArrayUI8(uint8_t* ptr_,uint8_t n){
+    /*
+
+    c_printArrayUI16( ptr_, size):
+
+    Function that prints an array of unsigned integers of 16 bits of size n.
+
+    */
+
+    printf("[");
+
+    for (int i = 0; i<n ; i++){
+
+        printf(" %hhu,",ptr_[i]);
+    }
+
+    printf("]");
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

@@ -15,47 +15,366 @@
 
 // ----------------------------------------------------------------------------------------------------
 
-
 // ****************************************************************************************************
-void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl){
-    ord_t ordi;
-    ndir_t i;
-    for (  ordi = ord-1; ordi < res->order; ordi++){
+sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl){
 
-        for ( i=0; i<res->p_nnz[ordi]; i++){
-            
-            res->p_im[ordi][i] *= a;
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-        }
+    der_r_atanh(num->re, num->order, derivs);
 
-    }
+    return soti_feval(derivs, num, dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
-// // ****************************************************************************************************
-// void soti_trunc_ssum(sotinum_t* num1, 
-//                     ord_t ord, sotinum_t* res, dhelpl_t dhl ){
-    
-//     // Initialize
-//     ord_t ordi;
-//     ndir_t i; 
+// ****************************************************************************************************
+sotinum_t soti_asinh(sotinum_t* num, dhelpl_t dhl){
 
-//     for (  ordi = ord-1; ordi < res->order; ordi++){
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-//         for ( i=0; i < res->p_ndpo[ordi]; i++){
-            
-//             res->p_im[ordi][i] += num1->p_im[ordi][i];
+    der_r_asinh(num->re, num->order, derivs);
 
-//         }
+    return soti_feval(derivs, num, dhl);
 
-//     }
-    
-// }
-// // ----------------------------------------------------------------------------------------------------
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_trunc_mul(sotinum_t* num1, ord_t ord1, sotinum_t* num2, ord_t ord2, dhelpl_t dhl){
+sotinum_t soti_acosh(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_acosh(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_tanh(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_tanh(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_sqrt(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_sqrt(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_cosh(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_cosh(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_sinh(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_sinh(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_asin(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_asin(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_acos(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_acos(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_atan(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_atan(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_tan(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_tan(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_cos(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_cos(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_sin(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_sin(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_logb(sotinum_t* num, double base, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_logb(num->re, base, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_log10(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_log10(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_log(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_log(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_exp(num->re, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_pow(num->re, e, num->order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl ){
+    
+    ord_t i ;
+
+    coeff_t factor = 1.0, val = 0.0;
+    sotinum_t res  ;
+    sotinum_t tmp1 = soti_get_tmp( 7,num->order,dhl);
+    sotinum_t tmp2 = soti_get_tmp( 8,num->order,dhl);
+    sotinum_t tmp3 = soti_get_tmp( 9,num->order,dhl);
+
+    soti_set( num, &tmp2, dhl);
+
+    for ( i = 1; i < num->order; i++){
+        // printf("\n=============================================\n");
+        // printf("\niter: %hhu\n",i);
+
+        factor *= i;
+
+        val = feval_re[i]/factor;
+        
+        soti_set(&tmp2 , &tmp1, dhl);
+        soti_trunc_smul_real( val, i, &tmp2, dhl);
+        
+
+        // printf("\n(before soti_trunc_ssum) tmp2:\n");
+        // soti_print(&tmp2,dhl); 
+        // printf("\n(before soti_trunc_ssum) tmp3:\n");
+        // soti_print(&tmp3,dhl); 
+
+        soti_trunc_ssum( &tmp2, i, &tmp3, dhl );
+
+        // printf("\n(after soti_trunc_ssum) tmp3:\n");
+        // soti_print(&tmp3,dhl); 
+
+        // update
+        soti_setFromReal( 0.0, &tmp2, dhl);
+
+
+
+        // printf("\n.    -               -               -   \n");
+
+        // printf("\n(before soti_trunc_mul) tmp1:\n");
+        // soti_print(&tmp1,dhl);  
+
+        // printf("\n(before soti_trunc_mul) num:\n");
+        // soti_print(num,dhl);  
+
+        soti_trunc_mul(&tmp1, i, num, 1, &tmp2, dhl );
+        
+        // printf("\n(soti_trunc_mul) tmp2:\n");
+        // soti_print(&tmp2,dhl);        
+
+
+
+           
+        
+
+    }
+
+    for (; i<=num->order; i++){
+        
+        factor *= i;
+        val = feval_re[i]/factor;        
+        soti_set(&tmp2 , &tmp1, dhl);
+        soti_trunc_smul_real( val, i, &tmp2, dhl);
+        soti_trunc_ssum( &tmp2, i, &tmp3, dhl );
+
+    }
+
+    // reset the size values of the tmp number    
+    for( i=0; i<tmp3.order; i++){
+        
+        tmp3.p_size[i] = tmp3.p_nnz[i];
+    }
+    // Set real value.
+    tmp3.re = feval_re[0];
+    // copy....
+    res = soti_copy( &tmp3, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl){
+    
+    ord_t ordi;
+    ndir_t i;
+
+    if (a == 0.0){
+        
+        for (  ordi = ord-1; ordi < res->order; ordi++){
+
+            res->p_nnz[ordi]=0.0;
+
+        }
+
+    } else {
+
+        for (  ordi = ord-1; ordi < res->order; ordi++){
+
+            for ( i=0; i<res->p_nnz[ordi]; i++){
+                
+                res->p_im[ordi][i] *= a;
+
+            }
+
+        }
+
+    }    
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_trunc_ssum(sotinum_t* num1, ord_t ord, sotinum_t* res, dhelpl_t dhl ){
+    
+    // Initialize
+    ord_t ordi;
+
+    sotinum_t tmpres = soti_get_tmp(6,res->order,dhl); 
+    
+    soti_set(res, &tmpres, dhl);
+
+    for (  ordi = ord-1; ordi < res->order; ordi++){
+
+        dhelp_sparse_add_dirs(num1->p_im[ordi],  num1->p_idx[ordi],   num1->p_nnz[ordi],
+                               res->p_im[ordi],   res->p_idx[ordi],    res->p_nnz[ordi],
+                             tmpres.p_im[ordi], tmpres.p_idx[ordi], &tmpres.p_nnz[ordi], dhl);
+
+    }
+
+    soti_set_trunc( &tmpres, ord, res, dhl);
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_trunc_mul(sotinum_t* num1, ord_t ord1, 
+                    sotinum_t* num2, ord_t ord2, 
+                    sotinum_t* dest, dhelpl_t dhl ){
 
     sotinum_t res, tmp, tmp2, tmp3;
     sotinum_t* tmpsrc= &tmp ;
@@ -67,13 +386,15 @@ sotinum_t soti_trunc_mul(sotinum_t* num1, ord_t ord1, sotinum_t* num2, ord_t ord
 
     // Retreive sotinum temporals.
     // All tmps are created with no elements in imaginary directions (but allocated).
-    tmp = soti_get_tmp(0,res_ord,dhl); // will hold the final result.
-    tmp2= soti_get_tmp(1,res_ord,dhl); // Will hold the temporary result.
-    tmp3= soti_get_tmp(2,res_ord,dhl); // Will hold the temporary result.    
+    tmp = soti_get_tmp(3,res_ord,dhl); // will hold the final result.
+    tmp2= soti_get_tmp(4,res_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_tmp(5,res_ord,dhl); // Will hold the temporary result.    
         
     ordlim1 = MIN(num1->order, res_ord - 1);
     
     // printf("\nLim ord1: %hhu\n",ordlim1);
+    // printf("\nord1: %hhu\n",ord1);
+    // printf("ord2: %hhu\n",ord2);
     
     for(ordi1=ord1-1; ordi1<ordlim1; ordi1++){
 
@@ -84,99 +405,42 @@ sotinum_t soti_trunc_mul(sotinum_t* num1, ord_t ord1, sotinum_t* num2, ord_t ord
         // printf("Lim ord2: %hhu\n",ordlim2);
         for (ordi2=ord2-1; ordi2<ordlim2; ordi2++){
 
-            ordires = ordi1 + ordi2 +1;
-            // printf("Multipliyng: %hhu x %hhu = %hhu\n",ordi1+1,ordi2+1,ordires+1);
+            ordires = ordi1 + ordi2 + 1;
+            // printf("\nMultipliyng: %hhu x %hhu = %hhu\n",ordi1+1,ordi2+1,ordires+1);
+            // printArrayDBL( num1->p_im[ordi1  ],  num1->p_nnz[ordi1  ]);printf("\n");
+            // printArrayUI64(num1->p_idx[ordi1  ], num1->p_nnz[ordi1  ]);printf("\n\n");
+            // printf("    x    \n");
+            // printArrayDBL( num2->p_im[ordi2  ],  num2->p_nnz[ordi2  ]);printf("\n");
+            // printArrayUI64(num2->p_idx[ordi2  ], num2->p_nnz[ordi2  ]);printf("\n\n");
 
-            dhelp_sparse_mult(num1->p_im[ordi1], num1->p_idx[ordi1], num1->p_nnz[ordi1],ordi1+1,
-                              num2->p_im[ordi2], num2->p_idx[ordi2], num2->p_nnz[ordi2],ordi2+1,
-                              tmp2.p_im[ordires],tmp2.p_idx[ordires],&tmp2.p_nnz[ordires], dhl);
-                            
+
+            dhelp_sparse_mult(num1->p_im[ordi1  ], num1->p_idx[ordi1  ], num1->p_nnz[ordi1  ], ordi1+1,
+                              num2->p_im[ordi2  ], num2->p_idx[ordi2  ], num2->p_nnz[ordi2  ], ordi2+1,
+                               tmp2.p_im[ordires],  tmp2.p_idx[ordires], &tmp2.p_nnz[ordires],     dhl );
+            // printf("Result: ");
+            // printArrayDBL( tmp2.p_im[ordi2  ],  tmp2.p_nnz[ordi2  ]);printf("\n");
+            // printArrayUI64(tmp2.p_idx[ordires], tmp2.p_nnz[ordires]);printf("\n\n\n\n");
             
-            
-            dhelp_sparse_add_dirs(tmp2.p_im[ordires], tmp2.p_idx[ordires], tmp2.p_nnz[ordires],
-                                  tmpsrc->p_im[ordires], tmpsrc->p_idx[ordires], tmpsrc->p_nnz[ordires],
+            dhelp_sparse_add_dirs(    tmp2.p_im[ordires],     tmp2.p_idx[ordires],      tmp2.p_nnz[ordires],
+                                   tmpsrc->p_im[ordires],  tmpsrc->p_idx[ordires],   tmpsrc->p_nnz[ordires],
                                   tmpdest->p_im[ordires], tmpdest->p_idx[ordires], &tmpdest->p_nnz[ordires], dhl);
             // printf("nnz tmp2: %lu, tmpsrc: %lu, tmpdest: %lu\n",
             //     tmp2.p_nnz[ordires],tmpsrc->p_nnz[ordires],tmpdest->p_nnz[ordires]);
 
         }
+        // soti_print(&tmp2,dhl);
 
-        tmpsrc->p_im[ordi1+1]  = tmpdest->p_im[ordi1+1] ;
-        tmpsrc->p_idx[ordi1+1] = tmpdest->p_idx[ordi1+1];
-        tmpsrc->p_nnz[ordi1+1] = tmpdest->p_nnz[ordi1+1];
+        tmpsrc->p_im[ ordi1+ord2] = tmpdest->p_im[ ordi1+ord2];
+        tmpsrc->p_idx[ordi1+ord2] = tmpdest->p_idx[ordi1+ord2];
+        tmpsrc->p_nnz[ordi1+ord2] = tmpdest->p_nnz[ordi1+ord2];
 
     }
     
-    
 
-    // reset the size values of the tmp number    
-    for(ordi1=0; ordi1<res_ord; ordi1++){
-        // printf("NNZ order %lu\n",tmpdest->p_nnz[ordi1]);
-        tmpdest->p_size[ordi1] = MAX(dhl.p_dh[ordi1].allocSize,tmpdest->p_nnz[ordi1]);
-    }
-
-    res = soti_copy(tmpdest, dhl);
-
-    return res;
+    soti_set_trunc( tmpdest, ord1+ord2-1, dest, dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-// // ****************************************************************************************************
-// void soti_trunc_mul(sotinum_t* num1, ord_t ord1, 
-//                    sotinum_t* num2, ord_t ord2, 
-//                    sotinum_t* res, dhelpl_t dhl ){
-    
-//     sotinum_t tmp, tmp2, tmp3;
-//     sotinum_t* tmpsrc= &tmp ;
-//     sotinum_t* tmpdest=&tmp3;
-//     sotinum_t* tmpswap;
-//     ord_t ordi;
-//     ord_t ord_mul1,ord_mul2;
-
-//     ord_t res_ord = MAX(num1->order,num2->order);
-    
-//     tmp = soti_get_tmp(0,res_ord,dhl); // will hold the final result.
-//     tmp2= soti_get_tmp(1,res_ord,dhl); // Will hold the temporary result.
-//     tmp3= soti_get_tmp(2,res_ord,dhl); // Will hold the temporary result.
-
-//     for ( ord_mul1 =ord1; ord_mul1 <= res->order; ord_mul1++){
-
-//         for ( ord_mul2 = res_ord-ord_mul1; ord_mul2 >= ord2; ord_mul2--){
-
-//             // printf("Multiplying order "_PORDT" times "_PORDT _ENDL, ord_mul1,ord_mul2);
-//             ord_t ord_res = ord_mul1 + ord_mul2;
-//             ordi = ord_res -1;
-
-//             dhelp_sparse_mult(num1->p_im[ord_mul1-1], num1->p_idx[ord_mul1-1], num1->p_nnz[ord_mul1-1],ord_mul1,
-//                               num2->p_im[ord_mul2-1], num2->p_idx[ord_mul2-1], num2->p_nnz[ord_mul2-1],ord_mul2,
-//                               tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
-
-//             tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
-
-//             dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-//                                   tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
-//                                   tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
-
-//         }   
-
-//     }
-
-//     // reset the size values of the tmp number    
-//     for(ordi=0; ordi<res_ord; ordi++){
-
-//         tmpdest->p_size[ordi] = MAX(dhl.p_dh[ordi].allocSize,tmpdest->p_nnz[ordi]);
-//     }
-
-//     // res = soti_copy(tmpdest, dhl);
-
-//     // return res;
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-
 
 
 // ****************************************************************************************************
@@ -184,18 +448,19 @@ void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     
     ndir_t i;
     ord_t ordi;
+
     // TODO: Add case when the two elements have different orders.
     // TODO: Add memory management when needed in this copy function.
-    if (src->order > dest->order){
-        printf("ERROR: Currently copy function of sotinum  is not implemented for order change.\n");
-    }
+    // if (src->order > dest->order){
+    //     printf("ERROR: Currently copy function of sotinum  is not implemented for order change.\n");
+    // }
 
-    // Reset sizes for dest:
-    for (ordi=0; ordi<dest->order; ordi++){
+    // // Reset sizes for dest:
+    // for (ordi=0; ordi<dest->order; ordi++){
 
-        dest->p_nnz[ordi] = 0;
+    //     dest->p_nnz[ordi] = 0;
 
-    }
+    // }
 
     for (ordi=0; ordi<src->order; ordi++){
 
@@ -249,6 +514,35 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
+coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t coef = soti_get_item(idx,order,num,dhl);
+    coeff_t factor = 1.0;
+    bases_t* dirs;
+    bases_t dir_prev;
+    ord_t i, j =1;
+    
+    // compute the factor 
+    if (coef != 0.0){
+        dirs = dhelp_get_imdir(idx,order,dhl);
+        dir_prev = dirs[0];
+        for (i=0; i<order; i++){
+            if (dirs[i] == dir_prev){
+                factor *= j;
+                j+=1;
+            } else{
+                j=1;
+                dir_prev = dirs[i];
+            }
+        }
+    }
+
+    return coef*factor;
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
 sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp, tmp2, tmp3;
@@ -261,9 +555,9 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     // Retreive sotinum temporals.
     // All tmps are created with no elements in imaginary directions (but allocated).
-    tmp = soti_get_tmp(0,res_ord,dhl); // will hold the final result.
-    tmp2= soti_get_tmp(1,res_ord,dhl); // Will hold the temporary result.
-    tmp3= soti_get_tmp(2,res_ord,dhl); // Will hold the temporary result.
+    tmp = soti_get_tmp(3,res_ord,dhl); // will hold the final result.
+    tmp2= soti_get_tmp(4,res_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_tmp(5,res_ord,dhl); // Will hold the temporary result.
     
 
     // Multiply real coefficients.
@@ -516,7 +810,7 @@ sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     tmp = soti_get_tmp(0,res_ord,dhl); // creates a sotinum with no elements in imaginary directions.
 
-    tmp.re = num1->re + num2->re;
+    tmp.re = num1->re + num2->re; 
 
     for(ordi=0; ordi<res_ord; ordi++){
         
@@ -562,7 +856,7 @@ sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     ord_t res_ord = MAX(num1->order,num2->order);
     ord_t ordi;
 
-    tmp = soti_get_tmp(0,res_ord,dhl); // creates a sotinum with no elements in imaginary directions.
+    tmp = soti_get_tmp(3,res_ord,dhl); // creates a sotinum with no elements in imaginary directions.
 
     tmp.re = num1->re - num2->re;
 
@@ -603,6 +897,34 @@ sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+sotinum_t soti_div_realoti(coeff_t num, sotinum_t* den, dhelpl_t dhl){
+
+    
+    sotinum_t inv = soti_pow(den,-1,dhl);
+    sotinum_t res = soti_mul_real(num,&inv,dhl);
+    soti_free(&inv);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_div(sotinum_t* num, sotinum_t* den, dhelpl_t dhl){
+
+    
+    sotinum_t inv = soti_pow(den,-1,dhl);
+    sotinum_t res = soti_mul(num,&inv,dhl);
+    soti_free(&inv);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 // ****************************************************************************************************
 sotinum_t soti_div_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl){
@@ -897,7 +1219,7 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
         num->order, nnz_total, num->re);
     printf("  ORD ,    IMDIR  ,   VALUE   \n");
 
-    printf("    0 ,         0 ,%11.4e\n",num->re);
+    printf("    0 ,         0 , %11.4e\n",num->re);
 
     for( ord = 0; ord<num->order; ord++){
 
@@ -1010,6 +1332,63 @@ sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
     }
 
     return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl){
+    
+    ord_t i;
+    num->re = a;
+
+    for ( i =0; i<num->order; i++){
+        // Set number of non-zero and allocated size to 0.
+        num->p_nnz[i]  = 0;         
+    }
+
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
+    
+    // Assumes both have the space allocated and both have the same truncation order
+    ord_t i;
+    dest->re = src->re;
+    
+    memcpy(dest->p_nnz, src->p_nnz, src->order*sizeof(ndir_t));
+
+    for ( i =0; i<src->order; i++){
+        
+        // Set number of non-zero and allocated size to 0.
+        // dest->p_nnz[i]  = src->p_nnz[i];
+
+        memcpy( dest->p_im[i],  src->p_im[i],  dest->p_nnz[i]*sizeof(coeff_t) );
+        memcpy( dest->p_idx[i], src->p_idx[i], dest->p_nnz[i]*sizeof(imdir_t) );
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl){
+    
+    // Assumes both have the space allocated and both have the same truncation order
+    ord_t i;
+
+    for ( i =ord-1; i<src->order; i++){
+        
+        // Set number of non-zero and allocated size to 0.
+        dest->p_nnz[i]  = src->p_nnz[i];
+
+        memcpy(dest->p_im[i], src->p_im[i], dest->p_nnz[i]*sizeof(coeff_t));
+        memcpy(dest->p_idx[i],src->p_idx[i],dest->p_nnz[i]*sizeof(imdir_t));
+
+    }
 
 }
 // ----------------------------------------------------------------------------------------------------

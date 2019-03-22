@@ -238,6 +238,45 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "otinum_spr.h"
   #---------------------------------------------------------------------------------------------------
+  
+  sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_asinh(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_acosh(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_tanh(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_sqrt(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_cosh(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_sinh(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_asin(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_acos(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_atan(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_tan(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_cos(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_sin(sotinum_t* num, dhelpl_t dhl );
+
+  sotinum_t soti_logb(sotinum_t* num, double base, dhelpl_t dhl);
+
+  sotinum_t soti_log10(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_log(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl);
+
+  sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl);
+
+  sotinum_t soti_div(sotinum_t* num, sotinum_t* den, dhelpl_t dhl);
+
   sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
   
   sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
@@ -246,7 +285,11 @@ cdef extern from "oti/oti.h" nogil:
 
   sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
 
+  coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+
   sotinum_t soti_div_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+
+  sotinum_t soti_div_realoti(coeff_t num, sotinum_t* den, dhelpl_t dhl);
 
   sotinum_t soti_sub_realoti( coeff_t val, sotinum_t* num, dhelpl_t dhl);
 

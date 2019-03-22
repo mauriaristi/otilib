@@ -401,6 +401,8 @@ void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 /**************************************************************************************************//**
 @brief Multiplies A set of oti coefficients for a given pair of orders.
 
+This function uses the following temporals: 3,4,5.
+
 @param[in] p_im1    Coefficients to be multiplied.
 @param[in] p_idx1   Imaginary directions to be multiplied.
 @param[in] ndir1    Number of directions in p_im1.

@@ -17,6 +17,7 @@ cdef class sotinum:
   
   @staticmethod
   cdef sotinum create(sotinum_t* num, uint8_t FLAGS = *)
+  cpdef coeff_t get_deriv( self, list item)
  
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::: End of class spr_otinum :::::::::::::::::::::::::::::::::::::::::
@@ -25,26 +26,25 @@ cdef class sotinum:
 
 
 #*****************************************************************************************************
-# cpdef sotinum scos(sotinum val)
-# cpdef sotinum ssin(sotinum val)
-# cpdef sotinum stan(sotinum val)
-# cpdef sotinum satan(sotinum val)
-# cpdef sotinum satan2(sotinum valx, sotinum valy)
-# cpdef sotinum sacos(sotinum val)
-# cpdef sotinum sasin(sotinum val)
-# cpdef sotinum ssinh(sotinum val)
-# cpdef sotinum sasinh(sotinum val)
-# cpdef sotinum scosh(sotinum val)
-# cpdef sotinum sacosh(sotinum val)
-# cpdef sotinum stanh(sotinum val)
-# cpdef sotinum satanh(sotinum val)
-# cpdef sotinum slogb(sotinum val, int base)
-# cpdef sotinum slog10(sotinum val)
-# cpdef sotinum slog(sotinum val)
-# cpdef sotinum sexp(sotinum val)
-# cpdef sotinum spower(sotinum val, double exponent)
-# cpdef sotinum ssqrt(sotinum val)
-# cdef object c_soti_print(sotinum_t* num)
+cpdef sotinum cos(sotinum val)
+cpdef sotinum sin(sotinum val)
+cpdef sotinum tan(sotinum val)
+cpdef sotinum atan(sotinum val)
+# cpdef sotinum atan2(sotinum valx, sotinum valy)
+cpdef sotinum acos(sotinum val)
+cpdef sotinum asin(sotinum val)
+cpdef sotinum sinh(sotinum val)
+cpdef sotinum asinh(sotinum val)
+cpdef sotinum cosh(sotinum val)
+cpdef sotinum acosh(sotinum val)
+cpdef sotinum tanh(sotinum val)
+cpdef sotinum atanh(sotinum val)
+cpdef sotinum logb(sotinum val, double base)
+cpdef sotinum log10(sotinum val)
+cpdef sotinum log(sotinum val)
+cpdef sotinum exp(sotinum val)
+cpdef sotinum power(sotinum val, double exponent)
+cpdef sotinum sqrt(sotinum val)
 #*****************************************************************************************************
 
 

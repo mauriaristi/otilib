@@ -335,7 +335,7 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
 
     }
 
-    ndir_t  ntmps =  10; // Number of arrays for temporal variables.
+    ndir_t  ntmps =  15; // Number of arrays for temporal variables.
     
     for( i = 1; i<=dhl->ndh; i++){
       // printf("Loading dhelp %d\n",i);
@@ -1535,7 +1535,7 @@ inline void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  n
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+inline void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
@@ -1652,7 +1652,7 @@ inline void dhelp_sparse_add_dirs_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_
 
 
 // ****************************************************************************************************
-void dhelp_sparse_add_dirs_older(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
@@ -1752,15 +1752,14 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
     imdir2d_t tmp_multtabl ;
     ndir_t i,j;
 
-    coeff_t* p_im_tmp1  = dhl.p_dh[tmp_ord-1].p_im[3] ;
-    coeff_t* p_im_tmp2  = dhl.p_dh[tmp_ord-1].p_im[4] ;
-    coeff_t* p_im_tmp3  = dhl.p_dh[tmp_ord-1].p_im[5] ;
-    
+    // Get temporal arrays.
+    coeff_t* p_im_tmp1  = dhl.p_dh[tmp_ord-1].p_im[0] ;
+    coeff_t* p_im_tmp2  = dhl.p_dh[tmp_ord-1].p_im[1] ;
+    coeff_t* p_im_tmp3  = dhl.p_dh[tmp_ord-1].p_im[2] ;
 
-
-    imdir_t* p_idx_tmp1 = dhl.p_dh[tmp_ord-1].p_idx[3] ;
-    imdir_t* p_idx_tmp2 = dhl.p_dh[tmp_ord-1].p_idx[4] ;
-    imdir_t* p_idx_tmp3 = dhl.p_dh[tmp_ord-1].p_idx[5] ;
+    imdir_t* p_idx_tmp1 = dhl.p_dh[tmp_ord-1].p_idx[0] ;
+    imdir_t* p_idx_tmp2 = dhl.p_dh[tmp_ord-1].p_idx[1] ;
+    imdir_t* p_idx_tmp3 = dhl.p_dh[tmp_ord-1].p_idx[2] ;
     
 
     // Define temporal swappers.
@@ -1897,7 +1896,7 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
     }
 
     dhelp_sparse_copy(p_im_tmpdest, p_idx_tmpdest, ndirtmpdest,
-                       p_imres, p_idxres, ndirres,dhl);
+                       p_imres, p_idxres, ndirres, dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------

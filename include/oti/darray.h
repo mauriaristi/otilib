@@ -26,21 +26,57 @@ typedef struct{
 // ----------------------------------------------------------------------------------------------------
 // ------------------------------------     DECLARATIONS     ------------------------------------------
 // ----------------------------------------------------------------------------------------------------
-// to add to c_otilib.pxd
 
+/**************************************************************************************************//**
+@brief Get element at position i,j in p_array. 
 
+@param[inout] p_array: Address of the array.
+@param[in] i: Row
+@param[in] j: Column
+@param[in] shapey: Number of elements in the second dimension.
+******************************************************************************************************/ 
+void darray_getItem(darray_t* p_array, uint64_t i, uint64_t j, coeff_t* num); 
+// ----------------------------------------------------------------------------------------------------
 
-// added to c_otilib.pxd
+/**************************************************************************************************//**
+@brief Set an item at position i,j in p_array. To be called only when p_array has already been created
+and has some correct values in it.
 
-void c_darray_getItem(darray_t* p_array, uint64_t i, uint64_t j, double* num); // inline
+@param[in] num: Value to be set.
+@param[in] i: Row
+@param[in] j: Column
+@param[inout] p_array: Address of the array.
+******************************************************************************************************/ 
+void darray_setItem( coeff_t num, uint64_t i, uint64_t j, darray_t* p_array);
+// ----------------------------------------------------------------------------------------------------
 
-void c_darray_setItem( double num, uint64_t i, uint64_t j, darray_t* p_array); // inline
+/**************************************************************************************************//**
+@brief C-level memory allocation of a real array setting all values to 0.
 
-int64_t c_darray_zeros(darray_t* p_array, uint64_t nrows, uint64_t ncols);
+@param[inout] p_array: Address of the array.
+@param[in] shapex: Number of elements in the first  dimension.
+@param[in] shapey: Number of elements in the second dimension.
+******************************************************************************************************/ 
+int64_t darray_zeros(darray_t* p_array, uint64_t nrows, uint64_t ncols);
+// ----------------------------------------------------------------------------------------------------
 
-void c_darray_free(darray_t* p_array);
+/**************************************************************************************************//**
+@brief Free all memory associated with the array.
 
-int64_t c_darray_createEmpty(darray_t* p_array, uint64_t nrows, uint64_t ncols);
+@param[inout] p_array: Address of the array.
+******************************************************************************************************/ 
+void darray_free(darray_t* p_array);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief C-level memory allocation of array.
+
+@param[inout] p_array: Address of the array to be allocated.
+@param[in] shapex: Number of elements in the first  dimension.
+@param[in] shapey: Number of elements in the second dimension.
+******************************************************************************************************/ 
+int64_t darray_createEmpty(darray_t* p_array, uint64_t nrows, uint64_t ncols);
+// ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------------     END DECLARATIONS     ----------------------------------------

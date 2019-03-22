@@ -793,8 +793,7 @@ cdef class otinum:
   #***************************************************************************************************
   cpdef coeff_t get_deriv( self, list item):
     """
-    PURPOSE:      to retrieve the n'th derivative according to the taylor 
-                  series expansion with dual numbers.
+    PURPOSE:      to retrieve the derivative contained in the oti number.
 
     """
     #*************************************************************************************************

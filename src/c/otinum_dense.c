@@ -406,26 +406,34 @@ otinum_t oti_feval(coeff_t* feval_re, otinum_t* num, dhelpl_t dhl ){
     // Set real value of result.
     res.re = feval_re[0];
 
-    for ( i = 1; i<=num->order; i++){
+    for ( i = 1; i < num->order; i++){
 
         factor *= i;
 
         val = feval_re[i]/factor;
         
         oti_set(&tmp2 , &tmp1, dhl);
-
         oti_trunc_smul_real( val, i, &tmp2, dhl);
-
         oti_trunc_ssum( &tmp2, i, &res, dhl );
-
+        
         // update
-        if (i != num->order ){
+        // if (i != num->order ){
+        oti_setFromReal( 0.0, &tmp2, dhl);
+        oti_trunc_mul(&tmp1, i, num, 1, &tmp2, dhl );
+        oti_set(&tmp2 , &tmp1, dhl);
+        // }
 
-            oti_setFromReal( 0.0, &tmp2, dhl);
-            oti_trunc_mul(&tmp1, i, num, 1, &tmp2, dhl );
-            oti_set(&tmp2 , &tmp1, dhl);
+    }
 
-        }
+    for (; i<=num->order; i++){
+
+        factor *= i;
+
+        val = feval_re[i]/factor;
+        
+        oti_set(&tmp2 , &tmp1, dhl);
+        oti_trunc_smul_real( val, i, &tmp2, dhl);
+        oti_trunc_ssum( &tmp2, i, &res, dhl );
 
     }
 
@@ -873,7 +881,7 @@ otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
             
         // Allocate memory.
         num.p_im   = ( coeff_t** ) malloc( num.order*sizeof(coeff_t*) );
-        num.p_ndpo = ( ndir_t* ) malloc( num.order*sizeof(ndir_t) );
+        num.p_ndpo = (  ndir_t*  ) malloc( num.order*sizeof(ndir_t) );
 
         if (num.p_im == NULL  || num.p_ndpo == NULL ){
             printf("--- ERROR: Out of memory\n");

@@ -894,25 +894,7 @@ void sotiarray_div_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrR
 // ****************************************************************************************************
 void sotiarray_oti_sub(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
     if (p_arrRes->p_data == NULL){
@@ -938,25 +920,7 @@ void sotiarray_oti_sub(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrR
 
 // ****************************************************************************************************
 void sotiarray_R_sub(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
     if (p_arrRes->p_data == NULL){
@@ -984,25 +948,7 @@ void sotiarray_R_sub(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
 // ****************************************************************************************************
 void sotiarray_sub_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
     if (p_arrRes->p_data == NULL){
@@ -1028,24 +974,7 @@ void sotiarray_sub_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrR
 
 // ****************************************************************************************************
 void sotiarray_sub_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
+    
     
     uint64_t i;
     sotinum_t tmp;
@@ -1072,25 +1001,7 @@ void sotiarray_sub_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
 // ****************************************************************************************************
 void sotiarray_sum_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
     if (p_arrRes->p_data == NULL){
@@ -1115,25 +1026,7 @@ void sotiarray_sum_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrR
 
 // ****************************************************************************************************
 void sotiarray_sum_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
     if (p_arrRes->p_data == NULL){
@@ -1157,24 +1050,7 @@ void sotiarray_sum_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
 // ****************************************************************************************************
 void sotiarray_mul_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* num)
-
-    multiply two sparse oti number arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of <p_arr1,p_arr2>.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
     if (p_arrRes->p_data == NULL){
@@ -1197,24 +1073,7 @@ void sotiarray_mul_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrR
 
 // ****************************************************************************************************
 void sotiarray_mul_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* num)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
 
@@ -1240,24 +1099,7 @@ void sotiarray_mul_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
 // ****************************************************************************************************
 void sotiarray_matmul_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* num)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i, j, k;
     sotinum_t tmp1, tmp2, tmp3;
     // Check correctness of dimensions:
@@ -1307,24 +1149,7 @@ void sotiarray_matmul_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p
 // ****************************************************************************************************
 void sotiarray_matmul_Roti(darray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* num)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i, j, k;
     sotinum_t tmp1, tmp2, tmp3;
     // Check correctness of dimensions:
@@ -1374,24 +1199,7 @@ void sotiarray_matmul_Roti(darray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p
 // ****************************************************************************************************
 void sotiarray_matmul_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* num)
 
-    multiply two sparse oti number arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of <p_arr1,p_arr2>.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i, j, k;
     sotinum_t tmp1, tmp2, tmp3;
 
@@ -1443,25 +1251,7 @@ void sotiarray_matmul_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray
 
 // ****************************************************************************************************
 void sotiarray_matsum_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
     // Check correctness of dimensions:
@@ -1491,24 +1281,6 @@ void sotiarray_matsum_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p
 // ****************************************************************************************************
 void sotiarray_matsum_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
     
     uint64_t i;
     sotinum_t tmp;
@@ -1537,25 +1309,6 @@ void sotiarray_matsum_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray
 
 // ****************************************************************************************************
 void sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* num){
-    /*
-    sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* num)
-
-    Get element at position i,j in p_array.
-
-    INPUTS:
-
-        ->      num:    Number to be placed.
-
-        ->        i:    Row position.
-
-        ->        j:    Column position.
-        
-        ->  p_array:    Address of the array.
-
-    OUTPUTS:
-        -> The result is the numHolder with the memory allocated.
-    */ 
-    // ************************************************************************************************
     
     num[0] = p_array->p_data[j+i*p_array->ncols];
 
@@ -1565,27 +1318,7 @@ void sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* 
 
 // ****************************************************************************************************
 void sotiarray_setItemR_indx( double num, uint64_t i, sotiarray_t* p_array){
-    /*
-    sotiarray_setItem( double num, uint64_t i, uint64_t j,sotiarray_t* p_array)
-
-    Set an item at position i,j in p_array. To be called only when p_array has already been created
-    and has some correct values in it.
-
-    INPUTS:
-
-        ->      num:    Number to be placed.
-
-        ->        i:    Row position.
-
-        ->        j:    Column position.
         
-        ->  p_array:    Address of the array.
-
-    OUTPUTS:
-        -> The result is the numHolder with the memory allocated.
-    */ 
-    // ************************************************************************************************
-    
     sotinum_t* tmp = &p_array->p_data[i];
     soti_free(tmp);
     soti_createEmpty(tmp, 1, p_array->order);
@@ -1597,26 +1330,6 @@ void sotiarray_setItemR_indx( double num, uint64_t i, sotiarray_t* p_array){
 
 // ****************************************************************************************************
 void sotiarray_setItemR( double num, uint64_t i, uint64_t j,sotiarray_t* p_array){
-    /*
-    sotiarray_setItem( double num, uint64_t i, uint64_t j,sotiarray_t* p_array)
-
-    Set an item at position i,j in p_array. To be called only when p_array has already been created
-    and has some correct values in it.
-
-    INPUTS:
-
-        ->      num:    Number to be placed.
-
-        ->        i:    Row position.
-
-        ->        j:    Column position.
-        
-        ->  p_array:    Address of the array.
-
-    OUTPUTS:
-        -> The result is the numHolder with the memory allocated.
-    */ 
-    // ************************************************************************************************
     
     sotinum_t* tmp = &p_array->p_data[j+i*p_array->ncols];
     soti_free(tmp);
@@ -1631,28 +1344,7 @@ void sotiarray_setItemR( double num, uint64_t i, uint64_t j,sotiarray_t* p_array
 
 // ****************************************************************************************************
 void sotiarray_setItemOTI_indx( sotinum_t* num, uint64_t i, sotiarray_t* p_array){
-    /*
-    sotiarray_setItem( sotinum_t* num, uint64_t i, uint64_t j,sotiarray_t* p_array)
-
-    Set an item at position i,j in p_array. To be called only when p_array has already been created
-    and has some correct values in it.
-
-    INPUTS:
-
-        ->      num:    Number to be placed.
-
-        ->        i:    Row position.
-
-        ->        j:    Column position.
-        
-        ->  p_array:    Address of the array.
-
-    OUTPUTS:
-        -> The result is the numHolder with the memory allocated.
-    */ 
-    // ************************************************************************************************
-
-
+    
     soti_free(&p_array->p_data[i]);
     p_array->p_data[i] = num[0]; // Does not copy coefficients, just takes the pointer!
 
@@ -1661,26 +1353,7 @@ void sotiarray_setItemOTI_indx( sotinum_t* num, uint64_t i, sotiarray_t* p_array
 
 // ****************************************************************************************************
 void sotiarray_setAllItems( sotinum_t* num, sotiarray_t* p_array){
-    /*
-    sotiarray_setItem( sotinum_t* num, uint64_t i, uint64_t j,sotiarray_t* p_array)
-
-    Set an item at position i,j in p_array. To be called only when p_array has already been created
-    and has some correct values in it.
-
-    INPUTS:
-
-        ->      num:    Number to be placed.
-
-        ->        i:    Row position.
-
-        ->        j:    Column position.
-        
-        ->  p_array:    Address of the array.
-
-    OUTPUTS:
-        -> The result is the numHolder with the memory allocated.
-    */ 
-    // ************************************************************************************************
+    
     uint64_t i;
     sotinum_t tmp;
 
@@ -1697,62 +1370,17 @@ void sotiarray_setAllItems( sotinum_t* num, sotiarray_t* p_array){
 
 // ****************************************************************************************************
 void sotiarray_setItemOTI( sotinum_t* num, uint64_t i, uint64_t j, sotiarray_t* p_array){
-    /*
-    sotiarray_setItem( sotinum_t* num, uint64_t i, uint64_t j,sotiarray_t* p_array)
-
-    Set an item at position i,j in p_array. To be called only when p_array has already been created
-    and has some correct values in it.
-
-    INPUTS:
-
-        ->      num:    Number to be placed.
-
-        ->        i:    Row position.
-
-        ->        j:    Column position.
-        
-        ->  p_array:    Address of the array.
-
-    OUTPUTS:
-        -> The result is the numHolder with the memory allocated.
-    */ 
-    // ************************************************************************************************
-
 
     soti_free(&p_array->p_data[j+i*p_array->ncols]);
-    p_array->p_data[j+i*p_array->ncols] = num[0]; // Does not copy coefficients, just takes the pointer!
+
+    // Does not copy coefficients, just takes the pointer!
+    p_array->p_data[j+i*p_array->ncols] = num[0]; 
 
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
 // ****************************************************************************************************
 void sotiarray_zeros(sotiarray_t* p_array, uint64_t nrows, uint64_t ncols, uint8_t order){
-    /*
-    sotiarray_createEmpty(sotiarray_t* p_array, uint64_t shapex, uint64_t shapey, uint8_t order)
-
-    C-level memory allocation of a dense oti number a direction array from a file
-
-    INPUTS:
-
-        ->  p_array:    Address of the array to be allocated.
-
-        ->   shapex:    Number of elements in the first  dimension.
-
-        ->   shapey:    Number of elements in the second dimension.
-        
-        ->    order:    Order of the numbers.
-            Example: 3
-
-        ->     coefs:    Number of nonzero coefficients in the number.
-            Example: 100
-
-    OUTPUTS:
-        -> The result is the numHolder with the memory allocated.
-    */ 
-    // ************************************************************************************************
     
     uint64_t i;
     sotinum_t value;

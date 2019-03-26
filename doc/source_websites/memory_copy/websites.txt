@@ -1,0 +1,3 @@
+1. Profiling of memory copy with different compilers.
+http://nadeausoftware.com/articles/2012/05/c_c_tip_how_copy_memory_quickly
+

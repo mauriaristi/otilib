@@ -81,7 +81,7 @@ void sotiarray_neg(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, dhelpl_t dhl);
 @brief Subtract a Real array by a sotiarray.
 
 @param[in] p_arr1: sotiarray.
-@param[in] p_arr2 sotiarray.
+@param[in] p_arr2: Real array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/

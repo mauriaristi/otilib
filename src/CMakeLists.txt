@@ -32,6 +32,7 @@
 
 # To compile with linux uncomment the following line
 SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall -Wstrict-prototypes")
+# SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -Ofast -Wall -Wstrict-prototypes")
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)

@@ -723,17 +723,17 @@ coeff_t oti_get_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
     coeff_t factor = 1.0;
     bases_t* dirs;
     bases_t dir_prev;
-    ord_t i, j =1;
+    ord_t i, j =2;
     // compute the factor 
     if (coef != 0.0){
         dirs = dhelp_get_imdir(idx,order,dhl);
         dir_prev = dirs[0];
-        for (i=0; i<order; i++){
+        for (i=1; i<order; i++){
             if (dirs[i] == dir_prev){
                 factor *= j;
                 j+=1;
             } else{
-                j=1;
+                j=2;
                 dir_prev = dirs[i];
             }
         }

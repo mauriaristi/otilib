@@ -520,7 +520,7 @@ coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     coeff_t factor = 1.0;
     bases_t* dirs;
     bases_t dir_prev;
-    ord_t i, j =1;
+    ord_t i, j = 1;
     
     // compute the factor 
     if (coef != 0.0){
@@ -531,7 +531,7 @@ coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
                 factor *= j;
                 j+=1;
             } else{
-                j=1;
+                j =2;
                 dir_prev = dirs[i];
             }
         }
@@ -570,26 +570,16 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
         tmpswap=tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
 
         for (ordi1 = 0; ordi1<num2->order; ordi1++){
-            // printf("Multiplying Re x (o: %hhu)\n",ordi1+1);
-            // printf("otinum has nnz(o): %llu\n\n",num2->p_nnz[ordi1]);
+
             // Perform multiplication
             dhelp_sparse_mult_real(num1->re,
                                num2->p_im[ordi1], num2->p_idx[ordi1], num2->p_nnz[ordi1],
                                tmp2.p_im[ordi1], tmp2.p_idx[ordi1], &tmp2.p_nnz[ordi1],       
-                               dhl);  
-            // printArrayDBL( tmp2.p_im[ordi1], tmp2.p_nnz[ordi1]);printf("\n");
-            // printArrayUI64(tmp2.p_idx[ordi1],tmp2.p_nnz[ordi1]);printf("\n");
-            
-            
-            
+                               dhl);              
 
             dhelp_sparse_add_dirs(tmp2.p_im[ordi1], tmp2.p_idx[ordi1], tmp2.p_nnz[ordi1],
                                   tmpsrc->p_im[ordi1], tmpsrc->p_idx[ordi1], tmpsrc->p_nnz[ordi1],
                                   tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
-
-            // printArrayDBL( tmpdest->p_im[ordi1], tmpdest->p_nnz[ordi1]);printf("\n");
-            // printArrayUI64(tmpdest->p_idx[ordi1],tmpdest->p_nnz[ordi1]);printf("\n");
-            // printf("result has nnz(o): %llu\n\n",tmp2.p_nnz[ordi1]);
 
         }
 
@@ -602,7 +592,7 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
         tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
 
         for (ordi1 = 0; ordi1<num1->order; ordi1++){
-            // printf("Multiplying (o: %hhu) x Re\n",ordi1+1);
+
             // Perform multiplication
             dhelp_sparse_mult_real(num2->re,
                                num1->p_im[ordi1], num1->p_idx[ordi1], num1->p_nnz[ordi1],
@@ -661,6 +651,8 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
         }
     
     }
+
+    // Result already exists in tmpdest (either tmp 3 or tmp5).
 
     // reset the size values of the tmp number    
     for(ordi1=0; ordi1<res_ord; ordi1++){

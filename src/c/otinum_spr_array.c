@@ -7,24 +7,7 @@
 
 // ****************************************************************************************************
 void sotiarray_invert(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, directionHelper* p_dH){
-    /*
-    sotiarray_transpose(sotiarray_t* p_arr1, sotiarray_t* p_arrRes)
-
-    Transpose a  sotiarray.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-
+    
     sotinum_t detInv,tmp1, tmp2, tmp;
     sotiarray_t tmpA1;
 
@@ -261,23 +244,6 @@ void sotiarray_invert(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, directionHelpe
 
 // ****************************************************************************************************
 void sotiarray_det(sotiarray_t* p_arr1, sotinum_t* p_res, directionHelper* p_dH){
-    /*
-    sotiarray_det(sotiarray_t* p_arr1, sotinum_t* p_res)
-
-    Determinant of a sotiarray.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
     
     uint64_t i, j ;
     sotinum_t tmp1, tmp2, tmp3;
@@ -379,23 +345,6 @@ void sotiarray_det(sotiarray_t* p_arr1, sotinum_t* p_res, directionHelper* p_dH)
 
 // ****************************************************************************************************
 void sotiarray_transpose(sotiarray_t* p_arr1, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_transpose(sotiarray_t* p_arr1, sotiarray_t* p_arrRes)
-
-    Transpose a  sotiarray.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1 + p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
     
     uint64_t i, j ;
     sotinum_t tmp;
@@ -426,25 +375,7 @@ void sotiarray_transpose(sotiarray_t* p_arr1, sotiarray_t* p_arrRes){
 // ****************************************************************************************************
 void sotiarray_mul_sotiarr(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
     // Check correctness of dimensions:
@@ -474,25 +405,7 @@ void sotiarray_mul_sotiarr(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t
 
 // ****************************************************************************************************
 void sotiarray_neg(sotiarray_t* p_arr1, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
+       
     uint64_t i;
     sotinum_t tmp;
     if (p_arrRes->p_data == NULL){
@@ -515,25 +428,7 @@ void sotiarray_neg(sotiarray_t* p_arr1, sotiarray_t* p_arrRes){
 
 // ****************************************************************************************************
 void sotiarray_matsub_Roti(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
-    
     uint64_t i;
     sotinum_t tmp;
     // Check correctness of dimensions:
@@ -565,24 +460,7 @@ void sotiarray_matsub_Roti(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p
 
 // ****************************************************************************************************
 void sotiarray_matsub_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
+    
     
     uint64_t i;
     sotinum_t tmp;
@@ -616,24 +494,7 @@ void sotiarray_matsub_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p
 // ****************************************************************************************************
 void sotiarray_matsub_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
+    
     
     uint64_t i;
     sotinum_t tmp;
@@ -667,24 +528,7 @@ void sotiarray_matsub_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray
 // ****************************************************************************************************
 void sotiarray_oti_div(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
+    
     
     uint64_t i;
     sotinum_t tmp;
@@ -712,24 +556,7 @@ void sotiarray_oti_div(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrR
 // ****************************************************************************************************
 void sotiarray_matdiv_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
+    
     
     uint64_t i;
     sotinum_t tmp;
@@ -761,24 +588,7 @@ void sotiarray_matdiv_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray
 
 // ****************************************************************************************************
 void sotiarray_div_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
+    
     
     uint64_t i;
     sotinum_t tmp;
@@ -805,24 +615,7 @@ void sotiarray_div_R(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes){
 // ****************************************************************************************************
 void sotiarray_R_div(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
+   
     
     uint64_t i;
     sotinum_t tmp;
@@ -849,24 +642,7 @@ void sotiarray_R_div(sotiarray_t* p_arr1, double num2, sotiarray_t* p_arrRes,
 // ****************************************************************************************************
 void sotiarray_div_oti(sotiarray_t* p_arr1, sotinum_t* num2, sotiarray_t* p_arrRes, 
                         directionHelper* p_dH){
-    /*
-    sotiarray_matsum(sotiarray_t* p_arr1, sotiarray_t* p_arr2, sotiarray_t* p_arrRes, 
-                        directionHelper* p_dH)
-
-    Sum two sparse oti arrays.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     p_dH:    Direction helper
-
-    */ 
-    // ************************************************************************************************
+    
     
     uint64_t i;
     sotinum_t tmp;

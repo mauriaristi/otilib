@@ -13,7 +13,7 @@
 
 
 typedef struct{
-    sotinum_t*    p_data; // Data array
+    sotinum_t*    p_data; ///< Data array
     uint64_t       nrows; // Number of rows.
     uint64_t       ncols; // Number of cols.
     uint64_t        size; // Total size of the array.
@@ -32,50 +32,50 @@ typedef struct{
 
 
 
+/**************************************************************************************************//**
+@brief Inverse of a sotiarray. The inverse is only computed for small matrices of size up to 3x3.
 
-void sotiarray_oti_div(sotiarray_t* p_arr1, sotinum_t* num2,
-                       sotiarray_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-void sotiarray_matdiv_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2,
-                             sotiarray_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-void sotiarray_div_R(sotiarray_t* p_arr1, coeff_t num2, sotiarray_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-void sotiarray_R_div(sotiarray_t* p_arr1, coeff_t num2, 
-                     sotiarray_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-void sotiarray_div_oti(sotiarray_t* p_arr1, sotinum_t* num2,
-                       sotiarray_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
+@param[in] p_arr1: sotiarray.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
 void sotiarray_invert(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Determinant of a sotiarray.
 
+@param[in] p_arr1: sotiarray.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
 void sotiarray_det(sotiarray_t* p_arr1, sotinum_t* p_res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Transpose a sotiarray.
 
+@param[in] p_arr1: sotiarray.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
 void sotiarray_transpose(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
-void sotiarray_mul_sotiarr(sotiarray_t* p_arr1, sotiarray_t* p_arr2,
-                           sotiarray_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**************************************************************************************************//**
+@brief Negate a sotiarray.
 
-
+@param[in] p_arr1: sotiarray.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
 void sotiarray_neg(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
 
 /**************************************************************************************************//**
 @brief Subtract a Real array by a sotiarray.
@@ -112,6 +112,162 @@ void sotiarray_matsub_otiR(sotiarray_t* p_arr1, darray_t* p_arr2,
 void sotiarray_matsub_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, 
                              sotiarray_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Multiply a sotiarray with a real array.
+
+@param[in] p_arr1: sotiarray.
+@param[in] p_arr2: real array.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_matmul_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, 
+                           sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Multiply a real array times a sotiarray.
+
+@param[in] p_arr1: real array.
+@param[in] p_arr2: sotiarray.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_matmul_Roti(darray_t* p_arr1, sotiarray_t* p_arr2, 
+                           sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Multiply two sotiarrays.
+
+@param[in] p_arr1: sotiarray.
+@param[in] p_arr2: sotiarray.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_matmul_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, 
+                             sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Add a sotiarray with a real array.
+
+@param[in] p_arr1: sotiarray.
+@param[in] p_arr2: real array.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_matsum_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Add two sotiarray elements
+
+@param[in] p_arr1: sotiarray.
+@param[in] p_arr2: sotiarray.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_matsum_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, 
+                             sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**************************************************************************************************//**
+@brief Elementise multiplication of a sotiarray by another sotiarray.
+
+@param[in] p_arr1: sotiarray.
+@param[in] p_arr2: sotiarray.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_mul_sotiarr(sotiarray_t* p_arr1, sotiarray_t* p_arr2,
+                           sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+/**************************************************************************************************//**
+@brief Elementise division of a sotiarray by another sotiarray.
+
+@param[in] p_arr1: sotiarray.
+@param[in] p_arr2: sotiarray.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_matdiv_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2,
+                             sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Divide a sotiarray by a real number.
+
+@param[in] p_arr1: sotiarray.
+@param[in] num2: Real number.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_div_R(sotiarray_t* p_arr1, coeff_t num2, sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+/**************************************************************************************************//**
+@brief Divide a sotiarray by an OTI number.
+
+@param[in] p_arr1: sotiarray.
+@param[in] num2: OTI number.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_div_oti(sotiarray_t* p_arr1, sotinum_t* num2,
+                       sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Divide an OTI number every element of a sotiarray.
+
+@param[in] p_arr1: sotiarray.
+@param[in] num2: OTI number.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_oti_div(sotiarray_t* p_arr1, sotinum_t* num2,
+                       sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Divide real number by a sotiarray (elementwise.
+
+@param[in] p_arr1: sotiarray.
+@param[in] num2: Real number.
+@param[inout] p_arrRes: Address of the result.
+@param[in] dhl: Direction helper list.
+******************************************************************************************************/
+void sotiarray_R_div(sotiarray_t* p_arr1, coeff_t num2, 
+                     sotiarray_t* p_arrRes, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 
 /**************************************************************************************************//**
 @brief Subtract an OTI number by a sotiarray.
@@ -205,65 +361,6 @@ void sotiarray_sum_oti(sotiarray_t* p_arr1, sotinum_t* num2,
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
 void sotiarray_sum_R(sotiarray_t* p_arr1, coeff_t num2, sotiarray_t* p_arrRes, dhelpl_t dhl); 
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Multiply a sotiarray with a real array.
-
-@param[in] p_arr1: sotiarray.
-@param[in] p_arr2: real array.
-@param[inout] p_arrRes: Address of the result.
-@param[in] dhl: Direction helper list.
-******************************************************************************************************/
-void sotiarray_matmul_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, 
-                           sotiarray_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Multiply a real array times a sotiarray.
-
-@param[in] p_arr1: real array.
-@param[in] p_arr2: sotiarray.
-@param[inout] p_arrRes: Address of the result.
-@param[in] dhl: Direction helper list.
-******************************************************************************************************/
-void sotiarray_matmul_Roti(darray_t* p_arr1, sotiarray_t* p_arr2, 
-                           sotiarray_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Multiply two sotiarrays.
-
-@param[in] p_arr1: sotiarray.
-@param[in] p_arr2: sotiarray.
-@param[inout] p_arrRes: Address of the result.
-@param[in] dhl: Direction helper list.
-******************************************************************************************************/
-void sotiarray_matmul_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, 
-                             sotiarray_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Add a sotiarray with a real array.
-
-@param[in] p_arr1: sotiarray.
-@param[in] p_arr2: real array.
-@param[inout] p_arrRes: Address of the result.
-@param[in] dhl: Direction helper list.
-******************************************************************************************************/
-void sotiarray_matsum_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Add two sotiarray elements
-
-@param[in] p_arr1: sotiarray.
-@param[in] p_arr2: sotiarray.
-@param[inout] p_arrRes: Address of the result.
-@param[in] dhl: Direction helper list.
-******************************************************************************************************/
-void sotiarray_matsum_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, 
-                             sotiarray_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

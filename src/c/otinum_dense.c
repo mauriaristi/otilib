@@ -693,6 +693,56 @@ otinum_t oti_copy(otinum_t* num, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+// ****************************************************************************************************
+otinum_t oti_get_tmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl){
+    
+    otinum_t res;
+
+    ord_t i=0;
+    
+    if (order == 0){
+        res = oti_createEmpty( nbases, order, dhl);
+        return res;
+    }
+    
+    // Get possible errors.
+    if (order > dhl.ndh){
+        printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
+        exit(OTI_undetErr);
+    }
+    if (ntmp >= dhl.p_dh[order-1].Ntmps){
+        printf("ERROR: Trying to get a temporal that does not exist.\n");
+        exit(OTI_undetErr);   
+    }
+
+    res.p_im   = dhl.p_dh[order-1].p_ims[ntmp]; 
+    res.p_ndpo  = dhl.p_dh[order-1].p_nnz[ntmp];
+
+    // set the values
+    res.order  = order;
+    res.nbases = nbases;
+    res.ndir   =0; // Excludes the real direction.
+    res.re     =0;
+
+    for (i=0; i<order; i++){
+
+        // Set the pointers according to the ntemp.
+        res.p_im[i]   = dhl.p_dh[i].p_im[ntmp];
+        res.p_ndpo[i] = dhelp_extract_ndirOrder( res.nbases, i+1, dhl );
+        
+        // Initialize imaginary coefficients in res as 0.
+        memset( res.p_im[i], 0, res.p_ndpo[i]*sizeof(coeff_t) );
+
+        res.ndir += res.p_ndpo[i];
+
+    }
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+
 // ****************************************************************************************************
 coeff_t oti_get( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
     
@@ -864,7 +914,7 @@ void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
+inline otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
     
     otinum_t num;
     ord_t ordi; 

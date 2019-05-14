@@ -36,6 +36,7 @@ typedef struct {
 // to add to c_otilib.pxd
 
 
+
 /**************************************************************************************************//**
 @brief Evaluation of inverse 4 quadrant tangent function at (num).
 
@@ -44,6 +45,17 @@ typedef struct {
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 // otinum_t oti_atan2(otinum_t* num, otinum_t* y, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Generate a temporal sparse otinum with the allocated data in the direction helper.
+
+@param[in] ntmp Number of temporal array to be retreived.
+@param[in] order Truncation order.
+@param[in] order Truncation order.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/
+otinum_t oti_get_tmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

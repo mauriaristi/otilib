@@ -36,11 +36,73 @@ typedef struct {
 // ------------------------------------     DECLARATIONS     ------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+/**************************************************************************************************//**
+@brief This function subtracts two sparse oti numbers. The result is held in a temporal 
+sparse oti number that needs to be copied, either to a new sotinum type or to an already existing 
+object. The memory returned should not be freed nor manipulated.
+
+@param[in] num1: OTI number.
+@param[in] num2: OTI number.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief This function adds two sparse oti numbers. The result is held in a temporal 
+sparse oti number that needs to be copied, either to a new sotinum type or to an already existing 
+object. The memory returned should not be freed nor manipulated.
+
+@param[in] num1: OTI number.
+@param[in] num2: OTI number.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+/**************************************************************************************************//**
+@brief This function multiplies two oti numbers num1 and num2. The result is held in a temporal 
+sparse oti number that needs to be copied, either to a new sotinum type or to an already existing 
+object. The memory returned should not be freed nor manipulated.
+
+@param[in]    num1 Oti number 1.
+@param[in]    num2 Oti number 2.
+@param[in]    dhl  Direction helper list object.
+******************************************************************************************************/
+sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief This function multiplies two oti numbers num1 and num2. The multiplication result is held
+in a temporal oti number that needs to be copied. The memory returned should not be freed nor 
+manipulated.
+
+@param[in]    num1 Oti number 1.
+@param[in]    num2 Oti number 2.
+@param[in]    dhl  Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+// FUNCTIONS THAT ALLOCATE NEW MEMORY:
+
+
 /**************************************************************************************************//**
 @brief Evaluation of inverse hyperbolic tangent function at (num).
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
+@param[in] num: Oti number.
+@param[in] dhl: Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
@@ -202,6 +264,29 @@ sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl);
 sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**************************************************************************************************//**
 @brief Truncated self addition of two oti numbers. This function adds num1 and num2 just to obtain 
 imaginary directions with orders greater than the given truncation order.
@@ -247,7 +332,8 @@ void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Copy information from src to dest.
+@brief Copy information from src to dest. Does not check if memory needs to be reallocated.
+Useful when copying data to a temporal sotinum.
 
 @param[in] src  Oti number.
 @param[in] dest Oti number.
@@ -257,7 +343,8 @@ void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Copy information from src to dest only with orders ord or greater.
+@brief Copy information from src to dest only with orders ord or greater. Does not check if memory 
+needs to be reallocated. Useful when copying data to a temporal sotinum.
 
 @param[in] src Oti number.
 @param[in] ord Order.
@@ -268,7 +355,8 @@ void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Set a sparse otinum from a real number. The number is already allocated.
+@brief Set a sparse otinum from a real number. Does not check if memory needs to be reallocated.
+Useful when setting data to a temporal sotinum.
 
 @param[in] a real number to be set.
 @param[in] num Oti number.
@@ -467,7 +555,8 @@ sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Copy to another sparse oti elements (already created).
+@brief Copy to another sparse oti elements (already created). This function checks wether reallocation
+is necessary.
 
 @param[in] num OTI number.
 @param[in] dhl Direction helper list object.

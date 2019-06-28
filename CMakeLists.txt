@@ -11,8 +11,8 @@
 
 cmake_minimum_required (VERSION 2.8)
 
-
-project (oti)
+# Name of the global project.
+project(oti)
 
 
 # Make the scripts available in the 'cmake' directory.

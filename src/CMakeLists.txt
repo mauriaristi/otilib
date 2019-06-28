@@ -26,13 +26,17 @@
 # set(CMAKE_BUILD_TYPE RELEASE)
 # set(CMAKE_C_FLAGS_DEBUG "-O2 -g")
 # set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall")
+if(APPLE)
+	# This is for the case of apple macOS
+    SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
+  
+elseif(UNIX)
+    # This is for the case of Unix (Linux systems.)
+    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall -Wstrict-prototypes")
+    # SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -Ofast -Wall -Wstrict-prototypes")
+endif(APPLE)
 
-# To compile with macOs uncomment the following line 
-#SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
 
-# To compile with linux uncomment the following line
-SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall -Wstrict-prototypes")
-# SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -Ofast -Wall -Wstrict-prototypes")
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
@@ -46,14 +50,13 @@ add_library (oti        c/core.c
 	                    # c/darray.c 
 	                    # c/otinum_spr_array.c
 	                    )
-	                    
-	                    
-	                    
-# To compile with macOs uncomment the following line           
-#SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")
 
-# To compile with linux uncomment the following line
-SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "")
+if(APPLE)
+    SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")
+elseif(UNIX)
+    SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "")
+endif(APPLE)    
+
 # Link to math libraries
 target_link_libraries(oti m)
 # -------------------------------------------------------------------

@@ -54,8 +54,6 @@ int64_t c_fem_defFunctFrom_otiFunc(sotiarray_t* p_arr1, uint64_t derIndx, elemPr
             tmp2 = tmpcnt;
 
             c_soti_sum( &tmp2, &tmp3, &tmpcnt, p_dH);
-
-
             
             c_soti_free(&tmp2);
 

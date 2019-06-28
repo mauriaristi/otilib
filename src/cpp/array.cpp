@@ -2,36 +2,57 @@
 
 
 
-namespace array{
 
 template<class T>
 class array2d{
 private:
-    vector<T> data;
+    T* data;
     uint64_t ncols, nrows;
 public:
     
-    // Initializer:
+    // Constructor:
     array2d();
-
-    // Deallocator
+    array2d();
+    // Destructor:
     ~array2d();
 
 
-
-    // Operations:
-
+    // ------------------------------
+    // Elementwise Operations:
+    // ------------------------------
     // Addition.
-
     // Subtraction.
+    // Multiplication.
+    // Division.
 
+    // ------------------------------
+    // Matrix operations:
+    // ------------------------------
     // Inner product (dot).
-
     // Transpose.
-
-    // Elementwise multiplication.
-
     // Inverse.
+
+    // ------------------------------
+    // Friend functions.
+    // ------------------------------
+
+    friend transpose();
+    friend invese();
+    friend dot();
+
+    operator=();
+    operator+=();
+    operator-=();
+    operator*=();
+    operator/=();
+
+    friend operator+();
+    friend operator-();
+    friend operator*();
+    friend operator/();   
+
+    friend operator<<();
+
 
 
 
@@ -65,11 +86,6 @@ public:
     // Elementwise multiplication.
 
     
-
-
-}
-
-
 
 
 }

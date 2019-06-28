@@ -18,7 +18,7 @@ int main(){
 	file.open(filename);
 
 	if (file.is_open()){
-		
+		 
 		cout << " :) Opened file correctly." << endl;
 		
 
@@ -30,7 +30,7 @@ int main(){
 
 	file.close();
 
-	cout << "quitting"<< endl;
+	cout << "... Quitting ..."<< endl;
 
 
 

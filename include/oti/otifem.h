@@ -15,37 +15,37 @@
 // ----------------------------------------------------------------------------------------------------
 
 typedef struct{
-    sotiarray_t* p_data; // Data array
-    uint64_t      nrows; // Number of rows.
-    uint64_t      ncols; // Number of cols.
-    uint64_t    nIntPts; // Number of integration points.
-    uint64_t    offsetx; // Offset x in the element formulation
-    uint64_t    offsety; // Offset y in the element formulation
-    uint64_t       size; // size of the array
-    uint8_t       order; // oti order
+    sotiarray_t* p_data; ///< Data array
+    uint64_t      nrows; ///< Number of rows.
+    uint64_t      ncols; ///< Number of cols.
+    uint64_t    nIntPts; ///< Number of integration points.
+    uint64_t    offsetx; ///< Offset x in the element formulation
+    uint64_t    offsety; ///< Offset y in the element formulation
+    uint64_t       size; ///< size of the array
+    uint8_t       order; ///< oti order
 } femarray_t;
 
 
 typedef struct elemprops_s{
-    uint64_t          nbasis; // Number of basis - Number of degrees of freedom - Number of nodes.
-    uint64_t           order; // Maximum order of 
-    int64_t         geomBase; // Geometric element type - elLine, elTriangle, etc ...
-    int64_t             kind; // Kind of element: Affine - IsoParametric
-    uint8_t             ndim; // Number of dimensions of the element. (1 -> 1D, 2 -> 2D, 3 -> 3D)
-    uint64_t         nIntPts; // Number of integration Points
-    uint8_t             nder; // Number of total derivatives in the problem.
-    uint8_t           isInit; // Initialization flag. 0: Not initialized, 1: Initialized.
-    uint8_t         otiorder; // Order of the soti numbers inside.
-    uint8_t     nDimAnalysis; // Number of dimensions of the analysis.
-    darray_t     p_intPoints; // (nIntPts x ndim) Array with the integration points coordinates.
-    darray_t    p_intWeights; // (nIntPts x 1   ) Array with the integration weights.
-    darray_t*    p_evalBasis; // (nder) List of (nbasis x nIntPts) arrays with the evaluated basis
-    femarray_t             J; // (nDimAn x nDimEl) Holder for Jacobian               
-    femarray_t          Jinv; // (nDimEl x nDimAn) Holder for inverse of Jacobian      
-    femarray_t          Jdet; // (1 x 1)           Holder for Determinant of Jacobian. 
-    femarray_t*      p_basis; // (nder) List (1 x nbasis) basis of the function in spat. coords.
-    femarray_t  p_detWeights; // ( 1 x 1 ) Array with the integration weights.
-    int64_t (*f_basis)(int64_t,int64_t,darray_t*,void*,darray_t*); //  Interpolation function.
+    uint64_t          nbasis; ///< Number of basis - Number of degrees of freedom - Number of nodes.
+    uint64_t           order; ///< Maximum order of 
+    int64_t         geomBase; ///< Geometric element type - elLine, elTriangle, etc ...
+    int64_t             kind; ///< Kind of element: Affine - IsoParametric
+    uint8_t             ndim; ///< Number of dimensions of the element. (1 -> 1D, 2 -> 2D, 3 -> 3D)
+    uint64_t         nIntPts; ///< Number of integration Points
+    uint8_t             nder; ///< Number of total derivatives in the problem.
+    uint8_t           isInit; ///< Initialization flag. 0: Not initialized, 1: Initialized.
+    uint8_t         otiorder; ///< Order of the soti numbers inside.
+    uint8_t     nDimAnalysis; ///< Number of dimensions of the analysis.
+    darray_t     p_intPoints; ///< (nIntPts x ndim) Array with the integration points coordinates.
+    darray_t    p_intWeights; ///< (nIntPts x 1   ) Array with the integration weights.
+    darray_t*    p_evalBasis; ///< (nder) List of (nbasis x nIntPts) arrays with the evaluated basis
+    femarray_t             J; ///< (nDimAn x nDimEl) Holder for Jacobian               
+    femarray_t          Jinv; ///< (nDimEl x nDimAn) Holder for inverse of Jacobian      
+    femarray_t          Jdet; ///< (1 x 1)           Holder for Determinant of Jacobian. 
+    femarray_t*      p_basis; ///< (nder) List (1 x nbasis) basis of the function in spat. coords.
+    femarray_t  p_detWeights; ///< ( 1 x 1 ) Array with the integration weights.
+    int64_t (*f_basis)(int64_t,int64_t,darray_t*,void*,darray_t*); ///<  Interpolation function.
 
 } elemProps_t;
 
@@ -65,26 +65,26 @@ typedef struct elemprops_s{
 // Enumerators to assign a code to FEM constants
 enum operEnum {  
   // Define operations identifiers.
-  opAdd         =   1 ,   // a +  b
-  opSub         =   2 ,   // a -  b
-  opMul         =   3 ,   // a *  b
-  opTruediv     =   4 ,   // a /  b
-  opPowr        =   5 ,   // a ** b
-  opInt1d       =   6 ,   // int1d(a)
-  opInt2d       =   7 ,   // int2d(a)
-  opInt3d       =   8 ,   // int3d(a)
-  opDx          =   9 ,   // dx(a)
-  opDy          =   10,   // dy(a)
-  opDz          =   11,   // dz(a)
-  opDxx         =   12,   // dxx(a)
-  opDyy         =   13,   // dyy(a)
-  opDzz         =   14,   // dzz(a)
-  opDxy         =   15,   // dxy(a)
-  opDxz         =   16,   // dxz(a)
-  opDyz         =   17,   // dyz(a)
-  opDef         =   18,   // Define something (probably basis function arrays)
-  opOn          =   19,   // Essential boundary definition integral.
-  opNeg         =   20,   // -a
+  opAdd         =   1 ,   ///< a +  b
+  opSub         =   2 ,   ///< a -  b
+  opMul         =   3 ,   ///< a *  b
+  opTruediv     =   4 ,   ///< a /  b
+  opPowr        =   5 ,   ///< a ** b
+  opInt1d       =   6 ,   ///< int1d(a)
+  opInt2d       =   7 ,   ///< int2d(a)
+  opInt3d       =   8 ,   ///< int3d(a)
+  opDx          =   9 ,   ///< dx(a)
+  opDy          =   10,   ///< dy(a)
+  opDz          =   11,   ///< dz(a)
+  opDxx         =   12,   ///< dxx(a)
+  opDyy         =   13,   ///< dyy(a)
+  opDzz         =   14,   ///< dzz(a)
+  opDxy         =   15,   ///< dxy(a)
+  opDxz         =   16,   ///< dxz(a)
+  opDyz         =   17,   ///< dyz(a)
+  opDef         =   18,   ///< Define something (probably basis function arrays)
+  opOn          =   19,   ///< Essential boundary definition integral.
+  opNeg         =   20,   ///< -a
 
 
   subOpDefBasis =   50,
@@ -97,28 +97,28 @@ enum operEnum {
   subOpIntBound =   57,
   
   // Basis type for this case.
-  basisN        =  101,   //      N
-  basisNx       =  102,   //  dx( N )
-  basisNxx      =  103,   // dxx( N )
-  basisNy       =  104,   //  dy( N )
-  basisNxy      =  105,   // dxy( N )
-  basisNyy      =  106,   // dyy( N )
-  basisNz       =  107,   //  dz( N )
-  basisNxz      =  108,   // dxz( N )
-  basisNyz      =  109,   // dyz( N )
-  basisNzz      =  110,   // dzz( N )
+  basisN        =  101,   ///<      N
+  basisNx       =  102,   ///<  dx( N )
+  basisNxx      =  103,   ///< dxx( N )
+  basisNy       =  104,   ///<  dy( N )
+  basisNxy      =  105,   ///< dxy( N )
+  basisNyy      =  106,   ///< dyy( N )
+  basisNz       =  107,   ///<  dz( N )
+  basisNxz      =  108,   ///< dxz( N )
+  basisNyz      =  109,   ///< dyz( N )
+  basisNzz      =  110,   ///< dzz( N )
   
   // Kind of data
-  kindOtiArr    =  200,    //  Variable OTI array.
-  kindOtiNum    =  201,    //  Constant OTI number. 
-  kindReal      =  202,    //  Constant Real number.
-  kindScalar    =  203,    //  .
-  kindFunc      =  204,    //  Function.
+  kindOtiArr    =  200,    ///<  Variable OTI array.
+  kindOtiNum    =  201,    ///<  Constant OTI number. 
+  kindReal      =  202,    ///<  Constant Real number.
+  kindScalar    =  203,    ///<  .
+  kindFunc      =  204,    ///<  Function.
 
 
   // Determine the type of FE variable, if Constant or Variable.
-  constant      =  301,    // varConst
-  variable      =  302,    // varVaria
+  constant      =  301,    ///< varConst
+  variable      =  302,    ///< varVaria
 
   // Element geometric types 
   elNode        =  400,
@@ -129,30 +129,30 @@ enum operEnum {
   elHexahedra   =  405,
 
   // Element kind : Iso-parametric or Affine
-  elkindIso     =  501,   // Isoparametric element. 
-  elkindAff     =  502,    // Affine element.
+  elkindIso     =  501,    ///< Isoparametric element. 
+  elkindAff     =  502,    ///< Affine element.
 
   // Derivative types.
-  derN          =  601,   //      N
-  derNa         =  602,   //  da( N )
-  derNaa        =  603,   // daa( N )
-  derNb         =  604,   //  db( N )
-  derNab        =  605,   // dab( N )
-  derNbb        =  606,   // dbb( N )
-  derNc         =  607,   //  dc( N )
-  derNac        =  608,   // dac( N )
-  derNbc        =  609,   // dbc( N )
-  derNcc        =  610,   // dcc( N )
+  derN          =  601,   ///<      N
+  derNa         =  602,   ///<  da( N )
+  derNaa        =  603,   ///< daa( N )
+  derNb         =  604,   ///<  db( N )
+  derNab        =  605,   ///< dab( N )
+  derNbb        =  606,   ///< dbb( N )
+  derNc         =  607,   ///<  dc( N )
+  derNac        =  608,   ///< dac( N )
+  derNbc        =  609,   ///< dbc( N )
+  derNcc        =  610,   ///< dcc( N )
 
   // Nature of Finite Element Function
-  feNatTest     =  701,   // Test function nature.
-  feNatUndef    =  702,   // Undefined function nature.
-  feNatDef      =  703,   // Defined function nature (already has data).
-  feNatDefConst =  704,   // Defined constant function nature (that does not vary inside the domain).
-  feNatOperRes  =  705,   // Defined as the result between a test and a undefined function.
-  feNatPostIntK =  706,   // integral type operation for K matrix.
-  feNatPostIntF =  707,   // integral type operation for F vector.
-  feNatBoundary =  708    // Boundary definition. (essential)
+  feNatTest     =  701,   ///< Test function nature.
+  feNatUndef    =  702,   ///< Undefined function nature.
+  feNatDef      =  703,   ///< Defined function nature (already has data).
+  feNatDefConst =  704,   ///< Defined constant function nature (that does not vary inside the domain).
+  feNatOperRes  =  705,   ///< Defined as the result between a test and a undefined function.
+  feNatPostIntK =  706,   ///< integral type operation for K matrix.
+  feNatPostIntF =  707,   ///< integral type operation for F vector.
+  feNatBoundary =  708    ///< Boundary definition. (essential)
 };
 
 

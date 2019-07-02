@@ -24,7 +24,7 @@ typedef struct {
     ndir_t*       p_nnz; ///< Number of non zero coefficients per order.
     ndir_t*      p_size; ///< Allocated size per order.
     ord_t         order; ///< Truncation order of the number.
-} sotinum_t; ///< Sparse OTI number type
+} sotinum_t;             ///< Sparse OTI number type
 
 // ----------------------------------------------------------------------------------------------------
 // -------------------------------------    END STRUCTURES      ---------------------------------------

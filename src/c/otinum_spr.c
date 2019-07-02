@@ -862,7 +862,7 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
 
         res.p_im[i]  = dhl.p_dh[i].p_im[ntmp];
         res.p_idx[i] = dhl.p_dh[i].p_idx[ntmp];
-        res.p_nnz[i] = 0;
+        res.p_nnz[i] = 0; // Initialize to zero elements.
         res.p_size[i]= dhl.p_dh[i].Ndir;
 
     }

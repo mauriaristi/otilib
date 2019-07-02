@@ -7,8 +7,8 @@
 
 
 // ****************************************************************************************************
-int64_t c_fem_defFunctFrom_otiFunc(sotiarray_t* p_arr1, uint64_t derIndx, elemProps_t* elem, femarray_t* p_arrRes,
-    directionHelper* p_dH) {
+int64_t c_fem_defFunctFrom_otiFunc(sotiarray_t* p_arr1, uint64_t derIndx, elemProps_t* elem, 
+    femarray_t* p_arrRes, directionHelper* p_dH) {
     /*
     c_fem_defFunctFrom_otiFunc( p_arr1, derIndx, elem, p_arrRes, p_dH)
 
@@ -16,7 +16,7 @@ int64_t c_fem_defFunctFrom_otiFunc(sotiarray_t* p_arr1, uint64_t derIndx, elemPr
 
     INPUTS:
 
-        -> p_arr1:        (1 x nbasis) otinum values of the function.
+        -> p_arr1:     (1 x nbasis) otinum values of the function.
 
         -> derIndx:    Basis Id that defines this function.
 
@@ -46,13 +46,12 @@ int64_t c_fem_defFunctFrom_otiFunc(sotiarray_t* p_arr1, uint64_t derIndx, elemPr
 
         for ( i=0; i<elem->nbasis ; i++){
      
+            // tmp3 = p_arr1->p_data[i] * &elem->p_basis[0,i,k];
             c_femarray_getItem_ijk(&elem->p_basis[derIndx],0,i,k,&tmp1);
-
-
             c_soti_mul( &p_arr1->p_data[i], &tmp1, &tmp3, p_dH);
 
+            // tmpcnt += tmp3;
             tmp2 = tmpcnt;
-
             c_soti_sum( &tmp2, &tmp3, &tmpcnt, p_dH);
             
             c_soti_free(&tmp2);

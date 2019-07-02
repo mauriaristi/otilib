@@ -81,23 +81,24 @@ typedef uint8_t     flag_t; ///< Flag type.
 // ----------------------------------------------------------------------------------------------------
 
 typedef struct {
-   imdir_t* p_arr;     ///< Array of imaginary directions
-   uint64_t shape[2];  ///< Shape of the array.
+  imdir_t* p_arr;     ///< Array of imaginary directions
+  uint64_t shape[2];  ///< Shape of the array.
 } imdir2d_t;           ///< imaginary direction array type.
 
 
 typedef struct {
-   // Arrays
+  // Arrays
     bases_t*      p_fulldir;  ///< 2D Array with explicit                     Shape: (    Ndir,   order)
     imdir2d_t*   p_multtabls; ///< 1D Array of 2D multiplication tables       Shape: (       1,   Nmult)
     ndir_t*         p_ndirs;  ///< 1D Array with the Ndir given a m <= Nbases Shape: (       1,  Nbasis)
     coeff_t**          p_im;  ///< Preallocated array for general multiplication coefs. Shape: (Ntmps,Ndir)
     imdir_t**         p_idx;  ///< Preallocated array for general multiplication indx.  Shape: (Ntmps,Ndir)
-    
+  //   
     coeff_t***        p_ims;  ///< Array for temporal oti nums. Shape: (1, order)
     imdir_t***        p_ids;  ///< Array for temporal oti nums. Shape: (1, order)
     ndir_t**          p_nnz;  ///< Array for temporal oti nums. Shape: (1, order)
     ndir_t**         p_size;  ///< Array for temporal oti nums. Shape: (1, order)
+  
   // Integer elements
     ndir_t        allocSize;  ///< Allocation size of arrays for this order. (useful for sotinum)
     ndir_t            Ntmps;  ///< Number of temporal arrays in the helper.

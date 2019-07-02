@@ -1223,7 +1223,7 @@ void sotiarray_createEmpty(sotiarray_t* p_array, uint64_t nrows, uint64_t ncols,
     p_array->ncols  = ncols;
     p_array->nrows  = nrows;
     p_array->size   = ncols*nrows;
-    p_array->order  = order ;
+    p_array->order  = order;
     p_array->p_data = (sotinum_t*) malloc( p_array->size * sizeof(sotinum_t) );
 
         

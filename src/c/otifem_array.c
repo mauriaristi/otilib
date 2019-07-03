@@ -746,7 +746,7 @@ void c_femarray_zeros(femarray_t* p_array, uint64_t nrows, uint64_t ncols,
     p_array->ncols    =  ncols;
     p_array->nrows    =  nrows;
     p_array->size     =  ncols*nrows;
-    p_array->order    =  order ;
+    p_array->order    =  order;
     p_array->nIntPts  =  nIntPts;
     p_array->offsetx  =  offsetx;
     p_array->offsety  =  offsety;

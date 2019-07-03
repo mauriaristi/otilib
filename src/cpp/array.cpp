@@ -86,6 +86,13 @@ public:
     uint64_t size();
     // ------------------------------------------------------------------------------------------------
 
+    void print(){
+        cout << "Pointer: " << this->data << endl;
+        cout << "nrows: " << this->nrows << endl;
+        cout << "ncols: " << this->ncols << endl;
+    }
+
+
     /**************************************************************************************************
     @brief Overload to the assignment ("=") operator. Set all elements in the matrix all to the same 
     value.
@@ -278,15 +285,7 @@ public:
 
 
 // ----------------------------------------------------------------------------------------------------
-template<class T> array2d<T>::array2d(){
-
-    // Assumes sizes = 0, therefore the 
-    // cout << "Allocating only one element" << endl;
-    this->data  = NULL;
-    this->ncols = 0;
-    this->nrows = 0;
-
-}
+template<class T> array2d<T>::array2d(): data(NULL), nrows(0), ncols(0) {}
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
@@ -667,8 +666,11 @@ int main(){
     a(1,1) = 16.5;
     b = 3.5;
 
+    c.print();
     c = ones<double>(3,3);
-    c.pointer();
+    c.print();
+    // c.pointer();
+
     cout << c << endl;
     cout << a << endl;
     cout << b << endl;

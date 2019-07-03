@@ -3,6 +3,9 @@
 #include <cstdlib>
 #include <iostream>
 #include <complex>
+#include <algorithm>
+#include <vector>
+
 #include"error_codes.hpp"
 using namespace std;
 // ----------------------------------------------------------------------------------------------------
@@ -17,7 +20,7 @@ typedef uint8_t      ord_t; ///< Order type.
 typedef uint8_t      ndh_t; ///< Number of direction helpers type.
 typedef uint8_t     flag_t; ///< Flag type.
 
-
+#define OWN_MEM 1
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------------     END TYPEDEFS       --------------------------------------
@@ -57,6 +60,10 @@ private:
     scalar_t* data; ///< Pointer to the data.
     uint64_t nrows; ///< Number of rows in the array.
     uint64_t ncols; ///< Number of columns in the array.
+    flag_t   flags; ///< Flags (8 bit):
+                    //   bit 1: memory owned -> (high) memory not owned -> (low) 
+                    //   bit 2: 
+
 
 public:
     
@@ -102,6 +109,7 @@ public:
     @tparam value: Value to set all parameters.
     **************************************************************************************************/
     array2d<scalar_t>& operator=(scalar_t value);
+    array2d<scalar_t>& operator=(array2d<scalar_t>& value);
     // ------------------------------------------------------------------------------------------------
 
 
@@ -265,12 +273,6 @@ public:
     // ------------------------------
     // Inverse.
 
-    // ------------------------------
-    // Friend functions.
-    // ------------------------------
-
-    
-    
     // operator+=();
     // operator-=();
     // operator*=();
@@ -287,7 +289,7 @@ public:
 
 
 // ----------------------------------------------------------------------------------------------------
-template<class T> array2d<T>::array2d(): data(NULL), nrows(0), ncols(0) {
+template<class T> array2d<T>::array2d(): data(NULL), nrows(0), ncols(0), flags(0) {
     cout << "Calling empty constructor\n";
 }
 // ----------------------------------------------------------------------------------------------------
@@ -301,6 +303,7 @@ template<class T> array2d<T>::array2d(uint64_t numRows, uint64_t numCols){
 
     // Allocate memory.
     this->data= new T[this->ncols*this->nrows];
+    this->flags = OWN_MEM;
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -310,11 +313,11 @@ template<class T> array2d<T>::~array2d(){
     
     cout << "Freeing item" << this->data << endl;
 
-    if (this->size() != 0){
+    if ( this->flags  == OWN_MEM ){
         
         delete[] this->data;
         this->data = NULL;
-        
+        this->flags = 0;
     }
     
     this->nrows = 0;
@@ -377,21 +380,28 @@ template<class T> array2d<T>& array2d<T>::operator=(T value){
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
-template<class T> array2d<T>& array2d<T>::operator=(const array2d<T>& value){
+template<class T> array2d<T>& array2d<T>::operator=(array2d<T>& value){
     
     uint64_t i,j,k;
 
-    if (this->size()>0){
+    if ( this->flags & OWN_MEM ){
 
-        // free
+        // If first allocated, remove previous data.
+        delete[] this->data;
 
-    } {
-        cerr << "Error trying to set elements to an uninitialized array."<< 
-                printError(OTI_NotInitialized) << endl;
-        exit(OTI_NotInitialized);
-    }
 
-    return *this;
+    } 
+
+    this->data  = value.data;
+    this->nrows = value.nrows;
+    this->ncols = value.ncols;
+    this->flags = this->flags || OWN_MEM; // Apply own memory to new element. 
+    
+    value.flags = 0;
+
+    // copy_n( value.data, this->size(), this->data);
+
+    return (*this);
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -688,16 +698,17 @@ int main(){
 
     // array2d<double> a(3,3);
     // array2d<double> b(3,3);
+
     array2d<double> c;
 
     // a = 0.5;
     // a(1,1) = 16.5;
     // b = 3.5;
 
-    c.print();
-    c = ones<double>(3,3);
-    c.print();
-    // c.pointer();
+    // c.print();
+    c = (ones<double>(3,3));
+    // c.print();
+    // // c.pointer();
 
     cout << c << endl;
     // cout << a << endl;

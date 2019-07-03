@@ -53,9 +53,11 @@ inline void allocate(class_t*& ptr, uint64_t numEls){
 template<class scalar_t>
 class array2d{
 private:
+    
     scalar_t* data; ///< Pointer to the data.
     uint64_t nrows; ///< Number of rows in the array.
     uint64_t ncols; ///< Number of columns in the array.
+
 public:
     
     /**************************************************************************************************
@@ -285,12 +287,15 @@ public:
 
 
 // ----------------------------------------------------------------------------------------------------
-template<class T> array2d<T>::array2d(): data(NULL), nrows(0), ncols(0) {}
+template<class T> array2d<T>::array2d(): data(NULL), nrows(0), ncols(0) {
+    cout << "Calling empty constructor\n";
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
 template<class T> array2d<T>::array2d(uint64_t numRows, uint64_t numCols){
-
+    
+    cout << "Calling sized constructor\n";
     this->nrows = numRows;
     this->ncols = numCols;
 
@@ -302,8 +307,16 @@ template<class T> array2d<T>::array2d(uint64_t numRows, uint64_t numCols){
 
 // ----------------------------------------------------------------------------------------------------
 template<class T> array2d<T>::~array2d(){
+    
+    cout << "Freeing item" << this->data << endl;
 
-    delete[] data;
+    if (this->size() != 0){
+        
+        delete[] this->data;
+        this->data = NULL;
+        
+    }
+    
     this->nrows = 0;
     this->ncols = 0;
 
@@ -338,6 +351,8 @@ template<class T> array2d<T>& array2d<T>::operator=(T value){
     
     uint64_t i,j,k;
 
+    cout << "Assigning "<< value << "to another array\n";
+
     if (this->size()>0){
 
         for (i=0; i<this->nrows; i++){
@@ -352,6 +367,25 @@ template<class T> array2d<T>& array2d<T>::operator=(T value){
         }
 
     } else {
+        cerr << "Error trying to set elements to an uninitialized array."<< 
+                printError(OTI_NotInitialized) << endl;
+        exit(OTI_NotInitialized);
+    }
+
+    return *this;
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ----------------------------------------------------------------------------------------------------
+template<class T> array2d<T>& array2d<T>::operator=(const array2d<T>& value){
+    
+    uint64_t i,j,k;
+
+    if (this->size()>0){
+
+        // free
+
+    } {
         cerr << "Error trying to set elements to an uninitialized array."<< 
                 printError(OTI_NotInitialized) << endl;
         exit(OTI_NotInitialized);
@@ -631,13 +665,7 @@ template<class T> array2d<T> ones(uint64_t nrows, uint64_t ncols){
         cout << i;
         res.data[i] = 1.;
         cout << " " << res.data[i] << endl;
-    }
-
-    // for (i=0; i<nrows*ncols; i++){
-    //     cout << i << " " << res.data[i] << endl;
-    // }
-
-    
+    }   
 
     res.pointer();
     
@@ -658,13 +686,13 @@ int main(){
     // array2d<complex<double>> a(3,3);
     // array2d<complex<double>> b(3,5);
 
-    array2d<double> a(3,3);
-    array2d<double> b(3,3);
+    // array2d<double> a(3,3);
+    // array2d<double> b(3,3);
     array2d<double> c;
 
-    a = 0.5;
-    a(1,1) = 16.5;
-    b = 3.5;
+    // a = 0.5;
+    // a(1,1) = 16.5;
+    // b = 3.5;
 
     c.print();
     c = ones<double>(3,3);
@@ -672,15 +700,15 @@ int main(){
     // c.pointer();
 
     cout << c << endl;
-    cout << a << endl;
-    cout << b << endl;
+    // cout << a << endl;
+    // cout << b << endl;
     
 
-    cout << transpose(b) << endl;
+    // cout << transpose(b) << endl;
 
-    cout << dot(a,b) << endl;
+    // cout << dot(a,b) << endl;
 
-    cout << 10. / a - b/15. << endl;
+    // cout << 10. / a - b/15. << endl;
 
     // Set a value of the array.
 

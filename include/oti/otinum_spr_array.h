@@ -13,11 +13,34 @@
 
 typedef struct{
     sotinum_t*    p_data; ///< Data array
-    uint64_t       nrows; // Number of rows.
-    uint64_t       ncols; // Number of cols.
-    uint64_t        size; // Total size of the array.
-    ord_t          order;
+    uint64_t       nrows; ///< Number of rows.
+    uint64_t       ncols; ///< Number of cols.
+    uint64_t        size; ///< Total size of the array.
+    ord_t          order; ///< Truncation order.
 } sotiarray_t;
+
+// typedef struct {
+//     coeff_t          re; ///< Real coefficient.
+//     coeff_t**      p_im; ///< Array with all imaginary coefficients per order.
+//     imdir_t**     p_idx; ///< Directions associated to each coefficient per order.
+//     ndir_t*       p_nnz; ///< Number of non zero coefficients per order.
+//     ndir_t*      p_size; ///< Allocated size per order.
+//     ord_t         order; ///< Truncation order of the number.
+// } sotinum_t;             ///< Sparse OTI number type
+
+
+// typedef struct{
+//     arrcoeff_t        re;
+//     arrcoeff_t**    p_im;
+//     imdir_t**      p_idx;
+//     ndir_t*        p_nnz;
+//     ndir_t*       p_size;
+//     uint64_t       nrows; ///< Number of rows.
+//     uint64_t       ncols; ///< Number of cols.
+//     uint64_t        size; ///< Total size of the array.
+//     ord_t          order; ///< Truncation order.
+// } sotiarray_t;
+
 
 // ----------------------------------------------------------------------------------------------------
 // -------------------------------------    END STRUCTURES      ---------------------------------------

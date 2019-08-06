@@ -23,6 +23,7 @@
 // ----------------------------------------------------------------------------------------------------
 
 typedef double     coeff_t; ///< Coefficient type.
+typedef double* arrcoeff_t; ///< Coefficient array type.
 typedef uint64_t   imdir_t; ///< Imaginary direction type.
 typedef uint64_t    ndir_t; ///< Number of Imaginary directions type.
 typedef uint16_t   bases_t; ///< Imaginary bases type. 

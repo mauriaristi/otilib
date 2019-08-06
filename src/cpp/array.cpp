@@ -389,7 +389,6 @@ template<class T> array2d<T>& array2d<T>::operator=(array2d<T>& value){
         // If first allocated, remove previous data.
         delete[] this->data;
 
-
     } 
 
     this->data  = value.data;
@@ -696,23 +695,23 @@ int main(){
     // array2d<complex<double>> a(3,3);
     // array2d<complex<double>> b(3,5);
 
-    // array2d<double> a(3,3);
-    // array2d<double> b(3,3);
+    array2d<double> a(3,3);
+    array2d<double> b(3,3);
 
     array2d<double> c;
 
-    // a = 0.5;
-    // a(1,1) = 16.5;
-    // b = 3.5;
+    a = 0.5;
+    a(1,1) = 16.5;
+    b = 3.5;
 
-    // c.print();
-    c = (ones<double>(3,3));
-    // c.print();
+    c.print();
+    c = (ones(3,3));
+    c.print();
     // // c.pointer();
 
-    cout << c << endl;
-    // cout << a << endl;
-    // cout << b << endl;
+    // cout << c << endl;
+    cout << a << endl;
+    cout << b << endl;
     
 
     // cout << transpose(b) << endl;

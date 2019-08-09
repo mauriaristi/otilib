@@ -50,6 +50,22 @@ and has some correct values in it.
 void darray_setItem( coeff_t num, uint64_t i, uint64_t j, darray_t* p_array);
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+/**************************************************************************************************//**
+@brief C-level memory allocation of a real array setting all values to 1.
+
+@param[inout] p_array: Address of the array.
+@param[in] shapex: Number of elements in the first  dimension.
+@param[in] shapey: Number of elements in the second dimension.
+******************************************************************************************************/ 
+int64_t darray_ones(darray_t* p_array, uint64_t nrows, uint64_t ncols);
+// ----------------------------------------------------------------------------------------------------
+
 /**************************************************************************************************//**
 @brief C-level memory allocation of a real array setting all values to 0.
 

@@ -34,12 +34,17 @@ typedef struct{
 
 @param[in] p_arr1: Address of the array.
 @param[in] num: scalar
-@param[inout] parrres: Resulting array.
+@param[inout] p_arrres: Resulting array.
 ******************************************************************************************************/ 
 void darray_r_sub(darray_t* p_arr1, double num, darray_t* p_arrres);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Negate an array. 
 
+@param[in]      p_arr1: Address of the array.
+@param[inout] p_arrres: Resulting array.
+******************************************************************************************************/
 void darray_neg(darray_t* p_arr1, darray_t* p_arrres);
 // ----------------------------------------------------------------------------------------------------
 
@@ -48,7 +53,7 @@ void darray_neg(darray_t* p_arr1, darray_t* p_arrres);
 
 @param[in] p_arr1: Address of the array.
 @param[in] num: Scalar
-@param[inout] parrres: Resulting array.
+@param[inout] p_arrres: Resulting array.
 ******************************************************************************************************/
 void darray_mul_r(darray_t* p_arr1, double num, darray_t* p_arrres);
 // ----------------------------------------------------------------------------------------------------
@@ -57,25 +62,59 @@ void darray_mul_r(darray_t* p_arr1, double num, darray_t* p_arrres);
 @brief Broadcasted subtraction of an array by a scalar. 
 
 @param[in] p_arr1: Address of the array.
-@param[in] i: Row
-@param[in] j: Column
-@param[inout] parrres: Resulting array.
+@param[in] num: Scalar.
+@param[inout] p_arrres: Resulting array.
 ******************************************************************************************************/
 void darray_sub_r(darray_t* p_arr1, double num, darray_t* p_arrres);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Broadcasted addition of an array by a scalar. 
+
+@param[in] p_arr1: Address of the array.
+@param[in] num: Scalar.
+@param[inout] p_arrres: Resulting array.
+******************************************************************************************************/
 void darray_sum_r(darray_t* p_arr1, double num, darray_t* p_arrres);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Elementwise division of arrays. Must have same dimensions. 
+
+@param[in] p_arr1: Address of the array 1.
+@param[in] p_arr2: Address of the array 2.
+@param[inout] p_arrres: Resulting array.
+******************************************************************************************************/
 void darray_div(darray_t* p_arr1, darray_t* p_arr2, darray_t* p_arrres);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Elementwise multiplication of arrays. Must have same dimensions. 
+
+@param[in] p_arr1: Address of the array 1.
+@param[in] p_arr2: Address of the array 2.
+@param[inout] p_arrres: Resulting array.
+******************************************************************************************************/
 void darray_mul(darray_t* p_arr1, darray_t* p_arr2, darray_t* p_arrres);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Elementwise subtraction of arrays. Must have same dimensions. 
+
+@param[in] p_arr1: Address of the array 1.
+@param[in] p_arr2: Address of the array 2.
+@param[inout] p_arrres: Resulting array.
+******************************************************************************************************/
 void darray_sub(darray_t* p_arr1, darray_t* p_arr2, darray_t* p_arrres);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Elementwise addition of arrays. Must have same dimensions. 
+
+@param[in] p_arr1: Address of the array 1.
+@param[in] p_arr2: Address of the array 2.
+@param[inout] p_arrres: Resulting array.
+******************************************************************************************************/
 void darray_sum(darray_t* p_arr1, darray_t* p_arr2, darray_t* p_arrres);
 // ----------------------------------------------------------------------------------------------------
 
@@ -111,11 +150,6 @@ and has some correct values in it.
 ******************************************************************************************************/ 
 void darray_setItem( coeff_t num, uint64_t i, uint64_t j, darray_t* p_array);
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
 
 
 /**************************************************************************************************//**

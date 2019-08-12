@@ -135,8 +135,10 @@ int main(){
 	quaternion q;
 	octonion   o;
 	sedenion   s;
+	
 	s = 3.5;
 	q = 3.8;
+
 	o.imag() = q;
 
 	cout<<"Quaternion: " << q <<  endl;

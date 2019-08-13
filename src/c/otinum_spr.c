@@ -38,8 +38,8 @@ sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
 
         res.p_im  = (coeff_t**)malloc( res.order * sizeof(coeff_t*) );
         res.p_idx = (imdir_t**)malloc( res.order * sizeof(imdir_t*) );
-        res.p_nnz = (ndir_t*)malloc( res.order * sizeof(ndir_t) );
-        res.p_size= (ndir_t*)malloc( res.order * sizeof(ndir_t) );
+        res.p_nnz = (ndir_t*  )malloc( res.order * sizeof(ndir_t) );
+        res.p_size= (ndir_t*  )malloc( res.order * sizeof(ndir_t) );
 
         if (res.p_im  == NULL || res.p_idx == NULL || res.p_nnz == NULL || res.p_size == NULL ){
 
@@ -522,7 +522,9 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     if (num1->re != 0.0 && num2->order > 0 ){
 
         // Swap pointers
-        tmpswap=tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
+        tmpswap=tmpsrc; 
+        tmpsrc=tmpdest; 
+        tmpdest=tmpswap;
 
         for (ordi1 = 0; ordi1<num2->order; ordi1++){
 

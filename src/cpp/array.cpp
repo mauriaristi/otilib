@@ -97,8 +97,8 @@ public:
 
     void print(){
         cout << "Pointer: " << this->data << endl;
-        cout << "nrows: " << this->nrows << endl;
-        cout << "ncols: " << this->ncols << endl;
+        cout << "nrows: "   << this->nrows << endl;
+        cout << "ncols: "   << this->ncols << endl;
     }
 
 
@@ -116,7 +116,7 @@ public:
     /**************************************************************************************************
     @brief Overload to the self addition ("+=") operator. Add to a scalar value
 
-    @tparam value: Value to set all parameters.
+    @param value: Value to set all parameters.
     **************************************************************************************************/
     array2d<scalar_t>& operator+=(scalar_t value);
     // ------------------------------------------------------------------------------------------------

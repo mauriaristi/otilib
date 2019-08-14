@@ -17,7 +17,7 @@ typedef struct{
     uint64_t       ncols; ///< Number of cols.
     uint64_t        size; ///< Total size of the array.
     ord_t          order; ///< Truncation order.
-} sotiarray_t;
+} soarr_t;
 
 // typedef struct {
 //     coeff_t          re; ///< Real coefficient.
@@ -39,7 +39,7 @@ typedef struct{
 //     uint64_t       ncols; ///< Number of cols.
 //     uint64_t        size; ///< Total size of the array.
 //     ord_t          order; ///< Truncation order.
-// } sotiarray_t;
+// } soarr_t;
 
 
 // ----------------------------------------------------------------------------------------------------
@@ -55,44 +55,44 @@ typedef struct{
 
 
 /**************************************************************************************************//**
-@brief Inverse of a sotiarray. The inverse is only computed for small matrices of size up to 3x3.
+@brief Inverse of a sparse OTI array. The inverse is only computed for small matrices of size up to 3x3.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: soarr.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_invert(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_invert(soarr_t* p_arr1, soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Determinant of a sotiarray.
+@brief Determinant of a sparse OTI array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_det(sotiarray_t* p_arr1, sotinum_t* p_res, dhelpl_t dhl);
+void soarr_det(soarr_t* p_arr1, sotinum_t* p_res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Transpose a sotiarray.
+@brief Transpose a sparse OTI array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_transpose(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_transpose(soarr_t* p_arr1, soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
 /**************************************************************************************************//**
-@brief Negate a sotiarray.
+@brief Negate a sparse OTI array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_neg(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_neg(soarr_t* p_arr1, soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -100,99 +100,99 @@ void sotiarray_neg(sotiarray_t* p_arr1, sotiarray_t* p_arrRes, dhelpl_t dhl);
 
 
 /**************************************************************************************************//**
-@brief Subtract a Real array by a sotiarray.
+@brief Subtract a Real array by a sparse OTI array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] p_arr2: Real array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_matsub_Roti(sotiarray_t* p_arr1, darray_t* p_arr2, 
-                           sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_matsub_Roti(soarr_t* p_arr1, darray_t* p_arr2, 
+                           soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Subtract a sotiarray by a real array.
+@brief Subtract a sparse OTI array by a real array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] p_arr2: Real array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_matsub_otiR(sotiarray_t* p_arr1, darray_t* p_arr2,
-                           sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_matsub_otiR(soarr_t* p_arr1, darray_t* p_arr2,
+                           soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Subtract two sotiarrays.
+@brief Subtract two soarrs.
 
-@param[in] p_arr1: sotiarray.
-@param[in] p_arr2 sotiarray.
+@param[in] p_arr1: sparse OTI array.
+@param[in] p_arr2 sparse OTI array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_matsub_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, 
-                             sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_matsub_otioti(soarr_t* p_arr1, soarr_t* p_arr2, 
+                             soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
 /**************************************************************************************************//**
-@brief Multiply a sotiarray with a real array.
+@brief Multiply a sparse OTI array with a real array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] p_arr2: real array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_matmul_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, 
-                           sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_matmul_otiR(soarr_t* p_arr1, darray_t* p_arr2, 
+                           soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Multiply a real array times a sotiarray.
+@brief Multiply a real array times a sparse OTI array.
 
 @param[in] p_arr1: real array.
-@param[in] p_arr2: sotiarray.
+@param[in] p_arr2: sparse OTI array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_matmul_Roti(darray_t* p_arr1, sotiarray_t* p_arr2, 
-                           sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_matmul_Roti(darray_t* p_arr1, soarr_t* p_arr2, 
+                           soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Multiply two sotiarrays.
+@brief Multiply two soarrs.
 
-@param[in] p_arr1: sotiarray.
-@param[in] p_arr2: sotiarray.
+@param[in] p_arr1: sparse OTI array.
+@param[in] p_arr2: sparse OTI array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_matmul_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, 
-                             sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_matmul_otioti(soarr_t* p_arr1, soarr_t* p_arr2, 
+                             soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Add a sotiarray with a real array.
+@brief Add a sparse OTI array with a real array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] p_arr2: real array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_matsum_otiR(sotiarray_t* p_arr1, darray_t* p_arr2, sotiarray_t* p_arrRes);
+void soarr_matsum_otiR(soarr_t* p_arr1, darray_t* p_arr2, soarr_t* p_arrRes);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Add two sotiarray elements
+@brief Add two sparse OTI array elements
 
-@param[in] p_arr1: sotiarray.
-@param[in] p_arr2: sotiarray.
+@param[in] p_arr1: sparse OTI array.
+@param[in] p_arr2: sparse OTI array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_matsum_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2, 
-                             sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_matsum_otioti(soarr_t* p_arr1, soarr_t* p_arr2, 
+                             soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -212,15 +212,15 @@ void sotiarray_matsum_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2,
 
 
 /**************************************************************************************************//**
-@brief Elementise multiplication of a sotiarray by another sotiarray.
+@brief Elementise multiplication of a sparse OTI array by another sparse OTI array.
 
-@param[in] p_arr1: sotiarray.
-@param[in] p_arr2: sotiarray.
+@param[in] p_arr1: sparse OTI array.
+@param[in] p_arr2: sparse OTI array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_mul_sotiarr(sotiarray_t* p_arr1, sotiarray_t* p_arr2,
-                           sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_mul_sotiarr(soarr_t* p_arr1, soarr_t* p_arr2,
+                           soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -228,165 +228,165 @@ void sotiarray_mul_sotiarr(sotiarray_t* p_arr1, sotiarray_t* p_arr2,
 
 
 /**************************************************************************************************//**
-@brief Elementise division of a sotiarray by another sotiarray.
+@brief Elementise division of a sparse OTI array by another sparse OTI array.
 
-@param[in] p_arr1: sotiarray.
-@param[in] p_arr2: sotiarray.
+@param[in] p_arr1: sparse OTI array.
+@param[in] p_arr2: sparse OTI array.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_matdiv_otioti(sotiarray_t* p_arr1, sotiarray_t* p_arr2,
-                             sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_matdiv_otioti(soarr_t* p_arr1, soarr_t* p_arr2,
+                             soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
 /**************************************************************************************************//**
-@brief Divide a sotiarray by a real number.
+@brief Divide a sparse OTI array by a real number.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: Real number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_div_R(sotiarray_t* p_arr1, coeff_t num2, sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_div_R(soarr_t* p_arr1, coeff_t num2, soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
 
 
 /**************************************************************************************************//**
-@brief Divide a sotiarray by an OTI number.
+@brief Divide a sparse OTI array by an OTI number.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: OTI number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_div_oti(sotiarray_t* p_arr1, sotinum_t* num2,
-                       sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_div_oti(soarr_t* p_arr1, sotinum_t* num2,
+                       soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Divide an OTI number every element of a sotiarray.
+@brief Divide an OTI number every element of a sparse OTI array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: OTI number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_oti_div(sotiarray_t* p_arr1, sotinum_t* num2,
-                       sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_oti_div(soarr_t* p_arr1, sotinum_t* num2,
+                       soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Divide real number by a sotiarray (elementwise.
+@brief Divide real number by a sparse OTI array (elementwise.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: Real number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_R_div(sotiarray_t* p_arr1, coeff_t num2, 
-                     sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_R_div(soarr_t* p_arr1, coeff_t num2, 
+                     soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
 /**************************************************************************************************//**
-@brief Subtract an OTI number by a sotiarray.
+@brief Subtract an OTI number by a sparse OTI array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: OTI number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_oti_sub(sotiarray_t* p_arr1, sotinum_t* num2, 
-                       sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_oti_sub(soarr_t* p_arr1, sotinum_t* num2, 
+                       soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Subtract real number by a sotiarray.
+@brief Subtract real number by a sparse OTI array.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: real number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_R_sub(sotiarray_t* p_arr1, coeff_t num2, 
-                     sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_R_sub(soarr_t* p_arr1, coeff_t num2, 
+                     soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Subtract a sotiarray by a sotinum.
+@brief Subtract a sparse OTI array by a sotinum.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: OTI number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_sub_oti(sotiarray_t* p_arr1, sotinum_t* num2,
-                       sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_sub_oti(soarr_t* p_arr1, sotinum_t* num2,
+                       soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Subtract a sotiarray by a real number.
+@brief Subtract a sparse OTI array by a real number.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: Real number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_sub_R(sotiarray_t* p_arr1, coeff_t num2,
-                     sotiarray_t* p_arrRe, dhelpl_t dhl);
+void soarr_sub_R(soarr_t* p_arr1, coeff_t num2,
+                     soarr_t* p_arrRe, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Multiply a sotiarray by a sotinum.
+@brief Multiply a sparse OTI array by a sotinum.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: OTI number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_mul_oti(sotiarray_t* p_arr1, sotinum_t* num2,
-                       sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_mul_oti(soarr_t* p_arr1, sotinum_t* num2,
+                       soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Multiply a sotiarray by a real number.
+@brief Multiply a sparse OTI array by a real number.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: real number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_mul_R(sotiarray_t* p_arr1, coeff_t num2, sotiarray_t* p_arrRes);
+void soarr_mul_R(soarr_t* p_arr1, coeff_t num2, soarr_t* p_arrRes);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Add a sotiarray by a sotinum.
+@brief Add a sparse OTI array by a sotinum.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: OTI number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_sum_oti(sotiarray_t* p_arr1, sotinum_t* num2, 
-                       sotiarray_t* p_arrRes, dhelpl_t dhl);
+void soarr_sum_oti(soarr_t* p_arr1, sotinum_t* num2, 
+                       soarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Add a sotiarray by a real number.
+@brief Add a sparse OTI array by a real number.
 
-@param[in] p_arr1: sotiarray.
+@param[in] p_arr1: sparse OTI array.
 @param[in] num2: real number.
 @param[inout] p_arrRes: Address of the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_sum_R(sotiarray_t* p_arr1, coeff_t num2, sotiarray_t* p_arrRes, dhelpl_t dhl); 
+void soarr_sum_R(soarr_t* p_arr1, coeff_t num2, soarr_t* p_arrRes, dhelpl_t dhl); 
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Get element from sotiarray
+@brief Get element from a sparse OTI array
 
 @param[in] p_array: Address of the array.
 @param[in] i: row
@@ -394,7 +394,7 @@ void sotiarray_sum_R(sotiarray_t* p_arr1, coeff_t num2, sotiarray_t* p_arrRes, d
 @param[inout] num: sotinum with the result.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/
-void sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* num, dhelpl_t dhl);
+void soarr_getItem(soarr_t* p_array, uint64_t i, uint64_t j, sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -406,7 +406,7 @@ void sotiarray_getItem(sotiarray_t* p_array, uint64_t i, uint64_t j, sotinum_t* 
 @param[inout] p_array: Address of the array.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/ 
-void sotiarray_setItemR_indx( coeff_t num, uint64_t i, sotiarray_t* p_array, dhelpl_t dhl);
+void soarr_setItemR_indx( coeff_t num, uint64_t i, soarr_t* p_array, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -417,7 +417,7 @@ void sotiarray_setItemR_indx( coeff_t num, uint64_t i, sotiarray_t* p_array, dhe
 @param[inout] p_array: Address of the array.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/ 
-void sotiarray_setItemOTI_indx( sotinum_t* num, uint64_t i, sotiarray_t* p_array, dhelpl_t dhl);
+void soarr_setItemOTI_indx( sotinum_t* num, uint64_t i, soarr_t* p_array, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -430,17 +430,17 @@ already been created and has some correct values in it.
 @param[inout] p_array: Address of the array.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/ 
-void sotiarray_setItemR( coeff_t num, uint64_t i, uint64_t j, sotiarray_t* p_array, dhelpl_t dhl);
+void soarr_setItemR( coeff_t num, uint64_t i, uint64_t j, soarr_t* p_array, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Sets all items in a sotiarray to the specified number.
+@brief Sets all items in a soarr to the specified number.
 
 @param[in] num: 
 @param[inout] p_array: Address of the array.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/ 
-void sotiarray_setAllItems( sotinum_t* num, sotiarray_t* p_array, dhelpl_t dhl);
+void soarr_setAllItems( sotinum_t* num, soarr_t* p_array, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -453,12 +453,12 @@ and has some correct values in it.
 @param[inout] p_array: Address of the array.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/ 
-void sotiarray_setItemOTI( sotinum_t* num, uint64_t i, uint64_t j, 
-                           sotiarray_t* p_array, dhelpl_t dhl);
+void soarr_setItemOTI( sotinum_t* num, uint64_t i, uint64_t j, 
+                           soarr_t* p_array, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Allocate memory to create an sotiarray object with all elements equal to zero. 
+@brief Allocate memory to create an soarr object with all elements equal to zero. 
 
 @param[inout] p_array: Address of the array.
 @param[in] shapex: Number of rows
@@ -466,7 +466,7 @@ void sotiarray_setItemOTI( sotinum_t* num, uint64_t i, uint64_t j,
 @param[in] order: Truncation order
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/ 
-void sotiarray_zeros(sotiarray_t* p_array, uint64_t shapex, uint64_t shapey, 
+void soarr_zeros(soarr_t* p_array, uint64_t shapex, uint64_t shapey, 
                      ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -476,11 +476,11 @@ void sotiarray_zeros(sotiarray_t* p_array, uint64_t shapex, uint64_t shapey,
 @param[inout] p_array: Address of the array.
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/ 
-void sotiarray_free(sotiarray_t* p_array, dhelpl_t dhl);
+void soarr_free(soarr_t* p_array, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Allocate memory to create an sotiarray object. 
+@brief Allocate memory to create an soarr object. 
 
 @param[inout] p_array: Address of the array.
 @param[in] shapex: Number of rows
@@ -488,7 +488,7 @@ void sotiarray_free(sotiarray_t* p_array, dhelpl_t dhl);
 @param[in] order: Truncation order
 @param[in] dhl: Direction helper list.
 ******************************************************************************************************/ 
-void sotiarray_createEmpty(sotiarray_t* p_array, uint64_t shapex, uint64_t shapey, 
+void soarr_createEmpty(soarr_t* p_array, uint64_t shapex, uint64_t shapey, 
                            ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 

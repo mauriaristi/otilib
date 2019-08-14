@@ -335,7 +335,7 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
 
     }
 
-    ndir_t  ntmps =  15; // Number of arrays for temporal variables.
+    ndir_t  ntmps =  25; // Number of arrays for temporal variables.
     
     for( i = 1; i<=dhl->ndh; i++){
       // printf("Loading dhelp %d\n",i);
@@ -1546,7 +1546,7 @@ inline void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_
 
     flag_t flag1;
     
-    // Copy all elements fron dir1 to the result:a*a
+    // Copy all elements fron dir1 to the result: a*a
     memcpy(p_imres ,p_im1 ,ndir1*sizeof(coeff_t));
     memcpy(p_idxres,p_idx1,ndir1*sizeof(imdir_t));
     *ndirres = ndir1;
@@ -1747,12 +1747,12 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
                        coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           // Result
                        dhelpl_t dhl){                            // Helper
 
-
+    // This function multiplies two arrays of imaginary coefficients.
     ord_t     tmp_ord      = ord1 + ord2;
     imdir2d_t tmp_multtabl ;
     ndir_t i,j;
 
-    // Get temporal arrays.
+    // Get temporal arrays 0,1 and 2. These must be reserved at all times for this porpuses.
     coeff_t* p_im_tmp1  = dhl.p_dh[tmp_ord-1].p_im[0] ;
     coeff_t* p_im_tmp2  = dhl.p_dh[tmp_ord-1].p_im[1] ;
     coeff_t* p_im_tmp3  = dhl.p_dh[tmp_ord-1].p_im[2] ;

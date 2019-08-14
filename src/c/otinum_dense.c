@@ -1,5 +1,105 @@
 #include "oti/otinum_dense.h"
 
+
+
+// // otinum_t oti_atan2(otinum_t* num, otinum_t* y, dhelpl_t dhl)
+// otinum_t oti_atanh(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_asinh(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_acosh(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_tanh(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_sqrt(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_cosh(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_sinh(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_asin(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_acos(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_atan(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_tan(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_cos(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_sin(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_logb(otinum_t* num, double base, dhelpl_t dhl)
+// otinum_t oti_log10(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_log(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_exp(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_pow(otinum_t* num, double e, dhelpl_t dhl)
+
+// void oti_trunc_smul_real(coeff_t a, ord_t ord, otinum_t* res, dhelpl_t dhl)
+// void oti_trunc_ssum(otinum_t* num1, 
+//                     ord_t ord, otinum_t* res, dhelpl_t dhl )
+// void oti_trunc_mul(otinum_t* num1, ord_t ord1, 
+//                    otinum_t* num2, ord_t ord2, 
+//                    otinum_t* res, dhelpl_t dhl )
+
+// otinum_t oti_div_otireal(otinum_t* num, coeff_t den, dhelpl_t dhl )
+// otinum_t oti_div_realoti(coeff_t num, otinum_t* den, dhelpl_t dhl )
+// otinum_t oti_div(otinum_t* num, otinum_t* den, dhelpl_t dhl )
+
+// otinum_t oti_feval(coeff_t* feval_re, otinum_t* num, dhelpl_t dhl )
+// otinum_t oti_sub_otireal(otinum_t* num1, coeff_t a, dhelpl_t dhl)
+// otinum_t oti_sub_realoti(coeff_t a, otinum_t* num2, dhelpl_t dhl)
+// otinum_t oti_neg(otinum_t* num1, dhelpl_t dhl)
+// otinum_t oti_sub(otinum_t* num1, otinum_t* num2, dhelpl_t dhl)
+// otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl)
+// otinum_t oti_mul_real(coeff_t a, otinum_t* num1, dhelpl_t dhl)
+// otinum_t oti_sum(otinum_t* num1, otinum_t* num2, dhelpl_t dhl)
+// otinum_t oti_sum_real(coeff_t a, otinum_t* num1, dhelpl_t dhl)
+// void oti_set(otinum_t* num, otinum_t* res, dhelpl_t dhl)
+// otinum_t oti_copy(otinum_t* num, dhelpl_t dhl)
+// otinum_t oti_get_rtmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl)
+// otinum_t oti_get_tmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl)
+// coeff_t oti_get( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl)
+// coeff_t oti_get_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl)
+// void oti_setIm_IdxOrd( coeff_t a, imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl)
+// void oti_print( otinum_t* num, dhelpl_t dhl)
+// void oti_free( otinum_t* num )
+
+// otinum_t oti_createZero( bases_t nbases, ord_t order, dhelpl_t dhl)
+// void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl)
+// inline otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ----------------------------------------------------------------------------------------------------
 // ---------------------------------     OTINUM FUNCTIONS     -----------------------------------------
 // ----------------------------------------------------------------------------------------------------

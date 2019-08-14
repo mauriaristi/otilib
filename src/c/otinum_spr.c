@@ -1,5 +1,119 @@
 #include "oti/otinum_spr.h"
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl)
+// sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl)
+
+// // Math
+// sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_asinh(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_acosh(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_tanh(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_sqrt(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_cosh(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_sinh(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_asin(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_acos(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_atan(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_tan(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_cos(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_sin(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_logb(sotinum_t* num, double base, dhelpl_t dhl)
+// sotinum_t soti_log10(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_log(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl)
+// inline sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl )
+// sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl)
+// sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl)
+// sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl)
+// void soti_atanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_asinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_acosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_tanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_sqrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_cosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_sinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_asin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_acos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_atan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_tan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_cos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_sin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_logb_to(sotinum_t* num, double base, sotinum_t* res, dhelpl_t dhl)
+// void soti_log10_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_log_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_exp_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
+// void soti_pow_to(sotinum_t* num, double e, sotinum_t* res, dhelpl_t dhl)
+// inline void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl )
+// inline void soti_mul_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl)
+// inline void soti_sum_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl)
+// inline void soti_sub_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl)
+// void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl)
+// inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl )
+// inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl)
+// inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl)
+// inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl)
+// void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl)
+// void soti_trunc_ssum(sotinum_t* num1, ord_t ord, sotinum_t* res, dhelpl_t dhl )
+// void soti_trunc_mul(sotinum_t* num1, ord_t ord1, 
+//                     sotinum_t* num2, ord_t ord2, 
+//                     sotinum_t* dest, dhelpl_t dhl )
+// sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl)
+// sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl)
+// coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_div_realoti(coeff_t num, sotinum_t* den, dhelpl_t dhl)
+// sotinum_t soti_div(sotinum_t* num, sotinum_t* den, dhelpl_t dhl)
+// sotinum_t soti_div_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl)
+// sotinum_t soti_sub_realoti( coeff_t val, sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_sub_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl)
+// sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_mul_real(coeff_t val, sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_sum_real(coeff_t val, sotinum_t* num, dhelpl_t dhl)
+// sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl)
+// void soti_insert_item( ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, 
+//     dhelpl_t dhl)
+// void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl)
+// coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl)
+// void soti_print(sotinum_t* num, dhelpl_t dhl)
+// void soti_free(sotinum_t* num)
+// void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl)
+// void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl)
+// void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl)
+// sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ----------------------------------------------------------------------------------------------------
 // -------------------------------     SPROTINUM FUNCTIONS     ----------------------------------------
 // ----------------------------------------------------------------------------------------------------

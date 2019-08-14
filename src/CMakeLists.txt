@@ -42,7 +42,8 @@ add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
 
 
-include_directories ("${PROJECT_SOURCE_DIR}/include")
+include_directories ("${PROJECT_SOURCE_DIR}/include"
+	"${PROJECT_SOURCE_DIR}/src")
 add_library (oti        c/core.c 
 						c/base_math.c
 	                    c/otinum_dense.c
@@ -50,6 +51,8 @@ add_library (oti        c/core.c
 	                    # c/darray.c 
 	                    # c/otinum_spr_array.c
 	                    )
+# add_library (oti        c/otilib.c
+# 	                    )
 
 if(APPLE)
     SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")
@@ -65,6 +68,29 @@ target_link_libraries(oti m)
 
 # Create folder for data.
 FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # # -------------------------------------------------------------------

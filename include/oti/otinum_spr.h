@@ -39,6 +39,217 @@ typedef struct {
 
 
 
+
+
+/**************************************************************************************************//**
+@brief Generate a temporal sparse otinum with the allocated data in the direction helper.
+
+@param[in] ntmp Number of temporal array to be retreived.
+@param[in] order Truncation order.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of inverse hyperbolic tangent function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_atanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of inverse hyperbolic sine function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_asinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of inverse hyperbolic cosine function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_acosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of  hyperbolic tangent function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_tanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of square root function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_sqrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of hyperbolic cosine function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_cosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of hyperbolic cosine function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_sinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of inverse sine function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_asin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of inverse cosine function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_acos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of inverse tangent function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_atan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of inverse cosine function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_tan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of cosine function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_cos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of sine function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_sin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_logb_to(sotinum_t* num, double base, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_log10_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of logarithm function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_log_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of exponential function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_exp_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Evaluation of power function at (num).
+
+@param[in] num: Oti number.
+@param[in] res: Result.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/
+void soti_pow_to(sotinum_t* num, double e, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_mul_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_sum_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_sub_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /**************************************************************************************************//**
 @brief This function subtracts two sparse oti numbers. The result is held in a temporal 
 sparse oti number that needs to be copied, either to a new sotinum type or to an already existing 

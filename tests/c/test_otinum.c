@@ -1,4 +1,4 @@
-#include<oti/otinum_dense.h>
+#include<oti/dense.h>
 #include<time.h>
 
 

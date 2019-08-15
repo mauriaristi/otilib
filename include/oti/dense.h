@@ -34,7 +34,37 @@ typedef struct {
 // ------------------------------------     DECLARATIONS     ------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 // to add to c_otilib.pxd
+void oti_atanh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_asinh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_acosh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_tanh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_sqrt_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_cosh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_sinh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_asin_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_acos_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_atan_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_tan_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_cos_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_sin_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_logb_to(otinum_t* num, double base, otinum_t* res, dhelpl_t dhl);
+void oti_log10_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_log_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_exp_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_pow_to(otinum_t* num, double e, otinum_t* res, dhelpl_t dhl);
 
+void oti_sum_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl);
+void oti_sum_real_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl);
+void oti_neg_to(otinum_t* num1, otinum_t* res, dhelpl_t dhl);
+void oti_sub_otireal_to(otinum_t* num1, coeff_t a, otinum_t* res, dhelpl_t dhl);
+void oti_sub_realoti_to(coeff_t a, otinum_t* num2, otinum_t* res, dhelpl_t dhl);
+void oti_sub_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl);
+void oti_mul_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl);
+void oti_mul_real_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl);
+void oti_div_otireal_to(otinum_t* num, coeff_t den, otinum_t* res, dhelpl_t dhl );
+void oti_div_realoti_to(coeff_t num, otinum_t* den, otinum_t* res, dhelpl_t dhl );
+void oti_div_to(otinum_t* num, otinum_t* den, otinum_t* res, dhelpl_t dhl );
+void oti_feval_to(coeff_t* feval_re, otinum_t* num, otinum_t* res, dhelpl_t dhl );
 
 
 /**************************************************************************************************//**
@@ -56,6 +86,7 @@ typedef struct {
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/
 otinum_t oti_get_tmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl);
+otinum_t oti_get_rtmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -477,10 +508,10 @@ otinum_t oti_init();
 @brief Assign an oti number copying the values from another oti number.
 
 @param[in] OTI number.
-@param[inout] num Address of the oti number to be assigned
+@param[inout] num Address of the oti number to be assigned.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-void oti_set( otinum_t* num, otinum_t* res, dhelpl_t dhl);
+void oti_copy_to( otinum_t* num, otinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

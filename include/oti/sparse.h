@@ -37,7 +37,18 @@ typedef struct {
 // ----------------------------------------------------------------------------------------------------
 
 
-
+void soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+void soti_sum_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void soti_sum_real_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+void soti_sub_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void soti_sub_realoti_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+void soti_sub_otireal_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
+void soti_mul_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void soti_mul_real_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+void soti_div_realoti_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
+void soti_div_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
+void soti_div_otireal_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
+void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
 
 
 
@@ -65,7 +76,7 @@ void soti_atanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 @brief Evaluation of inverse hyperbolic sine function at (num).
 
 @param[in] num: Oti number.
-@param[in] res: Result.
+@param[in] res: Result holder. Must come created and minimally instantiated.
 @param[in] dhl: Direction helper list object.
 ******************************************************************************************************/
 void soti_asinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
@@ -218,24 +229,6 @@ void soti_exp_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 ******************************************************************************************************/
 void soti_pow_to(sotinum_t* num, double e, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
-
-
-void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void soti_mul_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void soti_sum_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void soti_sub_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
 
 
 

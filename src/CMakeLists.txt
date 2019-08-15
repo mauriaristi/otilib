@@ -26,6 +26,7 @@
 # set(CMAKE_BUILD_TYPE RELEASE)
 # set(CMAKE_C_FLAGS_DEBUG "-O2 -g")
 # set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall")
+
 if(APPLE)
 	# This is for the case of apple macOS
     SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
@@ -42,17 +43,18 @@ add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
 
 
-include_directories ("${PROJECT_SOURCE_DIR}/include"
-	"${PROJECT_SOURCE_DIR}/src")
+include_directories (	"${PROJECT_SOURCE_DIR}/include"
+						"${PROJECT_SOURCE_DIR}/src/c"
+						)
+
 add_library (oti        c/core.c 
 						c/base_math.c
-	                    c/otinum_dense.c
-	                    c/otinum_spr.c
+	                    c/dense.c
+	                    c/sparse.c
 	                    # c/darray.c 
 	                    # c/otinum_spr_array.c
 	                    )
-# add_library (oti        c/otilib.c
-# 	                    )
+
 
 if(APPLE)
     SET_TARGET_PROPERTIES(oti PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")

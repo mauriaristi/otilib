@@ -179,8 +179,6 @@ void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
     }else{
 
         if ( order <= num->order ){
-            
-            
 
             pos = binSearchUI64(idx, num->p_idx[order-1], num->p_nnz[order-1], &flag );
 
@@ -194,12 +192,6 @@ void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
 
             }
 
-        // } else {
-            
-        //     // Change truncation order before setting an element of higher order
-
-        //     printf("ERROR: Order change is not yet implemented\n");
-        //     exit(OTI_NotImplemented);
         }
 
     }
@@ -246,6 +238,28 @@ void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

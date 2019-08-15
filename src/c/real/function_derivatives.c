@@ -1,19 +1,11 @@
-#include "oti/base_math.h"
 
 
 
-
-
-
-
-// ----------------------------------------------------------------------------------------------------
-// ---------------------------------    MATH FUNCTIONS    ---------------------------------------------
-// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_atan2(double x, double y, ord_t order, double* derivs){
+void der_r_atan2(coeff_t x, coeff_t y, ord_t order, coeff_t* derivs){
     
-    double x0;
+    coeff_t x0;
     uint8_t i;
     
     x0 = x/y;
@@ -60,10 +52,10 @@ void der_r_atan2(double x, double y, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_logb(double x0, double base, ord_t order, double* derivs){
+void der_r_logb(coeff_t x0, coeff_t base, ord_t order, coeff_t* derivs){
     
     uint8_t i;
-    double lbase = log(base);
+    coeff_t lbase = log(base);
 
     for( i=0; i<(order+1); i++){    
         switch(i){
@@ -96,7 +88,7 @@ void der_r_logb(double x0, double base, ord_t order, double* derivs){
 
 
 // ****************************************************************************************************
-void der_r_log10(double x0, ord_t order, double* derivs){
+void der_r_log10(coeff_t x0, ord_t order, coeff_t* derivs){
     
     uint8_t i;
     for( i=0; i<(order+1); i++){
@@ -130,7 +122,7 @@ void der_r_log10(double x0, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_atanh(double x0, ord_t order, double* derivs){
+void der_r_atanh(coeff_t x0, ord_t order, coeff_t* derivs){
     
     uint8_t i;
 
@@ -177,7 +169,7 @@ void der_r_atanh(double x0, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_asinh(double x0, ord_t order, double* derivs){
+void der_r_asinh(coeff_t x0, ord_t order, coeff_t* derivs){
     
     uint8_t i;
 
@@ -221,10 +213,10 @@ void der_r_asinh(double x0, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_acosh(double x0, ord_t order, double* derivs){
+void der_r_acosh(coeff_t x0, ord_t order, coeff_t* derivs){
     
-    double x2m1 = pow(x0, 2.) - 1.;
-    double sqx2m1 = pow(x2m1, 0.5);
+    coeff_t x2m1 = pow(x0, 2.) - 1.;
+    coeff_t sqx2m1 = pow(x2m1, 0.5);
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -260,11 +252,11 @@ void der_r_acosh(double x0, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_tanh(double x0, ord_t order, double* derivs){
+void der_r_tanh(coeff_t x0, ord_t order, coeff_t* derivs){
     
-    double tanhx0 = tanh(x0);
-    double tanh2  = pow(tanhx0, 2); 
-    double tanh2m1 = tanh2 - 1;
+    coeff_t tanhx0 = tanh(x0);
+    coeff_t tanh2  = pow(tanhx0, 2); 
+    coeff_t tanh2m1 = tanh2 - 1;
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -302,9 +294,9 @@ void der_r_tanh(double x0, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_sqrt(double x, ord_t order, double* derivs){
+void der_r_sqrt(coeff_t x, ord_t order, coeff_t* derivs){
     
-    double sqx = sqrt(x);
+    coeff_t sqx = sqrt(x);
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -340,10 +332,10 @@ void der_r_sqrt(double x, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_cosh(double x0, ord_t order, double* derivs){
+void der_r_cosh(coeff_t x0, ord_t order, coeff_t* derivs){
     
-    double ch = cosh(x0);
-    double sh = sinh(x0);
+    coeff_t ch = cosh(x0);
+    coeff_t sh = sinh(x0);
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -378,10 +370,10 @@ void der_r_cosh(double x0, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_sinh(double x0, ord_t order, double* derivs){
+void der_r_sinh(coeff_t x0, ord_t order, coeff_t* derivs){
     
-    double ch = cosh(x0);
-    double sh = sinh(x0);
+    coeff_t ch = cosh(x0);
+    coeff_t sh = sinh(x0);
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -416,7 +408,7 @@ void der_r_sinh(double x0, ord_t order, double* derivs){
 
 
 // ****************************************************************************************************
-void der_r_asin(double x0, ord_t order, double* derivs){
+void der_r_asin(coeff_t x0, ord_t order, coeff_t* derivs){
     
     uint8_t i;
 
@@ -477,7 +469,7 @@ void der_r_asin(double x0, ord_t order, double* derivs){
 
 
 // ****************************************************************************************************
-void der_r_acos(double x0, ord_t order, double* derivs){
+void der_r_acos(coeff_t x0, ord_t order, coeff_t* derivs){
     
     uint8_t i;
 
@@ -541,10 +533,10 @@ void der_r_acos(double x0, ord_t order, double* derivs){
 
 
 // ****************************************************************************************************
-void der_r_atan(double x0, ord_t order, double* derivs){
+void der_r_atan(coeff_t x0, ord_t order, coeff_t* derivs){
     
-    double x02   = pow(x0,2.0);
-    double x02p1 = x02+1.0;
+    coeff_t x02   = pow(x0,2.0);
+    coeff_t x02p1 = x02+1.0;
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -591,10 +583,10 @@ void der_r_atan(double x0, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_tan(double x0, ord_t order, double* derivs){
+void der_r_tan(coeff_t x0, ord_t order, coeff_t* derivs){
     
-    double tanx0 = tan(x0);
-    double tanx02p1 = pow(tanx0,2.0) + 1.0 ;
+    coeff_t tanx0 = tan(x0);
+    coeff_t tanx02p1 = pow(tanx0,2.0) + 1.0 ;
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -679,11 +671,11 @@ void der_r_tan(double x0, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_cos(double x0, ord_t order, double* derivs){
+void der_r_cos(coeff_t x0, ord_t order, coeff_t* derivs){
     
     uint8_t i;
     uint8_t s = 0;
-    double sign = 1.;
+    coeff_t sign = 1.;
     
     for( i=0; i<(order+1); i++){
     
@@ -706,11 +698,11 @@ void der_r_cos(double x0, ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_sin(double x0, ord_t order, double* derivs){
+void der_r_sin(coeff_t x0, ord_t order, coeff_t* derivs){
     
     uint8_t i;
     uint8_t s = 1;
-    double sign = -1.;
+    coeff_t sign = -1.;
     
     for( i=0; i<(order+1); i++){
     
@@ -735,10 +727,10 @@ void der_r_sin(double x0, ord_t order, double* derivs){
 
 
 // ****************************************************************************************************
-void der_r_log(double x , ord_t order, double* derivs){
+void der_r_log(coeff_t x , ord_t order, coeff_t* derivs){
       
-    double sign = -1.;
-    double factor = 1.;
+    coeff_t sign = -1.;
+    coeff_t factor = 1.;
     uint8_t i;    
 
     for (i=0; i<(order+1); i++){    
@@ -753,9 +745,9 @@ void der_r_log(double x , ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_exp(double x,ord_t order, double* derivs){
+void der_r_exp(coeff_t x,ord_t order, coeff_t* derivs){
     
-    double value = exp(x);
+    coeff_t value = exp(x);
     uint8_t i;    
 
     for (i=0; i<(order+1); i++){
@@ -766,12 +758,12 @@ void der_r_exp(double x,ord_t order, double* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_r_pow(double x, double e, ord_t order, double* derivs){
+void der_r_pow(coeff_t x, coeff_t e, ord_t order, coeff_t* derivs){
     
-    double power_i = e;
-    double x0 = x;
+    coeff_t power_i = e;
+    coeff_t x0 = x;
     uint8_t flag = 0;
-    double factor = 1.;
+    coeff_t factor = 1.;
     uint8_t i;
     
     for (i=0; i<(order+1); i++){
@@ -794,6 +786,3 @@ void der_r_pow(double x, double e, ord_t order, double* derivs){
 }
 // ----------------------------------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------------------------------
-// ---------------------------------    MATH FUNCTIONS    ---------------------------------------------
-// ----------------------------------------------------------------------------------------------------

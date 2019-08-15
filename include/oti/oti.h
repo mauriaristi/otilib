@@ -6,8 +6,7 @@
 // ----------------------------------------------------------------------------------------------------
 
 #include "oti/core.h"
-#include "oti/base_math.h"
-#include "oti/darray.h"
+#include "oti/real.h"
 #include "oti/dense.h"
 #include "oti/sparse.h"
 // #include "oti/otinum_dense_array.h"

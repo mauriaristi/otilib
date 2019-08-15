@@ -48,10 +48,9 @@ include_directories (	"${PROJECT_SOURCE_DIR}/include"
 						)
 
 add_library (oti        c/core.c 
-						c/base_math.c
+						c/real.c
 	                    c/dense.c
 	                    c/sparse.c
-	                    # c/darray.c 
 	                    # c/otinum_spr_array.c
 	                    )
 

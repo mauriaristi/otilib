@@ -352,7 +352,6 @@ coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     
-    ndir_t i;
     ord_t ordi;
 
     // TODO: Add check to wheather dest has not been initialized.

@@ -30,12 +30,12 @@ import pyoti.whereotilib as whereotilib   # A pure python script to get
                                           #the current path of this folder.
 from c_otilib cimport *                   # OTI lib in C.
 cimport cython                            #
-from cpython cimport PyObject             #
+from cpython cimport PyObject             # 
 from cpython cimport Py_INCREF            #
 
 #-----------------------------------------------------------------------------------------------------
 
-
+  
 cdef extern from "numpy/arrayobject.h":
       void PyArray_ENABLEFLAGS(np.ndarray arr, int flags)
 

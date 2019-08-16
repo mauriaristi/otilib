@@ -16,9 +16,11 @@ except:
 
 
 # Set new environment flags.
+# os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@ -O3"
+# os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@ -O3 -Wl,-O3"
+
 os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@"
 os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@"
-
 
 extensions = [ \
 Extension("pyoti.core",
@@ -36,7 +38,7 @@ Extension("pyoti.dense",
   define_macros = [("CYTHON_TRACE_NOGIL","1")],
   libraries = ['oti'],
   # language = "c++",
-  extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@"],
+  extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"],
   depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
   ),
 # Extension("pyoti.ndarray",
@@ -59,7 +61,7 @@ Extension("pyoti.sparse",
   define_macros = [("CYTHON_TRACE_NOGIL","1")],
   libraries = ['oti'],
   # language = "c++",
-  extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@"],
+  extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"],
   depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
   ),
 # Extension("pyoti.sndarray",
@@ -81,8 +83,9 @@ setup(
   # ext_modules  = cythonize('@PROJECT_SOURCE_DIR@/src/cython/*.pyx',   include_path=["@PROJECT_SOURCE_DIR@/include/"]),
   ext_modules = cythonize(extensions, 
     # include_path=["@CYTHONIZE_INCLUDE_DIR@","@DUTILS_ECARG2@"],
-    include_path=["@CYTHONIZE_INCLUDE_DIR@","@DUTILS_ECARG2@"],
-    build_dir="@CYTHONIZE_BUILD_DIR@"),
+    include_path=["@CYTHONIZE_INCLUDE_DIR@"],
+    # build_dir="@CYTHONIZE_BUILD_DIR@"
+    ),
   # zip_safe    = False, # Only in case of Setuptools
 )
 # python3 setup.py build_ext -i #(If building inplace) 

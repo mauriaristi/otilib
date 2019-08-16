@@ -90,7 +90,7 @@ void darr_transpose(darr_t* arr1, darr_t* aRes){
 // ****************************************************************************************************
 void darr_invert(darr_t* arr1, darr_t* aRes){
     
-    coeff_t det,detA1;
+    coeff_t det;
     
     darr_t tmpA1;
 
@@ -120,8 +120,6 @@ void darr_invert(darr_t* arr1, darr_t* aRes){
         det = darr_det( arr1 ); // Get determinant.
         
 
-
-
         // Set position 0,0
         tmpA1.p_data[0] = arr1->p_data[4];
         tmpA1.p_data[1] = arr1->p_data[5];
@@ -131,8 +129,6 @@ void darr_invert(darr_t* arr1, darr_t* aRes){
         aRes->p_data[0] = darr_det( &tmpA1 )/det;
 
         
-
-
 
         // Set position 0,1
         tmpA1.p_data[0] = arr1->p_data[2];

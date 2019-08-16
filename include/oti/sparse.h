@@ -20,11 +20,21 @@
 typedef struct {
     coeff_t          re; ///< Real coefficient.
     coeff_t**      p_im; ///< Array with all imaginary coefficients per order.
+} soticoef_t;            ///< Sparse OTI number type
+
+typedef struct {
+    coeff_t          re; ///< Real coefficient.
+    coeff_t**      p_im; ///< Array with all imaginary coefficients per order.
     imdir_t**     p_idx; ///< Directions associated to each coefficient per order.
     ndir_t*       p_nnz; ///< Number of non zero coefficients per order.
     ndir_t*      p_size; ///< Allocated size per order.
     ord_t         order; ///< Truncation order of the number.
 } sotinum_t;             ///< Sparse OTI number type
+
+
+
+
+
 
 
 typedef struct {
@@ -51,200 +61,12 @@ typedef struct {
 // ----------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+
 void soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-void soti_sum_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-void soti_sum_real_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-void soti_sub_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-void soti_sub_realoti_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-void soti_sub_otireal_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
-void soti_mul_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-void soti_mul_real_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-void soti_div_realoti_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
-void soti_div_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
-void soti_div_otireal_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
-void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
-
-
-
-/**************************************************************************************************//**
-@brief Generate a temporal sparse otinum with the allocated data in the direction helper.
-
-@param[in] ntmp Number of temporal array to be retreived.
-@param[in] order Truncation order.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of inverse hyperbolic tangent function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_atanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of inverse hyperbolic sine function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result holder. Must come created and minimally instantiated.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_asinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of inverse hyperbolic cosine function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_acosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of  hyperbolic tangent function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_tanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of square root function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_sqrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of hyperbolic cosine function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_cosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of hyperbolic cosine function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_sinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of inverse sine function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_asin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of inverse cosine function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_acos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of inverse tangent function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_atan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of inverse cosine function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_tan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of cosine function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_cos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of sine function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_sin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void soti_logb_to(sotinum_t* num, double base, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void soti_log10_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of logarithm function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_log_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of exponential function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_exp_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Evaluation of power function at (num).
-
-@param[in] num: Oti number.
-@param[in] res: Result.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/
-void soti_pow_to(sotinum_t* num, double e, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
 
 
 
@@ -267,6 +89,9 @@ object. The memory returned should not be freed nor manipulated.
 @param[in] dhl: Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_sub_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void soti_sub_ro_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+void soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -279,6 +104,8 @@ object. The memory returned should not be freed nor manipulated.
 @param[in] dhl: Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -293,6 +120,7 @@ object. The memory returned should not be freed nor manipulated.
 @param[in]    dhl  Direction helper list object.
 ******************************************************************************************************/
 sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
+void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -305,6 +133,8 @@ manipulated.
 @param[in]    dhl  Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -323,6 +153,7 @@ sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 @param[in] dhl: Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl);
+void soti_atanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -332,6 +163,7 @@ sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_asinh(sotinum_t* num, dhelpl_t dhl);
+void soti_asinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -341,6 +173,7 @@ sotinum_t soti_asinh(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_acosh(sotinum_t* num, dhelpl_t dhl);
+void soti_acosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -350,6 +183,7 @@ sotinum_t soti_acosh(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_tanh(sotinum_t* num, dhelpl_t dhl);
+void soti_tanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -359,6 +193,7 @@ sotinum_t soti_tanh(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_sqrt(sotinum_t* num, dhelpl_t dhl);
+void soti_sqrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -368,6 +203,7 @@ sotinum_t soti_sqrt(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_cosh(sotinum_t* num, dhelpl_t dhl);
+void soti_cosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -377,6 +213,7 @@ sotinum_t soti_cosh(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_sinh(sotinum_t* num, dhelpl_t dhl);
+void soti_sinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -386,6 +223,7 @@ sotinum_t soti_sinh(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_asin(sotinum_t* num, dhelpl_t dhl);
+void soti_asin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -395,6 +233,7 @@ sotinum_t soti_asin(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_acos(sotinum_t* num, dhelpl_t dhl);
+void soti_acos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -404,6 +243,7 @@ sotinum_t soti_acos(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_atan(sotinum_t* num, dhelpl_t dhl);
+void soti_atan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -413,6 +253,7 @@ sotinum_t soti_atan(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_tan(sotinum_t* num, dhelpl_t dhl);
+void soti_tan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -422,6 +263,7 @@ sotinum_t soti_tan(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_cos(sotinum_t* num, dhelpl_t dhl);
+void soti_cos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -431,6 +273,7 @@ sotinum_t soti_cos(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_sin(sotinum_t* num, dhelpl_t dhl );
+void soti_sin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -441,6 +284,7 @@ sotinum_t soti_sin(sotinum_t* num, dhelpl_t dhl );
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_logb(sotinum_t* num, double base, dhelpl_t dhl);
+void soti_logb_to(sotinum_t* num, double base, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -450,6 +294,7 @@ sotinum_t soti_logb(sotinum_t* num, double base, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_log10(sotinum_t* num, dhelpl_t dhl);
+void soti_log10_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -460,6 +305,7 @@ sotinum_t soti_log10(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_log(sotinum_t* num, dhelpl_t dhl);
+void soti_log_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -470,6 +316,7 @@ sotinum_t soti_log(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl);
+void soti_exp_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -480,6 +327,7 @@ sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl);
+void soti_pow_to(sotinum_t* num, coeff_t e, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -603,6 +451,9 @@ This function uses temporals 0 - 9.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_div(sotinum_t* num, sotinum_t* den, dhelpl_t dhl);
+void soti_div_oo_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
+void soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
+void soti_div_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -656,6 +507,7 @@ sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
+sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

@@ -27,7 +27,7 @@ void soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 // Addition.
 
 // ****************************************************************************************************
-void soti_sum_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl){
+void soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl){
 
     sotinum_t tmp;
 
@@ -40,9 +40,9 @@ void soti_sum_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl)
 
 
 // ****************************************************************************************************
-void soti_sum_real_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+void soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
     
-    soti_copy_to(num,res,dhl);
+    soti_copy_to( num, res, dhl);
 
     res->re += val;
 
@@ -68,9 +68,8 @@ void soti_sum_real_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
 
 // Subtraction.
 
-
 // ****************************************************************************************************
-void soti_sub_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl){
+void soti_sub_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl){
 
     sotinum_t tmp;
 
@@ -83,7 +82,7 @@ void soti_sub_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl)
 
 
 // ****************************************************************************************************
-void soti_sub_realoti_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+void soti_sub_ro_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 
     soti_neg_to(num,res,dhl);
     
@@ -92,7 +91,7 @@ void soti_sub_realoti_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t 
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void soti_sub_otireal_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl){
+void soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl){
 
     soti_sum_real_to(-val,num,res,dhl);
 }
@@ -111,7 +110,7 @@ void soti_sub_otireal_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t d
 // Multiplication.
 
 // ****************************************************************************************************
-void soti_mul_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl){
+void soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl){
 
     
     sotinum_t  tmp;
@@ -124,7 +123,7 @@ void soti_mul_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl)
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void soti_mul_real_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
     
     ord_t i;
     ndir_t j;
@@ -183,7 +182,7 @@ void soti_mul_real_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl)
 // Division.
 
 // ****************************************************************************************************
-void soti_div_realoti_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl){
+void soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl){
 
     
     sotinum_t inv = soti_get_rtmp(4, den->order, dhl);
@@ -194,7 +193,7 @@ void soti_div_realoti_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t d
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void soti_div_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl){
+void soti_div_oo_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl){
 
     sotinum_t inv = soti_get_rtmp(4, den->order, dhl);
     
@@ -206,7 +205,7 @@ void soti_div_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void soti_div_otireal_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl){
+void soti_div_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl){
 
     soti_mul_real_to(1.0/val, num, res, dhl);
 

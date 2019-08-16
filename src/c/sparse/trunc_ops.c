@@ -10,10 +10,6 @@
 
 
 
-
-
-
-
 // ****************************************************************************************************
 void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl){
     
@@ -75,7 +71,7 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
                     sotinum_t* num2, ord_t ord2, 
                     sotinum_t* dest, dhelpl_t dhl ){
 
-    sotinum_t res, tmp, tmp2, tmp3;
+    sotinum_t tmp, tmp2, tmp3;
     sotinum_t* tmpsrc= &tmp ;
     sotinum_t* tmpdest=&tmp3;
     sotinum_t* tmpswap;

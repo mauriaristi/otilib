@@ -220,7 +220,7 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
     char *header;//,holder[1024],one_char='0';
     char magic_read[7];
     // char kwds[3][64]={"'descr':","'fortran_order':","'shape':"};
-    char descr[1024],fortran_order[1024],shape_str[1024];
+    char shape_str[1024],fortran_order[1024],descr[1024];
     char descr_tmp[1024],fortran_order_tmp[1024],shape_str_tmp[1024];
     char magic[7] = {0x93,'N','U','M','P','Y','\0'};
     // char *holderSmall;

@@ -258,7 +258,25 @@ void oti_print( otinum_t* num, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+otinum_t oti_init( void ){
+    
+    otinum_t num;
+    
+    // Get the number of imaginary directions for nbases and order.
+    num.ndir = 0; // Excludes the real direction.
 
+    // Set the values of the number first.
+    num.order  = 0;
+    num.nbases = 0;
+
+    // Set pointer as null.
+    num.p_im = NULL;   
+    num.p_ndpo = NULL;     
+
+    return num;
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 void oti_free( otinum_t* num ){

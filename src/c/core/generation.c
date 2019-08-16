@@ -126,7 +126,8 @@ imdir_t dhelp_precompute_multiply(bases_t* dir1,ord_t ord1, bases_t* dir2,ord_t 
 
 // ****************************************************************************************************
 void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
-    ndir_t ndirs_o1, ndirs_o2, idx1, idx2,idxres,i=0;
+    
+    ndir_t ndirs_o1, ndirs_o2, idx1, idx2,i=0;
     // Define the number of multiplication tables 
     ord_t n_multtabls = order / 2, o1, o2,j ;
     bases_t* dirs1;
@@ -373,7 +374,7 @@ void dhelp_save_multtabls(char* directory, bases_t base, ord_t order,  dhelpl_t 
 void savenpy(char* filename, uint8_t dtype, void* data, uint64_t shapex, 
     uint64_t shapey){
     
-    uint8_t n_known_types = 5; // Number of known types
+    // uint8_t n_known_types = 5; // Number of known types
 
     char known_types_char[5][76]={
       " '|u1'",                     // uint8_t // '<u2': Little endian, unsigned int, 2 bytes
@@ -394,12 +395,12 @@ void savenpy(char* filename, uint8_t dtype, void* data, uint64_t shapex,
     char header[65536], header_body[65536];
     char magic[7] = {0x93,'N','U','M','P','Y','\0'}; // Magic keyword
     char version[3] = {1,0,'\0'}; // Only V1.0 supported for now.
-    char descr[1024],fortran_order[1024],shape_str[1024];
+    char shape_str[1024];
 
     FILE *cfPtr = NULL; //  file pointer
     uint16_t header_size, heade_len_factor;
     short unsigned int size_2_print;
-    uint64_t i, size_of_data=1,wrote;
+    uint64_t  size_of_data=1,wrote;
     uint16_t j;
 
     strcpy(header, magic);

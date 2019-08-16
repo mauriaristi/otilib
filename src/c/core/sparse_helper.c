@@ -131,9 +131,9 @@ inline void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_
                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
                            dhelpl_t dhl){
 
-    ndir_t  offset, j2, jres;
-    imdir_t dir1, dir2;
-    coeff_t im1, im2;
+    ndir_t  j2, jres; //, offset;
+    // imdir_t dir1, dir2;
+    // coeff_t im1, im2;
 
     flag_t flag1;
     
@@ -142,7 +142,7 @@ inline void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_
     memcpy(p_idxres,p_idx1,ndir1*sizeof(imdir_t));
     *ndirres = ndir1;
 
-    offset   = 0;
+    // offset   = 0;
     j2   = 0;
     jres = 0;
     
@@ -366,7 +366,7 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
     imdir_t* p_idx_tmpdest= p_idx_tmp3;
     imdir_t* p_idx_tmpswap;
 
-    ndir_t   ndirtmp=0;
+    // ndir_t   ndirtmp=0;
     ndir_t   ndirtmpsrc=0;
     ndir_t   ndirtmpdest=0;
     ndir_t   ndirtmpswap;
@@ -649,7 +649,7 @@ void dhelp_search_prev_dir(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
     ndir_t  next_i1;
     ndir_t  next_i2;
     // ord_t   ord_res;
-    imdir_t idx_res;
+    imdir_t idx_res= 0 ;
 
     if (curr_i1 == ndir1-1){
 

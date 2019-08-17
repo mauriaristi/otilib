@@ -1177,3 +1177,17 @@ def e( hum_dir ,ord_t order = 0,bases_t nbases = 0):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+# Append array code.
+
+include "dense_array.pxi"

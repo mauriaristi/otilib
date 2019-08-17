@@ -258,6 +258,22 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "dense.h"
   #---------------------------------------------------------------------------------------------------
+  void oarr_set_all_r( coeff_t num, oarr_t* arr, dhelpl_t dhl);
+  void oarr_set_item_i_r( coeff_t num, uint64_t i, oarr_t* arr, dhelpl_t dhl);
+  void oarr_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, oarr_t* arr, dhelpl_t dhl);
+  void oarr_set_all_o( otinum_t* num, oarr_t* arr, dhelpl_t dhl);
+  void oarr_set_item_i_o( otinum_t* num, uint64_t i, oarr_t* arr, dhelpl_t dhl);
+  void oarr_set_item_ij_o( otinum_t* num, uint64_t i, uint64_t j, oarr_t* arr, dhelpl_t dhl);
+  otinum_t oarr_get_item_i(oarr_t* arr, uint64_t i, dhelpl_t dhl);
+  otinum_t oarr_get_item_ij(oarr_t* arr, uint64_t i, uint64_t j, dhelpl_t dhl);
+  void oarr_get_item_i_to(oarr_t* p_array, uint64_t i, uint64_t j, otinum_t* res, dhelpl_t dhl);
+  void oarr_get_item_ij_to(oarr_t* p_array, uint64_t i, uint64_t j, otinum_t* res, dhelpl_t dhl);
+  void oarr_copy_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl);
+  oarr_t oarr_copy(oarr_t* arr, dhelpl_t dhl);
+  oarr_t oarr_ones(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
+  oarr_t oarr_zeros(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
+  void oarr_free(oarr_t* arr);
+  oarr_t oarr_createEmpty( uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
   otinum_t oti_get_tmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl);
   otinum_t oti_get_rtmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl);
   otinum_t oti_atanh(otinum_t* num, dhelpl_t dhl);
@@ -331,7 +347,7 @@ cdef extern from "oti/oti.h" nogil:
   coeff_t oti_get_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
   otinum_t oti_createZero( bases_t nbases, ord_t order, dhelpl_t dhl);
   otinum_t oti_createEmpty( bases_t nbases, ord_t order, dhelpl_t dhl);
-  otinum_t oti_init(  );
+  otinum_t oti_init( void );
   otinum_t oti_copy(otinum_t* num, dhelpl_t dhl);
   void oti_copy_to( otinum_t* num, otinum_t* res, dhelpl_t dhl);
   void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl);

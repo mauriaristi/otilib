@@ -18,6 +18,7 @@ cimport cython                      #
 
 from pyoti.core import   number_types, dHelp
 from pyoti.core cimport  c_ptr_to_np_1darray_double, ZERO, ONE
+from pyoti.core cimport  c_ptr_to_np_2darray_double
 from pyoti.core cimport  get_cython_dHelp, dHelp, imdir
 
 

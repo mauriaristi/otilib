@@ -164,7 +164,7 @@ void oarr_set_all_o( otinum_t* num, oarr_t* arr, dhelpl_t dhl){
         for( k = 0; k < arr->p_ndpo[ordi]; k++){
 
             // Extract the imaginary coefficient from num.
-            val = oti_get( k, ordi, num, dhl);
+            val = oti_get( k, ordi+1, num, dhl);
 
             tmp_arr.p_data = arr->p_im[ordi][k];
 
@@ -206,7 +206,7 @@ void oarr_set_item_i_o( otinum_t* num, uint64_t i, oarr_t* arr, dhelpl_t dhl){
         for( k = 0; k < arr->p_ndpo[ordi]; k++){
 
             // Extract the imaginary coefficient from num.
-            val = oti_get( k, ordi, num, dhl);
+            val = oti_get( k, ordi+1, num, dhl);
 
             tmp_arr.p_data = arr->p_im[ordi][k];
 
@@ -249,7 +249,7 @@ void oarr_set_item_ij_o( otinum_t* num, uint64_t i, uint64_t j, oarr_t* arr, dhe
         for( k = 0; k < arr->p_ndpo[ordi]; k++){
 
             // Extract the imaginary coefficient from num.
-            val = oti_get( k, ordi, num, dhl);
+            val = oti_get( k, ordi+1, num, dhl);
 
             tmp_arr.p_data = arr->p_im[ordi][k];
 
@@ -693,6 +693,7 @@ oarr_t oarr_ones(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dh
             
             res.p_im[ordi]   = ( arr_t* ) malloc( res.p_ndpo[ordi]*sizeof(arr_t) );
 
+            res.ndir += res.p_ndpo[ordi];
 
             if ( res.p_im[ordi] == NULL ){
                 printf("--- ERROR: Out of memory\n");
@@ -702,7 +703,7 @@ oarr_t oarr_ones(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dh
             // Initialize memory within each array.
             for( i = 0; i < res.p_ndpo[ordi]; i++){
 
-                tmp_arr = darr_ones(res.nrows,res.ncols);
+                tmp_arr = darr_zeros(res.nrows,res.ncols);
 
                 res.p_im[ordi][i] = tmp_arr.p_data;
 
@@ -769,6 +770,7 @@ oarr_t oarr_zeros(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, d
             
             res.p_im[ordi]   = ( arr_t* ) malloc( res.p_ndpo[ordi]*sizeof(arr_t) );
 
+            res.ndir += res.p_ndpo[ordi];
 
             if ( res.p_im[ordi] == NULL ){
                 printf("--- ERROR: Out of memory\n");

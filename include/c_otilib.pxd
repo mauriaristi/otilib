@@ -41,6 +41,22 @@ cdef extern from "oti/oti.h" nogil:
     dhelp_t* p_dh
     ndh_t     ndh
 
+  ctypedef struct coomat_ui64_t: 
+    uint64_t*     p_data 
+    uint64_t*     p_cols 
+    uint64_t*     p_rows 
+    uint64_t       sizex 
+    uint64_t       sizey 
+    uint64_t     nonzero 
+
+  ctypedef struct csrmat_ui64_t:
+    uint64_t*     p_data 
+    uint64_t*  p_indices 
+    uint64_t*   p_indptr 
+    uint64_t       sizex 
+    uint64_t       sizey 
+    uint64_t     nonzero 
+
   # Defs from "real.h"
   ctypedef struct darr_t:
     coeff_t*       p_data
@@ -57,21 +73,16 @@ cdef extern from "oti/oti.h" nogil:
     bases_t      nbases
     ord_t         order
 
-  ctypedef struct coomat_ui64_t: 
-    uint64_t*     p_data 
-    uint64_t*     p_cols 
-    uint64_t*     p_rows 
-    uint64_t       sizex 
-    uint64_t       sizey 
-    uint64_t     nonzero 
-
-  ctypedef struct csrmat_ui64_t:
-    uint64_t*     p_data 
-    uint64_t*  p_indices 
-    uint64_t*   p_indptr 
-    uint64_t       sizex 
-    uint64_t       sizey 
-    uint64_t     nonzero 
+  ctypedef struct oarr_t:
+    arr_t            re
+    arr_t**        p_im
+    ndir_t*      p_ndpo
+    ndir_t         ndir
+    bases_t      nbases
+    ord_t         order
+    uint64_t      nrows
+    uint64_t      ncols
+    uint64_t       size
 
   # Defs from "sparse.h"
   ctypedef struct sotinum_t:
@@ -347,7 +358,7 @@ cdef extern from "oti/oti.h" nogil:
   coeff_t oti_get_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
   otinum_t oti_createZero( bases_t nbases, ord_t order, dhelpl_t dhl);
   otinum_t oti_createEmpty( bases_t nbases, ord_t order, dhelpl_t dhl);
-  otinum_t oti_init( void );
+  otinum_t oti_init(  );
   otinum_t oti_copy(otinum_t* num, dhelpl_t dhl);
   void oti_copy_to( otinum_t* num, otinum_t* res, dhelpl_t dhl);
   void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl);

@@ -60,14 +60,19 @@ void oarr_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, oarr_t* arr, dhelp
 void oarr_set_all_o( otinum_t* num, oarr_t* arr, dhelpl_t dhl);
 void oarr_set_item_i_o( otinum_t* num, uint64_t i, oarr_t* arr, dhelpl_t dhl);
 void oarr_set_item_ij_o( otinum_t* num, uint64_t i, uint64_t j, oarr_t* arr, dhelpl_t dhl);
+
 otinum_t oarr_get_item_i(oarr_t* arr, uint64_t i, dhelpl_t dhl);
 otinum_t oarr_get_item_ij(oarr_t* arr, uint64_t i, uint64_t j, dhelpl_t dhl);
+
 void oarr_get_item_i_to(oarr_t* p_array, uint64_t i, uint64_t j, otinum_t* res, dhelpl_t dhl);
 void oarr_get_item_ij_to(oarr_t* p_array, uint64_t i, uint64_t j, otinum_t* res, dhelpl_t dhl);
+
 void oarr_copy_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl);
 oarr_t oarr_copy(oarr_t* arr, dhelpl_t dhl);
+
 oarr_t oarr_ones(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
 oarr_t oarr_zeros(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
+
 void oarr_free(oarr_t* arr);
 oarr_t oarr_createEmpty( uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
 

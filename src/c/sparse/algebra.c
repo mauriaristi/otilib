@@ -11,7 +11,7 @@
 // ****************************************************************************************************
 sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl){
     
-    return soti_mul_real(-1.0,num,dhl);
+    return soti_mul_ro(-1.0,num,dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl){
 // Addition.
 
 // ****************************************************************************************************
-sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp;
 
@@ -41,7 +41,7 @@ sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sum_real(coeff_t val, sotinum_t* num, dhelpl_t dhl){
+sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl){
     
     sotinum_t res = soti_copy(num,dhl);
 
@@ -104,7 +104,7 @@ inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp;
 
@@ -118,7 +118,7 @@ sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sub_realoti( coeff_t val, sotinum_t* num, dhelpl_t dhl){
+sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num, dhelpl_t dhl){
 
     sotinum_t res = soti_neg(num,dhl);
     
@@ -129,12 +129,11 @@ sotinum_t soti_sub_realoti( coeff_t val, sotinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sub_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl){
+sotinum_t soti_sub_or(sotinum_t* num, coeff_t val, dhelpl_t dhl){
 
-    return soti_sum_real(-val,num,dhl);
+    return soti_sum_ro(-val,num,dhl);
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 // ****************************************************************************************************
 inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
@@ -190,7 +189,7 @@ inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 // Multiplication.
 
 // ****************************************************************************************************
-sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     
     sotinum_t res, tmp;
@@ -205,7 +204,7 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_mul_real(coeff_t val, sotinum_t* num, dhelpl_t dhl){
+sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl){
     
     ord_t i;
     ndir_t j;
@@ -351,9 +350,9 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     // Retreive sotinum temporals.
     // All tmps are created with no elements in imaginary directions (but allocated).
-    tmp = soti_get_rtmp(0,res_ord,dhl); // will hold the final result.
-    tmp2= soti_get_rtmp(1,res_ord,dhl); // Will hold the temporary result.
-    tmp3= soti_get_rtmp(2,res_ord,dhl); // Will hold the temporary result.
+    tmp = soti_get_rtmp(3,res_ord,dhl); // will hold the final result.
+    tmp2= soti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.
     
 
     // Multiply real coefficients.
@@ -502,11 +501,11 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 // Division.
 
 // ****************************************************************************************************
-sotinum_t soti_div_realoti(coeff_t num, sotinum_t* den, dhelpl_t dhl){
+sotinum_t soti_div_ro(coeff_t num, sotinum_t* den, dhelpl_t dhl){
 
     
     sotinum_t inv = soti_pow(den,-1,dhl);
-    sotinum_t res = soti_mul_real(num,&inv,dhl);
+    sotinum_t res = soti_mul_ro(num,&inv,dhl);
 
     soti_free(&inv);
 
@@ -516,22 +515,22 @@ sotinum_t soti_div_realoti(coeff_t num, sotinum_t* den, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_div(sotinum_t* num, sotinum_t* den, dhelpl_t dhl){
+sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den, dhelpl_t dhl){
 
     
-    sotinum_t inv = soti_pow(den,-1,dhl);
-    sotinum_t res = soti_mul(num,&inv,dhl);
-    soti_free(&inv);
-
+    sotinum_t inv = soti_get_rtmp(7,den->order,dhl);
+    soti_pow_to(den,-1,&inv,dhl);
+    sotinum_t res = soti_mul_oo(num,&inv,dhl);
+    
     return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_div_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl){
+sotinum_t soti_div_or(sotinum_t* num, coeff_t val, dhelpl_t dhl){
 
-    return soti_mul_real(1.0/val,num,dhl);
+    return soti_mul_ro(1.0/val,num,dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------

@@ -21,6 +21,20 @@
 #include "dense/algebra_to.c"
 #include "dense/functions_to.c"
 
+
+// Array support.
+// Base functions to support manipulation.
+#include "dense/array_base.c"
+
+// // Array algebra: Elementwise operations.
+// #include "dense/array_algebra_elementwise.c"
+
+// // Array algebra: Matrix operations such as matmul, determinant and invertion.
+// #include "dense/array_algebra_matops.c"
+
+// // Array functions: Elementwise function evaluation.
+// #include "dense/array_functions.c"
+
 // ----------------------------------------------------------------------------------------------------
 // -------------------------------     END OTINUM FUNCTIONS     ---------------------------------------
 // ----------------------------------------------------------------------------------------------------

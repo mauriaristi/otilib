@@ -21,6 +21,21 @@
 #include "sparse/algebra_to.c"
 #include "sparse/functions_to.c"
 
+
+
+// // Array support.
+// // Base functions to support manipulation.
+// #include "sparse/array_base.c"
+
+// // Array algebra: Elementwise operations.
+// #include "sparse/array_algebra_elementwise.c"
+
+// // Array algebra: Matrix operations such as matmul, determinant and invertion.
+// #include "sparse/array_algebra_matops.c"
+
+// // Array functions: Elementwise function evaluation.
+// #include "sparse/array_functions.c"
+
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------    END SPARSE OTINUM FUNCTIONS   --------------------------------------
 // ----------------------------------------------------------------------------------------------------

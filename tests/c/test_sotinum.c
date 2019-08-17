@@ -51,12 +51,12 @@ int main(int argc, char *argv[]){
 
 	
 	printf("\nResult after adding real coefficient.\n");
-	num3 = soti_sum_real(c , &num2, dhl);
+	num3 = soti_sum_ro(c , &num2, dhl);
 	soti_print(&num3,dhl);	
 
 	soti_free(&num3);
 	printf("\nResult after multiplying by real coefficient.\n");
-	num3 = soti_mul_real(c , &num2, dhl);
+	num3 = soti_mul_ro(c , &num2, dhl);
 	soti_print(&num3,dhl);
 	soti_free(&num2);
 
@@ -66,17 +66,17 @@ int main(int argc, char *argv[]){
 
 	soti_free(&num2);
 	printf("\nResult after subtracting sotinum - real.\n");
-	num2 = soti_sub_otireal(&num3, a, dhl);
+	num2 = soti_sub_or(&num3, a, dhl);
 	soti_print(&num2,dhl);
 
 	soti_free(&num2);
 	printf("\nResult after subtracting real - sotinum.\n");
-	num2 = soti_sub_realoti( c, &num3, dhl);
+	num2 = soti_sub_ro( c, &num3, dhl);
 	soti_print(&num2,dhl);
 
 	soti_free(&num2);
 	printf("\nResult after dividing sotinum by real number.\n");
-	num2 = soti_div_otireal(&num3, b, dhl);
+	num2 = soti_div_or(&num3, b, dhl);
 	soti_print(&num2,dhl);
 
 	soti_set_item(c*3.3,3,3,&num3,dhl); 
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]){
 
 	soti_free(&num1);
 	printf("\nResult after adding two sotinums.\n");
-	num1 = soti_sum(&num3,&num2,dhl);
+	num1 = soti_sum_oo(&num3,&num2,dhl);
 	soti_print(&num1,dhl);
 
 

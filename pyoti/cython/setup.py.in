@@ -32,6 +32,17 @@ Extension("pyoti.core",
   extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@"],
   depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
   ),
+
+Extension("pyoti.real",
+  sources = ["@CYTHON_SOUCE_DIR@/real.pyx"],
+  include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
+  define_macros = [("CYTHON_TRACE_NOGIL","1")],
+  libraries = ['oti'],
+  # language = "c++",
+  extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"],
+  depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
+  ),
+
 Extension("pyoti.dense",
 	sources = ["@CYTHON_SOUCE_DIR@/dense.pyx"],
 	include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
@@ -41,6 +52,7 @@ Extension("pyoti.dense",
   extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"],
   depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
   ),
+
 # Extension("pyoti.ndarray",
 #   sources = ["@CYTHON_SOUCE_DIR@/ndarray.pyx"],
 #   include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
@@ -48,6 +60,7 @@ Extension("pyoti.dense",
 #   libraries = ['oti'],
 #   extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@"],
 #   depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]),
+
 # Extension("pyoti.otimat",
 #   sources = ["@CYTHON_SOUCE_DIR@/otimat.pyx"],
 #   include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
@@ -55,6 +68,7 @@ Extension("pyoti.dense",
 #   libraries = ['oti'],
 #   extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@"],
 #   depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]),
+
 Extension("pyoti.sparse",
   sources = ["@CYTHON_SOUCE_DIR@/sparse.pyx"],
   include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],

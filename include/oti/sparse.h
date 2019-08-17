@@ -32,11 +32,6 @@ typedef struct {
 } sotinum_t;             ///< Sparse OTI number type
 
 
-
-
-
-
-
 typedef struct {
     arr_t            re;  ///< Real coefficients.
     arr_t**        p_im;  ///< Array with all imaginary coefficients per order.
@@ -60,90 +55,6 @@ typedef struct {
 // ------------------------------------     DECLARATIONS     ------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-void soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-
-
-
-
-
-
-
-
-
-
-
-
-/**************************************************************************************************//**
-@brief This function subtracts two sparse oti numbers. The result is held in a temporal 
-sparse oti number that needs to be copied, either to a new sotinum type or to an already existing 
-object. The memory returned should not be freed nor manipulated.
-
-@param[in] num1: OTI number.
-@param[in] num2: OTI number.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-void soti_sub_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-void soti_sub_ro_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-void soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief This function adds two sparse oti numbers. The result is held in a temporal 
-sparse oti number that needs to be copied, either to a new sotinum type or to an already existing 
-object. The memory returned should not be freed nor manipulated.
-
-@param[in] num1: OTI number.
-@param[in] num2: OTI number.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-void soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-void soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-
-/**************************************************************************************************//**
-@brief This function multiplies two oti numbers num1 and num2. The result is held in a temporal 
-sparse oti number that needs to be copied, either to a new sotinum type or to an already existing 
-object. The memory returned should not be freed nor manipulated.
-
-@param[in]    num1 Oti number 1.
-@param[in]    num2 Oti number 2.
-@param[in]    dhl  Direction helper list object.
-******************************************************************************************************/
-sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
-void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief This function multiplies two oti numbers num1 and num2. The multiplication result is held
-in a temporal oti number that needs to be copied. The memory returned should not be freed nor 
-manipulated.
-
-@param[in]    num1 Oti number 1.
-@param[in]    num2 Oti number 2.
-@param[in]    dhl  Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-void soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-// FUNCTIONS THAT ALLOCATE NEW MEMORY:
 
 
 /**************************************************************************************************//**
@@ -337,22 +248,6 @@ void soti_pow_to(sotinum_t* num, coeff_t e, sotinum_t* res, dhelpl_t dhl);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**************************************************************************************************//**
 @brief Truncated self addition of two oti numbers. This function adds num1 and num2 just to obtain 
 imaginary directions with orders greater than the given truncation order.
@@ -439,6 +334,9 @@ void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
+sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
+
+void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -450,7 +348,10 @@ This function uses temporals 0 - 9.
 @param[in] num2 OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_div(sotinum_t* num, sotinum_t* den, dhelpl_t dhl);
+sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den, dhelpl_t dhl);
+sotinum_t soti_div_ro(coeff_t num, sotinum_t* den, dhelpl_t dhl);
+sotinum_t soti_div_or(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+
 void soti_div_oo_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
 void soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
 void soti_div_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
@@ -476,7 +377,12 @@ This function uses temporals 0, 1, 2, 3, 4, 5.
 @param[in] num2 OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+
+sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -486,7 +392,14 @@ sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 @param[in] num2 OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num, dhelpl_t dhl);
+sotinum_t soti_sub_or(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+
+sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_sub_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void soti_sub_ro_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+void soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -496,7 +409,12 @@ sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 @param[in] num2 OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+
+sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -510,44 +428,6 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
 sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Function that divides an  a real number by an oti number.
-
-@param[in] num OTI number.
-@param[in] val Real number to be added
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_div_realoti(coeff_t num, sotinum_t* den, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Function that divides an oti number by a real number.
-
-@param[in] num OTI number.
-@param[in] val Real number to be added
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_div_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Function that subtracts an oti number to a real number.
-
-@param[in] val Real number to be added
-@param[in] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_sub_realoti( coeff_t val, sotinum_t* num, dhelpl_t dhl);
-
-/**************************************************************************************************//**
-@brief Function that subtracts a real number to an oti number.
-
-@param[in] num OTI number.
-@param[in] val Real number to be added
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_sub_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Function that negates an oti number.
@@ -556,27 +436,9 @@ sotinum_t soti_sub_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl);
+void soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Function that multiplies an oti number to a real number.
-
-@param[in] val Real number to be added
-@param[in] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_mul_real(coeff_t val, sotinum_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Function that adds an oti number to a real number.
-
-@param[in] val Real number to be added
-@param[in] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-sotinum_t soti_sum_real(coeff_t val, sotinum_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Function that inserts the corresponding value in the arrays defining the oti number. If the 
@@ -622,15 +484,6 @@ coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Copy to another sparse oti elements (already created). This function checks wether reallocation
-is necessary.
-
-@param[in] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
 void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -685,11 +538,6 @@ sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl);
 ******************************************************************************************************/ 
 sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 
 // ----------------------------------------------------------------------------------------------------
-
-
-// added to c_otilib.pxd
-
-
 
 
 // ----------------------------------------------------------------------------------------------------

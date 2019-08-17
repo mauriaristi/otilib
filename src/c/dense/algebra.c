@@ -1,11 +1,12 @@
+
+
+
 // Algebra operations:
-
-
 
 // Addition
 
 // ****************************************************************************************************
-otinum_t oti_sum(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
+otinum_t oti_sum_oo(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 
     ord_t ordi;
     ndir_t i;
@@ -37,7 +38,7 @@ otinum_t oti_sum(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-otinum_t oti_sum_real(coeff_t a, otinum_t* num1, dhelpl_t dhl){
+otinum_t oti_sum_ro(coeff_t a, otinum_t* num1, dhelpl_t dhl){
 
     otinum_t res = oti_copy(num1, dhl);
     
@@ -113,7 +114,7 @@ otinum_t oti_neg(otinum_t* num1, dhelpl_t dhl){
 // Subtraction
 
 // ****************************************************************************************************
-otinum_t oti_sub_otireal(otinum_t* num1, coeff_t a, dhelpl_t dhl){
+otinum_t oti_sub_or(otinum_t* num1, coeff_t a, dhelpl_t dhl){
     
     otinum_t res = oti_copy(num1,dhl);;
     res.re -= a;
@@ -123,7 +124,7 @@ otinum_t oti_sub_otireal(otinum_t* num1, coeff_t a, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-otinum_t oti_sub_realoti(coeff_t a, otinum_t* num2, dhelpl_t dhl){
+otinum_t oti_sub_ro(coeff_t a, otinum_t* num2, dhelpl_t dhl){
     
     otinum_t res = oti_neg(num2,dhl);;
     res.re += a;
@@ -132,9 +133,8 @@ otinum_t oti_sub_realoti(coeff_t a, otinum_t* num2, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
 // ****************************************************************************************************
-otinum_t oti_sub(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
+otinum_t oti_sub_oo(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 
     ord_t ordi;
     ndir_t i;
@@ -192,7 +192,7 @@ otinum_t oti_sub(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
+otinum_t oti_mul_oo(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 
     otinum_t res = oti_createZero( num1->nbases, num1->order, dhl);
     ord_t ord_res;
@@ -246,11 +246,8 @@ otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
 // ****************************************************************************************************
-otinum_t oti_mul_real(coeff_t a, otinum_t* num1, dhelpl_t dhl){
+otinum_t oti_mul_ro(coeff_t a, otinum_t* num1, dhelpl_t dhl){
 
     ord_t ordi;
     ndir_t i;
@@ -304,22 +301,20 @@ otinum_t oti_mul_real(coeff_t a, otinum_t* num1, dhelpl_t dhl){
 
 
 
-
-
 // Division
 
 // ****************************************************************************************************
-otinum_t oti_div_otireal(otinum_t* num, coeff_t den, dhelpl_t dhl ){
+otinum_t oti_div_or(otinum_t* num, coeff_t den, dhelpl_t dhl ){
 
-    return oti_mul_real(1.0/den, num, dhl);
+    return oti_mul_ro(1.0/den, num, dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-otinum_t oti_div_realoti(coeff_t num, otinum_t* den, dhelpl_t dhl ){
+otinum_t oti_div_ro(coeff_t num, otinum_t* den, dhelpl_t dhl ){
     otinum_t tmp1 = oti_pow(den , -1.0, dhl);
-    otinum_t res = oti_mul_real(num, &tmp1, dhl);
+    otinum_t res = oti_mul_ro(num, &tmp1, dhl);
     oti_free(&tmp1);
     return res;
 
@@ -327,7 +322,7 @@ otinum_t oti_div_realoti(coeff_t num, otinum_t* den, dhelpl_t dhl ){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-otinum_t oti_div(otinum_t* num, otinum_t* den, dhelpl_t dhl ){
+otinum_t oti_div_oo(otinum_t* num, otinum_t* den, dhelpl_t dhl ){
     
     ord_t i;
 
@@ -401,8 +396,13 @@ otinum_t oti_div(otinum_t* num, otinum_t* den, dhelpl_t dhl ){
 
 
 
-// Function Evaluation.
 
+
+
+
+
+
+// Function Evaluation.
 
 // ****************************************************************************************************
 otinum_t oti_feval(coeff_t* feval_re, otinum_t* num, dhelpl_t dhl ){

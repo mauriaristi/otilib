@@ -343,68 +343,8 @@ cdef class otinum:
   #---------------------------------------------------------------------------------------------------  
 
 
-#   #***************************************************************************************************
-#   @staticmethod
-#   cdef double getitem(self, uint64_t index):
-#     """
-#     PURPOSE:  To get the value of an otinum coefficient. C level implementation
 
-#     EXAMPLE:  >>> a = 1.0 + 2.0 * e(2) + 3.0 * e([1,3])
-#               >>> a
-#               otinum([0,4,17], [1.,2.,3.], 2)
-#               >>> 
-#               >>> a[0]
-#               1.0
-#               >>> a[4]
-#               2.0
-#               >>> a[17]
-#               3.0
-#               >>> a[2]
-#               0.0
-#     """
-#     #*************************************************************************************************
-#     global h
-#     global p_dH
 
-#     cdef double zero = 0.0
-
-#     if index < self.num.Ndir:
-
-#       return self.num.p_coefs[index]
-
-#     else:
-
-#       return zero
-
-#     # end if
-
-#   #--------------------------------------------------------------------------------------------------- 
-
-#   #***************************************************************************************************
-#   def printPtr(self):
-#     """
-#     PURPOSE:  To get the value of an otinum coefficient.
-
-#     EXAMPLE:  >>> a = 1.0 + 2.0 * e(2) + 3.0 * e([1,3])
-#               >>> a
-#               spr_otinum([0,4,17], [1.,2.,3.], 2)
-#               >>> 
-#               >>> a[0]
-#               1.0
-#               >>> a[4]
-#               2.0
-#               >>> a[17]
-#               3.0
-#               >>> a[2]
-#               0.0
-#     """
-#     #*************************************************************************************************
-#     global h
-#     global p_dH
-
-#     print(hex(<uint64_t>self.num.p_coefs))
-
-#   #--------------------------------------------------------------------------------------------------- 
 
 
   #***************************************************************************************************
@@ -444,32 +384,6 @@ cdef class otinum:
   #---------------------------------------------------------------------------------------------------  
 
 
-#   #***************************************************************************************************
-#   cpdef otinum selfNeg(self):
-#     """
-#     PURPOSE:      To define how to turn a otinum into its opposite
-#                   (negative)
-
-#     DESCRIPTION:  It overloads the operation "a*=-1".
-    
-#     EXAMPLE:      >>> a = otinum([10.,7.,3.], 2)
-#                   >>> a.selfNeg
-#                   >>> a
-#                   otinum([-10.,-7.,-3.], 2)
-#     """
-#     #*************************************************************************************************
-#     global h
-#     global p_dH
-
-#     cdef uint64_t i
-    
-
-#     for i in range(self.num.Ndir):
-    
-#       self.num.p_coefs[i] *= -1.0
-
-#     # end for
-#   #--------------------------------------------------------------------------------------------------- 
 
 
   #***************************************************************************************************
@@ -528,17 +442,17 @@ cdef class otinum:
     if ( type1 is type2) : # Case Sum between OTIs.
       tmp1 = self
       tmp2 = other_in
-      res =  oti_sum(&tmp1.num, &tmp2.num, dhl);
+      res =  oti_sum_oo(&tmp1.num, &tmp2.num, dhl);
     
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
       tmp1 = self
-      res = oti_sum_real( other_in, &tmp1.num, dhl);
+      res = oti_sum_ro( other_in, &tmp1.num, dhl);
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = oti_sum_real( self, &tmp1.num, dhl);      
+      res = oti_sum_ro( self, &tmp1.num, dhl);      
 
     # end if 
       
@@ -590,17 +504,17 @@ cdef class otinum:
     if ( type1 is type2) : # Case Sum between OTIs.
       tmp1 = self
       tmp2 = other_in
-      res =  oti_sub(&tmp1.num, &tmp2.num, dhl);
+      res =  oti_sub_oo(&tmp1.num, &tmp2.num, dhl);
     
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
       tmp1 = self
-      res = oti_sub_otireal( &tmp1.num, other_in, dhl);
+      res = oti_sub_or( &tmp1.num, other_in, dhl);
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = oti_sub_realoti( self, &tmp1.num, dhl);      
+      res = oti_sub_ro( self, &tmp1.num, dhl);      
 
     # end if 
       
@@ -656,17 +570,17 @@ cdef class otinum:
     if ( type1 is type2) : # Case Sum between OTIs.
       tmp1 = self
       tmp2 = other_in
-      res =  oti_mul(&tmp1.num, &tmp2.num, dhl);
+      res =  oti_mul_oo(&tmp1.num, &tmp2.num, dhl);
     
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
       tmp1 = self
-      res = oti_mul_real( other_in, &tmp1.num, dhl);
+      res = oti_mul_ro( other_in, &tmp1.num, dhl);
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = oti_mul_real( self, &tmp1.num, dhl);       
+      res = oti_mul_ro( self, &tmp1.num, dhl);       
 
     # end if 
 
@@ -721,17 +635,17 @@ cdef class otinum:
       
       tmp1 = self
       tmp2 = other_in
-      res =  oti_div(&tmp1.num, &tmp2.num, dhl);
+      res =  oti_div_oo(&tmp1.num, &tmp2.num, dhl);
     
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
       tmp1 = self
-      res = oti_div_otireal( &tmp1.num, other_in, dhl);
+      res = oti_div_or( &tmp1.num, other_in, dhl);
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = oti_div_realoti( self, &tmp1.num, dhl);       
+      res = oti_div_ro( self, &tmp1.num, dhl);       
 
     # end if 
 
@@ -929,226 +843,6 @@ cdef class otinum:
 
 #   #---------------------------------------------------------------------------------------------------
 
-
-#   #***************************************************************************************************
-#   cpdef assignAll(self, float64_t value):
-#     """
-#     PURPOSE:      Fast function to assign to all coefficients in self the given value.
-
-#     """
-#     #*************************************************************************************************
-#     cdef uint64_t i
-
-#     for i in range(self.num.Ndir):
-
-#       self.num.p_coefs[i] = value
-
-#     # end for   
-
-#   #---------------------------------------------------------------------------------------------------
-
-#   #***************************************************************************************************
-#   cpdef one(self):
-#     """
-#     PURPOSE:      Fast function to assign to the real coefficient one and all others zero.
-
-#     """
-#     #*************************************************************************************************
-#     cdef uint64_t i=0
-    
-#     self.num.p_coefs[i] = 1.0
-    
-#     for i in range(1,self.num.Ndir):
-      
-#       self.num.p_coefs[i] = 0.
-
-#     # end for   
-
-#   #---------------------------------------------------------------------------------------------------
-
-#   #***************************************************************************************************
-#   def sum(self, *args):
-#     """
-#     PURPOSE:  Function to sum self with other otinum numbers without allocating memory between 
-#               processes. Input can be only one number or many otinum separated by commas.
-
-#               Notice that they need to have the same dimensions, otherwise it wont give accurate 
-#               results.
-
-#               example: Given otinum a,b,c,d:
-
-#                   >>> a.sum(b,c,d)       # Gives the same as doing:
-
-#                   >>> a = a + b + c + d  # but in a faster way. 
-#     """
-#     #*************************************************************************************************
-    
-#     cdef uint64_t i, j, nels = self.num.Ndir, nargs = len(args)
-#     cdef otinum other_in     # holder to increase access speed
-
-#     for i in range(nargs):
-
-#       other_in = args[i] # Get input by input
-
-#       for j in range(nels):
-
-#         self.num.p_coefs[j] += other_in.num.p_coefs[j]
-
-#       # end for 
-
-#     # end for   
-
-#   #---------------------------------------------------------------------------------------------------
-
-#   #***************************************************************************************************
-#   def sub(self, *args):
-#     """
-#     PURPOSE:  Function to substract self with other otinum numbers without allocating memory between 
-#               processes. Input can be only one number or many otinum separated by commas.
-
-#               Notice that they need to have the same dimensions, otherwise it wont give accurate 
-#               results.
-
-#               example: Given otinum a,b,c,d:
-
-#                   >>> a.sum(b,c,d)       # Gives the same as doing:
-
-#                   >>> a = a - b - c - d  # but in a faster way. 
-#     """
-#     #*************************************************************************************************
-    
-#     cdef uint64_t i, j, nels = self.num.Ndir, nargs = len(args)
-#     cdef otinum other_in     # holder to increase access speed
-
-#     for i in range(nargs):
-
-#       other_in = args[i] # Get input by input
-
-#       for j in range(nels):
-
-#         self.num.p_coefs[j] -= other_in.num.p_coefs[j]
-
-#       # end for 
-
-#     # end for     
-
-#   #---------------------------------------------------------------------------------------------------
-
-
-# #   #***************************************************************************************************
-# #   def inv(self):
-# #     """
-# #     PURPOSE:  Function to divide 1.0/self with another otinum number without allocating memory between 
-# #               processes.
-
-# #               example: Given otinum a,b,c,d:
-
-# #                   >>> a.inv()          # Gives the same as doing:
-
-# #                   >>> a = 1.0 / a      # but in a faster way. 
-# #     """
-# #     #*************************************************************************************************
-    
-# #     cdef uint64_t i, j, nels = self.coefs.size
-# #     cdef otinum other_in     # holder to increase access speed
-# #     cdef float64_t val1, val2
-    
-# #     if self.maxorder == 1:
-
-# #       val1 = 1/self.coefs[ZERO]
-# #       val2 = -1./(self.coefs[ZERO])
-      
-# #       for i in range(self.coefs.size):
-
-# #         if i == 0:
-        
-# #           self.coefs[i] = val1
-        
-# #         else:
-        
-# #           self.coefs[i] = val2*self.coefs[i]
-        
-# #         # end if
-
-# #       # end for
-
-# #     else:
-
-# #       self = 1.0/self
-
-# #     # end if  
-
-# #   #---------------------------------------------------------------------------------------------------
-
-# #   #***************************************************************************************************
-# #   def mult(self, *args,float64_t[:] prealloc = None):
-# #     """
-# #     PURPOSE:  Function to multiply self with other otinum numbers without allocating memory between 
-# #               processes. Input can be only one number or many otinums separated by commas.
-
-# #               Notice that they need to have the same dimensions, otherwise it wont do a correct 
-# #               operation.
-
-# #               example: Given the otinum objects:  a, b, c and d:
-
-# #                   >>> a.mult(b)          # Gives the same as doing:
-
-# #                   >>> a = a * b          # but in a faster way. 
-
-# #                   >>> a.mult(b,c,d)      # Gives the same as doing:
-
-# #                   >>> a = a + b + c + d  # but in a faster way. 
-# #     """
-# #     #*************************************************************************************************
-    
-# #     cdef uint64_t i, j, k, nels = self.coefs.size
-# #     cdef otinum other_in           # holder to increase access speed
-# #     cdef float64_t zerof = 0.
-# #     cdef uint8_t[:] error = np.array([0],dtype=np.uint8)
-
-# #     if prealloc == None:           # Check if the given prealloc value is allocated.
-    
-# #       prealloc = np.empty(nels,dtype = np.float64)
-
-# #     # end if 
-    
-# #     for k in range(len(args)):
-
-# #       O = args[k]  # Get one by one the given elements.
-
-# #       # initialize prealloc:
-# #       for i in range(nels):
-
-# #         prealloc[i] = zerof
-
-# #       # end for 
-
-# #       for i in range(nels):
-
-# #         for j in range(nels):
-
-# #           # multiply coefficients
-# #           resIndx = h.multIndx(i,j,self.maxorder,error)
-
-# #           if error[0] == 0:     # when error[0] is 1 the multiplication gives a non admissible dir.
-
-# #             prealloc[resIndx] = prealloc[resIndx] + self.coefs[i]*O.coefs[j] 
-
-# #           # end if
-
-# #         # end for
-
-# #       # end for
-
-# #       for i in range(nels):
-      
-# #         self.coefs[i] = prealloc[i]
-
-# #       # end for 
-
-# #     # end for 
-
-# #   #--------------------------------------------------------------------------------------------------- 
 
 
 

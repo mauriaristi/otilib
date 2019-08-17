@@ -3,47 +3,13 @@
 
 
 
-// void darr_neg(darr_t* arr1, darr_t* aRes);
-// void darr_sum_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes);
-// void darr_sum_Rr(darr_t* arr1, coeff_t num, darr_t* aRes);
-// void darr_sub_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes);
-// void darr_sub_Rr(darr_t* arr1, coeff_t num, darr_t* aRes);
-// void darr_sub_rR(coeff_t num, darr_t* arr1, darr_t* aRes);
-// void darr_mul_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes);
-// void darr_mul_Rr(darr_t* arr1, coeff_t num, darr_t* aRes);
-// void darr_div_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes);
-// void darr_div_Rr(darr_t* arr1, coeff_t num, darr_t* aRes);
-// void darr_div_rR(coeff_t num, darr_t* arr2, darr_t* aRes);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // 1. Elementwise operations.
 
 // 1.1. Negation.
 // ****************************************************************************************************
-void darr_neg(darr_t* arr1, darr_t* aRes){
+void darr_neg_to(darr_t* arr1, darr_t* aRes){
     
     int64_t i;
 
@@ -60,6 +26,23 @@ void darr_neg(darr_t* arr1, darr_t* aRes){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+darr_t darr_neg(darr_t* arr1){
+    
+    darr_t aRes = darr_copy(arr1);
+    int64_t i;
+
+    for (i = 0; i < aRes.size; i++){
+
+        aRes.p_data[i] *= -1;
+        
+    }    
+
+    return aRes;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 
 
@@ -68,8 +51,46 @@ void darr_neg(darr_t* arr1, darr_t* aRes){
 // 1.2. Addition.
 
 // 1.2.1. Real Array - Real Array.
+
 // ****************************************************************************************************
-void darr_sum_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes){
+darr_t darr_sum_RR(darr_t* arr1, darr_t* arr2){
+    
+    darr_t aRes = darr_copy(arr1);
+    int64_t i;
+
+    for (i = 0; i < arr1->size; i++){
+
+        aRes.p_data[i] += arr2->p_data[i];
+
+    }
+
+    return aRes;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// 1.2.2. Real Array - Real Scalar.
+// ****************************************************************************************************
+darr_t darr_sum_rR(coeff_t num, darr_t* arr1){
+    
+    darr_t aRes = darr_copy(arr1);
+    int64_t i;
+
+    for (i = 0; i < arr1->size; i++){
+
+        aRes.p_data[i] += num;
+        
+    }    
+
+    return aRes;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void darr_sum_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes){
     
     int64_t i;
 
@@ -89,7 +110,7 @@ void darr_sum_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes){
 
 // 1.2.2. Real Array - Real Scalar.
 // ****************************************************************************************************
-void darr_sum_Rr(darr_t* arr1, coeff_t num, darr_t* aRes){
+void darr_sum_rR_to(coeff_t num, darr_t* arr1, darr_t* aRes){
     
     int64_t i;
 
@@ -128,7 +149,59 @@ void darr_sum_Rr(darr_t* arr1, coeff_t num, darr_t* aRes){
 
 // 1.3.1. Real Array  - Real Array.
 // ****************************************************************************************************
-void darr_sub_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes){
+darr_t darr_sub_RR(darr_t* arr1, darr_t* arr2){
+    
+    darr_t aRes = darr_copy(arr1);
+    int64_t i;
+
+    for (i = 0; i < arr1->size; i++){
+
+        aRes.p_data[i] -= arr2->p_data[i];
+        
+    }
+    return aRes;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// 1.3.2. Real Array  - Real Scalar.
+// ****************************************************************************************************
+darr_t darr_sub_Rr(darr_t* arr1, coeff_t num){
+    
+    darr_t aRes = darr_copy(arr1);
+    int64_t i;
+
+    for (i = 0; i < arr1->size; i++){
+
+        aRes.p_data[i] -= num;
+        
+    }    
+    return aRes;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// 1.3.3. Real Scalar - Real Array.
+// ****************************************************************************************************
+darr_t darr_sub_rR(coeff_t num, darr_t* arr1){
+    
+    darr_t aRes = darr_neg(arr1);
+    int64_t i;
+
+    for (i = 0; i < arr1->size; i++){
+
+        aRes.p_data[i] += num;
+        
+    }    
+    return aRes;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// 1.3.1. Real Array  - Real Array.
+// ****************************************************************************************************
+void darr_sub_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes){
     
     int64_t i;
 
@@ -148,7 +221,7 @@ void darr_sub_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes){
 
 // 1.3.2. Real Array  - Real Scalar.
 // ****************************************************************************************************
-void darr_sub_Rr(darr_t* arr1, coeff_t num, darr_t* aRes){
+void darr_sub_Rr_to(darr_t* arr1, coeff_t num, darr_t* aRes){
     
     int64_t i;
 
@@ -167,7 +240,7 @@ void darr_sub_Rr(darr_t* arr1, coeff_t num, darr_t* aRes){
 
 // 1.3.3. Real Scalar - Real Array.
 // ****************************************************************************************************
-void darr_sub_rR(coeff_t num, darr_t* arr1, darr_t* aRes){
+void darr_sub_rR_to(coeff_t num, darr_t* arr1, darr_t* aRes){
     
     int64_t i;
 
@@ -213,10 +286,43 @@ void darr_sub_rR(coeff_t num, darr_t* arr1, darr_t* aRes){
 
 
 // 1.4. Multiplication.
-
-// 1.4.1. Real Array - Real Array.
 // ****************************************************************************************************
-void darr_mul_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes){
+darr_t darr_mul_RR(darr_t* arr1, darr_t* arr2){
+    
+    darr_t aRes = darr_copy(arr1);
+    int64_t i;
+
+    for (i = 0; i < aRes.size; i++){
+
+        aRes.p_data[i] *= arr2->p_data[i];
+        
+    }
+
+    return aRes;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+darr_t darr_mul_rR(coeff_t num, darr_t* arr1){
+    
+    int64_t i;
+    darr_t aRes = darr_copy(arr1);
+
+    for (i = 0; i < arr1->size; i++){
+
+        aRes.p_data[i] *= num;
+        
+    }
+
+    return aRes;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void darr_mul_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes){
     
     int64_t i;
 
@@ -233,11 +339,8 @@ void darr_mul_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-// 1.4.2. Real Array - Real Scalar.
 // ****************************************************************************************************
-void darr_mul_Rr(darr_t* arr1, coeff_t num, darr_t* aRes){
+void darr_mul_rR_to(coeff_t num, darr_t* arr1, darr_t* aRes){
     
     int64_t i;
 
@@ -272,10 +375,64 @@ void darr_mul_Rr(darr_t* arr1, coeff_t num, darr_t* aRes){
 
 
 // 1.5. Division
+// 1.5.1. Real Array  - Real Array.
+// ****************************************************************************************************
+darr_t darr_div_RR(darr_t* arr1, darr_t* arr2){
+    
+    darr_t aRes=darr_copy(arr1);
+    int64_t i;
+
+    for (i = 0; i < arr1->size; i++){
+
+        aRes.p_data[i] /= arr2->p_data[i];
+        
+    }
+
+    return aRes;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// 1.5.2. Real Array  - Real Scalar.
+// ****************************************************************************************************
+darr_t darr_div_Rr(darr_t* arr1, coeff_t num){
+    
+    darr_t aRes = darr_copy(arr1);
+    int64_t i;
+
+    for (i = 0; i < arr1->size; i++){
+
+        aRes.p_data[i] /= num;
+        
+    }
+
+    return aRes;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// 1.5.3. Real Scalar - Real Array.
+// ****************************************************************************************************
+darr_t darr_div_rR(coeff_t num, darr_t* arr1){
+    
+    darr_t aRes = darr_copy(arr1);
+    int64_t i;
+
+    for (i = 0; i < arr1->size; i++){
+
+        aRes.p_data[i] = num / arr1->p_data[i];
+        
+    }
+
+    return aRes;
+    
+}
+// ----------------------------------------------------------------------------------------------------
 
 // 1.5.1. Real Array  - Real Array.
 // ****************************************************************************************************
-void darr_div_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes){
+void darr_div_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes){
     
     int64_t i;
 
@@ -295,7 +452,7 @@ void darr_div_RR(darr_t* arr1, darr_t* arr2, darr_t* aRes){
 
 // 1.5.2. Real Array  - Real Scalar.
 // ****************************************************************************************************
-void darr_div_Rr(darr_t* arr1, coeff_t num, darr_t* aRes){
+void darr_div_Rr_to(darr_t* arr1, coeff_t num, darr_t* aRes){
     
     int64_t i;
 
@@ -314,7 +471,7 @@ void darr_div_Rr(darr_t* arr1, coeff_t num, darr_t* aRes){
 
 // 1.5.3. Real Scalar - Real Array.
 // ****************************************************************************************************
-void darr_div_rR(coeff_t num, darr_t* arr2, darr_t* aRes){
+void darr_div_rR_to(coeff_t num, darr_t* arr2, darr_t* aRes){
     
     int64_t i;
 

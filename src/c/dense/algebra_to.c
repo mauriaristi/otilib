@@ -25,7 +25,7 @@
 // Addition
 
 // ****************************************************************************************************
-void oti_sum_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
+void oti_sum_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
     ord_t ordi;
     ndir_t i;
@@ -52,13 +52,11 @@ void oti_sum_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
         exit(OTI_undetErr);
     }
 
-    
-
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void oti_sum_real_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl){
+void oti_sum_ro_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl){
 
     oti_copy_to(num1, res, dhl);
     
@@ -130,7 +128,7 @@ void oti_neg_to(otinum_t* num1, otinum_t* res, dhelpl_t dhl){
 // Subtraction
 
 // ****************************************************************************************************
-void oti_sub_otireal_to(otinum_t* num1, coeff_t a, otinum_t* res, dhelpl_t dhl){
+void oti_sub_or_to(otinum_t* num1, coeff_t a, otinum_t* res, dhelpl_t dhl){
     
     oti_copy_to(num1,res,dhl);;
     
@@ -140,7 +138,7 @@ void oti_sub_otireal_to(otinum_t* num1, coeff_t a, otinum_t* res, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void oti_sub_realoti_to(coeff_t a, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
+void oti_sub_ro_to(coeff_t a, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
     
     oti_neg_to(num2,res,dhl);;
     
@@ -151,7 +149,7 @@ void oti_sub_realoti_to(coeff_t a, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-void oti_sub_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
+void oti_sub_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
     ord_t ordi;
     ndir_t i;
@@ -207,7 +205,7 @@ void oti_sub_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-void oti_mul_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
+void oti_mul_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
 	oti_setFromReal( 0.0, res, dhl);
 
@@ -264,7 +262,7 @@ void oti_mul_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-void oti_mul_real_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl){
+void oti_mul_ro_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl){
 
     ord_t ordi;
     ndir_t i;
@@ -301,27 +299,27 @@ void oti_mul_real_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl){
 // Division
 
 // ****************************************************************************************************
-void oti_div_otireal_to(otinum_t* num, coeff_t den, otinum_t* res, dhelpl_t dhl ){
+void oti_div_or_to(otinum_t* num, coeff_t den, otinum_t* res, dhelpl_t dhl ){
 
-    oti_mul_real_to(1.0/den, num, res, dhl);
+    oti_mul_ro_to(1.0/den, num, res, dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void oti_div_realoti_to(coeff_t num, otinum_t* den, otinum_t* res, dhelpl_t dhl ){
+void oti_div_ro_to(coeff_t num, otinum_t* den, otinum_t* res, dhelpl_t dhl ){
     
     otinum_t tmp1 = oti_get_rtmp( 0, den->order, den->nbases, dhl);
 
     oti_pow_to(den , -1.0, &tmp1, dhl);
     
-    oti_mul_real_to(num, &tmp1, res, dhl);
+    oti_mul_ro_to(num, &tmp1, res, dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void oti_div_to(otinum_t* num, otinum_t* den, otinum_t* res, dhelpl_t dhl ){
+void oti_div_oo_to(otinum_t* num, otinum_t* den, otinum_t* res, dhelpl_t dhl ){
     
     ord_t i;
 

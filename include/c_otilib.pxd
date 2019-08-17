@@ -5,6 +5,7 @@ from libc.stdint cimport uint8_t, uint16_t,uint32_t, uint64_t, int64_t
 #--------------------------------------     TYPE DECLARATIONS     ------------------------------------
 #-----------------------------------------------------------------------------------------------------
 ctypedef double    coeff_t 
+ctypedef double*     arr_t
 ctypedef uint64_t  imdir_t
 ctypedef uint64_t   ndir_t
 ctypedef uint16_t  bases_t
@@ -40,7 +41,14 @@ cdef extern from "oti/oti.h" nogil:
     dhelp_t* p_dh
     ndh_t     ndh
 
-  # Defs from "otinum_dense.h"
+  # Defs from "real.h"
+  ctypedef struct darr_t:
+    coeff_t*       p_data
+    uint64_t        nrows
+    uint64_t        ncols
+    uint64_t         size
+
+  # Defs from "dense.h"
   ctypedef struct otinum_t:
     coeff_t          re
     coeff_t**      p_im
@@ -65,7 +73,7 @@ cdef extern from "oti/oti.h" nogil:
     uint64_t       sizey 
     uint64_t     nonzero 
 
-  # Defs from "otinum_spr.h"
+  # Defs from "sparse.h"
   ctypedef struct sotinum_t:
     coeff_t          re
     coeff_t**      p_im
@@ -76,6 +84,114 @@ cdef extern from "oti/oti.h" nogil:
 
   
 
+  #---------------------------------------------------------------------------------------------------
+
+
+  # Include functions from "real.h"
+  #---------------------------------------------------------------------------------------------------
+
+  darr_t darr_atanh(darr_t* arr);
+  void darr_atanh_to(darr_t* arr, darr_t* res);
+  darr_t darr_asinh(darr_t* arr);
+  void darr_asinh_to(darr_t* arr, darr_t* res);
+  darr_t darr_acosh(darr_t* arr);
+  void darr_acosh_to(darr_t* arr, darr_t* res);
+  darr_t darr_tanh(darr_t* arr);
+  void darr_tanh_to(darr_t* arr, darr_t* res);
+  darr_t darr_sqrt(darr_t* arr);
+  void darr_sqrt_to(darr_t* arr, darr_t* res);
+  darr_t darr_cosh(darr_t* arr);
+  void darr_cosh_to(darr_t* arr, darr_t* res);
+  darr_t darr_sinh(darr_t* arr);
+  void darr_sinh_to(darr_t* arr, darr_t* res);
+  darr_t darr_asin(darr_t* arr);
+  void darr_asin_to(darr_t* arr, darr_t* res);
+  darr_t darr_acos(darr_t* arr);
+  void darr_acos_to(darr_t* arr, darr_t* res);
+  darr_t darr_atan(darr_t* arr);
+  void darr_atan_to(darr_t* arr, darr_t* res);
+  darr_t darr_tan(darr_t* arr);
+  void darr_tan_to(darr_t* arr, darr_t* res);
+  darr_t darr_cos(darr_t* arr);
+  void darr_cos_to(darr_t* arr, darr_t* res);
+  darr_t darr_sin(darr_t* arr );
+  void darr_sin_to(darr_t* arr, darr_t* res);
+  darr_t darr_logb(darr_t* arr, double base);
+  void darr_logb_to(darr_t* arr, double base, darr_t* res);
+  darr_t darr_log10(darr_t* arr);
+  void darr_log10_to(darr_t* arr, darr_t* res);
+  darr_t darr_log(darr_t* arr);
+  void darr_log_to(darr_t* arr, darr_t* res);
+  darr_t darr_exp(darr_t* arr);
+  void darr_exp_to(darr_t* arr, darr_t* res);
+  darr_t darr_pow(darr_t* arr, double e);
+  void darr_pow_to(darr_t* arr, double e, darr_t* res);
+
+  void der_r_atan2(coeff_t x, coeff_t y, ord_t order, coeff_t* derivs);
+  void der_r_logb(coeff_t x, coeff_t base, ord_t order, coeff_t* derivs);
+  void der_r_log10(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_atanh(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_asinh(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_acosh(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_tanh(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_sqrt(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_cosh(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_sinh(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_asin(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_acos(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_atan(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_tan(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_cos(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_sin(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_log(coeff_t x , ord_t order, coeff_t* derivs);
+  void der_r_exp(coeff_t x, ord_t order, coeff_t* derivs);
+  void der_r_pow(coeff_t x, coeff_t e, ord_t order, coeff_t* derivs);
+  
+  darr_t darr_matmul(darr_t* arr1, darr_t* arr2 );
+  void darr_matmul_to(darr_t* arr1, darr_t* arr2, darr_t* aRes );
+
+  darr_t darr_transpose(darr_t* arr1);
+  void darr_transpose_to(darr_t* arr1, darr_t* aRes);
+
+  darr_t darr_invert(darr_t* arr1);
+  void darr_invert_to(darr_t* arr1, darr_t* aRes);
+
+  coeff_t darr_det( darr_t* arr1 );
+
+  void darr_neg_to(darr_t* arr1, darr_t* aRes);
+  darr_t darr_neg(darr_t* arr1);
+  darr_t darr_div_RR(darr_t* arr1, darr_t* arr2);
+  darr_t darr_div_Rr(darr_t* arr1, coeff_t num);
+  darr_t darr_div_rR(coeff_t num, darr_t* arr1);
+  void darr_div_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes);
+  void darr_div_Rr_to(darr_t* arr1, coeff_t num, darr_t* aRes);
+  void darr_div_rR_to(coeff_t num, darr_t* arr2, darr_t* aRes);
+  darr_t darr_mul_RR(darr_t* arr1, darr_t* arr2);
+  darr_t darr_mul_rR(coeff_t num, darr_t* arr1);
+  void darr_mul_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes);
+  void darr_mul_rR_to(coeff_t num, darr_t* arr1, darr_t* aRes);
+  darr_t darr_sub_RR(darr_t* arr1, darr_t* arr2);
+  darr_t darr_sub_Rr(darr_t* arr1, coeff_t num);
+  darr_t darr_sub_rR(coeff_t num, darr_t* arr1);
+  void darr_sub_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes);
+  void darr_sub_Rr_to(darr_t* arr1, coeff_t num, darr_t* aRes);
+  void darr_sub_rR_to(coeff_t num, darr_t* arr1, darr_t* aRes);
+  darr_t darr_sum_RR(darr_t* arr1, darr_t* arr2);
+  darr_t darr_sum_rR(coeff_t num, darr_t* arr1);
+  void darr_sum_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes);
+  void darr_sum_rR_to(coeff_t num, darr_t* arr1, darr_t* aRes);
+  void darr_set_all( coeff_t num, darr_t* arr);
+  coeff_t darr_get_item_ij(darr_t* arr, uint64_t i, uint64_t j);
+  coeff_t darr_get_item_i(darr_t* arr, uint64_t i);
+  void darr_set_item_ij( coeff_t num, uint64_t i, uint64_t j, darr_t* arr);
+  void darr_set_item_i( coeff_t num, uint64_t i, darr_t* arr);
+  darr_t   darr_copy(darr_t* src );
+  void     darr_copy_to(darr_t* src, darr_t* dst );
+  uint64_t darr_getSize(darr_t* arr);
+  darr_t darr_ones( uint64_t nrows, uint64_t ncols);
+  darr_t darr_zeros( uint64_t nrows, uint64_t ncols);
+  void darr_free(darr_t* arr);
+  darr_t darr_createEmpty( uint64_t nrows, uint64_t ncols);
   #---------------------------------------------------------------------------------------------------
 
   # Include functions from "core.h"
@@ -140,189 +256,184 @@ cdef extern from "oti/oti.h" nogil:
   #---------------------------------------------------------------------------------------------------
 
 
-  # Include functions from "otinum_dense.h"
+  # Include functions from "dense.h"
   #---------------------------------------------------------------------------------------------------
+  otinum_t oti_get_tmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl);
+  otinum_t oti_get_rtmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl);
   otinum_t oti_atanh(otinum_t* num, dhelpl_t dhl);
-
+  void oti_atanh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_asinh(otinum_t* num, dhelpl_t dhl);
-
+  void oti_asinh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_acosh(otinum_t* num, dhelpl_t dhl);
-
+  void oti_acosh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_tanh(otinum_t* num, dhelpl_t dhl);
-
+  void oti_tanh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_sqrt(otinum_t* num, dhelpl_t dhl);
-
+  void oti_sqrt_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_cosh(otinum_t* num, dhelpl_t dhl);
-
+  void oti_cosh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_sinh(otinum_t* num, dhelpl_t dhl);
-
+  void oti_sinh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_asin(otinum_t* num, dhelpl_t dhl);
-
+  void oti_asin_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_acos(otinum_t* num, dhelpl_t dhl);
-
+  void oti_acos_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_atan(otinum_t* num, dhelpl_t dhl);
-
+  void oti_atan_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_tan(otinum_t* num, dhelpl_t dhl);
-
+  void oti_tan_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_cos(otinum_t* num, dhelpl_t dhl);
-
+  void oti_cos_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_sin(otinum_t* num, dhelpl_t dhl );
-
+  void oti_sin_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_logb(otinum_t* num, double base, dhelpl_t dhl);
-
+  void oti_logb_to(otinum_t* num, double base, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_log10(otinum_t* num, dhelpl_t dhl);
-
+  void oti_log10_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_log(otinum_t* num, dhelpl_t dhl);
-
+  void oti_log_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_exp(otinum_t* num, dhelpl_t dhl);
-
+  void oti_exp_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_pow(otinum_t* num, double e, dhelpl_t dhl);
-
+  void oti_pow_to(otinum_t* num, double e, otinum_t* res, dhelpl_t dhl);
   otinum_t oti_feval(coeff_t* feval_re, otinum_t* num, dhelpl_t dhl );
-
+  void oti_feval_to(coeff_t* feval_re, otinum_t* num, otinum_t* res, dhelpl_t dhl );
   void oti_trunc_ssum(otinum_t* num1,  
                      ord_t ord, otinum_t* res,  dhelpl_t dhl );
-
   void oti_trunc_mul(otinum_t* num1, ord_t ord1, 
                    otinum_t* num2, ord_t ord2, 
                    otinum_t* res, dhelpl_t dhl );
-
   void oti_trunc_smul_real(coeff_t a, ord_t ord, otinum_t* num, dhelpl_t dhl);
-
   otinum_t oti_neg(otinum_t* num1, dhelpl_t dhl);
-
-  otinum_t oti_sub_otireal(otinum_t* num1, coeff_t a, dhelpl_t dhl);
-
-  otinum_t oti_sub_realoti(coeff_t a, otinum_t* num2, dhelpl_t dhl);
-
-  otinum_t oti_sub(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
-
-  otinum_t oti_div(otinum_t* num, otinum_t* den, dhelpl_t dhl );
-
-  otinum_t oti_div_otireal(otinum_t* num, coeff_t den, dhelpl_t dhl );
-
-  otinum_t oti_div_realoti(coeff_t num, otinum_t* den, dhelpl_t dhl );
-
-  otinum_t oti_mul(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
-
-  otinum_t oti_mul_real(coeff_t a, otinum_t* num1, dhelpl_t dhl);
-
-  otinum_t oti_sum(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
-
-  otinum_t oti_copy(otinum_t* num, dhelpl_t dhl);
-
-  otinum_t oti_sum_real(coeff_t a, otinum_t* num1, dhelpl_t dhl);
-
-  void oti_sum_real_r(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl);
-
+  void oti_neg_to(otinum_t* num1, otinum_t* res, dhelpl_t dhl);
+  otinum_t oti_sub_oo(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
+  otinum_t oti_sub_or(otinum_t* num1, coeff_t a, dhelpl_t dhl);
+  otinum_t oti_sub_ro(coeff_t a, otinum_t* num2, dhelpl_t dhl);
+  void oti_sub_or_to(otinum_t* num1, coeff_t a, otinum_t* res, dhelpl_t dhl);
+  void oti_sub_ro_to(coeff_t a, otinum_t* num2, otinum_t* res, dhelpl_t dhl);
+  void oti_sub_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl);
+  otinum_t oti_div_oo(otinum_t* num, otinum_t* den, dhelpl_t dhl );
+  otinum_t oti_div_ro(coeff_t num, otinum_t* den, dhelpl_t dhl );
+  otinum_t oti_div_or(otinum_t* num, coeff_t den, dhelpl_t dhl );
+  void oti_div_or_to(otinum_t* num, coeff_t den, otinum_t* res, dhelpl_t dhl );
+  void oti_div_ro_to(coeff_t num, otinum_t* den, otinum_t* res, dhelpl_t dhl );
+  void oti_div_oo_to(otinum_t* num, otinum_t* den, otinum_t* res, dhelpl_t dhl );
+  otinum_t oti_mul_oo(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
+  otinum_t oti_mul_ro(coeff_t a, otinum_t* num1, dhelpl_t dhl);
+  void oti_mul_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl);
+  void oti_mul_ro_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl);
+  otinum_t oti_sum_oo(otinum_t* num1, otinum_t* num2, dhelpl_t dhl);
+  otinum_t oti_sum_ro(coeff_t a, otinum_t* num1, dhelpl_t dhl);
+  void oti_sum_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl);
+  void oti_sum_ro_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl);
   void oti_setIm_IdxOrd( coeff_t a, imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
-
   coeff_t oti_get( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
-
   coeff_t oti_get_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl);
-
   otinum_t oti_createZero( bases_t nbases, ord_t order, dhelpl_t dhl);
-
   otinum_t oti_createEmpty( bases_t nbases, ord_t order, dhelpl_t dhl);
-
-  void oti_set( otinum_t* num, otinum_t* res, dhelpl_t dhl);
-
+  otinum_t oti_init(  );
+  otinum_t oti_copy(otinum_t* num, dhelpl_t dhl);
+  void oti_copy_to( otinum_t* num, otinum_t* res, dhelpl_t dhl);
   void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl);
-
   void oti_print( otinum_t* num, dhelpl_t dhl);
-
   void oti_free( otinum_t* num );
 
   #---------------------------------------------------------------------------------------------------
 
 
-  # Include functions from "otinum_spr.h"
+  # Include functions from "sparse.h"
   #---------------------------------------------------------------------------------------------------
   
   sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_atanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_asinh(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_asinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_acosh(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_acosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_tanh(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_tanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_sqrt(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_sqrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_cosh(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_cosh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_sinh(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_sinh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_asin(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_asin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_acos(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_acos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_atan(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_atan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_tan(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_tan_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_cos(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_cos_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_sin(sotinum_t* num, dhelpl_t dhl );
-
+  void soti_sin_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_logb(sotinum_t* num, double base, dhelpl_t dhl);
-
+  void soti_logb_to(sotinum_t* num, double base, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_log10(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_log10_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_log(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_log_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_exp_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl);
-
-  sotinum_t soti_div(sotinum_t* num, sotinum_t* den, dhelpl_t dhl);
-
-  sotinum_t soti_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-  
-  sotinum_t soti_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-  
-  sotinum_t soti_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-
-  sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
-
+  void soti_pow_to(sotinum_t* num, coeff_t e, sotinum_t* res, dhelpl_t dhl);
+  void soti_trunc_ssum(sotinum_t* num1, ord_t ord, sotinum_t* res, dhelpl_t dhl );
+  void soti_trunc_mul(sotinum_t* num1, ord_t ord1, 
+                      sotinum_t* num2, ord_t ord2, 
+                      sotinum_t* dest, dhelpl_t dhl );
+  void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl);
+  void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
+  void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl);
+  void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl);
+  sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
+  sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
+  void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
+  sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den, dhelpl_t dhl);
+  sotinum_t soti_div_ro(coeff_t num, sotinum_t* den, dhelpl_t dhl);
+  sotinum_t soti_div_or(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+  void soti_div_oo_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
+  void soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
+  void soti_div_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
   coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
-
-  sotinum_t soti_div_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
-
-  sotinum_t soti_div_realoti(coeff_t num, sotinum_t* den, dhelpl_t dhl);
-
-  sotinum_t soti_sub_realoti( coeff_t val, sotinum_t* num, dhelpl_t dhl);
-
-  sotinum_t soti_sub_otireal(sotinum_t* num, coeff_t val, dhelpl_t dhl);
-
+  sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+  sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  void soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+  void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num, dhelpl_t dhl);
+  sotinum_t soti_sub_or(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+  sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  void soti_sub_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+  void soti_sub_ro_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+  void soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+  sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  void soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+  void soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
+  sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
   sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl);
-
-  sotinum_t soti_mul_real(coeff_t val, sotinum_t* num, dhelpl_t dhl);
-
-  sotinum_t soti_sum_real(coeff_t val, sotinum_t* num, dhelpl_t dhl);
-
+  void soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   void soti_insert_item(ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
-
   void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
-
   coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
-
   sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl);
-
+  void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
   void soti_print(sotinum_t* num, dhelpl_t dhl);
-
   void soti_free(sotinum_t* num);
-
   sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl);
-  
   sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl); 
-  
   sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 
 
   #---------------------------------------------------------------------------------------------------
 
 
-  # Include functions from "otinum_dense.h"
+  # Include functions from "real.h"
   #---------------------------------------------------------------------------------------------------
 
 #-----------------------------------------------------------------------------------------------------

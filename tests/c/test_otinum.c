@@ -52,25 +52,25 @@ int main(int argc, char *argv[]){
 	// Test addition with real
 	printf("Result after adding real number %f.\n",c);
 	printf("Expected result: %f.\n",a+c);
-	num2 = oti_sum_real(c,&num,dhl);	
+	num2 = oti_sum_ro(c,&num,dhl);	
 	oti_print(&num2, dhl);
 
 
 	// Test addition with another oti number.
 	printf("Result after adding two oti numbers:\n");
-	num1 = oti_sum(&num, &num2, dhl);
+	num1 = oti_sum_oo(&num, &num2, dhl);
 	oti_print( &num1, dhl);
 	oti_free( &num2 );
 
 	// Test multiplication with real.
 	printf("Result after multiplying by a real number:\n");
-	num2 = oti_mul_real(3.5, &num1, dhl);
+	num2 = oti_mul_ro(3.5, &num1, dhl);
 	oti_print(&num2,dhl);
 	oti_free( &num2 );
 
 	// Test multiplication between OTI numbers.
 	printf("Result after multiplying by a oti number:\n");
-	num2 = oti_mul(&num, &num1, dhl);
+	num2 = oti_mul_oo(&num, &num1, dhl);
 	oti_print(&num2,dhl);
 
     // Free all numbers.
@@ -89,10 +89,10 @@ int main(int argc, char *argv[]){
 	oti_setIm_IdxOrd( 1.0, 1, 1, &y, dhl);
 	
 	// f(x,y) = ( x * y )^2
-	otinum_t xy = oti_mul(&x, &y, dhl);
+	otinum_t xy = oti_mul_oo(&x, &y, dhl);
 
-	otinum_t xy2 = oti_mul(&xy, &xy, dhl);
-	otinum_t xy4 = oti_mul(&xy2, &xy2, dhl);
+	otinum_t xy2 = oti_mul_oo(&xy, &xy, dhl);
+	otinum_t xy4 = oti_mul_oo(&xy2, &xy2, dhl);
 	printf("\n\n Result of evaluating f(x,y) = (x*y)^2\n");
 	oti_print(&xy2,dhl);
 
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]){
 	oti_print(&mxy4,dhl);
 
 	printf("\n Result of subtracting by itself:\n");
-	otinum_t mxy2 = oti_sub(&xy2,&xy2,dhl);
+	otinum_t mxy2 = oti_sub_oo(&xy2,&xy2,dhl);
 	oti_print(&mxy2,dhl);
 
 
@@ -133,11 +133,11 @@ int main(int argc, char *argv[]){
 	oti_setIm_IdxOrd( 1.0, 1, 1, &y, dhl);
 
 
-	xy = oti_div(&y, &x, dhl);
+	xy = oti_div_oo(&y, &x, dhl);
 	printf("\n Result of y/x:\n");
 	oti_print(&xy, dhl);
 
-	oti_free( &x );oti_free( &y );	oti_free( &xy );
+	oti_free( &x ); oti_free( &y );	oti_free( &xy );
 
 	printf("Unloading directions helpers\n");
 	dhelp_free( &dhl );

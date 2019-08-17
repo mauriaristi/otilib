@@ -147,31 +147,6 @@ cdef class omat:
     """
     #*************************************************************************************************
     
-    # cdef uint64_t i,j,k=0
-
-    # # omat_print_fmt = 
-    # head      = ''
-    # body      = '['
-    # for i in range(self.arr.nrows):
-
-    #   body += '['
-
-    #   for j in range(self.arr.ncols):
-
-    #     body += "{:10.4f},".format(self.arr.p_data[k])
-    #     k += 1 
-
-    #   # end for
-
-    #   body += '\b]\n '
-
-    # # end for 
-    # body = body[:len(body)-2]
-    # body += ']\n'
-
-    # tail      = ''
-    
-    # return (head + body + tail)
 
     cdef np.ndarray[double, ndim=2] A = self.to_numpy()
 

@@ -62,7 +62,7 @@ cdef class omat:
 
   @staticmethod
   cdef omat create(oarr_t* arr, uint8_t FLAGS = *)
-  # cpdef copy(self)
+  cpdef copy(self)
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS OMAT :::::::::::::::::::::::::::::::::::::::::::::

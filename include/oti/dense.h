@@ -54,6 +54,71 @@ typedef struct {
 
 
 // ARRAY
+
+
+
+// Algebra operations.
+
+oarr_t oarr_neg( oarr_t* arr1  dhelpl_t dhl);
+void oarr_neg_to(oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+
+oarr_t oarr_sum_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+void oarr_sum_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_sum_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl);
+void oarr_sum_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_sum_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+void oarr_sum_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_sum_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl);
+void oarr_sum_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+
+oarr_t oarr_sub_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+void oarr_sub_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_sub_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl);
+void oarr_sub_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_sub_Oo(oarr_t* arr1, otinum_t num, dhelpl_t dhl);
+void oarr_sub_Oo_to(oarr_t* arr1, otinum_t num, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_sub_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+void oarr_sub_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_sub_OR(oarr_t* arr1, darr_t* arr2, dhelpl_t dhl);
+void oarr_sub_OR_to(oarr_t* arr1, darr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_sub_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl);
+void oarr_sub_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_sub_Or( oarr_t* arr1, coeff_t num, dhelpl_t dhl);
+void oarr_sub_Or_to( oarr_t* arr1, coeff_t num, oarr_t* res, dhelpl_t dhl);
+
+oarr_t oarr_mul_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+void oarr_mul_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_mul_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl);
+void oarr_mul_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_mul_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+void oarr_mul_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_mul_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl);
+void oarr_mul_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+
+oarr_t oarr_div_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+void oarr_div_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_div_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl);
+void oarr_div_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_div_Oo(oarr_t* arr1, otinum_t num, dhelpl_t dhl);
+void oarr_div_Oo_to(oarr_t* arr1, otinum_t num, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_div_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+void oarr_div_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_div_OR(oarr_t* arr1, darr_t* arr2, dhelpl_t dhl);
+void oarr_div_OR_to(oarr_t* arr1, darr_t* arr2, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_div_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl);
+void oarr_div_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+oarr_t oarr_div_Or( oarr_t* arr1, coeff_t num, dhelpl_t dhl);
+void oarr_div_Or_to( oarr_t* arr1, coeff_t num, oarr_t* res, dhelpl_t dhl);
+
+
+
+
+
+
+
+
+// base:
+
 void oarr_set_all_r( coeff_t num, oarr_t* arr, dhelpl_t dhl);
 void oarr_set_item_i_r( coeff_t num, uint64_t i, oarr_t* arr, dhelpl_t dhl);
 void oarr_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, oarr_t* arr, dhelpl_t dhl);

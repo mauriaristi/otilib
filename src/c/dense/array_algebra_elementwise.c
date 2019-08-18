@@ -1,31 +1,273 @@
 
+// oarr_t oarr_neg( oarr_t* arr1  dhelpl_t dhl);
+// void oarr_neg_to(oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+
+// oarr_t oarr_sum_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+// void oarr_sum_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_sum_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl);
+// void oarr_sum_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_sum_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+// void oarr_sum_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_sum_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl);
+// void oarr_sum_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+
+// oarr_t oarr_sub_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+// void oarr_sub_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_sub_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl);
+// void oarr_sub_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_sub_Oo(oarr_t* arr1, otinum_t num, dhelpl_t dhl);
+// void oarr_sub_Oo_to(oarr_t* arr1, otinum_t num, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_sub_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+// void oarr_sub_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_sub_OR(oarr_t* arr1, darr_t* arr2, dhelpl_t dhl);
+// void oarr_sub_OR_to(oarr_t* arr1, darr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_sub_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl);
+// void oarr_sub_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_sub_Or( oarr_t* arr1, coeff_t num, dhelpl_t dhl);
+// void oarr_sub_Or_to( oarr_t* arr1, coeff_t num, oarr_t* res, dhelpl_t dhl);
+
+// oarr_t oarr_mul_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+// void oarr_mul_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_mul_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl);
+// void oarr_mul_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_mul_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+// void oarr_mul_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_mul_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl);
+// void oarr_mul_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+
+// oarr_t oarr_div_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+// void oarr_div_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_div_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl);
+// void oarr_div_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_div_Oo(oarr_t* arr1, otinum_t num, dhelpl_t dhl);
+// void oarr_div_Oo_to(oarr_t* arr1, otinum_t num, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_div_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
+// void oarr_div_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_div_OR(oarr_t* arr1, darr_t* arr2, dhelpl_t dhl);
+// void oarr_div_OR_to(oarr_t* arr1, darr_t* arr2, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_div_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl);
+// void oarr_div_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
+// oarr_t oarr_div_Or( oarr_t* arr1, coeff_t num, dhelpl_t dhl);
+// void oarr_div_Or_to( oarr_t* arr1, coeff_t num, oarr_t* res, dhelpl_t dhl);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 // 1. Elementwise operations.
 // 1.1. Negation.
 
-// ****************************************************************************************************
-void soarr_neg(soarr_t* p_arr1, soarr_t* p_arrRes){
-       
+oarr_t oarr_neg(oarr_t* arr1   dhelpl_t dhl){ 
+
     uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
+    oarr_t res;
+
+    darr_t tmp_arr1 , tmp_arr2; // Temporal real array.
+    ord_t ordi; 
+
+
+    // Initialize global attributes.
+
+    // Array specific attributes:
+    res.ncols  = arr->ncols;
+    res.nrows  = arr->nrows;
+    res.size   = arr->size ;
+
+
+
+    // Get the number of imaginary directions for nbases and order.
+    res.ndir = arr->ndir; // Excludes the real direction.
+    // Set the values of the number first.
+    res.order  = arr->order;
+    res.nbases = arr->nbases;
+
+    tmp_arr1.ncols = res.ncols;
+    tmp_arr1.nrows = res.nrows;
+    tmp_arr1.size  = res.size ;
+
+    // Initialize real direction.
+    tmp_arr1.p_data = arr->re;
+    tmp_arr2 =  darr_neg(&tmp_arr1);
+    res.re = tmp_arr2.p_data; //  Comes newly allocated.
+    
+    if (res.order != 0){
+            
+        // Allocate memory.
+        res.p_im   = ( arr_t** ) malloc( res.order*sizeof(arr_t*) );
+        res.p_ndpo = (  ndir_t*  ) malloc( res.order*sizeof(ndir_t) );
+
+        if (res.p_im == NULL  || res.p_ndpo == NULL ){
+            printf("--- ERROR: Out of memory\n");
+            exit(OTI_OutOfMemory);
+        }
+
+        for (ordi = 0; ordi<res.order; ordi++){
+
+            res.p_ndpo[ordi] = arr->p_ndpo[ordi];
+            
+            res.p_im[ordi]   = ( arr_t* ) malloc( res.p_ndpo[ordi]*sizeof(arr_t) );
+
+
+            if ( res.p_im[ordi] == NULL ){
+                printf("--- ERROR: Out of memory\n");
+                exit(OTI_OutOfMemory);
+            }
+
+            // Initialize memory within each array.
+            for( i = 0; i < res.p_ndpo[ordi]; i++){
+
+                tmp_arr1.p_data = arr->p_im[ordi][i];
+                tmp_arr2 = darr_neg( &tmp_arr1);
+
+                res.p_im[ordi][i] = tmp_arr2.p_data;
+
+            }
+
+        }
+
+    } else {
+
+        // Set pointer to null
+        res.p_im = NULL;   
+        res.p_ndpo = NULL;     
     }
+    
+    return res;
+}
 
-    for (i=0; i<p_arr1->size; i++){
+void oarr_neg_to(oarr_t* arr1, oarr_t* res, dhelpl_t dhl){ 
 
-        soti_neg(
-            &p_arr1->p_data[i]  ,
-            &tmp);
+    uint64_t i;
 
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+    darr_t tmp_arr1, tmp_arr2; // Temporal real array.
+    ord_t ordi; 
 
+    tmp_arr1.ncols = arr->ncols;
+    tmp_arr1.nrows = arr->nrows;
+    tmp_arr1.size  = arr->size ;
+
+    tmp_arr2.ncols = arr->ncols;
+    tmp_arr2.nrows = arr->nrows;
+    tmp_arr2.size  = arr->size ;
+
+    // TODO: Check memory.
+
+    // Initialize real direction.
+    tmp_arr1.p_data = arr->re;
+    tmp_arr2.p_data = res->re;
+
+    darr_neg_to( &tmp_arr1, &tmp_arr2 );
+    
+    if (res->order != 0){
+            
+        for (ordi = 0; ordi<res->order; ordi++){
+
+            // Initialize memory within each array.
+            for( i = 0; i < res->p_ndpo[ordi]; i++){
+
+                tmp_arr1.p_data = arr->p_im[ordi][i];
+                tmp_arr2.p_data = res->p_im[ordi][i];
+
+                darr_neg_to( &tmp_arr1, &tmp_arr2 );
+
+            }
+
+        }
+
+    } else {
+
+        // Set pointer to null
+        res->p_im = NULL;   
+        res->p_ndpo = NULL;     
     }
 
 }
-// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -38,114 +280,39 @@ void soarr_neg(soarr_t* p_arr1, soarr_t* p_arrRes){
 // 1.2.2. OTI Array - Real Array.
 // 1.2.3. OTI Array - OTI Scalar.
 // 1.2.3. OTI Array - Real Scalar.
-// ****************************************************************************************************
-void soarr_matsum_otiR(soarr_t* p_arr1, darray_t* p_arr2, soarr_t* p_arrRes){
-        
-    uint64_t i;
-    sotinum_t tmp;
-    // Check correctness of dimensions:
-    if( (p_arr1->ncols!=p_arr2->ncols) || (p_arr1->nrows!=p_arr2->nrows) ){
-        printf("--- DimensionError in matrix sum ---\n");
-        exit(1);
-    }
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr2->nrows, p_arr2->ncols, p_arr1->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
-
-        soti_sumf(
-            &p_arr1->p_data[i]  ,
-             p_arr2->p_data[i]  ,
-            &tmp);
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void soarr_matsum_otioti(soarr_t* p_arr1, soarr_t* p_arr2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-    
-    uint64_t i;
-    sotinum_t tmp;
-    // Check correctness of dimensions:
-    if( (p_arr1->ncols!=p_arr2->ncols) || (p_arr1->nrows!=p_arr2->nrows) ){
-        printf("--- DimensionError in matrix sum ---\n");
-        exit(1);
-    }
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr2->nrows, p_arr2->ncols, p_arr2->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
-
-        soti_sum(
-            &p_arr1->p_data[i]  ,
-            &p_arr2->p_data[i]  ,
-            &tmp,   dhl );
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
 
 
+// oarr_t oarr_sum_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 
-// ****************************************************************************************************
-void soarr_sum_oti(soarr_t* p_arr1, sotinum_t* num2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-        
-    uint64_t i;
+// }
 
-    sotinum_t tmp;
+// void oarr_sum_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
+// }
 
-    for (i=0; i<p_arr1->size; i++){
+// oarr_t oarr_sum_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl){
 
-        soti_sum(
-            &p_arr1->p_data[i]  ,
-            num2  ,
-            &tmp,   dhl );
+// }
 
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+// void oarr_sum_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
-    }
-    
+// }
 
-}
-// ----------------------------------------------------------------------------------------------------
+// oarr_t oarr_sum_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 
+// }
 
+// void oarr_sum_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
+// }
 
-// ****************************************************************************************************
-void soarr_sum_R(soarr_t* p_arr1, double num2, soarr_t* p_arrRes){
-        
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
+// oarr_t oarr_sum_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl){
 
-        soti_sumf(
-            &p_arr1->p_data[i]  ,
-             num2  ,
-            &tmp);
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+// }
 
-    }
-    
+// void oarr_sum_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
 
 
 
@@ -199,113 +366,70 @@ void soarr_sum_R(soarr_t* p_arr1, double num2, soarr_t* p_arrRes){
 
 // 1.3. Subtraction.
 // 1.3.1. OTI Array   - OTI Array.
-// 1.3.2. OTI Array   - Real Array.
-// 1.3.3. Real Array  - OTI Array.
-// 1.3.4. OTI Array   - OTI Scalar.
-// 1.3.4. OTI Array   - Real Scalar.
 // 1.3.5. OTI Scalar  - OTI Array.
+// 1.3.4. OTI Array   - OTI Scalar.
+// 1.3.3. Real Array  - OTI Array.
+// 1.3.2. OTI Array   - Real Array.
 // 1.3.5. Real Scalar - OTI Array.
+// 1.3.4. OTI Array   - Real Scalar.
 
 
 
-// ****************************************************************************************************
-void soarr_matsub_Roti(soarr_t* p_arr1, darray_t* p_arr2, soarr_t* p_arrRes){
-        
-    uint64_t i;
-    sotinum_t tmp;
-    // Check correctness of dimensions:
-    if( (p_arr1->ncols!=p_arr2->ncols) || (p_arr1->nrows!=p_arr2->nrows) ){
-        printf("--- DimensionError in matrix sum ---\n");
-        exit(1);
-    }
-    
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr2->nrows, p_arr2->ncols, p_arr1->order);
-    }
+// oarr_t oarr_sub_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 
-    for (i=0; i<p_arr1->size; i++){
+// }
 
-        soti_fsub(
-            &p_arr1->p_data[i]  ,
-             p_arr2->p_data[i]  ,
-            &tmp);
+// void oarr_sub_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+// }
 
-    }
-    
+// oarr_t oarr_sub_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl){
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
 
+// void oarr_sub_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+// }
 
-// ****************************************************************************************************
-void soarr_matsub_otiR(soarr_t* p_arr1, darray_t* p_arr2, soarr_t* p_arrRes){
-    
-    
-    uint64_t i;
-    sotinum_t tmp;
-    // Check correctness of dimensions:
-    if( (p_arr1->ncols!=p_arr2->ncols) || (p_arr1->nrows!=p_arr2->nrows) ){
-        printf("--- DimensionError in matrix sum ---\n");
-        exit(1);
-    }
-    
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr2->nrows, p_arr2->ncols, p_arr1->order);
-    }
+// oarr_t oarr_sub_Oo(oarr_t* arr1, otinum_t num, dhelpl_t dhl){
 
-    for (i=0; i<p_arr1->size; i++){
+// }
 
-        soti_subf(
-            &p_arr1->p_data[i]  ,
-             p_arr2->p_data[i]  ,
-            &tmp);
+// void oarr_sub_Oo_to(oarr_t* arr1, otinum_t num, oarr_t* res, dhelpl_t dhl){
 
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+// }
 
-    }
-    
+// oarr_t oarr_sub_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
 
+// void oarr_sub_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
+// }
 
-// ****************************************************************************************************
-void soarr_matsub_otioti(soarr_t* p_arr1, soarr_t* p_arr2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-    
-    
-    uint64_t i;
-    sotinum_t tmp;
-    // Check correctness of dimensions:
-    if( (p_arr1->ncols!=p_arr2->ncols) || (p_arr1->nrows!=p_arr2->nrows) ){
-        printf("--- DimensionError in matrix sum ---\n");
-        exit(1);
-    }
+// oarr_t oarr_sub_OR(oarr_t* arr1, darr_t* arr2, dhelpl_t dhl){
 
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr2->nrows, p_arr2->ncols, p_arr2->order);
-    }
+// }
 
-    for (i=0; i<p_arr1->size; i++){
+// void oarr_sub_OR_to(oarr_t* arr1, darr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
-        soti_sub(
-            &p_arr1->p_data[i]  ,
-            &p_arr2->p_data[i]  ,
-            &tmp,   dhl );
+// }
 
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+// oarr_t oarr_sub_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl){
 
-    }
-    
+// }
 
-}
-// ----------------------------------------------------------------------------------------------------
+// void oarr_sub_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+// }
 
+// oarr_t oarr_sub_Or( oarr_t* arr1, coeff_t num, dhelpl_t dhl){
+
+// }
+
+// void oarr_sub_Or_to( oarr_t* arr1, coeff_t num, oarr_t* res, dhelpl_t dhl){
+
+// }
 
 
 
@@ -348,97 +472,37 @@ void soarr_matsub_otioti(soarr_t* p_arr1, soarr_t* p_arr2, soarr_t* p_arrRes,
 // 1.4.3. OTI Array - OTI Scalar.
 // 1.4.3. OTI Array - Real Scalar.
 
+// oarr_t oarr_mul_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 
-// ****************************************************************************************************
-void soarr_mul_sotiarr(soarr_t* p_arr1, soarr_t* p_arr2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-        
-    uint64_t i;
-    sotinum_t tmp;
-    // Check correctness of dimensions:
-    if( (p_arr1->ncols!=p_arr2->ncols) || (p_arr1->nrows!=p_arr2->nrows) ){
-        printf("--- DimensionError in matrix sum ---\n");
-        exit(1);
-    }
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr2->nrows, p_arr2->ncols, p_arr2->order);
-    }
+// }
 
-    for (i=0; i<p_arr1->size; i++){
+// void oarr_mul_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
-        soti_mul(
-            &p_arr1->p_data[i]  ,
-            &p_arr2->p_data[i]  ,
-            &tmp,   dhl );
+// }
 
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+// oarr_t oarr_mul_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl){
 
-    }
-    
+// }
 
-}
-// ----------------------------------------------------------------------------------------------------
+// void oarr_mul_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+// }
 
-// ****************************************************************************************************
-void soarr_mul_oti(soarr_t* p_arr1, sotinum_t* num2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
+// oarr_t oarr_mul_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 
-    // Perform: A*a
-    // A: OTI matrix.
-    // a: OTI scalar.
-        
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
-        
-        soti_mul(
-            &p_arr1->p_data[i]  ,
-             num2  ,
-            &tmp,   dhl );
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+// }
 
-    }
-    
-}
-// ----------------------------------------------------------------------------------------------------
+// void oarr_mul_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
+// }
 
+// oarr_t oarr_mul_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl){
 
-// ****************************************************************************************************
-void soarr_mul_R(soarr_t* p_arr1, double num2, soarr_t* p_arrRes){
-    
-    // Perform A*c = c*A
-    // A: OTI matrix.
-    // c: Real numeber.
+// }
 
-    uint64_t i;
-    sotinum_t tmp;
+// void oarr_mul_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
-        
-        soti_mulf(
-            &p_arr1->p_data[i]  ,
-             num2  ,
-            &tmp);
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
+// }
 
 
 
@@ -497,316 +561,61 @@ void soarr_mul_R(soarr_t* p_arr1, double num2, soarr_t* p_arrRes){
 // 1.3.5. OTI Scalar  - OTI Array.
 // 1.3.5. Real Scalar - OTI Array.
 
+// oarr_t oarr_div_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 
+// }
 
-// ****************************************************************************************************
-void soarr_oti_div(soarr_t* p_arr1, sotinum_t* num2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-    
-    
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
+// void oarr_div_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
-    for (i=0; i<p_arr1->size; i++){
+// }
 
-        soti_div(
-            num2  ,
-            &p_arr1->p_data[i]  ,
-            &tmp,   dhl );
+// oarr_t oarr_div_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl){
 
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+// }
 
-    }
-    
+// void oarr_div_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
 
+// oarr_t oarr_div_Oo(oarr_t* arr1, otinum_t num, dhelpl_t dhl){
 
+// }
 
-// ****************************************************************************************************
-void soarr_matdiv_otioti(soarr_t* p_arr1, soarr_t* p_arr2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-    
-    
-    uint64_t i;
-    sotinum_t tmp;
-    // Check correctness of dimensions:
-    if( (p_arr1->ncols!=p_arr2->ncols) || (p_arr1->nrows!=p_arr2->nrows) ){
-        printf("--- DimensionError in matrix sum ---\n");
-        exit(1);
-    }
+// void oarr_div_Oo_to(oarr_t* arr1, otinum_t num, oarr_t* res, dhelpl_t dhl){
 
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr2->nrows, p_arr2->ncols, p_arr2->order);
-    }
+// }
 
-    for (i=0; i<p_arr1->size; i++){
+// oarr_t oarr_div_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 
-        soti_div(
-            &p_arr1->p_data[i]  ,
-            &p_arr2->p_data[i]  ,
-            &tmp,   dhl );
+// }
 
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
+// void oarr_div_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
-    }
-    
+// }
 
-}
-// ----------------------------------------------------------------------------------------------------
+// oarr_t oarr_div_OR(oarr_t* arr1, darr_t* arr2, dhelpl_t dhl){
 
+// }
 
+// void oarr_div_OR_to(oarr_t* arr1, darr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
+// }
 
+// oarr_t oarr_div_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl){
 
+// }
 
+// void oarr_div_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
+// }
 
+// oarr_t oarr_div_Or( oarr_t* arr1, coeff_t num, dhelpl_t dhl){
 
+// }
 
+// void oarr_div_Or_to( oarr_t* arr1, coeff_t num, oarr_t* res, dhelpl_t dhl){
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ****************************************************************************************************
-void soarr_div_R(soarr_t* p_arr1, double num2, soarr_t* p_arrRes){
-    
-    
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-
-    for (i=0; i<p_arr1->size; i++){
-
-        soti_divf(
-            &p_arr1->p_data[i]  ,
-             num2  ,
-            &tmp);
-
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-void soarr_R_div(soarr_t* p_arr1, double num2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-   
-    
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
-
-        soti_fdiv(
-             num2 ,
-            &p_arr1->p_data[i]  ,
-            &tmp,
-            dhl);
-
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-void soarr_div_oti(soarr_t* p_arr1, sotinum_t* num2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-    
-    
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-
-    for (i=0; i<p_arr1->size; i++){
-
-        soti_div(
-            &p_arr1->p_data[i]  ,
-            num2  ,
-            &tmp,   dhl );
-
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-void soarr_oti_sub(soarr_t* p_arr1, sotinum_t* num2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-        
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
-
-        soti_sub(
-            num2  ,
-            &p_arr1->p_data[i]  ,
-            &tmp,   dhl );
-
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-// ****************************************************************************************************
-void soarr_R_sub(soarr_t* p_arr1, double num2, soarr_t* p_arrRes){
-        
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
-
-        soti_fsub(
-            &p_arr1->p_data[i]  ,
-             num2  ,
-            &tmp);
-
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-// ****************************************************************************************************
-void soarr_sub_oti(soarr_t* p_arr1, sotinum_t* num2, soarr_t* p_arrRes, 
-                        dhelpl_t dhl){
-        
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
-
-        soti_sub(
-            &p_arr1->p_data[i]  ,
-            num2  ,
-            &tmp,   dhl );
-
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-// ****************************************************************************************************
-void soarr_sub_R(soarr_t* p_arr1, double num2, soarr_t* p_arrRes){
-    
-    
-    uint64_t i;
-    sotinum_t tmp;
-    if (p_arrRes->p_data == NULL){
-        soarr_zeros( p_arrRes, p_arr1->nrows, p_arr1->ncols, p_arr1->order);
-    }
-    for (i=0; i<p_arr1->size; i++){
-
-        soti_subf(
-            &p_arr1->p_data[i]  ,
-             num2  ,
-            &tmp);
-
-        soarr_setItemOTI_indx(&tmp,i,p_arrRes);
-
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
+// }
 
 
 

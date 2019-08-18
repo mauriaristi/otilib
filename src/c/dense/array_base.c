@@ -523,7 +523,7 @@ oarr_t oarr_copy(oarr_t* arr, dhelpl_t dhl){
     uint64_t i;
     oarr_t res;
 
-    darr_t tmp_arr1,tmp_arr2; // Temporal real array.
+    darr_t tmp_arr1 , tmp_arr2; // Temporal real array.
     ord_t ordi; 
 
 
@@ -578,7 +578,7 @@ oarr_t oarr_copy(oarr_t* arr, dhelpl_t dhl){
             for( i = 0; i < res.p_ndpo[ordi]; i++){
 
                 tmp_arr1.p_data = arr->p_im[ordi][i];
-                darr_copy_to( &tmp_arr1, &tmp_arr2);
+                tmp_arr2 = darr_copy( &tmp_arr1);
 
                 res.p_im[ordi][i] = tmp_arr2.p_data;
 

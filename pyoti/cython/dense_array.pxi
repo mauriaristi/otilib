@@ -266,102 +266,174 @@ cdef class omat:
 
 
 
-  # #***************************************************************************************************
-  # def __add__(self, other):
-  #   """
-  #   PURPOSE: Addition overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __add__(self, other):
+    """
+    PURPOSE: Addition overload.
+    """
+    #*************************************************************************************************
     
-  #   cdef oarr_t res 
-  #   cdef omat lhs,rhs
+    global dhl
     
-  #   tlhs = type(self)
-  #   trhs = type(other)
+    cdef oarr_t res 
+    cdef omat lhs,rhs
+    cdef dmat dlhs,drhs
+    cdef otinum olhs,orhs
     
-  #   if (tlhs == trhs):
+    tlhs = type(self)
+    trhs = type(other)
+    
+    if (tlhs == trhs):
 
-  #     lhs = self
-  #     rhs = other
+      lhs = self
+      rhs = other
 
-  #     res = oarr_sum_RR(&lhs.arr,&rhs.arr)
+      res = oarr_sum_OO(&lhs.arr,&rhs.arr,dhl)
+
+    elif ( tlhs  == otinum ):
+
+      olhs = self
+      rhs = other
+
+      res = oarr_sum_oO(&olhs.num,&rhs.arr, dhl)
+
+    elif ( trhs  == otinum ):
+
+      lhs = self
+      orhs = other
+
+      res = oarr_sum_oO(&orhs.num,&lhs.arr, dhl)
     
-  #   elif (tlhs in number_types):
+    elif (tlhs in number_types):
       
-  #     rhs = other
-  #     res = oarr_sum_rR(self, &rhs.arr)
+      rhs = other
+      res = oarr_sum_rO(self, &rhs.arr, dhl)
 
-  #   elif (trhs in number_types):
+    elif (trhs in number_types):
         
-  #     lhs = self
-  #     res = oarr_sum_rR(other, &lhs.arr)
+      lhs = self
+      res = oarr_sum_rO(other, &lhs.arr, dhl)
 
-  #   # end if 
+    elif ( tlhs  == dmat ):
+
+      dlhs = self
+      rhs = other
+
+      res = oarr_sum_RO(&dlhs.arr,&rhs.arr, dhl)
+
+    elif ( trhs  == dmat ):
+
+      lhs = self
+      drhs = other
+
+      res = oarr_sum_RO(&drhs.arr,&lhs.arr, dhl)
+
+    else:
+
+      return NotImplemented      
+
+    # end if 
       
-  #   return omat.create(&res)
+    return omat.create(&res)
 
-  # #---------------------------------------------------------------------------------------------------  
-
-
-  # #***************************************************************************************************
-  # def __iadd__(self, other):
-  #   """
-  #   PURPOSE: Inplace addition overload.
-  #   """
-  #   #*************************************************************************************************
-
-  #   return self + other
-
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __sub__(self, other):
-  #   """
-  #   PURPOSE: Subtraction overload.
-  #   """
-  # #************************************************************************
+  #***************************************************************************************************
+  def __iadd__(self, other):
+    """
+    PURPOSE: Inplace addition overload.
+    """
+    #*************************************************************************************************
+
+    return self + other
+
+  #---------------------------------------------------------------------------------------------------  
+
+
+  #***************************************************************************************************
+  def __sub__(self, other):
+    """
+    PURPOSE: Subtraction overload.
+    """
+  #************************************************************************
     
-  #   cdef oarr_t res 
-  #   cdef omat lhs,rhs
+    global dhl
     
-  #   tlhs = type(self)
-  #   trhs = type(other)
+    cdef oarr_t res 
+    cdef omat lhs,rhs
+    cdef dmat dlhs,drhs
+    cdef otinum olhs,orhs
     
-  #   if (tlhs == trhs):
+    tlhs = type(self)
+    trhs = type(other)
+    
+    if (tlhs == trhs):
 
-  #     lhs = self
-  #     rhs = other
+      lhs = self
+      rhs = other
 
-  #     res = oarr_sub_RR(&lhs.arr,&rhs.arr)
+      res = oarr_sub_OO(&lhs.arr,&rhs.arr,dhl)
+
+    elif ( tlhs  == otinum ):
+
+      olhs = self
+      rhs = other
+
+      res = oarr_sub_oO(&olhs.num,&rhs.arr, dhl)
+
+    elif ( trhs  == otinum ):
+
+      lhs = self
+      orhs = other
+
+      res = oarr_sub_Oo(&lhs.arr, &orhs.num, dhl)
     
-  #   elif (tlhs in number_types):
+    elif (tlhs in number_types):
       
-  #     rhs = other
-  #     res = oarr_sub_rR(self, &rhs.arr)
+      rhs = other
+      res = oarr_sub_rO(self, &rhs.arr, dhl)
 
-  #   elif (trhs in number_types):
+    elif (trhs in number_types):
         
-  #     lhs = self
-  #     res = oarr_sub_Rr( &lhs.arr, other)
+      lhs = self
+      res = oarr_sub_Or(&lhs.arr, other, dhl)
 
-  #   # end if 
+    elif ( tlhs  == dmat ):
+
+      dlhs = self
+      rhs = other
+
+      res = oarr_sub_RO(&dlhs.arr,&rhs.arr, dhl)
+
+    elif ( trhs  == dmat ):
+
+      lhs = self
+      drhs = other
+
+      res = oarr_sub_OR(&lhs.arr, &drhs.arr, dhl)
+
+    else:
+
+      return NotImplemented      
+
+    # end if 
       
-  #   return omat.create(&res)
+    return omat.create(&res)
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __isub__(self, other_in):
-  #   """
-  #   PURPOSE: Inplace subtraction overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __isub__(self, other_in):
+    """
+    PURPOSE: Inplace subtraction overload.
+    """
+    #*************************************************************************************************
   
-  #   return self - other_in
+    return self - other_in
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
   # #***************************************************************************************************

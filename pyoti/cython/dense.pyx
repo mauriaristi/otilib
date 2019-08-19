@@ -21,6 +21,9 @@ from pyoti.core cimport  c_ptr_to_np_1darray_double, ZERO, ONE
 from pyoti.core cimport  c_ptr_to_np_2darray_double
 from pyoti.core cimport  get_cython_dHelp, dHelp, imdir
 
+from pyoti.real import  dmat
+from pyoti.real cimport dmat
+
 
 cdef dHelp h = get_cython_dHelp()
 cdef dhelpl_t dhl = h.dhl
@@ -453,7 +456,11 @@ cdef class otinum:
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = oti_sum_ro( self, &tmp1.num, dhl);      
+      res = oti_sum_ro( self, &tmp1.num, dhl);   
+
+    else:
+
+      return NotImplemented         
 
     # end if 
       
@@ -515,7 +522,11 @@ cdef class otinum:
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = oti_sub_ro( self, &tmp1.num, dhl);      
+      res = oti_sub_ro( self, &tmp1.num, dhl);  
+
+    else:
+
+      return NotImplemented          
 
     # end if 
       
@@ -583,6 +594,10 @@ cdef class otinum:
       tmp1 = other_in
       res = oti_mul_ro( self, &tmp1.num, dhl);       
 
+    else:
+
+      return NotImplemented      
+
     # end if 
 
     return otinum.create(&res)
@@ -647,6 +662,10 @@ cdef class otinum:
       
       tmp1 = other_in
       res = oti_div_ro( self, &tmp1.num, dhl);       
+
+    else:
+
+      return NotImplemented      
 
     # end if 
 

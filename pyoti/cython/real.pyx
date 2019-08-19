@@ -269,6 +269,10 @@ cdef class dmat:
       lhs = self
       res = darr_sum_rR(other, &lhs.arr)
 
+    else:
+
+      return NotImplemented
+
     # end if 
       
     return dmat.create(&res)
@@ -317,6 +321,10 @@ cdef class dmat:
         
       lhs = self
       res = darr_sub_Rr( &lhs.arr, other)
+
+    else:
+
+      return NotImplemented
 
     # end if 
       
@@ -367,6 +375,10 @@ cdef class dmat:
       lhs = self
       res = darr_mul_rR(other, &lhs.arr)
 
+    else:
+
+      return NotImplemented
+
     # end if 
       
     return dmat.create(&res)
@@ -416,6 +428,10 @@ cdef class dmat:
         
       lhs = self
       res = darr_div_Rr( &lhs.arr, other)
+
+    else:
+
+      return NotImplemented
 
     # end if 
       

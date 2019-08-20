@@ -436,92 +436,180 @@ cdef class omat:
   #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __mul__(self, other):
-  #   """ 
-  #   PURPOSE: Multiplication overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __mul__(self, other):
+    """ 
+    PURPOSE: Multiplication overload.
+    """
+    #*************************************************************************************************
     
-  #   cdef oarr_t res 
-  #   cdef omat lhs,rhs
+    global dhl
     
-  #   tlhs = type(self)
-  #   trhs = type(other)
+    cdef oarr_t res 
+    cdef omat lhs,rhs
+    cdef dmat dlhs,drhs
+    cdef otinum olhs,orhs
     
-  #   if (tlhs == trhs):
+    tlhs = type(self)
+    trhs = type(other)
+    
+    if (tlhs == trhs):
 
-  #     lhs = self
-  #     rhs = other
+      # lhs = self
+      # rhs = other
 
-  #     res = oarr_mul_RR(&lhs.arr,&rhs.arr)
+      # res = oarr_mul_OO(&lhs.arr,&rhs.arr,dhl)
+
+      return NotImplemented
+
+    elif ( tlhs  == otinum ):
+
+      # olhs = self
+      # rhs = other
+
+      # res = oarr_mul_oO(&olhs.num,&rhs.arr, dhl)
+
+      return NotImplemented
+
+    elif ( trhs  == otinum ):
+
+      # lhs = self
+      # orhs = other
+
+      # res = oarr_mul_oO(&orhs.num,&lhs.arr, dhl)
+
+      return NotImplemented
     
-  #   elif (tlhs in number_types):
+    elif (tlhs in number_types):
       
-  #     rhs = other
-  #     res = oarr_mul_rR(self, &rhs.arr)
+      rhs = other
+      res = oarr_mul_rO(self, &rhs.arr, dhl)
 
-  #   elif (trhs in number_types):
+    elif (trhs in number_types):
         
-  #     lhs = self
-  #     res = oarr_mul_rR(other, &lhs.arr)
+      lhs = self
+      res = oarr_mul_rO(other, &lhs.arr, dhl)
 
-  #   # end if 
+    elif ( tlhs  == dmat ):
+
+      dlhs = self
+      rhs = other
+
+      res = oarr_mul_RO(&dlhs.arr,&rhs.arr, dhl)
+
+    elif ( trhs  == dmat ):
+
+      lhs = self
+      drhs = other
+
+      res = oarr_mul_RO(&drhs.arr,&lhs.arr, dhl)
+
+    else:
+
+      return NotImplemented      
+
+    # end if 
       
-  #   return omat.create(&res)
+    return omat.create(&res)
+
     
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __imul__(self, other_in):
-  #   """
-  #   PURPOSE: Inplace multiplication overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __imul__(self, other_in):
+    """
+    PURPOSE: Inplace multiplication overload.
+    """
+    #*************************************************************************************************
 
-  #   return self * other_in
+    return self * other_in
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __truediv__(self, other):
-  #   """
-  #   PURPOSE: Division overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __truediv__(self, other):
+    """
+    PURPOSE: Division overload.
+    """
+    #*************************************************************************************************
     
-  #   cdef oarr_t res 
-  #   cdef omat lhs,rhs
+    global dhl
     
-  #   tlhs = type(self)
-  #   trhs = type(other)
+    cdef oarr_t res 
+    cdef omat lhs,rhs
+    cdef dmat dlhs,drhs
+    cdef otinum olhs,orhs
     
-  #   if (tlhs == trhs):
+    tlhs = type(self)
+    trhs = type(other)
+    
+    if (tlhs == trhs):
 
-  #     lhs = self
-  #     rhs = other
+      # lhs = self
+      # rhs = other
 
-  #     res = oarr_div_RR(&lhs.arr,&rhs.arr)
+      # res = oarr_div_OO(&lhs.arr,&rhs.arr,dhl)
+
+      return NotImplemented
+
+    elif ( tlhs  == otinum ):
+
+      # olhs = self
+      # rhs = other
+
+      # res = oarr_div_oO(&olhs.num,&rhs.arr, dhl)
+
+      return NotImplemented
+
+    elif ( trhs  == otinum ):
+
+      # lhs = self
+      # orhs = other
+
+      # res = oarr_div_oO(&orhs.num,&lhs.arr, dhl)
+
+      return NotImplemented
     
-  #   elif (tlhs in number_types):
+    elif (tlhs in number_types):
       
-  #     rhs = other
-  #     res = oarr_div_rR(self, &rhs.arr)
+      # rhs = other
+      # res = oarr_div_rO(self, &rhs.arr, dhl)
 
-  #   elif (trhs in number_types):
+      return NotImplemented      
+
+    elif (trhs in number_types):
         
-  #     lhs = self
-  #     res = oarr_div_Rr( &lhs.arr, other)
+      lhs = self
+      res = oarr_div_Or(&lhs.arr, other, dhl)
 
-  #   # end if 
-      
-  #   return omat.create(&res)
+    elif ( tlhs  == dmat ):
 
+      # dlhs = self
+      # rhs = other
 
-  # #---------------------------------------------------------------------------------------------------  
+      # res = oarr_div_RO(&dlhs.arr,&rhs.arr, dhl)
+
+      return NotImplemented      
+
+    elif ( trhs  == dmat ):
+
+      lhs = self
+      drhs = other
+
+      res = oarr_div_OR(&lhs.arr, &drhs.arr, dhl)
+
+    else:
+
+      return NotImplemented      
+
+    # end if 
+
+    return omat.create(&res)
+
+  #---------------------------------------------------------------------------------------------------  
 
   # #***************************************************************************************************
   # cpdef np.ndarray[double, ndim=2] to_numpy(self):

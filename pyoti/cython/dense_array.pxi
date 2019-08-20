@@ -455,30 +455,24 @@ cdef class omat:
     
     if (tlhs == trhs):
 
-      # lhs = self
-      # rhs = other
+      lhs = self
+      rhs = other
 
-      # res = oarr_mul_OO(&lhs.arr,&rhs.arr,dhl)
-
-      return NotImplemented
+      res = oarr_mul_OO(&lhs.arr,&rhs.arr,dhl)
 
     elif ( tlhs  == otinum ):
 
-      # olhs = self
-      # rhs = other
+      olhs = self
+      rhs = other
 
-      # res = oarr_mul_oO(&olhs.num,&rhs.arr, dhl)
-
-      return NotImplemented
+      res = oarr_mul_oO(&olhs.num,&rhs.arr, dhl)
 
     elif ( trhs  == otinum ):
 
-      # lhs = self
-      # orhs = other
+      lhs = self
+      orhs = other
 
-      # res = oarr_mul_oO(&orhs.num,&lhs.arr, dhl)
-
-      return NotImplemented
+      res = oarr_mul_oO(&orhs.num,&lhs.arr, dhl)
     
     elif (tlhs in number_types):
       

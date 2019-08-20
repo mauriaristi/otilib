@@ -325,6 +325,17 @@ coeff_t darr_det( darr_t* arr1 );
 
 
 
+// Self operations.
+void darr_self_neg( darr_t* res);
+void darr_self_sum_R(darr_t* arr1, darr_t* res);
+void darr_self_sum_r(coeff_t num, darr_t* res);
+void darr_self_sub_R(darr_t* arr1, darr_t* res);
+void darr_self_sub_r(coeff_t num, darr_t* res);
+void darr_self_mul_R(darr_t* arr1, darr_t* res);
+void darr_self_mul_r(coeff_t num, darr_t* aRes);
+
+
+
 /**************************************************************************************************//**
 @brief Negate an array. 
 
@@ -365,6 +376,9 @@ darr_t darr_mul_rR(coeff_t num, darr_t* arr1);
 
 void darr_mul_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes);
 void darr_mul_rR_to(coeff_t num, darr_t* arr1, darr_t* aRes);
+
+void darr_mul_and_selfsum_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes);
+void darr_mul_and_selfsum_rR_to(coeff_t num, darr_t* arr2, darr_t* aRes);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -457,6 +471,15 @@ darr_t darr_ones( uint64_t nrows, uint64_t ncols);
 @param[in] shapey: Number of elements in the second dimension.
 ******************************************************************************************************/ 
 darr_t darr_zeros( uint64_t nrows, uint64_t ncols);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief C-level memory allocation of a real array creating an identity matrix.
+
+@param[inout] p_array: Address of the array.
+@param[in] size: Number of elements.
+******************************************************************************************************/ 
+darr_t darr_eye( uint64_t size);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

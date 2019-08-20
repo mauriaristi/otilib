@@ -160,6 +160,27 @@ darr_t darr_zeros( uint64_t nrows, uint64_t ncols){
 
 
 // ****************************************************************************************************
+darr_t darr_eye( uint64_t size){
+    
+    darr_t arr = darr_zeros( size, size);
+    coeff_t value = 1.0;
+
+    
+
+    // Set 0 to all elements.
+    for (uint64_t i = 0; i<size; i++){
+
+        arr.p_data[ i + size*i ] = value;   
+        
+    }
+
+    return arr;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
 darr_t darr_ones( uint64_t nrows, uint64_t ncols){
     
     darr_t arr;

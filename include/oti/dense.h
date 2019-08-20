@@ -55,7 +55,12 @@ typedef struct {
 
 // ARRAY
 
+oarr_t oarr_feval(darr_t* feval_re, oarr_t* arr, dhelpl_t dhl );
+void oarr_feval_to(darr_t* feval_re, oarr_t* arr, oarr_t* res, dhelpl_t dhl );
 
+void oarr_trc_self_mul_r( darr_t* a, ord_t ord, oarr_t* res, dhelpl_t dhl);
+void oarr_trc_self_sum(oarr_t* arr, ord_t ord, oarr_t* res, dhelpl_t dhl );
+void oarr_trc_mul( oarr_t* arr1, ord_t ord1, oarr_t* arr2, ord_t ord2, oarr_t* res, dhelpl_t dhl );
 
 // Algebra operations.
 
@@ -95,7 +100,7 @@ void oarr_mul_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
 oarr_t oarr_mul_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl);
 void oarr_mul_rO_to(coeff_t num,  oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
 
-void darr_mul_and_selfsum_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes);
+
 
 oarr_t oarr_div_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl);
 void oarr_div_OO_to(oarr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl);
@@ -114,9 +119,18 @@ void oarr_div_Or_to( oarr_t* arr1, coeff_t num, oarr_t* res, dhelpl_t dhl);
 
 
 
+// Helper:
+void dhelp_oarr_mul_RI(oarr_t* lhs, oarr_t* rhs, ord_t ord_rhs, oarr_t* res, dhelpl_t dhl );
+void dhelp_oarr_mul_RR(oarr_t* lhs, oarr_t* rhs, oarr_t* res, dhelpl_t dhl);
+void dhelp_oarr_mul_II(oarr_t* lhs, ord_t ord_lhs, oarr_t* rhs, ord_t ord_rhs, oarr_t* res, dhelpl_t dhl);
+
+void dhelp_oarr_mul_rR(otinum_t* lhs, oarr_t* rhs, oarr_t* res, dhelpl_t dhl);
+void dhelp_oarr_mul_rI(otinum_t* lhs, oarr_t* rhs, ord_t ord_rhs, oarr_t* res, dhelpl_t dhl );
+void dhelp_oarr_mul_Ri(oarr_t* lhs, otinum_t* rhs, ord_t ord_rhs, oarr_t* res, dhelpl_t dhl );
+void dhelp_oarr_mul_iI(otinum_t* lhs, ord_t ord_lhs, oarr_t* rhs, ord_t ord_rhs, oarr_t* res, dhelpl_t dhl);
 
 
-
+void oarr_trunc_mul( oarr_t* arr1, ord_t ord1, oarr_t* arr2, ord_t ord2, oarr_t* res, dhelpl_t dhl );
 
 
 // base:
@@ -139,6 +153,7 @@ oarr_t oarr_copy(oarr_t* arr, dhelpl_t dhl);
 
 oarr_t oarr_ones(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
 oarr_t oarr_zeros(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
+oarr_t oarr_eye(uint64_t size, bases_t nbases, ord_t order, dhelpl_t dhl);
 
 void oarr_free(oarr_t* arr);
 oarr_t oarr_createEmpty( uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);

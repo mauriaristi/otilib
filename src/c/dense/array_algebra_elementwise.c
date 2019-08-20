@@ -418,11 +418,11 @@ oarr_t oarr_sum_oO(otinum_t* num, oarr_t* arr, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 
-// ****************************************************************************************************
+// // ****************************************************************************************************
 // void oarr_sum_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // }
-// ----------------------------------------------------------------------------------------------------
+// // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
@@ -1297,51 +1297,38 @@ oarr_t oarr_sub_Or( oarr_t* arr2, coeff_t num, dhelpl_t dhl){
 
 oarr_t oarr_mul_OO(oarr_t* lhs, oarr_t* rhs, dhelpl_t dhl){
 
-    uint64_t i;
     oarr_t res = oarr_zeros(lhs->nrows, lhs->ncols,  lhs->nbases, lhs->order, dhl);    
+
+    ord_t ord_res, ord_mul1;
     
-    
+    // First multiply both real parts.
+
     // lhs real part times rhs real part.
-    res.re = num1->re * num2->re;
+    dhelp_oarr_mul_RR(lhs, rhs, &res, dhl);
 
     // Loop to get each resulting order.
+
     for (  ord_res = 1; ord_res <= res.order; ord_res++){
 
         // Multiply  lhs(re) x rhs(ord_res)
-        dhelp_dense_mult_real(num2->p_im[ord_res-1],num2->p_ndpo[ord_res-1],
-            num1->re,
-            res.p_im[ord_res-1],res.p_ndpo[ord_res-1],
-            dhl);
+        dhelp_oarr_mul_RI( lhs, rhs, ord_res, &res, dhl);
 
         // Multiply  lhs(ord_res) x rhs(re)
-        dhelp_dense_mult_real(num1->p_im[ord_res-1],num1->p_ndpo[ord_res-1],
-            num2->re,
-            res.p_im[ord_res-1],res.p_ndpo[ord_res-1],
-            dhl);
+        dhelp_oarr_mul_RI( rhs, lhs, ord_res, &res, dhl);
 
-        // Loop for every combination of orders such that the resulting order is
-        // ord_res.
+
+        // Loop for every combination of orders such that the resulting order is ord_res.
         for ( ord_mul1 = 1; ord_mul1 <= ord_res/2; ord_mul1++){
 
             ord_t ord_mul2 = ord_res - ord_mul1;
-            
 
-            dhelp_dense_mult( num1->p_im[ord_mul1-1], num1->p_ndpo[ord_mul1-1], ord_mul1, 
-                      num2->p_im[ord_mul2-1], num2->p_ndpo[ord_mul2-1], ord_mul2,
-                      res.p_im[ord_res-1], res.p_ndpo[ord_res]-1,
-                      dhl);
-            
+            dhelp_oarr_mul_II(lhs, ord_mul1, rhs, ord_mul2, &res, dhl);
+
             // In the case that the orders are the same, the operation is not the same.
             // It might be different in the case of matmul.
-
             if (ord_mul1 != ord_mul2){
-                
-                // printf("Multiplying %hhu X %hhu\n",ord_mul2,ord_mul1);                
 
-                dhelp_dense_mult( num1->p_im[ord_mul2-1], num1->p_ndpo[ord_mul2-1], ord_mul2, 
-                          num2->p_im[ord_mul1-1], num2->p_ndpo[ord_mul1-1], ord_mul1,
-                          res.p_im[ord_res-1], res.p_ndpo[ord_res]-1,
-                          dhl);
+                dhelp_oarr_mul_II(rhs, ord_mul1, lhs, ord_mul2, &res, dhl);
 
             }  
 
@@ -1358,11 +1345,52 @@ oarr_t oarr_mul_OO(oarr_t* lhs, oarr_t* rhs, dhelpl_t dhl){
 
 // }
 
-// oarr_t oarr_mul_oO(otinum_t num, oarr_t* arr1, dhelpl_t dhl){
+oarr_t oarr_mul_oO(otinum_t* lhs, oarr_t* rhs, dhelpl_t dhl){
 
-// }
+    oarr_t res = oarr_zeros(rhs->nrows, rhs->ncols,  rhs->nbases, rhs->order, dhl);    
 
-// void oarr_mul_oO_to(otinum_t num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+    ord_t ord_res, ord_mul1;
+    
+    // First multiply both real parts.
+
+    // lhs real part times rhs real part.
+    dhelp_oarr_mul_rR(lhs, rhs, &res, dhl);
+
+    // Loop to get each resulting order.
+
+    for (  ord_res = 1; ord_res <= res.order; ord_res++){
+
+        // Multiply  lhs(re) x rhs(ord_res)
+        dhelp_oarr_mul_rI( lhs, rhs, ord_res, &res, dhl);
+
+        // Multiply  lhs(ord_res) x rhs(re)
+        dhelp_oarr_mul_Ri( rhs, lhs, ord_res, &res, dhl);
+
+
+        // Loop for every combination of orders such that the resulting order is ord_res.
+        for ( ord_mul1 = 1; ord_mul1 <= ord_res/2; ord_mul1++){
+
+            ord_t ord_mul2 = ord_res - ord_mul1;
+
+            dhelp_oarr_mul_iI(lhs, ord_mul1, rhs, ord_mul2, &res, dhl);
+
+            // In the case that the orders are the same, the operation is not the same.
+            // It might be different in the case of matmul.
+            if (ord_mul1 != ord_mul2){
+
+                dhelp_oarr_mul_iI(lhs, ord_mul2, rhs, ord_mul1, &res, dhl);
+
+            }  
+
+        }        
+
+    }
+
+    return res;
+
+}
+
+// void oarr_mul_oO_to(otinum_t* num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
 // }
 
@@ -1605,11 +1633,11 @@ oarr_t oarr_mul_rO(coeff_t num,  oarr_t* arr1, dhelpl_t dhl){
 
 // }
 
-// oarr_t oarr_div_Oo(oarr_t* arr1, otinum_t num, dhelpl_t dhl){
+// oarr_t oarr_div_Oo(oarr_t* arr1, otinum_t* num, dhelpl_t dhl){
 
 // }
 
-// void oarr_div_Oo_to(oarr_t* arr1, otinum_t num, oarr_t* res, dhelpl_t dhl){
+// void oarr_div_Oo_to(oarr_t* arr1, otinum_t* num, oarr_t* res, dhelpl_t dhl){
 
 // }
 
@@ -1797,6 +1825,156 @@ oarr_t oarr_div_Or( oarr_t* arr1, coeff_t num, dhelpl_t dhl){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Function Evaluation.
+
+// ****************************************************************************************************
+oarr_t oarr_feval(darr_t* feval_re, oarr_t* arr, dhelpl_t dhl ){
+    
+    ord_t i;
+
+    coeff_t factor = 1.0;
+    darr_t val = darr_zeros( arr->nrows, arr->ncols );
+
+    darr_t tmp_arr;
+
+    tmp_arr.ncols = arr->ncols;
+    tmp_arr.nrows = arr->nrows;
+    tmp_arr.size  = arr->size ;
+    
+    oarr_t res  = oarr_zeros(arr->nrows, arr->ncols, arr->nbases, arr->order, dhl);
+    
+    // Create temporal arrays.
+    oarr_t tmp1  = oarr_zeros(arr->nrows, arr->ncols, arr->nbases, arr->order, dhl);
+    oarr_t tmp2  = oarr_zeros(arr->nrows, arr->ncols, arr->nbases, arr->order, dhl);
+
+    oarr_copy_to( arr, &tmp2, dhl);
+    
+
+    // Set real value of result.
+
+    
+    tmp_arr.p_data = res.re;
+    darr_copy_to( &feval_re[0] , &tmp_arr); 
+
+    for ( i = 1; i < arr->order; i++){
+
+        factor *= i;
+
+        // val = feval_re[i]/factor;
+        darr_div_Rr_to(&feval_re[i],factor,&val);
+        
+        oarr_copy_to(&tmp2 , &tmp1, dhl);
+        oarr_trc_self_mul_r( &val, i, &tmp2, dhl);
+        oarr_trc_self_sum( &tmp2, i, &res, dhl );
+        
+        // update
+        oarr_set_all_r( 0.0, &tmp2, dhl);
+        oarr_trc_mul(&tmp1, i, &res, 1, &tmp2, dhl );
+        oarr_copy_to(&tmp2 , &tmp1, dhl);
+
+    }
+
+    for (; i <= arr->order; i++){
+
+        factor *= i;
+
+        // val = feval_re[i]/factor;
+        darr_div_Rr_to(&feval_re[i],factor,&val);
+        
+        oarr_copy_to(&tmp2 , &tmp1, dhl);
+        oarr_trc_self_mul_r( &val, i, &tmp2, dhl);
+        oarr_trc_self_sum( &tmp2, i, &res, dhl );
+
+    }
+
+    // Free temporals
+    oarr_free(&tmp1); oarr_free(&tmp2); darr_free(&val);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void oarr_feval_to(darr_t* feval_re, oarr_t* arr, oarr_t* res, dhelpl_t dhl ){
+    
+    ord_t i;
+
+    coeff_t factor = 1.0;
+    darr_t val = darr_zeros( arr->nrows, arr->ncols );
+
+    darr_t tmp_arr;
+
+    tmp_arr.ncols = arr->ncols;
+    tmp_arr.nrows = arr->nrows;
+    tmp_arr.size  = arr->size ;
+    
+    oarr_set_all_r( 0.0, res, dhl);
+    
+    // Create temporal arrays.
+    oarr_t tmp1  = oarr_zeros(arr->nrows, arr->ncols, arr->nbases, arr->order, dhl);
+    oarr_t tmp2  = oarr_zeros(arr->nrows, arr->ncols, arr->nbases, arr->order, dhl);
+
+    oarr_copy_to( arr, &tmp2, dhl);
+    
+    // Set real value of result.
+    
+    tmp_arr.p_data = res->re;
+    darr_copy_to( &feval_re[0] , &tmp_arr); 
+
+    for ( i = 1; i < arr->order; i++){
+
+        factor *= i;
+
+        // val = feval_re[i]/factor;
+        darr_div_Rr_to(&feval_re[i],factor,&val);
+        
+        oarr_copy_to(&tmp2 , &tmp1, dhl);
+        oarr_trc_self_mul_r( &val, i, &tmp2, dhl);
+        oarr_trc_self_sum( &tmp2, i, res, dhl );
+        
+        // update
+        oarr_set_all_r( 0.0, &tmp2, dhl);
+        oarr_trc_mul(&tmp1, i, res, 1, &tmp2, dhl );
+        oarr_copy_to(&tmp2 , &tmp1, dhl);
+
+    }
+
+    for (; i <= arr->order; i++){
+
+        factor *= i;
+
+        // val = feval_re[i]/factor;
+        darr_div_Rr_to(&feval_re[i],factor,&val);
+        
+        oarr_copy_to(&tmp2 , &tmp1, dhl);
+        oarr_trc_self_mul_r( &val, i, &tmp2, dhl);
+        oarr_trc_self_sum( &tmp2, i, res, dhl );
+
+    }
+
+    // Free temporals
+    oarr_free(&tmp1); oarr_free(&tmp2); darr_free(&val);
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

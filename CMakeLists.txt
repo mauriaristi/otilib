@@ -25,12 +25,12 @@ include( copyfiles )
 # Uncomment this for macOS
 if(APPLE)
 	# This is for the case of apple macOS
-	set(CMAKE_C_COMPILER "/usr/bin/clang")
-  set(CYTHON_CMD_CALL_PREC "CC=gcc")
+	# set(CMAKE_C_COMPILER "/usr/bin/clang")
+  # set(CYTHON_CMD_CALL_PREC "CC=gcc")
   # set(CMAKE_C_COMPILER "gcc-8")
   # set(CYTHON_CMD_CALL_PREC "CC=gcc-8")
-  # set(CMAKE_C_COMPILER "icc")
-  # set(CYTHON_CMD_CALL_PREC "CC=icc")
+  set(CMAKE_C_COMPILER "icc")
+  set(CYTHON_CMD_CALL_PREC "CC=icc")
 elseif(UNIX)
 	# This is for the case of unix OS
 	set(CMAKE_C_COMPILER "/usr/bin/gcc")
@@ -46,7 +46,7 @@ set (OTI_LIBRARY_VERSION_MINOR 0)
 
 set(CMAKE_BUILD_TYPE RELEASE)
 set(CMAKE_C_FLAGS_DEBUG "-g")
-set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall")
+set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall -std=c99")
  
 
 # should we do the Cython part too?
@@ -86,3 +86,4 @@ option (GENERATE_FORTRAN
 add_subdirectory (src "${PROJECT_BINARY_DIR}/lib")
 
 
+# 

@@ -31,8 +31,12 @@
 #SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
 
 # To compile with linux uncomment the following line
-SET(GCC_COVERAGE_COMPILE_FLAGS "-g -fwrapv -O3 -Wall -Wstrict-prototypes")
+SET(GCC_COVERAGE_COMPILE_FLAGS "-g -fwrapv -O3 -Wall -Wstrict-prototypes ")
+SET(GCC_COVERAGE_LINK_FLAGS "")
+
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
 

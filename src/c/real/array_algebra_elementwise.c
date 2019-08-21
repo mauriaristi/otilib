@@ -72,6 +72,7 @@ darr_t darr_sum_RR(darr_t* arr1, darr_t* arr2){
     darr_t aRes = darr_copy(arr1);
     int64_t i;
 
+    
     for (i = 0; i < arr1->size; i++){
 
         aRes.p_data[i] += arr2->p_data[i];

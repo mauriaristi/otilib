@@ -22,62 +22,82 @@ except:
 os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@"
 os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@"
 
+
+libraries          = ['oti']
+include_dirs       = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]
+extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"]
+extra_link_args    = ['-fopenmp']
+macros             = [("CYTHON_TRACE_NOGIL","1")]
+language           = "c"
+dependencies       = ["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
+
 extensions = [ \
 Extension("pyoti.core",
 	sources = ["@CYTHON_SOUCE_DIR@/core.pyx"],
-	include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
-  define_macros = [("CYTHON_TRACE_NOGIL","1")],
-  libraries = ['oti'],
-  # language = "c++",
-  extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@"],
-  depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
+	include_dirs = include_dirs,
+  define_macros = macros,
+  libraries = libraries,
+  language = language,
+  extra_compile_args = extra_compile_args,
+  extra_link_args = extra_link_args,
+  depends=dependencies
   ),
-
+#
 Extension("pyoti.real",
   sources = ["@CYTHON_SOUCE_DIR@/real.pyx"],
-  include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
-  define_macros = [("CYTHON_TRACE_NOGIL","1")],
-  libraries = ['oti'],
-  # language = "c++",
-  extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"],
-  depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
+  include_dirs = include_dirs,
+  define_macros = macros,
+  libraries = libraries,
+  language = language,
+  extra_compile_args = extra_compile_args,
+  extra_link_args = extra_link_args,
+  depends=dependencies
   ),
-
+#
 Extension("pyoti.dense",
 	sources = ["@CYTHON_SOUCE_DIR@/dense.pyx"],
-	include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
-  define_macros = [("CYTHON_TRACE_NOGIL","1")],
-  libraries = ['oti'],
-  # language = "c++",
-  extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"],
-  depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
+	include_dirs = include_dirs,
+  define_macros = macros,
+  libraries = libraries,
+  language = language,
+  extra_compile_args = extra_compile_args,
+  extra_link_args = extra_link_args,
+  depends=dependencies
   ),
-
+#
 # Extension("pyoti.ndarray",
 #   sources = ["@CYTHON_SOUCE_DIR@/ndarray.pyx"],
-#   include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
-#   define_macros = [("CYTHON_TRACE_NOGIL","1")],
-#   libraries = ['oti'],
-#   extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@"],
-#   depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]),
-
+#   include_dirs = include_dirs,
+#   define_macros = macros,
+#   libraries = libraries,
+#   language = language,
+#   extra_compile_args = extra_compile_args,
+#   extra_link_args = extra_link_args,
+#   depends=dependencies
+#   ),
+# #
 # Extension("pyoti.otimat",
 #   sources = ["@CYTHON_SOUCE_DIR@/otimat.pyx"],
-#   include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
-#   define_macros = [("CYTHON_TRACE_NOGIL","1")],
-#   libraries = ['oti'],
-#   extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@"],
-#   depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]),
-
-Extension("pyoti.sparse",
-  sources = ["@CYTHON_SOUCE_DIR@/sparse.pyx"],
-  include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
-  define_macros = [("CYTHON_TRACE_NOGIL","1")],
-  libraries = ['oti'],
-  # language = "c++",
-  extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"],
-  depends=["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
-  ),
+#   include_dirs = include_dirs,
+#   define_macros = macros,
+#   libraries = libraries,
+#   language = language,
+#   extra_compile_args = extra_compile_args,
+#   extra_link_args = extra_link_args,
+#   depends=dependencies
+#   ),  
+# #
+# Extension("pyoti.sparse",
+#   sources = ["@CYTHON_SOUCE_DIR@/sparse.pyx"],
+#   include_dirs = include_dirs,
+#   define_macros = macros,
+#   libraries = libraries,
+#   language = language,
+#   extra_compile_args = extra_compile_args,
+#   extra_link_args = extra_link_args,
+#   depends=dependencies
+#   ),
+# #
 # Extension("pyoti.sndarray",
 #   sources = ["@CYTHON_SOUCE_DIR@/sndarray.pyx"],
 #   include_dirs = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"],
@@ -94,12 +114,16 @@ setup(
   packages=["pyoti"],
   author = "Mauricio Aristizabal Cano",
   version = "1.0",
-  # ext_modules  = cythonize('@PROJECT_SOURCE_DIR@/src/cython/*.pyx',   include_path=["@PROJECT_SOURCE_DIR@/include/"]),
   ext_modules = cythonize(extensions, 
-    # include_path=["@CYTHONIZE_INCLUDE_DIR@","@DUTILS_ECARG2@"],
     include_path=["@CYTHONIZE_INCLUDE_DIR@"],
     # build_dir="@CYTHONIZE_BUILD_DIR@"
     ),
   # zip_safe    = False, # Only in case of Setuptools
 )
+
+
 # python3 setup.py build_ext -i #(If building inplace) 
+
+
+
+

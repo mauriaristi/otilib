@@ -58,10 +58,10 @@ void darr_matmul_to(darr_t* arr1, darr_t* arr2, darr_t* aRes ){
     coeff_t tmp1;
 
     // Check correctness of dimensions:
-    if( (arr1->ncols != arr2->nrows) ){
-        printf("--- DimensionError in matrix sum ---\n");
-        exit(1);
-    }
+    // if( (arr1->ncols != arr2->nrows) ){
+    //     printf("--- DimensionError in matrix sum ---\n");
+    //     exit(1);
+    // }
     // if (aRes->p_data == NULL){
     //     soarr_zeros( aRes, arr1->nrows, arr2->ncols, arr2->order);
     // }
@@ -87,6 +87,32 @@ void darr_matmul_to(darr_t* arr1, darr_t* arr2, darr_t* aRes ){
 // ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+void darr_matmul_and_selfsum_RR_to(darr_t* arr1, darr_t* arr2, darr_t* res ){
+
+    uint64_t i, j, k;
+    coeff_t tmp1;
+
+    for (i = 0; i<arr1->nrows; i++){
+        
+        for(j = 0; j<arr2->ncols; j++){
+                
+            tmp1 = 0;
+
+            for(k=0; k<arr1->ncols; k++){
+
+                tmp1 += arr1->p_data[k+i*arr1->ncols] * arr2->p_data[j+k*arr2->ncols];
+
+            }
+
+            res->p_data[ j + i * res->ncols] += tmp1;
+
+        }
+
+    }    
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

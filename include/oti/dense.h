@@ -51,9 +51,15 @@ typedef struct {
 
 
 
-
-
+void dhelp_oarr_matmul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
+                       oarr_t* rhs, ord_t ord_rhs, // Input 2
+                       oarr_t* res, dhelpl_t dhl);
+void dhelp_oarr_matmul_IR(oarr_t* lhs, oarr_t* rhs, ord_t ord_rhs, oarr_t* res, dhelpl_t dhl );
+void dhelp_oarr_matmul_RI(oarr_t* lhs, oarr_t* rhs, ord_t ord_rhs, oarr_t* res, dhelpl_t dhl );
+void dhelp_oarr_matmul_RR(oarr_t* lhs, oarr_t* rhs, oarr_t* res, dhelpl_t dhl);
 // ARRAY
+
+
 
 oarr_t oarr_feval(darr_t* feval_re, oarr_t* arr, dhelpl_t dhl );
 void oarr_feval_to(darr_t* feval_re, oarr_t* arr, oarr_t* res, dhelpl_t dhl );

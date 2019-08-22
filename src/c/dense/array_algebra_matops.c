@@ -6,51 +6,47 @@
 // 2.1. Inner product.
 // 2.1.1. OTI Array   - OTI Array.
 // ****************************************************************************************************
-void oarr_matmul_OO(oarr_t* arr1, oarr_t* arr2, oarr_t* aRes, 
-                        dhelpl_t dhl){
+oarr_t oarr_matmul_OO(oarr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 
-    uint64_t i, j, k;
-    otinum_t tmp1, tmp2, tmp3;
+    oarr_t res = oarr_zeros(lhs->nrows, lhs->ncols,  lhs->nbases, lhs->order, dhl);    
 
-    // Check correctness of dimensions:
-    if( (arr1->ncols!=arr2->nrows) ){
-        printf("--- DimensionError in matrix sum ---\n");
-        exit(1);
-    }
-    if (aRes->p_data == NULL){
-        oarr_zeros( aRes, arr1->nrows, arr2->ncols, arr2->order);
-    }
-    for (i=0; i<arr1->nrows; i++){
-        
-        for(j=0; j<arr2->ncols; j++){
-                
+    ord_t ord_res, ord_mul1;
+    
+    // First multiply both real parts.
 
-            oti_createEmpty(&tmp1, 0, arr2->order);
+    // lhs real part times rhs real part.
+    dhelp_oarr_matmul_RR(lhs, rhs, &res, dhl);
 
-            for(k=0; k<arr1->ncols; k++){
+    // Loop to get each resulting order.
+    for (  ord_res = 1; ord_res <= res.order; ord_res++){
 
-                oti_mul(
-                    &arr1->p_data[k+i*arr1->ncols]  ,
-                    &arr2->p_data[j+k*arr2->ncols]  ,
-                    &tmp3,   dhl );
+        // Multiply  lhs(re) x rhs(ord_res)
+        dhelp_oarr_matmul_RI( lhs, rhs, ord_res, &res, dhl);
 
-                tmp2 = tmp1; // Copy all information between elements
-                
-                // Sum
-                oti_sum(&tmp2,&tmp3,&tmp1,dhl);
+        // Multiply  lhs(ord_res) x rhs(re)
+        dhelp_oarr_matmul_IR( lhs, rhs, ord_res, &res, dhl);
 
-                // Free memory ...
-                oti_free(&tmp2);
-                oti_free(&tmp3);
+        // Loop for every combination of orders such that the resulting order is ord_res.
+        for ( ord_mul1 = 1; ord_mul1 <= ord_res/2; ord_mul1++){
 
-            }
+            ord_t ord_mul2 = ord_res - ord_mul1;
 
-            oarr_setItemOTI( &tmp1, i, j, aRes);
+            dhelp_oarr_matmul_II(lhs, ord_mul1, rhs, ord_mul2, &res, dhl);
+
+            // In the case that the orders are the same, the operation is not the same.
+            // It might be different in the case of matmul.
+            if (ord_mul1 != ord_mul2){
+
+                dhelp_oarr_matmul_II(lhs, ord_mul2, rhs, ord_mul1, &res, dhl);
+
+            }  
 
         }
+        
 
     }
-    
+
+    return res;
 
 }
 // ----------------------------------------------------------------------------------------------------

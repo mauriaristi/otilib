@@ -30,8 +30,8 @@
 #include "dense/array_algebra_elementwise.c"
 #include "dense/array_algebra_helper.c"
 
-// // Array algebra: Matrix operations such as matmul, determinant and invertion.
-// #include "dense/array_algebra_matops.c"
+// Array algebra: Matrix operations such as matmul, determinant and invertion.
+#include "dense/array_algebra_matops.c"
 
 // // Array functions: Elementwise function evaluation.
 // #include "dense/array_functions.c"

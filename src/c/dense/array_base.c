@@ -363,7 +363,7 @@ otinum_t oarr_get_item_ij(oarr_t* arr, uint64_t i, uint64_t j, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-void oarr_get_item_i_to(oarr_t* arr, uint64_t i, uint64_t j, otinum_t* res, dhelpl_t dhl){
+void oarr_get_item_i_to(oarr_t* arr, uint64_t i,  otinum_t* res, dhelpl_t dhl){
     
     // Reset all coefficients in res.
     oti_setFromReal( 0.0, res, dhl );

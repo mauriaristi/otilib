@@ -428,10 +428,6 @@ void darr_mul_and_selfsum_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes){
     
     int64_t i;
 
-    aRes->size = arr1->size;
-    aRes->ncols = arr1->ncols;
-    aRes->nrows = arr1->nrows;
-
 
     // This for is pararellizable
     for (i = 0; i < arr1->size; i++){

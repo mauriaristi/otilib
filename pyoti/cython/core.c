@@ -18,12 +18,17 @@
         ],
         "extra_compile_args": [
             "-I.",
-            "-I."
+            "-I.",
+            "-O3"
+        ],
+        "extra_link_args": [
+            ""
         ],
         "include_dirs": [
             "/Users/maristi7/coding/otilib/include",
             "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/numpy/core/include"
         ],
+        "language": "c",
         "libraries": [
             "oti"
         ],

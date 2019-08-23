@@ -269,7 +269,12 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "dense.h"
   #---------------------------------------------------------------------------------------------------
-  
+  otinum_t oarr_det(oarr_t* arr, dhelpl_t dhl);
+  oarr_t oarr_transpose(oarr_t* arr, dhelpl_t dhl);
+  oarr_t oarr_matmul_OO(oarr_t* lhs, oarr_t* rhs, dhelpl_t dhl);
+  oarr_t oarr_matmul_OR(oarr_t* lhs, darr_t* rhs, dhelpl_t dhl);
+  oarr_t oarr_matmul_RO(darr_t* lhs, oarr_t* rhs, dhelpl_t dhl);
+
   oarr_t oarr_neg( oarr_t* arr1, dhelpl_t dhl);
   void oarr_neg_to(oarr_t* arr1, oarr_t* res, dhelpl_t dhl);
 
@@ -330,7 +335,7 @@ cdef extern from "oti/oti.h" nogil:
   void oarr_set_item_ij_o( otinum_t* num, uint64_t i, uint64_t j, oarr_t* arr, dhelpl_t dhl);
   otinum_t oarr_get_item_i(oarr_t* arr, uint64_t i, dhelpl_t dhl);
   otinum_t oarr_get_item_ij(oarr_t* arr, uint64_t i, uint64_t j, dhelpl_t dhl);
-  void oarr_get_item_i_to(oarr_t* p_array, uint64_t i, uint64_t j, otinum_t* res, dhelpl_t dhl);
+  void oarr_get_item_i_to(oarr_t* p_array, uint64_t i, otinum_t* res, dhelpl_t dhl);
   void oarr_get_item_ij_to(oarr_t* p_array, uint64_t i, uint64_t j, otinum_t* res, dhelpl_t dhl);
   void oarr_copy_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl);
   oarr_t oarr_copy(oarr_t* arr, dhelpl_t dhl);

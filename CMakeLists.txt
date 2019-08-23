@@ -25,12 +25,12 @@ include( copyfiles )
 # Uncomment this for macOS
 if(APPLE)
 	# This is for the case of apple macOS
-	# set(CMAKE_C_COMPILER "/usr/bin/clang")
-  # set(CYTHON_CMD_CALL_PREC "CC=gcc")
+	set(CMAKE_C_COMPILER "/usr/bin/clang")
+  set(CYTHON_CMD_CALL_PREC "CC=gcc")
   # set(CMAKE_C_COMPILER "gcc-8")
   # set(CYTHON_CMD_CALL_PREC "CC=gcc-8")
-  set(CMAKE_C_COMPILER "icc")
-  set(CYTHON_CMD_CALL_PREC "CC=icc")
+  # set(CMAKE_C_COMPILER "icc")
+  # set(CYTHON_CMD_CALL_PREC "CC=icc")
 elseif(UNIX)
 	# This is for the case of unix OS
 	set(CMAKE_C_COMPILER "/usr/bin/gcc")

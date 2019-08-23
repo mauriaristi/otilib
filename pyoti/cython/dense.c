@@ -21,14 +21,10 @@
             "-I.",
             "-O3"
         ],
-        "extra_link_args": [
-            ""
-        ],
         "include_dirs": [
             "/Users/maristi7/coding/otilib/include",
             "/Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/numpy/core/include"
         ],
-        "language": "c",
         "libraries": [
             "oti"
         ],
@@ -1308,6 +1304,7 @@ struct __pyx_opt_args_5pyoti_4real_4dmat_create {
 };
 struct __pyx_opt_args_5pyoti_5dense_6otinum_create;
 struct __pyx_opt_args_5pyoti_5dense_4omat_create;
+struct __pyx_opt_args_5pyoti_5dense_eye;
 struct __pyx_opt_args_5pyoti_5dense_zeros;
 struct __pyx_opt_args_5pyoti_5dense_ones;
 
@@ -1335,7 +1332,20 @@ struct __pyx_opt_args_5pyoti_5dense_4omat_create {
   uint8_t FLAGS;
 };
 
-/* "../../pyoti/cython/dense_array.pxi":731
+/* "../../pyoti/cython/dense_array.pxi":716
+ * 
+ * #*****************************************************************************************************
+ * cpdef omat eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
+ * 
+ *   global dhl
+ */
+struct __pyx_opt_args_5pyoti_5dense_eye {
+  int __pyx_n;
+  __pyx_t_8c_otilib_bases_t nbases;
+  __pyx_t_8c_otilib_ord_t order;
+};
+
+/* "../../pyoti/cython/dense_array.pxi":727
  * 
  * #*****************************************************************************************************
  * cpdef omat zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -1348,7 +1358,7 @@ struct __pyx_opt_args_5pyoti_5dense_zeros {
   __pyx_t_8c_otilib_ord_t order;
 };
 
-/* "../../pyoti/cython/dense_array.pxi":742
+/* "../../pyoti/cython/dense_array.pxi":738
  * 
  * #*****************************************************************************************************
  * cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -2208,8 +2218,10 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_exp(struct _
 static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_power(struct __pyx_obj_5pyoti_5dense_otinum *, double, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sqrt(struct __pyx_obj_5pyoti_5dense_otinum *, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_dot(struct __pyx_obj_5pyoti_5dense_omat *, struct __pyx_obj_5pyoti_5dense_omat *, int __pyx_skip_dispatch); /*proto*/
+static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_invert(struct __pyx_obj_5pyoti_5dense_omat *, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_transpose(struct __pyx_obj_5pyoti_5dense_omat *, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_det(struct __pyx_obj_5pyoti_5dense_omat *, int __pyx_skip_dispatch); /*proto*/
+static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_eye(uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_5dense_eye *__pyx_optional_args); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_zeros(uint64_t, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_5dense_zeros *__pyx_optional_args); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_ones(uint64_t, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_5dense_ones *__pyx_optional_args); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
@@ -2243,6 +2255,7 @@ static const char __pyx_k_dot[] = "dot";
 static const char __pyx_k_e_2[] = "+ e(";
 static const char __pyx_k_e_3[] = "e";
 static const char __pyx_k_exp[] = "exp";
+static const char __pyx_k_eye[] = "eye";
 static const char __pyx_k_g_2[] = "%+g";
 static const char __pyx_k_log[] = "log";
 static const char __pyx_k_res[] = "res";
@@ -2266,6 +2279,7 @@ static const char __pyx_k_omat[] = "omat";
 static const char __pyx_k_ones[] = "ones";
 static const char __pyx_k_self[] = "self";
 static const char __pyx_k_sinh[] = "sinh";
+static const char __pyx_k_size[] = "size";
 static const char __pyx_k_sqrt[] = "sqrt";
 static const char __pyx_k_tanh[] = "tanh";
 static const char __pyx_k_test[] = "__test__";
@@ -2285,6 +2299,7 @@ static const char __pyx_k_range[] = "range";
 static const char __pyx_k_zeros[] = "zeros";
 static const char __pyx_k_coeffs[] = "coeffs";
 static const char __pyx_k_import[] = "__import__";
+static const char __pyx_k_invert[] = "invert";
 static const char __pyx_k_nbases[] = "nbases";
 static const char __pyx_k_otinum[] = "otinum(";
 static const char __pyx_k_reduce[] = "__reduce__";
@@ -2381,6 +2396,7 @@ static PyObject *__pyx_kp_u_e_2;
 static PyObject *__pyx_n_s_e_3;
 static PyObject *__pyx_n_s_exp;
 static PyObject *__pyx_n_s_exponent;
+static PyObject *__pyx_n_s_eye;
 static PyObject *__pyx_kp_u_g;
 static PyObject *__pyx_kp_u_g_2;
 static PyObject *__pyx_n_s_get_compact_fulldir;
@@ -2390,6 +2406,7 @@ static PyObject *__pyx_kp_u_here;
 static PyObject *__pyx_n_s_hum_dir;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_indx_hd;
+static PyObject *__pyx_n_s_invert;
 static PyObject *__pyx_n_s_item;
 static PyObject *__pyx_n_s_log;
 static PyObject *__pyx_n_s_log10;
@@ -2444,6 +2461,7 @@ static PyObject *__pyx_n_s_setstate;
 static PyObject *__pyx_n_s_setstate_cython;
 static PyObject *__pyx_n_s_sin;
 static PyObject *__pyx_n_s_sinh;
+static PyObject *__pyx_n_s_size;
 static PyObject *__pyx_n_s_sqrt;
 static PyObject *__pyx_kp_s_stringsource;
 static PyObject *__pyx_n_s_tan;
@@ -2514,10 +2532,12 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_28copy(struct __pyx_obj_5pyoti_5de
 static PyObject *__pyx_pf_5pyoti_5dense_4omat_30__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5pyoti_5dense_4omat_32__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_5pyoti_5dense_38dot(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_B); /* proto */
-static PyObject *__pyx_pf_5pyoti_5dense_40transpose(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A); /* proto */
-static PyObject *__pyx_pf_5pyoti_5dense_42det(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A); /* proto */
-static PyObject *__pyx_pf_5pyoti_5dense_44zeros(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order); /* proto */
-static PyObject *__pyx_pf_5pyoti_5dense_46ones(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order); /* proto */
+static PyObject *__pyx_pf_5pyoti_5dense_40invert(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A); /* proto */
+static PyObject *__pyx_pf_5pyoti_5dense_42transpose(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A); /* proto */
+static PyObject *__pyx_pf_5pyoti_5dense_44det(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A); /* proto */
+static PyObject *__pyx_pf_5pyoti_5dense_46eye(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_size, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order); /* proto */
+static PyObject *__pyx_pf_5pyoti_5dense_48zeros(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order); /* proto */
+static PyObject *__pyx_pf_5pyoti_5dense_50ones(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static PyObject *__pyx_tp_new_5pyoti_5dense_otinum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -2566,6 +2586,8 @@ static PyObject *__pyx_tuple__74;
 static PyObject *__pyx_tuple__76;
 static PyObject *__pyx_tuple__78;
 static PyObject *__pyx_tuple__80;
+static PyObject *__pyx_tuple__82;
+static PyObject *__pyx_tuple__84;
 static PyObject *__pyx_codeobj__21;
 static PyObject *__pyx_codeobj__23;
 static PyObject *__pyx_codeobj__25;
@@ -2597,6 +2619,8 @@ static PyObject *__pyx_codeobj__75;
 static PyObject *__pyx_codeobj__77;
 static PyObject *__pyx_codeobj__79;
 static PyObject *__pyx_codeobj__81;
+static PyObject *__pyx_codeobj__83;
+static PyObject *__pyx_codeobj__85;
 /* Late includes */
 
 /* "../../pyoti/cython/dense.pyx":59
@@ -11773,7 +11797,107 @@ static PyObject *__pyx_pf_5pyoti_5dense_38dot(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense_array.pxi":686
+/* "../../pyoti/cython/dense_array.pxi":673
+ * 
+ * #*****************************************************************************************************
+ * cpdef omat invert(omat A):             # <<<<<<<<<<<<<<
+ * 
+ *   global dhl
+ */
+
+static PyObject *__pyx_pw_5pyoti_5dense_41invert(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
+static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_invert(struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A, CYTHON_UNUSED int __pyx_skip_dispatch) {
+  oarr_t __pyx_v_res;
+  struct __pyx_obj_5pyoti_5dense_omat *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("invert", 0);
+
+  /* "../../pyoti/cython/dense_array.pxi":677
+ *   global dhl
+ * 
+ *   cdef oarr_t res = oarr_invert( &A.arr, dhl )             # <<<<<<<<<<<<<<
+ * 
+ *   # TODO: Add check in python code.
+ */
+  __pyx_v_res = oarr_invert((&__pyx_v_A->arr), __pyx_v_5pyoti_5dense_dhl);
+
+  /* "../../pyoti/cython/dense_array.pxi":681
+ *   # TODO: Add check in python code.
+ * 
+ *   return omat.create(&res)             # <<<<<<<<<<<<<<
+ * 
+ * #-----------------------------------------------------------------------------------------------------
+ */
+  __Pyx_XDECREF(((PyObject *)__pyx_r));
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_omat->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 681, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../pyoti/cython/dense_array.pxi":673
+ * 
+ * #*****************************************************************************************************
+ * cpdef omat invert(omat A):             # <<<<<<<<<<<<<<
+ * 
+ *   global dhl
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.dense.invert", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF((PyObject *)__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_5dense_41invert(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
+static PyMethodDef __pyx_mdef_5pyoti_5dense_41invert = {"invert", (PyCFunction)__pyx_pw_5pyoti_5dense_41invert, METH_O, 0};
+static PyObject *__pyx_pw_5pyoti_5dense_41invert(PyObject *__pyx_self, PyObject *__pyx_v_A) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("invert (wrapper)", 0);
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_A), __pyx_ptype_5pyoti_5dense_omat, 1, "A", 0))) __PYX_ERR(2, 673, __pyx_L1_error)
+  __pyx_r = __pyx_pf_5pyoti_5dense_40invert(__pyx_self, ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_v_A));
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_5dense_40invert(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("invert", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_invert(__pyx_v_A, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 673, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.dense.invert", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../pyoti/cython/dense_array.pxi":688
  * 
  * #*****************************************************************************************************
  * cpdef omat transpose(omat A):             # <<<<<<<<<<<<<<
@@ -11781,7 +11905,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_38dot(CYTHON_UNUSED PyObject *__pyx_self
  *   global dhl
  */
 
-static PyObject *__pyx_pw_5pyoti_5dense_41transpose(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
+static PyObject *__pyx_pw_5pyoti_5dense_43transpose(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_transpose(struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A, CYTHON_UNUSED int __pyx_skip_dispatch) {
   oarr_t __pyx_v_res;
   struct __pyx_obj_5pyoti_5dense_omat *__pyx_r = NULL;
@@ -11789,7 +11913,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_transpose(stru
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("transpose", 0);
 
-  /* "../../pyoti/cython/dense_array.pxi":690
+  /* "../../pyoti/cython/dense_array.pxi":692
  *   global dhl
  * 
  *   cdef oarr_t res = oarr_transpose( &A.arr, dhl )             # <<<<<<<<<<<<<<
@@ -11798,7 +11922,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_transpose(stru
  */
   __pyx_v_res = oarr_transpose((&__pyx_v_A->arr), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense_array.pxi":694
+  /* "../../pyoti/cython/dense_array.pxi":696
  *   # TODO: Add check in python code.
  * 
  *   return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -11806,13 +11930,13 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_transpose(stru
  * #-----------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_omat->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 694, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_omat->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 696, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense_array.pxi":686
+  /* "../../pyoti/cython/dense_array.pxi":688
  * 
  * #*****************************************************************************************************
  * cpdef omat transpose(omat A):             # <<<<<<<<<<<<<<
@@ -11832,14 +11956,14 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_transpose(stru
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_5dense_41transpose(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
-static PyMethodDef __pyx_mdef_5pyoti_5dense_41transpose = {"transpose", (PyCFunction)__pyx_pw_5pyoti_5dense_41transpose, METH_O, 0};
-static PyObject *__pyx_pw_5pyoti_5dense_41transpose(PyObject *__pyx_self, PyObject *__pyx_v_A) {
+static PyObject *__pyx_pw_5pyoti_5dense_43transpose(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
+static PyMethodDef __pyx_mdef_5pyoti_5dense_43transpose = {"transpose", (PyCFunction)__pyx_pw_5pyoti_5dense_43transpose, METH_O, 0};
+static PyObject *__pyx_pw_5pyoti_5dense_43transpose(PyObject *__pyx_self, PyObject *__pyx_v_A) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("transpose (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_A), __pyx_ptype_5pyoti_5dense_omat, 1, "A", 0))) __PYX_ERR(2, 686, __pyx_L1_error)
-  __pyx_r = __pyx_pf_5pyoti_5dense_40transpose(__pyx_self, ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_v_A));
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_A), __pyx_ptype_5pyoti_5dense_omat, 1, "A", 0))) __PYX_ERR(2, 688, __pyx_L1_error)
+  __pyx_r = __pyx_pf_5pyoti_5dense_42transpose(__pyx_self, ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_v_A));
 
   /* function exit code */
   goto __pyx_L0;
@@ -11850,13 +11974,13 @@ static PyObject *__pyx_pw_5pyoti_5dense_41transpose(PyObject *__pyx_self, PyObje
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_5dense_40transpose(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A) {
+static PyObject *__pyx_pf_5pyoti_5dense_42transpose(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("transpose", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_transpose(__pyx_v_A, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 686, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_transpose(__pyx_v_A, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 688, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -11873,7 +11997,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_40transpose(CYTHON_UNUSED PyObject *__py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense_array.pxi":699
+/* "../../pyoti/cython/dense_array.pxi":701
  * 
  * #*****************************************************************************************************
  * cpdef otinum det(omat A):             # <<<<<<<<<<<<<<
@@ -11881,7 +12005,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_40transpose(CYTHON_UNUSED PyObject *__py
  *   global dhl
  */
 
-static PyObject *__pyx_pw_5pyoti_5dense_43det(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
+static PyObject *__pyx_pw_5pyoti_5dense_45det(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_det(struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A, CYTHON_UNUSED int __pyx_skip_dispatch) {
   otinum_t __pyx_v_res;
   struct __pyx_obj_5pyoti_5dense_otinum *__pyx_r = NULL;
@@ -11889,7 +12013,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_det(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("det", 0);
 
-  /* "../../pyoti/cython/dense_array.pxi":703
+  /* "../../pyoti/cython/dense_array.pxi":705
  *   global dhl
  * 
  *   cdef otinum_t res = oarr_det( &A.arr, dhl)             # <<<<<<<<<<<<<<
@@ -11898,7 +12022,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_det(struct _
  */
   __pyx_v_res = oarr_det((&__pyx_v_A->arr), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense_array.pxi":705
+  /* "../../pyoti/cython/dense_array.pxi":707
  *   cdef otinum_t res = oarr_det( &A.arr, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -11906,13 +12030,13 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_det(struct _
  * 
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_otinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 705, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_otinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 707, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense_array.pxi":699
+  /* "../../pyoti/cython/dense_array.pxi":701
  * 
  * #*****************************************************************************************************
  * cpdef otinum det(omat A):             # <<<<<<<<<<<<<<
@@ -11932,14 +12056,14 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_det(struct _
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_5dense_43det(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
-static PyMethodDef __pyx_mdef_5pyoti_5dense_43det = {"det", (PyCFunction)__pyx_pw_5pyoti_5dense_43det, METH_O, 0};
-static PyObject *__pyx_pw_5pyoti_5dense_43det(PyObject *__pyx_self, PyObject *__pyx_v_A) {
+static PyObject *__pyx_pw_5pyoti_5dense_45det(PyObject *__pyx_self, PyObject *__pyx_v_A); /*proto*/
+static PyMethodDef __pyx_mdef_5pyoti_5dense_45det = {"det", (PyCFunction)__pyx_pw_5pyoti_5dense_45det, METH_O, 0};
+static PyObject *__pyx_pw_5pyoti_5dense_45det(PyObject *__pyx_self, PyObject *__pyx_v_A) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("det (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_A), __pyx_ptype_5pyoti_5dense_omat, 1, "A", 0))) __PYX_ERR(2, 699, __pyx_L1_error)
-  __pyx_r = __pyx_pf_5pyoti_5dense_42det(__pyx_self, ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_v_A));
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_A), __pyx_ptype_5pyoti_5dense_omat, 1, "A", 0))) __PYX_ERR(2, 701, __pyx_L1_error)
+  __pyx_r = __pyx_pf_5pyoti_5dense_44det(__pyx_self, ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_v_A));
 
   /* function exit code */
   goto __pyx_L0;
@@ -11950,13 +12074,13 @@ static PyObject *__pyx_pw_5pyoti_5dense_43det(PyObject *__pyx_self, PyObject *__
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_5dense_42det(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A) {
+static PyObject *__pyx_pf_5pyoti_5dense_44det(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_5dense_omat *__pyx_v_A) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("det", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_det(__pyx_v_A, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 699, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_det(__pyx_v_A, 0)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 701, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -11973,7 +12097,187 @@ static PyObject *__pyx_pf_5pyoti_5dense_42det(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense_array.pxi":731
+/* "../../pyoti/cython/dense_array.pxi":716
+ * 
+ * #*****************************************************************************************************
+ * cpdef omat eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
+ * 
+ *   global dhl
+ */
+
+static PyObject *__pyx_pw_5pyoti_5dense_47eye(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_eye(uint64_t __pyx_v_size, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_5dense_eye *__pyx_optional_args) {
+  __pyx_t_8c_otilib_bases_t __pyx_v_nbases = ((__pyx_t_8c_otilib_bases_t)0);
+  __pyx_t_8c_otilib_ord_t __pyx_v_order = ((__pyx_t_8c_otilib_ord_t)0);
+  oarr_t __pyx_v_res;
+  struct __pyx_obj_5pyoti_5dense_omat *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("eye", 0);
+  if (__pyx_optional_args) {
+    if (__pyx_optional_args->__pyx_n > 0) {
+      __pyx_v_nbases = __pyx_optional_args->nbases;
+      if (__pyx_optional_args->__pyx_n > 1) {
+        __pyx_v_order = __pyx_optional_args->order;
+      }
+    }
+  }
+
+  /* "../../pyoti/cython/dense_array.pxi":720
+ *   global dhl
+ * 
+ *   cdef oarr_t res = oarr_eye(size, nbases, order, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *   return omat.create(&res)
+ */
+  __pyx_v_res = oarr_eye(__pyx_v_size, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
+
+  /* "../../pyoti/cython/dense_array.pxi":722
+ *   cdef oarr_t res = oarr_eye(size, nbases, order, dhl)
+ * 
+ *   return omat.create(&res)             # <<<<<<<<<<<<<<
+ * 
+ * #-----------------------------------------------------------------------------------------------------
+ */
+  __Pyx_XDECREF(((PyObject *)__pyx_r));
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_omat->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 722, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../pyoti/cython/dense_array.pxi":716
+ * 
+ * #*****************************************************************************************************
+ * cpdef omat eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
+ * 
+ *   global dhl
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.dense.eye", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF((PyObject *)__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_5dense_47eye(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_5pyoti_5dense_47eye = {"eye", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5pyoti_5dense_47eye, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5pyoti_5dense_47eye(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  uint64_t __pyx_v_size;
+  __pyx_t_8c_otilib_bases_t __pyx_v_nbases;
+  __pyx_t_8c_otilib_ord_t __pyx_v_order;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("eye (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_size,&__pyx_n_s_nbases,&__pyx_n_s_order,0};
+    PyObject* values[3] = {0,0,0};
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_size)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_nbases);
+          if (value) { values[1] = value; kw_args--; }
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_order);
+          if (value) { values[2] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "eye") < 0)) __PYX_ERR(2, 716, __pyx_L3_error)
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_size = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_size == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 716, __pyx_L3_error)
+    if (values[1]) {
+      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[1]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 716, __pyx_L3_error)
+    } else {
+      __pyx_v_nbases = ((__pyx_t_8c_otilib_bases_t)0);
+    }
+    if (values[2]) {
+      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[2]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 716, __pyx_L3_error)
+    } else {
+      __pyx_v_order = ((__pyx_t_8c_otilib_ord_t)0);
+    }
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("eye", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(2, 716, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("pyoti.dense.eye", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_5pyoti_5dense_46eye(__pyx_self, __pyx_v_size, __pyx_v_nbases, __pyx_v_order);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_5dense_46eye(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_size, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  struct __pyx_opt_args_5pyoti_5dense_eye __pyx_t_2;
+  __Pyx_RefNannySetupContext("eye", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_2.__pyx_n = 2;
+  __pyx_t_2.nbases = __pyx_v_nbases;
+  __pyx_t_2.order = __pyx_v_order;
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_eye(__pyx_v_size, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 716, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.dense.eye", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../pyoti/cython/dense_array.pxi":727
  * 
  * #*****************************************************************************************************
  * cpdef omat zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -11981,7 +12285,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_42det(CYTHON_UNUSED PyObject *__pyx_self
  *   global dhl
  */
 
-static PyObject *__pyx_pw_5pyoti_5dense_45zeros(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5pyoti_5dense_49zeros(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_zeros(uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_5dense_zeros *__pyx_optional_args) {
   __pyx_t_8c_otilib_bases_t __pyx_v_nbases = ((__pyx_t_8c_otilib_bases_t)0);
   __pyx_t_8c_otilib_ord_t __pyx_v_order = ((__pyx_t_8c_otilib_ord_t)0);
@@ -11999,7 +12303,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_zeros(uint64_t
     }
   }
 
-  /* "../../pyoti/cython/dense_array.pxi":735
+  /* "../../pyoti/cython/dense_array.pxi":731
  *   global dhl
  * 
  *   cdef oarr_t res = oarr_zeros(nrows,ncols,nbases,order,dhl)             # <<<<<<<<<<<<<<
@@ -12008,7 +12312,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_zeros(uint64_t
  */
   __pyx_v_res = oarr_zeros(__pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense_array.pxi":737
+  /* "../../pyoti/cython/dense_array.pxi":733
  *   cdef oarr_t res = oarr_zeros(nrows,ncols,nbases,order,dhl)
  * 
  *   return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -12016,13 +12320,13 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_zeros(uint64_t
  * #-----------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_omat->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 737, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_omat->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 733, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense_array.pxi":731
+  /* "../../pyoti/cython/dense_array.pxi":727
  * 
  * #*****************************************************************************************************
  * cpdef omat zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -12042,9 +12346,9 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_zeros(uint64_t
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_5dense_45zeros(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_5pyoti_5dense_45zeros = {"zeros", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5pyoti_5dense_45zeros, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_5pyoti_5dense_45zeros(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5pyoti_5dense_49zeros(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_5pyoti_5dense_49zeros = {"zeros", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5pyoti_5dense_49zeros, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5pyoti_5dense_49zeros(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   uint64_t __pyx_v_nrows;
   uint64_t __pyx_v_ncols;
   __pyx_t_8c_otilib_bases_t __pyx_v_nbases;
@@ -12079,7 +12383,7 @@ static PyObject *__pyx_pw_5pyoti_5dense_45zeros(PyObject *__pyx_self, PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ncols)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("zeros", 0, 2, 4, 1); __PYX_ERR(2, 731, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("zeros", 0, 2, 4, 1); __PYX_ERR(2, 727, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -12095,7 +12399,7 @@ static PyObject *__pyx_pw_5pyoti_5dense_45zeros(PyObject *__pyx_self, PyObject *
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "zeros") < 0)) __PYX_ERR(2, 731, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "zeros") < 0)) __PYX_ERR(2, 727, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -12109,35 +12413,35 @@ static PyObject *__pyx_pw_5pyoti_5dense_45zeros(PyObject *__pyx_self, PyObject *
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_nrows = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_nrows == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 731, __pyx_L3_error)
-    __pyx_v_ncols = __Pyx_PyInt_As_uint64_t(values[1]); if (unlikely((__pyx_v_ncols == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 731, __pyx_L3_error)
+    __pyx_v_nrows = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_nrows == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 727, __pyx_L3_error)
+    __pyx_v_ncols = __Pyx_PyInt_As_uint64_t(values[1]); if (unlikely((__pyx_v_ncols == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 727, __pyx_L3_error)
     if (values[2]) {
-      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[2]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 731, __pyx_L3_error)
+      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[2]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 727, __pyx_L3_error)
     } else {
       __pyx_v_nbases = ((__pyx_t_8c_otilib_bases_t)0);
     }
     if (values[3]) {
-      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[3]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 731, __pyx_L3_error)
+      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[3]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 727, __pyx_L3_error)
     } else {
       __pyx_v_order = ((__pyx_t_8c_otilib_ord_t)0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("zeros", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(2, 731, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("zeros", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(2, 727, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pyoti.dense.zeros", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5pyoti_5dense_44zeros(__pyx_self, __pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order);
+  __pyx_r = __pyx_pf_5pyoti_5dense_48zeros(__pyx_self, __pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_5dense_44zeros(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order) {
+static PyObject *__pyx_pf_5pyoti_5dense_48zeros(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -12147,7 +12451,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_44zeros(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_t_2.__pyx_n = 2;
   __pyx_t_2.nbases = __pyx_v_nbases;
   __pyx_t_2.order = __pyx_v_order;
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_zeros(__pyx_v_nrows, __pyx_v_ncols, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 731, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_zeros(__pyx_v_nrows, __pyx_v_ncols, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 727, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -12164,7 +12468,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_44zeros(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense_array.pxi":742
+/* "../../pyoti/cython/dense_array.pxi":738
  * 
  * #*****************************************************************************************************
  * cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -12172,7 +12476,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_44zeros(CYTHON_UNUSED PyObject *__pyx_se
  *   global dhl
  */
 
-static PyObject *__pyx_pw_5pyoti_5dense_47ones(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5pyoti_5dense_51ones(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
 static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_ones(uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, CYTHON_UNUSED int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_5dense_ones *__pyx_optional_args) {
   __pyx_t_8c_otilib_bases_t __pyx_v_nbases = ((__pyx_t_8c_otilib_bases_t)0);
   __pyx_t_8c_otilib_ord_t __pyx_v_order = ((__pyx_t_8c_otilib_ord_t)0);
@@ -12190,7 +12494,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_ones(uint64_t 
     }
   }
 
-  /* "../../pyoti/cython/dense_array.pxi":746
+  /* "../../pyoti/cython/dense_array.pxi":742
  *   global dhl
  * 
  *   cdef oarr_t res = oarr_ones(nrows,ncols,nbases,order,dhl)             # <<<<<<<<<<<<<<
@@ -12199,7 +12503,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_ones(uint64_t 
  */
   __pyx_v_res = oarr_ones(__pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense_array.pxi":748
+  /* "../../pyoti/cython/dense_array.pxi":744
  *   cdef oarr_t res = oarr_ones(nrows,ncols,nbases,order,dhl)
  * 
  *   return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -12207,13 +12511,13 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_ones(uint64_t 
  * #-----------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_omat->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 748, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_5dense_omat->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 744, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense_array.pxi":742
+  /* "../../pyoti/cython/dense_array.pxi":738
  * 
  * #*****************************************************************************************************
  * cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -12233,9 +12537,9 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_ones(uint64_t 
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_5dense_47ones(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyMethodDef __pyx_mdef_5pyoti_5dense_47ones = {"ones", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5pyoti_5dense_47ones, METH_VARARGS|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_5pyoti_5dense_47ones(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5pyoti_5dense_51ones(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyMethodDef __pyx_mdef_5pyoti_5dense_51ones = {"ones", (PyCFunction)(void*)(PyCFunctionWithKeywords)__pyx_pw_5pyoti_5dense_51ones, METH_VARARGS|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_5pyoti_5dense_51ones(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   uint64_t __pyx_v_nrows;
   uint64_t __pyx_v_ncols;
   __pyx_t_8c_otilib_bases_t __pyx_v_nbases;
@@ -12270,7 +12574,7 @@ static PyObject *__pyx_pw_5pyoti_5dense_47ones(PyObject *__pyx_self, PyObject *_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ncols)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("ones", 0, 2, 4, 1); __PYX_ERR(2, 742, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("ones", 0, 2, 4, 1); __PYX_ERR(2, 738, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -12286,7 +12590,7 @@ static PyObject *__pyx_pw_5pyoti_5dense_47ones(PyObject *__pyx_self, PyObject *_
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "ones") < 0)) __PYX_ERR(2, 742, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "ones") < 0)) __PYX_ERR(2, 738, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -12300,35 +12604,35 @@ static PyObject *__pyx_pw_5pyoti_5dense_47ones(PyObject *__pyx_self, PyObject *_
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_nrows = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_nrows == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 742, __pyx_L3_error)
-    __pyx_v_ncols = __Pyx_PyInt_As_uint64_t(values[1]); if (unlikely((__pyx_v_ncols == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 742, __pyx_L3_error)
+    __pyx_v_nrows = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_nrows == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 738, __pyx_L3_error)
+    __pyx_v_ncols = __Pyx_PyInt_As_uint64_t(values[1]); if (unlikely((__pyx_v_ncols == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 738, __pyx_L3_error)
     if (values[2]) {
-      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[2]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 742, __pyx_L3_error)
+      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[2]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 738, __pyx_L3_error)
     } else {
       __pyx_v_nbases = ((__pyx_t_8c_otilib_bases_t)0);
     }
     if (values[3]) {
-      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[3]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 742, __pyx_L3_error)
+      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[3]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(2, 738, __pyx_L3_error)
     } else {
       __pyx_v_order = ((__pyx_t_8c_otilib_ord_t)0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("ones", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(2, 742, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("ones", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(2, 738, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pyoti.dense.ones", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5pyoti_5dense_46ones(__pyx_self, __pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order);
+  __pyx_r = __pyx_pf_5pyoti_5dense_50ones(__pyx_self, __pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_5dense_46ones(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order) {
+static PyObject *__pyx_pf_5pyoti_5dense_50ones(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_8c_otilib_ord_t __pyx_v_order) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -12338,7 +12642,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_46ones(CYTHON_UNUSED PyObject *__pyx_sel
   __pyx_t_2.__pyx_n = 2;
   __pyx_t_2.nbases = __pyx_v_nbases;
   __pyx_t_2.order = __pyx_v_order;
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_ones(__pyx_v_nrows, __pyx_v_ncols, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 742, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_5dense_ones(__pyx_v_nrows, __pyx_v_ncols, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 738, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -15290,6 +15594,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_e_3, __pyx_k_e_3, sizeof(__pyx_k_e_3), 0, 0, 1, 1},
   {&__pyx_n_s_exp, __pyx_k_exp, sizeof(__pyx_k_exp), 0, 0, 1, 1},
   {&__pyx_n_s_exponent, __pyx_k_exponent, sizeof(__pyx_k_exponent), 0, 0, 1, 1},
+  {&__pyx_n_s_eye, __pyx_k_eye, sizeof(__pyx_k_eye), 0, 0, 1, 1},
   {&__pyx_kp_u_g, __pyx_k_g, sizeof(__pyx_k_g), 0, 1, 0, 0},
   {&__pyx_kp_u_g_2, __pyx_k_g_2, sizeof(__pyx_k_g_2), 0, 1, 0, 0},
   {&__pyx_n_s_get_compact_fulldir, __pyx_k_get_compact_fulldir, sizeof(__pyx_k_get_compact_fulldir), 0, 0, 1, 1},
@@ -15299,6 +15604,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_hum_dir, __pyx_k_hum_dir, sizeof(__pyx_k_hum_dir), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_indx_hd, __pyx_k_indx_hd, sizeof(__pyx_k_indx_hd), 0, 0, 1, 1},
+  {&__pyx_n_s_invert, __pyx_k_invert, sizeof(__pyx_k_invert), 0, 0, 1, 1},
   {&__pyx_n_s_item, __pyx_k_item, sizeof(__pyx_k_item), 0, 0, 1, 1},
   {&__pyx_n_s_log, __pyx_k_log, sizeof(__pyx_k_log), 0, 0, 1, 1},
   {&__pyx_n_s_log10, __pyx_k_log10, sizeof(__pyx_k_log10), 0, 0, 1, 1},
@@ -15353,6 +15659,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
   {&__pyx_n_s_sin, __pyx_k_sin, sizeof(__pyx_k_sin), 0, 0, 1, 1},
   {&__pyx_n_s_sinh, __pyx_k_sinh, sizeof(__pyx_k_sinh), 0, 0, 1, 1},
+  {&__pyx_n_s_size, __pyx_k_size, sizeof(__pyx_k_size), 0, 0, 1, 1},
   {&__pyx_n_s_sqrt, __pyx_k_sqrt, sizeof(__pyx_k_sqrt), 0, 0, 1, 1},
   {&__pyx_kp_s_stringsource, __pyx_k_stringsource, sizeof(__pyx_k_stringsource), 0, 0, 1, 0},
   {&__pyx_n_s_tan, __pyx_k_tan, sizeof(__pyx_k_tan), 0, 0, 1, 1},
@@ -15836,53 +16143,77 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__72);
   __pyx_codeobj__73 = (PyObject*)__Pyx_PyCode_New(2, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__72, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_dot, 659, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__73)) __PYX_ERR(2, 659, __pyx_L1_error)
 
-  /* "../../pyoti/cython/dense_array.pxi":686
+  /* "../../pyoti/cython/dense_array.pxi":673
+ * 
+ * #*****************************************************************************************************
+ * cpdef omat invert(omat A):             # <<<<<<<<<<<<<<
+ * 
+ *   global dhl
+ */
+  __pyx_tuple__74 = PyTuple_Pack(1, __pyx_n_s_A); if (unlikely(!__pyx_tuple__74)) __PYX_ERR(2, 673, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__74);
+  __Pyx_GIVEREF(__pyx_tuple__74);
+  __pyx_codeobj__75 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__74, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_invert, 673, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__75)) __PYX_ERR(2, 673, __pyx_L1_error)
+
+  /* "../../pyoti/cython/dense_array.pxi":688
  * 
  * #*****************************************************************************************************
  * cpdef omat transpose(omat A):             # <<<<<<<<<<<<<<
  * 
  *   global dhl
  */
-  __pyx_tuple__74 = PyTuple_Pack(1, __pyx_n_s_A); if (unlikely(!__pyx_tuple__74)) __PYX_ERR(2, 686, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__74);
-  __Pyx_GIVEREF(__pyx_tuple__74);
-  __pyx_codeobj__75 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__74, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_transpose, 686, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__75)) __PYX_ERR(2, 686, __pyx_L1_error)
+  __pyx_tuple__76 = PyTuple_Pack(1, __pyx_n_s_A); if (unlikely(!__pyx_tuple__76)) __PYX_ERR(2, 688, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__76);
+  __Pyx_GIVEREF(__pyx_tuple__76);
+  __pyx_codeobj__77 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__76, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_transpose, 688, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__77)) __PYX_ERR(2, 688, __pyx_L1_error)
 
-  /* "../../pyoti/cython/dense_array.pxi":699
+  /* "../../pyoti/cython/dense_array.pxi":701
  * 
  * #*****************************************************************************************************
  * cpdef otinum det(omat A):             # <<<<<<<<<<<<<<
  * 
  *   global dhl
  */
-  __pyx_tuple__76 = PyTuple_Pack(1, __pyx_n_s_A); if (unlikely(!__pyx_tuple__76)) __PYX_ERR(2, 699, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__76);
-  __Pyx_GIVEREF(__pyx_tuple__76);
-  __pyx_codeobj__77 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__76, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_det, 699, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__77)) __PYX_ERR(2, 699, __pyx_L1_error)
+  __pyx_tuple__78 = PyTuple_Pack(1, __pyx_n_s_A); if (unlikely(!__pyx_tuple__78)) __PYX_ERR(2, 701, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__78);
+  __Pyx_GIVEREF(__pyx_tuple__78);
+  __pyx_codeobj__79 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__78, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_det, 701, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__79)) __PYX_ERR(2, 701, __pyx_L1_error)
 
-  /* "../../pyoti/cython/dense_array.pxi":731
+  /* "../../pyoti/cython/dense_array.pxi":716
+ * 
+ * #*****************************************************************************************************
+ * cpdef omat eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
+ * 
+ *   global dhl
+ */
+  __pyx_tuple__80 = PyTuple_Pack(3, __pyx_n_s_size, __pyx_n_s_nbases, __pyx_n_s_order); if (unlikely(!__pyx_tuple__80)) __PYX_ERR(2, 716, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__80);
+  __Pyx_GIVEREF(__pyx_tuple__80);
+  __pyx_codeobj__81 = (PyObject*)__Pyx_PyCode_New(3, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__80, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_eye, 716, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__81)) __PYX_ERR(2, 716, __pyx_L1_error)
+
+  /* "../../pyoti/cython/dense_array.pxi":727
  * 
  * #*****************************************************************************************************
  * cpdef omat zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
  * 
  *   global dhl
  */
-  __pyx_tuple__78 = PyTuple_Pack(4, __pyx_n_s_nrows, __pyx_n_s_ncols, __pyx_n_s_nbases, __pyx_n_s_order); if (unlikely(!__pyx_tuple__78)) __PYX_ERR(2, 731, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__78);
-  __Pyx_GIVEREF(__pyx_tuple__78);
-  __pyx_codeobj__79 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__78, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_zeros, 731, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__79)) __PYX_ERR(2, 731, __pyx_L1_error)
+  __pyx_tuple__82 = PyTuple_Pack(4, __pyx_n_s_nrows, __pyx_n_s_ncols, __pyx_n_s_nbases, __pyx_n_s_order); if (unlikely(!__pyx_tuple__82)) __PYX_ERR(2, 727, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__82);
+  __Pyx_GIVEREF(__pyx_tuple__82);
+  __pyx_codeobj__83 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__82, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_zeros, 727, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__83)) __PYX_ERR(2, 727, __pyx_L1_error)
 
-  /* "../../pyoti/cython/dense_array.pxi":742
+  /* "../../pyoti/cython/dense_array.pxi":738
  * 
  * #*****************************************************************************************************
  * cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
  * 
  *   global dhl
  */
-  __pyx_tuple__80 = PyTuple_Pack(4, __pyx_n_s_nrows, __pyx_n_s_ncols, __pyx_n_s_nbases, __pyx_n_s_order); if (unlikely(!__pyx_tuple__80)) __PYX_ERR(2, 742, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__80);
-  __Pyx_GIVEREF(__pyx_tuple__80);
-  __pyx_codeobj__81 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__80, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_ones, 742, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__81)) __PYX_ERR(2, 742, __pyx_L1_error)
+  __pyx_tuple__84 = PyTuple_Pack(4, __pyx_n_s_nrows, __pyx_n_s_ncols, __pyx_n_s_nbases, __pyx_n_s_order); if (unlikely(!__pyx_tuple__84)) __PYX_ERR(2, 738, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__84);
+  __Pyx_GIVEREF(__pyx_tuple__84);
+  __pyx_codeobj__85 = (PyObject*)__Pyx_PyCode_New(4, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__84, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_ones, 738, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__85)) __PYX_ERR(2, 738, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -16938,52 +17269,76 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_dot, __pyx_t_2) < 0) __PYX_ERR(2, 659, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense_array.pxi":686
+  /* "../../pyoti/cython/dense_array.pxi":673
+ * 
+ * #*****************************************************************************************************
+ * cpdef omat invert(omat A):             # <<<<<<<<<<<<<<
+ * 
+ *   global dhl
+ */
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_41invert, 0, __pyx_n_s_invert, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__75)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 673, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_invert, __pyx_t_2) < 0) __PYX_ERR(2, 673, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "../../pyoti/cython/dense_array.pxi":688
  * 
  * #*****************************************************************************************************
  * cpdef omat transpose(omat A):             # <<<<<<<<<<<<<<
  * 
  *   global dhl
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_41transpose, 0, __pyx_n_s_transpose, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__75)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 686, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_43transpose, 0, __pyx_n_s_transpose, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__77)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 688, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_transpose, __pyx_t_2) < 0) __PYX_ERR(2, 686, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_transpose, __pyx_t_2) < 0) __PYX_ERR(2, 688, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense_array.pxi":699
+  /* "../../pyoti/cython/dense_array.pxi":701
  * 
  * #*****************************************************************************************************
  * cpdef otinum det(omat A):             # <<<<<<<<<<<<<<
  * 
  *   global dhl
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_43det, 0, __pyx_n_s_det, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__77)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 699, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_45det, 0, __pyx_n_s_det, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__79)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 701, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_det, __pyx_t_2) < 0) __PYX_ERR(2, 699, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_det, __pyx_t_2) < 0) __PYX_ERR(2, 701, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense_array.pxi":731
+  /* "../../pyoti/cython/dense_array.pxi":716
+ * 
+ * #*****************************************************************************************************
+ * cpdef omat eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
+ * 
+ *   global dhl
+ */
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_47eye, 0, __pyx_n_s_eye, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__81)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 716, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_eye, __pyx_t_2) < 0) __PYX_ERR(2, 716, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+
+  /* "../../pyoti/cython/dense_array.pxi":727
  * 
  * #*****************************************************************************************************
  * cpdef omat zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
  * 
  *   global dhl
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_45zeros, 0, __pyx_n_s_zeros, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__79)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 731, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_49zeros, 0, __pyx_n_s_zeros, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__83)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 727, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_zeros, __pyx_t_2) < 0) __PYX_ERR(2, 731, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_zeros, __pyx_t_2) < 0) __PYX_ERR(2, 727, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense_array.pxi":742
+  /* "../../pyoti/cython/dense_array.pxi":738
  * 
  * #*****************************************************************************************************
  * cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
  * 
  *   global dhl
  */
-  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_47ones, 0, __pyx_n_s_ones, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__81)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 742, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_NewEx(&__pyx_mdef_5pyoti_5dense_51ones, 0, __pyx_n_s_ones, NULL, __pyx_n_s_pyoti_dense, __pyx_d, ((PyObject *)__pyx_codeobj__85)); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 738, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_ones, __pyx_t_2) < 0) __PYX_ERR(2, 742, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_ones, __pyx_t_2) < 0) __PYX_ERR(2, 738, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "../../pyoti/cython/dense.pyx":1

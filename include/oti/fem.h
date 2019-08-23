@@ -1,5 +1,5 @@
-#ifndef OTIFEM_H
-#define OTIFEM_H
+#ifndef OTI_FEM_H
+#define OTI_FEM_H
 // ----------------------------------------------------------------------------------------------------
 // ---------------------------------     EXTERNAL LIBRARIES     ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
@@ -22,8 +22,20 @@ typedef struct{
     uint64_t    offsetx; ///< Offset x in the element formulation
     uint64_t    offsety; ///< Offset y in the element formulation
     uint64_t       size; ///< size of the array
-    uint8_t       order; ///< oti order
-} femoarr_t;
+    bases_t      nbases; ///< Number of bases
+    ord_t         order; ///< oti order    
+} feoarr_t;
+
+
+typedef struct{
+  darr_t*      p_data; ///< Data array
+  uint64_t      nrows; ///< Number of rows.
+  uint64_t      ncols; ///< Number of cols.
+  uint64_t    nIntPts; ///< Number of integration points.
+  uint64_t    offsetx; ///< Offset x in the element formulation
+  uint64_t    offsety; ///< Offset y in the element formulation
+  uint64_t       size; ///< size of the array
+} fedarr_t;
 
 
 typedef struct elemprops_s{
@@ -37,16 +49,15 @@ typedef struct elemprops_s{
     uint8_t           isInit; ///< Initialization flag. 0: Not initialized, 1: Initialized.
     uint8_t         otiorder; ///< Order of the soti numbers inside.
     uint8_t     nDimAnalysis; ///< Number of dimensions of the analysis.
-    darray_t     p_intPoints; ///< (nIntPts x ndim) Array with the integration points coordinates.
-    darray_t    p_intWeights; ///< (nIntPts x 1   ) Array with the integration weights.
-    darray_t*    p_evalBasis; ///< (nder) List of (nbasis x nIntPts) arrays with the evaluated basis
-    femoarr_t              J; ///< (nDimAn x nDimEl) Holder for Jacobian               
-    femoarr_t           Jinv; ///< (nDimEl x nDimAn) Holder for inverse of Jacobian      
-    femoarr_t           Jdet; ///< (1 x 1)           Holder for Determinant of Jacobian. 
-    femoarr_t*       p_basis; ///< (nder) List (1 x nbasis) basis of the function in spat. coords.
-    femoarr_t   p_detWeights; ///< ( 1 x 1 ) Array with the integration weights.
+    darr_t       p_intPoints; ///< (nIntPts x ndim) Array with the integration points coordinates.
+    darr_t      p_intWeights; ///< (nIntPts x 1   ) Array with the integration weights.
+    darr_t*      p_evalBasis; ///< (nder) List of (nbasis x nIntPts) arrays with the evaluated basis
+    feoarr_t               J; ///< (nDimAn x nDimEl) Holder for Jacobian               
+    feoarr_t            Jinv; ///< (nDimEl x nDimAn) Holder for inverse of Jacobian      
+    feoarr_t            Jdet; ///< (1 x 1)           Holder for Determinant of Jacobian. 
+    feoarr_t*        p_basis; ///< (nder) List (1 x nbasis) basis of the function in spat. coords.
+    feoarr_t    p_detWeights; ///< ( 1 x 1 ) Array with the integration weights.
     int64_t (*f_basis)(int64_t,int64_t,darray_t*,void*,darray_t*); ///<  Interpolation function.
-
 } elemProps_t;
 
 // ----------------------------------------------------------------------------------------------------
@@ -169,12 +180,20 @@ enum operEnum {
 // ----------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+
+
+// ARRAY:
+
 /**************************************************************************************************//**
 @brief 
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_gaussIntegrateOverElement(femoarr_t* p_arr1, elemProps_t* elem, sotiarray_t* p_arrRes, 
+void feoarr_gaussIntegrateOverElement(feoarr_t* p_arr1, elemProps_t* elem, sotiarray_t* p_arrRes, 
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -183,7 +202,7 @@ void femoarr_gaussIntegrateOverElement(femoarr_t* p_arr1, elemProps_t* elem, sot
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_sub(femoarr_t* p_arr1, femoarr_t* p_arr2, femoarr_t* p_arrRes, 
+void feoarr_sub(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, 
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -192,7 +211,7 @@ void femoarr_sub(femoarr_t* p_arr1, femoarr_t* p_arr2, femoarr_t* p_arrRes,
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_sum(femoarr_t* p_arr1, femoarr_t* p_arr2, femoarr_t* p_arrRes, 
+void feoarr_sum(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, 
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -201,7 +220,7 @@ void femoarr_sum(femoarr_t* p_arr1, femoarr_t* p_arr2, femoarr_t* p_arrRes,
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_mul_oti(femoarr_t* p_arr1, otinum_t* num2, femoarr_t* p_arrRes, 
+void feoarr_mul_oti(feoarr_t* p_arr1, otinum_t* num2, feoarr_t* p_arrRes, 
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -210,7 +229,7 @@ void femoarr_mul_oti(femoarr_t* p_arr1, otinum_t* num2, femoarr_t* p_arrRes,
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_mul_R(femoarr_t* p_arr1, double num2, femoarr_t* p_arrRes);
+void feoarr_mul_R(feoarr_t* p_arr1, double num2, feoarr_t* p_arrRes);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -218,7 +237,7 @@ void femoarr_mul_R(femoarr_t* p_arr1, double num2, femoarr_t* p_arrRes);
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_matmul(femoarr_t* p_arr1, femoarr_t* p_arr2, femoarr_t* p_arrRes, 
+void feoarr_matmul(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, 
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -227,7 +246,7 @@ void femoarr_matmul(femoarr_t* p_arr1, femoarr_t* p_arr2, femoarr_t* p_arrRes,
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_neg(femoarr_t* p_arr1, femoarr_t* p_arrRes);
+void feoarr_neg(feoarr_t* p_arr1, feoarr_t* p_arrRes);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -235,7 +254,7 @@ void femoarr_neg(femoarr_t* p_arr1, femoarr_t* p_arrRes);
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_det(femoarr_t* p_arr1, femoarr_t* p_arrRes, dhelpl_t dhl);
+void feoarr_det(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -243,7 +262,7 @@ void femoarr_det(femoarr_t* p_arr1, femoarr_t* p_arrRes, dhelpl_t dhl);
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_invert(femoarr_t* p_arr1, femoarr_t* p_arrRes, dhelpl_t dhl);
+void feoarr_invert(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -251,7 +270,7 @@ void femoarr_invert(femoarr_t* p_arr1, femoarr_t* p_arrRes, dhelpl_t dhl);
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_getItem_ij(femoarr_t* p_arr1, uint64_t i, uint64_t j,femoarr_t* p_arrRes);
+void feoarr_getItem_ij(feoarr_t* p_arr1, uint64_t i, uint64_t j,feoarr_t* p_arrRes);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -259,7 +278,7 @@ void femoarr_getItem_ij(femoarr_t* p_arr1, uint64_t i, uint64_t j,femoarr_t* p_a
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_getItem_k(femoarr_t* p_arr1, uint64_t k, 
+void feoarr_getItem_k(feoarr_t* p_arr1, uint64_t k, 
         sotiarray_t* p_arrRes);
 // ----------------------------------------------------------------------------------------------------
 
@@ -268,7 +287,7 @@ void femoarr_getItem_k(femoarr_t* p_arr1, uint64_t k,
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_fromOther(femoarr_t* p_arr1, femoarr_t* p_res);
+void feoarr_fromOther(feoarr_t* p_arr1, feoarr_t* p_res);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -276,7 +295,7 @@ void femoarr_fromOther(femoarr_t* p_arr1, femoarr_t* p_res);
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_getItem_ijk(femoarr_t* p_arr1, uint64_t i, uint64_t j, uint64_t k, 
+void feoarr_getItem_ijk(feoarr_t* p_arr1, uint64_t i, uint64_t j, uint64_t k, 
         otinum_t* p_res);
 // ----------------------------------------------------------------------------------------------------
 
@@ -285,7 +304,7 @@ void femoarr_getItem_ijk(femoarr_t* p_arr1, uint64_t i, uint64_t j, uint64_t k,
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_setItem_ij(femoarr_t* p_arr1, uint64_t i, uint64_t j, femoarr_t* p_arrRes);
+void feoarr_setItem_ij(feoarr_t* p_arr1, uint64_t i, uint64_t j, feoarr_t* p_arrRes);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -293,7 +312,7 @@ void femoarr_setItem_ij(femoarr_t* p_arr1, uint64_t i, uint64_t j, femoarr_t* p_
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_setItem_k( sotiarray_t* p_arr1 , uint64_t k, femoarr_t* p_arrRes);
+void feoarr_setItem_k( sotiarray_t* p_arr1 , uint64_t k, feoarr_t* p_arrRes);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -301,8 +320,8 @@ void femoarr_setItem_k( sotiarray_t* p_arr1 , uint64_t k, femoarr_t* p_arrRes);
 
 @param[in]
 ******************************************************************************************************/ 
-void femoarr_setItem_ijk(otinum_t* p_num, uint64_t i, uint64_t j, uint64_t k, 
-        femoarr_t* p_arrRes);
+void feoarr_setItem_ijk(otinum_t* p_num, uint64_t i, uint64_t j, uint64_t k, 
+        feoarr_t* p_arrRes);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -313,7 +332,7 @@ void femoarr_setItem_ijk(otinum_t* p_num, uint64_t i, uint64_t j, uint64_t k,
 @param[in] ncols: Number of columns.
 @param[in] order: Truncation order.
 ******************************************************************************************************/ 
-void femoarr_zeros(femoarr_t* p_array, uint64_t nrows, uint64_t ncols, 
+void feoarr_zeros(feoarr_t* p_array, uint64_t nrows, uint64_t ncols, 
                     uint64_t offsetx, uint64_t offsety, uint64_t nIntPts, uint8_t order);
 // ----------------------------------------------------------------------------------------------------
 
@@ -322,7 +341,7 @@ void femoarr_zeros(femoarr_t* p_array, uint64_t nrows, uint64_t ncols,
 
 @param[inout] p_array: Array.
 ******************************************************************************************************/ 
-void femoarr_free(femoarr_t* p_array);
+void feoarr_free(feoarr_t* p_array);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -333,11 +352,12 @@ void femoarr_free(femoarr_t* p_array);
 @param[in] ncols: Number of columns.
 @param[in] order: Truncation order.
 ******************************************************************************************************/ 
-void femoarr_createEmpty(femoarr_t* p_array, uint64_t nrows, uint64_t ncols, 
+void feoarr_createEmpty(feoarr_t* p_array, uint64_t nrows, uint64_t ncols, 
                     uint64_t offsetx, uint64_t offsety, uint64_t nIntPts, uint8_t order);
 // ----------------------------------------------------------------------------------------------------
 
 
+feoarr_t feoarr_init( void );
 
 
 
@@ -347,15 +367,64 @@ void femoarr_createEmpty(femoarr_t* p_array, uint64_t nrows, uint64_t ncols,
 
 
 
-int64_t fem_defFunctFrom_otiFunc(sotiarray_t* p_arr1, uint64_t derIndx, elemProps_t* elem, femoarr_t* p_arrRes,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// FEM FUNCTIONS
+
+int64_t fem_defFunctFrom_otiFunc(sotiarray_t* p_arr1, uint64_t derIndx, elemProps_t* elem, feoarr_t* p_arrRes,
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_defFunctFrom_oti(otinum_t* num, uint64_t derIndx, elemProps_t* elem, femoarr_t* p_arrRes,
+int64_t fem_defFunctFrom_oti(otinum_t* num, uint64_t derIndx, elemProps_t* elem, feoarr_t* p_arrRes,
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_defFunctFrom_R(double num, uint64_t derIndx, elemProps_t* elem, femoarr_t* p_arrRes,
+int64_t fem_defFunctFrom_R(double num, uint64_t derIndx, elemProps_t* elem, feoarr_t* p_arrRes,
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 

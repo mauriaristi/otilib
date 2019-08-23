@@ -178,10 +178,7 @@ int64_t c_fem_defFunctFrom_R(double num, uint64_t derIndx, elemProps_t* elem, fe
     // ************************************************************************************************
 
     uint64_t i,k;
-    sotinum_t tmpcnt,tmp1,tmp2;
-
-
-    
+    sotinum_t tmpcnt,tmp1,tmp2;    
 
     for (k=0; k<elem->nIntPts; k++){
 

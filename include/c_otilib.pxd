@@ -270,7 +270,16 @@ cdef extern from "oti/oti.h" nogil:
   # Include functions from "dense.h"
   #---------------------------------------------------------------------------------------------------
   otinum_t oarr_det(oarr_t* arr, dhelpl_t dhl);
+  void oarr_det_to(oarr_t* arr, otinum_t* res, dhelpl_t dhl);
+
   oarr_t oarr_transpose(oarr_t* arr, dhelpl_t dhl);
+  void oarr_transpose_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl);
+
+  oarr_t oarr_invert(oarr_t* arr, dhelpl_t dhl);
+  void oarr_invert_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl);
+  
+  oarr_t oarr_eye(uint64_t size, bases_t nbases, ord_t order, dhelpl_t dhl);
+
   oarr_t oarr_matmul_OO(oarr_t* lhs, oarr_t* rhs, dhelpl_t dhl);
   oarr_t oarr_matmul_OR(oarr_t* lhs, darr_t* rhs, dhelpl_t dhl);
   oarr_t oarr_matmul_RO(darr_t* lhs, oarr_t* rhs, dhelpl_t dhl);

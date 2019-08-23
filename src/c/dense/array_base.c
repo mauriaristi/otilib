@@ -648,6 +648,83 @@ oarr_t oarr_copy(oarr_t* arr, dhelpl_t dhl){
 
 // Memory management.
 
+
+// ****************************************************************************************************
+oarr_t oarr_eye(uint64_t size, bases_t nbases, ord_t order, dhelpl_t dhl){
+    
+    uint64_t i;
+    oarr_t res;
+
+    darr_t tmp_arr; // Temporal real array.
+    ord_t ordi; 
+
+
+    // Initialize global attributes.
+
+    // Array specific attributes: arr
+    res.ncols  = size;
+    res.nrows  = size;
+    res.size   = size * size;
+
+    // Get the number of imaginary directions for nbases and order.
+    res.ndir = 0; // Excludes the real direction.
+    // Set the values of the number first.
+    res.order  = order;
+    res.nbases = nbases;
+
+
+    // Initialize real direction.
+    tmp_arr = darr_eye(size);
+    res.re = tmp_arr.p_data;
+    
+    if (res.order != 0){
+            
+        // Allocate memory.
+        res.p_im   = ( arr_t** ) malloc( res.order*sizeof(arr_t*) );
+        res.p_ndpo = (  ndir_t*  ) malloc( res.order*sizeof(ndir_t) );
+
+        if (res.p_im == NULL  || res.p_ndpo == NULL ){
+            printf("--- ERROR: Out of memory\n");
+            exit(OTI_OutOfMemory);
+        }
+
+        for (ordi = 0; ordi<res.order; ordi++){
+
+            res.p_ndpo[ordi] = dhelp_extract_ndirOrder( res.nbases, ordi+1, dhl );
+            
+            res.p_im[ordi]   = ( arr_t* ) malloc( res.p_ndpo[ordi]*sizeof(arr_t) );
+
+            res.ndir += res.p_ndpo[ordi];
+
+            if ( res.p_im[ordi] == NULL ){
+                printf("--- ERROR: Out of memory\n");
+                exit(OTI_OutOfMemory);
+            }
+
+            // Initialize memory within each array.
+            for( i = 0; i < res.p_ndpo[ordi]; i++){
+
+                tmp_arr = darr_zeros(res.nrows,res.ncols);
+
+                res.p_im[ordi][i] = tmp_arr.p_data;
+
+            }
+
+        }
+
+    } else {
+
+        // Set pointer to null
+        res.p_im = NULL;   
+        res.p_ndpo = NULL;     
+    }
+    
+    return res;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+
 // ****************************************************************************************************
 oarr_t oarr_ones(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl){
     

@@ -49,11 +49,21 @@ typedef struct {
 // ----------------------------------------------------------------------------------------------------
 // to add to c_otilib.pxd
 otinum_t oarr_det(oarr_t* arr, dhelpl_t dhl);
+void oarr_det_to(oarr_t* arr, otinum_t* res, dhelpl_t dhl);
+
 oarr_t oarr_transpose(oarr_t* arr, dhelpl_t dhl);
+void oarr_transpose_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl);
+
+oarr_t oarr_invert(oarr_t* arr, dhelpl_t dhl);
+void oarr_invert_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl);
 
 oarr_t oarr_matmul_OO(oarr_t* lhs, oarr_t* rhs, dhelpl_t dhl);
 oarr_t oarr_matmul_OR(oarr_t* lhs, darr_t* rhs, dhelpl_t dhl);
 oarr_t oarr_matmul_RO(darr_t* lhs, oarr_t* rhs, dhelpl_t dhl);
+
+void oarr_matmul_OO_to(oarr_t* lhs, oarr_t* rhs, oarr_t* res, dhelpl_t dhl);
+void oarr_matmul_OR_to(oarr_t* lhs, darr_t* rhs, oarr_t* res, dhelpl_t dhl);
+void oarr_matmul_RO_to(darr_t* lhs, oarr_t* rhs, oarr_t* res, dhelpl_t dhl);
 
 void dhelp_oarr_matmul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
                        oarr_t* rhs, ord_t ord_rhs, // Input 2
@@ -63,7 +73,7 @@ void dhelp_oarr_matmul_RI(oarr_t* lhs, oarr_t* rhs, ord_t ord_rhs, oarr_t* res, 
 void dhelp_oarr_matmul_RR(oarr_t* lhs, oarr_t* rhs, oarr_t* res, dhelpl_t dhl);
 // ARRAY
 
-
+oarr_t oarr_eye(uint64_t size, bases_t nbases, ord_t order, dhelpl_t dhl);
 
 oarr_t oarr_feval(darr_t* feval_re, oarr_t* arr, dhelpl_t dhl );
 void oarr_feval_to(darr_t* feval_re, oarr_t* arr, oarr_t* res, dhelpl_t dhl );

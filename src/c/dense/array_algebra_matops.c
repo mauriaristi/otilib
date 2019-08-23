@@ -245,246 +245,246 @@ oarr_t oarr_transpose(oarr_t* arr, dhelpl_t dhl){
 
 
 
-// 2.3. Inversion.
-// ****************************************************************************************************
- oarr_t oarr_invert(oarr_t* arr, dhelpl_t dhl){
+// // 2.3. Inversion.
+// // ****************************************************************************************************
+//  oarr_t oarr_invert(oarr_t* arr, dhelpl_t dhl){
     
-    otinum_t detInv,
-    otinum_t tmp1, tmp2, tmp3, tmp4;
-    oarr_t res, tmpA1;
+//     otinum_t detInv,
+//     otinum_t tmp1, tmp2, tmp3, tmp4;
+//     oarr_t res, tmpA1;
 
 
 
-    if (arr1->ncols != arr1->nrows){
-        printf("--- DimensionError in matrix inverse. Only square matrices are invertible. ---\n");
-        exit(1);
-    }
+//     if (arr1->ncols != arr1->nrows){
+//         printf("--- DimensionError in matrix inverse. Only square matrices are invertible. ---\n");
+//         exit(1);
+//     }
     
-    res = oti_createZero( arr->nbases, arr->order, dhl);
+//     res = oti_createZero( arr->nbases, arr->order, dhl);
 
-    if ( arr->ncols == 1 ){
+//     if ( arr->ncols == 1 ){
 
-        // Get temporal
-        tmp1 = oti_get_tmp( 0, arr->order, arr->nbases,  dhl);
-        tmp2 = oti_get_tmp( 1, arr->order, arr->nbases,  dhl);
+//         // Get temporal
+//         tmp1 = oti_get_tmp( 0, arr->order, arr->nbases,  dhl);
+//         tmp2 = oti_get_tmp( 1, arr->order, arr->nbases,  dhl);
         
-        // Get item
-        oti_get_item_i_to(arr,0,&tmp1,dhl);
+//         // Get item
+//         oti_get_item_i_to(arr,0,&tmp1,dhl);
 
-        // Perform x^{-1}
+//         // Perform x^{-1}
 
-        oti_pow_to( &tmp1, -1.0, &tmp2, dhl);
+//         oti_pow_to( &tmp1, -1.0, &tmp2, dhl);
         
-        oti_set_item_i_o( &tmp2, 0, &res, dhl);
+//         oti_set_item_i_o( &tmp2, 0, &res, dhl);
 
 
-    } else if (arr1->ncols == 2){
-
-        
-
-//         oarr_det( arr1, &tmp1, dhl); // Get determinant.
-//         oti_pow(&tmp1, -1.0, dhl,&detInv);
-//         oti_free(&tmp1);
-
-//         // Set position 0,0
-//         oti_mul(
-//             &arr1->p_data[3],
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oarr_setItemOTI_indx(&tmp,0,aRes);
-
-
-//         // Set position 0,1
-//         oti_neg(&arr1->p_data[1],&tmp1);
-//         oti_mul(
-//             &tmp1,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp1);
-//         oarr_setItemOTI_indx(&tmp,1,aRes);
+//     } else if (arr1->ncols == 2){
 
         
-//         // Set position 1,0
-//         oti_neg(&arr1->p_data[2],&tmp1);
-//         oti_mul(
-//             &tmp1,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp1);
-//         oarr_setItemOTI_indx(&tmp,2,aRes);
+
+// //         oarr_det( arr1, &tmp1, dhl); // Get determinant.
+// //         oti_pow(&tmp1, -1.0, dhl,&detInv);
+// //         oti_free(&tmp1);
+
+// //         // Set position 0,0
+// //         oti_mul(
+// //             &arr1->p_data[3],
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oarr_setItemOTI_indx(&tmp,0,aRes);
 
 
-//         // Set position 1,1
-//         oti_mul(
-//             &arr1->p_data[0],
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oarr_setItemOTI_indx(&tmp,3,aRes);
+// //         // Set position 0,1
+// //         oti_neg(&arr1->p_data[1],&tmp1);
+// //         oti_mul(
+// //             &tmp1,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp1);
+// //         oarr_setItemOTI_indx(&tmp,1,aRes);
 
-//         oti_free(&detInv);
+        
+// //         // Set position 1,0
+// //         oti_neg(&arr1->p_data[2],&tmp1);
+// //         oti_mul(
+// //             &tmp1,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp1);
+// //         oarr_setItemOTI_indx(&tmp,2,aRes);
+
+
+// //         // Set position 1,1
+// //         oti_mul(
+// //             &arr1->p_data[0],
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oarr_setItemOTI_indx(&tmp,3,aRes);
+
+// //         oti_free(&detInv);
         
 
 
-    } else if (arr1->ncols == 3){
+//     } else if (arr1->ncols == 3){
 
-//         oarr_zeros( &tmpA1, 2, 2, arr1->order);
+// //         oarr_zeros( &tmpA1, 2, 2, arr1->order);
 
-//         if (aRes->p_data == NULL){
-//             oarr_zeros( aRes, arr1->ncols, arr1->nrows, arr1->order);
-//         }
+// //         if (aRes->p_data == NULL){
+// //             oarr_zeros( aRes, arr1->ncols, arr1->nrows, arr1->order);
+// //         }
 
-//         oarr_det( arr1, &tmp1, dhl); // Get determinant.
-//         oti_pow(&tmp1, -1.0, dhl, &detInv);
-//         oti_free(&tmp1);
-
-
-
-//         // Set position 0,0
-//         tmpA1.p_data[0] = arr1->p_data[4];
-//         tmpA1.p_data[1] = arr1->p_data[5];
-//         tmpA1.p_data[2] = arr1->p_data[7];
-//         tmpA1.p_data[3] = arr1->p_data[8];
-//         oarr_det( &tmpA1, &tmp2, dhl);
-//         oti_mul(
-//             &tmp2,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp2);
-//         oarr_setItemOTI_indx(&tmp,0,aRes);
-
-//         // Set position 0,1
-//         tmpA1.p_data[0] = arr1->p_data[2];
-//         tmpA1.p_data[1] = arr1->p_data[1];
-//         tmpA1.p_data[2] = arr1->p_data[8];
-//         tmpA1.p_data[3] = arr1->p_data[7];
-//         oarr_det( &tmpA1, &tmp2, dhl);
-//         oti_mul(
-//             &tmp2,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp2);
-//         oarr_setItemOTI_indx(&tmp,1,aRes);
-
-//         // Set position 0,2
-//         tmpA1.p_data[0] = arr1->p_data[1];
-//         tmpA1.p_data[1] = arr1->p_data[2];
-//         tmpA1.p_data[2] = arr1->p_data[4];
-//         tmpA1.p_data[3] = arr1->p_data[5];
-//         oarr_det( &tmpA1, &tmp2, dhl);
-//         oti_mul(
-//             &tmp2,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp2);
-//         oarr_setItemOTI_indx(&tmp,2,aRes);
+// //         oarr_det( arr1, &tmp1, dhl); // Get determinant.
+// //         oti_pow(&tmp1, -1.0, dhl, &detInv);
+// //         oti_free(&tmp1);
 
 
 
+// //         // Set position 0,0
+// //         tmpA1.p_data[0] = arr1->p_data[4];
+// //         tmpA1.p_data[1] = arr1->p_data[5];
+// //         tmpA1.p_data[2] = arr1->p_data[7];
+// //         tmpA1.p_data[3] = arr1->p_data[8];
+// //         oarr_det( &tmpA1, &tmp2, dhl);
+// //         oti_mul(
+// //             &tmp2,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp2);
+// //         oarr_setItemOTI_indx(&tmp,0,aRes);
 
-//         // Set position 1,0
-//         tmpA1.p_data[0] = arr1->p_data[5];
-//         tmpA1.p_data[1] = arr1->p_data[3];
-//         tmpA1.p_data[2] = arr1->p_data[8];
-//         tmpA1.p_data[3] = arr1->p_data[6];
-//         oarr_det( &tmpA1, &tmp2, dhl);
-//         oti_mul(
-//             &tmp2,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp2);
-//         oarr_setItemOTI_indx(&tmp,3,aRes);
+// //         // Set position 0,1
+// //         tmpA1.p_data[0] = arr1->p_data[2];
+// //         tmpA1.p_data[1] = arr1->p_data[1];
+// //         tmpA1.p_data[2] = arr1->p_data[8];
+// //         tmpA1.p_data[3] = arr1->p_data[7];
+// //         oarr_det( &tmpA1, &tmp2, dhl);
+// //         oti_mul(
+// //             &tmp2,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp2);
+// //         oarr_setItemOTI_indx(&tmp,1,aRes);
 
-//         // Set position 1,1
-//         tmpA1.p_data[0] = arr1->p_data[0];
-//         tmpA1.p_data[1] = arr1->p_data[2];
-//         tmpA1.p_data[2] = arr1->p_data[6];
-//         tmpA1.p_data[3] = arr1->p_data[8];
-//         oarr_det( &tmpA1, &tmp2, dhl);
-//         oti_mul(
-//             &tmp2,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp2);
-//         oarr_setItemOTI_indx(&tmp,4,aRes);
-
-//         // Set position 1,2
-//         tmpA1.p_data[0] = arr1->p_data[2];
-//         tmpA1.p_data[1] = arr1->p_data[0];
-//         tmpA1.p_data[2] = arr1->p_data[5];
-//         tmpA1.p_data[3] = arr1->p_data[3];
-//         oarr_det( &tmpA1, &tmp2, dhl);
-//         oti_mul(
-//             &tmp2,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp2);
-//         oarr_setItemOTI_indx(&tmp,5,aRes);
+// //         // Set position 0,2
+// //         tmpA1.p_data[0] = arr1->p_data[1];
+// //         tmpA1.p_data[1] = arr1->p_data[2];
+// //         tmpA1.p_data[2] = arr1->p_data[4];
+// //         tmpA1.p_data[3] = arr1->p_data[5];
+// //         oarr_det( &tmpA1, &tmp2, dhl);
+// //         oti_mul(
+// //             &tmp2,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp2);
+// //         oarr_setItemOTI_indx(&tmp,2,aRes);
 
 
 
 
-//         // Set position 2,0
-//         tmpA1.p_data[0] = arr1->p_data[3];
-//         tmpA1.p_data[1] = arr1->p_data[4];
-//         tmpA1.p_data[2] = arr1->p_data[6];
-//         tmpA1.p_data[3] = arr1->p_data[7];
-//         oarr_det( &tmpA1, &tmp2, dhl);
-//         oti_mul(
-//             &tmp2,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp2);
-//         oarr_setItemOTI_indx(&tmp,6,aRes);
+// //         // Set position 1,0
+// //         tmpA1.p_data[0] = arr1->p_data[5];
+// //         tmpA1.p_data[1] = arr1->p_data[3];
+// //         tmpA1.p_data[2] = arr1->p_data[8];
+// //         tmpA1.p_data[3] = arr1->p_data[6];
+// //         oarr_det( &tmpA1, &tmp2, dhl);
+// //         oti_mul(
+// //             &tmp2,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp2);
+// //         oarr_setItemOTI_indx(&tmp,3,aRes);
 
-//         // Set position 2,1
-//         tmpA1.p_data[0] = arr1->p_data[1];
-//         tmpA1.p_data[1] = arr1->p_data[0];
-//         tmpA1.p_data[2] = arr1->p_data[7];
-//         tmpA1.p_data[3] = arr1->p_data[6];
-//         oarr_det( &tmpA1, &tmp2, dhl);
-//         oti_mul(
-//             &tmp2,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp2);
-//         oarr_setItemOTI_indx(&tmp,7,aRes);
+// //         // Set position 1,1
+// //         tmpA1.p_data[0] = arr1->p_data[0];
+// //         tmpA1.p_data[1] = arr1->p_data[2];
+// //         tmpA1.p_data[2] = arr1->p_data[6];
+// //         tmpA1.p_data[3] = arr1->p_data[8];
+// //         oarr_det( &tmpA1, &tmp2, dhl);
+// //         oti_mul(
+// //             &tmp2,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp2);
+// //         oarr_setItemOTI_indx(&tmp,4,aRes);
 
-//         // Set position 2,2
-//         tmpA1.p_data[0] = arr1->p_data[0];
-//         tmpA1.p_data[1] = arr1->p_data[1];
-//         tmpA1.p_data[2] = arr1->p_data[3];
-//         tmpA1.p_data[3] = arr1->p_data[4];
-//         oarr_det( &tmpA1, &tmp2, dhl);
-//         oti_mul(
-//             &tmp2,
-//             &detInv,
-//             &tmp,
-//             dhl);
-//         oti_free(&tmp2);
-//         oarr_setItemOTI_indx(&tmp,8,aRes);
-
-
-//         oti_free(&detInv);
-//         free(tmpA1.p_data);
+// //         // Set position 1,2
+// //         tmpA1.p_data[0] = arr1->p_data[2];
+// //         tmpA1.p_data[1] = arr1->p_data[0];
+// //         tmpA1.p_data[2] = arr1->p_data[5];
+// //         tmpA1.p_data[3] = arr1->p_data[3];
+// //         oarr_det( &tmpA1, &tmp2, dhl);
+// //         oti_mul(
+// //             &tmp2,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp2);
+// //         oarr_setItemOTI_indx(&tmp,5,aRes);
 
 
-    }
+
+
+// //         // Set position 2,0
+// //         tmpA1.p_data[0] = arr1->p_data[3];
+// //         tmpA1.p_data[1] = arr1->p_data[4];
+// //         tmpA1.p_data[2] = arr1->p_data[6];
+// //         tmpA1.p_data[3] = arr1->p_data[7];
+// //         oarr_det( &tmpA1, &tmp2, dhl);
+// //         oti_mul(
+// //             &tmp2,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp2);
+// //         oarr_setItemOTI_indx(&tmp,6,aRes);
+
+// //         // Set position 2,1
+// //         tmpA1.p_data[0] = arr1->p_data[1];
+// //         tmpA1.p_data[1] = arr1->p_data[0];
+// //         tmpA1.p_data[2] = arr1->p_data[7];
+// //         tmpA1.p_data[3] = arr1->p_data[6];
+// //         oarr_det( &tmpA1, &tmp2, dhl);
+// //         oti_mul(
+// //             &tmp2,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp2);
+// //         oarr_setItemOTI_indx(&tmp,7,aRes);
+
+// //         // Set position 2,2
+// //         tmpA1.p_data[0] = arr1->p_data[0];
+// //         tmpA1.p_data[1] = arr1->p_data[1];
+// //         tmpA1.p_data[2] = arr1->p_data[3];
+// //         tmpA1.p_data[3] = arr1->p_data[4];
+// //         oarr_det( &tmpA1, &tmp2, dhl);
+// //         oti_mul(
+// //             &tmp2,
+// //             &detInv,
+// //             &tmp,
+// //             dhl);
+// //         oti_free(&tmp2);
+// //         oarr_setItemOTI_indx(&tmp,8,aRes);
+
+
+// //         oti_free(&detInv);
+// //         free(tmpA1.p_data);
+
+
+//     }
     
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
+// // ----------------------------------------------------------------------------------------------------
 
 
 

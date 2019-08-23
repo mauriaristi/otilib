@@ -33,8 +33,10 @@ if(APPLE)
   # set(CYTHON_CMD_CALL_PREC "CC=icc")
 elseif(UNIX)
 	# This is for the case of unix OS
-	set(CMAKE_C_COMPILER "/usr/bin/gcc")
+	set(CMAKE_C_COMPILER "gcc")
+  set(CYTHON_CMD_CALL_PREC "CC=gcc")
   # set(CMAKE_C_COMPILER "icc")
+  # set(CMAKE_C_COMPILER "gcc")
   # set(CYTHON_CMD_CALL_PREC "CC=icc")
 endif(APPLE)
  

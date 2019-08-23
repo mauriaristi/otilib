@@ -38,9 +38,9 @@ Extension("pyoti.core",
 	include_dirs = include_dirs,
   define_macros = macros,
   libraries = libraries,
-  language = language,
+  # language = language,
   extra_compile_args = extra_compile_args,
-  extra_link_args = extra_link_args,
+  # extra_link_args = extra_link_args,
   depends=dependencies
   ),
 #
@@ -49,9 +49,9 @@ Extension("pyoti.real",
   include_dirs = include_dirs,
   define_macros = macros,
   libraries = libraries,
-  language = language,
+  # language = language,
   extra_compile_args = extra_compile_args,
-  extra_link_args = extra_link_args,
+  # extra_link_args = extra_link_args,
   depends=dependencies
   ),
 #
@@ -60,9 +60,9 @@ Extension("pyoti.dense",
 	include_dirs = include_dirs,
   define_macros = macros,
   libraries = libraries,
-  language = language,
+  # language = language,
   extra_compile_args = extra_compile_args,
-  extra_link_args = extra_link_args,
+  # extra_link_args = extra_link_args,
   depends=dependencies
   ),
 #
@@ -124,7 +124,3 @@ setup(
 
 
 # python3 setup.py build_ext -i #(If building inplace) 
-
-
-
-

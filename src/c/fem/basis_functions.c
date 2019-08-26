@@ -1,9 +1,13 @@
 
+
+
+
+
 // ****************************************************************************************************
-int64_t c_fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis){
+int64_t fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis){
     /*
-    c_fem_basisFunctions_N_QuadSerendP2_2Diso(  basisId,  basisDer,  ncoords, 
+    fem_basisFunctions_N_QuadSerendP2_2Diso(  basisId,  basisDer,  ncoords, 
                                             ndim,     coords,    other_data,
                                             evalBasis) 
 
@@ -70,8 +74,8 @@ int64_t c_fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basis
 
     for(i=0; i<ncoords; i++){
 
-        c_darray_getItem(coords,i,0,&xi);
-        c_darray_getItem(coords,i,1,&eta);
+        xi  = darr_get_item_ij(coords,i,0);
+        eta = darr_get_item_ij(coords,i,1);
         
         // Detect which basis function is being computed: N1, N2, or N3.
         if (basisId == 0){
@@ -205,7 +209,7 @@ int64_t c_fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basis
                 evalBasis_i = 0.0;  
                 
             }
-            // =============================================================================
+
         }  else if (basisId == 4){
 
             // Detect which derivative is being computed
@@ -340,7 +344,7 @@ int64_t c_fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basis
 
         }
 
-        c_darray_setItem( evalBasis_i, basisId, i, evalBasis);
+        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
 
     }
 
@@ -354,10 +358,10 @@ int64_t c_fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basis
 
 
 // ****************************************************************************************************
-int64_t c_fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis){
+int64_t fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis){
     /*
-    c_fem_basisFunctions_N_QuadP1_2Diso(  basisId,  basisDer,  ncoords, 
+    fem_basisFunctions_N_QuadP1_2Diso(  basisId,  basisDer,  ncoords, 
                                             ndim,     coords,    other_data,
                                             evalBasis) 
 
@@ -417,8 +421,8 @@ int64_t c_fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, d
 
     for(i=0; i<ncoords; i++){
 
-        c_darray_getItem(coords,i,0,&xi);
-        c_darray_getItem(coords,i,1,&eta);
+        xi  = darr_get_item_ij(coords,i,0);
+        eta = darr_get_item_ij(coords,i,1);
         
         // Detect which basis function is being computed: N1, N2, or N3.
         if (basisId == 0){
@@ -523,7 +527,7 @@ int64_t c_fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, d
 
         }  
 
-        c_darray_setItem( evalBasis_i, basisId, i, evalBasis);
+        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
 
     }
 
@@ -534,10 +538,10 @@ int64_t c_fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, d
 
 
 // ****************************************************************************************************
-int64_t c_fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis){
+int64_t fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis){
     /*
-    c_fem_basisFunctions_N_TriangP1_2Diso(  basisId,  basisDer,  ncoords, 
+    fem_basisFunctions_N_TriangP1_2Diso(  basisId,  basisDer,  ncoords, 
                                             ndim,     coords,    other_data,
                                             evalBasis) 
 
@@ -601,8 +605,8 @@ int64_t c_fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer,
 
     for(i=0; i<ncoords; i++){
         
-        c_darray_getItem(coords,i,0,&xi);
-        c_darray_getItem(coords,i,1,&eta);
+        xi  = darr_get_item_ij(coords,i,0);
+        eta = darr_get_item_ij(coords,i,1);
         
         // Detect which basis function is being computed: N1, N2, or N3.
         if (basisId == 0){
@@ -765,7 +769,7 @@ int64_t c_fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer,
 
         }  
 
-        c_darray_setItem( evalBasis_i, basisId, i, evalBasis);
+        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
 
     }
 
@@ -780,10 +784,10 @@ int64_t c_fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer,
 
 
 // ****************************************************************************************************
-int64_t c_fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis){
+int64_t fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis){
     /*
-    c_fem_basisFunctions_N_TriangP1_2Diso(  basisId,  basisDer,  ncoords, 
+    fem_basisFunctions_N_TriangP1_2Diso(  basisId,  basisDer,  ncoords, 
                                             ndim,     coords,    other_data,
                                             evalBasis) 
 
@@ -843,8 +847,8 @@ int64_t c_fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer,
 
     for(i=0; i<ncoords; i++){
 
-        c_darray_getItem(coords,i,0,&xi);
-        c_darray_getItem(coords,i,1,&eta);
+        xi  = darr_get_item_ij(coords,i,0);
+        eta = darr_get_item_ij(coords,i,1);
         
         // Detect which basis function is being computed: N1, N2, or N3.
         if (basisId == 0){
@@ -904,7 +908,7 @@ int64_t c_fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer,
 
         } 
 
-        c_darray_setItem( evalBasis_i, basisId, i, evalBasis);
+        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
 
     }
 
@@ -915,10 +919,10 @@ int64_t c_fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer,
 
 
 // ****************************************************************************************************
-int64_t c_fem_basisFunctions_N_TriangP0_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis){
+int64_t fem_basisFunctions_N_TriangP0_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis){
     /*
-    c_fem_basisFunctions_N_TriangP1_2Diso(  basisId,  basisDer,  ncoords, 
+    fem_basisFunctions_N_TriangP1_2Diso(  basisId,  basisDer,  ncoords, 
                                             ndim,     coords,    other_data,
                                             evalBasis) 
 
@@ -989,7 +993,7 @@ int64_t c_fem_basisFunctions_N_TriangP0_2Diso(int64_t basisId, int64_t basisDer,
 
         }
 
-        c_darray_setItem( evalBasis_i, basisId, i, evalBasis);
+        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
 
     }
 
@@ -1001,10 +1005,10 @@ int64_t c_fem_basisFunctions_N_TriangP0_2Diso(int64_t basisId, int64_t basisDer,
 
 
 // ****************************************************************************************************
-int64_t c_fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis){
+int64_t fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis){
     /*
-    c_fem_basisFunctions_N_LineP2_1Diso(  basisId,  basisDer,  ncoords, 
+    fem_basisFunctions_N_LineP2_1Diso(  basisId,  basisDer,  ncoords, 
                                             ndim,     coords,    other_data,
                                             evalBasis) 
 
@@ -1060,7 +1064,7 @@ int64_t c_fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, d
 
     for(i=0; i<ncoords; i++){
 
-        c_darray_getItem(coords,i,0,&xi);
+        xi = darr_get_item_ij(coords,i,0);
         
         // Detect which basis function is being computed: N1, N2
         if (basisId == 0){
@@ -1128,7 +1132,7 @@ int64_t c_fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, d
 
         }  
 
-        c_darray_setItem( evalBasis_i, basisId, i, evalBasis);
+        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
 
     }
 
@@ -1142,10 +1146,10 @@ int64_t c_fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, d
 
 
 // ****************************************************************************************************
-int64_t c_fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis){
+int64_t fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis){
     /*
-    c_fem_basisFunctions_N_LineP1_1Diso(  basisId,  basisDer,  ncoords, 
+    fem_basisFunctions_N_LineP1_1Diso(  basisId,  basisDer,  ncoords, 
                                             ndim,     coords,    other_data,
                                             evalBasis) 
 
@@ -1201,7 +1205,7 @@ int64_t c_fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, d
 
     for(i=0; i<ncoords; i++){
 
-        c_darray_getItem(coords,i,0,&xi);
+        xi = darr_get_item_ij(coords,i,0);
         
         // Detect which basis function is being computed: N1, N2
         if (basisId == 0){
@@ -1240,7 +1244,7 @@ int64_t c_fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, d
 
         }  
 
-        c_darray_setItem( evalBasis_i, basisId, i, evalBasis);
+        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
 
     }
 
@@ -1252,10 +1256,10 @@ int64_t c_fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, d
 
 
 // ****************************************************************************************************
-int64_t c_fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis){
+int64_t fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis){
     /*
-    c_fem_basisFunctions_N_PntP0_0Diso(  basisId,  basisDer,  ncoords, 
+    fem_basisFunctions_N_PntP0_0Diso(  basisId,  basisDer,  ncoords, 
                                             ndim,     coords,    other_data,
                                             evalBasis) 
 
@@ -1327,7 +1331,7 @@ int64_t c_fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, da
 
         }  
 
-        c_darray_setItem( evalBasis_i, basisId, i, evalBasis);
+        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
 
     }
 

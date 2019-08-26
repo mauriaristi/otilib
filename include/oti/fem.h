@@ -4,7 +4,9 @@
 // ---------------------------------     EXTERNAL LIBRARIES     ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-#include "oti/otinum_spr_array.h"
+#include "oti/comm.h"
+#include "oti/real.h"
+#include "oti/dense.h"
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------    END EXTERNAL LIBRARIES     -------------------------------------
@@ -57,7 +59,7 @@ typedef struct elemprops_s{
     feoarr_t            Jdet; ///< (1 x 1)           Holder for Determinant of Jacobian. 
     feoarr_t*        p_basis; ///< (nder) List (1 x nbasis) basis of the function in spat. coords.
     feoarr_t    p_detWeights; ///< ( 1 x 1 ) Array with the integration weights.
-    int64_t (*f_basis)(int64_t,int64_t,darray_t*,void*,darray_t*); ///<  Interpolation function.
+    int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*); ///<  Interpolation function.
 } elemProps_t;
 
 // ----------------------------------------------------------------------------------------------------
@@ -193,7 +195,23 @@ enum operEnum {
 
 @param[in]
 ******************************************************************************************************/ 
-void feoarr_gaussIntegrateOverElement(feoarr_t* p_arr1, elemProps_t* elem, sotiarray_t* p_arrRes, 
+void feoarr_gaussIntegrateOverElement(feoarr_t* arr1, elemProps_t* elem, oarr_t* res, 
+    dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+void feoarr_sub_FF_to(feoarr_t* arr1, feoarr_t* arr2, feoarr_t* res, dhelpl_t dhl);
+void feoarr_sum_FF_to(feoarr_t* arr1, feoarr_t* arr2, feoarr_t* res, dhelpl_t dhl);
+void feoarr_neg_to(feoarr_t* arr, feoarr_t* res, dhelpl_t dhl);
+void feoarr_mul_oF_to( otinum_t* num, feoarr_t* arr, feoarr_t* res, dhelpl_t dhl);
+void feoarr_mul_rF_to(coeff_t num, feoarr_t* arr, feoarr_t* res, dhelpl_t dhl);
+
+
+/**************************************************************************************************//**
+@brief 
+
+@param[in]
+******************************************************************************************************/ 
+void feoarr_matmul(feoarr_t* arr1, feoarr_t* arr2, feoarr_t* res, 
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -202,8 +220,7 @@ void feoarr_gaussIntegrateOverElement(feoarr_t* p_arr1, elemProps_t* elem, sotia
 
 @param[in]
 ******************************************************************************************************/ 
-void feoarr_sub(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, 
-    dhelpl_t dhl);
+void feoarr_det(feoarr_t* arr1, feoarr_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -211,153 +228,30 @@ void feoarr_sub(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes,
 
 @param[in]
 ******************************************************************************************************/ 
-void feoarr_sum(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, 
-    dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_mul_oti(feoarr_t* p_arr1, otinum_t* num2, feoarr_t* p_arrRes, 
-    dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_mul_R(feoarr_t* p_arr1, double num2, feoarr_t* p_arrRes);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_matmul(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, 
-    dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_neg(feoarr_t* p_arr1, feoarr_t* p_arrRes);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_det(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_invert(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_getItem_ij(feoarr_t* p_arr1, uint64_t i, uint64_t j,feoarr_t* p_arrRes);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_getItem_k(feoarr_t* p_arr1, uint64_t k, 
-        sotiarray_t* p_arrRes);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_fromOther(feoarr_t* p_arr1, feoarr_t* p_res);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_getItem_ijk(feoarr_t* p_arr1, uint64_t i, uint64_t j, uint64_t k, 
-        otinum_t* p_res);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_setItem_ij(feoarr_t* p_arr1, uint64_t i, uint64_t j, feoarr_t* p_arrRes);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_setItem_k( sotiarray_t* p_arr1 , uint64_t k, feoarr_t* p_arrRes);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief 
-
-@param[in]
-******************************************************************************************************/ 
-void feoarr_setItem_ijk(otinum_t* p_num, uint64_t i, uint64_t j, uint64_t k, 
-        feoarr_t* p_arrRes);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Allocate a femarray object and set all elements to zero.
-
-@param[inout] p_array: Array.
-@param[in] nrows: Number of rows.
-@param[in] ncols: Number of columns.
-@param[in] order: Truncation order.
-******************************************************************************************************/ 
-void feoarr_zeros(feoarr_t* p_array, uint64_t nrows, uint64_t ncols, 
-                    uint64_t offsetx, uint64_t offsety, uint64_t nIntPts, uint8_t order);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Free all memory associated with the array.
-
-@param[inout] p_array: Array.
-******************************************************************************************************/ 
-void feoarr_free(feoarr_t* p_array);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Allocate a femarray object. 
-
-@param[inout] p_array: Array.
-@param[in] nrows: Number of rows.
-@param[in] ncols: Number of columns.
-@param[in] order: Truncation order.
-******************************************************************************************************/ 
-void feoarr_createEmpty(feoarr_t* p_array, uint64_t nrows, uint64_t ncols, 
-                    uint64_t offsetx, uint64_t offsety, uint64_t nIntPts, uint8_t order);
+void feoarr_invert(feoarr_t* arr1, feoarr_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+void feoarr_copy_to(feoarr_t* src, feoarr_t* dst, dhelpl_t dhl);
+feoarr_t feoarr_copy(feoarr_t* src, dhelpl_t dhl);
+
+void feoarr_get_item_ij_to(feoarr_t* arr, uint64_t i, uint64_t j, feoarr_t* res,dhelpl_t dhl);
+void feoarr_get_item_k_to(feoarr_t* arr, uint64_t k, oarr_t* res,dhelpl_t dhl);
+void feoarr_get_item_ijk_to(feoarr_t* arr, uint64_t i, uint64_t j, uint64_t k, otinum_t* res,dhelpl_t dhl);
+void feoarr_set_item_ij(feoarr_t* arr, uint64_t i, uint64_t j, feoarr_t* res, dhelpl_t dhl);
+void feoarr_set_item_k( oarr_t* arr , uint64_t k, feoarr_t* res, dhelpl_t dhl);
+void feoarr_set_item_ijk(otinum_t* num, uint64_t i, uint64_t j, uint64_t k, feoarr_t* res, dhelpl_t dhl);
+feoarr_t feoarr_zeros( uint64_t nrows, uint64_t ncols, uint64_t offsetx, uint64_t offsety, 
+                       uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl);
+void feoarr_free(feoarr_t* arr);
 feoarr_t feoarr_init( void );
+
+feoarr_t feoarr_createEmpty( uint64_t nrows, uint64_t ncols, uint64_t offsetx, uint64_t offsety, 
+                             uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl);
 
 
 
@@ -416,23 +310,23 @@ feoarr_t feoarr_init( void );
 
 // FEM FUNCTIONS
 
-int64_t fem_defFunctFrom_otiFunc(sotiarray_t* p_arr1, uint64_t derIndx, elemProps_t* elem, feoarr_t* p_arrRes,
+int64_t fem_defFunctFrom_otiFunc(oarr_t* arr1, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_defFunctFrom_oti(otinum_t* num, uint64_t derIndx, elemProps_t* elem, feoarr_t* p_arrRes,
+int64_t fem_defFunctFrom_oti(otinum_t* num, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_defFunctFrom_R(double num, uint64_t derIndx, elemProps_t* elem, feoarr_t* p_arrRes,
+int64_t fem_defFunctFrom_R(double num, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 int64_t fem_defineSpatial( elemProps_t* elem, uint16_t derFlags, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_computeJacobian( elemProps_t* elem, sotiarray_t* xcoords, sotiarray_t* ycoords,
-                               sotiarray_t* zcoords, dhelpl_t dhl);
+int64_t fem_computeJacobian( elemProps_t* elem, oarr_t* xcoords, oarr_t* ycoords,
+                               oarr_t* zcoords, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 int64_t fem_unInitElement(elemProps_t* elem);
@@ -441,54 +335,93 @@ int64_t fem_unInitElement(elemProps_t* elem);
 int64_t fem_initElement(uint64_t order, uint8_t otiorder,uint8_t nDimAnalysis, elemProps_t* elem);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_integrateSOTIfunct(sotiarray_t* f_eval, darray_t* weights, otinum_t* res,
+int64_t fem_integrateSOTIfunct(oarr_t* f_eval, darr_t* weights, otinum_t* res,
                                  dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 int64_t fem_integrationPoints(uint64_t order, int64_t elementType, 
-                                darray_t* coords, darray_t* weights);
+                                darr_t* coords, darr_t* weights);
 // ----------------------------------------------------------------------------------------------------
 
 uint64_t fem_addLineIntegrationPoints(uint8_t numberOfPermutations, uint64_t startPoint, 
                                            double a,  double w,
-                                           darray_t* coords, darray_t* weights);
+                                           darr_t* coords, darr_t* weights);
 // ----------------------------------------------------------------------------------------------------
 
 uint64_t fem_addTriangleIntegrationPoints(uint8_t numberOfPermutations, uint64_t startPoint, 
                                            double a, double b, double c, double w,
-                                           darray_t* coords, darray_t* weights);
+                                           darr_t* coords, darr_t* weights);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+int64_t fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis);
+int64_t fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis);
+int64_t fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis);
+int64_t fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_basisFunctions_N_TriangP0_2Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis);
+int64_t fem_basisFunctions_N_TriangP0_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis);
+int64_t fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis);
+int64_t fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, darray_t* coords,   
-                                              void* other_data, darray_t* evalBasis);
+int64_t fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
+                                              void* other_data, darr_t* evalBasis);
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------

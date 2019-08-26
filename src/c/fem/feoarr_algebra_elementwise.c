@@ -2,42 +2,26 @@
 
 
 
-
 // ****************************************************************************************************
-void feoarr_sub(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, 
-    dhelpl_t dhl){
+void feoarr_sub_FF_to(feoarr_t* arr1, feoarr_t* arr2, feoarr_t* res, dhelpl_t dhl){
     /*
-    feoarr_det(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl)
-
-    Determinant of femarray
+    Subtraction of two arrays.
 
     INPUTS:
 
-        ->   p_arr1:    Array
-
-        ->   p_arr2:    Array
-        
-        -> p_arrRes:    Result of operation.
-
-        ->     dhl:    Direction helper
+        -> arr1:   Array.
+        -> arr2:   Array.
+        -> res:    Result of operation.
+        -> dhl:    Direction helper.
 
     */ 
     // ************************************************************************************************
 
     uint64_t i;
 
-    if (p_arrRes->p_data == NULL){
+    for (i = 0; i<arr1->nIntPts; i++){
 
-        feoarr_zeros(p_arrRes, p_arr1->ncols, p_arr1->nrows, 
-            p_arr1->offsetx,p_arr1->offsety, p_arr1->nIntPts, p_arr1->order);
-
-    }
-
-
-    for (i = 0; i<p_arr1->nIntPts; i++){
-
-        sotiarray_matsub_otioti(&p_arr1->p_data[i], &p_arr2->p_data[i], 
-            &p_arrRes->p_data[i], dhl);
+        oarr_sub_OO_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i], dhl);
 
     }
 
@@ -46,40 +30,27 @@ void feoarr_sub(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes,
 
 
 // ****************************************************************************************************
-void feoarr_sum(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, 
-    dhelpl_t dhl){
+void feoarr_sum_FF_to(feoarr_t* arr1, feoarr_t* arr2, feoarr_t* res, dhelpl_t dhl){
     /*
-    feoarr_det(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl)
+    feoarr_det(feoarr_t* arr1, feoarr_t* res, dhelpl_t dhl)
 
     Determinant of femarray
 
     INPUTS:
 
-        ->   p_arr1:    Array
-
-        ->   p_arr2:    Array
-        
-        -> p_arrRes:    Result of operation.
-
-        ->     dhl:    Direction helper
+        -> arr1: Array
+        -> arr2: Array        
+        -> res:  Result of operation.
+        -> dhl:  Direction helper
 
     */ 
     // ************************************************************************************************
 
     uint64_t i;
 
-    if (p_arrRes->p_data == NULL){
+    for (i = 0; i<arr1->nIntPts; i++){
 
-        feoarr_zeros(p_arrRes, p_arr1->ncols, p_arr1->nrows, 
-            p_arr1->offsetx,p_arr1->offsety, p_arr1->nIntPts, p_arr1->order);
-
-    }
-
-
-    for (i = 0; i<p_arr1->nIntPts; i++){
-
-        sotiarray_matsum_otioti(&p_arr1->p_data[i], &p_arr2->p_data[i], 
-            &p_arrRes->p_data[i], dhl);
+        oarr_sum_OO_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i], dhl);
 
     }
 
@@ -87,39 +58,51 @@ void feoarr_sum(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes,
 // ----------------------------------------------------------------------------------------------------
 
 
+
+
 // ****************************************************************************************************
-void feoarr_mul_oti(feoarr_t* p_arr1, otinum_t* num2, feoarr_t* p_arrRes, 
-    dhelpl_t dhl){
+void feoarr_neg_to(feoarr_t* arr, feoarr_t* res, dhelpl_t dhl){
     /*
-    feoarr_det(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl)
+    @brief Negation of feoarr type.
 
-    Determinant of femarray
-
-    INPUTS:
-
-        ->   p_arr1:    Array
-
-        ->   p_arr2:    Array
-        
-        -> p_arrRes:    Result of operation.
-
-        ->     dhl:    Direction helper
+    @param[in]    arr:  Array.
+    @param[inout] res:   Result of operation.
 
     */ 
     // ************************************************************************************************
 
     uint64_t i;
 
-    if (p_arrRes->p_data == NULL){
+    for (i = 0; i<arr->nIntPts; i++){
 
-        feoarr_zeros(p_arrRes, p_arr1->ncols, p_arr1->nrows, 
-            p_arr1->offsetx,p_arr1->offsety, p_arr1->nIntPts, p_arr1->order);
+        oarr_neg_to( &arr->p_data[i], &res->p_data[i], dhl);
 
     }
 
-    for (i = 0; i<p_arr1->nIntPts; i++){
+}
+// ----------------------------------------------------------------------------------------------------
 
-        sotiarray_mul_oti(&p_arr1->p_data[i], num2, &p_arrRes->p_data[i], dhl);
+
+
+
+
+// ****************************************************************************************************
+void feoarr_mul_oF_to( otinum_t* num, feoarr_t* arr, feoarr_t* res, dhelpl_t dhl){
+    /*
+    @brief Elementwise multiplication by scalar oti number.
+
+    @param arr1:   Array.
+    @param res:    Result of operation.
+    @param dhl:    Direction helper.
+
+    */ 
+    // ************************************************************************************************
+
+    uint64_t i;
+
+    for (i = 0; i<arr->nIntPts; i++){
+
+        oarr_mul_oO_to( num, &arr->p_data[i], &res->p_data[i], dhl);
 
     }
 
@@ -129,73 +112,24 @@ void feoarr_mul_oti(feoarr_t* p_arr1, otinum_t* num2, feoarr_t* p_arrRes,
 
 
 // ****************************************************************************************************
-void feoarr_neg(feoarr_t* p_arr1, feoarr_t* p_arrRes){
+void feoarr_mul_rF_to(coeff_t num, feoarr_t* arr, feoarr_t* res, dhelpl_t dhl){
     /*
-    feoarr_det(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl)
-
-    Determinant of femarray
+    @brief Elementwise multiplication by a real number.
 
     INPUTS:
 
-        ->   p_arr1:    Array
-
-        ->   p_arr2:    Array
-        
-        -> p_arrRes:    Result of operation.
+    @param[in]    num:   Scalar.
+    @param[in]    arr:   Array
+    @param[inout] res:   Result of operation.
 
     */ 
     // ************************************************************************************************
 
     uint64_t i;
 
-    if (p_arrRes->p_data == NULL){
+    for (i = 0; i<arr->nIntPts; i++){
 
-        feoarr_zeros(p_arrRes, p_arr1->ncols, p_arr1->nrows, 
-            p_arr1->offsetx,p_arr1->offsety, p_arr1->nIntPts, p_arr1->order);
-
-    }
-
-    for (i = 0; i<p_arr1->nIntPts; i++){
-
-        sotiarray_neg(&p_arr1->p_data[i], &p_arrRes->p_data[i]);
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-void feoarr_mul_rF(coeff_t num, feoarr_t* arr, feoarr_t* res, dhelpl_t dhl){
-    /*
-    feoarr_det(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl)
-
-    Determinant of femarray
-
-    INPUTS:
-
-        ->   p_arr1:    Array
-
-        ->   p_arr2:    Array
-        
-        -> p_arrRes:    Result of operation.
-
-    */ 
-    // ************************************************************************************************
-
-    uint64_t i;
-
-    if (p_arrRes->p_data == NULL){
-
-        feoarr_zeros(p_arrRes, p_arr1->ncols, p_arr1->nrows, 
-            p_arr1->offsetx,p_arr1->offsety, p_arr1->nIntPts, p_arr1->order);
-
-    }
-
-    for (i = 0; i<p_arr1->nIntPts; i++){
-
-        sotiarray_mul_R(&p_arr1->p_data[i], num2, &p_arrRes->p_data[i]);
+        oarr_mul_rO_to( num, &arr->p_data[i],  &res->p_data[i], dhl );
 
     }
 

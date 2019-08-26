@@ -5,12 +5,16 @@
 // ---------------------------------     EXTERNAL LIBRARIES     ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+// Core functions.
 #include "oti/core.h"
 #include "oti/real.h"
+
+// Algebras.
 #include "oti/dense.h"
 #include "oti/sparse.h"
-// #include "oti/otinum_dense_array.h"
-// #include "oti/otinum_spr_array.h"
+
+// FEM support.
+#include "oti/fem.h"
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------    END EXTERNAL LIBRARIES     -------------------------------------

@@ -54,6 +54,7 @@ add_library (oti        c/core.c
 						c/real.c
 	                    c/dense.c
 	                    c/sparse.c
+                        c/fem.c
 	                    # c/otinum_spr_array.c
 	                    )
 

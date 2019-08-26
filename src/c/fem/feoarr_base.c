@@ -15,122 +15,114 @@
 
 
 
+// // ****************************************************************************************************
+// void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* res, dhelpl_t dhl){
+//     /*
+//     Gauss integration over all elements of a femarray.
 
+//     INPUTS:
 
+//         ->   p_arr1:    Array
 
-
-
-
-
-
-// ****************************************************************************************************
-void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* res, dhelpl_t dhl){
-    /*
-    Gauss integration over all elements of a femarray.
-
-    INPUTS:
-
-        ->   p_arr1:    Array
-
-        ->   elem:      Element with the information of the solution.
+//         ->   elem:      Element with the information of the solution.
         
-        -> p_arrRes:    Result of operation.
+//         -> res:    Result of operation.
 
-        ->     dhl:    Direction helper
+//         ->     dhl:    Direction helper
 
-    */ 
-    // ************************************************************************************************
+//     */ 
+//     // ************************************************************************************************
 
-    uint64_t i,j,k;
-    otinum_t tmp1, tmp2, tmp3,tmp4;
+//     uint64_t i,j,k;
+//     otinum_t tmp1, tmp2, tmp3,tmp4;
 
-    // double realVal;
+//     // double realVal;
     
 
-    if (p_arrRes->p_data == NULL){
+//     if (res->p_data == NULL){
 
-        // sotiarray_zeros(p_arrRes, p_arr1->ncols, p_arr1->nrows, p_arr1->order);
+//         // sotiarray_zeros(res, p_arr1->ncols, p_arr1->nrows, p_arr1->order);
 
-    }
+//     }
 
-    // printf("\nIntegrating over element.\n");
+//     // printf("\nIntegrating over element.\n");
     
-    for (i = 0; i<p_arr1->nrows; i++){
+//     for (i = 0; i<p_arr1->nrows; i++){
     
-        for (j = 0; j<p_arr1->ncols; j++){
+//         for (j = 0; j<p_arr1->ncols; j++){
 
-            // printf("  Integrating position (%llu,%llu)\n",i,j);
+//             // printf("  Integrating position (%llu,%llu)\n",i,j);
             
-            soti_createEmpty(&tmp1,0,p_arr1->order);
+//             soti_createEmpty(&tmp1,0,p_arr1->order);
 
-            for (k = 0; k<elem->nIntPts; k++){
+//             for (k = 0; k<elem->nIntPts; k++){
 
-                // printf("    Summing integration point %llu\n",k);
-                // printf("    Getting element of integration function\n");
-                feoarr_getItem_ijk(p_arr1, i, j, k, &tmp2);
+//                 // printf("    Summing integration point %llu\n",k);
+//                 // printf("    Getting element of integration function\n");
+//                 feoarr_getItem_ijk(p_arr1, i, j, k, &tmp2);
 
-                // printf("    Getting element of weights function\n");
-                feoarr_getItem_ijk(&elem->p_detWeights, 0, 0, k, &tmp4);
-
-
-                // printf("    Multiplying two otis\n");
-                soti_mul(&tmp2, &tmp4, &tmp3, dhl);
+//                 // printf("    Getting element of weights function\n");
+//                 feoarr_getItem_ijk(&elem->p_detWeights, 0, 0, k, &tmp4);
 
 
-                tmp2 = tmp1;
+//                 // printf("    Multiplying two otis\n");
+//                 soti_mul(&tmp2, &tmp4, &tmp3, dhl);
 
-                // printf("    Adding two otis\n");
-                soti_sum(&tmp2,&tmp3,&tmp1,dhl);
 
-                // printf("    Freeing memory of temporal arrays.\n");
-                // Free temporals that were created in here.
-                soti_free(&tmp2);    
-                soti_free(&tmp3);
+//                 tmp2 = tmp1;
 
-            }
-            // printf("  Adding position i: %llu,   j: %llu,    with offsets ->   i': %llu,   j': %llu\n", 
-                                // i, j, p_arr1->offsetx+i,   p_arr1->offsety+j  );
+//                 // printf("    Adding two otis\n");
+//                 soti_sum(&tmp2,&tmp3,&tmp1,dhl);
 
-            // printf("  Getting element from result array\n");
-            sotiarray_getItem( p_arrRes, p_arr1->offsetx + i, p_arr1->offsety + j, &tmp2);
+//                 // printf("    Freeing memory of temporal arrays.\n");
+//                 // Free temporals that were created in here.
+//                 soti_free(&tmp2);    
+//                 soti_free(&tmp3);
 
-            // realVal = soti_getReal(&tmp2);
+//             }
+//             // printf("  Adding position i: %llu,   j: %llu,    with offsets ->   i': %llu,   j': %llu\n", 
+//                                 // i, j, p_arr1->offsetx+i,   p_arr1->offsety+j  );
 
-            // printf("  tmp2: \n");
-            // soti_printf(&tmp2);
-            // realVal = soti_getReal(&tmp1);
-            // printf("\n  tmp1: \n");
-            // soti_printf(&tmp1);
+//             // printf("  Getting element from result array\n");
+//             sotiarray_getItem( res, p_arr1->offsetx + i, p_arr1->offsety + j, &tmp2);
 
-            // realVal = soti_getReal(&tmp3);
+//             // realVal = soti_getReal(&tmp2);
+
+//             // printf("  tmp2: \n");
+//             // soti_printf(&tmp2);
+//             // realVal = soti_getReal(&tmp1);
+//             // printf("\n  tmp1: \n");
+//             // soti_printf(&tmp1);
+
+//             // realVal = soti_getReal(&tmp3);
             
-            // printf("\n  tmp3: \n");
-            // soti_printf(&tmp3);
+//             // printf("\n  tmp3: \n");
+//             // soti_printf(&tmp3);
 
-            // printf("  Adding the two arrays\n");
-            
-
-            soti_sum(&tmp2,&tmp1,&tmp3,dhl);
-
-
-
-            // printf("  Freeing memory temporal 1.\n");
-            soti_free(&tmp1);
-
+//             // printf("  Adding the two arrays\n");
             
 
-            sotiarray_setItemOTI(&tmp3,
-                p_arr1->offsetx + i , p_arr1->offsety + j, p_arrRes);
+//             soti_sum(&tmp2,&tmp1,&tmp3,dhl);
+
+
+
+//             // printf("  Freeing memory temporal 1.\n");
+//             soti_free(&tmp1);
+
+            
+
+//             sotiarray_setItemOTI(&tmp3,
+//                 p_arr1->offsetx + i , p_arr1->offsety + j, res);
     
-        }
+//         }
     
-    }
+//     }
 
-    // printf("Exit.");
+//     // printf("Exit.");
 
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
+// // ----------------------------------------------------------------------------------------------------
 
 
 
@@ -170,11 +162,13 @@ void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* 
 
 
 // ****************************************************************************************************
-void feoarr_copy_to(feoarr_t* src, feoarr_t* dst){
+void feoarr_copy_to(feoarr_t* src, feoarr_t* dst,dhelpl_t dhl){
 
-    for( i = 0; i < res.nIntPts; i++){
+    uint64_t i;
 
-        oarr_copy_to( &src->p_data[i], &res->p_data[i], dhl);
+    for( i = 0; i < src->nIntPts; i++){
+
+        oarr_copy_to( &src->p_data[i], &dst->p_data[i], dhl);
 
     }
 
@@ -183,6 +177,22 @@ void feoarr_copy_to(feoarr_t* src, feoarr_t* dst){
 
 // ****************************************************************************************************
 feoarr_t feoarr_copy(feoarr_t* src, dhelpl_t dhl){
+    /*
+    feoarr_fromOther(feoarr_t* p_arr1, feoarr_t* p_res)
+
+    Define a femarray from another femarray.
+
+    INPUTS:
+
+        ->   p_arr1:    First array of shape (i,j) and k nIntPts.
+        
+        -> res:    Result of res = p_arr1.
+
+                        NOTE: Shape can be (i,j) or (j,i), important is that the number of elements 
+                              are the same.
+
+    */ 
+    // ************************************************************************************************
 
     uint64_t i;
 
@@ -222,64 +232,6 @@ feoarr_t feoarr_copy(feoarr_t* src, dhelpl_t dhl){
 
 
 
-// ****************************************************************************************************
-void feoarr_fromOther(feoarr_t* p_arr1, feoarr_t* p_arrRes){
-    /*
-    feoarr_fromOther(feoarr_t* p_arr1, feoarr_t* p_res)
-
-    Define a femarray from another femarray.
-
-
-
-    INPUTS:
-
-        ->   p_arr1:    First array of shape (i,j) and k nIntPts.
-        
-        -> p_arrRes:    Result of p_arrRes = p_arr1.
-
-                        NOTE: Shape can be (i,j) or (j,i), important is that the number of elements 
-                              are the same.
-
-    */ 
-    // ************************************************************************************************
-
-    otinum_t tmp1, tmp2;
-    uint64_t i,k;
-
-    if (p_arrRes->p_data == NULL){
-
-        feoarr_zeros(p_arrRes, p_arr1->ncols, p_arr1->nrows, 
-            p_arr1->offsetx,p_arr1->offsety, p_arr1->nIntPts, p_arr1->order);
-
-    }
-    
-    for (k=0; k<p_arr1->nIntPts; k++){
-
-        for( i=0; i<p_arr1->p_data[k].size; i++ ){
-
-            // Get the first element.
-            tmp1 = p_arr1->p_data[k].p_data[i];
-
-            soti_copy( &tmp2, &tmp1);
-
-            // Remove the previous element.
-            soti_free( &p_arrRes->p_data[k].p_data[i] );
-
-            // Assign new element.
-            p_arrRes->p_data[k].p_data[i] = tmp2;
-
-        }
-
-    }
-
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
 
 
 
@@ -288,7 +240,7 @@ void feoarr_fromOther(feoarr_t* p_arr1, feoarr_t* p_arrRes){
 
 
 // ****************************************************************************************************
-void feoarr_get_item_ij_to(feoarr_t* arr, uint64_t i, uint64_t j, feoarr_t* p_arrRes){
+void feoarr_get_item_ij_to(feoarr_t* arr, uint64_t i, uint64_t j, feoarr_t* res, dhelpl_t dhl){
     /*
 
     Transpose a femarray.
@@ -299,7 +251,7 @@ void feoarr_get_item_ij_to(feoarr_t* arr, uint64_t i, uint64_t j, feoarr_t* p_ar
 
         ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
+        -> res:    Result of p_arr1+p_arr2.
 
         ->     dhl:    Direction helper
 
@@ -307,29 +259,22 @@ void feoarr_get_item_ij_to(feoarr_t* arr, uint64_t i, uint64_t j, feoarr_t* p_ar
     // ************************************************************************************************
     
     uint64_t k;
-    otinum_t tmp;
 
-    if (p_arrRes->p_data == NULL){
-
-        feoarr_zeros(p_arrRes, 1, 1, 
-            p_arr1->offsetx,p_arr1->offsety, p_arr1->nIntPts, p_arr1->order);
-
-    }
+    otinum_t tmp = oti_get_tmp(10, arr->nbases, arr->order, dhl);
     
-    for (k = 0; k<p_arr1->nIntPts; k++){
+    for (k = 0; k<arr->nIntPts; k++){
         
-        feoarr_getItem_ijk( p_arr1, i, j, k, &tmp );
+        feoarr_get_item_ijk_to( arr, i, j, k, &tmp, dhl);
 
-        p_arrRes->p_data[k].p_data[0]=tmp;
-
+        oarr_set_item_ij_o(&tmp, 0, 0, &res->p_data[k], dhl);
+    
     }
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void feoarr_get_item_k(feoarr_t* p_arr1, uint64_t k, 
-        sotiarray_t* p_arrRes){
+void feoarr_get_item_k_to(feoarr_t* arr, uint64_t k, oarr_t* res, dhelpl_t dhl){
     /*
 
     Get k'th integration value of feoarr object.
@@ -340,14 +285,14 @@ void feoarr_get_item_k(feoarr_t* p_arr1, uint64_t k,
 
         ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
+        -> res:    Result of p_arr1+p_arr2.
 
         ->     dhl:    Direction helper
 
     */ 
     // ************************************************************************************************
 
-    p_arrRes[0] = p_arr1->p_data[k];
+    oarr_copy_to( &arr->p_data[k], res, dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -362,7 +307,7 @@ void feoarr_get_item_ijk_to(feoarr_t* arr, uint64_t i, uint64_t j, uint64_t k, o
 
         ->   arr:    Array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
+        -> res:    Result of p_arr1+p_arr2.
 
         ->     dhl:    Direction helper
 
@@ -414,10 +359,10 @@ void feoarr_get_item_ijk_to(feoarr_t* arr, uint64_t i, uint64_t j, uint64_t k, o
 
 
 // ****************************************************************************************************
-void feoarr_setItem_ij(feoarr_t* p_arr1, uint64_t i, uint64_t j, feoarr_t* p_arrRes){
+void feoarr_set_item_ij(feoarr_t* arr, uint64_t i, uint64_t j, feoarr_t* res, dhelpl_t dhl){
     /*
     feoarr_getItem_ijk(feoarr_t* p_arr1, uint64_t i, uint64_t j, uint64_t k, 
-                feoarr_t* p_arrRes)
+                feoarr_t* res)
 
     Transpose a  femarray.
 
@@ -427,7 +372,7 @@ void feoarr_setItem_ij(feoarr_t* p_arr1, uint64_t i, uint64_t j, feoarr_t* p_arr
 
         ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
+        -> res:    Result of p_arr1+p_arr2.
 
         ->     dhl:    Direction helper
 
@@ -435,61 +380,50 @@ void feoarr_setItem_ij(feoarr_t* p_arr1, uint64_t i, uint64_t j, feoarr_t* p_arr
     // ************************************************************************************************
     
     uint64_t k;
-    otinum_t tmp;
 
-    if (p_arrRes->p_data == NULL){
-
-        feoarr_zeros(p_arrRes, 1, 1, 
-            p_arr1->offsetx,p_arr1->offsety, p_arr1->nIntPts, p_arr1->order);
-
-    }
+    otinum_t tmp = oti_get_tmp( 10,  arr->nbases, arr->order, dhl);
     
-    for (k = 0; k<p_arr1->nIntPts; k++){
+    for (k = 0; k < arr->nIntPts; k++){
         
-        feoarr_getItem_ijk( p_arr1, i, j, k, &tmp );
+        oarr_get_item_ij_to(  &arr->p_data[k], 0, 0, &tmp, dhl);
 
-        p_arrRes->p_data[k].p_data[0]=tmp;
+        oarr_set_item_ij_o( &tmp, i, j, &res->p_data[k], dhl );
 
     }
 
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
 // ****************************************************************************************************
-void feoarr_setItem_k( sotiarray_t* p_arr1 , uint64_t k, feoarr_t* p_arrRes){
+void feoarr_set_item_k( oarr_t* arr , uint64_t k, feoarr_t* res, dhelpl_t dhl){
     /*
-    feoarr_getItem_ijk(feoarr_t* p_arr1, uint64_t i, uint64_t j, uint64_t k, 
-                feoarr_t* p_arrRes)
+    @brief Set integration point array value.
 
-    Transpose a  femarray.
-
-    INPUTS:
-
-        ->   p_arr1:    First array
-
-        ->   p_arr2:    Second array.
-        
-        -> p_arrRes:    Result of p_arr1+p_arr2.
-
-        ->     dhl:    Direction helper
+    @param[in] arr: Array to be set into res.
+    @param[in] k: Index of the integration element to be set.
+    @param[inout] res: Result holder. 
+    @param[in] dhl:    Direction helper.
 
     */ 
     // ************************************************************************************************
 
-    sotiarray_free(&p_arrRes->p_data[k]);
-    p_arrRes->p_data[k]=p_arr1[0];
+    // No new allocation needed.
+    oarr_copy_to( arr, &res->p_data[k], dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-void feoarr_setItem_ijk(otinum_t* p_num, uint64_t i, uint64_t j, uint64_t k, 
-        feoarr_t* p_arrRes){
-    /*
-    feoarr_getItem_ijk(feoarr_t* p_arr1, uint64_t i, uint64_t j, uint64_t k, 
-                feoarr_t* p_arrRes)
 
-    Transpose a  femarray.
+
+
+// ****************************************************************************************************
+void feoarr_set_item_ijk(otinum_t* num, uint64_t i, uint64_t j, uint64_t k, 
+        feoarr_t* res, dhelpl_t dhl){
+    /*
+    @brief Set integration point value.
 
     INPUTS:
 
@@ -497,14 +431,14 @@ void feoarr_setItem_ijk(otinum_t* p_num, uint64_t i, uint64_t j, uint64_t k,
 
         ->   p_arr2:    Second array.
         
-        -> p_arrRes:    Result of p_arr1+p_arr2.
+        -> res:    Result of p_arr1+p_arr2.
 
         ->     dhl:    Direction helper
 
     */ 
     // ************************************************************************************************
 
-    sotiarray_setItemOTI( p_num, i, j, &p_arrRes->p_data[k]);
+    oarr_set_item_ij_o( num, i, j, &res->p_data[k], dhl);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -560,7 +494,7 @@ void feoarr_setItem_ijk(otinum_t* p_num, uint64_t i, uint64_t j, uint64_t k,
 
 
 // ****************************************************************************************************
-void feoarr_zeros( uint64_t nrows, uint64_t ncols, uint64_t offsetx, uint64_t offsety, 
+feoarr_t feoarr_zeros( uint64_t nrows, uint64_t ncols, uint64_t offsetx, uint64_t offsety, 
                    uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl){
     /*
     feoarr_zeros(sotiarray_t* p_array, uint64_t shapex, uint64_t shapey, uint8_t order)
@@ -588,7 +522,8 @@ void feoarr_zeros( uint64_t nrows, uint64_t ncols, uint64_t offsetx, uint64_t of
     */ 
     // ************************************************************************************************
     
-    feoarr_t res;
+    uint64_t i;
+    feoarr_t res = feoarr_init();
     
     res.order    =  order ;
     res.nbases   =  nbases ;
@@ -612,7 +547,7 @@ void feoarr_zeros( uint64_t nrows, uint64_t ncols, uint64_t offsetx, uint64_t of
 
     for( i = 0; i < res.nIntPts; i++){
 
-        res.p_data[i] = oarr_createEmpty( nrows, ncols, nbases, order, dhl);
+        res.p_data[i] = oarr_zeros( nrows, ncols, nbases, order, dhl);
 
     }
 
@@ -660,6 +595,9 @@ void feoarr_free(feoarr_t* arr){
     
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
 
 // ****************************************************************************************************
 inline feoarr_t feoarr_init( void ){
@@ -756,3 +694,22 @@ feoarr_t feoarr_createEmpty( uint64_t nrows, uint64_t ncols, uint64_t offsetx, u
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

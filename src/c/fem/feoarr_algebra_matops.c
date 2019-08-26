@@ -4,7 +4,7 @@
 
 
 // ****************************************************************************************************
-void feoarr_matmul(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, dhelpl_t dhl){
+feoarr_t feoarr_matmul(feoarr_t* p_arr1, feoarr_t* p_arr2,  dhelpl_t dhl){
     /*
     feoarr_det(feoarr_t* p_arr1, feoarr_t* p_arrRes, dhelpl_t dhl)
 
@@ -25,45 +25,14 @@ void feoarr_matmul(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, dhelp
 
     uint64_t i;
 
-    if (p_arrRes->p_data == NULL){
+    for (i = 0; i<p_arr1->nIntPts; i++){
 
-        feoarr_zeros(p_arrRes, p_arr1->ncols, p_arr2->nrows, 
-            p_arr1->offsetx,p_arr1->offsety, p_arr1->nIntPts, p_arr1->order);
-
-    }
-
-    if ( ( p_arr1->ncols == 1) && ( p_arr1->nrows == 1) ){
-        
-
-        for (i = 0; i<p_arr1->nIntPts; i++){
-         
-            sotiarray_mul_oti(&p_arr2->p_data[i], &p_arr1->p_data[i].p_data[0], 
-                &p_arrRes->p_data[i], dhl);
-
-        }
-
-    } else if ( ( p_arr2->ncols == 1) && ( p_arr2->nrows == 1) ){
-        
-        for (i = 0; i<p_arr1->nIntPts; i++){
-
-            sotiarray_mul_oti(&p_arr1->p_data[i], &p_arr2->p_data[i].p_data[0], 
-                &p_arrRes->p_data[i], dhl);
-
-        }
-
-    }else{
-
-        for (i = 0; i<p_arr1->nIntPts; i++){
-
-            sotiarray_matmul_otioti(&p_arr1->p_data[i], &p_arr2->p_data[i], 
-                &p_arrRes->p_data[i], dhl);
-
-        }
+        sotiarray_matmul_otioti(&p_arr1->p_data[i], &p_arr2->p_data[i], 
+            &p_arrRes->p_data[i], dhl);
 
     }
 
 
-    
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -72,7 +41,38 @@ void feoarr_matmul(feoarr_t* p_arr1, feoarr_t* p_arr2, feoarr_t* p_arrRes, dhelp
 
 
 
+// ****************************************************************************************************
+void feoarr_matmul_to(feoarr_t* lhs, feoarr_t* rhs, feoarr_t* res, dhelpl_t dhl){
+    /*
+    
+    MATMUL operation of Finite Element OTI array.
 
+    INPUTS:
+
+        ->   lhs:    Left hand side array.
+
+        ->   rhs:    Right hand side array
+        
+        -> p_arrRes:    Result of operation.
+
+        ->     dhl:    Direction helper
+
+    */ 
+    // ************************************************************************************************
+
+    uint64_t i;
+
+    for (i = 0; i<p_arr1->nIntPts; i++){
+
+        sotiarray_matmul_otioti(&p_arr1->p_data[i], &p_arr2->p_data[i], 
+            &p_arrRes->p_data[i], dhl);
+
+    }
+
+
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

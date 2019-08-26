@@ -179,7 +179,7 @@ oarr_t oarr_matmul_RO(darr_t* lhs, oarr_t* rhs, dhelpl_t dhl){
     // This tmp is set to "fake" an oarr to pass it to the following functions.
     tmp_lhs.nbases = rhs->nbases ;
     tmp_lhs.order  = rhs->order  ;
-    tmp_lhs.ndir   = rhs->ndir  ;
+    tmp_lhs.ndir   = rhs->ndir   ;
     tmp_lhs.nrows  = lhs->nrows  ;
     tmp_lhs.ncols  = lhs->ncols  ;
     tmp_lhs.size   = lhs->size   ;

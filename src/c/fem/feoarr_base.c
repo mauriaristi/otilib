@@ -15,114 +15,114 @@
 
 
 
-// // ****************************************************************************************************
-// void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* res, dhelpl_t dhl){
-//     /*
-//     Gauss integration over all elements of a femarray.
+// ****************************************************************************************************
+void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* res, dhelpl_t dhl){
+    /*
+    Gauss integration over all elements of a femarray.
 
-//     INPUTS:
+    INPUTS:
 
-//         ->   p_arr1:    Array
+        ->   p_arr1:    Array
 
-//         ->   elem:      Element with the information of the solution.
+        ->   elem:      Element with the information of the solution.
         
-//         -> res:    Result of operation.
+        -> res:    Result of operation.
 
-//         ->     dhl:    Direction helper
+        ->     dhl:    Direction helper
 
-//     */ 
-//     // ************************************************************************************************
+    */ 
+    // ************************************************************************************************
 
-//     uint64_t i,j,k;
-//     otinum_t tmp1, tmp2, tmp3,tmp4;
+    uint64_t i,j,k;
+    otinum_t tmp1, tmp2, tmp3,tmp4;
 
-//     // double realVal;
+    // double realVal;
     
 
-//     if (res->p_data == NULL){
+    if (res->p_data == NULL){
 
-//         // sotiarray_zeros(res, p_arr1->ncols, p_arr1->nrows, p_arr1->order);
+        // sotiarray_zeros(res, p_arr1->ncols, p_arr1->nrows, p_arr1->order);
 
-//     }
+    }
 
-//     // printf("\nIntegrating over element.\n");
+    // printf("\nIntegrating over element.\n");
     
-//     for (i = 0; i<p_arr1->nrows; i++){
+    for (i = 0; i<p_arr1->nrows; i++){
     
-//         for (j = 0; j<p_arr1->ncols; j++){
+        for (j = 0; j<p_arr1->ncols; j++){
 
-//             // printf("  Integrating position (%llu,%llu)\n",i,j);
+            // printf("  Integrating position (%llu,%llu)\n",i,j);
             
-//             soti_createEmpty(&tmp1,0,p_arr1->order);
+            soti_createEmpty(&tmp1,0,p_arr1->order);
 
-//             for (k = 0; k<elem->nIntPts; k++){
+            for (k = 0; k<elem->nIntPts; k++){
 
-//                 // printf("    Summing integration point %llu\n",k);
-//                 // printf("    Getting element of integration function\n");
-//                 feoarr_getItem_ijk(p_arr1, i, j, k, &tmp2);
+                // printf("    Summing integration point %llu\n",k);
+                // printf("    Getting element of integration function\n");
+                feoarr_getItem_ijk(p_arr1, i, j, k, &tmp2);
 
-//                 // printf("    Getting element of weights function\n");
-//                 feoarr_getItem_ijk(&elem->p_detWeights, 0, 0, k, &tmp4);
-
-
-//                 // printf("    Multiplying two otis\n");
-//                 soti_mul(&tmp2, &tmp4, &tmp3, dhl);
+                // printf("    Getting element of weights function\n");
+                feoarr_getItem_ijk(&elem->p_detWeights, 0, 0, k, &tmp4);
 
 
-//                 tmp2 = tmp1;
+                // printf("    Multiplying two otis\n");
+                soti_mul(&tmp2, &tmp4, &tmp3, dhl);
 
-//                 // printf("    Adding two otis\n");
-//                 soti_sum(&tmp2,&tmp3,&tmp1,dhl);
 
-//                 // printf("    Freeing memory of temporal arrays.\n");
-//                 // Free temporals that were created in here.
-//                 soti_free(&tmp2);    
-//                 soti_free(&tmp3);
+                tmp2 = tmp1;
 
-//             }
-//             // printf("  Adding position i: %llu,   j: %llu,    with offsets ->   i': %llu,   j': %llu\n", 
-//                                 // i, j, p_arr1->offsetx+i,   p_arr1->offsety+j  );
+                // printf("    Adding two otis\n");
+                soti_sum(&tmp2,&tmp3,&tmp1,dhl);
 
-//             // printf("  Getting element from result array\n");
-//             sotiarray_getItem( res, p_arr1->offsetx + i, p_arr1->offsety + j, &tmp2);
+                // printf("    Freeing memory of temporal arrays.\n");
+                // Free temporals that were created in here.
+                soti_free(&tmp2);    
+                soti_free(&tmp3);
 
-//             // realVal = soti_getReal(&tmp2);
+            }
+            // printf("  Adding position i: %llu,   j: %llu,    with offsets ->   i': %llu,   j': %llu\n", 
+                                // i, j, p_arr1->offsetx+i,   p_arr1->offsety+j  );
 
-//             // printf("  tmp2: \n");
-//             // soti_printf(&tmp2);
-//             // realVal = soti_getReal(&tmp1);
-//             // printf("\n  tmp1: \n");
-//             // soti_printf(&tmp1);
+            // printf("  Getting element from result array\n");
+            sotiarray_getItem( res, p_arr1->offsetx + i, p_arr1->offsety + j, &tmp2);
 
-//             // realVal = soti_getReal(&tmp3);
+            // realVal = soti_getReal(&tmp2);
+
+            // printf("  tmp2: \n");
+            // soti_printf(&tmp2);
+            // realVal = soti_getReal(&tmp1);
+            // printf("\n  tmp1: \n");
+            // soti_printf(&tmp1);
+
+            // realVal = soti_getReal(&tmp3);
             
-//             // printf("\n  tmp3: \n");
-//             // soti_printf(&tmp3);
+            // printf("\n  tmp3: \n");
+            // soti_printf(&tmp3);
 
-//             // printf("  Adding the two arrays\n");
-            
-
-//             soti_sum(&tmp2,&tmp1,&tmp3,dhl);
-
-
-
-//             // printf("  Freeing memory temporal 1.\n");
-//             soti_free(&tmp1);
-
+            // printf("  Adding the two arrays\n");
             
 
-//             sotiarray_setItemOTI(&tmp3,
-//                 p_arr1->offsetx + i , p_arr1->offsety + j, res);
+            soti_sum(&tmp2,&tmp1,&tmp3,dhl);
+
+
+
+            // printf("  Freeing memory temporal 1.\n");
+            soti_free(&tmp1);
+
+            
+
+            sotiarray_setItemOTI(&tmp3,
+                p_arr1->offsetx + i , p_arr1->offsety + j, res);
     
-//         }
+        }
     
-//     }
+    }
 
-//     // printf("Exit.");
+    // printf("Exit.");
 
 
-// }
-// // ----------------------------------------------------------------------------------------------------
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

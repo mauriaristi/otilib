@@ -1,10 +1,10 @@
-int64_t fem_integrationPoints(uint64_t order, int64_t eType, darr_t* coords, darr_t* weights);
-uint64_t fem_addLineIntegrationPoints(uint8_t nPerms, uint64_t startPoint, double a,  double w, 
-                                      darr_t* coords, darr_t* weights);
+// int64_t fem_integrationPoints(uint64_t order, int64_t eType, darr_t* coords, darr_t* weights);
+// uint64_t fem_addLineIntegrationPoints(uint8_t nPerms, uint64_t startPoint, double a,  double w, 
+//                                       darr_t* coords, darr_t* weights);
 
-uint64_t fem_addTriangleIntegrationPoints(uint8_t numberOfPermutations, uint64_t startPoint, 
-                                           double a, double b, double c, double w,
-                                           darr_t* coords, darr_t* weights);
+// uint64_t fem_addTriangleIntegrationPoints(uint8_t numberOfPermutations, uint64_t startPoint, 
+//                                            double a, double b, double c, double w,
+//                                            darr_t* coords, darr_t* weights);
 
 
 
@@ -195,8 +195,8 @@ int64_t fem_integrationPoints(uint64_t order, int64_t elementType,
 
             npoints = 7;
 
-            darr_createEmpty( coords,npoints,ndim);
-            darr_createEmpty(weights,npoints,   1);
+            *coords  = darr_createEmpty(npoints,ndim);
+            *weights = darr_createEmpty(npoints,   1);
 
             // Point 0
             i = 0;

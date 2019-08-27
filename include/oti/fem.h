@@ -41,6 +41,10 @@ typedef struct{
 
 
 typedef struct elemprops_s{
+    // OTI properties
+    ord_t           otiorder; ///< Order of the oti numbers inside.
+    bases_t        otinbases; ///< Number of bases of the oti algebra.
+    // FEM Properties
     uint64_t          nbasis; ///< Number of basis - Number of degrees of freedom - Number of nodes.
     uint64_t           order; ///< Maximum order of 
     int64_t         geomBase; ///< Geometric element type - elLine, elTriangle, etc ...
@@ -49,7 +53,6 @@ typedef struct elemprops_s{
     uint64_t         nIntPts; ///< Number of integration Points
     uint8_t             nder; ///< Number of total derivatives in the problem.
     uint8_t           isInit; ///< Initialization flag. 0: Not initialized, 1: Initialized.
-    uint8_t         otiorder; ///< Order of the soti numbers inside.
     uint8_t     nDimAnalysis; ///< Number of dimensions of the analysis.
     darr_t       p_intPoints; ///< (nIntPts x ndim) Array with the integration points coordinates.
     darr_t      p_intWeights; ///< (nIntPts x 1   ) Array with the integration weights.
@@ -318,12 +321,14 @@ int64_t fem_defFunctFrom_oti(otinum_t* num, uint64_t derIndx, elemProps_t* elem,
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-int64_t fem_defFunctFrom_R(double num, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
+int64_t fem_defFunctFrom_R(coeff_t num, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
     dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 int64_t fem_defineSpatial( elemProps_t* elem, uint16_t derFlags, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+
 
 int64_t fem_computeJacobian( elemProps_t* elem, oarr_t* xcoords, oarr_t* ycoords,
                                oarr_t* zcoords, dhelpl_t dhl);
@@ -339,14 +344,33 @@ int64_t fem_integrateSOTIfunct(oarr_t* f_eval, darr_t* weights, otinum_t* res,
                                  dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Integration points.
+
 int64_t fem_integrationPoints(uint64_t order, int64_t elementType, 
                                 darr_t* coords, darr_t* weights);
 // ----------------------------------------------------------------------------------------------------
+
+
 
 uint64_t fem_addLineIntegrationPoints(uint8_t numberOfPermutations, uint64_t startPoint, 
                                            double a,  double w,
                                            darr_t* coords, darr_t* weights);
 // ----------------------------------------------------------------------------------------------------
+
+
 
 uint64_t fem_addTriangleIntegrationPoints(uint8_t numberOfPermutations, uint64_t startPoint, 
                                            double a, double b, double c, double w,
@@ -389,7 +413,7 @@ uint64_t fem_addTriangleIntegrationPoints(uint8_t numberOfPermutations, uint64_t
 
 
 
-
+// FEM basis Functions.
 
 
 int64_t fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   

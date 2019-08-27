@@ -32,9 +32,11 @@
 // Base FEM functions:
 #include "fem/basis_functions.c"
 
+#include "fem/integration_points.c"
+
+
 // #include "fem/base.c"
 
-// #include "fem/integration_points.c"
 
 // #include "fem/helper_functions.c"
 

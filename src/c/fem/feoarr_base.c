@@ -6,15 +6,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* res, dhelpl_t dhl){
     /*
@@ -34,35 +25,37 @@ void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* 
     // ************************************************************************************************
 
     uint64_t i,j,k;
-    otinum_t tmp1, tmp2, tmp3,tmp4;
-
-    // double realVal;
+    oarr_t tmp1, tmp2, tmp3, tmp4;
     
+    tmp1 = oarr_zeros(,dhl);
+    tmp2 = oarr_zeros(,dhl);
+    tmp3 = oarr_zeros(,dhl);
+    tmp4 = oarr_zeros(,dhl);
 
-    if (res->p_data == NULL){
+    // printf("\nIntegrating over element.\n");
 
-        // sotiarray_zeros(res, p_arr1->ncols, p_arr1->nrows, p_arr1->order);
+    for (k = 0; k<elem->nIntPts; k++){
+
 
     }
 
-    // printf("\nIntegrating over element.\n");
     
-    for (i = 0; i<p_arr1->nrows; i++){
+    for (i = 0; i<arr->nrows; i++){
     
-        for (j = 0; j<p_arr1->ncols; j++){
+        for (j = 0; j<arr->ncols; j++){
 
             // printf("  Integrating position (%llu,%llu)\n",i,j);
             
-            soti_createEmpty(&tmp1,0,p_arr1->order);
+            soti_createEmpty(&tmp1,0,arr->order);
 
+           
             for (k = 0; k<elem->nIntPts; k++){
-
                 // printf("    Summing integration point %llu\n",k);
                 // printf("    Getting element of integration function\n");
-                feoarr_getItem_ijk(p_arr1, i, j, k, &tmp2);
+                feoarr_get_item_ijk(arr, i, j, k, &tmp2);
 
                 // printf("    Getting element of weights function\n");
-                feoarr_getItem_ijk(&elem->p_detWeights, 0, 0, k, &tmp4);
+                feoarr_get_item_ijk(&elem->p_detWeights, 0, 0, k, &tmp4);
 
 
                 // printf("    Multiplying two otis\n");
@@ -102,12 +95,12 @@ void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* 
             // printf("  Adding the two arrays\n");
             
 
-            soti_sum(&tmp2,&tmp1,&tmp3,dhl);
+            oti_sum(&tmp2,&tmp1,&tmp3,dhl);
 
 
 
             // printf("  Freeing memory temporal 1.\n");
-            soti_free(&tmp1);
+            oti_free(&tmp1);
 
             
 
@@ -115,14 +108,21 @@ void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* 
                 p_arr1->offsetx + i , p_arr1->offsety + j, res);
     
         }
+
     
     }
-
-    // printf("Exit.");
 
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 
 

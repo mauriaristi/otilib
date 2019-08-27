@@ -1,7 +1,7 @@
 
-void feoarr_matmul_to(feoarr_t* lhs, feoarr_t* rhs, feoarr_t* res, dhelpl_t dhl);
-void feoarr_det_to(feoarr_t* arr, feoarr_t* res, dhelpl_t dhl);
-void feoarr_invert_to(feoarr_t* arr, feoarr_t* res, dhelpl_t dhl);
+// void feoarr_matmul_to(feoarr_t* lhs, feoarr_t* rhs, feoarr_t* res, dhelpl_t dhl);
+// void feoarr_det_to(feoarr_t* arr, feoarr_t* res, dhelpl_t dhl);
+// void feoarr_invert_to(feoarr_t* arr, feoarr_t* res, dhelpl_t dhl);
 
 
 

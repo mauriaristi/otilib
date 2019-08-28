@@ -26,20 +26,48 @@ void feoarr_gaussIntegrateOverElement(feoarr_t* arr, elemProps_t* elem, oarr_t* 
 
     uint64_t i,j,k;
     oarr_t tmp1, tmp2, tmp3, tmp4;
-    
+    otinum_t tmp_oti = oti_get_tmp(10 , arr->nbases, arr->order, dhl);
+
     tmp1 = oarr_zeros(,dhl);
     tmp2 = oarr_zeros(,dhl);
-    tmp3 = oarr_zeros(,dhl);
-    tmp4 = oarr_zeros(,dhl);
+    // tmp3 = oarr_zeros(,dhl);
+    // tmp4 = oarr_zeros(,dhl);
 
     // printf("\nIntegrating over element.\n");
 
     for (k = 0; k<elem->nIntPts; k++){
 
+        tmp_arr = arr->p_data[k];
+
+        feoarr_get_item_ijk_to(&elem->p_detWeights, 0, 0, k, &tmp_oti);
+
+        // multiply array times oti value
+        oarr_mul_oO_to( &tmp_oti, &arr->p_data[k], &tmp2, dhl);
+
+        // Add it to the result
+
+        // tmp3 += tmp2
+
+
 
     }
 
+    // offset copy information to the specified array.
+    for (i = 0; i<arr->nrows; i++){
     
+        for (j = 0; j<arr->ncols; j++){
+
+            
+
+        }
+
+    }
+
+    oarr_free( &tmp1 );
+
+
+
+
     for (i = 0; i<arr->nrows; i++){
     
         for (j = 0; j<arr->ncols; j++){

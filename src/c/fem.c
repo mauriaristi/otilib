@@ -35,7 +35,7 @@
 #include "fem/integration_points.c"
 
 
-// #include "fem/base.c"
+#include "fem/base.c"
 
 
 // #include "fem/helper_functions.c"

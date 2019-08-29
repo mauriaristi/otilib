@@ -160,7 +160,7 @@ int64_t fem_initElement(uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis, 
         for(derId = 0; derId<elem->nder; derId++){
 
             // Allocate new array
-            darr_createEmpty(&elem->p_evalBasis[derId], elem->nbasis, elem->nIntPts);
+            elem->p_evalBasis[derId] = darr_createEmpty(elem->nbasis, elem->nIntPts);
 
             // Loop through all basis functions.
             for(basisId = 0; basisId<elem->nbasis; basisId++){
@@ -170,7 +170,7 @@ int64_t fem_initElement(uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis, 
 
             }
 
-            feoarr_zeros(&elem->p_basis[ derId ],
+            elem->p_basis[ derId ] = feoarr_zeros(,
                     1,elem->nbasis,0,0,elem->nIntPts,elem->otiorder);
 
 
@@ -178,13 +178,13 @@ int64_t fem_initElement(uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis, 
 
 
         // Allocate space for Jacobian, its inverse and determinant.
-        feoarr_zeros(&elem->J, MAX(elem->ndim,1),    elem->nDimAnalysis, 0, 0, elem->nIntPts, elem->otiorder);
+        elem->J = feoarr_zeros( MAX(elem->ndim,1),    elem->nDimAnalysis, 0, 0, elem->nIntPts, elem->otiorder);
 
-        feoarr_zeros(&elem->Jinv,elem->nDimAnalysis, MAX(elem->ndim,1),  0, 0, elem->nIntPts, elem->otiorder);
+        elem->Jinv = feoarr_zeros(,elem->nDimAnalysis, MAX(elem->ndim,1),  0, 0, elem->nIntPts, elem->otiorder);
 
-        feoarr_zeros(&elem->Jdet,         1, 1, 0, 0, elem->nIntPts, elem->otiorder);
+        elem->Jdet =feoarr_zeros(1, 1, 0, 0, elem->nIntPts, elem->otiorder);
         
-        feoarr_zeros(&elem->p_detWeights, 1, 1, 0, 0, elem->nIntPts, elem->otiorder);
+        elem->p_detWeights= feoarr_zeros( 1, 1, 0, 0, elem->nIntPts, elem->otiorder);
 
         
         elem->isInit = 1; // Raise flag of initialization.

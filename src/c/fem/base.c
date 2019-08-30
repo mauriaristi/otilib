@@ -35,7 +35,7 @@
 
 
 // ****************************************************************************************************
-int64_t fem_unInitElement(elemProps_t* elem, ) {
+int64_t fem_unInitElement( elemProps_t* elem ) {
     /*
     fem_initElement(uint64_t order, elemProps_t* elem) 
 
@@ -85,12 +85,19 @@ int64_t fem_unInitElement(elemProps_t* elem, ) {
         
 
         
-        
-        free_ptr((void**)&elem->p_evalBasis);
-        free_ptr((void**)&elem->p_basis);
+        // Free pointers.
+        free(elem->p_evalBasis);
+        free(elem->p_basis);
+
+
         elem->isInit       = 0; // Lower flag of initialization.
         elem->nDimAnalysis = 0;
-        elem->otiorder     = 0;
+
+
+        // Set OTI specific variables.
+        elem->otiorder   = 0;
+        elem->otinbases  = 0;
+
 
         elem->p_evalBasis = NULL;
         elem->p_basis     = NULL;
@@ -105,8 +112,27 @@ int64_t fem_unInitElement(elemProps_t* elem, ) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-int64_t fem_initElement(uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis, elemProps_t* elem, 
+int64_t fem_initElement(uint64_t order, bases_t nbases, ord_t otiorder, uint8_t nDimAnalysis,  elemProps_t* elem,
 	dhelpl_t dhl) {
     /*
     fem_initElement(uint64_t order, elemProps_t* elem) 
@@ -131,6 +157,7 @@ int64_t fem_initElement(uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis, 
 
     int64_t derId;
     uint64_t basisId;
+    // elemProps_t elem;
 
     // Check first if the element is already initialized.
     if( elem->isInit == 0 ){
@@ -170,7 +197,11 @@ int64_t fem_initElement(uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis, 
 
             }
 
-            elem->p_basis[ derId ] = feoarr_zeros(,
+            // nrows,  ncols, 
+            // offsetx, offsety, 
+            // nIntPts, 
+            // otinbases, otiorder, dhl
+            elem->p_basis[ derId ] = feoarr_zeros(
                     1,elem->nbasis,0,0,elem->nIntPts,elem->otiorder);
 
 
@@ -182,7 +213,7 @@ int64_t fem_initElement(uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis, 
 
         elem->Jinv = feoarr_zeros(,elem->nDimAnalysis, MAX(elem->ndim,1),  0, 0, elem->nIntPts, elem->otiorder);
 
-        elem->Jdet =feoarr_zeros(1, 1, 0, 0, elem->nIntPts, elem->otiorder);
+        elem->Jdet = feoarr_zeros(1, 1, 0, 0, elem->nIntPts, elem->otiorder);
         
         elem->p_detWeights= feoarr_zeros( 1, 1, 0, 0, elem->nIntPts, elem->otiorder);
 

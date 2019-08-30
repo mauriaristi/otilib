@@ -31,7 +31,7 @@ typedef struct{
 
 
 
-
+darr_t darr_init( void );
 
 void darr_matmul_and_selfsum_RR_to(darr_t* arr1, darr_t* arr2, darr_t* res );
 

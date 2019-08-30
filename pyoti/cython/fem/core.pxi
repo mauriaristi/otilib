@@ -226,7 +226,7 @@ cpdef dx(fefunction func1):
   """
   PURPOSE: Define derivative of a Finite Element function.
 
-  INPUTS: 
+  INPUTS:  
 
     -> func1:   Finite element function that will be derived.
 

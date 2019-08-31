@@ -68,3 +68,4 @@ cpdef dmat power(dmat A,coeff_t b)
 
 
 
+cdef np.ndarray darr_2_npy(darr_t* array )

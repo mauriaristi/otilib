@@ -38,7 +38,7 @@ cdef class elBase:
 
     """
     
-    self.a=1
+    self.a = 1
 
   #---------------------------------------------------------------------------------------------------
 
@@ -51,8 +51,8 @@ cdef class elBase:
 
     """
     # print("trying Dealloc elBase")
-    if self.elemProps.isInit:
-      c_fem_unInitElement(&self.elemProps)
+    if self.elem.isInit:
+      elem_free(&self.elem)
     # end if 
     # print("finished Dealloc elBase")
 
@@ -62,7 +62,7 @@ cdef class elBase:
   @staticmethod
   cdef elBase createNewElement(uint64_t nbasis, uint64_t order, int64_t geomBase, \
                                int64_t  kind,   uint8_t  ndim, \
-              int64_t (*basis_f)(int64_t,int64_t,darray_t*,void*,darray_t*), list boundEls ):
+              int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*) nogil, list boundEls ):
     """
     PURPOSE:      C-level constructor of the Element class. Use this when adding new element types.
 
@@ -103,97 +103,54 @@ cdef class elBase:
 
     # create new empty object:
     cdef elBase newElement = <elBase> elBase.__new__(elBase)
-    cdef uint64_t nder = 0
 
-    newElement.elemProps.nbasis   = nbasis
-    newElement.elemProps.order    = order
-    newElement.elemProps.geomBase = geomBase
-    newElement.elemProps.kind     = kind
-    newElement.elemProps.ndim     = ndim
-    newElement.elemProps.f_basis  = basis_f
-
-    if ndim == 0:
-
-      nder = 1
-
-    elif ndim == 1:
-
-      nder = 3
-
-    elif ndim == 2:
-
-      nder = 6
-
-    elif ndim == 3:
-
-      nder = 10
-
-    # end if
-
-    newElement.elemProps.nder                = nder
-    newElement.elemProps.isInit              = 0
-    newElement.elemProps.nIntPts             = 0
-    newElement.elemProps.p_intPoints.p_data  = NULL
-    newElement.elemProps.p_intPoints.ncols   = 0
-    newElement.elemProps.p_intPoints.nrows   = 0
-    newElement.elemProps.p_intPoints.size    = 0 
-    newElement.elemProps.p_intWeights.p_data = NULL
-    newElement.elemProps.p_intWeights.ncols  = 0
-    newElement.elemProps.p_intWeights.nrows  = 0
-    newElement.elemProps.p_intWeights.size   = 0 
-    newElement.elemProps.p_evalBasis         = NULL
-
-    # newElement.elemProps.f_init   = &
-    # newElement.elemProps.f_unInit = &
-
-
-    newElement.elorder = order
-    newElement.a = 10
-    newElement.boundEls = boundEls
+    newElement.elem = elem_init()
+    
+    elem_allocate( &newElement.elem, nbasis, order, geomBase, kind, ndim, basis_f)
 
     return newElement
   #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  cpdef initElement(self, uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis):
+  # #***************************************************************************************************
+  # cpdef initElement(self, uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis):
 
-    c_fem_initElement( order, otiorder, nDimAnalysis,&self.elemProps)
+  #   c_fem_initElement( order, otiorder, nDimAnalysis,&self.elemProps)
 
 
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  cpdef uninitElement(self):
-    if self.elemProps.isInit == 1:
-      c_fem_unInitElement(&self.elemProps)
-    # end if 
+  # #***************************************************************************************************
+  # cpdef uninitElement(self):
+  #   if self.elemProps.isInit == 1:
+  #     c_fem_unInitElement(&self.elemProps)
+  #   # end if 
 
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @property
-  def intWeights(self):
+  def intWts(self):
     """
     PURPOSE:      Get self.elemProps.intWeights
 
     """
     #*************************************************************************************************
 
-    return  darray_2_numpyArray(&self.elemProps.p_intWeights)
+    return  dmat.create(&self.elem.intWts,FLAGS=0)
 
   #---------------------------------------------------------------------------------------------------
 
 
   #***************************************************************************************************
   @property
-  def intPoints(self):
+  def intPts(self):
     """
     PURPOSE:      Get self.elemProps.intPoints
 
     """
     #*************************************************************************************************
 
-    return darray_2_numpyArray(&self.elemProps.p_intPoints)
+    return dmat.create(&self.elem.intPts,FLAGS=0)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -206,7 +163,7 @@ cdef class elBase:
     """
     #*************************************************************************************************
 
-    return self.elemProps.nIntPts
+    return self.elem.nIntPts
 
   #---------------------------------------------------------------------------------------------------
 
@@ -220,7 +177,7 @@ cdef class elBase:
     """
     #*************************************************************************************************
 
-    return self.elemProps.nder
+    return self.elem.nder
 
   #---------------------------------------------------------------------------------------------------
 
@@ -233,7 +190,7 @@ cdef class elBase:
     """
     #*************************************************************************************************
 
-    return self.elemProps.nIntPts
+    return self.elem.nIntPts
 
   #---------------------------------------------------------------------------------------------------
 
@@ -248,7 +205,7 @@ cdef class elBase:
     """
     #*************************************************************************************************
     
-    return self.elemProps.isInit
+    return self.elem.isInit
 
   #---------------------------------------------------------------------------------------------------
 
@@ -263,7 +220,7 @@ cdef class elBase:
     """
     #*************************************************************************************************
 
-    return self.elemProps.nbasis
+    return self.elem.nbasis
 
   #---------------------------------------------------------------------------------------------------
 
@@ -276,7 +233,7 @@ cdef class elBase:
     """
     #*************************************************************************************************
 
-    return self.elemProps.order
+    return self.elem.order
 
   #---------------------------------------------------------------------------------------------------
 
@@ -289,7 +246,7 @@ cdef class elBase:
     """
     #*************************************************************************************************
 
-    return self.elemProps.geomBase
+    return self.elem.geomBase
 
   #---------------------------------------------------------------------------------------------------
 
@@ -302,7 +259,7 @@ cdef class elBase:
     """
     #*************************************************************************************************
 
-    return self.elemProps.kind
+    return self.elem.kind
 
   #---------------------------------------------------------------------------------------------------
 
@@ -315,40 +272,45 @@ cdef class elBase:
     """
     #*************************************************************************************************
 
-    return self.elemProps.ndim
+    return self.elem.ndim
 
   #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  cdef sndarray Ke(self,sndarray coords, np.ndarray connect, other):
-    """
-    PURPOSE:      Given the nodal coordinates, etc, calculate the elemental stiffness matrix for this
-                  problem.
+  # #***************************************************************************************************
+  # cdef sndarray Ke(self,sndarray coords, np.ndarray connect, other):
+  #   """
+  #   PURPOSE:      Given the nodal coordinates, etc, calculate the elemental stiffness matrix for this
+  #                 problem.
                   
-    """
-    cdef sndarray res = spzeros((1,1))
-    return res
-  #---------------------------------------------------------------------------------------------------
+  #   """
+  #   cdef sndarray res = spzeros((1,1))
+  #   return res
+  # #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  cdef sndarray fe(self,sndarray coords, np.ndarray connect, other):
-    """
-    PURPOSE:      Given the nodal coordinates, etc, calculate the elemental force vector a 
-                  problem.
+  # #***************************************************************************************************
+  # cdef sndarray fe(self,sndarray coords, np.ndarray connect, other):
+  #   """
+  #   PURPOSE:      Given the nodal coordinates, etc, calculate the elemental force vector a 
+  #                 problem.
                   
-    """
+  #   """
     
 
 
-    cdef sndarray res = spzeros((1,1))
-    return res
-  #---------------------------------------------------------------------------------------------------
+  #   cdef sndarray res = spzeros((1,1))
+  #   return res
+  # #---------------------------------------------------------------------------------------------------
 
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS elBase :::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
+
 
 
 

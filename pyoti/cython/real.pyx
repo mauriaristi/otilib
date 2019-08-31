@@ -64,8 +64,8 @@ cdef class dmat:
                   
     """
     #*************************************************************************************************
-    # print("Deallocating memory of otinum.")
-    if self.FLAGS & 1: # If memory is owned by this otinum.
+    
+    if self.FLAGS & 1: # If memory is owned by this class.
       
       darr_free(&self.arr)
 
@@ -763,3 +763,41 @@ cpdef dmat power(dmat A,coeff_t b):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+#*****************************************************************************************************
+cdef np.ndarray darr_2_npy(darr_t* array ):
+  """
+    
+  PURPOSE:      Convert a darray_t to numpy array for test purposes.
+
+  """
+  cdef np.ndarray nparray
+  cdef uint64_t i, j
+
+  nparray = np.empty((array[0].nrows,array[0].ncols),dtype = np.float64)
+
+  for i in range(array[0].nrows):
+    
+    for j in range(array[0].ncols):
+
+      nparray[i,j] = darr_get_item_ij(array,i,j)
+
+    # end for
+
+  # end for
+
+  return nparray
+
+#-----------------------------------------------------------------------------------------------------

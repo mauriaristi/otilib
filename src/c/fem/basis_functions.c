@@ -63,7 +63,7 @@ int64_t fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basisDe
     // ************************************************************************************************
 
     uint64_t i, ncoords=coords->nrows;
-    double xi, eta, evalBasis_i;
+    double xi, eta, evalBasis_i=0.0;
 
     // Check if the baseId given exceeds the corresponding for this element.
     if ( basisId > 7 ){
@@ -412,7 +412,7 @@ int64_t fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, dar
     // ************************************************************************************************
 
     uint64_t i, ncoords=coords->nrows;
-    double xi, eta, evalBasis_i;
+    double xi, eta, evalBasis_i=0.0;
     
     // Check if the baseId given exceeds the corresponding for this element.
     if ( basisId > 3 ){
@@ -595,7 +595,7 @@ int64_t fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer, d
     // ************************************************************************************************
 
     uint64_t i, ncoords=coords->nrows;
-    double xi, eta, evalBasis_i;
+    double xi, eta, evalBasis_i=0.0;
     
     if ( basisId > 5 ){
         return OTI_FEM_InvalidBaseId;
@@ -838,7 +838,7 @@ int64_t fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer, d
     // ************************************************************************************************
 
     uint64_t i, ncoords=coords->nrows;
-    double xi, eta, evalBasis_i;
+    double xi, eta, evalBasis_i=0.0;
     
     // Check if the baseId given exceeds the corresponding for this element.
     if ( basisId > 2 ){
@@ -971,7 +971,7 @@ int64_t fem_basisFunctions_N_TriangP0_2Diso(int64_t basisId, int64_t basisDer, d
     // ************************************************************************************************
 
     uint64_t i, ncoords=coords->nrows;
-    double  evalBasis_i;
+    double  evalBasis_i=0.0;
     
     
     // Check if the baseId given exceeds the corresponding for this element.
@@ -1055,7 +1055,7 @@ int64_t fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, dar
     // ************************************************************************************************
 
     uint64_t i, ncoords = coords->nrows;
-    double xi, evalBasis_i;
+    double xi, evalBasis_i=0.0;
     
     // Check if the baseId given exceeds the corresponding for this element.
     if ( basisId > 2 ){
@@ -1196,7 +1196,7 @@ int64_t fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, dar
     // ************************************************************************************************
 
     uint64_t i, ncoords = coords->nrows;
-    double xi, evalBasis_i;
+    double xi, evalBasis_i=0.0;
     
     // Check if the baseId given exceeds the corresponding for this element.
     if ( basisId > 1 ){
@@ -1306,7 +1306,7 @@ int64_t fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, darr
     // ************************************************************************************************
 
     uint64_t i, ncoords = coords->nrows;
-    double evalBasis_i;
+    double evalBasis_i=0.0;
     
     // Check if the baseId given exceeds the corresponding for this element.
     if ( basisId > 0 ){

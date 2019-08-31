@@ -1834,9 +1834,50 @@ oarr_t oarr_mul_oO(otinum_t* lhs, oarr_t* rhs, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-// void oarr_mul_oO_to(otinum_t* num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
+void oarr_mul_oO_to(otinum_t* num, oarr_t* arr1, oarr_t* res, dhelpl_t dhl){
 
-// }
+    oarr_set_all_r(0.0, res, dhl);    
+
+    ord_t ord_res, ord_mul1;
+    
+    // First multiply both real parts.
+
+    // lhs real part times rhs real part.
+    dhelp_oarr_mul_rR(lhs, rhs, res, dhl);
+
+    // Loop to get each resulting order.
+
+    for (  ord_res = 1; ord_res <= res->order; ord_res++){
+
+        // Multiply  lhs(re) x rhs(ord_res)
+        dhelp_oarr_mul_rI( lhs, rhs, ord_res, res, dhl);
+
+        // Multiply  lhs(ord_res) x rhs(re)
+        dhelp_oarr_mul_Ri( rhs, lhs, ord_res, res, dhl);
+
+
+        // Loop for every combination of orders such that the resulting order is ord_res.
+        for ( ord_mul1 = 1; ord_mul1 <= ord_res/2; ord_mul1++){
+
+            ord_t ord_mul2 = ord_res - ord_mul1;
+
+            dhelp_oarr_mul_iI(lhs, ord_mul1, rhs, ord_mul2, res, dhl);
+
+            // In the case that the orders are the same, the operation is not the same.
+            // It might be different in the case of matmul.
+            if (ord_mul1 != ord_mul2){
+
+                dhelp_oarr_mul_iI(lhs, ord_mul2, rhs, ord_mul1, res, dhl);
+
+            }  
+
+        }        
+
+    }
+
+    return res;
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
@@ -1921,9 +1962,53 @@ oarr_t oarr_mul_RO(darr_t* arr1, oarr_t* arr2, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-// void oarr_mul_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
+void oarr_mul_RO_to(darr_t* arr1, oarr_t* arr2, oarr_t* res, dhelpl_t dhl){
 
-// }
+
+
+    uint64_t i;
+
+    darr_t tmp_arr1 , tmp_arr2; // Temporal real array.
+    ord_t ordi; 
+
+
+    // Initialize global attributes.
+
+
+    tmp_arr1.ncols = arr2->ncols;
+    tmp_arr1.nrows = arr2->nrows;
+    tmp_arr1.size  = arr2->size ;
+
+    tmp_arr2.ncols = res->ncols;
+    tmp_arr2.nrows = res->nrows;
+    tmp_arr2.size  = res->size ;
+
+    // Initialize real direction.
+    tmp_arr1.p_data = arr2->re;
+    tmp_arr2.p_data =  res->re;
+    darr_mul_RR_to(arr1,&tmp_arr1,&tmp_arr2);
+    
+    if (res.order != 0){
+
+        for (ordi = 0; ordi<res->order; ordi++){
+
+            
+
+            // Initialize memory within each array.
+            for( i = 0; i < res.p_ndpo[ordi]; i++){
+
+                tmp_arr1.p_data = arr2->p_im[ordi][i];
+                tmp_arr2.p_data =  res->p_im[ordi][i];
+
+                darr_mul_RR( arr1, &tmp_arr1, &tmp_arr2 );
+
+            }
+
+        }
+
+    } 
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************

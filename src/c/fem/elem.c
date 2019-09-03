@@ -223,21 +223,27 @@ int64_t elem_allocate(elem_t* elem, uint64_t nbasis, uint64_t order, int64_t geo
 
     }
 
+
+
     // Check first if the element is already allocated.
     if( elem->isInit == 0 ){
    
         
         // elem->nDimAnalysis = nDimAnalysis;
         elem->order    = order;
+        elem->nbasis   = nbasis;
         elem->nder     = nder;
         elem->ndim     = ndim;
+        elem->kind     = kind;
         elem->f_basis  = basis_f;
-        
+        elem->geomBase = geomBase;
 
         // Get the integration points and integration weights.
         // This function allocates memory.
         fem_integrationPoints(order, elem->geomBase, &elem->intPts, &elem->intWts);
         
+        // printf("Here.\n");
+
         elem->nIntPts = elem->intPts.nrows;
         
 

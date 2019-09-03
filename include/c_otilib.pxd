@@ -108,7 +108,7 @@ cdef extern from "oti/oti.h" nogil:
     darr_t        intPts
     darr_t        intWts
     darr_t*  p_evalBasis
-    int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*)
+    int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*) nogil
 
     
   cdef enum operEnum :  

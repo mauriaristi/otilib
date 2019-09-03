@@ -128,152 +128,152 @@ QuadSerP2 = elBase.createNewElement(8,            # Number of basis
 # # ----------------------------------------------------------------------------------------------------
 
 
-# #*****************************************************************************************************
-# cpdef intOmega(fefunction func1, region = -1):
-#   """ 
-#   PURPOSE: Domain integral
+#*****************************************************************************************************
+cpdef intOmega(fefunction func1, region = -1):
+  """ 
+  PURPOSE: Domain integral
 
-#   """
+  """
 
-#   cdef fefunction res 
-#   cdef fefunction func2 =  <fefunction> fefunction.__new__(fefunction)
-#   cdef int64_t regionIdNum
+  cdef fefunction res 
+  cdef fefunction func2 =  <fefunction> fefunction.__new__(fefunction)
+  cdef int64_t regionIdNum
 
-#   res   = fefunction.newFromOperation(opInt3d,func1,func2)
+  res   = fefunction.newFromOperation(opInt3d,func1,func2)
 
-#   type1 = type(region)
+  type1 = type(region)
 
-#   if type1 == str:
-#     regionIdNum = res.baseSpace.mesh.nameIds[region]
-#   else:
-#     regionIdNum = region
-#   # end if 
+  if type1 == str:
+    regionIdNum = res.baseSpace.mesh.nameIds[region]
+  else:
+    regionIdNum = region
+  # end if 
 
-#   res.data = region
+  res.data = region
 
-#   return res
-# #-----------------------------------------------------------------------------------------------------
+  return res
+#-----------------------------------------------------------------------------------------------------
 
-# #*****************************************************************************************************
-# cpdef intGamma( boundaryId, fefunction func1 ):
-#   """ 
-#   PURPOSE: Boundary integral
+#*****************************************************************************************************
+cpdef intGamma( boundaryId, fefunction func1 ):
+  """ 
+  PURPOSE: Boundary integral
 
-#   """
+  """
 
-#   cdef fefunction res 
-#   cdef fefunction func2 =  <fefunction> fefunction.__new__(fefunction)
-#   cdef int64_t boundIdNum
+  cdef fefunction res 
+  cdef fefunction func2 =  <fefunction> fefunction.__new__(fefunction)
+  cdef int64_t boundIdNum
   
-#   res   = fefunction.newFromOperation(opInt2d,func1,func2)
+  res   = fefunction.newFromOperation(opInt2d,func1,func2)
 
-#   type1 = type(boundaryId)
+  type1 = type(boundaryId)
   
-#   if type1 == str:
-#     boundIdNum = res.baseSpace.mesh.nameIds[boundaryId]
-#   else:
-#     boundIdNum = boundaryId
-#   # end if 
+  if type1 == str:
+    boundIdNum = res.baseSpace.mesh.nameIds[boundaryId]
+  else:
+    boundIdNum = boundaryId
+  # end if 
 
-#   res.data = boundIdNum
+  res.data = boundIdNum
 
-#   return res
-# #-----------------------------------------------------------------------------------------------------
+  return res
+#-----------------------------------------------------------------------------------------------------
 
-# #*****************************************************************************************************
-# cpdef on(boundaryId, fefunction func1, in2): # define Dirichlet boundary conditions.
-#   """
-#   PURPOSE: Define essential (Dirichlet) boundary conditions for a finite element problem.
+#*****************************************************************************************************
+cpdef on(boundaryId, fefunction func1, in2): # define Dirichlet boundary conditions.
+  """
+  PURPOSE: Define essential (Dirichlet) boundary conditions for a finite element problem.
 
-#   INPUTS: 
+  INPUTS: 
 
-#     -> func1:   Undefined variable that will be set in the boundaries
+    -> func1:   Undefined variable that will be set in the boundaries
 
-#     -> in2:   Value at the boundary. This, for now, is only defined by defined FE function class.
+    -> in2:   Value at the boundary. This, for now, is only defined by defined FE function class.
 
 
-#   """
+  """
 
-#   cdef fefunction res, func2
-#   cdef int64_t boundIdNum 
+  cdef fefunction res, func2
+  cdef int64_t boundIdNum 
 
-#   type1 = type(boundaryId)
-#   type2 = type(in2)
+  type1 = type(boundaryId)
+  type2 = type(in2)
 
-#   if type2 == fefunction:
-#     func2 = in2
-#   else:
-#     func2 = func1.baseSpace.newFunction(in2)
-#   # end if 
+  if type2 == fefunction:
+    func2 = in2
+  else:
+    func2 = func1.baseSpace.newFunction(in2)
+  # end if 
 
-#   res   = fefunction.newFromOperation(opOn,func2,func1)
+  res   = fefunction.newFromOperation(opOn,func2,func1)
     
-#   if type1 == str:
-#     boundIdNum = res.baseSpace.mesh.nameIds[boundaryId]
-#   else:
-#     boundIdNum = boundaryId
-#   # end if 
+  if type1 == str:
+    boundIdNum = res.baseSpace.mesh.nameIds[boundaryId]
+  else:
+    boundIdNum = boundaryId
+  # end if 
 
-#   res.data = boundIdNum
+  res.data = boundIdNum
 
-#   return res
+  return res
 
-# #-----------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
 
 
-# #*****************************************************************************************************
-# cpdef dx(fefunction func1):
-#   """
-#   PURPOSE: Define derivative of a Finite Element function.
+#*****************************************************************************************************
+cpdef dx(fefunction func1):
+  """
+  PURPOSE: Define derivative of a Finite Element function.
 
-#   INPUTS:  
+  INPUTS:  
 
-#     -> func1:   Finite element function that will be derived.
+    -> func1:   Finite element function that will be derived.
 
-#   """ 
+  """ 
 
-#   cdef fefunction res 
+  cdef fefunction res 
 
-#   res   = fefunction.newFromOperation(opDx,func1,None)
+  res   = fefunction.newFromOperation(opDx,func1,None)
 
-#   return res
-# #-----------------------------------------------------------------------------------------------------
+  return res
+#-----------------------------------------------------------------------------------------------------
 
-# #*****************************************************************************************************
-# cpdef dy(fefunction func1):
-#   """
-#   PURPOSE: Define derivative of a Finite Element function.
+#*****************************************************************************************************
+cpdef dy(fefunction func1):
+  """
+  PURPOSE: Define derivative of a Finite Element function.
 
-#   INPUTS: 
+  INPUTS: 
 
-#     -> func1:   Finite element function that will be derived.
+    -> func1:   Finite element function that will be derived.
 
-#   """ 
+  """ 
 
-#   cdef fefunction res 
+  cdef fefunction res 
 
-#   res   = fefunction.newFromOperation(opDy,func1,None)
+  res   = fefunction.newFromOperation(opDy,func1,None)
 
-#   return res
-# #-----------------------------------------------------------------------------------------------------
+  return res
+#-----------------------------------------------------------------------------------------------------
 
-# #*****************************************************************************************************
-# cpdef dz(fefunction func1):
-#   """
-#   PURPOSE: Define derivative of a Finite Element function.
+#*****************************************************************************************************
+cpdef dz(fefunction func1):
+  """
+  PURPOSE: Define derivative of a Finite Element function.
 
-#   INPUTS: 
+  INPUTS: 
 
-#     -> func1:   Finite element function that will be derived.
+    -> func1:   Finite element function that will be derived.
 
-#   """ 
+  """ 
 
-#   cdef fefunction res 
+  cdef fefunction res 
 
-#   res   = fefunction.newFromOperation(opDz,func1,None)
+  res   = fefunction.newFromOperation(opDz,func1,None)
 
-#   return res
-# #-----------------------------------------------------------------------------------------------------
+  return res
+#-----------------------------------------------------------------------------------------------------
 
 
 
@@ -359,264 +359,264 @@ QuadSerP2 = elBase.createNewElement(8,            # Number of basis
 
 
 
-# #*****************************************************************************************************
-# def fem_readOperMat(mesh meshObj, np.ndarray mat):
-#   """
-#   DESCRIPTION:  Function to convert to a human readable format the operation stack produced 
-#                 by operating finite element Variables.
+#*****************************************************************************************************
+def fem_readOperMat(mesh meshObj, np.ndarray mat):
+  """
+  DESCRIPTION:  Function to convert to a human readable format the operation stack produced 
+                by operating finite element Variables.
 
 
 
-#   """
-#   cdef uint64_t i,j
-#   cdef uint64_t shape0 = mat.shape[0]
-#   out = ""
-#   space = " "
-#   # opNames
-#   for i in range(shape0):
+  """
+  cdef uint64_t i,j
+  cdef uint64_t shape0 = mat.shape[0]
+  out = ""
+  space = " "
+  # opNames
+  for i in range(shape0):
 
-#     out += opNames[mat[i,0]]
-#     out += space
+    out += opNames[mat[i,0]]
+    out += space
     
-#     if mat[i,0] <= np.uint64(opTruediv):
+    if mat[i,0] <= np.uint64(opTruediv):
       
-#       # print(" In basic operations")
+      # print(" In basic operations")
 
-#       # out += str(meshObj.elements[mat[i,1]])
-#       out += kindNames[mat[i,2]]
-#       out += space+str(mat[i,3])
-#       out += ' with '
-#       # out += str(meshObj.elements[mat[i,4]])
-#       out += kindNames[mat[i,5]]
-#       out += space+str(mat[i,6])
-#       out += ' in '
-#       # out += str(meshObj.elements[mat[i,7]])
-#       out += kindNames[mat[i,8]]
-#       out += space+str(mat[i,9])
+      # out += str(meshObj.elements[mat[i,1]])
+      out += kindNames[mat[i,2]]
+      out += space+str(mat[i,3])
+      out += ' with '
+      # out += str(meshObj.elements[mat[i,4]])
+      out += kindNames[mat[i,5]]
+      out += space+str(mat[i,6])
+      out += ' in '
+      # out += str(meshObj.elements[mat[i,7]])
+      out += kindNames[mat[i,8]]
+      out += space+str(mat[i,9])
 
-#     elif mat[i,0] == opDef:
+    elif mat[i,0] == opDef:
       
-#       # print(" In definition operation")
-#       # out += kindNames[mat[i,5]]
-#       # out += space+str(mat[i,6])
-#       out += kindNames[mat[i,3]]
-#       out += space+str(mat[i,4])
-#       out += " as "
-#       j = mat[i,1]-basisN
-#       out += basisNames[j]
+      # print(" In definition operation")
+      # out += kindNames[mat[i,5]]
+      # out += space+str(mat[i,6])
+      out += kindNames[mat[i,3]]
+      out += space+str(mat[i,4])
+      out += " as "
+      j = mat[i,1]-basisN
+      out += basisNames[j]
       
       
 
-#     elif mat[i,0] == opPowr: # Power function
+    elif mat[i,0] == opPowr: # Power function
 
-#       # print(" In power operation")
-#       # out += str(meshObj.elements[mat[i,1]])
-#       out += kindNames[mat[i,2]]
-#       out += space+str(mat[i,3])
-#       out += " by exp "
-#       out += str(meshObj.constObj[mat[i,5]][mat[i,4]])
+      # print(" In power operation")
+      # out += str(meshObj.elements[mat[i,1]])
+      out += kindNames[mat[i,2]]
+      out += space+str(mat[i,3])
+      out += " by exp "
+      out += str(meshObj.constObj[mat[i,5]][mat[i,4]])
 
-#     elif mat[i,0] <= opInt3d: # integrals
+    elif mat[i,0] <= opInt3d: # integrals
 
-#       # print(" In Integration operation")
-#       # out += "variable "
-#       # out += str(meshObj.elements[mat[i,2]])
-#       out += kindNames[mat[i,3]]
-#       out += space+str(mat[i,4])
-#       out += ' in '
-#       # out += str(meshObj.elements[mat[i,5]])
-#       out += kindNames[mat[i,6]]
-#       out += space+str(mat[i,7])
+      # print(" In Integration operation")
+      # out += "variable "
+      # out += str(meshObj.elements[mat[i,2]])
+      out += kindNames[mat[i,3]]
+      out += space+str(mat[i,4])
+      out += ' in '
+      # out += str(meshObj.elements[mat[i,5]])
+      out += kindNames[mat[i,6]]
+      out += space+str(mat[i,7])
 
-#     out += '\n'
+    out += '\n'
 
-#   print(out)
-#   # return out
-# #-----------------------------------------------------------------------------------------------------
+  print(out)
+  # return out
+#-----------------------------------------------------------------------------------------------------
 
-# #*****************************************************************************************************
-# cpdef int64_t fem_getDataKind(object data):
-#   """
-#   PURPOSE:     Get the kind of data 
+#*****************************************************************************************************
+cpdef int64_t fem_getDataKind(object data):
+  """
+  PURPOSE:     Get the kind of data 
 
-#   """
-#   cdef int64_t res
-#   if type(data) == sndarray:
+  """
+  cdef int64_t res
+  if type(data) == sndarray:
         
-#     res = kindFunc      # kind of function.
+    res = kindFunc      # kind of function.
 
-#   elif type(data) == sotinum:
+  elif type(data) == sotinum:
         
-#     res = kindScalar
+    res = kindScalar
 
-#   elif type(data) in number_types:
+  elif type(data) in number_types:
         
-#     res = kindReal
+    res = kindReal
 
-#   else:
+  else:
 
-#      raise ValueError("Undefined data kind. ")
+     raise ValueError("Undefined data kind. ")
 
-#   # end if
+  # end if
 
-#   return res
-# #-----------------------------------------------------------------------------------------------------
-
-
+  return res
+#-----------------------------------------------------------------------------------------------------
 
 
-# #*****************************************************************************************************
-# cpdef list fem_getOffset(list position,list solFunc,list testFunc,np.ndarray eDOF_per_sol):
-#   """
-#   PURPOSE:     Get the equivalent offset of the starting position 
 
-#   """
-#   cdef list eqPos = fem_getEqvPosition( position, solFunc, testFunc)
-#   cdef list res = [0,0]
-#   cdef uint64_t zero = 0, one = 1
+
+#*****************************************************************************************************
+cpdef list fem_getOffset(list position,list solFunc,list testFunc,np.ndarray eDOF_per_sol):
+  """
+  PURPOSE:     Get the equivalent offset of the starting position 
+
+  """
+  cdef list eqPos = fem_getEqvPosition( position, solFunc, testFunc)
+  cdef list res = [0,0]
+  cdef uint64_t zero = 0, one = 1
     
-#   res[zero] = eDOF_per_sol[eqPos[zero]]
+  res[zero] = eDOF_per_sol[eqPos[zero]]
 
-#   res[one] = eDOF_per_sol[eqPos[one]]
+  res[one] = eDOF_per_sol[eqPos[one]]
 
-#   return res
+  return res
 
-# #-----------------------------------------------------------------------------------------------------
-
-
+#-----------------------------------------------------------------------------------------------------
 
 
-# #*****************************************************************************************************
-# cpdef list fem_getEqvPosition(list position,list solFunc,list testFunc):
-#   """
-#   PURPOSE:    Convert a position given by function ids, into problem local coordinates.
 
-#   """
-#   cdef int64_t i,j
-#   cdef uint64_t res, funcId, funcId2
-#   cdef fefunction func
 
-#   if len(position)==1:
+#*****************************************************************************************************
+cpdef list fem_getEqvPosition(list position,list solFunc,list testFunc):
+  """
+  PURPOSE:    Convert a position given by function ids, into problem local coordinates.
+
+  """
+  cdef int64_t i,j
+  cdef uint64_t res, funcId, funcId2
+  cdef fefunction func
+
+  if len(position)==1:
     
-#     funcId = position[0]
+    funcId = position[0]
 
-#     if funcId == 0:
-#       return [0,0]
-#     # end if 
+    if funcId == 0:
+      return [0,0]
+    # end if 
 
-#     for i in range(len(solFunc)):
-#       func = solFunc[i]
-#       if func.funcid == funcId:
-#         return [i,0]
-#       # end if 
-#     # end for
+    for i in range(len(solFunc)):
+      func = solFunc[i]
+      if func.funcid == funcId:
+        return [i,0]
+      # end if 
+    # end for
 
-#     for i in range(len(testFunc)):
-#       func = testFunc[i]
-#       if func.funcid == funcId:
-#         return [i,0]
-#       # end if 
-#     # end for
-#     print("Position before error: ", position)
-#     raise ValueError("Position defined with respect to a variable that is not in the problem functions!")
+    for i in range(len(testFunc)):
+      func = testFunc[i]
+      if func.funcid == funcId:
+        return [i,0]
+      # end if 
+    # end for
+    print("Position before error: ", position)
+    raise ValueError("Position defined with respect to a variable that is not in the problem functions!")
 
-#   else:
+  else:
     
-#     funcId = position[0]
-#     funcId2= position[1]
+    funcId = position[0]
+    funcId2= position[1]
 
-#     for j in range(len(solFunc)):
-#       func = solFunc[j]
-#       if func.funcid == funcId2:
-#         break
-#       # end if 
-#     # end for
+    for j in range(len(solFunc)):
+      func = solFunc[j]
+      if func.funcid == funcId2:
+        break
+      # end if 
+    # end for
 
-#     for i in range(len(testFunc)):
-#       func = testFunc[i]
-#       if func.funcid == funcId:
-#         break
-#       # end if 
-#     # end for
-#     return [i, j]
-#   # end if
-
-
-# #-----------------------------------------------------------------------------------------------------
+    for i in range(len(testFunc)):
+      func = testFunc[i]
+      if func.funcid == funcId:
+        break
+      # end if 
+    # end for
+    return [i, j]
+  # end if
 
 
-# #*****************************************************************************************************
-# cpdef uint64_t fem_getEqvPositionIndx(list position,list solFunc,list testFunc):
-#   """
-#   PURPOSE:    Convert a position given by function ids, into problem local coordinates.
+#-----------------------------------------------------------------------------------------------------
 
-#   """
-#   #***************************************************************************************************
 
-#   cdef int64_t i,j
-#   cdef uint64_t res, funcId, funcId2
-#   cdef fefunction func
+#*****************************************************************************************************
+cpdef uint64_t fem_getEqvPositionIndx(list position,list solFunc,list testFunc):
+  """
+  PURPOSE:    Convert a position given by function ids, into problem local coordinates.
 
-#   if len(position)==1:
-#     funcId = position[0]
-#     for i in range(len(solFunc)):
-#       func = solFunc[i]
-#       if func.funcid == funcId:
-#         return i
-#       # end if 
-#     # end for
+  """
+  #***************************************************************************************************
 
-#     for i in range(len(testFunc)):
-#       func = solFunc[i]
-#       if func.funcid == funcId:
-#         return i
-#       # end if 
-#     # end for
+  cdef int64_t i,j
+  cdef uint64_t res, funcId, funcId2
+  cdef fefunction func
+
+  if len(position)==1:
+    funcId = position[0]
+    for i in range(len(solFunc)):
+      func = solFunc[i]
+      if func.funcid == funcId:
+        return i
+      # end if 
+    # end for
+
+    for i in range(len(testFunc)):
+      func = solFunc[i]
+      if func.funcid == funcId:
+        return i
+      # end if 
+    # end for
     
-#     raise ValueError("Position defined with respect to a variable that is not in the problem functions!")
-#   else:
-#     funcId = position[0]
-#     funcId2= position[1]
-#     for j in range(len(solFunc)):
-#       func = solFunc[j]
-#       if func.funcid == funcId2:
-#         break
-#       # end if 
-#     # end for
+    raise ValueError("Position defined with respect to a variable that is not in the problem functions!")
+  else:
+    funcId = position[0]
+    funcId2= position[1]
+    for j in range(len(solFunc)):
+      func = solFunc[j]
+      if func.funcid == funcId2:
+        break
+      # end if 
+    # end for
 
-#     for i in range(len(testFunc)):
-#       func = testFunc[i]
-#       if func.funcid == funcId:
-#         break
-#       # end if 
-#     # end for
-#     return i*len(testFunc)+ j
-#   # end if
-
-
-# #-----------------------------------------------------------------------------------------------------
+    for i in range(len(testFunc)):
+      func = testFunc[i]
+      if func.funcid == funcId:
+        break
+      # end if 
+    # end for
+    return i*len(testFunc)+ j
+  # end if
 
 
-# #*****************************************************************************************************
-# cpdef list fem_getOrderedFuncList(list funcList):
-#   """
-#   PURPOSE:    Generate a list of operations such that the elements match one-to-one with the 
-#               function ids of the element's list.
+#-----------------------------------------------------------------------------------------------------
 
-#   """
-#   #***************************************************************************************************
 
-#   cdef fefunction func = funcList[len(funcList)-1]
-#   cdef list res = [None]*int(func.funcid+1)
-#   cdef int64_t i
+#*****************************************************************************************************
+cpdef list fem_getOrderedFuncList(list funcList):
+  """
+  PURPOSE:    Generate a list of operations such that the elements match one-to-one with the 
+              function ids of the element's list.
+
+  """
+  #***************************************************************************************************
+
+  cdef fefunction func = funcList[len(funcList)-1]
+  cdef list res = [None]*int(func.funcid+1)
+  cdef int64_t i
   
-#   for i in range(len(funcList)):
-#     func = funcList[i]
-#     res[func.funcid]=func
-#   # end for
+  for i in range(len(funcList)):
+    func = funcList[i]
+    res[func.funcid]=func
+  # end for
 
-#   return res
-# #-----------------------------------------------------------------------------------------------------
+  return res
+#-----------------------------------------------------------------------------------------------------
 
 
 
@@ -625,7 +625,7 @@ QuadSerP2 = elBase.createNewElement(8,            # Number of basis
 
 
 #*****************************************************************************************************
-cdef object c_fem_get_enum_string(int64_t enumId):
+cdef object enum2string(int64_t enumId):
   """
   PURPOSE:    Returns a string with the name of the corresponding enum value given.
 

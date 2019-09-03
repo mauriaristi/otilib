@@ -25,7 +25,7 @@ cdef class mesh:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def __init__(self, filename, uint8_t otiorder = 1): 
+  def __init__(self, filename, bases_t otinbases = 0, ord_t otiorder = 0): 
     """
     PURPOSE:      Constructor of the Mesh class for Finite Elements using OTI algebra.
                   
@@ -59,7 +59,10 @@ cdef class mesh:
     self.fespaces   = []
     self.elTypes    = []
     self.nameIds = {}
-    self.otiorder = otiorder
+    
+    # set oti properties.
+    self.otiorder  = otiorder
+    self.otinbases = otinbases
 
     self.operationCount = 0
     self.xyzInit = 0   #
@@ -193,8 +196,10 @@ cdef class mesh:
       for j in range( boundEls.shape[0] ):
         
         if self.ndim==1:
+          
           # Boundary is made of points
           row,col=np.where(self.domainEls[:,:2]==boundEls[j,0])
+
           if row.size == 1:
             if col[0]==0:
               self.normalx[int(boundEls[j,0]-1),0]=-1.0
@@ -279,6 +284,7 @@ cdef class mesh:
 
     cdef int64_t i, j, k
     cdef np.ndarray boundEls
+
     for i in range( len( boundIds ) ):
       
       if type(boundIds[i]) == str:
@@ -370,123 +376,119 @@ cdef class mesh:
 
 
 
-  #***************************************************************************************************
-  def exportToVTK(self,filename,list pd=[],list pdNames=[]):
-    """
-    PURPOSE: Export mesh and solution functions to vtk format.
+  # #***************************************************************************************************
+  # def exportToVTK(self,filename,list pd=[],list pdNames=[]):
+  #   """
+  #   PURPOSE: Export mesh and solution functions to vtk format.
 
-    """
+  #   """
 
-    f = open(filename, "w")
+  #   f = open(filename, "w")
 
-    f.write("# vtk DataFile Version 4.1\n")# Header
-    f.write("Exported OTI solution\n")# Header
-    f.write("ASCII\n")# Header
+  #   f.write("# vtk DataFile Version 4.1\n")# Header
+  #   f.write("Exported OTI solution\n")# Header
+  #   f.write("ASCII\n")# Header
 
-    f.write("DATASET UNSTRUCTURED_GRID\n")
+  #   f.write("DATASET UNSTRUCTURED_GRID\n")
 
-    #First add the point data 
-    cdef np.ndarray nodesx = self.xcoords.real
-    cdef np.ndarray nodesy = self.ycoords.real
-    cdef np.ndarray nodesz = self.zcoords.real
-    cdef uint64_t nnodes, nels, elDof
-    cdef list humDir
+  #   #First add the point data 
+  #   cdef np.ndarray nodesx = self.xcoords.real
+  #   cdef np.ndarray nodesy = self.ycoords.real
+  #   cdef np.ndarray nodesz = self.zcoords.real
+  #   cdef uint64_t nnodes, nels, elDof
+  #   cdef list humDir
     
-    elDof = self.getBaseDOFs()
-    nnodes = np.max( self.domainEls[:,:elDof] )
+  #   elDof = self.getBaseDOFs()
+  #   nnodes = np.max( self.domainEls[:,:elDof] )
 
 
-    f.write("POINTS "+str(nnodes)+" double\n")
+  #   f.write("POINTS "+str(nnodes)+" double\n")
 
-    cdef uint64_t i, i0=0,j,k
-    for i in range(nnodes):
-      f.write(str(nodesx[i,i0])+" "+str(nodesy[i,i0])+" "+str(nodesz[i,i0])+"\n")
-    # end for 
+  #   cdef uint64_t i, i0=0,j,k
+  #   for i in range(nnodes):
+  #     f.write(str(nodesx[i,i0])+" "+str(nodesy[i,i0])+" "+str(nodesz[i,i0])+"\n")
+  #   # end for 
 
-    # add the elements
-    nels = self.domainEls.shape[0]
+  #   # add the elements
+  #   nels = self.domainEls.shape[0]
 
-    f.write("CELLS "+str(nels)+" "+str(nels*( int( elDof+1 ) ) )+" \n")
-    for i in range(nels):
-      f.write(str(elDof)+" ")
-      for j in range(elDof):
-        f.write(str( int( self.domainEls[i,j] - 1 ) )+" ")
-      #end for 
-      f.write("\n")
-    # end for 
+  #   f.write("CELLS "+str(nels)+" "+str(nels*( int( elDof+1 ) ) )+" \n")
+  #   for i in range(nels):
+  #     f.write(str(elDof)+" ")
+  #     for j in range(elDof):
+  #       f.write(str( int( self.domainEls[i,j] - 1 ) )+" ")
+  #     #end for 
+  #     f.write("\n")
+  #   # end for 
 
-    cdef uint64_t cellVtkType = self.getDomainVtkCellId(elDof)
-    cdef uint64_t ndata, nImDir
-    f.write("CELL_TYPES "+str(nels)+" \n")
-    for i in range(nels):
-      f.write(str(cellVtkType)+"\n")
-    # end for 
+  #   cdef uint64_t cellVtkType = self.getDomainVtkCellId(elDof)
+  #   cdef uint64_t ndata, nImDir
+  #   f.write("CELL_TYPES "+str(nels)+" \n")
+  #   for i in range(nels):
+  #     f.write(str(cellVtkType)+"\n")
+  #   # end for 
 
-    if len(pd)!=0:
-      if len(pdNames)!=len(pd):
-        f.close()
-        raise ValueError("pd and pdNames must match one to one.")
-      # end if 
+  #   if len(pd)!=0:
+  #     if len(pdNames)!=len(pd):
+  #       f.close()
+  #       raise ValueError("pd and pdNames must match one to one.")
+  #     # end if 
 
-      f.write("POINT_DATA "+str(nnodes)+"\n")
+  #     f.write("POINT_DATA "+str(nnodes)+"\n")
 
-      for j in range(len(pd)):
-        if type(pd[j]) == list:
-          # vector data
+  #     for j in range(len(pd)):
+        
+  #       if type(pd[j]) == list:
+  #         # vector data
           
-          flist = pd[j]
-          ndata = len(flist)
-          nImDir = flist[i0].data.Ndir
-          order  = flist[i0].data.order
+  #         flist = pd[j]
+  #         ndata = len(flist)
+  #         nImDir = flist[i0].data.Ndir
+  #         order  = flist[i0].data.order
           
-          for ndir in range(nImDir):       
-            e_dir = getLatexDir(ndir,order)
-            # end if 
-            f.write("VECTORS "+pdNames[j]+'-'+e_dir+" double\n")
-            for i in range(nnodes):
-              for k in range(ndata):
+  #         for ndir in range(nImDir):       
+  #           e_dir = getLatexDir(ndir,order)
+  #           # end if 
+  #           f.write("VECTORS "+pdNames[j]+'-'+e_dir+" double\n")
+  #           for i in range(nnodes):
+  #             for k in range(ndata):
                 
-                f.write(str(flist[k].data.data[i,ndir])+" ")
+  #               f.write(str(flist[k].data.data[i,ndir])+" ")
 
-              # end for 
-              for k in range(ndata,3):
-                f.write("0 ")
-              # end for 
-              f.write("\n")
-            # end for 
-          # end for 
-        else:
-          # point data
-          f.write("")
-          nImDir= pd[j].data.Ndir
-          order = pd[j].data.order
-          # f.write("SCALARS "+pdNames[j]+" double "+str(j)+"\n")
-          for ndir in range(nImDir):
-            e_dir = getLatexDir(ndir,order)
-            f.write("SCALARS "+pdNames[j]+'-'+e_dir+" double\n")
-            f.write("LOOKUP_TABLE default\n")
-            for i in range(nnodes):
+  #             # end for 
+  #             for k in range(ndata,3):
+  #               f.write("0 ")
+  #             # end for 
+  #             f.write("\n")
+  #           # end for 
+  #         # end for 
+  #       else:
+  #         # point data
+  #         f.write("")
+  #         nImDir= pd[j].data.Ndir
+  #         order = pd[j].data.order
+  #         # f.write("SCALARS "+pdNames[j]+" double "+str(j)+"\n")
+  #         for ndir in range(nImDir):
+  #           e_dir = getLatexDir(ndir,order)
+  #           f.write("SCALARS "+pdNames[j]+'-'+e_dir+" double\n")
+  #           f.write("LOOKUP_TABLE default\n")
+  #           for i in range(nnodes):
               
-              f.write(str(pd[j].data.data[i,ndir])+" ")
+  #             f.write(str(pd[j].data.data[i,ndir])+" ")
               
-              f.write("\n")
-            # end for 
-          # end for
+  #             f.write("\n")
+  #           # end for 
+  #         # end for
 
-        # end if 
+  #       # end if 
 
-      # end for 
+  #     # end for 
 
-    # end if 
+  #   # end if 
 
+  #   f.close()
 
-
-
-
-
-    f.close()
-
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   cdef uint64_t getBaseDOFs(self):
@@ -494,6 +496,7 @@ cdef class mesh:
     PURPOSE: get the basic order 1 domain DOFs according to the element type.
     """
     cdef uint64_t res = 0
+
     if self.domainType == elLine:
       
       res = 2
@@ -560,7 +563,7 @@ cdef class mesh:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cpdef uint64_t getGlobalDOFBound(self,int64_t ndim, fespace2 space):
+  cpdef uint64_t getGlobalDOFBound(self,int64_t ndim, fespace space):
     """
     PURPOSE: get the total number of degrees of freedom of a mesh according to the interpolation
              functions.
@@ -608,7 +611,7 @@ cdef class mesh:
 
 
   #***************************************************************************************************
-  cpdef uint64_t getGlobalDOF(self,fespace2 space):
+  cpdef uint64_t getGlobalDOF(self,fespace space):
     """
     PURPOSE: get the total number of degrees of freedom of a mesh according to the interpolation
              functions.
@@ -690,7 +693,7 @@ cdef class mesh:
     #   # end if 
     # # end for
 
-    cdef int64_t i,nodeIdx,eIdx
+    cdef int64_t i,nodeIdx,eIdx, maxdim=0
 
     f = open(filename, 'r')
     #read the headings
@@ -1311,8 +1314,8 @@ cdef class mesh:
       order2 = np.unique(self.domainElements[:,4:8])
 
 
-      new2old = np.append(order1,order2)
-      old2new = np.empty_like(new2old)
+      new2old  = np.append(order1,order2)
+      old2new  = np.empty_like(new2old)
       nodesNew = np.empty_like(nodes)
       for i in range(len(new2old)):
         old2new[int(new2old[i]-1)]=int(i+1)
@@ -1374,15 +1377,9 @@ cdef class mesh:
       
 
 
-
-
-
-
-
-
-    self.xcoords = sarray( nodes[:,[0]], order = self.otiorder)
-    self.ycoords = sarray( nodes[:,[1]], order = self.otiorder)
-    self.zcoords = sarray( nodes[:,[2]], order = self.otiorder)
+    self.xcoords = omat( nodes[:,[0]], nbases = self.otinbases, order = self.otiorder)
+    self.ycoords = omat( nodes[:,[1]], nbases = self.otinbases, order = self.otiorder)
+    self.zcoords = omat( nodes[:,[2]], nbases = self.otinbases, order = self.otiorder)
 
     # self.domainElements = 
 
@@ -1445,7 +1442,7 @@ cdef class mesh:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cdef uint64_t addNewSpace(self,fespace2 space):
+  cdef uint64_t addNewSpace(self,fespace space):
     """
     PURPOSE:      creates a new Finite Element space and adds a new element to the stack list of 
                   spaces that defines the interpolation of elements in the mesh.

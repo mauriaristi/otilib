@@ -18,6 +18,7 @@
 // Dense oti Finite Element array.
 #include "fem/feoarr_base.c"
 #include "fem/feoarr_algebra_elementwise.c"
+// #include "fem/feoarr_algebra_elementwise_to.c"
 #include "fem/feoarr_algebra_matops.c"
 
 // // Sparse oti.
@@ -49,7 +50,6 @@
 #include "fem/elem.c"
 
 // #include "fem/base.c"
-
 
 // #include "fem/helper_functions.c"
 

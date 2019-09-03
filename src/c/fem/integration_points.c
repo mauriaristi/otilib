@@ -39,8 +39,7 @@
 
 
 // ****************************************************************************************************
-int64_t fem_integrationPoints(uint64_t order, int64_t elementType, 
-                                darr_t* coords, darr_t* weights){
+int64_t fem_integrationPoints(uint64_t order, int64_t elementType, darr_t* coords, darr_t* weights){
     /*
     fem_integrationPoints(uint64_t order, int64_t elementType, double* coords) 
 
@@ -78,6 +77,8 @@ int64_t fem_integrationPoints(uint64_t order, int64_t elementType,
 
     // Depending on the element type, compute the data.
     if (elementType == elNode){
+
+        // printf("Initializing elNode.\n");
         npoints = 1;
         ndim = 1;
 
@@ -88,8 +89,13 @@ int64_t fem_integrationPoints(uint64_t order, int64_t elementType,
         darr_set_item_ij(1.0,0,0,weights);
 
     } else if (elementType == elLine){
+        // printf("Initializing elLine.\n");
+
         
-        uint64_t nIntPts = (order + 1)/2;
+        // According to --> 
+        // uint64_t nIntPts = (order + 1)/2;
+        uint64_t nIntPts = order ;
+
         // Line element.
         ndim = 1;
         if (nIntPts <= 1){ // Accepts 0 or 1.
@@ -288,6 +294,8 @@ int64_t fem_integrationPoints(uint64_t order, int64_t elementType,
 
     } else if (elementType == elTriangle){
         
+        // printf("Initializing elTriangle.\n");
+
         // Triangular element .
         ndim = 2;
 
@@ -525,6 +533,8 @@ int64_t fem_integrationPoints(uint64_t order, int64_t elementType,
 
     } else if (elementType == elQuadrangle){
 
+        // printf("Initializing elQuadrangle.\n");
+
         darr_t coord_tmp;
         darr_t weights_tmp;
 
@@ -570,6 +580,8 @@ int64_t fem_integrationPoints(uint64_t order, int64_t elementType,
     // } else if (elementType == elTetrahedra){
         
     } else if (elementType == elHexahedra){
+
+        // printf("Initializing elHexahedra.\n");
 
         darr_t coord_tmp;
         darr_t weights_tmp;

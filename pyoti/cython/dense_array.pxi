@@ -29,7 +29,7 @@ cdef class omat:
 
   #***************************************************************************************************
   
-  def __init__(self, nrows, ncols, ord_t order = 0, bases_t nbases = 0,  uint8_t FLAGS = 1): 
+  def __init__(self, realArray, ord_t order = 0, bases_t nbases = 0,  uint8_t FLAGS = 1): 
     """
     PURPOSE:      Python level constructor of the omat class.
 
@@ -39,9 +39,74 @@ cdef class omat:
     #*************************************************************************************************
     global dhl
     
+    cdef uint64_t nrows, ncols, i,j
+    cdef dmat inval
+    cdef double val 
+
     self.FLAGS = FLAGS
 
-    self.arr = oarr_createEmpty( nrows, ncols, nbases, order, dhl)
+    if isinstance(realArray,np.ndarray):
+      ndim = realArray.ndim
+      
+      if ndim >=3:
+      
+        raise ValueError("Only 1D and 2D arrays are supported.")
+      
+      elif (ndim == 1):
+      
+        ncols = 1
+      
+        nrows = realArray.shape[0]
+
+        self.arr = oarr_zeros( nrows, ncols, nbases, order, dhl)
+
+        for i in range(self.arr.nrows):
+      
+          val = realArray[i]
+          self.arr.re[i] = val
+        
+        # end for
+      
+      else: # ndim =2
+
+        nrows = realArray.shape[0]
+        ncols = realArray.shape[1]
+
+        self.arr = oarr_zeros( nrows, ncols, nbases, order, dhl)
+
+        for i in range(self.arr.nrows):
+      
+          for j in range(self.arr.ncols):
+            
+            val = realArray[i,j]
+            self.arr.re[j+i*self.arr.ncols] = val
+          
+          # end for
+        
+        # end for
+
+      # end if 
+
+      
+
+      
+
+    elif type(realArray) == dmat:
+      
+      inval = realArray
+      self.arr = oarr_zeros( inval.nrows, inval.ncols, nbases, order, dhl)
+
+      for i in range(self.arr.nrows):
+      
+        for j in range(self.arr.ncols):
+      
+          self.arr.re[j+i*self.arr.ncols] = inval.arr.p_data[j+i*inval.arr.ncols]
+        
+        # end for
+      
+      # end for
+
+
 
   #---------------------------------------------------------------------------------------------------
 
@@ -84,6 +149,38 @@ cdef class omat:
 
   #---------------------------------------------------------------------------------------------------
   
+  #***************************************************************************************************
+  @property
+  def real(self):
+    """
+    PURPOSE:      Get a numpy array with all coefficients in the real direction.
+
+    """
+    #*************************************************************************************************
+
+    cdef uint64_t i,j,k
+    cdef double val
+    
+    cdef np.ndarray res = np.empty(( self.arr.nrows,self.arr.ncols),dtype = np.float64)
+    cdef darr_t re;
+
+    re.nrows = self.arr.nrows
+    re.ncols = self.arr.ncols
+    re.size  = self.arr.size
+
+    re.p_data = self.arr.re
+
+    for i in range(self.arr.nrows):
+      for j in range(self.arr.ncols):
+      
+        res[i,j] = darr_get_item_ij(&re, i, j)
+
+    # end for
+    
+    return res
+
+  #---------------------------------------------------------------------------------------------------
+
   #***************************************************************************************************
   @staticmethod
   cdef omat create(oarr_t* arr, uint8_t FLAGS = 1):

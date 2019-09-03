@@ -111,6 +111,54 @@ cdef class elBase:
     return newElement
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
+  def __repr__(self):
+
+
+    cdef uint64_t i
+
+    head = ""
+    body = ""
+    tail = ""
+
+
+    head += "< elbase object: \n"
+    body += " - Geometric type: --------------- " + enum2string(self.elem.geomBase)+"\n"
+    body += " - Kind of evaluation: ----------- " + enum2string(self.elem.kind)+"\n"
+    body += " - Number of Integration points: - " + str(self.elem.nIntPts)+"\n"
+    body += " - Number of derivatives: -------- " + str(self.elem.nder)+"\n"
+    body += " - Number of dimensions: --------- " + str(self.elem.ndim)+"\n"
+    body += " - Number of basis: -------------- " + str(self.elem.nbasis)+"\n"
+    body += " - Order: ------------------------ " + str(self.elem.order)+"\n"
+    
+    body += " - Integration points: \n"
+    body += repr(dmat.create(&self.elem.intPts,FLAGS=0))
+    
+    body += "\n - Integration weights: \n"
+    body += repr(dmat.create(&self.elem.intWts,FLAGS=0))
+    
+    body += "\n - Evaluated basis functions: \n"
+
+    for i in range(self.elem.nder):
+
+      body += " ---- " + enum2string( i + derN ) + "\n"
+      body += repr(dmat.create(&self.elem.p_evalBasis[i],FLAGS=0)) + "\n"
+
+    # end for 
+
+
+
+
+    tail += "end elbase object >"
+
+
+
+
+    return head + body + tail
+
+
+  #---------------------------------------------------------------------------------------------------
+
   # #***************************************************************************************************
   # cpdef initElement(self, uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis):
 
@@ -181,19 +229,6 @@ cdef class elBase:
 
   #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  @property
-  def nIntPts(self):
-    """
-    PURPOSE:      Get self.elemProps.nIntPts
-
-    """
-    #*************************************************************************************************
-
-    return self.elem.nIntPts
-
-  #---------------------------------------------------------------------------------------------------
-
 
 
   #***************************************************************************************************
@@ -234,6 +269,30 @@ cdef class elBase:
     #*************************************************************************************************
 
     return self.elem.order
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @order.setter
+  def order(self, uint8_t new_order):
+    """
+    PURPOSE:      Get self.elemProps.order
+
+    """
+    #*************************************************************************************************
+    cdef elem_t new_elem;
+
+    new_elem = elem_init()
+
+    elem_allocate( &new_elem, self.elem.nbasis, new_order, self.elem.geomBase, self.elem.kind, 
+      self.elem.ndim, self.elem.f_basis)
+
+    elem_free(&self.elem)
+
+    self.elem = new_elem
+
+
+
 
   #---------------------------------------------------------------------------------------------------
 

@@ -14,7 +14,7 @@ cdef class fefunction:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def __init__(self, fespace2 baseSpace, int64_t nature, int64_t interpDer = basisN, \
+  def __init__(self, fespace baseSpace, int64_t nature, int64_t interpDer = basisN, \
                object data = None ):
     """
     PURPOSE:      Constructor of the finite element space class. Its main purpose is to define 

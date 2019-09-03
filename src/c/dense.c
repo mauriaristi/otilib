@@ -28,6 +28,7 @@
 
 // Array algebra: Elementwise operations.
 #include "dense/array_algebra_elementwise.c"
+#include "dense/array_algebra_elementwise_to.c"
 #include "dense/array_algebra_helper.c"
 
 // Array algebra: Matrix operations such as matmul, determinant and invertion.

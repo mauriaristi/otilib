@@ -8,7 +8,7 @@
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::     CLASS  FESPACE    ::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class fespace2:
+cdef class fespace:
 
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
@@ -93,15 +93,15 @@ cdef class fespace2:
 
     if type(data) in number_types:
 
-      data_conv = data + 0*se(1 ,order = self.mesh.otiorder )
+      data_conv = data + 0*e(1 , nbases = self.mesh.otinbases, order = self.mesh.otiorder )
 
-    elif type(data) == sotinum or  type(data) == sndarray or type(data) == ndarray:
+    elif type(data) == otinum or  type(data) == omat or type(data) == dmat:
     
       data_conv = data
 
     elif type(data) == np.ndarray:
 
-      data_conv = sarray(data,self.mesh.otiorder)
+      data_conv = omat(data, nbases = self.mesh.otinbases, order = self.mesh.otiorder)
 
     else:
 

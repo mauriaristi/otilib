@@ -441,11 +441,11 @@ cpdef int64_t fem_getDataKind(object data):
 
   """
   cdef int64_t res
-  if type(data) == sndarray:
+  if type(data) == omat:
         
     res = kindFunc      # kind of function.
 
-  elif type(data) == sotinum:
+  elif type(data) == otinum:
         
     res = kindScalar
 

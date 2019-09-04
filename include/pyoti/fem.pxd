@@ -443,12 +443,12 @@ cdef class elBase:
 # # ----------------------------------------------------------------------------------------------------
 
 
-# cpdef intOmega(fefunction func1, region = *)
-# cpdef intGamma( boundaryId, fefunction func1 )
-# cpdef on(boundaryId, fefunction func1, in2)
-# cpdef dx(fefunction func1)
-# cpdef dy(fefunction func1)
-# cpdef dz(fefunction func1)
+cpdef intOmega(fefunction func1, region = *)
+cpdef intGamma( boundaryId, fefunction func1 )
+cpdef on(boundaryId, fefunction func1, in2)
+cpdef dx(fefunction func1)
+cpdef dy(fefunction func1)
+cpdef dz(fefunction func1)
 # cdef np.ndarray darray_2_numpyArray(darray_t* array )
 # cpdef int64_t fem_getDataKind(object data)
 # cpdef list fem_getOffset(list position,list solFunc,list testFunc,np.ndarray eDOF_per_sol)

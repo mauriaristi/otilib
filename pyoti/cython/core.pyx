@@ -1322,6 +1322,15 @@ def get_latex_dir(imdir_t indx, ord_t order, real = '\mbox{Re}', epsilon='\epsil
 #-----------------------------------------------------------------------------------------------------
 
 
+cdef copy_numpy2d_to_ptr_f64(np.ndarray[coeff_t, ndim=2] src, coeff_t* dst):
+  cdef uint64_t i,j,ncols = src.shape[1]
+
+  for i in range(src.shape[0]):
+    for j in range(ncols):
+      dst[j + i*ncols] = src[i,j];
+    # end for 
+  # end for 
+
 
 
 

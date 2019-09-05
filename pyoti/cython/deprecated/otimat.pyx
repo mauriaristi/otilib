@@ -9,17 +9,17 @@
 # distutils: define_macros=CYTHON_TRACE_NOGIL=1
 # distutils: libraries = oti 
 ## distutils: extra_compile_args = -arch i386 -arch x86_64
-# filename: otimat.pyx
+# filename: spr_omat.pyx
 
-import scipy.sparse as spr
-import numpy as np                  # General numerical library
-cimport numpy as np                 # C-level functions of numpy
-from pyoti.core  import   number_types, getDirArray, dHelp, int_types,findComb
-from pyoti.core  cimport  p_dH, ZERO, ONE, c_getDirExpA
-from pyoti.core  cimport  get_cython_dHelp, dHelp
-import pyoti.dense
-from   pyoti.dense   cimport  otinum
-from   pyoti.ndarray cimport  ndarray
+# import scipy.sparse as spr
+# import numpy as np                  # General numerical library
+# cimport numpy as np                 # C-level functions of numpy
+# from pyoti.core  import   number_types, getDirArray, dHelp, int_types,findComb
+# from pyoti.core  cimport  p_dH, ZERO, ONE, c_getDirExpA
+# from pyoti.core  cimport  get_cython_dHelp, dHelp
+# import pyoti.dense
+# from   pyoti.dense   cimport  otinum
+# from   pyoti.ndarray cimport  ndarray
 
 # Get the Cython version of the helper
 cdef dHelp h = get_cython_dHelp()
@@ -27,15 +27,15 @@ cdef dHelp h = get_cython_dHelp()
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::     CLASS  otimat   :::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::::     CLASS  spr_omat   :::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class otimat:
+cdef class spr_omat:
   
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
 
-  #                                --->      Look in otimat.pxd    <---
+  #                                --->      Look in spr_omat.pxd    <---
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -43,7 +43,7 @@ cdef class otimat:
   #***************************************************************************************************
   def __cinit__(self, shape, m,order, spr_type): #*args, **kwargs
     """
-    PURPOSE:      Constructor of the otimat class.
+    PURPOSE:      Constructor of the spr_omat class.
 
     DESCRIPTION:  Creates a new OTI matirx given different types of constructors.
 
@@ -130,7 +130,7 @@ cdef class otimat:
     """
     #*************************************************************************************************
 
-    head      = '< otimat'
+    head      = '< spr_omat'
     body      = ''
     body += ' of shape ('+str(self.shape[0])+","+str(self.shape[1])+') with oti numbers of'
     body += ' order ' + str(self.order) 
@@ -160,7 +160,7 @@ cdef class otimat:
     # cdef uint64_t[:] indx = np.arange(self.Ndir,dtype = np.uint64)
     # cdef spr_otinum spr_oti
 
-    head      = '< otimat'
+    head      = '< spr_omat'
     body      = ''
     body += ' of shape ('+str(self.shape[0])+","+str(self.shape[1])+') with oti numbers of'
     body += ' order ' + str(self.order) 
@@ -183,7 +183,7 @@ cdef class otimat:
   #***************************************************************************************************
   def __getitem__(self, index):
     """
-    PURPOSE:  To get the value of a otimat coefficient.
+    PURPOSE:  To get the value of a spr_omat coefficient.
 
     """
     #*************************************************************************************************
@@ -236,7 +236,7 @@ cdef class otimat:
   #***************************************************************************************************
   def __setitem__(self, index, value):
     """
-    PURPOSE:  To set the value of an otimat coefficient.
+    PURPOSE:  To set the value of an spr_omat coefficient.
 
     """
     #*************************************************************************************************
@@ -640,7 +640,7 @@ cdef class otimat:
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: End of class otimat :::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: End of class spr_omat :::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
@@ -675,7 +675,7 @@ cdef class otimat:
 
 
 #*****************************************************************************************************
-def solveLU(otimat A, ndarray b, **kwargs):
+def solveLU(spr_omat A, ndarray b, **kwargs):
   """
   PURPOSE:  Solve a system Ax = b
 
@@ -793,7 +793,7 @@ def solveLU(otimat A, ndarray b, **kwargs):
 
 
 #*****************************************************************************************************
-def solve(otimat A, ndarray b, solver = 0):
+def solve(spr_omat A, ndarray b, solver = 0):
   """
   PURPOSE:  Solve a system Ax = b
 

@@ -37,8 +37,21 @@ cdef class elBase:
 
 
     """
-    
-    self.a = 1
+    self.elem = elem_init()
+    self.FLAG = 0
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __cinit__(self):
+    """
+    PURPOSE:      Constructor of the base element class. Its main purpose is to 
+                  allow a base for every new element definition.
+
+
+    """
+    self.elem = elem_init()
+    self.FLAG = 0
 
   #---------------------------------------------------------------------------------------------------
 
@@ -60,8 +73,7 @@ cdef class elBase:
   
   #***************************************************************************************************
   @staticmethod
-  cdef elBase createNewElement(uint64_t nbasis, uint64_t order, int64_t geomBase, \
-                               int64_t  kind,   uint8_t  ndim, \
+  cdef elBase createNewElement(uint64_t nbasis, int64_t geomBase, int64_t  kind,   uint8_t  ndim, \
               int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*) nogil, list boundEls ):
     """
     PURPOSE:      C-level constructor of the Element class. Use this when adding new element types.
@@ -106,7 +118,9 @@ cdef class elBase:
 
     newElement.elem = elem_init()
     
-    elem_allocate( &newElement.elem, nbasis, order, geomBase, kind, ndim, basis_f)
+    elem_start( &newElement.elem, nbasis, geomBase, kind, ndim, basis_f)
+
+    newElement.FLAG = 1 # Defined in c.
 
     return newElement
   #---------------------------------------------------------------------------------------------------
@@ -121,59 +135,67 @@ cdef class elBase:
     body = ""
     tail = ""
 
-
     head += "< elbase object: \n"
-    body += " - Geometric type: --------------- " + enum2string(self.elem.geomBase)+"\n"
-    body += " - Kind of evaluation: ----------- " + enum2string(self.elem.kind)+"\n"
-    body += " - Number of Integration points: - " + str(self.elem.nIntPts)+"\n"
-    body += " - Number of derivatives: -------- " + str(self.elem.nder)+"\n"
-    body += " - Number of dimensions: --------- " + str(self.elem.ndim)+"\n"
-    body += " - Number of basis: -------------- " + str(self.elem.nbasis)+"\n"
-    body += " - Order: ------------------------ " + str(self.elem.order)+"\n"
-    
-    body += " - Integration points: \n"
-    body += repr(dmat.create(&self.elem.intPts,FLAGS=0))
-    
-    body += "\n - Integration weights: \n"
-    body += repr(dmat.create(&self.elem.intWts,FLAGS=0))
-    
-    body += "\n - Evaluated basis functions: \n"
-
-    for i in range(self.elem.nder):
-
-      body += " ---- " + enum2string( i + derN ) + "\n"
-      body += repr(dmat.create(&self.elem.p_evalBasis[i],FLAGS=0)) + "\n"
-
-    # end for 
-
-
-
-
     tail += "end elbase object >"
 
+    if (self.FLAG & 1):
+      
+      if (elem_is_started( &self.elem )):
 
+        body += " - Geometric type: --------------- " + enum2string(self.elem.geomBase)+"\n"
+        body += " - Kind of evaluation: ----------- " + enum2string(self.elem.kind)+"\n"
+        
+        body += " - Number of derivatives: -------- " + str(self.elem.nder)+"\n"
+        body += " - Number of dimensions: --------- " + str(self.elem.ndim)+"\n"
+        body += " - Number of basis: -------------- " + str(self.elem.nbasis)+"\n"
+        body += " - Order: ------------------------ " + str(self.elem.order)+"\n"
+        
 
+        if (elem_is_allocated( &self.elem ) ):
+        
+          body += " - Number of Integration points: - " + str(self.elem.nIntPts)+"\n"
+          body += " - Integration points: \n"
+          body += repr(dmat.create(&self.elem.intPts,FLAGS=0))
+          
+          body += "\n - Integration weights: \n"
+          body += repr(dmat.create(&self.elem.intWts,FLAGS=0))
+          
+          body += "\n - Evaluated basis functions: \n"
+
+          for i in range(self.elem.nder):
+
+            body += " ---- " + enum2string( i + derN ) + "\n"
+            body += repr(dmat.create(&self.elem.p_evalBasis[i],FLAGS=0)) + "\n"
+
+          # end for 
+
+        # end if
+
+    # end if 
 
     return head + body + tail
 
 
   #---------------------------------------------------------------------------------------------------
 
-  # #***************************************************************************************************
-  # cpdef initElement(self, uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis):
+  #***************************************************************************************************
+  cpdef allocate(self, uint64_t intorder):
 
-  #   c_fem_initElement( order, otiorder, nDimAnalysis,&self.elemProps)
+    elem_allocate(&self.elem, intorder)
 
 
-  # #---------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------
 
-  # #***************************************************************************************************
-  # cpdef uninitElement(self):
-  #   if self.elemProps.isInit == 1:
-  #     c_fem_unInitElement(&self.elemProps)
-  #   # end if 
+  #***************************************************************************************************
+  cpdef end(self):
+    
+    if (self.FLAG &1):
+      
+      elem_end(&self.elem)
 
-  # #---------------------------------------------------------------------------------------------------
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @property
@@ -272,29 +294,30 @@ cdef class elBase:
 
   #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  @order.setter
-  def order(self, uint8_t new_order):
-    """
-    PURPOSE:      Get self.elemProps.order
+  # #***************************************************************************************************
+  # @order.setter
+  # def order(self, uint8_t new_order):
+  #   """
+  #   PURPOSE:      Get self.elemProps.order
 
-    """
-    #*************************************************************************************************
-    cdef elem_t new_elem;
+  #   """
+  #   #*************************************************************************************************
+  #   cdef elem_t new_elem;
 
-    new_elem = elem_init()
-
-    elem_allocate( &new_elem, self.elem.nbasis, new_order, self.elem.geomBase, self.elem.kind, 
-      self.elem.ndim, self.elem.f_basis)
-
-    elem_free(&self.elem)
-
-    self.elem = new_elem
+  #   new_elem = elem_init()
 
 
+  #   elem_allocate( &new_elem, self.elem.nbasis, new_order, self.elem.geomBase, self.elem.kind, 
+  #     self.elem.ndim, self.elem.f_basis)
+
+  #   elem_free(&self.elem)
+
+  #   self.elem = new_elem
 
 
-  #---------------------------------------------------------------------------------------------------
+
+
+  # #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @property

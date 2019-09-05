@@ -23,7 +23,6 @@ elTypeNames = ["point","line","triangle","quadrangle","tetrahedra","hexahedra"]
 
 
 PntP0 = elBase.createNewElement(1,            # Number of basis 
-                                0,            # Characteristic order of the polynomials
                                 elNode,       # Geometric type
                                 elkindIso,    # Kind of element 
                                 0,            # Number of dimensions
@@ -31,7 +30,6 @@ PntP0 = elBase.createNewElement(1,            # Number of basis
                                 [] ) # List of boundary element interpolators
 
 LineP1 = elBase.createNewElement(2,            # Number of basis 
-                                 1,            # Characteristic order of the polynomials
                                  elLine,       # Geometric type
                                  elkindIso,    # Kind of element 
                                  1,            # Number of dimensions
@@ -40,7 +38,6 @@ LineP1 = elBase.createNewElement(2,            # Number of basis
 
 
 LineP2 = elBase.createNewElement(3,            # Number of basis 
-                                 2,            # Characteristic order of the polynomials
                                  elLine,       # Geometric type
                                  elkindIso,    # Kind of element 
                                  1,            # Number of dimensions
@@ -49,7 +46,6 @@ LineP2 = elBase.createNewElement(3,            # Number of basis
 
 
 # TriP0 = elBase.createNewElement(1,            # Number of basis 
-#                                 0,            # Characteristic order of the polynomials
 #                                 elTriangle,   # Geometric type
 #                                 elkindIso,    # Kind of element 
 #                                 2,            # Number of dimensions
@@ -58,7 +54,6 @@ LineP2 = elBase.createNewElement(3,            # Number of basis
 
 
 TriP1 = elBase.createNewElement(3,            # Number of basis 
-                                1,            # Characteristic order of the polynomials
                                 elTriangle,   # Geometric type
                                 elkindIso,    # Kind of element 
                                 2,            # Number of dimensions
@@ -67,7 +62,6 @@ TriP1 = elBase.createNewElement(3,            # Number of basis
 
 
 TriP2 = elBase.createNewElement(6,            # Number of basis 
-                                2,            # Characteristic order of the polynomials
                                 elTriangle,   # Geometric type
                                 elkindIso,    # Kind of element 
                                 2,            # Number of dimensions
@@ -76,7 +70,6 @@ TriP2 = elBase.createNewElement(6,            # Number of basis
 
 
 QuadP1 = elBase.createNewElement(4,            # Number of basis 
-                                 1,            # Characteristic order of the polynomials
                                  elQuadrangle, # Geometric type
                                  elkindIso,    # Kind of element 
                                  2,            # Number of dimensions
@@ -85,7 +78,6 @@ QuadP1 = elBase.createNewElement(4,            # Number of basis
 
 
 QuadSerP2 = elBase.createNewElement(8,            # Number of basis 
-                                    2,            # Characteristic order of the polynomials or 2?
                                     elQuadrangle, # Geometric type
                                     elkindIso,    # Kind of element 
                                     2,            # Number of dimensions

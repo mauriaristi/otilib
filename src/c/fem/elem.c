@@ -1,5 +1,7 @@
 
-
+// int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase, int64_t  kind,   uint8_t  ndim,
+//               int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*));
+// int64_t elem_allocate(elem_t* elem, uint64_t intorder );
 
 
 
@@ -41,32 +43,9 @@
 
 // ****************************************************************************************************
 int64_t elem_free( elem_t* elem ) {
-    /*
-    
-    Free the elem object.
-
-    */ 
-    // ************************************************************************************************
 
     int64_t derId;
 
-    // typedef struct elem_s{    
-    //     // FEM Properties
-    //     uint64_t          nbasis; ///< Number of basis - Number of degrees of freedom - Number of nodes.
-    //     uint64_t           order; ///< Maximum order of the Element.
-    //     int64_t         geomBase; ///< Geometric element type - elLine, elTriangle, etc ...
-    //     int64_t             kind; ///< Kind of element: Affine - IsoParametric
-    //     uint8_t             ndim; ///< Number of dimensions of the element. (1 -> 1D, 2 -> 2D, 3 -> 3D)
-    //     uint64_t         nIntPts; ///< Number of integration Points
-    //     uint8_t             nder; ///< Number of total derivatives in the problem.
-    //     uint8_t           isInit; ///< Initialization flag. 0: Not initialized, 1: Initialized.
-    //     uint8_t     nDimAnalysis; ///< Number of dimensions of the analysis.
-    //     darr_t            intPts; ///< (nIntPts x ndim) Array with the integration point coordinates.
-    //     darr_t            intWts; ///< (nIntPts x 1   ) Array with the integration weights.
-    //     darr_t*      p_evalBasis; ///< (nder) List of (nbasis x nIntPts) arrays with the evaluated basis
-    //     int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*); ///<  Interpolation function.
-    //     // 
-    // } elem_t;
 
     if (elem->isInit != 0){
     
@@ -97,30 +76,10 @@ int64_t elem_free( elem_t* elem ) {
 // ----------------------------------------------------------------------------------------------------
 
 
-
-
-
+// ****************************************************************************************************
 elem_t  elem_init( void ){
 
     elem_t res;
-
-    // typedef struct elem_s{    
-    //     // FEM Properties
-    //     uint64_t          nbasis;
-    //     uint64_t           order;
-    //     int64_t         geomBase;
-    //     int64_t             kind;
-    //     uint8_t             ndim;
-    //     uint64_t         nIntPts;
-    //     uint8_t             nder;
-    //     uint8_t           isInit;
-    //     uint8_t     nDimAnalysis;
-    //     darr_t            intPts;
-    //     darr_t            intWts;
-    //     darr_t*      p_evalBasis;
-    //     int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*);
-    //     // 
-    // } elem_t;
 
     res.nbasis      = 0; ///< Number of basis - Number of degrees of freedom - Number of nodes.
     res.order       = 0; ///< Maximum order of 
@@ -129,7 +88,7 @@ elem_t  elem_init( void ){
     res.ndim        = 0; ///< Number of dimensions of the element. (1 -> 1D, 2 -> 2D, 3 -> 3D)
     res.nIntPts     = 0; ///< Number of integration Points
     res.nder        = 0; ///< Number of total derivatives in the problem.
-    res.isInit      = 0; ///< Initialization flag. 0: Not initialized, 1: Initialized.
+    res.isInit      = 0; ///< Initialization flag. byte 0: Started, Byte 1: Allocation.
     res.nDimAnalysis= 0; ///< Number of dimensions of the analysis.
     res.intPts      = darr_init(); ///< (nIntPts x ndim) Array with the integration points coordinates.
     res.intWts      = darr_init(); ///< (nIntPts x 1   ) Array with the integration weights.
@@ -138,69 +97,18 @@ elem_t  elem_init( void ){
 
     return res;
 }
-
-
-
-
-
-
-
-
-
-
-
-
+// ----------------------------------------------------------------------------------------------------
 
 
 
 
 // ****************************************************************************************************
-int64_t elem_allocate(elem_t* elem, uint64_t nbasis, uint64_t order, int64_t geomBase,
+int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase,
                        int64_t  kind,   uint8_t  ndim,
               int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*)
     ) {
-    /*
-    fem_initElement(uint64_t order, elem_t* elem) 
-
-    Initialize the element Basis functions for the specified order of integration.
-
-    INPUTS:
-
-        -> order:    Order of polynomial.
-
-        -> elem:   Address of the structure that holds the element information.
-
-
-    OUTPUTS: 
-        
-        -> Assigns to elem the corresponding arrays with the correct data input.
-
-        -> uint64_t error_code: Code of error, if any.
-
-    */ 
-    // ************************************************************************************************
-
-
-    // typedef struct elem_s{    
-    //     // FEM Properties
-    //     uint64_t          nbasis;
-    //     uint64_t           order;
-    //     int64_t         geomBase;
-    //     int64_t             kind;
-    //     uint8_t             ndim;
-    //     uint64_t         nIntPts;
-    //     uint8_t             nder;
-    //     uint8_t           isInit;
-    //     uint8_t     nDimAnalysis;
-    //     darr_t            intPts;
-    //     darr_t            intWts;
-    //     darr_t*      p_evalBasis;
-    //     int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*);
-    //     // 
-    // } elem_t;
 
     int64_t  derIdx;
-    uint64_t basisId;
 
     uint8_t nder;
     
@@ -226,11 +134,8 @@ int64_t elem_allocate(elem_t* elem, uint64_t nbasis, uint64_t order, int64_t geo
 
 
     // Check first if the element is already allocated.
-    if( elem->isInit == 0 ){
+    if( (elem->isInit & 1) == 0 ){
    
-        
-        // elem->nDimAnalysis = nDimAnalysis;
-        elem->order    = order;
         elem->nbasis   = nbasis;
         elem->nder     = nder;
         elem->ndim     = ndim;
@@ -240,13 +145,9 @@ int64_t elem_allocate(elem_t* elem, uint64_t nbasis, uint64_t order, int64_t geo
 
         // Get the integration points and integration weights.
         // This function allocates memory.
-        fem_integrationPoints(order, elem->geomBase, &elem->intPts, &elem->intWts);
+        elem->intPts = darr_init();
+        elem->intWts = darr_init();
         
-        // printf("Here.\n");
-
-        elem->nIntPts = elem->intPts.nrows;
-        
-
         elem->p_evalBasis = (darr_t*  ) malloc( elem->nder*sizeof(darr_t  ) ) ;
 
         if( elem->p_evalBasis == NULL ){
@@ -255,6 +156,75 @@ int64_t elem_allocate(elem_t* elem, uint64_t nbasis, uint64_t order, int64_t geo
         }        
 
         // Evaluate all basis functions at integration points.
+        // Loop through all derivatives
+        for(derIdx = 0; derIdx<elem->nder; derIdx++){
+
+            // Allocate new array
+            elem->p_evalBasis[derIdx] = darr_init();
+
+        }
+        
+        elem_raise_flag_start(elem);
+
+    }
+
+    return OTI_success;
+
+} 
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+int64_t elem_end(elem_t* elem) {
+
+    int64_t  derIdx;
+
+    // Check first if the element is already allocated.
+    if ( elem_is_started(elem) && elem_is_allocated(elem) ){
+   
+
+        // Get the integration points and integration weights.
+        // This function allocates memory.
+        darr_free(&elem->intPts);
+        darr_free(&elem->intWts);
+        
+        for(derIdx = 0; derIdx<elem->nder; derIdx++){
+
+            // Allocate new array
+            darr_free(&elem->p_evalBasis[derIdx]);
+
+        }
+        
+        elem_clear_flag_alloc(elem);
+
+    }
+
+    return OTI_success;
+
+} 
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+int64_t elem_allocate(elem_t* elem, uint64_t intorder ) {
+
+
+    int64_t  derIdx;
+    uint64_t basisId;
+
+    // Check first if the element is already Initialized.
+    if( elem_is_started(elem) ) {
+   
+        elem->order    = intorder;
+        
+        // Define the Gaussian integration point coordinates and weights.
+        fem_integrationPoints(elem->order, elem->geomBase, &elem->intPts, &elem->intWts);
+        
+        elem->nIntPts = elem->intPts.nrows;
+        
+        // Evaluate all basis functions at the integration points.
         // Loop through all derivatives
         for(derIdx = 0; derIdx<elem->nder; derIdx++){
 
@@ -271,7 +241,7 @@ int64_t elem_allocate(elem_t* elem, uint64_t nbasis, uint64_t order, int64_t geo
 
         }
         
-        elem->isInit = 1; // Raise flag of allocation.
+        elem_raise_flag_alloc(elem);
 
     }
 
@@ -279,6 +249,81 @@ int64_t elem_allocate(elem_t* elem, uint64_t nbasis, uint64_t order, int64_t geo
 
 } 
 // ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+inline uint8_t elem_is_started( elem_t* elem ){
+
+    if (elem->isInit & 1){
+    
+        return 1;
+    
+    }else{
+    
+        return 0;
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline uint8_t elem_is_allocated( elem_t* elem ){
+    
+    if (elem->isInit & 1<<2){
+    
+        return 1;
+    
+    }else{
+    
+        return 0;
+    
+    }
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void elem_clear_flag_start(elem_t* elem ){
+    
+    // Lower flag of allocation.
+    elem->isInit = elem->isInit & ( 255 ^ 1 ); 
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void elem_clear_flag_alloc(elem_t* elem ){
+
+    // Lower flag of start.
+    elem->isInit = elem->isInit & ( 255 ^ (1<<2) ); 
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void elem_raise_flag_start(elem_t* elem ){
+    
+    elem->isInit = elem->isInit | 1 ;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+inline void elem_raise_flag_alloc(elem_t* elem ){
+
+    elem->isInit = elem->isInit | 1<<2 ;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 
 

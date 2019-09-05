@@ -85,11 +85,7 @@ cdef class omat:
         
         # end for
 
-      # end if 
-
-      
-
-      
+      # end if
 
     elif type(realArray) == dmat:
       

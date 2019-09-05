@@ -68,5 +68,7 @@ cdef void c_Py_printArrayUI64(uint64_t* array,uint64_t size)
 cdef dHelp get_cython_dHelp()
 cpdef list expand_imdir(hum_dir)
 cpdef list imdir(hum_dir)
+
+cdef copy_numpy2d_to_ptr_f64(np.ndarray[coeff_t, ndim=2] src, coeff_t* dst)
 #-----------------------------------------------------------------------------------------------------
 

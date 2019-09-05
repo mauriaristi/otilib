@@ -68,7 +68,7 @@ typedef struct elemprops_s{
 typedef struct elem_s{    
     // FEM Properties
     uint64_t          nbasis; ///< Number of basis - Number of degrees of freedom - Number of nodes.
-    uint64_t           order; ///< Maximum order of the Element.
+    uint64_t           order; ///< Integration order of the Element.
     int64_t         geomBase; ///< Geometric element type - elLine, elTriangle, etc ...
     int64_t             kind; ///< Kind of element: Affine - IsoParametric
     uint8_t             ndim; ///< Number of dimensions of the element. (1 -> 1D, 2 -> 2D, 3 -> 3D)
@@ -232,17 +232,57 @@ enum operEnum {
 
 
 
+uint8_t elem_is_started(   elem_t* elem );
+uint8_t elem_is_allocated( elem_t* elem );
+void elem_clear_flag_start(elem_t* elem );
+void elem_clear_flag_alloc(elem_t* elem );
+void elem_raise_flag_start(elem_t* elem );
+void elem_raise_flag_alloc(elem_t* elem );
 
 
+int64_t elem_end(elem_t* elem);
 
+/**************************************************************************************************//**
+@brief  Frees memory of an element structure.
 
+@param[in] Address of the element. This element structure then results with ponters set to NULL and 
+values set to 0.
 
+******************************************************************************************************/
 int64_t elem_free( elem_t* elem );
-elem_t  elem_init( void );
-int64_t elem_allocate(elem_t* elem, uint64_t nbasis, uint64_t order, int64_t geomBase,
-                       int64_t  kind,   uint8_t  ndim,
-              int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*) );
+// ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief  Initialize the structure of an element. Sets pointers to NULL and values to 0.
+
+******************************************************************************************************/ 
+elem_t  elem_init( void );
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief  Setup of an element structure. This defines the interpolation function, and other parameters
+to be used.
+
+@param[inout] elem: Address of the element structure (Must come after a call to elem_init().
+@param[in] nbasis: Number of basis of the element (Equivalent to the number of DOFs of the element)
+@param[in] geomBase: Defines the basic geometry of the element (Line, Triangle, quad, tetrahedra,etc).
+@param[in] kind: Defines the kind of element Isoparametric or Affine.
+@param[in] ndim: Number of dimensions of the element.
+@param[in] basis_f: Pointer to function that defines the interpolation functions and its derivatives.
+******************************************************************************************************/ 
+int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase, int64_t  kind,   uint8_t  ndim,
+              int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*));
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief  Allocates memory for the element structure.
+
+@param[inout] elem: Address of the element structure. Must come after a call to elem_start(...).
+@param[in] intorder: Integration order, defines number of integration points for numerical integration.
+******************************************************************************************************/ 
+int64_t elem_allocate(elem_t* elem, uint64_t intorder );
+// ----------------------------------------------------------------------------------------------------
 
 
 

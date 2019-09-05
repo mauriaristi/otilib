@@ -573,6 +573,55 @@ cdef np.ndarray[uint64_t, ndim=1]  c_ptr_to_np_1darray_uint64(void * ptr, np.npy
 
 #-----------------------------------------------------------------------------------------------------
 
+#*****************************************************************************************************
+cdef np.ndarray[uint8_t, ndim=1]  c_ptr_to_np_1darray_uint8(void * ptr, np.npy_intp size, \
+                                                            uint8_t numpy_own = 0):
+  """
+  PURPOSE:    Convert a C pointer to numpy 1D array.
+   
+  INPUTS:      
+            - void *  ptr: C-pointer
+
+            - np.npy_intp size: Length of the 1D array.
+
+            - numpy_own: Flag to state if the numpy given array owns the pointer (will be 
+                         released by numpy when the object is deleted). Default is 0 (off).
+  OUTPUTS:
+            - uint16_t: number in which the high bits correspond to the position of the elements
+                        that belong to the asked partition.
+
+
+  SOURCES:
+
+    http://blog.enthought.com/python/numpy-arrays-with-pre-allocated-memory/#.WSsNoMaZNN3
+    https://gist.github.com/GaelVaroquaux/1249305
+    https://docs.scipy.org/doc/numpy/user/c-info.how-to-extend.html
+    https://docs.scipy.org/doc/numpy/reference/c-api.dtype.html#c.NPY_DOUBLE
+            
+  """
+  #***************************************************************************************************
+  # cdef extern from "numpy/arrayobject.h":
+  #     void PyArray_ENABLEFLAGS(np.ndarray arr, int flags)
+  # cdef double* data = <double*> ptr
+
+  # for i in range(size):
+  #   print(data[i])
+
+  cdef np.ndarray[uint8_t, ndim=1] arr = \
+          np.PyArray_SimpleNewFromData(1, &size, np.NPY_UINT8, ptr)
+  # PyObject *PyArray_SimpleNewFromData(int ndim, npy_intp* dims, int typenum, void* data)
+
+  if numpy_own != 0:
+
+    # Pass the ownership flag to numpy.
+    PyArray_ENABLEFLAGS(arr, np.NPY_OWNDATA)
+
+  # end if
+  
+  return arr
+
+#-----------------------------------------------------------------------------------------------------
+
 
 # #*****************************************************************************************************
 # cdef void c_getDirExpA(list dirArray, uint16_t** p_dirA, uint8_t** p_expA, uint8_t* order):
@@ -1105,6 +1154,13 @@ def get_CR_mdl(uint64_t dirBasis,uint64_t maxBasis):
 #-----------------------------------------------------------------------------------------------------
     
    
+
+
+
+
+
+
+
 #*****************************************************************************************************
 cdef dHelp get_cython_dHelp():
   """
@@ -1119,6 +1175,159 @@ cdef dHelp get_cython_dHelp():
 
 
 
+
+
+
+
+
+
+#*****************************************************************************************************
+def dhelp_get_matrix_form(bases_t nbases, ord_t order, export_latex = True, 
+  export_strings=False, export_sparse = False):
+  
+  global dhl
+  global h
+  
+  cdef matrix_form_t res = dhelp_matrix_form_indices(nbases,order,dhl);
+  cdef np.ndarray[uint64_t, ndim=1] rows
+  cdef np.ndarray[uint64_t, ndim=1] cols
+  cdef np.ndarray[uint64_t, ndim=1] im  
+  cdef np.ndarray[uint8_t, ndim=1]  orde
+
+  cdef str body = ""
+  cdef uint64_t i, j
+
+
+
+
+  
+  
+  if export_sparse == True:
+
+    from scipy.sparse.coo import coo_matrix 
+
+    rows= c_ptr_to_np_1darray_uint64( res.p_rows, res.nonzero)
+    cols= c_ptr_to_np_1darray_uint64( res.p_cols, res.nonzero)
+    im  = c_ptr_to_np_1darray_uint64( res.p_im  , res.nonzero)
+    orde= c_ptr_to_np_1darray_uint8 ( res.p_ord , res.nonzero)
+
+    im = im.copy()
+    rows = rows.copy()
+    cols = cols.copy()
+    orde = orde.copy()
+
+    mat_idx = coo_matrix( (   im, (rows,cols) ), shape=(res.sizex,res.sizey), dtype = np.uint64)    
+    mat_ord = coo_matrix( ( orde, (rows,cols) ), shape=(res.sizex,res.sizey), dtype = np.uint8 )
+
+    return (mat_idx, mat_ord)
+
+  elif (export_strings == True):
+
+    A = np.zeros((res.sizex,res.sizey),dtype=object)
+    A[:,:] = ''
+
+    for i in range(res.nonzero):
+
+      # print("Setting value at ("+str(res.p_rows[i])+","+str(res.p_cols[i])+") as ["+str(res.p_im[i])+","+str(res.p_ord[i])+"]: ") 
+      # print( str( get_latex_dir(res.p_im[i], res.p_ord[i]) ) )
+
+      A[res.p_rows[i],res.p_cols[i]] = get_latex_dir( res.p_im[i], res.p_ord[i] )
+      
+    # end for 
+
+    free(res.p_im)
+    free(res.p_ord)
+    free(res.p_rows)
+    free(res.p_cols)
+
+    return A
+
+  elif(export_latex==True):
+
+    A = np.zeros((res.sizex,res.sizey),dtype=object)
+    A[:,:] = '0'
+
+    for i in range(res.nonzero):
+
+      # print("Setting value at ("+str(res.p_rows[i])+","+str(res.p_cols[i])+") as ["+str(res.p_im[i])+","+str(res.p_ord[i])+"]: ") 
+      # print( str( get_latex_dir(res.p_im[i], res.p_ord[i]) ) )
+
+      A[res.p_rows[i],res.p_cols[i]] = get_latex_dir( res.p_im[i], res.p_ord[i] )
+      
+    # end for 
+
+    free(res.p_im)
+    free(res.p_ord)
+    free(res.p_rows)
+    free(res.p_cols)
+
+    body = ""
+
+    for i in range(A.shape[0]):
+      for j in range(A.shape[1]):
+        body+=A[i,j] + " & "
+      # end for 
+      body = body[:len(body)-2]
+      body +="\\\\\n"
+    # end for
+    return body
+
+  # end if 
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+#*****************************************************************************************************
+def get_latex_dir(imdir_t indx, ord_t order, real = '\mbox{Re}', epsilon='\epsilon'):
+  """
+  PURPOSE:  To print the imaginary direction referenced to a position of the 
+            binary indexing.
+  """
+  #***************************************************************************************************
+  global h
+
+  cdef object body ='' 
+
+  cdef np.ndarray bases, exponents 
+  
+  bases,exponents = h.get_base_exp( indx,  order)
+
+
+  if bases.size == 0:
+    
+    body += real
+
+  else:
+    
+    for i in range(bases.size):
+    
+      body += epsilon+'_{'+str(bases[i])+'}'
+    
+      if exponents[i]!=1:
+    
+        body += '^{'+str(exponents[i])+'}'
+    
+      # end if 
+    
+    #end for 
+
+  # end if 
+  
+  return body
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 #-----------------------------------------------------------------------------------------------------
 #-------------------------------------   INITIALIZATION ONLY   ---------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -1127,6 +1336,7 @@ cdef dHelp get_cython_dHelp():
 # Be careful. It requires some memory.
 h = dHelp()
 
+cdef dhelpl_t dhl = h.dhl
 
 # To provide an easy manner to create numpy arrays from C without copying data
 np.import_array()

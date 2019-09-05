@@ -48,6 +48,9 @@ typedef struct {
 // ------------------------------------     DECLARATIONS     ------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 // to add to c_otilib.pxd
+
+darr_t oti_to_cr_dense(otinum_t* num,  dhelpl_t dhl);
+
 otinum_t oarr_det(oarr_t* arr, dhelpl_t dhl);
 void oarr_det_to(oarr_t* arr, otinum_t* res, dhelpl_t dhl);
 

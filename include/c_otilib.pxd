@@ -1,6 +1,6 @@
 #file c_otilib.pxd
 
-from libc.stdint cimport uint8_t, uint16_t,uint32_t, uint64_t, int64_t
+from libc.stdint cimport uint8_t, uint16_t, uint32_t, uint64_t, int64_t, int16_t, int8_t, int32_t
 #-----------------------------------------------------------------------------------------------------
 #--------------------------------------     TYPE DECLARATIONS     ------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -56,6 +56,17 @@ cdef extern from "oti/oti.h" nogil:
     uint64_t       sizex 
     uint64_t       sizey 
     uint64_t     nonzero 
+
+  ctypedef struct matrix_form_t:
+    imdir_t*        p_im
+    ord_t*         p_ord
+    uint64_t*     p_cols
+    uint64_t*     p_rows
+    uint64_t       sizex
+    uint64_t       sizey
+    uint64_t     nonzero
+
+
 
   # Defs from "real.h"
   ctypedef struct darr_t:
@@ -298,6 +309,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "core.h"
   #---------------------------------------------------------------------------------------------------
+  matrix_form_t dhelp_matrix_form_indices( bases_t nbases, ord_t order, dhelpl_t dhl);
+
   uint8_t  array2d_getel_ui8_t( uint8_t*  arr,uint64_t ncols, uint64_t i, uint64_t j );
 
   uint16_t array2d_getel_ui16_t(uint16_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
@@ -360,6 +373,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "dense.h"
   #---------------------------------------------------------------------------------------------------
+  darr_t oti_to_cr_dense(otinum_t* num,  dhelpl_t dhl);
+
   otinum_t oarr_det(oarr_t* arr, dhelpl_t dhl);
   void oarr_det_to(oarr_t* arr, otinum_t* res, dhelpl_t dhl);
 

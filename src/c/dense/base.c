@@ -3,7 +3,93 @@
 
 
 
+// ****************************************************************************************************
+darr_t oti_to_cr_dense(otinum_t* num,  dhelpl_t dhl){
+    
+    ord_t ordi, ordj, ord_res;
+    imdir_t idx_i, idx_j, idx_res;
+    ndir_t ndir = num->ndir+1; 
+    ndir_t ndir_i, ndir_j; 
+    coeff_t val;
+    darr_t res;
+    uint64_t i,ii,jj, k;
+        
+    res = darr_zeros(ndir,ndir);
 
+    // set all diagonal coeffs to the real coefficient
+    val = num->re;
+    
+    for(i = 0; i<ndir; i++){
+
+        darr_set_item_ij(val,i,i,&res);
+
+    }
+
+    // set all first column coeffs to the imaginary directions
+    k=1;
+    for (ordi = 0; ordi<num->order; ordi++){
+        
+        for (idx_i = 0; idx_i < num->p_ndpo[ordi]; idx_i++){
+
+            val = num->p_im[ordi][idx_i];
+            darr_set_item_ij(val,k,0,&res);
+            k++;
+
+        }
+
+    }
+
+    // Put all other elements under the diagonal.
+    for( ordi = 1; ordi < num->order ; ordi++){
+        
+        ndir_i = num->p_ndpo[ordi-1];
+
+        for( ordj = 1; ordj <= (num->order-ordi) ; ordj++){
+            
+            ndir_j = num->p_ndpo[ordj-1];
+
+            if (ordj == 1){
+                
+                jj = 1;
+
+            } else {
+                
+                jj = num->p_ndpo[ordj-2];    
+
+            }
+            
+            if(ordi+ordj-1 == 1){
+                
+                ii = 1;
+
+            } else {
+                
+                ii = num->p_ndpo[ordi+ordj-2];
+
+            }
+            
+
+            for (idx_i=0; idx_i<ndir_i; idx_i++){
+                
+                for (idx_j=0; idx_j<ndir_j; idx_j++){
+                    
+                    dhelp_multDir( idx_i, ordi, idx_j, ordj, &idx_res,&ord_res,dhl);
+                    
+                    val = num->p_im[ord_res-1][idx_res];
+                    darr_set_item_ij(val, ii + idx_res, jj + idx_j ,&res);
+                    
+                }
+
+            }            
+
+        }
+
+    }
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************

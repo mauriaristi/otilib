@@ -27,6 +27,18 @@ typedef struct {
 } imdir2d_t;           ///< imaginary direction array type.
 
 
+typedef struct{
+    imdir_t*        p_im;
+    ord_t*         p_ord;
+    uint64_t*     p_cols;
+    uint64_t*     p_rows;
+    uint64_t       sizex;
+    uint64_t       sizey;
+    uint64_t     nonzero;
+} matrix_form_t;
+
+
+
 typedef struct {
   // Arrays
     bases_t*      p_fulldir;  ///< 2D Array with explicit                     Shape: (    Ndir,   order)
@@ -75,6 +87,10 @@ typedef struct {
 // ------------------------------------     DECLARATIONS     ------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 // to add to c_otilib.pxd
+
+
+matrix_form_t dhelp_matrix_form_indices( bases_t nbases, ord_t order, dhelpl_t dhl);
+
 
 
 // ----------------------------------------------------------------------------------------------------

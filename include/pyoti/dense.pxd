@@ -28,7 +28,7 @@ cdef class otinum:
   @staticmethod
   cdef otinum create(otinum_t* num, uint8_t FLAGS = *)
   cpdef copy(self)
-  cpdef coeff_t get_deriv( self, list item)
+  cpdef coeff_t get_deriv( self, hum_dir)
   # @staticmethod
   # cdef double getitem(self, uint64_t index)
   # cdef otinum neg(self)

@@ -69,6 +69,8 @@ cdef dHelp get_cython_dHelp()
 cpdef list expand_imdir(hum_dir)
 cpdef list imdir(hum_dir)
 
+
 cdef copy_numpy2d_to_ptr_f64(np.ndarray[coeff_t, ndim=2] src, coeff_t* dst)
+cpdef get_deriv_factor(hum_dir)
 #-----------------------------------------------------------------------------------------------------
 

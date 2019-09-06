@@ -309,6 +309,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "core.h"
   #---------------------------------------------------------------------------------------------------
+  coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhelpl_t dhl);
+
   matrix_form_t dhelp_matrix_form_indices( bases_t nbases, ord_t order, dhelpl_t dhl);
 
   uint8_t  array2d_getel_ui8_t( uint8_t*  arr,uint64_t ncols, uint64_t i, uint64_t j );

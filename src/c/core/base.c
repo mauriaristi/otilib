@@ -325,6 +325,7 @@ ndir_t dhelp_ndirOrder(bases_t nbases,ord_t order){
 
 // ****************************************************************************************************
 bases_t* dhelp_get_imdir( imdir_t idx, ord_t order, dhelpl_t dhl){
+    
     return &dhl.p_dh[order-1].p_fulldir[idx*order];
 }
 // ----------------------------------------------------------------------------------------------------
@@ -377,12 +378,9 @@ ndir_t dhelp_extract_ndirOrder(bases_t nbases,ord_t order,dhelpl_t dhl){
 // ****************************************************************************************************
 void dhelp_imdir2str(imdir_t imdir, ord_t ord, dhelpl_t* dhl, char* str){          
     
-    
-
     //TODO: Check for inconsistencies.
     int i;
     
-
     // Get the 
         
     for ( i=0; i<ord; i++){
@@ -391,6 +389,54 @@ void dhelp_imdir2str(imdir_t imdir, ord_t ord, dhelpl_t* dhl, char* str){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+// ****************************************************************************************************
+coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhelpl_t dhl){
+
+    coeff_t factor = 1.0;
+    bases_t* dirs;
+    bases_t dir_prev;
+    ord_t i, j = 2;
+    
+    dirs = dhelp_get_imdir( idx, order, dhl);
+
+    dir_prev = dirs[0];
+
+    for (i=1; i<order; i++){
+
+        if (dirs[i] == dir_prev){
+            
+            factor *= j;
+            j+=1;
+
+        } else{
+
+            j=2;
+
+            dir_prev = dirs[i];
+        }
+    }
+
+    return factor;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

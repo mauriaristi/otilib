@@ -411,8 +411,6 @@ cdef class spr_omat:
 
     # end for      
 
-    
-
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
@@ -745,83 +743,34 @@ cdef class spr_omat:
 
 
 
-  # #***************************************************************************************************
-  # def getDual(self, dirArray):
-  #   """
-  #   PURPOSE:      To add a human friendly form to get elements from a 
-  #                 spr_otinum.
+  #***************************************************************************************************
+  def get_deriv(self, hum_dir):
+    """
+    PURPOSE:  Get the factor to be multiplied to the coprresponding imaginary coefficient to get the 
+              exact value of the derivative.
+    """
+    #***************************************************************************************************
+    global dhl
+
+    cdef list item = imdir(hum_dir)
     
-  #   EXAMPLE:      >>> a = spr_otinum([0,4,17], [1.,3.,5.], 2)
-  #                 >>> print(a)
-  #                 1.0 + 3.0 * e([2]) + 5.0 * e([1,3])
-  #                 >>> a.getDual([1,3])
-  #                 5.0
-  #                 >>> a.getDual([1])
-  #                 0.0
-  #   """
-  #   #*************************************************************************************************
+    cdef coeff_t factor
 
+    # Check first if derivative is the real coefficient.
 
-  #   if type(dirArray)==int:
+    if item[ONE] == 0: # order 0.
     
-  #     indxArray = [dirArray]
-
-  #   else:
-
-  #     indxArray = dirArray
+      return self.re
+    
+    else:
       
-  #   # end if
-      
-  #   tmp_dirA,tmp_expA = getDirExpA(indxArray)
+      factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
 
-  #   cdef uint8_t maxorder = np.sum(tmp_expA)
-  #   cdef uint8_t i
-  #   cdef uint64_t indx
+      return factor * self.p_im[ item[ONE]-1 ][ item[ZERO] ]
 
-  #   if maxorder > self.maxorder:
+    # end if 
 
-  #     if self.spr_type == 0:
-        
-  #       return spr.csr_matrix((self.shape[0],self.shape[1]),dtype=np.float64)  
-
-  #     elif self.spr_type == 1:
-        
-  #       return spr.coo_matrix((self.shape[0],self.shape[1]),dtype=np.float64)  
-
-  #     elif self.spr_type == 2:
-        
-  #       return spr.lil_matrix((self.shape[0],self.shape[1]),dtype=np.float64)  
-
-  #     # end if  
-    
-  #   # create the real direction arrays:
-  #   dirA = np.zeros(self.maxorder,dtype = np.uint16)
-  #   expA = np.zeros(self.maxorder,dtype = np.uint8)
-    
-  #   for i in range(len(tmp_expA)):
-      
-  #     dirA[i] = tmp_dirA[i]
-  #     expA[i] = tmp_expA[i]
-
-  #   # end for 
-
-  #   if indxArray[0] == 0:
-        
-  #     indx = 0
-
-  #   elif self.maxorder == 1:
-
-  #     indx = indxArray[0]
-
-  #   else:
-
-  #     indx = h.findIndx(dirA,expA,self.maxorder)
-
-  #   # end if
-    
-  #   return self.elements[indx]
-
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
   # #***************************************************************************************************

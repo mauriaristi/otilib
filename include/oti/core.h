@@ -113,7 +113,7 @@ float    array2d_getel_f32_t( float*    arr,uint64_t ncols, uint64_t i, uint64_t
 
 
 
-
+coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhelpl_t dhl);
 
 
 void dhelp_add_coeff( coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres, 

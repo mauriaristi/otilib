@@ -1211,10 +1211,15 @@ def dhelp_get_matrix_form(bases_t nbases, ord_t order, export_latex = True,
     im  = c_ptr_to_np_1darray_uint64( res.p_im  , res.nonzero)
     orde= c_ptr_to_np_1darray_uint8 ( res.p_ord , res.nonzero)
 
-    im = im.copy()
+    im   = im.copy()
     rows = rows.copy()
     cols = cols.copy()
     orde = orde.copy()
+
+    free(res.p_im)
+    free(res.p_ord)
+    free(res.p_rows)
+    free(res.p_cols)
 
     mat_idx = coo_matrix( (   im, (rows,cols) ), shape=(res.sizex,res.sizey), dtype = np.uint64)    
     mat_ord = coo_matrix( ( orde, (rows,cols) ), shape=(res.sizex,res.sizey), dtype = np.uint8 )
@@ -1322,7 +1327,12 @@ def get_latex_dir(imdir_t indx, ord_t order, real = '\mbox{Re}', epsilon='\epsil
 #-----------------------------------------------------------------------------------------------------
 
 
+#*****************************************************************************************************
 cdef copy_numpy2d_to_ptr_f64(np.ndarray[coeff_t, ndim=2] src, coeff_t* dst):
+  """
+  PURPOSE:  Copy data from a numpy array (2D) into a pointer.
+  """
+  #***************************************************************************************************
   cdef uint64_t i,j,ncols = src.shape[1]
 
   for i in range(src.shape[0]):
@@ -1330,10 +1340,23 @@ cdef copy_numpy2d_to_ptr_f64(np.ndarray[coeff_t, ndim=2] src, coeff_t* dst):
       dst[j + i*ncols] = src[i,j];
     # end for 
   # end for 
+#-----------------------------------------------------------------------------------------------------
 
 
+#*****************************************************************************************************
+cpdef get_deriv_factor(hum_dir):
+  """
+  PURPOSE:  Get the factor to be multiplied to the coprresponding imaginary coefficient to get the 
+            exact value of the derivative.
+  """
+  #***************************************************************************************************
+  global dhl
 
+  cdef list item = imdir(hum_dir)
 
+  return dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
+
+#-----------------------------------------------------------------------------------------------------
 
 
 

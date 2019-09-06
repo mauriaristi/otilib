@@ -1307,3 +1307,72 @@ cdef class spr_omat:
 
 
 
+
+
+
+
+#*****************************************************************************************************
+def helper_get_multpl(hum_dir):
+    
+    global h
+
+    cdef uint64_t i=0, k=0, Nmultpl=1
+    cdef uint8_t passed
+    cdef np.ndarray multiple, multiples
+    cdef np.ndarray bases
+    cdef np.ndarray exp
+    
+    bases, exp = h.get_base_exp(*imdir(hum_dir))
+
+    order = np.sum(exp)
+
+    multiple = np.empty(exp.size, dtype = np.uint8)
+    
+    for i in range(exp.size):
+      # Multiply by the number of possible values of each basis exponent.
+      Nmultpl *= exp[i]+1;
+
+      # Initialize the multiple holder's values.
+      multiple[i] = 0;  # First multiple is real (all exps zero).
+      
+    # end for 
+
+    multiples = np.zeros( ( Nmultpl, exp.size ), dtype = np.uint8)
+
+    for i in range(1,Nmultpl):
+
+      passed = 0; # termination flag off.
+      k=0;        # Set the counter to the initial position
+
+      while(passed == 0 and k<exp.size):
+
+        # Check if the current exponent can be summed 1 and still meet the 
+        # exponent array limits.
+        if( (multiple[k]+1) > exp[k]) :
+            
+            # This means that if the current k'th exponent + 1 will not meet 
+            # the conditions.
+            multiple[k] = 0 # reset the current exponent
+            k+=1             # go to next position.
+
+        else :
+
+            # the exponent can be summed 1.
+            multiple[k] += 1
+            passed = 1        # rise the flag.
+
+        # end if 
+
+      # end while
+
+      for k in range(exp.size):
+
+          multiples[i,k] = multiple[k];
+
+      # end for 
+
+    # end for
+
+    return bases,multiples
+
+#-----------------------------------------------------------------------------------------------------

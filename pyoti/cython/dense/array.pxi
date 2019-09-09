@@ -235,7 +235,7 @@ cdef class omat:
     global dhl
     global h
 
-    cdef np.ndarray[double, ndim=2] tmp 
+    cdef np.ndarray[coeff_t, ndim=2] tmp 
     cdef ord_t ordi
     cdef uint64_t i
 
@@ -735,8 +735,105 @@ cdef class omat:
     return omat.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
+  
+
+  #***************************************************************************************************
+  def get_deriv(self, hum_dir ,copy=True):
+    """
+    PURPOSE: Get the corresponding derivative of the system.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef list item = imdir(hum_dir)
+    cdef np.ndarray[coeff_t, ndim=2] tmp
+    cdef coeff_t factor = 1
+
+    # Check first if derivative is the real coefficient.
 
 
+    
+
+    if item[ONE] == 0: # order 0.
+      
+      tmp = factor*c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)
+    
+    else:
+      
+      factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
+
+      tmp =  factor * c_ptr_to_np_2darray_double(self.arr.p_im[ item[ONE]-1 ][ item[ZERO] ], 
+                                                 self.arr.nrows, self.arr.ncols)
+
+    # end if 
+
+
+    # Export as a copy if requested.
+    if copy:
+      
+      return tmp.copy()
+
+    else:
+
+      return tmp
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------  
+
+  #***************************************************************************************************
+  def get_imdir(self, imdir_t idx , ord_t order, copy=True):
+    """
+    PURPOSE: Get the corresponding derivative of the system.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef np.ndarray[coeff_t, ndim=2] tmp
+    cdef coeff_t factor = 1
+
+    # Check first if derivative is the real coefficient.
+
+
+    if order <= self.arr.order:
+    
+      if order == 0:
+
+        tmp = c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)
+
+      else: 
+
+        if idx <= self.arr.p_ndpo[order-1]:
+
+          tmp =  c_ptr_to_np_2darray_double(self.arr.p_im[ order-1 ][ idx ], 
+                                                 self.arr.nrows, self.arr.ncols)
+
+        else:
+
+          tmp = np.zeros(np.zeros(self.shape))
+
+        # end if
+
+      # end if 
+
+    else: 
+
+      tmp = np.zeros(np.zeros(self.shape))
+   
+    # end if 
+
+    # Export as a copy if requested.
+    if copy:
+      
+      return tmp.copy()
+
+    else:
+
+      return tmp
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS OMAT :::::::::::::::::::::::::::::::::::::::::::::
@@ -840,7 +937,19 @@ cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):
 
 
 
+# #*****************************************************************************************************
+# cpdef omat solve(omat A, omat b):
+  
+#   global dhl
 
+#   # Get the corresponding matrix form.
+#   maxorder = max(A.order, b.order)
+
+#   cdef oarr_t res = oarr_ones(nrows,ncols,nbases,order,dhl)
+
+#   return omat.create(&res)
+  
+# #-----------------------------------------------------------------------------------------------------
 
 
 

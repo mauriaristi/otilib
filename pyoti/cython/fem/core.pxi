@@ -9,16 +9,47 @@
 # ----------------------------------------------------------------------------------------------------
 
 
-opNames = [ "None  ","   +  ","   -  ","   *  ","   /  ","  **  ","int1d ","int2d ",
-            "int3d ","  dx  ","  dy  ","  dz  ","  dxx ","  dyy ",
-            "  dzz ","  dxy ","  dxz ","  dyz ","  def "]
+opNames = [ "None  ",
+            "   +  ",
+            "   -  ",
+            "   *  ",
+            "   /  ",
+            "  **  ",
+            "int1d ",
+            "int2d ",
+            "int3d ",
+            "  dx  ",
+            "  dy  ",
+            "  dz  ",
+            "  dxx ",
+            "  dyy ",
+            "  dzz ",
+            "  dxy ",
+            "  dxz ",
+            "  dyz ",
+            "  def "]
 
-basisNames = ["N  ","Nx ","Ny ","Nz ","Nxx",
-              "Nyy","Nzz","Nxy","Nxz","Nyz"]
+basisNames = ["N  ",
+              "Nx ",
+              "Ny ",
+              "Nz ",
+              "Nxx",
+              "Nyy",
+              "Nzz",
+              "Nxy",
+              "Nxz",
+              "Nyz"]
 
-kindNames = ["OTIARR","OTINUM","REAL  "]
+kindNames = ["OTIARR",
+             "OTINUM",
+             "REAL  "]
 
-elTypeNames = ["point","line","triangle","quadrangle","tetrahedra","hexahedra"]
+elTypeNames = ["point",
+               "line",
+               "triangle",
+               "quadrangle",
+               "tetrahedra",
+               "hexahedra"]
 
 
 

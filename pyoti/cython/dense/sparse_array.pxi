@@ -617,6 +617,7 @@ cdef class spr_omat:
 
   #---------------------------------------------------------------------------------------------------   
 
+
   #***************************************************************************************************
   def to_csr(self):
     """
@@ -641,6 +642,7 @@ cdef class spr_omat:
     
     # end for
 
+    self.spr_type = 0
 
   #--------------------------------------------------------------------------------------------------- 
 
@@ -668,6 +670,7 @@ cdef class spr_omat:
     
     # end for
 
+    self.spr_type = 1
   #--------------------------------------------------------------------------------------------------- 
 
 
@@ -694,6 +697,7 @@ cdef class spr_omat:
     
     # end for
 
+    self.spr_type = 2
   #---------------------------------------------------------------------------------------------------
 
 
@@ -852,6 +856,17 @@ cdef class spr_omat:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 #*****************************************************************************************************
 def spsolve(spr_omat A, omat b, solver='LU'):
   """
@@ -880,8 +895,8 @@ def spsolve(spr_omat A, omat b, solver='LU'):
   cdef np.ndarray[uint64_t, ndim=1] idx_coo  
   cdef np.ndarray[ uint8_t, ndim=1] ord_coo
 
-  maxorder  = max(A.arr.order, b.arr.order)
-  maxnbases = max(A.arr.nbases,b.arr.nbases)
+  maxorder  = max(A.order, b.arr.order)
+  maxnbases = max(A.nbases,b.arr.nbases)
 
   res = zeros(b.arr.nrows, b.arr.ncols, nbases = maxnbases, order = maxorder)
 
@@ -905,8 +920,19 @@ def spsolve(spr_omat A, omat b, solver='LU'):
   vec_form_idx = idx_coo[first_col_indices]
   vec_form_ord = ord_coo[first_col_indices]
   
+  sol = solver.upper() # Convert to uppercase the string.
+  
   # Factorize system.
-  lu = spla.splu( A.get_imdir(0,0) )
+  if   (sol == 'LU'):
+    lu = spla.splu( A.get_imdir(0,0).tocsc() )
+  elif (sol == 'ILU'):
+    lu = spla.spilu( A.get_imdir(0,0).tocsc() )
+  # end if 
+
+
+
+  # Convert first to csr format (faster for operations)
+  A.to_csr()
 
   # Solve the real system of equations.
   tmp = lu.solve( b.get_imdir(0,0) )

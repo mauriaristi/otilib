@@ -63,6 +63,9 @@ cdef class omat:
   @staticmethod
   cdef omat create(oarr_t* arr, uint8_t FLAGS = *)
   cpdef copy(self)
+  cpdef get_im(self, hum_dir, copy = *)
+  cpdef get_imdir(self, imdir_t idx , ord_t order, copy = *)
+  cpdef set_imdir(self,np.ndarray[coeff_t, ndim=2] arr, imdir_t idx , ord_t order)
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS OMAT :::::::::::::::::::::::::::::::::::::::::::::
@@ -114,6 +117,8 @@ cdef class spr_omat:
   cpdef recompute_ndir(self)
   cpdef change_order(self, ord_t new_order)
   cpdef change_nbases(self,bases_t new_nbases)
+  cpdef get_imdir(self, imdir_t idx , ord_t order)
+
   # cdef void c_setSumFromSotinum(self, list index, sotinum_t* value)
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: End of class spr_omat :::::::::::::::::::::::::::::::::::::::::
@@ -150,7 +155,7 @@ cdef class spr_omat:
 
 
 
-
+# cpdef solve(omat A, omat b)
 
 
 

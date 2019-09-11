@@ -1240,6 +1240,7 @@ struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_3darray_double;
 struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_2darray_double;
 struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_double;
 struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_uint64;
+struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_uint8;
 
 /* "pyoti/core.pxd":53
  * 
@@ -1282,9 +1283,21 @@ struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_double {
  *                                                             uint8_t numpy_own = *)
  * cdef np.ndarray[uint64_t, ndim=1]  c_ptr_to_np_1darray_uint64(void * ptr, np.npy_intp size, \             # <<<<<<<<<<<<<<
  *                                                             uint8_t numpy_own = *)
- * # cdef void c_getDirExpA(list dirArray, uint16_t** p_dirA, uint8_t** p_expA, uint8_t* order)
+ * 
  */
 struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_uint64 {
+  int __pyx_n;
+  uint8_t numpy_own;
+};
+
+/* "pyoti/core.pxd":63
+ *                                                             uint8_t numpy_own = *)
+ * 
+ * cdef np.ndarray[uint8_t, ndim=1]  c_ptr_to_np_1darray_uint8(void * ptr, np.npy_intp size, \             # <<<<<<<<<<<<<<
+ *                                                             uint8_t numpy_own = *)
+ * # cdef void c_getDirExpA(list dirArray, uint16_t** p_dirA, uint8_t** p_expA, uint8_t* order)
+ */
+struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_uint8 {
   int __pyx_n;
   uint8_t numpy_own;
 };

@@ -730,19 +730,6 @@ cdef class spr_omat:
 
   #---------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   #***************************************************************************************************
   def get_deriv(self, hum_dir):
     """
@@ -770,208 +757,77 @@ cdef class spr_omat:
 
     # end if 
 
+  #--------------------------------------------------------------------------------------------------- 
+
+
+  #***************************************************************************************************
+  def get_deriv(self, hum_dir):
+    """
+    PURPOSE:  Get the factor to be multiplied to the coprresponding imaginary coefficient to get the 
+              exact value of the derivative.
+    """
+    #***************************************************************************************************
+    global dhl
+
+    cdef list item = imdir(hum_dir)
+    
+    cdef coeff_t factor = 1.0
+
+    # Check first if derivative is the real coefficient.
+
+      
+    factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
+
+    return factor * self.get_imdir( item[ZERO], item[ONE] )
+
   #---------------------------------------------------------------------------------------------------  
 
+  #***************************************************************************************************
+  cpdef get_imdir(self, imdir_t idx , ord_t order):
+    """
+    PURPOSE: Get the corresponding imaginary direction in the omat object.
+    """
+    #*************************************************************************************************
+    global dhl
 
-  # #***************************************************************************************************
-  # def setDual(self, dirArray, value):
-  #   """
-  #   PURPOSE:      To add a human friendly form to set elements of a 
-  #                 spr_otinum.
+    cdef object tmp
+
+    # Check first if derivative is the real coefficient.
+
     
-  #   EXAMPLE:      >>> a = spr_otinum([0,4,17], [1.,3.,5.], 2)
-  #                 >>> print(a)
-  #                 1.0 + 3.0 * e([2]) + 5.0 * e([1,3])
-  #                 >>> a.setDual([1,3],10)
-  #                 >>> print(a)
-  #                 1.0 + 3.0 * e([2]) + 10.0 * e([1,3])
-  #                 >>> a.setDual([1],2.5)
-  #                 >>> print(a)
-  #                 1.0 + 2.5 * e([1]) + 3.0 * e([2]) + 5.0 * e([1,3])
-  #   """
-  #   #*************************************************************************************************
-  
-  #   if type(dirArray)==int:
-    
-  #     indxArray = [dirArray]
+    if order <= self.order:
 
-  #   else:
+      if order == 0:
 
-  #     indxArray = dirArray
-      
-  #   # end if
-      
-  #   tmp_dirA,tmp_expA = getDirExpA(indxArray)
+        tmp = self.re
 
-  #   cdef uint8_t maxorder = np.sum(tmp_expA)
-  #   cdef uint8_t i
-  #   cdef uint64_t indx
-
-  #   if maxorder > self.maxorder:
-
-  #     raise ValueError("dirArray must correspond with the maxorder of the otivec")
-
-  #   # end if 
-    
-  #   # create the real direction arrays:
-  #   dirA = np.zeros(self.maxorder,dtype = np.uint16)
-  #   expA = np.zeros(self.maxorder,dtype = np.uint8)
-    
-  #   for i in range(len(tmp_expA)):
-      
-  #     dirA[i] = tmp_dirA[i]
-  #     expA[i] = tmp_expA[i]
-
-  #   # end for 
-
-  #   if indxArray[0] == 0:
+      else: 
         
-  #     indx = 0
+        if idx < self.p_ndpo[order-1]:
+          
+          tmp =  self.p_im[ order-1 ][ idx ]
+          
+        else:
+          
+          base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.
+          tmp = base_sprmat_creator(self.shape,dtype=self.re.dtype)
 
-  #   elif self.maxorder == 1:
+        # end if
 
-  #     indx = indxArray[0]
+      # end if 
 
-  #   else:
+    else: 
 
-  #     indx = h.findIndx(dirA,expA,self.maxorder)
+      base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.
+      tmp = base_sprmat_creator(self.shape,dtype=self.re.dtype)
+   
+    # end if 
 
-  #   # end if
+    return tmp
 
-
-  #   self.elements[indx] = value
-
-  
-
-  # #---------------------------------------------------------------------------------------------------  
-
-
-  # #***************************************************************************************************
-  # def getDerivByDirExp( self,uint16_t[::1] dirA, uint8_t[::1] expA):
-  #   """
-  #   PURPOSE:      to retrieve the n'th derivative according to the taylor 
-  #                 series expansion with dual numbers.
-                
-  #   DESCRIPTION:  Simply given the combinations of derivatives with the 
-  #                 dirArray, the function multiplys the terms that require
-  #                 extra factors to get the desired derivatives.
-    
-    
-
-  #   """
-  #   #*************************************************************************************************
-    
-  #   cdef uint8_t   order = np.sum(expA)
-    
-  #   # If asking for a coefficient of higher order, return 0.0
-  #   if order > self.maxorder:
-
-  #     if self.spr_type == 0:
-        
-  #       return spr.csr_matrix((self.shape[0],self.shape[1]),dtype=np.float64)  
-
-  #     elif self.spr_type == 1:
-        
-  #       return spr.coo_matrix((self.shape[0],self.shape[1]),dtype=np.float64)  
-
-  #     elif self.spr_type == 2:
-        
-  #       return spr.lil_matrix((self.shape[0],self.shape[1]),dtype=np.float64)  
-
-  #     # end if 
-
-  #   # end if 
-    
-  #   cdef float64_t factor = 1.0
-  #   cdef uint16_t[::1] tmp_dirA = np.zeros(self.maxorder,dtype = np.uint16)
-  #   cdef uint8_t[::1]  tmp_expA = np.zeros(self.maxorder,dtype = np.uint8)
-  #   cdef uint8_t i
-
-    
-  #   # Compute the multiplication factor and fill in the temporary arrays.
-
-  #   for i in range(dirA.size):
-      
-  #     factor *= factorial(expA[i])
-  #     tmp_dirA[i] = dirA[i]
-  #     tmp_expA[i] = expA[i]
-    
-  #   # end for
-    
-    
-  #   indx  = h.findIndx(tmp_dirA,tmp_expA,self.maxorder)
-    
-  #   cdef object mat = self.elements[indx] * factor
-
-    
-        
-  #   return mat
-
-  # #---------------------------------------------------------------------------------------------------  
-
-
-  # #***************************************************************************************************
-  # def getDeriv(self, dirArray):
-  #   """
-  #   PURPOSE:      to retrieve the n'th derivative according to the taylor 
-  #                 series expansion with dual numbers.
-                
-  #   DESCRIPTION:  Simply given the combinations of derivatives with the 
-  #                 dirArray, the function multiplys the terms that require
-  #                 extra factors to get the desired derivatives.
-    
-  #   EXAMPLE:      >>> a = spr_otinum([0,1,2,4,5,8],[1,2,3,4,5,6],2)
-  #                 >>>
-  #                 >>> getDerivative(a,[0])
-  #                 1.
-  #                 >>> getDerivative(a,[1])
-  #                 2.
-  #                 >>> getDerivative(a,[[1,2]])
-  #                 6.
-  #                 >>> getDerivative(a,[2])
-  #                 4.
-  #                 >>> getDerivative(a,[1,2])
-  #                 5.
-  #                 >>> getDerivative(a,[[2,2]])
-  #                 12.
-
-  #   """
-  #   #*************************************************************************************************
-
-  #   if type(dirArray)==int:
-      
-  #     indxArray = [dirArray]
-      
-  #   else:
-      
-  #     indxArray = dirArray
-      
-  #   # end if
-
-    
-  #   tmp_dirA,tmp_expA = getDirExpA(dirArray)
-  #   cdef uint8_t maxorder = np.sum(tmp_expA)
-  #   cdef uint8_t i
-  #   cdef uint64_t indx
-
-  #   # create the real direction arrays:
-  #   cdef uint16_t[::1] dirA = np.zeros(maxorder,dtype = np.uint16)
-  #   cdef uint8_t[::1]  expA = np.zeros(maxorder,dtype = np.uint8)
-    
-  #   for i in range(len(tmp_expA)):
-      
-  #     dirA[i] = tmp_dirA[i]
-  #     expA[i] = tmp_expA[i]
-
-  #   # end for 
-
-
-  #   return self.getDerivByDirExp(dirA,expA)
-
-  # #---------------------------------------------------------------------------------------------------  
-
-
-
+  #---------------------------------------------------------------------------------------------------
+ 
+ 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: End of class spr_omat :::::::::::::::::::::::::::::::::::::::::::
@@ -996,7 +852,120 @@ cdef class spr_omat:
 
 
 
+#*****************************************************************************************************
+def spsolve(spr_omat A, omat b, solver='LU'):
+  """
+  
+  PORPUSE: To solve a sparse linear system of equations of OTI algebra.
 
+  """
+  
+  global dhl
+
+  from scipy.sparse import coo_matrix, linalg as spla
+  from scipy.linalg import lu_factor, lu_solve
+
+  # Get the corresponding matrix form.
+  cdef uint64_t i, j, k
+  # cdef oarr_t oarr_res
+  cdef omat res
+  cdef np.ndarray[coeff_t, ndim=2] tmp
+  cdef np.ndarray[coeff_t, ndim=2] tmp_rhs
+  cdef np.ndarray[coeff_t, ndim=2] tmp_dot
+
+  cdef matrix_form_t matform
+
+  cdef np.ndarray[uint64_t, ndim=1] rows
+  cdef np.ndarray[uint64_t, ndim=1] cols
+  cdef np.ndarray[uint64_t, ndim=1] idx_coo  
+  cdef np.ndarray[ uint8_t, ndim=1] ord_coo
+
+  maxorder  = max(A.arr.order, b.arr.order)
+  maxnbases = max(A.arr.nbases,b.arr.nbases)
+
+  res = zeros(b.arr.nrows, b.arr.ncols, nbases = maxnbases, order = maxorder)
+
+  # TODO: use matrix inner product from dmat object.
+  matform = dhelp_matrix_form_indices(maxnbases,maxorder,dhl)
+
+  rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)
+  cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)
+  idx_coo = c_ptr_to_np_1darray_uint64( matform.p_im  , matform.nonzero)
+  ord_coo = c_ptr_to_np_1darray_uint8 ( matform.p_ord , matform.nonzero)
+
+  indices = np.arange( 1, matform.nonzero+1, dtype = np.uint64)
+
+  dummy_mat = coo_matrix( ( indices, (rows.copy(), cols.copy()) ), dtype = np.uint64 )
+  dummy_mat = dummy_mat.tocsr()
+
+  # first_col_indices = dummy_mat[:,0].data-1
+  first_col_indices = indices[ (matform.sizex-1) : (2*matform.sizex-1) ] - 1
+  
+  # Get vector form index and order pairs
+  vec_form_idx = idx_coo[first_col_indices]
+  vec_form_ord = ord_coo[first_col_indices]
+  
+  # Factorize system.
+  lu = spla.splu( A.get_imdir(0,0) )
+
+  # Solve the real system of equations.
+  tmp = lu.solve( b.get_imdir(0,0) )
+  res.set_imdir( tmp, 0, 0)
+
+  # Solve the imaginary systems.
+  tmp_rhs = np.zeros(b.shape,dtype = np.float64)
+  tmp_dot = np.zeros(b.shape,dtype = np.float64)
+
+  for i in range(1, dummy_mat.shape[0]):
+
+    # print("\n\ni: ",i)
+    # get the i'th row of elements to operate.
+    # row_indices = dummy_mat[i].data - 1
+    row_indices = dummy_mat.data[dummy_mat.indptr[i]:dummy_mat.indptr[i+1]] - 1
+
+    row_idx = idx_coo[row_indices]
+    row_ord = ord_coo[row_indices]
+
+    # Get the imaginary direation from the OTI rhs
+    tmp_rhs[:,:] = b.get_imdir( row_idx[ZERO], row_ord[ZERO])
+
+    # print("RHS:\n",tmp_rhs)
+    
+    k = row_idx.size-1
+    # Get A imaginary times b real.
+
+    tmp_dot = A.get_imdir(row_idx[ZERO], row_ord[ZERO]).dot( res.get_imdir(row_idx[k],row_ord[k]) )
+
+    tmp_rhs -= tmp_dot
+
+    # Solving 
+    for j in range(1,row_idx.size-1):
+
+      k = (row_idx.size-1) - j
+
+      # Get A imaginary times b real.
+
+      tmp_dot = A.get_imdir(row_idx[j], row_ord[j]).dot( res.get_imdir(row_idx[k], row_ord[k]) )
+      tmp_rhs -= tmp_dot
+    # end for 
+
+    # print("\n\nFinal RHS:\n",tmp_rhs)
+    # Solve the system of equations.
+    tmp = lu.solve( tmp_rhs )
+
+    # Write the result on the system.
+    res.set_imdir( tmp, vec_form_idx[i], vec_form_ord[i])
+
+  # end for 
+  
+  free(matform.p_im)
+  free(matform.p_ord)
+  free(matform.p_rows)
+  free(matform.p_cols)
+
+  return res
+
+#-----------------------------------------------------------------------------------------------------
 
 
 

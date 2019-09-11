@@ -211,14 +211,17 @@ cdef class omat:
 
     cdef np.ndarray[double, ndim=2] tmp 
 
-    out = "omat<"+" ndir: "+str(self.arr.ndir)+', order: '+str(self.arr.order)+'>\n'
-    out+= "re:\n"
+    out =  "omat<"
+    out += "shape: "+str(self.shape)+ ", "
+    out += "ndir: "+str(self.arr.ndir)+", "
+    out += "order: "+str(self.arr.order)+", "
+    out += "re:\n"
     # first print the real number:
     tmp = c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)
     
     out +=  repr(tmp)
 
-    out += ""
+    out += ">"
 
     return out
 
@@ -749,68 +752,57 @@ cdef class omat:
     cdef np.ndarray[coeff_t, ndim=2] tmp
     cdef coeff_t factor = 1
 
-    # Check first if derivative is the real coefficient.
+    tmp = self.get_imdir( item[ZERO], item[ONE],copy=copy)
 
+    factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
 
-    
-
-    if item[ONE] == 0: # order 0.
-      
-      tmp = factor*c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)
-    
-    else:
-      
-      factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
-
-      tmp =  factor * c_ptr_to_np_2darray_double(self.arr.p_im[ item[ONE]-1 ][ item[ZERO] ], 
-                                                 self.arr.nrows, self.arr.ncols)
-
-    # end if 
-
-
-    # Export as a copy if requested.
-    if copy:
-      
-      return tmp.copy()
-
-    else:
-
-      return tmp
-
-    # end if 
+    return tmp * factor
 
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
-  def get_imdir(self, imdir_t idx , ord_t order, copy=True):
+  cpdef get_im(self, hum_dir, copy = True):
     """
-    PURPOSE: Get the corresponding derivative of the system.
+    PURPOSE: Get the corresponding imaginary direction in the omat object.
+    """
+    #*************************************************************************************************
+    global dhl
+    
+    cdef list item = imdir(hum_dir)
+
+    return self.get_imdir( item[ZERO], item[ONE], copy = copy )
+
+  #---------------------------------------------------------------------------------------------------
+
+
+  #***************************************************************************************************
+  cpdef get_imdir(self, imdir_t idx , ord_t order, copy = True):
+    """
+    PURPOSE: Get the corresponding imaginary direction in the omat object.
     """
     #*************************************************************************************************
     global dhl
 
     cdef np.ndarray[coeff_t, ndim=2] tmp
-    cdef coeff_t factor = 1
 
     # Check first if derivative is the real coefficient.
-
-
-    if order <= self.arr.order:
     
+    if order <= self.arr.order:
+
       if order == 0:
 
         tmp = c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)
 
       else: 
-
-        if idx <= self.arr.p_ndpo[order-1]:
-
+        
+        if idx < self.arr.p_ndpo[order-1]:
+          
           tmp =  c_ptr_to_np_2darray_double(self.arr.p_im[ order-1 ][ idx ], 
-                                                 self.arr.nrows, self.arr.ncols)
-
+                                              self.arr.nrows, self.arr.ncols)
+          
         else:
 
-          tmp = np.zeros(np.zeros(self.shape))
+          tmp = np.zeros(self.shape)
 
         # end if
 
@@ -818,7 +810,7 @@ cdef class omat:
 
     else: 
 
-      tmp = np.zeros(np.zeros(self.shape))
+      tmp = np.zeros(self.shape)
    
     # end if 
 
@@ -832,6 +824,45 @@ cdef class omat:
       return tmp
 
     # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  
+
+  #***************************************************************************************************
+  cpdef set_imdir(self,np.ndarray[coeff_t, ndim=2] arr, imdir_t idx , ord_t order):
+    """
+    PURPOSE: Get the corresponding imaginary direction in the omat object.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    # Check first if derivative is the real coefficient.
+
+    if (arr.shape[0] != self.arr.nrows or arr.shape[1] != self.arr.ncols):
+
+      raise IndexError("Dimension mismatch in set_imdir() method.")
+
+    # end if 
+
+    if (order <= self.arr.order):
+    
+      if (order == 0):
+
+        copy_numpy2d_to_ptr_f64(arr, self.arr.re)
+
+      else: 
+
+        if (idx <= self.arr.p_ndpo[order-1]):
+
+          copy_numpy2d_to_ptr_f64(arr, self.arr.p_im[ order-1 ][ idx ])
+          
+
+        # end if
+
+      # end if 
+
+    # end if  
 
   #---------------------------------------------------------------------------------------------------
 
@@ -937,19 +968,274 @@ cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):
 
 
 
-# #*****************************************************************************************************
-# cpdef omat solve(omat A, omat b):
+#*****************************************************************************************************
+def solve(omat A, omat b):
+  """
   
-#   global dhl
+  PORPUSE: To solve a dense linear system of equations of OTI algebra.
 
-#   # Get the corresponding matrix form.
-#   maxorder = max(A.order, b.order)
-
-#   cdef oarr_t res = oarr_ones(nrows,ncols,nbases,order,dhl)
-
-#   return omat.create(&res)
+  """
   
-# #-----------------------------------------------------------------------------------------------------
+  global dhl
+
+  from scipy.sparse import coo_matrix
+  from scipy.linalg import lu_factor, lu_solve
+
+  # Get the corresponding matrix form.
+  cdef uint64_t i, j, k
+  # cdef oarr_t oarr_res
+  cdef omat res
+  cdef np.ndarray[coeff_t, ndim=2] tmp
+  cdef np.ndarray[coeff_t, ndim=2] tmp_rhs
+  cdef np.ndarray[coeff_t, ndim=2] tmp_dot
+
+  cdef matrix_form_t matform
+
+  cdef np.ndarray[uint64_t, ndim=1] rows
+  cdef np.ndarray[uint64_t, ndim=1] cols
+  cdef np.ndarray[uint64_t, ndim=1] idx_coo  
+  cdef np.ndarray[ uint8_t, ndim=1] ord_coo
+
+  maxorder  = max(A.arr.order, b.arr.order)
+  maxnbases = max(A.arr.nbases,b.arr.nbases)
+
+  res = zeros(b.arr.nrows, b.arr.ncols, nbases = maxnbases, order = maxorder)
+
+  # TODO: use matrix inner product from dmat object.
+  matform = dhelp_matrix_form_indices(maxnbases,maxorder,dhl)
+
+  rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)
+  cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)
+  idx_coo = c_ptr_to_np_1darray_uint64( matform.p_im  , matform.nonzero)
+  ord_coo = c_ptr_to_np_1darray_uint8 ( matform.p_ord , matform.nonzero)
+
+
+  
+  indices = np.arange( 1, matform.nonzero+1, dtype = np.uint64)
+
+  dummy_mat = coo_matrix( ( indices, (rows.copy(), cols.copy()) ), dtype = np.uint64 )
+  dummy_mat = dummy_mat.tocsr()
+
+  # first_col_indices = dummy_mat[:,0].data-1
+  first_col_indices = indices[ (matform.sizex-1) : (2*matform.sizex-1) ] - 1
+  
+  # Get vector form index and order pairs
+  vec_form_idx = idx_coo[first_col_indices]
+  vec_form_ord = ord_coo[first_col_indices]
+  
+  
+
+  # Factorize system.
+  factorization = lu_factor( A.get_imdir(0,0) )
+
+  # Solve the real system of equations.
+  tmp = lu_solve(factorization, b.get_imdir(0,0) )
+  res.set_imdir( tmp, 0, 0)
+
+  # Solve the imaginary systems.
+  tmp_rhs = np.zeros(b.shape,dtype = np.float64)
+  tmp_dot = np.zeros(b.shape,dtype = np.float64)
+
+  for i in range(1, dummy_mat.shape[0]):
+
+    # print("\n\ni: ",i)
+    # get the i'th row of elements to operate.
+    # row_indices = dummy_mat[i].data - 1
+    row_indices = dummy_mat.data[dummy_mat.indptr[i]:dummy_mat.indptr[i+1]] - 1
+
+    row_idx = idx_coo[row_indices]
+    row_ord = ord_coo[row_indices]
+
+    # Get the imaginary direation from the OTI rhs
+    tmp_rhs[:,:] = b.get_imdir( row_idx[ZERO], row_ord[ZERO], copy=False )
+
+    # print("RHS:\n",tmp_rhs)
+    
+    k = row_idx.size-1
+    # Get A imaginary times b real.
+    np.dot( A.get_imdir(row_idx[ZERO], row_ord[ZERO], copy=False ), 
+          res.get_imdir(row_idx[   k], row_ord[   k], copy=False ), out = tmp_dot )
+
+    tmp_rhs -= tmp_dot
+
+    # print("RHS:\n",tmp_rhs)
+    # Solving 
+    for j in range(1,row_idx.size-1):
+
+      k = (row_idx.size-1) - j
+
+      # Get A imaginary times b real.
+
+      np.dot( A.get_imdir(row_idx[j], row_ord[j], copy=False ), 
+            res.get_imdir(row_idx[k], row_ord[k], copy=False ),out = tmp_dot )
+      tmp_rhs -= tmp_dot
+    # end for 
+
+    # print("\n\nFinal RHS:\n",tmp_rhs)
+    # Solve the system of equations.
+    tmp = lu_solve(factorization, tmp_rhs )
+
+    # Write the result on the system.
+    res.set_imdir( tmp, vec_form_idx[i], vec_form_ord[i])
+
+  # end for 
+  
+  free(matform.p_im)
+  free(matform.p_ord)
+  free(matform.p_rows)
+  free(matform.p_cols)
+
+  return res
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+#*****************************************************************************************************
+def solve_latex(bases_t nbases, ord_t order, real = 're'):
+  """
+  
+  PORPUSE: To solve a dense linear system of equations of OTI algebra.
+
+  """
+  
+  global dhl
+
+  from scipy.sparse import coo_matrix
+
+  # Get the corresponding matrix form.
+  cdef uint64_t i, j, k
+  cdef matrix_form_t matform
+
+  cdef np.ndarray[uint64_t, ndim=1] rows
+  cdef np.ndarray[uint64_t, ndim=1] cols
+  cdef np.ndarray[uint64_t, ndim=1] idx_coo  
+  cdef np.ndarray[ uint8_t, ndim=1] ord_coo
+
+
+  # idx_coo, ord_coo = dhelp_get_matrix_form( nbases, order, 
+  #                                           export_latex  =False, 
+  #                                           export_strings=False, 
+  #                                           export_sparse =True)
+
+  matform = dhelp_matrix_form_indices(nbases,order,dhl)
+
+  rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)
+  cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)
+  idx_coo = c_ptr_to_np_1darray_uint64( matform.p_im  , matform.nonzero)
+  ord_coo = c_ptr_to_np_1darray_uint8 ( matform.p_ord , matform.nonzero)
+
+
+  
+  indices = np.arange( 1, matform.nonzero+1, dtype = np.uint64)
+
+  dummy_mat = coo_matrix( ( indices, (rows.copy(), cols.copy()) ), dtype = np.uint64 )
+  dummy_mat = dummy_mat.tocsr()
+
+  # first_col_indices = dummy_mat[:,0].data-1
+  first_col_indices = indices[ (matform.sizex-1) : (2*matform.sizex-1) ] - 1
+  
+  # Get vector form index and order pairs
+  # vec_form_idx = idx_coo[first_col_indices]
+  # vec_form_ord = ord_coo[first_col_indices]
+  
+  string = "\\begin{align}"
+
+  # Fist solve real system of equations.
+  string += "A_{"
+  string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re" )
+  string += "}"
+
+  string += "x_{"
+  string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re")
+  string += "}"
+
+  string += "&="
+
+  string += "b_{"
+  string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re")
+  string += "}"
+
+  string += "\\\\"
+
+  # Solve the imaginary systems.
+
+  for i in range(1, dummy_mat.shape[0]):
+
+    
+    string += "A_{"
+    string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re" )
+    string += "}"
+
+    string += "x_{"
+    string += get_latex_dir( idx_coo[first_col_indices[i]], ord_coo[first_col_indices[i]] )
+    string += "}"
+
+
+
+    # get the i'th row of elements to operate.
+    # row_els = dummy_mat[i]
+    # row_indices = dummy_mat[i].data - 1
+    row_indices = dummy_mat.data[dummy_mat.indptr[i]:dummy_mat.indptr[i+1]] - 1
+
+    row_idx = idx_coo[row_indices]
+    row_ord = ord_coo[row_indices]
+
+    string += " &= "
+
+    string += "b_{"
+    string += get_latex_dir( idx_coo[row_indices[ZERO]], ord_coo[row_indices[ZERO]] )
+    string += '} '
+
+
+    string += '-A_{'
+    string += get_latex_dir( idx_coo[row_indices[ZERO]], ord_coo[row_indices[ZERO]]  )
+    string += '}x_{'
+    string += get_latex_dir( idx_coo[row_indices[row_indices.size-1] ], ord_coo[row_indices[ row_indices.size - 1 ]], real = "re" )
+    string += '} '
+
+    # Solving 
+    for j in range(1,row_indices.size-1):
+
+      k = (row_indices.size-1) - j
+      string += ""
+      string += "-A_{"
+      string += get_latex_dir( idx_coo[row_indices[j]], ord_coo[row_indices[j]] )
+      string += '}x_{'
+      string += get_latex_dir( idx_coo[row_indices[k]], ord_coo[row_indices[k]] )
+      string += '} '
+
+    # end for 
+
+    
+    string += "\\\\ "
+    # print(i,row_els.data)
+
+    # print(string)
+
+  # end for 
+  string += "\\end{align}"
+
+  free(matform.p_im)
+  free(matform.p_ord)
+  free(matform.p_rows)
+  free(matform.p_cols)
+
+
+  return string
+  
+  
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 
 

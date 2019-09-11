@@ -59,6 +59,9 @@ cdef np.ndarray[double, ndim=1]  c_ptr_to_np_1darray_double(void * ptr, np.npy_i
                                                             uint8_t numpy_own = *)
 cdef np.ndarray[uint64_t, ndim=1]  c_ptr_to_np_1darray_uint64(void * ptr, np.npy_intp size, \
                                                             uint8_t numpy_own = *)
+
+cdef np.ndarray[uint8_t, ndim=1]  c_ptr_to_np_1darray_uint8(void * ptr, np.npy_intp size, \
+                                                            uint8_t numpy_own = *)
 # cdef void c_getDirExpA(list dirArray, uint16_t** p_dirA, uint8_t** p_expA, uint8_t* order)
 
 cdef void c_Py_print2DArrayUI8(uint8_t* array,uint64_t dim1, uint8_t dim2)

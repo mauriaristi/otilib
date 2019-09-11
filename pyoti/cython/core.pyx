@@ -1288,7 +1288,7 @@ def dhelp_get_matrix_form(bases_t nbases, ord_t order, export_latex = True,
 
 
 #*****************************************************************************************************
-def get_latex_dir(imdir_t indx, ord_t order, real = '\mbox{Re}', epsilon='\epsilon'):
+def get_latex_dir(imdir_t indx, ord_t order, real = '_{\mbox{Re}}', epsilon='\epsilon'):
   """
   PURPOSE:  To print the imaginary direction referenced to a position of the 
             binary indexing.

@@ -26,7 +26,7 @@ cdef class fespace:
 
     INPUTS:
 
-            -> mesh:     Mesh that defines the domain of the function.
+            -> mesh:         Mesh that defines the domain of the function.
 
             -> elementType:  Defines the interpolation functions of the discretized domain.
 
@@ -70,7 +70,8 @@ cdef class fespace:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def newUndefinedFunction(self):
+  # def newUndefinedFunction(self):
+  def newSolutionFunction(self):
     """
     PURPOSE:      Add a new Finite Element function that will be defined by solving a 
                   Finite element problem

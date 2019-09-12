@@ -21,7 +21,7 @@
 // #include "fem/feoarr_algebra_elementwise_to.c"
 #include "fem/feoarr_algebra_matops.c"
 
-// // Sparse oti.
+// // Sparse oti. ?
 // #include "fem/fesoarr_base.c"
 // #include "fem/fesoarr_algebra_elementwise.c"
 // #include "fem/fesoarr_algebra_matops.c"
@@ -44,6 +44,7 @@
 // Base FEM functions:
 #include "fem/basis_functions.c"
 
+// Setup integration points.
 #include "fem/integration_points.c"
 
 // Element structure various functions.

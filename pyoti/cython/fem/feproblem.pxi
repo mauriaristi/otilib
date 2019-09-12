@@ -65,7 +65,7 @@ cdef class feproblem:
     self.eId_per_DOF = np.array([])
 
 
-
+    
     self.DOF = len(test) # Number of solution variables sets the total degrees of freedom 
                          # of the problem
       
@@ -620,7 +620,7 @@ cdef class feproblem:
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     # # # # # # # # # # # # # # # # GLOBAL ASSEMBLY LOOP  # # # # # # # # # # # # # # 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-    # Loop for each element
+    # Loop for each element in the domain.
     for ii in range(nElsMesh):
 
       # Get the element region.

@@ -17,7 +17,7 @@ cdef class fefunction:
   def __init__(self, fespace baseSpace, int64_t nature, int64_t interpDer = basisN, \
                object data = None ):
     """
-    PURPOSE:      Constructor of the finite element space class. Its main purpose is to define 
+    PURPOSE:      Constructor of the finite element function class. Its main purpose is to define 
                   a common parameter to store all the procedures and variables to be performed
                   during the Finite Element calculations.
 
@@ -27,7 +27,7 @@ cdef class fefunction:
 
           -> nature:    Nature of the problem. Can be:
                         * feNatTest:  For test function
-                        * feNatUndef: For function that will be defined by solving a FE problem. 
+                        * feNatUndef: For function that will be solved as a FE problem. 
                         * feNatDef:   Defined, and has data already.
 
           -> interpDer: *Optional* Basis function derivative with which it will be approximated.

@@ -876,6 +876,61 @@ cdef class omat:
 
 
 
+
+#***************************************************************************************************
+cpdef omat addO(omat lhs, omat rhs, omat out = None):
+  """
+  PURPOSE:      Add two OTI numbers.
+                
+  DESCRIPTION:  Eliminates the need to type check the input parameters 
+  
+  INPUTS:
+                lhs: otinum 
+                rhs: otinum 
+                out: otinum, optional. Result holder
+                
+  """
+  #*************************************************************************************************
+  global dhl
+  cdef oarr_t res
+  
+  if out != None:
+
+    oarr_sum_OO_to(&lhs.arr, &rhs.arr, &out.arr ,dhl)
+    return None
+
+  else:
+    # 
+    res = oarr_sum_OO(&lhs.arr, &rhs.arr, dhl)
+
+    return omat.create(&res)
+
+#--------------------------------------------------------------------------------------------------- 
+
+
+
+#***************************************************************************************************
+cpdef addO_to(omat lhs, omat rhs, omat out):
+  """
+  PURPOSE:      Add two elements.
+                
+  DESCRIPTION:  Eliminates the need to type check the input parameters 
+  
+  INPUTS:
+                lhs: omat 
+                rhs: omat 
+                out: omat Result holder
+                
+  """
+  #*************************************************************************************************
+  global dhl
+  
+  oarr_sum_OO_to(&lhs.arr, &rhs.arr, &out.arr ,dhl)
+
+#--------------------------------------------------------------------------------------------------- 
+
+
+
 #*****************************************************************************************************
 cpdef omat dot(omat A, omat B):
 

@@ -607,6 +607,9 @@ otinum_t oti_copy(otinum_t* num, dhelpl_t dhl);
 void oti_copy_to( otinum_t* num, otinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
+void oti_setup(otinum_t* num,  bases_t nbases, ord_t order, dhelpl_t dhl );
+
 /**************************************************************************************************//**
 @brief Assign an oti number the value of a given real number.
 

@@ -101,7 +101,7 @@ void oti_copy_to(otinum_t* num, otinum_t* res, dhelpl_t dhl){
     // Copy information from num1 to res.
     for( ord = 0; ord<num->order; ord++){
 
-        memcpy( res->p_im[ord], num->p_im[ord], res->p_ndpo[ord]*sizeof(coeff_t) );
+        memcpy( res->p_im[ord], num->p_im[ord], num->p_ndpo[ord]*sizeof(coeff_t) );
 
     }
 
@@ -423,6 +423,47 @@ void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+// ****************************************************************************************************
+inline void oti_setup(otinum_t* num,  bases_t nbases, ord_t order, dhelpl_t dhl ){
+    
+    
+    ord_t ordi; 
+
+    // Get the number of imaginary directions for nbases and order.
+
+    num->ndir = 0; // Excludes the real direction.
+
+    // Set the values of the number first.
+    num->order  = order;
+    num->nbases = nbases;
+
+    for (ordi = 0; ordi < num->order; ordi++){
+
+        num->p_ndpo[ordi] = dhelp_extract_ndirOrder( num->nbases, ordi+1, dhl );
+        num->ndir += num->p_ndpo[ordi];
+
+    }
+
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 // ****************************************************************************************************
 inline otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){

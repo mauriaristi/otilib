@@ -29,6 +29,12 @@ cdef class otinum:
   cdef otinum create(otinum_t* num, uint8_t FLAGS = *)
   cpdef copy(self)
   cpdef coeff_t get_deriv( self, hum_dir)
+
+  # @staticmethod
+  # def otinum add(otinum lhs, otinum rhs, otinum out = *)
+  
+  # @staticmethod
+  # def otinum add_to(otinum lhs, otinum rhs, otinum out)
   # @staticmethod
   # cdef double getitem(self, uint64_t index)
   # cdef otinum neg(self)
@@ -157,7 +163,8 @@ cdef class spr_omat:
 
 # cpdef solve(omat A, omat b)
 
-
+cpdef otinum add(otinum lhs, otinum rhs, otinum out = *)
+cpdef add_to(otinum lhs, otinum rhs, otinum out)
 
 
 

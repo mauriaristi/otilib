@@ -29,34 +29,42 @@ void oti_sum_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
     ord_t ordi;
     ndir_t i;
+    bases_t nbases = MAX(num1->nbases,num2->nbases);
+    ord_t    order = MAX(num1->order, num2->order);
+    coeff_t *p_res, *p_num;
+
+    oti_setup( res,  nbases, order, dhl ); // Setup the p_ndpo values and ndir to corresponding values.
+    oti_setFromReal(0.0, res, dhl); // Set all elements in res as 0.0.
+    oti_copy_to( num1, res, dhl);
     
     // TODO: Add check of general memory allocation requirements.
-
+    
     res->re += num2->re;
 
-    if (num1->nbases == num2->nbases && num1->order == num2->order){
+    for ( ordi = 0; ordi < num2->order; ordi++){
 
-        for ( ordi = 0; ordi < res->order; ordi++){
+        p_res = res->p_im[ordi];
+        p_num = num2->p_im[ordi];
 
-            for (i=0; i < res->p_ndpo[ordi]; i++){
-                
-                res->p_im[ordi][i] += num2->p_im[ordi][i];
-
-            }
+        for (i=0; i < num2->p_ndpo[ordi]; i++){
+            
+            p_res[i] += p_num[i];
 
         }
 
-    } else {
-
-        printf("Error: Addition of oti numbers with different bases or orders not yet supported.\n");
-        exit(OTI_undetErr);
     }
+
 
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+
 // ****************************************************************************************************
 void oti_sum_ro_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl){
+
+    // Setup the p_ndpo values and ndir to corresponding values.
+    oti_setup( res,  num1->nbases, num1->order, dhl ); 
 
     oti_copy_to(num1, res, dhl);
     
@@ -87,24 +95,25 @@ void oti_neg_to(otinum_t* num1, otinum_t* res, dhelpl_t dhl){
 
     ord_t ordi;
     ndir_t i;
-
+    
+    // Setup the p_ndpo values and ndir to corresponding values.
+    oti_setup( res,  num1->nbases, num1->order, dhl ); 
     oti_copy_to( num1, res, dhl);
     
+    // Self neg....
     res->re *= -1;
 
-    if (num1->order != 0){
 
-        for (  ordi = 0; ordi < res->order; ordi++){
+    for ( ordi = 0; ordi < res->order; ordi++){
 
-            for ( i=0; i < res->p_ndpo[ordi]; i++){
-                
-                res->p_im[ordi][i] *= -1;
-
-            }
+        for ( i=0; i < res->p_ndpo[ordi]; i++){
+            
+            res->p_im[ordi][i] *= -1;
 
         }
 
     }
+
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -130,6 +139,8 @@ void oti_neg_to(otinum_t* num1, otinum_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 void oti_sub_or_to(otinum_t* num1, coeff_t a, otinum_t* res, dhelpl_t dhl){
     
+    // Setup the p_ndpo values and ndir to corresponding values.
+    oti_setup( res,  num1->nbases, num1->order, dhl ); 
     oti_copy_to(num1,res,dhl);;
     
     res->re -= a;
@@ -140,7 +151,7 @@ void oti_sub_or_to(otinum_t* num1, coeff_t a, otinum_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 void oti_sub_ro_to(coeff_t a, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
     
-    oti_neg_to(num2,res,dhl);;
+    oti_neg_to(num2,res,dhl);
     
     res->re += a;
 
@@ -151,29 +162,30 @@ void oti_sub_ro_to(coeff_t a, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 void oti_sub_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
+
     ord_t ordi;
     ndir_t i;
+    bases_t nbases = MAX(num1->nbases,num2->nbases);
+    ord_t    order = MAX(num1->order, num2->order);
+    coeff_t *p_res, *p_num;
 
+    oti_setup( res,  nbases, order, dhl ); // Setup the p_ndpo values and ndir to corresponding values.
+    oti_setFromReal(0.0, res, dhl); // Set all elements in res as 0.0.
     oti_copy_to( num1, res, dhl);
     
     res->re -= num2->re;
 
-    if (num1->nbases == num2->nbases && num1->order == num2->order){
+    for ( ordi = 0; ordi < num2->order; ordi++){
 
-        for (  ordi = 0; ordi < res->order; ordi++){
+        p_res = res->p_im[ordi];
+        p_num = num2->p_im[ordi];
 
-            for ( i=0; i < res->p_ndpo[ordi]; i++){
-                
-                res->p_im[ordi][i] -= num2->p_im[ordi][i];
-
-            }
+        for (i=0; i < num2->p_ndpo[ordi]; i++){
+            
+            p_res[i] -= p_num[i];
 
         }
 
-    } else {
-
-        printf("Error: Addition of oti numbers with different bases or orders not yet supported.\n");
-        exit(OTI_undetErr);
     }
 
 }
@@ -209,7 +221,7 @@ void oti_mul_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
 	oti_setFromReal( 0.0, res, dhl);
 
-    ord_t ord_res;
+    ord_t ord_res, ordi, ordj, ordk;
     ord_t ord_mul1;
     //  0 X 0
     res->re = num1->re * num2->re;

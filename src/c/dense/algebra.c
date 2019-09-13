@@ -8,39 +8,25 @@
 // ****************************************************************************************************
 otinum_t oti_sum_oo(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 
-    ord_t ordi;
-    ndir_t i;
-    otinum_t res = oti_copy( num1, dhl);
-    
-    res.re += num2->re;
+    // This function supports different nbases and order operation.
+    bases_t nbases = MAX(num1->nbases,num2->nbases);
+    ord_t    order = MAX(num1->order, num2->order);
 
-    if (num1->nbases == num2->nbases && num1->order == num2->order){
+    otinum_t res = oti_createEmpty( nbases, order, dhl); 
 
-        for ( ordi = 0; ordi < res.order; ordi++){
-
-            for (i=0; i < res.p_ndpo[ordi]; i++){
-                
-                res.p_im[ordi][i] += num2->p_im[ordi][i];
-
-            }
-
-        }
-
-    } else {
-
-        printf("Error: Addition of oti numbers with different bases or orders not yet supported.\n");
-        exit(OTI_undetErr);
-    }
+    oti_sum_oo_to(num1, num2, &res, dhl);
 
     return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
 
+
 // ****************************************************************************************************
 otinum_t oti_sum_ro(coeff_t a, otinum_t* num1, dhelpl_t dhl){
 
     otinum_t res = oti_copy(num1, dhl);
+    // preserve inital 
     
     res.re += a;
 
@@ -123,32 +109,42 @@ otinum_t oti_sub_ro(coeff_t a, otinum_t* num2, dhelpl_t dhl){
 // ****************************************************************************************************
 otinum_t oti_sub_oo(otinum_t* num1, otinum_t* num2, dhelpl_t dhl){
 
-    ord_t ordi;
-    ndir_t i;
+    // This function supports different nbases and order operation.
+    bases_t nbases = MAX(num1->nbases,num2->nbases);
+    ord_t    order = MAX(num1->order, num2->order);
 
-    otinum_t res = oti_copy( num1, dhl);
-    
-    res.re -= num2->re;
+    otinum_t res = oti_createEmpty( nbases, order, dhl);
 
-    if (num1->nbases == num2->nbases && num1->order == num2->order){
-
-        for (  ordi = 0; ordi < res.order; ordi++){
-
-            for ( i=0; i < res.p_ndpo[ordi]; i++){
-                
-                res.p_im[ordi][i] -= num2->p_im[ordi][i];
-
-            }
-
-        }
-
-    } else {
-
-        printf("Error: Addition of oti numbers with different bases or orders not yet supported.\n");
-        exit(OTI_undetErr);
-    }
+    oti_sub_oo_to(num1, num2, &res, dhl);
 
     return res;
+
+    // ord_t ordi;
+    // ndir_t i;
+
+    // otinum_t res = oti_copy( num1, dhl);
+    
+    // res.re -= num2->re;
+
+    // if (num1->nbases == num2->nbases && num1->order == num2->order){
+
+    //     for (  ordi = 0; ordi < res.order; ordi++){
+
+    //         for ( i=0; i < res.p_ndpo[ordi]; i++){
+                
+    //             res.p_im[ordi][i] -= num2->p_im[ordi][i];
+
+    //         }
+
+    //     }
+
+    // } else {
+
+    //     printf("Error: Addition of oti numbers with different bases or orders not yet supported.\n");
+    //     exit(OTI_undetErr);
+    // }
+
+    // return res;
 
 }
 // ----------------------------------------------------------------------------------------------------

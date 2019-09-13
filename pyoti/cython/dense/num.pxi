@@ -654,6 +654,9 @@ cdef class otinum:
 
 #   #---------------------------------------------------------------------------------------------------  
 
+  def __float__(self):
+    return self.num.re
+
 
   #***************************************************************************************************
   cpdef coeff_t get_deriv( self, hum_dir):
@@ -792,96 +795,7 @@ cdef class otinum:
 
   #---------------------------------------------------------------------------------------------------  
 
-
-#   #***************************************************************************************************
-#   def expand(self,ismat = 1,m = -1 , isspr = 0):
-#     """
-#     PURPOSE:      To convert a otinum into its matrix form.
-                  
-#     DESCRIPTION:  Convert to its own Cauchy-Riemann representation form.
-                   
-#     INPUTS:
-#                   ismat: To define a matrix (1) or a vector (0)
-
-#                   m:     To use the shape that will result of the number 
-#                          (-1) or an specific shape (given value).
-
-#                   isspr: Matrix in a sparse matrix (1) or not (0).
-                    
-#     """
-#     #*************************************************************************************************
-    
-#     global h
-#     global p_dH
-
-#     cdef: 
-#       uint64_t i, k, j
-#       uint64_t finalshape, nIterMin,  maxI
-#       double* data   
-#       uint64_t* shape
-
-
-#     if m == -1:
-#       # Deduce the matrix dimension by looking at the last indx and 
-#       # looking for the maximum base direction
-      
-#       # Separate cases for order 1 and others.       
-#       m_max =  c_helper_findMaxDir(self.num.Ndir-1,self.num.order,p_dH)
-
-#     else:
-      
-#       m_max = m
-      
-#     # end if
-
-#     finalshape = c_helper_getNels(m_max, self.num.order, p_dH)
-
-    
-#     if ismat == 0:
-#       # vector type
-      
-#       mat = np.zeros(finalshape)
-      
-#       # Do only a certain amount of iterations:
-#       c_minUI64(finalshape, self.num.Ndir, &nIterMin, &maxI)
-      
-#       k = 0
-
-#       for i in range(nIterMin):
-        
-#         mat[i] = self.num.p_coefs[i]
-
-#       # end for
-      
-#     else:
-
-#       # matrix type
-      
-#       if isspr == 0:
-#         #return the np.array?
-#         #mat = np.array(__otinum2Mat_dense(self, finalshape))
-        
-#         data = c_oti_num2mat(&self.num, finalshape, p_dH)
-#         mat = c_ptr_to_np_2darray_double(data,finalshape,finalshape, numpy_own = 1)
-        
-#       else:
-        
-        
-#         pass
-
-        
-#       # end if
-      
-
-#     # end if 
-    
-    
-#     return mat
-
-#   #---------------------------------------------------------------------------------------------------
-
-
-
+  
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS OTINUM :::::::::::::::::::::::::::::::::::::::::::
@@ -889,5 +803,139 @@ cdef class otinum:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#***************************************************************************************************
+cpdef otinum add(otinum lhs, otinum rhs, otinum out = None):
+  """
+  PURPOSE:      Add two OTI numbers.
+                
+  DESCRIPTION:  Eliminates the need to type check the input parameters 
+  
+  INPUTS:
+                lhs: otinum 
+                rhs: otinum 
+                out: otinum, optional. Result holder
+                
+  """
+  #*************************************************************************************************
+  global dhl
+  cdef otinum_t res
+  
+  if out != None:
+
+    oti_sum_oo_to(&lhs.num, &rhs.num, &out.num ,dhl)
+    return None
+
+  else:
+    # 
+    res = oti_sum_oo(&lhs.num, &rhs.num, dhl)
+
+    return otinum.create(&res)
+
+#---------------------------------------------------------------------------------------------------  
+
+
+#***************************************************************************************************
+cpdef add_to(otinum lhs, otinum rhs, otinum out):
+  """
+  PURPOSE:      Add two OTI numbers.
+                
+  DESCRIPTION:  Faster version to add two oti numbers to something already allocated.
+  
+  INPUTS:
+                lhs: otinum 
+                rhs: otinum 
+                out: otinum, optional. Result holder
+                
+  """
+  #*************************************************************************************************
+  global dhl
+
+  oti_sum_oo_to(&lhs.num, &rhs.num, &out.num ,dhl)
+
+
+#---------------------------------------------------------------------------------------------------  
+
+
+
+
+
+
+
+
+#***************************************************************************************************
+cpdef otinum sub(otinum lhs, otinum rhs, otinum out = None):
+  """
+  PURPOSE:      subtract two OTI numbers.
+                
+  DESCRIPTION:  Eliminates the need to type check the input parameters 
+  
+  INPUTS:
+                lhs: otinum 
+                rhs: otinum 
+                out: otinum, optional. Result holder
+                
+  """
+  #*************************************************************************************************
+  global dhl
+  cdef otinum_t res
+  
+  if out != None:
+
+    oti_sub_oo_to(&lhs.num, &rhs.num, &out.num ,dhl)
+    return None
+
+  else:
+    # 
+    res = oti_sub_oo(&lhs.num, &rhs.num, dhl)
+
+    return otinum.create(&res)
+
+#---------------------------------------------------------------------------------------------------  
+
+
+#***************************************************************************************************
+cpdef sub_to(otinum lhs, otinum rhs, otinum out):
+  """
+  PURPOSE:      subtract two OTI numbers.
+                
+  DESCRIPTION:  Faster version to operate two oti numbers to something already allocated.
+  
+  INPUTS:
+                lhs: otinum 
+                rhs: otinum 
+                out: otinum. Result holder
+                
+  """
+  #*************************************************************************************************
+  global dhl
+
+  oti_sub_oo_to(&lhs.num, &rhs.num, &out.num ,dhl)
+
+
+#---------------------------------------------------------------------------------------------------  
 
 

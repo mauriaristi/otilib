@@ -370,25 +370,20 @@ void oti_free( otinum_t* num ){
     ord_t ordi ;
     if (num->p_im != NULL){
 
+        // for ( ordi = 0; ordi<num->order; ordi++){
+        //     free( num->p_im[ordi] );
+        // }
 
-        for ( ordi = 0; ordi<num->order; ordi++){
-
-            free( num->p_im[ordi] );
-
-        }
-
-        free(num->p_ndpo);
+        // free(num->p_ndpo);
         free(num->p_im);
 
         num->p_im = NULL;
 
     }
 
+
     // Set all other values as 0.
-    num->ndir   = 0;
-    num->re     = 0;
-    num->nbases = 0;
-    num->order  = 0;
+    *num = oti_init();
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -457,63 +452,129 @@ inline void oti_setup(otinum_t* num,  bases_t nbases, ord_t order, dhelpl_t dhl 
 
 
 
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 inline otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
     
-    otinum_t num;
+    otinum_t num = oti_init();
     ord_t ordi; 
+
+    uint64_t total_memory = 0;
+    void * memory = NULL;
+
     
     // Get the number of imaginary directions for nbases and order.
-    num.ndir = 0; // Excludes the real direction.
+    num.ndir = dhelp_ndirTotal( nbases, order)-1; // Excludes the real direction.
 
     // Set the values of the number first.
     num.order  = order;
     num.nbases = nbases;
 
-    
-    if (num.order != 0){
-            
-        // Allocate memory.
-        num.p_im   = ( coeff_t** ) malloc( num.order*sizeof(coeff_t*) );
-        num.p_ndpo = (  ndir_t*  ) malloc( num.order*sizeof(ndir_t) );
 
-        if (num.p_im == NULL  || num.p_ndpo == NULL ){
-            printf("--- ERROR: Out of memory\n");
+    if (num.ndir != 0){
+
+        total_memory = num.order*sizeof(coeff_t*) + // Memory for p_im
+                       num.order*sizeof( ndir_t ) + // Memory for p_ndpo
+                       num.ndir *sizeof(coeff_t ) ; // Memory for imaginary direction coefficients.
+
+        // Goal: Do only one malloc call.
+        memory = malloc(total_memory);
+        
+        if (memory == NULL ){
+            printf("--- ERROR: Out of memory to create oti number.\n");
             exit(OTI_OutOfMemory);
         }
+
+        // Allocate memory.
+        num.p_im   = ( coeff_t** ) memory; // First element is p_im
+
+        // Shift memory.
+        memory += num.order*sizeof(coeff_t*);
+
+        num.p_ndpo = ( ndir_t*   ) memory;
+        
+        memory += num.order*sizeof(ndir_t);
 
         for (ordi = 0; ordi<num.order; ordi++){
 
             num.p_ndpo[ordi] = dhelp_extract_ndirOrder( num.nbases, ordi+1, dhl );
-            // num.p_ndpo[ordi] = dhelp_ndirOrder( num.nbases, ordi+1 );
-            num.p_im[ordi]   = ( coeff_t* ) malloc( num.p_ndpo[ordi]*sizeof(coeff_t) );
-            num.ndir += num.p_ndpo[ordi];
+            num.p_im[ordi]   = ( coeff_t* ) memory;
 
-
-            if ( num.p_im[ordi] == NULL ){
-                printf("--- ERROR: Out of memory\n");
-                exit(OTI_OutOfMemory);
-            }
+            // Move memory:
+            memory += num.p_ndpo[ordi]*sizeof(coeff_t );
+            // num.ndir += num.p_ndpo[ordi];
 
         }
-
+    
     } else {
+            
+        // Set pointers to null, no memory allocation required.
 
-        // Set pointer to null
         num.p_im = NULL;   
         num.p_ndpo = NULL;     
-    }
+
+    } 
 
     return num;
     
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+// // ****************************************************************************************************
+// inline otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
+    
+//     otinum_t num;
+//     ord_t ordi; 
+    
+//     // Get the number of imaginary directions for nbases and order.
+//     num.ndir = 0; // Excludes the real direction.
+
+//     // Set the values of the number first.
+//     num.order  = order;
+//     num.nbases = nbases;
+
+    
+//     if (num.order != 0){
+            
+//         // Allocate memory.
+//         num.p_im   = ( coeff_t** ) malloc( num.order*sizeof(coeff_t*) );
+//         num.p_ndpo = (  ndir_t*  ) malloc( num.order*sizeof(ndir_t) );
+
+//         if (num.p_im == NULL  || num.p_ndpo == NULL ){
+//             printf("--- ERROR: Out of memory\n");
+//             exit(OTI_OutOfMemory);
+//         }
+
+//         for (ordi = 0; ordi<num.order; ordi++){
+
+//             num.p_ndpo[ordi] = dhelp_extract_ndirOrder( num.nbases, ordi+1, dhl );
+//             // num.p_ndpo[ordi] = dhelp_ndirOrder( num.nbases, ordi+1 );
+//             num.p_im[ordi]   = ( coeff_t* ) malloc( num.p_ndpo[ordi]*sizeof(coeff_t) );
+//             num.ndir += num.p_ndpo[ordi];
+
+
+//             if ( num.p_im[ordi] == NULL ){
+//                 printf("--- ERROR: Out of memory\n");
+//                 exit(OTI_OutOfMemory);
+//             }
+
+//         }
+
+//     } else {
+
+//         // Set pointer to null
+//         num.p_im = NULL;   
+//         num.p_ndpo = NULL;     
+//     }
+
+//     return num;
+    
+// }
+// // ----------------------------------------------------------------------------------------------------
 

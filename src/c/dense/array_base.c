@@ -951,7 +951,7 @@ oarr_t oarr_createEmpty( uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t o
     // Set the values of the number first.
     res.order  = order;
     res.nbases = nbases;
-
+    
 
     // Initialize real direction.
     tmp_arr =  darr_createEmpty(res.nrows, res.ncols);

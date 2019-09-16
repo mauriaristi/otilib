@@ -96,12 +96,85 @@ darr_t oti_to_cr_dense(otinum_t* num,  dhelpl_t dhl){
 void oti_copy_to(otinum_t* num, otinum_t* res, dhelpl_t dhl){
 
     ord_t ord;
+
+    // Copy real information.
     res->re = num->re;
     
-    // Copy information from num1 to res.
+    // Copy imagiary information from num1 to res.
     for( ord = 0; ord<num->order; ord++){
 
         memcpy( res->p_im[ord], num->p_im[ord], num->p_ndpo[ord]*sizeof(coeff_t) );
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void oti_change_nbases(otinum_t* num, bases_t newnbases, dhelpl_t dhl){
+
+    ord_t ordi;
+    
+    // Create new memory object
+    otinum_t new_num = oti_init();
+
+    if (newnbases != num->nbases) {
+
+        new_num = oti_createZero( newnbases, num->order, dhl);
+        
+        new_num.re = num->re;
+
+        // Copy information from num to new_num.
+        // Only loop the minimym ammount of times necessary.
+        for( ordi = 0; ordi< new_num.order; ordi++){
+
+            memcpy( new_num.p_im[ordi], num->p_im[ordi], 
+                MIN( new_num.p_ndpo[ordi], num->p_ndpo[ordi] ) * sizeof(coeff_t) );
+
+        }
+
+        // Free memory in num and then copy the contents of new num.
+        oti_free(num);
+
+        *num = new_num;
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void oti_change_order(otinum_t* num, ord_t neworder, dhelpl_t dhl){
+
+    ord_t ordi;
+    
+
+    // Create new memory object
+    otinum_t new_num = oti_init();
+
+    if (neworder != num->order) {
+
+        new_num = oti_createZero( num->nbases, neworder, dhl);
+        
+        new_num.re = num->re;
+
+        // Copy information from num to new_num.
+        // Only loop the minimym ammount of times necessary.
+        for( ordi = 0; ordi< MIN( neworder, num->order); ordi++){
+
+            memcpy( new_num.p_im[ordi], num->p_im[ordi], num->p_ndpo[ordi]*sizeof(coeff_t) );
+
+        }
+
+        // Free memory in num and then copy the contents of new num.
+        oti_free(num);
+
+        *num = new_num;
+
 
     }
 
@@ -114,7 +187,7 @@ otinum_t oti_copy(otinum_t* num, dhelpl_t dhl){
     ord_t ord;
     otinum_t res;
         
-    // Allocate num1.
+    // Allocate res.
     res = oti_createEmpty( num->nbases, num->order, dhl);
 
     res.re = num->re;
@@ -136,44 +209,44 @@ otinum_t oti_copy(otinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 otinum_t oti_get_rtmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl){
     
-    otinum_t res;
+    otinum_t res = oti_init();
 
-    ord_t i=0;
+    ord_t ordi=0;
     
-    if (order == 0){
-        res = oti_createEmpty( nbases, order, dhl);
-        return res;
-    }
-    
-    // Get possible errors.
-    if (order > dhl.ndh){
-        printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
-        exit(OTI_undetErr);
-    }
-    if (ntmp >= dhl.p_dh[order-1].Ntmps){
-        printf("ERROR: Trying to get a temporal that does not exist.\n");
-        exit(OTI_undetErr);   
-    }
-
-    res.p_im   = dhl.p_dh[order-1].p_ims[ntmp]; 
-    res.p_ndpo  = dhl.p_dh[order-1].p_nnz[ntmp];
-
-    // set the values
-    res.order  = order;
-    res.nbases = nbases;
-    res.ndir   = 0; // Excludes the real direction.
-    res.re     = 0;
-
-    for (i=0; i<order; i++){
-
-        // Set the pointers according to the ntemp.
-        res.p_im[i]   = dhl.p_dh[i].p_im[ntmp];
-        res.p_ndpo[i] = dhelp_extract_ndirOrder( res.nbases, i+1, dhl );
+    if (order != 0){
         
-        // Initialize imaginary coefficients in res as 0.
-        memset( res.p_im[i], 0, res.p_ndpo[i]*sizeof(coeff_t) );
+        // Get possible errors.
+        if (order > dhl.ndh){
+            printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
+            exit(OTI_undetErr);
+        }
+        if (ntmp >= dhl.p_dh[order-1].Ntmps){
+            printf("ERROR: Trying to get a temporal that does not exist.\n");
+            exit(OTI_undetErr);   
+        }
 
-        res.ndir += res.p_ndpo[i];
+        res.p_im    = dhl.p_dh[order-1].p_ims[ntmp]; 
+        res.p_ndpo  = dhl.p_dh[order-1].p_nnz[ntmp];
+
+        // set the values
+        res.order  = order;
+        res.nbases = nbases;
+        res.ndir   = 0; // Excludes the real direction.
+        res.re     = 0;
+
+        for (ordi=0; ordi<order; ordi++){
+
+            // Set the pointers according to the ntemp.
+            res.p_im[ordi]   = dhl.p_dh[ordi].p_im[ntmp];
+            
+            res.p_ndpo[ordi] = dhelp_extract_ndirOrder( res.nbases, ordi+1, dhl );
+            
+            // Initialize imaginary coefficients in res as 0.
+            memset( res.p_im[ordi], 0, res.p_ndpo[ordi]*sizeof(coeff_t) );
+
+            res.ndir += res.p_ndpo[ordi];
+
+        }
 
     }
 
@@ -186,44 +259,43 @@ otinum_t oti_get_rtmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl){
 // ****************************************************************************************************
 otinum_t oti_get_tmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl){
     
-    otinum_t res;
+    otinum_t res= oti_init();
 
     ord_t i=0;
     
-    if (order == 0){
-        res = oti_createEmpty( nbases, order, dhl);
-        return res;
-    }
-    
-    // Get possible errors.
-    if (order > dhl.ndh){
-        printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
-        exit(OTI_undetErr);
-    }
-    if (ntmp >= (dhl.p_dh[order-1].Ntmps-10) ){
-        printf("ERROR: Trying to get a temporal that does not exist.\n");
-        exit(OTI_undetErr);   
-    }
-
-    res.p_im   = dhl.p_dh[order-1].p_ims[ntmp+10]; 
-    res.p_ndpo  = dhl.p_dh[order-1].p_nnz[ntmp+10];
-
-    // set the values
-    res.order  = order;
-    res.nbases = nbases;
-    res.ndir   = 0; // Excludes the real direction.
-    res.re     = 0;
-
-    for (i=0; i<order; i++){
-
-        // Set the pointers according to the ntemp.
-        res.p_im[i]   = dhl.p_dh[i].p_im[ntmp+10];
-        res.p_ndpo[i] = dhelp_extract_ndirOrder( res.nbases, i+1, dhl );
+    if (order != 0){
         
-        // Initialize imaginary coefficients in res as 0.
-        memset( res.p_im[i], 0, res.p_ndpo[i]*sizeof(coeff_t) );
+        // Get possible errors.
+        if (order > dhl.ndh){
+            printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
+            exit(OTI_undetErr);
+        }
+        if (ntmp >= (dhl.p_dh[order-1].Ntmps-10) ){
+            printf("ERROR: Trying to get a temporal that does not exist.\n");
+            exit(OTI_undetErr);   
+        }
 
-        res.ndir += res.p_ndpo[i];
+        res.p_im   = dhl.p_dh[order-1].p_ims[ntmp+10]; 
+        res.p_ndpo = dhl.p_dh[order-1].p_nnz[ntmp+10];
+
+        // set the values
+        res.order  = order;
+        res.nbases = nbases;
+        res.ndir   = 0; // Excludes the real direction.
+        res.re     = 0;
+
+        for (i=0; i<order; i++){
+
+            // Set the pointers according to the ntemp.
+            res.p_im[i]   = dhl.p_dh[i].p_im[ntmp+10];
+            res.p_ndpo[i] = dhelp_extract_ndirOrder( res.nbases, i+1, dhl );
+            
+            // Initialize imaginary coefficients in res as 0.
+            memset( res.p_im[i], 0, res.p_ndpo[i]*sizeof(coeff_t) );
+
+            res.ndir += res.p_ndpo[i];
+
+        }
 
     }
 
@@ -418,7 +490,6 @@ void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 
 

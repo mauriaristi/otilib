@@ -64,7 +64,8 @@ typedef struct {
 
 typedef struct {
    dhelp_t* p_dh; ///< Array of direction helpers. Shape: (1 , ndh)
-   ndh_t ndh;     ///< Number of direction helpers.
+   ndh_t     ndh; ///< Number of direction helpers.
+   ord_t*  order; ///< Global truncation order.
 } dhelpl_t;       ///< Direction Helper list type.
 
 

@@ -50,20 +50,13 @@ void dhelp_dense_mult_real(coeff_t* p_im1, ndir_t ndir1, // Input 1
                       dhelpl_t dhl){                     // Helper
     
     ndir_t i;
-    
-    if (ndir1 == ndirres){
         
-        for ( i =0; i<ndir1; i++){
-            
-            p_imres[i] +=  a*p_im1[i] ;
+    for ( i =0; i< MIN( ndir1, ndirres ); i++){
+        
+        p_imres[i] +=  a*p_im1[i] ;
 
-        }
-
-    } else {
-
-        printf("Error: Multiplication to elements of different sizes not yet implemented\n");
-        exit(OTI_NotImplemented);
     }
+
 }
 // ----------------------------------------------------------------------------------------------------
 

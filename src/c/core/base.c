@@ -21,9 +21,12 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
     // TODO: Make a reload function that is capable of loading different set of files.
     // TODO: Add a default configuration file that indicates the number of elements to be loaded
     int i;
-    dhl->ndh = 10;               // Number of elements in the ndirs array
+    
+    
+    
+    dhl->ndh  = 10;             // Number of elements in the ndirs array
 
-                                      //                    Order
+                                  //                    Order
     bases_t nbases_ord[]   = {10, // ------------------   1 
                               10, // ------------------   2
                               10, // ------------------   3
@@ -49,7 +52,12 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
                                 0  // ------------------  10
     };
 
+
+
     dhl->p_dh = (dhelp_t* )malloc(dhl->ndh*sizeof(dhelp_t));
+
+    dhl->order    = (ord_t*)malloc(1);
+    dhl->order[0] = 10;         // Global truncation order.
 
     if (dhl->p_dh == NULL){
 

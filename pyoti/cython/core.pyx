@@ -1360,6 +1360,46 @@ cpdef get_deriv_factor(hum_dir):
 
 
 
+#*****************************************************************************************************
+def set_trunc_order(ord_t order):
+  """
+  PURPOSE:  Set the global truncation order for OTI algebra. This allows to compute derivatives up to 
+            the set order using oti numbers.
+  """
+  #***************************************************************************************************
+
+
+  global dhl
+
+  # Check first that it is plaussible to compute the derivatives.
+  
+  if order <= dhl.ndh:
+
+    dhl.order[ZERO] = order
+
+  else:
+
+    # If the order is greater than the number of helpers, then set it to the maximum possible 
+    # to compute derivatives.
+    dhl.order[ZERO] = dhl.ndh  
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
+cpdef ord_t get_trunc_order( ):
+  """
+  PURPOSE:  Get the global truncation order for OTI algebra. 
+  """
+  #***************************************************************************************************
+
+  global dhl
+
+  return dhl.order[ZERO]
+
+#-----------------------------------------------------------------------------------------------------
+
 #-----------------------------------------------------------------------------------------------------
 #-------------------------------------   INITIALIZATION ONLY   ---------------------------------------
 #-----------------------------------------------------------------------------------------------------

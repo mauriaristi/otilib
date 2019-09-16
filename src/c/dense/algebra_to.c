@@ -219,48 +219,61 @@ void oti_sub_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 void oti_mul_oo_to(otinum_t* num1, otinum_t* num2, otinum_t* res, dhelpl_t dhl){
 
-	oti_setFromReal( 0.0, res, dhl);
+    // The resulting order is given by the minimum between adding the two orders from the inputs
+    // and the global truncation order
+    ord_t    order_result = MIN( num1->order+num2->order, dhl.order[0]);
+    bases_t nbases_result = MAX( num1->nbases,            num2->nbases);
 
-    ord_t ord_res, ordi, ordj, ordk;
-    ord_t ord_mul1;
+    // Assummes memory already allocated.
+    oti_setup(res, nbases_result, order_result, dhl );
+    oti_setFromReal(0.0,res,dhl);
+
+    ord_t ord_res ;
+    ord_t ord_mul1, ord_mul2;
+
+
     //  0 X 0
     res->re = num1->re * num2->re;
+    // printf("Order num1 %hhu\n", num1->order);
+    // printf("Order num2 %hhu\n", num2->order);
+    // printf("Order res  %hhu\n", res->order);
+    
+    // Multiply num1.re times all imaginary directions from num2 (until resulting order is achieved)
+    for (ord_res = 1; ord_res<= MIN( res->order, num2->order); ord_res++){
 
-    for (  ord_res = 1; ord_res <= res->order; ord_res++){
-
-
+        // printf()
         // First multiply  re x ord_res        
         dhelp_dense_mult_real(num2->p_im[ord_res-1],num2->p_ndpo[ord_res-1],
             num1->re,
             res->p_im[ord_res-1],res->p_ndpo[ord_res-1],
             dhl);
 
-        // Then multiply   ord_res x re
+    }
+
+    // Multiply num2.re times all imaginary directions from num1 (until resulting order is achieved)
+    for (ord_res = 1; ord_res<= MIN( res->order, num1->order); ord_res++){
+
+         // Then multiply   ord_res x re
         dhelp_dense_mult_real(num1->p_im[ord_res-1],num1->p_ndpo[ord_res-1],
             num2->re,
             res->p_im[ord_res-1],res->p_ndpo[ord_res-1],
             dhl);
 
-        for ( ord_mul1 = 1; ord_mul1 <= ord_res/2; ord_mul1++){
+    }
 
-            ord_t ord_mul2 = ord_res - ord_mul1;
-            // printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
+    // Multiply imaginary directions.
+    for ( ord_mul1 = 1; ord_mul1 <= MIN(res->order,num1->order); ord_mul1++){
+        // printf("Multiplying orders\n ");
+        for ( ord_mul2 = 1; ord_mul2 <= MIN(res->order-ord_mul1, num2->order) ; ord_mul2++){
+
+            ord_res = ord_mul1 + ord_mul2;  
+
+            // printf("%hhu x %hhu \n", ord_mul1, ord_mul2);
 
             dhelp_dense_mult( num1->p_im[ord_mul1-1], num1->p_ndpo[ord_mul1-1], ord_mul1, 
-                      num2->p_im[ord_mul2-1], num2->p_ndpo[ord_mul2-1], ord_mul2,
-                      res->p_im[ord_res-1], res->p_ndpo[ord_res]-1,
-                      dhl);
-
-            if (ord_mul1 != ord_mul2){
-                
-                // printf("Multiplying %hhu X %hhu\n",ord_mul2,ord_mul1);                
-
-                dhelp_dense_mult( num1->p_im[ord_mul2-1], num1->p_ndpo[ord_mul2-1], ord_mul2, 
-                          num2->p_im[ord_mul1-1], num2->p_ndpo[ord_mul1-1], ord_mul1,
-                          res->p_im[ord_res-1], res->p_ndpo[ord_res]-1,
-                          dhl);
-
-            }  
+                              num2->p_im[ord_mul2-1], num2->p_ndpo[ord_mul2-1], ord_mul2,
+                              res->p_im[ord_res-1],    res->p_ndpo[ord_res-1],
+                              dhl);
 
         }
         
@@ -278,7 +291,8 @@ void oti_mul_ro_to(coeff_t a, otinum_t* num1, otinum_t* res, dhelpl_t dhl){
 
     ord_t ordi;
     ndir_t i;
-
+    
+    oti_setup( res,  num1->nbases, num1->order, dhl );     
     oti_copy_to( num1, res, dhl);
     
     res->re *= a;

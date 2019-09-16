@@ -40,6 +40,7 @@ cdef extern from "oti/oti.h" nogil:
   ctypedef struct dhelpl_t:
     dhelp_t* p_dh
     ndh_t     ndh
+    ord_t*  order
 
   ctypedef struct coomat_ui64_t: 
     uint64_t*     p_data 

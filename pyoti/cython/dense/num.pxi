@@ -828,7 +828,7 @@ cdef class otinum:
 
 
 #***************************************************************************************************
-cpdef otinum add(otinum lhs, otinum rhs, otinum out = None):
+cpdef otinum add(otinum lhs, otinum rhs):
   """
   PURPOSE:      Add two OTI numbers.
                 
@@ -842,18 +842,11 @@ cpdef otinum add(otinum lhs, otinum rhs, otinum out = None):
   """
   #*************************************************************************************************
   global dhl
-  cdef otinum_t res
+  cdef otinum_t res  
   
-  if out != None:
+  res = oti_sum_oo(&lhs.num, &rhs.num, dhl)
 
-    oti_sum_oo_to(&lhs.num, &rhs.num, &out.num ,dhl)
-    return None
-
-  else:
-    # 
-    res = oti_sum_oo(&lhs.num, &rhs.num, dhl)
-
-    return otinum.create(&res)
+  return otinum.create(&res)
 
 #---------------------------------------------------------------------------------------------------  
 
@@ -885,9 +878,83 @@ cpdef add_to(otinum lhs, otinum rhs, otinum out):
 
 
 
+#***************************************************************************************************
+cpdef otinum mul(otinum lhs, otinum rhs):
+  """
+  PURPOSE:      Add two OTI numbers.
+                
+  DESCRIPTION:  Faster version to add two oti numbers to something already allocated.
+  
+  INPUTS:
+                lhs: otinum 
+                rhs: otinum 
+                
+                
+  """
+  #*************************************************************************************************
+  global dhl
+
+  cdef otinum_t res
+  
+  res = oti_mul_oo(&lhs.num, &rhs.num,dhl)
+
+  return otinum.create(&res)
+
+#---------------------------------------------------------------------------------------------------  
+
+
 
 #***************************************************************************************************
-cpdef otinum sub(otinum lhs, otinum rhs, otinum out = None):
+cpdef mul_to(otinum lhs, otinum rhs, otinum res):
+  """
+  PURPOSE:      Multiply two OTI numbers.
+                
+  DESCRIPTION:  Faster version to multiply two oti numbers to something already allocated.
+  
+  INPUTS:
+                lhs: otinum 
+                rhs: otinum 
+                out: otinum. Result holder
+                
+  """
+  #*************************************************************************************************
+  global dhl
+
+  
+  
+  oti_mul_oo_to(&lhs.num, &rhs.num, &res.num, dhl)
+
+
+#---------------------------------------------------------------------------------------------------  
+
+
+
+#***************************************************************************************************
+cpdef mulr_to(otinum lhs, coeff_t rhs, otinum res):
+  """
+  PURPOSE:      Multiply two OTI numbers.
+                
+  DESCRIPTION:  Faster version to multiply two oti numbers to something already allocated.
+  
+  INPUTS:
+                lhs: otinum 
+                rhs: otinum 
+                out: otinum. Result holder
+                
+  """
+  #*************************************************************************************************
+  global dhl
+
+  oti_mul_ro_to(rhs, &lhs.num,  &res.num, dhl)
+
+
+#---------------------------------------------------------------------------------------------------  
+
+
+
+
+#***************************************************************************************************
+cpdef otinum sub(otinum lhs, otinum rhs):
   """
   PURPOSE:      subtract two OTI numbers.
                 
@@ -902,17 +969,10 @@ cpdef otinum sub(otinum lhs, otinum rhs, otinum out = None):
   #*************************************************************************************************
   global dhl
   cdef otinum_t res
-  
-  if out != None:
+  # 
+  res = oti_sub_oo(&lhs.num, &rhs.num, dhl)
 
-    oti_sub_oo_to(&lhs.num, &rhs.num, &out.num ,dhl)
-    return None
-
-  else:
-    # 
-    res = oti_sub_oo(&lhs.num, &rhs.num, dhl)
-
-    return otinum.create(&res)
+  return otinum.create(&res)
 
 #---------------------------------------------------------------------------------------------------  
 

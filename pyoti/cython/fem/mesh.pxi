@@ -38,7 +38,7 @@ cdef class mesh:
     # nodes, self.cells, self.point_data, self.cell_data, self.field_data = meshio.read(filename)
     # self.nodes = sarray( nodes, order = order)
 
-    
+    # Initialize the system.
     self.cells      = {}
     self.point_data = {}
     self.cell_data  = {}
@@ -68,8 +68,10 @@ cdef class mesh:
     self.xyzInit = 0   #
 
 
-
+    # Read the file
     self.readFromGMSH(filename)
+
+    # Compute the normals of the boundary.
     self.computeNormals()
   #---------------------------------------------------------------------------------------------------
 

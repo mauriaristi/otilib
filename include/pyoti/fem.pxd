@@ -218,10 +218,10 @@ cdef class mesh:
   cdef public int64_t  baseGeomType # Basic geometric type
 
   cdef public list elemTable        # List of elements in each dimension 
-                                    #[ 0D elems ->    ... ,
-                                    #  1D elems ->    ... ,
-                                    #  2D elems ->    ... ,
-                                    #  3D elems ->    ... ]
+                                    # [ 0D elems ->    ... ,
+                                    #   1D elems ->    ... ,
+                                    #   2D elems ->    ... ,
+                                    #   3D elems ->    ... ]
 
   cdef np.ndarray   domainEls       # Elements that define the domain.
   cdef np.ndarray   normalx         # x component of the boundary normal

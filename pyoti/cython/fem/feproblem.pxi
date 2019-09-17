@@ -80,7 +80,7 @@ cdef class feproblem:
     
 
     self.problem = expr
-    self.problem.reorderBoundOpers() # Reorder boundary operations: First on then int2d.
+    self.problem.reorderBoundOpers() # Reorder boundary operations: First "on" then "int2d".
     self.intorder = self.problem.intorder
 
     # have a closer reference to the mesh
@@ -291,11 +291,7 @@ cdef class feproblem:
     self.expandedOperations = self.expandedOperations[:self.noper,:]
     self.uniqueOper   = []
     # print(self.expandedOperations)
-
-
-
-
-
+    
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************

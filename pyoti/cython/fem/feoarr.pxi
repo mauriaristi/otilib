@@ -32,7 +32,7 @@ cdef class feomat:
 
   #***************************************************************************************************
   
-  def __init__(self, realArray, bases_t nbases = 0, ord_t order = 0, uint8_t FLAGS = 1): 
+  def __init__(self, bases_t nbases = 0, ord_t order = 0, uint8_t FLAGS = 1): 
     """
     PURPOSE:      Python level constructor of the feomat class.
                  
@@ -40,70 +40,7 @@ cdef class feomat:
     #*************************************************************************************************
     global dhl
     
-    cdef uint64_t nrows, ncols, i,j
-    cdef dmat inval
-    cdef double val 
-
-    self.FLAGS = FLAGS
-
-    if isinstance(realArray,np.ndarray):
-      ndim = realArray.ndim
-      
-      if ndim >=3:
-      
-        raise ValueError("Only 1D and 2D arrays are supported.")
-      
-      elif (ndim == 1):
-      
-        ncols = 1
-      
-        nrows = realArray.shape[0]
-
-        self.arr = feoarr_zeros( nrows, ncols, nbases, order, dhl)
-
-        for i in range(self.arr.nrows):
-      
-          val = realArray[i]
-          self.arr.re[i] = val
-        
-        # end for
-      
-      else: # ndim =2
-
-        nrows = realArray.shape[0]
-        ncols = realArray.shape[1]
-
-        self.arr = feoarr_zeros( nrows, ncols, nbases, order, dhl)
-
-        for i in range(self.arr.nrows):
-      
-          for j in range(self.arr.ncols):
-            
-            val = realArray[i,j]
-            self.arr.re[j+i*self.arr.ncols] = val
-          
-          # end for
-        
-        # end for
-
-      # end if
-
-    elif type(realArray) == dmat:
-      
-      inval = realArray
-      self.arr = feoarr_zeros( inval.nrows, inval.ncols, nbases, order, dhl)
-
-      for i in range(self.arr.nrows):
-      
-        for j in range(self.arr.ncols):
-      
-          self.arr.re[j+i*self.arr.ncols] = inval.arr.p_data[j+i*inval.arr.ncols]
-        
-        # end for
-      
-      # end for
-
-
+    
 
   #---------------------------------------------------------------------------------------------------
 

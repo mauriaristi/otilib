@@ -535,27 +535,51 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 void soti_free(sotinum_t* num){
     
-    if( num->order != 0 ){
-        ord_t i;
-        for ( i=0; i<num->order; i++){
-            if (num->p_im[i]  != NULL ){
-                free(num->p_im[i]);
-            }                
-            if (num->p_idx[i] != NULL){
-                free(num->p_idx[i]);
-            }
-        }
+    
+        
+    if (num->p_im != NULL){
 
         free(num->p_im);
-        free(num->p_idx);
-        free(num->p_size);
-        free(num->p_nnz);
 
-        num->order = 0;
-    } 
+    }
+    *num = soti_init();
+    
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+// // ****************************************************************************************************
+// void soti_free(sotinum_t* num){
+    
+//     if( num->order != 0 ){
+//         ord_t i;
+//         for ( i=0; i<num->order; i++){
+//             if (num->p_im[i]  != NULL ){
+//                 free(num->p_im[i]);
+//             }                
+//             if (num->p_idx[i] != NULL){
+//                 free(num->p_idx[i]);
+//             }
+//         }
+
+//         free(num->p_im);
+//         free(num->p_idx);
+//         free(num->p_size);
+//         free(num->p_nnz);
+
+//         num->order = 0;
+//     } 
+
+// }
+// // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
@@ -571,40 +595,79 @@ sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
-    
+sotinum_t soti_init(void){
+
     sotinum_t res;
 
-    res.order = order;
+    res.p_im  = NULL;
+    res.p_idx = NULL;
+    res.p_nnz = NULL;
+    res.p_size= NULL;
+    
+    res.order = 0;
 
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
+    
+    sotinum_t res = soti_init();
+
+    res.order = order;
+    void * memory = NULL;
+    uint64_t allocation_size = 0 ;
+    ord_t i;
+    
     if (order != 0){
 
-        res.p_im  = (coeff_t**)malloc( res.order * sizeof(coeff_t*) );
-        res.p_idx = (imdir_t**)malloc( res.order * sizeof(imdir_t*) );
-        res.p_nnz = (ndir_t*  )malloc( res.order * sizeof(ndir_t) );
-        res.p_size= (ndir_t*  )malloc( res.order * sizeof(ndir_t) );
+        // Get the allocation size of the OTI number:
 
-        if (res.p_im  == NULL || res.p_idx == NULL || res.p_nnz == NULL || res.p_size == NULL ){
+        allocation_size = order*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
 
-            printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
-            exit(OTI_OutOfMemory);
+        // Add the standard allocation sizes:
+        for ( i =0; i<res.order; i++){
+            
+            allocation_size += dhl.p_dh[i].allocSize*(sizeof(coeff_t)+sizeof(imdir_t));
 
         }
-        ord_t i;
-        for ( i =0; i<res.order; i++){
+
+        // Allocate memory and check if correctly allocated.
+        memory = malloc(allocation_size);
+        if ( memory == NULL ){
+            printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
+            exit(OTI_OutOfMemory);
+        }
+
+
+        // Distribute memory alongside the different pointers.
+
+        res.p_im  = (coeff_t**)memory;
+        memory    += res.order * sizeof(coeff_t*);
+
+        res.p_idx = (imdir_t**)memory;
+        memory    += res.order * sizeof(imdir_t*);
+
+        res.p_nnz = (ndir_t*  )memory;
+        memory    += res.order * sizeof(ndir_t);
+
+        res.p_size= (ndir_t*  )memory;
+        memory    += res.order * sizeof(ndir_t);
+       
+        for ( i = 0; i < res.order; i++){
             
             if (dhl.p_dh[i].allocSize != 0){
             
-                res.p_im[i] = (coeff_t*)malloc(dhl.p_dh[i].allocSize*sizeof(coeff_t)); 
-                res.p_idx[i]= (imdir_t*)malloc(dhl.p_dh[i].allocSize*sizeof(imdir_t)); 
+                res.p_im[i] = (coeff_t*)memory;
+                memory += dhl.p_dh[i].allocSize*sizeof(coeff_t); 
 
-                if (res.p_im[i] == NULL || res.p_idx[i] == NULL ){
 
-                    printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
-                    exit(OTI_OutOfMemory);
-
-                }
-            
+                res.p_idx[i]= (imdir_t*)memory;
+                memory += dhl.p_dh[i].allocSize*sizeof(imdir_t); 
+                        
             } else {
 
                 res.p_im[i]  = NULL;
@@ -619,18 +682,76 @@ sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
         
         }
 
-    } else {
-
-        res.p_im  = NULL;
-        res.p_idx = NULL;
-        res.p_nnz = NULL;
-        res.p_size= NULL;
-
-    }
+    } 
 
     return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+// // ****************************************************************************************************
+// sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
+    
+//     sotinum_t res;
+
+//     res.order = order;
+
+//     if (order != 0){
+
+//         res.p_im  = (coeff_t**)malloc( res.order * sizeof(coeff_t*) );
+//         res.p_idx = (imdir_t**)malloc( res.order * sizeof(imdir_t*) );
+//         res.p_nnz = (ndir_t*  )malloc( res.order * sizeof(ndir_t) );
+//         res.p_size= (ndir_t*  )malloc( res.order * sizeof(ndir_t) );
+
+//         if (res.p_im  == NULL || res.p_idx == NULL || res.p_nnz == NULL || res.p_size == NULL ){
+
+//             printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
+//             exit(OTI_OutOfMemory);
+
+//         }
+//         ord_t i;
+//         for ( i =0; i<res.order; i++){
+            
+//             if (dhl.p_dh[i].allocSize != 0){
+            
+//                 res.p_im[i] = (coeff_t*)malloc(dhl.p_dh[i].allocSize*sizeof(coeff_t)); 
+//                 res.p_idx[i]= (imdir_t*)malloc(dhl.p_dh[i].allocSize*sizeof(imdir_t)); 
+
+//                 if (res.p_im[i] == NULL || res.p_idx[i] == NULL ){
+
+//                     printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
+//                     exit(OTI_OutOfMemory);
+
+//                 }
+            
+//             } else {
+
+//                 res.p_im[i]  = NULL;
+//                 res.p_idx[i] = NULL;
+
+//             }
+
+//             // Set number of non-zero and allocated size to 0.
+//             res.p_nnz[i]  = 0; 
+//             res.p_size[i] = 0; 
+
+        
+//         }
+
+//     } else {
+
+//         res.p_im  = NULL;
+//         res.p_idx = NULL;
+//         res.p_nnz = NULL;
+//         res.p_size= NULL;
+
+//     }
+
+//     return res;
+
+// }
+// // ----------------------------------------------------------------------------------------------------
 
 

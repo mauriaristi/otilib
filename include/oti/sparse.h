@@ -506,6 +506,10 @@ void soti_print(sotinum_t* num, dhelpl_t dhl);
 void soti_free(sotinum_t* num);
 // ----------------------------------------------------------------------------------------------------
 
+
+
+sotinum_t soti_init(void);
+
 /**************************************************************************************************//**
 @brief Create a new oti number with a real coefficient given by the input parameter and 
 

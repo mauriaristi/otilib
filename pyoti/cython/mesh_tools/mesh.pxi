@@ -38,7 +38,7 @@ cdef class mesh:
     # nodes, self.cells, self.point_data, self.cell_data, self.field_data = meshio.read(filename)
     # self.nodes = sarray( nodes, order = order)
 
-    
+    # Initialize the system.
     self.cells      = {}
     self.point_data = {}
     self.cell_data  = {}
@@ -68,8 +68,10 @@ cdef class mesh:
     self.xyzInit = 0   #
 
 
-
+    # Read the file
     self.readFromGMSH(filename)
+
+    # Compute the normals of the boundary.
     self.computeNormals()
   #---------------------------------------------------------------------------------------------------
 
@@ -1287,15 +1289,11 @@ cdef class mesh:
     # end if
 
     if nquads2>0:
-
       # self.elemTable[2].append(quads2)
       if self.ndim>2:
-      
         self.boundaEls.append(quads2)
         self.boundaType.append(elQuadrangle)
-      
       else:
-
         self.domainEls=quads2
         self.domainType = elQuadrangle
         self.domainElDofs=8
@@ -1439,14 +1437,14 @@ cdef class mesh:
     PURPOSE:  maintain global ids for operations.
 
     """
-    
+
     self.operationCount += 1
 
     return self.operationCount
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cdef uint64_t addNewSpace(self,fespace space):
+  cdef uint64_t addNewSpace(self, fespace space):
     """
     PURPOSE:      creates a new Finite Element space and adds a new element to the stack list of 
                   spaces that defines the interpolation of elements in the mesh.

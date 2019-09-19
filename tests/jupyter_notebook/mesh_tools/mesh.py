@@ -1,7 +1,7 @@
 
 
 
-
+import numpy as np
 
 
 
@@ -14,7 +14,7 @@
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::     CLASS  MESH       :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class mesh:
+class mesh:
   
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
@@ -39,16 +39,12 @@ cdef class mesh:
 
     self.elements      = []
     
-    self.element_ids       = []
-    self.element_ids_names = {}
+    self.groups      = []
+    self.group_names = {}
 
     
-    self.nodes     = []
+    self.nodes     = None
 
-    # self.normalx   = np.array([])     
-    # self.normaly   = np.array([])     
-    # self.normalz   = np.array([])     
-    
     self.fespaces       = []
     
     self.operationCount = 0
@@ -86,7 +82,35 @@ cdef class mesh:
     Th = mesh()
 
 
-    gmsh
+    gmesh = gmsh.model.mesh
+    gmodel= gmsh.model
+
+    # Organize first the nodes and element numbering to match a contiguous sequence.
+    gmesh.renumberNodes()
+    gmesh.renumberElements()
+
+    nodeTags, nodalCoord, parametricCoord = gmesh.getNodes() # this gets all Nodal coordinates.
+    nodeTags -= 1 # Change to python indices.
+
+    # Get the number of nodes:
+    nNodes = nodeTags.size
+
+    # Reshape the nodal coordinates to (nNodes x 3) matrix:
+    nodalCoord = nodalCoord.reshape((nNodes,3))
+
+    # get the elements for each dimension
+    for dim in range(4):
+
+      elTypes , elTags , nodeIdx = get_elements_from_gmsh( gmesh, dim=dim, tag=-1 )
+
+      # Set the elements to the Discretized domain.
+      Th.elements.append( ( elTypes, elTags, nodeIdx) )
+
+    # end for 
+
+
+
+
 
 
     return Th
@@ -785,6 +809,56 @@ cdef class mesh:
   
 
   
+
+#           UTILITY FUNCTIONS:
+
+#
+def get_elements_from_gmsh( mesh, dim=-1, tag=-1 ):
+  """
+  This function allows to get the elements from a gmsh mesh and reshape the 
+  nodal indices accordingly.
+  """
+  elTypes, elTags, nodes = mesh.getElements(dim=dim,tag=tag)
+  
+  for i in range(len(elTypes)):
+    
+    # Get the number of elements.
+    numelsi = elTags[i].size
+
+    # Reshape and set the node indices to a "0" notation.
+    nodes[i] = nodes[i].reshape((numelsi,int(nodes[i].size// numelsi))) - 1
+  
+  # end for     
+  
+  return elTypes,elTags,nodes
+
+#
+
+def map_indices(idxSrc,idxMap):
+  
+  srcShape = idxSrc.shape
+  reshaped = idxSrc.reshape(idxSrc.size)
+
+  for i in range(reshaped.size):
+  
+    reshaped[i] = idxMap[ reshaped[i] ]
+
+  # end for
+
+  return reshaped.reshape(idxSrc.shape)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

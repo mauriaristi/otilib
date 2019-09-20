@@ -10,6 +10,8 @@ import numpy as np
 
 
 
+
+
   
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::     CLASS  MESH       :::::::::::::::::::::::::::::::::::::::::
@@ -37,7 +39,7 @@ class mesh:
 
     # Initialize the system.
 
-    self.elements      = []
+    self.elements      = [[],[],[],[]]
     
     self.groups      = []
     self.group_names = {}
@@ -82,10 +84,10 @@ class mesh:
     Th = mesh()
 
 
-    gmesh = gmsh.model.mesh
-    gmodel= gmsh.model
+    gmesh  = gmsh.model.mesh
+    gmodel = gmsh.model
 
-    # Organize first the nodes and element numbering to match a contiguous sequence.
+    # Organize first the nodes and element numbering into a contiguous sequence.
     gmesh.renumberNodes()
     gmesh.renumberElements()
 
@@ -103,19 +105,218 @@ class mesh:
 
       elTypes , elTags , nodeIdx = get_elements_from_gmsh( gmesh, dim=dim, tag=-1 )
 
-      # Set the elements to the Discretized domain.
-      Th.elements.append( ( elTypes, elTags, nodeIdx) )
+      # Set the elements to the Mesh object.
+      Th.elements[dim] = {}
+
+      Th.elements[dim]['types'] = elTypes
+      Th.elements[dim]['tags']  = elTags
+      Th.elements[dim]['nodes'] = nodeIdx
 
     # end for 
 
-
-
-
-
+    Th.nodes = nodalCoord 
 
     return Th
 
   #---------------------------------------------------------------------------------------------------
+
+  def get_all_elements_pd(self):
+
+    import pandas as pd
+
+    # Get first the number of elements:
+    nels = self.get_number_elements()
+
+    # Set the number of columns:
+
+    # Col 1: Element Dimension 
+    # Col 2: Element type
+    # Col 3: Element tag
+    # Col 4: Element nodes
+
+    ncols = 4 #
+    data = np.empty((nels,ncols),dtype=object)
+    k = 0
+    for dim in range(4):
+
+      for j in range(self.elements[dim]['types'].size):
+
+        for l in range(self.elements[dim]['tags'][j].size):
+          k = int(self.elements[dim]['tags'][j][l]-1)
+          data[k,0] = dim
+          data[k,1] = element_type_name[self.elements[dim]['types'][j]]
+          data[k,2] = self.elements[dim]['tags'][j][l]
+          data[k,3] = self.elements[dim]['nodes'][j][l]
+          # k+=1
+
+    pd.option_context('display.max_rows', None, 'display.max_columns', None)
+    
+    return pd.DataFrame(
+      data=data,
+      index=data[:,2],
+      columns = ["Dim","Type","Tag","Nodes"])
+
+
+
+
+  #---------------------------------------------------------------------------------------------------
+
+  def get_all_elements(self):
+
+
+    # Get first the number of elements:
+    nels = self.get_number_elements()
+
+    # Set the number of columns:
+    # Col 1: Element Dimension 
+    # Col 2: Element type
+    # Col 3: Element tag
+    # Col 4: Element nodes
+    ncols = 5 #
+    data = np.emtpy((nels,ncols),dtype=object)
+
+
+
+
+  #---------------------------------------------------------------------------------------------------
+
+  def get_number_elements(self, dim = -1):
+
+    nels = 0
+
+    for dim in range(4):
+      
+      for j in range(self.elements[dim]['types'].size):
+
+        nels += self.elements[dim]['tags'][j].size
+
+      # end for
+
+    # end for
+
+    return nels 
+
+  #---------------------------------------------------------------------------------------------------
+
+  def to_vtk(self, dims = None, pd = None, pd_names= None):
+
+    import vtk
+    import vtk.util.numpy_support as np_support
+
+    # First copy the nodal points to the VTK format.
+    vtk_pts = vtk.vtkPoints()
+    vtk_pts.SetData(np_support.numpy_to_vtk(self.nodes,deep=1))
+
+    # Create the unstructured grid for all data.
+    vtk_grid = vtk.vtkUnstructuredGrid()
+
+    # Set the previously created points
+    vtk_grid.SetPoints(vtk_pts)
+
+
+    nels = self.get_number_elements()
+
+    # Allocate to store all elements.
+    vtk_grid.Allocate(nels)
+
+    if type(dims) == type(None):
+
+      loop_vals = range(4)
+
+    elif type(dims) == int:
+
+      loop_vals = [dims]
+
+    else:
+
+      loop_vals = dims
+
+    # end if 
+
+    # First loop through all dimensions.
+    for dim in loop_vals:
+      
+      # Get the equivalent element type
+      for etypei in range(self.elements[dim]['types'].size):
+        
+        # Get the equivalent VTK element type.
+        vtk_type = element_type_map_vtk[ self.elements[dim]['types'][etypei] ]
+    
+        
+        # Get numebr of elements and number of nodes per elements
+        elementsi = self.elements[dim]['nodes'][etypei]
+        nelsi, nnodes_el = elementsi.shape
+    
+        # Loop for all elements in the array:
+    
+        for elem in range(nelsi):
+    
+          vtk_grid.InsertNextCell(
+            vtk_type,         # Set element type.
+            nnodes_el,        # Number of nodes in this cell.
+            elementsi[ elem ] # Nodal indices.
+            )
+        # end for 
+    
+      # end for 
+    
+    # end for 
+
+
+    if type(pd) == list:
+
+      for i in range(len(pd)):
+
+        pdi = pd[i]
+      
+        if len(pdi.shape) == 1:
+
+          # Setting 1D data
+          vtk_array = np_support.numpy_to_vtk(pdi,deep=1)
+          vtk_array.SetName(pd_names[i])
+
+          vtk_grid.GetPointData().SetScalars(vtk_array)
+
+        elif pdi.shape[1] == 1:
+
+          # Setting 1D data
+          vtk_array = np_support.numpy_to_vtk(pdi,deep=1)
+          vtk_array.SetName(pd_names[i])
+
+          vtk_grid.GetPointData().SetScalars(vtk_array)
+
+        else:
+          
+          vtk_array = np_support.numpy_to_vtk(pdi,deep=1)
+          vtk_array.SetName(pd_names[i])
+
+          vtk_grid.GetPointData().SetVectors(vtk_array)
+
+
+        # end if
+
+      # end for 
+
+    return vtk_grid
+  #---------------------------------------------------------------------------------------------------
+
+
+  #***************************************************************************************************
+  def to_pv():    
+
+    import pyvista as pv
+
+    return pv.UnstructuredGrid(self.to_vtk())
+
+  #---------------------------------------------------------------------------------------------------
+  
+
+
+    
+
+
+    
+
 
   # #***************************************************************************************************
   # @property
@@ -852,16 +1053,26 @@ def map_indices(idxSrc,idxMap):
 
 
 
+element_type_name = np.empty(100,dtype=object)
+element_type_name[15] = 'point'
+element_type_name[1]  = 'line2'
+element_type_name[2]  = 'tri3'
+element_type_name[3]  = 'quad4'
+element_type_name[8]  = 'line3'
+element_type_name[9]  = 'tri6'
+element_type_name[16]  = 'quad6'
 
 
 
 
-
-
-
-
-
-
+element_type_map_vtk= np.empty(100,dtype=int)
+element_type_map_vtk[15] = 1
+element_type_map_vtk[1]  = 3
+element_type_map_vtk[2]  = 5
+element_type_map_vtk[3]  = 9
+element_type_map_vtk[8]  = 21
+element_type_map_vtk[9]  = 22
+element_type_map_vtk[16] = 23
 
 
 

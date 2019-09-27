@@ -77,16 +77,16 @@ Extension("pyoti.mesh_tools",
   depends=dependencies
   ),
 #
-Extension("pyoti.fem",
-  sources = ["@CYTHON_SOUCE_DIR@/fem.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
+# Extension("pyoti.fem",
+#   sources = ["@CYTHON_SOUCE_DIR@/fem.pyx"],
+#   include_dirs = include_dirs,
+#   define_macros = macros,
+#   libraries = libraries,
+#   # language = language,
+#   extra_compile_args = extra_compile_args,
+#   # extra_link_args = extra_link_args,
+#   depends=dependencies
+#   ),
 # #
 # Extension("pyoti.sparse",
 #   sources = ["@CYTHON_SOUCE_DIR@/sparse.pyx"],

@@ -25,23 +25,26 @@ import numpy as np
 
 
 # ****************************************************************************************************
-def ode_comp_F_derivs(F,x0,eps=1e-3,order = 5):
+def ode_step(F,x0,t0,eps=1e-3,order = 5):
     
     oti.set_trunc_order(order)
     x = []
+    zero_oti = 0*oti.e(1,nbases=1, order = order)
+    # Create  holders for the result.
     for i in range(len(x0)):
         
-        x.append(x0[i]+oti.e(1,nbases=1, order = order))
+        x.append( x0[i] + zero_oti )
 
     # end for 
-    
+    t = t0 + oti.e(1, nbases=1, order = order)
     for i in range(order+1):
         
-        x_t = F(x)
+        x_t = F(t,x)
         
         # Update x from x_t.
         for k in range(1,order+1):
-            
+
+            # Set all imaginary directions from the result.
             for i in range(len(x)):
                 x[i][[0,k]] = x_t[i][[0,k-1]]/k
                 
@@ -55,7 +58,7 @@ def ode_comp_F_derivs(F,x0,eps=1e-3,order = 5):
     # print("x_t: \nx1: ",x_t[0],"\nx2: ",x_t[1])
     # print()
     Err = np.zeros(len(x_t))
-    dts = np.zeros(len(x_t))
+    # dts = np.zeros(len(x_t))
     norm_np1 = 1.0
     
 #     for i in range(len(x)):
@@ -75,31 +78,79 @@ def ode_comp_F_derivs(F,x0,eps=1e-3,order = 5):
         # print("1/(n+1): ", 1.0/(order+1.0) )
         # print("\n\n")
 
-        dts[i] = np.power(eps*np.math.factorial(order+1)/abs(x_t[i][[0,order]]/(order+1)),1.0/(order+1.0))
+        # dts[i] = np.power(eps/abs(x_t[i][[0,order]]/(order+1)),1.0/(order+1.0))
     # end for  
 
     # print("Error: ",Err)
     
-    norm_np1 = np.linalg.norm(Err,1)#np.sqrt(norm_np1)
+    norm_np1 = np.linalg.norm(Err,2)#np.sqrt(norm_np1)
     
     # print("Err:  ",Err)
     # print("\nNorm_2: ",np.linalg.norm(Err,1))
     # print("\nNorm_inf: ",norm_np1)
-    print("\ndts: ",dts)
+    # print("\ndts: ",dts)
 
 
-    print()
+    # print()
 
     # Estimate the maximum step-size to obtain eps or less error.
-    dt = np.power(eps*np.math.factorial(order+1)/norm_np1,1.0/(order+1.0))
+
+    # dt = np.power(eps*np.math.factorial(order+1)/norm_np1,1.0/(order+1.0))
     
-    return x, dt
+    dt = np.power(eps/norm_np1,1.0/(order+1.0))
+    
+    return [x, dt]
 # ====================================================================================================
 
 
 
+# ****************************************************************************************************
+def ode_integrate( F, x0, t0, tf, eps=1e-3, order = 5, niter_max = 10000):
+    
+    # For now, t0 always 0.
 
+    ti = t0
+    xi = x0.copy()
+    
+    n_functs = len(x0)
+    iteration = 0
 
+    res = []
+
+    res.append([ xi, xi, ti])
+    #loop until the final point is reached.
+    
+    while( ti < tf and iteration < niter_max  ):
+
+        # Get OTI result and dt.
+        x, dt_est = ode_step( F, xi, ti, eps=eps,order = order)
+
+        # 
+
+        ti = ti + dt_est
+        xi = X(dt_est,x)
+
+        iteration += 1
+
+        # for i in range(n_functs):
+
+        #     xi[i] = xf[i]
+
+        # # end for.
+
+        res.append([xi, x, ti])
+
+    # end while.
+
+    if iteration >= niter_max:
+
+        print("WARNING: Maximum number of iteration reached. Results may not be valid. Review results carefully.")
+    
+    # end if.
+
+    return res
+
+# ====================================================================================================
 
 
 
@@ -111,14 +162,15 @@ def euler_integration(F,x0,dt,tf):
 
     nevals = int(tf//dt+1)
     t = 0
-    x_diff = np.zeros((nevals+1,2))
+    x_diff = np.zeros((nevals+1,3))
 
-    x_diff[0] = x0
+    x_diff[0,0:2] = x0
+    x_diff[0,2] = t
 
     for i in range(1,nevals):
         
         # Get dF/dt.
-        df    = F(x1)
+        df    = F(t,x1)
 
         for k in range(len(df)):
         
@@ -128,14 +180,15 @@ def euler_integration(F,x0,dt,tf):
 
         t += dt # accumulate t.
         
-        x_diff[i] = x1
+        x_diff[i,0:2] = x1
+        x_diff[i,2]   = t
         
     # end for 
 
     
     # Add step for x(tf)
     
-    df    = F(x1)
+    df    = F(tf,x1)
     
     for k in range(len(df)):
         
@@ -143,7 +196,8 @@ def euler_integration(F,x0,dt,tf):
     
     # end for 
     
-    x_diff[-1] = x1
+    x_diff[-1,0:2] = x1
+    x_diff[-1,2]   = tf
 
     
     return x_diff
@@ -151,7 +205,52 @@ def euler_integration(F,x0,dt,tf):
 # ====================================================================================================
 
 
+    
+# ****************************************************************************************************
+def get_interpolate(ode_sol, dt, tf, order = None):
 
+    t_sim = ode_sol[-1][2]
+    
+    t_vals = np.arange(0,min(tf,t_sim)+dt,dt)
+    
+    x_vals = np.zeros((t_vals.size,3))
+    
+    k = 1 # Use the first element in the solution.
+    i = 0
+
+    t_eval1 = ode_sol[k-1][2]
+    t_eval2 = ode_sol[k][2]
+    x_eval  = ode_sol[k][1]
+
+    for t in t_vals:
+
+        dti = t - t_eval1
+        dtf = t_eval2 - t
+        if dtf < 0:
+            # The next element from the solution should be taken.
+
+            while (dtf < 0):
+                k += 1
+                t_eval1 = ode_sol[k-1][2]
+                t_eval2 = ode_sol[k][2]
+                x_eval = ode_sol[k][1]
+                
+                dti = t - t_eval1
+                dtf = t_eval2 - t
+            # end while
+
+        # end if 
+        
+        x_vals[i,0:2] = X(dti,x_eval,order)
+        x_vals[i,2  ] = t
+        i += 1
+
+    # end for 
+    
+
+    return x_vals
+
+# ====================================================================================================
 
 
 
@@ -162,6 +261,7 @@ def get_x(dt,tf,x,order = None):
     x_vals = np.zeros((t_vals.size+1,2))
     
     i=0
+
     
     for t in t_vals:
         
@@ -189,9 +289,13 @@ def X(t,X,order = None):
 
     
     if order is not None:
+        
         iters = order+1
+
     else : 
+        
         iters = X[0].order+1
+
     # end if 
     
     

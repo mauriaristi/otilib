@@ -733,13 +733,13 @@ void der_r_log(coeff_t x , ord_t order, coeff_t* derivs){
     coeff_t factor = 1.;
     uint8_t i;    
 
-    for (i=0; i<(order+1); i++){    
-        if (i == 0){        
-            derivs[i]=log(x);        
-        }else{         
-            derivs[i] = factor * pow(sign,(i+1)) * (1.0/pow(x,i) );
-            factor    = factor * i;    
-        }
+    derivs[0]=log(x); 
+
+    for (i=1; i<(order+1); i++){    
+                 
+        derivs[i] = factor * pow(sign,(i+1)) * (1.0/pow(x,i) );
+        factor    = factor * i;    
+        
     }
 }
 // ----------------------------------------------------------------------------------------------------

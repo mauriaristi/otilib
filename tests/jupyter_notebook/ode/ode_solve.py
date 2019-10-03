@@ -25,7 +25,7 @@ import numpy as np
 
 
 # ****************************************************************************************************
-def ode_step(F,x0,t0,eps=1e-3,order = 5):
+def ode_step(F,x0,t0,eps=1e-3,order = 5, dt_tol = 1e-11):
     
     oti.set_trunc_order(order)
     x = []
@@ -54,48 +54,52 @@ def ode_step(F,x0,t0,eps=1e-3,order = 5):
         
     # end for 
     
-    # estimate step
-    # print("x_t: \nx1: ",x_t[0],"\nx2: ",x_t[1])
-    # print()
+    # Estimate step dt.
     Err = np.zeros(len(x_t))
-    # dts = np.zeros(len(x_t))
     norm_np1 = 1.0
     
-#     for i in range(len(x)):
-
-#         norm_np1 += (x[i][[0,order]])**2 # Extract the last derivative to estimate the error.
-#                                 # squared to get norm 2.
-#     # end for  
-
     for i in range(len(x_t)):
         
         Err[i] = x_t[i][[0,order]]/(order+1) # Extract the last derivative to estimate the error.
                                 # squared to get norm 2.
-        # print("Function: --- ",i)
-        # print("eps: ", eps)
-        # print("(n+1)!: ", np.math.factorial(order+1))
-        # print("d^{n+1}x/dt^{n+1}: ", x_t[i][[0,order]]/(order+1) )
-        # print("1/(n+1): ", 1.0/(order+1.0) )
-        # print("\n\n")
 
-        # dts[i] = np.power(eps/abs(x_t[i][[0,order]]/(order+1)),1.0/(order+1.0))
     # end for  
 
-    # print("Error: ",Err)
+    norm_np1 = np.linalg.norm(Err,2)
     
-    norm_np1 = np.linalg.norm(Err,2)#np.sqrt(norm_np1)
+    if norm_np1 <= dt_tol:
+
+        ordi = order
+        break_flag = 1
+
+        # try other derivatives.
+        while (ordi > 1 and break_flag):
+
+            for i in range(len(x)):
+                
+                Err[i] = x[i][[0,ordi]]
+
+            # end for
+
+            ordi -= 1 # decrease by one.
+
+            norm_np1 = np.linalg.norm(Err,2)
+
+            if norm_np1 > dt_tol:
+
+                break_flag = 0
+
+            # end if 
+
+            
+        # end while
+
+        if break_flag:
+
+            # the whole step can be undertaken.
     
-    # print("Err:  ",Err)
-    # print("\nNorm_2: ",np.linalg.norm(Err,1))
-    # print("\nNorm_inf: ",norm_np1)
-    # print("\ndts: ",dts)
-
-
-    # print()
 
     # Estimate the maximum step-size to obtain eps or less error.
-
-    # dt = np.power(eps*np.math.factorial(order+1)/norm_np1,1.0/(order+1.0))
     
     dt = np.power(eps/norm_np1,1.0/(order+1.0))
     

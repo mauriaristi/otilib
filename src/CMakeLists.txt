@@ -50,13 +50,13 @@ include_directories (	"${PROJECT_SOURCE_DIR}/include"
 						"${PROJECT_SOURCE_DIR}/src/c"
 						)
 
-add_library (oti        c/core.c 
-						c/real.c
-	                    c/dense.c
-	                    c/sparse.c
-                        c/fem.c
-	                    # c/otinum_spr_array.c
-	                    )
+add_library (oti    c/core.c 
+					c/real.c
+	                c/dense.c
+	                c/sparse.c
+                    c/fem.c
+	                # c/otinum_spr_array.c
+	                )
 
 
 if(APPLE)

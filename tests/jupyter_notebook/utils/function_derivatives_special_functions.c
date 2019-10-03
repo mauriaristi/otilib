@@ -104,13 +104,28 @@ void der_r_cos(coeff_t x0, ord_t order, coeff_t* derivs){
 // ****************************************************************************************************
 void der_r_log(coeff_t x0, ord_t order, coeff_t* derivs){
 
-    ord_t i;
     derivs[0]=log(x0);
 
     if( order >=1 ){
 
-        // Perform as if 1/x0. for the next derivatives.
-        der_r_pow(x0, -1.0, order, &derivs[1]);
+        // Perform as if f(x0) = 1/x0. for the next derivatives.
+        der_r_pow(x0, -1.0, order-1, &derivs[1]);
+
+    }
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void der_r_logb(coeff_t x0, coeff_t base, ord_t order, coeff_t* derivs){
+
+    ord_t i;
+    der_r_log(x0, order, derivs);
+    coeff_t log_base = log(base);
+
+    for( i=1; i<=order; i++ ){
+
+        derivs[i] = derivs[i]/log_base;
 
     }
     
@@ -126,7 +141,9 @@ void der_r_exp(coeff_t x0, ord_t order, coeff_t* derivs){
     derivs[0] = expx;
 
     for(i=1;i<=order;i++){
+
         derivs[i] = expx;
+
     }
 
 }

@@ -219,7 +219,7 @@ otinum_t oti_exp(otinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-otinum_t oti_pow(otinum_t* num, double e, dhelpl_t dhl){
+otinum_t oti_pow(otinum_t* num, coeff_t e, dhelpl_t dhl){
 
     coeff_t derivs[_MAXORDER_OTI+1];
 

@@ -67,36 +67,36 @@ def ode_step(F,x0,t0,eps=1e-3,order = 5, dt_tol = 1e-11):
 
     norm_np1 = np.linalg.norm(Err,2)
     
-    if norm_np1 <= dt_tol:
+    # if norm_np1 <= dt_tol:
 
-        ordi = order
-        break_flag = 1
+    #     ordi = order
+    #     break_flag = 1
 
-        # try other derivatives.
-        while (ordi > 1 and break_flag):
+    #     # try other derivatives.
+    #     while (ordi > 1 and break_flag):
 
-            for i in range(len(x)):
+    #         for i in range(len(x)):
                 
-                Err[i] = x[i][[0,ordi]]
+    #             Err[i] = x[i][[0,ordi]]
 
-            # end for
+    #         # end for
 
-            ordi -= 1 # decrease by one.
+    #         ordi -= 1 # decrease by one.
 
-            norm_np1 = np.linalg.norm(Err,2)
+    #         norm_np1 = np.linalg.norm(Err,2)
 
-            if norm_np1 > dt_tol:
+    #         if norm_np1 > dt_tol:
 
-                break_flag = 0
+    #             break_flag = 0
 
-            # end if 
+    #         # end if 
 
             
-        # end while
+    #     # end while
 
-        if break_flag:
+    #     if break_flag:
 
-            # the whole step can be undertaken.
+    #         # the whole step can be undertaken.
     
 
     # Estimate the maximum step-size to obtain eps or less error.

@@ -106,7 +106,7 @@ typedef struct elem_s{
 
 
 
-
+ 
 
 // ----------------------------------------------------------------------------------------------------
 // -------------------------------------    END STRUCTURES      ---------------------------------------
@@ -136,14 +136,23 @@ enum operEnum {
   opDy          =   10,   ///< dy(a)
   opDz          =   11,   ///< dz(a)
   opDxx         =   12,   ///< dxx(a)
-  opDyy         =   13,   ///< dyy(a)
-  opDzz         =   14,   ///< dzz(a)
-  opDxy         =   15,   ///< dxy(a)
-  opDxz         =   16,   ///< dxz(a)
-  opDyz         =   17,   ///< dyz(a)
+  opDxy         =   13,   ///< dxy(a)
+  opDyy         =   14,   ///< dyy(a)
+  opDxz         =   15,   ///< dxz(a)
+  opDyz         =   16,   ///< dyz(a)
+  opDzz         =   17,   ///< dzz(a)
   opDef         =   18,   ///< Define something (probably basis function arrays)
   opOn          =   19,   ///< Essential boundary definition integral.
   opNeg         =   20,   ///< -a
+  opDxi         =   21,   ///< dxi      (a)
+  opDeta        =   22,   ///< deta     (a)
+  opDzeta       =   23,   ///< dzeta    (a)
+  opDxixi       =   24,   ///< dxixi    (a)
+  opDxieta      =   25,   ///< dxieta   (a)
+  opDetaeta     =   26,   ///< detaeta  (a)
+  opDxizeta     =   27,   ///< dxizeta  (a)
+  opDetazeta    =   28,   ///< detazeta (a)
+  opDzetazeta   =   29,   ///< dzetazeta(a)
 
 
   subOpDefBasis =   50,   ///< 
@@ -158,11 +167,11 @@ enum operEnum {
   // Basis type for this case.
   basisN        =  101,   ///<      N
   basisNx       =  102,   ///<  dx( N )
-  basisNxx      =  103,   ///< dxx( N )
-  basisNy       =  104,   ///<  dy( N )
-  basisNxy      =  105,   ///< dxy( N )
-  basisNyy      =  106,   ///< dyy( N )
-  basisNz       =  107,   ///<  dz( N )
+  basisNy       =  103,   ///<  dy( N )
+  basisNz       =  104,   ///<  dz( N )
+  basisNxx      =  105,   ///< dxx( N )
+  basisNxy      =  106,   ///< dxy( N )
+  basisNyy      =  107,   ///< dyy( N )
   basisNxz      =  108,   ///< dxz( N )
   basisNyz      =  109,   ///< dyz( N )
   basisNzz      =  110,   ///< dzz( N )
@@ -176,16 +185,16 @@ enum operEnum {
 
 
   // Determine the type of FE variable, if Constant or Variable.
-  constant      =  301,    ///< varConst
-  variable      =  302,    ///< varVaria
+  feConstant      =  301,    ///< varConst
+  feVariable      =  302,    ///< varVaria
 
   // Element geometric types 
-  elNode        =  400,    ///< 
-  elLine        =  401,    ///< 
-  elTriangle    =  402,    ///< 
-  elQuadrangle  =  403,    ///< 
-  elTetrahedra  =  404,    ///< 
-  elHexahedra   =  405,    ///< 
+  elNode        =  400,    ///< Point.
+  elLine        =  401,    ///< Line.
+  elTriangle    =  402,    ///< Triangle.
+  elQuadrangle  =  403,    ///< Quad.
+  elTetrahedra  =  404,    ///< Tetra (4 triangle faces).
+  elHexahedra   =  405,    ///< Brick.
 
   // Element kind : Iso-parametric or Affine
   elkindIso     =  501,    ///< Isoparametric element. 
@@ -194,11 +203,11 @@ enum operEnum {
   // Derivative types.
   derN          =  601,   ///<      N
   derNa         =  602,   ///<  da( N )
-  derNaa        =  603,   ///< daa( N )
   derNb         =  604,   ///<  db( N )
+  derNc         =  607,   ///<  dc( N )
+  derNaa        =  603,   ///< daa( N )
   derNab        =  605,   ///< dab( N )
   derNbb        =  606,   ///< dbb( N )
-  derNc         =  607,   ///<  dc( N )
   derNac        =  608,   ///< dac( N )
   derNbc        =  609,   ///< dbc( N )
   derNcc        =  610,   ///< dcc( N )

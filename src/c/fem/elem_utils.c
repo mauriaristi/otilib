@@ -6,25 +6,25 @@
 void elem_iso_compJacobian( elem_t* elem, oarr_t* xcoo, oarr_t* ycoo, oarr_t* zcoo, dhelpl_t* dhl) {
     /*
     
-    @brief Compute the jacobian of an element with an isoparametric formulation.
+    @brief Compute the jacobian of an element.
 
     @param elem Element, must come initialized.
     @param xcoo Array with x coordinates. (ncoords x 1)
     @param ycoo Array with y coordinates. (ncoords x 1)
-    @param zcoo Array with z coordinates. (ncoords x 1)    
-    @param dhl: Direction helper 
+    @param zcoo Array with z coordinates. (ncoords x 1)
+    @param dhl: Direction helper
 
     */ 
     // ************************************************************************************************
 
     int64_t derId, posNa = derNa-derN, posNb = derNb-derN, posNc = derNc-derN;
     uint8_t intPt,elDim; // i, j
-    uint64_t basis; // i, k
+    uint64_t basis;      // i, k
     sotinum_t tmp1,tmp2,tmp3, tmpcntx, tmpcnty, tmpcntz;
     double dN_dxi;
 
     
-    for( intPt = 0; intPt<elem->nIntPts; intPt++){  // Do for each integration point intPt.
+    for( intPt = 0; intPt<elem->nIntPts; intPt++){  // Do for all integration points intPt.
 
         for( elDim = 0; elDim<elem->ndim; elDim++){ // take the derivative with respect to each
                                                     // of the canonical coordinates of the element.
@@ -62,7 +62,7 @@ void elem_iso_compJacobian( elem_t* elem, oarr_t* xcoo, oarr_t* ycoo, oarr_t* zc
 
                 // compute for analysis dimension 1
                 // Perform:
-                // tmpcntx += xcoo[ basis ]*dN_dxi[basis]
+                // tmpcntx += xcoo[ basis ] * dN_dxi[basis]
 
                 // Extract the coordinate for the corresponding basis.
                 // xcoo[ basis ]
@@ -130,25 +130,21 @@ void elem_iso_compJacobian( elem_t* elem, oarr_t* xcoo, oarr_t* ycoo, oarr_t* zc
 
             }
 
-            
+
+
             // The jacobian is formed as follows
             //  
-            //       < -------- Natural coords ------ > 
+            //       < -------- Global coords ------ > 
             //                                                        
-            //      |                                  |        A
-            //      |                                  |        |
-            //      |  dx_dxi     dx_deta   dx_dgamma  |        |
-            //      |                                  |        |
-            //      |                                  |        |
-            //  J = |  dy_dxi     dy_deta   dy_dgamma  | Spatial coords. 
-            //      |                                  |        |
-            //      |                                  |        |
-            //      |  dz_dxi     dz_deta   dz_dgamma  |        |
-            //      |                                  |        |
-            //      |                                  |        v
+            //      |                                 |      A
+            //      | dx_dxi     dy_dxi    dz_dxi     |      |
+            //      |                                 |      |            
+            //  J = | dx_deta    dy_deta   dz_deta    | Local coords. 
+            //      |                                 |      |
+            //      | dx_dgamma  dy_dgamma dz_dgamma  |      |
+            //      |                                 |      v
             // 
             //
-
 
 
             // set element of the result array:
@@ -299,7 +295,16 @@ void elem_iso_compJacobian( elem_t* elem, oarr_t* xcoo, oarr_t* ycoo, oarr_t* zc
         //     //       ||  |        |      |         | ||          
         //     //       ||  | dz/dxi |      | dz/deta | ||          
         //     //       ||  |        |      |         | ||          
-        //     //       ||                              ||          
+        //     //       ||                              ||     
+        
+        //     //
+        //     // $$
+        //     // d \Omega =    
+        //     //   sqrt{(\frac{dy}{dxi}\frac{dz}{deta}-\frac{dz}{dxi}\frac{dy}{deta})^2 + 
+        //     //        (\frac{dz}{dxi}\frac{dx}{deta}-\frac{dx}{dxi}\frac{dz}{deta})^2 + 
+        //     //        (\frac{dx}{dxi}\frac{dy}{deta}-\frac{dy}{dxi}\frac{dx}{deta})^2
+        //     //   }
+        //     // $$    
         //     //
 
 

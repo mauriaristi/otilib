@@ -328,14 +328,68 @@ coeff_t oti_get( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+otinum_t oti_get_imdir_full( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
+    
+    // This function gets an OTI number out of the current direction. 
+    otinum_t res;
+    ord_t order_res;
+
+
+
+    // Check input possibilities:
+    // 1. Requested imdir has order 0                -> Return a copy of num.
+    // 2. Requested imdir has order > num.order      -> Return otinum 0.
+    // 3. Requested imdir has 0<order<num.order and index within bounds -> Extract numbers.
+    // 4. Requested imdir has 0<order<num.order but index out of bounds -> Return otinum 0.
+    
+    // Case 1.
+    if ( order == 0 ){
+    
+        res = oti_copy(num,dhl);
+    // Case 2.
+    } else if (order > num->order)  {
+
+        res = oti_createZero( 0, 0, dhl);
+
+    //Cases 3 & 4.
+    } else if (order <= num->order)  {
+
+        // Case 3.
+        if (idx < num->p_ndpo[order-1]){ // Only if the index is within the available memory.
+
+            // In this case, idx and order correspond to an imaginary direction within the number.
+
+            // coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhl);
+
+            
+            res = num->p_im[ order-1 ][ idx ];
+
+        } else {
+
+            // Case 4.
+            res  = oti_createZero( 0, 0, dhl);
+
+        }
+
+        
+        
+    }
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 coeff_t oti_get_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
 
     coeff_t coef = oti_get(idx,order,num,dhl);
     coeff_t factor = 1.0;
     bases_t* dirs;
     bases_t dir_prev;
-    ord_t i, j =2;
+    ord_t i, j = 2;
+
     // compute the factor 
+    
     if (coef != 0.0){
         dirs = dhelp_get_imdir(idx,order,dhl);
         dir_prev = dirs[0];
@@ -580,7 +634,7 @@ inline otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
             
         // Set pointers to null, no memory allocation required.
 
-        num.p_im = NULL;   
+        num.p_im   = NULL;   
         num.p_ndpo = NULL;     
 
     } 

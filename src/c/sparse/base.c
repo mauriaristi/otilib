@@ -364,9 +364,9 @@ void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
             
             // Realloc memory only if the number of elements exceeds the number
             // of non zeros to be copied
-            dest->p_im[ordi]  =(coeff_t*)realloc(dest->p_im[ordi], src->p_nnz[ordi]*sizeof(coeff_t) );
-            dest->p_idx[ordi] =(imdir_t*)realloc(dest->p_idx[ordi],src->p_nnz[ordi]*sizeof(imdir_t) );
-            dest->p_size[ordi]=src->p_nnz[ordi];
+            dest->p_im[ordi]   = (coeff_t*)realloc(dest->p_im[ordi], src->p_nnz[ordi]*sizeof(coeff_t) );
+            dest->p_idx[ordi]  = (imdir_t*)realloc(dest->p_idx[ordi],src->p_nnz[ordi]*sizeof(imdir_t) );
+            dest->p_size[ordi] = src->p_nnz[ordi] ;
             
             if (dest->p_im[ordi]==NULL || dest->p_idx[ordi]==NULL){
                 printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");

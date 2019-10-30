@@ -58,3 +58,6 @@ include "dense/math.pxi"
 # Append math functions.
 include "dense/sparse_array.pxi"
 
+# Append base OTI class. - > Base to create OTI number with other characteristics.
+include "dense/generic.pxi"
+

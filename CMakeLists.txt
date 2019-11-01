@@ -71,7 +71,7 @@ endif (GENERATE_CYTHON_OTIFEM)
 
 # should we do the Cython part too?
 option (GENERATE_C_TESTS
-        "Generate C tests files" YES) 
+        "Generate C tests files" OFF) 
 
 if (GENERATE_C_TESTS)
   add_subdirectory (tests/c)

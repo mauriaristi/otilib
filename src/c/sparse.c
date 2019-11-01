@@ -8,18 +8,22 @@
 // Base functions to support manipulation.
 #include "sparse/base.c"
 
-// Operations where a truncation is recquired.
-#include "sparse/trunc_ops.c"
+// // Operations where a truncation is recquired.
+// #include "sparse/trunc_ops.c"
 
-// Basic algebraic operations, such as addition and multiplication.
-#include "sparse/algebra.c"
+// // Basic algebraic operations, such as addition and multiplication.
+// #include "sparse/algebra.c"
 
-// Analytic and Trascendental function evaluation.
-#include "sparse/functions.c"
+// // Analytic and Trascendental function evaluation.
+// #include "sparse/functions.c"
 
-// Functions added to support pre-allocated result holders.
-#include "sparse/algebra_to.c"
-#include "sparse/functions_to.c"
+// // Functions added to support pre-allocated result holders.
+// #include "sparse/algebra_to.c"
+// #include "sparse/functions_to.c"
+
+
+
+
 
 
 

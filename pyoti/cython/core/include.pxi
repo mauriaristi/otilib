@@ -1,15 +1,4 @@
-# cython: boundscheck=False 
-# cython: wraparound=False 
-# cython: nonecheck=False 
-# cython: language_level=3
-# cython: profile=False
-# cython: linetrace=True
-# cython: binding=True
-# cython: embedsignature=True
-## distutils: define_macros=CYTHON_TRACE_NOGIL=1
-## distutils: libraries = oti 
-## distutils: extra_compile_args = -arch i386 -arch x86_64 
-# filename: core.pyx
+
 
 #-----------------------------------------------------------------------------------------------------
 #---------------------------------   EXTERNAL LIBRARIES IMPORTS     ----------------------------------
@@ -28,14 +17,17 @@ from scipy.special import comb            # Classic combinatorials
 # from partitionsets import partition       # Compute partitions of sets
 import pyoti.whereotilib as whereotilib   # A pure python script to get 
                                           #the current path of this folder.
+
 from c_otilib cimport *                   # OTI lib in C.
+
 cimport cython                            #
 from cpython cimport PyObject             # 
 from cpython cimport Py_INCREF            #
 
 #-----------------------------------------------------------------------------------------------------
+#---------------------------------   EXTERNAL LIBRARIES IMPORTS     ----------------------------------
+#-----------------------------------------------------------------------------------------------------
 
-  
 cdef extern from "numpy/arrayobject.h":
       void PyArray_ENABLEFLAGS(np.ndarray arr, int flags)
 

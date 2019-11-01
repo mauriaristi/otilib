@@ -531,6 +531,7 @@ memory of the other elements correspond to zero value coefficients in the imagin
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl); 
+sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

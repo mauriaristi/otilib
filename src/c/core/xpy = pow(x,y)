@@ -1,0 +1,111 @@
+xpy = pow(x,y)
+lx = log(x)
+yp2 = y*y
+yp3 = yp2*y;
+yp4 = yp2*yp2;
+yp5 = yp2*yp3;
+yp6 = yp3*yp3;
+yp7 = yp3*yp4;
+yp8 = yp4*yp4;
+yp9 = yp4*yp5;
+
+xp2 = x*x
+xp3 = xp2*x;
+xp4 = xp2*xp2;
+xp5 = xp2*xp3;
+xp6 = xp3*xp3;
+xp7 = xp3*xp4;
+xp8 = xp4*xp4;
+xp9 = xp4*xp5;
+
+
+
+
+
+order:  0
+df^0/x^0y^0: xpy
+
+order:  1
+df^1/x^0y^1: xpy*lx
+df^1/x^1y^0: xpy*y/x
+
+order:  2
+df^2/x^0y^2: xpy*pow(lx,2)
+df^2/x^1y^1: xpy*y*lx/x+xpy/x
+df^2/x^2y^0: xpy*y*(y-1)/pow(x,2)
+
+order:  3
+df^3/x^0y^3: xpy*pow(lx,3)
+df^3/x^1y^2: xpy*(y*lx+2)*lx/x
+df^3/x^2y^1: xpy*y*(y-1)*lx/pow(x,2)+xpy*y/pow(x,2)+xpy*(y-1)/pow(x,2)
+df^3/x^3y^0: xpy*y*(pow(y,2)-3*y+2)/pow(x,3)
+
+order:  4
+df^4/x^0y^4: xpy*pow(lx,4)
+df^4/x^1y^3: xpy*(y*lx+3)*pow(lx,2)/x
+df^4/x^2y^2: xpy*(y*(y-1)*pow(lx,2)+2*y*lx+2*(y-1)*lx+2)/pow(x,2)
+df^4/x^3y^1: xpy*y*(2*y-3)/pow(x,3)+xpy*y*(pow(y,2)-3*y+2)*lx/pow(x,3)+xpy*(pow(y,2)-3*y+2)/pow(x,3)
+df^4/x^4y^0: xpy*y*(pow(y,3)-6*pow(y,2)+11*y-6)/pow(x,4)
+
+order:  5
+df^5/x^0y^5: xpy*pow(lx,5)
+df^5/x^1y^4: xpy*(y*lx+4)*pow(lx,3)/x
+df^5/x^2y^3: xpy*(y*(y-1)*pow(lx,2)+3*y*lx+3*(y-1)*lx+6)*lx/pow(x,2)
+df^5/x^3y^2: xpy*(2*y*(2*y-3)*lx+y*(pow(y,2)-3*y+2)*pow(lx,2)+6*y+2*(pow(y,2)-3*y+2)*lx-6)/pow(x,3)
+df^5/x^4y^1: xpy*y*(3*pow(y,2)-12*y+11)/pow(x,4)+xpy*y*(pow(y,3)-6*pow(y,2)+11*y-6)*lx/pow(x,4)+xpy*(pow(y,3)-6*pow(y,2)+11*y-6)/pow(x,4)
+df^5/x^5y^0: xpy*y*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)/pow(x,5)
+
+order:  6
+df^6/x^0y^6: xpy*pow(lx,6)
+df^6/x^1y^5: xpy*(y*lx+5)*pow(lx,4)/x
+df^6/x^2y^4: xpy*(y*(y-1)*pow(lx,2)+4*y*lx+4*(y-1)*lx+12)*pow(lx,2)/pow(x,2)
+df^6/x^3y^3: xpy*(3*y*(2*y-3)*pow(lx,2)+y*(pow(y,2)-3*y+2)*pow(lx,3)+6*y*lx+6*(2*y-3)*lx+3*(pow(y,2)-3*y+2)*pow(lx,2)+6)/pow(x,3)
+df^6/x^4y^2: xpy*(6*pow(y,2)+6*y*(y-2)+2*y*(3*pow(y,2)-12*y+11)*lx+y*(pow(y,3)-6*pow(y,2)+11*y-6)*pow(lx,2)-24*y+2*(pow(y,3)-6*pow(y,2)+11*y-6)*lx+22)/pow(x,4)
+df^6/x^5y^1: xpy*y*(4*pow(y,3)-30*pow(y,2)+70*y-50)/pow(x,5)+xpy*y*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)*lx/pow(x,5)+xpy*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)/pow(x,5)
+df^6/x^6y^0: xpy*y*(pow(y,5)-15*pow(y,4)+85*pow(y,3)-225*pow(y,2)+274*y-120)/pow(x,6)
+
+order:  7
+df^7/x^0y^7: xpy*pow(lx,7)
+df^7/x^1y^6: xpy*(y*lx+6)*pow(lx,5)/x
+df^7/x^2y^5: xpy*(y*(y-1)*pow(lx,2)+5*y*lx+5*(y-1)*lx+20)*pow(lx,3)/pow(x,2)
+df^7/x^3y^4: xpy*(4*y*(2*y-3)*pow(lx,2)+y*(pow(y,2)-3*y+2)*pow(lx,3)+12*y*lx+12*(2*y-3)*lx+4*(pow(y,2)-3*y+2)*pow(lx,2)+24)*lx/pow(x,3)
+df^7/x^4y^3: xpy*(18*y*(y-2)*lx+3*y*(3*pow(y,2)-12*y+11)*pow(lx,2)+y*(pow(y,3)-6*pow(y,2)+11*y-6)*pow(lx,3)+24*y+6*(3*pow(y,2)-12*y+11)*lx+3*(pow(y,3)-6*pow(y,2)+11*y-6)*pow(lx,2)-36)/pow(x,4)
+df^7/x^5y^2: xpy*(8*pow(y,3)-60*pow(y,2)+2*y*(6*pow(y,2)-30*y+35)+4*y*(2*pow(y,3)-15*pow(y,2)+35*y-25)*lx+y*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)*pow(lx,2)+140*y+2*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)*lx-100)/pow(x,5)
+df^7/x^6y^1: xpy*y*(5*pow(y,4)-60*pow(y,3)+255*pow(y,2)-450*y+274)/pow(x,6)+xpy*y*(pow(y,5)-15*pow(y,4)+85*pow(y,3)-225*pow(y,2)+274*y-120)*lx/pow(x,6)+xpy*(pow(y,5)-15*pow(y,4)+85*pow(y,3)-225*pow(y,2)+274*y-120)/pow(x,6)
+df^7/x^7y^0: xpy*y*(pow(y,6)-21*pow(y,5)+175*pow(y,4)-735*pow(y,3)+1624*pow(y,2)-1764*y+720)/pow(x,7)
+
+order:  8
+df^8/x^0y^8: xpy*pow(lx,8)
+df^8/x^1y^7: xpy*(y*lx+7)*pow(lx,6)/x
+df^8/x^2y^6: xpy*(y*(y-1)*pow(lx,2)+6*y*lx+6*(y-1)*lx+30)*pow(lx,4)/pow(x,2)
+df^8/x^3y^5: xpy*(5*y*(2*y-3)*pow(lx,2)+y*(pow(y,2)-3*y+2)*pow(lx,3)+20*y*lx+20*(2*y-3)*lx+5*(pow(y,2)-3*y+2)*pow(lx,2)+60)*pow(lx,2)/pow(x,3)
+df^8/x^4y^4: xpy*(36*y*(y-2)*pow(lx,2)+4*y*(3*pow(y,2)-12*y+11)*pow(lx,3)+y*(pow(y,3)-6*pow(y,2)+11*y-6)*pow(lx,4)+24*y*lx+72*(y-2)*lx+12*(3*pow(y,2)-12*y+11)*pow(lx,2)+4*(pow(y,3)-6*pow(y,2)+11*y-6)*pow(lx,3)+24)/pow(x,4)
+df^8/x^5y^3: xpy*(36*pow(y,2)+12*y*(2*y-5)+6*y*(6*pow(y,2)-30*y+35)*lx+6*y*(2*pow(y,3)-15*pow(y,2)+35*y-25)*pow(lx,2)+y*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)*pow(lx,3)-180*y+12*(2*pow(y,3)-15*pow(y,2)+35*y-25)*lx+3*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)*pow(lx,2)+210)/pow(x,5)
+df^8/x^6y^2: xpy*(10*pow(y,4)-120*pow(y,3)+510*pow(y,2)+10*y*(2*pow(y,3)-18*pow(y,2)+51*y-45)+2*y*(5*pow(y,4)-60*pow(y,3)+255*pow(y,2)-450*y+274)*lx+y*(pow(y,5)-15*pow(y,4)+85*pow(y,3)-225*pow(y,2)+274*y-120)*pow(lx,2)-900*y+2*(pow(y,5)-15*pow(y,4)+85*pow(y,3)-225*pow(y,2)+274*y-120)*lx+548)/pow(x,6)
+df^8/x^7y^1: xpy*y*(6*pow(y,5)-105*pow(y,4)+700*pow(y,3)-2205*pow(y,2)+3248*y-1764)/pow(x,7)+xpy*y*(pow(y,6)-21*pow(y,5)+175*pow(y,4)-735*pow(y,3)+1624*pow(y,2)-1764*y+720)*lx/pow(x,7)+xpy*(pow(y,6)-21*pow(y,5)+175*pow(y,4)-735*pow(y,3)+1624*pow(y,2)-1764*y+720)/pow(x,7)
+df^8/x^8y^0: xpy*y*(pow(y,7)-28*pow(y,6)+322*pow(y,5)-1960*pow(y,4)+6769*pow(y,3)-13132*pow(y,2)+13068*y-5040)/pow(x,8)
+
+order:  9
+df^9/x^0y^9: xpy*pow(lx,9)
+df^9/x^1y^8: xpy*(y*lx+8)*pow(lx,7)/x
+df^9/x^2y^7: xpy*(y*(y-1)*pow(lx,2)+7*y*lx+7*(y-1)*lx+42)*pow(lx,5)/pow(x,2)
+df^9/x^3y^6: xpy*(6*y*(2*y-3)*pow(lx,2)+y*(pow(y,2)-3*y+2)*pow(lx,3)+30*y*lx+30*(2*y-3)*lx+6*(pow(y,2)-3*y+2)*pow(lx,2)+120)*pow(lx,3)/pow(x,3)
+df^9/x^4y^5: xpy*(60*y*(y-2)*pow(lx,2)+5*y*(3*pow(y,2)-12*y+11)*pow(lx,3)+y*(pow(y,3)-6*pow(y,2)+11*y-6)*pow(lx,4)+60*y*lx+180*(y-2)*lx+20*(3*pow(y,2)-12*y+11)*pow(lx,2)+5*(pow(y,3)-6*pow(y,2)+11*y-6)*pow(lx,3)+120)*lx/pow(x,4)
+df^9/x^5y^4: xpy*(48*y*(2*y-5)*lx+12*y*(6*pow(y,2)-30*y+35)*pow(lx,2)+8*y*(2*pow(y,3)-15*pow(y,2)+35*y-25)*pow(lx,3)+y*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)*pow(lx,4)+120*y+24*(6*pow(y,2)-30*y+35)*lx+24*(2*pow(y,3)-15*pow(y,2)+35*y-25)*pow(lx,2)+4*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)*pow(lx,3)-240)/pow(x,5)
+df^9/x^6y^3: xpy*(60*pow(y,3)-540*pow(y,2)+30*y*(2*pow(y,2)-12*y+17)+30*y*(2*pow(y,3)-18*pow(y,2)+51*y-45)*lx+3*y*(5*pow(y,4)-60*pow(y,3)+255*pow(y,2)-450*y+274)*pow(lx,2)+y*(pow(y,5)-15*pow(y,4)+85*pow(y,3)-225*pow(y,2)+274*y-120)*pow(lx,3)+1530*y+6*(5*pow(y,4)-60*pow(y,3)+255*pow(y,2)-450*y+274)*lx+3*(pow(y,5)-15*pow(y,4)+85*pow(y,3)-225*pow(y,2)+274*y-120)*pow(lx,2)-1350)/pow(x,6)
+df^9/x^7y^2: xpy*(12*pow(y,5)-210*pow(y,4)+1400*pow(y,3)-4410*pow(y,2)+2*y*(15*pow(y,4)-210*pow(y,3)+1050*pow(y,2)-2205*y+1624)+2*y*(6*pow(y,5)-105*pow(y,4)+700*pow(y,3)-2205*pow(y,2)+3248*y-1764)*lx+y*(pow(y,6)-21*pow(y,5)+175*pow(y,4)-735*pow(y,3)+1624*pow(y,2)-1764*y+720)*pow(lx,2)+6496*y+2*(pow(y,6)-21*pow(y,5)+175*pow(y,4)-735*pow(y,3)+1624*pow(y,2)-1764*y+720)*lx-3528)/pow(x,7)
+df^9/x^8y^1: xpy*y*(7*pow(y,6)-168*pow(y,5)+1610*pow(y,4)-7840*pow(y,3)+20307*pow(y,2)-26264*y+13068)/pow(x,8)+xpy*y*(pow(y,7)-28*pow(y,6)+322*pow(y,5)-1960*pow(y,4)+6769*pow(y,3)-13132*pow(y,2)+13068*y-5040)*lx/pow(x,8)+xpy*(pow(y,7)-28*pow(y,6)+322*pow(y,5)-1960*pow(y,4)+6769*pow(y,3)-13132*pow(y,2)+13068*y-5040)/pow(x,8)
+df^9/x^9y^0: xpy*y*(pow(y,8)-36*pow(y,7)+546*pow(y,6)-4536*pow(y,5)+22449*pow(y,4)-67284*pow(y,3)+118124*pow(y,2)-109584*y+40320)/pow(x,9)
+
+order:  10
+df^10/x^0y^10: xpy*pow(lx,10)
+df^10/x^1y^9: xpy*(y*lx+9)*pow(lx,8)/x
+df^10/x^2y^8: xpy*(y*(y-1)*pow(lx,2)+8*y*lx+8*(y-1)*lx+56)*pow(lx,6)/pow(x,2)
+df^10/x^3y^7: xpy*(7*y*(2*y-3)*pow(lx,2)+y*(pow(y,2)-3*y+2)*pow(lx,3)+42*y*lx+42*(2*y-3)*lx+7*(pow(y,2)-3*y+2)*pow(lx,2)+210)*pow(lx,4)/pow(x,3)
+df^10/x^4y^6: xpy*(90*y*(y-2)*pow(lx,2)+6*y*(3*pow(y,2)-12*y+11)*pow(lx,3)+y*(pow(y,3)-6*pow(y,2)+11*y-6)*pow(lx,4)+120*y*lx+360*(y-2)*lx+30*(3*pow(y,2)-12*y+11)*pow(lx,2)+6*(pow(y,3)-6*pow(y,2)+11*y-6)*pow(lx,3)+360)*pow(lx,2)/pow(x,4)
+df^10/x^5y^5: xpy*(120*y*(2*y-5)*pow(lx,2)+20*y*(6*pow(y,2)-30*y+35)*pow(lx,3)+10*y*(2*pow(y,3)-15*pow(y,2)+35*y-25)*pow(lx,4)+y*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)*pow(lx,5)+120*y*lx+240*(2*y-5)*lx+60*(6*pow(y,2)-30*y+35)*pow(lx,2)+40*(2*pow(y,3)-15*pow(y,2)+35*y-25)*pow(lx,3)+5*(pow(y,4)-10*pow(y,3)+35*pow(y,2)-50*y+24)*pow(lx,4)+120)/pow(x,5)
+df^10/x^6y^4: xpy*(240*pow(y,2)+120*y*(y-3)+120*y*(2*pow(y,2)-12*y+17)*lx+60*y*(2*pow(y,3)-18*pow(y,2)+51*y-45)*pow(lx,2)+4*y*(5*pow(y,4)-60*pow(y,3)+255*pow(y,2)-450*y+274)*pow(lx,3)+y*(pow(y,5)-15*pow(y,4)+85*pow(y,3)-225*pow(y,2)+274*y-120)*pow(lx,4)-1440*y+120*(2*pow(y,3)-18*pow(y,2)+51*y-45)*lx+12*(5*pow(y,4)-60*pow(y,3)+255*pow(y,2)-450*y+274)*pow(lx,2)+4*(pow(y,5)-15*pow(y,4)+85*pow(y,3)-225*pow(y,2)+274*y-120)*pow(lx,3)+2040)/pow(x,6)
+df^10/x^7y^3: xpy*(90*pow(y,4)-1260*pow(y,3)+6300*pow(y,2)+30*y*(4*pow(y,3)-42*pow(y,2)+140*y-147)+6*y*(15*pow(y,4)-210*pow(y,3)+1050*pow(y,2)-2205*y+1624)*lx+3*y*(6*pow(y,5)-105*pow(y,4)+700*pow(y,3)-2205*pow(y,2)+3248*y-1764)*pow(lx,2)+y*(pow(y,6)-21*pow(y,5)+175*pow(y,4)-735*pow(y,3)+1624*pow(y,2)-1764*y+720)*pow(lx,3)-13230*y+6*(6*pow(y,5)-105*pow(y,4)+700*pow(y,3)-2205*pow(y,2)+3248*y-1764)*lx+3*(pow(y,6)-21*pow(y,5)+175*pow(y,4)-735*pow(y,3)+1624*pow(y,2)-1764*y+720)*pow(lx,2)+9744)/pow(x,7)
+df^10/x^8y^2: xpy*(14*pow(y,6)-336*pow(y,5)+3220*pow(y,4)-15680*pow(y,3)+40614*pow(y,2)+14*y*(3*pow(y,5)-60*pow(y,4)+460*pow(y,3)-1680*pow(y,2)+2901*y-1876)+2*y*(7*pow(y,6)-168*pow(y,5)+1610*pow(y,4)-7840*pow(y,3)+20307*pow(y,2)-26264*y+13068)*lx+y*(pow(y,7)-28*pow(y,6)+322*pow(y,5)-1960*pow(y,4)+6769*pow(y,3)-13132*pow(y,2)+13068*y-5040)*pow(lx,2)-52528*y+2*(pow(y,7)-28*pow(y,6)+322*pow(y,5)-1960*pow(y,4)+6769*pow(y,3)-13132*pow(y,2)+13068*y-5040)*lx+26136)/pow(x,8)
+df^10/x^9y^1: xpy*y*(8*pow(y,7)-252*pow(y,6)+3276*pow(y,5)-22680*pow(y,4)+89796*pow(y,3)-201852*pow(y,2)+236248*y-109584)/pow(x,9)+xpy*y*(pow(y,8)-36*pow(y,7)+546*pow(y,6)-4536*pow(y,5)+22449*pow(y,4)-67284*pow(y,3)+118124*pow(y,2)-109584*y+40320)*lx/pow(x,9)+xpy*(pow(y,8)-36*pow(y,7)+546*pow(y,6)-4536*pow(y,5)+22449*pow(y,4)-67284*pow(y,3)+118124*pow(y,2)-109584*y+40320)/pow(x,9)
+df^10/x^10y^0: xpy*y*(pow(y,9)-45*pow(y,8)+870*pow(y,7)-9450*pow(y,6)+63273*pow(y,5)-269325*pow(y,4)+723680*pow(y,3)-1172700*pow(y,2)+1026576*y-362880)/pow(x,10)

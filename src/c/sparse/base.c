@@ -556,11 +556,12 @@ void soti_free(sotinum_t* num){
     
     
         
-    if (num->p_im != NULL){
+    if (num->p_im != NULL && num->flag != 0){
 
         free(num->p_im);
 
     }
+
     *num = soti_init();
     
 
@@ -592,6 +593,7 @@ inline sotinum_t soti_init(void){
     res.p_size= NULL;
     
     res.order = 0;
+    res.flag  = 0; 
 
     return res;
 
@@ -667,6 +669,9 @@ sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
 
         
         }
+
+        // Set the memory flag to 1.
+        res.flag = 1;
 
     } 
 
@@ -821,8 +826,8 @@ sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
             }
 
             // Set number of non-zero and allocated size to 0.
-            res.p_nnz[i]  = 0; 
             res.p_size[i] = p_nnz[i]; 
+            res.p_nnz[i]  = 0; 
 
         
         }

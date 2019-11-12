@@ -29,20 +29,29 @@ typedef struct {
     ndir_t*       p_nnz; ///< Number of non zero coefficients per order.
     ndir_t*      p_size; ///< Allocated size per order.
     ord_t         order; ///< Truncation order of the number.
+    flag_t         flag; ///< Memory flag.
 } sotinum_t;             ///< Sparse OTI number type
 
 
 typedef struct {
-    arr_t            re;  ///< Real coefficients.
-    arr_t**        p_im;  ///< Array with all imaginary coefficients per order.
-    imdir_t**     p_idx;  ///< Directions associated to each coefficient per order.
-    ndir_t*       p_nnz;  ///< Number of non zero coefficients per order.
-    ndir_t*      p_size;  ///< Allocated size per order.
-    ord_t         order;  ///< Truncation order of the number.
+    sotinum_t*    p_data; ///< Pointer to array of Sparse otinums.
     uint64_t       nrows; ///< Number of rows.
     uint64_t       ncols; ///< Number of cols.
     uint64_t        size; ///< Size of array.
 } soarr_t;                ///< SOTI array type.
+
+
+// typedef struct {
+//     arr_t            re;  ///< Real coefficients.
+//     arr_t**        p_im;  ///< Array with all imaginary coefficients per order.
+//     imdir_t**     p_idx;  ///< Directions associated to each coefficient per order.
+//     ndir_t*       p_nnz;  ///< Number of non zero coefficients per order.
+//     ndir_t*      p_size;  ///< Allocated size per order.
+//     ord_t         order;  ///< Truncation order of the number.
+//     uint64_t       nrows; ///< Number of rows.
+//     uint64_t       ncols; ///< Number of cols.
+//     uint64_t        size; ///< Size of array.
+// } soarr_t;                ///< SOTI array type.
 
 
 // ----------------------------------------------------------------------------------------------------

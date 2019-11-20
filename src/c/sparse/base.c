@@ -613,7 +613,7 @@ sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
     ord_t i;
     
     // Define allocation sizes.
-    for ( i = 0; i < res.order; i++){
+    for ( i = 0; i < order; i++){
         p_nnz[i] = dhl.p_dh[i].allocSize; // Get standard allocation sizes.
     }
     

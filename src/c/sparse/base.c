@@ -213,7 +213,7 @@ void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl){
     for ( i = 0; i<num->order; i++){
 
         // Set number of non-zero and allocated size to 0.
-        num->p_nnz[i]  = 0;
+        num->p_nnz[i] = 0;
 
     }
 
@@ -224,20 +224,46 @@ void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     
-    // Assumes both have the space allocated and both have the same truncation order
+    // This function sets an oti number from another OTI number.
+    uint8_t reallocate = soti_requiresrealloc(src, dest);
     ord_t i;
+
+    // TODO: Add check to wheather dest has not been initialized.
+    // TODO: Add case when the two elements have different orders.
+    // TODO: Add check if dest is a tmp function.
+
+    if( reallocate ){
+        // Reallocation IS required.
+        // Easiest way: Free current memory in dest and allocate new memory.
+        soti_free(dest);
+
+        if (dest->flag != 0){
+            *dest = soti_createEmpty_like( src, dhl);        
+        } else {
+            // TODO: What happens if this is a tmp value?
+            printf("ERROR: Cant change memory of \n");
+            exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
+        }
+
+    }
+
+    // Copy real coefficient
     dest->re = src->re;
-    
-    memcpy(dest->p_nnz, src->p_nnz, src->order*sizeof(ndir_t));
 
-    for ( i =0; i<src->order; i++){
+    // Copy imaginary coefficients
+    for ( i = 0; i < src->order; i++){
         
-        // Set number of non-zero and allocated size to 0.
-        // dest->p_nnz[i]  = src->p_nnz[i];
+        // Copy memory to dest number. Only copy non zeros.
+        memcpy(dest->p_im[i], src->p_im[i], src->p_nnz[i]*sizeof(coeff_t) );
+        memcpy(dest->p_idx[i],src->p_idx[i],src->p_nnz[i]*sizeof(imdir_t) );
 
-        memcpy( dest->p_im[i],  src->p_im[i],  dest->p_nnz[i]*sizeof(coeff_t) );
-        memcpy( dest->p_idx[i], src->p_idx[i], dest->p_nnz[i]*sizeof(imdir_t) );
+        dest->p_nnz[i] = src->p_nnz[i]; 
 
+    }  
+
+    // Set all other elements in the imaginary directions to zero.
+    for (; i<dest->order;i++){
+        dest->p_nnz[i] = 0;
     }
 
 }
@@ -277,38 +303,17 @@ void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 
     coeff_t coef = soti_get_item(idx,order,num,dhl);
-    coeff_t factor = 1.0;
-    bases_t* dirs;
-    bases_t dir_prev;
-    ord_t i, j = 1;
-    
-    // compute the factor 
-    if (coef != 0.0){
-        dirs = dhelp_get_imdir(idx,order,dhl);
-        dir_prev = dirs[0];
-        for (i=0; i<order; i++){
-            if (dirs[i] == dir_prev){
-                factor *= j;
-                j+=1;
-            } else{
-                j =2;
-                dir_prev = dirs[i];
-            }
-        }
-    }
+    coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
 
     return coef*factor;
 }
 // ----------------------------------------------------------------------------------------------------
 
 
-
-
-
 // ****************************************************************************************************
 coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     
-    coeff_t res =0.0;
+    coeff_t res = 0.0; // Default answer.
     flag_t flag;
     imdir_t pos;
     
@@ -316,18 +321,15 @@ coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
         
         res = num->re;
 
-    }else{
+    } else {
 
         if ( order<=num->order ){
             
             if(num->p_nnz[order-1] != 0){
 
                 pos = binSearchUI64(idx, num->p_idx[order-1], num->p_nnz[order-1], &flag );
-
                 if (flag != 0){
-
                     res = num->p_im[order-1][pos];
-
                 }
 
             }
@@ -340,9 +342,6 @@ coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
 
 // ****************************************************************************************************
 uint64_t soti_get_min_memsize(sotinum_t* num, dhelpl_t dhl){
@@ -377,7 +376,7 @@ uint64_t soti_get_total_memsize(sotinum_t* num, dhelpl_t dhl){
     allocation_size = num->order*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
 
     // Add the standard allocation sizes:
-    for ( i =0; i<num->order; i++){
+    for ( i = 0; i<num->order; i++){
         
         allocation_size += num->p_size[i]*(sizeof(coeff_t)+sizeof(imdir_t));
 
@@ -390,73 +389,82 @@ uint64_t soti_get_total_memsize(sotinum_t* num, dhelpl_t dhl){
 
 
 
+
+// ****************************************************************************************************
+uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest){
+    
+    uint8_t reallocate = false;
+    ord_t i;
+
+    // Check if reallocation is necessary
+    if (src->order > dest->order ){
+
+        reallocate = true;
+
+    } else {
+       
+        for ( i = 0; i < src->order; i++){
+            if (src->p_nnz[i] > dest->p_size[i]){
+                reallocate = true;
+                break;
+            }
+        }
+
+    }
+
+    return reallocate;
+}
+// ----------------------------------------------------------------------------------------------------
+
+
 // Copy operations.
 
 // ****************************************************************************************************
 void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
-    
-    
-    uint64_t mem_src, mem_dest;
-    
-    uint8_t reallocate = false;
+        
+    uint8_t reallocate = soti_requiresrealloc(src, dest);
     ord_t i;
 
     // TODO: Add check to wheather dest has not been initialized.
     // TODO: Add case when the two elements have different orders.
     // TODO: Add check if dest is a tmp function.
 
-    // Check weather the destinantion number requires a memory reallocation.
-    mem_src  = soti_get_min_memsize(src,dhl);
-    mem_dest = soti_get_total_memsize(dest,dhl);
-
-    // Check if reallocation is necessary
-    if (src->order != dest->order || 
-        mem_src > mem_dest ){
-
-        reallocate = true;
-    } else {
-        
-        for ( i = 0; i < src->order; i++){
-
-            if (src->p_nnz[i] > dest->p_size[i]){
-                
-                reallocate = true;
-                break;
-
-            }
-
-        }
-
-    }
-
-  
-
     if( reallocate ){
         // Reallocation IS required.
         // Easiest way: Free current memory in dest and allocate new memory.
         soti_free(dest);
-        *dest = soti_copy( src, dhl);
 
-    } else {
-        
-        dest->order = src->order;
-
-        for ( i = 0; i < src->order; i++){
-            
-            if ( src->p_nnz[i] != 0 ){
-            
-                // Copy memory to dest number.
-                memcpy(dest->p_im[i], src->p_im[i], src->p_nnz[i]*sizeof(coeff_t) );
-                memcpy(dest->p_idx[i],src->p_idx[i],src->p_nnz[i]*sizeof(imdir_t) );
-                        
-            }
-
-            dest->p_nnz[i] = src->p_nnz[i]; 
-
+        if (dest->flag != 0){
+            *dest = soti_createEmpty_like( src, dhl);        
+        } else {
+            // TODO: What happens if this is a tmp value?
+            printf("ERROR: Cant change memory of \n");
+            exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
         }
 
     }
 
+    // Is it required to copy the order?
+    dest->order = src->order;
+
+    // Copy real coefficient
+    dest->re = src->re;
+
+    // Copy imaginary coefficients
+    for ( i = 0; i < src->order; i++){
+        
+        // Copy memory to dest number. Only copy non zeros.
+        memcpy(dest->p_im[i], src->p_im[i], src->p_nnz[i]*sizeof(coeff_t) );
+        memcpy(dest->p_idx[i],src->p_idx[i],src->p_nnz[i]*sizeof(imdir_t) );
+
+        dest->p_nnz[i] = src->p_nnz[i]; 
+
+    }  
+
+    // Set all other elements in the imaginary directions to zero.
+    for (; i<dest->order;i++){
+        dest->p_nnz[i] = 0;
+    }
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -501,8 +509,9 @@ sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 void soti_print(sotinum_t* num, dhelpl_t dhl){
 
-    ndir_t nnz_total = 1,dir;
+    ndir_t nnz_total = 1, dir;
     ord_t ordi,ord;
+    
     for( ordi = 0; ordi<num->order; ordi++){
         nnz_total += num->p_nnz[ordi];
     }
@@ -553,18 +562,13 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
 
 // ****************************************************************************************************
 void soti_free(sotinum_t* num){
-    
-    
-        
+                
     if (num->p_im != NULL && num->flag != 0){
-
         free(num->p_im);
-
     }
 
     *num = soti_init();
     
-
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -604,76 +608,16 @@ inline sotinum_t soti_init(void){
 // ****************************************************************************************************
 sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
     
-    sotinum_t res = soti_init(); // Initialize pointer values.
-
-    res.order = order;
-    void * memory = NULL;
-    uint64_t allocation_size = 0 ;
+    sotinum_t res;
+    ndir_t p_nnz[_MAXORDER_OTI]; 
     ord_t i;
     
-    if (res.order != 0){
-
-        // Get the allocation size of the OTI number:
-        allocation_size = res.order*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
-
-        // Add the standard allocation sizes:
-        for ( i =0; i<res.order; i++){
-            
-            allocation_size += dhl.p_dh[i].allocSize*(sizeof(coeff_t)+sizeof(imdir_t));
-
-        }
-
-        // Allocate memory and check if correctly allocated.
-        memory = malloc(allocation_size);
-        if ( memory == NULL ){
-            printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
-            exit(OTI_OutOfMemory);
-        }
-
-
-        // Distribute memory alongside the different pointers.
-
-        res.p_im  = (coeff_t**)memory;
-        memory    += res.order * sizeof(coeff_t*);
-
-        res.p_idx = (imdir_t**)memory;
-        memory    += res.order * sizeof(imdir_t*);
-
-        res.p_nnz = (ndir_t*  )memory;
-        memory    += res.order * sizeof(ndir_t);
-
-        res.p_size= (ndir_t*  )memory;
-        memory    += res.order * sizeof(ndir_t);
-       
-        for ( i = 0; i < res.order; i++){
-            
-            if (dhl.p_dh[i].allocSize != 0){
-            
-                res.p_im[i] = (coeff_t*)memory;
-                memory += dhl.p_dh[i].allocSize*sizeof(coeff_t); 
-
-
-                res.p_idx[i]= (imdir_t*)memory;
-                memory += dhl.p_dh[i].allocSize*sizeof(imdir_t); 
-                        
-            } else {
-
-                res.p_im[i]  = NULL;
-                res.p_idx[i] = NULL;
-
-            }
-
-            // Set number of non-zero and allocated size to 0.
-            res.p_nnz[i]  = 0; 
-            res.p_size[i] = dhl.p_dh[i].allocSize; 
-
-        
-        }
-
-        // Set the memory flag to 1.
-        res.flag = 1;
-
-    } 
+    // Define allocation sizes.
+    for ( i = 0; i < res.order; i++){
+        p_nnz[i] = dhl.p_dh[i].allocSize; // Get standard allocation sizes.
+    }
+    
+    res = soti_createEmpty_predef(p_nnz, order, dhl);
 
     return res;
 
@@ -686,73 +630,9 @@ sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
 // ****************************************************************************************************
 sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
     
-    sotinum_t res = soti_init(); // Initialize pointer values.
-
-    res.order = other->order;
-    void * memory = NULL;
-    uint64_t allocation_size = 0 ;
-    ord_t i;
-    
-    if (res.order != 0){
-
-        // Get the allocation size of the OTI number:
-        allocation_size = res.order*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
-
-        // Add the standard allocation sizes:
-        for ( i =0; i<res.order; i++){
-            
-            allocation_size += other->p_nnz[i]*(sizeof(coeff_t)+sizeof(imdir_t));
-
-        }
-
-        // Allocate memory and check if correctly allocated.
-        memory = malloc(allocation_size);
-        if ( memory == NULL ){
-            printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
-            exit(OTI_OutOfMemory);
-        }
-
-
-        // Distribute memory alongside the different pointers.
-
-        res.p_im  = (coeff_t**)memory;
-        memory    += res.order * sizeof(coeff_t*);
-
-        res.p_idx = (imdir_t**)memory;
-        memory    += res.order * sizeof(imdir_t*);
-
-        res.p_nnz = (ndir_t*  )memory;
-        memory    += res.order * sizeof(ndir_t);
-
-        res.p_size= (ndir_t*  )memory;
-        memory    += res.order * sizeof(ndir_t);
-       
-        for ( i = 0; i < res.order; i++){
-            
-            if (other->p_nnz[i] != 0){
-            
-                res.p_im[i] = (coeff_t*)memory;
-                memory += other->p_nnz[i]*sizeof(coeff_t); 
-
-
-                res.p_idx[i]= (imdir_t*)memory;
-                memory += other->p_nnz[i]*sizeof(imdir_t); 
-                        
-            } else {
-
-                res.p_im[i]  = NULL;
-                res.p_idx[i] = NULL;
-
-            }
-
-            // Set number of non-zero and allocated size to 0.
-            res.p_nnz[i]  = 0; 
-            res.p_size[i] = other->p_nnz[i]; 
-
-        
-        }
-
-    } 
+    // This function assumes that 'other' is correctly allocated.
+    // Defines a new memory space from the p_nnz (not p_size) of the input sparse number.
+    sotinum_t res = soti_createEmpty_predef(other->p_nnz, other->order, dhl);
 
     return res;
 
@@ -764,7 +644,7 @@ sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
+inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
     
     sotinum_t res = soti_init(); // Initialize pointer values.
 
@@ -779,7 +659,7 @@ sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
         allocation_size = res.order*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
 
         // Add the standard allocation sizes:
-        for ( i =0; i<res.order; i++){
+        for ( i = 0; i<res.order; i++){
             
             allocation_size += p_nnz[i]*(sizeof(coeff_t)+sizeof(imdir_t));
 
@@ -789,12 +669,10 @@ sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
         memory = malloc(allocation_size);
         if ( memory == NULL ){
             printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
-            exit(OTI_OutOfMemory);
+            exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
         }
 
-
-        // Distribute memory alongside the different pointers.
-
+        // Distribute memory among the different pointers.
         res.p_im  = (coeff_t**)memory;
         memory    += res.order * sizeof(coeff_t*);
 
@@ -806,31 +684,24 @@ sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
 
         res.p_size= (ndir_t*  )memory;
         memory    += res.order * sizeof(ndir_t);
-       
+        
         for ( i = 0; i < res.order; i++){
             
-            if (p_nnz[i] != 0){
-            
-                res.p_im[i] = (coeff_t*)memory;
-                memory += p_nnz[i]*sizeof(coeff_t); 
+            // Distribute memory.
+            res.p_im[i] = (coeff_t*)memory;
+            memory += p_nnz[i]*sizeof(coeff_t); 
 
-
-                res.p_idx[i]= (imdir_t*)memory;
-                memory += p_nnz[i]*sizeof(imdir_t); 
-                        
-            } else {
-
-                res.p_im[i]  = NULL;
-                res.p_idx[i] = NULL;
-
-            }
+            res.p_idx[i]= (imdir_t*)memory;
+            memory += p_nnz[i]*sizeof(imdir_t); 
 
             // Set number of non-zero and allocated size to 0.
             res.p_size[i] = p_nnz[i]; 
             res.p_nnz[i]  = 0; 
 
-        
         }
+
+        // Raise flag for OTI number.
+        res.flag = 1;
 
     } 
 

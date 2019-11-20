@@ -185,48 +185,32 @@ uint64_t binSearchUI64( uint64_t elem,  uint64_t* p_arr, uint64_t  size,flag_t* 
     if (elem <= p_arr[min_i]){
         
         if (elem == p_arr[min_i]){
-
             *flag = 1;
-
         }
-        
         return min_i;
 
     } else if (elem > p_arr[max_i-1]){
-        
         return max_i;
-
     }
-
-    
-
     
     while(  (max_i-min_i)>2  ){
 
-        
         if (elem > p_arr[pos]){
-
             min_i = pos;
-
         }else{
-
             max_i = pos+1;
-
         }
-        // Convert both arrays to 
 
+        // Convert both arrays to 
         pos = min_i+(max_i-min_i)/2 ;
 
     }
 
     if (p_arr[pos] == elem){
-
         *flag = 1;
-
     }
 
     return pos;
-
 
 }
 // ----------------------------------------------------------------------------------------------------

@@ -17,8 +17,8 @@ include "sparse/num.pxi"
 # Append easy creators.
 include "sparse/utils.pxi"
 
-# # Append math functions.
-# include "sparse/math.pxi"
+# Append math functions.
+include "sparse/math.pxi"
 
 
 # # Append math functions.

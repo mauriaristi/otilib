@@ -40,7 +40,6 @@ typedef struct {
     uint64_t        size; ///< Size of array.
 } soarr_t;                ///< SOTI array type.
 
-
 // typedef struct {
 //     arr_t            re;  ///< Real coefficients.
 //     arr_t**        p_im;  ///< Array with all imaginary coefficients per order.
@@ -516,6 +515,7 @@ void soti_free(sotinum_t* num);
 // ----------------------------------------------------------------------------------------------------
 
 
+uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest);
 
 sotinum_t soti_init(void);
 

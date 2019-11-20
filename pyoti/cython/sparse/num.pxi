@@ -1,4 +1,4 @@
-
+# cdef uint64_t[::1] arr_nnz = np.zeros(150)
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -16,18 +16,49 @@ cdef class sotinum:
 
 
   #***************************************************************************************************
-  def __init__(self, coeff_t re_coeff, ord_t order, uint8_t FLAGS = 1):
+  def __init__(self, coeff_t re_coeff, ord_t order = 0, uint8_t FLAGS = 1, object nnz = None):
     """
     DESCRIPTION: Constructor of a sparse OTI number.
     """
     #*************************************************************************************************
-    global dhl
+    global dhl, ONE, ZERO
+    
 
     # Add warning for higher orders and orders that are not required
     self.FLAGS = FLAGS
-
-    num1 = soti_createReal(re_coeff, order, dhl);
+    cdef ndir_t* p_nnz # Static allocation of this array.
+    cdef ord_t orderdef, i, size
     
+    
+    # First initialize the number.
+    self.num = soti_init()
+
+    # In case that nnz was defined.
+    if nnz is not None:
+      
+      size = len(nnz)
+      orderdef = max(size,order)
+
+      p_nnz = dhl.p_dh[dhl.ndh-ONE].p_nnz[ZERO]
+
+      for i in range(size):
+        p_nnz[i] = nnz[i]
+      # end for 
+
+      for i in range(size,orderdef):
+        p_nnz[i] = ZERO
+      # end for 
+      
+      self.num =  soti_createEmpty_predef(p_nnz, orderdef, dhl)
+
+      # Set real coefficient.
+      self.num.re = re_coeff
+    
+    else:
+      
+      self.num =  soti_createReal(re_coeff, order, dhl)
+    
+    # end if 
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -136,8 +167,9 @@ cdef class sotinum:
     otin.num.p_nnz  = num[ZERO].p_nnz 
     otin.num.p_size = num[ZERO].p_size
     otin.num.order  = num[ZERO].order 
+    otin.num.flag   = num[ZERO].flag 
 
-    otin.FLAGS = FLAGS
+    otin.FLAGS      = FLAGS
     
     return otin
 
@@ -574,36 +606,36 @@ cdef class sotinum:
   #--------------------------------------------------------------------------------------------------- 
 
 
-#   #***************************************************************************************************
-#   def copy(self):
-#     """
-#     PURPOSE:      To create a copy of a spr_otinum object, totally 
-#                   independent of the original.
+# #   #***************************************************************************************************
+# #   def copy(self):
+# #     """
+# #     PURPOSE:      To create a copy of a spr_otinum object, totally 
+# #                   independent of the original.
 
-#     DESCRIPTION:  The equality operator "=" is intended to create aliases
-#                   of multicomplex numbers. You should use copy() when you
-#                   need a copy instead of an alias.
+# #     DESCRIPTION:  The equality operator "=" is intended to create aliases
+# #                   of multicomplex numbers. You should use copy() when you
+# #                   need a copy instead of an alias.
     
-#     EXAMPLE:      >>> a = spr_otinum([0,4,17], [1.,7.,3.], 2)
-#                   >>> b = a.copy()
-#                   >>> b[1] = 10
-#                   >>> a
-#                   spr_otinum([0,4,17], [1.,7.,3.], 2)
-#                   >>> b
-#                   spr_otinum([0,1,4,17], [1.,10.,7.,3.], 2)
-#     """
-#     #*************************************************************************************************
+# #     EXAMPLE:      >>> a = spr_otinum([0,4,17], [1.,7.,3.], 2)
+# #                   >>> b = a.copy()
+# #                   >>> b[1] = 10
+# #                   >>> a
+# #                   spr_otinum([0,4,17], [1.,7.,3.], 2)
+# #                   >>> b
+# #                   spr_otinum([0,1,4,17], [1.,10.,7.,3.], 2)
+# #     """
+# #     #*************************************************************************************************
 
-#     if self.indx.size != 0:
+# #     if self.indx.size != 0:
       
-#       return spr_otinum(self.indx.copy(),self.coefs.copy(),self.maxorder)
+# #       return spr_otinum(self.indx.copy(),self.coefs.copy(),self.maxorder)
 
-#     else:
+# #     else:
 
-#       #empty number, MemoryView does not know how to handle them, therefore...
-#       return spr_otinum(np.array(self.indx),np.array(self.coefs),self.maxorder)
+# #       #empty number, MemoryView does not know how to handle them, therefore...
+# #       return spr_otinum(np.array(self.indx),np.array(self.coefs),self.maxorder)
 
-#   #---------------------------------------------------------------------------------------------------  
+# #   #---------------------------------------------------------------------------------------------------  
 
 
 

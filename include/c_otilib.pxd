@@ -24,12 +24,16 @@ cdef extern from "oti/oti.h" nogil:
     imdir_t* p_arr     
     uint64_t shape[2]
 
-  ctypedef struct dhelp_t:
+  ctypedef struct dhelp_t:    
     bases_t*      p_fulldir
     imdir2d_t*  p_multtabls
     ndir_t*         p_ndirs
     coeff_t**          p_im
     imdir_t**         p_idx
+    coeff_t***        p_ims
+    imdir_t***        p_ids
+    ndir_t**          p_nnz
+    ndir_t**         p_size
     ndir_t        allocSize
     ndir_t            Ntmps
     ndir_t             Ndir
@@ -104,6 +108,7 @@ cdef extern from "oti/oti.h" nogil:
     ndir_t*       p_nnz
     ndir_t*      p_size
     ord_t         order
+    flag_t         flag
 
 
   # Defs from "fem.h"
@@ -629,6 +634,7 @@ cdef extern from "oti/oti.h" nogil:
   void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
   void soti_print(sotinum_t* num, dhelpl_t dhl);
   void soti_free(sotinum_t* num);
+  sotinum_t soti_init();
   sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl);
   sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl); 
   sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 

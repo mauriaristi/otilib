@@ -59,7 +59,8 @@ inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     ord_t res_ord = MAX(num1->order,num2->order);
     ord_t ordi;
 
-    tmp = soti_get_rtmp(7,res_ord,dhl); // creates a sotinum with no elements in imaginary directions.
+    // Create a sotinum with no elements in imaginary directions.
+    tmp = soti_get_rtmp(7, res_ord, dhl);
 
     tmp.re = num1->re + num2->re; 
 

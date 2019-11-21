@@ -10,8 +10,8 @@
             ]
         ],
         "depends": [
-            "/Users/maristi7/coding/otilib/build/lib/liboti.a",
-            "/Users/maristi7/coding/otilib/build/tmp_src/../lib/liboti.a"
+            "/home/maristi7/coding/otilib/build/lib/liboti.a",
+            "/home/maristi7/coding/otilib/build/tmp_src/../lib/liboti.a"
         ],
         "extra_compile_args": [
             "-I.",
@@ -19,15 +19,15 @@
             "-O3"
         ],
         "include_dirs": [
-            "/Users/maristi7/opt/anaconda3/envs/pyoti/lib/python3.7/site-packages/numpy/core/include",
-            "/Users/maristi7/coding/otilib/include"
+            "/home/maristi7/anaconda3/envs/pyoti/lib/python3.7/site-packages/numpy/core/include",
+            "/home/maristi7/coding/otilib/include"
         ],
         "libraries": [
             "oti"
         ],
         "name": "pyoti.mesh_tools",
         "sources": [
-            "/Users/maristi7/coding/otilib/pyoti/cython/mesh_tools.pyx"
+            "/home/maristi7/coding/otilib/pyoti/cython/mesh_tools.pyx"
         ]
     },
     "module_name": "pyoti.mesh_tools"

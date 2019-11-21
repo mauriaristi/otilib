@@ -635,11 +635,11 @@ static CYTHON_INLINE float __PYX_NAN() {
 #define __PYX_HAVE_API__pyoti__sparse
 /* Early includes */
 #include <stdint.h>
-#include "oti/oti.h"
 #include <string.h>
 #include <stdio.h>
 #include "numpy/arrayobject.h"
 #include "numpy/ufuncobject.h"
+#include "oti/oti.h"
 #ifdef _OPENMP
 #include <omp.h>
 #endif /* _OPENMP */
@@ -881,69 +881,6 @@ static const char *__pyx_f[] = {
   "include.pxi",
 };
 
-/* "c_otilib.pxd":7
- * #--------------------------------------     TYPE DECLARATIONS     ------------------------------------
- * #-----------------------------------------------------------------------------------------------------
- * ctypedef double    coeff_t             # <<<<<<<<<<<<<<
- * ctypedef double*     arr_t
- * ctypedef uint64_t  imdir_t
- */
-typedef double __pyx_t_8c_otilib_coeff_t;
-
-/* "c_otilib.pxd":9
- * ctypedef double    coeff_t
- * ctypedef double*     arr_t
- * ctypedef uint64_t  imdir_t             # <<<<<<<<<<<<<<
- * ctypedef uint64_t   ndir_t
- * ctypedef uint16_t  bases_t
- */
-typedef uint64_t __pyx_t_8c_otilib_imdir_t;
-
-/* "c_otilib.pxd":10
- * ctypedef double*     arr_t
- * ctypedef uint64_t  imdir_t
- * ctypedef uint64_t   ndir_t             # <<<<<<<<<<<<<<
- * ctypedef uint16_t  bases_t
- * ctypedef uint8_t     ord_t
- */
-typedef uint64_t __pyx_t_8c_otilib_ndir_t;
-
-/* "c_otilib.pxd":11
- * ctypedef uint64_t  imdir_t
- * ctypedef uint64_t   ndir_t
- * ctypedef uint16_t  bases_t             # <<<<<<<<<<<<<<
- * ctypedef uint8_t     ord_t
- * ctypedef uint8_t     ndh_t
- */
-typedef uint16_t __pyx_t_8c_otilib_bases_t;
-
-/* "c_otilib.pxd":12
- * ctypedef uint64_t   ndir_t
- * ctypedef uint16_t  bases_t
- * ctypedef uint8_t     ord_t             # <<<<<<<<<<<<<<
- * ctypedef uint8_t     ndh_t
- * ctypedef uint8_t    flag_t
- */
-typedef uint8_t __pyx_t_8c_otilib_ord_t;
-
-/* "c_otilib.pxd":13
- * ctypedef uint16_t  bases_t
- * ctypedef uint8_t     ord_t
- * ctypedef uint8_t     ndh_t             # <<<<<<<<<<<<<<
- * ctypedef uint8_t    flag_t
- * #-----------------------------------------------------------------------------------------------------
- */
-typedef uint8_t __pyx_t_8c_otilib_ndh_t;
-
-/* "c_otilib.pxd":14
- * ctypedef uint8_t     ord_t
- * ctypedef uint8_t     ndh_t
- * ctypedef uint8_t    flag_t             # <<<<<<<<<<<<<<
- * #-----------------------------------------------------------------------------------------------------
- * 
- */
-typedef uint8_t __pyx_t_8c_otilib_flag_t;
-
 /* "../../../../opt/anaconda3/envs/pyoti/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":776
  * # in Cython to enable them only on the right systems.
  * 
@@ -1132,6 +1069,69 @@ typedef npy_double __pyx_t_5numpy_double_t;
  * ctypedef npy_cfloat      cfloat_t
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
+
+/* "c_otilib.pxd":8
+ * #--------------------------------------     TYPE DECLARATIONS     ------------------------------------
+ * #-----------------------------------------------------------------------------------------------------
+ * ctypedef double    coeff_t             # <<<<<<<<<<<<<<
+ * ctypedef double*     arr_t
+ * ctypedef uint64_t  imdir_t
+ */
+typedef double __pyx_t_8c_otilib_coeff_t;
+
+/* "c_otilib.pxd":10
+ * ctypedef double    coeff_t
+ * ctypedef double*     arr_t
+ * ctypedef uint64_t  imdir_t             # <<<<<<<<<<<<<<
+ * ctypedef uint64_t   ndir_t
+ * ctypedef uint16_t  bases_t
+ */
+typedef uint64_t __pyx_t_8c_otilib_imdir_t;
+
+/* "c_otilib.pxd":11
+ * ctypedef double*     arr_t
+ * ctypedef uint64_t  imdir_t
+ * ctypedef uint64_t   ndir_t             # <<<<<<<<<<<<<<
+ * ctypedef uint16_t  bases_t
+ * ctypedef uint8_t     ord_t
+ */
+typedef uint64_t __pyx_t_8c_otilib_ndir_t;
+
+/* "c_otilib.pxd":12
+ * ctypedef uint64_t  imdir_t
+ * ctypedef uint64_t   ndir_t
+ * ctypedef uint16_t  bases_t             # <<<<<<<<<<<<<<
+ * ctypedef uint8_t     ord_t
+ * ctypedef uint8_t     ndh_t
+ */
+typedef uint16_t __pyx_t_8c_otilib_bases_t;
+
+/* "c_otilib.pxd":13
+ * ctypedef uint64_t   ndir_t
+ * ctypedef uint16_t  bases_t
+ * ctypedef uint8_t     ord_t             # <<<<<<<<<<<<<<
+ * ctypedef uint8_t     ndh_t
+ * ctypedef uint8_t    flag_t
+ */
+typedef uint8_t __pyx_t_8c_otilib_ord_t;
+
+/* "c_otilib.pxd":14
+ * ctypedef uint16_t  bases_t
+ * ctypedef uint8_t     ord_t
+ * ctypedef uint8_t     ndh_t             # <<<<<<<<<<<<<<
+ * ctypedef uint8_t    flag_t
+ * #-----------------------------------------------------------------------------------------------------
+ */
+typedef uint8_t __pyx_t_8c_otilib_ndh_t;
+
+/* "c_otilib.pxd":15
+ * ctypedef uint8_t     ord_t
+ * ctypedef uint8_t     ndh_t
+ * ctypedef uint8_t    flag_t             # <<<<<<<<<<<<<<
+ * #-----------------------------------------------------------------------------------------------------
+ * 
+ */
+typedef uint8_t __pyx_t_8c_otilib_flag_t;
 /* Declarations.proto */
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
@@ -1160,15 +1160,6 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
 /*--- Type declarations ---*/
 struct __pyx_obj_5pyoti_4core_dHelp;
 struct __pyx_obj_5pyoti_6sparse_sotinum;
-
-/* "c_otilib.pxd":8
- * #-----------------------------------------------------------------------------------------------------
- * ctypedef double    coeff_t
- * ctypedef double*     arr_t             # <<<<<<<<<<<<<<
- * ctypedef uint64_t  imdir_t
- * ctypedef uint64_t   ndir_t
- */
-typedef double *__pyx_t_8c_otilib_arr_t;
 
 /* "../../../../opt/anaconda3/envs/pyoti/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":815
  * ctypedef npy_longdouble longdouble_t
@@ -1205,6 +1196,15 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  * cdef inline object PyArray_MultiIterNew1(a):
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
+
+/* "c_otilib.pxd":9
+ * #-----------------------------------------------------------------------------------------------------
+ * ctypedef double    coeff_t
+ * ctypedef double*     arr_t             # <<<<<<<<<<<<<<
+ * ctypedef uint64_t  imdir_t
+ * ctypedef uint64_t   ndir_t
+ */
+typedef double *__pyx_t_8c_otilib_arr_t;
 struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_3darray_double;
 struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_2darray_double;
 struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_double;
@@ -1871,8 +1871,6 @@ static __pyx_t_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_deriv(struc
 
 /* Module declarations from 'libc.stdint' */
 
-/* Module declarations from 'c_otilib' */
-
 /* Module declarations from 'cpython.buffer' */
 
 /* Module declarations from 'libc.string' */
@@ -1901,6 +1899,8 @@ static PyTypeObject *__pyx_ptype_5numpy_broadcast = 0;
 static PyTypeObject *__pyx_ptype_5numpy_ndarray = 0;
 static PyTypeObject *__pyx_ptype_5numpy_ufunc = 0;
 static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *, char *, char *, int *); /*proto*/
+
+/* Module declarations from 'c_otilib' */
 
 /* Module declarations from 'cython' */
 

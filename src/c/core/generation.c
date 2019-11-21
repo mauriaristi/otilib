@@ -20,7 +20,7 @@ void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder ){
         
         // ndirs
         printf("\n\n---------------------------------------------------\n");
-        printf("Precomputing data for order %hu.\n",order);
+        printf("Precomputing data for order " _PUINT8T ".\n",order);
         // printf("Generating ndirs\n");
         
         dhelp_precompute_ndirs( order, max_basis_k[order-1], &dhl); 
@@ -150,8 +150,8 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
         o1 = table+1;
         o2 = order-table-1;
 
-        printf("    Multiplication table %hhu\n",o1);
-        printf("       order %hhu X %hhu\n",o1,o2);
+        printf("    Multiplication table " _PORDT "\n",o1);
+        printf("       order " _PORDT " X " _PORDT "\n",o1,o2);
 
         ndirs_o1 = dhl->p_dh[o1-1].p_ndirs[nbases];
         ndirs_o2 = dhl->p_dh[o2-1].p_ndirs[nbases];
@@ -178,7 +178,7 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
                 for (j=0;j<o1;j++){
                     printf("%hu,",dirs1[j]);
                 }
-                printf("\b] iter %lu/%lu \n ",idx1*ndirs_o2+1,ndirs_o1*ndirs_o2);
+                printf("\b] iter " _PNDIRT "/" _PNDIRT " \n ",idx1*ndirs_o2+1,ndirs_o1*ndirs_o2);
             }
             i+=1;
 

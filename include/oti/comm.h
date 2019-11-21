@@ -10,7 +10,9 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <inttypes.h>
 #include <math.h>
+
 // #include <omp.h>
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------    END EXTERNAL LIBRARIES     -------------------------------------
@@ -74,24 +76,24 @@ typedef uint8_t     flag_t; ///< Flag type.
 #define MAX(a,b) ((a) > (b) ? a : b)
 #define MIN(a,b) ((a) < (b) ? a : b)
 
-#define _PCOEFFT "%11.4e" // Print format of coeff_t
-#define _PIMDIRT "%lu"    // Print format of imdir_t
-#define _PNDIRT  "%lu"    // Print format of ndir_t
-#define _PBASEST "%hu"    // Print format of bases_t
-#define _PORDT   "%hhu"   // Print format of ord_t
-#define _PNDHT   "%hhu"   // Print format of ndh_t
-#define _PFLAGT  "%hhu"   // Print format of flag_t
+#define _PCOEFFT "%11.4e"   // Print format of coeff_t
+#define _PIMDIRT "%"PRIu64  // Print format of imdir_t
+#define _PNDIRT  "%"PRIu64  // Print format of ndir_t
+#define _PBASEST "%"PRIu16  // Print format of bases_t
+#define _PORDT   "%"PRIu8   // Print format of ord_t
+#define _PNDHT   "%"PRIu8   // Print format of ndh_t
+#define _PFLAGT  "%"PRIu8   // Print format of flag_t
 
-#define _PUINT64T "%lu"
-#define _PUINT32T "%u"
-#define _PUINT16T "%hu"
-#define _PUINT8T  "%hhu"
+#define _PUINT64T "%"PRIu64
+#define _PUINT32T "%"PRIu32
+#define _PUINT16T "%"PRIu16
+#define _PUINT8T  "%"PRIu8
 
-#define _PINT64T "%ld"
-#define _PINT32T "%d"
+#define _PINT64T "%"PRId64
+#define _PINT32T "%"PRId32
 #define _PINT    "%d"
-#define _PINT16T "%hd"
-#define _PINT8T  "%hhd"
+#define _PINT16T "%"PRId16
+#define _PINT8T  "%"PRId8
 
 #define _ENDL "\n"
 

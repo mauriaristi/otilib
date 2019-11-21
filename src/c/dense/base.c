@@ -487,19 +487,20 @@ void oti_print( otinum_t* num, dhelpl_t dhl){
     ord_t ord ;
     ndir_t dir;
     // char* string = NULL;
-    printf("  Order: %hhu, nbases: %hu, ndir: %lu, re: %11.4e\n",
+    printf("  Order: "_PORDT", nbases: "_PBASEST", ndir: "_PNDIRT", re: "_PCOEFFT"\n",
         num->order, num->nbases, num->ndir, num->re);
     printf("  ORD ,    IMDIR  ,   VALUE   \n");
 
-    printf("    0 ,         0 ,%11.4e\n",num->re);
+    printf("    0 ,         0 ,"_PCOEFFT"\n",num->re);
 
-    for( ord = 0; ord<num->order; ord++){
+    for( ord = 1; ord<=num->order; ord++){
 
         ndir_t ndir_i = num->p_ndpo[ord];
 
         for ( dir=0; dir< ndir_i; dir++){
 
-            printf(" %4hhu , %9lu ,%11.4e\n",ord+1, dir, num->p_im[ord][dir]);
+            printf(" " _PORDT " , " _PNDIRT " ," _PCOEFFT "\n",
+                ord, dir, num->p_im[ord-1][dir]);
 
         }
 
@@ -531,7 +532,7 @@ otinum_t oti_init( void ){
 // ****************************************************************************************************
 void oti_free( otinum_t* num ){
     
-    ord_t ordi ;
+    // ord_t ordi ;
     if (num->p_im != NULL){
 
         // for ( ordi = 0; ordi<num->order; ordi++){

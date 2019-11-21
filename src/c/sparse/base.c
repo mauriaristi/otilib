@@ -211,12 +211,9 @@ void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl){
     num->re = a;
 
     for ( i = 0; i<num->order; i++){
-
         // Set number of non-zero and allocated size to 0.
         num->p_nnz[i] = 0;
-
     }
-
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -252,14 +249,12 @@ void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 
     // Copy imaginary coefficients
     for ( i = 0; i < src->order; i++){
-        
         // Copy memory to dest number. Only copy non zeros.
         memcpy(dest->p_im[i], src->p_im[i], src->p_nnz[i]*sizeof(coeff_t) );
         memcpy(dest->p_idx[i],src->p_idx[i],src->p_nnz[i]*sizeof(imdir_t) );
 
         dest->p_nnz[i] = src->p_nnz[i]; 
-
-    }  
+    }
 
     // Set all other elements in the imaginary directions to zero.
     for (; i<dest->order;i++){
@@ -302,7 +297,7 @@ void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 // ****************************************************************************************************
 coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t coef = soti_get_item(idx,order,num,dhl);
+    coeff_t coef   = soti_get_item(idx,order,num,dhl);
     coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
 
     return coef*factor;
@@ -323,17 +318,13 @@ coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 
     } else {
 
-        if ( order<=num->order ){
-            
+        if ( order<=num->order ){            
             if(num->p_nnz[order-1] != 0){
-
                 pos = binSearchUI64(idx, num->p_idx[order-1], num->p_nnz[order-1], &flag );
                 if (flag != 0){
                     res = num->p_im[order-1][pos];
                 }
-
             }
-
         }
 
     }
@@ -520,15 +511,16 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
         num->order, nnz_total, num->re);
     printf("  ORD ,    IMDIR  ,   VALUE   \n");
 
-    printf("    0 ,         0 , %11.4e\n",num->re);
+    printf("    0 ,         0 , "_PCOEFFT"\n",num->re);
 
-    for( ord = 0; ord<num->order; ord++){
+    for( ord = 1; ord<=num->order; ord++){
 
         ndir_t ndir_i = num->p_nnz[ord];
 
         for ( dir=0; dir< ndir_i; dir++){
-
-            printf(" %4hhu , %9lu ,%11.4e\n",ord+1, num->p_idx[ord][dir], num->p_im[ord][dir]);
+            
+            printf(" " _PORDT " , " _PNDIRT " ," _PCOEFFT "\n",
+                ord, num->p_idx[ord-1][dir], num->p_im[ord-1][dir]);
 
         }
 

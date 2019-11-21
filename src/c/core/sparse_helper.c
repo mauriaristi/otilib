@@ -1,8 +1,8 @@
 // ****************************************************************************************************
-void dhelp_sparse_mult_real( coeff_t val,
-                       coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
-                       coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,         
-                       dhelpl_t dhl){                            // Helper
+void dhelp_sparse_mult_real(   coeff_t val,
+                               coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                               coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,         
+                               dhelpl_t dhl){                            // Helper
 
     ndir_t i;
     (*ndirres) = ndir1;
@@ -40,10 +40,10 @@ void dhelp_sparse_copy(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
 
 
 // ****************************************************************************************************
-inline void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
-                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
-                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
-                           dhelpl_t dhl){
+inline void dhelp_sparse_sub_dirs( coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                                   coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
+                                   coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
+                                   dhelpl_t dhl){
 
     ndir_t j1, j2, jres;
     imdir_t dir1, dir2;
@@ -126,10 +126,10 @@ inline void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  n
 
 
 // ****************************************************************************************************
-inline void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
-                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
-                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
-                           dhelpl_t dhl){
+inline void dhelp_sparse_add_dirs_new( coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                                       coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
+                                       coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
+                                       dhelpl_t dhl){
 
     ndir_t  j2, jres; //, offset;
     // imdir_t dir1, dir2;
@@ -185,10 +185,10 @@ inline void dhelp_sparse_add_dirs_new(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_
 
 
 // ****************************************************************************************************
-inline void dhelp_sparse_add_dirs_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
-                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
-                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
-                           dhelpl_t dhl){
+inline void dhelp_sparse_add_dirs_old( coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                                       coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, 
+                                       coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           
+                                       dhelpl_t dhl){
 
     ndir_t j1, j2, jres;
     imdir_t dir1, dir2;

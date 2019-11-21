@@ -55,7 +55,7 @@ void search_prev_dir_old(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
                        				dhl);
 
 					// Add Direction
-					printf("-adding %lu\n",idx_res);
+					printf("-adding "_PIMDIRT"\n",idx_res);
 					*ndirres += 1;
 
 
@@ -84,8 +84,7 @@ void search_prev_dir_old(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
                         p_imres, p_idxres, ndirres, // Result
                         prev_idx, next_idx, next_i1, curr_i2,
            				dhl);	
-		}
-		
+		}		
 
 		return;
 
@@ -148,11 +147,11 @@ int main(int argc, char *argv[]){
 	imdir_t idx_res = 0;
 	ord_t   ord_res = 0;
 
-	imdir_t idx_res1 = 0;
-	ord_t   ord_res1 = 0;
+	// imdir_t idx_res1 = 0;
+	// ord_t   ord_res1 = 0;
 
-	imdir_t idx_res2 = 0;
-	ord_t   ord_res2 = 0;
+	// imdir_t idx_res2 = 0;
+	// ord_t   ord_res2 = 0;
 
 	ord_t  ord1=1, ord2=1;
 	
@@ -169,8 +168,8 @@ int main(int argc, char *argv[]){
 	ndir_t ndir2 = 7;
 
 
-	ord_t ordmin = MIN(ord1,ord2);
-	imdir2d_t tmp_multtabl = dhl.p_dh[ord1+ord2-1].p_multtabls[ordmin-1];
+	// ord_t ordmin = MIN(ord1,ord2);
+	// imdir2d_t tmp_multtabl = dhl.p_dh[ord1+ord2-1].p_multtabls[ordmin-1];
 
 	ndir_t i,j;
 	
@@ -195,7 +194,7 @@ int main(int argc, char *argv[]){
 			// }
 
 			// printf("Multiply: (%lu,%hhu) x (%lu,%hhu) = (%lu,%hhu)\n\n",idx1[i],ord1,idx2[j],ord2,idx_res, ord_res);
-			printf("%6lu, ",idx_res);
+			printf(" "_PIMDIRT", ",idx_res);
 			
 
 		}
@@ -212,7 +211,7 @@ int main(int argc, char *argv[]){
 	// Do first multiplication:
 	// idx1[0] * idx2[0];
 	dhelp_multDir( idx1[0],ord1, idx2[0],ord2 ,&idx_next_res, &ord_res , dhl);
-	printf("Adding %lu\n",idx_next_res);
+	printf("Adding "_PIMDIRT"\n",idx_next_res);
     ndirres++;
     idx_curr_res = idx_next_res;	
 	// Check previous elements from next direction.:
@@ -230,13 +229,14 @@ int main(int argc, char *argv[]){
 		                       idx_curr_res, idx_next_res, i, j,
 		                       dhl);
 		        // printf("Adding %lu, from ( %lu x %lu )\n",idx_next_res,idx1[i], idx2[j]);
-		        printf("Adding %lu\n",idx_next_res);
+		        printf("Adding "_PIMDIRT"\n",idx_next_res);
 		        ndirres++;
 				idx_curr_res = idx_next_res;	
 			}
 		}
 	}
-	printf("Total predicted multiplications: %lu vs total performed: %lu\n",ndir1*ndir2,ndirres);
+	printf("Total predicted multiplications: "_PNDIRT" vs total performed: "_PNDIRT"\n",
+		ndir1*ndir2,ndirres);
 
 
 	imdir_t p_idx_res[100];
@@ -248,9 +248,9 @@ int main(int argc, char *argv[]){
                        p_im_res, p_idx_res, &ndirres,          
                        dhl);
 	for ( i = 0; i<ndirres; i++){
-		printf("%4lu, %f\n",p_idx_res[i],p_im_res[i]);
+		printf("  "_PIMDIRT", "_PCOEFFT"\n",p_idx_res[i],p_im_res[i]);
 	} 
-	printf("Total second pass multiplications: %lu vs total performed: %lu\n",ndir1*ndir2,ndirres);
+	printf("Total second pass multiplications: "_PNDIRT" vs total performed: "_PNDIRT"\n",ndir1*ndir2,ndirres);
 
 	
 

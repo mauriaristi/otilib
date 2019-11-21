@@ -70,7 +70,7 @@ void loadnpy_multtabls( char* strLocation, ord_t order, bases_t nbasis, dhelp_t*
             sprintf(holder, _PBASEST, nbasis);
             strcat(filename,holder);
             strcat(filename,"_");
-            sprintf(holder, "%lu", k);
+            sprintf(holder, _PUINT64T, k);
             strcat(filename,holder);
             strcat(filename,".npy");
             
@@ -345,7 +345,7 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
 
                     *ndim=*ndim+1;
                     
-                    sscanf(pt,"%lu", &shape_tmp);
+                    sscanf(pt,_PUINT64T, &shape_tmp);
                     total_nels*=shape_tmp;
                     // printf("The read shape is: %lu\n", shape_tmp);   
                     pt = strtok(NULL,",");
@@ -360,7 +360,7 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
                 i=0;
                 while(pt !=NULL){
                     
-                    sscanf(pt,"%lu", &(shape[i]));
+                    sscanf(pt,_PUINT64T, &(shape[i]));
                     pt = strtok(NULL,",");
                     i+=1;
 

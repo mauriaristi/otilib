@@ -1104,7 +1104,7 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "c_otilib.pxd":7
+/* "c_otilib.pxd":8
  * #--------------------------------------     TYPE DECLARATIONS     ------------------------------------
  * #-----------------------------------------------------------------------------------------------------
  * ctypedef double    coeff_t             # <<<<<<<<<<<<<<
@@ -1113,7 +1113,7 @@ typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
  */
 typedef double __pyx_t_8c_otilib_coeff_t;
 
-/* "c_otilib.pxd":9
+/* "c_otilib.pxd":10
  * ctypedef double    coeff_t
  * ctypedef double*     arr_t
  * ctypedef uint64_t  imdir_t             # <<<<<<<<<<<<<<
@@ -1122,7 +1122,7 @@ typedef double __pyx_t_8c_otilib_coeff_t;
  */
 typedef uint64_t __pyx_t_8c_otilib_imdir_t;
 
-/* "c_otilib.pxd":10
+/* "c_otilib.pxd":11
  * ctypedef double*     arr_t
  * ctypedef uint64_t  imdir_t
  * ctypedef uint64_t   ndir_t             # <<<<<<<<<<<<<<
@@ -1131,7 +1131,7 @@ typedef uint64_t __pyx_t_8c_otilib_imdir_t;
  */
 typedef uint64_t __pyx_t_8c_otilib_ndir_t;
 
-/* "c_otilib.pxd":11
+/* "c_otilib.pxd":12
  * ctypedef uint64_t  imdir_t
  * ctypedef uint64_t   ndir_t
  * ctypedef uint16_t  bases_t             # <<<<<<<<<<<<<<
@@ -1140,7 +1140,7 @@ typedef uint64_t __pyx_t_8c_otilib_ndir_t;
  */
 typedef uint16_t __pyx_t_8c_otilib_bases_t;
 
-/* "c_otilib.pxd":12
+/* "c_otilib.pxd":13
  * ctypedef uint64_t   ndir_t
  * ctypedef uint16_t  bases_t
  * ctypedef uint8_t     ord_t             # <<<<<<<<<<<<<<
@@ -1149,7 +1149,7 @@ typedef uint16_t __pyx_t_8c_otilib_bases_t;
  */
 typedef uint8_t __pyx_t_8c_otilib_ord_t;
 
-/* "c_otilib.pxd":13
+/* "c_otilib.pxd":14
  * ctypedef uint16_t  bases_t
  * ctypedef uint8_t     ord_t
  * ctypedef uint8_t     ndh_t             # <<<<<<<<<<<<<<
@@ -1158,7 +1158,7 @@ typedef uint8_t __pyx_t_8c_otilib_ord_t;
  */
 typedef uint8_t __pyx_t_8c_otilib_ndh_t;
 
-/* "c_otilib.pxd":14
+/* "c_otilib.pxd":15
  * ctypedef uint8_t     ord_t
  * ctypedef uint8_t     ndh_t
  * ctypedef uint8_t    flag_t             # <<<<<<<<<<<<<<
@@ -1230,7 +1230,7 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "c_otilib.pxd":8
+/* "c_otilib.pxd":9
  * #-----------------------------------------------------------------------------------------------------
  * ctypedef double    coeff_t
  * ctypedef double*     arr_t             # <<<<<<<<<<<<<<

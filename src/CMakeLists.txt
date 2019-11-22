@@ -72,30 +72,43 @@ target_link_libraries(oti m)
 # --------------------------- BUILD OTI -----------------------------
 # -------------------------------------------------------------------
 
-# Create folder for data.
-FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
+
+
+# BUILD DATAGEN.
+
+# To compile with linux uncomment the following line
+SET(GCC_COVERAGE_COMPILE_FLAGS "-g -fwrapv -O3 -Wall -Wstrict-prototypes ")
+SET(GCC_COVERAGE_LINK_FLAGS "")
+
+add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+
+SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
+
+include_directories ("${PROJECT_SOURCE_DIR}/include")
+add_executable(otigen datagen/oti_gen_data.c)
+
+target_link_libraries (otigen oti)
 
 
 
 
+IF(EXISTS ${PROJECT_BINARY_DIR}/data)
 
+ELSE()
+    
+    ADD_CUSTOM_TARGET(gendata ALL
+        DEPENDS otigen)
+    # Create folder for data.
+    FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
 
+    ADD_CUSTOM_COMMAND (
+        TARGET  gendata    
+        COMMAND otigen -d../data/ -o20 -a5 -s1 -f10 -m10  
+    )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ENDIF()
 
 
 

@@ -1,83 +1,159 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <getopt.h>
 
+#include <string.h>
+#include <inttypes.h>
+#include <getopt.h>
 /* Flag set by ‘--verbose’. */
 static int verbose_flag;
+static int end_flag  =-1;
+static int start_flag=-1;
+static uint8_t maxorder = 1;
+static uint16_t m_set   = 1;
+static uint8_t o_start = 1;
+static uint8_t o_end   = 1;
+static uint16_t bases[150];
 
-int
-main (int argc, char **argv)
+char directory[1024]="";
+
+void set_nbasis(uint8_t start, uint8_t end,uint16_t set){
+
+  int i;
+  printf("In set_nbasis\n");
+  printf("Order start: %"PRIu8", Order end: %"PRIu8" \n",start,end);
+  if( start != 0 && end !=0){
+    for(i=start-1;i<end;i++){
+      bases[i]=set;
+    }
+  }
+
+  o_start = 0;
+  o_end   = 0;
+
+}
+
+void print_setup(void){
+  printf("  == directory: %s\n",directory);
+  printf("  == o_start  : %hhu\n",o_start);
+  printf("  == o_end    : %hhu\n",o_end);
+  printf("  == m_set    : %hu \n",m_set);
+  printf("  == maxorder : %hhu\n",maxorder);
+}
+
+void print_basis(void){
+  int i;
+  printf("BASES ARRAY is as follows: \n");
+  for(i=0;i<maxorder;i++){
+    printf(" Order: %d, number of bases: %"PRIu16"\n",i+1,bases[i]);
+  }
+
+}
+
+// Define the options:
+// const char *name
+// int has_arg
+// int *flag
+// int val
+
+static struct option long_options[] =
 {
+  /* These options don’t set a flag.
+     We distinguish them by their indices. */
+  {"directory",required_argument, 0, 'd'},
+  {"order",    required_argument, 0, 'o'},
+  {"maxorder", required_argument, 0, 'o'},
+  {"os",       required_argument, 0, 's'},
+  {"of",       required_argument, 0, 'f'},
+  {"m",        required_argument, 0, 'm'},
+  {"bases",    required_argument, 0, 'm'},
+  {0, 0, 0, 0}
+};
+
+int main (int argc, char **argv){
+  
   int c;
 
-  while (1)
-    {
-      static struct option long_options[] =
-        {
-          /* These options set a flag. */
-          {"verbose", no_argument,       &verbose_flag, 1},
-          {"brief",   no_argument,       &verbose_flag, 0},
-          /* These options don’t set a flag.
-             We distinguish them by their indices. */
-          {"add",     no_argument,       0, 'a'},
-          {"append",  no_argument,       0, 'b'},
-          {"delete",  required_argument, 0, 'd'},
-          {"create",  required_argument, 0, 'c'},
-          {"file",    required_argument, 0, 'f'},
-          {0, 0, 0, 0}
-        };
+
+  printf("The values of printing formats are the following:\n");
+  printf("PRIu8 : \""PRIu8"\"\n");
+  printf("PRIu16: \""PRIu16 "\"\n");
+  printf("PRIu32: \""PRIu32 "\"\n");
+  printf("PRIu64: \""PRIu64 "\"\n\n");
+  // printf("Got %d inputs\n",argc);
+  printf("Reading the inputs now:\n");
+
+  while (1)  {
+      
       /* getopt_long stores the option index here. */
       int option_index = 0;
 
-      c = getopt_long (argc, argv, "abc:d:f:",
+      c = getopt_long (argc, argv, "a:d:s:f:m:o:",
                        long_options, &option_index);
 
+      
       /* Detect the end of the options. */
-      if (c == -1)
+      if (c == -1){
         break;
+      }
 
-      switch (c)
-        {
-        case 0:
-          /* If this option set a flag, do nothing else now. */
-          if (long_options[option_index].flag != 0)
-            break;
-          printf ("option %s", long_options[option_index].name);
-          if (optarg)
-            printf (" with arg %s", optarg);
-          printf ("\n");
-          break;
+      // printf("  c is: (%c,%d) with option_index %d\n", c,c,option_index);
+      printf("\nRead a valid argv: (%c,%d)\n", c,c);
+      
 
-        case 'a':
-          puts ("option -a\n");
-          break;
-
-        case 'b':
-          puts ("option -b\n");
-          break;
-
-        case 'c':
-          printf ("option -c with value `%s'\n", optarg);
-          break;
-
+      switch (c){
         case 'd':
-          printf ("option -d with value `%s'\n", optarg);
+          strcpy(directory,optarg);
+          printf("  Setting directory name \"%s\"\n",directory);
+          // print_setup();
           break;
 
-        case 'f':
-          printf ("option -f with value `%s'\n", optarg);
+        case 'o':
+          sscanf(optarg,"%hhu",&maxorder);
+          // printf("    Setting maximum truncation order to %"PRIu8"\n",maxorder);
+          printf("  Setting maximum truncation order to %hhu\n",maxorder);
+          // print_setup();
+          set_nbasis(1, maxorder, m_set);
+          break;
+
+        case 'm': 
+          // print_setup();
+          // printf("\n");
+          sscanf(optarg,"%hu",&m_set);
+          printf("  Setting the number of basis to %hu\n",m_set);
+          // check that the range corresponds.
+          // print_setup();
+          set_nbasis(o_start, o_end, m_set);
+          break;
+        
+        case 'a': 
+          sscanf(optarg,"%hu",&m_set);
+          printf("  Setting all number of basis to %hu\n",m_set);
+          // print_setup();
+          set_nbasis(1, maxorder, m_set);
+          break;
+
+        case 's': 
+          sscanf(optarg,"%hhu",&o_start);
+          printf("  Setting start order to %hhu\n",o_start);
+          // print_setup();
+          break;
+        
+        case 'f': 
+          sscanf(optarg,"%hhu",&o_end);
+          printf("  Setting end order to %hhu\n",o_end);
+          // print_setup();
           break;
 
         case '?':
           /* getopt_long already printed an error message. */
           break;
 
-        default:
-          abort ();
+        // default:
+        //   abort ();
         }
     }
-
+  print_basis();
   /* Instead of reporting ‘--verbose’
      and ‘--brief’ as they are encountered,
      we report the final status resulting from them. */

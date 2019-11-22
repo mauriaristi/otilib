@@ -55,7 +55,6 @@ add_library (oti    c/core.c
 	                c/dense.c
 	                c/sparse.c
                     c/fem.c
-	                # c/otinum_spr_array.c
 	                )
 
 
@@ -92,23 +91,21 @@ add_executable(otigen datagen/oti_gen_data.c)
 target_link_libraries (otigen oti)
 
 
+SET(OTIGEN_FLAGS -d"${PROJECT_BINARY_DIR}/data/" -o150 -a2)
+SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s11 -f20 -m5)
+SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s4 -f10 -m10)
+SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s3 -f3 -m100)
+SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s1 -f2 -m1000)
 
+ADD_CUSTOM_TARGET(gendata ALL
+    DEPENDS otigen)
+# Create folder for data.
+FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
 
-IF(EXISTS ${PROJECT_BINARY_DIR}/data)
-
-ELSE()
-    
-    ADD_CUSTOM_TARGET(gendata ALL
-        DEPENDS otigen)
-    # Create folder for data.
-    FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
-
-    ADD_CUSTOM_COMMAND (
-        TARGET  gendata    
-        COMMAND otigen -d../data/ -o20 -a5 -s1 -f10 -m10  
-    )
-
-ENDIF()
+ADD_CUSTOM_COMMAND (
+    TARGET  gendata    
+    COMMAND otigen ${OTIGEN_FLAGS}
+)
 
 
 

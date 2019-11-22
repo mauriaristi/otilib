@@ -117,6 +117,8 @@ float    array2d_getel_f32_t( float*    arr,uint64_t ncols, uint64_t i, uint64_t
 coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhelpl_t dhl);
 
 
+
+
 void dhelp_add_coeff( coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres, 
     coeff_t im, imdir_t idx );
 
@@ -158,7 +160,7 @@ file located at the given folder.
 @param[in] nbasis Number of basis. Example: 10
 @param[out] p_dH Address of the helper to be loaded. Memory is allocated in this function.
 ******************************************************************************************************/ 
-void loadnpy_multtabls( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH);
+void loadnpy_multtabls( char* strLocation, ord_t order, dhelp_t* p_dH);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -170,7 +172,7 @@ the file from the given folder.
 @param[in] nbasis Number of basis. Example: 10.
 @param[out] p_dH Address of the helper to be loaded. Memory is allocated in this function.
 ******************************************************************************************************/ 
-void loadnpy_ndirs( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH);
+void loadnpy_ndirs( char* strLocation, ord_t order, dhelp_t* p_dH);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -183,9 +185,20 @@ file from the given folder.
 @param[in] nbasis Number of basis. Example: 10.
 @param[out] p_dH Address of the helper to be loaded. Memory is allocated in this function.
 ******************************************************************************************************/ 
-void loadnpy_fulldir( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH);
+void loadnpy_fulldir( char* strLocation, ord_t order, dhelp_t* p_dH);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Concatenate the filename for the pre-computed data cases.
+
+@param[in] strLocation String with the folder that contains the *.npy file with fulldir.
+@param[in] base_name String with the base name of the precomputed data. Example "fulldir"
+@param[in] order Order to be loaded. Example: 3.
+@param[out] filename Full name of the file. Example "multtabl_n20_0.npy"
+******************************************************************************************************/ 
+void concat_filename(const char* strLocation, const char* base_name, 
+    ord_t after, ord_t order, char* filename);
+void print_progressbar(double i, double imax);
 // ----------------------------------------------------------------------------------------------------
 // ---------------------------------   LOADNPY FUNCTIONS  ---------------------------------------------
 // ----------------------------------------------------------------------------------------------------
@@ -447,7 +460,7 @@ ndir_t dhelp_ndirOrder(bases_t nbases, ord_t order);
 @param nhelps Number of help arrays to be allocated in the array.
 @param[out] p_dH Address of the helper to be loaded.
 ******************************************************************************************************/ 
-void dhelp_load_singl( char* strLoc, ord_t order, bases_t nbasis, uint64_t nhelps, ndir_t allocSize,
+void dhelp_load_singl( char* strLoc, ord_t order, uint64_t nhelps, ndir_t allocSize,
   dhelp_t* p_dH);
 // ----------------------------------------------------------------------------------------------------
 

@@ -89,15 +89,15 @@ imdir_t dhelp_precompute_multiply(bases_t* dir1,ord_t ord1, bases_t* dir2,ord_t 
 
                 sorted[ires++] = dir1[i1++];
                 sorted[ires++] = dir2[i2++];
-                // i1+=1; i2+=1; ires+=2;
+                
             } else {
+
                 if (dir1[i1]<dir2[i2]){
-                    sorted[ires++] = dir1[i1++];
-                    // res++; i1++;
+                    sorted[ires++] = dir1[i1++];                    
                 }else{
-                    sorted[ires++] = dir2[i2++];
-                    // res++; i2++;
+                    sorted[ires++] = dir2[i2++];                    
                 }
+
             }
 
         } else if(i1 == ord1){
@@ -115,11 +115,11 @@ imdir_t dhelp_precompute_multiply(bases_t* dir1,ord_t ord1, bases_t* dir2,ord_t 
     for (i1 = 0; i1<ores;i1++){
         
         base = sorted[i1];
-        // printf("%hu,",base);
+        
         idx  += dhl.p_dh[i1].p_ndirs[base-1];
 
     }
-    // printf("\n%lu\n",idx);
+    
     return idx;
 }
 // ----------------------------------------------------------------------------------------------------
@@ -129,7 +129,7 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
     
     ndir_t ndirs_o1, ndirs_o2, idx1, idx2,i=0;
     // Define the number of multiplication tables 
-    ord_t n_multtabls = order / 2, o1, o2,j ;
+    ord_t n_multtabls = order / 2, o1, o2 ;
     bases_t* dirs1;
     bases_t* dirs2;
     ord_t table;
@@ -144,18 +144,15 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
 
     }
 
+    printf("Computing "_PORDT" tables\n",n_multtabls);
 
     for(table = 0; table<n_multtabls; table++ ){
 
         o1 = table+1;
         o2 = order-table-1;
 
-        printf("    Multiplication table " _PORDT "\n",o1);
-        printf("       order " _PORDT " X " _PORDT "\n",o1,o2);
-
         ndirs_o1 = dhl->p_dh[o1-1].p_ndirs[nbases];
         ndirs_o2 = dhl->p_dh[o2-1].p_ndirs[nbases];
-
 
         dhl->p_dh[order-1].p_multtabls[table].p_arr = 
             (imdir_t*)malloc( ndirs_o1*ndirs_o2*sizeof(imdir_t) );
@@ -172,13 +169,13 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
         for(idx1=0;idx1<ndirs_o1;idx1++){
 
             dirs1  = &dhl->p_dh[o1-1].p_fulldir[idx1*o1]; 
-            // printf("%lu\n",i);
-            if ( (i%100) == 0){
-                printf("        mult [");
-                for (j=0;j<o1;j++){
-                    printf("%hu,",dirs1[j]);
-                }
-                printf("\b] iter " _PNDIRT "/" _PNDIRT " \n ",idx1*ndirs_o2+1,ndirs_o1*ndirs_o2);
+
+            if ( (i%10) == 0){
+                
+                print_progressbar(idx1*ndirs_o2+1,ndirs_o1*ndirs_o2);
+                printf(" table "_PORDT"/"_PORDT,o1,n_multtabls);
+                fflush(stdout);
+
             }
             i+=1;
 
@@ -191,8 +188,34 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
 
             }           
         }
-
     }
+    print_progressbar(1,1); printf("\n");
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void print_progressbar(double i, double imax){
+
+    double perc = i/imax;
+    uint64_t buff_length = 40;
+    uint64_t nparts = (perc)*buff_length;
+    int k;
+    
+    printf("\r[");
+
+    for ( k=0; k < nparts; k++ ){
+        printf("#");
+    } 
+
+    for (; k<buff_length;k++){
+        printf(" ");
+    }
+
+    printf("] ");
+    printf("%3.0f %%",perc*100.0);
+    
+    // fflush(stdout);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -286,20 +309,9 @@ void dhelp_precompute_ndirs(ord_t order, bases_t nbases, dhelpl_t* dhl){
 void dhelp_save_fulldir(char* directory, bases_t base, ord_t order, dhelpl_t dhl ){
 
     char fullpathname[1024];
-    char filename[1024], holder[1024];
-
-    strcpy(fullpathname,directory);
-        
-    strcpy(filename,"fulldir_n");
-    sprintf(holder, _PORDT, order);
-    strcat(filename,holder);
-    strcat(filename,"_m");
-    sprintf(holder, _PBASEST, base);
-    strcat(filename,holder);
-    strcat(filename,".npy");
     
-    strcat(fullpathname,filename);
-
+    concat_filename(directory, "fulldir",0, order, fullpathname);
+    
     printf("Saving file: %s \n",fullpathname);
     savenpy(fullpathname,2,dhl.p_dh[order-1].p_fulldir,dhl.p_dh[order-1].Ndir,order);
 
@@ -310,23 +322,11 @@ void dhelp_save_fulldir(char* directory, bases_t base, ord_t order, dhelpl_t dhl
 void dhelp_save_ndirs(char* directory, bases_t base, ord_t order,  dhelpl_t dhl){
 
     char fullpathname[1024];
-    char filename[1024], holder[1024];
-    
 
-    strcpy(fullpathname,directory);
-
-    strcpy(filename,"ndirs_n");
-    sprintf(holder, _PORDT, order);
-    strcat(filename,holder);
-    strcat(filename,"_m");
-    sprintf(holder, _PBASEST, base);
-    strcat(filename,holder);
-    strcat(filename,".npy");
-    strcat(fullpathname,filename);
+    concat_filename(directory, "ndirs", 0, order, fullpathname);
 
     printf("Saving file: %s \n",fullpathname);
     savenpy(fullpathname,4,dhl.p_dh[order-1].p_ndirs, base + 1,0);
-
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -335,7 +335,7 @@ void dhelp_save_ndirs(char* directory, bases_t base, ord_t order,  dhelpl_t dhl)
 void dhelp_save_multtabls(char* directory, bases_t base, ord_t order,  dhelpl_t dhl){
 
     char fullpathname[1024];
-    char filename[1024], holder[1024];
+    // char filename[1024], holder[1024];
     
     ord_t nmults = dhl.p_dh[order-1].Nmult;
     ord_t i;
@@ -343,28 +343,18 @@ void dhelp_save_multtabls(char* directory, bases_t base, ord_t order,  dhelpl_t 
 
     for ( i=0; i<nmults; i++ ){
 
-        strcpy(fullpathname,directory);
+        concat_filename(directory, "multtabl", i+1, order, fullpathname);
 
-        strcpy(filename,"multtabl_n");
-        sprintf(holder, _PORDT, order);
-        strcat(filename,holder);
-        strcat(filename,"_m");
-        sprintf(holder, _PBASEST, base);
-        strcat(filename,holder);
-        strcat(filename,"_");
-        sprintf(holder, _PORDT, i);
-        strcat(filename,holder);
-        strcat(filename,".npy");
-        strcat(fullpathname,filename);
-
-        printf("Saving file: %s \n",fullpathname);
-
+        // printf("Saving file: %s \n",fullpathname);
+        printf("\rSaving file: %s, file %d/"_PORDT" ",fullpathname,i+1,nmults);
+        fflush(stdout);
         shapex = dhl.p_dh[order-1].p_multtabls[i].shape[0];
         shapey = dhl.p_dh[order-1].p_multtabls[i].shape[1];
 
         savenpy(fullpathname,4,dhl.p_dh[order-1].p_multtabls[i].p_arr, shapex, shapey);
 
     }
+    printf("\n");
 
 }
 // ----------------------------------------------------------------------------------------------------

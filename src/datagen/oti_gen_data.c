@@ -12,14 +12,13 @@ char directory[1024]="";
 void set_nbasis(uint8_t start, uint8_t end,uint16_t set){
 
   int i;
-  printf("In set_nbasis\n");
-  printf("Order start: %"PRIu8", Order end: %"PRIu8" \n",start,end);
+  // printf("In set_nbasis\n");
+  // printf("Order start: %"PRIu8", Order end: %"PRIu8" \n",start,end);
   if( start != 0 && end !=0){
     for(i=start-1;i<end;i++){
       bases[i]=set;
     }
   }
-
   o_start = 0;
   o_end   = 0;
 
@@ -35,9 +34,9 @@ void print_setup(void){
 
 void print_basis(void){
   int i;
-  printf("BASES ARRAY is as follows: \n");
+  printf("Precomputation of following OTI algebra: \n");
   for(i=0;i<maxorder;i++){
-    printf(" Order: %d, number of bases: %"PRIu16"\n",i+1,bases[i]);
+    printf(" Order: %3d, nbasis: %"PRIu16"\n",i+1,bases[i]);
   }
 
 }
@@ -67,13 +66,13 @@ int main (int argc, char **argv){
   int c;
 
 
-  printf("The values of printing formats are the following:\n");
-  printf("PRIu8 : \""PRIu8"\"\n");
-  printf("PRIu16: \""PRIu16 "\"\n");
-  printf("PRIu32: \""PRIu32 "\"\n");
-  printf("PRIu64: \""PRIu64 "\"\n\n");
+  // printf("The values of printing formats are the following:\n");
+  // printf("PRIu8 : \""PRIu8"\"\n");
+  // printf("PRIu16: \""PRIu16 "\"\n");
+  // printf("PRIu32: \""PRIu32 "\"\n");
+  // printf("PRIu64: \""PRIu64 "\"\n\n");
   // printf("Got %d inputs\n",argc);
-  printf("Reading the inputs now:\n");
+  // printf("Reading the inputs now:\n");
 
   while (1)  {
       
@@ -90,20 +89,20 @@ int main (int argc, char **argv){
       }
 
       // printf("  c is: (%c,%d) with option_index %d\n", c,c,option_index);
-      printf("\nRead a valid argv: (%c,%d)\n", c,c);
+      // printf("\nRead a valid argv: (%c,%d)\n", c,c);
       
 
       switch (c){
         case 'd':
           strcpy(directory,optarg);
-          printf("  Setting directory name \"%s\"\n",directory);
+          // printf("  Setting directory name \"%s\"\n",directory);
           // print_setup();
           break;
 
         case 'o':
           sscanf(optarg,"%hhu",&maxorder);
           // printf("    Setting maximum truncation order to %"PRIu8"\n",maxorder);
-          printf("  Setting maximum truncation order to %hhu\n",maxorder);
+          // printf("  Setting maximum truncation order to %hhu\n",maxorder);
           // print_setup();
           set_nbasis(1, maxorder, m_set);
           break;
@@ -112,7 +111,7 @@ int main (int argc, char **argv){
           // print_setup();
           // printf("\n");
           sscanf(optarg,"%hu",&m_set);
-          printf("  Setting the number of basis to %hu\n",m_set);
+          // printf("  Setting the number of basis to %hu\n",m_set);
           // check that the range corresponds.
           // print_setup();
           set_nbasis(o_start, o_end, m_set);
@@ -120,20 +119,20 @@ int main (int argc, char **argv){
         
         case 'a': 
           sscanf(optarg,"%hu",&m_set);
-          printf("  Setting all number of basis to %hu\n",m_set);
+          // printf("  Setting all number of basis to %hu\n",m_set);
           // print_setup();
           set_nbasis(1, maxorder, m_set);
           break;
 
         case 's': 
           sscanf(optarg,"%hhu",&o_start);
-          printf("  Setting start order to %hhu\n",o_start);
+          // printf("  Setting start order to %hhu\n",o_start);
           // print_setup();
           break;
         
         case 'f': 
           sscanf(optarg,"%hhu",&o_end);
-          printf("  Setting end order to %hhu\n",o_end);
+          // printf("  Setting end order to %hhu\n",o_end);
           // print_setup();
           break;
 

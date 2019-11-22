@@ -95,6 +95,19 @@ typedef uint8_t     flag_t; ///< Flag type.
 #define _PINT16T "%"PRId16
 #define _PINT8T  "%"PRId8
 
+#define _SUINT64T "%"SCNu64
+#define _SUINT32T "%"SCNu32
+#define _SUINT16T "%"SCNu16
+#define _SUINT8T  "%"SCNu8
+
+#define _SINT64T "%"SCNd64
+#define _SINT32T "%"SCNd32
+#define _SINT    "%d"
+#define _SINT16T "%"SCNd16
+#define _SINT8T  "%"SCNd8
+
+
+
 #define _ENDL "\n"
 
 #define _REALLOC_SIZE 10

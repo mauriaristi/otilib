@@ -17,8 +17,24 @@ cdef class sotinum:
   
   @staticmethod
   cdef sotinum create(sotinum_t* num, uint8_t FLAGS = *)
-  cpdef coeff_t get_deriv( self, list item)
- 
+  cpdef coeff_t get_deriv( self, object humdir)
+  cpdef sin(self)
+  cpdef cos(self)
+  cpdef tan(self)
+  cpdef atan(self)
+  cpdef acos(self)
+  cpdef asin(self)
+  cpdef sinh(self)
+  cpdef asinh(self)
+  cpdef cosh(self)
+  cpdef acosh(self)
+  cpdef tanh(self)
+  cpdef atanh(self)
+  cpdef log10(self)
+  cpdef log(self)
+  cpdef exp(self)
+  cpdef sqrt(self)
+  # cpdef cbrt(self)
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::: End of class spr_otinum :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

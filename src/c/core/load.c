@@ -16,25 +16,14 @@
 
 
 // ****************************************************************************************************
-void loadnpy_fulldir( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH){
+void loadnpy_fulldir( char* strLocation, ord_t order, dhelp_t* p_dH){
 
-    char filename[1000], holder[100];
+    char filename[1000];
     uint64_t shape[2]={1,1};
     uint8_t   ndim;
 
-    // printf("Loading dhelp Full dir\n");
-
     // Concatenate the filename.
-    strcpy(filename,strLocation);
-    strcat(filename,"/fulldir_n");
-    sprintf(holder, _PORDT, order);
-    strcat(filename,holder);
-    strcat(filename,"_m");
-    sprintf(holder, _PBASEST, nbasis);
-    strcat(filename,holder);
-    strcat(filename,".npy");
-
-    // printf("%s\n",filename);
+    concat_filename(strLocation, "fulldir", 0, order, filename);
 
     // Load array.
     loadnpy(filename, (void**) &p_dH->p_fulldir, &ndim, shape);
@@ -45,12 +34,12 @@ void loadnpy_fulldir( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void loadnpy_multtabls( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH){
+void loadnpy_multtabls( char* strLocation, ord_t order, dhelp_t* p_dH){
     
-    char filename[1000], holder[100];
+    char filename[1000];
     //uint64_t shape[2]={1,1};
     uint8_t   ndim;
-    uint64_t k;
+    uint64_t after,k;
 
     // Determine the number of operations.
     p_dH->Nmult = order/2;
@@ -62,18 +51,8 @@ void loadnpy_multtabls( char* strLocation, ord_t order, bases_t nbasis, dhelp_t*
         for (k=0;k<p_dH->Nmult;k++){
 
             // Concatenate the filename.
-            strcpy(filename,strLocation);
-            strcat(filename,"/multtabl_n");
-            sprintf(holder, _PORDT, order);
-            strcat(filename,holder);
-            strcat(filename,"_m");
-            sprintf(holder, _PBASEST, nbasis);
-            strcat(filename,holder);
-            strcat(filename,"_");
-            sprintf(holder, _PUINT64T, k);
-            strcat(filename,holder);
-            strcat(filename,".npy");
-            
+            after = k+1;
+            concat_filename(strLocation, "multtabl", after, order, filename);
 
             // Load the numpy array.
             loadnpy(filename, (void**) &p_dH->p_multtabls[k].p_arr, &ndim, p_dH->p_multtabls[k].shape);
@@ -87,36 +66,52 @@ void loadnpy_multtabls( char* strLocation, ord_t order, bases_t nbasis, dhelp_t*
 
 
 // ****************************************************************************************************
-void loadnpy_ndirs( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH){
+void loadnpy_ndirs( char* strLocation, ord_t order, dhelp_t* p_dH){
    
-    char filename[1000], holder[100];
+    char filename[1000];
     uint64_t shape[2]={1,1};
     uint8_t   ndim;
 
-    // printf("Loading ndirs\n");
-
     // Concatenate the filename
-    strcpy(filename,strLocation);
-    strcat(filename,"/ndirs_n");
-    sprintf(holder, _PORDT, order);
-    strcat(filename,holder);
-    strcat(filename,"_m");
-    sprintf(holder, _PBASEST, nbasis);
-    strcat(filename,holder);
-    strcat(filename,".npy");
-    
+    concat_filename(strLocation, "ndirs", 0, order, filename);
 
-    // printf("%s\n",filename);
 
     // Load the array.
-    loadnpy(filename, (void**) &p_dH->p_ndirs, &ndim, shape);    
+    loadnpy(filename, (void**) &p_dH->p_ndirs, &ndim, shape); 
+    p_dH->Nbasis   = shape[0]-1;
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 
 
+// ****************************************************************************************************
+void concat_filename(const char* strLocation, const char* base_name, ord_t after, ord_t order, char* filename){
 
+    ord_t after_print = after-1;
+    char holder[100];
+
+    strcpy(filename,strLocation);
+    strcat(filename,"/");
+    strcat(filename,base_name);
+    strcat(filename,"_n");
+
+    sprintf(holder, _PORDT, order);
+    strcat(filename,holder);
+    // strcat(filename,"_m");
+    // sprintf(holder, _PBASEST, nbasis);
+    // strcat(filename,holder);
+
+    if (after > 0){
+        strcat(filename,"_");
+        sprintf(holder, _PORDT, after_print);
+        strcat(filename,holder);
+    }
+    
+    strcat(filename,".npy");
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
@@ -166,17 +161,16 @@ void dhelp_load_tmps( dhelp_t* p_dH){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void dhelp_load_singl( char* strLocation, ord_t order, bases_t nbasis, ndir_t ntemps, 
+void dhelp_load_singl( char* strLocation, ord_t order, ndir_t ntemps, 
     ndir_t allocSize, dhelp_t* p_dH){ 
 
-    p_dH->Nbasis     = nbasis;
     p_dH->Ntmps      = ntemps;
     p_dH->allocSize  = allocSize;
 
     // Load arrays from files.
-    loadnpy_fulldir(   strLocation, order, nbasis, p_dH);
-    loadnpy_ndirs(     strLocation, order, nbasis, p_dH);    
-    loadnpy_multtabls( strLocation, order, nbasis, p_dH);
+    loadnpy_ndirs(     strLocation, order, p_dH);    
+    loadnpy_fulldir(   strLocation, order, p_dH);
+    loadnpy_multtabls( strLocation, order, p_dH);
 
     // Load temporals
     dhelp_load_tmps( p_dH );
@@ -345,7 +339,7 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
 
                     *ndim=*ndim+1;
                     
-                    sscanf(pt,_PUINT64T, &shape_tmp);
+                    sscanf(pt,_SUINT64T, &shape_tmp);
                     total_nels*=shape_tmp;
                     // printf("The read shape is: %lu\n", shape_tmp);   
                     pt = strtok(NULL,",");
@@ -360,7 +354,7 @@ void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape){
                 i=0;
                 while(pt !=NULL){
                     
-                    sscanf(pt,_PUINT64T, &(shape[i]));
+                    sscanf(pt,_SUINT64T, &(shape[i]));
                     pt = strtok(NULL,",");
                     i+=1;
 

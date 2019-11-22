@@ -521,6 +521,11 @@ cdef void c_Py_printArrayUI64(uint64_t* array,uint64_t size):
 
 
 
+def ndir_total(bases_t nbases,ord_t order):
+  return dhelp_ndirTotal( nbases, order)
+
+def ndir_order(bases_t nbases,ord_t order):
+  return dhelp_ndirOrder( nbases, order)
 
 # #*****************************************************************************************************
 # def getDirExpA(dirArray):
@@ -922,12 +927,7 @@ def dhelp_get_matrix_form(bases_t nbases, ord_t order, export_latex = True,
   cdef np.ndarray[uint8_t, ndim=1]  orde
 
   cdef str body = ""
-  cdef uint64_t i, j
-
-
-
-
-  
+  cdef uint64_t i, j  
   
   if export_sparse == True:
 

@@ -34,6 +34,7 @@ The wonderful world of OTIs
 ## Quick set up.
 
 * Summary of set up
+
 First you need anaconda 3. Then you should install the environment.yml file by runing:
 
 ```

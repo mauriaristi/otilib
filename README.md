@@ -7,7 +7,7 @@ This is the repository for the implementation of Order Truncated Imaginary numbe
 ***
 
 ## Current Programming languages: 
-* **C** (C11)
+* **C** (C99)
 * **Python** (Version 3 or newer. We are currently using [Cython](http://cython.org)
 
 The following programming languages are to be implemented in a very near future:
@@ -34,7 +34,19 @@ The wonderful world of OTIs
 ## Quick set up.
 
 * Summary of set up
-Run:
+First you need anaconda 3. Then you should install the environment.yml file by runing:
+
+```
+conda env create -f environment.yml
+```
+
+Then, after created the environment you should activate the environment,
+
+```
+conda activate pyoti
+```
+
+Finally, run:
 ```
 cd path/to/src/otilib
 mkdir build

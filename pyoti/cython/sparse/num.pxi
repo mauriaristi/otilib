@@ -182,6 +182,46 @@ cdef class sotinum:
     PURPOSE:  To print a representation of the sotinum object in a compact form.
     """
     #*************************************************************************************************
+    global dhl
+    global h
+
+    
+    cdef ord_t ordi, j
+    cdef ndir_t i;
+    cdef bases_t* dirs;
+
+    head      = ''
+    body      = ''
+    
+    body += '%.4f'%self.num.re
+
+    for ordi in range(0,self.num.order):
+
+      for i in range(self.num.p_nnz[ordi]):
+        
+        num = '%+.4f'%self.num.p_im[ordi][i] 
+        body += ' '+num[0]+" "+num[1:]
+        body += ' * e(' 
+        
+        body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
+        body += ")"
+      
+      # end for
+
+    # end for 
+      
+    tail = ''
+    
+    return (head + body + tail)
+
+  #--------------------------------------------------------------------------------------------------- 
+
+  #*************************************************************************************************** 
+  def short_repr(self):
+    """
+    PURPOSE:  To print a representation of the sotinum object in a compact form.
+    """
+    #*************************************************************************************************
     global h
     global p_dH
 
@@ -651,7 +691,7 @@ cdef class sotinum:
     return sotinum.create(&res)
   #---------------------------------------------------------------------------------------------------  
   #***************************************************************************************************
-  cpdef atan(self):
+  cpdef arctan(self):
     """
     PURPOSE: function.
     """
@@ -661,7 +701,7 @@ cdef class sotinum:
     return sotinum.create(&res)
   #---------------------------------------------------------------------------------------------------  
   #***************************************************************************************************
-  cpdef acos(self):
+  cpdef arccos(self):
     """
     PURPOSE: function.
     """
@@ -671,7 +711,7 @@ cdef class sotinum:
     return sotinum.create(&res)
   #---------------------------------------------------------------------------------------------------  
   #***************************************************************************************************
-  cpdef asin(self):
+  cpdef arcsin(self):
     """
     PURPOSE: function.
     """
@@ -691,7 +731,7 @@ cdef class sotinum:
     return sotinum.create(&res)
   #---------------------------------------------------------------------------------------------------  
   #***************************************************************************************************
-  cpdef asinh(self):
+  cpdef arcsinh(self):
     """
     PURPOSE: function.
     """
@@ -711,7 +751,7 @@ cdef class sotinum:
     return sotinum.create(&res)
   #---------------------------------------------------------------------------------------------------  
   #***************************************************************************************************
-  cpdef acosh(self):
+  cpdef arccosh(self):
     """
     PURPOSE: function.
     """
@@ -731,7 +771,7 @@ cdef class sotinum:
     return sotinum.create(&res)
   #---------------------------------------------------------------------------------------------------  
   #***************************************************************************************************
-  cpdef atanh(self):
+  cpdef arctanh(self):
     """
     PURPOSE: function.
     """

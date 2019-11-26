@@ -185,8 +185,8 @@ enum operEnum {
 
 
   // Determine the type of FE variable, if Constant or Variable.
-  feConstant      =  301,    ///< varConst
-  feVariable      =  302,    ///< varVaria
+  feConstant    =  301,    ///< varConst
+  feVariable    =  302,    ///< varVaria
 
   // Element geometric types 
   elNode        =  400,    ///< Point.

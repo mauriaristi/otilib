@@ -25,7 +25,6 @@
             "/Users/maristi7/coding/otilib/include",
             "/Users/maristi7/opt/anaconda3/envs/pyoti/lib/python3.7/site-packages/numpy/core/include"
         ],
-        "language": "c",
         "libraries": [
             "oti"
         ],

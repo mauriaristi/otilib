@@ -9,6 +9,10 @@ from pyoti.real  cimport dmat, darr_2_npy
 
 from pyoti.dense  import omat
 from pyoti.dense cimport omat
+
+from pyoti.sparse  import e as se
+
+
 # from pyoti.otimat  cimport otimat
 # from pyoti.ndarray cimport ndarray
 # from pyoti.sndarray cimport sndarray
@@ -16,6 +20,19 @@ from pyoti.dense cimport omat
 cimport numpy as np
 
 # from pyoti.otimat import otimat
+
+
+cpdef point1_iso( ord_t derOrder, np.ndarray coords)
+cpdef  line2_iso( ord_t derOrder, np.ndarray coords)
+cpdef  line3_iso( ord_t derOrder, np.ndarray coords)
+cpdef   tri3_iso( ord_t derOrder, np.ndarray coords)
+cpdef   tri4_iso( ord_t derOrder, np.ndarray coords)
+cpdef   tri6_iso( ord_t derOrder, np.ndarray coords)
+cpdef  quad4_iso( ord_t derOrder, np.ndarray coords)
+cpdef  quad8_iso( ord_t derOrder, np.ndarray coords)
+# cpdef brick8_iso( ord_t derOrder, np.ndarray coords)
+# cpdef brick20_iso( ord_t derOrder, np.ndarray coords)
+
 
 
 
@@ -195,179 +212,179 @@ cimport numpy as np
 
 
 
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  OTIMESH    :::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class mesh:
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::     CLASS  OTIMESH    :::::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# cdef class mesh:
   
-  #---------------------------------------------------------------------------------------------------
-  #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
-  #---------------------------------------------------------------------------------------------------
+#   #---------------------------------------------------------------------------------------------------
+#   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
+#   #---------------------------------------------------------------------------------------------------
 
-  cdef public dict     cells        # Elements
-  cdef public dict     point_data   # Contains information of the points
-  cdef public dict     cell_data    # Contains information of the elements
-  cdef public dict     field_data   # Contains labels.
-  cdef public dict     nameIds      # Contains labels.
-  cdef public uint8_t  ndim         # Characteristic number of dimensions in the mesh.
-  cdef public omat     xcoords      # Nodal coordinates as oti arrays.
-  cdef public omat     ycoords      # Nodal coordinates as oti arrays.
-  cdef public omat     zcoords      # Nodal coordinates as oti arrays.
-  cdef public bases_t  otinbases    # Number of bases of oti numbers.
-  cdef public ord_t    otiorder     # order of the oti numbers.
-  cdef public int64_t  baseGeomType # Basic geometric type
+#   cdef public dict     cells        # Elements
+#   cdef public dict     point_data   # Contains information of the points
+#   cdef public dict     cell_data    # Contains information of the elements
+#   cdef public dict     field_data   # Contains labels.
+#   cdef public dict     nameIds      # Contains labels.
+#   cdef public uint8_t  ndim         # Characteristic number of dimensions in the mesh.
+#   cdef public omat     xcoords      # Nodal coordinates as oti arrays.
+#   cdef public omat     ycoords      # Nodal coordinates as oti arrays.
+#   cdef public omat     zcoords      # Nodal coordinates as oti arrays.
+#   cdef public bases_t  otinbases    # Number of bases of oti numbers.
+#   cdef public ord_t    otiorder     # order of the oti numbers.
+#   cdef public int64_t  baseGeomType # Basic geometric type
 
-  cdef public list elemTable        # List of elements in each dimension 
-                                    # [ 0D elems ->    ... ,
-                                    #   1D elems ->    ... ,
-                                    #   2D elems ->    ... ,
-                                    #   3D elems ->    ... ]
+#   cdef public list elemTable        # List of elements in each dimension 
+#                                     # [ 0D elems ->    ... ,
+#                                     #   1D elems ->    ... ,
+#                                     #   2D elems ->    ... ,
+#                                     #   3D elems ->    ... ]
 
-  cdef np.ndarray   domainEls       # Elements that define the domain.
-  cdef np.ndarray   normalx         # x component of the boundary normal
-  cdef np.ndarray   normaly         # y component of the boundary normal
-  cdef np.ndarray   normalz         # z component of the boundary normal
-  cdef public  int64_t domainType    # Geometric type of the domain.
-  cdef public uint64_t domainElDofs  # D.O.Fs of the domain element.
-  cdef public  list boundaEls       # Elements that define the boundary elements.
-  cdef public  list boundaType      # Geometric type of the boundaries.
-  cdef public  list boundaElsIds    # Ids of the boundary elements 
-  cdef public  list elsIds
+#   cdef np.ndarray   domainEls       # Elements that define the domain.
+#   cdef np.ndarray   normalx         # x component of the boundary normal
+#   cdef np.ndarray   normaly         # y component of the boundary normal
+#   cdef np.ndarray   normalz         # z component of the boundary normal
+#   cdef public  int64_t domainType    # Geometric type of the domain.
+#   cdef public uint64_t domainElDofs  # D.O.Fs of the domain element.
+#   cdef public  list boundaEls       # Elements that define the boundary elements.
+#   cdef public  list boundaType      # Geometric type of the boundaries.
+#   cdef public  list boundaElsIds    # Ids of the boundary elements 
+#   cdef public  list elsIds
  
-  cdef public list fespaces         # List of finite element spaces that are currently in the mesh.
-                                    # Is this required? or maybe only add the element types only?
+#   cdef public list fespaces         # List of finite element spaces that are currently in the mesh.
+#                                     # Is this required? or maybe only add the element types only?
  
-  cdef public list elTypes          # List of interpolating functions defined for the triangulation.
+#   cdef public list elTypes          # List of interpolating functions defined for the triangulation.
 
-  cdef public uint64_t operationCount
+#   cdef public uint64_t operationCount
 
-  cdef public fefunction x
-  cdef public fefunction y
-  cdef public fefunction z
-  cdef public uint8_t    xyzInit    # flag for initialization of x,y,z
+#   cdef public fefunction x
+#   cdef public fefunction y
+#   cdef public fefunction z
+#   cdef public uint8_t    xyzInit    # flag for initialization of x,y,z
 
-  #---------------------------------------------------------------------------------------------------
-
-  
-  cdef uint64_t getBaseDOFs(self)
-  cdef uint64_t getDomainVtkCellId(self, dofs)
-  cpdef uint64_t getGlobalDOFBound(self,int64_t ndim, fespace space)
-  cpdef uint64_t getGlobalDOF(self,fespace space)
-  cdef uint64_t addNewOperation(self)
-  cdef uint64_t addNewSpace(self,fespace space)
-
-
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: END OF CLASS OTIMESH ::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#   #---------------------------------------------------------------------------------------------------
 
   
+#   cdef uint64_t getBaseDOFs(self)
+#   cdef uint64_t getDomainVtkCellId(self, dofs)
+#   cpdef uint64_t getGlobalDOFBound(self,int64_t ndim, fespace space)
+#   cpdef uint64_t getGlobalDOF(self,fespace space)
+#   cdef uint64_t addNewOperation(self)
+#   cdef uint64_t addNewSpace(self,fespace space)
 
 
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::     CLASS  FESPACE    ::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class fespace:
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# # :::::::::::::::::::::::::::::::::::: END OF CLASS OTIMESH ::::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  #---------------------------------------------------------------------------------------------------
-  #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
-  #---------------------------------------------------------------------------------------------------
 
-  cdef public mesh    mesh        # Triangulation related to this space.
-  cdef public elBase  elType     # Element type that defines the interpolation functions.
-  cdef public uint8_t fespaceId  # Id of the finite element space in the mesh.
 
-  #---------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
-  cdef uint64_t addNewOperation(self)
-
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::: END OF CLASS fespace ::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# # :::::::::::::::::::::::::::::::::::     CLASS  FESPACE    ::::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# cdef class fespace:
 
+#   #---------------------------------------------------------------------------------------------------
+#   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
+#   #---------------------------------------------------------------------------------------------------
 
+#   cdef public mesh    mesh        # Triangulation related to this space.
+#   cdef public elBase  elType     # Element type that defines the interpolation functions.
+#   cdef public uint8_t fespaceId  # Id of the finite element space in the mesh.
 
-
-
-
-
-
-
-
-
-
-
-
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::     CLASS  FEFUNCTION    :::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class fefunction:
-
-  #---------------------------------------------------------------------------------------------------
-  #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
-  #---------------------------------------------------------------------------------------------------
-
-  cdef public fespace    baseSpace     # Finite element space at which the variable is associated.
+#   #---------------------------------------------------------------------------------------------------
   
-  cdef public int64_t     interpDer     # Interpolation derivative that is required in this operation.
+#   cdef uint64_t addNewOperation(self)
 
-  cdef public uint64_t    intorder      # Polynomial order. The interpolation basis define an order.
-                                        # Then, the operations will increase the order of the 
-                                        # equivalent polynomials. That will modify the integration 
-                                        # parameters for numerical computations.
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::::: END OF CLASS fespace ::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  cdef public uint64_t    funcid        # Global Id of the function. 
 
-  cdef public int64_t     nature        # Nature of the function: 
-                                        #    feNatTest, feNatUndef, feNatDef
 
-  cdef public list shape      
-  cdef public list shapeBounds                
-  cdef public list position             # position in the matrix.
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# # :::::::::::::::::::::::::::::::::     CLASS  FEFUNCTION    :::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# cdef class fefunction:
+
+#   #---------------------------------------------------------------------------------------------------
+#   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
+#   #---------------------------------------------------------------------------------------------------
+
+#   cdef public fespace    baseSpace     # Finite element space at which the variable is associated.
   
-  cdef public object   data             # Data of the object, if defined already.
-  cdef public list     baseFunc         # A list to know which vars are associated to the number.
+#   cdef public int64_t     interpDer     # Interpolation derivative that is required in this operation.
+
+#   cdef public uint64_t    intorder      # Polynomial order. The interpolation basis define an order.
+#                                         # Then, the operations will increase the order of the 
+#                                         # equivalent polynomials. That will modify the integration 
+#                                         # parameters for numerical computations.
+
+#   cdef public uint64_t    funcid        # Global Id of the function. 
+
+#   cdef public int64_t     nature        # Nature of the function: 
+#                                         #    feNatTest, feNatUndef, feNatDef
+
+#   cdef public list shape      
+#   cdef public list shapeBounds                
+#   cdef public list position             # position in the matrix.
+  
+#   cdef public object   data             # Data of the object, if defined already.
+#   cdef public list     baseFunc         # A list to know which vars are associated to the number.
 
 
-  cdef np.ndarray  Koper                # Operations defined for Stiffness matrix.
-  cdef np.ndarray  foper                # Operations defined for Force vector.
-  cdef np.ndarray  essentialOper        # Operations defined for boundary conditions.
+#   cdef np.ndarray  Koper                # Operations defined for Stiffness matrix.
+#   cdef np.ndarray  foper                # Operations defined for Force vector.
+#   cdef np.ndarray  essentialOper        # Operations defined for boundary conditions.
 
-  #---------------------------------------------------------------------------------------------------
+#   #---------------------------------------------------------------------------------------------------
 
-  @staticmethod
-  cdef fefunction newFromOperation(int64_t operId, fefunction func1, fefunction func2)
+#   @staticmethod
+#   cdef fefunction newFromOperation(int64_t operId, fefunction func1, fefunction func2)
 
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::: END OF CLASS FEFUNCTION ::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::: END OF CLASS FEFUNCTION ::::::::::::::::::::::::::::::::::::::::
+# # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
@@ -441,29 +458,29 @@ cdef class elBase:
 
 
 
-# # ----------------------------------------------------------------------------------------------------
-# # -------------------------------------    AUX FUNCTIONS    ------------------------------------------
-# # ----------------------------------------------------------------------------------------------------
+# # # ----------------------------------------------------------------------------------------------------
+# # # -------------------------------------    AUX FUNCTIONS    ------------------------------------------
+# # # ----------------------------------------------------------------------------------------------------
 
 
-cpdef intOmega(fefunction func1, region = *)
-cpdef intGamma( boundaryId, fefunction func1 )
-cpdef on(boundaryId, fefunction func1, in2)
-cpdef dx(fefunction func1)
-cpdef dy(fefunction func1)
-cpdef dz(fefunction func1)
-# cdef np.ndarray darray_2_numpyArray(darray_t* array )
-# cpdef int64_t fem_getDataKind(object data)
-# cpdef list fem_getOffset(list position,list solFunc,list testFunc,np.ndarray eDOF_per_sol)
-# cpdef list fem_getEqvPosition(list position,list solFunc,list testFunc)
-# cpdef uint64_t fem_getEqvPositionIndx(list position,list solFunc,list testFunc)
-# cpdef list fem_getOrderedFuncList(list funcList)
+# cpdef intOmega(fefunction func1, region = *)
+# cpdef intGamma( boundaryId, fefunction func1 )
+# cpdef on(boundaryId, fefunction func1, in2)
+# cpdef dx(fefunction func1)
+# cpdef dy(fefunction func1)
+# cpdef dz(fefunction func1)
+# # cdef np.ndarray darray_2_numpyArray(darray_t* array )
+# # cpdef int64_t fem_getDataKind(object data)
+# # cpdef list fem_getOffset(list position,list solFunc,list testFunc,np.ndarray eDOF_per_sol)
+# # cpdef list fem_getEqvPosition(list position,list solFunc,list testFunc)
+# # cpdef uint64_t fem_getEqvPositionIndx(list position,list solFunc,list testFunc)
+# # cpdef list fem_getOrderedFuncList(list funcList)
 cdef object enum2string(int64_t enumId)
-# cdef object c_darray_print(darray_t* array)
-# cdef object c_elemprops_print(elemProps_t* array,style = *) 
-# cdef object c_femarray_print(femarray_t* array,style = *)
-# cdef object c_elemprops_print_perElement(elemProps_t* array,style = *)
+# # cdef object c_darray_print(darray_t* array)
+# # cdef object c_elemprops_print(elemProps_t* array,style = *) 
+# # cdef object c_femarray_print(femarray_t* array,style = *)
+# # cdef object c_elemprops_print_perElement(elemProps_t* array,style = *)
 
-# # ----------------------------------------------------------------------------------------------------
+# # # ----------------------------------------------------------------------------------------------------
 
 

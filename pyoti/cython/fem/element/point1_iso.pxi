@@ -1,11 +1,11 @@
 
 #*****************************************************************************************************
-cpdef line3_iso(ord_t derOrder, np.ndarray coords):
+cpdef point1_iso( ord_t derOrder, np.ndarray coords):
   """
-  Definition of basis functions for the P2 Line element.
+  Definition of basis functions for the point "0D" element.
 
   NODE NUMBERING:
-                           (0)* *(2)* *(1)
+                         (0)
 
   INPUTS:
     -> derOrder: Order of derivative sought for basis functions.
@@ -14,16 +14,20 @@ cpdef line3_iso(ord_t derOrder, np.ndarray coords):
 
   OUTPUTS: 
     -> [N0,N1,...]: Evaluated basis functions.
-  """   
-
-  cdef np.ndarray coords_obj = coords.astype(object)
-  cdef np.ndarray xi = coords_obj + se( 1, order= derOrder)
-
-  N0 = -0.5 * xi * ( 1 - xi )
-  N1 =  0.5 * xi * ( 1 + xi ) 
-  N2 =  1 - xi**2
-
-  return [ N0, N1, N2 ]
+      
+  """
+  # Create full of Nones.
+  N0 = np.empty((coords.shape[0],3),dtype=object)
+  
+  for i in range(N0.shape[0]):
+    for j in range(N0.shape[1]):
+      
+      N0[i,j] = sotinum(1.0)
+      
+    # end for 
+  # end for
+  
+  return [N0,]
 
 #-----------------------------------------------------------------------------------------------------
 

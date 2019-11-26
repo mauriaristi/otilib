@@ -1,15 +1,15 @@
 
 # ****************************************************************************************************
-cpdef tri3_iso( ord_t derOrder, np.ndarray coords):
+cpdef tri4_iso(ord_t derOrder, np.ndarray coords):
   """
-  Definition of basis functions for the 3-node triangle 2D element.
+  Definition of basis functions for the 4-node triangle (bubble) 2D element.
 
   NODE NUMBERING:
                          (2)
                           * *
                           *   * 
                           *     *  
-                          *       *
+                          *  (3)  *
                           *         *
                          (0)* * * * *(1)
 
@@ -30,7 +30,8 @@ cpdef tri3_iso( ord_t derOrder, np.ndarray coords):
   N0 = 1 -  xi - eta
   N1 =  xi
   N2 = eta
+  N3 = ( 1 - xi**2 )*( 1 - eta**2 )
   
-  return [N0, N1, N2];
-
+  return [N0, N1, N2, N3];
+ 
 # ----------------------------------------------------------------------------------------------------

@@ -7,9 +7,14 @@
 
 
 
-
-
-
+include "element/point1_iso.pxi"
+include "element/line2_iso.pxi"
+include "element/line3_iso.pxi"
+include "element/tri3_iso.pxi"
+include "element/tri4_iso.pxi"
+include "element/tri6_iso.pxi"
+include "element/quad4_iso.pxi"
+include "element/quad8_iso.pxi"
 
 
 

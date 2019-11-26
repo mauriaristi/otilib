@@ -44,7 +44,7 @@ class mesh:
     self.groups      = []
     self.group_names = {}
 
-    
+    self.ndim = -1
     self.nodes     = None
 
     self.fespaces       = []
@@ -100,8 +100,10 @@ class mesh:
     # Reshape the nodal coordinates to (nNodes x 3) matrix:
     nodalCoord = nodalCoord.reshape((nNodes,3))
 
+    Th.ndim = gmodel.getDimension()
+
     # get the elements for each dimension
-    for dim in range(4):
+    for dim in range(Th.ndim+1):
 
       elTypes , elTags , nodeIdx = get_elements_from_gmsh( gmesh, dim=dim, tag=-1 )
 
@@ -111,6 +113,20 @@ class mesh:
       Th.elements[dim]['types'] = elTypes
       Th.elements[dim]['tags']  = elTags
       Th.elements[dim]['nodes'] = nodeIdx
+      Th.elements[dim]['groups'] = []
+
+    # end for 
+
+    # Get all phisical groups
+    physGroups = gmodel.getPhysicalGroups()
+    for pg in physGroups:
+      name = gmodel.getPhysicalName(*pg)
+      Th.groups.append([pg[0],pg[1]])
+      Th.group_names[name] = pg[1]
+      entities = gmodel.getEntitiesForPhysicalGroup(*pg)
+      for entity in entities:
+        elTypes, elTags, nodeIdx = gmesh.getElements(pg[0],entity)
+      # end for 
 
     # end for 
 
@@ -137,7 +153,7 @@ class mesh:
     ncols = 4 #
     data = np.empty((nels,ncols),dtype=object)
     k = 0
-    for dim in range(4):
+    for dim in range(self.ndim+1):
 
       for j in range(self.elements[dim]['types'].size):
 
@@ -184,7 +200,7 @@ class mesh:
 
     nels = 0
 
-    for dim in range(4):
+    for dim in range(self.ndim+1):
       
       for j in range(self.elements[dim]['types'].size):
 

@@ -388,8 +388,6 @@ def fem_readOperMat(mesh meshObj, np.ndarray mat):
   DESCRIPTION:  Function to convert to a human readable format the operation stack produced 
                 by operating finite element Variables.
 
-
-
   """
   cdef uint64_t i,j
   cdef uint64_t shape0 = mat.shape[0]

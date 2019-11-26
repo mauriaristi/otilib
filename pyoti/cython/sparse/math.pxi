@@ -44,7 +44,7 @@ cpdef  sotinum tan(sotinum val):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef  sotinum atan(sotinum val):
+cpdef  sotinum arctan(sotinum val):
   """
   PURPOSE:  Mathematical function of arctangent for OTI numbers
   """
@@ -72,7 +72,7 @@ cpdef  sotinum atan(sotinum val):
 # #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef  sotinum acos(sotinum val):
+cpdef  sotinum arccos(sotinum val):
   """
   PURPOSE:  Mathematical function of inverse cosine for OTI numbers
   """
@@ -85,7 +85,7 @@ cpdef  sotinum acos(sotinum val):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef  sotinum asin(sotinum val):
+cpdef  sotinum arcsin(sotinum val):
   """
   PURPOSE:  Mathematical function of inverse sine for OTI numbers
   """
@@ -111,7 +111,7 @@ cpdef  sotinum sinh(sotinum val):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef  sotinum asinh(sotinum val):
+cpdef  sotinum arcsinh(sotinum val):
   """
   PURPOSE:  Mathematical function of inverse hyperbolic sine for OTI numbers  
   """
@@ -137,7 +137,7 @@ cpdef  sotinum cosh(sotinum val):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef  sotinum acosh(sotinum val):
+cpdef  sotinum arccosh(sotinum val):
   """
   PURPOSE:  Mathematical function of inverse hyperbolic cosine for OTI numbers
 
@@ -164,7 +164,7 @@ cpdef  sotinum tanh(sotinum val):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef  sotinum atanh(sotinum val):
+cpdef  sotinum arctanh(sotinum val):
   """
   PURPOSE:  Mathematical function of Inverse hyperbolic tangent for OTI numbers
 
@@ -262,3 +262,15 @@ cpdef  sotinum sqrt(sotinum val):
   return sotinum.create(&res)
 #-----------------------------------------------------------------------------------------------------
 
+#*****************************************************************************************************
+cpdef sotinum cbrt(sotinum val):
+  """
+  PURPOSE:  Square root function for OTI numbers, for non integer exponents. 
+  """
+  #*************************************************************************************************** 
+  global dhl
+  
+  cdef sotinum_t res = soti_cbrt(&val.num, dhl)
+
+  return sotinum.create(&res)
+#-----------------------------------------------------------------------------------------------------

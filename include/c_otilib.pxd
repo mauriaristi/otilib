@@ -559,7 +559,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "sparse.h"
   #---------------------------------------------------------------------------------------------------
-  
+  sotinum_t soti_cbrt(sotinum_t* num, dhelpl_t dhl);
+  void soti_cbrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl);
   void soti_atanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_asinh(sotinum_t* num, dhelpl_t dhl);

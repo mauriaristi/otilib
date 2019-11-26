@@ -34,7 +34,7 @@ cdef class sotinum:
   cpdef log(self)
   cpdef exp(self)
   cpdef sqrt(self)
-  # cpdef cbrt(self)
+  cpdef cbrt(self)
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::: End of class spr_otinum :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -45,22 +45,23 @@ cdef class sotinum:
 cpdef sotinum cos(sotinum val)
 cpdef sotinum sin(sotinum val)
 cpdef sotinum tan(sotinum val)
-cpdef sotinum atan(sotinum val)
+cpdef sotinum arctan(sotinum val)
 # cpdef sotinum atan2(sotinum valx, sotinum valy)
-cpdef sotinum acos(sotinum val)
-cpdef sotinum asin(sotinum val)
+cpdef sotinum arccos(sotinum val)
+cpdef sotinum arcsin(sotinum val)
 cpdef sotinum sinh(sotinum val)
-cpdef sotinum asinh(sotinum val)
+cpdef sotinum arcsinh(sotinum val)
 cpdef sotinum cosh(sotinum val)
-cpdef sotinum acosh(sotinum val)
+cpdef sotinum arccosh(sotinum val)
 cpdef sotinum tanh(sotinum val)
-cpdef sotinum atanh(sotinum val)
+cpdef sotinum arctanh(sotinum val)
 cpdef sotinum logb(sotinum val, double base)
 cpdef sotinum log10(sotinum val)
 cpdef sotinum log(sotinum val)
 cpdef sotinum exp(sotinum val)
 cpdef sotinum power(sotinum val, double exponent)
 cpdef sotinum sqrt(sotinum val)
+cpdef sotinum cbrt(sotinum val)
 # #*****************************************************************************************************
 
 

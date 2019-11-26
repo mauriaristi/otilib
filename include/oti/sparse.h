@@ -116,6 +116,16 @@ void soti_sqrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
+@brief Evaluation of cubic root function at (num).
+
+@param[in] num Oti number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_cbrt(sotinum_t* num, dhelpl_t dhl);
+void soti_cbrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
 @brief Evaluation of hiperbolic cosine function at (num).
 
 @param[in] num Oti number.

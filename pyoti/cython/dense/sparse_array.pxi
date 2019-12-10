@@ -284,6 +284,7 @@ cdef class spr_omat:
       
       self.re[index] = value
 
+      # Set the values of the imaginary directions to zero.
       for ordi in range(self.order):
 
         for i in range(self.p_ndpo[ordi]):
@@ -958,10 +959,9 @@ def spsolve(spr_omat A, omat b, solver='LU'):
     # print("RHS:\n",tmp_rhs)
     
     k = row_idx.size-1
+
     # Get A imaginary times b real.
-
     tmp_dot = A.get_imdir(row_idx[ZERO], row_ord[ZERO]).dot( res.get_imdir(row_idx[k],row_ord[k]) )
-
     tmp_rhs -= tmp_dot
 
     # Solving 
@@ -970,12 +970,11 @@ def spsolve(spr_omat A, omat b, solver='LU'):
       k = (row_idx.size-1) - j
 
       # Get A imaginary times b real.
-
       tmp_dot = A.get_imdir(row_idx[j], row_ord[j]).dot( res.get_imdir(row_idx[k], row_ord[k]) )
       tmp_rhs -= tmp_dot
+
     # end for 
 
-    # print("\n\nFinal RHS:\n",tmp_rhs)
     # Solve the system of equations.
     tmp = lu.solve( tmp_rhs )
 

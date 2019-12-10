@@ -10,6 +10,7 @@ dependencies:
   - pyvista
   - gmsh
   - jupyter
+  - jupyterlab
   - ipython
   - vtk
   - cython

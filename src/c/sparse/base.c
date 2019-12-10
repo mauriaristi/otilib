@@ -601,7 +601,9 @@ inline sotinum_t soti_init(void){
 sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
     
     sotinum_t res;
+    
     ndir_t p_nnz[_MAXORDER_OTI]; 
+
     ord_t i;
     
     // Define allocation sizes.
@@ -631,19 +633,16 @@ sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
 // ****************************************************************************************************
 inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
     
     sotinum_t res = soti_init(); // Initialize pointer values.
 
-    res.order = order;
     void * memory = NULL;
-    uint64_t allocation_size = 0 ;
+    uint64_t allocation_size = 0;
     ord_t i;
+
+    res.order = order;
     
     if (res.order != 0){
 
@@ -702,4 +701,82 @@ inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dh
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+uint64_t soti_memory_size(ndir_t* p_nnz, ord_t order){
+
+    uint64_t allocation_size = 0 ;
+
+    if (order != 0){
+        
+        // Get the allocation size of the OTI number:
+        allocation_size = order * (sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
+
+        // Add the standard allocation sizes:
+        for ( i = 0; i < order; i++){
+            
+            allocation_size += p_nnz[i]*(sizeof(coeff_t)+sizeof(imdir_t));
+
+        }
+    }
+
+    return allocation_size;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_distribute_memory(void* memory, ndir_t* p_nnz, ord_t order, flag_t flag, sotinum_t* res){
+
+    ord_t i;
+
+    res->order = order;
+
+    // Distribute memory among the different pointers.
+    res->p_im  = (coeff_t**)memory;
+    memory    += res->order * sizeof(coeff_t*);
+
+    res->p_idx = (imdir_t**)memory;
+    memory    += res->order * sizeof(imdir_t*);
+
+    res->p_nnz = (ndir_t*  )memory;
+    memory    += res->order * sizeof(ndir_t);
+
+    res->p_size= (ndir_t*  )memory;
+    memory    += res->order * sizeof(ndir_t);
     
+    for ( i = 0; i < res->order; i++){
+        
+        // Distribute memory.
+        res->p_im[i] = (coeff_t*)memory;
+        memory += p_nnz[i]*sizeof(coeff_t); 
+
+        res->p_idx[i]= (imdir_t*)memory;
+        memory += p_nnz[i]*sizeof(imdir_t); 
+
+        // Set number of non-zero and allocated size to 0.
+        res->p_size[i] = p_nnz[i]; 
+        res->p_nnz[i]  = 0; 
+
+    }
+
+    // Raise flag for OTI number.
+    res->flag = flag;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+

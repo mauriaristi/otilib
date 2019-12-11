@@ -17,6 +17,8 @@ dependencies:
   - make
   - sympy
   - pip
+  - ipympl
+  - nodejs
   - pip:
     - partitionsets
     - gmsh-sdk

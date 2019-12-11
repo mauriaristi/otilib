@@ -705,6 +705,7 @@ inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dh
 uint64_t soti_memory_size(ndir_t* p_nnz, ord_t order){
 
     uint64_t allocation_size = 0 ;
+    ord_t i = 0;
 
     if (order != 0){
         

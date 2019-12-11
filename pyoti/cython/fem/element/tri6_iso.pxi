@@ -24,10 +24,10 @@ cpdef tri6_iso(ord_t derOrder, np.ndarray coords):
   """ 
 
   cdef bases_t nbases  = 2
-  cdef omat coords_omat = omat(coords, order= derOrder, nbases= nbases)
+  # cdef np.ndarray coords_omat = omat(coords, order= derOrder, nbases= nbases)
   
-  cdef omat  xi = coords_omat[:,0] + e(1, order= derOrder, nbases= nbases)
-  cdef omat eta = coords_omat[:,1] + e(2, order= derOrder, nbases= nbases)
+  cdef np.ndarray  xi = coords[:,0] + se(1, order= derOrder)
+  cdef np.ndarray eta = coords[:,1] + se(2, order= derOrder)
 
   N0 = 2*eta**2+ 4*eta* xi - 3*eta + 2* xi**2 - 3* xi + 1.0
   N1 = 2* xi**2- xi

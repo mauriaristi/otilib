@@ -1149,7 +1149,8 @@ number_types = (   float,      int, np.float64,   np.int64,\
 
 int_types = ( int, np.int64, np.int32, np.int16, np.int8)
 
-ZERO = 0
+ZERO = 0  # these whatfor?
 ONE  = 1
+TWO  = 2
 
 #-----------------------------------------------------------------------------------------------------

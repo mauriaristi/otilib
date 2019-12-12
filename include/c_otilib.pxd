@@ -119,6 +119,23 @@ cdef extern from "oti/oti.h" nogil:
     flag_t         flag
 
 
+  ctypedef struct somin_t:
+    coeff_t          re
+    coeff_t**      p_im
+    imdir_t**     p_idx
+    ndir_t*       p_nnz
+
+  ctypedef struct  arrso_t:
+    somin_t*      p_data
+    uint64_t       nrows
+    uint64_t       ncols
+    uint64_t        size
+    ndir_t*       p_size
+    ord_t          order
+    flag_t          flag
+  
+
+
   # Defs from "fem.h"
   ctypedef struct elem_t:
     uint64_t      nbasis
@@ -212,6 +229,12 @@ cdef extern from "oti/oti.h" nogil:
   
 
   #---------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 
   # Include functions from "real.h"
@@ -559,6 +582,28 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "sparse.h"
   #---------------------------------------------------------------------------------------------------
+  arrso_t arrso_eye_bases(uint64_t nrows, bases_t nbases, ord_t order, dhelpl_t dhl);
+  arrso_t arrso_ones_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
+  arrso_t arrso_zeros_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
+  void arrso_set_all_r( coeff_t num, arrso_t* arr, dhelpl_t dhl);
+  void arrso_set_item_i_r( coeff_t num, uint64_t i, arrso_t* arr, dhelpl_t dhl);
+  void arrso_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, arrso_t* arr, dhelpl_t dhl);
+  void arrso_set_all_o( sotinum_t* src, arrso_t* arr, dhelpl_t dhl);
+  void arrso_set_item_i_o( sotinum_t* num, uint64_t i, arrso_t* arr, dhelpl_t dhl);
+  void arrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, arrso_t* arr, dhelpl_t dhl);
+  sotinum_t arrso_get_item_i(arrso_t* arr, uint64_t i, dhelpl_t dhl);
+  sotinum_t arrso_get_item_ij(arrso_t* arr, uint64_t i, uint64_t j, dhelpl_t dhl);
+  arrso_t arrso_init();
+  void arrso_free(arrso_t* arr);
+  arrso_t arrso_eye(uint64_t nrows, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+  arrso_t arrso_ones(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+  arrso_t arrso_zeros(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+  arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+  size_t arrso_memory_size( uint64_t size, const ndir_t* p_nnz, ord_t order);
+  void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, 
+      flag_t flag, arrso_t* res);
+
+
   sotinum_t soti_cbrt(sotinum_t* num, dhelpl_t dhl);
   void soti_cbrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl);

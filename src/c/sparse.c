@@ -26,19 +26,22 @@
 
 
 
+// Array of OTIs support:
+// Base functions to support manipulation.
+#include "sparse/array_of_otis/base.c"
 
-// // Array support.
-// // Base functions to support manipulation.
-// #include "sparse/array_base.c"
+// Array algebra: Elementwise operations.
+// #include "sparse/array/algebra_elementwise.c"
 
-// // Array algebra: Elementwise operations.
-// #include "sparse/array_algebra_elementwise.c"
+// Array algebra: Matrix operations such as matmul, determinant and invertion.
+// #include "sparse/array/algebra_matops.c"
 
-// // Array algebra: Matrix operations such as matmul, determinant and invertion.
-// #include "sparse/array_algebra_matops.c"
+// Array functions: Elementwise function evaluation.
+// #include "sparse/array/functions.c"
 
-// // Array functions: Elementwise function evaluation.
-// #include "sparse/array_functions.c"
+
+//  OTI of arrays support:
+// #include "sparse/oti_of_arrays/base.c"
 
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------    END SPARSE OTINUM FUNCTIONS   --------------------------------------

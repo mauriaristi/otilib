@@ -1,7 +1,7 @@
 
 
 #*****************************************************************************************************
-def e( hum_dir ,ord_t order = 0,bases_t nbases = 0):
+def e( hum_dir ,ord_t order = 0, bases_t nbases = 0):
   """
   PURPOSE:  To create a sotinum with value 1 at the specified imaginary direction
             in a human friendly manner

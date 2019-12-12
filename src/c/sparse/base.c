@@ -726,9 +726,10 @@ uint64_t soti_memory_size(ndir_t* p_nnz, ord_t order){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void soti_distribute_memory(void* memory, ndir_t* p_nnz, ord_t order, flag_t flag, sotinum_t* res){
+void soti_distribute_memory(void* mem, ndir_t* p_nnz, ord_t order, flag_t flag, sotinum_t* res){
 
     ord_t i;
+    void* memory = mem;
 
     res->order = order;
 

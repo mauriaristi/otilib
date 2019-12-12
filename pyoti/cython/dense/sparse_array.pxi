@@ -56,7 +56,7 @@ cdef class spr_omat:
 
 
     self.order  = order
-    self.nbases = nbases       
+    self.nbases = nbases
     self.nrows  = shape[0]
     self.ncols  = shape[1]
     self.size   = self.nrows * self.ncols 

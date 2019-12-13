@@ -2,6 +2,8 @@
 
 
 // ****************************************************************************************************
+void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+arrso_t oarrso_copy(arrso_t* arr, dhelpl_t dhl);
 
 arrso_t arrso_eye_bases(uint64_t nrows, bases_t nbases, ord_t order, dhelpl_t dhl);
 arrso_t arrso_ones_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);

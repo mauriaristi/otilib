@@ -32,26 +32,7 @@ cdef class matso:
     
     cdef uint64_t nrows, ncols, i,j
     cdef ord_t ordi
-    # cdef dmat inval
     cdef coeff_t val 
-
-    # if order != 0:
-
-    #   p_nnz = <ndir_t*>malloc( order*sizeof(ndir_t) )
-    #   if p_nnz == NULL:
-    #     raise MemoryError("Not enough memory.")
-    #   # end if 
-
-    #   if nnz == None:
-    #     for ordi in range(order):
-    #       p_nnz[ordi] = dhelp_ndirOrder(nbases,ordi+1)
-    #     # end for 
-    #   else:
-    #     for ordi in range(order):
-    #       p_nnz[ordi] = nnz[ordi]
-    #     # end for 
-
-    # # end if
 
 
     if isinstance( realArray, np.ndarray):
@@ -93,23 +74,6 @@ cdef class matso:
 
       # end if
 
-    # elif type(realArray) == dmat:
-      
-    #   inval = realArray
-    #   self.arr = oarr_zeros( inval.nrows, inval.ncols, nbases, order, dhl)
-
-    #   for i in range(self.arr.nrows):
-      
-    #     for j in range(self.arr.ncols):
-      
-    #       self.arr.re[j+i*self.arr.ncols] = inval.arr.p_data[j+i*inval.arr.ncols]
-        
-    #     # end for
-      
-    #   # end for
-
-    
-
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
@@ -147,37 +111,30 @@ cdef class matso:
 
   #---------------------------------------------------------------------------------------------------
   
-  # #***************************************************************************************************
-  # @property
-  # def real(self):
-  #   """
-  #   PURPOSE:      Get a numpy array with all coefficients in the real direction.
+  #***************************************************************************************************
+  @property
+  def real(self):
+    """
+    PURPOSE:      Get a numpy array with all coefficients in the real direction.
 
-  #   """
-  #   #*************************************************************************************************
+    """
+    #*************************************************************************************************
 
-  #   cdef uint64_t i,j,k
-  #   cdef double val
-    
-  #   cdef np.ndarray res = np.empty(( self.arr.nrows,self.arr.ncols),dtype = np.float64)
-  #   cdef darr_t re;
+    cdef np.ndarray[coeff_t, ndim=2] tmp
+    cdef uint64_t i,j,k
 
-  #   re.nrows = self.arr.nrows
-  #   re.ncols = self.arr.ncols
-  #   re.size  = self.arr.size
+    tmp = np.empty( self.shape , dtype = np.float64)
 
-  #   re.p_data = self.arr.re
+    for i in range(self.arr.nrows):
+      for j in range(self.arr.ncols):
+        k = j+i*self.arr.ncols
+        tmp[i,j] = self.arr.p_data[k].re
+      # end for 
+    # end for 
 
-  #   for i in range(self.arr.nrows):
-  #     for j in range(self.arr.ncols):
-      
-  #       res[i,j] = darr_get_item_ij(&re, i, j)
+    return tmp
 
-  #   # end for
-    
-  #   return res
-
-  # #---------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @staticmethod
@@ -214,6 +171,7 @@ cdef class matso:
     # end for 
 
     return tmp
+  #--------------------------------------------------------------------------------------------------- 
 
   #*************************************************************************************************** 
   def __repr__(self):
@@ -273,75 +231,75 @@ cdef class matso:
 
 
 
-  # #***************************************************************************************************
-  # def  __getitem__(self, val):
-  #   """
-  #   PURPOSE: Get the value of an element of the item.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def  __getitem__(self, val):
+    """
+    PURPOSE: Get the value of an element of the item.
+    """
+    #*************************************************************************************************
     
-  #   global dhl
+    global dhl
 
-  #   cdef otinum_t res
+    cdef sotinum_t res
 
-  #   if (isinstance(val, int)):
+    if (isinstance(val, int)):
       
-  #     res = oarr_get_item_i( &self.arr, val, dhl)
+      res = arrso_get_item_i( &self.arr, val, dhl)
     
-  #   else:
+    else:
       
-  #     res = oarr_get_item_ij( &self.arr, val[0], val[1], dhl)
+      res = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
 
-  #   # end if
+    # end if
 
-  #   return otinum.create(&res)
+    return sotinum.create(&res)
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __setitem__(self, val, value):
-  #   """
-  #   PURPOSE: Set an element of the item to the specified value.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __setitem__(self, val, value):
+    """
+    PURPOSE: Set an element of the item to the specified value.
+    """
+    #*************************************************************************************************
         
-  #   global dhl
+    global dhl
 
-  #   cdef otinum valt
+    cdef sotinum valt
     
-  #   tval = type(value)
+    tval = type(value)
 
-  #   if (isinstance(val, int)):
+    if (isinstance(val, int)):
       
-  #     if tval == otinum:
-  #       print('here:')
-  #       valt = value
-  #       oarr_set_item_i_o( &valt.num, val, &self.arr, dhl)
+      if tval == sotinum:
 
-  #     else:
+        valt = value
+        arrso_set_item_i_o( &valt.num, val, &self.arr, dhl)
 
-  #       oarr_set_item_i_r( value, val, &self.arr, dhl)
+      else:
 
-  #     # end if 
+        arrso_set_item_i_r( value, val, &self.arr, dhl)
+
+      # end if 
     
-  #   else:
+    else:
       
-  #     if tval == otinum:
+      if tval == sotinum:
         
-  #       valt = value
-  #       oarr_set_item_ij_o( &valt.num, val[0], val[1], &self.arr, dhl)
+        valt = value
+        arrso_set_item_ij_o( &valt.num, val[0], val[1], &self.arr, dhl)
 
-  #     else:
+      else:
 
-  #       oarr_set_item_ij_r( value, val[0], val[1], &self.arr, dhl)
+        arrso_set_item_ij_r( value, val[0], val[1], &self.arr, dhl)
 
-  #     # end if 
+      # end if 
 
-  #   # end if
+    # end if
 
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
 

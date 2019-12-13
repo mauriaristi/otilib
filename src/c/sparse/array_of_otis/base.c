@@ -32,17 +32,53 @@
 
 
 
-// utils
 
+// Copy operations.
+// ****************************************************************************************************
+void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
 
-// // Copy operations.
-// // ****************************************************************************************************
-// void arrso_copy_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl)
-// // ----------------------------------------------------------------------------------------------------
+    somin_t* dummy_src, *dummy_dest;
+    ord_t ordi;
+    uint64_t i,j;
+    // TODO: add allocation check.
+    if(res->nrows != arr->nrows || res->ncols != arr->ncols ||
+       res->order != arr->order){
+        printf("ERROR: Assignment mismatch in dimensions. Check destination.\n");
+        exit(OTI_undetErr);
+    }
 
-// // ****************************************************************************************************
-// oarr_t oarrso_copy(oarr_t* arr, dhelpl_t dhl)
-// // ----------------------------------------------------------------------------------------------------
+    for (i=0; i<arr->size; i++){
+
+        dummy_src  = &arr->p_data[i];
+        dummy_dest = &res->p_data[i];
+
+        dummy_dest->re = dummy_src->re;
+
+        for (ordi=0; ordi<arr->order; ordi++){
+            memcpy(dummy_dest->p_im[ordi], dummy_src->p_im[ordi], dummy_src->p_nnz[ordi]*sizeof(coeff_t));
+            memcpy(dummy_dest->p_idx[ordi],dummy_src->p_idx[ordi],dummy_src->p_nnz[ordi]*sizeof(imdir_t));
+            dummy_dest->p_nnz[ordi] = dummy_src->p_nnz[ordi];
+        }
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+arrso_t oarrso_copy(arrso_t* arr, dhelpl_t dhl){
+
+    arrso_t res;
+
+    // allocate memory first.
+    res = arrso_createEmpty_predef(arr->nrows, arr->ncols, arr->p_size, arr->order, dhl);
+
+    arrso_copy_to(arr,&res,dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -488,114 +524,7 @@ void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const nd
         }
 
     }
-    // printf("Memory distributed: %zu\n", allocation_size);
-    // printf("Sizes: sizeof(somin_t ): %zu,\n", sizeof(somin_t));
-    // printf("       sizeof(coeff_t ): %zu,\n", sizeof(coeff_t));
-    // printf("       sizeof(imdir_t ): %zu,\n", sizeof(imdir_t));
-    // printf("       sizeof(coeff_t*): %zu,\n", sizeof(coeff_t*));
-    // printf("       sizeof(imdir_t*): %zu,\n", sizeof(imdir_t*));
-    // printf("       sizeof(ndir_t  ): %zu,\n", sizeof(ndir_t));
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // Copy operations.
-// // ****************************************************************************************************
-// void oarr_copy_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl)
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// oarr_t oarr_copy(oarr_t* arr, dhelpl_t dhl)
-// // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
 

@@ -39,19 +39,17 @@ void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
 
     somin_t* dummy_src, *dummy_dest;
     ord_t ordi;
-    uint64_t i,j;
+    uint64_t i;
     // TODO: add allocation check.
-    if(res->nrows != arr->nrows || res->ncols != arr->ncols ||
-       res->order != arr->order){
+    if(res->nrows != arr->nrows || res->ncols != arr->ncols || res->order != arr->order){
         printf("ERROR: Assignment mismatch in dimensions. Check destination.\n");
         exit(OTI_undetErr);
     }
 
     for (i=0; i<arr->size; i++){
 
-        dummy_src  = &arr->p_data[i];
-        dummy_dest = &res->p_data[i];
-
+        dummy_src      = &arr->p_data[i];
+        dummy_dest     = &res->p_data[i];
         dummy_dest->re = dummy_src->re;
 
         for (ordi=0; ordi<arr->order; ordi++){
@@ -66,12 +64,9 @@ void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-arrso_t oarrso_copy(arrso_t* arr, dhelpl_t dhl){
+arrso_t arrso_copy(arrso_t* arr, dhelpl_t dhl){
 
-    arrso_t res;
-
-    // allocate memory first.
-    res = arrso_createEmpty_predef(arr->nrows, arr->ncols, arr->p_size, arr->order, dhl);
+    arrso_t res = arrso_empty_like(arr,dhl);
 
     arrso_copy_to(arr,&res,dhl);
 
@@ -89,16 +84,13 @@ arrso_t oarrso_copy(arrso_t* arr, dhelpl_t dhl){
 
 // Setters.
 // Setter by one index.
-
 // ****************************************************************************************************
 void arrso_set_all_r( coeff_t num, arrso_t* arr, dhelpl_t dhl){
     
     uint64_t i;
 
-    for (i = 0; i<arr->size; i++ ){
-        
+    for (i = 0; i<arr->size; i++ ){        
         arrso_set_item_i_r( num, i, arr, dhl);
-
     }
 
 }
@@ -138,9 +130,7 @@ void arrso_set_all_o( sotinum_t* num, arrso_t* arr, dhelpl_t dhl){
     //     exit( OTI_NotImplemented );
     // }
     for (i = 0; i<arr->size; i++ ){
-        
         arrso_set_item_i_o( num, i, arr, dhl);
-
     }
 
 }
@@ -391,6 +381,17 @@ void arrso_free(arrso_t* arr){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+inline arrso_t arrso_empty_like(arrso_t* arr, dhelpl_t dhl){
+
+    arrso_t  res;
+    res = arrso_createEmpty_predef(arr->nrows, arr->ncols, arr->p_size, arr->order, dhl);
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
 inline arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols, 
                         const ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
 
@@ -452,7 +453,7 @@ size_t arrso_memory_size( uint64_t size, const ndir_t* p_nnz, ord_t order){
 // ****************************************************************************************************
 void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, 
     flag_t flag, arrso_t* res){
-    size_t allocation_size=0;
+    // size_t allocation_size=0;
     uint64_t i;
     ord_t ordi;
     void* memory = mem;
@@ -468,12 +469,10 @@ void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const nd
     // Distribute memory among the structur pointers.
     res->p_data  = (somin_t* )memory;
     memory    += res->size * sizeof(somin_t); // Move memory pointer.
-    // allocation_size += res->size * sizeof(somin_t);
-
+    
     res->p_size  = (ndir_t*  )memory;
     memory    += res->order * sizeof(ndir_t);
-    // allocation_size += res->order * sizeof(ndir_t);
-
+    
     for ( ordi = 0; ordi < res->order; ordi++){
         // Set number allocated size.
         res->p_size[ordi] = p_nnz[ordi]; 
@@ -485,26 +484,21 @@ void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const nd
             dummy_somin = &res->p_data[i];
             dummy_somin->p_im  = (coeff_t**)memory;
             memory    += res->order * sizeof(coeff_t*);
-            // allocation_size +=res->order * sizeof(coeff_t*);
-
+            
             dummy_somin->p_idx = (imdir_t**)memory;
             memory    += res->order * sizeof(imdir_t*);
-            // allocation_size +=res->order * sizeof(imdir_t*);
-
+            
             dummy_somin->p_nnz = (ndir_t*  )memory;
             memory    += res->order * sizeof(ndir_t);
-            // allocation_size +=res->order * sizeof(ndir_t);
-
+            
             for ( ordi = 0; ordi < res->order; ordi++){
             
                 // Distribute memory.
                 dummy_somin->p_im[ordi] = (coeff_t*)memory;
-                memory += p_nnz[ordi]*sizeof(coeff_t); 
-                // allocation_size += p_nnz[ordi]*sizeof(coeff_t); 
+                memory += p_nnz[ordi]*sizeof(coeff_t);                 
 
                 dummy_somin->p_idx[ordi]= (imdir_t*)memory;
-                memory += p_nnz[ordi]*sizeof(imdir_t); 
-                // allocation_size += p_nnz[ordi]*sizeof(imdir_t);
+                memory += p_nnz[ordi]*sizeof(imdir_t);                 
 
                 // Set number of non-zero to 0.
                 dummy_somin->p_nnz[ordi]  = 0; 

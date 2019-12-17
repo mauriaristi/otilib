@@ -16,10 +16,10 @@
 #include "sparse/num/structures.h"
 
 // Append array of otis structures.
-#include "sparse/array_of_otis/structures.h"
+#include "sparse/arrso/structures.h"
 
 // Append oti of arrays structures.
-#include "sparse/oti_of_arrays/structures.h"
+#include "sparse/soarr/structures.h"
 
 // ----------------------------------------------------------------------------------------------------
 // -------------------------------------    END STRUCTURES      ---------------------------------------
@@ -50,16 +50,16 @@
 
 
 // Append core operations.
-#include "sparse/array_of_otis/base.h"
+#include "sparse/arrso/base.h"
 
 // // append utils.
-// #include "sparse/array_of_otis/utils.h"
+// #include "sparse/arrso/utils.h"
 
 // // Append algebra declarations.
-// #include "sparse/array_of_otis/algebra_elementwise.h"
+// #include "sparse/arrso/algebra_elementwise.h"
 
 // // Append function declarations.
-// #include "sparse/array_of_otis/functions.h"
+// #include "sparse/arrso/functions.h"
 
 
 // ----------------------------------------------------------------------------------------------------

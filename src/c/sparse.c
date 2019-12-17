@@ -28,7 +28,7 @@
 
 // Array of OTIs support:
 // Base functions to support manipulation.
-#include "sparse/array_of_otis/base.c"
+#include "sparse/arrso/base.c"
 
 // Array algebra: Elementwise operations.
 // #include "sparse/array/algebra_elementwise.c"

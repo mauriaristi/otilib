@@ -40,6 +40,7 @@ void sarr_copy_to(sarr_t* arr, sarr_t* res, dhelpl_t dhl){
     somin_t* dummy_src, *dummy_dest;
     ord_t ordi;
     uint64_t i;
+
     // TODO: add allocation check.
     if(res->nrows != arr->nrows || res->ncols != arr->ncols || res->order != arr->order){
         printf("ERROR: Assignment mismatch in dimensions. Check destination.\n");

@@ -66,7 +66,7 @@ make
 
 #### **C** version
 
-The current version only depends on ```stdlib.h``` and ```math.h```
+The current version depends on ```stdlib.h``` and ```math.h```
 
 #### Python version 3:
 
@@ -87,11 +87,11 @@ Requirements:
 * Direct comments to the library should be addressed to Mauricio Aristizabal to [this e-mail](mailto:mauriaristi@gmail.com) with the subject: "[OTILIB]:*concern*: your subject "
 
 The word *concern* may be replaced by one of the following (choose accordingly):
-* *CodeTroubleC*: C code bugs
-* *CodeTroublePy*: Python code bugs
-* *DocTrouble*: Documentation bugs
-* *ExampleTrouble*: Trouble in one of the examples.
-* *NewWrapper*: Questions related with new wrappers to other languages.
+* *bugc*: C code bugs
+* *bugpy*: Python code bugs
+* *doc*: Documentation bugs
+* *example*: Trouble in one of the examples.
+* *wrapper*: Questions related with wrappers to other languages.
 
 ***
 

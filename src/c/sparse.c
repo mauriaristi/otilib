@@ -28,7 +28,7 @@
 
 // Array of OTIs support:
 // Base functions to support manipulation.
-#include "sparse/arrso/base.c"
+#include "sparse/array/array_of_oti/base.c"
 
 // Array algebra: Elementwise operations.
 // #include "sparse/array/algebra_elementwise.c"
@@ -41,7 +41,7 @@
 
 
 //  OTI of arrays support:
-// #include "sparse/oti_of_arrays/base.c"
+// #include "sparse/array/oti_of_array/base.c"
 
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------    END SPARSE OTINUM FUNCTIONS   --------------------------------------

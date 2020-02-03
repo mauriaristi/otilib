@@ -1,6 +1,45 @@
 
+
+/**************************************************************************************************//**
+@brief Function that distribute memory along the different components of an OTI number.
+
+@param[in]  mem   Addres of the allocated memory.
+@param[in]  p_nnz List of values corresponding to the allocation size per element.
+@param[in]  order OTI Truncation order.
+@param[in]  flag  Memory flag. flag=1 means memory is owned by the respective sotinum, otherwise flag=0.
+@param[in]  res   Addres of the resulting OTI number that will be distributed accordingly.
+@param[out] void* Address after every item was distributed.
+******************************************************************************************************/
+void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_t flag, sotinum_t* res);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Function that returns the size of memory to be allocated and distributed into a sparse OTI type.
+
+@param[in] p_nnz List of number of non zeros for each order.
+@param[in] order Truncation order of the oti number.
+******************************************************************************************************/
+size_t soti_memory_size( const ndir_t* p_nnz, ord_t order);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Function that compares memory from two oti numbers and determines weather if memory reallocation 
+       is necessary if src is will be copied to dest.
+
+@param[in] src   Address of the source oti number.
+@param[in] dest  Address of the destination oti number.
+******************************************************************************************************/
 uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Initialization of a sparse oti type. This function prevents memory leaks from uninitialized 
+       pointers.
+
+******************************************************************************************************/
 sotinum_t soti_init(void);
+// ----------------------------------------------------------------------------------------------------
+
 
 /**************************************************************************************************//**
 @brief Copy information from src to dest. Does not check if memory needs to be reallocated.

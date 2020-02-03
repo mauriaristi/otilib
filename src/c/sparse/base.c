@@ -426,17 +426,19 @@ void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
         soti_free(dest);
 
         if (dest->flag != 0){
-            *dest = soti_createEmpty_like( src, dhl);        
+            
+            (*dest) = soti_createEmpty_like( src, dhl);
+
         } else {
             // TODO: What happens if this is a tmp value?
-            printf("ERROR: Cant change memory of \n");
+            printf("ERROR: Cant change memory of the given number (function soti_copy_to(...) ) \n");
             exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
         }
 
     }
 
     // Is it required to copy the order?
-    dest->order = src->order;
+    // dest->order = src->order;
 
     // Copy real coefficient
     dest->re = src->re;
@@ -553,32 +555,6 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
 // Memory management.
 
 // ****************************************************************************************************
-void soti_free(sotinum_t* num){
-                
-    if (num->p_im != NULL && num->flag != 0){
-        free(num->p_im);
-    }
-
-    *num = soti_init();
-    
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl){
-    
-    sotinum_t res = soti_createEmpty(order,dhl);
-
-    res.re = num;
-
-    return res;
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
 inline sotinum_t soti_init(void){
 
     sotinum_t res;
@@ -596,6 +572,28 @@ inline sotinum_t soti_init(void){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void soti_free(sotinum_t* num){
+                
+    if (num->p_im != NULL && num->flag != 0){
+        free(num->p_im);
+    }
+
+    *num = soti_init();
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl){
+    
+    sotinum_t res = soti_createEmpty(order,dhl);
+
+    res.re = num;
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
@@ -702,9 +700,9 @@ inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dh
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-uint64_t soti_memory_size(ndir_t* p_nnz, ord_t order){
+size_t soti_memory_size( const ndir_t* p_nnz, ord_t order){
 
-    uint64_t allocation_size = 0 ;
+    size_t allocation_size = 0;
     ord_t i = 0;
 
     if (order != 0){
@@ -726,7 +724,7 @@ uint64_t soti_memory_size(ndir_t* p_nnz, ord_t order){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void soti_distribute_memory(void* mem, ndir_t* p_nnz, ord_t order, flag_t flag, sotinum_t* res){
+void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_t flag, sotinum_t* res){
 
     ord_t i;
     void* memory = mem;
@@ -763,6 +761,9 @@ void soti_distribute_memory(void* mem, ndir_t* p_nnz, ord_t order, flag_t flag, 
 
     // Raise flag for OTI number.
     res->flag = flag;
+
+    // If necessary, returns end of memory.
+    return memory;
 
 }
 // ----------------------------------------------------------------------------------------------------

@@ -400,9 +400,9 @@ void darr_sub_rR_to(coeff_t num, darr_t* arr1, darr_t* aRes);
 /**************************************************************************************************//**
 @brief Elementwise addition of arrays. Must have same dimensions. 
 
-@param[in] p_arr1: Address of the array 1.
-@param[in] p_arr2: Address of the array 2.
-@param[inout] p_arrres: Resulting array.
+@param[in] arr1: Address of the array 1.
+@param[in] arr2: Address of the array 2.
+@param[inout] aRes: Resulting array.
 ******************************************************************************************************/
 darr_t darr_sum_RR(darr_t* arr1, darr_t* arr2);
 darr_t darr_sum_rR(coeff_t num, darr_t* arr1);

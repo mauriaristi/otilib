@@ -31,10 +31,12 @@
 #include "sparse/array/array_of_oti/base.c"
 
 // Array algebra: Elementwise operations.
-// #include "sparse/array/algebra_elementwise.c"
+#include "sparse/array/array_of_oti/algebra_elementwise_to.c"
+#include "sparse/array/array_of_oti/algebra_elementwise.c"
 
 // Array algebra: Matrix operations such as matmul, determinant and invertion.
-// #include "sparse/array/algebra_matops.c"
+#include "sparse/array/array_of_oti/algebra_matops_to.c"
+// #include "sparse/array/array_of_oti/algebra_matops.c"
 
 // Array functions: Elementwise function evaluation.
 // #include "sparse/array/functions.c"

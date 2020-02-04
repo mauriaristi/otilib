@@ -31,6 +31,7 @@ enum oti_errors {
   OTI_BadIndx         =    -2,   ///< indexing error.
   OTI_NonPreComp      =    -3,   ///< No precomputed data is available.
   OTI_NotImplemented  =    -4,   ///< Not implemented.
+  OTI_BadDim          =    -5,   ///< Wrong dimensions for operations.
 
   OTI_FEM_InvalidBaseId = -100,         ///< invalid base Id. It pops up when for example 
                                         /// for P0 elements that only have 1 basis function

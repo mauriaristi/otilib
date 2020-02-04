@@ -257,9 +257,8 @@ arrso_t arrso_zeros_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t 
     arrso_t  res;
     uint64_t i;
     
-    printf("Creating empty array\n");
     res = arrso_createEmpty_bases(nrows, ncols, nbases, order, dhl);
-    printf("Empty array created\n");
+    
     for (i=0; i<res.size; i++ ){
         res.p_data[i].re = 0.0;
     }
@@ -379,10 +378,10 @@ inline arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols,
         printf("ERROR: Not enough memory to handle array of sparse otis.\n Exiting...\n");
         exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
     }
-    printf("Before distribute memory\n");
+    
     // Distributes the memory in the corresponding pointers. Sets the memory flag as 1.
     arrso_distribute_memory(memory, nrows, ncols, p_nnz, order, 1, &res);
-    printf("After distribute memory\n");
+    
     // This is returned uninitialized.
     return res;
 
@@ -431,7 +430,7 @@ void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const nd
     
     // Loop for all elements in the array
     for(i = 0; i < res->size; i++){
-        // Distribute the memory accordingly.
+        // Distribute the memory as required .
         memory = soti_distribute_memory(memory, p_nnz, order, otinum_flag, & res->p_data[i]);
     }
     

@@ -1,38 +1,101 @@
-
-
-
 // typedef struct {
-//     coeff_t          re; ///< Real coefficient.
-//     coeff_t**      p_im; ///< Array with all imaginary coefficients per order.
-//     imdir_t**     p_idx; ///< Directions associated to each coefficient per order.
-//     ndir_t*       p_nnz; ///< Number of non zero coefficients per order.
-//     ndir_t*      p_size; ///< Allocated size per order.
-//     ord_t         order; ///< Truncation order of the number.
-//     flag_t         flag; ///< Memory flag.
-// } sotinum_t;             ///< Sparse OTI number type
+//     sotinum_t*    p_data; ///< Pointer to array of Sparse otinums.
+//     uint64_t       nrows; ///< Number of rows.
+//     uint64_t       ncols; ///< Number of cols.
+//     uint64_t        size; ///< Size of array.
+//     flag_t          flag; ///< Memory flag.
+// } arrso_t;                ///< Array of OTIs type.
 
-// typedef struct {
-//     coeff_t          re; ///< Real coefficient.
-//     coeff_t**      p_im; ///< Array with all imaginary coefficients per order.
-//     imdir_t**     p_idx; ///< Directions associated to each coefficient per order.
-//     ndir_t*       p_nnz; ///< Number of non zero coefficients per order.
-// } somin_t;               ///< Minimal sparse OTI number type. 
+
+// ****************************************************************************************************
+inline void arrso_dimCheck_OO_elementwise(arrso_t* arr1,arrso_t* arr2){
+
+	 if( arr1->size  != arr2->size  || 
+	     arr1->ncols != arr2->ncols ||
+	     arr1->nrows != arr2->nrows   ){
+	 	printf("ERROR: Wrong dimensions in elementwise operation between two arrso arrays.\n");
+	 	exit(OTI_BadDim);
+	 }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void arrso_dimCheck_RO_elementwise(darr_t* arr1,arrso_t* arr2){
+
+	 if( arr1->size  != arr2->size  || 
+	     arr1->ncols != arr2->ncols ||
+	     arr1->nrows != arr2->nrows   ){
+	 	printf("ERROR: Wrong dimensions in elementwise operation between arrso and real arrays.\n");
+	 	exit(OTI_BadDim);
+	 }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+inline void arrso_dimCheck_OO_matmul(arrso_t* arr1,arrso_t* arr2){
+
+	 if( arr1->nrows != arr2->ncols ){
+	 	printf("ERROR: Wrong dimensions in matmul-like operation between two arrso arrays.\n");
+	 	exit(OTI_BadDim);
+	 }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void arrso_dimCheck_RO_matmul(darr_t* arr1,arrso_t* arr2){
+
+	 if( arr1->nrows != arr2->ncols ){
+	 	printf("ERROR: Wrong dimensions in matmul-like operation between darr and arrso arrays.\n");
+	 	exit(OTI_BadDim);
+	 }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void arrso_dimCheck_OR_matmul(arrso_t* arr1, darr_t* arr2){
+
+	 if( arr1->nrows != arr2->ncols ){
+	 	printf("ERROR: Wrong dimensions in matmul-like operation between arrso and darr arrays.\n");
+	 	exit(OTI_BadDim);
+	 }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void arrso_dimCheck_OR_squareness(arrso_t* arr1){
+
+	 if( arr1->nrows != arr1->ncols ){
+	 	printf("ERROR: Arrso array not square.\n");
+	 	exit(OTI_BadDim);
+	 }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+ord_t arrso_get_order(arrso_t* arr){
+	ord_t order = 0;
+
+	if( arr->size !=0 ){
+		// Extract the order information from the first sotinum element.
+		order = arr->p_data[0].order;
+	}
+
+	return order;
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
 // ****************************************************************************************************
-inline sotinum_t dhelp_get_sotinum_from_somin(somin_t in, ord_t order, flag_t flag, ndir_t* p_size){
 
-	sotinum_t res;
 
-	res.re     = in.re;
-	res.p_im   = in.p_im;
-	res.p_idx  = in.p_idx;
-	res.p_nnz  = in.p_nnz;
-	res.p_size = p_size;
-	res.order  = order;
-	res.flag   = 0;
 
-	return res;
-}
-// ----------------------------------------------------------------------------------------------------
+

@@ -471,7 +471,7 @@ void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl){
 
     ord_t i;
-    sotinum_t res = soti_createEmpty_like(num,dhl);
+    sotinum_t res = soti_createEmpty_like( num, dhl);
 
     res.re    = num->re;
 

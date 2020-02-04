@@ -35,7 +35,7 @@
 // Append core operations.
 #include "sparse/num/base.h"
 
-// append utils.
+// Append utils.
 #include "sparse/num/utils.h"
 
 // Append algebra declarations.
@@ -50,10 +50,13 @@
 // Append core operations.
 #include "sparse/array/array_of_oti/base.h"
 
-// // append utils.
-// #include "sparse/arrso/utils.h"
+// Append algebra declarations.
+#include "sparse/array/array_of_oti/algebra_elementwise.h"
 
-// // Append algebra declarations.
+// Append utils.
+#include "sparse/array/array_of_oti/utils.h"
+
+
 // #include "sparse/arrso/algebra_elementwise.h"
 
 // // Append function declarations.

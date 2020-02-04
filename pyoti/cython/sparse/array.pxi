@@ -140,22 +140,10 @@ cdef class matso:
   @property
   def order(self):
     """
-    PURPOSE:      Gets the global order of the OTI array.
+    PURPOSE:      Gets the truncation order the OTI array.
 
     """
     #*************************************************************************************************
-
-    cdef np.ndarray[coeff_t, ndim=2] tmp
-    cdef uint64_t i,j,k
-
-    tmp = np.empty( self.shape , dtype = np.float64)
-
-    for i in range(self.arr.nrows):
-      for j in range(self.arr.ncols):
-        k = j+i*self.arr.ncols
-        tmp[i,j] = self.arr.p_data[k].re
-      # end for 
-    # end for 
 
     return tmp
 

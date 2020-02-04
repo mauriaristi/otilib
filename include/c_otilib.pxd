@@ -126,12 +126,10 @@ cdef extern from "oti/oti.h" nogil:
     ndir_t*       p_nnz
 
   ctypedef struct  arrso_t:
-    somin_t*      p_data
+    sotinum_t*    p_data
     uint64_t       nrows
     uint64_t       ncols
     uint64_t        size
-    ndir_t*       p_size
-    ord_t          order
     flag_t          flag
   
 

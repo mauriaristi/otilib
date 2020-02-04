@@ -137,6 +137,31 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
+  @property
+  def order(self):
+    """
+    PURPOSE:      Gets the global order of the OTI array.
+
+    """
+    #*************************************************************************************************
+
+    cdef np.ndarray[coeff_t, ndim=2] tmp
+    cdef uint64_t i,j,k
+
+    tmp = np.empty( self.shape , dtype = np.float64)
+
+    for i in range(self.arr.nrows):
+      for j in range(self.arr.ncols):
+        k = j+i*self.arr.ncols
+        tmp[i,j] = self.arr.p_data[k].re
+      # end for 
+    # end for 
+
+    return tmp
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   @staticmethod
   cdef matso create(arrso_t* arr):
     """
@@ -185,13 +210,8 @@ cdef class matso:
 
     cdef np.ndarray[uint64_t, ndim=1] tmp 
 
-    out =  "matso<"
+    out =  "matso< "
     out += "shape: "+str(self.shape)+ ", "
-    out += "order: "+str(self.arr.order)+", "
-
-    tmp = c_ptr_to_np_1darray_uint64(self.arr.p_size,self.arr.order)
-
-    out += "p_size: "+str(tmp)+", "
     out += "re:\n"
     # first print the real part:
     out += repr( self.get_real() )

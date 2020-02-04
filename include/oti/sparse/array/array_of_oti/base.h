@@ -5,8 +5,6 @@
 // ****************************************************************************************************
 
 
-inline arrso_t arrso_createEmpty_bases(uint64_t nrows, uint64_t ncols, 
-                        bases_t nbases, ord_t order, dhelpl_t dhl);
 
 /**************************************************************************************************//**
 @brief Copy an existing array. Data is copied to the new memory.
@@ -133,6 +131,7 @@ arrso_t arrso_zeros_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t 
 @param[in] dhl    Direction helper list object.
 ******************************************************************************************************/ 
 arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+arrso_t arrso_createEmpty_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

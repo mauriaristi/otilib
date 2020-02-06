@@ -152,7 +152,26 @@ void soti_gem_oo_to(sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dh
     sotinum_t  tmp1, tmp2;
 
     tmp1 = soti_base_mul(    a, b, dhl); // This is temporal 3, 4 or 5
-    tmp2 = soti_base_sum( tmp1, c, dhl); // this is temporal 7.
+    tmp2 = soti_base_sum( &tmp1, c, dhl); // this is temporal 7.
+
+    soti_copy_to(&tmp2, res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+// ****************************************************************************************************
+void soti_gem_ro_to(coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl){
+    // This function does GEM (GEneral Multiplication): res = a*b + c
+
+    sotinum_t tmp1 = soti_get_tmp( 0, b->order, dhl);
+    sotinum_t tmp2;
+
+    soti_mul_ro_to( a, b, &tmp1, dhl); // This is temporal 10
+    
+    tmp2 = soti_base_sum( &tmp1, c, dhl); // this is temporal 7.
 
     soti_copy_to(&tmp2, res, dhl);
 

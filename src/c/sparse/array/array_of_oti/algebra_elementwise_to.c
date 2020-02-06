@@ -14,8 +14,8 @@
 void arrso_neg_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
 
     uint64_t i;
-    // Check first dimensions and if reallocation is necessary.
-    arrso_dimCheck_OO_elementwise(arr,res);
+    // Check first dimensions.
+    arrso_dimCheck_OO_elementwise(arr,arr,res);
 
     // The loop for every element in arr.
     for (i = 1; i<arr->size; i++){
@@ -38,7 +38,7 @@ void arrso_sum_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_OO_elementwise(arr1,arr2);
+    arrso_dimCheck_OO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -56,7 +56,7 @@ void arrso_sum_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr2);
+    arrso_dimCheck_RO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -71,6 +71,9 @@ void arrso_sum_oO_to(sotinum_t* num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     // Perform o + O.
     uint64_t i;
 
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
         soti_sum_oo_to( num, &arr1->p_data[i], &res->p_data[i], dhl);
@@ -84,6 +87,9 @@ void arrso_sum_rO_to(coeff_t num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 
     // Perform r + O.
     uint64_t i;
+
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -114,7 +120,7 @@ void arrso_sub_OO_to( arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_OO_elementwise(arr1,arr2);
+    arrso_dimCheck_OO_elementwise(arr1,arr2, res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -129,7 +135,7 @@ void arrso_sub_OR_to( arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr2,arr1);
+    arrso_dimCheck_RO_elementwise(arr2,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -144,7 +150,7 @@ void arrso_sub_RO_to( darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr2);
+    arrso_dimCheck_RO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -158,6 +164,9 @@ void arrso_sub_Oo_to( arrso_t* arr1, sotinum_t* num, arrso_t* res, dhelpl_t dhl)
     // Perform O - o
     uint64_t i;
 
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
         soti_sub_oo_to( &arr1->p_data[i], num, &res->p_data[i], dhl);
@@ -169,6 +178,9 @@ void arrso_sub_Oo_to( arrso_t* arr1, sotinum_t* num, arrso_t* res, dhelpl_t dhl)
 void arrso_sub_oO_to( sotinum_t* num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     // Prrform o - O
     uint64_t i;
+
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -182,6 +194,9 @@ void arrso_sub_Or_to( arrso_t* arr1, coeff_t num, arrso_t* res, dhelpl_t dhl){
     // Prrform O - r
     uint64_t i;
 
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
         soti_sub_or_to( &arr1->p_data[i], num, &res->p_data[i], dhl);
@@ -193,6 +208,9 @@ void arrso_sub_Or_to( arrso_t* arr1, coeff_t num, arrso_t* res, dhelpl_t dhl){
 void arrso_sub_rO_to( coeff_t num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     // Prrform r - O
     uint64_t i;
+
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -222,7 +240,7 @@ void arrso_mul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_OO_elementwise(arr1,arr2);
+    arrso_dimCheck_OO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -237,7 +255,7 @@ void arrso_mul_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr2);
+    arrso_dimCheck_RO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -251,6 +269,9 @@ void arrso_mul_oO_to(sotinum_t* num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     // Perform o * O
     uint64_t i;
 
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr2,arr2,res);
+
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr2->size; i++){
         soti_mul_oo_to(num, &arr2->p_data[i], &res->p_data[i], dhl);
@@ -262,6 +283,9 @@ void arrso_mul_oO_to(sotinum_t* num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 void arrso_mul_rO_to(coeff_t num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     // Perform r * O
     uint64_t i;
+
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr2,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr2->size; i++){
@@ -289,7 +313,7 @@ void arrso_div_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_OO_elementwise(arr1,arr2);
+    arrso_dimCheck_OO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -304,7 +328,7 @@ void arrso_div_OR_to(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr2,arr1);
+    arrso_dimCheck_RO_elementwise(arr2,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -320,7 +344,7 @@ void arrso_div_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr2);
+    arrso_dimCheck_RO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr2->size; i++){
@@ -333,6 +357,9 @@ void arrso_div_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 void arrso_div_oO_to(sotinum_t* num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     // Perform o/O
     uint64_t i;
+    
+        // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr2,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr2->size; i++){
@@ -345,6 +372,9 @@ void arrso_div_oO_to(sotinum_t* num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 void arrso_div_Oo_to(arrso_t* arr1, sotinum_t* num, arrso_t* res, dhelpl_t dhl){
     // Perform O/o
     uint64_t i;
+    
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -357,6 +387,9 @@ void arrso_div_Oo_to(arrso_t* arr1, sotinum_t* num, arrso_t* res, dhelpl_t dhl){
 void arrso_div_rO_to(coeff_t num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     // Perform r/O
     uint64_t i;
+    
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr2,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr2->size; i++){
@@ -369,6 +402,9 @@ void arrso_div_rO_to(coeff_t num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 void arrso_div_Or_to(arrso_t* arr1, coeff_t num, arrso_t* res, dhelpl_t dhl){
     // Perform O/r
     uint64_t i;
+    
+    // Check inputs:
+    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){

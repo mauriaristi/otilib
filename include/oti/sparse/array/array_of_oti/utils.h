@@ -8,14 +8,14 @@ Bad Dimension error if dimensions mismatch.
 @param[in] arr1 Array.
 @param[in] arr2 Array.
 ******************************************************************************************************/ 
-void arrso_dimCheck_OO_elementwise(arrso_t* arr1, arrso_t* arr2);
-void arrso_dimCheck_RO_elementwise(darr_t*  arr1, arrso_t* arr2);
+void arrso_dimCheck_OO_elementwise(arrso_t* arr1, arrso_t* arr2, arrso_t* res);
+void arrso_dimCheck_RO_elementwise(darr_t*  arr1, arrso_t* arr2, arrso_t* res);
 
-void arrso_dimCheck_OO_matmul(arrso_t* arr1, arrso_t* arr2);
-void arrso_dimCheck_RO_matmul(darr_t*  arr1, arrso_t* arr2);
-void arrso_dimCheck_OR_matmul(arrso_t* arr1, darr_t*  arr2);
+void arrso_dimCheck_OO_matmul(arrso_t* arr1, arrso_t* arr2, arrso_t* res);
+void arrso_dimCheck_RO_matmul(darr_t*  arr1, arrso_t* arr2, arrso_t* res);
+void arrso_dimCheck_OR_matmul(arrso_t* arr1, darr_t*  arr2, arrso_t* res);
 
-void arrso_dimCheck_OR_squareness(arrso_t* arr1);
+void arrso_dimCheck_OR_squareness(arrso_t* arr1, arrso_t* res);
 // ----------------------------------------------------------------------------------------------------
 
 

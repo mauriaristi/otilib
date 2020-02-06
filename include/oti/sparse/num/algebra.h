@@ -36,7 +36,7 @@ void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief General multiplication function. Performs a*b + c,
+@brief General multiplication function. Performs res = a*b + c,
 
 This function uses temporals 0, 1, 2, 3, 4, 5.
 
@@ -45,6 +45,7 @@ This function uses temporals 0, 1, 2, 3, 4, 5.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 void soti_gem_oo_to(sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Subtract two sparse oti numbers.

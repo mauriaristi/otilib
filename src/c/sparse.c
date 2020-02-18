@@ -35,7 +35,7 @@
 #include "sparse/array/array_of_oti/algebra_elementwise.c"
 
 // Array algebra: Matrix operations such as matmul, determinant and invertion.
-#include "sparse/array/array_of_oti/algebra_matops_to.c"
+// #include "sparse/array/array_of_oti/algebra_matops_to.c"
 // #include "sparse/array/array_of_oti/algebra_matops.c"
 
 // Array functions: Elementwise function evaluation.

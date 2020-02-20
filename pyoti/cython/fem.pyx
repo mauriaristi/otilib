@@ -11,6 +11,10 @@ include "fem/utils.pxi"
 # Append Element functions.
 include "fem/elbase.pxi"
 
+
+# Append Real FEM array.
+include "fem/fem_real_array.pxi"
+
 # Include Mesh.
 # include "fem/mesh.pxi"
 

@@ -9,7 +9,7 @@ import spr_duallib as dn
 import otilib as otin
 
 def MAC_PlotSys(nds,els,dsp,fce,U,scaleF=1.0,C=[],M='o-'):
-    #DESCRIPTION:   Function that plots the system using a displacement array
+    #  DESCRIPTION:   Function that plots the system using a displacement array
     
     #plt.figure()
     ax = plt.axes()

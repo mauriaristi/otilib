@@ -1,9 +1,6 @@
 
 
 
-import numpy as np
-
-
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::     CLASS  FEM_REAL_MATRIX    :::::::::::::::::::::::::::::::::::::::::
@@ -20,7 +17,7 @@ class fem_real_matrix:
 
   #***************************************************************************************************
   def __init__(self,list shape, uint64_t n_int_points = 0): 
-  	 """
+    """
     PURPOSE:      Python level constructor of the fem_real_matrix class. The porpuse of this class
                   is to provide a high level interface to an array used in the integration process
                   of a Finite Element calculation. In particular a FEM array is an "list of arrays"
@@ -33,19 +30,87 @@ class fem_real_matrix:
                  
     """
     #*************************************************************************************************
-    self.array   = np.zeros((n_int_points,*shape),dtype=np.float64)
+    self.array = []
+
     self.nintpts = n_int_points
-    # Weights are not needed
+
+    for i in range(self.nintpts):
+    
+      self.array.append( np.zeros(shape,dtype=np.float64) )
+    
+    # end for 
 
   #---------------------------------------------------------------------------------------------------  
 
-    
+  #***************************************************************************************************
+  def __str__(self):
+    """
+    PURPOSE:      String conversion of the class.
 
+                  Returns lhs + rhs according to what input types are.
+    """
+    #*************************************************************************************************
+
+    out = ""
+
+    out += "<gaussian_real_matrix, n_int_points = "+str(self.nintpts)+" >\n"
+
+    for i in range(self.nintpts):
+
+      out += "Integration point "+str(i)+":\n"
+      out += str(self.array[i]) + "\n"
+
+    # end for
+
+    return out
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __repr__(self):
+    """
+    PURPOSE:      String conversion of the class.
+
+                  Returns lhs + rhs according to what input types are.
+    """
+    #*************************************************************************************************
+
+    out = ""
+
+    out += "<gaussian_real_matrix, n_int_points = "+str(self.nintpts)+" >\n"
+
+    for i in range(self.nintpts):
+
+      out += "Integration point "+str(i)+":\n"
+      out += str(self.array[i]) + "\n"
+
+    # end for
+
+    return out
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __add__(self, rhs):
+    """
+    PURPOSE:      Addition operation overload for the class.
+
+                  Returns self + rhs according to what input types are.
+    """
+    #*************************************************************************************************
+
+    res = fem_real_matrix(self.array[0].shape, self.nintpts)
+
+    for i in range(self.nintpts):
+
+      res.array[i] = self.array[i] + rhs.array[i]
+
+    # end for
+
+    return res
   #---------------------------------------------------------------------------------------------------
 
 
-def det(rhs):
+# def det(rhs):
 
-  t_rhs = type(rhs)
+#   t_rhs = type(rhs)
 
-  if t_rhs == np.ndarray
+#   if t_rhs == np.ndarray

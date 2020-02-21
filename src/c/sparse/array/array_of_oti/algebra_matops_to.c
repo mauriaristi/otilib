@@ -18,7 +18,7 @@ void arrso_matmul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl
     arrso_dimCheck_OO_matmul(arr1, arr2, res);
 
     // Extract temporal 5.
-    tmp = soti_get_tmp( 5, dhl);
+    tmp = soti_get_tmp( 5,arr1->p_data[0].order ,dhl);
 
     for ( i = 0; i < arr1->nrows; i++){
         
@@ -56,7 +56,7 @@ void arrso_matmul_OR(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl){
     arrso_dimCheck_RO_matmul(arr1, arr2, res);
 
     // Extract temporal 5.
-    tmp = soti_get_tmp( 5, dhl);
+    tmp = soti_get_tmp( 5,arr1->p_data[0].order ,dhl);
 
     for ( i = 0; i < arr1->nrows; i++){
         
@@ -68,7 +68,7 @@ void arrso_matmul_OR(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl){
 
                 soti_gem_ro_to(  arr2->p_data[ j + k * arr2->ncols ],
                                 &arr1->p_data[ k + i * arr1->ncols ],
-                                &tmp, dhl);
+                                &tmp ,&tmp, dhl);
                    
             }
 
@@ -82,14 +82,14 @@ void arrso_matmul_OR(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 
-// 2.1.3. Real Array  - OTI Array.
-// ****************************************************************************************************
-void arrso_matmul_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
+// // 2.1.3. Real Array  - OTI Array.
+// // ****************************************************************************************************
+// void arrso_matmul_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
         
     
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
+// // ----------------------------------------------------------------------------------------------------
 
 
 

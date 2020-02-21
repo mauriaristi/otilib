@@ -72,7 +72,7 @@ void arrso_sum_oO_to(sotinum_t* num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+    arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -89,7 +89,7 @@ void arrso_sum_rO_to(coeff_t num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+    arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -165,7 +165,7 @@ void arrso_sub_Oo_to( arrso_t* arr1, sotinum_t* num, arrso_t* res, dhelpl_t dhl)
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+    arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -180,7 +180,7 @@ void arrso_sub_oO_to( sotinum_t* num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl)
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+    arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -195,7 +195,7 @@ void arrso_sub_Or_to( arrso_t* arr1, coeff_t num, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+    arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -210,7 +210,7 @@ void arrso_sub_rO_to( coeff_t num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+    arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -270,7 +270,7 @@ void arrso_mul_oO_to(sotinum_t* num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr2,arr2,res);
+    arrso_dimCheck_OO_elementwise(arr2,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr2->size; i++){
@@ -285,7 +285,7 @@ void arrso_mul_rO_to(coeff_t num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
 
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr2,arr2,res);
+    arrso_dimCheck_OO_elementwise(arr2,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr2->size; i++){
@@ -359,7 +359,7 @@ void arrso_div_oO_to(sotinum_t* num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
     
         // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr2,arr2,res);
+    arrso_dimCheck_OO_elementwise(arr2,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr2->size; i++){
@@ -374,7 +374,7 @@ void arrso_div_Oo_to(arrso_t* arr1, sotinum_t* num, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
     
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+    arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){
@@ -389,7 +389,7 @@ void arrso_div_rO_to(coeff_t num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
     
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr2,arr2,res);
+    arrso_dimCheck_OO_elementwise(arr2,arr2,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr2->size; i++){
@@ -404,7 +404,7 @@ void arrso_div_Or_to(arrso_t* arr1, coeff_t num, arrso_t* res, dhelpl_t dhl){
     uint64_t i;
     
     // Check inputs:
-    arrso_dimCheck_RO_elementwise(arr1,arr1,res);
+    arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
     for ( i = 0; i < arr1->size; i++){

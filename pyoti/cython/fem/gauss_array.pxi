@@ -3,15 +3,15 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::     CLASS  FEM_REAL_MATRIX    :::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::     CLASS  GAUSS MATRIX    :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-class fem_real_matrix:
+cdef class gauss_matrix:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
   
   #                                --->      Look in fem.pxd    <---
-  # cdef np.ndarray array    #
+  # cdef list       array    #
   # cdef uint64_t   nintpts  #
   # cdef tuple      shape    #
 
@@ -21,31 +21,46 @@ class fem_real_matrix:
   #***************************************************************************************************
   def __init__(self, shape, uint64_t n_int_points = 0): 
     """
-    PURPOSE:      Python level constructor of the fem_real_matrix class. The porpuse of this class
-                  is to provide a high level interface to an array used in the integration process
-                  of a Finite Element calculation. In particular a FEM array is an "list of arrays"
-                  where each element of the list correspond to an item related with the computations
-                  of each integration point.
+    PURPOSE:      Python level constructor of the gauss_matrix class. The porpuse of this class
+                  is to provide a high level interface to an array used in a Finite Element 
+                  calculation. In particular a Gauss array is a "list of arrays" where each element 
+                  of correspond to an integration point of a gauss computation.
 
-                  A = fem_real_matrix(n_int_points = 8)
 
-                  Creates a list of 
+
+                  A = gauss_matrix( (3,3), n_int_points = 8)
+
+                  # Creates a list of 8, 3 x 3, arrays that can be integrated.
                  
     """
     #*************************************************************************************************
+    
     self.array = []
+
+    t_shape = type(shape)
+
+    if t_shape == int:
+
+      self.shape = (shape,1)
+
+    else:
+
+      self.shape = tuple(shape)
+
+    # end if
 
     # Check that the number of integration points is greater than 0.
     self.nintpts = n_int_points
 
     for i in range(self.nintpts):
-    
-      self.array.append( np.zeros(shape,dtype=np.float64) )
+      #  
+      self.array.append( np.zeros(   self.shape, dtype=np.float64 ) )
     
     # end for 
 
   #---------------------------------------------------------------------------------------------------  
 
+  
   #***************************************************************************************************
   def __str__(self):
     """
@@ -57,7 +72,8 @@ class fem_real_matrix:
 
     out = ""
 
-    out += "<gaussian_real_matrix, shape: " , nint_points = "+str(self.nintpts)+" >\n"
+    out += "<gauss_matrix, shape: " + str(self.shape) 
+    out += ", number of integration points = "+str(self.nintpts)+" >\n"
 
     for i in range(self.nintpts):
 
@@ -72,15 +88,14 @@ class fem_real_matrix:
   #***************************************************************************************************
   def __repr__(self):
     """
-    PURPOSE:      String conversion of the class.
+    PURPOSE:      Returns inline representation of the class object.
 
-                  Returns lhs + rhs according to what input types are.
     """
     #*************************************************************************************************
 
     out = ""
 
-    out += "<gaussian_real_matrix, n_int_points = "+str(self.nintpts)+" >\n"
+    out += "<gauss_matrix, n_int_points = "+str(self.nintpts)+" >\n"
 
     for i in range(self.nintpts):
 
@@ -101,7 +116,10 @@ class fem_real_matrix:
     """
     #*************************************************************************************************
 
-    res = fem_real_matrix(self.array[0].shape, self.nintpts)
+    res = gauss_matrix(self.array[0].shape, self.nintpts)
+    
+    t_lhs = type(self)
+    t_rhs = type(rhs)
 
     for i in range(self.nintpts):
 
@@ -126,7 +144,7 @@ class fem_real_matrix:
 
     if t_self == t_rhs:
 
-      res = fem_real_matrix(self.array[0].shape, self.nintpts)
+      res = gauss_matrix(self.array[0].shape, self.nintpts)
 
       for i in range(self.nintpts):
 

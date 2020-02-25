@@ -13,7 +13,7 @@ include "fem/elbase.pxi"
 
 
 # Append Real FEM array.
-include "fem/fem_real_array.pxi"
+include "fem/gauss_array.pxi"
 
 # Include Mesh.
 # include "fem/mesh.pxi"

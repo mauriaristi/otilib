@@ -1,79 +1,13 @@
 
-#-----------------------------------------------------------------------------------------------------
-#---------------------------------   EXTERNAL LIBRARIES IMPORTS     ----------------------------------
-#-----------------------------------------------------------------------------------------------------
 
-cimport numpy as np
-from c_otilib cimport *             # OTI lib in C.
+# Import external libraries.
+include "core/dependencies.pxd"
 
-#-----------------------------------------------------------------------------------------------------
+# Global variables declarations.
+include "core/globals.pxd"
 
+# Direction helper class.
+include "core/dhelp.pxd" 
 
-#-----------------------------------------------------------------------------------------------------
-#-------------------------------------   INITIALIZATION ONLY   ---------------------------------------
-#-----------------------------------------------------------------------------------------------------
-
-cdef dHelp h       # Direction helper interface with python, global object.
-cdef dhelpl_t dhl  # List of direction helpers, global object
-cdef uint64_t ZERO 
-cdef uint64_t  ONE 
-
-#-----------------------------------------------------------------------------------------------------
-
-
-
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::      CLASS HELPER      :::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class dHelp:
-  
-  #---------------------------------------------------------------------------------------------------
-  #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
-  #---------------------------------------------------------------------------------------------------
-  cdef dhelpl_t dhl                 # Direction helper list.
-  #---------------------------------------------------------------------------------------------------  
-
-  #---------------------------------------------------------------------------------------------------
-  #------------------------------   DEFINITION OF C-LEVEL FUNCTIONS   --------------------------------
-  #---------------------------------------------------------------------------------------------------
-
-  #---------------------------------------------------------------------------------------------------
-  
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::   END OF CLASS HELPER   :::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-#-----------------------------------------------------------------------------------------------------
-#-------------------------------------     OTHER FUNCTIONS     ---------------------------------------
-#-----------------------------------------------------------------------------------------------------
-
-
-
-cdef np.ndarray[double, ndim=3]  c_ptr_to_np_3darray_double(void * ptr, np.npy_intp sizex, \
-                                                            np.npy_intp sizey, np.npy_intp sizez, \
-                                                            uint8_t numpy_own = *)
-cdef np.ndarray[double, ndim=2]  c_ptr_to_np_2darray_double(void * ptr, np.npy_intp sizex, \
-                                                            np.npy_intp sizey, uint8_t numpy_own = *)
-cdef np.ndarray[double, ndim=1]  c_ptr_to_np_1darray_double(void * ptr, np.npy_intp size, \
-                                                            uint8_t numpy_own = *)
-cdef np.ndarray[uint64_t, ndim=1]  c_ptr_to_np_1darray_uint64(void * ptr, np.npy_intp size, \
-                                                            uint8_t numpy_own = *)
-
-cdef np.ndarray[uint8_t, ndim=1]  c_ptr_to_np_1darray_uint8(void * ptr, np.npy_intp size, \
-                                                            uint8_t numpy_own = *)
-# cdef void c_getDirExpA(list dirArray, uint16_t** p_dirA, uint8_t** p_expA, uint8_t* order)
-
-cdef void c_Py_print2DArrayUI8(uint8_t* array,uint64_t dim1, uint8_t dim2)
-cdef void c_Py_printArrayUI8(uint8_t* array,uint8_t size)
-cdef void c_Py_printArrayUI16(uint16_t* array,uint8_t size)
-cdef void c_Py_printArrayUI64(uint64_t* array,uint64_t size)
-cdef dHelp get_cython_dHelp()
-cpdef list expand_imdir(hum_dir)
-cpdef list imdir(hum_dir)
-
-
-cdef copy_numpy2d_to_ptr_f64(np.ndarray[coeff_t, ndim=2] src, coeff_t* dst)
-cpdef get_deriv_factor(hum_dir)
-#-----------------------------------------------------------------------------------------------------
-
+# Utility function declarations.
+include "core/utils.pxd"

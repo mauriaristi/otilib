@@ -1,9 +1,10 @@
-
 #-----------------------------------------------------------------------------------------------------
-#---------------------------------   EXTERNAL LIBRARIES IMPORTS     ----------------------------------
+#-------------------------------------   INITIALIZATION ONLY   ---------------------------------------
 #-----------------------------------------------------------------------------------------------------
 
-cimport numpy as np
-from c_otilib cimport *             # OTI lib in C.
-
+cdef dHelp h       # Direction helper interface with python, global object.
+cdef dhelpl_t dhl  # List of direction helpers, global object
+cdef uint64_t ZERO 
+cdef uint64_t  ONE 
 #-----------------------------------------------------------------------------------------------------
+

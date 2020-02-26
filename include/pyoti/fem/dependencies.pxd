@@ -1,6 +1,6 @@
 
 # Include the calls from C interface.
-from c_otilib cimport *
+from pyoti.c_otilib cimport *
 
 # Import real dependencies
 from pyoti.real   import dmat

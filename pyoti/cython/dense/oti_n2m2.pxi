@@ -6,32 +6,7 @@
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::     CLASS  OTINUM    ::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class otinum:
-  """
-  OTI scalar number class.
-
-  OTI is short for Order Truncated Imaginary numbers, which will allow you to compute derivatives
-  very precisely on computer machines. The main idea is that you use OTIs as an on-demand tool
-  to compute derivatives of a program, by perturbing the variable of interest with an OTI direction.
-
-  Example:
-
-  >>> import pyoti.dense as oti
-  >>> x = 3.5 + oti.e(1, order=2)
-  >>> f = oti.sin(x**2)* oti.log(x)  # <-- This is the function we want to differentiate.
-  >>>                                # At this point f already contains all derivatives, 
-  >>>                                # we just need to extract them
-  >>> f
-  out: -0.389759 + 8.24523 * e([1]) + 12.6531 * e([[1,2]])
-  >>> # This is the oti representation.
-  >>>
-  >>> f.get_all_deriv()
-  out: array([-0.38975881,  8.24523458, 25.30624122])
-  >>> #       ^ f(3.5)     ^ df/dx(3.5) ^ d^2f/dx^2(3.5)
-
-
-
-  """
+cdef class oti_n2m2:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -43,7 +18,8 @@ cdef class otinum:
 
   #***************************************************************************************************
   # not _cinit_ to avoid creation with _new_
-  def __init__(self, coeffs, ord_t order, bases_t nbases = 1,uint8_t FLAGS = 1): 
+  def __init__(self, coeff_t real, coeff_t e1 = 0., coeff_t e2 = 0., 
+               coeff_t e11 = 0., coeff_t e12 = 0., coeff_t e22 = 0.): 
     """
     PURPOSE:      Python level constructor of the otinum class.
 
@@ -66,69 +42,14 @@ cdef class otinum:
                   
     """
     #*************************************************************************************************
-    global dhl
-
-    cdef uint64_t sizeOfCoefs, newSizeOfCoefs, i, j, ordi
     
-    self.FLAGS = FLAGS
+    self.re = real
+    self.e1 = e1
+    self.e2 = e2
+    self.e11 = e11
+    self.e12 = e12
+    self.e22 = e22
 
-      
-    # create a list to handle the index numbers 
-    if type(coeffs) in number_types:
-      
-      self.num = oti_createZero( nbases, order, dhl);
-      self.num.re = coeffs
-    
-    else:
-      
-      sizeOfCoefs = len(coeffs) - 1
-      self.num = oti_createZero( nbases, order, dhl);
-      self.num.re = coeffs[0]
-
-      if (sizeOfCoefs != self.num.ndir):
-        print("Size mismatch of coeffs and the number of dimensions for nbases: "+
-          str(nbases) + " and order: "+str(order)+".")
-      else:
-        
-        j = 1
-        
-        for ordi in range(self.num.order):
-          
-          for i in range(self.num.p_ndpo[ordi]):
-            
-            self.num.p_im[ordi][i] = coeffs[j]
-            j += 1
-
-          # end for
-
-        # end for 
-
-      # end if 
-
-    # end if
-
-  #---------------------------------------------------------------------------------------------------
-
-  #***************************************************************************************************
-  def __dealloc__(self): 
-    """
-    PURPOSE:      Destructor of the class. 
-
-    DESCRIPTION:  Frees all pointers allocated in the 
-                  
-    """
-    #*************************************************************************************************
-    # print("Deallocating memory of otinum.")
-    if self.FLAGS & 1: # If memory is owned by this otinum.
-      # print('Freeing otinum')
-      oti_free(&self.num)
-
-    # else:
-
-    #   self.num
-
-    #end if 
-    
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
@@ -139,19 +60,19 @@ cdef class otinum:
     """
     #*************************************************************************************************
 
-    return self.num.ndir
+    return 6
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @property
-  def  nbases(self): 
+  def nbases(self): 
     """
     PURPOSE:      Return the number of bases in the otinum.                  
     """
     #*************************************************************************************************
 
-    return self.num.nbases
+    return 2
 
   #---------------------------------------------------------------------------------------------------
   
@@ -167,42 +88,9 @@ cdef class otinum:
     """
     #*************************************************************************************************
 
-    return self.num.order
+    return 2
 
   #---------------------------------------------------------------------------------------------------
-
-
-    
-  #***************************************************************************************************
-  @staticmethod
-  cdef otinum create(otinum_t* num, uint8_t FLAGS = 1):
-    """
-    PURPOSE:      C-level constructor of the otinum class. Use this when creating otinums within 
-                  Cython
-
-    DESCRIPTION:  Creates a new OTI number given a c-level otinum_t type.
-
-    PARAMETERS:
-                 
-                  num:  Number to be referenced in python     
-
-    RESULT:       
-            A new otinum python object is created
-                  
-    """
-    #*************************************************************************************************
-    global dhl
-
-    # create new empty object:
-    cdef otinum otin = <otinum> otinum.__new__(otinum)
-
-    otin.num  = num[0]
-    otin.FLAGS = FLAGS
-    
-    return otin
-
-  #--------------------------------------------------------------------------------------------------- 
-
 
   #*************************************************************************************************** 
   def __repr__(self):
@@ -229,9 +117,9 @@ cdef class otinum:
     
     global dhl
 
-    head      = 'otinum('
+    head      = 'oti_n2m2('
     body      = ''
-    tail = str(self.num.re)+", ndir: "+str(self.num.ndir)+', order: '+str(self.num.order)+')'
+    tail = str(self.re)+", ndir: "+str(self.ndir)+', order: '+str(self.order)+')'
 
     return (head + body + tail)
 
@@ -246,33 +134,20 @@ cdef class otinum:
     """
     #*************************************************************************************************
     
-    global dhl
-    global h
-
-    
-    cdef ord_t ordi, j
-    cdef ndir_t i;
-    cdef bases_t* dirs;
-
     head      = ''
     body      = ''
     
-    body += '%g'%self.num.re
+    # Real
+    body += '%g'%self.re+' '
 
-    for ordi in range(0,self.num.order):
+    # Order 1
+    body += '%+g'%self.e1 +' * e([1]) '
+    body += '%+g'%self.e2 +' * e([2]) '
 
-      for i in range(self.num.p_ndpo[ordi]):
-        
-        num = '%+g'%self.num.p_im[ordi][i] 
-        body += ' '+num[0]+" "+num[1:]
-        body += ' * e(' 
-        
-        body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')
-        body += ")"
-      
-      # end for
-
-    # end for 
+    # Order 2
+    body += '%+g'%self.e11 +' * e([[1,2]]) '
+    body += '%+g'%self.e12 +' * e([1,2]) '
+    body += '%+g'%self.e22 +' * e([[2,2]]) '
       
     tail = ''
     
@@ -288,11 +163,30 @@ cdef class otinum:
     PURPOSE:  To get the value of an otinum coefficient.
     """
     #*************************************************************************************************
-    global dhl
+    
 
     cdef imdir_t idx = item[ZERO]
     cdef ord_t order = item[ONE]
-    return oti_get( idx, order, &self.num, dhl)
+    cdef coeff_t res = 0.0
+
+    if (order == 0):
+      res = self.re
+    elif (order == 1) :
+      if item == 0:
+        res = self.e1
+      elif item == 1:
+        res = self.e2
+      # end if 
+    elif (order == 2):
+      if item == 0:
+        res = self.e11
+      elif item == 1:
+        res = self.e12
+      elif item == 2:
+        res = self.e22
+      # end if 
+    # end if 
+    return res
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -302,18 +196,29 @@ cdef class otinum:
     """
     PURPOSE:  To set the value of an otinum coefficient.
 
-              !!!!! TODO:  !!!!! 
-              ADD ERROR WHEN DATA OWN FLAG IS SET LOW AND INDEX LARGER THAN SELF.NUM.NDIR 
-              IS GIVEN !!!!!!!!
     """
     #*************************************************************************************************
-    global dhl
-
     cdef int i = 0, j = 1
     cdef imdir_t index = item[i]
     cdef ord_t   order = item[j]
 
-    oti_setIm_IdxOrd( value, index, order, &self.num, dhl)
+    if (order == 0):
+      self.re = value
+    elif (order == 1) :
+      if item == 0:
+        self.e1 = value
+      elif item == 1:
+        self.e2 = value
+      # end if 
+    elif (order == 2):
+      if item == 0:
+        self.e11 = value
+      elif item == 1:
+        self.e12 = value
+      elif item == 2:
+        self.e22 = value
+      # end if 
+    # end if 
 
 
   #---------------------------------------------------------------------------------------------------  
@@ -334,11 +239,24 @@ cdef class otinum:
                   otinum([-10.,-7.,-3.], 2)
     """
     #*************************************************************************************************
-    global dhl
+    cdef: 
+      oti_n2m2 tmp1 = self, res = oti_n2m2(0.0)
+      
+    
+    
+    
 
-    cdef otinum_t newnum = oti_neg(&self.num, dhl)
+    res.re  = -tmp1.re
 
-    return otinum.create(&newnum)
+    res.e1  = -tmp1.e1
+    res.e2  = -tmp1.e2
+
+    res.e11 = -tmp1.e11
+    res.e12 = -tmp1.e12
+    res.e22 = -tmp1.e22
+      
+      
+    return res
   #---------------------------------------------------------------------------------------------------
 
 
@@ -362,10 +280,8 @@ cdef class otinum:
     """
     #*************************************************************************************************
     
-    global dhl
     cdef: 
-      otinum_t res
-      otinum tmp1, tmp2
+      oti_n2m2 tmp1, tmp2, res = oti_n2m2(0.0)
       
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
@@ -377,17 +293,41 @@ cdef class otinum:
     if ( type1 is type2) : # Case Sum between OTIs.
       tmp1 = self
       tmp2 = other_in
-      res =  oti_sum_oo(&tmp1.num, &tmp2.num, dhl);
+
+      res.re  = tmp1.re + tmp2.re 
+
+      res.e1  = tmp1.e1 + tmp2.e1 
+      res.e2  = tmp1.e2 + tmp2.e2 
+
+      res.e11 = tmp1.e11+ tmp2.e11
+      res.e12 = tmp1.e12+ tmp2.e12
+      res.e22 = tmp1.e22+ tmp2.e22
     
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
       tmp1 = self
-      res = oti_sum_ro( other_in, &tmp1.num, dhl);
+      
+      res.re  = tmp1.re + other_in
+
+      res.e1  = tmp1.e1
+      res.e2  = tmp1.e2
+      
+      res.e11 = tmp1.e11
+      res.e12 = tmp1.e12
+      res.e22 = tmp1.e22
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = oti_sum_ro( self, &tmp1.num, dhl);   
+      
+      res.re  = tmp1.re + self
+
+      res.e1  = tmp1.e1
+      res.e2  = tmp1.e2
+      
+      res.e11 = tmp1.e11
+      res.e12 = tmp1.e12
+      res.e22 = tmp1.e22
 
     else:
 
@@ -396,7 +336,7 @@ cdef class otinum:
     # end if 
       
       
-    return otinum.create(&res)
+    return res
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -412,8 +352,40 @@ cdef class otinum:
     """
     #*************************************************************************************************
 
-    return self + other_in
+    cdef: 
+      oti_n2m2 tmp1, tmp2, res = self
+      
+    type2 = type(other_in) # takes 100 ns ...
 
+    # type1 = self.__class__     # takes ~50 ns ... 
+    # type2 = other_in.__class__ # takes ~50 ns ...
+
+
+    if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.
+      
+      tmp2 = other_in
+
+      res.re  += tmp2.re 
+
+      res.e1  += tmp2.e1 
+      res.e2  += tmp2.e2 
+
+      res.e11 += tmp2.e11
+      res.e12 += tmp2.e12
+      res.e22 += tmp2.e22
+    
+    elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
+      
+      res.re  += other_in
+
+    else:
+
+      return NotImplemented         
+
+    # end if 
+      
+      
+    return self
   #---------------------------------------------------------------------------------------------------  
 
 
@@ -428,10 +400,8 @@ cdef class otinum:
     """
   #************************************************************************
     
-    global dhl
     cdef: 
-      otinum_t res
-      otinum tmp1, tmp2
+      oti_n2m2 tmp1, tmp2, res = oti_n2m2(0.0)
       
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
@@ -443,25 +413,50 @@ cdef class otinum:
     if ( type1 is type2) : # Case Sum between OTIs.
       tmp1 = self
       tmp2 = other_in
-      res =  oti_sub_oo(&tmp1.num, &tmp2.num, dhl);
+
+      res.re  = tmp1.re - tmp2.re 
+
+      res.e1  = tmp1.e1 - tmp2.e1 
+      res.e2  = tmp1.e2 - tmp2.e2 
+
+      res.e11 = tmp1.e11- tmp2.e11
+      res.e12 = tmp1.e12- tmp2.e12
+      res.e22 = tmp1.e22- tmp2.e22
     
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
       tmp1 = self
-      res = oti_sub_or( &tmp1.num, other_in, dhl);
+      
+      res.re  = tmp1.re - other_in
+
+      res.e1  = tmp1.e1
+      res.e2  = tmp1.e2
+      
+      res.e11 = tmp1.e11
+      res.e12 = tmp1.e12
+      res.e22 = tmp1.e22
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = oti_sub_ro( self, &tmp1.num, dhl);  
+      
+      res.re  = -tmp1.re + self
+
+      res.e1  = -tmp1.e1
+      res.e2  = -tmp1.e2
+      
+      res.e11 = -tmp1.e11
+      res.e12 = -tmp1.e12
+      res.e22 = -tmp1.e22
 
     else:
 
-      return NotImplemented          
+      return NotImplemented         
 
     # end if 
       
-    return otinum.create(&res)
+      
+    return res
 
 
   #---------------------------------------------------------------------------------------------------  
@@ -480,7 +475,40 @@ cdef class otinum:
     """
     #*************************************************************************************************
   
-    return self - other_in
+    cdef: 
+      oti_n2m2 tmp1, tmp2, res = self
+      
+    type2 = type(other_in) # takes 100 ns ...
+
+    # type1 = self.__class__     # takes ~50 ns ... 
+    # type2 = other_in.__class__ # takes ~50 ns ...
+
+
+    if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.
+      
+      tmp2 = other_in
+
+      res.re  -= tmp2.re 
+
+      res.e1  -= tmp2.e1 
+      res.e2  -= tmp2.e2 
+
+      res.e11 -= tmp2.e11
+      res.e12 -= tmp2.e12
+      res.e22 -= tmp2.e22
+    
+    elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
+      
+      res.re  -= other_in
+
+    else:
+
+      return NotImplemented         
+
+    # end if 
+      
+      
+    return self
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -498,10 +526,8 @@ cdef class otinum:
     """
     #*************************************************************************************************
     
-    global dhl
     cdef: 
-      otinum_t res
-      otinum tmp1, tmp2
+      oti_n2m2 tmp1, tmp2, res = oti_n2m2(0.0)
       
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
@@ -513,25 +539,50 @@ cdef class otinum:
     if ( type1 is type2) : # Case Sum between OTIs.
       tmp1 = self
       tmp2 = other_in
-      res =  oti_mul_oo(&tmp1.num, &tmp2.num, dhl);
+
+      res.re  = tmp1.re * tmp2.re 
+
+      res.e1  = tmp1.e1*tmp2.re + tmp1.re * tmp2.e1
+      res.e2  = tmp1.e2*tmp2.re + tmp1.re * tmp2.e2
+
+      res.e11 = tmp1.e11*tmp2.re+ tmp1.re*tmp2.e11 + tmp1.e1*tmp2.e1 
+      res.e12 = tmp1.e12*tmp2.re+ tmp1.re*tmp2.e12 + tmp1.e1*tmp2.e2 + tmp1.e2*tmp2.e1
+      res.e22 = tmp1.e22*tmp2.re+ tmp1.re*tmp2.e22 + tmp1.e2*tmp2.e2 
     
     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
       
       tmp1 = self
-      res = oti_mul_ro( other_in, &tmp1.num, dhl);
+      
+      res.re  = tmp1.re*other_in
+
+      res.e1  = tmp1.e1*other_in
+      res.e2  = tmp1.e2*other_in
+      
+      res.e11 = tmp1.e11*other_in
+      res.e12 = tmp1.e12*other_in
+      res.e22 = tmp1.e22*other_in
 
     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
       
       tmp1 = other_in
-      res = oti_mul_ro( self, &tmp1.num, dhl);       
+      
+      res.re  = tmp1.re*self
+
+      res.e1  = tmp1.e1*self
+      res.e2  = tmp1.e2*self
+      
+      res.e11 = tmp1.e11*self
+      res.e12 = tmp1.e12*self
+      res.e22 = tmp1.e22*self
 
     else:
 
-      return NotImplemented      
+      return NotImplemented         
 
     # end if 
-
-    return otinum.create(&res)
+      
+      
+    return res
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -549,7 +600,47 @@ cdef class otinum:
     """
     #*************************************************************************************************
 
-    return self * other_in
+    cdef: 
+      oti_n2m2 tmp1, tmp2, res = self
+    
+    type2 = type(other_in) # takes 100 ns ...
+
+    # type1 = self.__class__     # takes ~50 ns ... 
+    # type2 = other_in.__class__ # takes ~50 ns ...
+
+
+    if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.
+      
+      tmp2 = other_in
+
+      res.re  *= tmp2.re 
+
+      res.e1  = res.e1*tmp2.re + res.re * tmp2.e1
+      res.e2  = res.e2*tmp2.re + res.re * tmp2.e2
+
+      res.e11 = res.e11*tmp2.re+ res.re*tmp2.e11 + res.e1*tmp2.e1 
+      res.e12 = res.e12*tmp2.re+ res.re*tmp2.e12 + res.e1*tmp2.e2 + res.e2*tmp2.e1
+      res.e22 = res.e22*tmp2.re+ res.re*tmp2.e22 + res.e2*tmp2.e2 
+    
+    elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
+      
+      res.re  *= other_in
+
+      res.e1  *= other_in
+      res.e2  *= other_in
+      
+      res.e11 *= other_in
+      res.e12 *= other_in
+      res.e22 *= other_in
+
+    else:
+
+      return NotImplemented         
+
+    # end if 
+      
+      
+    return res
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -565,42 +656,7 @@ cdef class otinum:
 
     """
     #*************************************************************************************************
-    
-    global dhl
-    cdef: 
-      otinum_t res
-      otinum tmp1, tmp2
-      
-    type1 = type(self)     # takes 100 ns ... 
-    type2 = type(other_in) # takes 100 ns ...
-
-    # type1 = self.__class__     # takes ~50 ns ... 
-    # type2 = other_in.__class__ # takes ~50 ns ...
-
-
-    if ( type1 is type2) : # Case Sum between OTIs.
-      
-      tmp1 = self
-      tmp2 = other_in
-      res =  oti_div_oo(&tmp1.num, &tmp2.num, dhl);
-    
-    elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
-      
-      tmp1 = self
-      res = oti_div_or( &tmp1.num, other_in, dhl);
-
-    elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
-      
-      tmp1 = other_in
-      res = oti_div_ro( self, &tmp1.num, dhl);       
-
-    else:
-
-      return NotImplemented      
-
-    # end if 
-
-    return otinum.create(&res)
+    pass
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -612,13 +668,13 @@ cdef class otinum:
     """
     #*************************************************************************************************
 
-    return power(self,n)
+    # General feval.    
 
   #---------------------------------------------------------------------------------------------------  
 
 
   #***************************************************************************************************
-  cpdef copy(self):
+  def copy(self):
     """
     PURPOSE:      To create a copy of a spr_otinum object, totally 
                   independent of the original.
@@ -628,11 +684,7 @@ cdef class otinum:
                   need a copy instead of an alias.
     """
     #*************************************************************************************************
-    global dhl
-    
-    cdef otinum_t res = oti_copy(&self.num,dhl)
-
-    return otinum.create(&res)
+    return oti_n2m2(self.re, e1=self.e1, e2=self.e2, e11=self.e11, e12=self.e12, e22=self.e22)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -654,158 +706,157 @@ cdef class otinum:
 
 #   #---------------------------------------------------------------------------------------------------  
   
-  #***************************************************************************************************
-  def __float__(self):
-    """
-    PORPUSE:      Overload of function float()
-    """
-    return self.num.re
-  #---------------------------------------------------------------------------------------------------  
+  # #***************************************************************************************************
+  # def __float__(self):
+  #   """
+  #   PORPUSE:      Overload of function float()
+  #   """
+  #   return self.num.re
+  # #---------------------------------------------------------------------------------------------------  
 
 
-  #***************************************************************************************************
-  cpdef coeff_t get_deriv( self, hum_dir):
-    """
-    PURPOSE:      to retrieve the derivative contained in the oti number.
+  # #***************************************************************************************************
+  # cpdef coeff_t get_deriv( self, hum_dir):
+  #   """
+  #   PURPOSE:      to retrieve the derivative contained in the oti number.
 
-    """
-    #*************************************************************************************************
-    global dhl
-    cdef list item = imdir(hum_dir)
-    cdef imdir_t indx = item[ZERO]
-    cdef ord_t  order = item[ONE]
+  #   """
+  #   #*************************************************************************************************
+  #   global dhl
+  #   cdef list item = imdir(hum_dir)
+  #   cdef imdir_t indx = item[ZERO]
+  #   cdef ord_t  order = item[ONE]
     
-    return oti_get_deriv(indx,order,&self.num,dhl) 
+  #   return oti_get_deriv(indx,order,&self.num,dhl) 
 
-  #---------------------------------------------------------------------------------------------------  
+  # #---------------------------------------------------------------------------------------------------  
 
-  #***************************************************************************************************
-  def get_all_deriv( self, int16_t order = -1, get_indices = False):
-    """
-    PURPOSE:    To retreive the derivatives contained in the oti number.
+  # #***************************************************************************************************
+  # def get_all_deriv( self, int16_t order = -1, get_indices = False):
+  #   """
+  #   PURPOSE:    To retreive the derivatives contained in the oti number.
 
-    """
-    #*************************************************************************************************
-    global dhl
+  #   """
+  #   #*************************************************************************************************
+  #   global dhl
 
-    cdef uint64_t i, j, k
-    cdef ord_t ordi
-    cdef np.ndarray res
+  #   cdef uint64_t i, j, k
+  #   cdef ord_t ordi
+  #   cdef np.ndarray res
 
 
 
-    if order == -1:
+  #   if order == -1:
 
-      # Get all derivatives of all orders.
-      res = np.empty((self.num.ndir+1,),dtype = np.float64)
+  #     # Get all derivatives of all orders.
+  #     res = np.empty((self.num.ndir+1,),dtype = np.float64)
 
-      j = 0
-      res[j] = self.num.re; j += 1
+  #     j = 0
+  #     res[j] = self.num.re; j += 1
       
-      for ordi in range( self.num.order ):
+  #     for ordi in range( self.num.order ):
 
-        for i in range( self.num.p_ndpo[ordi] ):
+  #       for i in range( self.num.p_ndpo[ordi] ):
 
-          res [ j ] = oti_get_deriv( i, ordi+1, &self.num, dhl); j += 1
+  #         res [ j ] = oti_get_deriv( i, ordi+1, &self.num, dhl); j += 1
 
-        # end for 
+  #       # end for 
 
-      # end for 
+  #     # end for 
 
-    else:
+  #   else:
 
-      if order <= self.num.order:
-        if order == 0:
+  #     if order <= self.num.order:
+  #       if order == 0:
           
-          res = np.empty((1,),dtype=np.float64)
-          res[0] = self.num.re
+  #         res = np.empty((1,),dtype=np.float64)
+  #         res[0] = self.num.re
 
-        else:
+  #       else:
 
-          res = np.empty((self.num.p_ndpo[order-1],),dtype=np.float64)
+  #         res = np.empty((self.num.p_ndpo[order-1],),dtype=np.float64)
 
-          for i in range(self.num.p_ndpo[order-1]):
+  #         for i in range(self.num.p_ndpo[order-1]):
 
-            res[i] = oti_get_deriv(i,order,&self.num,dhl) 
+  #           res[i] = oti_get_deriv(i,order,&self.num,dhl) 
 
-          # end for 
+  #         # end for 
 
-        # end if 
+  #       # end if 
 
-      # end if 
+  #     # end if 
 
-    # end if 
+  #   # end if 
     
-    return res
+  #   return res
 
-  #---------------------------------------------------------------------------------------------------  
+  # #---------------------------------------------------------------------------------------------------  
 
-  #***************************************************************************************************
-  def to_vector(self):
-    """
-    PURPOSE:      To convert an otinum into its vector form.
+  # #***************************************************************************************************
+  # def to_vector(self):
+  #   """
+  #   PURPOSE:      To convert an otinum into its vector form.
                     
-    """
-    #*************************************************************************************************
-    cdef np.ndarray res
-    cdef uint64_t i, j
-    cdef ord_t ordi
+  #   """
+  #   #*************************************************************************************************
+  #   cdef np.ndarray res
+  #   cdef uint64_t i, j
+  #   cdef ord_t ordi
 
-    res = np.empty((self.num.ndir+1,),dtype = np.float64)
+  #   res = np.empty((self.num.ndir+1,),dtype = np.float64)
 
-    j = 0
-    res[j] = self.num.re; j += 1
+  #   j = 0
+  #   res[j] = self.num.re; j += 1
 
-    if self.num.order > 0:
+  #   if self.num.order > 0:
 
-      for ordi in range(self.num.order):
+  #     for ordi in range(self.num.order):
       
-        for i in range(self.num.p_ndpo[ordi]):
+  #       for i in range(self.num.p_ndpo[ordi]):
       
-          res[j] = self.num.p_im[ordi][i]; j+=1
+  #         res[j] = self.num.p_im[ordi][i]; j+=1
       
-        # end for
+  #       # end for
       
-      # end for 
+  #     # end for 
 
-    # end if 
+  #   # end if 
 
-    return res
+  #   return res
 
-  #---------------------------------------------------------------------------------------------------  
+  # #---------------------------------------------------------------------------------------------------  
 
 
-  #***************************************************************************************************
-  def to_matrix(self,sparse_mat = False):
-    """
-    PURPOSE:      To convert an otinum into its matrix form.
+  # #***************************************************************************************************
+  # def to_matrix(self,sparse_mat = False):
+  #   """
+  #   PURPOSE:      To convert an otinum into its matrix form.
                   
-    DESCRIPTION:  Convert to its own Cauchy-Riemann representation vector.
+  #   DESCRIPTION:  Convert to its own Cauchy-Riemann representation vector.
     
-    INPUTS:
-                  ismat: To define a matrix (1) or a vector (0)
-                  isshape: To use the shape that will result of the number 
-                    (-1) or an specific shape (given value).
-                  isspr: To result in a sparse matrix (1) or not (0).
-    """
-    #*************************************************************************************************
+  #   INPUTS:
+  #                 ismat: To define a matrix (1) or a vector (0)
+  #                 isshape: To use the shape that will result of the number 
+  #                   (-1) or an specific shape (given value).
+  #                 isspr: To result in a sparse matrix (1) or not (0).
+  #   """
+  #   #*************************************************************************************************
 
-    global dhl
+  #   global dhl
     
-    cdef darr_t res
+  #   cdef darr_t res
 
-    res = oti_to_cr_dense(&self.num,  dhl)
+  #   res = oti_to_cr_dense(&self.num,  dhl)
 
-    return dmat.create(&res)
+  #   return dmat.create(&res)
 
-  #---------------------------------------------------------------------------------------------------  
+  # #---------------------------------------------------------------------------------------------------  
 
   
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS OTINUM :::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
 
 
 

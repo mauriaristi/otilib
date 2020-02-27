@@ -887,6 +887,7 @@ static const char *__pyx_f[] = {
   "base.pxd",
   "array.pxd",
   "sparse_array.pxd",
+  "oti_n2m2.pxd",
   "dhelp.pxd",
   "scalar.pxd",
   "array.pxd",
@@ -1176,6 +1177,7 @@ struct __pyx_obj_5pyoti_5dense_otinum;
 struct __pyx_obj_5pyoti_5dense_otibase;
 struct __pyx_obj_5pyoti_5dense_omat;
 struct __pyx_obj_5pyoti_5dense_spr_omat;
+struct __pyx_obj_5pyoti_5dense_oti_n2m2;
 struct __pyx_obj_5pyoti_4core_dHelp;
 struct __pyx_obj_5pyoti_6sparse_sotinum;
 struct __pyx_obj_5pyoti_6sparse_matso;
@@ -1498,6 +1500,22 @@ struct __pyx_obj_5pyoti_5dense_spr_omat {
   uint64_t ncols;
   uint64_t size;
   uint8_t spr_type;
+};
+
+
+/* "../../include/pyoti/dense/oti_n2m2.pxd":1
+ * cdef class oti_n2m2:             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+struct __pyx_obj_5pyoti_5dense_oti_n2m2 {
+  PyObject_HEAD
+  __pyx_t_5pyoti_8c_otilib_coeff_t re;
+  __pyx_t_5pyoti_8c_otilib_coeff_t e1;
+  __pyx_t_5pyoti_8c_otilib_coeff_t e2;
+  __pyx_t_5pyoti_8c_otilib_coeff_t e11;
+  __pyx_t_5pyoti_8c_otilib_coeff_t e12;
+  __pyx_t_5pyoti_8c_otilib_coeff_t e22;
 };
 
 
@@ -2382,6 +2400,7 @@ static PyTypeObject *__pyx_ptype_5pyoti_5dense_otinum = 0;
 static PyTypeObject *__pyx_ptype_5pyoti_5dense_otibase = 0;
 static PyTypeObject *__pyx_ptype_5pyoti_5dense_omat = 0;
 static PyTypeObject *__pyx_ptype_5pyoti_5dense_spr_omat = 0;
+static PyTypeObject *__pyx_ptype_5pyoti_5dense_oti_n2m2 = 0;
 
 /* Module declarations from 'pyoti.core' */
 static PyTypeObject *__pyx_ptype_5pyoti_4core_dHelp = 0;
@@ -14611,20 +14630,22 @@ static int __Pyx_modinit_type_import_code(void) {
   __pyx_ptype_5pyoti_5dense_spr_omat = __Pyx_ImportType(__pyx_t_1, "pyoti.dense", "spr_omat", sizeof(struct __pyx_obj_5pyoti_5dense_spr_omat), __Pyx_ImportType_CheckSize_Warn);
    if (!__pyx_ptype_5pyoti_5dense_spr_omat) __PYX_ERR(20, 4, __pyx_L1_error)
   __pyx_vtabptr_5pyoti_5dense_spr_omat = (struct __pyx_vtabstruct_5pyoti_5dense_spr_omat*)__Pyx_GetVtable(__pyx_ptype_5pyoti_5dense_spr_omat->tp_dict); if (unlikely(!__pyx_vtabptr_5pyoti_5dense_spr_omat)) __PYX_ERR(20, 4, __pyx_L1_error)
+  __pyx_ptype_5pyoti_5dense_oti_n2m2 = __Pyx_ImportType(__pyx_t_1, "pyoti.dense", "oti_n2m2", sizeof(struct __pyx_obj_5pyoti_5dense_oti_n2m2), __Pyx_ImportType_CheckSize_Warn);
+   if (!__pyx_ptype_5pyoti_5dense_oti_n2m2) __PYX_ERR(21, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyImport_ImportModule("pyoti.core"); if (unlikely(!__pyx_t_1)) __PYX_ERR(21, 6, __pyx_L1_error)
+  __pyx_t_1 = PyImport_ImportModule("pyoti.core"); if (unlikely(!__pyx_t_1)) __PYX_ERR(22, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_ptype_5pyoti_4core_dHelp = __Pyx_ImportType(__pyx_t_1, "pyoti.core", "dHelp", sizeof(struct __pyx_obj_5pyoti_4core_dHelp), __Pyx_ImportType_CheckSize_Warn);
-   if (!__pyx_ptype_5pyoti_4core_dHelp) __PYX_ERR(21, 6, __pyx_L1_error)
+   if (!__pyx_ptype_5pyoti_4core_dHelp) __PYX_ERR(22, 6, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyImport_ImportModule("pyoti.sparse"); if (unlikely(!__pyx_t_1)) __PYX_ERR(22, 5, __pyx_L1_error)
+  __pyx_t_1 = PyImport_ImportModule("pyoti.sparse"); if (unlikely(!__pyx_t_1)) __PYX_ERR(23, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_ptype_5pyoti_6sparse_sotinum = __Pyx_ImportType(__pyx_t_1, "pyoti.sparse", "sotinum", sizeof(struct __pyx_obj_5pyoti_6sparse_sotinum), __Pyx_ImportType_CheckSize_Warn);
-   if (!__pyx_ptype_5pyoti_6sparse_sotinum) __PYX_ERR(22, 5, __pyx_L1_error)
-  __pyx_vtabptr_5pyoti_6sparse_sotinum = (struct __pyx_vtabstruct_5pyoti_6sparse_sotinum*)__Pyx_GetVtable(__pyx_ptype_5pyoti_6sparse_sotinum->tp_dict); if (unlikely(!__pyx_vtabptr_5pyoti_6sparse_sotinum)) __PYX_ERR(22, 5, __pyx_L1_error)
+   if (!__pyx_ptype_5pyoti_6sparse_sotinum) __PYX_ERR(23, 5, __pyx_L1_error)
+  __pyx_vtabptr_5pyoti_6sparse_sotinum = (struct __pyx_vtabstruct_5pyoti_6sparse_sotinum*)__Pyx_GetVtable(__pyx_ptype_5pyoti_6sparse_sotinum->tp_dict); if (unlikely(!__pyx_vtabptr_5pyoti_6sparse_sotinum)) __PYX_ERR(23, 5, __pyx_L1_error)
   __pyx_ptype_5pyoti_6sparse_matso = __Pyx_ImportType(__pyx_t_1, "pyoti.sparse", "matso", sizeof(struct __pyx_obj_5pyoti_6sparse_matso), __Pyx_ImportType_CheckSize_Warn);
-   if (!__pyx_ptype_5pyoti_6sparse_matso) __PYX_ERR(23, 6, __pyx_L1_error)
-  __pyx_vtabptr_5pyoti_6sparse_matso = (struct __pyx_vtabstruct_5pyoti_6sparse_matso*)__Pyx_GetVtable(__pyx_ptype_5pyoti_6sparse_matso->tp_dict); if (unlikely(!__pyx_vtabptr_5pyoti_6sparse_matso)) __PYX_ERR(23, 6, __pyx_L1_error)
+   if (!__pyx_ptype_5pyoti_6sparse_matso) __PYX_ERR(24, 6, __pyx_L1_error)
+  __pyx_vtabptr_5pyoti_6sparse_matso = (struct __pyx_vtabstruct_5pyoti_6sparse_matso*)__Pyx_GetVtable(__pyx_ptype_5pyoti_6sparse_matso->tp_dict); if (unlikely(!__pyx_vtabptr_5pyoti_6sparse_matso)) __PYX_ERR(24, 6, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -14883,7 +14904,7 @@ if (!__Pyx_RefNanny) {
  * from pyoti.core cimport  c_ptr_to_np_1darray_double, ZERO, ONE
  * from pyoti.core cimport  c_ptr_to_np_2darray_double
  */
-  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(24, 6, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_number_types);
   __Pyx_GIVEREF(__pyx_n_s_number_types);
@@ -14891,12 +14912,12 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_dHelp);
   __Pyx_GIVEREF(__pyx_n_s_dHelp);
   PyList_SET_ITEM(__pyx_t_1, 1, __pyx_n_s_dHelp);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(24, 6, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(25, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(24, 6, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_number_types, __pyx_t_1) < 0) __PYX_ERR(24, 6, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_number_types, __pyx_t_1) < 0) __PYX_ERR(25, 6, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
@@ -14907,12 +14928,12 @@ if (!__Pyx_RefNanny) {
  * from pyoti.real cimport dmat
  * 
  */
-  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(24, 11, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(25, 11, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_dmat);
   __Pyx_GIVEREF(__pyx_n_s_dmat);
   PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_dmat);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_real, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(24, 11, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_real, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 11, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -14924,7 +14945,7 @@ if (!__Pyx_RefNanny) {
  * from pyoti.dense cimport omat, otinum
  * 
  */
-  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(24, 14, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_omat);
   __Pyx_GIVEREF(__pyx_n_s_omat);
@@ -14935,12 +14956,12 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_e);
   __Pyx_GIVEREF(__pyx_n_s_e);
   PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_e);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_dense, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(24, 14, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_dense, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(25, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_e); if (unlikely(!__pyx_t_1)) __PYX_ERR(24, 14, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_e); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_e, __pyx_t_1) < 0) __PYX_ERR(24, 14, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_e, __pyx_t_1) < 0) __PYX_ERR(25, 14, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
@@ -14951,7 +14972,7 @@ if (!__Pyx_RefNanny) {
  * from pyoti.sparse cimport sotinum
  * 
  */
-  __pyx_t_2 = PyList_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(24, 17, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(3); if (unlikely(!__pyx_t_2)) __PYX_ERR(25, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_sotinum);
   __Pyx_GIVEREF(__pyx_n_s_sotinum);
@@ -14962,16 +14983,16 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_e);
   __Pyx_GIVEREF(__pyx_n_s_e);
   PyList_SET_ITEM(__pyx_t_2, 2, __pyx_n_s_e);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_sparse, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(24, 17, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_sparse, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_get_deriv); if (unlikely(!__pyx_t_2)) __PYX_ERR(24, 17, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_get_deriv); if (unlikely(!__pyx_t_2)) __PYX_ERR(25, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_deriv, __pyx_t_2) < 0) __PYX_ERR(24, 17, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_deriv, __pyx_t_2) < 0) __PYX_ERR(25, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_e); if (unlikely(!__pyx_t_2)) __PYX_ERR(24, 17, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_e); if (unlikely(!__pyx_t_2)) __PYX_ERR(25, 17, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_se, __pyx_t_2) < 0) __PYX_ERR(24, 17, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_se, __pyx_t_2) < 0) __PYX_ERR(25, 17, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
@@ -14982,9 +15003,9 @@ if (!__Pyx_RefNanny) {
  * cimport numpy as np
  * 
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(24, 20, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 20, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(24, 20, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(25, 20, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../pyoti/cython/fem/include.pxi":29
@@ -14993,7 +15014,7 @@ if (!__Pyx_RefNanny) {
  * cdef dHelp h = get_cython_dHelp()             # <<<<<<<<<<<<<<
  * cdef dhelpl_t dhl = h.dhl
  */
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_4core_get_cython_dHelp()); if (unlikely(!__pyx_t_1)) __PYX_ERR(24, 29, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_4core_get_cython_dHelp()); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(((PyObject *)__pyx_v_5pyoti_3fem_h));
   __Pyx_DECREF_SET(__pyx_v_5pyoti_3fem_h, ((struct __pyx_obj_5pyoti_4core_dHelp *)__pyx_t_1));
@@ -15015,7 +15036,7 @@ if (!__Pyx_RefNanny) {
  *             "   +  ",
  *             "   -  ",
  */
-  __pyx_t_1 = PyList_New(19); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 13, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(19); if (unlikely(!__pyx_t_1)) __PYX_ERR(26, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_kp_s_None);
   __Pyx_GIVEREF(__pyx_kp_s_None);
@@ -15074,7 +15095,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_kp_s_def);
   __Pyx_GIVEREF(__pyx_kp_s_def);
   PyList_SET_ITEM(__pyx_t_1, 18, __pyx_kp_s_def);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_opNames, __pyx_t_1) < 0) __PYX_ERR(25, 13, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_opNames, __pyx_t_1) < 0) __PYX_ERR(26, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../pyoti/cython/fem/utils.pxi":33
@@ -15084,7 +15105,7 @@ if (!__Pyx_RefNanny) {
  *               "Nx ",
  *               "Ny ",
  */
-  __pyx_t_1 = PyList_New(10); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 33, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(10); if (unlikely(!__pyx_t_1)) __PYX_ERR(26, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_kp_s_N);
   __Pyx_GIVEREF(__pyx_kp_s_N);
@@ -15116,7 +15137,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_Nyz);
   __Pyx_GIVEREF(__pyx_n_s_Nyz);
   PyList_SET_ITEM(__pyx_t_1, 9, __pyx_n_s_Nyz);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_basisNames, __pyx_t_1) < 0) __PYX_ERR(25, 33, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_basisNames, __pyx_t_1) < 0) __PYX_ERR(26, 33, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../pyoti/cython/fem/utils.pxi":44
@@ -15126,7 +15147,7 @@ if (!__Pyx_RefNanny) {
  *              "OTINUM",
  *              "REAL  "]
  */
-  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 44, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(26, 44, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_OTIARR);
   __Pyx_GIVEREF(__pyx_n_s_OTIARR);
@@ -15137,7 +15158,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_kp_s_REAL);
   __Pyx_GIVEREF(__pyx_kp_s_REAL);
   PyList_SET_ITEM(__pyx_t_1, 2, __pyx_kp_s_REAL);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_kindNames, __pyx_t_1) < 0) __PYX_ERR(25, 44, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_kindNames, __pyx_t_1) < 0) __PYX_ERR(26, 44, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../pyoti/cython/fem/utils.pxi":48
@@ -15147,7 +15168,7 @@ if (!__Pyx_RefNanny) {
  *                "line",
  *                "triangle",
  */
-  __pyx_t_1 = PyList_New(6); if (unlikely(!__pyx_t_1)) __PYX_ERR(25, 48, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(6); if (unlikely(!__pyx_t_1)) __PYX_ERR(26, 48, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_point);
   __Pyx_GIVEREF(__pyx_n_s_point);
@@ -15167,7 +15188,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_hexahedra);
   __Pyx_GIVEREF(__pyx_n_s_hexahedra);
   PyList_SET_ITEM(__pyx_t_1, 5, __pyx_n_s_hexahedra);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_elTypeNames, __pyx_t_1) < 0) __PYX_ERR(25, 48, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_elTypeNames, __pyx_t_1) < 0) __PYX_ERR(26, 48, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "(tree fragment)":1

@@ -24,3 +24,7 @@ include "dense/sparse_array.pxi"
 # Append base OTI class. - > Base to create OTI number with other characteristics.
 include "dense/generic.pxi"
 
+
+
+include "dense/oti_n2m2.pxi"
+

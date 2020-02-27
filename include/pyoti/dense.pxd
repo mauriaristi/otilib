@@ -20,3 +20,6 @@ include "dense/math.pxd"
 # Utility functions declarations .
 include "dense/utils.pxd"
 
+include "dense/oti_n2m2.pxd"
+
+

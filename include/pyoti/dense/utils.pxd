@@ -13,6 +13,6 @@ cpdef otinum mul(otinum lhs, otinum rhs)
 cpdef mul_to(otinum lhs, otinum rhs, otinum out)
 
 
-
+cpdef multiply_val(otinum a )
 
 

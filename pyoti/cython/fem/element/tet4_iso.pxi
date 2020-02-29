@@ -1,17 +1,17 @@
 
 # ****************************************************************************************************
-cpdef tri6_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
+cpdef tet4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
   """
   Definition of basis functions for the 6-node triangle 2D element.
   
   NODE NUMBERING:
                           (2)
                            * *
-                           *   * 
-                          (5)   (4) 
-                           *       *
-                           *         *
-                          (0)* *(3)* *(1)
+                           * \ * 
+                           *  \  * 
+                           *  (3)  *
+                           * /     \ *
+                          (0)* * * * *(1)
 
   INPUTS:
     -> xi:  Xi coordinate for this element.
@@ -44,15 +44,14 @@ cpdef tri6_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
 
 
   """ 
-  cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
-  cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
+  cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
+  cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
+  cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)
 
-  cdef otinum N0 = 2.0 * eta ** 2 +  4.0 * eta * xi - 3.0 * eta + 2.0 * xi ** 2 - 3.0 * xi + 1.0
-  cdef otinum N1 = 2.0 * xi ** 2 - xi
-  cdef otinum N2 = 2.0 * eta ** 2 - eta
-  cdef otinum N3 = 4.0 * (  xi  -   xi ** 2 - eta * xi)
-  cdef otinum N4 = 4.0 * eta * xi   
-  cdef otinum N5 = 4.0 * ( eta  -  eta**2 - eta * xi)
-
-  return [N0, N1, N2, N3, N4, N5]   
+  cdef otinum N0 = 1.0 - xi - eta - chi
+  cdef otinum N1 = xi 
+  cdef otinum N2 = eta
+  cdef otinum N3 = chi
+  
+  return [N0, N1, N2, N3]
 # ----------------------------------------------------------------------------------------------------

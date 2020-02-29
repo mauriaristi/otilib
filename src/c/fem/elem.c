@@ -1,46 +1,5 @@
 
-// int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase, int64_t  kind,   uint8_t  ndim,
-//               int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*));
-// int64_t elem_allocate(elem_t* elem, uint64_t intorder );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Memory management.
-
-
 // ****************************************************************************************************
 int64_t elem_free( elem_t* elem ) {
 

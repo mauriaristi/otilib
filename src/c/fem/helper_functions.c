@@ -10,32 +10,6 @@
 // ****************************************************************************************************
 int64_t fem_defFunctFrom_otiFunc(oarr_t* p_arr1, uint64_t derIndx, elemProps_t* elem, 
     feoarr_t* res, dhelpl_t dhl) {
-    /*
-    fem_defFunctFrom_otiFunc( p_arr1, derIndx, elem, res, dhl)
-
-    Define a constant function from a real number.
-
-    INPUTS:
-
-        -> p_arr1:     (1 x nbasis) otinum values of the function.
-
-        -> derIndx:    Basis Id that defines this function.
-
-        -> elem:       Element that interpolates the data.
-
-        -> res:   (1 x 1) Address of the array that holds the result.
-
-        -> dhl:       Direction helper
-
-
-    OUTPUTS: 
-        
-        -> Assigns the result .
-
-        -> uint64_t error_code: Code of error, if any.
-
-    */ 
-    // ************************************************************************************************
 
     uint64_t i,k;
     otinum_t tmpcnt, tmp1, tmp2, tmp3;    
@@ -75,38 +49,10 @@ int64_t fem_defFunctFrom_otiFunc(oarr_t* p_arr1, uint64_t derIndx, elemProps_t* 
 // ****************************************************************************************************
 int64_t fem_defFunctFrom_oti(otinum_t* num, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
     dhelpl_t dhl) {
-    /*
-    fem_defFunctFrom_R( num, derIndx, elem, res, dhl)
-
-    Define a constant function from a real number.
-
-    INPUTS:
-
-        -> num:        otinum value of the constant function.
-
-        -> derIndx:    Basis Id that defines this function.
-
-        -> elem:       Element that interpolates the data.
-
-        -> res:   (1 x 1) Address of the array that holds the result.
-
-        -> dhl:       Direction helper
-
-
-    OUTPUTS: 
-        
-        -> Assigns the result .
-
-        -> uint64_t error_code: Code of error, if any.
-
-    */ 
-    // ************************************************************************************************
 
     uint64_t i,k;
     otinum_t tmpcnt,tmp1,tmp2;
 
-
-    // 
     // printf("Inside Function definition.\n");
     for (k=0; k<elem->nIntPts; k++){
         // printf("   Creating counter.\n");
@@ -152,28 +98,7 @@ int64_t fem_defFunctFrom_oti(otinum_t* num, uint64_t derIndx, elemProps_t* elem,
 int64_t fem_defFunctFrom_R(double num, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
     dhelpl_t dhl) {
     /*
-    fem_defFunctFrom_R( num, derIndx, elem, res, dhl)
-
-    Define a constant function from a real number.
-
-    INPUTS:
-
-        -> num:        Real value of the constant function.
-
-        -> derIndx:    Basis Id that defines this function.
-
-        -> elem:       Element that interpolates the data.
-
-        -> res:   (1 x 1) Address of the array that holds the result.
-
-        -> dhl:       Direction helper
-
-
-    OUTPUTS: 
-        
-        -> Assigns the result .
-
-        -> uint64_t error_code: Code of error, if any.
+    
 
     */ 
     // ************************************************************************************************

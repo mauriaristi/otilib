@@ -13,31 +13,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 int64_t fem_integrationPoints(uint64_t order, int64_t elementType, darr_t* coords, darr_t* weights){
     /*

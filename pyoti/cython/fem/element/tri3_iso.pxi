@@ -2,7 +2,7 @@
 # ****************************************************************************************************
 cpdef tri3_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
   """
-  Definition of basis functions for the 3-node triangle 2D element.
+  Definition of basis functions for the 3-node triangle 2D element (1st order).
 
   NODE NUMBERING:
                           (2)
@@ -14,7 +14,7 @@ cpdef tri3_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
                           (0)* * * * *(1)
 
   INPUTS:
-    -> xi:  Xi coordinate for this element.
+    -> xi:  Xi  coordinate for this element.
     -> eta: Eta coordinate for this element.
     -> chi: Chi coordinate for this element.
     -> derOrder: Order of derivative required.

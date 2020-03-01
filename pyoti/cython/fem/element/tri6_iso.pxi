@@ -2,7 +2,7 @@
 # ****************************************************************************************************
 cpdef tri6_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
   """
-  Definition of basis functions for the 6-node triangle 2D element.
+  Definition of basis functions for the 6-node triangle 2D element (2nd order).
   
   NODE NUMBERING:
                           (2)

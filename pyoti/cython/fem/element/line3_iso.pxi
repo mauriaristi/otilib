@@ -2,7 +2,7 @@
 #*****************************************************************************************************
 cpdef line3_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
   """
-  Definition of basis functions for the P2 Line element.
+  Definition of basis functions for the 3 node Line 1D element (2nd order).
 
   NODE NUMBERING:
   

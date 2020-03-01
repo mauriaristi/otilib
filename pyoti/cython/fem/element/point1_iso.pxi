@@ -2,7 +2,7 @@
 #*****************************************************************************************************
 cpdef point1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
   """
-  Definition of basis functions for the point "0D" element.
+  Definition of basis functions for the 1 node point 0D element.  (0th order)
 
   NODE NUMBERING:
   

@@ -2,17 +2,17 @@
 # ******************************************************************************************************
 cpdef tri1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
   """
-  Definition of basis functions for the 0 node triangle, element.
+  Definition of basis functions for the 1 node triangle 2D element (0th order).
 
   NODE NUMBERING:
                           
-                   *                    |           *
-                   * *                  |           * *
-                   *   *                            *   * 
-                   *     *         <-- o r -->      *     *  
-                   *  (0)  *                        *       *
-                   *         *          |           *         *
-                   * * * * * * *        |          (0)* * * * * *
+         *                    |           *
+         * *                  |           * *
+         *   *                            *   * 
+         *     *         <-- o r -->      *     *  
+         *  (0)  *                        *       *
+         *         *          |           *         *
+         * * * * * * *        |          (0)* * * * * *
   INPUTS:
     -> xi:  Xi coordinate for this element.
     -> eta: Eta coordinate for this element.
@@ -25,7 +25,7 @@ cpdef tri1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
         Derivatives are returned in the following manner:
 
         # Real value.
-        N       -> real direction -> [0] .
+        N       -> real direction -> [0].
         
         # First order derivatives
         dN/dxi  -> e1 direction -> [1].
@@ -41,10 +41,8 @@ cpdef tri1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
         d2N/dchi dchi -> e33 direction -> [[3,2]].
 
         # etc...
-
-
   """
-   
-  return point1_iso(derOrder,coords)
+  
+  return point1_iso( xi_r, eta_r, chi_r, derOrder)
 
 # ------------------------------------------------------------------------------------------------------

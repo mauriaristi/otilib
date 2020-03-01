@@ -2,7 +2,7 @@
 #*****************************************************************************************************
 cpdef line2_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
   """
-  Definition of basis functions for the Line P1 1D element.
+  Definition of basis functions for the 2 node line 1D element (1st order).
  
   NODE NUMBERING:
   

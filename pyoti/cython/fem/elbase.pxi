@@ -6,17 +6,31 @@
 
 
 
-
+# Point element.
 include "element/point1_iso.pxi"
+
+# Line element.
+include "element/line1_iso.pxi"
 include "element/line2_iso.pxi"
 include "element/line3_iso.pxi"
+
+# Triangle element.
+include "element/tri1_iso.pxi"
 include "element/tri3_iso.pxi"
 include "element/tri4_iso.pxi"
 include "element/tri6_iso.pxi"
+
+# Quad element.
 include "element/quad4_iso.pxi"
 include "element/quad8_iso.pxi"
+include "element/quad9_iso.pxi"
 
+# Tetrahedron element.
+include "element/tet4_iso.pxi"
 
+# Brick element (Hexahedron).
+include "element/hex8_iso.pxi"
+include "element/hex20_iso.pxi"
 
 
 

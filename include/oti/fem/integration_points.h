@@ -22,6 +22,10 @@ uint64_t fem_addTriangleIntegrationPoints(uint8_t numberOfPermutations, uint64_t
 
 
 
+uint64_t fem_addTetrahedronIntegrationPoints(uint8_t numberOfPermutations, uint64_t startPoint, 
+                                           double a, double b, double c,  double d, double w,
+                                           darr_t* coords, darr_t* weights);
+// ----------------------------------------------------------------------------------------------------
 
 
 

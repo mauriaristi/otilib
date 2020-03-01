@@ -2,7 +2,8 @@
 # ****************************************************************************************************
 cpdef hex8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
   """
-  Definition of basis functions for the 4-node quad 2D element.
+  Definition of basis functions for the 4-node quad 2D element (1st order). 
+  Basis functions taken from Smith, I. "Programming the Finite Element Method" 5th ed. Wiley.
 
   NODE NUMBERING:
                                                 
@@ -17,16 +18,16 @@ cpdef hex8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
                              * |  |      **
                             *     x     * *
                            *   |       *  *     
-                         (3)* * * * *(2)  *      xi
+                         (4)* * * * *(5)  *      xi
                           *    |      * x-------->   
-                          *   (4) - - * -(5)  
+                          *   (3) - - * -(2)  
                           *   /       *  *
                           *  /        * *
                           * /         **    
                          (0)* * * * *(1) 
 
   INPUTS:
-    -> xi:  Xi coordinate for this element.
+    -> xi:  Xi  coordinate for this element.
     -> eta: Eta coordinate for this element.
     -> chi: Chi coordinate for this element.
     -> derOrder: Order of derivative required.
@@ -62,10 +63,10 @@ cpdef hex8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
 
   cdef otinum N0 =  0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) # 1 -> (-1,-1,-1)
   cdef otinum N1 =  0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) # 1 -> ( 1,-1,-1)
-  cdef otinum N2 =  0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> ( 1,-1, 1)
-  cdef otinum N3 =  0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> (-1,-1, 1)
-  cdef otinum N4 =  0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> (-1, 1,-1)
-  cdef otinum N5 =  0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> ( 1, 1,-1)
+  cdef otinum N2 =  0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> ( 1, 1,-1)
+  cdef otinum N3 =  0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> (-1, 1,-1)
+  cdef otinum N4 =  0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> (-1,-1, 1)
+  cdef otinum N5 =  0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> ( 1,-1, 1)
   cdef otinum N6 =  0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) # 1 -> ( 1, 1, 1)
   cdef otinum N7 =  0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) # 1 -> (-1, 1, 1)
 

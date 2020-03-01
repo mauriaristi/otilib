@@ -1,13 +1,24 @@
 
 
 cpdef point1_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
+cpdef  line1_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
 cpdef  line2_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
 cpdef  line3_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
+
+cpdef   tri1_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
 cpdef   tri3_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
 cpdef   tri4_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
 cpdef   tri6_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
+
 cpdef  quad4_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
 cpdef  quad8_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
+cpdef  quad9_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
+
+cpdef   hex8_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
+cpdef  hex20_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
+
+cpdef   tet4_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder)
+
 # cpdef brick8_iso( ord_t derOrder, np.ndarray coords)
 # cpdef brick20_iso( ord_t derOrder, np.ndarray coords)
 

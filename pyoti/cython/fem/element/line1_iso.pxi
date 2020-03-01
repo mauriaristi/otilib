@@ -1,18 +1,12 @@
 
-# ****************************************************************************************************
-cpdef tri4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
+# ******************************************************************************************************
+cpdef line1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
   """
-  Definition of basis functions for the 4-node triangle 2D element (bubble triangle).
+  Definition of basis functions for the 1 node line 1D element (0th order).
 
   NODE NUMBERING:
-                          (2)
-                           * *
-                           *   * 
-                           *     *  
-                           *  (3)  *
-                           *         *
-                          (0)* * * * *(1)
-
+                          
+                 --------(0)--------
   INPUTS:
     -> xi:  Xi  coordinate for this element.
     -> eta: Eta coordinate for this element.
@@ -21,7 +15,7 @@ cpdef tri4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
 
   OUTPUTS: 
     -> [N0,N1,...]: Evaluated basis functions.
-
+    
         Derivatives are returned in the following manner:
 
         # Real value.
@@ -41,18 +35,8 @@ cpdef tri4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
         d2N/dchi dchi -> e33 direction -> [[3,2]].
 
         # etc...
-
-
-  """ 
+  """
   
-  cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
-  cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
+  return point1_iso( xi_r, eta_r, chi_r, derOrder)
 
-  cdef otinum N0 = 1.0 -  xi - eta
-  cdef otinum N1 = xi
-  cdef otinum N2 = eta
-  cdef otinum N3 = ( 1.0 - xi ** 2 )*( 1.0 - eta ** 2 )
-  
-  return [N0, N1, N2, N3];
- 
-# ----------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------

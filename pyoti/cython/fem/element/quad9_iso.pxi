@@ -2,7 +2,7 @@
 # ****************************************************************************************************
 cpdef quad9_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
   """
-  Definition of basis functions for the serendipity quad (8-node) 2D element.
+  Definition of basis functions for the 9-node quad 2D element (2nd order).
 
   NODE NUMBERING:
                          (3)* *(6)* *(2) 

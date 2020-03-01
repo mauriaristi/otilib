@@ -504,7 +504,239 @@ int64_t fem_integrationPoints(uint64_t order, int64_t elementType, darr_t* coord
         }
 
 
+    } else if (elementType == elTetrahedra){
 
+        // Tetrahedral element .
+        ndim = 3;
+
+        if (order <= 1){ // Accepts 0 or 1.
+
+            npoints = 1;
+
+            *coords  = darr_createEmpty(npoints,ndim);
+            *weights = darr_createEmpty(npoints,1   );
+
+            // Point 0
+            i = 0; 
+            a = 0.250000000000000; b = a; c = a; d = a;
+            w = 1.000000000000000; w /= 6.0;
+            i = fem_addTetrahedraIntegrationPoints(1, i, a, b, c, d, w, coords, weights);
+
+        } else if (order == 2){
+
+        //     npoints = 3;
+
+        //     *coords  = darr_createEmpty(npoints,ndim);
+        //     *weights = darr_createEmpty(npoints,1   );
+
+        //     // Points 0, 1, 2
+        //     i = 0; 
+        //     a = 0.666666666666667; b = 0.166666666666667; c = b;
+        //     w = 0.333333333333333; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        // } else if (order == 3){
+
+        //     npoints = 1+3;
+
+        //     *coords  = darr_createEmpty(npoints,ndim);
+        //     *weights = darr_createEmpty(npoints,1   );
+
+        //     // Point 0
+        //     i = 0; 
+        //     a = 0.333333333333333; b = a; c = a;
+        //     w =-0.562500000000000; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(1, i, a, b, c, w, coords, weights);
+
+        //     a = 0.600000000000000; b = 0.200000000000000; c = b;
+        //     w = 0.520833333333333; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        // } else if (order == 4){
+
+        //     npoints = 3+3;
+
+        //     *coords  = darr_createEmpty(npoints,ndim);
+        //     *weights = darr_createEmpty(npoints,1   );
+
+        //     // Point 0
+        //     i = 0;
+        //     a = 0.108103018168070; b = 0.445948490915965; c = b;
+        //     w = 0.223381589678011; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.816847572980459; b = 0.091576213509771; c = b;
+        //     w = 0.109951743655322; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+            
+        // } else if (order == 5){
+
+        //     npoints = 1+3+3;
+
+        //     *coords  = darr_createEmpty(npoints,ndim);
+        //     *weights = darr_createEmpty(npoints,1   );
+
+        //     // Point 0
+        //     i = 0; 
+        //     a = 0.333333333333333; b = a; c = a;
+        //     w = 0.225000000000000; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(1, i, a, b, c, w, coords, weights);
+            
+        //     a = 0.059715871789770; b = 0.470142064105115; c = b;
+        //     w = 0.132394152788506; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.797426985353087; b = 0.101286507323456; c = b;
+        //     w = 0.125939180544827; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+            
+        // } else if (order == 6){
+
+        //     npoints = 3+3+6;
+
+        //     *coords  = darr_createEmpty(npoints,ndim);
+        //     *weights = darr_createEmpty(npoints,1   );
+
+        //     // Point 0
+        //     i = 0; 
+
+        //     a = 0.501426509658179; b = 0.249286745170910; c = b;
+        //     w = 0.116786275726379; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.873821971016996; b = 0.063089014491502; c = b;
+        //     w = 0.050844906370207; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.053145049844817; b = 0.310352451033784; c = 0.636502499121399;
+        //     w = 0.082851075618374; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(6, i, a, b, c, w, coords, weights);
+            
+        // } else if (order == 7){
+
+        //     npoints = 1+3+3+6;
+
+        //     *coords  = darr_createEmpty(npoints,ndim);
+        //     *weights = darr_createEmpty(npoints,1   );
+
+        //     // Point 0
+        //     i = 0; 
+        //     a = 0.333333333333333; b = a; c = a;
+        //     w =-0.149570044467682; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(1, i, a, b, c, w, coords, weights);
+            
+        //     a = 0.479308067841920; b = 0.260345966079040; c = b;
+        //     w = 0.175615257433208; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.869739794195568; b = 0.065130102902216; c = b;
+        //     w = 0.053347235608838; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.048690315425316; b = 0.312865496004874; c = 0.638444188569810;
+        //     w = 0.077113760890257; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(6, i, a, b, c, w, coords, weights);
+            
+        // } else if (order == 8){
+
+        //     npoints = 1+3+3+3+6;
+
+        //     *coords  = darr_createEmpty(npoints,ndim);
+        //     *weights = darr_createEmpty(npoints,1   );
+
+        //     // Point 0
+        //     i = 0; 
+        //     a = 0.333333333333333; b = a; c = a;
+        //     w = 0.144315607677787; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(1, i, a, b, c, w, coords, weights);
+            
+        //     a = 0.081414823414554; b = 0.459292588292723; c = b;
+        //     w = 0.095091634267285; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.658861384496480; b = 0.170569307751760; c = b;
+        //     w = 0.103217370534718; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.898905543365938; b = 0.050547228317031; c = b;
+        //     w = 0.032458497623198; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.008394777409958; b = 0.263112829634638; c = 0.728492392955404;
+        //     w = 0.027230314174435; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(6, i, a, b, c, w, coords, weights); 
+
+
+
+        // } else if (order == 9){
+
+        //     npoints = 1+3+3+3+3+6;
+
+        //     *coords  = darr_createEmpty(npoints,ndim);
+        //     *weights = darr_createEmpty(npoints,1   );
+
+        //     // Point 0
+        //     i = 0; 
+        //     a = 0.333333333333333; b = a; c = a;
+        //     w = 0.097135796282799; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(1, i, a, b, c, w, coords, weights);
+            
+        //     a = 0.020634961602525; b = 0.489682519198738; c = b;
+        //     w = 0.031334700227139; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.125820817014127; b = 0.437089591492937; c = b;
+        //     w = 0.077827541004774; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.623592928761935; b = 0.188203535619033; c = b;
+        //     w = 0.079647738927210; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.910540973211095; b = 0.044729513394453; c = b;
+        //     w = 0.025577675658698; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.036838412054736; b = 0.221962989160766; c = 0.741198598784498;
+        //     w = 0.043283539377289; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(6, i, a, b, c, w, coords, weights);
+
+        
+        // } else {
+
+        //     npoints = 1+3+3+6+6+6;
+
+        //     *coords  = darr_createEmpty(npoints,ndim);
+        //     *weights = darr_createEmpty(npoints,1   );
+
+        //     // Point 0
+        //     i = 0; 
+        //     a = 0.333333333333333; b = a; c = a;
+        //     w = 0.090817990382754; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(1, i, a, b, c, w, coords, weights);
+            
+        //     a = 0.028844733232685; b = 0.485577633383657; c = b;
+        //     w = 0.036725957756467; w *= 0.5;            
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.781036849029926; b = 0.109481575485037; c = b;
+        //     w = 0.045321059435528; w *= 0.5;            
+        //     i = fem_addTriangleIntegrationPoints(3, i, a, b, c, w, coords, weights);
+
+        //     a = 0.141707219414880; b = 0.307939838764121; c = 0.550352941820999;
+        //     w = 0.072757916845420; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(6, i, a, b, c, w, coords, weights);
+
+        //     a = 0.025003534762686; b = 0.246672560639903; c = 0.728323904597411;
+        //     w = 0.028327242531057; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(6, i, a, b, c, w, coords, weights);
+
+        //     a = 0.009540815400299; b = 0.066803251012200; c = 0.923655933587500;
+        //     w = 0.009421666963733; w *= 0.5;
+        //     i = fem_addTriangleIntegrationPoints(6, i, a, b, c, w, coords, weights);
+
+        }
 
     } else if (elementType == elQuadrangle){
 
@@ -798,6 +1030,127 @@ uint64_t fem_addTriangleIntegrationPoints(uint8_t numberOfPermutations, uint64_t
 
 
 
+
+
+// ****************************************************************************************************
+uint64_t fem_addTetrahedronIntegrationPoints(uint8_t numberOfPermutations, uint64_t startPoint, 
+                                           double a, double b, double c, double d, double w,
+                                           darr_t* coords, darr_t* weights){
+    /*
+    INPUTS:
+
+        -> numberOfPermutations: Number of permutations for the selected point. (1, 4 or 6)
+
+        -> startPoint: Index of the starting point in the 
+
+        -> a: Volume coordinate 1
+
+        -> b: Volume coordinate 2
+
+        -> c: Volume coordinate 3
+
+        -> d: Volume coordinate 4
+
+        -> w: Weight for this configuration                      
+
+        -> coords:  ( ncoords x 3 ) Array to write the coordinates. Must come allocated.
+
+        -> weights: ( ncoords x 1 ) Array to write the weights. Must come allocated.
+    
+    OUTPUTS: 
+
+        -> Position after last element added. (startPoint + numberOfPermutations). Current positionAdded position
+
+    */ 
+    // ************************************************************************************************
+    uint64_t i=0,j=0;
+
+    if (numberOfPermutations == 1){
+        // Point 1
+        i = startPoint; 
+        j = 0; darr_set_item_ij( a, i, j, coords);
+        j = 1; darr_set_item_ij( a, i, j, coords);
+        j = 2; darr_set_item_ij( a, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+    } else if (numberOfPermutations == 4){
+
+        // Point 1
+        i = startPoint; 
+        j = 0; darr_set_item_ij(a, i, j, coords);
+        j = 1; darr_set_item_ij(b, i, j, coords);
+        j = 2; darr_set_item_ij(b, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+        // Point 2
+        i+= 1; 
+        j = 0; darr_set_item_ij(b, i, j, coords);
+        j = 1; darr_set_item_ij(a, i, j, coords);
+        j = 2; darr_set_item_ij(b, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+        // Point 3
+        i+= 1; 
+        j = 0; darr_set_item_ij(b, i, j, coords);
+        j = 1; darr_set_item_ij(b, i, j, coords);
+        j = 2; darr_set_item_ij(a, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+        // Point 4
+        i+= 1; 
+        j = 0; darr_set_item_ij(b, i, j, coords);
+        j = 1; darr_set_item_ij(b, i, j, coords);
+        j = 2; darr_set_item_ij(b, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+    } else if (numberOfPermutations == 6){
+        
+        // Point 1
+        i = startPoint; 
+        j = 0; darr_set_item_ij( a, i, j, coords);
+        j = 1; darr_set_item_ij( a, i, j, coords);
+        j = 2; darr_set_item_ij( b, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+        // Point 2
+        i+= 1; 
+        j = 0; darr_set_item_ij( a, i, j, coords);
+        j = 1; darr_set_item_ij( b, i, j, coords);
+        j = 2; darr_set_item_ij( a, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+        // Point 3
+        i+= 1; 
+        j = 0; darr_set_item_ij( a, i, j, coords);
+        j = 1; darr_set_item_ij( b, i, j, coords);
+        j = 2; darr_set_item_ij( b, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+        // Point 4
+        i+= 1; 
+        j = 0; darr_set_item_ij( b, i, j, coords);
+        j = 1; darr_set_item_ij( a, i, j, coords);
+        j = 2; darr_set_item_ij( a, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+        // Point 5
+        i+= 1; 
+        j = 0; darr_set_item_ij( b, i, j, coords);
+        j = 1; darr_set_item_ij( a, i, j, coords);
+        j = 2; darr_set_item_ij( b, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights);
+
+        // Point 6
+        i+= 1;
+        j = 0; darr_set_item_ij( b, i, j, coords);
+        j = 1; darr_set_item_ij( b, i, j, coords);
+        j = 2; darr_set_item_ij( a, i, j, coords);
+        darr_set_item_ij( w, i, 0, weights); 
+    }
+
+    return i+1;
+}   
+// ----------------------------------------------------------------------------------------------------
 
 
 

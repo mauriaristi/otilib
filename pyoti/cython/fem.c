@@ -4547,7 +4547,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
  * #*****************************************************************************************************
  * cpdef point1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the point "0D" element.
+ *   Definition of basis functions for the 1 node point 0D element.  (0th order)
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_1point1_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -4611,7 +4611,7 @@ static PyObject *__pyx_f_5pyoti_3fem_point1_iso(CYTHON_UNUSED __pyx_t_5pyoti_8c_
  * #*****************************************************************************************************
  * cpdef point1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the point "0D" element.
+ *   Definition of basis functions for the 1 node point 0D element.  (0th order)
  */
 
   /* function exit code */
@@ -4630,7 +4630,7 @@ static PyObject *__pyx_f_5pyoti_3fem_point1_iso(CYTHON_UNUSED __pyx_t_5pyoti_8c_
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_1point1_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_point1_iso[] = "\n  Definition of basis functions for the point \"0D\" element.\n\n  NODE NUMBERING:\n  \n                         (0)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n      \n  ";
+static char __pyx_doc_5pyoti_3fem_point1_iso[] = "\n  Definition of basis functions for the 1 node point 0D element.  (0th order)\n\n  NODE NUMBERING:\n  \n                         (0)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n      \n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_1point1_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -4740,7 +4740,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_point1_iso(CYTHON_UNUSED PyObject *__pyx_s
  * # ******************************************************************************************************
  * cpdef line1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 1 node line, element.
+ *   Definition of basis functions for the 1 node line 1D element (0th order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_3line1_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -4769,7 +4769,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
  * # ******************************************************************************************************
  * cpdef line1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 1 node line, element.
+ *   Definition of basis functions for the 1 node line 1D element (0th order).
  */
 
   /* function exit code */
@@ -4785,7 +4785,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_3line1_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_2line1_iso[] = "\n  Definition of basis functions for the 1 node line, element.\n\n  NODE NUMBERING:\n                          \n                 --------(0)--------\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n    \n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n  ";
+static char __pyx_doc_5pyoti_3fem_2line1_iso[] = "\n  Definition of basis functions for the 1 node line 1D element (0th order).\n\n  NODE NUMBERING:\n                          \n                 --------(0)--------\n  INPUTS:\n    -> xi:  Xi  coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n    \n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_3line1_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -4895,7 +4895,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_2line1_iso(CYTHON_UNUSED PyObject *__pyx_s
  * #*****************************************************************************************************
  * cpdef line2_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the Line P1 1D element.
+ *   Definition of basis functions for the 2 node line 1D element (1st order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_5line2_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -4997,7 +4997,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line2_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
  * #*****************************************************************************************************
  * cpdef line2_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the Line P1 1D element.
+ *   Definition of basis functions for the 2 node line 1D element (1st order).
  */
 
   /* function exit code */
@@ -5019,7 +5019,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line2_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_5line2_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_4line2_iso[] = "\n  Definition of basis functions for the Line P1 1D element.\n \n  NODE NUMBERING:\n  \n                          (0)* * * * *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions at the given coordinates.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
+static char __pyx_doc_5pyoti_3fem_4line2_iso[] = "\n  Definition of basis functions for the 2 node line 1D element (1st order).\n \n  NODE NUMBERING:\n  \n                          (0)* * * * *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions at the given coordinates.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_5line2_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -5129,7 +5129,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_4line2_iso(CYTHON_UNUSED PyObject *__pyx_s
  * #*****************************************************************************************************
  * cpdef line3_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the P2 Line element.
+ *   Definition of basis functions for the 3 node Line 1D element (2nd order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_7line3_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -5257,7 +5257,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
  * #*****************************************************************************************************
  * cpdef line3_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the P2 Line element.
+ *   Definition of basis functions for the 3 node Line 1D element (2nd order).
  */
 
   /* function exit code */
@@ -5280,7 +5280,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_7line3_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_6line3_iso[] = "\n  Definition of basis functions for the P2 Line element.\n\n  NODE NUMBERING:\n  \n                           (0)* *(2)* *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n  ";
+static char __pyx_doc_5pyoti_3fem_6line3_iso[] = "\n  Definition of basis functions for the 3 node Line 1D element (2nd order).\n\n  NODE NUMBERING:\n  \n                           (0)* *(2)* *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_7line3_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -5390,7 +5390,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6line3_iso(CYTHON_UNUSED PyObject *__pyx_s
  * # ******************************************************************************************************
  * cpdef tri1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 0 node triangle, element.
+ *   Definition of basis functions for the 1 node triangle 2D element (0th order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_9tri1_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -5419,7 +5419,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
  * # ******************************************************************************************************
  * cpdef tri1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 0 node triangle, element.
+ *   Definition of basis functions for the 1 node triangle 2D element (0th order).
  */
 
   /* function exit code */
@@ -5435,7 +5435,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_9tri1_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_8tri1_iso[] = "\n  Definition of basis functions for the 0 node triangle, element.\n\n  NODE NUMBERING:\n                          \n         *                    |           *\n         * *                  |           * *\n         *   *                            *   * \n         *     *         <-- o r -->      *     *  \n         *  (0)  *                        *       *\n         *         *          |           *         *\n         * * * * * * *        |          (0)* * * * * *\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n    \n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0].\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n  ";
+static char __pyx_doc_5pyoti_3fem_8tri1_iso[] = "\n  Definition of basis functions for the 1 node triangle 2D element (0th order).\n\n  NODE NUMBERING:\n                          \n         *                    |           *\n         * *                  |           * *\n         *   *                            *   * \n         *     *         <-- o r -->      *     *  \n         *  (0)  *                        *       *\n         *         *          |           *         *\n         * * * * * * *        |          (0)* * * * * *\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n    \n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0].\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_9tri1_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -5545,7 +5545,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_8tri1_iso(CYTHON_UNUSED PyObject *__pyx_se
  * # ****************************************************************************************************
  * cpdef tri3_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 3-node triangle 2D element.
+ *   Definition of basis functions for the 3-node triangle 2D element (1st order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_11tri3_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -5687,7 +5687,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
  * # ****************************************************************************************************
  * cpdef tri3_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 3-node triangle 2D element.
+ *   Definition of basis functions for the 3-node triangle 2D element (1st order).
  */
 
   /* function exit code */
@@ -5711,7 +5711,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_11tri3_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_10tri3_iso[] = "\n  Definition of basis functions for the 3-node triangle 2D element.\n\n  NODE NUMBERING:\n                          (2)\n                           * *\n                           *   * \n                           *     *  \n                           *       *\n                           *         *\n                          (0)* * * * *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n\n  ";
+static char __pyx_doc_5pyoti_3fem_10tri3_iso[] = "\n  Definition of basis functions for the 3-node triangle 2D element (1st order).\n\n  NODE NUMBERING:\n                          (2)\n                           * *\n                           *   * \n                           *     *  \n                           *       *\n                           *         *\n                          (0)* * * * *(1)\n\n  INPUTS:\n    -> xi:  Xi  coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_11tri3_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -5821,7 +5821,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_10tri3_iso(CYTHON_UNUSED PyObject *__pyx_s
  * # ****************************************************************************************************
  * cpdef tri4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 4-node triangle (bubble) 2D element.
+ *   Definition of basis functions for the 4-node triangle 2D element (bubble triangle).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_13tri4_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -5992,7 +5992,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
  * # ****************************************************************************************************
  * cpdef tri4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 4-node triangle (bubble) 2D element.
+ *   Definition of basis functions for the 4-node triangle 2D element (bubble triangle).
  */
 
   /* function exit code */
@@ -6017,7 +6017,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_13tri4_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_12tri4_iso[] = "\n  Definition of basis functions for the 4-node triangle (bubble) 2D element.\n\n  NODE NUMBERING:\n                          (2)\n                           * *\n                           *   * \n                           *     *  \n                           *  (3)  *\n                           *         *\n                          (0)* * * * *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n\n  ";
+static char __pyx_doc_5pyoti_3fem_12tri4_iso[] = "\n  Definition of basis functions for the 4-node triangle 2D element (bubble triangle).\n\n  NODE NUMBERING:\n                          (2)\n                           * *\n                           *   * \n                           *     *  \n                           *  (3)  *\n                           *         *\n                          (0)* * * * *(1)\n\n  INPUTS:\n    -> xi:  Xi  coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_13tri4_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -6127,7 +6127,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12tri4_iso(CYTHON_UNUSED PyObject *__pyx_s
  * # ****************************************************************************************************
  * cpdef tri6_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 6-node triangle 2D element.
+ *   Definition of basis functions for the 6-node triangle 2D element (2nd order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_15tri6_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -6397,7 +6397,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
  * # ****************************************************************************************************
  * cpdef tri6_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 6-node triangle 2D element.
+ *   Definition of basis functions for the 6-node triangle 2D element (2nd order).
  */
 
   /* function exit code */
@@ -6424,7 +6424,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_15tri6_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_14tri6_iso[] = "\n  Definition of basis functions for the 6-node triangle 2D element.\n  \n  NODE NUMBERING:\n                          (2)\n                           * *\n                           *   * \n                          (5)   (4) \n                           *       *\n                           *         *\n                          (0)* *(3)* *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n\n  ";
+static char __pyx_doc_5pyoti_3fem_14tri6_iso[] = "\n  Definition of basis functions for the 6-node triangle 2D element (2nd order).\n  \n  NODE NUMBERING:\n                          (2)\n                           * *\n                           *   * \n                          (5)   (4) \n                           *       *\n                           *         *\n                          (0)* *(3)* *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_15tri6_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -6534,7 +6534,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_14tri6_iso(CYTHON_UNUSED PyObject *__pyx_s
  * # ****************************************************************************************************
  * cpdef quad4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 4-node quad 2D element.
+ *   Definition of basis functions for the 4-node quad 2D element (1st order).This element works for both
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_17quad4_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -6553,155 +6553,155 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("quad4_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":50
+  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":51
  *   """
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
  * 
  */
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_xi_r); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 50, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_xi_r); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 51, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_e); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 50, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_e); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 51, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 50, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 51, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_4)) __PYX_ERR(10, 50, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_4)) __PYX_ERR(10, 51, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_t_4) < 0) __PYX_ERR(10, 50, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_t_4) < 0) __PYX_ERR(10, 51, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_nbases, __pyx_int_2) < 0) __PYX_ERR(10, 50, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(10, 50, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_nbases, __pyx_int_2) < 0) __PYX_ERR(10, 51, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(10, 51, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 50, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 51, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 50, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 51, __pyx_L1_error)
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":51
+  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":52
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
  * 
  *   cdef otinum N0 =  0.25*(1.0 - xi)*(1.0 - eta)
  */
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_eta_r); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 51, __pyx_L1_error)
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_eta_r); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(10, 51, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(10, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 51, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 51, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_t_2) < 0) __PYX_ERR(10, 51, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_t_2) < 0) __PYX_ERR(10, 52, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_nbases, __pyx_int_2) < 0) __PYX_ERR(10, 51, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__2, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 51, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_nbases, __pyx_int_2) < 0) __PYX_ERR(10, 52, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__2, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyNumber_Add(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 51, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Add(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 51, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 52, __pyx_L1_error)
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":53
+  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":54
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
  * 
  *   cdef otinum N0 =  0.25*(1.0 - xi)*(1.0 - eta)             # <<<<<<<<<<<<<<
  *   cdef otinum N1 =  0.25*(1.0 + xi)*(1.0 - eta)
  *   cdef otinum N2 =  0.25*(1.0 + xi)*(1.0 + eta)
  */
-  __pyx_t_1 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 53, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Multiply(__pyx_float_0_25, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 53, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Multiply(__pyx_float_0_25, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 53, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 53, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 54, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 53, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 54, __pyx_L1_error)
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":54
+  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":55
  * 
  *   cdef otinum N0 =  0.25*(1.0 - xi)*(1.0 - eta)
  *   cdef otinum N1 =  0.25*(1.0 + xi)*(1.0 - eta)             # <<<<<<<<<<<<<<
  *   cdef otinum N2 =  0.25*(1.0 + xi)*(1.0 + eta)
  *   cdef otinum N3 =  0.25*(1.0 - xi)*(1.0 + eta)
  */
-  __pyx_t_3 = PyNumber_Add(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 54, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyNumber_Multiply(__pyx_float_0_25, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 54, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Multiply(__pyx_float_0_25, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 54, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = PyNumber_Multiply(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 54, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Multiply(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 54, __pyx_L1_error)
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 55, __pyx_L1_error)
   __pyx_v_N1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":55
+  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":56
  *   cdef otinum N0 =  0.25*(1.0 - xi)*(1.0 - eta)
  *   cdef otinum N1 =  0.25*(1.0 + xi)*(1.0 - eta)
  *   cdef otinum N2 =  0.25*(1.0 + xi)*(1.0 + eta)             # <<<<<<<<<<<<<<
  *   cdef otinum N3 =  0.25*(1.0 - xi)*(1.0 + eta)
  * 
  */
-  __pyx_t_2 = PyNumber_Add(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 55, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Add(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_float_0_25, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 55, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_float_0_25, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Add(__pyx_float_1_0, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 55, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Add(__pyx_float_1_0, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyNumber_Multiply(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 55, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Multiply(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 55, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 56, __pyx_L1_error)
   __pyx_v_N2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":56
+  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":57
  *   cdef otinum N1 =  0.25*(1.0 + xi)*(1.0 - eta)
  *   cdef otinum N2 =  0.25*(1.0 + xi)*(1.0 + eta)
  *   cdef otinum N3 =  0.25*(1.0 - xi)*(1.0 + eta)             # <<<<<<<<<<<<<<
  * 
  *   return [ N0, N1, N2, N3 ]
  */
-  __pyx_t_1 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 56, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyNumber_Multiply(__pyx_float_0_25, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 56, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Multiply(__pyx_float_0_25, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyNumber_Add(__pyx_float_1_0, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 56, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Add(__pyx_float_1_0, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyNumber_Multiply(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 56, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Multiply(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 56, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(10, 57, __pyx_L1_error)
   __pyx_v_N3 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":58
+  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":59
  *   cdef otinum N3 =  0.25*(1.0 - xi)*(1.0 + eta)
  * 
  *   return [ N0, N1, N2, N3 ]             # <<<<<<<<<<<<<<
@@ -6709,7 +6709,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
  * # ----------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = PyList_New(4); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 58, __pyx_L1_error)
+  __pyx_t_3 = PyList_New(4); if (unlikely(!__pyx_t_3)) __PYX_ERR(10, 59, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(((PyObject *)__pyx_v_N0));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_N0));
@@ -6732,7 +6732,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
  * # ****************************************************************************************************
  * cpdef quad4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 4-node quad 2D element.
+ *   Definition of basis functions for the 4-node quad 2D element (1st order).This element works for both
  */
 
   /* function exit code */
@@ -6757,7 +6757,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_17quad4_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_16quad4_iso[] = "\n  Definition of basis functions for the 4-node quad 2D element.\n\n  NODE NUMBERING:\n                          ^ \n                          | eta\n                          |\n                         (3)* * * * *(2) \n                          *           *\n                          *           *\n                          *           *\n                          *           *\n                          *           *    xi\n                         (0)* * * * *(1) ----->\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
+static char __pyx_doc_5pyoti_3fem_16quad4_iso[] = "\n  Definition of basis functions for the 4-node quad 2D element (1st order).This element works for both \n  the first order quad and first order serendipity quad element.\n\n  NODE NUMBERING:\n                                ^ eta \n                                |\n                                |\n                         (3)* * * * *(2) \n                          *           *\n                          *           *        xi\n                          *           * ------->\n                          *           *\n                          *           * \n                         (0)* * * * *(1)\n\n  INPUTS:\n    -> xi:  Xi  coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_17quad4_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -7258,7 +7258,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_19quad8_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_18quad8_iso[] = "\n  Definition of basis functions for the serendipity quad (8-node) 2D element.\n\n  NODE NUMBERING:\n                         (3)* *(6)* *(2) \n                          *           *\n                          *           *\n                         (7)         (5)\n                          *           *\n                          *           *\n                         (0)* *(4)* *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
+static char __pyx_doc_5pyoti_3fem_18quad8_iso[] = "\n  Definition of basis functions for the serendipity quad (8-node) 2D element.\n\n  NODE NUMBERING:\n                         (3)* *(6)* *(2) \n                          *           *\n                          *           *\n                         (7)         (5)\n                          *           *\n                          *           *\n                         (0)* *(4)* *(1)\n\n  INPUTS:\n    -> xi:  Xi  coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_19quad8_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -7368,7 +7368,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_18quad8_iso(CYTHON_UNUSED PyObject *__pyx_
  * # ****************************************************************************************************
  * cpdef quad9_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the serendipity quad (8-node) 2D element.
+ *   Definition of basis functions for the 9-node quad 2D element (2nd order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_21quad9_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -7750,7 +7750,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
  * # ****************************************************************************************************
  * cpdef quad9_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the serendipity quad (8-node) 2D element.
+ *   Definition of basis functions for the 9-node quad 2D element (2nd order).
  */
 
   /* function exit code */
@@ -7780,7 +7780,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_21quad9_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_20quad9_iso[] = "\n  Definition of basis functions for the serendipity quad (8-node) 2D element.\n\n  NODE NUMBERING:\n                         (3)* *(6)* *(2) \n                          *           *\n                          *           *\n                         (7)   (8)   (5)\n                          *           *\n                          *           *\n                         (0)* *(4)* *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
+static char __pyx_doc_5pyoti_3fem_20quad9_iso[] = "\n  Definition of basis functions for the 9-node quad 2D element (2nd order).\n\n  NODE NUMBERING:\n                         (3)* *(6)* *(2) \n                          *           *\n                          *           *\n                         (7)   (8)   (5)\n                          *           *\n                          *           *\n                         (0)* *(4)* *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_21quad9_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -7890,7 +7890,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_20quad9_iso(CYTHON_UNUSED PyObject *__pyx_
  * # ****************************************************************************************************
  * cpdef tet4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 4-node tetrahedron 3D element.
+ *   Definition of basis functions for the 4-node tetrahedron 3D element (1st order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_23tet4_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -7910,116 +7910,116 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("tet4_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":47
+  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":56
  * 
  *   """
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)
  */
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_xi_r); if (unlikely(!__pyx_t_1)) __PYX_ERR(13, 47, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_xi_r); if (unlikely(!__pyx_t_1)) __PYX_ERR(13, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_e); if (unlikely(!__pyx_t_2)) __PYX_ERR(13, 47, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_e); if (unlikely(!__pyx_t_2)) __PYX_ERR(13, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 47, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 47, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_t_4) < 0) __PYX_ERR(13, 47, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_t_4) < 0) __PYX_ERR(13, 56, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_nbases, __pyx_int_3) < 0) __PYX_ERR(13, 47, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 47, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_nbases, __pyx_int_3) < 0) __PYX_ERR(13, 56, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple_, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 47, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(13, 47, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(13, 56, __pyx_L1_error)
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":48
+  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":57
  *   """
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)
  * 
  */
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_eta_r); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 48, __pyx_L1_error)
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_eta_r); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 48, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_e); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(13, 48, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(13, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_2)) __PYX_ERR(13, 48, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_2)) __PYX_ERR(13, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_t_2) < 0) __PYX_ERR(13, 48, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_order, __pyx_t_2) < 0) __PYX_ERR(13, 57, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_nbases, __pyx_int_3) < 0) __PYX_ERR(13, 48, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__2, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(13, 48, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_nbases, __pyx_int_3) < 0) __PYX_ERR(13, 57, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__2, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(13, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyNumber_Add(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(13, 48, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Add(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(13, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(13, 48, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(13, 57, __pyx_L1_error)
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":49
+  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":58
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
  * 
  *   cdef otinum N0 = 1.0 - xi - eta - chi
  */
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_chi_r); if (unlikely(!__pyx_t_1)) __PYX_ERR(13, 49, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_chi_r); if (unlikely(!__pyx_t_1)) __PYX_ERR(13, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_e); if (unlikely(!__pyx_t_2)) __PYX_ERR(13, 49, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_e); if (unlikely(!__pyx_t_2)) __PYX_ERR(13, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 49, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 49, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_uint8_t(__pyx_v_derOrder); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_t_4) < 0) __PYX_ERR(13, 49, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_order, __pyx_t_4) < 0) __PYX_ERR(13, 58, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_nbases, __pyx_int_3) < 0) __PYX_ERR(13, 49, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__3, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 49, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_nbases, __pyx_int_3) < 0) __PYX_ERR(13, 58, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__3, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Add(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 49, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Add(__pyx_t_1, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(13, 49, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(13, 58, __pyx_L1_error)
   __pyx_v_chi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":51
+  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":60
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)
  * 
  *   cdef otinum N0 = 1.0 - xi - eta - chi             # <<<<<<<<<<<<<<
  *   cdef otinum N1 = xi
  *   cdef otinum N2 = eta
  */
-  __pyx_t_3 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 51, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Subtract(__pyx_float_1_0, ((PyObject *)__pyx_v_xi)); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 60, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyNumber_Subtract(__pyx_t_3, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 51, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Subtract(__pyx_t_3, ((PyObject *)__pyx_v_eta)); if (unlikely(!__pyx_t_4)) __PYX_ERR(13, 60, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyNumber_Subtract(__pyx_t_4, ((PyObject *)__pyx_v_chi)); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 51, __pyx_L1_error)
+  __pyx_t_3 = PyNumber_Subtract(__pyx_t_4, ((PyObject *)__pyx_v_chi)); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 60, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(13, 51, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5pyoti_5dense_otinum))))) __PYX_ERR(13, 60, __pyx_L1_error)
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":52
+  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":61
  * 
  *   cdef otinum N0 = 1.0 - xi - eta - chi
  *   cdef otinum N1 = xi             # <<<<<<<<<<<<<<
@@ -8029,7 +8029,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_xi));
   __pyx_v_N1 = __pyx_v_xi;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":53
+  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":62
  *   cdef otinum N0 = 1.0 - xi - eta - chi
  *   cdef otinum N1 = xi
  *   cdef otinum N2 = eta             # <<<<<<<<<<<<<<
@@ -8039,7 +8039,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_eta));
   __pyx_v_N2 = __pyx_v_eta;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":54
+  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":63
  *   cdef otinum N1 = xi
  *   cdef otinum N2 = eta
  *   cdef otinum N3 = chi             # <<<<<<<<<<<<<<
@@ -8049,14 +8049,14 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_chi));
   __pyx_v_N3 = __pyx_v_chi;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":56
+  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":65
  *   cdef otinum N3 = chi
  * 
  *   return [N0, N1, N2, N3]             # <<<<<<<<<<<<<<
  * # ----------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = PyList_New(4); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 56, __pyx_L1_error)
+  __pyx_t_3 = PyList_New(4); if (unlikely(!__pyx_t_3)) __PYX_ERR(13, 65, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(((PyObject *)__pyx_v_N0));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_N0));
@@ -8079,7 +8079,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
  * # ****************************************************************************************************
  * cpdef tet4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 4-node tetrahedron 3D element.
+ *   Definition of basis functions for the 4-node tetrahedron 3D element (1st order).
  */
 
   /* function exit code */
@@ -8105,7 +8105,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_23tet4_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_22tet4_iso[] = "\n  Definition of basis functions for the 4-node tetrahedron 3D element.\n  \n  NODE NUMBERING:\n                          (2)\n                           * *\n                           * \\ * \n                           *  \\  * \n                           *  (3)  *\n                           * /     \\ *\n                          (0)* * * * *(1)\n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n\n  ";
+static char __pyx_doc_5pyoti_3fem_22tet4_iso[] = "\n  Definition of basis functions for the 4-node tetrahedron 3D element (1st order).\n  \n  NODE NUMBERING:\n\n\n\n\n                           ^ eta\n                           |         4\n                           |        / chi\n                           |       /\n                           |      /\n                          (2)* * (3)\n                           * *  /  *\n                           *   *    *\n                           *  /  *   *\n                           *       *  *\n                           */        * *\n                          (0)* * * * *(1)------> xi\n\n  INPUTS:\n    -> xi:  Xi  coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_23tet4_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -8215,7 +8215,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_22tet4_iso(CYTHON_UNUSED PyObject *__pyx_s
  * # ****************************************************************************************************
  * cpdef hex8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 4-node quad 2D element.
+ *   Definition of basis functions for the 4-node quad 2D element (1st order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_25hex8_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -8596,7 +8596,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
  * # ****************************************************************************************************
  * cpdef hex8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 4-node quad 2D element.
+ *   Definition of basis functions for the 4-node quad 2D element (1st order).
  */
 
   /* function exit code */
@@ -8626,7 +8626,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_25hex8_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_24hex8_iso[] = "\n  Definition of basis functions for the 4-node quad 2D element.\n  Basis functions taken from Smith, I. \"Programming the Finite Element Method\" 5th ed. Wiley.\n\n  NODE NUMBERING:\n                                                \n                                                \n                              chi ^          4 y    \n                                  |         / eta    \n                                  |        /      \n                                  |       /\n                                  |      /       \n                                  |     /        \n                              (7)*|* * * (6)\n                             * |  |      **\n                            *     x     * *\n                           *   |       *  *     \n                         (4)* * * * *(5)  *      xi\n                          *    |      * x-------->   \n                          *   (3) - - * -(2)  \n                          *   /       *  *\n                          *  /        * *\n                          * /         **    \n                         (0)* * * * *(1) \n\n  INPUTS:\n    -> xi:  Xi coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 di""rection -> [[3,2]].\n\n        # etc...\n\n  ";
+static char __pyx_doc_5pyoti_3fem_24hex8_iso[] = "\n  Definition of basis functions for the 4-node quad 2D element (1st order). \n  Basis functions taken from Smith, I. \"Programming the Finite Element Method\" 5th ed. Wiley.\n\n  NODE NUMBERING:\n                                                \n                                                \n                              chi ^          4 y    \n                                  |         / eta    \n                                  |        /      \n                                  |       /\n                                  |      /       \n                                  |     /        \n                              (7)*|* * * (6)\n                             * |  |      **\n                            *     x     * *\n                           *   |       *  *     \n                         (4)* * * * *(5)  *      xi\n                          *    |      * x-------->   \n                          *   (3) - - * -(2)  \n                          *   /       *  *\n                          *  /        * *\n                          * /         **    \n                         (0)* * * * *(1) \n\n  INPUTS:\n    -> xi:  Xi  coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi ""dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_25hex8_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -8736,7 +8736,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_24hex8_iso(CYTHON_UNUSED PyObject *__pyx_s
  * # ****************************************************************************************************
  * cpdef hex20_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 20-node brick 3D element.
+ *   Definition of basis functions for the 20-node brick 3D element (2nd order).
  */
 
 static PyObject *__pyx_pw_5pyoti_3fem_27hex20_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
@@ -9645,7 +9645,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
  * # ****************************************************************************************************
  * cpdef hex20_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
  *   """
- *   Definition of basis functions for the 20-node brick 3D element.
+ *   Definition of basis functions for the 20-node brick 3D element (2nd order).
  */
 
   /* function exit code */
@@ -9687,7 +9687,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
 
 /* Python wrapper */
 static PyObject *__pyx_pw_5pyoti_3fem_27hex20_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_3fem_26hex20_iso[] = "\n  Definition of basis functions for the 20-node brick 3D element. \n  Basis functions taken from Smith, I. \"Programming the Finite Element Method\" 5th ed. Wiley.\n  \n  NODE NUMBERING:   Node numbering corresponds to GMSH 4 numbering scheme.                                       \n\n                                                4\n                                               /\n                             ^ chi            /  eta\n                             |               /\n                             |              /\n                             |             /                    \n                             |            /\n                             |           /\n                   (7)* * * *|* (19)* * * * * *(6) \n                   *         |                 **\n                  * |        |        /       * *\n                 *           |               *  *\n                *   |        |      /       *   *\n              (17)           x           (18)   *\n              *     |             /       *     *\n             *     (15)          x       *     (14)\n            *       |                   *       *\n           *                           *        *\n          *         |                 *         *\n        (4)* * * * * (16)* * * * * *(5)         *\n         *          |                *      x -------------> xi    \n         *                           *          *\n         *          |                *          *\n         *         (3)----------(13)-*---------(2)\n         *         /                 *        *\n         *        /                  *       *\n        (10)     /                  (12)    *\n         *      /                    *     *\n         *    (9)                    *   (11)\n         *    /                      *   *\n         *   /                       *  *\n         *  /                        * *\n         * /                         **   \n        (0)* * * * * *(8)* * * * * *(1) \n\n  INPUTS:\n   "" -> xi:  Xi  coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
+static char __pyx_doc_5pyoti_3fem_26hex20_iso[] = "\n  Definition of basis functions for the 20-node brick 3D element (2nd order). \n  Basis functions taken from Smith, I. \"Programming the Finite Element Method\" 5th ed. Wiley.\n  \n  NODE NUMBERING:   Node numbering corresponds to GMSH 4 numbering scheme.                                       \n\n                                                4\n                                               /\n                             ^ chi            /  eta\n                             |               /\n                             |              /\n                             |             /                    \n                             |            /\n                             |           /\n                   (7)* * * *|* (19)* * * * * *(6) \n                   *         |                 **\n                  * |        |        /       * *\n                 *           |               *  *\n                *   |        |      /       *   *\n              (17)           x           (18)   *\n              *     |             /       *     *\n             *     (15)          x       *     (14)\n            *       |                   *       *\n           *                           *        *\n          *         |                 *         *\n        (4)* * * * * (16)* * * * * *(5)         *\n         *          |                *      x -------------> xi    \n         *                           *          *\n         *          |                *          *\n         *         (3)----------(13)-*---------(2)\n         *         /                 *        *\n         *        /                  *       *\n        (10)     /                  (12)    *\n         *      /                    *     *\n         *    (9)                    *   (11)\n         *    /                      *   *\n         *   /                       *  *\n         *  /                        * *\n         * /                         **   \n        (0)* * * * * *(8)* * * * * *(1) \n""\n  INPUTS:\n    -> xi:  Xi  coordinate for this element.\n    -> eta: Eta coordinate for this element.\n    -> chi: Chi coordinate for this element.\n    -> derOrder: Order of derivative required.\n\n  OUTPUTS: \n    -> [N0,N1,...]: Evaluated basis functions.\n\n        Derivatives are returned in the following manner:\n\n        # Real value.\n        N       -> real direction -> [0] .\n        \n        # First order derivatives\n        dN/dxi  -> e1 direction -> [1].\n        dN/deta -> e2 direction -> [2].\n        dN/dchi -> e3 direction -> [3].\n\n        # Second order derivatives:\n        d2N/dxi  dxi  -> e11 direction -> [[1,2]].\n        d2N/dxi  deta -> e12 direction -> [ 1,2 ].\n        d2N/deta deta -> e22 direction -> [[2,2]].\n        d2N/dxi  dchi -> e13 direction -> [ 1,3 ].\n        d2N/deta dchi -> e23 direction -> [ 2,3 ].\n        d2N/dchi dchi -> e33 direction -> [[3,2]].\n\n        # etc...\n\n  ";
 static PyObject *__pyx_pw_5pyoti_3fem_27hex20_iso(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_xi_r;
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_eta_r;
@@ -16884,14 +16884,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":49
+  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":58
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
  * 
  *   cdef otinum N0 = 1.0 - xi - eta - chi
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(13, 49, __pyx_L1_error)
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_int_3); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(13, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 

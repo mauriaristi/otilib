@@ -18,7 +18,7 @@ cdef class fespace:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def __init__(self, mesh mesh, elBase elType):
+  def __init__(self, mesh mesh, uint8_t order, special = 'std'):
     """
     PURPOSE:      Constructor of the finite element space class. Its main purpose is to define 
                   a class to relate the triangulation with interpolation functions defined by the
@@ -26,14 +26,14 @@ cdef class fespace:
 
     INPUTS:
 
-            -> mesh:         Mesh that defines the domain of the function.
-
-            -> elementType:  Defines the interpolation functions of the discretized domain.
+            -> mesh:    Mesh that defines the domain of the function.
+            -> elOrder: Defines the interpolation functions of the discretized domain.
 
     """
     
-    self.mesh       = mesh         # Reference to the mesh
-    self.elType     = elType       # Reference to the element type.
+    self.mesh       = mesh         # Reference to the mesh.
+    self.order      = order        # Reference to the element order.
+    self.special    = special      # Reference to element special.
     self.fespaceId  = self.mesh.addNewSpace(self) # Stack
 
 
@@ -119,7 +119,7 @@ cdef class fespace:
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::::: END OF CLASS FESPACE2 ::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::::: END OF CLASS FESPACE :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 

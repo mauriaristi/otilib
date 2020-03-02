@@ -52,7 +52,7 @@ elem_t  elem_init( void ){
     res.intPts      = darr_init(); ///< (nIntPts x ndim) Array with the integration points coordinates.
     res.intWts      = darr_init(); ///< (nIntPts x 1   ) Array with the integration weights.
     res.p_evalBasis = NULL; ///< (nder) List of (nbasis x nIntPts) arrays with the evaluated basis
-    res.f_basis     = NULL; ///<  Interpolation function.
+    // res.f_basis     = NULL; ///<  Interpolation function.
 
     return res;
 }
@@ -63,9 +63,7 @@ elem_t  elem_init( void ){
 
 // ****************************************************************************************************
 int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase,
-                       int64_t  kind,   uint8_t  ndim,
-              int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*)
-    ) {
+                       int64_t  kind,   uint8_t  ndim) {
 
     int64_t  derIdx;
 
@@ -90,6 +88,8 @@ int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase,
 
     }
 
+    nder = 10;
+
 
 
     // Check first if the element is already allocated.
@@ -99,7 +99,7 @@ int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase,
         elem->nder     = nder;
         elem->ndim     = ndim;
         elem->kind     = kind;
-        elem->f_basis  = basis_f;
+        // elem->f_basis  = basis_f;
         elem->geomBase = geomBase;
 
         // Get the integration points and integration weights.
@@ -171,7 +171,7 @@ int64_t elem_allocate(elem_t* elem, uint64_t intorder ) {
 
 
     int64_t  derIdx;
-    uint64_t basisId;
+    // uint64_t basisId;
 
     // Check first if the element is already Initialized.
     if( elem_is_started(elem) ) {
@@ -188,15 +188,13 @@ int64_t elem_allocate(elem_t* elem, uint64_t intorder ) {
         for(derIdx = 0; derIdx<elem->nder; derIdx++){
 
             // Allocate new array
-            elem->p_evalBasis[derIdx] = darr_createEmpty(elem->nbasis, elem->nIntPts);
+            elem->p_evalBasis[derIdx] = darr_zeros(elem->nbasis, elem->nIntPts);
 
-            // Evaluates all basis functions.
+            // Evaluate all basis functions.
             // Loop through all basis functions.
-            for(basisId = 0; basisId<elem->nbasis; basisId++){
-                
-                elem->f_basis(basisId, derIdx + derN, &elem->intPts, NULL, &elem->p_evalBasis[derIdx]);
-
-            }
+            // for(basisId = 0; basisId<elem->nbasis; basisId++){
+            //     elem->f_basis(basisId, derIdx + derN, &elem->intPts, NULL, &elem->p_evalBasis[derIdx]);
+            // }
 
         }
         

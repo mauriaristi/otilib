@@ -22,8 +22,8 @@
             "-O3"
         ],
         "include_dirs": [
-            "/Users/maristi7/coding/otilib/include",
-            "/Users/maristi7/opt/anaconda3/envs/pyoti/lib/python3.7/site-packages/numpy/core/include"
+            "/Users/maristi7/opt/anaconda3/envs/pyoti/lib/python3.7/site-packages/numpy/core/include",
+            "/Users/maristi7/coding/otilib/include"
         ],
         "libraries": [
             "oti"

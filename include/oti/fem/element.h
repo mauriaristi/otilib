@@ -78,9 +78,11 @@ to be used.
 @param[in]  kind:     Defines the kind of element Isoparametric or Affine.
 @param[in]  ndim:     Number of dimensions of the element.
 @param[in]  basis_f:  Pointer to function that defines the interpolation functions and its derivatives.
+                      (deprecated).
 ******************************************************************************************************/ 
-int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase, int64_t  kind,   uint8_t  ndim,
-              int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*));
+// int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase, int64_t  kind,   uint8_t  ndim,
+//               int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*));
+int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase, int64_t  kind,   uint8_t  ndim);
 // ----------------------------------------------------------------------------------------------------
 
 

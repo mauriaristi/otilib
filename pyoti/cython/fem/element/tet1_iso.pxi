@@ -1,37 +1,36 @@
-
-# ****************************************************************************************************
-cpdef tet4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
+# ******************************************************************************************************
+cpdef tet1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
   """
-  Definition of basis functions for the 4-node tetrahedron 3D element (1st order).
-  
+  Definition of basis functions for the 1 node triangle 2D element (0th order).
+
   NODE NUMBERING:
+                          
 
                            ^ eta
                            |         4
                            |        / chi
                            |       /
                            |      /
-                          (2)* * (3)
+                           * * *  * 
                            * *  /  *
                            *   *    *
                            *  /  *   *
-                           *       *  *
+                           *   (0) *  *
                            */        * *
-                          (0)* * * * *(1)------> xi
-
+                           * * * * * * * ------> xi
   INPUTS:
-    -> xi:  Xi  coordinate for this element.
+    -> xi:  Xi coordinate for this element.
     -> eta: Eta coordinate for this element.
     -> chi: Chi coordinate for this element.
     -> derOrder: Order of derivative required.
 
   OUTPUTS: 
     -> [N0,N1,...]: Evaluated basis functions.
-
+    
         Derivatives are returned in the following manner:
 
         # Real value.
-        N       -> real direction -> [0] .
+        N       -> real direction -> [0].
         
         # First order derivatives
         dN/dxi  -> e1 direction -> [1].
@@ -47,17 +46,8 @@ cpdef tet4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
         d2N/dchi dchi -> e33 direction -> [[3,2]].
 
         # etc...
-
-
-  """ 
-  cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
-  cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
-  cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)
-
-  cdef otinum N0 = 1.0 - xi - eta - chi
-  cdef otinum N1 = xi 
-  cdef otinum N2 = eta
-  cdef otinum N3 = chi
+  """
   
-  return [N0, N1, N2, N3]
-# ----------------------------------------------------------------------------------------------------
+  return point1_iso( xi_r, eta_r, chi_r, derOrder)
+
+# ------------------------------------------------------------------------------------------------------

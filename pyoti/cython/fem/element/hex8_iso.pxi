@@ -5,9 +5,7 @@ cpdef hex8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
   Definition of basis functions for the 4-node quad 2D element (1st order). 
   Basis functions taken from Smith, I. "Programming the Finite Element Method" 5th ed. Wiley.
 
-  NODE NUMBERING:
-                                                
-                                                
+  NODE NUMBERING:                                                
                               chi ^          4 y    
                                   |         / eta    
                                   |        /      

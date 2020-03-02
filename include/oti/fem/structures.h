@@ -64,18 +64,18 @@ typedef struct elem_s{
     uint8_t     nDimAnalysis; ///< Number of dimensions of the analysis.
     darr_t            intPts; ///< (nIntPts x ndim) Array with the integration point coordinates.
     darr_t            intWts; ///< (nIntPts x 1   ) Array with the integration weights.
-    darr_t*      p_evalBasis; ///< (nder) List of (nbasis x nIntPts) arrays with the evaluated basis functions.
+    darr_t*      p_evalBasis; ///< (10) List of (nbasis x nIntPts) arrays with the evaluated basis functions.
                               // p_evalBasis[0] -> N  
                               // p_evalBasis[1] -> Na 
-                              // p_evalBasis[2] -> Naa
-                              // p_evalBasis[3] -> Nb 
-                              // p_evalBasis[4] -> Nab
-                              // p_evalBasis[5] -> Nbb
-                              // p_evalBasis[6] -> Nc 
+                              // p_evalBasis[2] -> Nb 
+                              // p_evalBasis[3] -> Nc 
+                              // p_evalBasis[4] -> Naa
+                              // p_evalBasis[5] -> Nab
+                              // p_evalBasis[6] -> Nbb
                               // p_evalBasis[7] -> Nac
                               // p_evalBasis[8] -> Nbc
                               // p_evalBasis[9] -> Ncc
-    int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*); ///<  Interpolation function.
+    // int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*); ///<  Interpolation function.
     // 
 } elem_t;
 

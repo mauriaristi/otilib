@@ -10,3 +10,6 @@ include "core/dhelp.pxi"
 
 # Append utils.
 include "core/utils.pxi"
+
+# Module writer utils.
+include "core/module_writer.pxi"

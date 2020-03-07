@@ -1,6 +1,6 @@
 !! ================================================================
 !!
-!! A FORTRAN MODULE FOR  USE OF OTI NUMBERS.
+!! A FORTRAN MODULE FOR USE OF OTI NUMBERS.
 !! IN PARTICULAR, OTI ALGEBRA WITH UP TO M = 2 IMAGINARY BASES AND 
 !! TRUNCATION ORDER N = 2
 !!

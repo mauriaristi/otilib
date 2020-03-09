@@ -300,6 +300,56 @@ cdef np.ndarray[uint64_t, ndim=1]  c_ptr_to_np_1darray_uint64(void * ptr, np.npy
 
 #-----------------------------------------------------------------------------------------------------
 
+
+#*****************************************************************************************************
+cdef np.ndarray[uint16_t, ndim=1]  c_ptr_to_np_1darray_uint16(void * ptr, np.npy_intp size, \
+                                                            uint8_t numpy_own = 0):
+  """
+  PURPOSE:    Convert a C pointer to numpy 1D array.
+   
+  INPUTS:      
+            - void *  ptr: C-pointer
+
+            - np.npy_intp size: Length of the 1D array.
+
+            - numpy_own: Flag to state if the numpy given array owns the pointer (will be 
+                         released by numpy when the object is deleted). Default is 0 (off).
+  OUTPUTS:
+            - uint16_t: number in which the high bits correspond to the position of the elements
+                        that belong to the asked partition.
+
+
+  SOURCES:
+
+    http://blog.enthought.com/python/numpy-arrays-with-pre-allocated-memory/#.WSsNoMaZNN3
+    https://gist.github.com/GaelVaroquaux/1249305
+    https://docs.scipy.org/doc/numpy/user/c-info.how-to-extend.html
+    https://docs.scipy.org/doc/numpy/reference/c-api.dtype.html#c.NPY_DOUBLE
+            
+  """
+  #***************************************************************************************************
+  # cdef extern from "numpy/arrayobject.h":
+  #     void PyArray_ENABLEFLAGS(np.ndarray arr, int flags)
+  # cdef double* data = <double*> ptr
+
+  # for i in range(size):
+  #   print(data[i])
+
+  cdef np.ndarray[uint16_t, ndim=1] arr = \
+          np.PyArray_SimpleNewFromData(1, &size, np.NPY_UINT16, ptr)
+  # PyObject *PyArray_SimpleNewFromData(int ndim, npy_intp* dims, int typenum, void* data)
+
+  if numpy_own != 0:
+
+    # Pass the ownership flag to numpy.
+    PyArray_ENABLEFLAGS(arr, np.NPY_OWNDATA)
+
+  # end if
+  
+  return arr
+
+#-----------------------------------------------------------------------------------------------------
+
 #*****************************************************************************************************
 cdef np.ndarray[uint8_t, ndim=1]  c_ptr_to_np_1darray_uint8(void * ptr, np.npy_intp size, \
                                                             uint8_t numpy_own = 0):

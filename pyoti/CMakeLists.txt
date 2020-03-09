@@ -73,9 +73,10 @@ ADD_CUSTOM_COMMAND (
 ADD_CUSTOM_COMMAND (
 	TARGET  oticython
 	# COMMAND pwd
-	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/__init__.py     ${CYTHON_BUILD_DIR}/
-	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/whereotilib.py  ${CYTHON_BUILD_DIR}/
-	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/auxFunctions.py ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/__init__.py      ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/whereotilib.py   ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/auxFunctions.py  ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/module_writer.py ${CYTHON_BUILD_DIR}/
 )
 
 # -------------------------------------------------------------------

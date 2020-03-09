@@ -119,6 +119,28 @@ cdef class dHelp:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
+  def get_fulldir(self, imdir_t indx, ord_t order):
+    """
+    PURPOSE: Get the expanded representation of an imaginary direction as an array.
+    """  
+  
+    cdef bases_t* dirs
+    cdef np.ndarray out
+
+    if order != 0:
+           
+      dirs = dhelp_get_imdir(indx,order,self.dhl)
+      out = c_ptr_to_np_1darray_uint16(<void*> dirs, order, numpy_own = 0) 
+    else:
+    
+      out = np.zeros(1,dtype = np.uint16)
+    
+    # end if 
+
+    return out
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   def get_str_fulldir(self, imdir_t indx, ord_t order):
     """
     PURPOSE: Get the expanded string representation of an imaginary direction.
@@ -216,7 +238,46 @@ cdef class dHelp:
     return out 
   #--------------------------------------------------------------------------------------------------- 
 
+  #***************************************************************************************************
+  def get_ndir_total(self, bases_t nbases, ord_t order ):
+    """
+    PURPOSE: Return the total number of imaginary directions for the given number of
+             basis and truncation order.
 
+    @param[in] nbases: Number of imaginary basis
+    @param[in] order:  Truncation order
+
+    """  
+    return dhelp_ndirTotal(nbases, order)
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def get_ndir_order(self, bases_t nbases, ord_t order ):
+    """
+    PURPOSE: Return the number of imaginary directions of given order for the number of
+             basis given.
+
+    @param[in] nbases: Number of imaginary basis.
+    @param[in] order:  Order of imagianry direcitions.
+
+    """  
+    return dhelp_ndirOrder(nbases, order)
+  #--------------------------------------------------------------------------------------------------- 
+
+  def mult_dir(self,imdir_t indx1, ord_t ord1, imdir_t indx2, ord_t ord2):
+    """
+    PURPOSE: Multiply two imaginary directions.
+
+    @param[in] indx1, ord1: Pair defining imaginary direction 1.
+    @param[in] indx2, ord2: Pair defining imaginary direction 2.
+
+    """  
+    cdef imdir_t ixres
+    cdef ord_t ores
+    dhelp_multDir(indx1, ord1,indx2, ord2, &ixres, &ores, self.dhl)
+    return [ixres,ores]
+  #--------------------------------------------------------------------------------------------------- 
+    
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::   END OF CLASS HELPER   :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

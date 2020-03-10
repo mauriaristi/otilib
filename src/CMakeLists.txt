@@ -97,15 +97,23 @@ SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s4 -f10 -m10)
 SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s3 -f3 -m100)
 SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s1 -f2 -m1000)
 
-ADD_CUSTOM_TARGET(gendata ALL
+
+# To generate data call
+# ...: make gendata
+ADD_CUSTOM_TARGET(gendata 
+    COMMAND otigen ${OTIGEN_FLAGS}
     DEPENDS otigen)
+
+
 # Create folder for data.
 FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
 
-ADD_CUSTOM_COMMAND (
-    TARGET  gendata    
-    COMMAND otigen ${OTIGEN_FLAGS}
-)
+# ADD_CUSTOM_COMMAND (
+#     TARGET  gendata    
+#     # OUTPUT  ${PROJECT_BINARY_DIR}/data/ndirs_n1.npy
+#     COMMAND otigen ${OTIGEN_FLAGS}
+#     DEPENDS otigen
+# )
 
 
 

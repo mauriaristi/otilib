@@ -3,10 +3,11 @@ IFC = ifort
 GFC = gfortran
 
 IFORTFLAGS = -warn
-GFORTFLAGS = -Wall -ffree-line-length-1024 -O3
+GFORTFLAGS = -Wall -ffree-line-length-3000 -O0
 FORTFLAGSDEBUG = -g
-M = 5
-N = 10
+M = 2
+N = 3
+
 KEYWORD_TYPE = OTI_TYPE
 KEYWORD_MOD = OTI_MOD
 OTI_TYPE = ONUMM$(M)N$(N)

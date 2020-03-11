@@ -1146,7 +1146,7 @@ class writer:
 
 
     str_out += (leveli)*tab +"DO I = 1, SIZE(LHS,1)"+ endl
-    str_out += (leveli+1)*tab +"DO J = 1, SIZE(RHS,2)"+endl
+    str_out += (leveli+1)*tab +"DO J = 1, SIZE(LHS,2)"+endl
     str_out += (leveli+2)*tab +"RES( J, I ) = LHS( I, J )"+endl
     str_out += (leveli+1)*tab +"END DO"+endl
     str_out += (leveli)*tab +"END DO"+endl
@@ -1228,7 +1228,7 @@ class writer:
 
   #***************************************************************************************************
   def write_matrix_function_neg(self, function_name = "NEG", level = 0, tab = " ", 
-    f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_dim="(:,:)",res_dim = "(SIZE(LHS,2),SIZE(RHS,1))", 
+    f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_dim="(:,:)",res_dim = "(SIZE(LHS,2),SIZE(LHS,1))", 
     f_open = "(", f_close = ")", addition = " + ",generator = None,
     overload = None ):
 

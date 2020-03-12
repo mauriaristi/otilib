@@ -1,0 +1,335 @@
+MODULE MULTIDUAL2
+
+  IMPLICIT NONE
+
+  INTEGER, PARAMETER :: DP         = 8
+  INTEGER, PARAMETER :: NUM_IM_DIR = 4
+  INTEGER, PARAMETER :: TORDER     = 2
+
+  TYPE MDUAL2
+    ! Real
+    REAL(DP) :: R
+    ! Order 1
+    REAL(DP) :: E1
+    REAL(DP) :: E2
+    ! Order 2
+    REAL(DP) :: E12
+  END TYPE MDUAL2
+
+  INTERFACE OPERATOR(*)
+    MODULE PROCEDURE MDUAL2_MUL_MDUAL2,R_MUL_MDUAL2,MDUAL2_MUL_R
+  END INTERFACE
+
+  INTERFACE OPERATOR(+)
+    MODULE PROCEDURE MDUAL2_ADD_MDUAL2,R_ADD_MDUAL2,MDUAL2_ADD_R
+  END INTERFACE
+
+  INTERFACE OPERATOR(-)
+    MODULE PROCEDURE MDUAL2_NEG,MDUAL2_SUB_MDUAL2,R_SUB_MDUAL2,MDUAL2_SUB_R
+  END INTERFACE
+
+  INTERFACE ASSIGNMENT(=)
+    MODULE PROCEDURE MDUAL2_ASSIGN_R
+  END INTERFACE
+
+  INTERFACE TRANSPOSE
+    MODULE PROCEDURE MDUAL2_TRANSPOSE
+  END INTERFACE
+
+  INTERFACE MATMUL
+    MODULE PROCEDURE MDUAL2_MATMUL_MDUAL2,R_MATMUL_MDUAL2,MDUAL2_MATMUL_R
+  END INTERFACE
+
+  CONTAINS
+
+  ELEMENTAL SUBROUTINE MDUAL2_ASSIGN_R(RES,LHS)
+    
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(MDUAL2), INTENT(OUT) :: RES 
+
+    ! Assign like function 'LHS'
+    ! Real
+    RES%R = LHS
+    ! Order 1
+    RES%E1 = 0.0_dp
+    RES%E2 = 0.0_dp
+    ! Order 2
+    RES%E12 = 0.0_dp
+
+  END SUBROUTINE MDUAL2_ASSIGN_R
+
+  ELEMENTAL FUNCTION MDUAL2_ADD_MDUAL2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS 
+    TYPE(MDUAL2), INTENT(IN) :: RHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Addition like function 'LHS + RHS'
+    ! Real
+    RES%R = LHS%R + RHS%R
+    ! Order 1
+    RES%E1 = LHS%E1 + RHS%E1
+    RES%E2 = LHS%E2 + RHS%E2
+    ! Order 2
+    RES%E12 = LHS%E12 + RHS%E12
+
+  END FUNCTION MDUAL2_ADD_MDUAL2
+
+  ELEMENTAL FUNCTION R_ADD_MDUAL2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(MDUAL2), INTENT(IN) :: RHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Addition like function 'LHS + RHS'
+    ! Real
+    RES%R = LHS + RHS%R
+    ! Order 1
+    RES%E1 =  + RHS%E1
+    RES%E2 =  + RHS%E2
+    ! Order 2
+    RES%E12 =  + RHS%E12
+
+  END FUNCTION R_ADD_MDUAL2
+
+  ELEMENTAL FUNCTION MDUAL2_ADD_R(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS 
+    REAL(DP), INTENT(IN) :: RHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Addition like function 'LHS + RHS'
+    ! Real
+    RES%R = LHS%R + RHS
+    ! Order 1
+    RES%E1 = LHS%E1
+    RES%E2 = LHS%E2
+    ! Order 2
+    RES%E12 = LHS%E12
+
+  END FUNCTION MDUAL2_ADD_R
+
+  ELEMENTAL FUNCTION MDUAL2_NEG(LHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Negation like function '-LHS'
+    ! Real
+    RES%R = -LHS%R
+    ! Order 1
+    RES%E1 = -LHS%E1
+    RES%E2 = -LHS%E2
+    ! Order 2
+    RES%E12 = -LHS%E12
+
+  END FUNCTION MDUAL2_NEG
+
+  ELEMENTAL FUNCTION MDUAL2_SUB_MDUAL2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS 
+    TYPE(MDUAL2), INTENT(IN) :: RHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Addition like function 'LHS - RHS'
+    ! Real
+    RES%R = LHS%R - RHS%R
+    ! Order 1
+    RES%E1 = LHS%E1 - RHS%E1
+    RES%E2 = LHS%E2 - RHS%E2
+    ! Order 2
+    RES%E12 = LHS%E12 - RHS%E12
+
+  END FUNCTION MDUAL2_SUB_MDUAL2
+
+  ELEMENTAL FUNCTION R_SUB_MDUAL2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(MDUAL2), INTENT(IN) :: RHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Addition like function 'LHS - RHS'
+    ! Real
+    RES%R = LHS - RHS%R
+    ! Order 1
+    RES%E1 =  - RHS%E1
+    RES%E2 =  - RHS%E2
+    ! Order 2
+    RES%E12 =  - RHS%E12
+
+  END FUNCTION R_SUB_MDUAL2
+
+  ELEMENTAL FUNCTION MDUAL2_SUB_R(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS 
+    REAL(DP), INTENT(IN) :: RHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Addition like function 'LHS - RHS'
+    ! Real
+    RES%R = LHS%R - RHS
+    ! Order 1
+    RES%E1 = LHS%E1
+    RES%E2 = LHS%E2
+    ! Order 2
+    RES%E12 = LHS%E12
+
+  END FUNCTION MDUAL2_SUB_R
+
+  ELEMENTAL FUNCTION MDUAL2_MUL_MDUAL2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS 
+    TYPE(MDUAL2), INTENT(IN) :: RHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Multiplication like function 'LHS*RHS'
+    ! Real
+    RES%R = LHS%R*RHS%R
+    ! Order 1
+    RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+    RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
+    ! Order 2
+    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R + LHS%E1*RHS%E2 &
+            + LHS%E2*RHS%E1
+
+  END FUNCTION MDUAL2_MUL_MDUAL2
+
+  ELEMENTAL FUNCTION R_MUL_MDUAL2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(MDUAL2), INTENT(IN) :: RHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Multiplication like function 'LHS*RHS'
+    ! Real
+    RES%R = LHS*RHS%R
+    ! Order 1
+    RES%E1 = LHS*RHS%E1
+    RES%E2 = LHS*RHS%E2
+    ! Order 2
+    RES%E12 = LHS*RHS%E12
+
+  END FUNCTION R_MUL_MDUAL2
+
+  ELEMENTAL FUNCTION MDUAL2_MUL_R(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS 
+    REAL(DP), INTENT(IN) :: RHS 
+    TYPE(MDUAL2) :: RES 
+
+    ! Multiplication like function 'LHS*RHS'
+    ! Real
+    RES%R = LHS%R*RHS
+    ! Order 1
+    RES%E1 = LHS%E1*RHS
+    RES%E2 = LHS%E2*RHS
+    ! Order 2
+    RES%E12 = LHS%E12*RHS
+
+  END FUNCTION MDUAL2_MUL_R
+
+  FUNCTION MDUAL2_MATMUL_MDUAL2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS(:,:) 
+    TYPE(MDUAL2), INTENT(IN) :: RHS(:,:) 
+    TYPE(MDUAL2) :: TMP 
+    TYPE(MDUAL2) :: RES(SIZE(LHS,1),SIZE(RHS,2)) 
+    INTEGER :: I,J,K 
+
+    ! Dimension check
+    IF (SIZE(LHS,2) /= SIZE(RHS,1)) THEN
+      STOP "Runtime error: " // &
+           "Dimension mismatch in MATMUL."
+    END IF
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(RHS,2)
+        TMP = 0.0_DP
+        DO K = 1, SIZE(LHS,2)
+          TMP = TMP + LHS( I, K )*RHS( K, J )
+        END DO
+        RES( I, J ) = TMP
+      END DO
+    END DO
+
+  END FUNCTION MDUAL2_MATMUL_MDUAL2
+
+  FUNCTION R_MATMUL_MDUAL2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS(:,:) 
+    TYPE(MDUAL2), INTENT(IN) :: RHS(:,:) 
+    TYPE(MDUAL2) :: TMP 
+    TYPE(MDUAL2) :: RES(SIZE(LHS,1),SIZE(RHS,2)) 
+    INTEGER :: I,J,K 
+
+    ! Dimension check
+    IF (SIZE(LHS,2) /= SIZE(RHS,1)) THEN
+      STOP "Runtime error: " // &
+           "Dimension mismatch in MATMUL."
+    END IF
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(RHS,2)
+        TMP = 0.0_DP
+        DO K = 1, SIZE(LHS,2)
+          TMP = TMP + LHS( I, K )*RHS( K, J )
+        END DO
+        RES( I, J ) = TMP
+      END DO
+    END DO
+
+  END FUNCTION R_MATMUL_MDUAL2
+
+  FUNCTION MDUAL2_MATMUL_R(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS(:,:) 
+    REAL(DP), INTENT(IN) :: RHS(:,:) 
+    TYPE(MDUAL2) :: TMP 
+    TYPE(MDUAL2) :: RES(SIZE(LHS,1),SIZE(RHS,2)) 
+    INTEGER :: I,J,K 
+
+    ! Dimension check
+    IF (SIZE(LHS,2) /= SIZE(RHS,1)) THEN
+      STOP "Runtime error: " // &
+           "Dimension mismatch in MATMUL."
+    END IF
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(RHS,2)
+        TMP = 0.0_DP
+        DO K = 1, SIZE(LHS,2)
+          TMP = TMP + LHS( I, K )*RHS( K, J )
+        END DO
+        RES( I, J ) = TMP
+      END DO
+    END DO
+
+  END FUNCTION MDUAL2_MATMUL_R
+
+  FUNCTION MDUAL2_TRANSPOSE(LHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDUAL2), INTENT(IN) :: LHS(:,:) 
+    TYPE(MDUAL2) :: RES(SIZE(LHS,2),SIZE(LHS,1)) 
+    INTEGER :: I,J 
+
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(LHS,2)
+        RES( J, I ) = LHS( I, J )
+      END DO
+    END DO
+
+  END FUNCTION MDUAL2_TRANSPOSE
+
+END MODULE MULTIDUAL2

@@ -2,7 +2,7 @@
 // --------------------------------------      STRUCTURES        --------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-// Structure for array of sparse OTI numbers
+// Structure for array of sparse OTI numbers (2D)
 
 typedef struct {
     sotinum_t*    p_data; ///< Pointer to array of Sparse otinums.

@@ -570,12 +570,39 @@ cdef void c_Py_printArrayUI64(uint64_t* array,uint64_t size):
 #-----------------------------------------------------------------------------------------------------
 
 
-
+#*****************************************************************************************************
 def ndir_total(bases_t nbases,ord_t order):
+  """
+  PURPOSE: Compute the total number of directions. 
+
+  PARAMETERS:
+          
+          nbases: Number of basis.
+          order: Truncation order. 
+
+  """
+
   return dhelp_ndirTotal( nbases, order)
 
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
 def ndir_order(bases_t nbases,ord_t order):
+  """
+  PURPOSE: Compute the number of directions for a given truncation order. 
+
+  PARAMETERS:
+          
+          nbases: Number of basis.
+          order: Truncation order. 
+
+  """
+
   return dhelp_ndirOrder( nbases, order)
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
 
 # #*****************************************************************************************************
 # def getDirExpA(dirArray):

@@ -1,3 +1,6 @@
+#ifndef OTI_SPARSE_ARRAY_ALGEBRA_ELEMENTWISE_H
+#define OTI_SPARSE_ARRAY_ALGEBRA_ELEMENTWISE_H
+
 
 /**************************************************************************************************//**
 @brief Negation operation for array of sparse oti numbers object type. The following operations 
@@ -151,3 +154,4 @@ void arrso_div_Or_to(arrso_t*   lhs, coeff_t    rhs, arrso_t* res, dhelpl_t dhl)
 
 
 
+#endif

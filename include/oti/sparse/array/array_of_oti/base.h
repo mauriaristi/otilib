@@ -1,9 +1,5 @@
-
-
-
-
-// ****************************************************************************************************
-
+#ifndef OTI_SPARSE_ARRAY_BASE_H
+#define OTI_SPARSE_ARRAY_BASE_H
 
 
 /**************************************************************************************************//**
@@ -161,3 +157,5 @@ size_t arrso_memory_size( uint64_t size, const ndir_t* p_nnz, ord_t order);
 void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, 
     flag_t flag, arrso_t* res);
 // ----------------------------------------------------------------------------------------------------
+
+#endif

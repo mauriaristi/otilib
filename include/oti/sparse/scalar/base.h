@@ -1,4 +1,5 @@
-
+#ifndef OTI_SPARSE_SCALAR_BASE_H
+#define OTI_SPARSE_SCALAR_BASE_H
 
 /**************************************************************************************************//**
 @brief Function that distribute memory along the different components of an OTI number.
@@ -198,3 +199,5 @@ sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl);
 ******************************************************************************************************/ 
 sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 
 // ----------------------------------------------------------------------------------------------------
+
+#endif

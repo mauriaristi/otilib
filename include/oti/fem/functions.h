@@ -1,4 +1,5 @@
-
+#ifndef OTI_FEM_FUNCTIONS_H
+#define OTI_FEM_FUNCTIONS_H
 
 
 
@@ -101,3 +102,4 @@ int64_t fem_integrateSOTIfunct(oarr_t* f_eval, darr_t* weights, otinum_t* res,
 
 
 
+#endif

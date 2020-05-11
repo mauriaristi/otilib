@@ -1,4 +1,5 @@
-
+#ifndef OTI_FEM_INTEGRATION_POINTS_H
+#define OTI_FEM_INTEGRATION_POINTS_H
 
 // Integration points.
 
@@ -31,4 +32,4 @@ uint64_t fem_addTetrahedraIntegrationPoints(uint8_t numberOfPermutations, uint64
 
 
 
-
+#endif

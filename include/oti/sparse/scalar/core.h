@@ -1,6 +1,28 @@
+#ifndef OTI_SPARSE_SCALAR_CORE_H
+#define OTI_SPARSE_SCALAR_CORE_H
 
+
+
+/**************************************************************************************************//**
+@brief Check if a number requires reallocation, in order to store usefuldata from srt in dest.
+
+@param[in] src  Oti number that sets the memory requirement.
+@param[in] dest Oti number to hold result.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/
 uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Copy information from src to dest. Does not check if memory needs to be reallocated.
+Useful when copying data to a temporal sotinum.
+
+@param[in] src  Oti number.
+@param[in] dest Oti number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/
 sotinum_t soti_init(void);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Copy information from src to dest. Does not check if memory needs to be reallocated.
@@ -159,3 +181,5 @@ sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl);
 ******************************************************************************************************/ 
 sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 
 // ----------------------------------------------------------------------------------------------------
+
+#endif

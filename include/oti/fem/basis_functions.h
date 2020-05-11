@@ -1,3 +1,6 @@
+#ifndef OTI_FEM_BASIS_FUNCTIONS_H
+#define OTI_FEM_BASIS_FUNCTIONS_H
+
 // FEM basis Functions.
 
 
@@ -48,3 +51,7 @@ int64_t fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, dar
 int64_t fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, darr_t* coords,   
                                               void* other_data, darr_t* evalBasis);
 // ----------------------------------------------------------------------------------------------------
+
+
+
+#endif

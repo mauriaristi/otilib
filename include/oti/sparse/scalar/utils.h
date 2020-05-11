@@ -1,4 +1,5 @@
-
+#ifndef OTI_SPARSE_SCALAR_UTILS_H
+#define OTI_SPARSE_SCALAR_UTILS_H
 
 /**************************************************************************************************//**
 @brief Truncated self addition of two oti numbers. This function adds num1 and num2 just to obtain 
@@ -43,3 +44,5 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
 ******************************************************************************************************/
 void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+#endif

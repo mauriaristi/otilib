@@ -1,4 +1,5 @@
-
+#ifndef OTI_FEM_FEOARR_H
+#define OTI_FEM_FEOARR_H
 // ARRAY:
 
 /**************************************************************************************************//**
@@ -171,3 +172,5 @@ feoarr_t feoarr_init( void );
 feoarr_t feoarr_createEmpty( uint64_t nrows, uint64_t ncols, uint64_t offsetx, uint64_t offsety, 
                              uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+#endif

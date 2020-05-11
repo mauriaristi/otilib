@@ -1,4 +1,5 @@
-
+#ifndef OTI_FEM_ELEMENT_H
+#define OTI_FEM_ELEMENT_H
 
 /**************************************************************************************************//**
 @brief Function to check wether an element object is started.
@@ -96,3 +97,4 @@ int64_t elem_allocate(elem_t* elem, uint64_t intorder );
 // ----------------------------------------------------------------------------------------------------
 
 
+#endif

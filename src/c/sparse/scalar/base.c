@@ -1,5 +1,4 @@
-#ifndef OTI_CORE_BASE_H
-#define OTI_CORE_BASE_H
+
 
 
 
@@ -37,7 +36,7 @@ sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
 
         res.p_im[i]  = dhl.p_dh[i].p_im[ntmp];
         res.p_idx[i] = dhl.p_dh[i].p_idx[ntmp];
-        res.p_nnz[i] = 0 ; // Initialize to zero elements.
+        res.p_nnz[i] = 0; // Initialize to zero elements.
         res.p_size[i]= dhl.p_dh[i].Ndir;
 
     }
@@ -776,7 +775,7 @@ void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_t
 
 
 
-#endif
+
 
 
 

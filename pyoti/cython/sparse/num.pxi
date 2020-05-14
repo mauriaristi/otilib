@@ -596,7 +596,7 @@ cdef class sotinum:
     elif type2 in number_types:   # Case 1. Mult to real scalar. 
       
       S = self
-      soti_div_or(&S.num,other_in,dhl)
+      res = soti_div_or(&S.num,other_in,dhl)
     
     elif type1 in number_types:   # Case 1.5. Reverse Mult to real scalar.
       

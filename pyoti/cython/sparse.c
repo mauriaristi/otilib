@@ -5270,7 +5270,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_28__truediv__(PyObject *__pyx_
  *     elif type2 in number_types:   # Case 1. Mult to real scalar.
  * 
  *       S = self             # <<<<<<<<<<<<<<
- *       soti_div_or(&S.num,other_in,dhl)
+ *       res = soti_div_or(&S.num,other_in,dhl)
  * 
  */
     if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(0, 598, __pyx_L1_error)
@@ -5282,12 +5282,12 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_28__truediv__(PyObject *__pyx_
     /* "../../pyoti/cython/sparse/num.pxi":599
  * 
  *       S = self
- *       soti_div_or(&S.num,other_in,dhl)             # <<<<<<<<<<<<<<
+ *       res = soti_div_or(&S.num,other_in,dhl)             # <<<<<<<<<<<<<<
  * 
  *     elif type1 in number_types:   # Case 1.5. Reverse Mult to real scalar.
  */
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other_in); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 599, __pyx_L1_error)
-    (void)(soti_div_or((&__pyx_v_S->num), __pyx_t_4, __pyx_v_5pyoti_6sparse_dhl));
+    __pyx_v_res = soti_div_or((&__pyx_v_S->num), __pyx_t_4, __pyx_v_5pyoti_6sparse_dhl);
 
     /* "../../pyoti/cython/sparse/num.pxi":596
  *       res = soti_div_oo(&S.num,&O.num,dhl)
@@ -5300,7 +5300,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_28__truediv__(PyObject *__pyx_
   }
 
   /* "../../pyoti/cython/sparse/num.pxi":601
- *       soti_div_or(&S.num,other_in,dhl)
+ *       res = soti_div_or(&S.num,other_in,dhl)
  * 
  *     elif type1 in number_types:   # Case 1.5. Reverse Mult to real scalar.             # <<<<<<<<<<<<<<
  * 
@@ -5337,7 +5337,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_28__truediv__(PyObject *__pyx_
     __pyx_v_res = soti_div_ro(__pyx_t_4, (&__pyx_v_O->num), __pyx_v_5pyoti_6sparse_dhl);
 
     /* "../../pyoti/cython/sparse/num.pxi":601
- *       soti_div_or(&S.num,other_in,dhl)
+ *       res = soti_div_or(&S.num,other_in,dhl)
  * 
  *     elif type1 in number_types:   # Case 1.5. Reverse Mult to real scalar.             # <<<<<<<<<<<<<<
  * 

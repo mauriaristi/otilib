@@ -225,7 +225,11 @@ ndir_t dhelp_ndirOrder(bases_t nbases,ord_t order){
 
 // ****************************************************************************************************
 bases_t* dhelp_get_imdir( imdir_t idx, ord_t order, dhelpl_t dhl){
-    return &dhl.p_dh[order-1].p_fulldir[idx*order];
+    if (order == 0){
+        return NULL;
+    } else {
+        return &dhl.p_dh[order-1].p_fulldir[idx*order];
+    }    
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -278,24 +282,31 @@ coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhelpl_t dhl){
     bases_t dir_prev;
     ord_t i, j = 2;
     
-    dirs = dhelp_get_imdir( idx, order, dhl);
+    if ( order != 0 ){
 
-    dir_prev = dirs[0];
+        dirs = dhelp_get_imdir( idx, order, dhl);
 
-    for (i=1; i<order; i++){
+        dir_prev = dirs[0];
 
-        if (dirs[i] == dir_prev){
-            
-            factor *= j;
-            j+=1;
+        for (i=1; i<order; i++){
 
-        } else{
+            if (dirs[i] == dir_prev){
+                
+                factor *= j;
+                j+=1;
 
-            j=2;
+            } else{
 
-            dir_prev = dirs[i];
-        }
+                j=2;
+
+                dir_prev = dirs[i];
+                
+            }
+
+        }    
+
     }
+    
 
     return factor;
 

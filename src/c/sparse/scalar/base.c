@@ -384,20 +384,25 @@ uint64_t soti_get_total_memsize(sotinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest){
     
-    uint8_t reallocate = false;
+    uint8_t reallocate = 0; // False
     ord_t i;
 
     // Check if reallocation is necessary
-    if (src->order > dest->order ){
+    if (src->order != dest->order ){
 
-        reallocate = true;
+        reallocate = 0xFF; // True
 
     } else {
        
         for ( i = 0; i < src->order; i++){
-            if (src->p_nnz[i] > dest->p_size[i]){
-                reallocate = true;
+
+            // Check if the number of non zeros is greater to the size allocated
+            // in destination.
+            if ( src->p_nnz[i] > dest->p_size[i] ){
+
+                reallocate = 0xFF; // True
                 break;
+
             }
         }
 

@@ -1315,7 +1315,7 @@ struct __pyx_opt_args_5pyoti_6sparse_ones;
  *   @staticmethod
  *   cdef sotinum create(sotinum_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
  *   cpdef coeff_t get_deriv( self, object humdir)
- *   cpdef sin(self)
+ *   cpdef coeff_t get_im( self, object humdir)
  */
 struct __pyx_opt_args_5pyoti_6sparse_7sotinum_create {
   int __pyx_n;
@@ -1415,6 +1415,7 @@ struct __pyx_obj_5pyoti_6sparse_matso {
 struct __pyx_vtabstruct_5pyoti_6sparse_sotinum {
   struct __pyx_obj_5pyoti_6sparse_sotinum *(*create)(sotinum_t *, struct __pyx_opt_args_5pyoti_6sparse_7sotinum_create *__pyx_optional_args);
   __pyx_t_5pyoti_8c_otilib_coeff_t (*get_deriv)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
+  __pyx_t_5pyoti_8c_otilib_coeff_t (*get_im)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
   PyObject *(*sin)(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch);
   PyObject *(*cos)(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch);
   PyObject *(*tan)(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch);
@@ -2071,6 +2072,7 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
 static struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_f_5pyoti_6sparse_7sotinum_create(sotinum_t *__pyx_v_num, struct __pyx_opt_args_5pyoti_6sparse_7sotinum_create *__pyx_optional_args); /* proto*/
 static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_deriv(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, PyObject *__pyx_v_humdir, int __pyx_skip_dispatch); /* proto*/
+static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_im(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, PyObject *__pyx_v_humdir, int __pyx_skip_dispatch); /* proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_tan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
@@ -2242,6 +2244,7 @@ static const char __pyx_k_shape[] = "shape";
 static const char __pyx_k_arccos[] = "arccos";
 static const char __pyx_k_arcsin[] = "arcsin";
 static const char __pyx_k_arctan[] = "arctan";
+static const char __pyx_k_get_im[] = "get_im";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_nbases[] = "nbases";
 static const char __pyx_k_reduce[] = "__reduce__";
@@ -2356,6 +2359,7 @@ static PyObject *__pyx_kp_s_g;
 static PyObject *__pyx_kp_s_g_2;
 static PyObject *__pyx_n_s_get_compact_fulldir;
 static PyObject *__pyx_n_s_get_deriv;
+static PyObject *__pyx_n_s_get_im;
 static PyObject *__pyx_n_s_get_real;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_hum_dir;
@@ -2441,26 +2445,27 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_26__imul__(struct __pyx_obj_5p
 static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_28__truediv__(PyObject *__pyx_v_self, PyObject *__pyx_v_other_in); /* proto */
 static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_30__pow__(PyObject *__pyx_v_self, PyObject *__pyx_v_n, CYTHON_UNUSED PyObject *__pyx_v_z); /* proto */
 static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_32get_deriv(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, PyObject *__pyx_v_humdir); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_34copy(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_36sin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_38cos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_40tan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_42arctan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_44arccos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_46arcsin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_48sinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_50arcsinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_52cosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_54arccosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_56tanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_58arctanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_60log10(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_62log(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_64exp(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_66sqrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_68cbrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_70__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_72__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_34get_im(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, PyObject *__pyx_v_humdir); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_36copy(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_38sin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_40cos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_42tan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_44arctan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_46arccos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_48arcsin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_50sinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_52arcsinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_54cosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_56arccosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_58tanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_60arctanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_62log10(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_64log(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_66exp(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_68sqrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_70cbrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_72__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_74__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_5pyoti_6sparse_e(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_hum_dir, __pyx_t_5pyoti_8c_otilib_ord_t __pyx_v_order, CYTHON_UNUSED __pyx_t_5pyoti_8c_otilib_bases_t __pyx_v_nbases); /* proto */
 static PyObject *__pyx_pf_5pyoti_6sparse_2get_deriv(CYTHON_UNUSED PyObject *__pyx_self, PyArrayObject *__pyx_v_inarr, PyObject *__pyx_v_hum_dir); /* proto */
 static PyObject *__pyx_pf_5pyoti_6sparse_4cos(CYTHON_UNUSED PyObject *__pyx_self, struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_val); /* proto */
@@ -5469,7 +5474,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_30__pow__(PyObject *__pyx_v_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":632
+/* "../../pyoti/cython/sparse/num.pxi":637
  * 
  *   #***************************************************************************************************
  *   cpdef coeff_t get_deriv( self, object humdir):             # <<<<<<<<<<<<<<
@@ -5500,7 +5505,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_deri
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_deriv); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 632, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_deriv); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 637, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_33get_deriv)) {
         __Pyx_INCREF(__pyx_t_1);
@@ -5516,10 +5521,10 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_deri
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_v_humdir) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_humdir);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 632, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 637, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 632, __pyx_L1_error)
+        __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 637, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __pyx_r = __pyx_t_5;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -5538,14 +5543,14 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_deri
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":643
+  /* "../../pyoti/cython/sparse/num.pxi":648
  *     cdef ord_t  order
  * 
  *     indx, order = imdir(humdir)             # <<<<<<<<<<<<<<
  *     return soti_get_deriv(indx,order, &self.num, dhl)
  * 
  */
-  __pyx_t_1 = __pyx_f_5pyoti_4core_imdir(__pyx_v_humdir, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 643, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_4core_imdir(__pyx_v_humdir, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 648, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   if (likely(__pyx_t_1 != Py_None)) {
     PyObject* sequence = __pyx_t_1;
@@ -5553,7 +5558,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_deri
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      __PYX_ERR(0, 643, __pyx_L1_error)
+      __PYX_ERR(0, 648, __pyx_L1_error)
     }
     #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
     __pyx_t_2 = PyList_GET_ITEM(sequence, 0); 
@@ -5561,23 +5566,23 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_deri
     __Pyx_INCREF(__pyx_t_2);
     __Pyx_INCREF(__pyx_t_3);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 643, __pyx_L1_error)
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 648, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 643, __pyx_L1_error)
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 648, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
-    __Pyx_RaiseNoneNotIterableError(); __PYX_ERR(0, 643, __pyx_L1_error)
+    __Pyx_RaiseNoneNotIterableError(); __PYX_ERR(0, 648, __pyx_L1_error)
   }
-  __pyx_t_6 = __Pyx_PyInt_As_uint64_t(__pyx_t_2); if (unlikely((__pyx_t_6 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 643, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_uint64_t(__pyx_t_2); if (unlikely((__pyx_t_6 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 648, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_7 = __Pyx_PyInt_As_uint8_t(__pyx_t_3); if (unlikely((__pyx_t_7 == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 643, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyInt_As_uint8_t(__pyx_t_3); if (unlikely((__pyx_t_7 == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 648, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_indx = __pyx_t_6;
   __pyx_v_order = __pyx_t_7;
 
-  /* "../../pyoti/cython/sparse/num.pxi":644
+  /* "../../pyoti/cython/sparse/num.pxi":649
  * 
  *     indx, order = imdir(humdir)
  *     return soti_get_deriv(indx,order, &self.num, dhl)             # <<<<<<<<<<<<<<
@@ -5587,7 +5592,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_deri
   __pyx_r = soti_get_deriv(__pyx_v_indx, __pyx_v_order, (&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":632
+  /* "../../pyoti/cython/sparse/num.pxi":637
  * 
  *   #***************************************************************************************************
  *   cpdef coeff_t get_deriv( self, object humdir):             # <<<<<<<<<<<<<<
@@ -5628,7 +5633,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_32get_deriv(struct __pyx_obj_5
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("get_deriv", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_5pyoti_6sparse_7sotinum_get_deriv(__pyx_v_self, __pyx_v_humdir, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 632, __pyx_L1_error)
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_5pyoti_6sparse_7sotinum_get_deriv(__pyx_v_self, __pyx_v_humdir, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 637, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5645,7 +5650,183 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_32get_deriv(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":650
+/* "../../pyoti/cython/sparse/num.pxi":654
+ * 
+ *   #***************************************************************************************************
+ *   cpdef coeff_t get_im( self, object humdir):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE:      to retrieve the coefficient in the oti direction.
+ */
+
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_35get_im(PyObject *__pyx_v_self, PyObject *__pyx_v_humdir); /*proto*/
+static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_6sparse_7sotinum_get_im(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, PyObject *__pyx_v_humdir, int __pyx_skip_dispatch) {
+  __pyx_t_5pyoti_8c_otilib_imdir_t __pyx_v_indx;
+  __pyx_t_5pyoti_8c_otilib_ord_t __pyx_v_order;
+  __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_r;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_5;
+  __pyx_t_5pyoti_8c_otilib_imdir_t __pyx_t_6;
+  __pyx_t_5pyoti_8c_otilib_ord_t __pyx_t_7;
+  __Pyx_RefNannySetupContext("get_im", 0);
+  /* Check if called by wrapper */
+  if (unlikely(__pyx_skip_dispatch)) ;
+  /* Check if overridden in Python */
+  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
+    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
+      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      #endif
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_im); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 654, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_35get_im)) {
+        __Pyx_INCREF(__pyx_t_1);
+        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+          if (likely(__pyx_t_4)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+            __Pyx_INCREF(__pyx_t_4);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_3, function);
+          }
+        }
+        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_Call2Args(__pyx_t_3, __pyx_t_4, __pyx_v_humdir) : __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_humdir);
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 654, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_t_5 = __pyx_PyFloat_AsDouble(__pyx_t_2); if (unlikely((__pyx_t_5 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 654, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+        __pyx_r = __pyx_t_5;
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        goto __pyx_L0;
+      }
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
+      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
+        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+      }
+      #endif
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    }
+    #endif
+  }
+
+  /* "../../pyoti/cython/sparse/num.pxi":665
+ *     cdef ord_t  order
+ * 
+ *     indx, order = imdir(humdir)             # <<<<<<<<<<<<<<
+ *     return soti_get_item(indx,order, &self.num, dhl)
+ * 
+ */
+  __pyx_t_1 = __pyx_f_5pyoti_4core_imdir(__pyx_v_humdir, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 665, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (likely(__pyx_t_1 != Py_None)) {
+    PyObject* sequence = __pyx_t_1;
+    Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
+    if (unlikely(size != 2)) {
+      if (size > 2) __Pyx_RaiseTooManyValuesError(2);
+      else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
+      __PYX_ERR(0, 665, __pyx_L1_error)
+    }
+    #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+    __pyx_t_2 = PyList_GET_ITEM(sequence, 0); 
+    __pyx_t_3 = PyList_GET_ITEM(sequence, 1); 
+    __Pyx_INCREF(__pyx_t_2);
+    __Pyx_INCREF(__pyx_t_3);
+    #else
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 665, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 665, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    #endif
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  } else {
+    __Pyx_RaiseNoneNotIterableError(); __PYX_ERR(0, 665, __pyx_L1_error)
+  }
+  __pyx_t_6 = __Pyx_PyInt_As_uint64_t(__pyx_t_2); if (unlikely((__pyx_t_6 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 665, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_7 = __Pyx_PyInt_As_uint8_t(__pyx_t_3); if (unlikely((__pyx_t_7 == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 665, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_v_indx = __pyx_t_6;
+  __pyx_v_order = __pyx_t_7;
+
+  /* "../../pyoti/cython/sparse/num.pxi":666
+ * 
+ *     indx, order = imdir(humdir)
+ *     return soti_get_item(indx,order, &self.num, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __pyx_r = soti_get_item(__pyx_v_indx, __pyx_v_order, (&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
+  goto __pyx_L0;
+
+  /* "../../pyoti/cython/sparse/num.pxi":654
+ * 
+ *   #***************************************************************************************************
+ *   cpdef coeff_t get_im( self, object humdir):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE:      to retrieve the coefficient in the oti direction.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_WriteUnraisable("pyoti.sparse.sotinum.get_im", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_35get_im(PyObject *__pyx_v_self, PyObject *__pyx_v_humdir); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_34get_im[] = "\n    PURPOSE:      to retrieve the coefficient in the oti direction.\n\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_35get_im(PyObject *__pyx_v_self, PyObject *__pyx_v_humdir) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_im (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_34get_im(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self), ((PyObject *)__pyx_v_humdir));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_34get_im(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, PyObject *__pyx_v_humdir) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("get_im", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_f_5pyoti_6sparse_7sotinum_get_im(__pyx_v_self, __pyx_v_humdir, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 654, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.get_im", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../pyoti/cython/sparse/num.pxi":672
  * 
  *   #***************************************************************************************************
  *   def copy(self):             # <<<<<<<<<<<<<<
@@ -5654,50 +5835,50 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_32get_deriv(struct __pyx_obj_5
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_35copy(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_34copy[] = "\n    PURPOSE:      To create a copy of the object.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_35copy(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_37copy(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_36copy[] = "\n    PURPOSE:      To create a copy of the object.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_37copy(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("copy (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_34copy(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_36copy(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_34copy(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_36copy(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("copy", 0);
 
-  /* "../../pyoti/cython/sparse/num.pxi":656
- *     #*************************************************************************************************
+  /* "../../pyoti/cython/sparse/num.pxi":679
  *     global dhl
+ * 
  *     cdef sotinum_t res = soti_copy( &self.num, dhl )             # <<<<<<<<<<<<<<
  *     return sotinum.create(&res)
  * 
  */
   __pyx_v_res = soti_copy((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":657
- *     global dhl
+  /* "../../pyoti/cython/sparse/num.pxi":680
+ * 
  *     cdef sotinum_t res = soti_copy( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  * 
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 657, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 680, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":650
+  /* "../../pyoti/cython/sparse/num.pxi":672
  * 
  *   #***************************************************************************************************
  *   def copy(self):             # <<<<<<<<<<<<<<
@@ -5716,7 +5897,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_34copy(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":662
+/* "../../pyoti/cython/sparse/num.pxi":705
  * 
  *   #***************************************************************************************************
  *   cpdef sin(self):             # <<<<<<<<<<<<<<
@@ -5724,7 +5905,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_34copy(struct __pyx_obj_5pyoti
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_37sin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_39sin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -5743,9 +5924,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sin(struct __pyx_obj_5pyoti_6sp
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_sin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 662, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_sin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 705, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_37sin)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_39sin)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -5760,7 +5941,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sin(struct __pyx_obj_5pyoti_6sp
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 662, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 705, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -5781,30 +5962,30 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sin(struct __pyx_obj_5pyoti_6sp
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":668
- *     #*************************************************************************************************
+  /* "../../pyoti/cython/sparse/num.pxi":712
  *     global dhl
+ * 
  *     cdef sotinum_t res = soti_sin( &self.num, dhl )             # <<<<<<<<<<<<<<
  *     return sotinum.create(&res)
  *   #---------------------------------------------------------------------------------------------------
  */
   __pyx_v_res = soti_sin((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":669
- *     global dhl
+  /* "../../pyoti/cython/sparse/num.pxi":713
+ * 
  *     cdef sotinum_t res = soti_sin( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 669, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 713, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":662
+  /* "../../pyoti/cython/sparse/num.pxi":705
  * 
  *   #***************************************************************************************************
  *   cpdef sin(self):             # <<<<<<<<<<<<<<
@@ -5827,26 +6008,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sin(struct __pyx_obj_5pyoti_6sp
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_37sin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_36sin[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_37sin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_39sin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_38sin[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_39sin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("sin (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_36sin(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_38sin(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_36sin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_38sin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sin", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_sin(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 662, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_sin(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 705, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -5863,7 +6044,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_36sin(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":673
+/* "../../pyoti/cython/sparse/num.pxi":717
  * 
  *   #***************************************************************************************************
  *   cpdef cos(self):             # <<<<<<<<<<<<<<
@@ -5871,7 +6052,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_36sin(struct __pyx_obj_5pyoti_
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_39cos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_41cos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -5890,9 +6071,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cos(struct __pyx_obj_5pyoti_6sp
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_cos); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 673, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_cos); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 717, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_39cos)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_41cos)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -5907,7 +6088,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cos(struct __pyx_obj_5pyoti_6sp
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 673, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 717, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -5928,7 +6109,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cos(struct __pyx_obj_5pyoti_6sp
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":679
+  /* "../../pyoti/cython/sparse/num.pxi":723
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_cos( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -5937,7 +6118,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cos(struct __pyx_obj_5pyoti_6sp
  */
   __pyx_v_res = soti_cos((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":680
+  /* "../../pyoti/cython/sparse/num.pxi":724
  *     global dhl
  *     cdef sotinum_t res = soti_cos( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
@@ -5945,13 +6126,13 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cos(struct __pyx_obj_5pyoti_6sp
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 680, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 724, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":673
+  /* "../../pyoti/cython/sparse/num.pxi":717
  * 
  *   #***************************************************************************************************
  *   cpdef cos(self):             # <<<<<<<<<<<<<<
@@ -5974,26 +6155,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cos(struct __pyx_obj_5pyoti_6sp
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_39cos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_38cos[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_39cos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_41cos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_40cos[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_41cos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("cos (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_38cos(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_40cos(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_38cos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_40cos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("cos", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_cos(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 673, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_cos(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 717, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6010,7 +6191,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_38cos(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":684
+/* "../../pyoti/cython/sparse/num.pxi":728
  * 
  *   #***************************************************************************************************
  *   cpdef tan(self):             # <<<<<<<<<<<<<<
@@ -6018,7 +6199,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_38cos(struct __pyx_obj_5pyoti_
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_41tan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_43tan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_tan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -6037,9 +6218,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_tan(struct __pyx_obj_5pyoti_6sp
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tan); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 684, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tan); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 728, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_41tan)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_43tan)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -6054,7 +6235,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_tan(struct __pyx_obj_5pyoti_6sp
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 684, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 728, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -6075,7 +6256,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_tan(struct __pyx_obj_5pyoti_6sp
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":690
+  /* "../../pyoti/cython/sparse/num.pxi":734
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_tan( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -6084,21 +6265,21 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_tan(struct __pyx_obj_5pyoti_6sp
  */
   __pyx_v_res = soti_tan((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":691
+  /* "../../pyoti/cython/sparse/num.pxi":735
  *     global dhl
  *     cdef sotinum_t res = soti_tan( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 691, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 735, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":684
+  /* "../../pyoti/cython/sparse/num.pxi":728
  * 
  *   #***************************************************************************************************
  *   cpdef tan(self):             # <<<<<<<<<<<<<<
@@ -6121,26 +6302,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_tan(struct __pyx_obj_5pyoti_6sp
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_41tan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_40tan[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_41tan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_43tan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_42tan[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_43tan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("tan (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_40tan(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_42tan(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_40tan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_42tan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("tan", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_tan(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 684, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_tan(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 728, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6157,15 +6338,15 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_40tan(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":694
- *   #---------------------------------------------------------------------------------------------------
+/* "../../pyoti/cython/sparse/num.pxi":739
+ * 
  *   #***************************************************************************************************
  *   cpdef arctan(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_43arctan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_45arctan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arctan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -6184,9 +6365,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arctan(struct __pyx_obj_5pyoti_
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arctan); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 694, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arctan); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 739, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_43arctan)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_45arctan)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -6201,7 +6382,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arctan(struct __pyx_obj_5pyoti_
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 694, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 739, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -6222,7 +6403,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arctan(struct __pyx_obj_5pyoti_
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":700
+  /* "../../pyoti/cython/sparse/num.pxi":745
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_atan( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -6231,22 +6412,22 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arctan(struct __pyx_obj_5pyoti_
  */
   __pyx_v_res = soti_atan((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":701
+  /* "../../pyoti/cython/sparse/num.pxi":746
  *     global dhl
  *     cdef sotinum_t res = soti_atan( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 701, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 746, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":694
- *   #---------------------------------------------------------------------------------------------------
+  /* "../../pyoti/cython/sparse/num.pxi":739
+ * 
  *   #***************************************************************************************************
  *   cpdef arctan(self):             # <<<<<<<<<<<<<<
  *     """
@@ -6268,26 +6449,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arctan(struct __pyx_obj_5pyoti_
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_43arctan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_42arctan[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_43arctan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_45arctan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_44arctan[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_45arctan(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("arctan (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_42arctan(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_44arctan(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_42arctan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_44arctan(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("arctan", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arctan(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 694, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arctan(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 739, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6304,15 +6485,15 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_42arctan(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":704
- *   #---------------------------------------------------------------------------------------------------
+/* "../../pyoti/cython/sparse/num.pxi":750
+ * 
  *   #***************************************************************************************************
  *   cpdef arccos(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_45arccos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_47arccos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arccos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -6331,9 +6512,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arccos(struct __pyx_obj_5pyoti_
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arccos); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 704, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arccos); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 750, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_45arccos)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_47arccos)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -6348,7 +6529,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arccos(struct __pyx_obj_5pyoti_
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 704, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 750, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -6369,7 +6550,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arccos(struct __pyx_obj_5pyoti_
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":710
+  /* "../../pyoti/cython/sparse/num.pxi":756
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_acos( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -6378,22 +6559,22 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arccos(struct __pyx_obj_5pyoti_
  */
   __pyx_v_res = soti_acos((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":711
+  /* "../../pyoti/cython/sparse/num.pxi":757
  *     global dhl
  *     cdef sotinum_t res = soti_acos( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 711, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 757, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":704
- *   #---------------------------------------------------------------------------------------------------
+  /* "../../pyoti/cython/sparse/num.pxi":750
+ * 
  *   #***************************************************************************************************
  *   cpdef arccos(self):             # <<<<<<<<<<<<<<
  *     """
@@ -6415,26 +6596,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arccos(struct __pyx_obj_5pyoti_
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_45arccos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_44arccos[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_45arccos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_47arccos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_46arccos[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_47arccos(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("arccos (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_44arccos(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_46arccos(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_44arccos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_46arccos(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("arccos", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arccos(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 704, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arccos(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 750, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6451,15 +6632,15 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_44arccos(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":714
- *   #---------------------------------------------------------------------------------------------------
+/* "../../pyoti/cython/sparse/num.pxi":761
+ * 
  *   #***************************************************************************************************
  *   cpdef arcsin(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_47arcsin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_49arcsin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -6478,9 +6659,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsin(struct __pyx_obj_5pyoti_
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arcsin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 714, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arcsin); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 761, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_47arcsin)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_49arcsin)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -6495,7 +6676,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsin(struct __pyx_obj_5pyoti_
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 714, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 761, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -6516,7 +6697,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsin(struct __pyx_obj_5pyoti_
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":720
+  /* "../../pyoti/cython/sparse/num.pxi":767
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_asin( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -6525,22 +6706,22 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsin(struct __pyx_obj_5pyoti_
  */
   __pyx_v_res = soti_asin((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":721
+  /* "../../pyoti/cython/sparse/num.pxi":768
  *     global dhl
  *     cdef sotinum_t res = soti_asin( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 721, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 768, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":714
- *   #---------------------------------------------------------------------------------------------------
+  /* "../../pyoti/cython/sparse/num.pxi":761
+ * 
  *   #***************************************************************************************************
  *   cpdef arcsin(self):             # <<<<<<<<<<<<<<
  *     """
@@ -6562,26 +6743,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsin(struct __pyx_obj_5pyoti_
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_47arcsin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_46arcsin[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_47arcsin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_49arcsin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_48arcsin[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_49arcsin(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("arcsin (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_46arcsin(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_48arcsin(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_46arcsin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_48arcsin(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("arcsin", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arcsin(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 714, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arcsin(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 761, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6598,15 +6779,15 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_46arcsin(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":724
- *   #---------------------------------------------------------------------------------------------------
+/* "../../pyoti/cython/sparse/num.pxi":772
+ * 
  *   #***************************************************************************************************
  *   cpdef sinh(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_49sinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_51sinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -6625,9 +6806,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sinh(struct __pyx_obj_5pyoti_6s
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_sinh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 724, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_sinh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 772, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_49sinh)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_51sinh)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -6642,7 +6823,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sinh(struct __pyx_obj_5pyoti_6s
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 724, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 772, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -6663,7 +6844,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sinh(struct __pyx_obj_5pyoti_6s
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":730
+  /* "../../pyoti/cython/sparse/num.pxi":778
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_sinh( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -6672,22 +6853,22 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sinh(struct __pyx_obj_5pyoti_6s
  */
   __pyx_v_res = soti_sinh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":731
+  /* "../../pyoti/cython/sparse/num.pxi":779
  *     global dhl
  *     cdef sotinum_t res = soti_sinh( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 731, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 779, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":724
- *   #---------------------------------------------------------------------------------------------------
+  /* "../../pyoti/cython/sparse/num.pxi":772
+ * 
  *   #***************************************************************************************************
  *   cpdef sinh(self):             # <<<<<<<<<<<<<<
  *     """
@@ -6709,26 +6890,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sinh(struct __pyx_obj_5pyoti_6s
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_49sinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_48sinh[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_49sinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_51sinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_50sinh[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_51sinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("sinh (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_48sinh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_50sinh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_48sinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_50sinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sinh", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_sinh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 724, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_sinh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 772, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6745,15 +6926,15 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_48sinh(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":734
- *   #---------------------------------------------------------------------------------------------------
+/* "../../pyoti/cython/sparse/num.pxi":783
+ * 
  *   #***************************************************************************************************
  *   cpdef arcsinh(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_51arcsinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_53arcsinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -6772,9 +6953,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsinh(struct __pyx_obj_5pyoti
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arcsinh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 734, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arcsinh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 783, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_51arcsinh)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_53arcsinh)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -6789,7 +6970,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsinh(struct __pyx_obj_5pyoti
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 734, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 783, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -6810,7 +6991,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsinh(struct __pyx_obj_5pyoti
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":740
+  /* "../../pyoti/cython/sparse/num.pxi":789
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_asinh( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -6819,22 +7000,22 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsinh(struct __pyx_obj_5pyoti
  */
   __pyx_v_res = soti_asinh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":741
+  /* "../../pyoti/cython/sparse/num.pxi":790
  *     global dhl
  *     cdef sotinum_t res = soti_asinh( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 741, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 790, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":734
- *   #---------------------------------------------------------------------------------------------------
+  /* "../../pyoti/cython/sparse/num.pxi":783
+ * 
  *   #***************************************************************************************************
  *   cpdef arcsinh(self):             # <<<<<<<<<<<<<<
  *     """
@@ -6856,26 +7037,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arcsinh(struct __pyx_obj_5pyoti
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_51arcsinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_50arcsinh[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_51arcsinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_53arcsinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_52arcsinh[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_53arcsinh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("arcsinh (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_50arcsinh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_52arcsinh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_50arcsinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_52arcsinh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("arcsinh", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arcsinh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 734, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arcsinh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 783, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -6892,15 +7073,15 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_50arcsinh(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":744
- *   #---------------------------------------------------------------------------------------------------
+/* "../../pyoti/cython/sparse/num.pxi":794
+ * 
  *   #***************************************************************************************************
  *   cpdef cosh(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_53cosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_55cosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -6919,744 +7100,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cosh(struct __pyx_obj_5pyoti_6s
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_cosh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 744, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_cosh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 794, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_53cosh)) {
-        __Pyx_XDECREF(__pyx_r);
-        __Pyx_INCREF(__pyx_t_1);
-        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-          if (likely(__pyx_t_4)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-            __Pyx_INCREF(__pyx_t_4);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_3, function);
-          }
-        }
-        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 744, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_r = __pyx_t_2;
-        __pyx_t_2 = 0;
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        goto __pyx_L0;
-      }
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
-      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
-        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-      }
-      #endif
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    }
-    #endif
-  }
-
-  /* "../../pyoti/cython/sparse/num.pxi":750
- *     #*************************************************************************************************
- *     global dhl
- *     cdef sotinum_t res = soti_cosh( &self.num, dhl )             # <<<<<<<<<<<<<<
- *     return sotinum.create(&res)
- *   #---------------------------------------------------------------------------------------------------
- */
-  __pyx_v_res = soti_cosh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
-
-  /* "../../pyoti/cython/sparse/num.pxi":751
- *     global dhl
- *     cdef sotinum_t res = soti_cosh( &self.num, dhl )
- *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 751, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "../../pyoti/cython/sparse/num.pxi":744
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef cosh(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.cosh", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_53cosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_52cosh[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_53cosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("cosh (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_52cosh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_52cosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("cosh", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_cosh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 744, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.cosh", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "../../pyoti/cython/sparse/num.pxi":754
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef arccosh(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_55arccosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arccosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
-  sotinum_t __pyx_v_res;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("arccosh", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
-    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
-      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arccosh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 754, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_55arccosh)) {
-        __Pyx_XDECREF(__pyx_r);
-        __Pyx_INCREF(__pyx_t_1);
-        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-          if (likely(__pyx_t_4)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-            __Pyx_INCREF(__pyx_t_4);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_3, function);
-          }
-        }
-        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 754, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_r = __pyx_t_2;
-        __pyx_t_2 = 0;
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        goto __pyx_L0;
-      }
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
-      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
-        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-      }
-      #endif
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    }
-    #endif
-  }
-
-  /* "../../pyoti/cython/sparse/num.pxi":760
- *     #*************************************************************************************************
- *     global dhl
- *     cdef sotinum_t res = soti_acosh( &self.num, dhl )             # <<<<<<<<<<<<<<
- *     return sotinum.create(&res)
- *   #---------------------------------------------------------------------------------------------------
- */
-  __pyx_v_res = soti_acosh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
-
-  /* "../../pyoti/cython/sparse/num.pxi":761
- *     global dhl
- *     cdef sotinum_t res = soti_acosh( &self.num, dhl )
- *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 761, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "../../pyoti/cython/sparse/num.pxi":754
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef arccosh(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.arccosh", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_55arccosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_54arccosh[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_55arccosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("arccosh (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_54arccosh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_54arccosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("arccosh", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arccosh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 754, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.arccosh", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "../../pyoti/cython/sparse/num.pxi":764
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef tanh(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_57tanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_tanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
-  sotinum_t __pyx_v_res;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("tanh", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
-    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
-      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tanh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 764, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_57tanh)) {
-        __Pyx_XDECREF(__pyx_r);
-        __Pyx_INCREF(__pyx_t_1);
-        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-          if (likely(__pyx_t_4)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-            __Pyx_INCREF(__pyx_t_4);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_3, function);
-          }
-        }
-        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 764, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_r = __pyx_t_2;
-        __pyx_t_2 = 0;
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        goto __pyx_L0;
-      }
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
-      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
-        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-      }
-      #endif
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    }
-    #endif
-  }
-
-  /* "../../pyoti/cython/sparse/num.pxi":770
- *     #*************************************************************************************************
- *     global dhl
- *     cdef sotinum_t res = soti_tanh( &self.num, dhl )             # <<<<<<<<<<<<<<
- *     return sotinum.create(&res)
- *   #---------------------------------------------------------------------------------------------------
- */
-  __pyx_v_res = soti_tanh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
-
-  /* "../../pyoti/cython/sparse/num.pxi":771
- *     global dhl
- *     cdef sotinum_t res = soti_tanh( &self.num, dhl )
- *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 771, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "../../pyoti/cython/sparse/num.pxi":764
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef tanh(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.tanh", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_57tanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_56tanh[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_57tanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("tanh (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_56tanh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_56tanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("tanh", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_tanh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 764, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.tanh", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "../../pyoti/cython/sparse/num.pxi":774
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef arctanh(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_59arctanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arctanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
-  sotinum_t __pyx_v_res;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("arctanh", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
-    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
-      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arctanh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 774, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_59arctanh)) {
-        __Pyx_XDECREF(__pyx_r);
-        __Pyx_INCREF(__pyx_t_1);
-        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-          if (likely(__pyx_t_4)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-            __Pyx_INCREF(__pyx_t_4);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_3, function);
-          }
-        }
-        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 774, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_r = __pyx_t_2;
-        __pyx_t_2 = 0;
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        goto __pyx_L0;
-      }
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
-      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
-        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-      }
-      #endif
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    }
-    #endif
-  }
-
-  /* "../../pyoti/cython/sparse/num.pxi":780
- *     #*************************************************************************************************
- *     global dhl
- *     cdef sotinum_t res = soti_atanh( &self.num, dhl )             # <<<<<<<<<<<<<<
- *     return sotinum.create(&res)
- *   #---------------------------------------------------------------------------------------------------
- */
-  __pyx_v_res = soti_atanh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
-
-  /* "../../pyoti/cython/sparse/num.pxi":781
- *     global dhl
- *     cdef sotinum_t res = soti_atanh( &self.num, dhl )
- *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 781, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "../../pyoti/cython/sparse/num.pxi":774
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef arctanh(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.arctanh", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_59arctanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_58arctanh[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_59arctanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("arctanh (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_58arctanh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_58arctanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("arctanh", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arctanh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 774, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.arctanh", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "../../pyoti/cython/sparse/num.pxi":784
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef log10(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_61log10(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_log10(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
-  sotinum_t __pyx_v_res;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("log10", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
-    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
-      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_log10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 784, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_61log10)) {
-        __Pyx_XDECREF(__pyx_r);
-        __Pyx_INCREF(__pyx_t_1);
-        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
-          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
-          if (likely(__pyx_t_4)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
-            __Pyx_INCREF(__pyx_t_4);
-            __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_3, function);
-          }
-        }
-        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
-        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 784, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_2);
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_r = __pyx_t_2;
-        __pyx_t_2 = 0;
-        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-        goto __pyx_L0;
-      }
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
-      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
-        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-      }
-      #endif
-      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    }
-    #endif
-  }
-
-  /* "../../pyoti/cython/sparse/num.pxi":790
- *     #*************************************************************************************************
- *     global dhl
- *     cdef sotinum_t res = soti_log10( &self.num, dhl )             # <<<<<<<<<<<<<<
- *     return sotinum.create(&res)
- *   #---------------------------------------------------------------------------------------------------
- */
-  __pyx_v_res = soti_log10((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
-
-  /* "../../pyoti/cython/sparse/num.pxi":791
- *     global dhl
- *     cdef sotinum_t res = soti_log10( &self.num, dhl )
- *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- */
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 791, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* "../../pyoti/cython/sparse/num.pxi":784
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef log10(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_4);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.log10", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_61log10(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_60log10[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_61log10(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
-  PyObject *__pyx_r = 0;
-  __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("log10 (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_60log10(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
-
-  /* function exit code */
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_60log10(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  __Pyx_RefNannySetupContext("log10", 0);
-  __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_log10(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 784, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_r = __pyx_t_1;
-  __pyx_t_1 = 0;
-  goto __pyx_L0;
-
-  /* function exit code */
-  __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_AddTraceback("pyoti.sparse.sotinum.log10", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
-  __Pyx_RefNannyFinishContext();
-  return __pyx_r;
-}
-
-/* "../../pyoti/cython/sparse/num.pxi":794
- *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
- *   cpdef log(self):             # <<<<<<<<<<<<<<
- *     """
- *     PURPOSE: function.
- */
-
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_63log(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_log(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
-  sotinum_t __pyx_v_res;
-  PyObject *__pyx_r = NULL;
-  __Pyx_RefNannyDeclarations
-  PyObject *__pyx_t_1 = NULL;
-  PyObject *__pyx_t_2 = NULL;
-  PyObject *__pyx_t_3 = NULL;
-  PyObject *__pyx_t_4 = NULL;
-  __Pyx_RefNannySetupContext("log", 0);
-  /* Check if called by wrapper */
-  if (unlikely(__pyx_skip_dispatch)) ;
-  /* Check if overridden in Python */
-  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
-    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
-    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
-    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
-      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
-      #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_log); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 794, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_63log)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_55cosh)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -7695,18 +7141,18 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_log(struct __pyx_obj_5pyoti_6sp
   /* "../../pyoti/cython/sparse/num.pxi":800
  *     #*************************************************************************************************
  *     global dhl
- *     cdef sotinum_t res = soti_log( &self.num, dhl )             # <<<<<<<<<<<<<<
+ *     cdef sotinum_t res = soti_cosh( &self.num, dhl )             # <<<<<<<<<<<<<<
  *     return sotinum.create(&res)
  *   #---------------------------------------------------------------------------------------------------
  */
-  __pyx_v_res = soti_log((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
+  __pyx_v_res = soti_cosh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
   /* "../../pyoti/cython/sparse/num.pxi":801
  *     global dhl
- *     cdef sotinum_t res = soti_log( &self.num, dhl )
+ *     cdef sotinum_t res = soti_cosh( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 801, __pyx_L1_error)
@@ -7716,7 +7162,742 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_log(struct __pyx_obj_5pyoti_6sp
   goto __pyx_L0;
 
   /* "../../pyoti/cython/sparse/num.pxi":794
+ * 
+ *   #***************************************************************************************************
+ *   cpdef cosh(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.cosh", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_55cosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_54cosh[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_55cosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("cosh (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_54cosh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_54cosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("cosh", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_cosh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 794, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.cosh", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../pyoti/cython/sparse/num.pxi":805
+ * 
+ *   #***************************************************************************************************
+ *   cpdef arccosh(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_57arccosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arccosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
+  sotinum_t __pyx_v_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("arccosh", 0);
+  /* Check if called by wrapper */
+  if (unlikely(__pyx_skip_dispatch)) ;
+  /* Check if overridden in Python */
+  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
+    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
+      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      #endif
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arccosh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 805, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_57arccosh)) {
+        __Pyx_XDECREF(__pyx_r);
+        __Pyx_INCREF(__pyx_t_1);
+        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+          if (likely(__pyx_t_4)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+            __Pyx_INCREF(__pyx_t_4);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_3, function);
+          }
+        }
+        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 805, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_r = __pyx_t_2;
+        __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        goto __pyx_L0;
+      }
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
+      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
+        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+      }
+      #endif
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    }
+    #endif
+  }
+
+  /* "../../pyoti/cython/sparse/num.pxi":811
+ *     #*************************************************************************************************
+ *     global dhl
+ *     cdef sotinum_t res = soti_acosh( &self.num, dhl )             # <<<<<<<<<<<<<<
+ *     return sotinum.create(&res)
  *   #---------------------------------------------------------------------------------------------------
+ */
+  __pyx_v_res = soti_acosh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
+
+  /* "../../pyoti/cython/sparse/num.pxi":812
+ *     global dhl
+ *     cdef sotinum_t res = soti_acosh( &self.num, dhl )
+ *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
+ *   #---------------------------------------------------------------------------------------------------
+ * 
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 812, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../pyoti/cython/sparse/num.pxi":805
+ * 
+ *   #***************************************************************************************************
+ *   cpdef arccosh(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.arccosh", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_57arccosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_56arccosh[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_57arccosh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("arccosh (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_56arccosh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_56arccosh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("arccosh", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arccosh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 805, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.arccosh", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../pyoti/cython/sparse/num.pxi":816
+ * 
+ *   #***************************************************************************************************
+ *   cpdef tanh(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_59tanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_tanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
+  sotinum_t __pyx_v_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("tanh", 0);
+  /* Check if called by wrapper */
+  if (unlikely(__pyx_skip_dispatch)) ;
+  /* Check if overridden in Python */
+  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
+    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
+      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      #endif
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_tanh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 816, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_59tanh)) {
+        __Pyx_XDECREF(__pyx_r);
+        __Pyx_INCREF(__pyx_t_1);
+        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+          if (likely(__pyx_t_4)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+            __Pyx_INCREF(__pyx_t_4);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_3, function);
+          }
+        }
+        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 816, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_r = __pyx_t_2;
+        __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        goto __pyx_L0;
+      }
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
+      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
+        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+      }
+      #endif
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    }
+    #endif
+  }
+
+  /* "../../pyoti/cython/sparse/num.pxi":822
+ *     #*************************************************************************************************
+ *     global dhl
+ *     cdef sotinum_t res = soti_tanh( &self.num, dhl )             # <<<<<<<<<<<<<<
+ *     return sotinum.create(&res)
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __pyx_v_res = soti_tanh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
+
+  /* "../../pyoti/cython/sparse/num.pxi":823
+ *     global dhl
+ *     cdef sotinum_t res = soti_tanh( &self.num, dhl )
+ *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
+ *   #---------------------------------------------------------------------------------------------------
+ * 
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 823, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../pyoti/cython/sparse/num.pxi":816
+ * 
+ *   #***************************************************************************************************
+ *   cpdef tanh(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.tanh", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_59tanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_58tanh[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_59tanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("tanh (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_58tanh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_58tanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("tanh", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_tanh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 816, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.tanh", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../pyoti/cython/sparse/num.pxi":827
+ * 
+ *   #***************************************************************************************************
+ *   cpdef arctanh(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_61arctanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_arctanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
+  sotinum_t __pyx_v_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("arctanh", 0);
+  /* Check if called by wrapper */
+  if (unlikely(__pyx_skip_dispatch)) ;
+  /* Check if overridden in Python */
+  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
+    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
+      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      #endif
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_arctanh); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 827, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_61arctanh)) {
+        __Pyx_XDECREF(__pyx_r);
+        __Pyx_INCREF(__pyx_t_1);
+        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+          if (likely(__pyx_t_4)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+            __Pyx_INCREF(__pyx_t_4);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_3, function);
+          }
+        }
+        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 827, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_r = __pyx_t_2;
+        __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        goto __pyx_L0;
+      }
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
+      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
+        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+      }
+      #endif
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    }
+    #endif
+  }
+
+  /* "../../pyoti/cython/sparse/num.pxi":833
+ *     #*************************************************************************************************
+ *     global dhl
+ *     cdef sotinum_t res = soti_atanh( &self.num, dhl )             # <<<<<<<<<<<<<<
+ *     return sotinum.create(&res)
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __pyx_v_res = soti_atanh((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
+
+  /* "../../pyoti/cython/sparse/num.pxi":834
+ *     global dhl
+ *     cdef sotinum_t res = soti_atanh( &self.num, dhl )
+ *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
+ *   #---------------------------------------------------------------------------------------------------
+ * 
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 834, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../pyoti/cython/sparse/num.pxi":827
+ * 
+ *   #***************************************************************************************************
+ *   cpdef arctanh(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.arctanh", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_61arctanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_60arctanh[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_61arctanh(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("arctanh (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_60arctanh(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_60arctanh(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("arctanh", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_arctanh(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 827, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.arctanh", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../pyoti/cython/sparse/num.pxi":838
+ * 
+ *   #***************************************************************************************************
+ *   cpdef log10(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_63log10(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_log10(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
+  sotinum_t __pyx_v_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("log10", 0);
+  /* Check if called by wrapper */
+  if (unlikely(__pyx_skip_dispatch)) ;
+  /* Check if overridden in Python */
+  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
+    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
+      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      #endif
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_log10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 838, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_63log10)) {
+        __Pyx_XDECREF(__pyx_r);
+        __Pyx_INCREF(__pyx_t_1);
+        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+          if (likely(__pyx_t_4)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+            __Pyx_INCREF(__pyx_t_4);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_3, function);
+          }
+        }
+        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 838, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_r = __pyx_t_2;
+        __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        goto __pyx_L0;
+      }
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
+      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
+        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+      }
+      #endif
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    }
+    #endif
+  }
+
+  /* "../../pyoti/cython/sparse/num.pxi":844
+ *     #*************************************************************************************************
+ *     global dhl
+ *     cdef sotinum_t res = soti_log10( &self.num, dhl )             # <<<<<<<<<<<<<<
+ *     return sotinum.create(&res)
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __pyx_v_res = soti_log10((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
+
+  /* "../../pyoti/cython/sparse/num.pxi":845
+ *     global dhl
+ *     cdef sotinum_t res = soti_log10( &self.num, dhl )
+ *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
+ *   #---------------------------------------------------------------------------------------------------
+ * 
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 845, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../pyoti/cython/sparse/num.pxi":838
+ * 
+ *   #***************************************************************************************************
+ *   cpdef log10(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.log10", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_63log10(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_62log10[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_63log10(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("log10 (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_62log10(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_62log10(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("log10", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_log10(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 838, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.sotinum.log10", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../pyoti/cython/sparse/num.pxi":849
+ * 
+ *   #***************************************************************************************************
+ *   cpdef log(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: function.
+ */
+
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_65log(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_log(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
+  sotinum_t __pyx_v_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  __Pyx_RefNannySetupContext("log", 0);
+  /* Check if called by wrapper */
+  if (unlikely(__pyx_skip_dispatch)) ;
+  /* Check if overridden in Python */
+  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
+    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
+      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      #endif
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_log); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 849, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_65log)) {
+        __Pyx_XDECREF(__pyx_r);
+        __Pyx_INCREF(__pyx_t_1);
+        __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+          __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+          if (likely(__pyx_t_4)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+            __Pyx_INCREF(__pyx_t_4);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_3, function);
+          }
+        }
+        __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
+        __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 849, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_r = __pyx_t_2;
+        __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        goto __pyx_L0;
+      }
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
+      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
+        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+      }
+      #endif
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    }
+    #endif
+  }
+
+  /* "../../pyoti/cython/sparse/num.pxi":855
+ *     #*************************************************************************************************
+ *     global dhl
+ *     cdef sotinum_t res = soti_log( &self.num, dhl )             # <<<<<<<<<<<<<<
+ *     return sotinum.create(&res)
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __pyx_v_res = soti_log((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
+
+  /* "../../pyoti/cython/sparse/num.pxi":856
+ *     global dhl
+ *     cdef sotinum_t res = soti_log( &self.num, dhl )
+ *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
+ *   #---------------------------------------------------------------------------------------------------
+ * 
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 856, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../pyoti/cython/sparse/num.pxi":849
+ * 
  *   #***************************************************************************************************
  *   cpdef log(self):             # <<<<<<<<<<<<<<
  *     """
@@ -7738,26 +7919,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_log(struct __pyx_obj_5pyoti_6sp
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_63log(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_62log[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_63log(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_65log(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_64log[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_65log(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("log (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_62log(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_64log(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_62log(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_64log(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("log", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_log(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 794, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_log(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 849, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7774,15 +7955,15 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_62log(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":804
- *   #---------------------------------------------------------------------------------------------------
+/* "../../pyoti/cython/sparse/num.pxi":860
+ * 
  *   #***************************************************************************************************
  *   cpdef exp(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_65exp(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_67exp(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_exp(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -7801,9 +7982,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_exp(struct __pyx_obj_5pyoti_6sp
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_exp); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 804, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_exp); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 860, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_65exp)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_67exp)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -7818,7 +7999,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_exp(struct __pyx_obj_5pyoti_6sp
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 804, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 860, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -7839,7 +8020,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_exp(struct __pyx_obj_5pyoti_6sp
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":810
+  /* "../../pyoti/cython/sparse/num.pxi":866
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_exp( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -7848,22 +8029,22 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_exp(struct __pyx_obj_5pyoti_6sp
  */
   __pyx_v_res = soti_exp((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":811
+  /* "../../pyoti/cython/sparse/num.pxi":867
  *     global dhl
  *     cdef sotinum_t res = soti_exp( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
- *   #***************************************************************************************************
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 811, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 867, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":804
- *   #---------------------------------------------------------------------------------------------------
+  /* "../../pyoti/cython/sparse/num.pxi":860
+ * 
  *   #***************************************************************************************************
  *   cpdef exp(self):             # <<<<<<<<<<<<<<
  *     """
@@ -7885,26 +8066,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_exp(struct __pyx_obj_5pyoti_6sp
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_65exp(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_64exp[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_65exp(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_67exp(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_66exp[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_67exp(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("exp (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_64exp(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_66exp(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_64exp(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_66exp(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("exp", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_exp(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 804, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_exp(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 860, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -7921,15 +8102,15 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_64exp(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":814
- *   #---------------------------------------------------------------------------------------------------
+/* "../../pyoti/cython/sparse/num.pxi":871
+ * 
  *   #***************************************************************************************************
  *   cpdef sqrt(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_67sqrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_69sqrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sqrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -7948,9 +8129,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sqrt(struct __pyx_obj_5pyoti_6s
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_sqrt); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 814, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_sqrt); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 871, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_67sqrt)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_69sqrt)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -7965,7 +8146,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sqrt(struct __pyx_obj_5pyoti_6s
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 814, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 871, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -7986,7 +8167,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sqrt(struct __pyx_obj_5pyoti_6s
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":820
+  /* "../../pyoti/cython/sparse/num.pxi":877
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_sqrt( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -7995,22 +8176,22 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sqrt(struct __pyx_obj_5pyoti_6s
  */
   __pyx_v_res = soti_sqrt((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":821
+  /* "../../pyoti/cython/sparse/num.pxi":878
  *     global dhl
  *     cdef sotinum_t res = soti_sqrt( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
  *   #---------------------------------------------------------------------------------------------------
- * #***************************************************************************************************
+ * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 821, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 878, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":814
- *   #---------------------------------------------------------------------------------------------------
+  /* "../../pyoti/cython/sparse/num.pxi":871
+ * 
  *   #***************************************************************************************************
  *   cpdef sqrt(self):             # <<<<<<<<<<<<<<
  *     """
@@ -8032,26 +8213,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_sqrt(struct __pyx_obj_5pyoti_6s
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_67sqrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_66sqrt[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_67sqrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_69sqrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_68sqrt[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_69sqrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("sqrt (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_66sqrt(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_68sqrt(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_66sqrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_68sqrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sqrt", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_sqrt(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 814, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_sqrt(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 871, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -8068,15 +8249,15 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_66sqrt(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/sparse/num.pxi":824
- *   #---------------------------------------------------------------------------------------------------
- * #***************************************************************************************************
+/* "../../pyoti/cython/sparse/num.pxi":882
+ * 
+ *   #***************************************************************************************************
  *   cpdef cbrt(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
  */
 
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_69cbrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_71cbrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cbrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, int __pyx_skip_dispatch) {
   sotinum_t __pyx_v_res;
   PyObject *__pyx_r = NULL;
@@ -8095,9 +8276,9 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cbrt(struct __pyx_obj_5pyoti_6s
     if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
       PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
       #endif
-      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_cbrt); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 824, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_cbrt); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 882, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_69cbrt)) {
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_6sparse_7sotinum_71cbrt)) {
         __Pyx_XDECREF(__pyx_r);
         __Pyx_INCREF(__pyx_t_1);
         __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
@@ -8112,7 +8293,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cbrt(struct __pyx_obj_5pyoti_6s
         }
         __pyx_t_2 = (__pyx_t_4) ? __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4) : __Pyx_PyObject_CallNoArg(__pyx_t_3);
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
-        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 824, __pyx_L1_error)
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 882, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_r = __pyx_t_2;
@@ -8133,7 +8314,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cbrt(struct __pyx_obj_5pyoti_6s
     #endif
   }
 
-  /* "../../pyoti/cython/sparse/num.pxi":830
+  /* "../../pyoti/cython/sparse/num.pxi":888
  *     #*************************************************************************************************
  *     global dhl
  *     cdef sotinum_t res = soti_cbrt( &self.num, dhl )             # <<<<<<<<<<<<<<
@@ -8142,7 +8323,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cbrt(struct __pyx_obj_5pyoti_6s
  */
   __pyx_v_res = soti_cbrt((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../pyoti/cython/sparse/num.pxi":831
+  /* "../../pyoti/cython/sparse/num.pxi":889
  *     global dhl
  *     cdef sotinum_t res = soti_cbrt( &self.num, dhl )
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
@@ -8150,15 +8331,15 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cbrt(struct __pyx_obj_5pyoti_6s
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 831, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 889, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/sparse/num.pxi":824
- *   #---------------------------------------------------------------------------------------------------
- * #***************************************************************************************************
+  /* "../../pyoti/cython/sparse/num.pxi":882
+ * 
+ *   #***************************************************************************************************
  *   cpdef cbrt(self):             # <<<<<<<<<<<<<<
  *     """
  *     PURPOSE: function.
@@ -8179,26 +8360,26 @@ static PyObject *__pyx_f_5pyoti_6sparse_7sotinum_cbrt(struct __pyx_obj_5pyoti_6s
 }
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_69cbrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_7sotinum_68cbrt[] = "\n    PURPOSE: function.\n    ";
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_69cbrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_71cbrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_7sotinum_70cbrt[] = "\n    PURPOSE: function.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_71cbrt(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("cbrt (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_68cbrt(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_70cbrt(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_68cbrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_70cbrt(struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("cbrt", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_cbrt(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 824, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5pyoti_6sparse_7sotinum_cbrt(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 882, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -8222,19 +8403,19 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_68cbrt(struct __pyx_obj_5pyoti
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_71__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_71__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_73__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_73__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_70__reduce_cython__(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_72__reduce_cython__(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_70__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_72__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -8276,19 +8457,19 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_70__reduce_cython__(CYTHON_UNU
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_73__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_73__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_75__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_7sotinum_75__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_72__setstate_cython__(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_7sotinum_74__setstate_cython__(((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_72__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_74__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -16060,26 +16241,27 @@ static PyObject *__pyx_getprop_5pyoti_6sparse_7sotinum_order(PyObject *o, CYTHON
 static PyMethodDef __pyx_methods_5pyoti_6sparse_sotinum[] = {
   {"short_repr", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_7short_repr, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_6short_repr},
   {"get_deriv", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_33get_deriv, METH_O, __pyx_doc_5pyoti_6sparse_7sotinum_32get_deriv},
-  {"copy", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_35copy, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_34copy},
-  {"sin", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_37sin, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_36sin},
-  {"cos", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_39cos, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_38cos},
-  {"tan", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_41tan, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_40tan},
-  {"arctan", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_43arctan, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_42arctan},
-  {"arccos", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_45arccos, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_44arccos},
-  {"arcsin", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_47arcsin, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_46arcsin},
-  {"sinh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_49sinh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_48sinh},
-  {"arcsinh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_51arcsinh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_50arcsinh},
-  {"cosh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_53cosh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_52cosh},
-  {"arccosh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_55arccosh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_54arccosh},
-  {"tanh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_57tanh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_56tanh},
-  {"arctanh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_59arctanh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_58arctanh},
-  {"log10", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_61log10, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_60log10},
-  {"log", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_63log, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_62log},
-  {"exp", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_65exp, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_64exp},
-  {"sqrt", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_67sqrt, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_66sqrt},
-  {"cbrt", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_69cbrt, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_68cbrt},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_71__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_73__setstate_cython__, METH_O, 0},
+  {"get_im", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_35get_im, METH_O, __pyx_doc_5pyoti_6sparse_7sotinum_34get_im},
+  {"copy", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_37copy, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_36copy},
+  {"sin", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_39sin, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_38sin},
+  {"cos", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_41cos, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_40cos},
+  {"tan", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_43tan, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_42tan},
+  {"arctan", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_45arctan, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_44arctan},
+  {"arccos", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_47arccos, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_46arccos},
+  {"arcsin", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_49arcsin, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_48arcsin},
+  {"sinh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_51sinh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_50sinh},
+  {"arcsinh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_53arcsinh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_52arcsinh},
+  {"cosh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_55cosh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_54cosh},
+  {"arccosh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_57arccosh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_56arccosh},
+  {"tanh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_59tanh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_58tanh},
+  {"arctanh", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_61arctanh, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_60arctanh},
+  {"log10", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_63log10, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_62log10},
+  {"log", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_65log, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_64log},
+  {"exp", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_67exp, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_66exp},
+  {"sqrt", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_69sqrt, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_68sqrt},
+  {"cbrt", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_71cbrt, METH_NOARGS, __pyx_doc_5pyoti_6sparse_7sotinum_70cbrt},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_73__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_5pyoti_6sparse_7sotinum_75__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -16509,6 +16691,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_g_2, __pyx_k_g_2, sizeof(__pyx_k_g_2), 0, 0, 1, 0},
   {&__pyx_n_s_get_compact_fulldir, __pyx_k_get_compact_fulldir, sizeof(__pyx_k_get_compact_fulldir), 0, 0, 1, 1},
   {&__pyx_n_s_get_deriv, __pyx_k_get_deriv, sizeof(__pyx_k_get_deriv), 0, 0, 1, 1},
+  {&__pyx_n_s_get_im, __pyx_k_get_im, sizeof(__pyx_k_get_im), 0, 0, 1, 1},
   {&__pyx_n_s_get_real, __pyx_k_get_real, sizeof(__pyx_k_get_real), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_hum_dir, __pyx_k_hum_dir, sizeof(__pyx_k_hum_dir), 0, 0, 1, 1},
@@ -16850,6 +17033,7 @@ static int __Pyx_modinit_type_init_code(void) {
   __pyx_vtabptr_5pyoti_6sparse_sotinum = &__pyx_vtable_5pyoti_6sparse_sotinum;
   __pyx_vtable_5pyoti_6sparse_sotinum.create = (struct __pyx_obj_5pyoti_6sparse_sotinum *(*)(sotinum_t *, struct __pyx_opt_args_5pyoti_6sparse_7sotinum_create *__pyx_optional_args))__pyx_f_5pyoti_6sparse_7sotinum_create;
   __pyx_vtable_5pyoti_6sparse_sotinum.get_deriv = (__pyx_t_5pyoti_8c_otilib_coeff_t (*)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch))__pyx_f_5pyoti_6sparse_7sotinum_get_deriv;
+  __pyx_vtable_5pyoti_6sparse_sotinum.get_im = (__pyx_t_5pyoti_8c_otilib_coeff_t (*)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch))__pyx_f_5pyoti_6sparse_7sotinum_get_im;
   __pyx_vtable_5pyoti_6sparse_sotinum.sin = (PyObject *(*)(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch))__pyx_f_5pyoti_6sparse_7sotinum_sin;
   __pyx_vtable_5pyoti_6sparse_sotinum.cos = (PyObject *(*)(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch))__pyx_f_5pyoti_6sparse_7sotinum_cos;
   __pyx_vtable_5pyoti_6sparse_sotinum.tan = (PyObject *(*)(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch))__pyx_f_5pyoti_6sparse_7sotinum_tan;

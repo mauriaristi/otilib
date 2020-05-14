@@ -1378,7 +1378,7 @@ struct __pyx_opt_args_5pyoti_6sparse_ones;
  *   @staticmethod
  *   cdef sotinum create(sotinum_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
  *   cpdef coeff_t get_deriv( self, object humdir)
- *   cpdef sin(self)
+ *   cpdef coeff_t get_im( self, object humdir)
  */
 struct __pyx_opt_args_5pyoti_6sparse_7sotinum_create {
   int __pyx_n;
@@ -1697,6 +1697,7 @@ static struct __pyx_vtabstruct_5pyoti_5dense_spr_omat *__pyx_vtabptr_5pyoti_5den
 struct __pyx_vtabstruct_5pyoti_6sparse_sotinum {
   struct __pyx_obj_5pyoti_6sparse_sotinum *(*create)(sotinum_t *, struct __pyx_opt_args_5pyoti_6sparse_7sotinum_create *__pyx_optional_args);
   __pyx_t_5pyoti_8c_otilib_coeff_t (*get_deriv)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
+  __pyx_t_5pyoti_8c_otilib_coeff_t (*get_im)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
   PyObject *(*sin)(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch);
   PyObject *(*cos)(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch);
   PyObject *(*tan)(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch);

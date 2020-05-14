@@ -12,14 +12,11 @@
 // ----------------------------------------------------------------------------------------------------
 
 
-// Append oti number structures.
-#include "sparse/scalar/structures.h"
 
-// Append array of otis structures.
-#include "sparse/array/array_of_oti/structures.h"
 
-// Append oti of arrays structures.
-#include "sparse/array/oti_of_array/structures.h"
+
+
+
 
 // ----------------------------------------------------------------------------------------------------
 // -------------------------------------    END STRUCTURES      ---------------------------------------
@@ -31,6 +28,8 @@
 // ------------------------------------    SCALAR DECLARATIONS     ------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+// Append oti number structures.
+#include "sparse/scalar/structures.h"
 
 // Append core operations.
 #include "sparse/scalar/base.h"
@@ -57,22 +56,27 @@
 // ----------------------------------------------------------------------------------------------------
 
 // Array of oti numbers
+// Append array of otis structures.
+#include "sparse/array/structures.h"
+
 // Append core operations.
-#include "sparse/array/array_of_oti/base.h"
+#include "sparse/array/base.h"
 
 // Append algebra declarations.
-#include "sparse/array/array_of_oti/algebra_elementwise.h"
+#include "sparse/array/algebra_elementwise.h"
+#include "sparse/array/algebra_matops.h"
 
 // Append utils.
-#include "sparse/array/array_of_oti/utils.h"
+#include "sparse/array/utils.h"
 
 
-// #include "sparse/arrso/algebra_elementwise.h"
+// Function evaluation (Elementwise).
+#include "sparse/array/functions.h"
 
-// // Append function declarations.
 
 
-// #include "sparse/arrso/functions.h"
+// Append oti of arrays structures.
+// #include "sparse/array/oti_of_array/structures.h"
 
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------------     END ARRAY DECLARATIONS     ----------------------------------

@@ -147,11 +147,4 @@ void arrso_div_Or_to(arrso_t*   lhs, coeff_t    rhs, arrso_t* res, dhelpl_t dhl)
 
 
 
-
-
-
-
-
-
-
 #endif

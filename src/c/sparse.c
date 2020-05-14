@@ -1,51 +1,65 @@
 #include "oti/sparse.h"
 
 
+
+
+
+
 // ----------------------------------------------------------------------------------------------------
-// -------------------------------    SPARSE OTINUM FUNCTIONS   ---------------------------------------
+// --------------------------------------    SCALAR FUNCTIONS   ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
 // Base functions to support manipulation.
-#include "sparse/base.c"
+#include "sparse/scalar/base.c"
 
 // Operations where a truncation is recquired.
-#include "sparse/trunc_ops.c"
+#include "sparse/scalar/trunc_ops.c"
 
 // Basic algebraic operations, such as addition and multiplication.
-#include "sparse/algebra.c"
+#include "sparse/scalar/algebra.c"
+#include "sparse/scalar/algebra_to.c"
 
 // Analytic and Trascendental function evaluation.
-#include "sparse/functions.c"
+#include "sparse/scalar/functions.c"
+#include "sparse/scalar/functions_to.c"
 
-// Functions added to support pre-allocated result holders.
-#include "sparse/algebra_to.c"
-#include "sparse/functions_to.c"
-
-
-
+// ----------------------------------------------------------------------------------------------------
+// -----------------------------------   END SCALAR FUNCTIONS   ---------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+
+
+
+
+// ----------------------------------------------------------------------------------------------------
+// --------------------------------------    ARRAY  FUNCTIONS   ---------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
 // Array of OTIs support:
-// Base functions to support manipulation.
-#include "sparse/array/array_of_oti/base.c"
+// Base functions to support memory manipulation.
+#include "sparse/array/base.c"
 
-// Array algebra: Elementwise operations.
-#include "sparse/array/array_of_oti/algebra_elementwise_to.c"
-#include "sparse/array/array_of_oti/algebra_elementwise.c"
+// Array algebra.
+#include "sparse/array/algebra_elementwise.c"
+#include "sparse/array/algebra_elementwise_to.c"
 
 // Array algebra: Matrix operations such as matmul, determinant and invertion.
-#include "sparse/array/array_of_oti/algebra_matops_to.c"
-#include "sparse/array/array_of_oti/utils.c"
-// #include "sparse/array/array_of_oti/algebra_matops.c"
+// #include "sparse/array/algebra_matops.c"
+#include "sparse/array/algebra_matops_to.c"
+
+#include "sparse/array/utils.c"
+
 
 // Array functions: Elementwise function evaluation.
-// #include "sparse/array/functions.c"
+#include "sparse/array/functions.c"
 
-
-//  OTI of arrays support:
-// #include "sparse/array/oti_of_array/base.c"
 
 // ----------------------------------------------------------------------------------------------------
-// ----------------------------    END SPARSE OTINUM FUNCTIONS   --------------------------------------
+// --------------------------------------  END ARRAY FUNCTIONS   --------------------------------------
 // ----------------------------------------------------------------------------------------------------
+

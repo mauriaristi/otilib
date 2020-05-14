@@ -1,42 +1,60 @@
 #include "oti/dense.h"
 
 
+
+
+
+
 // ----------------------------------------------------------------------------------------------------
-// ---------------------------------     OTINUM FUNCTIONS     -----------------------------------------
+// --------------------------------------    SCALAR FUNCTIONS   ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
 // Base functions to support manipulation.
-#include "dense/base.c"
+#include "dense/scalar/base.c"
 
 // Operations where a truncation is recquired.
-#include "dense/trunc_ops.c"
+#include "dense/scalar/trunc_ops.c"
 
 // Basic algebraic operations, such as addition and multiplication.
-#include "dense/algebra.c"
+#include "dense/scalar/algebra.c"
+#include "dense/scalar/algebra_to.c"
 
 // Analytic and Trascendental function evaluation.
-#include "dense/functions.c"
+#include "dense/scalar/functions.c"
+#include "dense/scalar/functions_to.c"
 
-// Functions added to support pre-allocated result holders.
-#include "dense/algebra_to.c"
-#include "dense/functions_to.c"
+// ----------------------------------------------------------------------------------------------------
+// -----------------------------------   END SCALAR FUNCTIONS   ---------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+// ----------------------------------------------------------------------------------------------------
+// --------------------------------------    ARRAY  FUNCTIONS   ---------------------------------------
+// ----------------------------------------------------------------------------------------------------
 // Array support.
+
 // Base functions to support manipulation.
-#include "dense/array_base.c"
+#include "dense/array/base.c"
 
 // Array algebra: Elementwise operations.
-#include "dense/array_algebra_elementwise.c"
-#include "dense/array_algebra_elementwise_to.c"
-#include "dense/array_algebra_helper.c"
+#include "dense/array/algebra_elementwise.c"
+#include "dense/array/algebra_elementwise_to.c"
 
 // Array algebra: Matrix operations such as matmul, determinant and invertion.
-#include "dense/array_algebra_matops.c"
+#include "dense/array/algebra_matops.c"
+#include "dense/array/algebra_matops_to.c"
+
+#include "dense/array/algebra_helper.c"
 
 // // Array functions: Elementwise function evaluation.
-// #include "dense/array_functions.c"
+#include "dense/array/functions.c"
+
 
 // ----------------------------------------------------------------------------------------------------
-// -------------------------------     END OTINUM FUNCTIONS     ---------------------------------------
+// --------------------------------------  END ARRAY FUNCTIONS   --------------------------------------
 // ----------------------------------------------------------------------------------------------------
+

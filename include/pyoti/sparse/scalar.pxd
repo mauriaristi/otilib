@@ -15,6 +15,7 @@ cdef class sotinum:
   @staticmethod
   cdef sotinum create(sotinum_t* num, uint8_t FLAGS = *)
   cpdef coeff_t get_deriv( self, object humdir)
+  cpdef coeff_t get_im( self, object humdir)
   cpdef sin(self)
   cpdef cos(self)
   cpdef tan(self)

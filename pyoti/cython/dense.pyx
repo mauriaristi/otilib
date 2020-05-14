@@ -25,6 +25,5 @@ include "dense/sparse_array.pxi"
 include "dense/generic.pxi"
 
 
-
 include "dense/oti_n2m2.pxi"
 

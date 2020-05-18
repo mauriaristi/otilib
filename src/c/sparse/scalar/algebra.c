@@ -64,6 +64,26 @@ inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     tmp.re = num1->re + num2->re; 
 
+    // TODO: divide in three for loops
+    // ord_t min_ord = MIN(num1->order,num2->order);
+    // for(ordi=0; ordi<min_ord; ordi++){ 
+    //     dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+    //                           num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+    //                           tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+    // }
+
+    // for(ordi=min_ord; ordi< num1->order; ordi++){ 
+    //     dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+    //                           NULL, NULL, 0,
+    //                           tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+    // }
+
+    // for(ordi=min_ord; ordi< num2->order; ordi++){ 
+    //     dhelp_sparse_add_dirs(num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+    //                           NULL, NULL, 0,
+    //                           tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);    
+    // }
+    
     for(ordi=0; ordi<res_ord; ordi++){
         
         if (ordi < num1->order && ordi < num2->order){

@@ -9,6 +9,7 @@ cdef extern from "oti/oti.h" nogil:
     ndir_t*       p_nnz
     ndir_t*      p_size
     ord_t         order
+    ord_t        torder
     flag_t         flag
 
 

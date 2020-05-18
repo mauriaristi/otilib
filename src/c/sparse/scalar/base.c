@@ -575,8 +575,9 @@ inline sotinum_t soti_init(void){
     res.p_nnz = NULL;
     res.p_size= NULL;
     
-    res.order = 0;
-    res.flag  = 0; 
+    res.order  = 0;
+    res.torder = 0;
+    res.flag   = 0; 
 
     return res;
 

@@ -16,7 +16,8 @@ cdef class sotinum:
 
 
   #***************************************************************************************************
-  def __init__(self, coeff_t re_coeff, ord_t order = 0, uint8_t FLAGS = 1, object nnz = None):
+  def __init__(self, coeff_t re_coeff, bases_t nbases = 0,ord_t order = 0, uint8_t FLAGS = 1, 
+    object nnz = None):
     """
     DESCRIPTION: Constructor of a sparse OTI number.
     """
@@ -54,6 +55,19 @@ cdef class sotinum:
       # Set real coefficient.
       self.num.re = re_coeff
     
+    elif nbases != 0 and order !=0 :
+
+      p_nnz = dhl.p_dh[order-ONE].p_nnz[ZERO]
+
+      for i in range(order):
+        p_nnz[i] = dhelp_extract_ndirOrder( nbases, i+1, dhl )
+      # end for 
+      
+      self.num =  soti_createEmpty_predef(p_nnz, order, dhl)
+
+      # Set real coefficient.
+      self.num.re = re_coeff  
+
     else:
       
       self.num =  soti_createReal(re_coeff, order, dhl)
@@ -265,6 +279,40 @@ cdef class sotinum:
 
     head = 'sotinum('
     body = str(self.num.re) + ", nnz: " + str(ndir_total) + ', order: ' + str(self.num.order)
+    tail = ')'
+
+    return (head + body + tail)
+
+  #---------------------------------------------------------------------------------------------------  
+
+  #*************************************************************************************************** 
+  def long_repr(self):
+    """
+    PURPOSE:  To print a representation of the sotinum object in a full detail form.
+    """
+    #*************************************************************************************************
+    global h
+    global p_dH
+
+    cdef ndir_t ndir_total = 1, ndir_max = 1, i;
+
+    for i in range(0, self.num.order):
+
+      ndir_total += self.num.p_nnz[i]
+      ndir_max   += self.num.p_size[i]
+
+    # end for
+
+    head = 'sotinum('
+    body = str(self.num.re) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max) 
+    body += ', order: ' + str(self.num.order) + "\n"
+
+    for i in range(0, self.num.order):
+
+      body += "Order {0}->   nnz: {1}  size: {2} \n".format(i+1, self.num.p_nnz[i],self.num.p_size[i])
+
+    # end for 
+
     tail = ')'
 
     return (head + body + tail)

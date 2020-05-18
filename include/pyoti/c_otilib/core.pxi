@@ -57,6 +57,10 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "core.h"
   #---------------------------------------------------------------------------------------------------
+  void error_exit(int64_t error_id);
+
+  void set_python_error_function(void (*error_function)(int64_t) nogil );
+
   coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhelpl_t dhl);
 
   matrix_form_t dhelp_matrix_form_indices( bases_t nbases, ord_t order, dhelpl_t dhl);

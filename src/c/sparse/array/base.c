@@ -57,7 +57,7 @@ arrso_t arrso_copy(arrso_t* arr, dhelpl_t dhl){
 // Setters.
 // Setter by one index.
 // ****************************************************************************************************
-void arrso_set_all_r( coeff_t num, arrso_t* arr, dhelpl_t dhl){
+inline void arrso_set_all_r( coeff_t num, arrso_t* arr, dhelpl_t dhl){
     
     uint64_t i;
 
@@ -72,14 +72,14 @@ void arrso_set_all_r( coeff_t num, arrso_t* arr, dhelpl_t dhl){
 inline void arrso_set_item_i_r( coeff_t num, uint64_t i, arrso_t* arr, dhelpl_t dhl){
         
     if( i<arr->size ){
-        soti_setFromReal( num, &arr->p_data[i], dhl);
+        soti_set_r( num, &arr->p_data[i], dhl);
     }
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void arrso_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, arrso_t* arr, dhelpl_t dhl){
+inline void arrso_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, arrso_t* arr, dhelpl_t dhl){
 
     arrso_set_item_i_r( num, j + i*arr->ncols, arr,  dhl);
 
@@ -91,7 +91,7 @@ void arrso_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, arrso_t* arr, dhe
 
 
 // ****************************************************************************************************
-void arrso_set_all_o( sotinum_t* num, arrso_t* arr, dhelpl_t dhl){
+inline void arrso_set_all_o( sotinum_t* num, arrso_t* arr, dhelpl_t dhl){
 
     uint64_t i;
 
@@ -118,7 +118,7 @@ inline void arrso_set_item_i_o( sotinum_t* src, uint64_t i, arrso_t* arr, dhelpl
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void arrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, arrso_t* arr, dhelpl_t dhl){
+inline void arrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, arrso_t* arr, dhelpl_t dhl){
 
     arrso_set_item_i_o( num, j + i*arr->ncols, arr, dhl);
 

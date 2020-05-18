@@ -1204,6 +1204,14 @@ cpdef ord_t get_trunc_order( ):
 
 #-----------------------------------------------------------------------------------------------------
 
+#*****************************************************************************************************
+cdef void error_function( int64_t err_id ) nogil:
+  
+  raise ValueError("Found an error: "+str(err_id))
+
+#-----------------------------------------------------------------------------------------------------
+
+
 #-----------------------------------------------------------------------------------------------------
 #-------------------------------------   INITIALIZATION ONLY   ---------------------------------------
 #-----------------------------------------------------------------------------------------------------
@@ -1213,6 +1221,10 @@ cpdef ord_t get_trunc_order( ):
 h = dHelp()
 
 cdef dhelpl_t dhl = h.dhl
+
+# Set the python exit error function in the C-OTI LIBRARY.
+set_python_error_function(&error_function)
+
 
 # To provide an easy manner to create numpy arrays from C without copying data
 np.import_array()

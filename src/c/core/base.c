@@ -30,6 +30,8 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
     
     dhl->order[0] = dhl->ndh         ; // Global truncation order.
 
+    start_python_error_function();
+
     if (dhl->p_dh == NULL){
       printf("ERROR: Not enough memory for helper array. Exiting...\n");
       exit(OTI_OutOfMemory);

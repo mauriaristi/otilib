@@ -1,11 +1,3 @@
-// typedef struct {
-//     sotinum_t*    p_data; ///< Pointer to array of Sparse otinums.
-//     uint64_t       nrows; ///< Number of rows.
-//     uint64_t       ncols; ///< Number of cols.
-//     uint64_t        size; ///< Size of array.
-//     flag_t          flag; ///< Memory flag.
-// } arrso_t;                ///< Array of OTIs type.
-
 
 // ****************************************************************************************************
 inline void arrso_dimCheck_OO_elementwise(arrso_t* arr1,arrso_t* arr2,arrso_t* res){
@@ -38,7 +30,7 @@ inline void arrso_dimCheck_RO_elementwise(darr_t* arr1,arrso_t* arr2,arrso_t* re
 
 
 // ****************************************************************************************************
-inline void arrso_dimCheck_OO_matmul(arrso_t* arr1,arrso_t* arr2,arrso_t* res){
+inline void arrso_dimCheck_OO_matmul( arrso_t* arr1, arrso_t* arr2, arrso_t* res){
 
 	 if( arr1->nrows != arr2->ncols ){
 	 	printf("ERROR: Wrong dimensions in matmul-like operation between two arrso arrays.\n");
@@ -49,7 +41,7 @@ inline void arrso_dimCheck_OO_matmul(arrso_t* arr1,arrso_t* arr2,arrso_t* res){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline void arrso_dimCheck_RO_matmul(darr_t* arr1,arrso_t* arr2,arrso_t* res){
+inline void arrso_dimCheck_RO_matmul( darr_t* arr1, arrso_t* arr2, arrso_t* res){
 
 	 if( arr1->ncols != arr2->nrows ||
 	     arr1->nrows !=  res->nrows || 
@@ -62,7 +54,7 @@ inline void arrso_dimCheck_RO_matmul(darr_t* arr1,arrso_t* arr2,arrso_t* res){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline void arrso_dimCheck_OR_matmul(arrso_t* arr1, darr_t* arr2,arrso_t* res){
+inline void arrso_dimCheck_OR_matmul( arrso_t* arr1, darr_t* arr2, arrso_t* res){
 
 	 if( arr1->ncols != arr2->nrows ||
 	     arr1->nrows !=  res->nrows || 
@@ -75,7 +67,7 @@ inline void arrso_dimCheck_OR_matmul(arrso_t* arr1, darr_t* arr2,arrso_t* res){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline void arrso_dimCheck_O_squareness(arrso_t* arr1,arrso_t* res){
+inline void arrso_dimCheck_O_squareness( arrso_t* arr1, arrso_t* res){
 
 	 if( arr1->ncols != arr1->nrows ||
 	     arr1->nrows !=  res->nrows || 
@@ -89,7 +81,7 @@ inline void arrso_dimCheck_O_squareness(arrso_t* arr1,arrso_t* res){
 
 
 // ****************************************************************************************************
-ord_t arrso_get_order(arrso_t* arr){
+ord_t arrso_get_order( arrso_t* arr ){
 	
 	ord_t order = 0;
 

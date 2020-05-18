@@ -592,7 +592,7 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl
     sotinum_t tmp2 = soti_get_rtmp( 8,num->order,dhl);
     sotinum_t tmp3 = soti_get_rtmp( 9,num->order,dhl);
 
-    soti_set( num, &tmp2, dhl);
+    soti_set_o( num, &tmp2, dhl);
 
     for ( i = 1; i < num->order; i++){
         
@@ -600,12 +600,12 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl
 
         val = feval_re[i]/factor;
         
-        soti_set(&tmp2 , &tmp1, dhl);
+        soti_set_o(&tmp2 , &tmp1, dhl);
         soti_trunc_smul_real( val, i, &tmp2, dhl);
         soti_trunc_ssum( &tmp2, i, &tmp3, dhl );
         
         // update
-        soti_setFromReal( 0.0, &tmp2, dhl);
+        soti_set_r( 0.0, &tmp2, dhl);
         soti_trunc_mul(&tmp1, i, num, 1, &tmp2, dhl );
 
     }
@@ -614,7 +614,7 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl
         
         factor *= i;
         val = feval_re[i]/factor;        
-        soti_set(&tmp2 , &tmp1, dhl);
+        soti_set_o(&tmp2 , &tmp1, dhl);
         soti_trunc_smul_real( val, i, &tmp2, dhl);
         soti_trunc_ssum( &tmp2, i, &tmp3, dhl );
 

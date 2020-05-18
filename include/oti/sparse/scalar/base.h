@@ -46,11 +46,14 @@ sotinum_t soti_init(void);
 @brief Copy information from src to dest. Does not check if memory needs to be reallocated.
 Useful when copying data to a temporal sotinum.
 
+dest = src
+
 @param[in] src  Oti number.
 @param[in] dest Oti number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/
-void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
+void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
+void soti_set_r(    coeff_t src, sotinum_t* dest, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -63,17 +66,6 @@ needs to be reallocated. Useful when copying data to a temporal sotinum.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/
 void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Set a sparse otinum from a real number. Does not check if memory needs to be reallocated.
-Useful when setting data to a temporal sotinum.
-
-@param[in] a real number to be set.
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

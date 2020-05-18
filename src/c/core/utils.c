@@ -363,3 +363,101 @@ matrix_form_t dhelp_matrix_form_indices( bases_t nbases, uint8_t order, dhelpl_t
 }    
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+void (*__PY_ERROR_OTI_EXIT)(int64_t);
+uint64_t is_python_error_def;
+
+// void (**__PY_ERROR_OTI_EXIT_ptr)(int64_t)=&__PY_ERROR_OTI_EXIT;
+// uint64_t* is_python_error_def_ptr = &is_python_error_def;
+
+
+// ****************************************************************************************************
+void start_python_error_function(void){
+
+
+    // printf("In start_python_error_function()\nDefining error function from python: \n");
+    __PY_ERROR_OTI_EXIT = NULL;
+    // error_function(OTI_OutOfMemory);
+    is_python_error_def = 0;
+    // printf("is_python_error_def: %llu\n",is_python_error_def);
+    // (*__PY_ERROR_OTI_EXIT_ptr)(OTI_OutOfMemory);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void set_python_error_function(void (*error_function)(int64_t)){
+
+    usage_python_error_function(error_function, 0, 0);
+    // printf("In set_python_error_function()\nDefining error function from python: \n");
+    // __PY_ERROR_OTI_EXIT = error_function;
+    // error_function(OTI_OutOfMemory);
+    // is_python_error_def = is_python_error_def + 1;
+    // printf("is_python_error_def: %llu\n",is_python_error_def);
+    // (*__PY_ERROR_OTI_EXIT_ptr)(OTI_OutOfMemory);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void usage_python_error_function(void (*error_function)(int64_t), int64_t error_id, int64_t status){
+    
+    static void (*__PY_ERROR)(int64_t)=NULL;
+    static uint64_t is_python = 0;
+
+    if (status == 0){
+        // Redefine __PY_ERROR_OTI_EXIT
+        __PY_ERROR = error_function;
+        is_python = 1;
+        // printf("in usage_python_error_function\nModifying values\n");
+        
+    } else if (status == 1){
+        
+        // Use __PY_ERROR_OTI_EXIT
+        
+        // printf("in usage_python_error_function\nis_python_error_def %llu\n",is_python);
+
+        // if (__PY_ERROR != NULL && is_python != 0){
+        //     (*__PY_ERROR)(error_id);
+        // }
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void python_error_function(void (*error_function)(int64_t)){
+
+
+    // printf("In set_python_error_function()\nDefining error function from python: \n");
+    __PY_ERROR_OTI_EXIT = error_function;
+    // error_function(OTI_OutOfMemory);
+    is_python_error_def = is_python_error_def + 1;
+    // printf("is_python_error_def: %llu\n",is_python_error_def);
+    // (*__PY_ERROR_OTI_EXIT_ptr)(OTI_OutOfMemory);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void error_exit(int64_t error_id){
+
+    // printf("In error_exit()\nis_python_error_def: %llu\n",is_python_error_def);
+    // usage_python_error_function(NULL,error_id,1);
+    if (is_python_error_def != 0 ){
+
+        (*__PY_ERROR_OTI_EXIT)(error_id);
+
+    } else {
+
+        exit(error_id);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------

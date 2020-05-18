@@ -55,7 +55,7 @@ Useful when setting data to a temporal sotinum.
 @param[in] num Oti number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl);
+void soti_set_r( coeff_t a, sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

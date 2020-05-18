@@ -914,6 +914,18 @@ typedef struct {
   char is_valid_array;
 } __Pyx_BufFmt_Context;
 
+/* ForceInitThreads.proto */
+#ifndef __PYX_FORCE_INIT_THREADS
+  #define __PYX_FORCE_INIT_THREADS 0
+#endif
+
+/* NoFastGil.proto */
+#define __Pyx_PyGILState_Ensure PyGILState_Ensure
+#define __Pyx_PyGILState_Release PyGILState_Release
+#define __Pyx_FastGIL_Remember()
+#define __Pyx_FastGIL_Forget()
+#define __Pyx_FastGilFuncInit()
+
 
 /* "../../../../opt/anaconda3/envs/pyoti/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":776
  * # in Cython to enable them only on the right systems.
@@ -1968,6 +1980,9 @@ static CYTHON_INLINE uint64_t __Pyx_pow_uint64_t(uint64_t, uint64_t);
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_Py_intptr_t(Py_intptr_t value);
 
+/* CIntToPy.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int64_t(int64_t value);
+
 /* RealImag.proto */
 #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
@@ -2228,6 +2243,7 @@ static PyObject *__pyx_f_5pyoti_4core_imdir(PyObject *, int __pyx_skip_dispatch)
 static PyObject *__pyx_f_5pyoti_4core_get_deriv_factor(PyObject *, int __pyx_skip_dispatch); /*proto*/
 static PyArrayObject *__pyx_f_5pyoti_4core_c_ptr_to_np_1darray_uint16(void *, npy_intp, struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_uint16 *__pyx_optional_args); /*proto*/
 static __pyx_t_5pyoti_8c_otilib_ord_t __pyx_f_5pyoti_4core_get_trunc_order(int __pyx_skip_dispatch); /*proto*/
+static void __pyx_f_5pyoti_4core_error_function(int64_t); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn_uint64_t = { "uint64_t", NULL, sizeof(uint64_t), { 0 }, 0, IS_UNSIGNED(uint64_t) ? 'U' : 'I', IS_UNSIGNED(uint64_t), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn_uint16_t = { "uint16_t", NULL, sizeof(uint16_t), { 0 }, 0, IS_UNSIGNED(uint16_t) ? 'U' : 'I', IS_UNSIGNED(uint16_t), 0 };
@@ -2392,6 +2408,7 @@ static const char __pyx_k__17[] = "^{";
   static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
   static const char __pyx_k_scipy_special[] = "scipy.special";
   static const char __pyx_k_writer___init[] = "writer.__init__";
+  static const char __pyx_k_Found_an_error[] = "Found an error: ";
   static const char __pyx_k_export_strings[] = "export_strings";
   static const char __pyx_k_helpers_loaded[] = " helpers loaded>";
   static const char __pyx_k_END_TYPE_ONUM_M[] = "END TYPE ONUM_M";
@@ -2431,6 +2448,7 @@ static const char __pyx_k__17[] = "^{";
   static PyObject *__pyx_kp_s_END_TYPE_ONUM_M;
   static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
   static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
+  static PyObject *__pyx_kp_s_Found_an_error;
   static PyObject *__pyx_kp_s_Helper;
   static PyObject *__pyx_n_s_ImportError;
   static PyObject *__pyx_n_s_N;
@@ -9843,6 +9861,90 @@ static PyObject *__pyx_pf_5pyoti_4core_20get_trunc_order(CYTHON_UNUSED PyObject 
   return __pyx_r;
 }
 
+/* "../../pyoti/cython/core/utils.pxi":1208
+ * 
+ * #*****************************************************************************************************
+ * cdef void error_function( int64_t err_id ) nogil:             # <<<<<<<<<<<<<<
+ * 
+ *   raise ValueError("Found an error: "+str(err_id))
+ */
+
+static void __pyx_f_5pyoti_4core_error_function(int64_t __pyx_v_err_id) {
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  #ifdef WITH_THREAD
+  PyGILState_STATE __pyx_gilstate_save;
+  #endif
+  __Pyx_RefNannySetupContext("error_function", 1);
+
+  /* "../../pyoti/cython/core/utils.pxi":1210
+ * cdef void error_function( int64_t err_id ) nogil:
+ * 
+ *   raise ValueError("Found an error: "+str(err_id))             # <<<<<<<<<<<<<<
+ * 
+ * #-----------------------------------------------------------------------------------------------------
+ */
+  /*try:*/ {
+    {
+        #ifdef WITH_THREAD
+        PyGILState_STATE __pyx_gilstate_save = __Pyx_PyGILState_Ensure();
+        #endif
+        /*try:*/ {
+          __pyx_t_1 = __Pyx_PyInt_From_int64_t(__pyx_v_err_id); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1210, __pyx_L7_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __pyx_t_2 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 1210, __pyx_L7_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __pyx_t_1 = PyNumber_Add(__pyx_kp_s_Found_an_error, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1210, __pyx_L7_error)
+          __Pyx_GOTREF(__pyx_t_1);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_builtin_ValueError, __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 1210, __pyx_L7_error)
+          __Pyx_GOTREF(__pyx_t_2);
+          __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+          __Pyx_Raise(__pyx_t_2, 0, 0, 0);
+          __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+          __PYX_ERR(2, 1210, __pyx_L7_error)
+        }
+        /*finally:*/ {
+          __pyx_L7_error: {
+            #ifdef WITH_THREAD
+            __Pyx_PyGILState_Release(__pyx_gilstate_save);
+            #endif
+            goto __pyx_L4_error;
+          }
+        }
+    }
+  }
+  /*finally:*/ {
+    __pyx_L4_error: {
+      #ifdef WITH_THREAD
+      __pyx_gilstate_save = __Pyx_PyGILState_Ensure();
+      #endif
+      goto __pyx_L1_error;
+    }
+  }
+
+  /* "../../pyoti/cython/core/utils.pxi":1208
+ * 
+ * #*****************************************************************************************************
+ * cdef void error_function( int64_t err_id ) nogil:             # <<<<<<<<<<<<<<
+ * 
+ *   raise ValueError("Found an error: "+str(err_id))
+ */
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_WriteUnraisable("pyoti.core.error_function", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 1);
+  __pyx_L0:;
+  #ifdef WITH_THREAD
+  __Pyx_PyGILState_Release(__pyx_gilstate_save);
+  #endif
+}
+
 /* "../../pyoti/cython/core/module_writer.pxi":8
  * 
  * 
@@ -13091,6 +13193,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_END_TYPE_ONUM_M, __pyx_k_END_TYPE_ONUM_M, sizeof(__pyx_k_END_TYPE_ONUM_M), 0, 0, 1, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor, __pyx_k_Format_string_allocated_too_shor, sizeof(__pyx_k_Format_string_allocated_too_shor), 0, 1, 0, 0},
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
+  {&__pyx_kp_s_Found_an_error, __pyx_k_Found_an_error, sizeof(__pyx_k_Found_an_error), 0, 0, 1, 0},
   {&__pyx_kp_s_Helper, __pyx_k_Helper, sizeof(__pyx_k_Helper), 0, 0, 1, 0},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
   {&__pyx_n_s_N, __pyx_k_N, sizeof(__pyx_k_N), 0, 0, 1, 1},
@@ -14101,93 +14204,102 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_set_trunc_order, __pyx_t_1) < 0) __PYX_ERR(2, 1168, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/core/utils.pxi":1213
+  /* "../../pyoti/cython/core/utils.pxi":1221
  * # Global variable to help do the multiplications. One of this is required per core being used.
  * # Be careful. It requires some memory.
  * h = dHelp()             # <<<<<<<<<<<<<<
  * 
  * cdef dhelpl_t dhl = h.dhl
  */
-  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_5pyoti_4core_dHelp)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1213, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_CallNoArg(((PyObject *)__pyx_ptype_5pyoti_4core_dHelp)); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1221, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(((PyObject *)__pyx_v_5pyoti_4core_h));
   __Pyx_DECREF_SET(__pyx_v_5pyoti_4core_h, ((struct __pyx_obj_5pyoti_4core_dHelp *)__pyx_t_1));
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/core/utils.pxi":1215
+  /* "../../pyoti/cython/core/utils.pxi":1223
  * h = dHelp()
  * 
  * cdef dhelpl_t dhl = h.dhl             # <<<<<<<<<<<<<<
  * 
- * # To provide an easy manner to create numpy arrays from C without copying data
+ * # Set the python exit error function in the C-OTI LIBRARY.
  */
   __pyx_t_4 = __pyx_v_5pyoti_4core_h->dhl;
   __pyx_v_5pyoti_4core_dhl = __pyx_t_4;
 
-  /* "../../pyoti/cython/core/utils.pxi":1218
+  /* "../../pyoti/cython/core/utils.pxi":1226
+ * 
+ * # Set the python exit error function in the C-OTI LIBRARY.
+ * set_python_error_function(&error_function)             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  set_python_error_function((&__pyx_f_5pyoti_4core_error_function));
+
+  /* "../../pyoti/cython/core/utils.pxi":1230
  * 
  * # To provide an easy manner to create numpy arrays from C without copying data
  * np.import_array()             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_3 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_3 == ((int)-1))) __PYX_ERR(2, 1218, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_5numpy_import_array(); if (unlikely(__pyx_t_3 == ((int)-1))) __PYX_ERR(2, 1230, __pyx_L1_error)
 
-  /* "../../pyoti/cython/core/utils.pxi":1224
+  /* "../../pyoti/cython/core/utils.pxi":1236
  * # Change to a function that checks all items.
  * # TODO: LOOK FOR A MORE EFFICIENT WAY TO CHECK VARIOUS data types.
  * number_types = (   float,      int, np.float64,   np.int64,\             # <<<<<<<<<<<<<<
  *                 np.int32, np.int16,    np.int8, np.float32  )
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1224, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 1224, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 1236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1224, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int64); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 1224, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int64); if (unlikely(!__pyx_t_5)) __PYX_ERR(2, 1236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/core/utils.pxi":1225
+  /* "../../pyoti/cython/core/utils.pxi":1237
  * # TODO: LOOK FOR A MORE EFFICIENT WAY TO CHECK VARIOUS data types.
  * number_types = (   float,      int, np.float64,   np.int64,\
  *                 np.int32, np.int16,    np.int8, np.float32  )             # <<<<<<<<<<<<<<
  * 
  * int_types = ( int, np.int64, np.int32, np.int16, np.int8)
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1225, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int32); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 1225, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int32); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 1237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1225, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int16); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 1225, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int16); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 1237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1225, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int8); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1225, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int8); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1225, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float32); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 1225, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float32); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 1237, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/core/utils.pxi":1224
+  /* "../../pyoti/cython/core/utils.pxi":1236
  * # Change to a function that checks all items.
  * # TODO: LOOK FOR A MORE EFFICIENT WAY TO CHECK VARIOUS data types.
  * number_types = (   float,      int, np.float64,   np.int64,\             # <<<<<<<<<<<<<<
  *                 np.int32, np.int16,    np.int8, np.float32  )
  * 
  */
-  __pyx_t_1 = PyTuple_New(8); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1224, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(8); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1236, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(((PyObject *)(&PyFloat_Type)));
   __Pyx_GIVEREF(((PyObject *)(&PyFloat_Type)));
@@ -14213,37 +14325,37 @@ if (!__Pyx_RefNanny) {
   __pyx_t_7 = 0;
   __pyx_t_8 = 0;
   __pyx_t_9 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_number_types, __pyx_t_1) < 0) __PYX_ERR(2, 1224, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_number_types, __pyx_t_1) < 0) __PYX_ERR(2, 1236, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/core/utils.pxi":1227
+  /* "../../pyoti/cython/core/utils.pxi":1239
  *                 np.int32, np.int16,    np.int8, np.float32  )
  * 
  * int_types = ( int, np.int64, np.int32, np.int16, np.int8)             # <<<<<<<<<<<<<<
  * 
  * ZERO = 0  # these whatfor?
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1227, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int64); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 1227, __pyx_L1_error)
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int64); if (unlikely(!__pyx_t_9)) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_9);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1227, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int32); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1227, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int32); if (unlikely(!__pyx_t_8)) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_8);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1227, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int16); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 1227, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int16); if (unlikely(!__pyx_t_7)) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1227, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int8); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 1227, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_int8); if (unlikely(!__pyx_t_6)) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyTuple_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1227, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(((PyObject *)(&PyInt_Type)));
   __Pyx_GIVEREF(((PyObject *)(&PyInt_Type)));
@@ -14260,10 +14372,10 @@ if (!__Pyx_RefNanny) {
   __pyx_t_8 = 0;
   __pyx_t_7 = 0;
   __pyx_t_6 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_int_types, __pyx_t_1) < 0) __PYX_ERR(2, 1227, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_int_types, __pyx_t_1) < 0) __PYX_ERR(2, 1239, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/core/utils.pxi":1229
+  /* "../../pyoti/cython/core/utils.pxi":1241
  * int_types = ( int, np.int64, np.int32, np.int16, np.int8)
  * 
  * ZERO = 0  # these whatfor?             # <<<<<<<<<<<<<<
@@ -14272,7 +14384,7 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_v_5pyoti_4core_ZERO = 0;
 
-  /* "../../pyoti/cython/core/utils.pxi":1230
+  /* "../../pyoti/cython/core/utils.pxi":1242
  * 
  * ZERO = 0  # these whatfor?
  * ONE  = 1             # <<<<<<<<<<<<<<
@@ -14281,14 +14393,14 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_v_5pyoti_4core_ONE = 1;
 
-  /* "../../pyoti/cython/core/utils.pxi":1231
+  /* "../../pyoti/cython/core/utils.pxi":1243
  * ZERO = 0  # these whatfor?
  * ONE  = 1
  * TWO  = 2             # <<<<<<<<<<<<<<
  * 
  * #-----------------------------------------------------------------------------------------------------
  */
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_TWO, __pyx_int_2) < 0) __PYX_ERR(2, 1231, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_TWO, __pyx_int_2) < 0) __PYX_ERR(2, 1243, __pyx_L1_error)
 
   /* "../../pyoti/cython/core/module_writer.pxi":5
  * 
@@ -18300,6 +18412,37 @@ bad:
         int one = 1; int little = (int)*(unsigned char *)&one;
         unsigned char *bytes = (unsigned char *)&value;
         return _PyLong_FromByteArray(bytes, sizeof(Py_intptr_t),
+                                     little, !is_unsigned);
+    }
+}
+
+/* CIntToPy */
+  static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int64_t(int64_t value) {
+    const int64_t neg_one = (int64_t) ((int64_t) 0 - (int64_t) 1), const_zero = (int64_t) 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(int64_t) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(int64_t) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int64_t) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+#endif
+        }
+    } else {
+        if (sizeof(int64_t) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(int64_t) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(int64_t),
                                      little, !is_unsigned);
     }
 }

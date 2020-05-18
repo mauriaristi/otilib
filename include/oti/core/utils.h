@@ -1,6 +1,15 @@
 #ifndef OTI_CORE_UTILS_H
 #define OTI_CORE_UTILS_H
 
+extern void (*__PY_ERROR_OTI_EXIT)(int64_t);
+extern uint64_t is_python_error_def;
+
+// extern void (**__PY_ERROR_OTI_EXIT_ptr)(int64_t);
+// extern uint64_t* is_python_error_def_ptr;
+void start_python_error_function(void);
+void set_python_error_function(void (*error_function)(int64_t));
+void usage_python_error_function(void (*error_function)(int64_t), int64_t error_id, int64_t status);
+void error_exit(int64_t error_id);
 
 /**************************************************************************************************//**
 @brief Function that searches the index of a given element in an ordered array. If the element is not 

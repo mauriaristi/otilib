@@ -94,9 +94,9 @@ cdef extern from "oti/oti.h" nogil:
                       sotinum_t* num2, ord_t ord2, 
                       sotinum_t* dest, dhelpl_t dhl );
   void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl);
-  void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
+  void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
   void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl);
-  void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl);
+  void soti_set_r( coeff_t a, sotinum_t* num, dhelpl_t dhl);
   sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
   sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
   void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );

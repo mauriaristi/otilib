@@ -1,0 +1,322 @@
+MODULE OTIM1N2
+
+  IMPLICIT NONE
+
+  INTEGER, PARAMETER :: DP         = 8
+  INTEGER, PARAMETER :: NUM_IM_DIR = 3
+  INTEGER, PARAMETER :: TORDER     = 2
+
+  TYPE ONUMM1N2
+    ! Real
+    REAL(DP) :: R
+    ! Order 1
+    REAL(DP) :: E1
+    ! Order 2
+    REAL(DP) :: E11
+  END TYPE ONUMM1N2
+
+  INTERFACE OPERATOR(*)
+    MODULE PROCEDURE ONUMM1N2_MUL_ONUMM1N2,R_MUL_ONUMM1N2,ONUMM1N2_MUL_R
+  END INTERFACE
+
+  INTERFACE OPERATOR(+)
+    MODULE PROCEDURE ONUMM1N2_ADD_ONUMM1N2,R_ADD_ONUMM1N2,ONUMM1N2_ADD_R
+  END INTERFACE
+
+  INTERFACE OPERATOR(-)
+    MODULE PROCEDURE ONUMM1N2_NEG,ONUMM1N2_SUB_ONUMM1N2,R_SUB_ONUMM1N2,ONUMM1N2_SUB_R
+  END INTERFACE
+
+  INTERFACE ASSIGNMENT(=)
+    MODULE PROCEDURE ONUMM1N2_ASSIGN_R
+  END INTERFACE
+
+  INTERFACE TRANSPOSE
+    MODULE PROCEDURE ONUMM1N2_TRANSPOSE
+  END INTERFACE
+
+  INTERFACE MATMUL
+    MODULE PROCEDURE ONUMM1N2_MATMUL_ONUMM1N2,R_MATMUL_ONUMM1N2,ONUMM1N2_MATMUL_R
+  END INTERFACE
+
+  CONTAINS
+
+  ELEMENTAL SUBROUTINE ONUMM1N2_ASSIGN_R(RES,LHS)
+    
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(ONUMM1N2), INTENT(OUT) :: RES 
+
+    ! Assign like function 'LHS'
+    ! Real
+    RES%R = LHS
+    ! Order 1
+    RES%E1 = 0.0_dp
+    ! Order 2
+    RES%E11 = 0.0_dp
+
+  END SUBROUTINE ONUMM1N2_ASSIGN_R
+
+  ELEMENTAL FUNCTION ONUMM1N2_ADD_ONUMM1N2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS 
+    TYPE(ONUMM1N2), INTENT(IN) :: RHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Addition like function 'LHS + RHS'
+    ! Real
+    RES%R = LHS%R + RHS%R
+    ! Order 1
+    RES%E1 = LHS%E1 + RHS%E1
+    ! Order 2
+    RES%E11 = LHS%E11 + RHS%E11
+
+  END FUNCTION ONUMM1N2_ADD_ONUMM1N2
+
+  ELEMENTAL FUNCTION R_ADD_ONUMM1N2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(ONUMM1N2), INTENT(IN) :: RHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Addition like function 'LHS + RHS'
+    ! Real
+    RES%R = LHS + RHS%R
+    ! Order 1
+    RES%E1 =  + RHS%E1
+    ! Order 2
+    RES%E11 =  + RHS%E11
+
+  END FUNCTION R_ADD_ONUMM1N2
+
+  ELEMENTAL FUNCTION ONUMM1N2_ADD_R(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS 
+    REAL(DP), INTENT(IN) :: RHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Addition like function 'LHS + RHS'
+    ! Real
+    RES%R = LHS%R + RHS
+    ! Order 1
+    RES%E1 = LHS%E1
+    ! Order 2
+    RES%E11 = LHS%E11
+
+  END FUNCTION ONUMM1N2_ADD_R
+
+  ELEMENTAL FUNCTION ONUMM1N2_NEG(LHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Negation like function '-LHS'
+    ! Real
+    RES%R = -LHS%R
+    ! Order 1
+    RES%E1 = -LHS%E1
+    ! Order 2
+    RES%E11 = -LHS%E11
+
+  END FUNCTION ONUMM1N2_NEG
+
+  ELEMENTAL FUNCTION ONUMM1N2_SUB_ONUMM1N2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS 
+    TYPE(ONUMM1N2), INTENT(IN) :: RHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Addition like function 'LHS - RHS'
+    ! Real
+    RES%R = LHS%R - RHS%R
+    ! Order 1
+    RES%E1 = LHS%E1 - RHS%E1
+    ! Order 2
+    RES%E11 = LHS%E11 - RHS%E11
+
+  END FUNCTION ONUMM1N2_SUB_ONUMM1N2
+
+  ELEMENTAL FUNCTION R_SUB_ONUMM1N2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(ONUMM1N2), INTENT(IN) :: RHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Addition like function 'LHS - RHS'
+    ! Real
+    RES%R = LHS - RHS%R
+    ! Order 1
+    RES%E1 =  - RHS%E1
+    ! Order 2
+    RES%E11 =  - RHS%E11
+
+  END FUNCTION R_SUB_ONUMM1N2
+
+  ELEMENTAL FUNCTION ONUMM1N2_SUB_R(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS 
+    REAL(DP), INTENT(IN) :: RHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Addition like function 'LHS - RHS'
+    ! Real
+    RES%R = LHS%R - RHS
+    ! Order 1
+    RES%E1 = LHS%E1
+    ! Order 2
+    RES%E11 = LHS%E11
+
+  END FUNCTION ONUMM1N2_SUB_R
+
+  ELEMENTAL FUNCTION ONUMM1N2_MUL_ONUMM1N2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS 
+    TYPE(ONUMM1N2), INTENT(IN) :: RHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Multiplication like function 'LHS*RHS'
+    ! Real
+    RES%R = LHS%R*RHS%R
+    ! Order 1
+    RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+    ! Order 2
+    RES%E11 = LHS%R*RHS%E11 + LHS%E11*RHS%R + LHS%E1*RHS%E1
+
+  END FUNCTION ONUMM1N2_MUL_ONUMM1N2
+
+  ELEMENTAL FUNCTION R_MUL_ONUMM1N2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(ONUMM1N2), INTENT(IN) :: RHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Multiplication like function 'LHS*RHS'
+    ! Real
+    RES%R = LHS*RHS%R
+    ! Order 1
+    RES%E1 = LHS*RHS%E1
+    ! Order 2
+    RES%E11 = LHS*RHS%E11
+
+  END FUNCTION R_MUL_ONUMM1N2
+
+  ELEMENTAL FUNCTION ONUMM1N2_MUL_R(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS 
+    REAL(DP), INTENT(IN) :: RHS 
+    TYPE(ONUMM1N2) :: RES 
+
+    ! Multiplication like function 'LHS*RHS'
+    ! Real
+    RES%R = LHS%R*RHS
+    ! Order 1
+    RES%E1 = LHS%E1*RHS
+    ! Order 2
+    RES%E11 = LHS%E11*RHS
+
+  END FUNCTION ONUMM1N2_MUL_R
+
+  FUNCTION ONUMM1N2_MATMUL_ONUMM1N2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:) 
+    TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:) 
+    TYPE(ONUMM1N2) :: TMP 
+    TYPE(ONUMM1N2) :: RES(SIZE(LHS,1),SIZE(RHS,2)) 
+    INTEGER :: I,J,K 
+
+    ! Dimension check
+    IF (SIZE(LHS,2) /= SIZE(RHS,1)) THEN
+      STOP "Runtime error: " // &
+           "Dimension mismatch in MATMUL."
+    END IF
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(RHS,2)
+        TMP = 0.0_DP
+        DO K = 1, SIZE(LHS,2)
+          TMP = TMP + LHS( I, K )*RHS( K, J )
+        END DO
+        RES( I, J ) = TMP
+      END DO
+    END DO
+
+  END FUNCTION ONUMM1N2_MATMUL_ONUMM1N2
+
+  FUNCTION R_MATMUL_ONUMM1N2(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS(:,:) 
+    TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:) 
+    TYPE(ONUMM1N2) :: TMP 
+    TYPE(ONUMM1N2) :: RES(SIZE(LHS,1),SIZE(RHS,2)) 
+    INTEGER :: I,J,K 
+
+    ! Dimension check
+    IF (SIZE(LHS,2) /= SIZE(RHS,1)) THEN
+      STOP "Runtime error: " // &
+           "Dimension mismatch in MATMUL."
+    END IF
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(RHS,2)
+        TMP = 0.0_DP
+        DO K = 1, SIZE(LHS,2)
+          TMP = TMP + LHS( I, K )*RHS( K, J )
+        END DO
+        RES( I, J ) = TMP
+      END DO
+    END DO
+
+  END FUNCTION R_MATMUL_ONUMM1N2
+
+  FUNCTION ONUMM1N2_MATMUL_R(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:) 
+    REAL(DP), INTENT(IN) :: RHS(:,:) 
+    TYPE(ONUMM1N2) :: TMP 
+    TYPE(ONUMM1N2) :: RES(SIZE(LHS,1),SIZE(RHS,2)) 
+    INTEGER :: I,J,K 
+
+    ! Dimension check
+    IF (SIZE(LHS,2) /= SIZE(RHS,1)) THEN
+      STOP "Runtime error: " // &
+           "Dimension mismatch in MATMUL."
+    END IF
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(RHS,2)
+        TMP = 0.0_DP
+        DO K = 1, SIZE(LHS,2)
+          TMP = TMP + LHS( I, K )*RHS( K, J )
+        END DO
+        RES( I, J ) = TMP
+      END DO
+    END DO
+
+  END FUNCTION ONUMM1N2_MATMUL_R
+
+  FUNCTION ONUMM1N2_TRANSPOSE(LHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:) 
+    TYPE(ONUMM1N2) :: RES(SIZE(LHS,2),SIZE(LHS,1)) 
+    INTEGER :: I,J 
+
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(LHS,2)
+        RES( J, I ) = LHS( I, J )
+      END DO
+    END DO
+
+  END FUNCTION ONUMM1N2_TRANSPOSE
+
+END MODULE OTIM1N2

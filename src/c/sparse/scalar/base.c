@@ -205,7 +205,7 @@ void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
 
 
 // ****************************************************************************************************
-void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl){
+void soti_set_r( coeff_t a, sotinum_t* num, dhelpl_t dhl){
     
     ord_t i;
     num->re = a;
@@ -219,7 +219,7 @@ void soti_setFromReal( coeff_t a, sotinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
+void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     
     // This function sets an oti number from another OTI number.
     uint8_t reallocate = soti_requiresrealloc(src, dest);
@@ -235,11 +235,15 @@ void soti_set( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
         soti_free(dest);
 
         if (dest->flag != 0){
+
             *dest = soti_createEmpty_like( src, dhl);        
+
         } else {
+
             // TODO: What happens if this is a tmp value?
             printf("ERROR: Cant change memory of \n");
             exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
+
         }
 
     }
@@ -299,6 +303,8 @@ coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 
     coeff_t coef   = soti_get_item(idx,order,num,dhl);
     coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
+
+    // error_exit(OTI_OutOfMemory);
 
     return coef*factor;
 }

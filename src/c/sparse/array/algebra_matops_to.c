@@ -24,7 +24,7 @@ void arrso_matmul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl
         
         for( j = 0; j < arr2->ncols; j++){
 
-            soti_setFromReal( 0.0, &tmp, dhl);
+            soti_set_r( 0.0, &tmp, dhl);
 
             for( k = 0; k < arr1->ncols; k++){
 
@@ -47,13 +47,13 @@ void arrso_matmul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl
 
 // 2.1.2. OTI Array   - Real Array.
 // ****************************************************************************************************
-void arrso_matmul_OR(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl){
+void arrso_matmul_OR_to(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl){
         
     uint64_t i, j, k;
     sotinum_t tmp;
 
     // check for dimensions.
-    arrso_dimCheck_RO_matmul(arr1, arr2, res);
+    arrso_dimCheck_OR_matmul(arr1, arr2, res);
 
     // Extract temporal 5.
     tmp = soti_get_tmp( 5,arr1->p_data[0].order ,dhl);
@@ -62,7 +62,7 @@ void arrso_matmul_OR(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl){
         
         for( j = 0; j < arr2->ncols; j++){
 
-            soti_setFromReal( 0.0, &tmp, dhl);
+            soti_set_r( 0.0, &tmp, dhl);
 
             for( k = 0; k < arr1->ncols; k++){
 

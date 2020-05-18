@@ -51,7 +51,7 @@ void soti_trunc_ssum(sotinum_t* num1, ord_t ord, sotinum_t* res, dhelpl_t dhl ){
 
     sotinum_t tmpres = soti_get_rtmp(6,res->order,dhl); 
     
-    soti_set(res, &tmpres, dhl);
+    soti_set_o(res, &tmpres, dhl);
 
     for (  ordi = ord-1; ordi < res->order; ordi++){
 

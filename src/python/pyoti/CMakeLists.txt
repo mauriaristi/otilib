@@ -27,16 +27,16 @@ FILE(COPY  python/__init__.py
 
 
 
-SET(CYTHON_BUILD_DIR     "${PROJECT_BINARY_DIR}/pyoti"        )
-SET(CYTHON_SOUCE_DIR     "${PROJECT_SOURCE_DIR}/pyoti/cython" )
-SET(CYTHON_INCLUDE_DIR   "${PROJECT_SOURCE_DIR}/include"      )
-SET(CYTHON_SETUP_DIR     "${PROJECT_BINARY_DIR}/tmp_src"      )
-SET(CYTHON_LINK_DIR      "${PROJECT_BINARY_DIR}/lib"          )
+SET(CYTHON_BUILD_DIR     "${PROJECT_BINARY_DIR}/pyoti"                   )
+SET(CYTHON_SOUCE_DIR     "${PROJECT_SOURCE_DIR}/src/python/pyoti/cython" )
+SET(CYTHON_INCLUDE_DIR   "${PROJECT_SOURCE_DIR}/include"                 )
+SET(CYTHON_SETUP_DIR     "${PROJECT_BINARY_DIR}/tmp_src"                 )
+SET(CYTHON_LINK_DIR      "${PROJECT_BINARY_DIR}/lib"                     )
 
 SET(CYTHON_SOURCES_NAMES dense.pyx core.pyx)
 
-SET(CYTHONIZE_BUILD_DIR   "${PROJECT_BINARY_DIR}/tmp_src"   )
-SET(CYTHONIZE_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include"   )
+SET(CYTHONIZE_BUILD_DIR   "${PROJECT_BINARY_DIR}/tmp_src"                )
+SET(CYTHONIZE_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include"                )
 
 if(APPLE)
 	# Apple requires the arquitecture to be defined.
@@ -53,7 +53,7 @@ else(APPLE)
 endif(APPLE)
 
 configure_file (
-  "${PROJECT_SOURCE_DIR}/pyoti/cython/setup.py.in"
+  "${PROJECT_SOURCE_DIR}/src/python/pyoti/cython/setup.py.in"
   "${PROJECT_BINARY_DIR}/tmp_src/setup.py"
   )
 
@@ -73,10 +73,10 @@ ADD_CUSTOM_COMMAND (
 ADD_CUSTOM_COMMAND (
 	TARGET  oticython
 	# COMMAND pwd
-	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/__init__.py      ${CYTHON_BUILD_DIR}/
-	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/whereotilib.py   ${CYTHON_BUILD_DIR}/
-	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/auxFunctions.py  ${CYTHON_BUILD_DIR}/
-	COMMAND cp ${PROJECT_SOURCE_DIR}/pyoti/python/module_writer.py ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/__init__.py      ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/whereotilib.py   ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/auxFunctions.py  ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/module_writer.py ${CYTHON_BUILD_DIR}/
 )
 
 # -------------------------------------------------------------------

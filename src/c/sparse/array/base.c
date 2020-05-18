@@ -369,7 +369,7 @@ inline arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols,
     arrso_t  res = arrso_init();
     void*    memory = NULL;
     size_t   allocation_size;
-
+    uint64_t i;
     allocation_size = arrso_memory_size( nrows * ncols, p_nnz, order);
 
     // Allocate memory and check if correctly allocated.
@@ -382,6 +382,14 @@ inline arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols,
     // Distributes the memory in the corresponding pointers. Sets the memory flag as 1.
     arrso_distribute_memory(memory, nrows, ncols, p_nnz, order, 1, &res);
     
+    // Loop for all elements in the array
+    for(i = 0; i < res.size; i++){
+
+        // Allocate every number as indicated
+        res.p_data[i] = soti_createEmpty_predef( p_nnz, order, dhl);
+    
+    }
+
     // This is returned uninitialized.
     return res;
 
@@ -398,11 +406,11 @@ size_t arrso_memory_size( uint64_t size, const ndir_t* p_nnz, ord_t order){
     //  Memory for p_data.
     allocation_size += size  * sizeof(sotinum_t); 
     
-    // Get the memory taken by each otinum.
-    otinum_size = soti_memory_size(p_nnz, order); 
+    // // Get the memory taken by each otinum.
+    // otinum_size = soti_memory_size(p_nnz, order); 
     
-    // Add the memory of each otinum to the allocation size.
-    allocation_size += size * otinum_size;
+    // // Add the memory of each otinum to the allocation size.
+    // allocation_size += size * otinum_size;
 
     return allocation_size;
 
@@ -428,11 +436,15 @@ void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const nd
     res->p_data  = (sotinum_t* )memory;
     memory    += res->size * sizeof(sotinum_t); // Move memory pointer.
     
-    // Loop for all elements in the array
-    for(i = 0; i < res->size; i++){
-        // Distribute the memory as required .
-        memory = soti_distribute_memory(memory, p_nnz, order, otinum_flag, & res->p_data[i]);
-    }
+    // // Loop for all elements in the array
+    // for(i = 0; i < res->size; i++){
+    //     // // Distribute the memory as required .
+    //     // memory = soti_distribute_memory(memory, p_nnz, order, otinum_flag, & res->p_data[i]);
+
+    //     // Allocate every number as indicated
+    //     res->p_data[i] = soti_createEmpty_predef( p_nnz, order, dhl);
+    
+    // }
     
 }
 // ----------------------------------------------------------------------------------------------------
@@ -440,6 +452,14 @@ void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const nd
 // ****************************************************************************************************
 void arrso_free(arrso_t* arr){
     
+    uint64_t i;
+
+    for (i=0; i<arr->size; i++){
+    
+        soti_free( &arr->p_data[i] );
+    
+    }
+
     if (arr->flag && 1){
         free(arr->p_data);
     }

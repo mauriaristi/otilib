@@ -59,15 +59,14 @@ option (GENERATE_CYTHON_OTI
 # add the CYTHON part?
 #
 if (GENERATE_CYTHON_OTI)
-  add_subdirectory (pyoti)
+  add_subdirectory (src/python/pyoti "${PROJECT_BINARY_DIR}/pyoti")
 endif (GENERATE_CYTHON_OTI)
 
-option (GENERATE_CYTHON_OTIFEM 
-        "Generate the Cython implementation of OTIFEM" OFF)
-
-if (GENERATE_CYTHON_OTIFEM)
-  add_subdirectory (pyotifem)  
-endif (GENERATE_CYTHON_OTIFEM)
+# option (GENERATE_CYTHON_OTIFEM 
+#         "Generate the Cython implementation of OTIFEM" OFF)
+# if (GENERATE_CYTHON_OTIFEM)
+#   add_subdirectory (pyotifem)  
+# endif (GENERATE_CYTHON_OTIFEM)
 
 # should we do the Cython part too?
 option (GENERATE_C_TESTS

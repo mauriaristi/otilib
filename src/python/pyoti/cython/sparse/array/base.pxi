@@ -684,87 +684,77 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __truediv__(self, other):
-  #   """
-  #   PURPOSE: Division overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __truediv__(self, other):
+    """
+    PURPOSE: Division overload.
+    """
+    #*************************************************************************************************
     
-  #   global dhl
+    global dhl
     
-  #   cdef arrso_t res 
-  #   cdef matso lhs,rhs
-  #   cdef dmat dlhs,drhs
-  #   cdef sotinum olhs,orhs
+    cdef arrso_t res 
+    cdef matso lhs,rhs
+    cdef dmat dlhs,drhs
+    cdef sotinum olhs,orhs
     
-  #   tlhs = type(self)
-  #   trhs = type(other)
+    tlhs = type(self)
+    trhs = type(other)
     
-  #   if (tlhs == trhs):
+    if (tlhs == trhs):
 
-  #     # lhs = self
-  #     # rhs = other
+      lhs = self
+      rhs = other
 
-  #     # res = arrso_div_OO(&lhs.arr,&rhs.arr,dhl)
+      res = arrso_div_OO(&lhs.arr,&rhs.arr,dhl)
 
-  #     return NotImplemented
+    elif ( tlhs  == sotinum ):
 
-  #   elif ( tlhs  == sotinum ):
+      olhs = self
+      rhs = other
 
-  #     # olhs = self
-  #     # rhs = other
+      res = arrso_div_oO(&olhs.num,&rhs.arr, dhl)
 
-  #     # res = arrso_div_oO(&olhs.num,&rhs.arr, dhl)
+    elif ( trhs  == sotinum ):
 
-  #     return NotImplemented
+      lhs = self
+      orhs = other
 
-  #   elif ( trhs  == sotinum ):
-
-  #     # lhs = self
-  #     # orhs = other
-
-  #     # res = arrso_div_oO(&orhs.num,&lhs.arr, dhl)
-
-  #     return NotImplemented
+      res = arrso_div_Oo(&lhs.arr, &orhs.num, dhl)
     
-  #   elif (tlhs in number_types):
+    elif (tlhs in number_types):
       
-  #     # rhs = other
-  #     # res = arrso_div_rO(self, &rhs.arr, dhl)
+      rhs = other
+      res = arrso_div_rO(self, &rhs.arr, dhl)
 
-  #     return NotImplemented      
-
-  #   elif (trhs in number_types):
+    elif (trhs in number_types):
         
-  #     lhs = self
-  #     res = arrso_div_Or(&lhs.arr, other, dhl)
+      lhs = self
+      res = arrso_div_Or(&lhs.arr, other, dhl)
 
-  #   elif ( tlhs  == dmat ):
+    elif ( tlhs  == dmat ):
 
-  #     # dlhs = self
-  #     # rhs = other
+      dlhs = self
+      rhs = other
 
-  #     # res = arrso_div_RO(&dlhs.arr,&rhs.arr, dhl)
+      res = arrso_div_RO(&dlhs.arr,&rhs.arr, dhl)
 
-  #     return NotImplemented      
+    elif ( trhs  == dmat ):
 
-  #   elif ( trhs  == dmat ):
+      lhs = self
+      drhs = other
 
-  #     lhs = self
-  #     drhs = other
+      res = arrso_div_OR(&lhs.arr, &drhs.arr, dhl)
 
-  #     res = arrso_div_OR(&lhs.arr, &drhs.arr, dhl)
+    else:
 
-  #   else:
+      return NotImplemented      
 
-  #     return NotImplemented      
+    # end if 
+      
+    return matso.create(&res)
 
-  #   # end if 
-
-  #   return matso.create(&res)
-
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
   # # #***************************************************************************************************
   # # cpdef np.ndarray[double, ndim=2] to_numpy(self):

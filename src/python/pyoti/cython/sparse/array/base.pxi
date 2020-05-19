@@ -196,8 +196,6 @@ cdef class matso:
 
     global dhl
 
-    cdef np.ndarray[uint64_t, ndim=1] tmp 
-
     out =  "matso< "
     out += "shape: "+str(self.shape)+ ", "
     out += "re:\n"
@@ -226,7 +224,41 @@ cdef class matso:
     out += "shape: "+str(self.shape)+ ", "
     out += "re:\n"
     # first print the real part:
-    out += repr( self.get_real() )
+    out += repr( self.real )
+
+    out += ">"
+
+    return out
+
+  #---------------------------------------------------------------------------------------------------
+
+  #*************************************************************************************************** 
+  def list_repr(self):
+    """
+    PURPOSE:      A short representation of the object.
+  
+    """
+    #*************************************************************************************************
+
+    global dhl
+
+    cdef uint64_t i,j 
+    cdef sotinum tmp
+
+
+    out =  "matso< "
+    out += "shape: "+str(self.shape)+ ", \n"
+
+    for j in range(self.arr.ncols):
+      for i in range(self.arr.nrows):
+
+        out += "({0:d},{1:d}) ".format(i,j)
+        tmp = self[i,j]
+        out += tmp.__str__()
+        out += "\n"
+
+      # end for 
+    # end for 
 
     out += ">"
 
@@ -246,18 +278,19 @@ cdef class matso:
   
     cdef sotinum_t d_soti
     cdef sotinum   soti
-    out  = ""
+    out  = self.list_repr()
+    # out=""
 
-    out += "["
-    for i in range(self.arr.nrows):
-      out += "["
-      for j in range(self.arr.ncols):
-        d_soti = arrso_get_item_ij(&self.arr, i, j, dhl)
-        out+= (sotinum.create(&d_soti,FLAGS=0)).__str__()+", "
-      # end for 
-      out = out[:-2] + "],\n"
-    # end for 
-    out =out[:-2] + "]"
+    # out += "["
+    # for i in range(self.arr.nrows):
+    #   out += "["
+    #   for j in range(self.arr.ncols):
+    #     d_soti = arrso_get_item_ij(&self.arr, i, j, dhl)
+    #     out+= (sotinum.create(&d_soti,FLAGS=0)).__str__()+", "
+    #   # end for 
+    #   out = out[:-2] + "],\n"
+    # # end for 
+    # out =out[:-2] + "]"
     return out
 
   #--------------------------------------------------------------------------------------------------- 
@@ -273,18 +306,18 @@ cdef class matso:
   
     cdef sotinum_t d_soti
     cdef sotinum   soti
-    out  = ""
+    out  = self.list_repr()
 
-    out += "["
-    for i in range(self.arr.nrows):
-      out += "["
-      for j in range(self.arr.ncols):
-        d_soti = arrso_get_item_ij(&self.arr, i, j, dhl)
-        out+= (sotinum.create(&d_soti,FLAGS=0)).__str__()+", "
-      # end for 
-      out = out[:-2] + "],\n"
-    # end for 
-    out =out[:-2] + "]"
+    # out += "["
+    # for i in range(self.arr.nrows):
+    #   out += "["
+    #   for j in range(self.arr.ncols):
+    #     d_soti = arrso_get_item_ij(&self.arr, i, j, dhl)
+    #     out+= (sotinum.create(&d_soti,FLAGS=0)).__str__()+", "
+    #   # end for 
+    #   out = out[:-2] + "],\n"
+    # # end for 
+    # out =out[:-2] + "]"
     return out
 
   #---------------------------------------------------------------------------------------------------  

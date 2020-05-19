@@ -22,7 +22,7 @@ cdef class matso:
   
   def __init__(self, realArray, ord_t order = 0, bases_t nbases = 0, object nnz = None): 
     """
-    PURPOSE:      Python level constructor of the somat class.
+    PURPOSE:      Python level constructor of the matso class.
 
     DESCRIPTION:  Creates a new matrix, reserving memory Assumes coefficient values to be all zeroes.
                  
@@ -325,278 +325,278 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------
 
 
-  # #***************************************************************************************************
-  # def __neg__(self):
-  #   """
-  #   PURPOSE: Negation overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __neg__(self):
+    """
+    PURPOSE: Negation overload.
+    """
+    #*************************************************************************************************
     
-  #   global dhl
+    global dhl
     
-  #   cdef oarr_t res = oarr_neg(&self.arr, dhl)
+    cdef arrso_t res = arrso_neg(&self.arr, dhl)
 
-  #   return somat.create(&res)
-  # #---------------------------------------------------------------------------------------------------
-
-
+    return matso.create(&res)
+  #---------------------------------------------------------------------------------------------------
 
 
-  # #***************************************************************************************************
-  # def __add__(self, other):
-  #   """
-  #   PURPOSE: Addition overload.
-  #   """
-  #   #*************************************************************************************************
+
+
+  #***************************************************************************************************
+  def __add__(self, other):
+    """
+    PURPOSE: Addition overload.
+    """
+    #*************************************************************************************************
     
-  #   global dhl
+    global dhl
     
-  #   cdef oarr_t res 
-  #   cdef somat lhs,rhs
-  #   cdef dmat dlhs,drhs
-  #   cdef otinum olhs,orhs
+    cdef arrso_t res 
+    cdef matso lhs,rhs
+    cdef dmat dlhs,drhs
+    cdef sotinum olhs,orhs
     
-  #   tlhs = type(self)
-  #   trhs = type(other)
+    tlhs = type(self)
+    trhs = type(other)
     
-  #   if (tlhs == trhs):
+    if (tlhs == trhs):
 
-  #     lhs = self
-  #     rhs = other
+      lhs = self
+      rhs = other
 
-  #     res = oarr_sum_OO(&lhs.arr,&rhs.arr,dhl)
+      res = arrso_sum_OO(&lhs.arr,&rhs.arr,dhl)
 
-  #   elif ( tlhs  == otinum ):
+    elif ( tlhs  == sotinum ):
 
-  #     olhs = self
-  #     rhs = other
+      olhs = self
+      rhs = other
 
-  #     res = oarr_sum_oO(&olhs.num,&rhs.arr, dhl)
+      res = arrso_sum_oO(&olhs.num,&rhs.arr, dhl)
 
-  #   elif ( trhs  == otinum ):
+    elif ( trhs  == sotinum ):
 
-  #     lhs = self
-  #     orhs = other
+      lhs = self
+      orhs = other
 
-  #     res = oarr_sum_oO(&orhs.num,&lhs.arr, dhl)
+      res = arrso_sum_oO(&orhs.num,&lhs.arr, dhl)
     
-  #   elif (tlhs in number_types):
+    elif (tlhs in number_types):
       
-  #     rhs = other
-  #     res = oarr_sum_rO(self, &rhs.arr, dhl)
+      rhs = other
+      res = arrso_sum_rO(self, &rhs.arr, dhl)
 
-  #   elif (trhs in number_types):
+    elif (trhs in number_types):
         
-  #     lhs = self
-  #     res = oarr_sum_rO(other, &lhs.arr, dhl)
+      lhs = self
+      res = arrso_sum_rO(other, &lhs.arr, dhl)
 
-  #   elif ( tlhs  == dmat ):
+    elif ( tlhs  == dmat ):
 
-  #     dlhs = self
-  #     rhs = other
+      dlhs = self
+      rhs = other
 
-  #     res = oarr_sum_RO(&dlhs.arr,&rhs.arr, dhl)
+      res = arrso_sum_RO(&dlhs.arr,&rhs.arr, dhl)
 
-  #   elif ( trhs  == dmat ):
+    elif ( trhs  == dmat ):
 
-  #     lhs = self
-  #     drhs = other
+      lhs = self
+      drhs = other
 
-  #     res = oarr_sum_RO(&drhs.arr,&lhs.arr, dhl)
+      res = arrso_sum_RO(&drhs.arr,&lhs.arr, dhl)
 
-  #   else:
+    else:
 
-  #     return NotImplemented      
+      return NotImplemented
 
-  #   # end if 
+    # end if 
       
-  #   return somat.create(&res)
+    return matso.create(&res)
 
-  # #---------------------------------------------------------------------------------------------------  
-
-
-  # #***************************************************************************************************
-  # def __iadd__(self, other):
-  #   """
-  #   PURPOSE: Inplace addition overload.
-  #   """
-  #   #*************************************************************************************************
-
-  #   return self + other
-
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __sub__(self, other):
-  #   """
-  #   PURPOSE: Subtraction overload.
-  #   """
-  # #************************************************************************
+  #***************************************************************************************************
+  def __iadd__(self, other):
+    """
+    PURPOSE: Inplace addition overload.
+    """
+    #*************************************************************************************************
+
+    return self + other
+
+  #---------------------------------------------------------------------------------------------------  
+
+
+  #***************************************************************************************************
+  def __sub__(self, other):
+    """
+    PURPOSE: Subtraction overload.
+    """
+  #************************************************************************
     
-  #   global dhl
+    global dhl
     
-  #   cdef oarr_t res 
-  #   cdef somat lhs,rhs
-  #   cdef dmat dlhs,drhs
-  #   cdef otinum olhs,orhs
+    cdef arrso_t res 
+    cdef matso lhs,rhs
+    cdef dmat dlhs,drhs
+    cdef sotinum olhs,orhs
     
-  #   tlhs = type(self)
-  #   trhs = type(other)
+    tlhs = type(self)
+    trhs = type(other)
     
-  #   if (tlhs == trhs):
+    if (tlhs == trhs):
 
-  #     lhs = self
-  #     rhs = other
+      lhs = self
+      rhs = other
 
-  #     res = oarr_sub_OO(&lhs.arr,&rhs.arr,dhl)
+      res = arrso_sub_OO(&lhs.arr,&rhs.arr,dhl)
 
-  #   elif ( tlhs  == otinum ):
+    elif ( tlhs  == sotinum ):
 
-  #     olhs = self
-  #     rhs = other
+      olhs = self
+      rhs = other
 
-  #     res = oarr_sub_oO(&olhs.num,&rhs.arr, dhl)
+      res = arrso_sub_oO(&olhs.num,&rhs.arr, dhl)
 
-  #   elif ( trhs  == otinum ):
+    elif ( trhs  == sotinum ):
 
-  #     lhs = self
-  #     orhs = other
+      lhs = self
+      orhs = other
 
-  #     res = oarr_sub_Oo(&lhs.arr, &orhs.num, dhl)
+      res = arrso_sub_Oo(&lhs.arr, &orhs.num, dhl)
     
-  #   elif (tlhs in number_types):
+    elif (tlhs in number_types):
       
-  #     rhs = other
-  #     res = oarr_sub_rO(self, &rhs.arr, dhl)
+      rhs = other
+      res = arrso_sub_rO(self, &rhs.arr, dhl)
 
-  #   elif (trhs in number_types):
+    elif (trhs in number_types):
         
-  #     lhs = self
-  #     res = oarr_sub_Or(&lhs.arr, other, dhl)
+      lhs = self
+      res = arrso_sub_Or(&lhs.arr, other, dhl)
 
-  #   elif ( tlhs  == dmat ):
+    elif ( tlhs  == dmat ):
 
-  #     dlhs = self
-  #     rhs = other
+      dlhs = self
+      rhs = other
 
-  #     res = oarr_sub_RO(&dlhs.arr,&rhs.arr, dhl)
+      res = arrso_sub_RO(&dlhs.arr,&rhs.arr, dhl)
 
-  #   elif ( trhs  == dmat ):
+    elif ( trhs  == dmat ):
 
-  #     lhs = self
-  #     drhs = other
+      lhs = self
+      drhs = other
 
-  #     res = oarr_sub_OR(&lhs.arr, &drhs.arr, dhl)
+      res = arrso_sub_OR(&lhs.arr, &drhs.arr, dhl)
 
-  #   else:
+    else:
 
-  #     return NotImplemented      
+      return NotImplemented      
 
-  #   # end if 
+    # end if 
       
-  #   return somat.create(&res)
+    return matso.create(&res)
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __isub__(self, other_in):
-  #   """
-  #   PURPOSE: Inplace subtraction overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __isub__(self, other_in):
+    """
+    PURPOSE: Inplace subtraction overload.
+    """
+    #*************************************************************************************************
   
-  #   return self - other_in
+    return self - other_in
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __mul__(self, other):
-  #   """ 
-  #   PURPOSE: Multiplication overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __mul__(self, other):
+    """ 
+    PURPOSE: Multiplication overload.
+    """
+    #*************************************************************************************************
     
-  #   global dhl
+    global dhl
     
-  #   cdef oarr_t res 
-  #   cdef somat lhs,rhs
-  #   cdef dmat dlhs,drhs
-  #   cdef otinum olhs,orhs
+    cdef arrso_t res 
+    cdef matso lhs,rhs
+    cdef dmat dlhs,drhs
+    cdef sotinum olhs,orhs
     
-  #   tlhs = type(self)
-  #   trhs = type(other)
+    tlhs = type(self)
+    trhs = type(other)
     
-  #   if (tlhs == trhs):
+    if (tlhs == trhs):
 
-  #     lhs = self
-  #     rhs = other
+      lhs = self
+      rhs = other
 
-  #     res = oarr_mul_OO(&lhs.arr,&rhs.arr,dhl)
+      res = arrso_mul_OO(&lhs.arr,&rhs.arr,dhl)
 
-  #   elif ( tlhs  == otinum ):
+    elif ( tlhs  == sotinum ):
 
-  #     olhs = self
-  #     rhs = other
+      olhs = self
+      rhs = other
 
-  #     res = oarr_mul_oO(&olhs.num,&rhs.arr, dhl)
+      res = arrso_mul_oO(&olhs.num,&rhs.arr, dhl)
 
-  #   elif ( trhs  == otinum ):
+    elif ( trhs  == sotinum ):
 
-  #     lhs = self
-  #     orhs = other
+      lhs = self
+      orhs = other
 
-  #     res = oarr_mul_oO(&orhs.num,&lhs.arr, dhl)
+      res = arrso_mul_oO(&orhs.num,&lhs.arr, dhl)
     
-  #   elif (tlhs in number_types):
+    elif (tlhs in number_types):
       
-  #     rhs = other
-  #     res = oarr_mul_rO(self, &rhs.arr, dhl)
+      rhs = other
+      res = arrso_mul_rO(self, &rhs.arr, dhl)
 
-  #   elif (trhs in number_types):
+    elif (trhs in number_types):
         
-  #     lhs = self
-  #     res = oarr_mul_rO(other, &lhs.arr, dhl)
+      lhs = self
+      res = arrso_mul_rO(other, &lhs.arr, dhl)
 
-  #   elif ( tlhs  == dmat ):
+    elif ( tlhs  == dmat ):
 
-  #     dlhs = self
-  #     rhs = other
+      dlhs = self
+      rhs = other
 
-  #     res = oarr_mul_RO(&dlhs.arr,&rhs.arr, dhl)
+      res = arrso_mul_RO(&dlhs.arr,&rhs.arr, dhl)
 
-  #   elif ( trhs  == dmat ):
+    elif ( trhs  == dmat ):
 
-  #     lhs = self
-  #     drhs = other
+      lhs = self
+      drhs = other
 
-  #     res = oarr_mul_RO(&drhs.arr,&lhs.arr, dhl)
+      res = arrso_mul_RO(&drhs.arr,&lhs.arr, dhl)
 
-  #   else:
+    else:
 
-  #     return NotImplemented      
+      return NotImplemented      
 
-  #   # end if 
+    # end if 
       
-  #   return somat.create(&res)
+    return matso.create(&res)
 
     
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __imul__(self, other_in):
-  #   """
-  #   PURPOSE: Inplace multiplication overload.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __imul__(self, other_in):
+    """
+    PURPOSE: Inplace multiplication overload.
+    """
+    #*************************************************************************************************
 
-  #   return self * other_in
+    return self * other_in
 
-  # #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------  
 
 
   # #***************************************************************************************************
@@ -608,10 +608,10 @@ cdef class matso:
     
   #   global dhl
     
-  #   cdef oarr_t res 
-  #   cdef somat lhs,rhs
+  #   cdef arrso_t res 
+  #   cdef matso lhs,rhs
   #   cdef dmat dlhs,drhs
-  #   cdef otinum olhs,orhs
+  #   cdef sotinum olhs,orhs
     
   #   tlhs = type(self)
   #   trhs = type(other)
@@ -621,46 +621,46 @@ cdef class matso:
   #     # lhs = self
   #     # rhs = other
 
-  #     # res = oarr_div_OO(&lhs.arr,&rhs.arr,dhl)
+  #     # res = arrso_div_OO(&lhs.arr,&rhs.arr,dhl)
 
   #     return NotImplemented
 
-  #   elif ( tlhs  == otinum ):
+  #   elif ( tlhs  == sotinum ):
 
   #     # olhs = self
   #     # rhs = other
 
-  #     # res = oarr_div_oO(&olhs.num,&rhs.arr, dhl)
+  #     # res = arrso_div_oO(&olhs.num,&rhs.arr, dhl)
 
   #     return NotImplemented
 
-  #   elif ( trhs  == otinum ):
+  #   elif ( trhs  == sotinum ):
 
   #     # lhs = self
   #     # orhs = other
 
-  #     # res = oarr_div_oO(&orhs.num,&lhs.arr, dhl)
+  #     # res = arrso_div_oO(&orhs.num,&lhs.arr, dhl)
 
   #     return NotImplemented
     
   #   elif (tlhs in number_types):
       
   #     # rhs = other
-  #     # res = oarr_div_rO(self, &rhs.arr, dhl)
+  #     # res = arrso_div_rO(self, &rhs.arr, dhl)
 
   #     return NotImplemented      
 
   #   elif (trhs in number_types):
         
   #     lhs = self
-  #     res = oarr_div_Or(&lhs.arr, other, dhl)
+  #     res = arrso_div_Or(&lhs.arr, other, dhl)
 
   #   elif ( tlhs  == dmat ):
 
   #     # dlhs = self
   #     # rhs = other
 
-  #     # res = oarr_div_RO(&dlhs.arr,&rhs.arr, dhl)
+  #     # res = arrso_div_RO(&dlhs.arr,&rhs.arr, dhl)
 
   #     return NotImplemented      
 
@@ -669,7 +669,7 @@ cdef class matso:
   #     lhs = self
   #     drhs = other
 
-  #     res = oarr_div_OR(&lhs.arr, &drhs.arr, dhl)
+  #     res = arrso_div_OR(&lhs.arr, &drhs.arr, dhl)
 
   #   else:
 
@@ -677,7 +677,7 @@ cdef class matso:
 
   #   # end if 
 
-  #   return somat.create(&res)
+  #   return matso.create(&res)
 
   # #---------------------------------------------------------------------------------------------------  
 
@@ -701,64 +701,69 @@ cdef class matso:
 
   # #   return power(self,n)
 
-  # # #---------------------------------------------------------------------------------------------------  
+  # # #---------------------------------------------------------------------------------------------------
 
+ 
+  #***************************************************************************************************
+  def get_deriv(self, hum_dir ):
+    """
+    PURPOSE: Get the corresponding derivative of the system.
+    """
+    #*************************************************************************************************
+    global dhl
 
-  # #***************************************************************************************************
-  # cpdef copy(self):
-  #   """
-  #   PURPOSE: Copy the elements to new memory spaces.
-  #   """
-  #   #*************************************************************************************************
+    cdef list item = imdir(hum_dir)
+    cdef np.ndarray[coeff_t, ndim=2] tmp
+    cdef coeff_t factor = 1
+
+    tmp = self.get_im(hum_dir)
+
+    factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
+
+    return tmp * factor
+
+  #---------------------------------------------------------------------------------------------------  
+
+  #***************************************************************************************************
+  def get_im(self, hum_dir):
+    """
+    PURPOSE: Get the corresponding imaginary direction in the matso object.
+    """
+    #*************************************************************************************************
+    global dhl
     
-  #   global dhl
-    
-  #   cdef oarr_t res = oarr_copy(&self.arr, dhl)    
-      
-  #   return somat.create(&res)
+    cdef list item = imdir(hum_dir)
+    cdef darr_t res_darr
+    cdef dmat res_dmat
+    cdef uint64_t i,j, k
+    cdef np.ndarray[double, ndim=2] res
 
-  # #---------------------------------------------------------------------------------------------------  
-  
+    res_darr = arrso_get_im( item[ZERO],  item[ONE], &self.arr,  dhl)
 
-  # #***************************************************************************************************
-  # def get_deriv(self, hum_dir ,copy=True):
-  #   """
-  #   PURPOSE: Get the corresponding derivative of the system.
-  #   """
-  #   #*************************************************************************************************
-  #   global dhl
+    res = np.empty( self.shape , dtype = np.float64)
 
-  #   cdef list item = imdir(hum_dir)
-  #   cdef np.ndarray[coeff_t, ndim=2] tmp
-  #   cdef coeff_t factor = 1
+    k=0
 
-  #   tmp = self.get_imdir( item[ZERO], item[ONE],copy=copy)
+    for i in range(self.arr.nrows):
 
-  #   factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
+      for j in range(self.arr.ncols):
 
-  #   return tmp * factor
+        res[i,j] = res_darr.p_data[k]
+        k+=1
 
-  # #---------------------------------------------------------------------------------------------------  
+      # end for 
 
-  # #***************************************************************************************************
-  # cpdef get_im(self, hum_dir, copy = True):
-  #   """
-  #   PURPOSE: Get the corresponding imaginary direction in the somat object.
-  #   """
-  #   #*************************************************************************************************
-  #   global dhl
-    
-  #   cdef list item = imdir(hum_dir)
+    #end for
 
-  #   return self.get_imdir( item[ZERO], item[ONE], copy = copy )
+    return res
 
-  # #---------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------
 
 
   # #***************************************************************************************************
   # cpdef get_imdir(self, imdir_t idx , ord_t order, copy = True):
   #   """
-  #   PURPOSE: Get the corresponding imaginary direction in the somat object.
+  #   PURPOSE: Get the corresponding imaginary direction in the matso object.
   #   """
   #   #*************************************************************************************************
   #   global dhl
@@ -812,7 +817,7 @@ cdef class matso:
   # #***************************************************************************************************
   # cpdef set_imdir(self,np.ndarray[coeff_t, ndim=2] arr, imdir_t idx , ord_t order):
   #   """
-  #   PURPOSE: Get the corresponding imaginary direction in the somat object.
+  #   PURPOSE: Get the corresponding imaginary direction in the matso object.
   #   """
   #   #*************************************************************************************************
   #   global dhl
@@ -847,7 +852,7 @@ cdef class matso:
   # #---------------------------------------------------------------------------------------------------
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: END OF CLASS somat :::::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS matso :::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
@@ -858,109 +863,109 @@ cdef class matso:
 
 
 # #***************************************************************************************************
-# cpdef somat addO(somat lhs, somat rhs, somat out = None):
+# cpdef matso addO(matso lhs, matso rhs, matso out = None):
 #   """
 #   PURPOSE:      Add two OTI numbers.
                 
 #   DESCRIPTION:  Eliminates the need to type check the input parameters 
   
 #   INPUTS:
-#                 lhs: otinum 
-#                 rhs: otinum 
-#                 out: otinum, optional. Result holder
+#                 lhs: sotinum 
+#                 rhs: sotinum 
+#                 out: sotinum, optional. Result holder
                 
 #   """
 #   #*************************************************************************************************
 #   global dhl
-#   cdef oarr_t res
+#   cdef arrso_t res
   
 #   if out != None:
 
-#     oarr_sum_OO_to(&lhs.arr, &rhs.arr, &out.arr ,dhl)
+#     arrso_sum_OO_to(&lhs.arr, &rhs.arr, &out.arr ,dhl)
 #     return None
 
 #   else:
 #     # 
-#     res = oarr_sum_OO(&lhs.arr, &rhs.arr, dhl)
+#     res = arrso_sum_OO(&lhs.arr, &rhs.arr, dhl)
 
-#     return somat.create(&res)
+#     return matso.create(&res)
 
 # #--------------------------------------------------------------------------------------------------- 
 
 
 
 # #***************************************************************************************************
-# cpdef addO_to(somat lhs, somat rhs, somat out):
+# cpdef addO_to(matso lhs, matso rhs, matso out):
 #   """
 #   PURPOSE:      Add two elements.
                 
 #   DESCRIPTION:  Eliminates the need to type check the input parameters 
   
 #   INPUTS:
-#                 lhs: somat 
-#                 rhs: somat 
-#                 out: somat Result holder
+#                 lhs: matso 
+#                 rhs: matso 
+#                 out: matso Result holder
                 
 #   """
 #   #*************************************************************************************************
 #   global dhl
   
-#   oarr_sum_OO_to(&lhs.arr, &rhs.arr, &out.arr ,dhl)
+#   arrso_sum_OO_to(&lhs.arr, &rhs.arr, &out.arr ,dhl)
 
 # #--------------------------------------------------------------------------------------------------- 
 
 
 
 # #*****************************************************************************************************
-# cpdef somat dot(somat A, somat B):
+# cpdef matso dot(matso A, matso B):
 
 #   global dhl
   
-#   cdef oarr_t res = oarr_matmul_OO( &A.arr, &B.arr , dhl)
+#   cdef arrso_t res = arrso_matmul_OO( &A.arr, &B.arr , dhl)
 
 #   # TODO: Add check in python code.
 
-#   return somat.create(&res)
+#   return matso.create(&res)
 
 # #-----------------------------------------------------------------------------------------------------
 
 
 # #*****************************************************************************************************
-# cpdef somat invert(somat A):
+# cpdef matso invert(matso A):
   
 #   global dhl
 
-#   cdef oarr_t res = oarr_invert( &A.arr, dhl )
+#   cdef arrso_t res = arrso_invert( &A.arr, dhl )
 
 #   # TODO: Add check in python code.
 
-#   return somat.create(&res)
+#   return matso.create(&res)
 
 # #-----------------------------------------------------------------------------------------------------
 
 
 
 # #*****************************************************************************************************
-# cpdef somat transpose(somat A):
+# cpdef matso transpose(matso A):
   
 #   global dhl
 
-#   cdef oarr_t res = oarr_transpose( &A.arr, dhl )
+#   cdef arrso_t res = arrso_transpose( &A.arr, dhl )
 
 #   # TODO: Add check in python code.
 
-#   return somat.create(&res)
+#   return matso.create(&res)
 
 # #-----------------------------------------------------------------------------------------------------
 
 # #*****************************************************************************************************
-# cpdef otinum det(somat A):
+# cpdef sotinum det(matso A):
   
 #   global dhl
 
-#   cdef otinum_t res = oarr_det( &A.arr, dhl)
+#   cdef sotinum_t res = arrso_det( &A.arr, dhl)
 
-#   return otinum.create(&res)
+#   return sotinum.create(&res)
   
 
 # #-----------------------------------------------------------------------------------------------------
@@ -1004,7 +1009,7 @@ cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0)
 
 
 # #*****************************************************************************************************
-# def solve(somat A, somat b):
+# def solve(matso A, matso b):
 #   """
   
 #   PORPUSE: To solve a dense linear system of equations of OTI algebra.
@@ -1018,8 +1023,8 @@ cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0)
 
 #   # Get the corresponding matrix form.
 #   cdef uint64_t i, j, k
-#   # cdef oarr_t oarr_res
-#   cdef somat res
+#   # cdef arrso_t arrso_res
+#   cdef matso res
 #   cdef np.ndarray[coeff_t, ndim=2] tmp
 #   cdef np.ndarray[coeff_t, ndim=2] tmp_rhs
 #   cdef np.ndarray[coeff_t, ndim=2] tmp_dot

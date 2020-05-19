@@ -30,7 +30,7 @@
         ],
         "name": "pyoti.fem",
         "sources": [
-            "/Users/maristi7/coding/otilib/pyoti/cython/fem.pyx"
+            "/Users/maristi7/coding/otilib/src/python/pyoti/cython/fem.pyx"
         ]
     },
     "module_name": "pyoti.fem"
@@ -1603,7 +1603,7 @@ struct __pyx_obj_5pyoti_3fem_gauss_array {
 };
 
 
-/* "../../pyoti/cython/fem/gauss_array.pxi":8
+/* "../../src/python/pyoti/cython/fem/gauss_array.pxi":8
  * # :::::::::::::::::::::::::::::::     CLASS  GAUSS MATRIX    :::::::::::::::::::::::::::::::::::::::::
  * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  * cdef class gauss_matrix:             # <<<<<<<<<<<<<<
@@ -1717,7 +1717,7 @@ struct __pyx_vtabstruct_5pyoti_6sparse_matso {
 static struct __pyx_vtabstruct_5pyoti_6sparse_matso *__pyx_vtabptr_5pyoti_6sparse_matso;
 
 
-/* "../../pyoti/cython/fem/elbase.pxi":44
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":44
  * # ::::::::::::::::::::::::::::::::::     CLASS  elBase    ::::::::::::::::::::::::::::::::::::::::::::
  * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  * cdef class elBase:             # <<<<<<<<<<<<<<
@@ -3074,7 +3074,7 @@ static PyObject *__pyx_tuple__24;
 static PyObject *__pyx_codeobj__25;
 /* Late includes */
 
-/* "../../pyoti/cython/fem/utils.pxi":67
+/* "../../src/python/pyoti/cython/fem/utils.pxi":67
  * 
  * #*****************************************************************************************************
  * cdef object enum2string(int64_t enumId):             # <<<<<<<<<<<<<<
@@ -3087,7 +3087,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("enum2string", 0);
 
-  /* "../../pyoti/cython/fem/utils.pxi":74
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":74
  *   #***************************************************************************************************
  * 
  *   if   enumId == opAdd        :             # <<<<<<<<<<<<<<
@@ -3097,7 +3097,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
   switch (__pyx_v_enumId) {
     case opAdd:
 
-    /* "../../pyoti/cython/fem/utils.pxi":75
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":75
  * 
  *   if   enumId == opAdd        :
  *     return "opAdd        "             # <<<<<<<<<<<<<<
@@ -3109,7 +3109,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opAdd;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":74
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":74
  *   #***************************************************************************************************
  * 
  *   if   enumId == opAdd        :             # <<<<<<<<<<<<<<
@@ -3119,7 +3119,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opSub:
 
-    /* "../../pyoti/cython/fem/utils.pxi":77
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":77
  *     return "opAdd        "
  *   elif enumId == opSub        :
  *     return "opSub        "             # <<<<<<<<<<<<<<
@@ -3131,7 +3131,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opSub;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":76
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":76
  *   if   enumId == opAdd        :
  *     return "opAdd        "
  *   elif enumId == opSub        :             # <<<<<<<<<<<<<<
@@ -3141,7 +3141,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opMul:
 
-    /* "../../pyoti/cython/fem/utils.pxi":79
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":79
  *     return "opSub        "
  *   elif enumId == opMul        :
  *     return "opMul        "             # <<<<<<<<<<<<<<
@@ -3153,7 +3153,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opMul;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":78
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":78
  *   elif enumId == opSub        :
  *     return "opSub        "
  *   elif enumId == opMul        :             # <<<<<<<<<<<<<<
@@ -3163,7 +3163,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opTruediv:
 
-    /* "../../pyoti/cython/fem/utils.pxi":81
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":81
  *     return "opMul        "
  *   elif enumId == opTruediv    :
  *     return "opTruediv    "             # <<<<<<<<<<<<<<
@@ -3175,7 +3175,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opTruediv;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":80
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":80
  *   elif enumId == opMul        :
  *     return "opMul        "
  *   elif enumId == opTruediv    :             # <<<<<<<<<<<<<<
@@ -3185,7 +3185,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opPowr:
 
-    /* "../../pyoti/cython/fem/utils.pxi":83
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":83
  *     return "opTruediv    "
  *   elif enumId == opPowr       :
  *     return "opPowr       "             # <<<<<<<<<<<<<<
@@ -3197,7 +3197,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opPowr;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":82
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":82
  *   elif enumId == opTruediv    :
  *     return "opTruediv    "
  *   elif enumId == opPowr       :             # <<<<<<<<<<<<<<
@@ -3207,7 +3207,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opInt1d:
 
-    /* "../../pyoti/cython/fem/utils.pxi":85
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":85
  *     return "opPowr       "
  *   elif enumId == opInt1d      :
  *     return "opInt1d      "             # <<<<<<<<<<<<<<
@@ -3219,7 +3219,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opInt1d;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":84
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":84
  *   elif enumId == opPowr       :
  *     return "opPowr       "
  *   elif enumId == opInt1d      :             # <<<<<<<<<<<<<<
@@ -3229,7 +3229,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opInt2d:
 
-    /* "../../pyoti/cython/fem/utils.pxi":87
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":87
  *     return "opInt1d      "
  *   elif enumId == opInt2d      :
  *     return "opInt2d      "             # <<<<<<<<<<<<<<
@@ -3241,7 +3241,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opInt2d;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":86
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":86
  *   elif enumId == opInt1d      :
  *     return "opInt1d      "
  *   elif enumId == opInt2d      :             # <<<<<<<<<<<<<<
@@ -3251,7 +3251,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opInt3d:
 
-    /* "../../pyoti/cython/fem/utils.pxi":89
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":89
  *     return "opInt2d      "
  *   elif enumId == opInt3d      :
  *     return "opInt3d      "             # <<<<<<<<<<<<<<
@@ -3263,7 +3263,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opInt3d;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":88
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":88
  *   elif enumId == opInt2d      :
  *     return "opInt2d      "
  *   elif enumId == opInt3d      :             # <<<<<<<<<<<<<<
@@ -3273,7 +3273,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDx:
 
-    /* "../../pyoti/cython/fem/utils.pxi":91
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":91
  *     return "opInt3d      "
  *   elif enumId == opDx         :
  *     return "opDx         "             # <<<<<<<<<<<<<<
@@ -3285,7 +3285,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDx;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":90
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":90
  *   elif enumId == opInt3d      :
  *     return "opInt3d      "
  *   elif enumId == opDx         :             # <<<<<<<<<<<<<<
@@ -3295,7 +3295,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDxx:
 
-    /* "../../pyoti/cython/fem/utils.pxi":93
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":93
  *     return "opDx         "
  *   elif enumId == opDxx        :
  *     return "opDxx        "             # <<<<<<<<<<<<<<
@@ -3307,7 +3307,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDxx;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":92
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":92
  *   elif enumId == opDx         :
  *     return "opDx         "
  *   elif enumId == opDxx        :             # <<<<<<<<<<<<<<
@@ -3317,7 +3317,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDy:
 
-    /* "../../pyoti/cython/fem/utils.pxi":95
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":95
  *     return "opDxx        "
  *   elif enumId == opDy         :
  *     return "opDy         "             # <<<<<<<<<<<<<<
@@ -3329,7 +3329,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDy;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":94
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":94
  *   elif enumId == opDxx        :
  *     return "opDxx        "
  *   elif enumId == opDy         :             # <<<<<<<<<<<<<<
@@ -3339,7 +3339,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDxy:
 
-    /* "../../pyoti/cython/fem/utils.pxi":97
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":97
  *     return "opDy         "
  *   elif enumId == opDxy        :
  *     return "opDxy        "             # <<<<<<<<<<<<<<
@@ -3351,7 +3351,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDxy;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":96
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":96
  *   elif enumId == opDy         :
  *     return "opDy         "
  *   elif enumId == opDxy        :             # <<<<<<<<<<<<<<
@@ -3361,7 +3361,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDyy:
 
-    /* "../../pyoti/cython/fem/utils.pxi":99
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":99
  *     return "opDxy        "
  *   elif enumId == opDyy        :
  *     return "opDyy        "             # <<<<<<<<<<<<<<
@@ -3373,7 +3373,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDyy;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":98
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":98
  *   elif enumId == opDxy        :
  *     return "opDxy        "
  *   elif enumId == opDyy        :             # <<<<<<<<<<<<<<
@@ -3383,7 +3383,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDz:
 
-    /* "../../pyoti/cython/fem/utils.pxi":101
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":101
  *     return "opDyy        "
  *   elif enumId == opDz         :
  *     return "opDz         "             # <<<<<<<<<<<<<<
@@ -3395,7 +3395,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDz;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":100
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":100
  *   elif enumId == opDyy        :
  *     return "opDyy        "
  *   elif enumId == opDz         :             # <<<<<<<<<<<<<<
@@ -3405,7 +3405,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDxz:
 
-    /* "../../pyoti/cython/fem/utils.pxi":103
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":103
  *     return "opDz         "
  *   elif enumId == opDxz        :
  *     return "opDxz        "             # <<<<<<<<<<<<<<
@@ -3417,7 +3417,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDxz;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":102
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":102
  *   elif enumId == opDz         :
  *     return "opDz         "
  *   elif enumId == opDxz        :             # <<<<<<<<<<<<<<
@@ -3427,7 +3427,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDyz:
 
-    /* "../../pyoti/cython/fem/utils.pxi":105
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":105
  *     return "opDxz        "
  *   elif enumId == opDyz        :
  *     return "opDyz        "             # <<<<<<<<<<<<<<
@@ -3439,7 +3439,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDyz;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":104
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":104
  *   elif enumId == opDxz        :
  *     return "opDxz        "
  *   elif enumId == opDyz        :             # <<<<<<<<<<<<<<
@@ -3449,7 +3449,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDzz:
 
-    /* "../../pyoti/cython/fem/utils.pxi":107
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":107
  *     return "opDyz        "
  *   elif enumId == opDzz        :
  *     return "opDzz        "             # <<<<<<<<<<<<<<
@@ -3461,7 +3461,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDzz;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":106
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":106
  *   elif enumId == opDyz        :
  *     return "opDyz        "
  *   elif enumId == opDzz        :             # <<<<<<<<<<<<<<
@@ -3471,7 +3471,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opDef:
 
-    /* "../../pyoti/cython/fem/utils.pxi":109
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":109
  *     return "opDzz        "
  *   elif enumId == opDef        :
  *     return "opDef        "             # <<<<<<<<<<<<<<
@@ -3483,7 +3483,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opDef;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":108
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":108
  *   elif enumId == opDzz        :
  *     return "opDzz        "
  *   elif enumId == opDef        :             # <<<<<<<<<<<<<<
@@ -3493,7 +3493,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opOn:
 
-    /* "../../pyoti/cython/fem/utils.pxi":111
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":111
  *     return "opDef        "
  *   elif enumId == opOn         :
  *     return "opOn         "             # <<<<<<<<<<<<<<
@@ -3505,7 +3505,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opOn;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":110
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":110
  *   elif enumId == opDef        :
  *     return "opDef        "
  *   elif enumId == opOn         :             # <<<<<<<<<<<<<<
@@ -3515,7 +3515,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case opNeg:
 
-    /* "../../pyoti/cython/fem/utils.pxi":113
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":113
  *     return "opOn         "
  *   elif enumId == opNeg        :
  *     return "opNeg        "             # <<<<<<<<<<<<<<
@@ -3527,7 +3527,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_opNeg;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":112
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":112
  *   elif enumId == opOn         :
  *     return "opOn         "
  *   elif enumId == opNeg        :             # <<<<<<<<<<<<<<
@@ -3537,7 +3537,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case subOpDefBasis:
 
-    /* "../../pyoti/cython/fem/utils.pxi":115
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":115
  *     return "opNeg        "
  *   elif enumId == subOpDefBasis:
  *     return "subOpDefBasis"             # <<<<<<<<<<<<<<
@@ -3549,7 +3549,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_n_s_subOpDefBasis;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":114
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":114
  *   elif enumId == opNeg        :
  *     return "opNeg        "
  *   elif enumId == subOpDefBasis:             # <<<<<<<<<<<<<<
@@ -3559,7 +3559,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case subOpDefKnown:
 
-    /* "../../pyoti/cython/fem/utils.pxi":117
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":117
  *     return "subOpDefBasis"
  *   elif enumId == subOpDefKnown:
  *     return "subOpDefKnown"             # <<<<<<<<<<<<<<
@@ -3571,7 +3571,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_n_s_subOpDefKnown;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":116
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":116
  *   elif enumId == subOpDefBasis:
  *     return "subOpDefBasis"
  *   elif enumId == subOpDefKnown:             # <<<<<<<<<<<<<<
@@ -3581,7 +3581,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case subOpInt:
 
-    /* "../../pyoti/cython/fem/utils.pxi":119
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":119
  *     return "subOpDefKnown"
  *   elif enumId == subOpInt     :
  *     return "subOpInt     "             # <<<<<<<<<<<<<<
@@ -3593,7 +3593,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_subOpInt;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":118
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":118
  *   elif enumId == subOpDefKnown:
  *     return "subOpDefKnown"
  *   elif enumId == subOpInt     :             # <<<<<<<<<<<<<<
@@ -3603,7 +3603,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case subOpNeg:
 
-    /* "../../pyoti/cython/fem/utils.pxi":121
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":121
  *     return "subOpInt     "
  *   elif enumId == subOpNeg     :
  *     return "subOpNeg     "             # <<<<<<<<<<<<<<
@@ -3615,7 +3615,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_subOpNeg;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":120
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":120
  *   elif enumId == subOpInt     :
  *     return "subOpInt     "
  *   elif enumId == subOpNeg     :             # <<<<<<<<<<<<<<
@@ -3625,7 +3625,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case subOpMulRes:
 
-    /* "../../pyoti/cython/fem/utils.pxi":123
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":123
  *     return "subOpNeg     "
  *   elif enumId == subOpMulRes  :
  *     return "subOpMulRes  "             # <<<<<<<<<<<<<<
@@ -3637,7 +3637,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_subOpMulRes;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":122
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":122
  *   elif enumId == subOpNeg     :
  *     return "subOpNeg     "
  *   elif enumId == subOpMulRes  :             # <<<<<<<<<<<<<<
@@ -3647,7 +3647,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case subOpMulKnown:
 
-    /* "../../pyoti/cython/fem/utils.pxi":125
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":125
  *     return "subOpMulRes  "
  *   elif enumId == subOpMulKnown:
  *     return "subOpMulKnown"             # <<<<<<<<<<<<<<
@@ -3659,7 +3659,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_n_s_subOpMulKnown;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":124
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":124
  *   elif enumId == subOpMulRes  :
  *     return "subOpMulRes  "
  *   elif enumId == subOpMulKnown:             # <<<<<<<<<<<<<<
@@ -3669,7 +3669,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case subOpOn:
 
-    /* "../../pyoti/cython/fem/utils.pxi":127
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":127
  *     return "subOpMulKnown"
  *   elif enumId == subOpOn      :
  *     return "subOpOn      "             # <<<<<<<<<<<<<<
@@ -3681,7 +3681,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_subOpOn;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":126
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":126
  *   elif enumId == subOpMulKnown:
  *     return "subOpMulKnown"
  *   elif enumId == subOpOn      :             # <<<<<<<<<<<<<<
@@ -3691,7 +3691,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisN:
 
-    /* "../../pyoti/cython/fem/utils.pxi":129
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":129
  *     return "subOpOn      "
  *   elif enumId == basisN       :
  *     return "basisN       "             # <<<<<<<<<<<<<<
@@ -3703,7 +3703,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisN;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":128
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":128
  *   elif enumId == subOpOn      :
  *     return "subOpOn      "
  *   elif enumId == basisN       :             # <<<<<<<<<<<<<<
@@ -3713,7 +3713,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisNx:
 
-    /* "../../pyoti/cython/fem/utils.pxi":131
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":131
  *     return "basisN       "
  *   elif enumId == basisNx      :
  *     return "basisNx      "             # <<<<<<<<<<<<<<
@@ -3725,7 +3725,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisNx;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":130
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":130
  *   elif enumId == basisN       :
  *     return "basisN       "
  *   elif enumId == basisNx      :             # <<<<<<<<<<<<<<
@@ -3735,7 +3735,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisNxx:
 
-    /* "../../pyoti/cython/fem/utils.pxi":133
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":133
  *     return "basisNx      "
  *   elif enumId == basisNxx     :
  *     return "basisNxx     "             # <<<<<<<<<<<<<<
@@ -3747,7 +3747,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisNxx;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":132
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":132
  *   elif enumId == basisNx      :
  *     return "basisNx      "
  *   elif enumId == basisNxx     :             # <<<<<<<<<<<<<<
@@ -3757,7 +3757,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisNy:
 
-    /* "../../pyoti/cython/fem/utils.pxi":135
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":135
  *     return "basisNxx     "
  *   elif enumId == basisNy      :
  *     return "basisNy      "             # <<<<<<<<<<<<<<
@@ -3769,7 +3769,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisNy;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":134
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":134
  *   elif enumId == basisNxx     :
  *     return "basisNxx     "
  *   elif enumId == basisNy      :             # <<<<<<<<<<<<<<
@@ -3779,7 +3779,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisNxy:
 
-    /* "../../pyoti/cython/fem/utils.pxi":137
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":137
  *     return "basisNy      "
  *   elif enumId == basisNxy     :
  *     return "basisNxy     "             # <<<<<<<<<<<<<<
@@ -3791,7 +3791,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisNxy;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":136
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":136
  *   elif enumId == basisNy      :
  *     return "basisNy      "
  *   elif enumId == basisNxy     :             # <<<<<<<<<<<<<<
@@ -3801,7 +3801,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisNyy:
 
-    /* "../../pyoti/cython/fem/utils.pxi":139
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":139
  *     return "basisNxy     "
  *   elif enumId == basisNyy     :
  *     return "basisNyy     "             # <<<<<<<<<<<<<<
@@ -3813,7 +3813,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisNyy;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":138
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":138
  *   elif enumId == basisNxy     :
  *     return "basisNxy     "
  *   elif enumId == basisNyy     :             # <<<<<<<<<<<<<<
@@ -3823,7 +3823,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisNz:
 
-    /* "../../pyoti/cython/fem/utils.pxi":141
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":141
  *     return "basisNyy     "
  *   elif enumId == basisNz      :
  *     return "basisNz      "             # <<<<<<<<<<<<<<
@@ -3835,7 +3835,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisNz;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":140
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":140
  *   elif enumId == basisNyy     :
  *     return "basisNyy     "
  *   elif enumId == basisNz      :             # <<<<<<<<<<<<<<
@@ -3845,7 +3845,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisNxz:
 
-    /* "../../pyoti/cython/fem/utils.pxi":143
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":143
  *     return "basisNz      "
  *   elif enumId == basisNxz     :
  *     return "basisNxz     "             # <<<<<<<<<<<<<<
@@ -3857,7 +3857,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisNxz;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":142
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":142
  *   elif enumId == basisNz      :
  *     return "basisNz      "
  *   elif enumId == basisNxz     :             # <<<<<<<<<<<<<<
@@ -3867,7 +3867,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisNyz:
 
-    /* "../../pyoti/cython/fem/utils.pxi":145
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":145
  *     return "basisNxz     "
  *   elif enumId == basisNyz     :
  *     return "basisNyz     "             # <<<<<<<<<<<<<<
@@ -3879,7 +3879,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisNyz;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":144
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":144
  *   elif enumId == basisNxz     :
  *     return "basisNxz     "
  *   elif enumId == basisNyz     :             # <<<<<<<<<<<<<<
@@ -3889,7 +3889,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case basisNzz:
 
-    /* "../../pyoti/cython/fem/utils.pxi":147
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":147
  *     return "basisNyz     "
  *   elif enumId == basisNzz     :
  *     return "basisNzz     "             # <<<<<<<<<<<<<<
@@ -3901,7 +3901,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_basisNzz;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":146
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":146
  *   elif enumId == basisNyz     :
  *     return "basisNyz     "
  *   elif enumId == basisNzz     :             # <<<<<<<<<<<<<<
@@ -3911,7 +3911,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case kindOtiArr:
 
-    /* "../../pyoti/cython/fem/utils.pxi":149
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":149
  *     return "basisNzz     "
  *   elif enumId == kindOtiArr   :
  *     return "kindOtiArr   "             # <<<<<<<<<<<<<<
@@ -3923,7 +3923,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_kindOtiArr;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":148
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":148
  *   elif enumId == basisNzz     :
  *     return "basisNzz     "
  *   elif enumId == kindOtiArr   :             # <<<<<<<<<<<<<<
@@ -3933,7 +3933,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case kindOtiNum:
 
-    /* "../../pyoti/cython/fem/utils.pxi":151
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":151
  *     return "kindOtiArr   "
  *   elif enumId == kindOtiNum   :
  *     return "kindOtiNum   "             # <<<<<<<<<<<<<<
@@ -3945,7 +3945,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_kindOtiNum;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":150
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":150
  *   elif enumId == kindOtiArr   :
  *     return "kindOtiArr   "
  *   elif enumId == kindOtiNum   :             # <<<<<<<<<<<<<<
@@ -3955,7 +3955,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case kindReal:
 
-    /* "../../pyoti/cython/fem/utils.pxi":153
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":153
  *     return "kindOtiNum   "
  *   elif enumId == kindReal     :
  *     return "kindReal     "             # <<<<<<<<<<<<<<
@@ -3967,7 +3967,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_kindReal;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":152
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":152
  *   elif enumId == kindOtiNum   :
  *     return "kindOtiNum   "
  *   elif enumId == kindReal     :             # <<<<<<<<<<<<<<
@@ -3977,7 +3977,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case kindScalar:
 
-    /* "../../pyoti/cython/fem/utils.pxi":155
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":155
  *     return "kindReal     "
  *   elif enumId == kindScalar   :
  *     return "kindScalar   "             # <<<<<<<<<<<<<<
@@ -3989,7 +3989,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_kindScalar;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":154
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":154
  *   elif enumId == kindReal     :
  *     return "kindReal     "
  *   elif enumId == kindScalar   :             # <<<<<<<<<<<<<<
@@ -3999,7 +3999,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case kindFunc:
 
-    /* "../../pyoti/cython/fem/utils.pxi":157
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":157
  *     return "kindScalar   "
  *   elif enumId == kindFunc     :
  *     return "kindFunc     "             # <<<<<<<<<<<<<<
@@ -4011,7 +4011,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_kindFunc;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":156
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":156
  *   elif enumId == kindScalar   :
  *     return "kindScalar   "
  *   elif enumId == kindFunc     :             # <<<<<<<<<<<<<<
@@ -4021,7 +4021,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feConstant:
 
-    /* "../../pyoti/cython/fem/utils.pxi":159
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":159
  *     return "kindFunc     "
  *   elif enumId == feConstant     :
  *     return "feConstant   "             # <<<<<<<<<<<<<<
@@ -4033,7 +4033,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_feConstant;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":158
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":158
  *   elif enumId == kindFunc     :
  *     return "kindFunc     "
  *   elif enumId == feConstant     :             # <<<<<<<<<<<<<<
@@ -4043,7 +4043,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feVariable:
 
-    /* "../../pyoti/cython/fem/utils.pxi":161
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":161
  *     return "feConstant   "
  *   elif enumId == feVariable     :
  *     return "feVariable   "             # <<<<<<<<<<<<<<
@@ -4055,7 +4055,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_feVariable;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":160
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":160
  *   elif enumId == feConstant     :
  *     return "feConstant   "
  *   elif enumId == feVariable     :             # <<<<<<<<<<<<<<
@@ -4065,7 +4065,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case elNode:
 
-    /* "../../pyoti/cython/fem/utils.pxi":163
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":163
  *     return "feVariable   "
  *   elif enumId == elNode       :
  *     return "elNode       "             # <<<<<<<<<<<<<<
@@ -4077,7 +4077,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_elNode;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":162
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":162
  *   elif enumId == feVariable     :
  *     return "feVariable   "
  *   elif enumId == elNode       :             # <<<<<<<<<<<<<<
@@ -4087,7 +4087,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case elLine:
 
-    /* "../../pyoti/cython/fem/utils.pxi":165
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":165
  *     return "elNode       "
  *   elif enumId == elLine       :
  *     return "elLine       "             # <<<<<<<<<<<<<<
@@ -4099,7 +4099,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_elLine;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":164
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":164
  *   elif enumId == elNode       :
  *     return "elNode       "
  *   elif enumId == elLine       :             # <<<<<<<<<<<<<<
@@ -4109,7 +4109,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case elTriangle:
 
-    /* "../../pyoti/cython/fem/utils.pxi":167
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":167
  *     return "elLine       "
  *   elif enumId == elTriangle   :
  *     return "elTriangle   "             # <<<<<<<<<<<<<<
@@ -4121,7 +4121,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_elTriangle;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":166
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":166
  *   elif enumId == elLine       :
  *     return "elLine       "
  *   elif enumId == elTriangle   :             # <<<<<<<<<<<<<<
@@ -4131,7 +4131,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case elQuadrangle:
 
-    /* "../../pyoti/cython/fem/utils.pxi":169
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":169
  *     return "elTriangle   "
  *   elif enumId == elQuadrangle :
  *     return "elQuadrangle "             # <<<<<<<<<<<<<<
@@ -4143,7 +4143,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_elQuadrangle;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":168
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":168
  *   elif enumId == elTriangle   :
  *     return "elTriangle   "
  *   elif enumId == elQuadrangle :             # <<<<<<<<<<<<<<
@@ -4153,7 +4153,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case elTetrahedra:
 
-    /* "../../pyoti/cython/fem/utils.pxi":171
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":171
  *     return "elQuadrangle "
  *   elif enumId == elTetrahedra :
  *     return "elTetrahedra "             # <<<<<<<<<<<<<<
@@ -4165,7 +4165,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_elTetrahedra;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":170
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":170
  *   elif enumId == elQuadrangle :
  *     return "elQuadrangle "
  *   elif enumId == elTetrahedra :             # <<<<<<<<<<<<<<
@@ -4175,7 +4175,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case elHexahedra:
 
-    /* "../../pyoti/cython/fem/utils.pxi":173
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":173
  *     return "elTetrahedra "
  *   elif enumId == elHexahedra  :
  *     return "elHexahedra  "             # <<<<<<<<<<<<<<
@@ -4187,7 +4187,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_elHexahedra;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":172
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":172
  *   elif enumId == elTetrahedra :
  *     return "elTetrahedra "
  *   elif enumId == elHexahedra  :             # <<<<<<<<<<<<<<
@@ -4197,7 +4197,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case elkindIso:
 
-    /* "../../pyoti/cython/fem/utils.pxi":175
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":175
  *     return "elHexahedra  "
  *   elif enumId == elkindIso    :
  *     return "elkindIso    "             # <<<<<<<<<<<<<<
@@ -4209,7 +4209,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_elkindIso;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":174
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":174
  *   elif enumId == elHexahedra  :
  *     return "elHexahedra  "
  *   elif enumId == elkindIso    :             # <<<<<<<<<<<<<<
@@ -4219,7 +4219,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case elkindAff:
 
-    /* "../../pyoti/cython/fem/utils.pxi":177
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":177
  *     return "elkindIso    "
  *   elif enumId == elkindAff    :
  *     return "elkindAff    "             # <<<<<<<<<<<<<<
@@ -4231,7 +4231,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_elkindAff;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":176
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":176
  *   elif enumId == elkindIso    :
  *     return "elkindIso    "
  *   elif enumId == elkindAff    :             # <<<<<<<<<<<<<<
@@ -4241,7 +4241,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derN:
 
-    /* "../../pyoti/cython/fem/utils.pxi":179
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":179
  *     return "elkindAff    "
  *   elif enumId == derN         :
  *     return "derN         "             # <<<<<<<<<<<<<<
@@ -4253,7 +4253,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derN;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":178
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":178
  *   elif enumId == elkindAff    :
  *     return "elkindAff    "
  *   elif enumId == derN         :             # <<<<<<<<<<<<<<
@@ -4263,7 +4263,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derNa:
 
-    /* "../../pyoti/cython/fem/utils.pxi":181
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":181
  *     return "derN         "
  *   elif enumId == derNa        :
  *     return "derNa        "             # <<<<<<<<<<<<<<
@@ -4275,7 +4275,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derNa;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":180
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":180
  *   elif enumId == derN         :
  *     return "derN         "
  *   elif enumId == derNa        :             # <<<<<<<<<<<<<<
@@ -4285,7 +4285,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derNaa:
 
-    /* "../../pyoti/cython/fem/utils.pxi":183
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":183
  *     return "derNa        "
  *   elif enumId == derNaa       :
  *     return "derNaa       "             # <<<<<<<<<<<<<<
@@ -4297,7 +4297,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derNaa;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":182
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":182
  *   elif enumId == derNa        :
  *     return "derNa        "
  *   elif enumId == derNaa       :             # <<<<<<<<<<<<<<
@@ -4307,7 +4307,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derNb:
 
-    /* "../../pyoti/cython/fem/utils.pxi":185
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":185
  *     return "derNaa       "
  *   elif enumId == derNb        :
  *     return "derNb        "             # <<<<<<<<<<<<<<
@@ -4319,7 +4319,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derNb;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":184
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":184
  *   elif enumId == derNaa       :
  *     return "derNaa       "
  *   elif enumId == derNb        :             # <<<<<<<<<<<<<<
@@ -4329,7 +4329,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derNab:
 
-    /* "../../pyoti/cython/fem/utils.pxi":187
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":187
  *     return "derNb        "
  *   elif enumId == derNab       :
  *     return "derNab       "             # <<<<<<<<<<<<<<
@@ -4341,7 +4341,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derNab;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":186
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":186
  *   elif enumId == derNb        :
  *     return "derNb        "
  *   elif enumId == derNab       :             # <<<<<<<<<<<<<<
@@ -4351,7 +4351,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derNbb:
 
-    /* "../../pyoti/cython/fem/utils.pxi":189
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":189
  *     return "derNab       "
  *   elif enumId == derNbb       :
  *     return "derNbb       "             # <<<<<<<<<<<<<<
@@ -4363,7 +4363,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derNbb;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":188
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":188
  *   elif enumId == derNab       :
  *     return "derNab       "
  *   elif enumId == derNbb       :             # <<<<<<<<<<<<<<
@@ -4373,7 +4373,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derNc:
 
-    /* "../../pyoti/cython/fem/utils.pxi":191
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":191
  *     return "derNbb       "
  *   elif enumId == derNc        :
  *     return "derNc        "             # <<<<<<<<<<<<<<
@@ -4385,7 +4385,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derNc;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":190
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":190
  *   elif enumId == derNbb       :
  *     return "derNbb       "
  *   elif enumId == derNc        :             # <<<<<<<<<<<<<<
@@ -4395,7 +4395,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derNac:
 
-    /* "../../pyoti/cython/fem/utils.pxi":193
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":193
  *     return "derNc        "
  *   elif enumId == derNac       :
  *     return "derNac       "             # <<<<<<<<<<<<<<
@@ -4407,7 +4407,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derNac;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":192
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":192
  *   elif enumId == derNc        :
  *     return "derNc        "
  *   elif enumId == derNac       :             # <<<<<<<<<<<<<<
@@ -4417,7 +4417,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derNbc:
 
-    /* "../../pyoti/cython/fem/utils.pxi":195
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":195
  *     return "derNac       "
  *   elif enumId == derNbc       :
  *     return "derNbc       "             # <<<<<<<<<<<<<<
@@ -4429,7 +4429,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derNbc;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":194
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":194
  *   elif enumId == derNac       :
  *     return "derNac       "
  *   elif enumId == derNbc       :             # <<<<<<<<<<<<<<
@@ -4439,7 +4439,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case derNcc:
 
-    /* "../../pyoti/cython/fem/utils.pxi":197
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":197
  *     return "derNbc       "
  *   elif enumId == derNcc       :
  *     return "derNcc       "             # <<<<<<<<<<<<<<
@@ -4451,7 +4451,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_derNcc;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":196
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":196
  *   elif enumId == derNbc       :
  *     return "derNbc       "
  *   elif enumId == derNcc       :             # <<<<<<<<<<<<<<
@@ -4461,7 +4461,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feNatTest:
 
-    /* "../../pyoti/cython/fem/utils.pxi":199
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":199
  *     return "derNcc       "
  *   elif enumId == feNatTest    :
  *     return "feNatTest    "             # <<<<<<<<<<<<<<
@@ -4473,7 +4473,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_feNatTest;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":198
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":198
  *   elif enumId == derNcc       :
  *     return "derNcc       "
  *   elif enumId == feNatTest    :             # <<<<<<<<<<<<<<
@@ -4483,7 +4483,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feNatUndef:
 
-    /* "../../pyoti/cython/fem/utils.pxi":201
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":201
  *     return "feNatTest    "
  *   elif enumId == feNatUndef   :
  *     return "feNatUndef   "             # <<<<<<<<<<<<<<
@@ -4495,7 +4495,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_feNatUndef;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":200
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":200
  *   elif enumId == feNatTest    :
  *     return "feNatTest    "
  *   elif enumId == feNatUndef   :             # <<<<<<<<<<<<<<
@@ -4505,7 +4505,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feNatDef:
 
-    /* "../../pyoti/cython/fem/utils.pxi":203
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":203
  *     return "feNatUndef   "
  *   elif enumId == feNatDef     :
  *     return "feNatDef     "             # <<<<<<<<<<<<<<
@@ -4517,7 +4517,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_feNatDef;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":202
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":202
  *   elif enumId == feNatUndef   :
  *     return "feNatUndef   "
  *   elif enumId == feNatDef     :             # <<<<<<<<<<<<<<
@@ -4527,7 +4527,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feNatDefConst:
 
-    /* "../../pyoti/cython/fem/utils.pxi":205
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":205
  *     return "feNatDef     "
  *   elif enumId == feNatDefConst:
  *     return "feNatDefConst"             # <<<<<<<<<<<<<<
@@ -4539,7 +4539,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_n_s_feNatDefConst;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":204
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":204
  *   elif enumId == feNatDef     :
  *     return "feNatDef     "
  *   elif enumId == feNatDefConst:             # <<<<<<<<<<<<<<
@@ -4549,7 +4549,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feNatOperRes:
 
-    /* "../../pyoti/cython/fem/utils.pxi":207
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":207
  *     return "feNatDefConst"
  *   elif enumId == feNatOperRes :
  *     return "feNatOperRes "             # <<<<<<<<<<<<<<
@@ -4561,7 +4561,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_kp_s_feNatOperRes;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":206
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":206
  *   elif enumId == feNatDefConst:
  *     return "feNatDefConst"
  *   elif enumId == feNatOperRes :             # <<<<<<<<<<<<<<
@@ -4571,7 +4571,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feNatPostIntK:
 
-    /* "../../pyoti/cython/fem/utils.pxi":209
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":209
  *     return "feNatOperRes "
  *   elif enumId == feNatPostIntK:
  *     return "feNatPostIntK"             # <<<<<<<<<<<<<<
@@ -4583,7 +4583,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_n_s_feNatPostIntK;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":208
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":208
  *   elif enumId == feNatOperRes :
  *     return "feNatOperRes "
  *   elif enumId == feNatPostIntK:             # <<<<<<<<<<<<<<
@@ -4593,7 +4593,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feNatPostIntF:
 
-    /* "../../pyoti/cython/fem/utils.pxi":211
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":211
  *     return "feNatPostIntK"
  *   elif enumId == feNatPostIntF:
  *     return "feNatPostIntF"             # <<<<<<<<<<<<<<
@@ -4605,7 +4605,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_n_s_feNatPostIntF;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":210
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":210
  *   elif enumId == feNatPostIntK:
  *     return "feNatPostIntK"
  *   elif enumId == feNatPostIntF:             # <<<<<<<<<<<<<<
@@ -4615,7 +4615,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     break;
     case feNatBoundary:
 
-    /* "../../pyoti/cython/fem/utils.pxi":213
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":213
  *     return "feNatPostIntF"
  *   elif enumId == feNatBoundary:
  *     return "feNatBoundary"             # <<<<<<<<<<<<<<
@@ -4627,7 +4627,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     __pyx_r = __pyx_n_s_feNatBoundary;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/fem/utils.pxi":212
+    /* "../../src/python/pyoti/cython/fem/utils.pxi":212
  *   elif enumId == feNatPostIntF:
  *     return "feNatPostIntF"
  *   elif enumId == feNatBoundary:             # <<<<<<<<<<<<<<
@@ -4638,7 +4638,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
     default: break;
   }
 
-  /* "../../pyoti/cython/fem/utils.pxi":67
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":67
  * 
  * #*****************************************************************************************************
  * cdef object enum2string(int64_t enumId):             # <<<<<<<<<<<<<<
@@ -4654,7 +4654,7 @@ static PyObject *__pyx_f_5pyoti_3fem_enum2string(int64_t __pyx_v_enumId) {
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/point1_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/point1_iso.pxi":3
  * 
  * #*****************************************************************************************************
  * cpdef point1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -4672,7 +4672,7 @@ static PyObject *__pyx_f_5pyoti_3fem_point1_iso(CYTHON_UNUSED __pyx_t_5pyoti_8c_
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("point1_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/point1_iso.pxi":22
+  /* "../../src/python/pyoti/cython/fem/element/point1_iso.pxi":22
  *   """
  * 
  *   cdef otinum N0 = 1.0 + 0.0*e( 1, order = derOrder)             # <<<<<<<<<<<<<<
@@ -4701,7 +4701,7 @@ static PyObject *__pyx_f_5pyoti_3fem_point1_iso(CYTHON_UNUSED __pyx_t_5pyoti_8c_
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/point1_iso.pxi":24
+  /* "../../src/python/pyoti/cython/fem/element/point1_iso.pxi":24
  *   cdef otinum N0 = 1.0 + 0.0*e( 1, order = derOrder)
  * 
  *   return [N0,]             # <<<<<<<<<<<<<<
@@ -4718,7 +4718,7 @@ static PyObject *__pyx_f_5pyoti_3fem_point1_iso(CYTHON_UNUSED __pyx_t_5pyoti_8c_
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/point1_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/point1_iso.pxi":3
  * 
  * #*****************************************************************************************************
  * cpdef point1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -4847,7 +4847,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_point1_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/line1_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/line1_iso.pxi":3
  * 
  * # ******************************************************************************************************
  * cpdef line1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -4862,7 +4862,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("line1_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/line1_iso.pxi":40
+  /* "../../src/python/pyoti/cython/fem/element/line1_iso.pxi":40
  *   """
  * 
  *   return point1_iso( xi_r, eta_r, chi_r, derOrder)             # <<<<<<<<<<<<<<
@@ -4876,7 +4876,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/line1_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/line1_iso.pxi":3
  * 
  * # ******************************************************************************************************
  * cpdef line1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -5002,7 +5002,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_2line1_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/line2_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/line2_iso.pxi":3
  * 
  * #*****************************************************************************************************
  * cpdef line2_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -5023,7 +5023,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line2_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("line2_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/line2_iso.pxi":42
+  /* "../../src/python/pyoti/cython/fem/element/line2_iso.pxi":42
  *   """
  * 
  *   cdef otinum xi = xi_r + e( 1, order = derOrder)             # <<<<<<<<<<<<<<
@@ -5052,7 +5052,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line2_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/line2_iso.pxi":44
+  /* "../../src/python/pyoti/cython/fem/element/line2_iso.pxi":44
  *   cdef otinum xi = xi_r + e( 1, order = derOrder)
  * 
  *   cdef otinum N0 = 0.5 * (1.0 - xi)             # <<<<<<<<<<<<<<
@@ -5068,7 +5068,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line2_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/line2_iso.pxi":45
+  /* "../../src/python/pyoti/cython/fem/element/line2_iso.pxi":45
  * 
  *   cdef otinum N0 = 0.5 * (1.0 - xi)
  *   cdef otinum N1 = 0.5 * (1.0 + xi)             # <<<<<<<<<<<<<<
@@ -5084,7 +5084,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line2_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/line2_iso.pxi":47
+  /* "../../src/python/pyoti/cython/fem/element/line2_iso.pxi":47
  *   cdef otinum N1 = 0.5 * (1.0 + xi)
  * 
  *   return [ N0, N1 ]             # <<<<<<<<<<<<<<
@@ -5104,7 +5104,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line2_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/line2_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/line2_iso.pxi":3
  * 
  * #*****************************************************************************************************
  * cpdef line2_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -5236,7 +5236,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_4line2_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/line3_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/line3_iso.pxi":3
  * 
  * #*****************************************************************************************************
  * cpdef line3_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -5258,7 +5258,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("line3_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/line3_iso.pxi":22
+  /* "../../src/python/pyoti/cython/fem/element/line3_iso.pxi":22
  *   """
  * 
  *   cdef otinum xi = xi_r + e( 1, order = derOrder)             # <<<<<<<<<<<<<<
@@ -5287,7 +5287,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/line3_iso.pxi":24
+  /* "../../src/python/pyoti/cython/fem/element/line3_iso.pxi":24
  *   cdef otinum xi = xi_r + e( 1, order = derOrder)
  * 
  *   cdef otinum N0 = -0.5 * xi * ( 1.0 - xi )             # <<<<<<<<<<<<<<
@@ -5306,7 +5306,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/line3_iso.pxi":25
+  /* "../../src/python/pyoti/cython/fem/element/line3_iso.pxi":25
  * 
  *   cdef otinum N0 = -0.5 * xi * ( 1.0 - xi )
  *   cdef otinum N1 =  0.5 * xi * ( 1.0 + xi )             # <<<<<<<<<<<<<<
@@ -5325,7 +5325,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/line3_iso.pxi":26
+  /* "../../src/python/pyoti/cython/fem/element/line3_iso.pxi":26
  *   cdef otinum N0 = -0.5 * xi * ( 1.0 - xi )
  *   cdef otinum N1 =  0.5 * xi * ( 1.0 + xi )
  *   cdef otinum N2 =  1.0 - xi * xi             # <<<<<<<<<<<<<<
@@ -5341,7 +5341,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/line3_iso.pxi":28
+  /* "../../src/python/pyoti/cython/fem/element/line3_iso.pxi":28
  *   cdef otinum N2 =  1.0 - xi * xi
  * 
  *   return [ N0, N1, N2 ]             # <<<<<<<<<<<<<<
@@ -5364,7 +5364,7 @@ static PyObject *__pyx_f_5pyoti_3fem_line3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/line3_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/line3_iso.pxi":3
  * 
  * #*****************************************************************************************************
  * cpdef line3_iso(coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -5497,7 +5497,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6line3_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/tri1_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/tri1_iso.pxi":3
  * 
  * # ******************************************************************************************************
  * cpdef tri1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -5512,7 +5512,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("tri1_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/tri1_iso.pxi":46
+  /* "../../src/python/pyoti/cython/fem/element/tri1_iso.pxi":46
  *   """
  * 
  *   return point1_iso( xi_r, eta_r, chi_r, derOrder)             # <<<<<<<<<<<<<<
@@ -5526,7 +5526,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/tri1_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/tri1_iso.pxi":3
  * 
  * # ******************************************************************************************************
  * cpdef tri1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -5652,7 +5652,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_8tri1_iso(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/tri3_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/tri3_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef tri3_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -5675,7 +5675,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("tri3_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/tri3_iso.pxi":48
+  /* "../../src/python/pyoti/cython/fem/element/tri3_iso.pxi":48
  *   """
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -5705,7 +5705,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri3_iso.pxi":49
+  /* "../../src/python/pyoti/cython/fem/element/tri3_iso.pxi":49
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -5735,7 +5735,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri3_iso.pxi":51
+  /* "../../src/python/pyoti/cython/fem/element/tri3_iso.pxi":51
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
  * 
  *   cdef otinum N0 = 1.0 - xi - eta             # <<<<<<<<<<<<<<
@@ -5751,7 +5751,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri3_iso.pxi":52
+  /* "../../src/python/pyoti/cython/fem/element/tri3_iso.pxi":52
  * 
  *   cdef otinum N0 = 1.0 - xi - eta
  *   cdef otinum N1 = xi             # <<<<<<<<<<<<<<
@@ -5761,7 +5761,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_xi));
   __pyx_v_N1 = __pyx_v_xi;
 
-  /* "../../pyoti/cython/fem/element/tri3_iso.pxi":53
+  /* "../../src/python/pyoti/cython/fem/element/tri3_iso.pxi":53
  *   cdef otinum N0 = 1.0 - xi - eta
  *   cdef otinum N1 = xi
  *   cdef otinum N2 = eta             # <<<<<<<<<<<<<<
@@ -5771,7 +5771,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_eta));
   __pyx_v_N2 = __pyx_v_eta;
 
-  /* "../../pyoti/cython/fem/element/tri3_iso.pxi":55
+  /* "../../src/python/pyoti/cython/fem/element/tri3_iso.pxi":55
  *   cdef otinum N2 = eta
  * 
  *   return [N0, N1, N2];             # <<<<<<<<<<<<<<
@@ -5794,7 +5794,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri3_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/tri3_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/tri3_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef tri3_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -5928,7 +5928,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_10tri3_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/tri4_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/tri4_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef tri4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -5952,7 +5952,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("tri4_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/tri4_iso.pxi":48
+  /* "../../src/python/pyoti/cython/fem/element/tri4_iso.pxi":48
  *   """
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -5982,7 +5982,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri4_iso.pxi":49
+  /* "../../src/python/pyoti/cython/fem/element/tri4_iso.pxi":49
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -6012,7 +6012,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri4_iso.pxi":51
+  /* "../../src/python/pyoti/cython/fem/element/tri4_iso.pxi":51
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
  * 
  *   cdef otinum N0 = 1.0 -  xi - eta             # <<<<<<<<<<<<<<
@@ -6028,7 +6028,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri4_iso.pxi":52
+  /* "../../src/python/pyoti/cython/fem/element/tri4_iso.pxi":52
  * 
  *   cdef otinum N0 = 1.0 -  xi - eta
  *   cdef otinum N1 = xi             # <<<<<<<<<<<<<<
@@ -6038,7 +6038,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_xi));
   __pyx_v_N1 = __pyx_v_xi;
 
-  /* "../../pyoti/cython/fem/element/tri4_iso.pxi":53
+  /* "../../src/python/pyoti/cython/fem/element/tri4_iso.pxi":53
  *   cdef otinum N0 = 1.0 -  xi - eta
  *   cdef otinum N1 = xi
  *   cdef otinum N2 = eta             # <<<<<<<<<<<<<<
@@ -6048,7 +6048,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_eta));
   __pyx_v_N2 = __pyx_v_eta;
 
-  /* "../../pyoti/cython/fem/element/tri4_iso.pxi":54
+  /* "../../src/python/pyoti/cython/fem/element/tri4_iso.pxi":54
  *   cdef otinum N1 = xi
  *   cdef otinum N2 = eta
  *   cdef otinum N3 = ( 1.0 - xi ** 2 )*( 1.0 - eta ** 2 )             # <<<<<<<<<<<<<<
@@ -6073,7 +6073,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N3 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri4_iso.pxi":56
+  /* "../../src/python/pyoti/cython/fem/element/tri4_iso.pxi":56
  *   cdef otinum N3 = ( 1.0 - xi ** 2 )*( 1.0 - eta ** 2 )
  * 
  *   return [N0, N1, N2, N3];             # <<<<<<<<<<<<<<
@@ -6099,7 +6099,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/tri4_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/tri4_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef tri4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -6234,7 +6234,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12tri4_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/tri6_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef tri6_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -6260,7 +6260,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("tri6_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":47
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":47
  * 
  *   """
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -6290,7 +6290,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":48
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":48
  *   """
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -6320,7 +6320,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":50
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":50
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
  * 
  *   cdef otinum N0 = 2.0 * eta ** 2 +  4.0 * eta * xi - 3.0 * eta + 2.0 * xi ** 2 - 3.0 * xi + 1.0             # <<<<<<<<<<<<<<
@@ -6369,7 +6369,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":51
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":51
  * 
  *   cdef otinum N0 = 2.0 * eta ** 2 +  4.0 * eta * xi - 3.0 * eta + 2.0 * xi ** 2 - 3.0 * xi + 1.0
  *   cdef otinum N1 = 2.0 * xi ** 2 - xi             # <<<<<<<<<<<<<<
@@ -6388,7 +6388,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":52
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":52
  *   cdef otinum N0 = 2.0 * eta ** 2 +  4.0 * eta * xi - 3.0 * eta + 2.0 * xi ** 2 - 3.0 * xi + 1.0
  *   cdef otinum N1 = 2.0 * xi ** 2 - xi
  *   cdef otinum N2 = 2.0 * eta ** 2 - eta             # <<<<<<<<<<<<<<
@@ -6407,7 +6407,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":53
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":53
  *   cdef otinum N1 = 2.0 * xi ** 2 - xi
  *   cdef otinum N2 = 2.0 * eta ** 2 - eta
  *   cdef otinum N3 = 4.0 * (  xi  -   xi ** 2 - eta * xi)             # <<<<<<<<<<<<<<
@@ -6432,7 +6432,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N3 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":54
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":54
  *   cdef otinum N2 = 2.0 * eta ** 2 - eta
  *   cdef otinum N3 = 4.0 * (  xi  -   xi ** 2 - eta * xi)
  *   cdef otinum N4 = 4.0 * eta * xi             # <<<<<<<<<<<<<<
@@ -6448,7 +6448,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N4 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":55
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":55
  *   cdef otinum N3 = 4.0 * (  xi  -   xi ** 2 - eta * xi)
  *   cdef otinum N4 = 4.0 * eta * xi
  *   cdef otinum N5 = 4.0 * ( eta  -  eta**2 - eta * xi)             # <<<<<<<<<<<<<<
@@ -6473,7 +6473,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N5 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":57
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":57
  *   cdef otinum N5 = 4.0 * ( eta  -  eta**2 - eta * xi)
  * 
  *   return [N0, N1, N2, N3, N4, N5]             # <<<<<<<<<<<<<<
@@ -6504,7 +6504,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tri6_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/tri6_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/tri6_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef tri6_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -6641,7 +6641,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_14tri6_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/quad1_iso.pxi":2
+/* "../../src/python/pyoti/cython/fem/element/quad1_iso.pxi":2
  * # ******************************************************************************************************
  * cpdef quad1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
@@ -6655,7 +6655,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("quad1_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/quad1_iso.pxi":47
+  /* "../../src/python/pyoti/cython/fem/element/quad1_iso.pxi":47
  *   """
  * 
  *   return point1_iso( xi_r, eta_r, chi_r, derOrder)             # <<<<<<<<<<<<<<
@@ -6669,7 +6669,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/quad1_iso.pxi":2
+  /* "../../src/python/pyoti/cython/fem/element/quad1_iso.pxi":2
  * # ******************************************************************************************************
  * cpdef quad1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
@@ -6794,7 +6794,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_16quad1_iso(CYTHON_UNUSED PyObject *__pyx_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/quad4_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/quad4_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef quad4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -6818,7 +6818,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("quad4_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":51
+  /* "../../src/python/pyoti/cython/fem/element/quad4_iso.pxi":51
  *   """
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -6848,7 +6848,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":52
+  /* "../../src/python/pyoti/cython/fem/element/quad4_iso.pxi":52
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -6878,7 +6878,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":54
+  /* "../../src/python/pyoti/cython/fem/element/quad4_iso.pxi":54
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
  * 
  *   cdef otinum N0 =  0.25*(1.0 - xi)*(1.0 - eta)             # <<<<<<<<<<<<<<
@@ -6900,7 +6900,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":55
+  /* "../../src/python/pyoti/cython/fem/element/quad4_iso.pxi":55
  * 
  *   cdef otinum N0 =  0.25*(1.0 - xi)*(1.0 - eta)
  *   cdef otinum N1 =  0.25*(1.0 + xi)*(1.0 - eta)             # <<<<<<<<<<<<<<
@@ -6922,7 +6922,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":56
+  /* "../../src/python/pyoti/cython/fem/element/quad4_iso.pxi":56
  *   cdef otinum N0 =  0.25*(1.0 - xi)*(1.0 - eta)
  *   cdef otinum N1 =  0.25*(1.0 + xi)*(1.0 - eta)
  *   cdef otinum N2 =  0.25*(1.0 + xi)*(1.0 + eta)             # <<<<<<<<<<<<<<
@@ -6944,7 +6944,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":57
+  /* "../../src/python/pyoti/cython/fem/element/quad4_iso.pxi":57
  *   cdef otinum N1 =  0.25*(1.0 + xi)*(1.0 - eta)
  *   cdef otinum N2 =  0.25*(1.0 + xi)*(1.0 + eta)
  *   cdef otinum N3 =  0.25*(1.0 - xi)*(1.0 + eta)             # <<<<<<<<<<<<<<
@@ -6966,7 +6966,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N3 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":59
+  /* "../../src/python/pyoti/cython/fem/element/quad4_iso.pxi":59
  *   cdef otinum N3 =  0.25*(1.0 - xi)*(1.0 + eta)
  * 
  *   return [ N0, N1, N2, N3 ]             # <<<<<<<<<<<<<<
@@ -6992,7 +6992,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/quad4_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/quad4_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef quad4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -7127,7 +7127,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_18quad4_iso(CYTHON_UNUSED PyObject *__pyx_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/quad8_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef quad8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -7155,7 +7155,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("quad8_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":47
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":47
  *   """
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -7185,7 +7185,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":48
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":48
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -7215,7 +7215,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":50
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":50
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
  * 
  *   cdef otinum N0 = -0.25*(1.0 - xi)*(1.0 - eta)*(1.0 + xi + eta)             # <<<<<<<<<<<<<<
@@ -7246,7 +7246,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":51
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":51
  * 
  *   cdef otinum N0 = -0.25*(1.0 - xi)*(1.0 - eta)*(1.0 + xi + eta)
  *   cdef otinum N1 = -0.25*(1.0 + xi)*(1.0 - eta)*(1.0 - xi + eta)             # <<<<<<<<<<<<<<
@@ -7277,7 +7277,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":52
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":52
  *   cdef otinum N0 = -0.25*(1.0 - xi)*(1.0 - eta)*(1.0 + xi + eta)
  *   cdef otinum N1 = -0.25*(1.0 + xi)*(1.0 - eta)*(1.0 - xi + eta)
  *   cdef otinum N2 = -0.25*(1.0 + xi)*(1.0 + eta)*(1.0 - xi - eta)             # <<<<<<<<<<<<<<
@@ -7308,7 +7308,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":53
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":53
  *   cdef otinum N1 = -0.25*(1.0 + xi)*(1.0 - eta)*(1.0 - xi + eta)
  *   cdef otinum N2 = -0.25*(1.0 + xi)*(1.0 + eta)*(1.0 - xi - eta)
  *   cdef otinum N3 = -0.25*(1.0 - xi)*(1.0 + eta)*(1.0 + xi - eta)             # <<<<<<<<<<<<<<
@@ -7339,7 +7339,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N3 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":54
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":54
  *   cdef otinum N2 = -0.25*(1.0 + xi)*(1.0 + eta)*(1.0 - xi - eta)
  *   cdef otinum N3 = -0.25*(1.0 - xi)*(1.0 + eta)*(1.0 + xi - eta)
  *   cdef otinum N4 =  0.50*(1.0 - xi)*(1.0 + xi )*(1.0 - eta)             # <<<<<<<<<<<<<<
@@ -7367,7 +7367,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N4 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":55
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":55
  *   cdef otinum N3 = -0.25*(1.0 - xi)*(1.0 + eta)*(1.0 + xi - eta)
  *   cdef otinum N4 =  0.50*(1.0 - xi)*(1.0 + xi )*(1.0 - eta)
  *   cdef otinum N5 =  0.50*(1.0 + xi)*(1.0 + eta)*(1.0 - eta)             # <<<<<<<<<<<<<<
@@ -7395,7 +7395,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N5 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":56
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":56
  *   cdef otinum N4 =  0.50*(1.0 - xi)*(1.0 + xi )*(1.0 - eta)
  *   cdef otinum N5 =  0.50*(1.0 + xi)*(1.0 + eta)*(1.0 - eta)
  *   cdef otinum N6 =  0.50*(1.0 - xi)*(1.0 + xi )*(1.0 + eta)             # <<<<<<<<<<<<<<
@@ -7423,7 +7423,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N6 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":57
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":57
  *   cdef otinum N5 =  0.50*(1.0 + xi)*(1.0 + eta)*(1.0 - eta)
  *   cdef otinum N6 =  0.50*(1.0 - xi)*(1.0 + xi )*(1.0 + eta)
  *   cdef otinum N7 =  0.50*(1.0 - xi)*(1.0 + eta)*(1.0 - eta)             # <<<<<<<<<<<<<<
@@ -7451,7 +7451,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N7 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":59
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":59
  *   cdef otinum N7 =  0.50*(1.0 - xi)*(1.0 + eta)*(1.0 - eta)
  * 
  *   return [ N0, N1, N2, N3, N4, N5, N6, N7]             # <<<<<<<<<<<<<<
@@ -7489,7 +7489,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/quad8_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/quad8_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef quad8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -7628,7 +7628,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_20quad8_iso(CYTHON_UNUSED PyObject *__pyx_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/quad9_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef quad9_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -7657,7 +7657,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("quad9_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":47
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":47
  *   """
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -7687,7 +7687,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":48
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":48
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -7717,7 +7717,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":50
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":50
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)
  * 
  *   cdef otinum N0 = 0.25 * ( xi ** 2 - xi ) * ( eta ** 2 - eta )             # <<<<<<<<<<<<<<
@@ -7745,7 +7745,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":51
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":51
  * 
  *   cdef otinum N0 = 0.25 * ( xi ** 2 - xi ) * ( eta ** 2 - eta )
  *   cdef otinum N1 = 0.25 * ( xi ** 2 + xi ) * ( eta ** 2 - eta )             # <<<<<<<<<<<<<<
@@ -7773,7 +7773,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":52
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":52
  *   cdef otinum N0 = 0.25 * ( xi ** 2 - xi ) * ( eta ** 2 - eta )
  *   cdef otinum N1 = 0.25 * ( xi ** 2 + xi ) * ( eta ** 2 - eta )
  *   cdef otinum N2 = 0.25 * ( xi ** 2 + xi ) * ( eta ** 2 + eta )             # <<<<<<<<<<<<<<
@@ -7801,7 +7801,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":53
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":53
  *   cdef otinum N1 = 0.25 * ( xi ** 2 + xi ) * ( eta ** 2 - eta )
  *   cdef otinum N2 = 0.25 * ( xi ** 2 + xi ) * ( eta ** 2 + eta )
  *   cdef otinum N3 = 0.25 * ( xi ** 2 - xi ) * ( eta ** 2 + eta )             # <<<<<<<<<<<<<<
@@ -7829,7 +7829,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N3 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":54
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":54
  *   cdef otinum N2 = 0.25 * ( xi ** 2 + xi ) * ( eta ** 2 + eta )
  *   cdef otinum N3 = 0.25 * ( xi ** 2 - xi ) * ( eta ** 2 + eta )
  *   cdef otinum N4 = 0.50 * ( 1.0 - xi ** 2) * ( eta ** 2 - eta )             # <<<<<<<<<<<<<<
@@ -7857,7 +7857,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N4 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":55
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":55
  *   cdef otinum N3 = 0.25 * ( xi ** 2 - xi ) * ( eta ** 2 + eta )
  *   cdef otinum N4 = 0.50 * ( 1.0 - xi ** 2) * ( eta ** 2 - eta )
  *   cdef otinum N5 = 0.50 * ( xi ** 2 + xi ) * ( 1.0 - eta ** 2 )             # <<<<<<<<<<<<<<
@@ -7885,7 +7885,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N5 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":56
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":56
  *   cdef otinum N4 = 0.50 * ( 1.0 - xi ** 2) * ( eta ** 2 - eta )
  *   cdef otinum N5 = 0.50 * ( xi ** 2 + xi ) * ( 1.0 - eta ** 2 )
  *   cdef otinum N6 = 0.50 * ( 1.0 - xi ** 2) * ( eta ** 2 + eta )             # <<<<<<<<<<<<<<
@@ -7913,7 +7913,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N6 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":57
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":57
  *   cdef otinum N5 = 0.50 * ( xi ** 2 + xi ) * ( 1.0 - eta ** 2 )
  *   cdef otinum N6 = 0.50 * ( 1.0 - xi ** 2) * ( eta ** 2 + eta )
  *   cdef otinum N7 = 0.50 * ( xi ** 2 - xi ) * ( 1.0 - eta ** 2 )             # <<<<<<<<<<<<<<
@@ -7941,7 +7941,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N7 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":58
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":58
  *   cdef otinum N6 = 0.50 * ( 1.0 - xi ** 2) * ( eta ** 2 + eta )
  *   cdef otinum N7 = 0.50 * ( xi ** 2 - xi ) * ( 1.0 - eta ** 2 )
  *   cdef otinum N8 = 0.50 * ( 1.0 - xi ** 2) * ( 1.0 - eta ** 2 )             # <<<<<<<<<<<<<<
@@ -7969,7 +7969,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N8 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":60
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":60
  *   cdef otinum N8 = 0.50 * ( 1.0 - xi ** 2) * ( 1.0 - eta ** 2 )
  * 
  *   return [ N0, N1, N2, N3, N4, N5, N6, N7, N8]             # <<<<<<<<<<<<<<
@@ -8010,7 +8010,7 @@ static PyObject *__pyx_f_5pyoti_3fem_quad9_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/quad9_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/quad9_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef quad9_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -8150,7 +8150,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_22quad9_iso(CYTHON_UNUSED PyObject *__pyx_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/tet1_iso.pxi":2
+/* "../../src/python/pyoti/cython/fem/element/tet1_iso.pxi":2
  * # ******************************************************************************************************
  * cpdef tet1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
@@ -8164,7 +8164,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("tet1_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/tet1_iso.pxi":51
+  /* "../../src/python/pyoti/cython/fem/element/tet1_iso.pxi":51
  *   """
  * 
  *   return point1_iso( xi_r, eta_r, chi_r, derOrder)             # <<<<<<<<<<<<<<
@@ -8178,7 +8178,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/tet1_iso.pxi":2
+  /* "../../src/python/pyoti/cython/fem/element/tet1_iso.pxi":2
  * # ******************************************************************************************************
  * cpdef tet1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
@@ -8303,7 +8303,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_24tet1_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/tet4_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef tet4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -8328,7 +8328,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("tet4_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":53
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":53
  * 
  *   """
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -8358,7 +8358,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":54
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":54
  *   """
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -8388,7 +8388,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":55
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":55
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -8418,7 +8418,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_chi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":57
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":57
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)
  * 
  *   cdef otinum N0 = 1.0 - xi - eta - chi             # <<<<<<<<<<<<<<
@@ -8437,7 +8437,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":58
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":58
  * 
  *   cdef otinum N0 = 1.0 - xi - eta - chi
  *   cdef otinum N1 = xi             # <<<<<<<<<<<<<<
@@ -8447,7 +8447,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_xi));
   __pyx_v_N1 = __pyx_v_xi;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":59
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":59
  *   cdef otinum N0 = 1.0 - xi - eta - chi
  *   cdef otinum N1 = xi
  *   cdef otinum N2 = eta             # <<<<<<<<<<<<<<
@@ -8457,7 +8457,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_eta));
   __pyx_v_N2 = __pyx_v_eta;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":60
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":60
  *   cdef otinum N1 = xi
  *   cdef otinum N2 = eta
  *   cdef otinum N3 = chi             # <<<<<<<<<<<<<<
@@ -8467,7 +8467,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __Pyx_INCREF(((PyObject *)__pyx_v_chi));
   __pyx_v_N3 = __pyx_v_chi;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":62
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":62
  *   cdef otinum N3 = chi
  * 
  *   return [N0, N1, N2, N3]             # <<<<<<<<<<<<<<
@@ -8492,7 +8492,7 @@ static PyObject *__pyx_f_5pyoti_3fem_tet4_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef tet4_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
@@ -8628,7 +8628,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_26tet4_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/hex1_iso.pxi":2
+/* "../../src/python/pyoti/cython/fem/element/hex1_iso.pxi":2
  * # ******************************************************************************************************
  * cpdef hex1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
@@ -8642,7 +8642,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("hex1_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/hex1_iso.pxi":56
+  /* "../../src/python/pyoti/cython/fem/element/hex1_iso.pxi":56
  *   """
  * 
  *   return point1_iso( xi_r, eta_r, chi_r, derOrder)             # <<<<<<<<<<<<<<
@@ -8656,7 +8656,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex1_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/hex1_iso.pxi":2
+  /* "../../src/python/pyoti/cython/fem/element/hex1_iso.pxi":2
  * # ******************************************************************************************************
  * cpdef hex1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):             # <<<<<<<<<<<<<<
  *   """
@@ -8781,7 +8781,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_28hex1_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/hex8_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef hex8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -8810,7 +8810,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("hex8_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":58
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":58
  *   """
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -8840,7 +8840,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":59
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":59
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -8870,7 +8870,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":60
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":60
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -8900,7 +8900,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_chi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":62
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":62
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)
  * 
  *   cdef otinum N0 =  0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) # 1 -> (-1,-1,-1)             # <<<<<<<<<<<<<<
@@ -8928,7 +8928,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":63
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":63
  * 
  *   cdef otinum N0 =  0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) # 1 -> (-1,-1,-1)
  *   cdef otinum N1 =  0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) # 1 -> ( 1,-1,-1)             # <<<<<<<<<<<<<<
@@ -8956,7 +8956,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":64
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":64
  *   cdef otinum N0 =  0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) # 1 -> (-1,-1,-1)
  *   cdef otinum N1 =  0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) # 1 -> ( 1,-1,-1)
  *   cdef otinum N2 =  0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> ( 1, 1,-1)             # <<<<<<<<<<<<<<
@@ -8984,7 +8984,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":65
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":65
  *   cdef otinum N1 =  0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) # 1 -> ( 1,-1,-1)
  *   cdef otinum N2 =  0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> ( 1, 1,-1)
  *   cdef otinum N3 =  0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> (-1, 1,-1)             # <<<<<<<<<<<<<<
@@ -9012,7 +9012,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N3 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":66
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":66
  *   cdef otinum N2 =  0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> ( 1, 1,-1)
  *   cdef otinum N3 =  0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> (-1, 1,-1)
  *   cdef otinum N4 =  0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> (-1,-1, 1)             # <<<<<<<<<<<<<<
@@ -9040,7 +9040,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N4 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":67
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":67
  *   cdef otinum N3 =  0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) # 1 -> (-1, 1,-1)
  *   cdef otinum N4 =  0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> (-1,-1, 1)
  *   cdef otinum N5 =  0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> ( 1,-1, 1)             # <<<<<<<<<<<<<<
@@ -9068,7 +9068,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N5 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":68
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":68
  *   cdef otinum N4 =  0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> (-1,-1, 1)
  *   cdef otinum N5 =  0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> ( 1,-1, 1)
  *   cdef otinum N6 =  0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) # 1 -> ( 1, 1, 1)             # <<<<<<<<<<<<<<
@@ -9096,7 +9096,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N6 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":69
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":69
  *   cdef otinum N5 =  0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) # 1 -> ( 1,-1, 1)
  *   cdef otinum N6 =  0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) # 1 -> ( 1, 1, 1)
  *   cdef otinum N7 =  0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) # 1 -> (-1, 1, 1)             # <<<<<<<<<<<<<<
@@ -9124,7 +9124,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_v_N7 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":71
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":71
  *   cdef otinum N7 =  0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) # 1 -> (-1, 1, 1)
  * 
  *   return [ N0, N1, N2, N3, N4, N5, N6, N7 ]             # <<<<<<<<<<<<<<
@@ -9162,7 +9162,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex8_iso(__pyx_t_5pyoti_8c_otilib_coeff_t _
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/hex8_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/hex8_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef hex8_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -9302,7 +9302,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_30hex8_iso(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/element/hex20_iso.pxi":3
+/* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef hex20_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -9343,7 +9343,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("hex20_iso", 0);
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":76
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":76
  *   """
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -9373,7 +9373,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_xi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":77
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":77
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -9403,7 +9403,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_eta = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":78
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":78
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -9433,7 +9433,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_chi = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":81
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":81
  * 
  *   # Vertex nodes.
  *   cdef otinum N0 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * (-xi - eta - chi - 2.0 ) #(-1,-1,-1)             # <<<<<<<<<<<<<<
@@ -9476,7 +9476,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N0 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":82
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":82
  *   # Vertex nodes.
  *   cdef otinum N0 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * (-xi - eta - chi - 2.0 ) #(-1,-1,-1)
  *   cdef otinum N1 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * ( xi - eta - chi - 2.0 ) #( 1,-1,-1)             # <<<<<<<<<<<<<<
@@ -9516,7 +9516,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":83
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":83
  *   cdef otinum N0 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * (-xi - eta - chi - 2.0 ) #(-1,-1,-1)
  *   cdef otinum N1 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * ( xi - eta - chi - 2.0 ) #( 1,-1,-1)
  *   cdef otinum N2 = 0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * ( xi + eta - chi - 2.0 ) #( 1, 1,-1)             # <<<<<<<<<<<<<<
@@ -9556,7 +9556,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":84
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":84
  *   cdef otinum N1 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * ( xi - eta - chi - 2.0 ) #( 1,-1,-1)
  *   cdef otinum N2 = 0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * ( xi + eta - chi - 2.0 ) #( 1, 1,-1)
  *   cdef otinum N3 = 0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * (-xi + eta - chi - 2.0 ) #(-1, 1,-1)             # <<<<<<<<<<<<<<
@@ -9599,7 +9599,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N3 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":85
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":85
  *   cdef otinum N2 = 0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * ( xi + eta - chi - 2.0 ) #( 1, 1,-1)
  *   cdef otinum N3 = 0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * (-xi + eta - chi - 2.0 ) #(-1, 1,-1)
  *   cdef otinum N4 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * (-xi - eta + chi - 2.0 ) #(-1, 1, 1)             # <<<<<<<<<<<<<<
@@ -9642,7 +9642,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N4 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":86
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":86
  *   cdef otinum N3 = 0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * (-xi + eta - chi - 2.0 ) #(-1, 1,-1)
  *   cdef otinum N4 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * (-xi - eta + chi - 2.0 ) #(-1, 1, 1)
  *   cdef otinum N5 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * ( xi - eta + chi - 2.0 ) #( 1,-1, 1)             # <<<<<<<<<<<<<<
@@ -9682,7 +9682,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N5 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":87
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":87
  *   cdef otinum N4 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * (-xi - eta + chi - 2.0 ) #(-1, 1, 1)
  *   cdef otinum N5 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * ( xi - eta + chi - 2.0 ) #( 1,-1, 1)
  *   cdef otinum N6 = 0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) * ( xi + eta + chi - 2.0 ) #( 1, 1, 1)             # <<<<<<<<<<<<<<
@@ -9722,7 +9722,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N6 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":88
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":88
  *   cdef otinum N5 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * ( xi - eta + chi - 2.0 ) #( 1,-1, 1)
  *   cdef otinum N6 = 0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) * ( xi + eta + chi - 2.0 ) #( 1, 1, 1)
  *   cdef otinum N7 = 0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) * (-xi + eta + chi - 2.0 ) #(-1, 1, 1)             # <<<<<<<<<<<<<<
@@ -9765,7 +9765,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N7 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":91
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":91
  * 
  *   # Edge nodes
  *   cdef otinum N8 = 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 - chi      )             # <<<<<<<<<<<<<<
@@ -9796,7 +9796,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N8 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":92
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":92
  *   # Edge nodes
  *   cdef otinum N8 = 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 - chi      )
  *   cdef otinum N9 = 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )             # <<<<<<<<<<<<<<
@@ -9827,7 +9827,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N9 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":93
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":93
  *   cdef otinum N8 = 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 - chi      )
  *   cdef otinum N9 = 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )
  *   cdef otinum N10= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )             # <<<<<<<<<<<<<<
@@ -9858,7 +9858,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N10 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":94
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":94
  *   cdef otinum N9 = 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )
  *   cdef otinum N10= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )
  *   cdef otinum N11= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )             # <<<<<<<<<<<<<<
@@ -9889,7 +9889,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N11 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":95
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":95
  *   cdef otinum N10= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )
  *   cdef otinum N11= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )
  *   cdef otinum N12= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )             # <<<<<<<<<<<<<<
@@ -9920,7 +9920,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N12 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":96
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":96
  *   cdef otinum N11= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )
  *   cdef otinum N12= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )
  *   cdef otinum N13= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 + eta      ) * ( 1.0 - chi      )             # <<<<<<<<<<<<<<
@@ -9951,7 +9951,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N13 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":97
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":97
  *   cdef otinum N12= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )
  *   cdef otinum N13= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 + eta      ) * ( 1.0 - chi      )
  *   cdef otinum N14= 0.250 * ( 1.0 + xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )             # <<<<<<<<<<<<<<
@@ -9982,7 +9982,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N14 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":98
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":98
  *   cdef otinum N13= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 + eta      ) * ( 1.0 - chi      )
  *   cdef otinum N14= 0.250 * ( 1.0 + xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )
  *   cdef otinum N15= 0.250 * ( 1.0 - xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )             # <<<<<<<<<<<<<<
@@ -10013,7 +10013,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N15 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":99
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":99
  *   cdef otinum N14= 0.250 * ( 1.0 + xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )
  *   cdef otinum N15= 0.250 * ( 1.0 - xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )
  *   cdef otinum N16= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 + chi      )             # <<<<<<<<<<<<<<
@@ -10044,7 +10044,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N16 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":100
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":100
  *   cdef otinum N15= 0.250 * ( 1.0 - xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )
  *   cdef otinum N16= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 + chi      )
  *   cdef otinum N17= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 + chi      )             # <<<<<<<<<<<<<<
@@ -10075,7 +10075,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N17 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":101
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":101
  *   cdef otinum N16= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 + chi      )
  *   cdef otinum N17= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 + chi      )
  *   cdef otinum N18= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 + chi      )             # <<<<<<<<<<<<<<
@@ -10106,7 +10106,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N18 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":102
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":102
  *   cdef otinum N17= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 + chi      )
  *   cdef otinum N18= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 + chi      )
  *   cdef otinum N19= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 + eta      ) * ( 1.0 + chi      )             # <<<<<<<<<<<<<<
@@ -10137,7 +10137,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_v_N19 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":104
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":104
  *   cdef otinum N19= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 + eta      ) * ( 1.0 + chi      )
  * 
  *   return [ N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12, N13, N14, N15, N16, N17, N18, N19 ]             # <<<<<<<<<<<<<<
@@ -10211,7 +10211,7 @@ static PyObject *__pyx_f_5pyoti_3fem_hex20_iso(__pyx_t_5pyoti_8c_otilib_coeff_t 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/element/hex20_iso.pxi":3
+  /* "../../src/python/pyoti/cython/fem/element/hex20_iso.pxi":3
  * 
  * # ****************************************************************************************************
  * cpdef hex20_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):             # <<<<<<<<<<<<<<
@@ -10363,7 +10363,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_32hex20_iso(CYTHON_UNUSED PyObject *__pyx_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":55
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":55
  * 
  *   #***************************************************************************************************
  *   def __init__(self):             # <<<<<<<<<<<<<<
@@ -10396,7 +10396,7 @@ static int __pyx_pf_5pyoti_3fem_6elBase___init__(struct __pyx_obj_5pyoti_3fem_el
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":62
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":62
  * 
  *     """
  *     self.elem = elem_init()             # <<<<<<<<<<<<<<
@@ -10405,7 +10405,7 @@ static int __pyx_pf_5pyoti_3fem_6elBase___init__(struct __pyx_obj_5pyoti_3fem_el
  */
   __pyx_v_self->elem = elem_init();
 
-  /* "../../pyoti/cython/fem/elbase.pxi":63
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":63
  *     """
  *     self.elem = elem_init()
  *     self.FLAG = 0             # <<<<<<<<<<<<<<
@@ -10414,7 +10414,7 @@ static int __pyx_pf_5pyoti_3fem_6elBase___init__(struct __pyx_obj_5pyoti_3fem_el
  */
   __pyx_v_self->FLAG = 0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":55
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":55
  * 
  *   #***************************************************************************************************
  *   def __init__(self):             # <<<<<<<<<<<<<<
@@ -10428,7 +10428,7 @@ static int __pyx_pf_5pyoti_3fem_6elBase___init__(struct __pyx_obj_5pyoti_3fem_el
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":68
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":68
  * 
  *   #***************************************************************************************************
  *   def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -10457,7 +10457,7 @@ static int __pyx_pf_5pyoti_3fem_6elBase_2__cinit__(struct __pyx_obj_5pyoti_3fem_
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":75
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":75
  * 
  *     """
  *     self.elem = elem_init()             # <<<<<<<<<<<<<<
@@ -10466,7 +10466,7 @@ static int __pyx_pf_5pyoti_3fem_6elBase_2__cinit__(struct __pyx_obj_5pyoti_3fem_
  */
   __pyx_v_self->elem = elem_init();
 
-  /* "../../pyoti/cython/fem/elbase.pxi":76
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":76
  *     """
  *     self.elem = elem_init()
  *     self.FLAG = 0             # <<<<<<<<<<<<<<
@@ -10475,7 +10475,7 @@ static int __pyx_pf_5pyoti_3fem_6elBase_2__cinit__(struct __pyx_obj_5pyoti_3fem_
  */
   __pyx_v_self->FLAG = 0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":68
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":68
  * 
  *   #***************************************************************************************************
  *   def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -10489,7 +10489,7 @@ static int __pyx_pf_5pyoti_3fem_6elBase_2__cinit__(struct __pyx_obj_5pyoti_3fem_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":81
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":81
  * 
  *   #***************************************************************************************************
  *   def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -10513,7 +10513,7 @@ static void __pyx_pf_5pyoti_3fem_6elBase_4__dealloc__(struct __pyx_obj_5pyoti_3f
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":89
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":89
  *     """
  *     # print("trying Dealloc elBase")
  *     if self.elem.isInit:             # <<<<<<<<<<<<<<
@@ -10523,7 +10523,7 @@ static void __pyx_pf_5pyoti_3fem_6elBase_4__dealloc__(struct __pyx_obj_5pyoti_3f
   __pyx_t_1 = (__pyx_v_self->elem.isInit != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/fem/elbase.pxi":90
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":90
  *     # print("trying Dealloc elBase")
  *     if self.elem.isInit:
  *       elem_free(&self.elem)             # <<<<<<<<<<<<<<
@@ -10532,7 +10532,7 @@ static void __pyx_pf_5pyoti_3fem_6elBase_4__dealloc__(struct __pyx_obj_5pyoti_3f
  */
     (void)(elem_free((&__pyx_v_self->elem)));
 
-    /* "../../pyoti/cython/fem/elbase.pxi":89
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":89
  *     """
  *     # print("trying Dealloc elBase")
  *     if self.elem.isInit:             # <<<<<<<<<<<<<<
@@ -10541,7 +10541,7 @@ static void __pyx_pf_5pyoti_3fem_6elBase_4__dealloc__(struct __pyx_obj_5pyoti_3f
  */
   }
 
-  /* "../../pyoti/cython/fem/elbase.pxi":81
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":81
  * 
  *   #***************************************************************************************************
  *   def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -10553,7 +10553,7 @@ static void __pyx_pf_5pyoti_3fem_6elBase_4__dealloc__(struct __pyx_obj_5pyoti_3f
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":100
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":100
  *   # cdef elBase createNewElement(uint64_t nbasis, int64_t geomBase, int64_t  kind,   uint8_t  ndim, \
  *   #             int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*) nogil, list boundEls ):
  *   cdef elBase createNewElement(uint64_t nbasis, uint8_t order, int64_t geomBase, int64_t  kind,   \             # <<<<<<<<<<<<<<
@@ -10569,7 +10569,7 @@ static struct __pyx_obj_5pyoti_3fem_elBase *__pyx_f_5pyoti_3fem_6elBase_createNe
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("createNewElement", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":139
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":139
  * 
  *     # create new empty object:
  *     cdef elBase newElement = <elBase> elBase.__new__(elBase)             # <<<<<<<<<<<<<<
@@ -10584,7 +10584,7 @@ static struct __pyx_obj_5pyoti_3fem_elBase *__pyx_f_5pyoti_3fem_6elBase_createNe
   __pyx_v_newElement = ((struct __pyx_obj_5pyoti_3fem_elBase *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":141
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":141
  *     cdef elBase newElement = <elBase> elBase.__new__(elBase)
  * 
  *     newElement.elem = elem_init()             # <<<<<<<<<<<<<<
@@ -10593,7 +10593,7 @@ static struct __pyx_obj_5pyoti_3fem_elBase *__pyx_f_5pyoti_3fem_6elBase_createNe
  */
   __pyx_v_newElement->elem = elem_init();
 
-  /* "../../pyoti/cython/fem/elbase.pxi":144
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":144
  * 
  *     # elem_start( &newElement.elem, nbasis, geomBase, kind, ndim, basis_f)
  *     elem_start( &newElement.elem, nbasis, geomBase, kind, ndim)             # <<<<<<<<<<<<<<
@@ -10602,7 +10602,7 @@ static struct __pyx_obj_5pyoti_3fem_elBase *__pyx_f_5pyoti_3fem_6elBase_createNe
  */
   (void)(elem_start((&__pyx_v_newElement->elem), __pyx_v_nbasis, __pyx_v_geomBase, __pyx_v_kind, __pyx_v_ndim));
 
-  /* "../../pyoti/cython/fem/elbase.pxi":145
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":145
  *     # elem_start( &newElement.elem, nbasis, geomBase, kind, ndim, basis_f)
  *     elem_start( &newElement.elem, nbasis, geomBase, kind, ndim)
  *     newElement.pyFunct = basis             # <<<<<<<<<<<<<<
@@ -10615,7 +10615,7 @@ static struct __pyx_obj_5pyoti_3fem_elBase *__pyx_f_5pyoti_3fem_6elBase_createNe
   __Pyx_DECREF(__pyx_v_newElement->pyFunct);
   __pyx_v_newElement->pyFunct = __pyx_v_basis;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":146
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":146
  *     elem_start( &newElement.elem, nbasis, geomBase, kind, ndim)
  *     newElement.pyFunct = basis
  *     newElement.FLAG = 1 # Defined in c.             # <<<<<<<<<<<<<<
@@ -10624,7 +10624,7 @@ static struct __pyx_obj_5pyoti_3fem_elBase *__pyx_f_5pyoti_3fem_6elBase_createNe
  */
   __pyx_v_newElement->FLAG = 1;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":148
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":148
  *     newElement.FLAG = 1 # Defined in c.
  * 
  *     return newElement             # <<<<<<<<<<<<<<
@@ -10636,7 +10636,7 @@ static struct __pyx_obj_5pyoti_3fem_elBase *__pyx_f_5pyoti_3fem_6elBase_createNe
   __pyx_r = __pyx_v_newElement;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":100
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":100
  *   # cdef elBase createNewElement(uint64_t nbasis, int64_t geomBase, int64_t  kind,   uint8_t  ndim, \
  *   #             int64_t (*basis_f)(int64_t,int64_t,darr_t*,void*,darr_t*) nogil, list boundEls ):
  *   cdef elBase createNewElement(uint64_t nbasis, uint8_t order, int64_t geomBase, int64_t  kind,   \             # <<<<<<<<<<<<<<
@@ -10657,7 +10657,7 @@ static struct __pyx_obj_5pyoti_3fem_elBase *__pyx_f_5pyoti_3fem_6elBase_createNe
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":152
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":152
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -10694,7 +10694,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   uint64_t __pyx_t_7;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":157
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":157
  *     cdef uint64_t i
  * 
  *     head = ""             # <<<<<<<<<<<<<<
@@ -10704,7 +10704,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   __Pyx_INCREF(__pyx_kp_s__4);
   __pyx_v_head = __pyx_kp_s__4;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":158
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":158
  * 
  *     head = ""
  *     body = ""             # <<<<<<<<<<<<<<
@@ -10714,7 +10714,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   __Pyx_INCREF(__pyx_kp_s__4);
   __pyx_v_body = __pyx_kp_s__4;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":159
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":159
  *     head = ""
  *     body = ""
  *     tail = ""             # <<<<<<<<<<<<<<
@@ -10724,7 +10724,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   __Pyx_INCREF(__pyx_kp_s__4);
   __pyx_v_tail = __pyx_kp_s__4;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":161
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":161
  *     tail = ""
  * 
  *     head += "< elbase object: \n"             # <<<<<<<<<<<<<<
@@ -10736,7 +10736,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF_SET(__pyx_v_head, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":162
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":162
  * 
  *     head += "< elbase object: \n"
  *     tail += "end elbase object >"             # <<<<<<<<<<<<<<
@@ -10748,7 +10748,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF_SET(__pyx_v_tail, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":164
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":164
  *     tail += "end elbase object >"
  * 
  *     if (self.FLAG & 1):             # <<<<<<<<<<<<<<
@@ -10758,7 +10758,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   __pyx_t_2 = ((__pyx_v_self->FLAG & 1) != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/fem/elbase.pxi":167
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":167
  * 
  * 
  *       if (elem_is_started( &self.elem )):             # <<<<<<<<<<<<<<
@@ -10768,7 +10768,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
     __pyx_t_2 = (elem_is_started((&__pyx_v_self->elem)) != 0);
     if (__pyx_t_2) {
 
-      /* "../../pyoti/cython/fem/elbase.pxi":169
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":169
  *       if (elem_is_started( &self.elem )):
  * 
  *         body += " - Object status: ---------------- " + "Started"+"\n"             # <<<<<<<<<<<<<<
@@ -10786,7 +10786,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":170
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":170
  * 
  *         body += " - Object status: ---------------- " + "Started"+"\n"
  *         body += " - Geometric type: --------------- " + enum2string(self.elem.geomBase)+"\n"             # <<<<<<<<<<<<<<
@@ -10807,7 +10807,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":171
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":171
  *         body += " - Object status: ---------------- " + "Started"+"\n"
  *         body += " - Geometric type: --------------- " + enum2string(self.elem.geomBase)+"\n"
  *         body += " - Kind of evaluation: ----------- " + enum2string(self.elem.kind)+"\n"             # <<<<<<<<<<<<<<
@@ -10828,7 +10828,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":173
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":173
  *         body += " - Kind of evaluation: ----------- " + enum2string(self.elem.kind)+"\n"
  * 
  *         body += " - Number of derivatives: -------- " + str(self.elem.nder)+"\n"             # <<<<<<<<<<<<<<
@@ -10852,7 +10852,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":174
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":174
  * 
  *         body += " - Number of derivatives: -------- " + str(self.elem.nder)+"\n"
  *         body += " - Number of dimensions: --------- " + str(self.elem.ndim)+"\n"             # <<<<<<<<<<<<<<
@@ -10876,7 +10876,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":175
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":175
  *         body += " - Number of derivatives: -------- " + str(self.elem.nder)+"\n"
  *         body += " - Number of dimensions: --------- " + str(self.elem.ndim)+"\n"
  *         body += " - Number of basis: -------------- " + str(self.elem.nbasis)+"\n"             # <<<<<<<<<<<<<<
@@ -10900,7 +10900,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":176
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":176
  *         body += " - Number of dimensions: --------- " + str(self.elem.ndim)+"\n"
  *         body += " - Number of basis: -------------- " + str(self.elem.nbasis)+"\n"
  *         body += " - Order: ------------------------ " + str(self.elem.order)+"\n"             # <<<<<<<<<<<<<<
@@ -10924,7 +10924,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":179
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":179
  * 
  * 
  *         if (elem_is_allocated( &self.elem ) ):             # <<<<<<<<<<<<<<
@@ -10934,7 +10934,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
       __pyx_t_2 = (elem_is_allocated((&__pyx_v_self->elem)) != 0);
       if (__pyx_t_2) {
 
-        /* "../../pyoti/cython/fem/elbase.pxi":181
+        /* "../../src/python/pyoti/cython/fem/elbase.pxi":181
  *         if (elem_is_allocated( &self.elem ) ):
  * 
  *           body += " - Object allocation: ------------ " + "Allocated"+"\n"             # <<<<<<<<<<<<<<
@@ -10952,7 +10952,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
         __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/fem/elbase.pxi":182
+        /* "../../src/python/pyoti/cython/fem/elbase.pxi":182
  * 
  *           body += " - Object allocation: ------------ " + "Allocated"+"\n"
  *           body += " - Number of Integration points: - " + str(self.elem.nIntPts)+"\n"             # <<<<<<<<<<<<<<
@@ -10976,7 +10976,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
         __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/fem/elbase.pxi":183
+        /* "../../src/python/pyoti/cython/fem/elbase.pxi":183
  *           body += " - Object allocation: ------------ " + "Allocated"+"\n"
  *           body += " - Number of Integration points: - " + str(self.elem.nIntPts)+"\n"
  *           body += " - Integration points: \n"             # <<<<<<<<<<<<<<
@@ -10988,7 +10988,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
         __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/fem/elbase.pxi":184
+        /* "../../src/python/pyoti/cython/fem/elbase.pxi":184
  *           body += " - Number of Integration points: - " + str(self.elem.nIntPts)+"\n"
  *           body += " - Integration points: \n"
  *           body += repr(dmat.create(&self.elem.intPts,FLAGS=0))             # <<<<<<<<<<<<<<
@@ -11008,7 +11008,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
         __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/fem/elbase.pxi":186
+        /* "../../src/python/pyoti/cython/fem/elbase.pxi":186
  *           body += repr(dmat.create(&self.elem.intPts,FLAGS=0))
  * 
  *           body += "\n - Integration weights: \n"             # <<<<<<<<<<<<<<
@@ -11020,7 +11020,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
         __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/fem/elbase.pxi":187
+        /* "../../src/python/pyoti/cython/fem/elbase.pxi":187
  * 
  *           body += "\n - Integration weights: \n"
  *           body += repr(dmat.create(&self.elem.intWts,FLAGS=0))             # <<<<<<<<<<<<<<
@@ -11040,7 +11040,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
         __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/fem/elbase.pxi":189
+        /* "../../src/python/pyoti/cython/fem/elbase.pxi":189
  *           body += repr(dmat.create(&self.elem.intWts,FLAGS=0))
  * 
  *           body += "\n - Evaluated basis functions: \n"             # <<<<<<<<<<<<<<
@@ -11052,7 +11052,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
         __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/fem/elbase.pxi":191
+        /* "../../src/python/pyoti/cython/fem/elbase.pxi":191
  *           body += "\n - Evaluated basis functions: \n"
  * 
  *           for i in range(self.elem.nder):             # <<<<<<<<<<<<<<
@@ -11064,7 +11064,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
         for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
           __pyx_v_i = __pyx_t_7;
 
-          /* "../../pyoti/cython/fem/elbase.pxi":193
+          /* "../../src/python/pyoti/cython/fem/elbase.pxi":193
  *           for i in range(self.elem.nder):
  * 
  *             body += " ---- " + enum2string( i + derN ) + "\n"             # <<<<<<<<<<<<<<
@@ -11085,7 +11085,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
           __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_3);
           __pyx_t_3 = 0;
 
-          /* "../../pyoti/cython/fem/elbase.pxi":194
+          /* "../../src/python/pyoti/cython/fem/elbase.pxi":194
  * 
  *             body += " ---- " + enum2string( i + derN ) + "\n"
  *             body += repr(dmat.create(&self.elem.p_evalBasis[i],FLAGS=0)) + "\n"             # <<<<<<<<<<<<<<
@@ -11109,7 +11109,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
           __pyx_t_1 = 0;
         }
 
-        /* "../../pyoti/cython/fem/elbase.pxi":179
+        /* "../../src/python/pyoti/cython/fem/elbase.pxi":179
  * 
  * 
  *         if (elem_is_allocated( &self.elem ) ):             # <<<<<<<<<<<<<<
@@ -11119,7 +11119,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
         goto __pyx_L5;
       }
 
-      /* "../../pyoti/cython/fem/elbase.pxi":199
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":199
  *         else:
  * 
  *           body += " - Array allocation: -------------- " + "Not allocated"+"\n"             # <<<<<<<<<<<<<<
@@ -11140,7 +11140,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
       }
       __pyx_L5:;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":167
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":167
  * 
  * 
  *       if (elem_is_started( &self.elem )):             # <<<<<<<<<<<<<<
@@ -11149,7 +11149,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
  */
     }
 
-    /* "../../pyoti/cython/fem/elbase.pxi":164
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":164
  *     tail += "end elbase object >"
  * 
  *     if (self.FLAG & 1):             # <<<<<<<<<<<<<<
@@ -11159,7 +11159,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/fem/elbase.pxi":203
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":203
  *         # end if
  *     else:
  *       body += " - Object status: ---------------- " + "Not started"+"\n"             # <<<<<<<<<<<<<<
@@ -11180,7 +11180,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":206
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":206
  *     # end if
  * 
  *     return head + body + tail             # <<<<<<<<<<<<<<
@@ -11197,7 +11197,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":152
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":152
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -11220,7 +11220,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6__repr__(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":212
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":212
  * 
  *   #***************************************************************************************************
  *   cpdef allocate(self, uint64_t intorder):             # <<<<<<<<<<<<<<
@@ -11309,7 +11309,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
     #endif
   }
 
-  /* "../../pyoti/cython/fem/elbase.pxi":217
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":217
  *     """
  *     cdef uint64_t i, j, k
  *     cdef coeff_t xi = 0.0, eta = 0.0, chi = 0.0             # <<<<<<<<<<<<<<
@@ -11320,7 +11320,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
   __pyx_v_eta = 0.0;
   __pyx_v_chi = 0.0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":219
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":219
  *     cdef coeff_t xi = 0.0, eta = 0.0, chi = 0.0
  * 
  *     if self.is_allocated():             # <<<<<<<<<<<<<<
@@ -11333,7 +11333,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_6) {
 
-    /* "../../pyoti/cython/fem/elbase.pxi":220
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":220
  * 
  *     if self.is_allocated():
  *       self.end()             # <<<<<<<<<<<<<<
@@ -11344,7 +11344,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/fem/elbase.pxi":219
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":219
  *     cdef coeff_t xi = 0.0, eta = 0.0, chi = 0.0
  * 
  *     if self.is_allocated():             # <<<<<<<<<<<<<<
@@ -11353,7 +11353,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
  */
   }
 
-  /* "../../pyoti/cython/fem/elbase.pxi":223
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":223
  *     # end if
  * 
  *     elem_allocate(&self.elem, intorder)             # <<<<<<<<<<<<<<
@@ -11362,7 +11362,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
  */
   (void)(elem_allocate((&__pyx_v_self->elem), __pyx_v_intorder));
 
-  /* "../../pyoti/cython/fem/elbase.pxi":226
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":226
  * 
  *     # Call evaluation of basis functions at integration points.
  *     for i in range(self.elem.nIntPts):             # <<<<<<<<<<<<<<
@@ -11374,7 +11374,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
   for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
     __pyx_v_i = __pyx_t_9;
 
-    /* "../../pyoti/cython/fem/elbase.pxi":229
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":229
  * 
  *       # get integration point.
  *       xi, eta, chi = self.get_integration_point(i)             # <<<<<<<<<<<<<<
@@ -11464,7 +11464,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
     __pyx_v_eta = __pyx_t_12;
     __pyx_v_chi = __pyx_t_13;
 
-    /* "../../pyoti/cython/fem/elbase.pxi":232
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":232
  * 
  *       # Evaluates all basis functions for the given coords.
  *       N = self.pyFunct(xi, eta, chi, 1)             # <<<<<<<<<<<<<<
@@ -11538,7 +11538,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
     __Pyx_XDECREF_SET(__pyx_v_N, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/fem/elbase.pxi":235
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":235
  *       # N[j] has the jth basis evaluated at xi,eta,chi; with its derivatives.
  * 
  *       for j in range(self.elem.nbasis):             # <<<<<<<<<<<<<<
@@ -11550,7 +11550,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
     for (__pyx_t_19 = 0; __pyx_t_19 < __pyx_t_18; __pyx_t_19+=1) {
       __pyx_v_j = __pyx_t_19;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":236
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":236
  * 
  *       for j in range(self.elem.nbasis):
  *         k = 0             # <<<<<<<<<<<<<<
@@ -11559,7 +11559,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
  */
       __pyx_v_k = 0;
 
-      /* "../../pyoti/cython/fem/elbase.pxi":238
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":238
  *         k = 0
  *         # Evaluated basis
  *         darr_set_item_ij(N[j].get_deriv([0]),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11597,7 +11597,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
       darr_set_item_ij(__pyx_t_13, __pyx_v_j, __pyx_v_i, (&(__pyx_v_self->elem.p_evalBasis[__pyx_v_k])));
       __pyx_v_k = (__pyx_v_k + 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":241
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":241
  * 
  *         # First order derivatives
  *         darr_set_item_ij(N[j].get_deriv([1]),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11635,7 +11635,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
       darr_set_item_ij(__pyx_t_13, __pyx_v_j, __pyx_v_i, (&(__pyx_v_self->elem.p_evalBasis[__pyx_v_k])));
       __pyx_v_k = (__pyx_v_k + 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":242
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":242
  *         # First order derivatives
  *         darr_set_item_ij(N[j].get_deriv([1]),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv([2]),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11673,7 +11673,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
       darr_set_item_ij(__pyx_t_13, __pyx_v_j, __pyx_v_i, (&(__pyx_v_self->elem.p_evalBasis[__pyx_v_k])));
       __pyx_v_k = (__pyx_v_k + 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":243
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":243
  *         darr_set_item_ij(N[j].get_deriv([1]),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv([2]),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv([3]),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11711,7 +11711,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
       darr_set_item_ij(__pyx_t_13, __pyx_v_j, __pyx_v_i, (&(__pyx_v_self->elem.p_evalBasis[__pyx_v_k])));
       __pyx_v_k = (__pyx_v_k + 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":246
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":246
  * 
  *         # Second order derivatives
  *         darr_set_item_ij(N[j].get_deriv([[1,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11757,7 +11757,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
       darr_set_item_ij(__pyx_t_13, __pyx_v_j, __pyx_v_i, (&(__pyx_v_self->elem.p_evalBasis[__pyx_v_k])));
       __pyx_v_k = (__pyx_v_k + 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":247
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":247
  *         # Second order derivatives
  *         darr_set_item_ij(N[j].get_deriv([[1,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv( [1,2] ),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11798,7 +11798,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
       darr_set_item_ij(__pyx_t_13, __pyx_v_j, __pyx_v_i, (&(__pyx_v_self->elem.p_evalBasis[__pyx_v_k])));
       __pyx_v_k = (__pyx_v_k + 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":248
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":248
  *         darr_set_item_ij(N[j].get_deriv([[1,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv( [1,2] ),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv([[2,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11844,7 +11844,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
       darr_set_item_ij(__pyx_t_13, __pyx_v_j, __pyx_v_i, (&(__pyx_v_self->elem.p_evalBasis[__pyx_v_k])));
       __pyx_v_k = (__pyx_v_k + 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":249
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":249
  *         darr_set_item_ij(N[j].get_deriv( [1,2] ),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv([[2,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv( [1,3] ),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11885,7 +11885,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
       darr_set_item_ij(__pyx_t_13, __pyx_v_j, __pyx_v_i, (&(__pyx_v_self->elem.p_evalBasis[__pyx_v_k])));
       __pyx_v_k = (__pyx_v_k + 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":250
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":250
  *         darr_set_item_ij(N[j].get_deriv([[2,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv( [1,3] ),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv( [2,3] ),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11926,7 +11926,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
       darr_set_item_ij(__pyx_t_13, __pyx_v_j, __pyx_v_i, (&(__pyx_v_self->elem.p_evalBasis[__pyx_v_k])));
       __pyx_v_k = (__pyx_v_k + 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":251
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":251
  *         darr_set_item_ij(N[j].get_deriv( [1,3] ),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv( [2,3] ),j,i,&self.elem.p_evalBasis[k]); k+=1
  *         darr_set_item_ij(N[j].get_deriv([[3,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1             # <<<<<<<<<<<<<<
@@ -11974,7 +11974,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_allocate(struct __pyx_obj_5pyoti_3f
     }
   }
 
-  /* "../../pyoti/cython/fem/elbase.pxi":212
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":212
  * 
  *   #***************************************************************************************************
  *   cpdef allocate(self, uint64_t intorder):             # <<<<<<<<<<<<<<
@@ -12049,7 +12049,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_8allocate(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":260
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":260
  * 
  *   #***************************************************************************************************
  *   def get_integration_point(self, uint64_t i):             # <<<<<<<<<<<<<<
@@ -12095,7 +12095,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("get_integration_point", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":266
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":266
  *     """
  * 
  *     cdef coeff_t xi = 0.0, eta = 0.0, chi = 0.0             # <<<<<<<<<<<<<<
@@ -12106,7 +12106,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
   __pyx_v_eta = 0.0;
   __pyx_v_chi = 0.0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":268
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":268
  *     cdef coeff_t xi = 0.0, eta = 0.0, chi = 0.0
  * 
  *     if not self.is_allocated():             # <<<<<<<<<<<<<<
@@ -12120,7 +12120,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
   __pyx_t_3 = ((!__pyx_t_2) != 0);
   if (unlikely(__pyx_t_3)) {
 
-    /* "../../pyoti/cython/fem/elbase.pxi":270
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":270
  *     if not self.is_allocated():
  * 
  *       raise ValueError("Element must be initialized.")             # <<<<<<<<<<<<<<
@@ -12133,7 +12133,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __PYX_ERR(0, 270, __pyx_L1_error)
 
-    /* "../../pyoti/cython/fem/elbase.pxi":268
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":268
  *     cdef coeff_t xi = 0.0, eta = 0.0, chi = 0.0
  * 
  *     if not self.is_allocated():             # <<<<<<<<<<<<<<
@@ -12142,7 +12142,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
  */
   }
 
-  /* "../../pyoti/cython/fem/elbase.pxi":274
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":274
  *     # end if
  * 
  *     if i < self.elem.nIntPts:             # <<<<<<<<<<<<<<
@@ -12152,7 +12152,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
   __pyx_t_3 = ((__pyx_v_i < __pyx_v_self->elem.nIntPts) != 0);
   if (likely(__pyx_t_3)) {
 
-    /* "../../pyoti/cython/fem/elbase.pxi":276
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":276
  *     if i < self.elem.nIntPts:
  * 
  *       xi = darr_get_item_ij(&self.elem.intPts,i,0)             # <<<<<<<<<<<<<<
@@ -12161,7 +12161,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
  */
     __pyx_v_xi = darr_get_item_ij((&__pyx_v_self->elem.intPts), __pyx_v_i, 0);
 
-    /* "../../pyoti/cython/fem/elbase.pxi":278
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":278
  *       xi = darr_get_item_ij(&self.elem.intPts,i,0)
  * 
  *       if self.elem.ndim > 1 :             # <<<<<<<<<<<<<<
@@ -12171,7 +12171,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
     __pyx_t_3 = ((__pyx_v_self->elem.ndim > 1) != 0);
     if (__pyx_t_3) {
 
-      /* "../../pyoti/cython/fem/elbase.pxi":280
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":280
  *       if self.elem.ndim > 1 :
  * 
  *         eta = darr_get_item_ij(&self.elem.intPts,i,1)             # <<<<<<<<<<<<<<
@@ -12180,7 +12180,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
  */
       __pyx_v_eta = darr_get_item_ij((&__pyx_v_self->elem.intPts), __pyx_v_i, 1);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":278
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":278
  *       xi = darr_get_item_ij(&self.elem.intPts,i,0)
  * 
  *       if self.elem.ndim > 1 :             # <<<<<<<<<<<<<<
@@ -12189,7 +12189,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
  */
     }
 
-    /* "../../pyoti/cython/fem/elbase.pxi":284
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":284
  *       # end if
  * 
  *       if self.elem.ndim > 2:             # <<<<<<<<<<<<<<
@@ -12199,7 +12199,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
     __pyx_t_3 = ((__pyx_v_self->elem.ndim > 2) != 0);
     if (__pyx_t_3) {
 
-      /* "../../pyoti/cython/fem/elbase.pxi":286
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":286
  *       if self.elem.ndim > 2:
  * 
  *         chi = darr_get_item_ij(&self.elem.intPts,i,2)             # <<<<<<<<<<<<<<
@@ -12208,7 +12208,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
  */
       __pyx_v_chi = darr_get_item_ij((&__pyx_v_self->elem.intPts), __pyx_v_i, 2);
 
-      /* "../../pyoti/cython/fem/elbase.pxi":284
+      /* "../../src/python/pyoti/cython/fem/elbase.pxi":284
  *       # end if
  * 
  *       if self.elem.ndim > 2:             # <<<<<<<<<<<<<<
@@ -12217,7 +12217,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
  */
     }
 
-    /* "../../pyoti/cython/fem/elbase.pxi":274
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":274
  *     # end if
  * 
  *     if i < self.elem.nIntPts:             # <<<<<<<<<<<<<<
@@ -12227,7 +12227,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
     goto __pyx_L4;
   }
 
-  /* "../../pyoti/cython/fem/elbase.pxi":292
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":292
  *     else:
  * 
  *       raise IndexError("Index out of bounds for integration point "+str(i)+" for array with " +             # <<<<<<<<<<<<<<
@@ -12247,7 +12247,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/fem/elbase.pxi":293
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":293
  * 
  *       raise IndexError("Index out of bounds for integration point "+str(i)+" for array with " +
  *                        str(self.elem.nIntPts)+" integration points.")             # <<<<<<<<<<<<<<
@@ -12260,7 +12260,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/fem/elbase.pxi":292
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":292
  *     else:
  * 
  *       raise IndexError("Index out of bounds for integration point "+str(i)+" for array with " +             # <<<<<<<<<<<<<<
@@ -12272,7 +12272,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "../../pyoti/cython/fem/elbase.pxi":293
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":293
  * 
  *       raise IndexError("Index out of bounds for integration point "+str(i)+" for array with " +
  *                        str(self.elem.nIntPts)+" integration points.")             # <<<<<<<<<<<<<<
@@ -12283,7 +12283,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/fem/elbase.pxi":292
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":292
  *     else:
  * 
  *       raise IndexError("Index out of bounds for integration point "+str(i)+" for array with " +             # <<<<<<<<<<<<<<
@@ -12299,7 +12299,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
   }
   __pyx_L4:;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":297
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":297
  *     # end if
  * 
  *     return [ xi, eta, chi]             # <<<<<<<<<<<<<<
@@ -12328,7 +12328,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":260
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":260
  * 
  *   #***************************************************************************************************
  *   def get_integration_point(self, uint64_t i):             # <<<<<<<<<<<<<<
@@ -12350,7 +12350,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_10get_integration_point(struct __p
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":302
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":302
  * 
  *   #***************************************************************************************************
  *   cdef is_allocated(self):             # <<<<<<<<<<<<<<
@@ -12364,7 +12364,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_is_allocated(struct __pyx_obj_5pyot
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("is_allocated", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":304
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":304
  *   cdef is_allocated(self):
  * 
  *     return elem_is_allocated(&self.elem)             # <<<<<<<<<<<<<<
@@ -12378,7 +12378,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_is_allocated(struct __pyx_obj_5pyot
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":302
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":302
  * 
  *   #***************************************************************************************************
  *   cdef is_allocated(self):             # <<<<<<<<<<<<<<
@@ -12397,7 +12397,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_is_allocated(struct __pyx_obj_5pyot
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":308
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":308
  * 
  *   #***************************************************************************************************
  *   cdef is_initialized(self):             # <<<<<<<<<<<<<<
@@ -12411,7 +12411,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_is_initialized(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("is_initialized", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":310
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":310
  *   cdef is_initialized(self):
  * 
  *     return elem_is_started(&self.elem)             # <<<<<<<<<<<<<<
@@ -12425,7 +12425,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_is_initialized(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":308
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":308
  * 
  *   #***************************************************************************************************
  *   cdef is_initialized(self):             # <<<<<<<<<<<<<<
@@ -12444,7 +12444,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_is_initialized(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":315
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":315
  * 
  *   #***************************************************************************************************
  *   cpdef end(self):             # <<<<<<<<<<<<<<
@@ -12509,7 +12509,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_end(struct __pyx_obj_5pyoti_3fem_el
     #endif
   }
 
-  /* "../../pyoti/cython/fem/elbase.pxi":317
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":317
  *   cpdef end(self):
  * 
  *     if (self.FLAG &1):             # <<<<<<<<<<<<<<
@@ -12519,7 +12519,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_end(struct __pyx_obj_5pyoti_3fem_el
   __pyx_t_5 = ((__pyx_v_self->FLAG & 1) != 0);
   if (__pyx_t_5) {
 
-    /* "../../pyoti/cython/fem/elbase.pxi":319
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":319
  *     if (self.FLAG &1):
  * 
  *       elem_end(&self.elem)             # <<<<<<<<<<<<<<
@@ -12528,7 +12528,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_end(struct __pyx_obj_5pyoti_3fem_el
  */
     (void)(elem_end((&__pyx_v_self->elem)));
 
-    /* "../../pyoti/cython/fem/elbase.pxi":317
+    /* "../../src/python/pyoti/cython/fem/elbase.pxi":317
  *   cpdef end(self):
  * 
  *     if (self.FLAG &1):             # <<<<<<<<<<<<<<
@@ -12537,7 +12537,7 @@ static PyObject *__pyx_f_5pyoti_3fem_6elBase_end(struct __pyx_obj_5pyoti_3fem_el
  */
   }
 
-  /* "../../pyoti/cython/fem/elbase.pxi":315
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":315
  * 
  *   #***************************************************************************************************
  *   cpdef end(self):             # <<<<<<<<<<<<<<
@@ -12597,7 +12597,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_12end(struct __pyx_obj_5pyoti_3fem
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":327
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":327
  *   #***************************************************************************************************
  *   @property
  *   def intWts(self):             # <<<<<<<<<<<<<<
@@ -12625,7 +12625,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6intWts___get__(struct __pyx_obj_5
   struct __pyx_opt_args_5pyoti_4real_4dmat_create __pyx_t_2;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":334
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":334
  *     #*************************************************************************************************
  * 
  *     return  dmat.create(&self.elem.intWts,FLAGS=0)             # <<<<<<<<<<<<<<
@@ -12641,7 +12641,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6intWts___get__(struct __pyx_obj_5
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":327
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":327
  *   #***************************************************************************************************
  *   @property
  *   def intWts(self):             # <<<<<<<<<<<<<<
@@ -12660,7 +12660,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6intWts___get__(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":341
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":341
  *   #***************************************************************************************************
  *   @property
  *   def intPts(self):             # <<<<<<<<<<<<<<
@@ -12688,7 +12688,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6intPts___get__(struct __pyx_obj_5
   struct __pyx_opt_args_5pyoti_4real_4dmat_create __pyx_t_2;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":348
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":348
  *     #*************************************************************************************************
  * 
  *     return dmat.create(&self.elem.intPts,FLAGS=0)             # <<<<<<<<<<<<<<
@@ -12704,7 +12704,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6intPts___get__(struct __pyx_obj_5
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":341
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":341
  *   #***************************************************************************************************
  *   @property
  *   def intPts(self):             # <<<<<<<<<<<<<<
@@ -12723,7 +12723,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6intPts___get__(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":354
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":354
  *   #***************************************************************************************************
  *   @property
  *   def nIntPts(self):             # <<<<<<<<<<<<<<
@@ -12750,7 +12750,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_7nIntPts___get__(struct __pyx_obj_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":361
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":361
  *     #*************************************************************************************************
  * 
  *     return self.elem.nIntPts             # <<<<<<<<<<<<<<
@@ -12764,7 +12764,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_7nIntPts___get__(struct __pyx_obj_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":354
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":354
  *   #***************************************************************************************************
  *   @property
  *   def nIntPts(self):             # <<<<<<<<<<<<<<
@@ -12783,7 +12783,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_7nIntPts___get__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":368
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":368
  *   #***************************************************************************************************
  *   @property
  *   def nder(self):             # <<<<<<<<<<<<<<
@@ -12810,7 +12810,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_4nder___get__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":375
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":375
  *     #*************************************************************************************************
  * 
  *     return self.elem.nder             # <<<<<<<<<<<<<<
@@ -12824,7 +12824,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_4nder___get__(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":368
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":368
  *   #***************************************************************************************************
  *   @property
  *   def nder(self):             # <<<<<<<<<<<<<<
@@ -12843,7 +12843,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_4nder___get__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":383
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":383
  *   #***************************************************************************************************
  *   @property
  *   def isInit(self):             # <<<<<<<<<<<<<<
@@ -12870,7 +12870,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6isInit___get__(struct __pyx_obj_5
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":390
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":390
  *     #*************************************************************************************************
  * 
  *     return self.elem.isInit             # <<<<<<<<<<<<<<
@@ -12884,7 +12884,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6isInit___get__(struct __pyx_obj_5
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":383
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":383
  *   #***************************************************************************************************
  *   @property
  *   def isInit(self):             # <<<<<<<<<<<<<<
@@ -12903,7 +12903,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6isInit___get__(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":398
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":398
  *   #***************************************************************************************************
  *   @property
  *   def nbasis(self):             # <<<<<<<<<<<<<<
@@ -12930,7 +12930,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6nbasis___get__(struct __pyx_obj_5
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":405
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":405
  *     #*************************************************************************************************
  * 
  *     return self.elem.nbasis             # <<<<<<<<<<<<<<
@@ -12944,7 +12944,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6nbasis___get__(struct __pyx_obj_5
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":398
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":398
  *   #***************************************************************************************************
  *   @property
  *   def nbasis(self):             # <<<<<<<<<<<<<<
@@ -12963,7 +12963,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_6nbasis___get__(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":411
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":411
  *   #***************************************************************************************************
  *   @property
  *   def order(self):             # <<<<<<<<<<<<<<
@@ -12990,7 +12990,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_5order___get__(struct __pyx_obj_5p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":418
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":418
  *     #*************************************************************************************************
  * 
  *     return self.elem.order             # <<<<<<<<<<<<<<
@@ -13004,7 +13004,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_5order___get__(struct __pyx_obj_5p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":411
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":411
  *   #***************************************************************************************************
  *   @property
  *   def order(self):             # <<<<<<<<<<<<<<
@@ -13023,7 +13023,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_5order___get__(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":449
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":449
  *   #***************************************************************************************************
  *   @property
  *   def geomBase(self):             # <<<<<<<<<<<<<<
@@ -13050,7 +13050,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_8geomBase___get__(struct __pyx_obj
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":456
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":456
  *     #*************************************************************************************************
  * 
  *     return self.elem.geomBase             # <<<<<<<<<<<<<<
@@ -13064,7 +13064,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_8geomBase___get__(struct __pyx_obj
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":449
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":449
  *   #***************************************************************************************************
  *   @property
  *   def geomBase(self):             # <<<<<<<<<<<<<<
@@ -13083,7 +13083,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_8geomBase___get__(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":462
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":462
  *   #***************************************************************************************************
  *   @property
  *   def kind(self):             # <<<<<<<<<<<<<<
@@ -13110,7 +13110,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_4kind___get__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":469
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":469
  *     #*************************************************************************************************
  * 
  *     return self.elem.kind             # <<<<<<<<<<<<<<
@@ -13124,7 +13124,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_4kind___get__(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":462
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":462
  *   #***************************************************************************************************
  *   @property
  *   def kind(self):             # <<<<<<<<<<<<<<
@@ -13143,7 +13143,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_4kind___get__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/elbase.pxi":475
+/* "../../src/python/pyoti/cython/fem/elbase.pxi":475
  *   #***************************************************************************************************
  *   @property
  *   def ndim(self):             # <<<<<<<<<<<<<<
@@ -13170,7 +13170,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_4ndim___get__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":482
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":482
  *     #*************************************************************************************************
  * 
  *     return self.elem.ndim             # <<<<<<<<<<<<<<
@@ -13184,7 +13184,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_4ndim___get__(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/elbase.pxi":475
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":475
  *   #***************************************************************************************************
  *   @property
  *   def ndim(self):             # <<<<<<<<<<<<<<
@@ -13491,7 +13491,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_6elBase_16__setstate_cython__(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/gauss_array.pxi":11
+/* "../../src/python/pyoti/cython/fem/gauss_array.pxi":11
  * 
  *   #***************************************************************************************************
  *   def __init__(self, shape, uint64_t n_int_points = 0):             # <<<<<<<<<<<<<<
@@ -13589,7 +13589,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
   int __pyx_t_11;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":27
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":27
  *     #*************************************************************************************************
  * 
  *     self.array = []             # <<<<<<<<<<<<<<
@@ -13601,7 +13601,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
   if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_array, __pyx_t_1) < 0) __PYX_ERR(20, 27, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":29
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":29
  *     self.array = []
  * 
  *     t_shape = type(shape)             # <<<<<<<<<<<<<<
@@ -13611,7 +13611,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_shape)));
   __pyx_v_t_shape = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_shape)));
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":31
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":31
  *     t_shape = type(shape)
  * 
  *     if t_shape == int:             # <<<<<<<<<<<<<<
@@ -13623,7 +13623,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":33
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":33
  *     if t_shape == int:
  * 
  *       self.shape = (shape,1)             # <<<<<<<<<<<<<<
@@ -13641,7 +13641,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
     if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_shape, __pyx_t_1) < 0) __PYX_ERR(20, 33, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":31
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":31
  *     t_shape = type(shape)
  * 
  *     if t_shape == int:             # <<<<<<<<<<<<<<
@@ -13651,7 +13651,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":37
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":37
  *     else:
  * 
  *       self.shape = tuple(shape)             # <<<<<<<<<<<<<<
@@ -13666,7 +13666,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":42
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":42
  * 
  *     # Check that the number of integration points is greater than 0.
  *     self.nintpts = n_int_points             # <<<<<<<<<<<<<<
@@ -13678,7 +13678,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
   if (__Pyx_PyObject_SetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_nintpts, __pyx_t_1) < 0) __PYX_ERR(20, 42, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":44
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":44
  *     self.nintpts = n_int_points
  * 
  *     for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -13733,7 +13733,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":46
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":46
  *     for i in range(self.nintpts):
  *       #
  *       self.array.append( np.zeros(   self.shape, dtype=np.float64 ) )             # <<<<<<<<<<<<<<
@@ -13772,7 +13772,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":44
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":44
  *     self.nintpts = n_int_points
  * 
  *     for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -13782,7 +13782,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":11
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":11
  * 
  *   #***************************************************************************************************
  *   def __init__(self, shape, uint64_t n_int_points = 0):             # <<<<<<<<<<<<<<
@@ -13810,7 +13810,7 @@ static int __pyx_pf_5pyoti_3fem_12gauss_matrix___init__(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/gauss_array.pxi":54
+/* "../../src/python/pyoti/cython/fem/gauss_array.pxi":54
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -13847,7 +13847,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":62
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":62
  *     #*************************************************************************************************
  * 
  *     out = ""             # <<<<<<<<<<<<<<
@@ -13857,7 +13857,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
   __Pyx_INCREF(__pyx_kp_s__4);
   __pyx_v_out = __pyx_kp_s__4;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":64
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":64
  *     out = ""
  * 
  *     out += "<gauss_matrix, shape: " + str(self.shape)             # <<<<<<<<<<<<<<
@@ -13878,7 +13878,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":65
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":65
  * 
  *     out += "<gauss_matrix, shape: " + str(self.shape)
  *     out += ", number of integration points = "+str(self.nintpts)+" >\n"             # <<<<<<<<<<<<<<
@@ -13902,7 +13902,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":67
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":67
  *     out += ", number of integration points = "+str(self.nintpts)+" >\n"
  * 
  *     for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -13957,7 +13957,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":69
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":69
  *     for i in range(self.nintpts):
  * 
  *       out += "Integration point "+str(i+1)+":\n"             # <<<<<<<<<<<<<<
@@ -13981,7 +13981,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
     __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":70
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":70
  * 
  *       out += "Integration point "+str(i+1)+":\n"
  *       out += str(self.array[i]) + "\n"             # <<<<<<<<<<<<<<
@@ -14005,7 +14005,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
     __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":67
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":67
  *     out += ", number of integration points = "+str(self.nintpts)+" >\n"
  * 
  *     for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -14015,7 +14015,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":74
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":74
  *     # end for
  * 
  *     return out             # <<<<<<<<<<<<<<
@@ -14027,7 +14027,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":54
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":54
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -14050,7 +14050,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_2__str__(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/gauss_array.pxi":78
+/* "../../src/python/pyoti/cython/fem/gauss_array.pxi":78
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -14087,7 +14087,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_4__repr__(struct __pyx_obj_
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":85
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":85
  *     #*************************************************************************************************
  * 
  *     out = ""             # <<<<<<<<<<<<<<
@@ -14097,7 +14097,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_4__repr__(struct __pyx_obj_
   __Pyx_INCREF(__pyx_kp_s__4);
   __pyx_v_out = __pyx_kp_s__4;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":87
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":87
  *     out = ""
  * 
  *     out += "<gauss_matrix, n_int_points = "+str(self.nintpts)+" >\n"             # <<<<<<<<<<<<<<
@@ -14121,7 +14121,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_4__repr__(struct __pyx_obj_
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":89
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":89
  *     out += "<gauss_matrix, n_int_points = "+str(self.nintpts)+" >\n"
  * 
  *     for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -14176,7 +14176,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_4__repr__(struct __pyx_obj_
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":91
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":91
  *     for i in range(self.nintpts):
  * 
  *       out += "Integration point "+str(i)+":\n"             # <<<<<<<<<<<<<<
@@ -14197,7 +14197,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_4__repr__(struct __pyx_obj_
     __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":92
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":92
  * 
  *       out += "Integration point "+str(i)+":\n"
  *       out += str(self.array[i]) + "\n"             # <<<<<<<<<<<<<<
@@ -14221,7 +14221,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_4__repr__(struct __pyx_obj_
     __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":89
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":89
  *     out += "<gauss_matrix, n_int_points = "+str(self.nintpts)+" >\n"
  * 
  *     for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -14231,7 +14231,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_4__repr__(struct __pyx_obj_
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":96
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":96
  *     # end for
  * 
  *     return out             # <<<<<<<<<<<<<<
@@ -14243,7 +14243,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_4__repr__(struct __pyx_obj_
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":78
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":78
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -14266,7 +14266,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_4__repr__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/gauss_array.pxi":100
+/* "../../src/python/pyoti/cython/fem/gauss_array.pxi":100
  * 
  *   #***************************************************************************************************
  *   def __add__(self, rhs):             # <<<<<<<<<<<<<<
@@ -14306,7 +14306,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_6__add__(PyObject *__pyx_v_
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":108
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":108
  *     #*************************************************************************************************
  * 
  *     res = gauss_matrix(self.array[0].shape, self.nintpts)             # <<<<<<<<<<<<<<
@@ -14337,7 +14337,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_6__add__(PyObject *__pyx_v_
   __pyx_v_res = ((struct __pyx_obj_5pyoti_3fem_gauss_matrix *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":110
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":110
  *     res = gauss_matrix(self.array[0].shape, self.nintpts)
  * 
  *     t_lhs = type(self)             # <<<<<<<<<<<<<<
@@ -14347,7 +14347,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_6__add__(PyObject *__pyx_v_
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_t_lhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":111
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":111
  * 
  *     t_lhs = type(self)
  *     t_rhs = type(rhs)             # <<<<<<<<<<<<<<
@@ -14357,7 +14357,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_6__add__(PyObject *__pyx_v_
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_rhs)));
   __pyx_v_t_rhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_rhs)));
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":113
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":113
  *     t_rhs = type(rhs)
  * 
  *     for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -14412,7 +14412,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_6__add__(PyObject *__pyx_v_
     __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":115
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":115
  *     for i in range(self.nintpts):
  * 
  *       res.array[i] = self.array[i] + rhs.array[i]             # <<<<<<<<<<<<<<
@@ -14439,7 +14439,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_6__add__(PyObject *__pyx_v_
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":113
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":113
  *     t_rhs = type(rhs)
  * 
  *     for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -14449,7 +14449,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_6__add__(PyObject *__pyx_v_
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":119
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":119
  *     # end for
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -14461,7 +14461,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_6__add__(PyObject *__pyx_v_
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":100
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":100
  * 
  *   #***************************************************************************************************
  *   def __add__(self, rhs):             # <<<<<<<<<<<<<<
@@ -14487,7 +14487,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_6__add__(PyObject *__pyx_v_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/fem/gauss_array.pxi":123
+/* "../../src/python/pyoti/cython/fem/gauss_array.pxi":123
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, rhs):             # <<<<<<<<<<<<<<
@@ -14528,7 +14528,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("__mul__", 0);
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":131
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":131
  *     #*************************************************************************************************
  * 
  *     t_self = type(self)             # <<<<<<<<<<<<<<
@@ -14538,7 +14538,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_t_self = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":132
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":132
  * 
  *     t_self = type(self)
  *     t_rhs  = type(rhs)             # <<<<<<<<<<<<<<
@@ -14548,7 +14548,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_rhs)));
   __pyx_v_t_rhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_rhs)));
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":134
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":134
  *     t_rhs  = type(rhs)
  * 
  *     if t_self == t_rhs:             # <<<<<<<<<<<<<<
@@ -14560,7 +14560,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":136
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":136
  *     if t_self == t_rhs:
  * 
  *       res = gauss_matrix(self.array[0].shape, self.nintpts)             # <<<<<<<<<<<<<<
@@ -14591,7 +14591,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
     __pyx_v_res = ((struct __pyx_obj_5pyoti_3fem_gauss_matrix *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":138
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":138
  *       res = gauss_matrix(self.array[0].shape, self.nintpts)
  * 
  *       for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -14646,7 +14646,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
       __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_4);
       __pyx_t_4 = 0;
 
-      /* "../../pyoti/cython/fem/gauss_array.pxi":140
+      /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":140
  *       for i in range(self.nintpts):
  * 
  *         res.array[i] = self.array[i] * rhs.array[i]             # <<<<<<<<<<<<<<
@@ -14673,7 +14673,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "../../pyoti/cython/fem/gauss_array.pxi":138
+      /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":138
  *       res = gauss_matrix(self.array[0].shape, self.nintpts)
  * 
  *       for i in range(self.nintpts):             # <<<<<<<<<<<<<<
@@ -14683,7 +14683,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/fem/gauss_array.pxi":134
+    /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":134
  *     t_rhs  = type(rhs)
  * 
  *     if t_self == t_rhs:             # <<<<<<<<<<<<<<
@@ -14693,7 +14693,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":144
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":144
  *       # end for
  * 
  *     elif t_rhs == np.ndarray:             # <<<<<<<<<<<<<<
@@ -14707,7 +14707,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":150
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":150
  *     # end if
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -14720,7 +14720,7 @@ static PyObject *__pyx_pf_5pyoti_3fem_12gauss_matrix_8__mul__(PyObject *__pyx_v_
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/fem/gauss_array.pxi":123
+  /* "../../src/python/pyoti/cython/fem/gauss_array.pxi":123
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, rhs):             # <<<<<<<<<<<<<<
@@ -18635,7 +18635,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "../../pyoti/cython/fem/element/point1_iso.pxi":22
+  /* "../../src/python/pyoti/cython/fem/element/point1_iso.pxi":22
  *   """
  * 
  *   cdef otinum N0 = 1.0 + 0.0*e( 1, order = derOrder)             # <<<<<<<<<<<<<<
@@ -18646,7 +18646,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
 
-  /* "../../pyoti/cython/fem/element/tri3_iso.pxi":49
+  /* "../../src/python/pyoti/cython/fem/element/tri3_iso.pxi":49
  * 
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 2)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 2)             # <<<<<<<<<<<<<<
@@ -18657,7 +18657,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
 
-  /* "../../pyoti/cython/fem/element/tet4_iso.pxi":55
+  /* "../../src/python/pyoti/cython/fem/element/tet4_iso.pxi":55
  *   cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
  *   cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
  *   cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)             # <<<<<<<<<<<<<<
@@ -18668,7 +18668,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__3);
   __Pyx_GIVEREF(__pyx_tuple__3);
 
-  /* "../../pyoti/cython/fem/elbase.pxi":270
+  /* "../../src/python/pyoti/cython/fem/elbase.pxi":270
  *     if not self.is_allocated():
  * 
  *       raise ValueError("Element must be initialized.")             # <<<<<<<<<<<<<<
@@ -19292,7 +19292,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(22, 2, __pyx_L1_error)
   #endif
 
-  /* "../../pyoti/cython/fem/include.pxi":6
+  /* "../../src/python/pyoti/cython/fem/include.pxi":6
  * #-----------------------------------------------------------------------------------------------------
  * 
  * from pyoti.core import   number_types, dHelp             # <<<<<<<<<<<<<<
@@ -19316,7 +19316,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/include.pxi":11
+  /* "../../src/python/pyoti/cython/fem/include.pxi":11
  * from pyoti.core cimport  get_cython_dHelp, dHelp, imdir
  * 
  * from pyoti.real import  dmat             # <<<<<<<<<<<<<<
@@ -19333,7 +19333,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/include.pxi":14
+  /* "../../src/python/pyoti/cython/fem/include.pxi":14
  * from pyoti.real cimport dmat
  * 
  * from pyoti.dense import  omat, otinum, e             # <<<<<<<<<<<<<<
@@ -19360,7 +19360,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/include.pxi":17
+  /* "../../src/python/pyoti/cython/fem/include.pxi":17
  * from pyoti.dense cimport omat, otinum
  * 
  * from pyoti.sparse  import sotinum, get_deriv, e as se             # <<<<<<<<<<<<<<
@@ -19391,7 +19391,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/include.pxi":20
+  /* "../../src/python/pyoti/cython/fem/include.pxi":20
  * from pyoti.sparse cimport sotinum
  * 
  * import  numpy as np             # <<<<<<<<<<<<<<
@@ -19403,7 +19403,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(34, 20, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/include.pxi":29
+  /* "../../src/python/pyoti/cython/fem/include.pxi":29
  * 
  * 
  * cdef dHelp h = get_cython_dHelp()             # <<<<<<<<<<<<<<
@@ -19416,7 +19416,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/include.pxi":30
+  /* "../../src/python/pyoti/cython/fem/include.pxi":30
  * 
  * cdef dHelp h = get_cython_dHelp()
  * cdef dhelpl_t dhl = h.dhl             # <<<<<<<<<<<<<<
@@ -19424,7 +19424,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_3 = __pyx_v_5pyoti_3fem_h->dhl;
   __pyx_v_5pyoti_3fem_dhl = __pyx_t_3;
 
-  /* "../../pyoti/cython/fem/utils.pxi":13
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":13
  * 
  * 
  * opNames = [ "None  ",             # <<<<<<<<<<<<<<
@@ -19493,7 +19493,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_opNames, __pyx_t_1) < 0) __PYX_ERR(35, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":33
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":33
  *             "  def "]
  * 
  * basisNames = ["N  ",             # <<<<<<<<<<<<<<
@@ -19535,7 +19535,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_basisNames, __pyx_t_1) < 0) __PYX_ERR(35, 33, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":44
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":44
  *               "Nyz"]
  * 
  * kindNames = ["OTIARR",             # <<<<<<<<<<<<<<
@@ -19556,7 +19556,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_kindNames, __pyx_t_1) < 0) __PYX_ERR(35, 44, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":48
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":48
  *              "REAL  "]
  * 
  * elTypeNames = ["point",             # <<<<<<<<<<<<<<
@@ -19586,7 +19586,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_elTypeNames, __pyx_t_1) < 0) __PYX_ERR(35, 48, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":249
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":249
  *                                  elkindIso,    # Kind of element
  *                                  0,            # Number of dimensions
  *                                  point1_iso,   # Basis functions.             # <<<<<<<<<<<<<<
@@ -19596,7 +19596,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_point1_iso); if (unlikely(!__pyx_t_1)) __PYX_ERR(35, 249, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "../../pyoti/cython/fem/utils.pxi":250
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":250
  *                                  0,            # Number of dimensions
  *                                  point1_iso,   # Basis functions.
  *                                  [])             # <<<<<<<<<<<<<<
@@ -19606,7 +19606,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_2 = PyList_New(0); if (unlikely(!__pyx_t_2)) __PYX_ERR(35, 250, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "../../pyoti/cython/fem/utils.pxi":244
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":244
  * # Create element objects.
  * # Point element
  * point1 = elBase.createNewElement(1,            # Number of basis             # <<<<<<<<<<<<<<
@@ -19620,7 +19620,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_point1, __pyx_t_4) < 0) __PYX_ERR(35, 244, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":259
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":259
  *                                  elkindIso,    # Kind of element
  *                                  1,            # Number of dimensions
  *                                  line1_iso,    # Basis functions.             # <<<<<<<<<<<<<<
@@ -19630,7 +19630,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_line1_iso); if (unlikely(!__pyx_t_4)) __PYX_ERR(35, 259, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "../../pyoti/cython/fem/utils.pxi":260
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":260
  *                                  1,            # Number of dimensions
  *                                  line1_iso,    # Basis functions.
  *                                  [point1,])             # <<<<<<<<<<<<<<
@@ -19645,7 +19645,7 @@ if (!__Pyx_RefNanny) {
   PyList_SET_ITEM(__pyx_t_1, 0, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":254
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":254
  * # Line elements
  * # 1 node line
  * line1 = elBase.createNewElement( 1,            # Number of basis             # <<<<<<<<<<<<<<
@@ -19659,7 +19659,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_line1, __pyx_t_2) < 0) __PYX_ERR(35, 254, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":267
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":267
  *                                  elkindIso,    # Kind of element
  *                                  1,            # Number of dimensions
  *                                  line2_iso,    # Basis functions.             # <<<<<<<<<<<<<<
@@ -19669,7 +19669,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_line2_iso); if (unlikely(!__pyx_t_2)) __PYX_ERR(35, 267, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
 
-  /* "../../pyoti/cython/fem/utils.pxi":268
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":268
  *                                  1,            # Number of dimensions
  *                                  line2_iso,    # Basis functions.
  *                                  [point1,])             # <<<<<<<<<<<<<<
@@ -19684,7 +19684,7 @@ if (!__Pyx_RefNanny) {
   PyList_SET_ITEM(__pyx_t_4, 0, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":262
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":262
  *                                  [point1,])
  * # 2 node line
  * line2 = elBase.createNewElement( 2,            # Number of basis             # <<<<<<<<<<<<<<
@@ -19698,7 +19698,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_line2, __pyx_t_1) < 0) __PYX_ERR(35, 262, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":275
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":275
  *                                  elkindIso,    # Kind of element
  *                                  1,            # Number of dimensions
  *                                  line2_iso,    # Basis functions.             # <<<<<<<<<<<<<<
@@ -19708,7 +19708,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_line2_iso); if (unlikely(!__pyx_t_1)) __PYX_ERR(35, 275, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "../../pyoti/cython/fem/utils.pxi":276
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":276
  *                                  1,            # Number of dimensions
  *                                  line2_iso,    # Basis functions.
  *                                  [point1,])             # <<<<<<<<<<<<<<
@@ -19723,7 +19723,7 @@ if (!__Pyx_RefNanny) {
   PyList_SET_ITEM(__pyx_t_2, 0, __pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":270
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":270
  *                                  [point1,])
  * # 3 node line
  * line3 = elBase.createNewElement( 3,            # Number of basis             # <<<<<<<<<<<<<<
@@ -19737,7 +19737,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_line3, __pyx_t_4) < 0) __PYX_ERR(35, 270, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":286
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":286
  *                                  elkindIso,    # Kind of element
  *                                  2,            # Number of dimensions
  *                                  tri1_iso,     # Basis functions.             # <<<<<<<<<<<<<<
@@ -19747,7 +19747,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_tri1_iso); if (unlikely(!__pyx_t_4)) __PYX_ERR(35, 286, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "../../pyoti/cython/fem/utils.pxi":287
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":287
  *                                  2,            # Number of dimensions
  *                                  tri1_iso,     # Basis functions.
  *                                  [point1, line1])             # <<<<<<<<<<<<<<
@@ -19767,7 +19767,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_2 = 0;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":281
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":281
  * # Triangle elements.
  * # 1 node Triangle
  * tri1 = elBase.createNewElement(  1,            # Number of basis             # <<<<<<<<<<<<<<
@@ -19781,7 +19781,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_tri1, __pyx_t_1) < 0) __PYX_ERR(35, 281, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":294
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":294
  *                                  elkindIso,    # Kind of element
  *                                  2,            # Number of dimensions
  *                                  tri3_iso,     # Basis functions.             # <<<<<<<<<<<<<<
@@ -19791,7 +19791,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_tri3_iso); if (unlikely(!__pyx_t_1)) __PYX_ERR(35, 294, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "../../pyoti/cython/fem/utils.pxi":295
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":295
  *                                  2,            # Number of dimensions
  *                                  tri3_iso,     # Basis functions.
  *                                  [point1, line2])             # <<<<<<<<<<<<<<
@@ -19811,7 +19811,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_5 = 0;
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":289
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":289
  *                                  [point1, line1])
  * # 3 node triangle
  * tri3 = elBase.createNewElement(  3,            # Number of basis             # <<<<<<<<<<<<<<
@@ -19825,7 +19825,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_tri3, __pyx_t_4) < 0) __PYX_ERR(35, 289, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":302
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":302
  *                                  elkindIso,    # Kind of element
  *                                  2,            # Number of dimensions
  *                                  tri4_iso,     # Basis functions.             # <<<<<<<<<<<<<<
@@ -19835,7 +19835,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_tri4_iso); if (unlikely(!__pyx_t_4)) __PYX_ERR(35, 302, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "../../pyoti/cython/fem/utils.pxi":303
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":303
  *                                  2,            # Number of dimensions
  *                                  tri4_iso,     # Basis functions.
  *                                  [point1,line2])             # <<<<<<<<<<<<<<
@@ -19855,7 +19855,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_2 = 0;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":297
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":297
  *                                  [point1, line2])
  * # 4 node triangle (bubble)
  * tri4 = elBase.createNewElement(  4,            # Number of basis             # <<<<<<<<<<<<<<
@@ -19869,7 +19869,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_tri4, __pyx_t_1) < 0) __PYX_ERR(35, 297, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":310
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":310
  *                                  elkindIso,    # Kind of element
  *                                  2,            # Number of dimensions
  *                                  tri6_iso,     # Basis functions.             # <<<<<<<<<<<<<<
@@ -19879,7 +19879,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_tri6_iso); if (unlikely(!__pyx_t_1)) __PYX_ERR(35, 310, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "../../pyoti/cython/fem/utils.pxi":311
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":311
  *                                  2,            # Number of dimensions
  *                                  tri6_iso,     # Basis functions.
  *                                  [point1, line3])             # <<<<<<<<<<<<<<
@@ -19899,7 +19899,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_5 = 0;
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":305
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":305
  *                                  [point1,line2])
  * # 6 node triangle
  * tri6 = elBase.createNewElement(  6,            # Number of basis             # <<<<<<<<<<<<<<
@@ -19913,7 +19913,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_tri6, __pyx_t_4) < 0) __PYX_ERR(35, 305, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":320
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":320
  *                                  elkindIso,    # Kind of element
  *                                  2,            # Number of dimensions
  *                                  quad1_iso,    # Basis functions.             # <<<<<<<<<<<<<<
@@ -19923,7 +19923,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_quad1_iso); if (unlikely(!__pyx_t_4)) __PYX_ERR(35, 320, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "../../pyoti/cython/fem/utils.pxi":321
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":321
  *                                  2,            # Number of dimensions
  *                                  quad1_iso,    # Basis functions.
  *                                  [point1, line1])             # <<<<<<<<<<<<<<
@@ -19943,7 +19943,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_2 = 0;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":315
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":315
  * # Quadrangle elements.
  * # 1 node Quad
  * quad1 = elBase.createNewElement( 1,            # Number of basis             # <<<<<<<<<<<<<<
@@ -19957,7 +19957,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_quad1, __pyx_t_1) < 0) __PYX_ERR(35, 315, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":328
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":328
  *                                  elkindIso,    # Kind of element
  *                                  2,            # Number of dimensions
  *                                  quad4_iso,    # Basis functions.             # <<<<<<<<<<<<<<
@@ -19967,7 +19967,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_quad4_iso); if (unlikely(!__pyx_t_1)) __PYX_ERR(35, 328, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "../../pyoti/cython/fem/utils.pxi":329
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":329
  *                                  2,            # Number of dimensions
  *                                  quad4_iso,    # Basis functions.
  *                                  [point1, line2])             # <<<<<<<<<<<<<<
@@ -19987,7 +19987,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_5 = 0;
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":323
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":323
  *                                  [point1, line1])
  * # 4 node Quad
  * quad4 = elBase.createNewElement( 4,            # Number of basis             # <<<<<<<<<<<<<<
@@ -20001,7 +20001,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_quad4, __pyx_t_4) < 0) __PYX_ERR(35, 323, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":336
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":336
  *                                  elkindIso,    # Kind of element
  *                                  2,            # Number of dimensions
  *                                  quad8_iso,    # Basis functions.             # <<<<<<<<<<<<<<
@@ -20011,7 +20011,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_quad8_iso); if (unlikely(!__pyx_t_4)) __PYX_ERR(35, 336, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "../../pyoti/cython/fem/utils.pxi":337
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":337
  *                                  2,            # Number of dimensions
  *                                  quad8_iso,    # Basis functions.
  *                                  [point1, line3])             # <<<<<<<<<<<<<<
@@ -20031,7 +20031,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_2 = 0;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":331
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":331
  *                                  [point1, line2])
  * # 8 node Quad (serendipity)
  * quad8 = elBase.createNewElement( 8,            # Number of basis             # <<<<<<<<<<<<<<
@@ -20045,7 +20045,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_quad8, __pyx_t_1) < 0) __PYX_ERR(35, 331, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":344
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":344
  *                                  elkindIso,    # Kind of element
  *                                  2,            # Number of dimensions
  *                                  quad9_iso,    # Basis functions.             # <<<<<<<<<<<<<<
@@ -20055,7 +20055,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_quad9_iso); if (unlikely(!__pyx_t_1)) __PYX_ERR(35, 344, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "../../pyoti/cython/fem/utils.pxi":345
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":345
  *                                  2,            # Number of dimensions
  *                                  quad9_iso,    # Basis functions.
  *                                  [point1, line3])             # <<<<<<<<<<<<<<
@@ -20075,7 +20075,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_5 = 0;
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":339
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":339
  *                                  [point1, line3])
  * # 8 node Quad (serendipity)
  * quad9 = elBase.createNewElement( 9,            # Number of basis             # <<<<<<<<<<<<<<
@@ -20089,7 +20089,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_quad9, __pyx_t_4) < 0) __PYX_ERR(35, 339, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":355
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":355
  *                                  elkindIso,    # Kind of element
  *                                  3,            # Number of dimensions
  *                                  tet1_iso,     # Basis functions.             # <<<<<<<<<<<<<<
@@ -20099,7 +20099,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_tet1_iso); if (unlikely(!__pyx_t_4)) __PYX_ERR(35, 355, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "../../pyoti/cython/fem/utils.pxi":356
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":356
  *                                  3,            # Number of dimensions
  *                                  tet1_iso,     # Basis functions.
  *                                  [point1, line1, tri1])             # <<<<<<<<<<<<<<
@@ -20124,7 +20124,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_1 = 0;
   __pyx_t_5 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":350
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":350
  * # Tetrahedra elements.
  * # 1 node tetrahedra
  * tet1 = elBase.createNewElement(  1,            # Number of basis             # <<<<<<<<<<<<<<
@@ -20138,7 +20138,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_tet1, __pyx_t_5) < 0) __PYX_ERR(35, 350, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":363
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":363
  *                                  elkindIso,    # Kind of element
  *                                  3,            # Number of dimensions
  *                                  tet4_iso,     # Basis functions.             # <<<<<<<<<<<<<<
@@ -20148,7 +20148,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_tet4_iso); if (unlikely(!__pyx_t_5)) __PYX_ERR(35, 363, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
 
-  /* "../../pyoti/cython/fem/utils.pxi":364
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":364
  *                                  3,            # Number of dimensions
  *                                  tet4_iso,     # Basis functions.
  *                                  [point1, line2, tri3])             # <<<<<<<<<<<<<<
@@ -20173,7 +20173,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_4 = 0;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":358
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":358
  *                                  [point1, line1, tri1])
  * # 4 node tetrahedra
  * tet4 = elBase.createNewElement(  4,            # Number of basis             # <<<<<<<<<<<<<<
@@ -20187,7 +20187,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_tet4, __pyx_t_1) < 0) __PYX_ERR(35, 358, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":382
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":382
  *                                  elkindIso,    # Kind of element
  *                                  3,            # Number of dimensions
  *                                  hex1_iso,     # Basis functions.             # <<<<<<<<<<<<<<
@@ -20197,7 +20197,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_hex1_iso); if (unlikely(!__pyx_t_1)) __PYX_ERR(35, 382, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
 
-  /* "../../pyoti/cython/fem/utils.pxi":383
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":383
  *                                  3,            # Number of dimensions
  *                                  hex1_iso,     # Basis functions.
  *                                  [point1, line1, quad1])             # <<<<<<<<<<<<<<
@@ -20222,7 +20222,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_5 = 0;
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":377
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":377
  * # Hexahedra elements.
  * # 1 node hexahedra
  * hex1 = elBase.createNewElement(  1,            # Number of basis             # <<<<<<<<<<<<<<
@@ -20236,7 +20236,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_hex1, __pyx_t_4) < 0) __PYX_ERR(35, 377, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":390
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":390
  *                                  elkindIso,    # Kind of element
  *                                  3,            # Number of dimensions
  *                                  hex8_iso,     # Basis functions.             # <<<<<<<<<<<<<<
@@ -20246,7 +20246,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_4, __pyx_n_s_hex8_iso); if (unlikely(!__pyx_t_4)) __PYX_ERR(35, 390, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
 
-  /* "../../pyoti/cython/fem/utils.pxi":391
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":391
  *                                  3,            # Number of dimensions
  *                                  hex8_iso,     # Basis functions.
  *                                  [point1, line2, quad4])             # <<<<<<<<<<<<<<
@@ -20271,7 +20271,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_1 = 0;
   __pyx_t_5 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":385
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":385
  *                                  [point1, line1, quad1])
  * # 4 node hexahedra
  * hex8 = elBase.createNewElement(  8,            # Number of basis             # <<<<<<<<<<<<<<
@@ -20285,7 +20285,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_hex8, __pyx_t_5) < 0) __PYX_ERR(35, 385, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":398
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":398
  *                                  elkindIso,    # Kind of element
  *                                  3,            # Number of dimensions
  *                                  hex20_iso,    # Basis functions.             # <<<<<<<<<<<<<<
@@ -20295,7 +20295,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_hex20_iso); if (unlikely(!__pyx_t_5)) __PYX_ERR(35, 398, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
 
-  /* "../../pyoti/cython/fem/utils.pxi":399
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":399
  *                                  3,            # Number of dimensions
  *                                  hex20_iso,    # Basis functions.
  *                                  [point1, line3, quad8])             # <<<<<<<<<<<<<<
@@ -20320,7 +20320,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_4 = 0;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":393
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":393
  *                                  [point1, line2, quad4])
  * # 10 node hexahedra
  * hex20 = elBase.createNewElement( 20,           # Number of basis             # <<<<<<<<<<<<<<
@@ -20334,7 +20334,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_hex20, __pyx_t_1) < 0) __PYX_ERR(35, 393, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":401
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":401
  *                                  [point1, line3, quad8])
  * 
  * elements = {}             # <<<<<<<<<<<<<<
@@ -20346,7 +20346,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_elements, __pyx_t_1) < 0) __PYX_ERR(35, 401, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":402
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":402
  * 
  * elements = {}
  * elements['point']=[]             # <<<<<<<<<<<<<<
@@ -20361,7 +20361,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":403
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":403
  * elements = {}
  * elements['point']=[]
  * elements['point'].append(point1)             # <<<<<<<<<<<<<<
@@ -20379,7 +20379,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":405
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":405
  * elements['point'].append(point1)
  * 
  * elements['line']=[]             # <<<<<<<<<<<<<<
@@ -20394,7 +20394,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":406
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":406
  * 
  * elements['line']=[]
  * elements['line'].append(line1) # Order 0             # <<<<<<<<<<<<<<
@@ -20412,7 +20412,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":407
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":407
  * elements['line']=[]
  * elements['line'].append(line1) # Order 0
  * elements['line'].append(line2) # Order 1             # <<<<<<<<<<<<<<
@@ -20430,7 +20430,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":408
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":408
  * elements['line'].append(line1) # Order 0
  * elements['line'].append(line2) # Order 1
  * elements['line'].append(line3) # Order 2             # <<<<<<<<<<<<<<
@@ -20448,7 +20448,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":410
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":410
  * elements['line'].append(line3) # Order 2
  * 
  * elements['triangle']=[]             # <<<<<<<<<<<<<<
@@ -20463,7 +20463,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":411
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":411
  * 
  * elements['triangle']=[]
  * elements['triangle'].append(tri1) # Order 0             # <<<<<<<<<<<<<<
@@ -20481,7 +20481,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":412
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":412
  * elements['triangle']=[]
  * elements['triangle'].append(tri1) # Order 0
  * elements['triangle'].append(tri3) # Order 1             # <<<<<<<<<<<<<<
@@ -20499,7 +20499,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":413
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":413
  * elements['triangle'].append(tri1) # Order 0
  * elements['triangle'].append(tri3) # Order 1
  * elements['triangle'].append(tri6) # Order 2             # <<<<<<<<<<<<<<
@@ -20517,7 +20517,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":415
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":415
  * elements['triangle'].append(tri6) # Order 2
  * 
  * elements['bubble']=[]             # <<<<<<<<<<<<<<
@@ -20532,7 +20532,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":416
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":416
  * 
  * elements['bubble']=[]
  * elements['bubble'].append(tri1) # Order 0             # <<<<<<<<<<<<<<
@@ -20550,7 +20550,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":417
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":417
  * elements['bubble']=[]
  * elements['bubble'].append(tri1) # Order 0
  * elements['bubble'].append(tri3) # Order 1             # <<<<<<<<<<<<<<
@@ -20568,7 +20568,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":418
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":418
  * elements['bubble'].append(tri1) # Order 0
  * elements['bubble'].append(tri3) # Order 1
  * elements['bubble'].append(tri4) # Order 1.b             # <<<<<<<<<<<<<<
@@ -20586,7 +20586,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":420
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":420
  * elements['bubble'].append(tri4) # Order 1.b
  * 
  * elements['quad']=[]             # <<<<<<<<<<<<<<
@@ -20601,7 +20601,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":421
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":421
  * 
  * elements['quad']=[]
  * elements['quad'].append(quad1) # Order 0             # <<<<<<<<<<<<<<
@@ -20619,7 +20619,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":422
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":422
  * elements['quad']=[]
  * elements['quad'].append(quad1) # Order 0
  * elements['quad'].append(quad4) # Order 1             # <<<<<<<<<<<<<<
@@ -20637,7 +20637,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":423
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":423
  * elements['quad'].append(quad1) # Order 0
  * elements['quad'].append(quad4) # Order 1
  * elements['quad'].append(quad9) # Order 2             # <<<<<<<<<<<<<<
@@ -20655,7 +20655,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":425
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":425
  * elements['quad'].append(quad9) # Order 2
  * 
  * elements['serendipity']=[]             # <<<<<<<<<<<<<<
@@ -20670,7 +20670,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":426
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":426
  * 
  * elements['serendipity']=[]
  * elements['serendipity'].append(quad1) # Order 0             # <<<<<<<<<<<<<<
@@ -20688,7 +20688,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":427
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":427
  * elements['serendipity']=[]
  * elements['serendipity'].append(quad1) # Order 0
  * elements['serendipity'].append(quad4) # Order 1             # <<<<<<<<<<<<<<
@@ -20706,7 +20706,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":428
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":428
  * elements['serendipity'].append(quad1) # Order 0
  * elements['serendipity'].append(quad4) # Order 1
  * elements['serendipity'].append(quad8) # Order 2             # <<<<<<<<<<<<<<
@@ -20724,7 +20724,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":430
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":430
  * elements['serendipity'].append(quad8) # Order 2
  * 
  * elements['tetra']=[]             # <<<<<<<<<<<<<<
@@ -20739,7 +20739,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":431
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":431
  * 
  * elements['tetra']=[]
  * elements['tetra'].append(tet1 ) # Order 0             # <<<<<<<<<<<<<<
@@ -20757,7 +20757,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":432
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":432
  * elements['tetra']=[]
  * elements['tetra'].append(tet1 ) # Order 0
  * elements['tetra'].append(tet4 ) # Order 1             # <<<<<<<<<<<<<<
@@ -20775,7 +20775,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":435
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":435
  * # elements['tetra'].append(tet10) # Order 2
  * 
  * elements['brick']=[]             # <<<<<<<<<<<<<<
@@ -20790,7 +20790,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":436
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":436
  * 
  * elements['brick']=[]
  * elements['brick'].append(hex1 ) # Order 0             # <<<<<<<<<<<<<<
@@ -20808,7 +20808,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":437
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":437
  * elements['brick']=[]
  * elements['brick'].append(hex1 ) # Order 0
  * elements['brick'].append(hex8 ) # Order 1             # <<<<<<<<<<<<<<
@@ -20826,7 +20826,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem/utils.pxi":438
+  /* "../../src/python/pyoti/cython/fem/utils.pxi":438
  * elements['brick'].append(hex1 ) # Order 0
  * elements['brick'].append(hex8 ) # Order 1
  * elements['brick'].append(hex20) # Order 2             # <<<<<<<<<<<<<<
@@ -20853,7 +20853,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_pyx_unpickle_gauss_matrix, __pyx_t_1) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/fem.pyx":2
+  /* "../../src/python/pyoti/cython/fem.pyx":2
  * 
  * # Append directives             # <<<<<<<<<<<<<<
  * include "common/directives.pxi"

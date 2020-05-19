@@ -30,7 +30,7 @@
         ],
         "name": "pyoti.real",
         "sources": [
-            "/Users/maristi7/coding/otilib/pyoti/cython/real.pyx"
+            "/Users/maristi7/coding/otilib/src/python/pyoti/cython/real.pyx"
         ]
     },
     "module_name": "pyoti.real"
@@ -1345,7 +1345,7 @@ struct __pyx_obj_5pyoti_4real_dmat {
 
 
 
-/* "../../pyoti/cython/real/array.pxi":4
+/* "../../src/python/pyoti/cython/real/array.pxi":4
  * # ::::::::::::::::::::::::::::::::::     CLASS  DMAT    ::::::::::::::::::::::::::::::::::::::::::::::
  * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  * cdef class dmat:             # <<<<<<<<<<<<<<
@@ -2166,7 +2166,7 @@ static PyObject *__pyx_tuple__8;
 static PyObject *__pyx_tuple__9;
 /* Late includes */
 
-/* "../../pyoti/cython/real/array.pxi":16
+/* "../../src/python/pyoti/cython/real/array.pxi":16
  *   #***************************************************************************************************
  *   # not _cinit_ to avoid creation with _new_
  *   def __init__(self, nrows, ncols, uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -2264,7 +2264,7 @@ static int __pyx_pf_5pyoti_4real_4dmat___init__(struct __pyx_obj_5pyoti_4real_dm
   uint64_t __pyx_t_2;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":27
+  /* "../../src/python/pyoti/cython/real/array.pxi":27
  *     cdef uint64_t sizeOfCoefs, newSizeOfCoefs, i, j, ordi
  * 
  *     self.FLAGS = FLAGS             # <<<<<<<<<<<<<<
@@ -2273,7 +2273,7 @@ static int __pyx_pf_5pyoti_4real_4dmat___init__(struct __pyx_obj_5pyoti_4real_dm
  */
   __pyx_v_self->FLAGS = __pyx_v_FLAGS;
 
-  /* "../../pyoti/cython/real/array.pxi":29
+  /* "../../src/python/pyoti/cython/real/array.pxi":29
  *     self.FLAGS = FLAGS
  * 
  *     self.arr = darr_createEmpty( nrows, ncols )             # <<<<<<<<<<<<<<
@@ -2284,7 +2284,7 @@ static int __pyx_pf_5pyoti_4real_4dmat___init__(struct __pyx_obj_5pyoti_4real_dm
   __pyx_t_2 = __Pyx_PyInt_As_uint64_t(__pyx_v_ncols); if (unlikely((__pyx_t_2 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 29, __pyx_L1_error)
   __pyx_v_self->arr = darr_createEmpty(__pyx_t_1, __pyx_t_2);
 
-  /* "../../pyoti/cython/real/array.pxi":16
+  /* "../../src/python/pyoti/cython/real/array.pxi":16
  *   #***************************************************************************************************
  *   # not _cinit_ to avoid creation with _new_
  *   def __init__(self, nrows, ncols, uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -2303,7 +2303,7 @@ static int __pyx_pf_5pyoti_4real_4dmat___init__(struct __pyx_obj_5pyoti_4real_dm
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":34
+/* "../../src/python/pyoti/cython/real/array.pxi":34
  * 
  *   #***************************************************************************************************
  *   def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -2327,7 +2327,7 @@ static void __pyx_pf_5pyoti_4real_4dmat_2__dealloc__(struct __pyx_obj_5pyoti_4re
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":43
+  /* "../../src/python/pyoti/cython/real/array.pxi":43
  *     #*************************************************************************************************
  * 
  *     if self.FLAGS & 1: # If memory is owned by this class.             # <<<<<<<<<<<<<<
@@ -2337,7 +2337,7 @@ static void __pyx_pf_5pyoti_4real_4dmat_2__dealloc__(struct __pyx_obj_5pyoti_4re
   __pyx_t_1 = ((__pyx_v_self->FLAGS & 1) != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/real/array.pxi":45
+    /* "../../src/python/pyoti/cython/real/array.pxi":45
  *     if self.FLAGS & 1: # If memory is owned by this class.
  * 
  *       darr_free(&self.arr)             # <<<<<<<<<<<<<<
@@ -2346,7 +2346,7 @@ static void __pyx_pf_5pyoti_4real_4dmat_2__dealloc__(struct __pyx_obj_5pyoti_4re
  */
     darr_free((&__pyx_v_self->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":43
+    /* "../../src/python/pyoti/cython/real/array.pxi":43
  *     #*************************************************************************************************
  * 
  *     if self.FLAGS & 1: # If memory is owned by this class.             # <<<<<<<<<<<<<<
@@ -2355,7 +2355,7 @@ static void __pyx_pf_5pyoti_4real_4dmat_2__dealloc__(struct __pyx_obj_5pyoti_4re
  */
   }
 
-  /* "../../pyoti/cython/real/array.pxi":34
+  /* "../../src/python/pyoti/cython/real/array.pxi":34
  * 
  *   #***************************************************************************************************
  *   def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -2367,7 +2367,7 @@ static void __pyx_pf_5pyoti_4real_4dmat_2__dealloc__(struct __pyx_obj_5pyoti_4re
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../pyoti/cython/real/array.pxi":53
+/* "../../src/python/pyoti/cython/real/array.pxi":53
  *   #***************************************************************************************************
  *   @property
  *   def shape(self):             # <<<<<<<<<<<<<<
@@ -2396,7 +2396,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_5shape___get__(struct __pyx_obj_5py
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":59
+  /* "../../src/python/pyoti/cython/real/array.pxi":59
  *     #*************************************************************************************************
  * 
  *     return (self.arr.nrows,self.arr.ncols)             # <<<<<<<<<<<<<<
@@ -2420,7 +2420,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_5shape___get__(struct __pyx_obj_5py
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":53
+  /* "../../src/python/pyoti/cython/real/array.pxi":53
  *   #***************************************************************************************************
  *   @property
  *   def shape(self):             # <<<<<<<<<<<<<<
@@ -2441,7 +2441,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_5shape___get__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":65
+/* "../../src/python/pyoti/cython/real/array.pxi":65
  *   #***************************************************************************************************
  *   @property
  *   def  size(self):             # <<<<<<<<<<<<<<
@@ -2468,7 +2468,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_4size___get__(struct __pyx_obj_5pyo
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":71
+  /* "../../src/python/pyoti/cython/real/array.pxi":71
  *     #*************************************************************************************************
  * 
  *     return self.arr.size             # <<<<<<<<<<<<<<
@@ -2482,7 +2482,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_4size___get__(struct __pyx_obj_5pyo
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":65
+  /* "../../src/python/pyoti/cython/real/array.pxi":65
  *   #***************************************************************************************************
  *   @property
  *   def  size(self):             # <<<<<<<<<<<<<<
@@ -2501,7 +2501,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_4size___get__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":77
+/* "../../src/python/pyoti/cython/real/array.pxi":77
  *   #***************************************************************************************************
  *   @staticmethod
  *   cdef dmat create(darr_t* arr, uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -2523,7 +2523,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_4dmat_create(dar
     }
   }
 
-  /* "../../pyoti/cython/real/array.pxi":86
+  /* "../../src/python/pyoti/cython/real/array.pxi":86
  * 
  *     # create new empty object:
  *     cdef dmat mat = <dmat> dmat.__new__(dmat)             # <<<<<<<<<<<<<<
@@ -2538,7 +2538,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_4dmat_create(dar
   __pyx_v_mat = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/real/array.pxi":88
+  /* "../../src/python/pyoti/cython/real/array.pxi":88
  *     cdef dmat mat = <dmat> dmat.__new__(dmat)
  * 
  *     mat.arr = arr[0]             # <<<<<<<<<<<<<<
@@ -2547,7 +2547,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_4dmat_create(dar
  */
   __pyx_v_mat->arr = (__pyx_v_arr[0]);
 
-  /* "../../pyoti/cython/real/array.pxi":89
+  /* "../../src/python/pyoti/cython/real/array.pxi":89
  * 
  *     mat.arr = arr[0]
  *     mat.FLAGS = FLAGS             # <<<<<<<<<<<<<<
@@ -2556,7 +2556,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_4dmat_create(dar
  */
   __pyx_v_mat->FLAGS = __pyx_v_FLAGS;
 
-  /* "../../pyoti/cython/real/array.pxi":91
+  /* "../../src/python/pyoti/cython/real/array.pxi":91
  *     mat.FLAGS = FLAGS
  * 
  *     return mat             # <<<<<<<<<<<<<<
@@ -2568,7 +2568,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_4dmat_create(dar
   __pyx_r = __pyx_v_mat;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":77
+  /* "../../src/python/pyoti/cython/real/array.pxi":77
  *   #***************************************************************************************************
  *   @staticmethod
  *   cdef dmat create(darr_t* arr, uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -2589,7 +2589,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_4dmat_create(dar
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":97
+/* "../../src/python/pyoti/cython/real/array.pxi":97
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -2627,7 +2627,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_4__repr__(struct __pyx_obj_5pyoti_4
   __pyx_pybuffernd_A.data = NULL;
   __pyx_pybuffernd_A.rcbuffer = &__pyx_pybuffer_A;
 
-  /* "../../pyoti/cython/real/array.pxi":111
+  /* "../../src/python/pyoti/cython/real/array.pxi":111
  *     # return (head + body + tail)
  * 
  *     cdef np.ndarray[double, ndim=2] A = self.to_numpy()             # <<<<<<<<<<<<<<
@@ -2647,7 +2647,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_4__repr__(struct __pyx_obj_5pyoti_4
   __pyx_v_A = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/real/array.pxi":113
+  /* "../../src/python/pyoti/cython/real/array.pxi":113
  *     cdef np.ndarray[double, ndim=2] A = self.to_numpy()
  * 
  *     return repr(A)             # <<<<<<<<<<<<<<
@@ -2661,7 +2661,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_4__repr__(struct __pyx_obj_5pyoti_4
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":97
+  /* "../../src/python/pyoti/cython/real/array.pxi":97
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -2690,7 +2690,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_4__repr__(struct __pyx_obj_5pyoti_4
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":118
+/* "../../src/python/pyoti/cython/real/array.pxi":118
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -2728,7 +2728,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_6__str__(struct __pyx_obj_5pyoti_4r
   __pyx_pybuffernd_A.data = NULL;
   __pyx_pybuffernd_A.rcbuffer = &__pyx_pybuffer_A;
 
-  /* "../../pyoti/cython/real/array.pxi":150
+  /* "../../src/python/pyoti/cython/real/array.pxi":150
  *     # return (head + body + tail)
  * 
  *     cdef np.ndarray[double, ndim=2] A = self.to_numpy()             # <<<<<<<<<<<<<<
@@ -2748,7 +2748,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_6__str__(struct __pyx_obj_5pyoti_4r
   __pyx_v_A = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/real/array.pxi":152
+  /* "../../src/python/pyoti/cython/real/array.pxi":152
  *     cdef np.ndarray[double, ndim=2] A = self.to_numpy()
  * 
  *     return str(A)             # <<<<<<<<<<<<<<
@@ -2762,7 +2762,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_6__str__(struct __pyx_obj_5pyoti_4r
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":118
+  /* "../../src/python/pyoti/cython/real/array.pxi":118
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -2791,7 +2791,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_6__str__(struct __pyx_obj_5pyoti_4r
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":159
+/* "../../src/python/pyoti/cython/real/array.pxi":159
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self, val):             # <<<<<<<<<<<<<<
@@ -2826,7 +2826,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_8__getitem__(struct __pyx_obj_5pyot
   uint64_t __pyx_t_5;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":165
+  /* "../../src/python/pyoti/cython/real/array.pxi":165
  *     #*************************************************************************************************
  * 
  *     if (isinstance(val, int)):             # <<<<<<<<<<<<<<
@@ -2837,7 +2837,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_8__getitem__(struct __pyx_obj_5pyot
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":167
+    /* "../../src/python/pyoti/cython/real/array.pxi":167
  *     if (isinstance(val, int)):
  * 
  *       return darr_get_item_i( &self.arr, val)             # <<<<<<<<<<<<<<
@@ -2852,7 +2852,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_8__getitem__(struct __pyx_obj_5pyot
     __pyx_t_4 = 0;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/real/array.pxi":165
+    /* "../../src/python/pyoti/cython/real/array.pxi":165
  *     #*************************************************************************************************
  * 
  *     if (isinstance(val, int)):             # <<<<<<<<<<<<<<
@@ -2861,7 +2861,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_8__getitem__(struct __pyx_obj_5pyot
  */
   }
 
-  /* "../../pyoti/cython/real/array.pxi":171
+  /* "../../src/python/pyoti/cython/real/array.pxi":171
  *     else:
  * 
  *       return darr_get_item_ij( &self.arr, val[0], val[1])             # <<<<<<<<<<<<<<
@@ -2885,7 +2885,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_8__getitem__(struct __pyx_obj_5pyot
     goto __pyx_L0;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":159
+  /* "../../src/python/pyoti/cython/real/array.pxi":159
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self, val):             # <<<<<<<<<<<<<<
@@ -2904,7 +2904,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_8__getitem__(struct __pyx_obj_5pyot
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":179
+/* "../../src/python/pyoti/cython/real/array.pxi":179
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, val, coeff_t value):             # <<<<<<<<<<<<<<
@@ -2949,7 +2949,7 @@ static int __pyx_pf_5pyoti_4real_4dmat_10__setitem__(struct __pyx_obj_5pyoti_4re
   uint64_t __pyx_t_5;
   __Pyx_RefNannySetupContext("__setitem__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":186
+  /* "../../src/python/pyoti/cython/real/array.pxi":186
  * 
  * 
  *     if (isinstance(val, int)):             # <<<<<<<<<<<<<<
@@ -2960,7 +2960,7 @@ static int __pyx_pf_5pyoti_4real_4dmat_10__setitem__(struct __pyx_obj_5pyoti_4re
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":188
+    /* "../../src/python/pyoti/cython/real/array.pxi":188
  *     if (isinstance(val, int)):
  * 
  *       darr_set_item_i( value, val, &self.arr)             # <<<<<<<<<<<<<<
@@ -2970,7 +2970,7 @@ static int __pyx_pf_5pyoti_4real_4dmat_10__setitem__(struct __pyx_obj_5pyoti_4re
     __pyx_t_3 = __Pyx_PyInt_As_uint64_t(__pyx_v_val); if (unlikely((__pyx_t_3 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(0, 188, __pyx_L1_error)
     darr_set_item_i(__pyx_v_value, __pyx_t_3, (&__pyx_v_self->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":186
+    /* "../../src/python/pyoti/cython/real/array.pxi":186
  * 
  * 
  *     if (isinstance(val, int)):             # <<<<<<<<<<<<<<
@@ -2980,7 +2980,7 @@ static int __pyx_pf_5pyoti_4real_4dmat_10__setitem__(struct __pyx_obj_5pyoti_4re
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":192
+  /* "../../src/python/pyoti/cython/real/array.pxi":192
  *     else:
  * 
  *       darr_set_item_ij( value , val[0], val[1], &self.arr)             # <<<<<<<<<<<<<<
@@ -3000,7 +3000,7 @@ static int __pyx_pf_5pyoti_4real_4dmat_10__setitem__(struct __pyx_obj_5pyoti_4re
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/real/array.pxi":179
+  /* "../../src/python/pyoti/cython/real/array.pxi":179
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, val, coeff_t value):             # <<<<<<<<<<<<<<
@@ -3020,7 +3020,7 @@ static int __pyx_pf_5pyoti_4real_4dmat_10__setitem__(struct __pyx_obj_5pyoti_4re
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":203
+/* "../../src/python/pyoti/cython/real/array.pxi":203
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -3052,7 +3052,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_12__neg__(struct __pyx_obj_5pyoti_4
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__neg__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":209
+  /* "../../src/python/pyoti/cython/real/array.pxi":209
  *     #*************************************************************************************************
  * 
  *     cdef darr_t newmat = darr_neg(&self.arr)             # <<<<<<<<<<<<<<
@@ -3061,7 +3061,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_12__neg__(struct __pyx_obj_5pyoti_4
  */
   __pyx_v_newmat = darr_neg((&__pyx_v_self->arr));
 
-  /* "../../pyoti/cython/real/array.pxi":211
+  /* "../../src/python/pyoti/cython/real/array.pxi":211
  *     cdef darr_t newmat = darr_neg(&self.arr)
  * 
  *     return dmat.create(&newmat)             # <<<<<<<<<<<<<<
@@ -3075,7 +3075,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_12__neg__(struct __pyx_obj_5pyoti_4
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":203
+  /* "../../src/python/pyoti/cython/real/array.pxi":203
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -3094,7 +3094,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_12__neg__(struct __pyx_obj_5pyoti_4
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":218
+/* "../../src/python/pyoti/cython/real/array.pxi":218
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other):             # <<<<<<<<<<<<<<
@@ -3133,7 +3133,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":227
+  /* "../../src/python/pyoti/cython/real/array.pxi":227
  *     cdef dmat lhs,rhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -3143,7 +3143,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/real/array.pxi":228
+  /* "../../src/python/pyoti/cython/real/array.pxi":228
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -3153,7 +3153,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../pyoti/cython/real/array.pxi":230
+  /* "../../src/python/pyoti/cython/real/array.pxi":230
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -3165,7 +3165,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":232
+    /* "../../src/python/pyoti/cython/real/array.pxi":232
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -3178,7 +3178,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":233
+    /* "../../src/python/pyoti/cython/real/array.pxi":233
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -3191,7 +3191,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":235
+    /* "../../src/python/pyoti/cython/real/array.pxi":235
  *       rhs = other
  * 
  *       res = darr_sum_RR(&lhs.arr,&rhs.arr)             # <<<<<<<<<<<<<<
@@ -3200,7 +3200,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
  */
     __pyx_v_res = darr_sum_RR((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":230
+    /* "../../src/python/pyoti/cython/real/array.pxi":230
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -3210,7 +3210,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":237
+  /* "../../src/python/pyoti/cython/real/array.pxi":237
  *       res = darr_sum_RR(&lhs.arr,&rhs.arr)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -3224,7 +3224,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/real/array.pxi":239
+    /* "../../src/python/pyoti/cython/real/array.pxi":239
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -3237,7 +3237,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":240
+    /* "../../src/python/pyoti/cython/real/array.pxi":240
  * 
  *       rhs = other
  *       res = darr_sum_rR(self, &rhs.arr)             # <<<<<<<<<<<<<<
@@ -3247,7 +3247,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 240, __pyx_L1_error)
     __pyx_v_res = darr_sum_rR(__pyx_t_4, (&__pyx_v_rhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":237
+    /* "../../src/python/pyoti/cython/real/array.pxi":237
  *       res = darr_sum_RR(&lhs.arr,&rhs.arr)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -3257,7 +3257,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":242
+  /* "../../src/python/pyoti/cython/real/array.pxi":242
  *       res = darr_sum_rR(self, &rhs.arr)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -3271,7 +3271,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":244
+    /* "../../src/python/pyoti/cython/real/array.pxi":244
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -3284,7 +3284,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":245
+    /* "../../src/python/pyoti/cython/real/array.pxi":245
  * 
  *       lhs = self
  *       res = darr_sum_rR(other, &lhs.arr)             # <<<<<<<<<<<<<<
@@ -3294,7 +3294,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 245, __pyx_L1_error)
     __pyx_v_res = darr_sum_rR(__pyx_t_4, (&__pyx_v_lhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":242
+    /* "../../src/python/pyoti/cython/real/array.pxi":242
  *       res = darr_sum_rR(self, &rhs.arr)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -3304,7 +3304,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":249
+  /* "../../src/python/pyoti/cython/real/array.pxi":249
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -3319,7 +3319,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/real/array.pxi":253
+  /* "../../src/python/pyoti/cython/real/array.pxi":253
  *     # end if
  * 
  *     return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -3333,7 +3333,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":218
+  /* "../../src/python/pyoti/cython/real/array.pxi":218
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other):             # <<<<<<<<<<<<<<
@@ -3356,7 +3356,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_14__add__(PyObject *__pyx_v_self, P
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":259
+/* "../../src/python/pyoti/cython/real/array.pxi":259
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other):             # <<<<<<<<<<<<<<
@@ -3387,7 +3387,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_16__iadd__(struct __pyx_obj_5pyoti_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__iadd__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":265
+  /* "../../src/python/pyoti/cython/real/array.pxi":265
  *     #*************************************************************************************************
  * 
  *     return self + other             # <<<<<<<<<<<<<<
@@ -3401,7 +3401,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_16__iadd__(struct __pyx_obj_5pyoti_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":259
+  /* "../../src/python/pyoti/cython/real/array.pxi":259
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other):             # <<<<<<<<<<<<<<
@@ -3420,7 +3420,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_16__iadd__(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":271
+/* "../../src/python/pyoti/cython/real/array.pxi":271
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other):             # <<<<<<<<<<<<<<
@@ -3459,7 +3459,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__sub__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":280
+  /* "../../src/python/pyoti/cython/real/array.pxi":280
  *     cdef dmat lhs,rhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -3469,7 +3469,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/real/array.pxi":281
+  /* "../../src/python/pyoti/cython/real/array.pxi":281
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -3479,7 +3479,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../pyoti/cython/real/array.pxi":283
+  /* "../../src/python/pyoti/cython/real/array.pxi":283
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -3491,7 +3491,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":285
+    /* "../../src/python/pyoti/cython/real/array.pxi":285
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -3504,7 +3504,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":286
+    /* "../../src/python/pyoti/cython/real/array.pxi":286
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -3517,7 +3517,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":288
+    /* "../../src/python/pyoti/cython/real/array.pxi":288
  *       rhs = other
  * 
  *       res = darr_sub_RR(&lhs.arr,&rhs.arr)             # <<<<<<<<<<<<<<
@@ -3526,7 +3526,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
  */
     __pyx_v_res = darr_sub_RR((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":283
+    /* "../../src/python/pyoti/cython/real/array.pxi":283
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -3536,7 +3536,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":290
+  /* "../../src/python/pyoti/cython/real/array.pxi":290
  *       res = darr_sub_RR(&lhs.arr,&rhs.arr)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -3550,7 +3550,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/real/array.pxi":292
+    /* "../../src/python/pyoti/cython/real/array.pxi":292
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -3563,7 +3563,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":293
+    /* "../../src/python/pyoti/cython/real/array.pxi":293
  * 
  *       rhs = other
  *       res = darr_sub_rR(self, &rhs.arr)             # <<<<<<<<<<<<<<
@@ -3573,7 +3573,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 293, __pyx_L1_error)
     __pyx_v_res = darr_sub_rR(__pyx_t_4, (&__pyx_v_rhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":290
+    /* "../../src/python/pyoti/cython/real/array.pxi":290
  *       res = darr_sub_RR(&lhs.arr,&rhs.arr)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -3583,7 +3583,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":295
+  /* "../../src/python/pyoti/cython/real/array.pxi":295
  *       res = darr_sub_rR(self, &rhs.arr)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -3597,7 +3597,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":297
+    /* "../../src/python/pyoti/cython/real/array.pxi":297
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -3610,7 +3610,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":298
+    /* "../../src/python/pyoti/cython/real/array.pxi":298
  * 
  *       lhs = self
  *       res = darr_sub_Rr( &lhs.arr, other)             # <<<<<<<<<<<<<<
@@ -3620,7 +3620,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 298, __pyx_L1_error)
     __pyx_v_res = darr_sub_Rr((&__pyx_v_lhs->arr), __pyx_t_4);
 
-    /* "../../pyoti/cython/real/array.pxi":295
+    /* "../../src/python/pyoti/cython/real/array.pxi":295
  *       res = darr_sub_rR(self, &rhs.arr)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -3630,7 +3630,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":302
+  /* "../../src/python/pyoti/cython/real/array.pxi":302
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -3645,7 +3645,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/real/array.pxi":306
+  /* "../../src/python/pyoti/cython/real/array.pxi":306
  *     # end if
  * 
  *     return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -3659,7 +3659,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":271
+  /* "../../src/python/pyoti/cython/real/array.pxi":271
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other):             # <<<<<<<<<<<<<<
@@ -3682,7 +3682,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_18__sub__(PyObject *__pyx_v_self, P
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":312
+/* "../../src/python/pyoti/cython/real/array.pxi":312
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -3713,7 +3713,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_20__isub__(struct __pyx_obj_5pyoti_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__isub__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":318
+  /* "../../src/python/pyoti/cython/real/array.pxi":318
  *     #*************************************************************************************************
  * 
  *     return self - other_in             # <<<<<<<<<<<<<<
@@ -3727,7 +3727,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_20__isub__(struct __pyx_obj_5pyoti_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":312
+  /* "../../src/python/pyoti/cython/real/array.pxi":312
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -3746,7 +3746,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_20__isub__(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":324
+/* "../../src/python/pyoti/cython/real/array.pxi":324
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other):             # <<<<<<<<<<<<<<
@@ -3785,7 +3785,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__mul__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":333
+  /* "../../src/python/pyoti/cython/real/array.pxi":333
  *     cdef dmat lhs,rhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -3795,7 +3795,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/real/array.pxi":334
+  /* "../../src/python/pyoti/cython/real/array.pxi":334
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -3805,7 +3805,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../pyoti/cython/real/array.pxi":336
+  /* "../../src/python/pyoti/cython/real/array.pxi":336
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -3817,7 +3817,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":338
+    /* "../../src/python/pyoti/cython/real/array.pxi":338
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -3830,7 +3830,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":339
+    /* "../../src/python/pyoti/cython/real/array.pxi":339
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -3843,7 +3843,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":341
+    /* "../../src/python/pyoti/cython/real/array.pxi":341
  *       rhs = other
  * 
  *       res = darr_mul_RR(&lhs.arr,&rhs.arr)             # <<<<<<<<<<<<<<
@@ -3852,7 +3852,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
  */
     __pyx_v_res = darr_mul_RR((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":336
+    /* "../../src/python/pyoti/cython/real/array.pxi":336
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -3862,7 +3862,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":343
+  /* "../../src/python/pyoti/cython/real/array.pxi":343
  *       res = darr_mul_RR(&lhs.arr,&rhs.arr)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -3876,7 +3876,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/real/array.pxi":345
+    /* "../../src/python/pyoti/cython/real/array.pxi":345
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -3889,7 +3889,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":346
+    /* "../../src/python/pyoti/cython/real/array.pxi":346
  * 
  *       rhs = other
  *       res = darr_mul_rR(self, &rhs.arr)             # <<<<<<<<<<<<<<
@@ -3899,7 +3899,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 346, __pyx_L1_error)
     __pyx_v_res = darr_mul_rR(__pyx_t_4, (&__pyx_v_rhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":343
+    /* "../../src/python/pyoti/cython/real/array.pxi":343
  *       res = darr_mul_RR(&lhs.arr,&rhs.arr)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -3909,7 +3909,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":348
+  /* "../../src/python/pyoti/cython/real/array.pxi":348
  *       res = darr_mul_rR(self, &rhs.arr)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -3923,7 +3923,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":350
+    /* "../../src/python/pyoti/cython/real/array.pxi":350
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -3936,7 +3936,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":351
+    /* "../../src/python/pyoti/cython/real/array.pxi":351
  * 
  *       lhs = self
  *       res = darr_mul_rR(other, &lhs.arr)             # <<<<<<<<<<<<<<
@@ -3946,7 +3946,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 351, __pyx_L1_error)
     __pyx_v_res = darr_mul_rR(__pyx_t_4, (&__pyx_v_lhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":348
+    /* "../../src/python/pyoti/cython/real/array.pxi":348
  *       res = darr_mul_rR(self, &rhs.arr)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -3956,7 +3956,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":355
+  /* "../../src/python/pyoti/cython/real/array.pxi":355
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -3971,7 +3971,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/real/array.pxi":359
+  /* "../../src/python/pyoti/cython/real/array.pxi":359
  *     # end if
  * 
  *     return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -3985,7 +3985,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":324
+  /* "../../src/python/pyoti/cython/real/array.pxi":324
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other):             # <<<<<<<<<<<<<<
@@ -4008,7 +4008,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_22__mul__(PyObject *__pyx_v_self, P
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":366
+/* "../../src/python/pyoti/cython/real/array.pxi":366
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -4039,7 +4039,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_24__imul__(struct __pyx_obj_5pyoti_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__imul__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":372
+  /* "../../src/python/pyoti/cython/real/array.pxi":372
  *     #*************************************************************************************************
  * 
  *     return self * other_in             # <<<<<<<<<<<<<<
@@ -4053,7 +4053,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_24__imul__(struct __pyx_obj_5pyoti_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":366
+  /* "../../src/python/pyoti/cython/real/array.pxi":366
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -4072,7 +4072,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_24__imul__(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":378
+/* "../../src/python/pyoti/cython/real/array.pxi":378
  * 
  *   #***************************************************************************************************
  *   def __truediv__(self, other):             # <<<<<<<<<<<<<<
@@ -4111,7 +4111,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__truediv__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":387
+  /* "../../src/python/pyoti/cython/real/array.pxi":387
  *     cdef dmat lhs,rhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -4121,7 +4121,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/real/array.pxi":388
+  /* "../../src/python/pyoti/cython/real/array.pxi":388
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -4131,7 +4131,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../pyoti/cython/real/array.pxi":390
+  /* "../../src/python/pyoti/cython/real/array.pxi":390
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -4143,7 +4143,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":392
+    /* "../../src/python/pyoti/cython/real/array.pxi":392
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -4156,7 +4156,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":393
+    /* "../../src/python/pyoti/cython/real/array.pxi":393
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -4169,7 +4169,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":395
+    /* "../../src/python/pyoti/cython/real/array.pxi":395
  *       rhs = other
  * 
  *       res = darr_div_RR(&lhs.arr,&rhs.arr)             # <<<<<<<<<<<<<<
@@ -4178,7 +4178,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = darr_div_RR((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":390
+    /* "../../src/python/pyoti/cython/real/array.pxi":390
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -4188,7 +4188,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":397
+  /* "../../src/python/pyoti/cython/real/array.pxi":397
  *       res = darr_div_RR(&lhs.arr,&rhs.arr)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -4202,7 +4202,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/real/array.pxi":399
+    /* "../../src/python/pyoti/cython/real/array.pxi":399
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -4215,7 +4215,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":400
+    /* "../../src/python/pyoti/cython/real/array.pxi":400
  * 
  *       rhs = other
  *       res = darr_div_rR(self, &rhs.arr)             # <<<<<<<<<<<<<<
@@ -4225,7 +4225,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 400, __pyx_L1_error)
     __pyx_v_res = darr_div_rR(__pyx_t_4, (&__pyx_v_rhs->arr));
 
-    /* "../../pyoti/cython/real/array.pxi":397
+    /* "../../src/python/pyoti/cython/real/array.pxi":397
  *       res = darr_div_RR(&lhs.arr,&rhs.arr)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -4235,7 +4235,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":402
+  /* "../../src/python/pyoti/cython/real/array.pxi":402
  *       res = darr_div_rR(self, &rhs.arr)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -4249,7 +4249,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/real/array.pxi":404
+    /* "../../src/python/pyoti/cython/real/array.pxi":404
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -4262,7 +4262,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/real/array.pxi":405
+    /* "../../src/python/pyoti/cython/real/array.pxi":405
  * 
  *       lhs = self
  *       res = darr_div_Rr( &lhs.arr, other)             # <<<<<<<<<<<<<<
@@ -4272,7 +4272,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 405, __pyx_L1_error)
     __pyx_v_res = darr_div_Rr((&__pyx_v_lhs->arr), __pyx_t_4);
 
-    /* "../../pyoti/cython/real/array.pxi":402
+    /* "../../src/python/pyoti/cython/real/array.pxi":402
  *       res = darr_div_rR(self, &rhs.arr)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -4282,7 +4282,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/real/array.pxi":409
+  /* "../../src/python/pyoti/cython/real/array.pxi":409
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -4297,7 +4297,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/real/array.pxi":413
+  /* "../../src/python/pyoti/cython/real/array.pxi":413
  *     # end if
  * 
  *     return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -4311,7 +4311,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":378
+  /* "../../src/python/pyoti/cython/real/array.pxi":378
  * 
  *   #***************************************************************************************************
  *   def __truediv__(self, other):             # <<<<<<<<<<<<<<
@@ -4334,7 +4334,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":419
+/* "../../src/python/pyoti/cython/real/array.pxi":419
  * 
  *   #***************************************************************************************************
  *   cpdef np.ndarray[double, ndim=2] to_numpy(self):             # <<<<<<<<<<<<<<
@@ -4399,7 +4399,7 @@ static PyArrayObject *__pyx_f_5pyoti_4real_4dmat_to_numpy(struct __pyx_obj_5pyot
     #endif
   }
 
-  /* "../../pyoti/cython/real/array.pxi":425
+  /* "../../src/python/pyoti/cython/real/array.pxi":425
  *     #*************************************************************************************************
  * 
  *     return c_ptr_to_np_2darray_double(self.arr.p_data, self.arr.nrows, self.arr.ncols)             # <<<<<<<<<<<<<<
@@ -4413,7 +4413,7 @@ static PyArrayObject *__pyx_f_5pyoti_4real_4dmat_to_numpy(struct __pyx_obj_5pyot
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":419
+  /* "../../src/python/pyoti/cython/real/array.pxi":419
  * 
  *   #***************************************************************************************************
  *   cpdef np.ndarray[double, ndim=2] to_numpy(self):             # <<<<<<<<<<<<<<
@@ -4472,7 +4472,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_28to_numpy(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":430
+/* "../../src/python/pyoti/cython/real/array.pxi":430
  * 
  *   #***************************************************************************************************
  *   def __pow__(self, n,z):             # <<<<<<<<<<<<<<
@@ -4504,7 +4504,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_30__pow__(PyObject *__pyx_v_self, P
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__pow__", 0);
 
-  /* "../../pyoti/cython/real/array.pxi":436
+  /* "../../src/python/pyoti/cython/real/array.pxi":436
  *     #*************************************************************************************************
  * 
  *     return power(self,n)             # <<<<<<<<<<<<<<
@@ -4520,7 +4520,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_30__pow__(PyObject *__pyx_v_self, P
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":430
+  /* "../../src/python/pyoti/cython/real/array.pxi":430
  * 
  *   #***************************************************************************************************
  *   def __pow__(self, n,z):             # <<<<<<<<<<<<<<
@@ -4539,7 +4539,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_30__pow__(PyObject *__pyx_v_self, P
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/array.pxi":442
+/* "../../src/python/pyoti/cython/real/array.pxi":442
  * 
  *   #***************************************************************************************************
  *   cpdef copy(self):             # <<<<<<<<<<<<<<
@@ -4604,7 +4604,7 @@ static PyObject *__pyx_f_5pyoti_4real_4dmat_copy(struct __pyx_obj_5pyoti_4real_d
     #endif
   }
 
-  /* "../../pyoti/cython/real/array.pxi":448
+  /* "../../src/python/pyoti/cython/real/array.pxi":448
  *     #*************************************************************************************************
  * 
  *     cdef darr_t res = darr_copy(&self.arr)             # <<<<<<<<<<<<<<
@@ -4613,7 +4613,7 @@ static PyObject *__pyx_f_5pyoti_4real_4dmat_copy(struct __pyx_obj_5pyoti_4real_d
  */
   __pyx_v_res = darr_copy((&__pyx_v_self->arr));
 
-  /* "../../pyoti/cython/real/array.pxi":450
+  /* "../../src/python/pyoti/cython/real/array.pxi":450
  *     cdef darr_t res = darr_copy(&self.arr)
  * 
  *     return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -4627,7 +4627,7 @@ static PyObject *__pyx_f_5pyoti_4real_4dmat_copy(struct __pyx_obj_5pyoti_4real_d
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/array.pxi":442
+  /* "../../src/python/pyoti/cython/real/array.pxi":442
  * 
  *   #***************************************************************************************************
  *   cpdef copy(self):             # <<<<<<<<<<<<<<
@@ -4793,7 +4793,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_36__setstate_cython__(CYTHON_UNUSED
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":8
+/* "../../src/python/pyoti/cython/real/math.pxi":8
  * 
  * #*****************************************************************************************************
  * cpdef dmat atanh(dmat A):             # <<<<<<<<<<<<<<
@@ -4809,7 +4809,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_atanh(struct __p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("atanh", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":10
+  /* "../../src/python/pyoti/cython/real/math.pxi":10
  * cpdef dmat atanh(dmat A):
  * 
  *   cdef darr_t res = darr_atanh(&A.arr)             # <<<<<<<<<<<<<<
@@ -4818,7 +4818,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_atanh(struct __p
  */
   __pyx_v_res = darr_atanh((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":12
+  /* "../../src/python/pyoti/cython/real/math.pxi":12
  *   cdef darr_t res = darr_atanh(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -4832,7 +4832,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_atanh(struct __p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":8
+  /* "../../src/python/pyoti/cython/real/math.pxi":8
  * 
  * #*****************************************************************************************************
  * cpdef dmat atanh(dmat A):             # <<<<<<<<<<<<<<
@@ -4892,7 +4892,7 @@ static PyObject *__pyx_pf_5pyoti_4real_atanh(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":19
+/* "../../src/python/pyoti/cython/real/math.pxi":19
  * 
  * #*****************************************************************************************************
  * cpdef dmat asinh(dmat A):             # <<<<<<<<<<<<<<
@@ -4908,7 +4908,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_asinh(struct __p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("asinh", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":21
+  /* "../../src/python/pyoti/cython/real/math.pxi":21
  * cpdef dmat asinh(dmat A):
  * 
  *   cdef darr_t res = darr_asinh(&A.arr)             # <<<<<<<<<<<<<<
@@ -4917,7 +4917,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_asinh(struct __p
  */
   __pyx_v_res = darr_asinh((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":23
+  /* "../../src/python/pyoti/cython/real/math.pxi":23
  *   cdef darr_t res = darr_asinh(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -4931,7 +4931,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_asinh(struct __p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":19
+  /* "../../src/python/pyoti/cython/real/math.pxi":19
  * 
  * #*****************************************************************************************************
  * cpdef dmat asinh(dmat A):             # <<<<<<<<<<<<<<
@@ -4991,7 +4991,7 @@ static PyObject *__pyx_pf_5pyoti_4real_2asinh(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":30
+/* "../../src/python/pyoti/cython/real/math.pxi":30
  * 
  * #*****************************************************************************************************
  * cpdef dmat acosh(dmat A):             # <<<<<<<<<<<<<<
@@ -5007,7 +5007,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_acosh(struct __p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("acosh", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":32
+  /* "../../src/python/pyoti/cython/real/math.pxi":32
  * cpdef dmat acosh(dmat A):
  * 
  *   cdef darr_t res = darr_acosh(&A.arr)             # <<<<<<<<<<<<<<
@@ -5016,7 +5016,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_acosh(struct __p
  */
   __pyx_v_res = darr_acosh((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":34
+  /* "../../src/python/pyoti/cython/real/math.pxi":34
  *   cdef darr_t res = darr_acosh(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5030,7 +5030,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_acosh(struct __p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":30
+  /* "../../src/python/pyoti/cython/real/math.pxi":30
  * 
  * #*****************************************************************************************************
  * cpdef dmat acosh(dmat A):             # <<<<<<<<<<<<<<
@@ -5090,7 +5090,7 @@ static PyObject *__pyx_pf_5pyoti_4real_4acosh(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":41
+/* "../../src/python/pyoti/cython/real/math.pxi":41
  * 
  * #*****************************************************************************************************
  * cpdef dmat tanh(dmat A):             # <<<<<<<<<<<<<<
@@ -5106,7 +5106,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_tanh(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("tanh", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":43
+  /* "../../src/python/pyoti/cython/real/math.pxi":43
  * cpdef dmat tanh(dmat A):
  * 
  *   cdef darr_t res = darr_tanh(&A.arr)             # <<<<<<<<<<<<<<
@@ -5115,7 +5115,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_tanh(struct __py
  */
   __pyx_v_res = darr_tanh((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":45
+  /* "../../src/python/pyoti/cython/real/math.pxi":45
  *   cdef darr_t res = darr_tanh(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5129,7 +5129,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_tanh(struct __py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":41
+  /* "../../src/python/pyoti/cython/real/math.pxi":41
  * 
  * #*****************************************************************************************************
  * cpdef dmat tanh(dmat A):             # <<<<<<<<<<<<<<
@@ -5189,7 +5189,7 @@ static PyObject *__pyx_pf_5pyoti_4real_6tanh(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":52
+/* "../../src/python/pyoti/cython/real/math.pxi":52
  * 
  * #*****************************************************************************************************
  * cpdef dmat sqrt(dmat A):             # <<<<<<<<<<<<<<
@@ -5205,7 +5205,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_sqrt(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sqrt", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":54
+  /* "../../src/python/pyoti/cython/real/math.pxi":54
  * cpdef dmat sqrt(dmat A):
  * 
  *   cdef darr_t res = darr_sqrt(&A.arr)             # <<<<<<<<<<<<<<
@@ -5214,7 +5214,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_sqrt(struct __py
  */
   __pyx_v_res = darr_sqrt((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":56
+  /* "../../src/python/pyoti/cython/real/math.pxi":56
  *   cdef darr_t res = darr_sqrt(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5228,7 +5228,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_sqrt(struct __py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":52
+  /* "../../src/python/pyoti/cython/real/math.pxi":52
  * 
  * #*****************************************************************************************************
  * cpdef dmat sqrt(dmat A):             # <<<<<<<<<<<<<<
@@ -5288,7 +5288,7 @@ static PyObject *__pyx_pf_5pyoti_4real_8sqrt(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":63
+/* "../../src/python/pyoti/cython/real/math.pxi":63
  * 
  * #*****************************************************************************************************
  * cpdef dmat cosh(dmat A):             # <<<<<<<<<<<<<<
@@ -5304,7 +5304,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_cosh(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("cosh", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":65
+  /* "../../src/python/pyoti/cython/real/math.pxi":65
  * cpdef dmat cosh(dmat A):
  * 
  *   cdef darr_t res = darr_cosh(&A.arr)             # <<<<<<<<<<<<<<
@@ -5313,7 +5313,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_cosh(struct __py
  */
   __pyx_v_res = darr_cosh((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":67
+  /* "../../src/python/pyoti/cython/real/math.pxi":67
  *   cdef darr_t res = darr_cosh(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5327,7 +5327,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_cosh(struct __py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":63
+  /* "../../src/python/pyoti/cython/real/math.pxi":63
  * 
  * #*****************************************************************************************************
  * cpdef dmat cosh(dmat A):             # <<<<<<<<<<<<<<
@@ -5387,7 +5387,7 @@ static PyObject *__pyx_pf_5pyoti_4real_10cosh(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":74
+/* "../../src/python/pyoti/cython/real/math.pxi":74
  * 
  * #*****************************************************************************************************
  * cpdef dmat sinh(dmat A):             # <<<<<<<<<<<<<<
@@ -5403,7 +5403,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_sinh(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sinh", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":76
+  /* "../../src/python/pyoti/cython/real/math.pxi":76
  * cpdef dmat sinh(dmat A):
  * 
  *   cdef darr_t res = darr_sinh(&A.arr)             # <<<<<<<<<<<<<<
@@ -5412,7 +5412,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_sinh(struct __py
  */
   __pyx_v_res = darr_sinh((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":78
+  /* "../../src/python/pyoti/cython/real/math.pxi":78
  *   cdef darr_t res = darr_sinh(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5426,7 +5426,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_sinh(struct __py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":74
+  /* "../../src/python/pyoti/cython/real/math.pxi":74
  * 
  * #*****************************************************************************************************
  * cpdef dmat sinh(dmat A):             # <<<<<<<<<<<<<<
@@ -5486,7 +5486,7 @@ static PyObject *__pyx_pf_5pyoti_4real_12sinh(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":84
+/* "../../src/python/pyoti/cython/real/math.pxi":84
  * 
  * #*****************************************************************************************************
  * cpdef dmat asin(dmat A):             # <<<<<<<<<<<<<<
@@ -5502,7 +5502,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_asin(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("asin", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":86
+  /* "../../src/python/pyoti/cython/real/math.pxi":86
  * cpdef dmat asin(dmat A):
  * 
  *   cdef darr_t res = darr_asin(&A.arr)             # <<<<<<<<<<<<<<
@@ -5511,7 +5511,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_asin(struct __py
  */
   __pyx_v_res = darr_asin((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":88
+  /* "../../src/python/pyoti/cython/real/math.pxi":88
  *   cdef darr_t res = darr_asin(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5525,7 +5525,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_asin(struct __py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":84
+  /* "../../src/python/pyoti/cython/real/math.pxi":84
  * 
  * #*****************************************************************************************************
  * cpdef dmat asin(dmat A):             # <<<<<<<<<<<<<<
@@ -5585,7 +5585,7 @@ static PyObject *__pyx_pf_5pyoti_4real_14asin(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":94
+/* "../../src/python/pyoti/cython/real/math.pxi":94
  * 
  * #*****************************************************************************************************
  * cpdef dmat acos(dmat A):             # <<<<<<<<<<<<<<
@@ -5601,7 +5601,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_acos(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("acos", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":96
+  /* "../../src/python/pyoti/cython/real/math.pxi":96
  * cpdef dmat acos(dmat A):
  * 
  *   cdef darr_t res = darr_acos(&A.arr)             # <<<<<<<<<<<<<<
@@ -5610,7 +5610,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_acos(struct __py
  */
   __pyx_v_res = darr_acos((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":98
+  /* "../../src/python/pyoti/cython/real/math.pxi":98
  *   cdef darr_t res = darr_acos(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5624,7 +5624,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_acos(struct __py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":94
+  /* "../../src/python/pyoti/cython/real/math.pxi":94
  * 
  * #*****************************************************************************************************
  * cpdef dmat acos(dmat A):             # <<<<<<<<<<<<<<
@@ -5684,7 +5684,7 @@ static PyObject *__pyx_pf_5pyoti_4real_16acos(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":104
+/* "../../src/python/pyoti/cython/real/math.pxi":104
  * 
  * #*****************************************************************************************************
  * cpdef dmat atan(dmat A):             # <<<<<<<<<<<<<<
@@ -5700,7 +5700,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_atan(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("atan", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":106
+  /* "../../src/python/pyoti/cython/real/math.pxi":106
  * cpdef dmat atan(dmat A):
  * 
  *   cdef darr_t res = darr_atan(&A.arr)             # <<<<<<<<<<<<<<
@@ -5709,7 +5709,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_atan(struct __py
  */
   __pyx_v_res = darr_atan((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":108
+  /* "../../src/python/pyoti/cython/real/math.pxi":108
  *   cdef darr_t res = darr_atan(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5723,7 +5723,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_atan(struct __py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":104
+  /* "../../src/python/pyoti/cython/real/math.pxi":104
  * 
  * #*****************************************************************************************************
  * cpdef dmat atan(dmat A):             # <<<<<<<<<<<<<<
@@ -5783,7 +5783,7 @@ static PyObject *__pyx_pf_5pyoti_4real_18atan(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":114
+/* "../../src/python/pyoti/cython/real/math.pxi":114
  * 
  * #*****************************************************************************************************
  * cpdef dmat tan(dmat A):             # <<<<<<<<<<<<<<
@@ -5799,7 +5799,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_tan(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("tan", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":116
+  /* "../../src/python/pyoti/cython/real/math.pxi":116
  * cpdef dmat tan(dmat A):
  * 
  *   cdef darr_t res = darr_tan(&A.arr)             # <<<<<<<<<<<<<<
@@ -5808,7 +5808,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_tan(struct __pyx
  */
   __pyx_v_res = darr_tan((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":118
+  /* "../../src/python/pyoti/cython/real/math.pxi":118
  *   cdef darr_t res = darr_tan(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5822,7 +5822,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_tan(struct __pyx
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":114
+  /* "../../src/python/pyoti/cython/real/math.pxi":114
  * 
  * #*****************************************************************************************************
  * cpdef dmat tan(dmat A):             # <<<<<<<<<<<<<<
@@ -5882,7 +5882,7 @@ static PyObject *__pyx_pf_5pyoti_4real_20tan(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":123
+/* "../../src/python/pyoti/cython/real/math.pxi":123
  * 
  * #*****************************************************************************************************
  * cpdef dmat cos(dmat A):             # <<<<<<<<<<<<<<
@@ -5898,7 +5898,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_cos(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("cos", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":125
+  /* "../../src/python/pyoti/cython/real/math.pxi":125
  * cpdef dmat cos(dmat A):
  * 
  *   cdef darr_t res = darr_cos(&A.arr)             # <<<<<<<<<<<<<<
@@ -5907,7 +5907,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_cos(struct __pyx
  */
   __pyx_v_res = darr_cos((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":127
+  /* "../../src/python/pyoti/cython/real/math.pxi":127
  *   cdef darr_t res = darr_cos(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -5921,7 +5921,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_cos(struct __pyx
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":123
+  /* "../../src/python/pyoti/cython/real/math.pxi":123
  * 
  * #*****************************************************************************************************
  * cpdef dmat cos(dmat A):             # <<<<<<<<<<<<<<
@@ -5981,7 +5981,7 @@ static PyObject *__pyx_pf_5pyoti_4real_22cos(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":132
+/* "../../src/python/pyoti/cython/real/math.pxi":132
  * 
  * #*****************************************************************************************************
  * cpdef dmat sin(dmat A):             # <<<<<<<<<<<<<<
@@ -5997,7 +5997,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_sin(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sin", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":134
+  /* "../../src/python/pyoti/cython/real/math.pxi":134
  * cpdef dmat sin(dmat A):
  * 
  *   cdef darr_t res = darr_sin(&A.arr )             # <<<<<<<<<<<<<<
@@ -6006,7 +6006,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_sin(struct __pyx
  */
   __pyx_v_res = darr_sin((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":136
+  /* "../../src/python/pyoti/cython/real/math.pxi":136
  *   cdef darr_t res = darr_sin(&A.arr )
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -6020,7 +6020,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_sin(struct __pyx
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":132
+  /* "../../src/python/pyoti/cython/real/math.pxi":132
  * 
  * #*****************************************************************************************************
  * cpdef dmat sin(dmat A):             # <<<<<<<<<<<<<<
@@ -6080,7 +6080,7 @@ static PyObject *__pyx_pf_5pyoti_4real_24sin(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":141
+/* "../../src/python/pyoti/cython/real/math.pxi":141
  * 
  * #*****************************************************************************************************
  * cpdef dmat log10(dmat A):             # <<<<<<<<<<<<<<
@@ -6096,7 +6096,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_log10(struct __p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("log10", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":143
+  /* "../../src/python/pyoti/cython/real/math.pxi":143
  * cpdef dmat log10(dmat A):
  * 
  *   cdef darr_t res = darr_log10(&A.arr)             # <<<<<<<<<<<<<<
@@ -6105,7 +6105,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_log10(struct __p
  */
   __pyx_v_res = darr_log10((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":145
+  /* "../../src/python/pyoti/cython/real/math.pxi":145
  *   cdef darr_t res = darr_log10(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -6119,7 +6119,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_log10(struct __p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":141
+  /* "../../src/python/pyoti/cython/real/math.pxi":141
  * 
  * #*****************************************************************************************************
  * cpdef dmat log10(dmat A):             # <<<<<<<<<<<<<<
@@ -6179,7 +6179,7 @@ static PyObject *__pyx_pf_5pyoti_4real_26log10(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":150
+/* "../../src/python/pyoti/cython/real/math.pxi":150
  * 
  * #*****************************************************************************************************
  * cpdef dmat log(dmat A):             # <<<<<<<<<<<<<<
@@ -6195,7 +6195,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_log(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("log", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":152
+  /* "../../src/python/pyoti/cython/real/math.pxi":152
  * cpdef dmat log(dmat A):
  * 
  *   cdef darr_t res = darr_log(&A.arr)             # <<<<<<<<<<<<<<
@@ -6204,7 +6204,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_log(struct __pyx
  */
   __pyx_v_res = darr_log((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":154
+  /* "../../src/python/pyoti/cython/real/math.pxi":154
  *   cdef darr_t res = darr_log(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -6218,7 +6218,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_log(struct __pyx
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":150
+  /* "../../src/python/pyoti/cython/real/math.pxi":150
  * 
  * #*****************************************************************************************************
  * cpdef dmat log(dmat A):             # <<<<<<<<<<<<<<
@@ -6278,7 +6278,7 @@ static PyObject *__pyx_pf_5pyoti_4real_28log(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":159
+/* "../../src/python/pyoti/cython/real/math.pxi":159
  * 
  * #*****************************************************************************************************
  * cpdef dmat exp(dmat A):             # <<<<<<<<<<<<<<
@@ -6294,7 +6294,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_exp(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("exp", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":161
+  /* "../../src/python/pyoti/cython/real/math.pxi":161
  * cpdef dmat exp(dmat A):
  * 
  *   cdef darr_t res = darr_exp(&A.arr)             # <<<<<<<<<<<<<<
@@ -6303,7 +6303,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_exp(struct __pyx
  */
   __pyx_v_res = darr_exp((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/math.pxi":163
+  /* "../../src/python/pyoti/cython/real/math.pxi":163
  *   cdef darr_t res = darr_exp(&A.arr)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -6317,7 +6317,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_exp(struct __pyx
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":159
+  /* "../../src/python/pyoti/cython/real/math.pxi":159
  * 
  * #*****************************************************************************************************
  * cpdef dmat exp(dmat A):             # <<<<<<<<<<<<<<
@@ -6377,7 +6377,7 @@ static PyObject *__pyx_pf_5pyoti_4real_30exp(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":168
+/* "../../src/python/pyoti/cython/real/math.pxi":168
  * 
  * #*****************************************************************************************************
  * cpdef dmat logb(dmat A,coeff_t b):             # <<<<<<<<<<<<<<
@@ -6393,7 +6393,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_logb(struct __py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("logb", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":170
+  /* "../../src/python/pyoti/cython/real/math.pxi":170
  * cpdef dmat logb(dmat A,coeff_t b):
  * 
  *   cdef darr_t res = darr_logb(&A.arr,b)             # <<<<<<<<<<<<<<
@@ -6402,7 +6402,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_logb(struct __py
  */
   __pyx_v_res = darr_logb((&__pyx_v_A->arr), __pyx_v_b);
 
-  /* "../../pyoti/cython/real/math.pxi":172
+  /* "../../src/python/pyoti/cython/real/math.pxi":172
  *   cdef darr_t res = darr_logb(&A.arr,b)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -6416,7 +6416,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_logb(struct __py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":168
+  /* "../../src/python/pyoti/cython/real/math.pxi":168
  * 
  * #*****************************************************************************************************
  * cpdef dmat logb(dmat A,coeff_t b):             # <<<<<<<<<<<<<<
@@ -6524,7 +6524,7 @@ static PyObject *__pyx_pf_5pyoti_4real_32logb(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/math.pxi":177
+/* "../../src/python/pyoti/cython/real/math.pxi":177
  * 
  * #*****************************************************************************************************
  * cpdef dmat power(dmat A,coeff_t b):             # <<<<<<<<<<<<<<
@@ -6540,7 +6540,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_power(struct __p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("power", 0);
 
-  /* "../../pyoti/cython/real/math.pxi":179
+  /* "../../src/python/pyoti/cython/real/math.pxi":179
  * cpdef dmat power(dmat A,coeff_t b):
  * 
  *   cdef darr_t res = darr_pow(&A.arr,b)             # <<<<<<<<<<<<<<
@@ -6549,7 +6549,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_power(struct __p
  */
   __pyx_v_res = darr_pow((&__pyx_v_A->arr), __pyx_v_b);
 
-  /* "../../pyoti/cython/real/math.pxi":181
+  /* "../../src/python/pyoti/cython/real/math.pxi":181
  *   cdef darr_t res = darr_pow(&A.arr,b)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -6563,7 +6563,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_power(struct __p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/math.pxi":177
+  /* "../../src/python/pyoti/cython/real/math.pxi":177
  * 
  * #*****************************************************************************************************
  * cpdef dmat power(dmat A,coeff_t b):             # <<<<<<<<<<<<<<
@@ -6671,7 +6671,7 @@ static PyObject *__pyx_pf_5pyoti_4real_34power(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/utils.pxi":3
+/* "../../src/python/pyoti/cython/real/utils.pxi":3
  * 
  * #*****************************************************************************************************
  * cpdef dmat dot(dmat A, dmat B):             # <<<<<<<<<<<<<<
@@ -6687,7 +6687,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_dot(struct __pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("dot", 0);
 
-  /* "../../pyoti/cython/real/utils.pxi":5
+  /* "../../src/python/pyoti/cython/real/utils.pxi":5
  * cpdef dmat dot(dmat A, dmat B):
  * 
  *   cdef darr_t res = darr_matmul( &A.arr, &B.arr )             # <<<<<<<<<<<<<<
@@ -6696,7 +6696,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_dot(struct __pyx
  */
   __pyx_v_res = darr_matmul((&__pyx_v_A->arr), (&__pyx_v_B->arr));
 
-  /* "../../pyoti/cython/real/utils.pxi":9
+  /* "../../src/python/pyoti/cython/real/utils.pxi":9
  *   # TODO: Add check in python code.
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -6710,7 +6710,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_dot(struct __pyx
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/utils.pxi":3
+  /* "../../src/python/pyoti/cython/real/utils.pxi":3
  * 
  * #*****************************************************************************************************
  * cpdef dmat dot(dmat A, dmat B):             # <<<<<<<<<<<<<<
@@ -6819,7 +6819,7 @@ static PyObject *__pyx_pf_5pyoti_4real_36dot(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/utils.pxi":15
+/* "../../src/python/pyoti/cython/real/utils.pxi":15
  * 
  * #*****************************************************************************************************
  * cpdef dmat invert(dmat A):             # <<<<<<<<<<<<<<
@@ -6835,7 +6835,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_invert(struct __
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("invert", 0);
 
-  /* "../../pyoti/cython/real/utils.pxi":17
+  /* "../../src/python/pyoti/cython/real/utils.pxi":17
  * cpdef dmat invert(dmat A):
  * 
  *   cdef darr_t res = darr_invert( &A.arr )             # <<<<<<<<<<<<<<
@@ -6844,7 +6844,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_invert(struct __
  */
   __pyx_v_res = darr_invert((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/utils.pxi":21
+  /* "../../src/python/pyoti/cython/real/utils.pxi":21
  *   # TODO: Add check in python code.
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -6858,7 +6858,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_invert(struct __
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/utils.pxi":15
+  /* "../../src/python/pyoti/cython/real/utils.pxi":15
  * 
  * #*****************************************************************************************************
  * cpdef dmat invert(dmat A):             # <<<<<<<<<<<<<<
@@ -6918,7 +6918,7 @@ static PyObject *__pyx_pf_5pyoti_4real_38invert(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/utils.pxi":28
+/* "../../src/python/pyoti/cython/real/utils.pxi":28
  * 
  * #*****************************************************************************************************
  * cpdef dmat transpose(dmat A):             # <<<<<<<<<<<<<<
@@ -6934,7 +6934,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_transpose(struct
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("transpose", 0);
 
-  /* "../../pyoti/cython/real/utils.pxi":30
+  /* "../../src/python/pyoti/cython/real/utils.pxi":30
  * cpdef dmat transpose(dmat A):
  * 
  *   cdef darr_t res = darr_transpose( &A.arr )             # <<<<<<<<<<<<<<
@@ -6943,7 +6943,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_transpose(struct
  */
   __pyx_v_res = darr_transpose((&__pyx_v_A->arr));
 
-  /* "../../pyoti/cython/real/utils.pxi":34
+  /* "../../src/python/pyoti/cython/real/utils.pxi":34
  *   # TODO: Add check in python code.
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -6957,7 +6957,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_transpose(struct
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/utils.pxi":28
+  /* "../../src/python/pyoti/cython/real/utils.pxi":28
  * 
  * #*****************************************************************************************************
  * cpdef dmat transpose(dmat A):             # <<<<<<<<<<<<<<
@@ -7017,7 +7017,7 @@ static PyObject *__pyx_pf_5pyoti_4real_40transpose(CYTHON_UNUSED PyObject *__pyx
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/utils.pxi":39
+/* "../../src/python/pyoti/cython/real/utils.pxi":39
  * 
  * #*****************************************************************************************************
  * cpdef coeff_t det(dmat A):             # <<<<<<<<<<<<<<
@@ -7031,7 +7031,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_4real_det(struct __pyx_ob
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("det", 0);
 
-  /* "../../pyoti/cython/real/utils.pxi":41
+  /* "../../src/python/pyoti/cython/real/utils.pxi":41
  * cpdef coeff_t det(dmat A):
  * 
  *   return darr_det( &A.arr )             # <<<<<<<<<<<<<<
@@ -7041,7 +7041,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_4real_det(struct __pyx_ob
   __pyx_r = darr_det((&__pyx_v_A->arr));
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/utils.pxi":39
+  /* "../../src/python/pyoti/cython/real/utils.pxi":39
  * 
  * #*****************************************************************************************************
  * cpdef coeff_t det(dmat A):             # <<<<<<<<<<<<<<
@@ -7096,7 +7096,7 @@ static PyObject *__pyx_pf_5pyoti_4real_42det(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/utils.pxi":46
+/* "../../src/python/pyoti/cython/real/utils.pxi":46
  * 
  * #*****************************************************************************************************
  * cpdef dmat eye(uint64_t size):             # <<<<<<<<<<<<<<
@@ -7116,7 +7116,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_eye(uint64_t __p
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("eye", 0);
 
-  /* "../../pyoti/cython/real/utils.pxi":48
+  /* "../../src/python/pyoti/cython/real/utils.pxi":48
  * cpdef dmat eye(uint64_t size):
  * 
  *   cdef darr_t res = darr_zeros(size,size)             # <<<<<<<<<<<<<<
@@ -7125,7 +7125,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_eye(uint64_t __p
  */
   __pyx_v_res = darr_zeros(__pyx_v_size, __pyx_v_size);
 
-  /* "../../pyoti/cython/real/utils.pxi":51
+  /* "../../src/python/pyoti/cython/real/utils.pxi":51
  *   cdef uint64_t i;
  * 
  *   for i in range(size):             # <<<<<<<<<<<<<<
@@ -7137,7 +7137,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_eye(uint64_t __p
   for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "../../pyoti/cython/real/utils.pxi":53
+    /* "../../src/python/pyoti/cython/real/utils.pxi":53
  *   for i in range(size):
  * 
  *     darr_set_item_ij( 1.0, i, i,&res)             # <<<<<<<<<<<<<<
@@ -7147,7 +7147,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_eye(uint64_t __p
     darr_set_item_ij(1.0, __pyx_v_i, __pyx_v_i, (&__pyx_v_res));
   }
 
-  /* "../../pyoti/cython/real/utils.pxi":58
+  /* "../../src/python/pyoti/cython/real/utils.pxi":58
  * 
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -7161,7 +7161,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_eye(uint64_t __p
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/utils.pxi":46
+  /* "../../src/python/pyoti/cython/real/utils.pxi":46
  * 
  * #*****************************************************************************************************
  * cpdef dmat eye(uint64_t size):             # <<<<<<<<<<<<<<
@@ -7226,7 +7226,7 @@ static PyObject *__pyx_pf_5pyoti_4real_44eye(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/utils.pxi":63
+/* "../../src/python/pyoti/cython/real/utils.pxi":63
  * 
  * #*****************************************************************************************************
  * cpdef dmat zeros(uint64_t nrows,uint64_t ncols):             # <<<<<<<<<<<<<<
@@ -7242,7 +7242,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_zeros(uint64_t _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("zeros", 0);
 
-  /* "../../pyoti/cython/real/utils.pxi":65
+  /* "../../src/python/pyoti/cython/real/utils.pxi":65
  * cpdef dmat zeros(uint64_t nrows,uint64_t ncols):
  * 
  *   cdef darr_t res = darr_zeros(nrows,ncols)             # <<<<<<<<<<<<<<
@@ -7251,7 +7251,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_zeros(uint64_t _
  */
   __pyx_v_res = darr_zeros(__pyx_v_nrows, __pyx_v_ncols);
 
-  /* "../../pyoti/cython/real/utils.pxi":67
+  /* "../../src/python/pyoti/cython/real/utils.pxi":67
  *   cdef darr_t res = darr_zeros(nrows,ncols)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -7265,7 +7265,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_zeros(uint64_t _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/utils.pxi":63
+  /* "../../src/python/pyoti/cython/real/utils.pxi":63
  * 
  * #*****************************************************************************************************
  * cpdef dmat zeros(uint64_t nrows,uint64_t ncols):             # <<<<<<<<<<<<<<
@@ -7368,7 +7368,7 @@ static PyObject *__pyx_pf_5pyoti_4real_46zeros(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/utils.pxi":72
+/* "../../src/python/pyoti/cython/real/utils.pxi":72
  * 
  * #*****************************************************************************************************
  * cpdef dmat ones(uint64_t nrows,uint64_t ncols):             # <<<<<<<<<<<<<<
@@ -7384,7 +7384,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_ones(uint64_t __
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("ones", 0);
 
-  /* "../../pyoti/cython/real/utils.pxi":74
+  /* "../../src/python/pyoti/cython/real/utils.pxi":74
  * cpdef dmat ones(uint64_t nrows,uint64_t ncols):
  * 
  *   cdef darr_t res = darr_ones(nrows,ncols)             # <<<<<<<<<<<<<<
@@ -7393,7 +7393,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_ones(uint64_t __
  */
   __pyx_v_res = darr_ones(__pyx_v_nrows, __pyx_v_ncols);
 
-  /* "../../pyoti/cython/real/utils.pxi":76
+  /* "../../src/python/pyoti/cython/real/utils.pxi":76
  *   cdef darr_t res = darr_ones(nrows,ncols)
  * 
  *   return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -7407,7 +7407,7 @@ static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_ones(uint64_t __
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/utils.pxi":72
+  /* "../../src/python/pyoti/cython/real/utils.pxi":72
  * 
  * #*****************************************************************************************************
  * cpdef dmat ones(uint64_t nrows,uint64_t ncols):             # <<<<<<<<<<<<<<
@@ -7510,7 +7510,7 @@ static PyObject *__pyx_pf_5pyoti_4real_48ones(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/real/utils.pxi":97
+/* "../../src/python/pyoti/cython/real/utils.pxi":97
  * 
  * #*****************************************************************************************************
  * cdef np.ndarray darr_2_npy(darr_t* array ):             # <<<<<<<<<<<<<<
@@ -7537,7 +7537,7 @@ static PyArrayObject *__pyx_f_5pyoti_4real_darr_2_npy(darr_t *__pyx_v_array) {
   uint64_t __pyx_t_11;
   __Pyx_RefNannySetupContext("darr_2_npy", 0);
 
-  /* "../../pyoti/cython/real/utils.pxi":106
+  /* "../../src/python/pyoti/cython/real/utils.pxi":106
  *   cdef uint64_t i, j
  * 
  *   nparray = np.empty((array[0].nrows,array[0].ncols),dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -7584,7 +7584,7 @@ static PyArrayObject *__pyx_f_5pyoti_4real_darr_2_npy(darr_t *__pyx_v_array) {
   __pyx_v_nparray = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "../../pyoti/cython/real/utils.pxi":108
+  /* "../../src/python/pyoti/cython/real/utils.pxi":108
  *   nparray = np.empty((array[0].nrows,array[0].ncols),dtype = np.float64)
  * 
  *   for i in range(array[0].nrows):             # <<<<<<<<<<<<<<
@@ -7596,7 +7596,7 @@ static PyArrayObject *__pyx_f_5pyoti_4real_darr_2_npy(darr_t *__pyx_v_array) {
   for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
     __pyx_v_i = __pyx_t_8;
 
-    /* "../../pyoti/cython/real/utils.pxi":110
+    /* "../../src/python/pyoti/cython/real/utils.pxi":110
  *   for i in range(array[0].nrows):
  * 
  *     for j in range(array[0].ncols):             # <<<<<<<<<<<<<<
@@ -7608,7 +7608,7 @@ static PyArrayObject *__pyx_f_5pyoti_4real_darr_2_npy(darr_t *__pyx_v_array) {
     for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
       __pyx_v_j = __pyx_t_11;
 
-      /* "../../pyoti/cython/real/utils.pxi":112
+      /* "../../src/python/pyoti/cython/real/utils.pxi":112
  *     for j in range(array[0].ncols):
  * 
  *       nparray[i,j] = darr_get_item_ij(array,i,j)             # <<<<<<<<<<<<<<
@@ -7635,7 +7635,7 @@ static PyArrayObject *__pyx_f_5pyoti_4real_darr_2_npy(darr_t *__pyx_v_array) {
     }
   }
 
-  /* "../../pyoti/cython/real/utils.pxi":118
+  /* "../../src/python/pyoti/cython/real/utils.pxi":118
  *   # end for
  * 
  *   return nparray             # <<<<<<<<<<<<<<
@@ -7647,7 +7647,7 @@ static PyArrayObject *__pyx_f_5pyoti_4real_darr_2_npy(darr_t *__pyx_v_array) {
   __pyx_r = __pyx_v_nparray;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/real/utils.pxi":97
+  /* "../../src/python/pyoti/cython/real/utils.pxi":97
  * 
  * #*****************************************************************************************************
  * cdef np.ndarray darr_2_npy(darr_t* array ):             # <<<<<<<<<<<<<<
@@ -11046,7 +11046,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(5, 2, __pyx_L1_error)
   #endif
 
-  /* "../../pyoti/cython/real/include.pxi":6
+  /* "../../src/python/pyoti/cython/real/include.pxi":6
  * #-----------------------------------------------------------------------------------------------------
  * 
  * import  numpy as np                 # General numerical library             # <<<<<<<<<<<<<<
@@ -11058,7 +11058,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(8, 6, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/real/include.pxi":10
+  /* "../../src/python/pyoti/cython/real/include.pxi":10
  * cimport cython                      #
  * 
  * from pyoti.core import   number_types             # <<<<<<<<<<<<<<
@@ -11079,7 +11079,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/real.pyx":2
+  /* "../../src/python/pyoti/cython/real.pyx":2
  * 
  * # Append directives             # <<<<<<<<<<<<<<
  * include "common/directives.pxi"

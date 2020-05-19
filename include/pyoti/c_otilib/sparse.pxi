@@ -28,6 +28,30 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "sparse.h"
   #---------------------------------------------------------------------------------------------------
+  arrso_t arrso_div_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_div_OR(arrso_t* arr1, darr_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_div_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_div_oO(sotinum_t* num, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_div_Oo(arrso_t* arr1, sotinum_t* num, dhelpl_t dhl);
+  arrso_t arrso_div_rO(coeff_t num, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_div_Or(arrso_t* arr1, coeff_t num, dhelpl_t dhl);
+  arrso_t arrso_mul_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_mul_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_mul_oO(sotinum_t* num, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_mul_rO(coeff_t num, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_sub_OO( arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_sub_OR( arrso_t* arr1, darr_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_sub_RO( darr_t* arr1, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_sub_Oo( arrso_t* arr1, sotinum_t* num, dhelpl_t dhl);
+  arrso_t arrso_sub_oO( sotinum_t* num, arrso_t* arr1, dhelpl_t dhl);
+  arrso_t arrso_sub_Or( arrso_t* arr1, coeff_t num, dhelpl_t dhl);
+  arrso_t arrso_sub_rO( coeff_t num, arrso_t* arr1, dhelpl_t dhl);
+  arrso_t arrso_sum_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_sum_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl);
+  arrso_t arrso_sum_oO(sotinum_t* num, arrso_t* arr1, dhelpl_t dhl);
+  arrso_t arrso_sum_rO(coeff_t num, arrso_t* arr1, dhelpl_t dhl);
+  arrso_t arrso_neg(arrso_t* arr, dhelpl_t dhl);
+  darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
   void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_copy(arrso_t* arr, dhelpl_t dhl);
   arrso_t arrso_eye_bases(uint64_t nrows, bases_t nbases, ord_t order, dhelpl_t dhl);

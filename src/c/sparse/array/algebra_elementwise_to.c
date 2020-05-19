@@ -18,7 +18,7 @@ void arrso_neg_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
     arrso_dimCheck_OO_elementwise(arr,arr,res);
 
     // The loop for every element in arr.
-    for (i = 1; i<arr->size; i++){
+    for (i = 0; i<arr->size; i++){
         soti_neg_to( &arr->p_data[i], &res->p_data[i], dhl);
     }
 

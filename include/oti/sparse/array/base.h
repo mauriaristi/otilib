@@ -2,6 +2,10 @@
 #define OTI_SPARSE_ARRAY_BASE_H
 
 
+
+
+darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+
 /**************************************************************************************************//**
 @brief Copy an existing array. Data is copied to the new memory.
 

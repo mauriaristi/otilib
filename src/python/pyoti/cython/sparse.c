@@ -877,6 +877,7 @@ static const char *__pyx_f[] = {
   "sparse.pyx",
   "type.pxd",
   "dhelp.pxd",
+  "array.pxd",
   "include.pxi",
 };
 /* BufferFormatStructs.proto */
@@ -1194,6 +1195,7 @@ static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(do
 
 /*--- Type declarations ---*/
 struct __pyx_obj_5pyoti_4core_dHelp;
+struct __pyx_obj_5pyoti_4real_dmat;
 struct __pyx_obj_5pyoti_6sparse_sotinum;
 struct __pyx_obj_5pyoti_6sparse_matso;
 
@@ -1306,6 +1308,19 @@ struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_uint8 {
   int __pyx_n;
   uint8_t numpy_own;
 };
+struct __pyx_opt_args_5pyoti_4real_4dmat_create;
+
+/* "../../include/pyoti/real/array.pxd":18
+ * 
+ *   @staticmethod
+ *   cdef dmat create(darr_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
+ *   cpdef copy(self)
+ *   cpdef np.ndarray[double, ndim=2] to_numpy(self)
+ */
+struct __pyx_opt_args_5pyoti_4real_4dmat_create {
+  int __pyx_n;
+  uint8_t FLAGS;
+};
 struct __pyx_opt_args_5pyoti_6sparse_7sotinum_create;
 struct __pyx_opt_args_5pyoti_6sparse_eye;
 struct __pyx_opt_args_5pyoti_6sparse_zeros;
@@ -1375,6 +1390,21 @@ struct __pyx_obj_5pyoti_4core_dHelp {
 };
 
 
+/* "../../include/pyoti/real/array.pxd":5
+ * # ::::::::::::::::::::::::::::::::::     CLASS  OTINUM    ::::::::::::::::::::::::::::::::::::::::::::
+ * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ * cdef class dmat:             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+struct __pyx_obj_5pyoti_4real_dmat {
+  PyObject_HEAD
+  struct __pyx_vtabstruct_5pyoti_4real_dmat *__pyx_vtab;
+  darr_t arr;
+  uint8_t FLAGS;
+};
+
+
 /* "../../include/pyoti/sparse/scalar.pxd":5
  * # ::::::::::::::::::::::::::::::::     CLASS  SPR_OTINUM   :::::::::::::::::::::::::::::::::::::::::::
  * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -1403,6 +1433,22 @@ struct __pyx_obj_5pyoti_6sparse_matso {
   arrso_t arr;
 };
 
+
+
+/* "../../include/pyoti/real/array.pxd":5
+ * # ::::::::::::::::::::::::::::::::::     CLASS  OTINUM    ::::::::::::::::::::::::::::::::::::::::::::
+ * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ * cdef class dmat:             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+
+struct __pyx_vtabstruct_5pyoti_4real_dmat {
+  struct __pyx_obj_5pyoti_4real_dmat *(*create)(darr_t *, struct __pyx_opt_args_5pyoti_4real_4dmat_create *__pyx_optional_args);
+  PyObject *(*copy)(struct __pyx_obj_5pyoti_4real_dmat *, int __pyx_skip_dispatch);
+  PyArrayObject *(*to_numpy)(struct __pyx_obj_5pyoti_4real_dmat *, int __pyx_skip_dispatch);
+};
+static struct __pyx_vtabstruct_5pyoti_4real_dmat *__pyx_vtabptr_5pyoti_4real_dmat;
 
 
 /* "../../src/python/pyoti/cython/sparse/scalar/base.pxi":7
@@ -1841,6 +1887,9 @@ enum __Pyx_ImportType_CheckSize {
 static PyTypeObject *__Pyx_ImportType(PyObject* module, const char *module_name, const char *class_name, size_t size, enum __Pyx_ImportType_CheckSize check_size);
 #endif
 
+/* GetVTable.proto */
+static void* __Pyx_GetVtable(PyObject *dict);
+
 /* Import.proto */
 static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
 
@@ -2113,6 +2162,9 @@ static PyArrayObject *(*__pyx_f_5pyoti_4core_c_ptr_to_np_1darray_uint64)(void *,
 static struct __pyx_obj_5pyoti_4core_dHelp *(*__pyx_f_5pyoti_4core_get_cython_dHelp)(void); /*proto*/
 static PyObject *(*__pyx_f_5pyoti_4core_imdir)(PyObject *, int __pyx_skip_dispatch); /*proto*/
 
+/* Module declarations from 'pyoti.real' */
+static PyTypeObject *__pyx_ptype_5pyoti_4real_dmat = 0;
+
 /* Module declarations from 'pyoti.sparse' */
 static PyTypeObject *__pyx_ptype_5pyoti_6sparse_sotinum = 0;
 static PyTypeObject *__pyx_ptype_5pyoti_6sparse_matso = 0;
@@ -2163,6 +2215,7 @@ static PyObject *__pyx_f_5pyoti_6sparse_power_to(struct __pyx_obj_5pyoti_6sparse
 static PyObject *__pyx_f_5pyoti_6sparse_sqrt_to(struct __pyx_obj_5pyoti_6sparse_sotinum *, struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_f_5pyoti_6sparse_cbrt_to(struct __pyx_obj_5pyoti_6sparse_sotinum *, struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn___pyx_t_5pyoti_8c_otilib_coeff_t = { "coeff_t", NULL, sizeof(__pyx_t_5pyoti_8c_otilib_coeff_t), { 0 }, 0, 'R', 0, 0 };
+static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
 #define __Pyx_MODULE_NAME "pyoti.sparse"
 extern int __pyx_module_is_main_pyoti__sparse;
 int __pyx_module_is_main_pyoti__sparse = 0;
@@ -2206,6 +2259,8 @@ static const char __pyx_k_val[] = "val";
 static const char __pyx_k_4f_2[] = "%+.4f";
 static const char __pyx_k_ZERO[] = "ZERO";
 static const char __pyx_k_base[] = "base";
+static const char __pyx_k_dmat[] = "dmat";
+static const char __pyx_k_flag[] = ", flag: ";
 static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "__name__";
 static const char __pyx_k_ndim[] = "ndim";
@@ -2255,6 +2310,7 @@ static const char __pyx_k_IndexError[] = "IndexError";
 static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_empty_like[] = "empty_like";
 static const char __pyx_k_pyoti_core[] = "pyoti.core";
+static const char __pyx_k_pyoti_real[] = "pyoti.real";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
@@ -2324,12 +2380,14 @@ static PyObject *__pyx_n_s_base;
 static PyObject *__pyx_n_s_bases_hd;
 static PyObject *__pyx_n_s_cline_in_traceback;
 static PyObject *__pyx_n_s_dHelp;
+static PyObject *__pyx_n_s_dmat;
 static PyObject *__pyx_n_s_dtype;
 static PyObject *__pyx_kp_s_e;
 static PyObject *__pyx_n_s_e_2;
 static PyObject *__pyx_n_s_empty;
 static PyObject *__pyx_n_s_empty_like;
 static PyObject *__pyx_n_s_exponent;
+static PyObject *__pyx_kp_s_flag;
 static PyObject *__pyx_n_s_float64;
 static PyObject *__pyx_n_s_format;
 static PyObject *__pyx_kp_s_g;
@@ -2370,6 +2428,7 @@ static PyObject *__pyx_kp_s_order_2;
 static PyObject *__pyx_n_s_order_hd;
 static PyObject *__pyx_n_s_out;
 static PyObject *__pyx_n_s_pyoti_core;
+static PyObject *__pyx_n_s_pyoti_real;
 static PyObject *__pyx_n_s_pyoti_sparse;
 static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_range;
@@ -2479,8 +2538,17 @@ static PyObject *__pyx_pf_5pyoti_6sparse_5matso_8__str__(struct __pyx_obj_5pyoti
 static PyObject *__pyx_pf_5pyoti_6sparse_5matso_10__getitem__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_val); /* proto */
 static int __pyx_pf_5pyoti_6sparse_5matso_12__setitem__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_val, PyObject *__pyx_v_value); /* proto */
 static PyObject *__pyx_pf_5pyoti_6sparse_5matso_14copy(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_5matso_16__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_6sparse_5matso_18__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_16__neg__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_18__add__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_20__iadd__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_22__sub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_24__isub__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_other_in); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_26__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_28__imul__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_other_in); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_30get_deriv(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_hum_dir); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_32get_im(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_hum_dir); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_34__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_36__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_5pyoti_6sparse_86eye(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_size, __pyx_t_5pyoti_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_5pyoti_8c_otilib_ord_t __pyx_v_order); /* proto */
 static PyObject *__pyx_pf_5pyoti_6sparse_88zeros(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_5pyoti_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_5pyoti_8c_otilib_ord_t __pyx_v_order); /* proto */
 static PyObject *__pyx_pf_5pyoti_6sparse_90ones(CYTHON_UNUSED PyObject *__pyx_self, uint64_t __pyx_v_nrows, uint64_t __pyx_v_ncols, __pyx_t_5pyoti_8c_otilib_bases_t __pyx_v_nbases, __pyx_t_5pyoti_8c_otilib_ord_t __pyx_v_order); /* proto */
@@ -4023,7 +4091,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_10long_repr(struct __pyx_obj_5
  * 
  *     head = 'sotinum('             # <<<<<<<<<<<<<<
  *     body = str(self.num.re) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max)
- *     body += ', order: ' + str(self.num.order) + "\n"
+ *     body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"
  */
   __Pyx_INCREF(__pyx_kp_s_sotinum);
   __pyx_v_head = __pyx_kp_s_sotinum;
@@ -4032,7 +4100,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_10long_repr(struct __pyx_obj_5
  * 
  *     head = 'sotinum('
  *     body = str(self.num.re) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max)             # <<<<<<<<<<<<<<
- *     body += ', order: ' + str(self.num.order) + "\n"
+ *     body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"
  * 
  */
   __pyx_t_4 = PyFloat_FromDouble(__pyx_v_self->num.re); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 320, __pyx_L1_error)
@@ -4070,7 +4138,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_10long_repr(struct __pyx_obj_5
   /* "../../src/python/pyoti/cython/sparse/scalar/base.pxi":321
  *     head = 'sotinum('
  *     body = str(self.num.re) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max)
- *     body += ', order: ' + str(self.num.order) + "\n"             # <<<<<<<<<<<<<<
+ *     body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"             # <<<<<<<<<<<<<<
  * 
  *     for i in range(0, self.num.order):
  */
@@ -4082,17 +4150,29 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_10long_repr(struct __pyx_obj_5
   __pyx_t_5 = PyNumber_Add(__pyx_kp_s_order_2, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __pyx_t_4 = PyNumber_Add(__pyx_t_5, __pyx_kp_s_flag); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_InPlaceAdd(__pyx_v_body, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_From_uint8_t(__pyx_v_self->num.flag); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __pyx_t_6 = __Pyx_PyObject_CallOneArg(((PyObject *)(&PyString_Type)), __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 321, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  __pyx_t_6 = PyNumber_Add(__pyx_t_5, __pyx_kp_s__6); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __pyx_t_5 = PyNumber_InPlaceAdd(__pyx_v_body, __pyx_t_6); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 321, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_5);
   __pyx_t_5 = 0;
 
   /* "../../src/python/pyoti/cython/sparse/scalar/base.pxi":323
- *     body += ', order: ' + str(self.num.order) + "\n"
+ *     body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"
  * 
  *     for i in range(0, self.num.order):             # <<<<<<<<<<<<<<
  * 
@@ -4110,44 +4190,44 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_10long_repr(struct __pyx_obj_5
  * 
  *     # end for
  */
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Order_0_nnz_1_size_2, __pyx_n_s_format); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 325, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = __Pyx_PyInt_From_uint64_t((__pyx_v_i + 1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 325, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_kp_s_Order_0_nnz_1_size_2, __pyx_n_s_format); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 325, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_4 = __Pyx_PyInt_From_uint64_t((__pyx_v_i + 1)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 325, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_7 = __Pyx_PyInt_From_uint64_t((__pyx_v_self->num.p_nnz[__pyx_v_i])); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 325, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_8 = __Pyx_PyInt_From_uint64_t((__pyx_v_self->num.p_size[__pyx_v_i])); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 325, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_9 = NULL;
     __pyx_t_10 = 0;
-    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
-      __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_4);
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_6))) {
+      __pyx_t_9 = PyMethod_GET_SELF(__pyx_t_6);
       if (likely(__pyx_t_9)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
         __Pyx_INCREF(__pyx_t_9);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_4, function);
+        __Pyx_DECREF_SET(__pyx_t_6, function);
         __pyx_t_10 = 1;
       }
     }
     #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(__pyx_t_4)) {
-      PyObject *__pyx_temp[4] = {__pyx_t_9, __pyx_t_6, __pyx_t_7, __pyx_t_8};
-      __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 325, __pyx_L1_error)
+    if (PyFunction_Check(__pyx_t_6)) {
+      PyObject *__pyx_temp[4] = {__pyx_t_9, __pyx_t_4, __pyx_t_7, __pyx_t_8};
+      __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 325, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     } else
     #endif
     #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
-      PyObject *__pyx_temp[4] = {__pyx_t_9, __pyx_t_6, __pyx_t_7, __pyx_t_8};
-      __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 325, __pyx_L1_error)
+    if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
+      PyObject *__pyx_temp[4] = {__pyx_t_9, __pyx_t_4, __pyx_t_7, __pyx_t_8};
+      __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 3+__pyx_t_10); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 325, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_GOTREF(__pyx_t_5);
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     } else
@@ -4158,25 +4238,25 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_10long_repr(struct __pyx_obj_5
       if (__pyx_t_9) {
         __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_9); __pyx_t_9 = NULL;
       }
-      __Pyx_GIVEREF(__pyx_t_6);
-      PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_10, __pyx_t_6);
+      __Pyx_GIVEREF(__pyx_t_4);
+      PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_10, __pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_7);
       PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_10, __pyx_t_7);
       __Pyx_GIVEREF(__pyx_t_8);
       PyTuple_SET_ITEM(__pyx_t_11, 2+__pyx_t_10, __pyx_t_8);
-      __pyx_t_6 = 0;
+      __pyx_t_4 = 0;
       __pyx_t_7 = 0;
       __pyx_t_8 = 0;
-      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 325, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_11, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 325, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
     }
-    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __pyx_t_4 = PyNumber_InPlaceAdd(__pyx_v_body, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 325, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_6 = PyNumber_InPlaceAdd(__pyx_v_body, __pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 325, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_4);
-    __pyx_t_4 = 0;
+    __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_6);
+    __pyx_t_6 = 0;
   }
 
   /* "../../src/python/pyoti/cython/sparse/scalar/base.pxi":329
@@ -4197,11 +4277,11 @@ static PyObject *__pyx_pf_5pyoti_6sparse_7sotinum_10long_repr(struct __pyx_obj_5
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_4 = PyNumber_Add(__pyx_v_head, __pyx_v_body); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 331, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyNumber_Add(__pyx_t_4, __pyx_v_tail); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __pyx_t_6 = PyNumber_Add(__pyx_v_head, __pyx_v_body); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_5 = PyNumber_Add(__pyx_t_6, __pyx_v_tail); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 331, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
   __pyx_r = __pyx_t_5;
   __pyx_t_5 = 0;
   goto __pyx_L0;
@@ -12336,12 +12416,12 @@ static PyObject *__pyx_pf_5pyoti_6sparse_84cbrt_to(CYTHON_UNUSED PyObject *__pyx
  * 
  *   def __init__(self, realArray, ord_t order = 0, bases_t nbases = 0, object nnz = None):             # <<<<<<<<<<<<<<
  *     """
- *     PURPOSE:      Python level constructor of the somat class.
+ *     PURPOSE:      Python level constructor of the matso class.
  */
 
 /* Python wrapper */
 static int __pyx_pw_5pyoti_6sparse_5matso_1__init__(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static char __pyx_doc_5pyoti_6sparse_5matso___init__[] = "\n    PURPOSE:      Python level constructor of the somat class.\n\n    DESCRIPTION:  Creates a new matrix, reserving memory Assumes coefficient values to be all zeroes.\n                 \n    ";
+static char __pyx_doc_5pyoti_6sparse_5matso___init__[] = "\n    PURPOSE:      Python level constructor of the matso class.\n\n    DESCRIPTION:  Creates a new matrix, reserving memory Assumes coefficient values to be all zeroes.\n                 \n    ";
 #if CYTHON_COMPILING_IN_CPYTHON
 struct wrapperbase __pyx_wrapperbase_5pyoti_6sparse_5matso___init__;
 #endif
@@ -12731,7 +12811,7 @@ static int __pyx_pf_5pyoti_6sparse_5matso___init__(struct __pyx_obj_5pyoti_6spar
  * 
  *   def __init__(self, realArray, ord_t order = 0, bases_t nbases = 0, object nnz = None):             # <<<<<<<<<<<<<<
  *     """
- *     PURPOSE:      Python level constructor of the somat class.
+ *     PURPOSE:      Python level constructor of the matso class.
  */
 
   /* function exit code */
@@ -14211,6 +14291,2214 @@ static PyObject *__pyx_pf_5pyoti_6sparse_5matso_14copy(struct __pyx_obj_5pyoti_6
   return __pyx_r;
 }
 
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":329
+ * 
+ *   #***************************************************************************************************
+ *   def __neg__(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Negation overload.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_17__neg__(PyObject *__pyx_v_self); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_5matso_16__neg__[] = "\n    PURPOSE: Negation overload.\n    ";
+#if CYTHON_COMPILING_IN_CPYTHON
+struct wrapperbase __pyx_wrapperbase_5pyoti_6sparse_5matso_16__neg__;
+#endif
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_17__neg__(PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__neg__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_16__neg__(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_16__neg__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self) {
+  arrso_t __pyx_v_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("__neg__", 0);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":337
+ *     global dhl
+ * 
+ *     cdef arrso_t res = arrso_neg(&self.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     return matso.create(&res)
+ */
+  __pyx_v_res = arrso_neg((&__pyx_v_self->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":339
+ *     cdef arrso_t res = arrso_neg(&self.arr, dhl)
+ * 
+ *     return matso.create(&res)             # <<<<<<<<<<<<<<
+ *   #---------------------------------------------------------------------------------------------------
+ * 
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 339, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":329
+ * 
+ *   #***************************************************************************************************
+ *   def __neg__(self):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Negation overload.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.matso.__neg__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":346
+ * 
+ *   #***************************************************************************************************
+ *   def __add__(self, other):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Addition overload.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_19__add__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_5matso_18__add__[] = "\n    PURPOSE: Addition overload.\n    ";
+#if CYTHON_COMPILING_IN_CPYTHON
+struct wrapperbase __pyx_wrapperbase_5pyoti_6sparse_5matso_18__add__;
+#endif
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_19__add__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__add__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_18__add__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_18__add__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+  arrso_t __pyx_v_res;
+  struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_lhs = 0;
+  struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_rhs = 0;
+  struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_dlhs = 0;
+  struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_drhs = 0;
+  struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_olhs = 0;
+  struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_orhs = 0;
+  PyTypeObject *__pyx_v_tlhs = NULL;
+  PyTypeObject *__pyx_v_trhs = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
+  __Pyx_RefNannySetupContext("__add__", 0);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":359
+ *     cdef sotinum olhs,orhs
+ * 
+ *     tlhs = type(self)             # <<<<<<<<<<<<<<
+ *     trhs = type(other)
+ * 
+ */
+  __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
+  __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":360
+ * 
+ *     tlhs = type(self)
+ *     trhs = type(other)             # <<<<<<<<<<<<<<
+ * 
+ *     if (tlhs == trhs):
+ */
+  __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
+  __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":362
+ *     trhs = type(other)
+ * 
+ *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 362, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 362, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":364
+ *     if (tlhs == trhs):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       rhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 364, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":365
+ * 
+ *       lhs = self
+ *       rhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sum_OO(&lhs.arr,&rhs.arr,dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 365, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":367
+ *       rhs = other
+ * 
+ *       res = arrso_sum_OO(&lhs.arr,&rhs.arr,dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( tlhs  == sotinum ):
+ */
+    __pyx_v_res = arrso_sum_OO((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":362
+ *     trhs = type(other)
+ * 
+ *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":369
+ *       res = arrso_sum_OO(&lhs.arr,&rhs.arr,dhl)
+ * 
+ *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       olhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 369, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 369, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":371
+ *     elif ( tlhs  == sotinum ):
+ * 
+ *       olhs = self             # <<<<<<<<<<<<<<
+ *       rhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(3, 371, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_olhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":372
+ * 
+ *       olhs = self
+ *       rhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sum_oO(&olhs.num,&rhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 372, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":374
+ *       rhs = other
+ * 
+ *       res = arrso_sum_oO(&olhs.num,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( trhs  == sotinum ):
+ */
+    __pyx_v_res = arrso_sum_oO((&__pyx_v_olhs->num), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":369
+ *       res = arrso_sum_OO(&lhs.arr,&rhs.arr,dhl)
+ * 
+ *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       olhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":376
+ *       res = arrso_sum_oO(&olhs.num,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 376, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 376, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":378
+ *     elif ( trhs  == sotinum ):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       orhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 378, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":379
+ * 
+ *       lhs = self
+ *       orhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sum_oO(&orhs.num,&lhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(3, 379, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_orhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":381
+ *       orhs = other
+ * 
+ *       res = arrso_sum_oO(&orhs.num,&lhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif (tlhs in number_types):
+ */
+    __pyx_v_res = arrso_sum_oO((&__pyx_v_orhs->num), (&__pyx_v_lhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":376
+ *       res = arrso_sum_oO(&olhs.num,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":383
+ *       res = arrso_sum_oO(&orhs.num,&lhs.arr, dhl)
+ * 
+ *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       rhs = other
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 383, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 383, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":385
+ *     elif (tlhs in number_types):
+ * 
+ *       rhs = other             # <<<<<<<<<<<<<<
+ *       res = arrso_sum_rO(self, &rhs.arr, dhl)
+ * 
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 385, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":386
+ * 
+ *       rhs = other
+ *       res = arrso_sum_rO(self, &rhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif (trhs in number_types):
+ */
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 386, __pyx_L1_error)
+    __pyx_v_res = arrso_sum_rO(__pyx_t_4, (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":383
+ *       res = arrso_sum_oO(&orhs.num,&lhs.arr, dhl)
+ * 
+ *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       rhs = other
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":388
+ *       res = arrso_sum_rO(self, &rhs.arr, dhl)
+ * 
+ *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 388, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(3, 388, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = (__pyx_t_3 != 0);
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":390
+ *     elif (trhs in number_types):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       res = arrso_sum_rO(other, &lhs.arr, dhl)
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 390, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":391
+ * 
+ *       lhs = self
+ *       res = arrso_sum_rO(other, &lhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( tlhs  == dmat ):
+ */
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 391, __pyx_L1_error)
+    __pyx_v_res = arrso_sum_rO(__pyx_t_4, (&__pyx_v_lhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":388
+ *       res = arrso_sum_rO(self, &rhs.arr, dhl)
+ * 
+ *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":393
+ *       res = arrso_sum_rO(other, &lhs.arr, dhl)
+ * 
+ *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       dlhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_4real_dmat), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 393, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 393, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":395
+ *     elif ( tlhs  == dmat ):
+ * 
+ *       dlhs = self             # <<<<<<<<<<<<<<
+ *       rhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_4real_dmat))))) __PYX_ERR(3, 395, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_dlhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":396
+ * 
+ *       dlhs = self
+ *       rhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sum_RO(&dlhs.arr,&rhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 396, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":398
+ *       rhs = other
+ * 
+ *       res = arrso_sum_RO(&dlhs.arr,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( trhs  == dmat ):
+ */
+    __pyx_v_res = arrso_sum_RO((&__pyx_v_dlhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":393
+ *       res = arrso_sum_rO(other, &lhs.arr, dhl)
+ * 
+ *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       dlhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":400
+ *       res = arrso_sum_RO(&dlhs.arr,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_4real_dmat), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 400, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 400, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":402
+ *     elif ( trhs  == dmat ):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       drhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 402, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":403
+ * 
+ *       lhs = self
+ *       drhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sum_RO(&drhs.arr,&lhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_4real_dmat))))) __PYX_ERR(3, 403, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_drhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":405
+ *       drhs = other
+ * 
+ *       res = arrso_sum_RO(&drhs.arr,&lhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     else:
+ */
+    __pyx_v_res = arrso_sum_RO((&__pyx_v_drhs->arr), (&__pyx_v_lhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":400
+ *       res = arrso_sum_RO(&dlhs.arr,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":409
+ *     else:
+ * 
+ *       return NotImplemented             # <<<<<<<<<<<<<<
+ * 
+ *     # end if
+ */
+  /*else*/ {
+    __Pyx_XDECREF(__pyx_r);
+    __Pyx_INCREF(__pyx_builtin_NotImplemented);
+    __pyx_r = __pyx_builtin_NotImplemented;
+    goto __pyx_L0;
+  }
+  __pyx_L3:;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":413
+ *     # end if
+ * 
+ *     return matso.create(&res)             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 413, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":346
+ * 
+ *   #***************************************************************************************************
+ *   def __add__(self, other):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Addition overload.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.matso.__add__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_lhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_rhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_dlhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_drhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_olhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_orhs);
+  __Pyx_XDECREF(__pyx_v_tlhs);
+  __Pyx_XDECREF(__pyx_v_trhs);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":419
+ * 
+ *   #***************************************************************************************************
+ *   def __iadd__(self, other):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Inplace addition overload.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_21__iadd__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_5matso_20__iadd__[] = "\n    PURPOSE: Inplace addition overload.\n    ";
+#if CYTHON_COMPILING_IN_CPYTHON
+struct wrapperbase __pyx_wrapperbase_5pyoti_6sparse_5matso_20__iadd__;
+#endif
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_21__iadd__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__iadd__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_20__iadd__(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_20__iadd__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_other) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("__iadd__", 0);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":425
+ *     #*************************************************************************************************
+ * 
+ *     return self + other             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyNumber_Add(((PyObject *)__pyx_v_self), __pyx_v_other); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 425, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":419
+ * 
+ *   #***************************************************************************************************
+ *   def __iadd__(self, other):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Inplace addition overload.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.matso.__iadd__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":431
+ * 
+ *   #***************************************************************************************************
+ *   def __sub__(self, other):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Subtraction overload.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_23__sub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_5matso_22__sub__[] = "\n    PURPOSE: Subtraction overload.\n    ";
+#if CYTHON_COMPILING_IN_CPYTHON
+struct wrapperbase __pyx_wrapperbase_5pyoti_6sparse_5matso_22__sub__;
+#endif
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_23__sub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__sub__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_22__sub__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_22__sub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+  arrso_t __pyx_v_res;
+  struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_lhs = 0;
+  struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_rhs = 0;
+  struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_dlhs = 0;
+  struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_drhs = 0;
+  struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_olhs = 0;
+  struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_orhs = 0;
+  PyTypeObject *__pyx_v_tlhs = NULL;
+  PyTypeObject *__pyx_v_trhs = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
+  __Pyx_RefNannySetupContext("__sub__", 0);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":444
+ *     cdef sotinum olhs,orhs
+ * 
+ *     tlhs = type(self)             # <<<<<<<<<<<<<<
+ *     trhs = type(other)
+ * 
+ */
+  __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
+  __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":445
+ * 
+ *     tlhs = type(self)
+ *     trhs = type(other)             # <<<<<<<<<<<<<<
+ * 
+ *     if (tlhs == trhs):
+ */
+  __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
+  __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":447
+ *     trhs = type(other)
+ * 
+ *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 447, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 447, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":449
+ *     if (tlhs == trhs):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       rhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 449, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":450
+ * 
+ *       lhs = self
+ *       rhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sub_OO(&lhs.arr,&rhs.arr,dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 450, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":452
+ *       rhs = other
+ * 
+ *       res = arrso_sub_OO(&lhs.arr,&rhs.arr,dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( tlhs  == sotinum ):
+ */
+    __pyx_v_res = arrso_sub_OO((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":447
+ *     trhs = type(other)
+ * 
+ *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":454
+ *       res = arrso_sub_OO(&lhs.arr,&rhs.arr,dhl)
+ * 
+ *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       olhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 454, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 454, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":456
+ *     elif ( tlhs  == sotinum ):
+ * 
+ *       olhs = self             # <<<<<<<<<<<<<<
+ *       rhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(3, 456, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_olhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":457
+ * 
+ *       olhs = self
+ *       rhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sub_oO(&olhs.num,&rhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 457, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":459
+ *       rhs = other
+ * 
+ *       res = arrso_sub_oO(&olhs.num,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( trhs  == sotinum ):
+ */
+    __pyx_v_res = arrso_sub_oO((&__pyx_v_olhs->num), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":454
+ *       res = arrso_sub_OO(&lhs.arr,&rhs.arr,dhl)
+ * 
+ *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       olhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":461
+ *       res = arrso_sub_oO(&olhs.num,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 461, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 461, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":463
+ *     elif ( trhs  == sotinum ):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       orhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 463, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":464
+ * 
+ *       lhs = self
+ *       orhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sub_Oo(&lhs.arr, &orhs.num, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(3, 464, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_orhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":466
+ *       orhs = other
+ * 
+ *       res = arrso_sub_Oo(&lhs.arr, &orhs.num, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif (tlhs in number_types):
+ */
+    __pyx_v_res = arrso_sub_Oo((&__pyx_v_lhs->arr), (&__pyx_v_orhs->num), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":461
+ *       res = arrso_sub_oO(&olhs.num,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":468
+ *       res = arrso_sub_Oo(&lhs.arr, &orhs.num, dhl)
+ * 
+ *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       rhs = other
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 468, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 468, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":470
+ *     elif (tlhs in number_types):
+ * 
+ *       rhs = other             # <<<<<<<<<<<<<<
+ *       res = arrso_sub_rO(self, &rhs.arr, dhl)
+ * 
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 470, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":471
+ * 
+ *       rhs = other
+ *       res = arrso_sub_rO(self, &rhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif (trhs in number_types):
+ */
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 471, __pyx_L1_error)
+    __pyx_v_res = arrso_sub_rO(__pyx_t_4, (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":468
+ *       res = arrso_sub_Oo(&lhs.arr, &orhs.num, dhl)
+ * 
+ *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       rhs = other
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":473
+ *       res = arrso_sub_rO(self, &rhs.arr, dhl)
+ * 
+ *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 473, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(3, 473, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = (__pyx_t_3 != 0);
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":475
+ *     elif (trhs in number_types):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       res = arrso_sub_Or(&lhs.arr, other, dhl)
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 475, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":476
+ * 
+ *       lhs = self
+ *       res = arrso_sub_Or(&lhs.arr, other, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( tlhs  == dmat ):
+ */
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 476, __pyx_L1_error)
+    __pyx_v_res = arrso_sub_Or((&__pyx_v_lhs->arr), __pyx_t_4, __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":473
+ *       res = arrso_sub_rO(self, &rhs.arr, dhl)
+ * 
+ *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":478
+ *       res = arrso_sub_Or(&lhs.arr, other, dhl)
+ * 
+ *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       dlhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_4real_dmat), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 478, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 478, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":480
+ *     elif ( tlhs  == dmat ):
+ * 
+ *       dlhs = self             # <<<<<<<<<<<<<<
+ *       rhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_4real_dmat))))) __PYX_ERR(3, 480, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_dlhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":481
+ * 
+ *       dlhs = self
+ *       rhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sub_RO(&dlhs.arr,&rhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 481, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":483
+ *       rhs = other
+ * 
+ *       res = arrso_sub_RO(&dlhs.arr,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( trhs  == dmat ):
+ */
+    __pyx_v_res = arrso_sub_RO((&__pyx_v_dlhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":478
+ *       res = arrso_sub_Or(&lhs.arr, other, dhl)
+ * 
+ *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       dlhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":485
+ *       res = arrso_sub_RO(&dlhs.arr,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_4real_dmat), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 485, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 485, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":487
+ *     elif ( trhs  == dmat ):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       drhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 487, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":488
+ * 
+ *       lhs = self
+ *       drhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_sub_OR(&lhs.arr, &drhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_4real_dmat))))) __PYX_ERR(3, 488, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_drhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":490
+ *       drhs = other
+ * 
+ *       res = arrso_sub_OR(&lhs.arr, &drhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     else:
+ */
+    __pyx_v_res = arrso_sub_OR((&__pyx_v_lhs->arr), (&__pyx_v_drhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":485
+ *       res = arrso_sub_RO(&dlhs.arr,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":494
+ *     else:
+ * 
+ *       return NotImplemented             # <<<<<<<<<<<<<<
+ * 
+ *     # end if
+ */
+  /*else*/ {
+    __Pyx_XDECREF(__pyx_r);
+    __Pyx_INCREF(__pyx_builtin_NotImplemented);
+    __pyx_r = __pyx_builtin_NotImplemented;
+    goto __pyx_L0;
+  }
+  __pyx_L3:;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":498
+ *     # end if
+ * 
+ *     return matso.create(&res)             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 498, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":431
+ * 
+ *   #***************************************************************************************************
+ *   def __sub__(self, other):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Subtraction overload.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.matso.__sub__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_lhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_rhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_dlhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_drhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_olhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_orhs);
+  __Pyx_XDECREF(__pyx_v_tlhs);
+  __Pyx_XDECREF(__pyx_v_trhs);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":504
+ * 
+ *   #***************************************************************************************************
+ *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Inplace subtraction overload.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_25__isub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other_in); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_5matso_24__isub__[] = "\n    PURPOSE: Inplace subtraction overload.\n    ";
+#if CYTHON_COMPILING_IN_CPYTHON
+struct wrapperbase __pyx_wrapperbase_5pyoti_6sparse_5matso_24__isub__;
+#endif
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_25__isub__(PyObject *__pyx_v_self, PyObject *__pyx_v_other_in) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__isub__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_24__isub__(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self), ((PyObject *)__pyx_v_other_in));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_24__isub__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_other_in) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("__isub__", 0);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":510
+ *     #*************************************************************************************************
+ * 
+ *     return self - other_in             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyNumber_Subtract(((PyObject *)__pyx_v_self), __pyx_v_other_in); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 510, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":504
+ * 
+ *   #***************************************************************************************************
+ *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Inplace subtraction overload.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.matso.__isub__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":516
+ * 
+ *   #***************************************************************************************************
+ *   def __mul__(self, other):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Multiplication overload.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_27__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_5matso_26__mul__[] = " \n    PURPOSE: Multiplication overload.\n    ";
+#if CYTHON_COMPILING_IN_CPYTHON
+struct wrapperbase __pyx_wrapperbase_5pyoti_6sparse_5matso_26__mul__;
+#endif
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_27__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__mul__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_26__mul__(((PyObject *)__pyx_v_self), ((PyObject *)__pyx_v_other));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_26__mul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other) {
+  arrso_t __pyx_v_res;
+  struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_lhs = 0;
+  struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_rhs = 0;
+  struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_dlhs = 0;
+  struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_drhs = 0;
+  struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_olhs = 0;
+  struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_v_orhs = 0;
+  PyTypeObject *__pyx_v_tlhs = NULL;
+  PyTypeObject *__pyx_v_trhs = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
+  __Pyx_RefNannySetupContext("__mul__", 0);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":529
+ *     cdef sotinum olhs,orhs
+ * 
+ *     tlhs = type(self)             # <<<<<<<<<<<<<<
+ *     trhs = type(other)
+ * 
+ */
+  __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
+  __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":530
+ * 
+ *     tlhs = type(self)
+ *     trhs = type(other)             # <<<<<<<<<<<<<<
+ * 
+ *     if (tlhs == trhs):
+ */
+  __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
+  __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":532
+ *     trhs = type(other)
+ * 
+ *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 532, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 532, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":534
+ *     if (tlhs == trhs):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       rhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 534, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":535
+ * 
+ *       lhs = self
+ *       rhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_mul_OO(&lhs.arr,&rhs.arr,dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 535, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":537
+ *       rhs = other
+ * 
+ *       res = arrso_mul_OO(&lhs.arr,&rhs.arr,dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( tlhs  == sotinum ):
+ */
+    __pyx_v_res = arrso_mul_OO((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":532
+ *     trhs = type(other)
+ * 
+ *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":539
+ *       res = arrso_mul_OO(&lhs.arr,&rhs.arr,dhl)
+ * 
+ *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       olhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 539, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 539, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":541
+ *     elif ( tlhs  == sotinum ):
+ * 
+ *       olhs = self             # <<<<<<<<<<<<<<
+ *       rhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(3, 541, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_olhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":542
+ * 
+ *       olhs = self
+ *       rhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_mul_oO(&olhs.num,&rhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 542, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":544
+ *       rhs = other
+ * 
+ *       res = arrso_mul_oO(&olhs.num,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( trhs  == sotinum ):
+ */
+    __pyx_v_res = arrso_mul_oO((&__pyx_v_olhs->num), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":539
+ *       res = arrso_mul_OO(&lhs.arr,&rhs.arr,dhl)
+ * 
+ *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       olhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":546
+ *       res = arrso_mul_oO(&olhs.num,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 546, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 546, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":548
+ *     elif ( trhs  == sotinum ):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       orhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 548, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":549
+ * 
+ *       lhs = self
+ *       orhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_mul_oO(&orhs.num,&lhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(3, 549, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_orhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":551
+ *       orhs = other
+ * 
+ *       res = arrso_mul_oO(&orhs.num,&lhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif (tlhs in number_types):
+ */
+    __pyx_v_res = arrso_mul_oO((&__pyx_v_orhs->num), (&__pyx_v_lhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":546
+ *       res = arrso_mul_oO(&olhs.num,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":553
+ *       res = arrso_mul_oO(&orhs.num,&lhs.arr, dhl)
+ * 
+ *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       rhs = other
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 553, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 553, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_3 = (__pyx_t_2 != 0);
+  if (__pyx_t_3) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":555
+ *     elif (tlhs in number_types):
+ * 
+ *       rhs = other             # <<<<<<<<<<<<<<
+ *       res = arrso_mul_rO(self, &rhs.arr, dhl)
+ * 
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 555, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":556
+ * 
+ *       rhs = other
+ *       res = arrso_mul_rO(self, &rhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif (trhs in number_types):
+ */
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 556, __pyx_L1_error)
+    __pyx_v_res = arrso_mul_rO(__pyx_t_4, (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":553
+ *       res = arrso_mul_oO(&orhs.num,&lhs.arr, dhl)
+ * 
+ *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       rhs = other
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":558
+ *       res = arrso_mul_rO(self, &rhs.arr, dhl)
+ * 
+ *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 558, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(3, 558, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_2 = (__pyx_t_3 != 0);
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":560
+ *     elif (trhs in number_types):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       res = arrso_mul_rO(other, &lhs.arr, dhl)
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 560, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":561
+ * 
+ *       lhs = self
+ *       res = arrso_mul_rO(other, &lhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( tlhs  == dmat ):
+ */
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 561, __pyx_L1_error)
+    __pyx_v_res = arrso_mul_rO(__pyx_t_4, (&__pyx_v_lhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":558
+ *       res = arrso_mul_rO(self, &rhs.arr, dhl)
+ * 
+ *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":563
+ *       res = arrso_mul_rO(other, &lhs.arr, dhl)
+ * 
+ *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       dlhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_4real_dmat), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 563, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 563, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":565
+ *     elif ( tlhs  == dmat ):
+ * 
+ *       dlhs = self             # <<<<<<<<<<<<<<
+ *       rhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_4real_dmat))))) __PYX_ERR(3, 565, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_dlhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":566
+ * 
+ *       dlhs = self
+ *       rhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_mul_RO(&dlhs.arr,&rhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 566, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":568
+ *       rhs = other
+ * 
+ *       res = arrso_mul_RO(&dlhs.arr,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     elif ( trhs  == dmat ):
+ */
+    __pyx_v_res = arrso_mul_RO((&__pyx_v_dlhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":563
+ *       res = arrso_mul_rO(other, &lhs.arr, dhl)
+ * 
+ *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       dlhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":570
+ *       res = arrso_mul_RO(&dlhs.arr,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_4real_dmat), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 570, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(3, 570, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_2) {
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":572
+ *     elif ( trhs  == dmat ):
+ * 
+ *       lhs = self             # <<<<<<<<<<<<<<
+ *       drhs = other
+ * 
+ */
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_matso))))) __PYX_ERR(3, 572, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_self;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":573
+ * 
+ *       lhs = self
+ *       drhs = other             # <<<<<<<<<<<<<<
+ * 
+ *       res = arrso_mul_RO(&drhs.arr,&lhs.arr, dhl)
+ */
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_4real_dmat))))) __PYX_ERR(3, 573, __pyx_L1_error)
+    __pyx_t_1 = __pyx_v_other;
+    __Pyx_INCREF(__pyx_t_1);
+    __pyx_v_drhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":575
+ *       drhs = other
+ * 
+ *       res = arrso_mul_RO(&drhs.arr,&lhs.arr, dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     else:
+ */
+    __pyx_v_res = arrso_mul_RO((&__pyx_v_drhs->arr), (&__pyx_v_lhs->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":570
+ *       res = arrso_mul_RO(&dlhs.arr,&rhs.arr, dhl)
+ * 
+ *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
+ * 
+ *       lhs = self
+ */
+    goto __pyx_L3;
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":579
+ *     else:
+ * 
+ *       return NotImplemented             # <<<<<<<<<<<<<<
+ * 
+ *     # end if
+ */
+  /*else*/ {
+    __Pyx_XDECREF(__pyx_r);
+    __Pyx_INCREF(__pyx_builtin_NotImplemented);
+    __pyx_r = __pyx_builtin_NotImplemented;
+    goto __pyx_L0;
+  }
+  __pyx_L3:;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":583
+ *     # end if
+ * 
+ *     return matso.create(&res)             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 583, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":516
+ * 
+ *   #***************************************************************************************************
+ *   def __mul__(self, other):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Multiplication overload.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.matso.__mul__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF((PyObject *)__pyx_v_lhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_rhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_dlhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_drhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_olhs);
+  __Pyx_XDECREF((PyObject *)__pyx_v_orhs);
+  __Pyx_XDECREF(__pyx_v_tlhs);
+  __Pyx_XDECREF(__pyx_v_trhs);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":591
+ * 
+ *   #***************************************************************************************************
+ *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Inplace multiplication overload.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_29__imul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other_in); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_5matso_28__imul__[] = "\n    PURPOSE: Inplace multiplication overload.\n    ";
+#if CYTHON_COMPILING_IN_CPYTHON
+struct wrapperbase __pyx_wrapperbase_5pyoti_6sparse_5matso_28__imul__;
+#endif
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_29__imul__(PyObject *__pyx_v_self, PyObject *__pyx_v_other_in) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__imul__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_28__imul__(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self), ((PyObject *)__pyx_v_other_in));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_28__imul__(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_other_in) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("__imul__", 0);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":597
+ *     #*************************************************************************************************
+ * 
+ *     return self * other_in             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyNumber_Multiply(((PyObject *)__pyx_v_self), __pyx_v_other_in); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 597, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":591
+ * 
+ *   #***************************************************************************************************
+ *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Inplace multiplication overload.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.sparse.matso.__imul__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":710
+ * 
+ *   #***************************************************************************************************
+ *   def get_deriv(self, hum_dir ):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Get the corresponding derivative of the system.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_31get_deriv(PyObject *__pyx_v_self, PyObject *__pyx_v_hum_dir); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_5matso_30get_deriv[] = "\n    PURPOSE: Get the corresponding derivative of the system.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_31get_deriv(PyObject *__pyx_v_self, PyObject *__pyx_v_hum_dir) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_deriv (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_30get_deriv(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self), ((PyObject *)__pyx_v_hum_dir));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_30get_deriv(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_hum_dir) {
+  PyObject *__pyx_v_item = 0;
+  PyArrayObject *__pyx_v_tmp = 0;
+  __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_factor;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_tmp;
+  __Pyx_Buffer __pyx_pybuffer_tmp;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyArrayObject *__pyx_t_4 = NULL;
+  int __pyx_t_5;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  __pyx_t_5pyoti_8c_otilib_imdir_t __pyx_t_9;
+  __pyx_t_5pyoti_8c_otilib_ord_t __pyx_t_10;
+  __Pyx_RefNannySetupContext("get_deriv", 0);
+  __pyx_pybuffer_tmp.pybuffer.buf = NULL;
+  __pyx_pybuffer_tmp.refcount = 0;
+  __pyx_pybuffernd_tmp.data = NULL;
+  __pyx_pybuffernd_tmp.rcbuffer = &__pyx_pybuffer_tmp;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":717
+ *     global dhl
+ * 
+ *     cdef list item = imdir(hum_dir)             # <<<<<<<<<<<<<<
+ *     cdef np.ndarray[coeff_t, ndim=2] tmp
+ *     cdef coeff_t factor = 1
+ */
+  __pyx_t_1 = __pyx_f_5pyoti_4core_imdir(__pyx_v_hum_dir, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 717, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_v_item = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":719
+ *     cdef list item = imdir(hum_dir)
+ *     cdef np.ndarray[coeff_t, ndim=2] tmp
+ *     cdef coeff_t factor = 1             # <<<<<<<<<<<<<<
+ * 
+ *     tmp = self.get_im(hum_dir)
+ */
+  __pyx_v_factor = 1.0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":721
+ *     cdef coeff_t factor = 1
+ * 
+ *     tmp = self.get_im(hum_dir)             # <<<<<<<<<<<<<<
+ * 
+ *     factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_im); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 721, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_v_hum_dir) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_hum_dir);
+  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 721, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(3, 721, __pyx_L1_error)
+  __pyx_t_4 = ((PyArrayObject *)__pyx_t_1);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_tmp.rcbuffer->pybuffer);
+    __pyx_t_5 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tmp.rcbuffer->pybuffer, (PyObject*)__pyx_t_4, &__Pyx_TypeInfo_nn___pyx_t_5pyoti_8c_otilib_coeff_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack);
+    if (unlikely(__pyx_t_5 < 0)) {
+      PyErr_Fetch(&__pyx_t_6, &__pyx_t_7, &__pyx_t_8);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_tmp.rcbuffer->pybuffer, (PyObject*)__pyx_v_tmp, &__Pyx_TypeInfo_nn___pyx_t_5pyoti_8c_otilib_coeff_t, PyBUF_FORMAT| PyBUF_STRIDES, 2, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_6); Py_XDECREF(__pyx_t_7); Py_XDECREF(__pyx_t_8);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_6, __pyx_t_7, __pyx_t_8);
+      }
+      __pyx_t_6 = __pyx_t_7 = __pyx_t_8 = 0;
+    }
+    __pyx_pybuffernd_tmp.diminfo[0].strides = __pyx_pybuffernd_tmp.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_tmp.diminfo[0].shape = __pyx_pybuffernd_tmp.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_tmp.diminfo[1].strides = __pyx_pybuffernd_tmp.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_tmp.diminfo[1].shape = __pyx_pybuffernd_tmp.rcbuffer->pybuffer.shape[1];
+    if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(3, 721, __pyx_L1_error)
+  }
+  __pyx_t_4 = 0;
+  __pyx_v_tmp = ((PyArrayObject *)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":723
+ *     tmp = self.get_im(hum_dir)
+ * 
+ *     factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     return tmp * factor
+ */
+  if (unlikely(__pyx_v_item == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(3, 723, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_item, __pyx_v_5pyoti_4core_ZERO, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 723, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_9 = __Pyx_PyInt_As_uint64_t(__pyx_t_1); if (unlikely((__pyx_t_9 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 723, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (unlikely(__pyx_v_item == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(3, 723, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_item, __pyx_v_5pyoti_4core_ONE, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 723, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_10 = __Pyx_PyInt_As_uint8_t(__pyx_t_1); if (unlikely((__pyx_t_10 == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 723, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_factor = dhelp_get_deriv_factor(__pyx_t_9, __pyx_t_10, __pyx_v_5pyoti_6sparse_dhl);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":725
+ *     factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
+ * 
+ *     return tmp * factor             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_factor); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 725, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyNumber_Multiply(((PyObject *)__pyx_v_tmp), __pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(3, 725, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_r = __pyx_t_2;
+  __pyx_t_2 = 0;
+  goto __pyx_L0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":710
+ * 
+ *   #***************************************************************************************************
+ *   def get_deriv(self, hum_dir ):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Get the corresponding derivative of the system.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_tmp.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_AddTraceback("pyoti.sparse.matso.get_deriv", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_tmp.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __Pyx_XDECREF(__pyx_v_item);
+  __Pyx_XDECREF((PyObject *)__pyx_v_tmp);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":730
+ * 
+ *   #***************************************************************************************************
+ *   def get_im(self, hum_dir):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Get the corresponding imaginary direction in the matso object.
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_33get_im(PyObject *__pyx_v_self, PyObject *__pyx_v_hum_dir); /*proto*/
+static char __pyx_doc_5pyoti_6sparse_5matso_32get_im[] = "\n    PURPOSE: Get the corresponding imaginary direction in the matso object.\n    ";
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_33get_im(PyObject *__pyx_v_self, PyObject *__pyx_v_hum_dir) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_im (wrapper)", 0);
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_32get_im(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self), ((PyObject *)__pyx_v_hum_dir));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_32get_im(struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, PyObject *__pyx_v_hum_dir) {
+  PyObject *__pyx_v_item = 0;
+  darr_t __pyx_v_res_darr;
+  uint64_t __pyx_v_i;
+  uint64_t __pyx_v_j;
+  uint64_t __pyx_v_k;
+  PyArrayObject *__pyx_v_res = 0;
+  __Pyx_LocalBuf_ND __pyx_pybuffernd_res;
+  __Pyx_Buffer __pyx_pybuffer_res;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __pyx_t_5pyoti_8c_otilib_imdir_t __pyx_t_2;
+  __pyx_t_5pyoti_8c_otilib_ord_t __pyx_t_3;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  PyArrayObject *__pyx_t_8 = NULL;
+  int __pyx_t_9;
+  PyObject *__pyx_t_10 = NULL;
+  PyObject *__pyx_t_11 = NULL;
+  PyObject *__pyx_t_12 = NULL;
+  uint64_t __pyx_t_13;
+  uint64_t __pyx_t_14;
+  uint64_t __pyx_t_15;
+  uint64_t __pyx_t_16;
+  uint64_t __pyx_t_17;
+  uint64_t __pyx_t_18;
+  uint64_t __pyx_t_19;
+  uint64_t __pyx_t_20;
+  __Pyx_RefNannySetupContext("get_im", 0);
+  __pyx_pybuffer_res.pybuffer.buf = NULL;
+  __pyx_pybuffer_res.refcount = 0;
+  __pyx_pybuffernd_res.data = NULL;
+  __pyx_pybuffernd_res.rcbuffer = &__pyx_pybuffer_res;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":737
+ *     global dhl
+ * 
+ *     cdef list item = imdir(hum_dir)             # <<<<<<<<<<<<<<
+ *     cdef darr_t res_darr
+ *     cdef dmat res_dmat
+ */
+  __pyx_t_1 = __pyx_f_5pyoti_4core_imdir(__pyx_v_hum_dir, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 737, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_v_item = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":743
+ *     cdef np.ndarray[double, ndim=2] res
+ * 
+ *     res_darr = arrso_get_im( item[ZERO],  item[ONE], &self.arr,  dhl)             # <<<<<<<<<<<<<<
+ * 
+ *     res = np.empty( self.shape , dtype = np.float64)
+ */
+  if (unlikely(__pyx_v_item == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(3, 743, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_item, __pyx_v_5pyoti_4core_ZERO, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 743, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_uint64_t(__pyx_t_1); if (unlikely((__pyx_t_2 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 743, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (unlikely(__pyx_v_item == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(3, 743, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_List(__pyx_v_item, __pyx_v_5pyoti_4core_ONE, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 1, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 743, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_PyInt_As_uint8_t(__pyx_t_1); if (unlikely((__pyx_t_3 == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 743, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_res_darr = arrso_get_im(__pyx_t_2, __pyx_t_3, (&__pyx_v_self->arr), __pyx_v_5pyoti_6sparse_dhl);
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":745
+ *     res_darr = arrso_get_im( item[ZERO],  item[ONE], &self.arr,  dhl)
+ * 
+ *     res = np.empty( self.shape , dtype = np.float64)             # <<<<<<<<<<<<<<
+ * 
+ *     k=0
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 745, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_empty); if (unlikely(!__pyx_t_4)) __PYX_ERR(3, 745, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_shape); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 745, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(3, 745, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_1);
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 745, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(3, 745, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_float64); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 745, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(3, 745, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_5, __pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(3, 745, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_7) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_7, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(3, 745, __pyx_L1_error)
+  __pyx_t_8 = ((PyArrayObject *)__pyx_t_7);
+  {
+    __Pyx_BufFmt_StackElem __pyx_stack[1];
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+    __pyx_t_9 = __Pyx_GetBufferAndValidate(&__pyx_pybuffernd_res.rcbuffer->pybuffer, (PyObject*)__pyx_t_8, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack);
+    if (unlikely(__pyx_t_9 < 0)) {
+      PyErr_Fetch(&__pyx_t_10, &__pyx_t_11, &__pyx_t_12);
+      if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_res.rcbuffer->pybuffer, (PyObject*)__pyx_v_res, &__Pyx_TypeInfo_double, PyBUF_FORMAT| PyBUF_STRIDES| PyBUF_WRITABLE, 2, 0, __pyx_stack) == -1)) {
+        Py_XDECREF(__pyx_t_10); Py_XDECREF(__pyx_t_11); Py_XDECREF(__pyx_t_12);
+        __Pyx_RaiseBufferFallbackError();
+      } else {
+        PyErr_Restore(__pyx_t_10, __pyx_t_11, __pyx_t_12);
+      }
+      __pyx_t_10 = __pyx_t_11 = __pyx_t_12 = 0;
+    }
+    __pyx_pybuffernd_res.diminfo[0].strides = __pyx_pybuffernd_res.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_res.diminfo[0].shape = __pyx_pybuffernd_res.rcbuffer->pybuffer.shape[0]; __pyx_pybuffernd_res.diminfo[1].strides = __pyx_pybuffernd_res.rcbuffer->pybuffer.strides[1]; __pyx_pybuffernd_res.diminfo[1].shape = __pyx_pybuffernd_res.rcbuffer->pybuffer.shape[1];
+    if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(3, 745, __pyx_L1_error)
+  }
+  __pyx_t_8 = 0;
+  __pyx_v_res = ((PyArrayObject *)__pyx_t_7);
+  __pyx_t_7 = 0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":747
+ *     res = np.empty( self.shape , dtype = np.float64)
+ * 
+ *     k=0             # <<<<<<<<<<<<<<
+ * 
+ *     for i in range(self.arr.nrows):
+ */
+  __pyx_v_k = 0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":749
+ *     k=0
+ * 
+ *     for i in range(self.arr.nrows):             # <<<<<<<<<<<<<<
+ * 
+ *       for j in range(self.arr.ncols):
+ */
+  __pyx_t_13 = __pyx_v_self->arr.nrows;
+  __pyx_t_14 = __pyx_t_13;
+  for (__pyx_t_15 = 0; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
+    __pyx_v_i = __pyx_t_15;
+
+    /* "../../src/python/pyoti/cython/sparse/array/base.pxi":751
+ *     for i in range(self.arr.nrows):
+ * 
+ *       for j in range(self.arr.ncols):             # <<<<<<<<<<<<<<
+ * 
+ *         res[i,j] = res_darr.p_data[k]
+ */
+    __pyx_t_16 = __pyx_v_self->arr.ncols;
+    __pyx_t_17 = __pyx_t_16;
+    for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_17; __pyx_t_18+=1) {
+      __pyx_v_j = __pyx_t_18;
+
+      /* "../../src/python/pyoti/cython/sparse/array/base.pxi":753
+ *       for j in range(self.arr.ncols):
+ * 
+ *         res[i,j] = res_darr.p_data[k]             # <<<<<<<<<<<<<<
+ *         k+=1
+ * 
+ */
+      __pyx_t_19 = __pyx_v_i;
+      __pyx_t_20 = __pyx_v_j;
+      __pyx_t_9 = -1;
+      if (unlikely(__pyx_t_19 >= (size_t)__pyx_pybuffernd_res.diminfo[0].shape)) __pyx_t_9 = 0;
+      if (unlikely(__pyx_t_20 >= (size_t)__pyx_pybuffernd_res.diminfo[1].shape)) __pyx_t_9 = 1;
+      if (unlikely(__pyx_t_9 != -1)) {
+        __Pyx_RaiseBufferIndexError(__pyx_t_9);
+        __PYX_ERR(3, 753, __pyx_L1_error)
+      }
+      *__Pyx_BufPtrStrided2d(double *, __pyx_pybuffernd_res.rcbuffer->pybuffer.buf, __pyx_t_19, __pyx_pybuffernd_res.diminfo[0].strides, __pyx_t_20, __pyx_pybuffernd_res.diminfo[1].strides) = (__pyx_v_res_darr.p_data[__pyx_v_k]);
+
+      /* "../../src/python/pyoti/cython/sparse/array/base.pxi":754
+ * 
+ *         res[i,j] = res_darr.p_data[k]
+ *         k+=1             # <<<<<<<<<<<<<<
+ * 
+ *       # end for
+ */
+      __pyx_v_k = (__pyx_v_k + 1);
+    }
+  }
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":760
+ *     #end for
+ * 
+ *     return res             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_res));
+  __pyx_r = ((PyObject *)__pyx_v_res);
+  goto __pyx_L0;
+
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":730
+ * 
+ *   #***************************************************************************************************
+ *   def get_im(self, hum_dir):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Get the corresponding imaginary direction in the matso object.
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7);
+  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
+    __Pyx_PyThreadState_declare
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
+    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
+  __Pyx_AddTraceback("pyoti.sparse.matso.get_im", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  goto __pyx_L2;
+  __pyx_L0:;
+  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_res.rcbuffer->pybuffer);
+  __pyx_L2:;
+  __Pyx_XDECREF(__pyx_v_item);
+  __Pyx_XDECREF((PyObject *)__pyx_v_res);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     raise TypeError("self.arr cannot be converted to a Python object for pickling")
@@ -14218,19 +16506,19 @@ static PyObject *__pyx_pf_5pyoti_6sparse_5matso_14copy(struct __pyx_obj_5pyoti_6
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_5matso_17__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_5pyoti_6sparse_5matso_17__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_35__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_35__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_16__reduce_cython__(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_34__reduce_cython__(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_5matso_16__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_34__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14272,19 +16560,19 @@ static PyObject *__pyx_pf_5pyoti_6sparse_5matso_16__reduce_cython__(CYTHON_UNUSE
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_6sparse_5matso_19__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_5pyoti_6sparse_5matso_19__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_37__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_5pyoti_6sparse_5matso_37__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_18__setstate_cython__(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_5pyoti_6sparse_5matso_36__setstate_cython__(((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_6sparse_5matso_18__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_5pyoti_6sparse_5matso_36__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_6sparse_matso *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -14318,7 +16606,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_5matso_18__setstate_cython__(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/array/base.pxi":972
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":979
  * 
  * #*****************************************************************************************************
  * cpdef matso eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14344,7 +16632,7 @@ static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_eye(uint64_
     }
   }
 
-  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":976
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":983
  *   global dhl
  * 
  *   cdef arrso_t res = arrso_eye_bases(size, nbases, order, dhl)             # <<<<<<<<<<<<<<
@@ -14353,7 +16641,7 @@ static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_eye(uint64_
  */
   __pyx_v_res = arrso_eye_bases(__pyx_v_size, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":978
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":985
  *   cdef arrso_t res = arrso_eye_bases(size, nbases, order, dhl)
  * 
  *   return matso.create(&res)             # <<<<<<<<<<<<<<
@@ -14361,13 +16649,13 @@ static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_eye(uint64_
  * #-----------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 978, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 985, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":972
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":979
  * 
  * #*****************************************************************************************************
  * cpdef matso eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14430,7 +16718,7 @@ static PyObject *__pyx_pw_5pyoti_6sparse_87eye(PyObject *__pyx_self, PyObject *_
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "eye") < 0)) __PYX_ERR(3, 972, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "eye") < 0)) __PYX_ERR(3, 979, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -14443,21 +16731,21 @@ static PyObject *__pyx_pw_5pyoti_6sparse_87eye(PyObject *__pyx_self, PyObject *_
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_size = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_size == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 972, __pyx_L3_error)
+    __pyx_v_size = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_size == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 979, __pyx_L3_error)
     if (values[1]) {
-      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[1]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 972, __pyx_L3_error)
+      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[1]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 979, __pyx_L3_error)
     } else {
       __pyx_v_nbases = ((__pyx_t_5pyoti_8c_otilib_bases_t)0);
     }
     if (values[2]) {
-      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[2]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 972, __pyx_L3_error)
+      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[2]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 979, __pyx_L3_error)
     } else {
       __pyx_v_order = ((__pyx_t_5pyoti_8c_otilib_ord_t)0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("eye", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 972, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("eye", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 979, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pyoti.sparse.eye", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -14480,7 +16768,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_86eye(CYTHON_UNUSED PyObject *__pyx_sel
   __pyx_t_2.__pyx_n = 2;
   __pyx_t_2.nbases = __pyx_v_nbases;
   __pyx_t_2.order = __pyx_v_order;
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_eye(__pyx_v_size, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 972, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_eye(__pyx_v_size, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 979, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -14497,7 +16785,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_86eye(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/array/base.pxi":983
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":990
  * 
  * #*****************************************************************************************************
  * cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14523,7 +16811,7 @@ static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_zeros(uint6
     }
   }
 
-  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":987
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":994
  *   global dhl
  * 
  *   cdef arrso_t res = arrso_zeros_bases(nrows,ncols,nbases,order,dhl)             # <<<<<<<<<<<<<<
@@ -14532,7 +16820,7 @@ static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_zeros(uint6
  */
   __pyx_v_res = arrso_zeros_bases(__pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":989
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":996
  *   cdef arrso_t res = arrso_zeros_bases(nrows,ncols,nbases,order,dhl)
  * 
  *   return matso.create(&res)             # <<<<<<<<<<<<<<
@@ -14540,13 +16828,13 @@ static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_zeros(uint6
  * #-----------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 989, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 996, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":983
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":990
  * 
  * #*****************************************************************************************************
  * cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14602,7 +16890,7 @@ static PyObject *__pyx_pw_5pyoti_6sparse_89zeros(PyObject *__pyx_self, PyObject 
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ncols)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("zeros", 0, 2, 4, 1); __PYX_ERR(3, 983, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("zeros", 0, 2, 4, 1); __PYX_ERR(3, 990, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -14618,7 +16906,7 @@ static PyObject *__pyx_pw_5pyoti_6sparse_89zeros(PyObject *__pyx_self, PyObject 
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "zeros") < 0)) __PYX_ERR(3, 983, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "zeros") < 0)) __PYX_ERR(3, 990, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -14632,22 +16920,22 @@ static PyObject *__pyx_pw_5pyoti_6sparse_89zeros(PyObject *__pyx_self, PyObject 
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_nrows = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_nrows == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 983, __pyx_L3_error)
-    __pyx_v_ncols = __Pyx_PyInt_As_uint64_t(values[1]); if (unlikely((__pyx_v_ncols == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 983, __pyx_L3_error)
+    __pyx_v_nrows = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_nrows == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 990, __pyx_L3_error)
+    __pyx_v_ncols = __Pyx_PyInt_As_uint64_t(values[1]); if (unlikely((__pyx_v_ncols == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 990, __pyx_L3_error)
     if (values[2]) {
-      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[2]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 983, __pyx_L3_error)
+      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[2]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 990, __pyx_L3_error)
     } else {
       __pyx_v_nbases = ((__pyx_t_5pyoti_8c_otilib_bases_t)0);
     }
     if (values[3]) {
-      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[3]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 983, __pyx_L3_error)
+      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[3]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 990, __pyx_L3_error)
     } else {
       __pyx_v_order = ((__pyx_t_5pyoti_8c_otilib_ord_t)0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("zeros", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 983, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("zeros", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 990, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pyoti.sparse.zeros", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -14670,7 +16958,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_88zeros(CYTHON_UNUSED PyObject *__pyx_s
   __pyx_t_2.__pyx_n = 2;
   __pyx_t_2.nbases = __pyx_v_nbases;
   __pyx_t_2.order = __pyx_v_order;
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_zeros(__pyx_v_nrows, __pyx_v_ncols, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 983, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_zeros(__pyx_v_nrows, __pyx_v_ncols, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 990, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -14687,7 +16975,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_88zeros(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/array/base.pxi":994
+/* "../../src/python/pyoti/cython/sparse/array/base.pxi":1001
  * 
  * #*****************************************************************************************************
  * cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14713,7 +17001,7 @@ static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_ones(uint64
     }
   }
 
-  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":998
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":1005
  *   global dhl
  * 
  *   cdef arrso_t res = arrso_ones_bases(nrows,ncols,nbases,order,dhl)             # <<<<<<<<<<<<<<
@@ -14722,7 +17010,7 @@ static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_ones(uint64
  */
   __pyx_v_res = arrso_ones_bases(__pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":1000
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":1007
  *   cdef arrso_t res = arrso_ones_bases(nrows,ncols,nbases,order,dhl)
  * 
  *   return matso.create(&res)             # <<<<<<<<<<<<<<
@@ -14730,13 +17018,13 @@ static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_ones(uint64
  * #-----------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 1000, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_5matso_create((&__pyx_v_res))); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 1007, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = ((struct __pyx_obj_5pyoti_6sparse_matso *)__pyx_t_1);
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":994
+  /* "../../src/python/pyoti/cython/sparse/array/base.pxi":1001
  * 
  * #*****************************************************************************************************
  * cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14792,7 +17080,7 @@ static PyObject *__pyx_pw_5pyoti_6sparse_91ones(PyObject *__pyx_self, PyObject *
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_ncols)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("ones", 0, 2, 4, 1); __PYX_ERR(3, 994, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("ones", 0, 2, 4, 1); __PYX_ERR(3, 1001, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -14808,7 +17096,7 @@ static PyObject *__pyx_pw_5pyoti_6sparse_91ones(PyObject *__pyx_self, PyObject *
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "ones") < 0)) __PYX_ERR(3, 994, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "ones") < 0)) __PYX_ERR(3, 1001, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -14822,22 +17110,22 @@ static PyObject *__pyx_pw_5pyoti_6sparse_91ones(PyObject *__pyx_self, PyObject *
         default: goto __pyx_L5_argtuple_error;
       }
     }
-    __pyx_v_nrows = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_nrows == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 994, __pyx_L3_error)
-    __pyx_v_ncols = __Pyx_PyInt_As_uint64_t(values[1]); if (unlikely((__pyx_v_ncols == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 994, __pyx_L3_error)
+    __pyx_v_nrows = __Pyx_PyInt_As_uint64_t(values[0]); if (unlikely((__pyx_v_nrows == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 1001, __pyx_L3_error)
+    __pyx_v_ncols = __Pyx_PyInt_As_uint64_t(values[1]); if (unlikely((__pyx_v_ncols == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 1001, __pyx_L3_error)
     if (values[2]) {
-      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[2]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 994, __pyx_L3_error)
+      __pyx_v_nbases = __Pyx_PyInt_As_uint16_t(values[2]); if (unlikely((__pyx_v_nbases == ((uint16_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 1001, __pyx_L3_error)
     } else {
       __pyx_v_nbases = ((__pyx_t_5pyoti_8c_otilib_bases_t)0);
     }
     if (values[3]) {
-      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[3]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 994, __pyx_L3_error)
+      __pyx_v_order = __Pyx_PyInt_As_uint8_t(values[3]); if (unlikely((__pyx_v_order == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 1001, __pyx_L3_error)
     } else {
       __pyx_v_order = ((__pyx_t_5pyoti_8c_otilib_ord_t)0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("ones", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 994, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("ones", 0, 2, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(3, 1001, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("pyoti.sparse.ones", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -14860,7 +17148,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_90ones(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_t_2.__pyx_n = 2;
   __pyx_t_2.nbases = __pyx_v_nbases;
   __pyx_t_2.order = __pyx_v_order;
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_ones(__pyx_v_nrows, __pyx_v_ncols, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 994, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_6sparse_ones(__pyx_v_nrows, __pyx_v_ncols, 0, &__pyx_t_2)); if (unlikely(!__pyx_t_1)) __PYX_ERR(3, 1001, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -17588,8 +19876,10 @@ static PyObject *__pyx_getprop_5pyoti_6sparse_5matso_real(PyObject *o, CYTHON_UN
 static PyMethodDef __pyx_methods_5pyoti_6sparse_matso[] = {
   {"get_real", (PyCFunction)__pyx_pw_5pyoti_6sparse_5matso_5get_real, METH_NOARGS, 0},
   {"copy", (PyCFunction)__pyx_pw_5pyoti_6sparse_5matso_15copy, METH_NOARGS, __pyx_doc_5pyoti_6sparse_5matso_14copy},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_5pyoti_6sparse_5matso_17__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_5pyoti_6sparse_5matso_19__setstate_cython__, METH_O, 0},
+  {"get_deriv", (PyCFunction)__pyx_pw_5pyoti_6sparse_5matso_31get_deriv, METH_O, __pyx_doc_5pyoti_6sparse_5matso_30get_deriv},
+  {"get_im", (PyCFunction)__pyx_pw_5pyoti_6sparse_5matso_33get_im, METH_O, __pyx_doc_5pyoti_6sparse_5matso_32get_im},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_5pyoti_6sparse_5matso_35__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_5pyoti_6sparse_5matso_37__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -17598,6 +19888,68 @@ static struct PyGetSetDef __pyx_getsets_5pyoti_6sparse_matso[] = {
   {(char *)"size", __pyx_getprop_5pyoti_6sparse_5matso_size, 0, (char *)"\n    PURPOSE:      Return the size of array.                \n    ", 0},
   {(char *)"real", __pyx_getprop_5pyoti_6sparse_5matso_real, 0, (char *)"\n    PURPOSE:      Get a numpy array with all coefficients in the real direction.\n\n    ", 0},
   {0, 0, 0, 0, 0}
+};
+
+static PyNumberMethods __pyx_tp_as_number_matso = {
+  __pyx_pw_5pyoti_6sparse_5matso_19__add__, /*nb_add*/
+  __pyx_pw_5pyoti_6sparse_5matso_23__sub__, /*nb_subtract*/
+  __pyx_pw_5pyoti_6sparse_5matso_27__mul__, /*nb_multiply*/
+  #if PY_MAJOR_VERSION < 3 || (CYTHON_COMPILING_IN_PYPY && PY_VERSION_HEX < 0x03050000)
+  0, /*nb_divide*/
+  #endif
+  0, /*nb_remainder*/
+  0, /*nb_divmod*/
+  0, /*nb_power*/
+  __pyx_pw_5pyoti_6sparse_5matso_17__neg__, /*nb_negative*/
+  0, /*nb_positive*/
+  0, /*nb_absolute*/
+  0, /*nb_nonzero*/
+  0, /*nb_invert*/
+  0, /*nb_lshift*/
+  0, /*nb_rshift*/
+  0, /*nb_and*/
+  0, /*nb_xor*/
+  0, /*nb_or*/
+  #if PY_MAJOR_VERSION < 3 || (CYTHON_COMPILING_IN_PYPY && PY_VERSION_HEX < 0x03050000)
+  0, /*nb_coerce*/
+  #endif
+  0, /*nb_int*/
+  #if PY_MAJOR_VERSION < 3
+  0, /*nb_long*/
+  #else
+  0, /*reserved*/
+  #endif
+  0, /*nb_float*/
+  #if PY_MAJOR_VERSION < 3 || (CYTHON_COMPILING_IN_PYPY && PY_VERSION_HEX < 0x03050000)
+  0, /*nb_oct*/
+  #endif
+  #if PY_MAJOR_VERSION < 3 || (CYTHON_COMPILING_IN_PYPY && PY_VERSION_HEX < 0x03050000)
+  0, /*nb_hex*/
+  #endif
+  __pyx_pw_5pyoti_6sparse_5matso_21__iadd__, /*nb_inplace_add*/
+  __pyx_pw_5pyoti_6sparse_5matso_25__isub__, /*nb_inplace_subtract*/
+  __pyx_pw_5pyoti_6sparse_5matso_29__imul__, /*nb_inplace_multiply*/
+  #if PY_MAJOR_VERSION < 3 || (CYTHON_COMPILING_IN_PYPY && PY_VERSION_HEX < 0x03050000)
+  0, /*nb_inplace_divide*/
+  #endif
+  0, /*nb_inplace_remainder*/
+  0, /*nb_inplace_power*/
+  0, /*nb_inplace_lshift*/
+  0, /*nb_inplace_rshift*/
+  0, /*nb_inplace_and*/
+  0, /*nb_inplace_xor*/
+  0, /*nb_inplace_or*/
+  0, /*nb_floor_divide*/
+  0, /*nb_true_divide*/
+  0, /*nb_inplace_floor_divide*/
+  0, /*nb_inplace_true_divide*/
+  0, /*nb_index*/
+  #if PY_VERSION_HEX >= 0x03050000
+  0, /*nb_matrix_multiply*/
+  #endif
+  #if PY_VERSION_HEX >= 0x03050000
+  0, /*nb_inplace_matrix_multiply*/
+  #endif
 };
 
 static PySequenceMethods __pyx_tp_as_sequence_matso = {
@@ -17635,7 +19987,7 @@ static PyTypeObject __pyx_type_5pyoti_6sparse_matso = {
   0, /*tp_as_async*/
   #endif
   __pyx_pw_5pyoti_6sparse_5matso_7__repr__, /*tp_repr*/
-  0, /*tp_as_number*/
+  &__pyx_tp_as_number_matso, /*tp_as_number*/
   &__pyx_tp_as_sequence_matso, /*tp_as_sequence*/
   &__pyx_tp_as_mapping_matso, /*tp_as_mapping*/
   0, /*tp_hash*/
@@ -17807,12 +20159,14 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_bases_hd, __pyx_k_bases_hd, sizeof(__pyx_k_bases_hd), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
   {&__pyx_n_s_dHelp, __pyx_k_dHelp, sizeof(__pyx_k_dHelp), 0, 0, 1, 1},
+  {&__pyx_n_s_dmat, __pyx_k_dmat, sizeof(__pyx_k_dmat), 0, 0, 1, 1},
   {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
   {&__pyx_kp_s_e, __pyx_k_e, sizeof(__pyx_k_e), 0, 0, 1, 0},
   {&__pyx_n_s_e_2, __pyx_k_e_2, sizeof(__pyx_k_e_2), 0, 0, 1, 1},
   {&__pyx_n_s_empty, __pyx_k_empty, sizeof(__pyx_k_empty), 0, 0, 1, 1},
   {&__pyx_n_s_empty_like, __pyx_k_empty_like, sizeof(__pyx_k_empty_like), 0, 0, 1, 1},
   {&__pyx_n_s_exponent, __pyx_k_exponent, sizeof(__pyx_k_exponent), 0, 0, 1, 1},
+  {&__pyx_kp_s_flag, __pyx_k_flag, sizeof(__pyx_k_flag), 0, 0, 1, 0},
   {&__pyx_n_s_float64, __pyx_k_float64, sizeof(__pyx_k_float64), 0, 0, 1, 1},
   {&__pyx_n_s_format, __pyx_k_format, sizeof(__pyx_k_format), 0, 0, 1, 1},
   {&__pyx_kp_s_g, __pyx_k_g, sizeof(__pyx_k_g), 0, 0, 1, 0},
@@ -17853,6 +20207,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_order_hd, __pyx_k_order_hd, sizeof(__pyx_k_order_hd), 0, 0, 1, 1},
   {&__pyx_n_s_out, __pyx_k_out, sizeof(__pyx_k_out), 0, 0, 1, 1},
   {&__pyx_n_s_pyoti_core, __pyx_k_pyoti_core, sizeof(__pyx_k_pyoti_core), 0, 0, 1, 1},
+  {&__pyx_n_s_pyoti_real, __pyx_k_pyoti_real, sizeof(__pyx_k_pyoti_real), 0, 0, 1, 1},
   {&__pyx_n_s_pyoti_sparse, __pyx_k_pyoti_sparse, sizeof(__pyx_k_pyoti_sparse), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
@@ -18369,6 +20724,76 @@ static int __Pyx_modinit_type_init_code(void) {
     }
   }
   #endif
+  #if CYTHON_COMPILING_IN_CPYTHON
+  {
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_5pyoti_6sparse_matso, "__neg__"); if (unlikely(!wrapper)) __PYX_ERR(3, 11, __pyx_L1_error)
+    if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_16__neg__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_16__neg__.doc = __pyx_doc_5pyoti_6sparse_5matso_16__neg__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_5pyoti_6sparse_5matso_16__neg__;
+    }
+  }
+  #endif
+  #if CYTHON_COMPILING_IN_CPYTHON
+  {
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_5pyoti_6sparse_matso, "__add__"); if (unlikely(!wrapper)) __PYX_ERR(3, 11, __pyx_L1_error)
+    if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_18__add__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_18__add__.doc = __pyx_doc_5pyoti_6sparse_5matso_18__add__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_5pyoti_6sparse_5matso_18__add__;
+    }
+  }
+  #endif
+  #if CYTHON_COMPILING_IN_CPYTHON
+  {
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_5pyoti_6sparse_matso, "__iadd__"); if (unlikely(!wrapper)) __PYX_ERR(3, 11, __pyx_L1_error)
+    if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_20__iadd__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_20__iadd__.doc = __pyx_doc_5pyoti_6sparse_5matso_20__iadd__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_5pyoti_6sparse_5matso_20__iadd__;
+    }
+  }
+  #endif
+  #if CYTHON_COMPILING_IN_CPYTHON
+  {
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_5pyoti_6sparse_matso, "__sub__"); if (unlikely(!wrapper)) __PYX_ERR(3, 11, __pyx_L1_error)
+    if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_22__sub__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_22__sub__.doc = __pyx_doc_5pyoti_6sparse_5matso_22__sub__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_5pyoti_6sparse_5matso_22__sub__;
+    }
+  }
+  #endif
+  #if CYTHON_COMPILING_IN_CPYTHON
+  {
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_5pyoti_6sparse_matso, "__isub__"); if (unlikely(!wrapper)) __PYX_ERR(3, 11, __pyx_L1_error)
+    if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_24__isub__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_24__isub__.doc = __pyx_doc_5pyoti_6sparse_5matso_24__isub__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_5pyoti_6sparse_5matso_24__isub__;
+    }
+  }
+  #endif
+  #if CYTHON_COMPILING_IN_CPYTHON
+  {
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_5pyoti_6sparse_matso, "__mul__"); if (unlikely(!wrapper)) __PYX_ERR(3, 11, __pyx_L1_error)
+    if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_26__mul__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_26__mul__.doc = __pyx_doc_5pyoti_6sparse_5matso_26__mul__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_5pyoti_6sparse_5matso_26__mul__;
+    }
+  }
+  #endif
+  #if CYTHON_COMPILING_IN_CPYTHON
+  {
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_5pyoti_6sparse_matso, "__imul__"); if (unlikely(!wrapper)) __PYX_ERR(3, 11, __pyx_L1_error)
+    if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_28__imul__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_5pyoti_6sparse_5matso_28__imul__.doc = __pyx_doc_5pyoti_6sparse_5matso_28__imul__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_5pyoti_6sparse_5matso_28__imul__;
+    }
+  }
+  #endif
   if (__Pyx_SetVtable(__pyx_type_5pyoti_6sparse_matso.tp_dict, __pyx_vtabptr_5pyoti_6sparse_matso) < 0) __PYX_ERR(3, 11, __pyx_L1_error)
   if (PyObject_SetAttr(__pyx_m, __pyx_n_s_matso_2, (PyObject *)&__pyx_type_5pyoti_6sparse_matso) < 0) __PYX_ERR(3, 11, __pyx_L1_error)
   if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5pyoti_6sparse_matso) < 0) __PYX_ERR(3, 11, __pyx_L1_error)
@@ -18413,6 +20838,12 @@ static int __Pyx_modinit_type_import_code(void) {
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_ptype_5pyoti_4core_dHelp = __Pyx_ImportType(__pyx_t_1, "pyoti.core", "dHelp", sizeof(struct __pyx_obj_5pyoti_4core_dHelp), __Pyx_ImportType_CheckSize_Warn);
    if (!__pyx_ptype_5pyoti_4core_dHelp) __PYX_ERR(9, 6, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyImport_ImportModule("pyoti.real"); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 5, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_ptype_5pyoti_4real_dmat = __Pyx_ImportType(__pyx_t_1, "pyoti.real", "dmat", sizeof(struct __pyx_obj_5pyoti_4real_dmat), __Pyx_ImportType_CheckSize_Warn);
+   if (!__pyx_ptype_5pyoti_4real_dmat) __PYX_ERR(10, 5, __pyx_L1_error)
+  __pyx_vtabptr_5pyoti_4real_dmat = (struct __pyx_vtabstruct_5pyoti_4real_dmat*)__Pyx_GetVtable(__pyx_ptype_5pyoti_4real_dmat->tp_dict); if (unlikely(!__pyx_vtabptr_5pyoti_4real_dmat)) __PYX_ERR(10, 5, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -18666,9 +21097,9 @@ if (!__Pyx_RefNanny) {
  * cimport numpy as np                 # C-level functions of numpy
  * from c_otilib cimport *             # OTI lib in C.
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 6, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(11, 6, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(10, 6, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(11, 6, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../src/python/pyoti/cython/sparse/include.pxi":15
@@ -18678,7 +21109,7 @@ if (!__Pyx_RefNanny) {
  * from pyoti.core cimport  ZERO, ONE, get_cython_dHelp, dHelp, imdir
  * from pyoti.core cimport  c_ptr_to_np_1darray_double, c_ptr_to_np_1darray_uint64
  */
-  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 15, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(11, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_number_types);
   __Pyx_GIVEREF(__pyx_n_s_number_types);
@@ -18689,34 +21120,51 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_imdir);
   __Pyx_GIVEREF(__pyx_n_s_imdir);
   PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_imdir);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 15, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(11, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 15, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(11, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_number_types, __pyx_t_1) < 0) __PYX_ERR(10, 15, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_number_types, __pyx_t_1) < 0) __PYX_ERR(11, 15, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_imdir); if (unlikely(!__pyx_t_1)) __PYX_ERR(10, 15, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_imdir); if (unlikely(!__pyx_t_1)) __PYX_ERR(11, 15, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_imdir, __pyx_t_1) < 0) __PYX_ERR(10, 15, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_imdir, __pyx_t_1) < 0) __PYX_ERR(11, 15, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../src/python/pyoti/cython/sparse/include.pxi":25
+  /* "../../src/python/pyoti/cython/sparse/include.pxi":19
+ * from pyoti.core cimport  c_ptr_to_np_1darray_double, c_ptr_to_np_1darray_uint64
+ * 
+ * from pyoti.real import  dmat             # <<<<<<<<<<<<<<
+ * from pyoti.real cimport dmat
+ * 
+ */
+  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(11, 19, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_INCREF(__pyx_n_s_dmat);
+  __Pyx_GIVEREF(__pyx_n_s_dmat);
+  PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_dmat);
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_real, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(11, 19, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "../../src/python/pyoti/cython/sparse/include.pxi":28
  * 
  * 
  * cdef dHelp h = get_cython_dHelp()             # <<<<<<<<<<<<<<
  * cdef dhelpl_t dhl = h.dhl
  * 
  */
-  __pyx_t_2 = ((PyObject *)__pyx_f_5pyoti_4core_get_cython_dHelp()); if (unlikely(!__pyx_t_2)) __PYX_ERR(10, 25, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_4core_get_cython_dHelp()); if (unlikely(!__pyx_t_1)) __PYX_ERR(11, 28, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(((PyObject *)__pyx_v_5pyoti_6sparse_h));
-  __Pyx_DECREF_SET(__pyx_v_5pyoti_6sparse_h, ((struct __pyx_obj_5pyoti_4core_dHelp *)__pyx_t_2));
-  __Pyx_GIVEREF(__pyx_t_2);
-  __pyx_t_2 = 0;
+  __Pyx_DECREF_SET(__pyx_v_5pyoti_6sparse_h, ((struct __pyx_obj_5pyoti_4core_dHelp *)__pyx_t_1));
+  __Pyx_GIVEREF(__pyx_t_1);
+  __pyx_t_1 = 0;
 
-  /* "../../src/python/pyoti/cython/sparse/include.pxi":26
+  /* "../../src/python/pyoti/cython/sparse/include.pxi":29
  * 
  * cdef dHelp h = get_cython_dHelp()
  * cdef dhelpl_t dhl = h.dhl             # <<<<<<<<<<<<<<
@@ -18732,10 +21180,10 @@ if (!__Pyx_RefNanny) {
  *   """
  *   PURPOSE:  To create a sotinum with value 1 at the specified imaginary direction
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_5pyoti_6sparse_1e, NULL, __pyx_n_s_pyoti_sparse); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_e_2, __pyx_t_2) < 0) __PYX_ERR(2, 4, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5pyoti_6sparse_1e, NULL, __pyx_n_s_pyoti_sparse); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_e_2, __pyx_t_1) < 0) __PYX_ERR(2, 4, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../src/python/pyoti/cython/sparse/scalar/utils.pxi":43
  * 
@@ -18744,10 +21192,10 @@ if (!__Pyx_RefNanny) {
  *   """
  *   PURPOSE:  Return the derivative selected from a numpy array of sotinums.
  */
-  __pyx_t_2 = PyCFunction_NewEx(&__pyx_mdef_5pyoti_6sparse_3get_deriv, NULL, __pyx_n_s_pyoti_sparse); if (unlikely(!__pyx_t_2)) __PYX_ERR(2, 43, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_deriv, __pyx_t_2) < 0) __PYX_ERR(2, 43, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_5pyoti_6sparse_3get_deriv, NULL, __pyx_n_s_pyoti_sparse); if (unlikely(!__pyx_t_1)) __PYX_ERR(2, 43, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_deriv, __pyx_t_1) < 0) __PYX_ERR(2, 43, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../src/python/pyoti/cython/sparse.pyx":3
  * 
@@ -18756,14 +21204,14 @@ if (!__Pyx_RefNanny) {
  * include "common/directives.pxi"
  * 
  */
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_2)) __PYX_ERR(7, 3, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_t_2, __pyx_kp_u_sotinum___sub___line_499, __pyx_kp_u_PURPOSE_To_define_how_to_subtra) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_kp_u_sotinum___isub___line_557, __pyx_kp_u_PURPOSE_To_define_how_to_subtra_2) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_kp_u_sotinum___mul___line_583, __pyx_kp_u_PURPOSE_To_define_how_to_multip) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_t_2, __pyx_kp_u_sotinum___imul___line_639, __pyx_kp_u_PURPOSE_To_define_how_to_make_a) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_2) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_1 = __Pyx_PyDict_NewPresized(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(7, 3, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_t_1, __pyx_kp_u_sotinum___sub___line_499, __pyx_kp_u_PURPOSE_To_define_how_to_subtra) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_kp_u_sotinum___isub___line_557, __pyx_kp_u_PURPOSE_To_define_how_to_subtra_2) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_kp_u_sotinum___mul___line_583, __pyx_kp_u_PURPOSE_To_define_how_to_multip) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_1, __pyx_kp_u_sotinum___imul___line_639, __pyx_kp_u_PURPOSE_To_define_how_to_make_a) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_1) < 0) __PYX_ERR(7, 3, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../../../opt/anaconda3/envs/pyoti/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1046
  *         raise ImportError("numpy.core.umath failed to import")
@@ -20881,6 +23329,26 @@ bad:
     return NULL;
 }
 #endif
+
+/* GetVTable */
+  static void* __Pyx_GetVtable(PyObject *dict) {
+    void* ptr;
+    PyObject *ob = PyObject_GetItem(dict, __pyx_n_s_pyx_vtable);
+    if (!ob)
+        goto bad;
+#if PY_VERSION_HEX >= 0x02070000
+    ptr = PyCapsule_GetPointer(ob, 0);
+#else
+    ptr = PyCObject_AsVoidPtr(ob);
+#endif
+    if (!ptr && !PyErr_Occurred())
+        PyErr_SetString(PyExc_RuntimeError, "invalid vtable found for imported type");
+    Py_DECREF(ob);
+    return ptr;
+bad:
+    Py_XDECREF(ob);
+    return NULL;
+}
 
 /* Import */
   static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {

@@ -232,10 +232,10 @@ void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     if( reallocate ){
         // Reallocation IS required.
         // Easiest way: Free current memory in dest and allocate new memory.
-        soti_free(dest);
-
+        
         if (dest->flag != 0){
 
+            soti_free(dest);  
             *dest = soti_createEmpty_like( src, dhl);        
 
         } else {
@@ -434,10 +434,11 @@ void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     if( reallocate ){
         // Reallocation IS required.
         // Easiest way: Free current memory in dest and allocate new memory.
-        soti_free(dest);
+        
 
         if (dest->flag != 0){
-            
+
+            soti_free(dest);            
             (*dest) = soti_createEmpty_like( src, dhl);
 
         } else {
@@ -577,7 +578,7 @@ inline sotinum_t soti_init(void){
     
     res.order  = 0;
     res.torder = 0;
-    res.flag   = 0; 
+    res.flag   = 1; 
 
     return res;
 
@@ -705,6 +706,8 @@ inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dh
         res.flag = 1;
 
     } 
+    // Raise flag for OTI number.
+    res.flag = 1;
 
     return res;
 

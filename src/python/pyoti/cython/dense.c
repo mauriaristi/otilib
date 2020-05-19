@@ -30,7 +30,7 @@
         ],
         "name": "pyoti.dense",
         "sources": [
-            "/Users/maristi7/coding/otilib/pyoti/cython/dense.pyx"
+            "/Users/maristi7/coding/otilib/src/python/pyoti/cython/dense.pyx"
         ]
     },
     "module_name": "pyoti.dense"
@@ -1386,7 +1386,7 @@ struct __pyx_opt_args_5pyoti_5dense_4omat_get_imdir {
   PyObject *copy;
 };
 
-/* "../../pyoti/cython/dense/array.pxi":905
+/* "../../src/python/pyoti/cython/dense/array.pxi":905
  * 
  * #***************************************************************************************************
  * cpdef omat addO(omat lhs, omat rhs, omat out = None):             # <<<<<<<<<<<<<<
@@ -1398,7 +1398,7 @@ struct __pyx_opt_args_5pyoti_5dense_addO {
   struct __pyx_obj_5pyoti_5dense_omat *out;
 };
 
-/* "../../pyoti/cython/dense/array.pxi":1016
+/* "../../src/python/pyoti/cython/dense/array.pxi":1016
  * 
  * #*****************************************************************************************************
  * cpdef omat eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -1411,7 +1411,7 @@ struct __pyx_opt_args_5pyoti_5dense_eye {
   __pyx_t_5pyoti_8c_otilib_ord_t order;
 };
 
-/* "../../pyoti/cython/dense/array.pxi":1027
+/* "../../src/python/pyoti/cython/dense/array.pxi":1027
  * 
  * #*****************************************************************************************************
  * cpdef omat zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -1424,7 +1424,7 @@ struct __pyx_opt_args_5pyoti_5dense_zeros {
   __pyx_t_5pyoti_8c_otilib_ord_t order;
 };
 
-/* "../../pyoti/cython/dense/array.pxi":1038
+/* "../../src/python/pyoti/cython/dense/array.pxi":1038
  * 
  * #*****************************************************************************************************
  * cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -1571,7 +1571,7 @@ struct __pyx_vtabstruct_5pyoti_4real_dmat {
 static struct __pyx_vtabstruct_5pyoti_4real_dmat *__pyx_vtabptr_5pyoti_4real_dmat;
 
 
-/* "../../pyoti/cython/dense/num.pxi":9
+/* "../../src/python/pyoti/cython/dense/num.pxi":9
  * # ::::::::::::::::::::::::::::::::::     CLASS  OTINUM    ::::::::::::::::::::::::::::::::::::::::::::
  * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  * cdef class otinum:             # <<<<<<<<<<<<<<
@@ -1587,7 +1587,7 @@ struct __pyx_vtabstruct_5pyoti_5dense_otinum {
 static struct __pyx_vtabstruct_5pyoti_5dense_otinum *__pyx_vtabptr_5pyoti_5dense_otinum;
 
 
-/* "../../pyoti/cython/dense/array.pxi":20
+/* "../../src/python/pyoti/cython/dense/array.pxi":20
  * # ::::::::::::::::::::::::::::::::::     CLASS  OMAT    ::::::::::::::::::::::::::::::::::::::::::::::
  * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  * cdef class omat:             # <<<<<<<<<<<<<<
@@ -1605,7 +1605,7 @@ struct __pyx_vtabstruct_5pyoti_5dense_omat {
 static struct __pyx_vtabstruct_5pyoti_5dense_omat *__pyx_vtabptr_5pyoti_5dense_omat;
 
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":12
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":12
  * # ::::::::::::::::::::::::::::::::::::     CLASS  spr_omat   :::::::::::::::::::::::::::::::::::::::::::
  * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
  * cdef class spr_omat:             # <<<<<<<<<<<<<<
@@ -2710,7 +2710,7 @@ static const char __pyx_k_x[] = "x_{";
     static const char __pyx_k_PURPOSE_To_define_how_to_turn_a[] = "\n    PURPOSE:      To define how to turn a spr_otinum into its opposite\n                  (negative)\n\n    DESCRIPTION:  It overloads the operator \"-\".\n    \n    EXAMPLE:      >>> a = otinum([10.,7.,3.], 2)\n                  >>> -a\n                  otinum([-10.,-7.,-3.], 2)\n    ";
     static const char __pyx_k_Size_mismatch_of_coeffs_and_the[] = "Size mismatch of coeffs and the number of dimensions for nbases: ";
     static const char __pyx_k_Try_0_CSR_matrix_or_1_COO_matri[] = ". Try 0: CSR matrix or 1: COO matrix.";
-    static const char __pyx_k_Users_maristi7_coding_otilib_py[] = "/Users/maristi7/coding/otilib/pyoti/cython/dense/array.pxi";
+    static const char __pyx_k_Users_maristi7_coding_otilib_sr[] = "/Users/maristi7/coding/otilib/src/python/pyoti/cython/dense/array.pxi";
     static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
     static const char __pyx_k_self_arr_cannot_be_converted_to[] = "self.arr cannot be converted to a Python object for pickling";
     static const char __pyx_k_self_num_cannot_be_converted_to[] = "self.num cannot be converted to a Python object for pickling";
@@ -2723,8 +2723,8 @@ static const char __pyx_k_x[] = "x_{";
     static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
     static const char __pyx_k_no_default___reduce___due_to_non[] = "no default __reduce__ due to non-trivial __cinit__";
     static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath failed to import";
-    static const char __pyx_k_Users_maristi7_coding_otilib_py_2[] = "/Users/maristi7/coding/otilib/pyoti/cython/dense/utils.pxi";
-    static const char __pyx_k_Users_maristi7_coding_otilib_py_3[] = "/Users/maristi7/coding/otilib/pyoti/cython/dense/sparse_array.pxi";
+    static const char __pyx_k_Users_maristi7_coding_otilib_sr_2[] = "/Users/maristi7/coding/otilib/src/python/pyoti/cython/dense/utils.pxi";
+    static const char __pyx_k_Users_maristi7_coding_otilib_sr_3[] = "/Users/maristi7/coding/otilib/src/python/pyoti/cython/dense/sparse_array.pxi";
     static const char __pyx_k_Format_string_allocated_too_shor_2[] = "Format string allocated too short.";
     static PyObject *__pyx_kp_s_;
     static PyObject *__pyx_n_s_A;
@@ -2752,9 +2752,9 @@ static const char __pyx_k_x[] = "x_{";
     static PyObject *__pyx_kp_s_Try_0_CSR_matrix_or_1_COO_matri;
     static PyObject *__pyx_n_s_TypeError;
     static PyObject *__pyx_kp_s_Unknown_spr_type;
-    static PyObject *__pyx_kp_s_Users_maristi7_coding_otilib_py;
-    static PyObject *__pyx_kp_s_Users_maristi7_coding_otilib_py_2;
-    static PyObject *__pyx_kp_s_Users_maristi7_coding_otilib_py_3;
+    static PyObject *__pyx_kp_s_Users_maristi7_coding_otilib_sr;
+    static PyObject *__pyx_kp_s_Users_maristi7_coding_otilib_sr_2;
+    static PyObject *__pyx_kp_s_Users_maristi7_coding_otilib_sr_3;
     static PyObject *__pyx_n_s_ValueError;
     static PyObject *__pyx_kp_s__12;
     static PyObject *__pyx_kp_s__13;
@@ -3258,7 +3258,7 @@ static PyObject *__pyx_codeobj__56;
 static PyObject *__pyx_codeobj__58;
 /* Late includes */
 
-/* "../../pyoti/cython/dense/num.pxi":46
+/* "../../src/python/pyoti/cython/dense/num.pxi":46
  *   #***************************************************************************************************
  *   # not _cinit_ to avoid creation with _new_
  *   def __init__(self, coeffs, ord_t order, bases_t nbases = 1,uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -3387,7 +3387,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
   uint64_t __pyx_t_13;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":73
+  /* "../../src/python/pyoti/cython/dense/num.pxi":73
  *     cdef uint64_t sizeOfCoefs, newSizeOfCoefs, i, j, ordi
  * 
  *     self.FLAGS = FLAGS             # <<<<<<<<<<<<<<
@@ -3396,7 +3396,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
  */
   __pyx_v_self->FLAGS = __pyx_v_FLAGS;
 
-  /* "../../pyoti/cython/dense/num.pxi":77
+  /* "../../src/python/pyoti/cython/dense/num.pxi":77
  * 
  *     # create a list to handle the index numbers
  *     if type(coeffs) in number_types:             # <<<<<<<<<<<<<<
@@ -3410,7 +3410,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/num.pxi":79
+    /* "../../src/python/pyoti/cython/dense/num.pxi":79
  *     if type(coeffs) in number_types:
  * 
  *       self.num = oti_createZero( nbases, order, dhl);             # <<<<<<<<<<<<<<
@@ -3419,7 +3419,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
  */
     __pyx_v_self->num = oti_createZero(__pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":80
+    /* "../../src/python/pyoti/cython/dense/num.pxi":80
  * 
  *       self.num = oti_createZero( nbases, order, dhl);
  *       self.num.re = coeffs             # <<<<<<<<<<<<<<
@@ -3429,7 +3429,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_coeffs); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 80, __pyx_L1_error)
     __pyx_v_self->num.re = __pyx_t_4;
 
-    /* "../../pyoti/cython/dense/num.pxi":77
+    /* "../../src/python/pyoti/cython/dense/num.pxi":77
  * 
  *     # create a list to handle the index numbers
  *     if type(coeffs) in number_types:             # <<<<<<<<<<<<<<
@@ -3439,7 +3439,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":84
+  /* "../../src/python/pyoti/cython/dense/num.pxi":84
  *     else:
  * 
  *       sizeOfCoefs = len(coeffs) - 1             # <<<<<<<<<<<<<<
@@ -3450,7 +3450,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
     __pyx_t_5 = PyObject_Length(__pyx_v_coeffs); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 84, __pyx_L1_error)
     __pyx_v_sizeOfCoefs = (__pyx_t_5 - 1);
 
-    /* "../../pyoti/cython/dense/num.pxi":85
+    /* "../../src/python/pyoti/cython/dense/num.pxi":85
  * 
  *       sizeOfCoefs = len(coeffs) - 1
  *       self.num = oti_createZero( nbases, order, dhl);             # <<<<<<<<<<<<<<
@@ -3459,7 +3459,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
  */
     __pyx_v_self->num = oti_createZero(__pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":86
+    /* "../../src/python/pyoti/cython/dense/num.pxi":86
  *       sizeOfCoefs = len(coeffs) - 1
  *       self.num = oti_createZero( nbases, order, dhl);
  *       self.num.re = coeffs[0]             # <<<<<<<<<<<<<<
@@ -3472,7 +3472,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_self->num.re = __pyx_t_4;
 
-    /* "../../pyoti/cython/dense/num.pxi":88
+    /* "../../src/python/pyoti/cython/dense/num.pxi":88
  *       self.num.re = coeffs[0]
  * 
  *       if (sizeOfCoefs != self.num.ndir):             # <<<<<<<<<<<<<<
@@ -3482,7 +3482,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
     __pyx_t_3 = ((__pyx_v_sizeOfCoefs != __pyx_v_self->num.ndir) != 0);
     if (__pyx_t_3) {
 
-      /* "../../pyoti/cython/dense/num.pxi":90
+      /* "../../src/python/pyoti/cython/dense/num.pxi":90
  *       if (sizeOfCoefs != self.num.ndir):
  *         print("Size mismatch of coeffs and the number of dimensions for nbases: "+
  *           str(nbases) + " and order: "+str(order)+".")             # <<<<<<<<<<<<<<
@@ -3495,7 +3495,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/num.pxi":89
+      /* "../../src/python/pyoti/cython/dense/num.pxi":89
  * 
  *       if (sizeOfCoefs != self.num.ndir):
  *         print("Size mismatch of coeffs and the number of dimensions for nbases: "+             # <<<<<<<<<<<<<<
@@ -3506,7 +3506,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-      /* "../../pyoti/cython/dense/num.pxi":90
+      /* "../../src/python/pyoti/cython/dense/num.pxi":90
  *       if (sizeOfCoefs != self.num.ndir):
  *         print("Size mismatch of coeffs and the number of dimensions for nbases: "+
  *           str(nbases) + " and order: "+str(order)+".")             # <<<<<<<<<<<<<<
@@ -3531,7 +3531,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
       if (__Pyx_PrintOne(0, __pyx_t_7) < 0) __PYX_ERR(1, 89, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "../../pyoti/cython/dense/num.pxi":88
+      /* "../../src/python/pyoti/cython/dense/num.pxi":88
  *       self.num.re = coeffs[0]
  * 
  *       if (sizeOfCoefs != self.num.ndir):             # <<<<<<<<<<<<<<
@@ -3541,7 +3541,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
       goto __pyx_L4;
     }
 
-    /* "../../pyoti/cython/dense/num.pxi":93
+    /* "../../src/python/pyoti/cython/dense/num.pxi":93
  *       else:
  * 
  *         j = 1             # <<<<<<<<<<<<<<
@@ -3551,7 +3551,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
     /*else*/ {
       __pyx_v_j = 1;
 
-      /* "../../pyoti/cython/dense/num.pxi":95
+      /* "../../src/python/pyoti/cython/dense/num.pxi":95
  *         j = 1
  * 
  *         for ordi in range(self.num.order):             # <<<<<<<<<<<<<<
@@ -3563,7 +3563,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
       for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
         __pyx_v_ordi = __pyx_t_10;
 
-        /* "../../pyoti/cython/dense/num.pxi":97
+        /* "../../src/python/pyoti/cython/dense/num.pxi":97
  *         for ordi in range(self.num.order):
  * 
  *           for i in range(self.num.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -3575,7 +3575,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
         for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
           __pyx_v_i = __pyx_t_13;
 
-          /* "../../pyoti/cython/dense/num.pxi":99
+          /* "../../src/python/pyoti/cython/dense/num.pxi":99
  *           for i in range(self.num.p_ndpo[ordi]):
  * 
  *             self.num.p_im[ordi][i] = coeffs[j]             # <<<<<<<<<<<<<<
@@ -3588,7 +3588,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
           __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
           ((__pyx_v_self->num.p_im[__pyx_v_ordi])[__pyx_v_i]) = __pyx_t_4;
 
-          /* "../../pyoti/cython/dense/num.pxi":100
+          /* "../../src/python/pyoti/cython/dense/num.pxi":100
  * 
  *             self.num.p_im[ordi][i] = coeffs[j]
  *             j += 1             # <<<<<<<<<<<<<<
@@ -3603,7 +3603,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/num.pxi":46
+  /* "../../src/python/pyoti/cython/dense/num.pxi":46
  *   #***************************************************************************************************
  *   # not _cinit_ to avoid creation with _new_
  *   def __init__(self, coeffs, ord_t order, bases_t nbases = 1,uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -3625,7 +3625,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum___init__(struct __pyx_obj_5pyoti_5dens
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":113
+/* "../../src/python/pyoti/cython/dense/num.pxi":113
  * 
  *   #***************************************************************************************************
  *   def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -3649,7 +3649,7 @@ static void __pyx_pf_5pyoti_5dense_6otinum_2__dealloc__(struct __pyx_obj_5pyoti_
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":122
+  /* "../../src/python/pyoti/cython/dense/num.pxi":122
  *     #*************************************************************************************************
  *     # print("Deallocating memory of otinum.")
  *     if self.FLAGS & 1: # If memory is owned by this otinum.             # <<<<<<<<<<<<<<
@@ -3659,7 +3659,7 @@ static void __pyx_pf_5pyoti_5dense_6otinum_2__dealloc__(struct __pyx_obj_5pyoti_
   __pyx_t_1 = ((__pyx_v_self->FLAGS & 1) != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/num.pxi":124
+    /* "../../src/python/pyoti/cython/dense/num.pxi":124
  *     if self.FLAGS & 1: # If memory is owned by this otinum.
  *       # print('Freeing otinum')
  *       oti_free(&self.num)             # <<<<<<<<<<<<<<
@@ -3668,7 +3668,7 @@ static void __pyx_pf_5pyoti_5dense_6otinum_2__dealloc__(struct __pyx_obj_5pyoti_
  */
     oti_free((&__pyx_v_self->num));
 
-    /* "../../pyoti/cython/dense/num.pxi":122
+    /* "../../src/python/pyoti/cython/dense/num.pxi":122
  *     #*************************************************************************************************
  *     # print("Deallocating memory of otinum.")
  *     if self.FLAGS & 1: # If memory is owned by this otinum.             # <<<<<<<<<<<<<<
@@ -3677,7 +3677,7 @@ static void __pyx_pf_5pyoti_5dense_6otinum_2__dealloc__(struct __pyx_obj_5pyoti_
  */
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":113
+  /* "../../src/python/pyoti/cython/dense/num.pxi":113
  * 
  *   #***************************************************************************************************
  *   def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -3689,7 +3689,7 @@ static void __pyx_pf_5pyoti_5dense_6otinum_2__dealloc__(struct __pyx_obj_5pyoti_
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../pyoti/cython/dense/num.pxi":136
+/* "../../src/python/pyoti/cython/dense/num.pxi":136
  *   #***************************************************************************************************
  *   @property
  *   def  ndir(self):             # <<<<<<<<<<<<<<
@@ -3716,7 +3716,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_4ndir___get__(struct __pyx_obj_5
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":142
+  /* "../../src/python/pyoti/cython/dense/num.pxi":142
  *     #*************************************************************************************************
  * 
  *     return self.num.ndir             # <<<<<<<<<<<<<<
@@ -3730,7 +3730,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_4ndir___get__(struct __pyx_obj_5
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":136
+  /* "../../src/python/pyoti/cython/dense/num.pxi":136
  *   #***************************************************************************************************
  *   @property
  *   def  ndir(self):             # <<<<<<<<<<<<<<
@@ -3749,7 +3749,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_4ndir___get__(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":148
+/* "../../src/python/pyoti/cython/dense/num.pxi":148
  *   #***************************************************************************************************
  *   @property
  *   def  nbases(self):             # <<<<<<<<<<<<<<
@@ -3776,7 +3776,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_6nbases___get__(struct __pyx_obj
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":154
+  /* "../../src/python/pyoti/cython/dense/num.pxi":154
  *     #*************************************************************************************************
  * 
  *     return self.num.nbases             # <<<<<<<<<<<<<<
@@ -3790,7 +3790,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_6nbases___get__(struct __pyx_obj
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":148
+  /* "../../src/python/pyoti/cython/dense/num.pxi":148
  *   #***************************************************************************************************
  *   @property
  *   def  nbases(self):             # <<<<<<<<<<<<<<
@@ -3809,7 +3809,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_6nbases___get__(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":161
+/* "../../src/python/pyoti/cython/dense/num.pxi":161
  *   #***************************************************************************************************
  *   @property
  *   def  order(self):             # <<<<<<<<<<<<<<
@@ -3836,7 +3836,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_5order___get__(struct __pyx_obj_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":170
+  /* "../../src/python/pyoti/cython/dense/num.pxi":170
  *     #*************************************************************************************************
  * 
  *     return self.num.order             # <<<<<<<<<<<<<<
@@ -3850,7 +3850,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_5order___get__(struct __pyx_obj_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":161
+  /* "../../src/python/pyoti/cython/dense/num.pxi":161
  *   #***************************************************************************************************
  *   @property
  *   def  order(self):             # <<<<<<<<<<<<<<
@@ -3869,7 +3869,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_5order___get__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":178
+/* "../../src/python/pyoti/cython/dense/num.pxi":178
  *   #***************************************************************************************************
  *   @staticmethod
  *   cdef otinum create(otinum_t* num, uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -3891,7 +3891,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_6otinum_crea
     }
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":197
+  /* "../../src/python/pyoti/cython/dense/num.pxi":197
  * 
  *     # create new empty object:
  *     cdef otinum otin = <otinum> otinum.__new__(otinum)             # <<<<<<<<<<<<<<
@@ -3906,7 +3906,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_6otinum_crea
   __pyx_v_otin = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/num.pxi":199
+  /* "../../src/python/pyoti/cython/dense/num.pxi":199
  *     cdef otinum otin = <otinum> otinum.__new__(otinum)
  * 
  *     otin.num  = num[0]             # <<<<<<<<<<<<<<
@@ -3915,7 +3915,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_6otinum_crea
  */
   __pyx_v_otin->num = (__pyx_v_num[0]);
 
-  /* "../../pyoti/cython/dense/num.pxi":200
+  /* "../../src/python/pyoti/cython/dense/num.pxi":200
  * 
  *     otin.num  = num[0]
  *     otin.FLAGS = FLAGS             # <<<<<<<<<<<<<<
@@ -3924,7 +3924,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_6otinum_crea
  */
   __pyx_v_otin->FLAGS = __pyx_v_FLAGS;
 
-  /* "../../pyoti/cython/dense/num.pxi":202
+  /* "../../src/python/pyoti/cython/dense/num.pxi":202
  *     otin.FLAGS = FLAGS
  * 
  *     return otin             # <<<<<<<<<<<<<<
@@ -3936,7 +3936,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_6otinum_crea
   __pyx_r = __pyx_v_otin;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":178
+  /* "../../src/python/pyoti/cython/dense/num.pxi":178
  *   #***************************************************************************************************
  *   @staticmethod
  *   cdef otinum create(otinum_t* num, uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -3957,7 +3957,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_6otinum_crea
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":208
+/* "../../src/python/pyoti/cython/dense/num.pxi":208
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -3990,7 +3990,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_4__repr__(struct __pyx_obj_5pyot
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":217
+  /* "../../src/python/pyoti/cython/dense/num.pxi":217
  * 
  * 
  *     return self.__str__()             # <<<<<<<<<<<<<<
@@ -4019,7 +4019,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_4__repr__(struct __pyx_obj_5pyot
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":208
+  /* "../../src/python/pyoti/cython/dense/num.pxi":208
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -4040,7 +4040,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_4__repr__(struct __pyx_obj_5pyot
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":222
+/* "../../src/python/pyoti/cython/dense/num.pxi":222
  * 
  *   #***************************************************************************************************
  *   def short_repr(self):             # <<<<<<<<<<<<<<
@@ -4073,7 +4073,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_6short_repr(struct __pyx_obj_5py
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("short_repr", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":232
+  /* "../../src/python/pyoti/cython/dense/num.pxi":232
  *     global dhl
  * 
  *     head      = 'otinum('             # <<<<<<<<<<<<<<
@@ -4083,7 +4083,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_6short_repr(struct __pyx_obj_5py
   __Pyx_INCREF(__pyx_kp_s_otinum);
   __pyx_v_head = __pyx_kp_s_otinum;
 
-  /* "../../pyoti/cython/dense/num.pxi":233
+  /* "../../src/python/pyoti/cython/dense/num.pxi":233
  * 
  *     head      = 'otinum('
  *     body      = ''             # <<<<<<<<<<<<<<
@@ -4093,7 +4093,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_6short_repr(struct __pyx_obj_5py
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_body = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/num.pxi":234
+  /* "../../src/python/pyoti/cython/dense/num.pxi":234
  *     head      = 'otinum('
  *     body      = ''
  *     tail = str(self.num.re)+", ndir: "+str(self.num.ndir)+', order: '+str(self.num.order)+')'             # <<<<<<<<<<<<<<
@@ -4135,7 +4135,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_6short_repr(struct __pyx_obj_5py
   __pyx_v_tail = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/num.pxi":236
+  /* "../../src/python/pyoti/cython/dense/num.pxi":236
  *     tail = str(self.num.re)+", ndir: "+str(self.num.ndir)+', order: '+str(self.num.order)+')'
  * 
  *     return (head + body + tail)             # <<<<<<<<<<<<<<
@@ -4152,7 +4152,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_6short_repr(struct __pyx_obj_5py
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":222
+  /* "../../src/python/pyoti/cython/dense/num.pxi":222
  * 
  *   #***************************************************************************************************
  *   def short_repr(self):             # <<<<<<<<<<<<<<
@@ -4176,7 +4176,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_6short_repr(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":241
+/* "../../src/python/pyoti/cython/dense/num.pxi":241
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -4225,7 +4225,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
   PyObject *__pyx_t_13 = NULL;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":257
+  /* "../../src/python/pyoti/cython/dense/num.pxi":257
  *     cdef bases_t* dirs;
  * 
  *     head      = ''             # <<<<<<<<<<<<<<
@@ -4235,7 +4235,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_head = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/num.pxi":258
+  /* "../../src/python/pyoti/cython/dense/num.pxi":258
  * 
  *     head      = ''
  *     body      = ''             # <<<<<<<<<<<<<<
@@ -4245,7 +4245,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_body = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/num.pxi":260
+  /* "../../src/python/pyoti/cython/dense/num.pxi":260
  *     body      = ''
  * 
  *     body += '%g'%self.num.re             # <<<<<<<<<<<<<<
@@ -4263,7 +4263,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/num.pxi":262
+  /* "../../src/python/pyoti/cython/dense/num.pxi":262
  *     body += '%g'%self.num.re
  * 
  *     for ordi in range(0,self.num.order):             # <<<<<<<<<<<<<<
@@ -4275,7 +4275,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_ordi = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/num.pxi":264
+    /* "../../src/python/pyoti/cython/dense/num.pxi":264
  *     for ordi in range(0,self.num.order):
  * 
  *       for i in range(self.num.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -4287,7 +4287,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_i = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/num.pxi":266
+      /* "../../src/python/pyoti/cython/dense/num.pxi":266
  *       for i in range(self.num.p_ndpo[ordi]):
  * 
  *         num = '%+g'%self.num.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -4302,7 +4302,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
       __Pyx_XDECREF_SET(__pyx_v_num, __pyx_t_2);
       __pyx_t_2 = 0;
 
-      /* "../../pyoti/cython/dense/num.pxi":267
+      /* "../../src/python/pyoti/cython/dense/num.pxi":267
  * 
  *         num = '%+g'%self.num.p_im[ordi][i]
  *         body += ' '+num[0]+" "+num[1:]             # <<<<<<<<<<<<<<
@@ -4329,7 +4329,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/num.pxi":268
+      /* "../../src/python/pyoti/cython/dense/num.pxi":268
  *         num = '%+g'%self.num.p_im[ordi][i]
  *         body += ' '+num[0]+" "+num[1:]
  *         body += ' * e('             # <<<<<<<<<<<<<<
@@ -4341,7 +4341,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/num.pxi":270
+      /* "../../src/python/pyoti/cython/dense/num.pxi":270
  *         body += ' * e('
  * 
  *         body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')             # <<<<<<<<<<<<<<
@@ -4418,7 +4418,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/num.pxi":271
+      /* "../../src/python/pyoti/cython/dense/num.pxi":271
  * 
  *         body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')
  *         body += ")"             # <<<<<<<<<<<<<<
@@ -4432,7 +4432,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
     }
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":277
+  /* "../../src/python/pyoti/cython/dense/num.pxi":277
  *     # end for
  * 
  *     tail = ''             # <<<<<<<<<<<<<<
@@ -4442,7 +4442,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_tail = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/num.pxi":279
+  /* "../../src/python/pyoti/cython/dense/num.pxi":279
  *     tail = ''
  * 
  *     return (head + body + tail)             # <<<<<<<<<<<<<<
@@ -4459,7 +4459,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
   __pyx_t_9 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":241
+  /* "../../src/python/pyoti/cython/dense/num.pxi":241
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -4487,7 +4487,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_8__str__(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":286
+/* "../../src/python/pyoti/cython/dense/num.pxi":286
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self, list item):             # <<<<<<<<<<<<<<
@@ -4527,7 +4527,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_10__getitem__(struct __pyx_obj_5
   __pyx_t_5pyoti_8c_otilib_ord_t __pyx_t_3;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":293
+  /* "../../src/python/pyoti/cython/dense/num.pxi":293
  *     global dhl
  * 
  *     cdef imdir_t idx = item[ZERO]             # <<<<<<<<<<<<<<
@@ -4544,7 +4544,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_10__getitem__(struct __pyx_obj_5
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_idx = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/num.pxi":294
+  /* "../../src/python/pyoti/cython/dense/num.pxi":294
  * 
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]             # <<<<<<<<<<<<<<
@@ -4561,7 +4561,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_10__getitem__(struct __pyx_obj_5
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_order = __pyx_t_3;
 
-  /* "../../pyoti/cython/dense/num.pxi":295
+  /* "../../src/python/pyoti/cython/dense/num.pxi":295
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]
  *     return oti_get( idx, order, &self.num, dhl)             # <<<<<<<<<<<<<<
@@ -4575,7 +4575,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_10__getitem__(struct __pyx_obj_5
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":286
+  /* "../../src/python/pyoti/cython/dense/num.pxi":286
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self, list item):             # <<<<<<<<<<<<<<
@@ -4594,7 +4594,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_10__getitem__(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":301
+/* "../../src/python/pyoti/cython/dense/num.pxi":301
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, list item, coeff_t value):             # <<<<<<<<<<<<<<
@@ -4646,7 +4646,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum_12__setitem__(struct __pyx_obj_5pyoti_
   __pyx_t_5pyoti_8c_otilib_ord_t __pyx_t_3;
   __Pyx_RefNannySetupContext("__setitem__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":312
+  /* "../../src/python/pyoti/cython/dense/num.pxi":312
  *     global dhl
  * 
  *     cdef int i = 0, j = 1             # <<<<<<<<<<<<<<
@@ -4656,7 +4656,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum_12__setitem__(struct __pyx_obj_5pyoti_
   __pyx_v_i = 0;
   __pyx_v_j = 1;
 
-  /* "../../pyoti/cython/dense/num.pxi":313
+  /* "../../src/python/pyoti/cython/dense/num.pxi":313
  * 
  *     cdef int i = 0, j = 1
  *     cdef imdir_t index = item[i]             # <<<<<<<<<<<<<<
@@ -4673,7 +4673,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum_12__setitem__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_index = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/num.pxi":314
+  /* "../../src/python/pyoti/cython/dense/num.pxi":314
  *     cdef int i = 0, j = 1
  *     cdef imdir_t index = item[i]
  *     cdef ord_t   order = item[j]             # <<<<<<<<<<<<<<
@@ -4690,7 +4690,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum_12__setitem__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_order = __pyx_t_3;
 
-  /* "../../pyoti/cython/dense/num.pxi":316
+  /* "../../src/python/pyoti/cython/dense/num.pxi":316
  *     cdef ord_t   order = item[j]
  * 
  *     oti_setIm_IdxOrd( value, index, order, &self.num, dhl)             # <<<<<<<<<<<<<<
@@ -4699,7 +4699,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum_12__setitem__(struct __pyx_obj_5pyoti_
  */
   oti_setIm_IdxOrd(__pyx_v_value, __pyx_v_index, __pyx_v_order, (&__pyx_v_self->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/num.pxi":301
+  /* "../../src/python/pyoti/cython/dense/num.pxi":301
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, list item, coeff_t value):             # <<<<<<<<<<<<<<
@@ -4719,7 +4719,7 @@ static int __pyx_pf_5pyoti_5dense_6otinum_12__setitem__(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":325
+/* "../../src/python/pyoti/cython/dense/num.pxi":325
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -4751,7 +4751,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_14__neg__(struct __pyx_obj_5pyot
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__neg__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":339
+  /* "../../src/python/pyoti/cython/dense/num.pxi":339
  *     global dhl
  * 
  *     cdef otinum_t newnum = oti_neg(&self.num, dhl)             # <<<<<<<<<<<<<<
@@ -4760,7 +4760,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_14__neg__(struct __pyx_obj_5pyot
  */
   __pyx_v_newnum = oti_neg((&__pyx_v_self->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/num.pxi":341
+  /* "../../src/python/pyoti/cython/dense/num.pxi":341
  *     cdef otinum_t newnum = oti_neg(&self.num, dhl)
  * 
  *     return otinum.create(&newnum)             # <<<<<<<<<<<<<<
@@ -4774,7 +4774,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_14__neg__(struct __pyx_obj_5pyot
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":325
+  /* "../../src/python/pyoti/cython/dense/num.pxi":325
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -4793,7 +4793,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_14__neg__(struct __pyx_obj_5pyot
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":348
+/* "../../src/python/pyoti/cython/dense/num.pxi":348
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other_in):             # <<<<<<<<<<<<<<
@@ -4832,7 +4832,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":370
+  /* "../../src/python/pyoti/cython/dense/num.pxi":370
  *       otinum tmp1, tmp2
  * 
  *     type1 = type(self)     # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -4842,7 +4842,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_type1 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/num.pxi":371
+  /* "../../src/python/pyoti/cython/dense/num.pxi":371
  * 
  *     type1 = type(self)     # takes 100 ns ...
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -4852,7 +4852,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/num.pxi":377
+  /* "../../src/python/pyoti/cython/dense/num.pxi":377
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -4863,7 +4863,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/num.pxi":378
+    /* "../../src/python/pyoti/cython/dense/num.pxi":378
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -4876,7 +4876,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":379
+    /* "../../src/python/pyoti/cython/dense/num.pxi":379
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -4889,7 +4889,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":380
+    /* "../../src/python/pyoti/cython/dense/num.pxi":380
  *       tmp1 = self
  *       tmp2 = other_in
  *       res =  oti_sum_oo(&tmp1.num, &tmp2.num, dhl);             # <<<<<<<<<<<<<<
@@ -4898,7 +4898,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
  */
     __pyx_v_res = oti_sum_oo((&__pyx_v_tmp1->num), (&__pyx_v_tmp2->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":377
+    /* "../../src/python/pyoti/cython/dense/num.pxi":377
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -4908,7 +4908,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":382
+  /* "../../src/python/pyoti/cython/dense/num.pxi":382
  *       res =  oti_sum_oo(&tmp1.num, &tmp2.num, dhl);
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -4922,7 +4922,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/num.pxi":384
+    /* "../../src/python/pyoti/cython/dense/num.pxi":384
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -4935,7 +4935,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":385
+    /* "../../src/python/pyoti/cython/dense/num.pxi":385
  * 
  *       tmp1 = self
  *       res = oti_sum_ro( other_in, &tmp1.num, dhl);             # <<<<<<<<<<<<<<
@@ -4945,7 +4945,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other_in); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 385, __pyx_L1_error)
     __pyx_v_res = oti_sum_ro(__pyx_t_4, (&__pyx_v_tmp1->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":382
+    /* "../../src/python/pyoti/cython/dense/num.pxi":382
  *       res =  oti_sum_oo(&tmp1.num, &tmp2.num, dhl);
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -4955,7 +4955,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":387
+  /* "../../src/python/pyoti/cython/dense/num.pxi":387
  *       res = oti_sum_ro( other_in, &tmp1.num, dhl);
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -4969,7 +4969,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/num.pxi":389
+    /* "../../src/python/pyoti/cython/dense/num.pxi":389
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
  * 
  *       tmp1 = other_in             # <<<<<<<<<<<<<<
@@ -4982,7 +4982,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":390
+    /* "../../src/python/pyoti/cython/dense/num.pxi":390
  * 
  *       tmp1 = other_in
  *       res = oti_sum_ro( self, &tmp1.num, dhl);             # <<<<<<<<<<<<<<
@@ -4992,7 +4992,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 390, __pyx_L1_error)
     __pyx_v_res = oti_sum_ro(__pyx_t_4, (&__pyx_v_tmp1->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":387
+    /* "../../src/python/pyoti/cython/dense/num.pxi":387
  *       res = oti_sum_ro( other_in, &tmp1.num, dhl);
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -5002,7 +5002,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":394
+  /* "../../src/python/pyoti/cython/dense/num.pxi":394
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -5017,7 +5017,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/num.pxi":399
+  /* "../../src/python/pyoti/cython/dense/num.pxi":399
  * 
  * 
  *     return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -5031,7 +5031,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":348
+  /* "../../src/python/pyoti/cython/dense/num.pxi":348
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5054,7 +5054,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_16__add__(PyObject *__pyx_v_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":405
+/* "../../src/python/pyoti/cython/dense/num.pxi":405
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5085,7 +5085,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_18__iadd__(struct __pyx_obj_5pyo
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__iadd__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":415
+  /* "../../src/python/pyoti/cython/dense/num.pxi":415
  *     #*************************************************************************************************
  * 
  *     return self + other_in             # <<<<<<<<<<<<<<
@@ -5099,7 +5099,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_18__iadd__(struct __pyx_obj_5pyo
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":405
+  /* "../../src/python/pyoti/cython/dense/num.pxi":405
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5118,7 +5118,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_18__iadd__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":421
+/* "../../src/python/pyoti/cython/dense/num.pxi":421
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5157,7 +5157,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__sub__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":436
+  /* "../../src/python/pyoti/cython/dense/num.pxi":436
  *       otinum tmp1, tmp2
  * 
  *     type1 = type(self)     # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -5167,7 +5167,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_type1 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/num.pxi":437
+  /* "../../src/python/pyoti/cython/dense/num.pxi":437
  * 
  *     type1 = type(self)     # takes 100 ns ...
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -5177,7 +5177,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/num.pxi":443
+  /* "../../src/python/pyoti/cython/dense/num.pxi":443
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -5188,7 +5188,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/num.pxi":444
+    /* "../../src/python/pyoti/cython/dense/num.pxi":444
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -5201,7 +5201,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":445
+    /* "../../src/python/pyoti/cython/dense/num.pxi":445
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -5214,7 +5214,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":446
+    /* "../../src/python/pyoti/cython/dense/num.pxi":446
  *       tmp1 = self
  *       tmp2 = other_in
  *       res =  oti_sub_oo(&tmp1.num, &tmp2.num, dhl);             # <<<<<<<<<<<<<<
@@ -5223,7 +5223,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
  */
     __pyx_v_res = oti_sub_oo((&__pyx_v_tmp1->num), (&__pyx_v_tmp2->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":443
+    /* "../../src/python/pyoti/cython/dense/num.pxi":443
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -5233,7 +5233,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":448
+  /* "../../src/python/pyoti/cython/dense/num.pxi":448
  *       res =  oti_sub_oo(&tmp1.num, &tmp2.num, dhl);
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -5247,7 +5247,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/num.pxi":450
+    /* "../../src/python/pyoti/cython/dense/num.pxi":450
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -5260,7 +5260,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":451
+    /* "../../src/python/pyoti/cython/dense/num.pxi":451
  * 
  *       tmp1 = self
  *       res = oti_sub_or( &tmp1.num, other_in, dhl);             # <<<<<<<<<<<<<<
@@ -5270,7 +5270,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other_in); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 451, __pyx_L1_error)
     __pyx_v_res = oti_sub_or((&__pyx_v_tmp1->num), __pyx_t_4, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":448
+    /* "../../src/python/pyoti/cython/dense/num.pxi":448
  *       res =  oti_sub_oo(&tmp1.num, &tmp2.num, dhl);
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -5280,7 +5280,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":453
+  /* "../../src/python/pyoti/cython/dense/num.pxi":453
  *       res = oti_sub_or( &tmp1.num, other_in, dhl);
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -5294,7 +5294,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/num.pxi":455
+    /* "../../src/python/pyoti/cython/dense/num.pxi":455
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
  * 
  *       tmp1 = other_in             # <<<<<<<<<<<<<<
@@ -5307,7 +5307,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":456
+    /* "../../src/python/pyoti/cython/dense/num.pxi":456
  * 
  *       tmp1 = other_in
  *       res = oti_sub_ro( self, &tmp1.num, dhl);             # <<<<<<<<<<<<<<
@@ -5317,7 +5317,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 456, __pyx_L1_error)
     __pyx_v_res = oti_sub_ro(__pyx_t_4, (&__pyx_v_tmp1->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":453
+    /* "../../src/python/pyoti/cython/dense/num.pxi":453
  *       res = oti_sub_or( &tmp1.num, other_in, dhl);
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -5327,7 +5327,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":460
+  /* "../../src/python/pyoti/cython/dense/num.pxi":460
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -5342,7 +5342,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/num.pxi":464
+  /* "../../src/python/pyoti/cython/dense/num.pxi":464
  *     # end if
  * 
  *     return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -5356,7 +5356,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":421
+  /* "../../src/python/pyoti/cython/dense/num.pxi":421
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5379,7 +5379,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_20__sub__(PyObject *__pyx_v_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":471
+/* "../../src/python/pyoti/cython/dense/num.pxi":471
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5410,7 +5410,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_22__isub__(struct __pyx_obj_5pyo
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__isub__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":483
+  /* "../../src/python/pyoti/cython/dense/num.pxi":483
  *     #*************************************************************************************************
  * 
  *     return self - other_in             # <<<<<<<<<<<<<<
@@ -5424,7 +5424,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_22__isub__(struct __pyx_obj_5pyo
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":471
+  /* "../../src/python/pyoti/cython/dense/num.pxi":471
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5443,7 +5443,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_22__isub__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":489
+/* "../../src/python/pyoti/cython/dense/num.pxi":489
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5482,7 +5482,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__mul__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":506
+  /* "../../src/python/pyoti/cython/dense/num.pxi":506
  *       otinum tmp1, tmp2
  * 
  *     type1 = type(self)     # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -5492,7 +5492,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_type1 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/num.pxi":507
+  /* "../../src/python/pyoti/cython/dense/num.pxi":507
  * 
  *     type1 = type(self)     # takes 100 ns ...
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -5502,7 +5502,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/num.pxi":513
+  /* "../../src/python/pyoti/cython/dense/num.pxi":513
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -5513,7 +5513,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/num.pxi":514
+    /* "../../src/python/pyoti/cython/dense/num.pxi":514
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -5526,7 +5526,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":515
+    /* "../../src/python/pyoti/cython/dense/num.pxi":515
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -5539,7 +5539,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":516
+    /* "../../src/python/pyoti/cython/dense/num.pxi":516
  *       tmp1 = self
  *       tmp2 = other_in
  *       res =  oti_mul_oo(&tmp1.num, &tmp2.num, dhl);             # <<<<<<<<<<<<<<
@@ -5548,7 +5548,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
  */
     __pyx_v_res = oti_mul_oo((&__pyx_v_tmp1->num), (&__pyx_v_tmp2->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":513
+    /* "../../src/python/pyoti/cython/dense/num.pxi":513
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -5558,7 +5558,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":518
+  /* "../../src/python/pyoti/cython/dense/num.pxi":518
  *       res =  oti_mul_oo(&tmp1.num, &tmp2.num, dhl);
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -5572,7 +5572,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/num.pxi":520
+    /* "../../src/python/pyoti/cython/dense/num.pxi":520
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -5585,7 +5585,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":521
+    /* "../../src/python/pyoti/cython/dense/num.pxi":521
  * 
  *       tmp1 = self
  *       res = oti_mul_ro( other_in, &tmp1.num, dhl);             # <<<<<<<<<<<<<<
@@ -5595,7 +5595,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other_in); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 521, __pyx_L1_error)
     __pyx_v_res = oti_mul_ro(__pyx_t_4, (&__pyx_v_tmp1->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":518
+    /* "../../src/python/pyoti/cython/dense/num.pxi":518
  *       res =  oti_mul_oo(&tmp1.num, &tmp2.num, dhl);
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -5605,7 +5605,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":523
+  /* "../../src/python/pyoti/cython/dense/num.pxi":523
  *       res = oti_mul_ro( other_in, &tmp1.num, dhl);
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -5619,7 +5619,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/num.pxi":525
+    /* "../../src/python/pyoti/cython/dense/num.pxi":525
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
  * 
  *       tmp1 = other_in             # <<<<<<<<<<<<<<
@@ -5632,7 +5632,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":526
+    /* "../../src/python/pyoti/cython/dense/num.pxi":526
  * 
  *       tmp1 = other_in
  *       res = oti_mul_ro( self, &tmp1.num, dhl);             # <<<<<<<<<<<<<<
@@ -5642,7 +5642,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 526, __pyx_L1_error)
     __pyx_v_res = oti_mul_ro(__pyx_t_4, (&__pyx_v_tmp1->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":523
+    /* "../../src/python/pyoti/cython/dense/num.pxi":523
  *       res = oti_mul_ro( other_in, &tmp1.num, dhl);
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -5652,7 +5652,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":530
+  /* "../../src/python/pyoti/cython/dense/num.pxi":530
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -5667,7 +5667,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/num.pxi":534
+  /* "../../src/python/pyoti/cython/dense/num.pxi":534
  *     # end if
  * 
  *     return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -5681,7 +5681,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":489
+  /* "../../src/python/pyoti/cython/dense/num.pxi":489
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5704,7 +5704,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_24__mul__(PyObject *__pyx_v_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":540
+/* "../../src/python/pyoti/cython/dense/num.pxi":540
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5735,7 +5735,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_26__imul__(struct __pyx_obj_5pyo
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__imul__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":552
+  /* "../../src/python/pyoti/cython/dense/num.pxi":552
  *     #*************************************************************************************************
  * 
  *     return self * other_in             # <<<<<<<<<<<<<<
@@ -5749,7 +5749,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_26__imul__(struct __pyx_obj_5pyo
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":540
+  /* "../../src/python/pyoti/cython/dense/num.pxi":540
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5768,7 +5768,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_26__imul__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":558
+/* "../../src/python/pyoti/cython/dense/num.pxi":558
  * 
  *   #***************************************************************************************************
  *   def __truediv__(self, other_in):             # <<<<<<<<<<<<<<
@@ -5807,7 +5807,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__truediv__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":574
+  /* "../../src/python/pyoti/cython/dense/num.pxi":574
  *       otinum tmp1, tmp2
  * 
  *     type1 = type(self)     # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -5817,7 +5817,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_type1 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/num.pxi":575
+  /* "../../src/python/pyoti/cython/dense/num.pxi":575
  * 
  *     type1 = type(self)     # takes 100 ns ...
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -5827,7 +5827,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/num.pxi":581
+  /* "../../src/python/pyoti/cython/dense/num.pxi":581
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -5838,7 +5838,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/num.pxi":583
+    /* "../../src/python/pyoti/cython/dense/num.pxi":583
  *     if ( type1 is type2) : # Case Sum between OTIs.
  * 
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -5851,7 +5851,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":584
+    /* "../../src/python/pyoti/cython/dense/num.pxi":584
  * 
  *       tmp1 = self
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -5864,7 +5864,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":585
+    /* "../../src/python/pyoti/cython/dense/num.pxi":585
  *       tmp1 = self
  *       tmp2 = other_in
  *       res =  oti_div_oo(&tmp1.num, &tmp2.num, dhl);             # <<<<<<<<<<<<<<
@@ -5873,7 +5873,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
  */
     __pyx_v_res = oti_div_oo((&__pyx_v_tmp1->num), (&__pyx_v_tmp2->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":581
+    /* "../../src/python/pyoti/cython/dense/num.pxi":581
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -5883,7 +5883,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":587
+  /* "../../src/python/pyoti/cython/dense/num.pxi":587
  *       res =  oti_div_oo(&tmp1.num, &tmp2.num, dhl);
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -5897,7 +5897,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/num.pxi":589
+    /* "../../src/python/pyoti/cython/dense/num.pxi":589
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -5910,7 +5910,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":590
+    /* "../../src/python/pyoti/cython/dense/num.pxi":590
  * 
  *       tmp1 = self
  *       res = oti_div_or( &tmp1.num, other_in, dhl);             # <<<<<<<<<<<<<<
@@ -5920,7 +5920,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other_in); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 590, __pyx_L1_error)
     __pyx_v_res = oti_div_or((&__pyx_v_tmp1->num), __pyx_t_4, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":587
+    /* "../../src/python/pyoti/cython/dense/num.pxi":587
  *       res =  oti_div_oo(&tmp1.num, &tmp2.num, dhl);
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -5930,7 +5930,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":592
+  /* "../../src/python/pyoti/cython/dense/num.pxi":592
  *       res = oti_div_or( &tmp1.num, other_in, dhl);
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -5944,7 +5944,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/num.pxi":594
+    /* "../../src/python/pyoti/cython/dense/num.pxi":594
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
  * 
  *       tmp1 = other_in             # <<<<<<<<<<<<<<
@@ -5957,7 +5957,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":595
+    /* "../../src/python/pyoti/cython/dense/num.pxi":595
  * 
  *       tmp1 = other_in
  *       res = oti_div_ro( self, &tmp1.num, dhl);             # <<<<<<<<<<<<<<
@@ -5967,7 +5967,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(1, 595, __pyx_L1_error)
     __pyx_v_res = oti_div_ro(__pyx_t_4, (&__pyx_v_tmp1->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/num.pxi":592
+    /* "../../src/python/pyoti/cython/dense/num.pxi":592
  *       res = oti_div_or( &tmp1.num, other_in, dhl);
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -5977,7 +5977,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":599
+  /* "../../src/python/pyoti/cython/dense/num.pxi":599
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -5992,7 +5992,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/num.pxi":603
+  /* "../../src/python/pyoti/cython/dense/num.pxi":603
  *     # end if
  * 
  *     return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -6006,7 +6006,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":558
+  /* "../../src/python/pyoti/cython/dense/num.pxi":558
  * 
  *   #***************************************************************************************************
  *   def __truediv__(self, other_in):             # <<<<<<<<<<<<<<
@@ -6029,7 +6029,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_28__truediv__(PyObject *__pyx_v_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":609
+/* "../../src/python/pyoti/cython/dense/num.pxi":609
  * 
  *   #***************************************************************************************************
  *   def __pow__(self, n,z):             # <<<<<<<<<<<<<<
@@ -6061,7 +6061,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_30__pow__(PyObject *__pyx_v_self
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__pow__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":615
+  /* "../../src/python/pyoti/cython/dense/num.pxi":615
  *     #*************************************************************************************************
  * 
  *     return power(self,n)             # <<<<<<<<<<<<<<
@@ -6077,7 +6077,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_30__pow__(PyObject *__pyx_v_self
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":609
+  /* "../../src/python/pyoti/cython/dense/num.pxi":609
  * 
  *   #***************************************************************************************************
  *   def __pow__(self, n,z):             # <<<<<<<<<<<<<<
@@ -6096,7 +6096,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_30__pow__(PyObject *__pyx_v_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":621
+/* "../../src/python/pyoti/cython/dense/num.pxi":621
  * 
  *   #***************************************************************************************************
  *   cpdef copy(self):             # <<<<<<<<<<<<<<
@@ -6161,7 +6161,7 @@ static PyObject *__pyx_f_5pyoti_5dense_6otinum_copy(struct __pyx_obj_5pyoti_5den
     #endif
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":633
+  /* "../../src/python/pyoti/cython/dense/num.pxi":633
  *     global dhl
  * 
  *     cdef otinum_t res = oti_copy(&self.num,dhl)             # <<<<<<<<<<<<<<
@@ -6170,7 +6170,7 @@ static PyObject *__pyx_f_5pyoti_5dense_6otinum_copy(struct __pyx_obj_5pyoti_5den
  */
   __pyx_v_res = oti_copy((&__pyx_v_self->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/num.pxi":635
+  /* "../../src/python/pyoti/cython/dense/num.pxi":635
  *     cdef otinum_t res = oti_copy(&self.num,dhl)
  * 
  *     return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -6184,7 +6184,7 @@ static PyObject *__pyx_f_5pyoti_5dense_6otinum_copy(struct __pyx_obj_5pyoti_5den
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":621
+  /* "../../src/python/pyoti/cython/dense/num.pxi":621
  * 
  *   #***************************************************************************************************
  *   cpdef copy(self):             # <<<<<<<<<<<<<<
@@ -6243,7 +6243,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_32copy(struct __pyx_obj_5pyoti_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":658
+/* "../../src/python/pyoti/cython/dense/num.pxi":658
  * 
  *   #***************************************************************************************************
  *   def __float__(self):             # <<<<<<<<<<<<<<
@@ -6274,7 +6274,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_34__float__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__float__", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":662
+  /* "../../src/python/pyoti/cython/dense/num.pxi":662
  *     PORPUSE:      Overload of function float()
  *     """
  *     return self.num.re             # <<<<<<<<<<<<<<
@@ -6288,7 +6288,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_34__float__(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":658
+  /* "../../src/python/pyoti/cython/dense/num.pxi":658
  * 
  *   #***************************************************************************************************
  *   def __float__(self):             # <<<<<<<<<<<<<<
@@ -6307,7 +6307,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_34__float__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":667
+/* "../../src/python/pyoti/cython/dense/num.pxi":667
  * 
  *   #***************************************************************************************************
  *   cpdef coeff_t get_deriv( self, hum_dir):             # <<<<<<<<<<<<<<
@@ -6377,7 +6377,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_5dense_6otinum_get_deriv(
     #endif
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":674
+  /* "../../src/python/pyoti/cython/dense/num.pxi":674
  *     #*************************************************************************************************
  *     global dhl
  *     cdef list item = imdir(hum_dir)             # <<<<<<<<<<<<<<
@@ -6389,7 +6389,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_5dense_6otinum_get_deriv(
   __pyx_v_item = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/num.pxi":675
+  /* "../../src/python/pyoti/cython/dense/num.pxi":675
  *     global dhl
  *     cdef list item = imdir(hum_dir)
  *     cdef imdir_t indx = item[ZERO]             # <<<<<<<<<<<<<<
@@ -6406,7 +6406,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_5dense_6otinum_get_deriv(
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_indx = __pyx_t_6;
 
-  /* "../../pyoti/cython/dense/num.pxi":676
+  /* "../../src/python/pyoti/cython/dense/num.pxi":676
  *     cdef list item = imdir(hum_dir)
  *     cdef imdir_t indx = item[ZERO]
  *     cdef ord_t  order = item[ONE]             # <<<<<<<<<<<<<<
@@ -6423,7 +6423,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_5dense_6otinum_get_deriv(
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_order = __pyx_t_7;
 
-  /* "../../pyoti/cython/dense/num.pxi":678
+  /* "../../src/python/pyoti/cython/dense/num.pxi":678
  *     cdef ord_t  order = item[ONE]
  * 
  *     return oti_get_deriv(indx,order,&self.num,dhl)             # <<<<<<<<<<<<<<
@@ -6433,7 +6433,7 @@ static __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_f_5pyoti_5dense_6otinum_get_deriv(
   __pyx_r = oti_get_deriv(__pyx_v_indx, __pyx_v_order, (&__pyx_v_self->num), __pyx_v_5pyoti_5dense_dhl);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":667
+  /* "../../src/python/pyoti/cython/dense/num.pxi":667
  * 
  *   #***************************************************************************************************
  *   cpdef coeff_t get_deriv( self, hum_dir):             # <<<<<<<<<<<<<<
@@ -6492,7 +6492,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_36get_deriv(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":683
+/* "../../src/python/pyoti/cython/dense/num.pxi":683
  * 
  *   #***************************************************************************************************
  *   def get_all_deriv( self, int16_t order = -1, get_indices = False):             # <<<<<<<<<<<<<<
@@ -6594,7 +6594,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
   uint64_t __pyx_t_12;
   __Pyx_RefNannySetupContext("get_all_deriv", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":697
+  /* "../../src/python/pyoti/cython/dense/num.pxi":697
  * 
  * 
  *     if order == -1:             # <<<<<<<<<<<<<<
@@ -6604,7 +6604,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
   __pyx_t_1 = ((__pyx_v_order == -1L) != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/num.pxi":700
+    /* "../../src/python/pyoti/cython/dense/num.pxi":700
  * 
  *       # Get all derivatives of all orders.
  *       res = np.empty((self.num.ndir+1,),dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -6646,7 +6646,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
     __pyx_v_res = ((PyArrayObject *)__pyx_t_6);
     __pyx_t_6 = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":702
+    /* "../../src/python/pyoti/cython/dense/num.pxi":702
  *       res = np.empty((self.num.ndir+1,),dtype = np.float64)
  * 
  *       j = 0             # <<<<<<<<<<<<<<
@@ -6655,7 +6655,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
  */
     __pyx_v_j = 0;
 
-    /* "../../pyoti/cython/dense/num.pxi":703
+    /* "../../src/python/pyoti/cython/dense/num.pxi":703
  * 
  *       j = 0
  *       res[j] = self.num.re; j += 1             # <<<<<<<<<<<<<<
@@ -6668,7 +6668,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_v_j = (__pyx_v_j + 1);
 
-    /* "../../pyoti/cython/dense/num.pxi":705
+    /* "../../src/python/pyoti/cython/dense/num.pxi":705
  *       res[j] = self.num.re; j += 1
  * 
  *       for ordi in range( self.num.order ):             # <<<<<<<<<<<<<<
@@ -6680,7 +6680,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_ordi = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/num.pxi":707
+      /* "../../src/python/pyoti/cython/dense/num.pxi":707
  *       for ordi in range( self.num.order ):
  * 
  *         for i in range( self.num.p_ndpo[ordi] ):             # <<<<<<<<<<<<<<
@@ -6692,7 +6692,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
       for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
         __pyx_v_i = __pyx_t_12;
 
-        /* "../../pyoti/cython/dense/num.pxi":709
+        /* "../../src/python/pyoti/cython/dense/num.pxi":709
  *         for i in range( self.num.p_ndpo[ordi] ):
  * 
  *           res [ j ] = oti_get_deriv( i, ordi+1, &self.num, dhl); j += 1             # <<<<<<<<<<<<<<
@@ -6707,7 +6707,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
       }
     }
 
-    /* "../../pyoti/cython/dense/num.pxi":697
+    /* "../../src/python/pyoti/cython/dense/num.pxi":697
  * 
  * 
  *     if order == -1:             # <<<<<<<<<<<<<<
@@ -6717,7 +6717,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":717
+  /* "../../src/python/pyoti/cython/dense/num.pxi":717
  *     else:
  * 
  *       if order <= self.num.order:             # <<<<<<<<<<<<<<
@@ -6728,7 +6728,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
     __pyx_t_1 = ((__pyx_v_order <= __pyx_v_self->num.order) != 0);
     if (__pyx_t_1) {
 
-      /* "../../pyoti/cython/dense/num.pxi":718
+      /* "../../src/python/pyoti/cython/dense/num.pxi":718
  * 
  *       if order <= self.num.order:
  *         if order == 0:             # <<<<<<<<<<<<<<
@@ -6738,7 +6738,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
       __pyx_t_1 = ((__pyx_v_order == 0) != 0);
       if (__pyx_t_1) {
 
-        /* "../../pyoti/cython/dense/num.pxi":720
+        /* "../../src/python/pyoti/cython/dense/num.pxi":720
  *         if order == 0:
  * 
  *           res = np.empty((1,),dtype=np.float64)             # <<<<<<<<<<<<<<
@@ -6767,7 +6767,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
         __pyx_v_res = ((PyArrayObject *)__pyx_t_3);
         __pyx_t_3 = 0;
 
-        /* "../../pyoti/cython/dense/num.pxi":721
+        /* "../../src/python/pyoti/cython/dense/num.pxi":721
  * 
  *           res = np.empty((1,),dtype=np.float64)
  *           res[0] = self.num.re             # <<<<<<<<<<<<<<
@@ -6779,7 +6779,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
         if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_res), 0, __pyx_t_3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1) < 0)) __PYX_ERR(1, 721, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-        /* "../../pyoti/cython/dense/num.pxi":718
+        /* "../../src/python/pyoti/cython/dense/num.pxi":718
  * 
  *       if order <= self.num.order:
  *         if order == 0:             # <<<<<<<<<<<<<<
@@ -6789,7 +6789,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
         goto __pyx_L9;
       }
 
-      /* "../../pyoti/cython/dense/num.pxi":725
+      /* "../../src/python/pyoti/cython/dense/num.pxi":725
  *         else:
  * 
  *           res = np.empty((self.num.p_ndpo[order-1],),dtype=np.float64)             # <<<<<<<<<<<<<<
@@ -6832,7 +6832,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
         __pyx_v_res = ((PyArrayObject *)__pyx_t_5);
         __pyx_t_5 = 0;
 
-        /* "../../pyoti/cython/dense/num.pxi":727
+        /* "../../src/python/pyoti/cython/dense/num.pxi":727
  *           res = np.empty((self.num.p_ndpo[order-1],),dtype=np.float64)
  * 
  *           for i in range(self.num.p_ndpo[order-1]):             # <<<<<<<<<<<<<<
@@ -6844,7 +6844,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
         for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
           __pyx_v_i = __pyx_t_12;
 
-          /* "../../pyoti/cython/dense/num.pxi":729
+          /* "../../src/python/pyoti/cython/dense/num.pxi":729
  *           for i in range(self.num.p_ndpo[order-1]):
  * 
  *             res[i] = oti_get_deriv(i,order,&self.num,dhl)             # <<<<<<<<<<<<<<
@@ -6859,7 +6859,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
       }
       __pyx_L9:;
 
-      /* "../../pyoti/cython/dense/num.pxi":717
+      /* "../../src/python/pyoti/cython/dense/num.pxi":717
  *     else:
  * 
  *       if order <= self.num.order:             # <<<<<<<<<<<<<<
@@ -6870,7 +6870,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/num.pxi":739
+  /* "../../src/python/pyoti/cython/dense/num.pxi":739
  *     # end if
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -6883,7 +6883,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":683
+  /* "../../src/python/pyoti/cython/dense/num.pxi":683
  * 
  *   #***************************************************************************************************
  *   def get_all_deriv( self, int16_t order = -1, get_indices = False):             # <<<<<<<<<<<<<<
@@ -6907,7 +6907,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_38get_all_deriv(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":744
+/* "../../src/python/pyoti/cython/dense/num.pxi":744
  * 
  *   #***************************************************************************************************
  *   def to_vector(self):             # <<<<<<<<<<<<<<
@@ -6950,7 +6950,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
   uint64_t __pyx_t_12;
   __Pyx_RefNannySetupContext("to_vector", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":754
+  /* "../../src/python/pyoti/cython/dense/num.pxi":754
  *     cdef ord_t ordi
  * 
  *     res = np.empty((self.num.ndir+1,),dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -6992,7 +6992,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
   __pyx_v_res = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "../../pyoti/cython/dense/num.pxi":756
+  /* "../../src/python/pyoti/cython/dense/num.pxi":756
  *     res = np.empty((self.num.ndir+1,),dtype = np.float64)
  * 
  *     j = 0             # <<<<<<<<<<<<<<
@@ -7001,7 +7001,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
  */
   __pyx_v_j = 0;
 
-  /* "../../pyoti/cython/dense/num.pxi":757
+  /* "../../src/python/pyoti/cython/dense/num.pxi":757
  * 
  *     j = 0
  *     res[j] = self.num.re; j += 1             # <<<<<<<<<<<<<<
@@ -7014,7 +7014,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __pyx_v_j = (__pyx_v_j + 1);
 
-  /* "../../pyoti/cython/dense/num.pxi":759
+  /* "../../src/python/pyoti/cython/dense/num.pxi":759
  *     res[j] = self.num.re; j += 1
  * 
  *     if self.num.order > 0:             # <<<<<<<<<<<<<<
@@ -7024,7 +7024,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
   __pyx_t_6 = ((__pyx_v_self->num.order > 0) != 0);
   if (__pyx_t_6) {
 
-    /* "../../pyoti/cython/dense/num.pxi":761
+    /* "../../src/python/pyoti/cython/dense/num.pxi":761
  *     if self.num.order > 0:
  * 
  *       for ordi in range(self.num.order):             # <<<<<<<<<<<<<<
@@ -7036,7 +7036,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_ordi = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/num.pxi":763
+      /* "../../src/python/pyoti/cython/dense/num.pxi":763
  *       for ordi in range(self.num.order):
  * 
  *         for i in range(self.num.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -7048,7 +7048,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
       for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
         __pyx_v_i = __pyx_t_12;
 
-        /* "../../pyoti/cython/dense/num.pxi":765
+        /* "../../src/python/pyoti/cython/dense/num.pxi":765
  *         for i in range(self.num.p_ndpo[ordi]):
  * 
  *           res[j] = self.num.p_im[ordi][i]; j+=1             # <<<<<<<<<<<<<<
@@ -7063,7 +7063,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
       }
     }
 
-    /* "../../pyoti/cython/dense/num.pxi":759
+    /* "../../src/python/pyoti/cython/dense/num.pxi":759
  *     res[j] = self.num.re; j += 1
  * 
  *     if self.num.order > 0:             # <<<<<<<<<<<<<<
@@ -7072,7 +7072,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
  */
   }
 
-  /* "../../pyoti/cython/dense/num.pxi":773
+  /* "../../src/python/pyoti/cython/dense/num.pxi":773
  *     # end if
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -7084,7 +7084,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":744
+  /* "../../src/python/pyoti/cython/dense/num.pxi":744
  * 
  *   #***************************************************************************************************
  *   def to_vector(self):             # <<<<<<<<<<<<<<
@@ -7108,7 +7108,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_40to_vector(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/num.pxi":779
+/* "../../src/python/pyoti/cython/dense/num.pxi":779
  * 
  *   #***************************************************************************************************
  *   def to_matrix(self,sparse_mat = False):             # <<<<<<<<<<<<<<
@@ -7180,7 +7180,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_42to_matrix(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("to_matrix", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":797
+  /* "../../src/python/pyoti/cython/dense/num.pxi":797
  *     cdef darr_t res
  * 
  *     res = oti_to_cr_dense(&self.num,  dhl)             # <<<<<<<<<<<<<<
@@ -7189,7 +7189,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_42to_matrix(struct __pyx_obj_5py
  */
   __pyx_v_res = oti_to_cr_dense((&__pyx_v_self->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/num.pxi":799
+  /* "../../src/python/pyoti/cython/dense/num.pxi":799
  *     res = oti_to_cr_dense(&self.num,  dhl)
  * 
  *     return dmat.create(&res)             # <<<<<<<<<<<<<<
@@ -7203,7 +7203,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_42to_matrix(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/num.pxi":779
+  /* "../../src/python/pyoti/cython/dense/num.pxi":779
  * 
  *   #***************************************************************************************************
  *   def to_matrix(self,sparse_mat = False):             # <<<<<<<<<<<<<<
@@ -7329,7 +7329,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6otinum_46__setstate_cython__(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":32
+/* "../../src/python/pyoti/cython/dense/array.pxi":32
  *   #***************************************************************************************************
  * 
  *   def __init__(self, realArray, ord_t order = 0, bases_t nbases = 0,  uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -7465,7 +7465,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
   PyObject *__pyx_t_12 = NULL;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":46
+  /* "../../src/python/pyoti/cython/dense/array.pxi":46
  *     cdef double val
  * 
  *     self.FLAGS = FLAGS             # <<<<<<<<<<<<<<
@@ -7474,7 +7474,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
  */
   __pyx_v_self->FLAGS = __pyx_v_FLAGS;
 
-  /* "../../pyoti/cython/dense/array.pxi":48
+  /* "../../src/python/pyoti/cython/dense/array.pxi":48
  *     self.FLAGS = FLAGS
  * 
  *     if isinstance(realArray,np.ndarray):             # <<<<<<<<<<<<<<
@@ -7485,7 +7485,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":49
+    /* "../../src/python/pyoti/cython/dense/array.pxi":49
  * 
  *     if isinstance(realArray,np.ndarray):
  *       ndim = realArray.ndim             # <<<<<<<<<<<<<<
@@ -7497,7 +7497,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
     __pyx_v_ndim = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":51
+    /* "../../src/python/pyoti/cython/dense/array.pxi":51
  *       ndim = realArray.ndim
  * 
  *       if ndim >=3:             # <<<<<<<<<<<<<<
@@ -7509,7 +7509,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (unlikely(__pyx_t_2)) {
 
-      /* "../../pyoti/cython/dense/array.pxi":53
+      /* "../../src/python/pyoti/cython/dense/array.pxi":53
  *       if ndim >=3:
  * 
  *         raise ValueError("Only 1D and 2D arrays are supported.")             # <<<<<<<<<<<<<<
@@ -7522,7 +7522,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __PYX_ERR(3, 53, __pyx_L1_error)
 
-      /* "../../pyoti/cython/dense/array.pxi":51
+      /* "../../src/python/pyoti/cython/dense/array.pxi":51
  *       ndim = realArray.ndim
  * 
  *       if ndim >=3:             # <<<<<<<<<<<<<<
@@ -7531,7 +7531,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
  */
     }
 
-    /* "../../pyoti/cython/dense/array.pxi":55
+    /* "../../src/python/pyoti/cython/dense/array.pxi":55
  *         raise ValueError("Only 1D and 2D arrays are supported.")
  * 
  *       elif (ndim == 1):             # <<<<<<<<<<<<<<
@@ -7544,7 +7544,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (__pyx_t_2) {
 
-      /* "../../pyoti/cython/dense/array.pxi":57
+      /* "../../src/python/pyoti/cython/dense/array.pxi":57
  *       elif (ndim == 1):
  * 
  *         ncols = 1             # <<<<<<<<<<<<<<
@@ -7553,7 +7553,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
  */
       __pyx_v_ncols = 1;
 
-      /* "../../pyoti/cython/dense/array.pxi":59
+      /* "../../src/python/pyoti/cython/dense/array.pxi":59
  *         ncols = 1
  * 
  *         nrows = realArray.shape[0]             # <<<<<<<<<<<<<<
@@ -7569,7 +7569,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_v_nrows = __pyx_t_5;
 
-      /* "../../pyoti/cython/dense/array.pxi":61
+      /* "../../src/python/pyoti/cython/dense/array.pxi":61
  *         nrows = realArray.shape[0]
  * 
  *         self.arr = oarr_zeros( nrows, ncols, nbases, order, dhl)             # <<<<<<<<<<<<<<
@@ -7578,7 +7578,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
  */
       __pyx_v_self->arr = oarr_zeros(__pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-      /* "../../pyoti/cython/dense/array.pxi":63
+      /* "../../src/python/pyoti/cython/dense/array.pxi":63
  *         self.arr = oarr_zeros( nrows, ncols, nbases, order, dhl)
  * 
  *         for i in range(self.arr.nrows):             # <<<<<<<<<<<<<<
@@ -7590,7 +7590,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
       for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
         __pyx_v_i = __pyx_t_7;
 
-        /* "../../pyoti/cython/dense/array.pxi":65
+        /* "../../src/python/pyoti/cython/dense/array.pxi":65
  *         for i in range(self.arr.nrows):
  * 
  *           val = realArray[i]             # <<<<<<<<<<<<<<
@@ -7603,7 +7603,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         __pyx_v_val = __pyx_t_8;
 
-        /* "../../pyoti/cython/dense/array.pxi":66
+        /* "../../src/python/pyoti/cython/dense/array.pxi":66
  * 
  *           val = realArray[i]
  *           self.arr.re[i] = val             # <<<<<<<<<<<<<<
@@ -7613,7 +7613,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
         (__pyx_v_self->arr.re[__pyx_v_i]) = __pyx_v_val;
       }
 
-      /* "../../pyoti/cython/dense/array.pxi":55
+      /* "../../src/python/pyoti/cython/dense/array.pxi":55
  *         raise ValueError("Only 1D and 2D arrays are supported.")
  * 
  *       elif (ndim == 1):             # <<<<<<<<<<<<<<
@@ -7623,7 +7623,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
       goto __pyx_L4;
     }
 
-    /* "../../pyoti/cython/dense/array.pxi":72
+    /* "../../src/python/pyoti/cython/dense/array.pxi":72
  *       else: # ndim =2
  * 
  *         nrows = realArray.shape[0]             # <<<<<<<<<<<<<<
@@ -7640,7 +7640,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_v_nrows = __pyx_t_5;
 
-      /* "../../pyoti/cython/dense/array.pxi":73
+      /* "../../src/python/pyoti/cython/dense/array.pxi":73
  * 
  *         nrows = realArray.shape[0]
  *         ncols = realArray.shape[1]             # <<<<<<<<<<<<<<
@@ -7656,7 +7656,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __pyx_v_ncols = __pyx_t_5;
 
-      /* "../../pyoti/cython/dense/array.pxi":75
+      /* "../../src/python/pyoti/cython/dense/array.pxi":75
  *         ncols = realArray.shape[1]
  * 
  *         self.arr = oarr_zeros( nrows, ncols, nbases, order, dhl)             # <<<<<<<<<<<<<<
@@ -7665,7 +7665,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
  */
       __pyx_v_self->arr = oarr_zeros(__pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-      /* "../../pyoti/cython/dense/array.pxi":77
+      /* "../../src/python/pyoti/cython/dense/array.pxi":77
  *         self.arr = oarr_zeros( nrows, ncols, nbases, order, dhl)
  * 
  *         for i in range(self.arr.nrows):             # <<<<<<<<<<<<<<
@@ -7677,7 +7677,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
       for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
         __pyx_v_i = __pyx_t_7;
 
-        /* "../../pyoti/cython/dense/array.pxi":79
+        /* "../../src/python/pyoti/cython/dense/array.pxi":79
  *         for i in range(self.arr.nrows):
  * 
  *           for j in range(self.arr.ncols):             # <<<<<<<<<<<<<<
@@ -7689,7 +7689,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
         for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
           __pyx_v_j = __pyx_t_11;
 
-          /* "../../pyoti/cython/dense/array.pxi":81
+          /* "../../src/python/pyoti/cython/dense/array.pxi":81
  *           for j in range(self.arr.ncols):
  * 
  *             val = realArray[i,j]             # <<<<<<<<<<<<<<
@@ -7715,7 +7715,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
           __pyx_v_val = __pyx_t_8;
 
-          /* "../../pyoti/cython/dense/array.pxi":82
+          /* "../../src/python/pyoti/cython/dense/array.pxi":82
  * 
  *             val = realArray[i,j]
  *             self.arr.re[j+i*self.arr.ncols] = val             # <<<<<<<<<<<<<<
@@ -7728,7 +7728,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
     }
     __pyx_L4:;
 
-    /* "../../pyoti/cython/dense/array.pxi":48
+    /* "../../src/python/pyoti/cython/dense/array.pxi":48
  *     self.FLAGS = FLAGS
  * 
  *     if isinstance(realArray,np.ndarray):             # <<<<<<<<<<<<<<
@@ -7738,7 +7738,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":90
+  /* "../../src/python/pyoti/cython/dense/array.pxi":90
  *       # end if
  * 
  *     elif type(realArray) == dmat:             # <<<<<<<<<<<<<<
@@ -7750,7 +7750,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":92
+    /* "../../src/python/pyoti/cython/dense/array.pxi":92
  *     elif type(realArray) == dmat:
  * 
  *       inval = realArray             # <<<<<<<<<<<<<<
@@ -7763,7 +7763,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
     __pyx_v_inval = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":93
+    /* "../../src/python/pyoti/cython/dense/array.pxi":93
  * 
  *       inval = realArray
  *       self.arr = oarr_zeros( inval.nrows, inval.ncols, nbases, order, dhl)             # <<<<<<<<<<<<<<
@@ -7780,7 +7780,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_self->arr = oarr_zeros(__pyx_t_5, __pyx_t_6, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":95
+    /* "../../src/python/pyoti/cython/dense/array.pxi":95
  *       self.arr = oarr_zeros( inval.nrows, inval.ncols, nbases, order, dhl)
  * 
  *       for i in range(self.arr.nrows):             # <<<<<<<<<<<<<<
@@ -7792,7 +7792,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_5; __pyx_t_7+=1) {
       __pyx_v_i = __pyx_t_7;
 
-      /* "../../pyoti/cython/dense/array.pxi":97
+      /* "../../src/python/pyoti/cython/dense/array.pxi":97
  *       for i in range(self.arr.nrows):
  * 
  *         for j in range(self.arr.ncols):             # <<<<<<<<<<<<<<
@@ -7804,7 +7804,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_j = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/array.pxi":99
+        /* "../../src/python/pyoti/cython/dense/array.pxi":99
  *         for j in range(self.arr.ncols):
  * 
  *           self.arr.re[j+i*self.arr.ncols] = inval.arr.p_data[j+i*inval.arr.ncols]             # <<<<<<<<<<<<<<
@@ -7815,7 +7815,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
       }
     }
 
-    /* "../../pyoti/cython/dense/array.pxi":90
+    /* "../../src/python/pyoti/cython/dense/array.pxi":90
  *       # end if
  * 
  *     elif type(realArray) == dmat:             # <<<<<<<<<<<<<<
@@ -7825,7 +7825,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/array.pxi":32
+  /* "../../src/python/pyoti/cython/dense/array.pxi":32
  *   #***************************************************************************************************
  * 
  *   def __init__(self, realArray, ord_t order = 0, bases_t nbases = 0,  uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -7849,7 +7849,7 @@ static int __pyx_pf_5pyoti_5dense_4omat___init__(struct __pyx_obj_5pyoti_5dense_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":110
+/* "../../src/python/pyoti/cython/dense/array.pxi":110
  * 
  *   #***************************************************************************************************
  *   def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -7873,7 +7873,7 @@ static void __pyx_pf_5pyoti_5dense_4omat_2__dealloc__(struct __pyx_obj_5pyoti_5d
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":116
+  /* "../../src/python/pyoti/cython/dense/array.pxi":116
  *     #*************************************************************************************************
  * 
  *     if self.FLAGS & 1: # If memory is owned.             # <<<<<<<<<<<<<<
@@ -7883,7 +7883,7 @@ static void __pyx_pf_5pyoti_5dense_4omat_2__dealloc__(struct __pyx_obj_5pyoti_5d
   __pyx_t_1 = ((__pyx_v_self->FLAGS & 1) != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/array.pxi":118
+    /* "../../src/python/pyoti/cython/dense/array.pxi":118
  *     if self.FLAGS & 1: # If memory is owned.
  * 
  *       oarr_free(&self.arr)             # <<<<<<<<<<<<<<
@@ -7892,7 +7892,7 @@ static void __pyx_pf_5pyoti_5dense_4omat_2__dealloc__(struct __pyx_obj_5pyoti_5d
  */
     oarr_free((&__pyx_v_self->arr));
 
-    /* "../../pyoti/cython/dense/array.pxi":116
+    /* "../../src/python/pyoti/cython/dense/array.pxi":116
  *     #*************************************************************************************************
  * 
  *     if self.FLAGS & 1: # If memory is owned.             # <<<<<<<<<<<<<<
@@ -7901,7 +7901,7 @@ static void __pyx_pf_5pyoti_5dense_4omat_2__dealloc__(struct __pyx_obj_5pyoti_5d
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":110
+  /* "../../src/python/pyoti/cython/dense/array.pxi":110
  * 
  *   #***************************************************************************************************
  *   def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -7913,7 +7913,7 @@ static void __pyx_pf_5pyoti_5dense_4omat_2__dealloc__(struct __pyx_obj_5pyoti_5d
   __Pyx_RefNannyFinishContext();
 }
 
-/* "../../pyoti/cython/dense/array.pxi":126
+/* "../../src/python/pyoti/cython/dense/array.pxi":126
  *   #***************************************************************************************************
  *   @property
  *   def shape(self):             # <<<<<<<<<<<<<<
@@ -7942,7 +7942,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_5shape___get__(struct __pyx_obj_5p
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":132
+  /* "../../src/python/pyoti/cython/dense/array.pxi":132
  *     #*************************************************************************************************
  * 
  *     return (self.arr.nrows,self.arr.ncols)             # <<<<<<<<<<<<<<
@@ -7966,7 +7966,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_5shape___get__(struct __pyx_obj_5p
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":126
+  /* "../../src/python/pyoti/cython/dense/array.pxi":126
  *   #***************************************************************************************************
  *   @property
  *   def shape(self):             # <<<<<<<<<<<<<<
@@ -7987,7 +7987,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_5shape___get__(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":138
+/* "../../src/python/pyoti/cython/dense/array.pxi":138
  *   #***************************************************************************************************
  *   @property
  *   def  size(self):             # <<<<<<<<<<<<<<
@@ -8014,7 +8014,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4size___get__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":144
+  /* "../../src/python/pyoti/cython/dense/array.pxi":144
  *     #*************************************************************************************************
  * 
  *     return self.arr.size             # <<<<<<<<<<<<<<
@@ -8028,7 +8028,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4size___get__(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":138
+  /* "../../src/python/pyoti/cython/dense/array.pxi":138
  *   #***************************************************************************************************
  *   @property
  *   def  size(self):             # <<<<<<<<<<<<<<
@@ -8047,7 +8047,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4size___get__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":150
+/* "../../src/python/pyoti/cython/dense/array.pxi":150
  *   #***************************************************************************************************
  *   @property
  *   def  order(self):             # <<<<<<<<<<<<<<
@@ -8074,7 +8074,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_5order___get__(struct __pyx_obj_5p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":156
+  /* "../../src/python/pyoti/cython/dense/array.pxi":156
  *     #*************************************************************************************************
  * 
  *     return self.arr.order             # <<<<<<<<<<<<<<
@@ -8088,7 +8088,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_5order___get__(struct __pyx_obj_5p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":150
+  /* "../../src/python/pyoti/cython/dense/array.pxi":150
  *   #***************************************************************************************************
  *   @property
  *   def  order(self):             # <<<<<<<<<<<<<<
@@ -8107,7 +8107,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_5order___get__(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":162
+/* "../../src/python/pyoti/cython/dense/array.pxi":162
  *   #***************************************************************************************************
  *   @property
  *   def  nbases(self):             # <<<<<<<<<<<<<<
@@ -8134,7 +8134,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6nbases___get__(struct __pyx_obj_5
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":168
+  /* "../../src/python/pyoti/cython/dense/array.pxi":168
  *     #*************************************************************************************************
  * 
  *     return self.arr.nbases             # <<<<<<<<<<<<<<
@@ -8148,7 +8148,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6nbases___get__(struct __pyx_obj_5
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":162
+  /* "../../src/python/pyoti/cython/dense/array.pxi":162
  *   #***************************************************************************************************
  *   @property
  *   def  nbases(self):             # <<<<<<<<<<<<<<
@@ -8167,7 +8167,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6nbases___get__(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":174
+/* "../../src/python/pyoti/cython/dense/array.pxi":174
  *   #***************************************************************************************************
  *   @property
  *   def real(self):             # <<<<<<<<<<<<<<
@@ -8209,7 +8209,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
   uint64_t __pyx_t_12;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":184
+  /* "../../src/python/pyoti/cython/dense/array.pxi":184
  *     cdef double val
  * 
  *     cdef np.ndarray res = np.empty(( self.arr.nrows,self.arr.ncols),dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -8256,7 +8256,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
   __pyx_v_res = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":187
+  /* "../../src/python/pyoti/cython/dense/array.pxi":187
  *     cdef darr_t re;
  * 
  *     re.nrows = self.arr.nrows             # <<<<<<<<<<<<<<
@@ -8266,7 +8266,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
   __pyx_t_6 = __pyx_v_self->arr.nrows;
   __pyx_v_re.nrows = __pyx_t_6;
 
-  /* "../../pyoti/cython/dense/array.pxi":188
+  /* "../../src/python/pyoti/cython/dense/array.pxi":188
  * 
  *     re.nrows = self.arr.nrows
  *     re.ncols = self.arr.ncols             # <<<<<<<<<<<<<<
@@ -8276,7 +8276,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
   __pyx_t_6 = __pyx_v_self->arr.ncols;
   __pyx_v_re.ncols = __pyx_t_6;
 
-  /* "../../pyoti/cython/dense/array.pxi":189
+  /* "../../src/python/pyoti/cython/dense/array.pxi":189
  *     re.nrows = self.arr.nrows
  *     re.ncols = self.arr.ncols
  *     re.size  = self.arr.size             # <<<<<<<<<<<<<<
@@ -8286,7 +8286,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
   __pyx_t_6 = __pyx_v_self->arr.size;
   __pyx_v_re.size = __pyx_t_6;
 
-  /* "../../pyoti/cython/dense/array.pxi":191
+  /* "../../src/python/pyoti/cython/dense/array.pxi":191
  *     re.size  = self.arr.size
  * 
  *     re.p_data = self.arr.re             # <<<<<<<<<<<<<<
@@ -8296,7 +8296,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
   __pyx_t_7 = __pyx_v_self->arr.re;
   __pyx_v_re.p_data = __pyx_t_7;
 
-  /* "../../pyoti/cython/dense/array.pxi":193
+  /* "../../src/python/pyoti/cython/dense/array.pxi":193
  *     re.p_data = self.arr.re
  * 
  *     for i in range(self.arr.nrows):             # <<<<<<<<<<<<<<
@@ -8308,7 +8308,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
   for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
     __pyx_v_i = __pyx_t_9;
 
-    /* "../../pyoti/cython/dense/array.pxi":194
+    /* "../../src/python/pyoti/cython/dense/array.pxi":194
  * 
  *     for i in range(self.arr.nrows):
  *       for j in range(self.arr.ncols):             # <<<<<<<<<<<<<<
@@ -8320,7 +8320,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
     for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
       __pyx_v_j = __pyx_t_12;
 
-      /* "../../pyoti/cython/dense/array.pxi":196
+      /* "../../src/python/pyoti/cython/dense/array.pxi":196
  *       for j in range(self.arr.ncols):
  * 
  *         res[i,j] = darr_get_item_ij(&re, i, j)             # <<<<<<<<<<<<<<
@@ -8347,7 +8347,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
     }
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":200
+  /* "../../src/python/pyoti/cython/dense/array.pxi":200
  *     # end for
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -8359,7 +8359,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":174
+  /* "../../src/python/pyoti/cython/dense/array.pxi":174
  *   #***************************************************************************************************
  *   @property
  *   def real(self):             # <<<<<<<<<<<<<<
@@ -8383,7 +8383,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4real___get__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":206
+/* "../../src/python/pyoti/cython/dense/array.pxi":206
  *   #***************************************************************************************************
  *   @staticmethod
  *   cdef omat create(oarr_t* arr, uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -8405,7 +8405,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_4omat_create(o
     }
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":215
+  /* "../../src/python/pyoti/cython/dense/array.pxi":215
  * 
  *     # create new empty object:
  *     cdef omat mat = <omat> omat.__new__(omat)             # <<<<<<<<<<<<<<
@@ -8420,7 +8420,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_4omat_create(o
   __pyx_v_mat = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":217
+  /* "../../src/python/pyoti/cython/dense/array.pxi":217
  *     cdef omat mat = <omat> omat.__new__(omat)
  * 
  *     mat.arr = arr[0]             # <<<<<<<<<<<<<<
@@ -8429,7 +8429,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_4omat_create(o
  */
   __pyx_v_mat->arr = (__pyx_v_arr[0]);
 
-  /* "../../pyoti/cython/dense/array.pxi":218
+  /* "../../src/python/pyoti/cython/dense/array.pxi":218
  * 
  *     mat.arr = arr[0]
  *     mat.FLAGS = FLAGS             # <<<<<<<<<<<<<<
@@ -8438,7 +8438,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_4omat_create(o
  */
   __pyx_v_mat->FLAGS = __pyx_v_FLAGS;
 
-  /* "../../pyoti/cython/dense/array.pxi":220
+  /* "../../src/python/pyoti/cython/dense/array.pxi":220
  *     mat.FLAGS = FLAGS
  * 
  *     return mat             # <<<<<<<<<<<<<<
@@ -8450,7 +8450,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_4omat_create(o
   __pyx_r = __pyx_v_mat;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":206
+  /* "../../src/python/pyoti/cython/dense/array.pxi":206
  *   #***************************************************************************************************
  *   @staticmethod
  *   cdef omat create(oarr_t* arr, uint8_t FLAGS = 1):             # <<<<<<<<<<<<<<
@@ -8471,7 +8471,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_4omat_create(o
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":226
+/* "../../src/python/pyoti/cython/dense/array.pxi":226
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -8515,7 +8515,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __pyx_pybuffernd_tmp.data = NULL;
   __pyx_pybuffernd_tmp.rcbuffer = &__pyx_pybuffer_tmp;
 
-  /* "../../pyoti/cython/dense/array.pxi":238
+  /* "../../src/python/pyoti/cython/dense/array.pxi":238
  *     cdef np.ndarray[double, ndim=2] tmp
  * 
  *     out =  "omat<"             # <<<<<<<<<<<<<<
@@ -8525,7 +8525,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __Pyx_INCREF(__pyx_kp_s_omat);
   __pyx_v_out = __pyx_kp_s_omat;
 
-  /* "../../pyoti/cython/dense/array.pxi":239
+  /* "../../src/python/pyoti/cython/dense/array.pxi":239
  * 
  *     out =  "omat<"
  *     out += "shape: "+str(self.shape)+ ", "             # <<<<<<<<<<<<<<
@@ -8549,7 +8549,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":240
+  /* "../../src/python/pyoti/cython/dense/array.pxi":240
  *     out =  "omat<"
  *     out += "shape: "+str(self.shape)+ ", "
  *     out += "ndir: "+str(self.arr.ndir)+", "             # <<<<<<<<<<<<<<
@@ -8573,7 +8573,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":241
+  /* "../../src/python/pyoti/cython/dense/array.pxi":241
  *     out += "shape: "+str(self.shape)+ ", "
  *     out += "ndir: "+str(self.arr.ndir)+", "
  *     out += "order: "+str(self.arr.order)+", "             # <<<<<<<<<<<<<<
@@ -8597,7 +8597,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":242
+  /* "../../src/python/pyoti/cython/dense/array.pxi":242
  *     out += "ndir: "+str(self.arr.ndir)+", "
  *     out += "order: "+str(self.arr.order)+", "
  *     out += "re:\n"             # <<<<<<<<<<<<<<
@@ -8609,7 +8609,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":244
+  /* "../../src/python/pyoti/cython/dense/array.pxi":244
  *     out += "re:\n"
  *     # first print the real number:
  *     tmp = c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)             # <<<<<<<<<<<<<<
@@ -8638,7 +8638,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __pyx_v_tmp = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":246
+  /* "../../src/python/pyoti/cython/dense/array.pxi":246
  *     tmp = c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)
  * 
  *     out +=  repr(tmp)             # <<<<<<<<<<<<<<
@@ -8653,7 +8653,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":248
+  /* "../../src/python/pyoti/cython/dense/array.pxi":248
  *     out +=  repr(tmp)
  * 
  *     out += ">"             # <<<<<<<<<<<<<<
@@ -8665,7 +8665,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":250
+  /* "../../src/python/pyoti/cython/dense/array.pxi":250
  *     out += ">"
  * 
  *     return out             # <<<<<<<<<<<<<<
@@ -8677,7 +8677,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":226
+  /* "../../src/python/pyoti/cython/dense/array.pxi":226
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -8708,7 +8708,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_4__repr__(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":256
+/* "../../src/python/pyoti/cython/dense/array.pxi":256
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -8764,7 +8764,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
   __pyx_pybuffernd_tmp.data = NULL;
   __pyx_pybuffernd_tmp.rcbuffer = &__pyx_pybuffer_tmp;
 
-  /* "../../pyoti/cython/dense/array.pxi":269
+  /* "../../src/python/pyoti/cython/dense/array.pxi":269
  *     cdef uint64_t i
  * 
  *     out = ""             # <<<<<<<<<<<<<<
@@ -8774,7 +8774,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_out = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/array.pxi":272
+  /* "../../src/python/pyoti/cython/dense/array.pxi":272
  * 
  *     # first print the real number:
  *     tmp = c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)             # <<<<<<<<<<<<<<
@@ -8803,7 +8803,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
   __pyx_v_tmp = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":273
+  /* "../../src/python/pyoti/cython/dense/array.pxi":273
  *     # first print the real number:
  *     tmp = c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)
  *     out +=  str(tmp) + "\n"             # <<<<<<<<<<<<<<
@@ -8821,7 +8821,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":276
+  /* "../../src/python/pyoti/cython/dense/array.pxi":276
  * 
  *     # Print imaginary directions
  *     for ordi in range(self.arr.order):             # <<<<<<<<<<<<<<
@@ -8833,7 +8833,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
   for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
     __pyx_v_ordi = __pyx_t_9;
 
-    /* "../../pyoti/cython/dense/array.pxi":278
+    /* "../../src/python/pyoti/cython/dense/array.pxi":278
  *     for ordi in range(self.arr.order):
  * 
  *       for i in range(self.arr.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -8845,7 +8845,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
     for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
       __pyx_v_i = __pyx_t_12;
 
-      /* "../../pyoti/cython/dense/array.pxi":281
+      /* "../../src/python/pyoti/cython/dense/array.pxi":281
  * 
  *         # Print imaginary direction first
  *         out += '+ e('             # <<<<<<<<<<<<<<
@@ -8857,7 +8857,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
       __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":283
+      /* "../../src/python/pyoti/cython/dense/array.pxi":283
  *         out += '+ e('
  * 
  *         out += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')             # <<<<<<<<<<<<<<
@@ -8934,7 +8934,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
       __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":284
+      /* "../../src/python/pyoti/cython/dense/array.pxi":284
  * 
  *         out += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')
  *         out += ") * \n"             # <<<<<<<<<<<<<<
@@ -8946,7 +8946,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
       __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":286
+      /* "../../src/python/pyoti/cython/dense/array.pxi":286
  *         out += ") * \n"
  * 
  *         tmp = c_ptr_to_np_2darray_double(self.arr.p_im[ordi][i], self.arr.nrows, self.arr.ncols)             # <<<<<<<<<<<<<<
@@ -8975,7 +8975,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
       __Pyx_DECREF_SET(__pyx_v_tmp, ((PyArrayObject *)__pyx_t_1));
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":287
+      /* "../../src/python/pyoti/cython/dense/array.pxi":287
  * 
  *         tmp = c_ptr_to_np_2darray_double(self.arr.p_im[ordi][i], self.arr.nrows, self.arr.ncols)
  *         out +=  str(tmp) + "\n"             # <<<<<<<<<<<<<<
@@ -8995,7 +8995,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
     }
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":291
+  /* "../../src/python/pyoti/cython/dense/array.pxi":291
  *     # end for
  * 
  *     out += ""             # <<<<<<<<<<<<<<
@@ -9007,7 +9007,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
   __Pyx_DECREF_SET(__pyx_v_out, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":293
+  /* "../../src/python/pyoti/cython/dense/array.pxi":293
  *     out += ""
  * 
  *     return out             # <<<<<<<<<<<<<<
@@ -9019,7 +9019,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
   __pyx_r = __pyx_v_out;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":256
+  /* "../../src/python/pyoti/cython/dense/array.pxi":256
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -9054,7 +9054,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_6__str__(struct __pyx_obj_5pyoti_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":300
+/* "../../src/python/pyoti/cython/dense/array.pxi":300
  * 
  *   #***************************************************************************************************
  *   def  __getitem__(self, val):             # <<<<<<<<<<<<<<
@@ -9090,7 +9090,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_8__getitem__(struct __pyx_obj_5pyo
   uint64_t __pyx_t_5;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":310
+  /* "../../src/python/pyoti/cython/dense/array.pxi":310
  *     cdef otinum_t res
  * 
  *     if (isinstance(val, int)):             # <<<<<<<<<<<<<<
@@ -9101,7 +9101,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_8__getitem__(struct __pyx_obj_5pyo
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":312
+    /* "../../src/python/pyoti/cython/dense/array.pxi":312
  *     if (isinstance(val, int)):
  * 
  *       res = oarr_get_item_i( &self.arr, val, dhl)             # <<<<<<<<<<<<<<
@@ -9111,7 +9111,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_8__getitem__(struct __pyx_obj_5pyo
     __pyx_t_3 = __Pyx_PyInt_As_uint64_t(__pyx_v_val); if (unlikely((__pyx_t_3 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 312, __pyx_L1_error)
     __pyx_v_res = oarr_get_item_i((&__pyx_v_self->arr), __pyx_t_3, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":310
+    /* "../../src/python/pyoti/cython/dense/array.pxi":310
  *     cdef otinum_t res
  * 
  *     if (isinstance(val, int)):             # <<<<<<<<<<<<<<
@@ -9121,7 +9121,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_8__getitem__(struct __pyx_obj_5pyo
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":316
+  /* "../../src/python/pyoti/cython/dense/array.pxi":316
  *     else:
  * 
  *       res = oarr_get_item_ij( &self.arr, val[0], val[1], dhl)             # <<<<<<<<<<<<<<
@@ -9141,7 +9141,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_8__getitem__(struct __pyx_obj_5pyo
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/array.pxi":320
+  /* "../../src/python/pyoti/cython/dense/array.pxi":320
  *     # end if
  * 
  *     return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -9155,7 +9155,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_8__getitem__(struct __pyx_obj_5pyo
   __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":300
+  /* "../../src/python/pyoti/cython/dense/array.pxi":300
  * 
  *   #***************************************************************************************************
  *   def  __getitem__(self, val):             # <<<<<<<<<<<<<<
@@ -9174,7 +9174,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_8__getitem__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":326
+/* "../../src/python/pyoti/cython/dense/array.pxi":326
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, val, value):             # <<<<<<<<<<<<<<
@@ -9212,7 +9212,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
   uint64_t __pyx_t_6;
   __Pyx_RefNannySetupContext("__setitem__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":336
+  /* "../../src/python/pyoti/cython/dense/array.pxi":336
  *     cdef otinum valt
  * 
  *     tval = type(value)             # <<<<<<<<<<<<<<
@@ -9222,7 +9222,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_value)));
   __pyx_v_tval = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_value)));
 
-  /* "../../pyoti/cython/dense/array.pxi":338
+  /* "../../src/python/pyoti/cython/dense/array.pxi":338
  *     tval = type(value)
  * 
  *     if (isinstance(val, int)):             # <<<<<<<<<<<<<<
@@ -9233,7 +9233,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":340
+    /* "../../src/python/pyoti/cython/dense/array.pxi":340
  *     if (isinstance(val, int)):
  * 
  *       if tval == otinum:             # <<<<<<<<<<<<<<
@@ -9245,7 +9245,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (__pyx_t_2) {
 
-      /* "../../pyoti/cython/dense/array.pxi":342
+      /* "../../src/python/pyoti/cython/dense/array.pxi":342
  *       if tval == otinum:
  * 
  *         valt = value             # <<<<<<<<<<<<<<
@@ -9258,7 +9258,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
       __pyx_v_valt = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":343
+      /* "../../src/python/pyoti/cython/dense/array.pxi":343
  * 
  *         valt = value
  *         oarr_set_item_i_o( &valt.num, val, &self.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9268,7 +9268,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
       __pyx_t_4 = __Pyx_PyInt_As_uint64_t(__pyx_v_val); if (unlikely((__pyx_t_4 == ((uint64_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 343, __pyx_L1_error)
       oarr_set_item_i_o((&__pyx_v_valt->num), __pyx_t_4, (&__pyx_v_self->arr), __pyx_v_5pyoti_5dense_dhl);
 
-      /* "../../pyoti/cython/dense/array.pxi":340
+      /* "../../src/python/pyoti/cython/dense/array.pxi":340
  *     if (isinstance(val, int)):
  * 
  *       if tval == otinum:             # <<<<<<<<<<<<<<
@@ -9278,7 +9278,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
       goto __pyx_L4;
     }
 
-    /* "../../pyoti/cython/dense/array.pxi":347
+    /* "../../src/python/pyoti/cython/dense/array.pxi":347
  *       else:
  * 
  *         oarr_set_item_i_r( value, val, &self.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9292,7 +9292,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
     }
     __pyx_L4:;
 
-    /* "../../pyoti/cython/dense/array.pxi":338
+    /* "../../src/python/pyoti/cython/dense/array.pxi":338
  *     tval = type(value)
  * 
  *     if (isinstance(val, int)):             # <<<<<<<<<<<<<<
@@ -9302,7 +9302,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":353
+  /* "../../src/python/pyoti/cython/dense/array.pxi":353
  *     else:
  * 
  *       if tval == otinum:             # <<<<<<<<<<<<<<
@@ -9315,7 +9315,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (__pyx_t_2) {
 
-      /* "../../pyoti/cython/dense/array.pxi":355
+      /* "../../src/python/pyoti/cython/dense/array.pxi":355
  *       if tval == otinum:
  * 
  *         valt = value             # <<<<<<<<<<<<<<
@@ -9328,7 +9328,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
       __pyx_v_valt = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":356
+      /* "../../src/python/pyoti/cython/dense/array.pxi":356
  * 
  *         valt = value
  *         oarr_set_item_ij_o( &valt.num, val[0], val[1], &self.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9345,7 +9345,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       oarr_set_item_ij_o((&__pyx_v_valt->num), __pyx_t_4, __pyx_t_6, (&__pyx_v_self->arr), __pyx_v_5pyoti_5dense_dhl);
 
-      /* "../../pyoti/cython/dense/array.pxi":353
+      /* "../../src/python/pyoti/cython/dense/array.pxi":353
  *     else:
  * 
  *       if tval == otinum:             # <<<<<<<<<<<<<<
@@ -9355,7 +9355,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
       goto __pyx_L5;
     }
 
-    /* "../../pyoti/cython/dense/array.pxi":360
+    /* "../../src/python/pyoti/cython/dense/array.pxi":360
  *       else:
  * 
  *         oarr_set_item_ij_r( value, val[0], val[1], &self.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9378,7 +9378,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/array.pxi":326
+  /* "../../src/python/pyoti/cython/dense/array.pxi":326
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, val, value):             # <<<<<<<<<<<<<<
@@ -9400,7 +9400,7 @@ static int __pyx_pf_5pyoti_5dense_4omat_10__setitem__(struct __pyx_obj_5pyoti_5d
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":373
+/* "../../src/python/pyoti/cython/dense/array.pxi":373
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -9432,7 +9432,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_12__neg__(struct __pyx_obj_5pyoti_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__neg__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":381
+  /* "../../src/python/pyoti/cython/dense/array.pxi":381
  *     global dhl
  * 
  *     cdef oarr_t res = oarr_neg(&self.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9441,7 +9441,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_12__neg__(struct __pyx_obj_5pyoti_
  */
   __pyx_v_res = oarr_neg((&__pyx_v_self->arr), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":383
+  /* "../../src/python/pyoti/cython/dense/array.pxi":383
  *     cdef oarr_t res = oarr_neg(&self.arr, dhl)
  * 
  *     return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -9455,7 +9455,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_12__neg__(struct __pyx_obj_5pyoti_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":373
+  /* "../../src/python/pyoti/cython/dense/array.pxi":373
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -9474,7 +9474,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_12__neg__(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":390
+/* "../../src/python/pyoti/cython/dense/array.pxi":390
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other):             # <<<<<<<<<<<<<<
@@ -9517,7 +9517,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":403
+  /* "../../src/python/pyoti/cython/dense/array.pxi":403
  *     cdef otinum olhs,orhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -9527,7 +9527,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/array.pxi":404
+  /* "../../src/python/pyoti/cython/dense/array.pxi":404
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -9537,7 +9537,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../pyoti/cython/dense/array.pxi":406
+  /* "../../src/python/pyoti/cython/dense/array.pxi":406
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -9549,7 +9549,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":408
+    /* "../../src/python/pyoti/cython/dense/array.pxi":408
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -9562,7 +9562,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":409
+    /* "../../src/python/pyoti/cython/dense/array.pxi":409
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -9575,7 +9575,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":411
+    /* "../../src/python/pyoti/cython/dense/array.pxi":411
  *       rhs = other
  * 
  *       res = oarr_sum_OO(&lhs.arr,&rhs.arr,dhl)             # <<<<<<<<<<<<<<
@@ -9584,7 +9584,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sum_OO((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":406
+    /* "../../src/python/pyoti/cython/dense/array.pxi":406
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -9594,7 +9594,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":413
+  /* "../../src/python/pyoti/cython/dense/array.pxi":413
  *       res = oarr_sum_OO(&lhs.arr,&rhs.arr,dhl)
  * 
  *     elif ( tlhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -9606,7 +9606,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":415
+    /* "../../src/python/pyoti/cython/dense/array.pxi":415
  *     elif ( tlhs  == otinum ):
  * 
  *       olhs = self             # <<<<<<<<<<<<<<
@@ -9619,7 +9619,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_olhs = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":416
+    /* "../../src/python/pyoti/cython/dense/array.pxi":416
  * 
  *       olhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -9632,7 +9632,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":418
+    /* "../../src/python/pyoti/cython/dense/array.pxi":418
  *       rhs = other
  * 
  *       res = oarr_sum_oO(&olhs.num,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9641,7 +9641,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sum_oO((&__pyx_v_olhs->num), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":413
+    /* "../../src/python/pyoti/cython/dense/array.pxi":413
  *       res = oarr_sum_OO(&lhs.arr,&rhs.arr,dhl)
  * 
  *     elif ( tlhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -9651,7 +9651,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":420
+  /* "../../src/python/pyoti/cython/dense/array.pxi":420
  *       res = oarr_sum_oO(&olhs.num,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -9663,7 +9663,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":422
+    /* "../../src/python/pyoti/cython/dense/array.pxi":422
  *     elif ( trhs  == otinum ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -9676,7 +9676,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":423
+    /* "../../src/python/pyoti/cython/dense/array.pxi":423
  * 
  *       lhs = self
  *       orhs = other             # <<<<<<<<<<<<<<
@@ -9689,7 +9689,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_orhs = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":425
+    /* "../../src/python/pyoti/cython/dense/array.pxi":425
  *       orhs = other
  * 
  *       res = oarr_sum_oO(&orhs.num,&lhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9698,7 +9698,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sum_oO((&__pyx_v_orhs->num), (&__pyx_v_lhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":420
+    /* "../../src/python/pyoti/cython/dense/array.pxi":420
  *       res = oarr_sum_oO(&olhs.num,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -9708,7 +9708,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":427
+  /* "../../src/python/pyoti/cython/dense/array.pxi":427
  *       res = oarr_sum_oO(&orhs.num,&lhs.arr, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -9722,7 +9722,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/array.pxi":429
+    /* "../../src/python/pyoti/cython/dense/array.pxi":429
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -9735,7 +9735,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":430
+    /* "../../src/python/pyoti/cython/dense/array.pxi":430
  * 
  *       rhs = other
  *       res = oarr_sum_rO(self, &rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9745,7 +9745,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 430, __pyx_L1_error)
     __pyx_v_res = oarr_sum_rO(__pyx_t_4, (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":427
+    /* "../../src/python/pyoti/cython/dense/array.pxi":427
  *       res = oarr_sum_oO(&orhs.num,&lhs.arr, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -9755,7 +9755,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":432
+  /* "../../src/python/pyoti/cython/dense/array.pxi":432
  *       res = oarr_sum_rO(self, &rhs.arr, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -9769,7 +9769,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":434
+    /* "../../src/python/pyoti/cython/dense/array.pxi":434
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -9782,7 +9782,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":435
+    /* "../../src/python/pyoti/cython/dense/array.pxi":435
  * 
  *       lhs = self
  *       res = oarr_sum_rO(other, &lhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9792,7 +9792,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 435, __pyx_L1_error)
     __pyx_v_res = oarr_sum_rO(__pyx_t_4, (&__pyx_v_lhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":432
+    /* "../../src/python/pyoti/cython/dense/array.pxi":432
  *       res = oarr_sum_rO(self, &rhs.arr, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -9802,7 +9802,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":437
+  /* "../../src/python/pyoti/cython/dense/array.pxi":437
  *       res = oarr_sum_rO(other, &lhs.arr, dhl)
  * 
  *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -9814,7 +9814,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":439
+    /* "../../src/python/pyoti/cython/dense/array.pxi":439
  *     elif ( tlhs  == dmat ):
  * 
  *       dlhs = self             # <<<<<<<<<<<<<<
@@ -9827,7 +9827,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_dlhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":440
+    /* "../../src/python/pyoti/cython/dense/array.pxi":440
  * 
  *       dlhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -9840,7 +9840,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":442
+    /* "../../src/python/pyoti/cython/dense/array.pxi":442
  *       rhs = other
  * 
  *       res = oarr_sum_RO(&dlhs.arr,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9849,7 +9849,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sum_RO((&__pyx_v_dlhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":437
+    /* "../../src/python/pyoti/cython/dense/array.pxi":437
  *       res = oarr_sum_rO(other, &lhs.arr, dhl)
  * 
  *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -9859,7 +9859,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":444
+  /* "../../src/python/pyoti/cython/dense/array.pxi":444
  *       res = oarr_sum_RO(&dlhs.arr,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -9871,7 +9871,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":446
+    /* "../../src/python/pyoti/cython/dense/array.pxi":446
  *     elif ( trhs  == dmat ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -9884,7 +9884,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":447
+    /* "../../src/python/pyoti/cython/dense/array.pxi":447
  * 
  *       lhs = self
  *       drhs = other             # <<<<<<<<<<<<<<
@@ -9897,7 +9897,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     __pyx_v_drhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":449
+    /* "../../src/python/pyoti/cython/dense/array.pxi":449
  *       drhs = other
  * 
  *       res = oarr_sum_RO(&drhs.arr,&lhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -9906,7 +9906,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sum_RO((&__pyx_v_drhs->arr), (&__pyx_v_lhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":444
+    /* "../../src/python/pyoti/cython/dense/array.pxi":444
  *       res = oarr_sum_RO(&dlhs.arr,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -9916,7 +9916,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":453
+  /* "../../src/python/pyoti/cython/dense/array.pxi":453
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -9931,7 +9931,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/array.pxi":457
+  /* "../../src/python/pyoti/cython/dense/array.pxi":457
  *     # end if
  * 
  *     return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -9945,7 +9945,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":390
+  /* "../../src/python/pyoti/cython/dense/array.pxi":390
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other):             # <<<<<<<<<<<<<<
@@ -9972,7 +9972,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_14__add__(PyObject *__pyx_v_self, 
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":463
+/* "../../src/python/pyoti/cython/dense/array.pxi":463
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other):             # <<<<<<<<<<<<<<
@@ -10003,7 +10003,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_16__iadd__(struct __pyx_obj_5pyoti
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__iadd__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":469
+  /* "../../src/python/pyoti/cython/dense/array.pxi":469
  *     #*************************************************************************************************
  * 
  *     return self + other             # <<<<<<<<<<<<<<
@@ -10017,7 +10017,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_16__iadd__(struct __pyx_obj_5pyoti
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":463
+  /* "../../src/python/pyoti/cython/dense/array.pxi":463
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other):             # <<<<<<<<<<<<<<
@@ -10036,7 +10036,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_16__iadd__(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":475
+/* "../../src/python/pyoti/cython/dense/array.pxi":475
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other):             # <<<<<<<<<<<<<<
@@ -10079,7 +10079,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__sub__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":488
+  /* "../../src/python/pyoti/cython/dense/array.pxi":488
  *     cdef otinum olhs,orhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -10089,7 +10089,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/array.pxi":489
+  /* "../../src/python/pyoti/cython/dense/array.pxi":489
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -10099,7 +10099,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../pyoti/cython/dense/array.pxi":491
+  /* "../../src/python/pyoti/cython/dense/array.pxi":491
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -10111,7 +10111,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":493
+    /* "../../src/python/pyoti/cython/dense/array.pxi":493
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -10124,7 +10124,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":494
+    /* "../../src/python/pyoti/cython/dense/array.pxi":494
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -10137,7 +10137,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":496
+    /* "../../src/python/pyoti/cython/dense/array.pxi":496
  *       rhs = other
  * 
  *       res = oarr_sub_OO(&lhs.arr,&rhs.arr,dhl)             # <<<<<<<<<<<<<<
@@ -10146,7 +10146,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sub_OO((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":491
+    /* "../../src/python/pyoti/cython/dense/array.pxi":491
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -10156,7 +10156,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":498
+  /* "../../src/python/pyoti/cython/dense/array.pxi":498
  *       res = oarr_sub_OO(&lhs.arr,&rhs.arr,dhl)
  * 
  *     elif ( tlhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -10168,7 +10168,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":500
+    /* "../../src/python/pyoti/cython/dense/array.pxi":500
  *     elif ( tlhs  == otinum ):
  * 
  *       olhs = self             # <<<<<<<<<<<<<<
@@ -10181,7 +10181,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_olhs = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":501
+    /* "../../src/python/pyoti/cython/dense/array.pxi":501
  * 
  *       olhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -10194,7 +10194,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":503
+    /* "../../src/python/pyoti/cython/dense/array.pxi":503
  *       rhs = other
  * 
  *       res = oarr_sub_oO(&olhs.num,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -10203,7 +10203,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sub_oO((&__pyx_v_olhs->num), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":498
+    /* "../../src/python/pyoti/cython/dense/array.pxi":498
  *       res = oarr_sub_OO(&lhs.arr,&rhs.arr,dhl)
  * 
  *     elif ( tlhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -10213,7 +10213,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":505
+  /* "../../src/python/pyoti/cython/dense/array.pxi":505
  *       res = oarr_sub_oO(&olhs.num,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -10225,7 +10225,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":507
+    /* "../../src/python/pyoti/cython/dense/array.pxi":507
  *     elif ( trhs  == otinum ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -10238,7 +10238,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":508
+    /* "../../src/python/pyoti/cython/dense/array.pxi":508
  * 
  *       lhs = self
  *       orhs = other             # <<<<<<<<<<<<<<
@@ -10251,7 +10251,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_orhs = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":510
+    /* "../../src/python/pyoti/cython/dense/array.pxi":510
  *       orhs = other
  * 
  *       res = oarr_sub_Oo(&lhs.arr, &orhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -10260,7 +10260,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sub_Oo((&__pyx_v_lhs->arr), (&__pyx_v_orhs->num), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":505
+    /* "../../src/python/pyoti/cython/dense/array.pxi":505
  *       res = oarr_sub_oO(&olhs.num,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -10270,7 +10270,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":512
+  /* "../../src/python/pyoti/cython/dense/array.pxi":512
  *       res = oarr_sub_Oo(&lhs.arr, &orhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -10284,7 +10284,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/array.pxi":514
+    /* "../../src/python/pyoti/cython/dense/array.pxi":514
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -10297,7 +10297,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":515
+    /* "../../src/python/pyoti/cython/dense/array.pxi":515
  * 
  *       rhs = other
  *       res = oarr_sub_rO(self, &rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -10307,7 +10307,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 515, __pyx_L1_error)
     __pyx_v_res = oarr_sub_rO(__pyx_t_4, (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":512
+    /* "../../src/python/pyoti/cython/dense/array.pxi":512
  *       res = oarr_sub_Oo(&lhs.arr, &orhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -10317,7 +10317,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":517
+  /* "../../src/python/pyoti/cython/dense/array.pxi":517
  *       res = oarr_sub_rO(self, &rhs.arr, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -10331,7 +10331,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":519
+    /* "../../src/python/pyoti/cython/dense/array.pxi":519
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -10344,7 +10344,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":520
+    /* "../../src/python/pyoti/cython/dense/array.pxi":520
  * 
  *       lhs = self
  *       res = oarr_sub_Or(&lhs.arr, other, dhl)             # <<<<<<<<<<<<<<
@@ -10354,7 +10354,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 520, __pyx_L1_error)
     __pyx_v_res = oarr_sub_Or((&__pyx_v_lhs->arr), __pyx_t_4, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":517
+    /* "../../src/python/pyoti/cython/dense/array.pxi":517
  *       res = oarr_sub_rO(self, &rhs.arr, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -10364,7 +10364,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":522
+  /* "../../src/python/pyoti/cython/dense/array.pxi":522
  *       res = oarr_sub_Or(&lhs.arr, other, dhl)
  * 
  *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -10376,7 +10376,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":524
+    /* "../../src/python/pyoti/cython/dense/array.pxi":524
  *     elif ( tlhs  == dmat ):
  * 
  *       dlhs = self             # <<<<<<<<<<<<<<
@@ -10389,7 +10389,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_dlhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":525
+    /* "../../src/python/pyoti/cython/dense/array.pxi":525
  * 
  *       dlhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -10402,7 +10402,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":527
+    /* "../../src/python/pyoti/cython/dense/array.pxi":527
  *       rhs = other
  * 
  *       res = oarr_sub_RO(&dlhs.arr,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -10411,7 +10411,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sub_RO((&__pyx_v_dlhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":522
+    /* "../../src/python/pyoti/cython/dense/array.pxi":522
  *       res = oarr_sub_Or(&lhs.arr, other, dhl)
  * 
  *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -10421,7 +10421,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":529
+  /* "../../src/python/pyoti/cython/dense/array.pxi":529
  *       res = oarr_sub_RO(&dlhs.arr,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -10433,7 +10433,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":531
+    /* "../../src/python/pyoti/cython/dense/array.pxi":531
  *     elif ( trhs  == dmat ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -10446,7 +10446,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":532
+    /* "../../src/python/pyoti/cython/dense/array.pxi":532
  * 
  *       lhs = self
  *       drhs = other             # <<<<<<<<<<<<<<
@@ -10459,7 +10459,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     __pyx_v_drhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":534
+    /* "../../src/python/pyoti/cython/dense/array.pxi":534
  *       drhs = other
  * 
  *       res = oarr_sub_OR(&lhs.arr, &drhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -10468,7 +10468,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_sub_OR((&__pyx_v_lhs->arr), (&__pyx_v_drhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":529
+    /* "../../src/python/pyoti/cython/dense/array.pxi":529
  *       res = oarr_sub_RO(&dlhs.arr,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -10478,7 +10478,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":538
+  /* "../../src/python/pyoti/cython/dense/array.pxi":538
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -10493,7 +10493,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/array.pxi":542
+  /* "../../src/python/pyoti/cython/dense/array.pxi":542
  *     # end if
  * 
  *     return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -10507,7 +10507,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":475
+  /* "../../src/python/pyoti/cython/dense/array.pxi":475
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other):             # <<<<<<<<<<<<<<
@@ -10534,7 +10534,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_18__sub__(PyObject *__pyx_v_self, 
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":548
+/* "../../src/python/pyoti/cython/dense/array.pxi":548
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -10565,7 +10565,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_20__isub__(struct __pyx_obj_5pyoti
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__isub__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":554
+  /* "../../src/python/pyoti/cython/dense/array.pxi":554
  *     #*************************************************************************************************
  * 
  *     return self - other_in             # <<<<<<<<<<<<<<
@@ -10579,7 +10579,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_20__isub__(struct __pyx_obj_5pyoti
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":548
+  /* "../../src/python/pyoti/cython/dense/array.pxi":548
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -10598,7 +10598,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_20__isub__(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":560
+/* "../../src/python/pyoti/cython/dense/array.pxi":560
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other):             # <<<<<<<<<<<<<<
@@ -10641,7 +10641,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__mul__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":573
+  /* "../../src/python/pyoti/cython/dense/array.pxi":573
  *     cdef otinum olhs,orhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -10651,7 +10651,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/array.pxi":574
+  /* "../../src/python/pyoti/cython/dense/array.pxi":574
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -10661,7 +10661,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../pyoti/cython/dense/array.pxi":576
+  /* "../../src/python/pyoti/cython/dense/array.pxi":576
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -10673,7 +10673,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":578
+    /* "../../src/python/pyoti/cython/dense/array.pxi":578
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -10686,7 +10686,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":579
+    /* "../../src/python/pyoti/cython/dense/array.pxi":579
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -10699,7 +10699,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":581
+    /* "../../src/python/pyoti/cython/dense/array.pxi":581
  *       rhs = other
  * 
  *       res = oarr_mul_OO(&lhs.arr,&rhs.arr,dhl)             # <<<<<<<<<<<<<<
@@ -10708,7 +10708,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_mul_OO((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":576
+    /* "../../src/python/pyoti/cython/dense/array.pxi":576
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -10718,7 +10718,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":583
+  /* "../../src/python/pyoti/cython/dense/array.pxi":583
  *       res = oarr_mul_OO(&lhs.arr,&rhs.arr,dhl)
  * 
  *     elif ( tlhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -10730,7 +10730,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":585
+    /* "../../src/python/pyoti/cython/dense/array.pxi":585
  *     elif ( tlhs  == otinum ):
  * 
  *       olhs = self             # <<<<<<<<<<<<<<
@@ -10743,7 +10743,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_olhs = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":586
+    /* "../../src/python/pyoti/cython/dense/array.pxi":586
  * 
  *       olhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -10756,7 +10756,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":588
+    /* "../../src/python/pyoti/cython/dense/array.pxi":588
  *       rhs = other
  * 
  *       res = oarr_mul_oO(&olhs.num,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -10765,7 +10765,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_mul_oO((&__pyx_v_olhs->num), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":583
+    /* "../../src/python/pyoti/cython/dense/array.pxi":583
  *       res = oarr_mul_OO(&lhs.arr,&rhs.arr,dhl)
  * 
  *     elif ( tlhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -10775,7 +10775,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":590
+  /* "../../src/python/pyoti/cython/dense/array.pxi":590
  *       res = oarr_mul_oO(&olhs.num,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -10787,7 +10787,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":592
+    /* "../../src/python/pyoti/cython/dense/array.pxi":592
  *     elif ( trhs  == otinum ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -10800,7 +10800,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":593
+    /* "../../src/python/pyoti/cython/dense/array.pxi":593
  * 
  *       lhs = self
  *       orhs = other             # <<<<<<<<<<<<<<
@@ -10813,7 +10813,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_orhs = ((struct __pyx_obj_5pyoti_5dense_otinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":595
+    /* "../../src/python/pyoti/cython/dense/array.pxi":595
  *       orhs = other
  * 
  *       res = oarr_mul_oO(&orhs.num,&lhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -10822,7 +10822,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_mul_oO((&__pyx_v_orhs->num), (&__pyx_v_lhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":590
+    /* "../../src/python/pyoti/cython/dense/array.pxi":590
  *       res = oarr_mul_oO(&olhs.num,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -10832,7 +10832,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":597
+  /* "../../src/python/pyoti/cython/dense/array.pxi":597
  *       res = oarr_mul_oO(&orhs.num,&lhs.arr, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -10846,7 +10846,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/array.pxi":599
+    /* "../../src/python/pyoti/cython/dense/array.pxi":599
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -10859,7 +10859,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":600
+    /* "../../src/python/pyoti/cython/dense/array.pxi":600
  * 
  *       rhs = other
  *       res = oarr_mul_rO(self, &rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -10869,7 +10869,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 600, __pyx_L1_error)
     __pyx_v_res = oarr_mul_rO(__pyx_t_4, (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":597
+    /* "../../src/python/pyoti/cython/dense/array.pxi":597
  *       res = oarr_mul_oO(&orhs.num,&lhs.arr, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -10879,7 +10879,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":602
+  /* "../../src/python/pyoti/cython/dense/array.pxi":602
  *       res = oarr_mul_rO(self, &rhs.arr, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -10893,7 +10893,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":604
+    /* "../../src/python/pyoti/cython/dense/array.pxi":604
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -10906,7 +10906,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":605
+    /* "../../src/python/pyoti/cython/dense/array.pxi":605
  * 
  *       lhs = self
  *       res = oarr_mul_rO(other, &lhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -10916,7 +10916,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 605, __pyx_L1_error)
     __pyx_v_res = oarr_mul_rO(__pyx_t_4, (&__pyx_v_lhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":602
+    /* "../../src/python/pyoti/cython/dense/array.pxi":602
  *       res = oarr_mul_rO(self, &rhs.arr, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -10926,7 +10926,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":607
+  /* "../../src/python/pyoti/cython/dense/array.pxi":607
  *       res = oarr_mul_rO(other, &lhs.arr, dhl)
  * 
  *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -10938,7 +10938,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":609
+    /* "../../src/python/pyoti/cython/dense/array.pxi":609
  *     elif ( tlhs  == dmat ):
  * 
  *       dlhs = self             # <<<<<<<<<<<<<<
@@ -10951,7 +10951,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_dlhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":610
+    /* "../../src/python/pyoti/cython/dense/array.pxi":610
  * 
  *       dlhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
@@ -10964,7 +10964,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":612
+    /* "../../src/python/pyoti/cython/dense/array.pxi":612
  *       rhs = other
  * 
  *       res = oarr_mul_RO(&dlhs.arr,&rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -10973,7 +10973,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_mul_RO((&__pyx_v_dlhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":607
+    /* "../../src/python/pyoti/cython/dense/array.pxi":607
  *       res = oarr_mul_rO(other, &lhs.arr, dhl)
  * 
  *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -10983,7 +10983,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":614
+  /* "../../src/python/pyoti/cython/dense/array.pxi":614
  *       res = oarr_mul_RO(&dlhs.arr,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -10995,7 +10995,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":616
+    /* "../../src/python/pyoti/cython/dense/array.pxi":616
  *     elif ( trhs  == dmat ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -11008,7 +11008,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":617
+    /* "../../src/python/pyoti/cython/dense/array.pxi":617
  * 
  *       lhs = self
  *       drhs = other             # <<<<<<<<<<<<<<
@@ -11021,7 +11021,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     __pyx_v_drhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":619
+    /* "../../src/python/pyoti/cython/dense/array.pxi":619
  *       drhs = other
  * 
  *       res = oarr_mul_RO(&drhs.arr,&lhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -11030,7 +11030,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
  */
     __pyx_v_res = oarr_mul_RO((&__pyx_v_drhs->arr), (&__pyx_v_lhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":614
+    /* "../../src/python/pyoti/cython/dense/array.pxi":614
  *       res = oarr_mul_RO(&dlhs.arr,&rhs.arr, dhl)
  * 
  *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -11040,7 +11040,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":623
+  /* "../../src/python/pyoti/cython/dense/array.pxi":623
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -11055,7 +11055,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/array.pxi":627
+  /* "../../src/python/pyoti/cython/dense/array.pxi":627
  *     # end if
  * 
  *     return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -11069,7 +11069,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":560
+  /* "../../src/python/pyoti/cython/dense/array.pxi":560
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other):             # <<<<<<<<<<<<<<
@@ -11096,7 +11096,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_22__mul__(PyObject *__pyx_v_self, 
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":635
+/* "../../src/python/pyoti/cython/dense/array.pxi":635
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -11127,7 +11127,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_24__imul__(struct __pyx_obj_5pyoti
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__imul__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":641
+  /* "../../src/python/pyoti/cython/dense/array.pxi":641
  *     #*************************************************************************************************
  * 
  *     return self * other_in             # <<<<<<<<<<<<<<
@@ -11141,7 +11141,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_24__imul__(struct __pyx_obj_5pyoti
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":635
+  /* "../../src/python/pyoti/cython/dense/array.pxi":635
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -11160,7 +11160,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_24__imul__(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":647
+/* "../../src/python/pyoti/cython/dense/array.pxi":647
  * 
  *   #***************************************************************************************************
  *   def __truediv__(self, other):             # <<<<<<<<<<<<<<
@@ -11199,7 +11199,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__truediv__", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":660
+  /* "../../src/python/pyoti/cython/dense/array.pxi":660
  *     cdef otinum olhs,orhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -11209,7 +11209,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/array.pxi":661
+  /* "../../src/python/pyoti/cython/dense/array.pxi":661
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -11219,7 +11219,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../pyoti/cython/dense/array.pxi":663
+  /* "../../src/python/pyoti/cython/dense/array.pxi":663
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -11231,7 +11231,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":670
+    /* "../../src/python/pyoti/cython/dense/array.pxi":670
  *       # res = oarr_div_OO(&lhs.arr,&rhs.arr,dhl)
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -11243,7 +11243,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     __pyx_r = __pyx_builtin_NotImplemented;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/dense/array.pxi":663
+    /* "../../src/python/pyoti/cython/dense/array.pxi":663
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -11252,7 +11252,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":672
+  /* "../../src/python/pyoti/cython/dense/array.pxi":672
  *       return NotImplemented
  * 
  *     elif ( tlhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -11264,7 +11264,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":679
+    /* "../../src/python/pyoti/cython/dense/array.pxi":679
  *       # res = oarr_div_oO(&olhs.num,&rhs.arr, dhl)
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -11276,7 +11276,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     __pyx_r = __pyx_builtin_NotImplemented;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/dense/array.pxi":672
+    /* "../../src/python/pyoti/cython/dense/array.pxi":672
  *       return NotImplemented
  * 
  *     elif ( tlhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -11285,7 +11285,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":681
+  /* "../../src/python/pyoti/cython/dense/array.pxi":681
  *       return NotImplemented
  * 
  *     elif ( trhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -11297,7 +11297,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":688
+    /* "../../src/python/pyoti/cython/dense/array.pxi":688
  *       # res = oarr_div_oO(&orhs.num,&lhs.arr, dhl)
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -11309,7 +11309,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     __pyx_r = __pyx_builtin_NotImplemented;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/dense/array.pxi":681
+    /* "../../src/python/pyoti/cython/dense/array.pxi":681
  *       return NotImplemented
  * 
  *     elif ( trhs  == otinum ):             # <<<<<<<<<<<<<<
@@ -11318,7 +11318,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":690
+  /* "../../src/python/pyoti/cython/dense/array.pxi":690
  *       return NotImplemented
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -11332,7 +11332,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/array.pxi":695
+    /* "../../src/python/pyoti/cython/dense/array.pxi":695
  *       # res = oarr_div_rO(self, &rhs.arr, dhl)
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -11344,7 +11344,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     __pyx_r = __pyx_builtin_NotImplemented;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/dense/array.pxi":690
+    /* "../../src/python/pyoti/cython/dense/array.pxi":690
  *       return NotImplemented
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -11353,7 +11353,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":697
+  /* "../../src/python/pyoti/cython/dense/array.pxi":697
  *       return NotImplemented
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -11367,7 +11367,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":699
+    /* "../../src/python/pyoti/cython/dense/array.pxi":699
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -11380,7 +11380,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":700
+    /* "../../src/python/pyoti/cython/dense/array.pxi":700
  * 
  *       lhs = self
  *       res = oarr_div_Or(&lhs.arr, other, dhl)             # <<<<<<<<<<<<<<
@@ -11390,7 +11390,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(3, 700, __pyx_L1_error)
     __pyx_v_res = oarr_div_Or((&__pyx_v_lhs->arr), __pyx_t_4, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":697
+    /* "../../src/python/pyoti/cython/dense/array.pxi":697
  *       return NotImplemented
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -11400,7 +11400,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":702
+  /* "../../src/python/pyoti/cython/dense/array.pxi":702
  *       res = oarr_div_Or(&lhs.arr, other, dhl)
  * 
  *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -11412,7 +11412,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":709
+    /* "../../src/python/pyoti/cython/dense/array.pxi":709
  *       # res = oarr_div_RO(&dlhs.arr,&rhs.arr, dhl)
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -11424,7 +11424,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     __pyx_r = __pyx_builtin_NotImplemented;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/dense/array.pxi":702
+    /* "../../src/python/pyoti/cython/dense/array.pxi":702
  *       res = oarr_div_Or(&lhs.arr, other, dhl)
  * 
  *     elif ( tlhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -11433,7 +11433,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":711
+  /* "../../src/python/pyoti/cython/dense/array.pxi":711
  *       return NotImplemented
  * 
  *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -11445,7 +11445,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":713
+    /* "../../src/python/pyoti/cython/dense/array.pxi":713
  *     elif ( trhs  == dmat ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
@@ -11458,7 +11458,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":714
+    /* "../../src/python/pyoti/cython/dense/array.pxi":714
  * 
  *       lhs = self
  *       drhs = other             # <<<<<<<<<<<<<<
@@ -11471,7 +11471,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     __pyx_v_drhs = ((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":716
+    /* "../../src/python/pyoti/cython/dense/array.pxi":716
  *       drhs = other
  * 
  *       res = oarr_div_OR(&lhs.arr, &drhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -11480,7 +11480,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
  */
     __pyx_v_res = oarr_div_OR((&__pyx_v_lhs->arr), (&__pyx_v_drhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":711
+    /* "../../src/python/pyoti/cython/dense/array.pxi":711
  *       return NotImplemented
  * 
  *     elif ( trhs  == dmat ):             # <<<<<<<<<<<<<<
@@ -11490,7 +11490,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":720
+  /* "../../src/python/pyoti/cython/dense/array.pxi":720
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -11505,7 +11505,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/array.pxi":724
+  /* "../../src/python/pyoti/cython/dense/array.pxi":724
  *     # end if
  * 
  *     return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -11519,7 +11519,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":647
+  /* "../../src/python/pyoti/cython/dense/array.pxi":647
  * 
  *   #***************************************************************************************************
  *   def __truediv__(self, other):             # <<<<<<<<<<<<<<
@@ -11542,7 +11542,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_26__truediv__(PyObject *__pyx_v_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":752
+/* "../../src/python/pyoti/cython/dense/array.pxi":752
  * 
  *   #***************************************************************************************************
  *   cpdef copy(self):             # <<<<<<<<<<<<<<
@@ -11607,7 +11607,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_copy(struct __pyx_obj_5pyoti_5dense
     #endif
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":760
+  /* "../../src/python/pyoti/cython/dense/array.pxi":760
  *     global dhl
  * 
  *     cdef oarr_t res = oarr_copy(&self.arr, dhl)             # <<<<<<<<<<<<<<
@@ -11616,7 +11616,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_copy(struct __pyx_obj_5pyoti_5dense
  */
   __pyx_v_res = oarr_copy((&__pyx_v_self->arr), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":762
+  /* "../../src/python/pyoti/cython/dense/array.pxi":762
  *     cdef oarr_t res = oarr_copy(&self.arr, dhl)
  * 
  *     return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -11630,7 +11630,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_copy(struct __pyx_obj_5pyoti_5dense
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":752
+  /* "../../src/python/pyoti/cython/dense/array.pxi":752
  * 
  *   #***************************************************************************************************
  *   cpdef copy(self):             # <<<<<<<<<<<<<<
@@ -11689,7 +11689,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_28copy(struct __pyx_obj_5pyoti_5de
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":768
+/* "../../src/python/pyoti/cython/dense/array.pxi":768
  * 
  *   #***************************************************************************************************
  *   def get_deriv(self, hum_dir ,copy=True):             # <<<<<<<<<<<<<<
@@ -11787,7 +11787,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_30get_deriv(struct __pyx_obj_5pyot
   __pyx_pybuffernd_tmp.data = NULL;
   __pyx_pybuffernd_tmp.rcbuffer = &__pyx_pybuffer_tmp;
 
-  /* "../../pyoti/cython/dense/array.pxi":775
+  /* "../../src/python/pyoti/cython/dense/array.pxi":775
  *     global dhl
  * 
  *     cdef list item = imdir(hum_dir)             # <<<<<<<<<<<<<<
@@ -11799,7 +11799,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_30get_deriv(struct __pyx_obj_5pyot
   __pyx_v_item = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":777
+  /* "../../src/python/pyoti/cython/dense/array.pxi":777
  *     cdef list item = imdir(hum_dir)
  *     cdef np.ndarray[coeff_t, ndim=2] tmp
  *     cdef coeff_t factor = 1             # <<<<<<<<<<<<<<
@@ -11808,7 +11808,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_30get_deriv(struct __pyx_obj_5pyot
  */
   __pyx_v_factor = 1.0;
 
-  /* "../../pyoti/cython/dense/array.pxi":779
+  /* "../../src/python/pyoti/cython/dense/array.pxi":779
  *     cdef coeff_t factor = 1
  * 
  *     tmp = self.get_imdir( item[ZERO], item[ONE],copy=copy)             # <<<<<<<<<<<<<<
@@ -11858,7 +11858,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_30get_deriv(struct __pyx_obj_5pyot
   __pyx_v_tmp = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":781
+  /* "../../src/python/pyoti/cython/dense/array.pxi":781
  *     tmp = self.get_imdir( item[ZERO], item[ONE],copy=copy)
  * 
  *     factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)             # <<<<<<<<<<<<<<
@@ -11883,7 +11883,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_30get_deriv(struct __pyx_obj_5pyot
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_factor = dhelp_get_deriv_factor(__pyx_t_2, __pyx_t_3, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":783
+  /* "../../src/python/pyoti/cython/dense/array.pxi":783
  *     factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
  * 
  *     return tmp * factor             # <<<<<<<<<<<<<<
@@ -11900,7 +11900,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_30get_deriv(struct __pyx_obj_5pyot
   __pyx_t_10 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":768
+  /* "../../src/python/pyoti/cython/dense/array.pxi":768
  * 
  *   #***************************************************************************************************
  *   def get_deriv(self, hum_dir ,copy=True):             # <<<<<<<<<<<<<<
@@ -11931,7 +11931,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_30get_deriv(struct __pyx_obj_5pyot
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":788
+/* "../../src/python/pyoti/cython/dense/array.pxi":788
  * 
  *   #***************************************************************************************************
  *   cpdef get_im(self, hum_dir, copy = True):             # <<<<<<<<<<<<<<
@@ -12037,7 +12037,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_im(struct __pyx_obj_5pyoti_5den
     #endif
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":795
+  /* "../../src/python/pyoti/cython/dense/array.pxi":795
  *     global dhl
  * 
  *     cdef list item = imdir(hum_dir)             # <<<<<<<<<<<<<<
@@ -12049,7 +12049,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_im(struct __pyx_obj_5pyoti_5den
   __pyx_v_item = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":797
+  /* "../../src/python/pyoti/cython/dense/array.pxi":797
  *     cdef list item = imdir(hum_dir)
  * 
  *     return self.get_imdir( item[ZERO], item[ONE], copy = copy )             # <<<<<<<<<<<<<<
@@ -12081,7 +12081,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_im(struct __pyx_obj_5pyoti_5den
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":788
+  /* "../../src/python/pyoti/cython/dense/array.pxi":788
  * 
  *   #***************************************************************************************************
  *   cpdef get_im(self, hum_dir, copy = True):             # <<<<<<<<<<<<<<
@@ -12197,7 +12197,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_32get_im(struct __pyx_obj_5pyoti_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":803
+/* "../../src/python/pyoti/cython/dense/array.pxi":803
  * 
  *   #***************************************************************************************************
  *   cpdef get_imdir(self, imdir_t idx , ord_t order, copy = True):             # <<<<<<<<<<<<<<
@@ -12324,7 +12324,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
     #endif
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":814
+  /* "../../src/python/pyoti/cython/dense/array.pxi":814
  *     # Check first if derivative is the real coefficient.
  * 
  *     if order <= self.arr.order:             # <<<<<<<<<<<<<<
@@ -12334,7 +12334,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
   __pyx_t_9 = ((__pyx_v_order <= __pyx_v_self->arr.order) != 0);
   if (__pyx_t_9) {
 
-    /* "../../pyoti/cython/dense/array.pxi":816
+    /* "../../src/python/pyoti/cython/dense/array.pxi":816
  *     if order <= self.arr.order:
  * 
  *       if order == 0:             # <<<<<<<<<<<<<<
@@ -12344,7 +12344,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
     __pyx_t_9 = ((__pyx_v_order == 0) != 0);
     if (__pyx_t_9) {
 
-      /* "../../pyoti/cython/dense/array.pxi":818
+      /* "../../src/python/pyoti/cython/dense/array.pxi":818
  *       if order == 0:
  * 
  *         tmp = c_ptr_to_np_2darray_double(self.arr.re, self.arr.nrows, self.arr.ncols)             # <<<<<<<<<<<<<<
@@ -12373,7 +12373,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
       __pyx_v_tmp = ((PyArrayObject *)__pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":816
+      /* "../../src/python/pyoti/cython/dense/array.pxi":816
  *     if order <= self.arr.order:
  * 
  *       if order == 0:             # <<<<<<<<<<<<<<
@@ -12383,7 +12383,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
       goto __pyx_L4;
     }
 
-    /* "../../pyoti/cython/dense/array.pxi":822
+    /* "../../src/python/pyoti/cython/dense/array.pxi":822
  *       else:
  * 
  *         if idx < self.arr.p_ndpo[order-1]:             # <<<<<<<<<<<<<<
@@ -12394,7 +12394,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
       __pyx_t_9 = ((__pyx_v_idx < (__pyx_v_self->arr.p_ndpo[(__pyx_v_order - 1)])) != 0);
       if (__pyx_t_9) {
 
-        /* "../../pyoti/cython/dense/array.pxi":824
+        /* "../../src/python/pyoti/cython/dense/array.pxi":824
  *         if idx < self.arr.p_ndpo[order-1]:
  * 
  *           tmp =  c_ptr_to_np_2darray_double(self.arr.p_im[ order-1 ][ idx ],             # <<<<<<<<<<<<<<
@@ -12423,7 +12423,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
         __pyx_v_tmp = ((PyArrayObject *)__pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/dense/array.pxi":822
+        /* "../../src/python/pyoti/cython/dense/array.pxi":822
  *       else:
  * 
  *         if idx < self.arr.p_ndpo[order-1]:             # <<<<<<<<<<<<<<
@@ -12433,7 +12433,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
         goto __pyx_L5;
       }
 
-      /* "../../pyoti/cython/dense/array.pxi":829
+      /* "../../src/python/pyoti/cython/dense/array.pxi":829
  *         else:
  * 
  *           tmp = np.zeros(self.shape)             # <<<<<<<<<<<<<<
@@ -12491,7 +12491,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
     }
     __pyx_L4:;
 
-    /* "../../pyoti/cython/dense/array.pxi":814
+    /* "../../src/python/pyoti/cython/dense/array.pxi":814
  *     # Check first if derivative is the real coefficient.
  * 
  *     if order <= self.arr.order:             # <<<<<<<<<<<<<<
@@ -12501,7 +12501,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":837
+  /* "../../src/python/pyoti/cython/dense/array.pxi":837
  *     else:
  * 
  *       tmp = np.zeros(self.shape)             # <<<<<<<<<<<<<<
@@ -12557,7 +12557,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/array.pxi":842
+  /* "../../src/python/pyoti/cython/dense/array.pxi":842
  * 
  *     # Export as a copy if requested.
  *     if copy:             # <<<<<<<<<<<<<<
@@ -12567,7 +12567,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
   __pyx_t_9 = __Pyx_PyObject_IsTrue(__pyx_v_copy); if (unlikely(__pyx_t_9 < 0)) __PYX_ERR(3, 842, __pyx_L1_error)
   if (__pyx_t_9) {
 
-    /* "../../pyoti/cython/dense/array.pxi":844
+    /* "../../src/python/pyoti/cython/dense/array.pxi":844
  *     if copy:
  * 
  *       return tmp.copy()             # <<<<<<<<<<<<<<
@@ -12596,7 +12596,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/dense/array.pxi":842
+    /* "../../src/python/pyoti/cython/dense/array.pxi":842
  * 
  *     # Export as a copy if requested.
  *     if copy:             # <<<<<<<<<<<<<<
@@ -12605,7 +12605,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":848
+  /* "../../src/python/pyoti/cython/dense/array.pxi":848
  *     else:
  * 
  *       return tmp             # <<<<<<<<<<<<<<
@@ -12619,7 +12619,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_get_imdir(struct __pyx_obj_5pyoti_5
     goto __pyx_L0;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":803
+  /* "../../src/python/pyoti/cython/dense/array.pxi":803
  * 
  *   #***************************************************************************************************
  *   cpdef get_imdir(self, imdir_t idx , ord_t order, copy = True):             # <<<<<<<<<<<<<<
@@ -12757,7 +12757,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_34get_imdir(struct __pyx_obj_5pyot
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":857
+/* "../../src/python/pyoti/cython/dense/array.pxi":857
  * 
  *   #***************************************************************************************************
  *   cpdef set_imdir(self,np.ndarray[coeff_t, ndim=2] arr, imdir_t idx , ord_t order):             # <<<<<<<<<<<<<<
@@ -12879,7 +12879,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
     #endif
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":866
+  /* "../../src/python/pyoti/cython/dense/array.pxi":866
  *     # Check first if derivative is the real coefficient.
  * 
  *     if (arr.shape[0] != self.arr.nrows or arr.shape[1] != self.arr.ncols):             # <<<<<<<<<<<<<<
@@ -12897,7 +12897,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
   __pyx_L4_bool_binop_done:;
   if (unlikely(__pyx_t_9)) {
 
-    /* "../../pyoti/cython/dense/array.pxi":868
+    /* "../../src/python/pyoti/cython/dense/array.pxi":868
  *     if (arr.shape[0] != self.arr.nrows or arr.shape[1] != self.arr.ncols):
  * 
  *       raise IndexError("Dimension mismatch in set_imdir() method.")             # <<<<<<<<<<<<<<
@@ -12910,7 +12910,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __PYX_ERR(3, 868, __pyx_L1_error)
 
-    /* "../../pyoti/cython/dense/array.pxi":866
+    /* "../../src/python/pyoti/cython/dense/array.pxi":866
  *     # Check first if derivative is the real coefficient.
  * 
  *     if (arr.shape[0] != self.arr.nrows or arr.shape[1] != self.arr.ncols):             # <<<<<<<<<<<<<<
@@ -12919,7 +12919,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":872
+  /* "../../src/python/pyoti/cython/dense/array.pxi":872
  *     # end if
  * 
  *     if (order <= self.arr.order):             # <<<<<<<<<<<<<<
@@ -12929,7 +12929,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
   __pyx_t_9 = ((__pyx_v_order <= __pyx_v_self->arr.order) != 0);
   if (__pyx_t_9) {
 
-    /* "../../pyoti/cython/dense/array.pxi":874
+    /* "../../src/python/pyoti/cython/dense/array.pxi":874
  *     if (order <= self.arr.order):
  * 
  *       if (order == 0):             # <<<<<<<<<<<<<<
@@ -12939,7 +12939,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
     __pyx_t_9 = ((__pyx_v_order == 0) != 0);
     if (__pyx_t_9) {
 
-      /* "../../pyoti/cython/dense/array.pxi":876
+      /* "../../src/python/pyoti/cython/dense/array.pxi":876
  *       if (order == 0):
  * 
  *         copy_numpy2d_to_ptr_f64(arr, self.arr.re)             # <<<<<<<<<<<<<<
@@ -12950,7 +12950,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":874
+      /* "../../src/python/pyoti/cython/dense/array.pxi":874
  *     if (order <= self.arr.order):
  * 
  *       if (order == 0):             # <<<<<<<<<<<<<<
@@ -12960,7 +12960,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
       goto __pyx_L7;
     }
 
-    /* "../../pyoti/cython/dense/array.pxi":880
+    /* "../../src/python/pyoti/cython/dense/array.pxi":880
  *       else:
  * 
  *         if (idx <= self.arr.p_ndpo[order-1]):             # <<<<<<<<<<<<<<
@@ -12971,7 +12971,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
       __pyx_t_9 = ((__pyx_v_idx <= (__pyx_v_self->arr.p_ndpo[(__pyx_v_order - 1)])) != 0);
       if (__pyx_t_9) {
 
-        /* "../../pyoti/cython/dense/array.pxi":882
+        /* "../../src/python/pyoti/cython/dense/array.pxi":882
  *         if (idx <= self.arr.p_ndpo[order-1]):
  * 
  *           copy_numpy2d_to_ptr_f64(arr, self.arr.p_im[ order-1 ][ idx ])             # <<<<<<<<<<<<<<
@@ -12982,7 +12982,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/dense/array.pxi":880
+        /* "../../src/python/pyoti/cython/dense/array.pxi":880
  *       else:
  * 
  *         if (idx <= self.arr.p_ndpo[order-1]):             # <<<<<<<<<<<<<<
@@ -12993,7 +12993,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
     }
     __pyx_L7:;
 
-    /* "../../pyoti/cython/dense/array.pxi":872
+    /* "../../src/python/pyoti/cython/dense/array.pxi":872
  *     # end if
  * 
  *     if (order <= self.arr.order):             # <<<<<<<<<<<<<<
@@ -13002,7 +13002,7 @@ static PyObject *__pyx_f_5pyoti_5dense_4omat_set_imdir(struct __pyx_obj_5pyoti_5
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":857
+  /* "../../src/python/pyoti/cython/dense/array.pxi":857
  * 
  *   #***************************************************************************************************
  *   cpdef set_imdir(self,np.ndarray[coeff_t, ndim=2] arr, imdir_t idx , ord_t order):             # <<<<<<<<<<<<<<
@@ -13266,7 +13266,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4omat_40__setstate_cython__(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":905
+/* "../../src/python/pyoti/cython/dense/array.pxi":905
  * 
  * #***************************************************************************************************
  * cpdef omat addO(omat lhs, omat rhs, omat out = None):             # <<<<<<<<<<<<<<
@@ -13289,7 +13289,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_addO(struct __
     }
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":921
+  /* "../../src/python/pyoti/cython/dense/array.pxi":921
  *   cdef oarr_t res
  * 
  *   if out != None:             # <<<<<<<<<<<<<<
@@ -13301,7 +13301,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_addO(struct __
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/array.pxi":923
+    /* "../../src/python/pyoti/cython/dense/array.pxi":923
  *   if out != None:
  * 
  *     oarr_sum_OO_to(&lhs.arr, &rhs.arr, &out.arr ,dhl)             # <<<<<<<<<<<<<<
@@ -13310,7 +13310,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_addO(struct __
  */
     oarr_sum_OO_to((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr), (&__pyx_v_out->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":924
+    /* "../../src/python/pyoti/cython/dense/array.pxi":924
  * 
  *     oarr_sum_OO_to(&lhs.arr, &rhs.arr, &out.arr ,dhl)
  *     return None             # <<<<<<<<<<<<<<
@@ -13321,7 +13321,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_addO(struct __
     __pyx_r = ((struct __pyx_obj_5pyoti_5dense_omat *)Py_None); __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/dense/array.pxi":921
+    /* "../../src/python/pyoti/cython/dense/array.pxi":921
  *   cdef oarr_t res
  * 
  *   if out != None:             # <<<<<<<<<<<<<<
@@ -13330,7 +13330,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_addO(struct __
  */
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":928
+  /* "../../src/python/pyoti/cython/dense/array.pxi":928
  *   else:
  *     #
  *     res = oarr_sum_OO(&lhs.arr, &rhs.arr, dhl)             # <<<<<<<<<<<<<<
@@ -13340,7 +13340,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_addO(struct __
   /*else*/ {
     __pyx_v_res = oarr_sum_OO((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr), __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/array.pxi":930
+    /* "../../src/python/pyoti/cython/dense/array.pxi":930
  *     res = oarr_sum_OO(&lhs.arr, &rhs.arr, dhl)
  * 
  *     return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -13355,7 +13355,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_addO(struct __
     goto __pyx_L0;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":905
+  /* "../../src/python/pyoti/cython/dense/array.pxi":905
  * 
  * #***************************************************************************************************
  * cpdef omat addO(omat lhs, omat rhs, omat out = None):             # <<<<<<<<<<<<<<
@@ -13484,7 +13484,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_addO(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":937
+/* "../../src/python/pyoti/cython/dense/array.pxi":937
  * 
  * #***************************************************************************************************
  * cpdef addO_to(omat lhs, omat rhs, omat out):             # <<<<<<<<<<<<<<
@@ -13498,7 +13498,7 @@ static PyObject *__pyx_f_5pyoti_5dense_addO_to(struct __pyx_obj_5pyoti_5dense_om
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("addO_to", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":952
+  /* "../../src/python/pyoti/cython/dense/array.pxi":952
  *   global dhl
  * 
  *   oarr_sum_OO_to(&lhs.arr, &rhs.arr, &out.arr ,dhl)             # <<<<<<<<<<<<<<
@@ -13507,7 +13507,7 @@ static PyObject *__pyx_f_5pyoti_5dense_addO_to(struct __pyx_obj_5pyoti_5dense_om
  */
   oarr_sum_OO_to((&__pyx_v_lhs->arr), (&__pyx_v_rhs->arr), (&__pyx_v_out->arr), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":937
+  /* "../../src/python/pyoti/cython/dense/array.pxi":937
  * 
  * #***************************************************************************************************
  * cpdef addO_to(omat lhs, omat rhs, omat out):             # <<<<<<<<<<<<<<
@@ -13625,7 +13625,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_2addO_to(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":959
+/* "../../src/python/pyoti/cython/dense/array.pxi":959
  * 
  * #*****************************************************************************************************
  * cpdef omat dot(omat A, omat B):             # <<<<<<<<<<<<<<
@@ -13641,7 +13641,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_dot(struct __p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("dot", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":963
+  /* "../../src/python/pyoti/cython/dense/array.pxi":963
  *   global dhl
  * 
  *   cdef oarr_t res = oarr_matmul_OO( &A.arr, &B.arr , dhl)             # <<<<<<<<<<<<<<
@@ -13650,7 +13650,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_dot(struct __p
  */
   __pyx_v_res = oarr_matmul_OO((&__pyx_v_A->arr), (&__pyx_v_B->arr), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":967
+  /* "../../src/python/pyoti/cython/dense/array.pxi":967
  *   # TODO: Add check in python code.
  * 
  *   return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -13664,7 +13664,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_dot(struct __p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":959
+  /* "../../src/python/pyoti/cython/dense/array.pxi":959
  * 
  * #*****************************************************************************************************
  * cpdef omat dot(omat A, omat B):             # <<<<<<<<<<<<<<
@@ -13773,7 +13773,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_4dot(CYTHON_UNUSED PyObject *__pyx_self,
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":973
+/* "../../src/python/pyoti/cython/dense/array.pxi":973
  * 
  * #*****************************************************************************************************
  * cpdef omat invert(omat A):             # <<<<<<<<<<<<<<
@@ -13789,7 +13789,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_invert(struct 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("invert", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":977
+  /* "../../src/python/pyoti/cython/dense/array.pxi":977
  *   global dhl
  * 
  *   cdef oarr_t res = oarr_invert( &A.arr, dhl )             # <<<<<<<<<<<<<<
@@ -13798,7 +13798,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_invert(struct 
  */
   __pyx_v_res = oarr_invert((&__pyx_v_A->arr), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":981
+  /* "../../src/python/pyoti/cython/dense/array.pxi":981
  *   # TODO: Add check in python code.
  * 
  *   return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -13812,7 +13812,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_invert(struct 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":973
+  /* "../../src/python/pyoti/cython/dense/array.pxi":973
  * 
  * #*****************************************************************************************************
  * cpdef omat invert(omat A):             # <<<<<<<<<<<<<<
@@ -13872,7 +13872,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_6invert(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":988
+/* "../../src/python/pyoti/cython/dense/array.pxi":988
  * 
  * #*****************************************************************************************************
  * cpdef omat transpose(omat A):             # <<<<<<<<<<<<<<
@@ -13888,7 +13888,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_transpose(stru
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("transpose", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":992
+  /* "../../src/python/pyoti/cython/dense/array.pxi":992
  *   global dhl
  * 
  *   cdef oarr_t res = oarr_transpose( &A.arr, dhl )             # <<<<<<<<<<<<<<
@@ -13897,7 +13897,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_transpose(stru
  */
   __pyx_v_res = oarr_transpose((&__pyx_v_A->arr), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":996
+  /* "../../src/python/pyoti/cython/dense/array.pxi":996
  *   # TODO: Add check in python code.
  * 
  *   return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -13911,7 +13911,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_transpose(stru
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":988
+  /* "../../src/python/pyoti/cython/dense/array.pxi":988
  * 
  * #*****************************************************************************************************
  * cpdef omat transpose(omat A):             # <<<<<<<<<<<<<<
@@ -13971,7 +13971,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8transpose(CYTHON_UNUSED PyObject *__pyx
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":1001
+/* "../../src/python/pyoti/cython/dense/array.pxi":1001
  * 
  * #*****************************************************************************************************
  * cpdef otinum det(omat A):             # <<<<<<<<<<<<<<
@@ -13987,7 +13987,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_det(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("det", 0);
 
-  /* "../../pyoti/cython/dense/array.pxi":1005
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1005
  *   global dhl
  * 
  *   cdef otinum_t res = oarr_det( &A.arr, dhl)             # <<<<<<<<<<<<<<
@@ -13996,7 +13996,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_det(struct _
  */
   __pyx_v_res = oarr_det((&__pyx_v_A->arr), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":1007
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1007
  *   cdef otinum_t res = oarr_det( &A.arr, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -14010,7 +14010,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_det(struct _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1001
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1001
  * 
  * #*****************************************************************************************************
  * cpdef otinum det(omat A):             # <<<<<<<<<<<<<<
@@ -14070,7 +14070,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_10det(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":1016
+/* "../../src/python/pyoti/cython/dense/array.pxi":1016
  * 
  * #*****************************************************************************************************
  * cpdef omat eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14096,7 +14096,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_eye(uint64_t _
     }
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":1020
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1020
  *   global dhl
  * 
  *   cdef oarr_t res = oarr_eye(size, nbases, order, dhl)             # <<<<<<<<<<<<<<
@@ -14105,7 +14105,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_eye(uint64_t _
  */
   __pyx_v_res = oarr_eye(__pyx_v_size, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":1022
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1022
  *   cdef oarr_t res = oarr_eye(size, nbases, order, dhl)
  * 
  *   return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -14119,7 +14119,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_eye(uint64_t _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1016
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1016
  * 
  * #*****************************************************************************************************
  * cpdef omat eye(uint64_t size, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14249,7 +14249,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_12eye(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":1027
+/* "../../src/python/pyoti/cython/dense/array.pxi":1027
  * 
  * #*****************************************************************************************************
  * cpdef omat zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14275,7 +14275,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_zeros(uint64_t
     }
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":1031
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1031
  *   global dhl
  * 
  *   cdef oarr_t res = oarr_zeros(nrows,ncols,nbases,order,dhl)             # <<<<<<<<<<<<<<
@@ -14284,7 +14284,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_zeros(uint64_t
  */
   __pyx_v_res = oarr_zeros(__pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":1033
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1033
  *   cdef oarr_t res = oarr_zeros(nrows,ncols,nbases,order,dhl)
  * 
  *   return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -14298,7 +14298,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_zeros(uint64_t
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1027
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1027
  * 
  * #*****************************************************************************************************
  * cpdef omat zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14439,7 +14439,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_14zeros(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":1038
+/* "../../src/python/pyoti/cython/dense/array.pxi":1038
  * 
  * #*****************************************************************************************************
  * cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14465,7 +14465,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_ones(uint64_t 
     }
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":1042
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1042
  *   global dhl
  * 
  *   cdef oarr_t res = oarr_ones(nrows,ncols,nbases,order,dhl)             # <<<<<<<<<<<<<<
@@ -14474,7 +14474,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_ones(uint64_t 
  */
   __pyx_v_res = oarr_ones(__pyx_v_nrows, __pyx_v_ncols, __pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":1044
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1044
  *   cdef oarr_t res = oarr_ones(nrows,ncols,nbases,order,dhl)
  * 
  *   return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -14488,7 +14488,7 @@ static struct __pyx_obj_5pyoti_5dense_omat *__pyx_f_5pyoti_5dense_ones(uint64_t 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1038
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1038
  * 
  * #*****************************************************************************************************
  * cpdef omat ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):             # <<<<<<<<<<<<<<
@@ -14629,7 +14629,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_16ones(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":1051
+/* "../../src/python/pyoti/cython/dense/array.pxi":1051
  * 
  * #*****************************************************************************************************
  * def solve(omat A, omat b):             # <<<<<<<<<<<<<<
@@ -14807,7 +14807,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_pybuffernd_ord_coo.data = NULL;
   __pyx_pybuffernd_ord_coo.rcbuffer = &__pyx_pybuffer_ord_coo;
 
-  /* "../../pyoti/cython/dense/array.pxi":1060
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1060
  *   global dhl
  * 
  *   from scipy.sparse import coo_matrix             # <<<<<<<<<<<<<<
@@ -14829,7 +14829,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1061
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1061
  * 
  *   from scipy.sparse import coo_matrix
  *   from scipy.linalg import lu_factor, lu_solve             # <<<<<<<<<<<<<<
@@ -14859,7 +14859,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1078
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1078
  *   cdef np.ndarray[ uint8_t, ndim=1] ord_coo
  * 
  *   maxorder  = max(A.arr.order, b.arr.order)             # <<<<<<<<<<<<<<
@@ -14878,7 +14878,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_maxorder = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1079
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1079
  * 
  *   maxorder  = max(A.arr.order, b.arr.order)
  *   maxnbases = max(A.arr.nbases,b.arr.nbases)             # <<<<<<<<<<<<<<
@@ -14897,7 +14897,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_maxnbases = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1081
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1081
  *   maxnbases = max(A.arr.nbases,b.arr.nbases)
  * 
  *   res = zeros(b.arr.nrows, b.arr.ncols, nbases = maxnbases, order = maxorder)             # <<<<<<<<<<<<<<
@@ -14914,7 +14914,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1084
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1084
  * 
  *   # TODO: use matrix inner product from dmat object.
  *   matform = dhelp_matrix_form_indices(maxnbases,maxorder,dhl)             # <<<<<<<<<<<<<<
@@ -14925,7 +14925,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_t_5 = __Pyx_PyInt_As_uint8_t(__pyx_v_maxorder); if (unlikely((__pyx_t_5 == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(3, 1084, __pyx_L1_error)
   __pyx_v_matform = dhelp_matrix_form_indices(__pyx_t_8, __pyx_t_5, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":1086
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1086
  *   matform = dhelp_matrix_form_indices(maxnbases,maxorder,dhl)
  * 
  *   rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)             # <<<<<<<<<<<<<<
@@ -14954,7 +14954,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_rows = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1087
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1087
  * 
  *   rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)
  *   cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)             # <<<<<<<<<<<<<<
@@ -14983,7 +14983,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_cols = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1088
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1088
  *   rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)
  *   cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)
  *   idx_coo = c_ptr_to_np_1darray_uint64( matform.p_im  , matform.nonzero)             # <<<<<<<<<<<<<<
@@ -15012,7 +15012,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_idx_coo = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1089
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1089
  *   cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)
  *   idx_coo = c_ptr_to_np_1darray_uint64( matform.p_im  , matform.nonzero)
  *   ord_coo = c_ptr_to_np_1darray_uint8 ( matform.p_ord , matform.nonzero)             # <<<<<<<<<<<<<<
@@ -15041,7 +15041,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_ord_coo = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1093
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1093
  * 
  * 
  *   indices = np.arange( 1, matform.nonzero+1, dtype = np.uint64)             # <<<<<<<<<<<<<<
@@ -15080,7 +15080,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_indices = __pyx_t_16;
   __pyx_t_16 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1095
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1095
  *   indices = np.arange( 1, matform.nonzero+1, dtype = np.uint64)
  * 
  *   dummy_mat = coo_matrix( ( indices, (rows.copy(), cols.copy()) ), dtype = np.uint64 )             # <<<<<<<<<<<<<<
@@ -15158,7 +15158,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_dummy_mat = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1096
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1096
  * 
  *   dummy_mat = coo_matrix( ( indices, (rows.copy(), cols.copy()) ), dtype = np.uint64 )
  *   dummy_mat = dummy_mat.tocsr()             # <<<<<<<<<<<<<<
@@ -15185,7 +15185,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __Pyx_DECREF_SET(__pyx_v_dummy_mat, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1099
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1099
  * 
  *   # first_col_indices = dummy_mat[:,0].data-1
  *   first_col_indices = indices[ (matform.sizex-1) : (2*matform.sizex-1) ] - 1             # <<<<<<<<<<<<<<
@@ -15200,7 +15200,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_first_col_indices = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1102
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1102
  * 
  *   # Get vector form index and order pairs
  *   vec_form_idx = idx_coo[first_col_indices]             # <<<<<<<<<<<<<<
@@ -15212,7 +15212,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_vec_form_idx = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1103
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1103
  *   # Get vector form index and order pairs
  *   vec_form_idx = idx_coo[first_col_indices]
  *   vec_form_ord = ord_coo[first_col_indices]             # <<<<<<<<<<<<<<
@@ -15224,7 +15224,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_vec_form_ord = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1108
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1108
  * 
  *   # Factorize system.
  *   factorization = lu_factor( A.get_imdir(0,0) )             # <<<<<<<<<<<<<<
@@ -15253,7 +15253,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_factorization = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1111
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1111
  * 
  *   # Solve the real system of equations.
  *   tmp = lu_solve(factorization, b.get_imdir(0,0) )             # <<<<<<<<<<<<<<
@@ -15333,7 +15333,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_tmp = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1112
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1112
  *   # Solve the real system of equations.
  *   tmp = lu_solve(factorization, b.get_imdir(0,0) )
  *   res.set_imdir( tmp, 0, 0)             # <<<<<<<<<<<<<<
@@ -15344,7 +15344,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1115
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1115
  * 
  *   # Solve the imaginary systems.
  *   tmp_rhs = np.zeros(b.shape,dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -15400,7 +15400,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_tmp_rhs = ((PyArrayObject *)__pyx_t_16);
   __pyx_t_16 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1116
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1116
  *   # Solve the imaginary systems.
  *   tmp_rhs = np.zeros(b.shape,dtype = np.float64)
  *   tmp_dot = np.zeros(b.shape,dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -15456,7 +15456,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_v_tmp_dot = ((PyArrayObject *)__pyx_t_14);
   __pyx_t_14 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1118
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1118
  *   tmp_dot = np.zeros(b.shape,dtype = np.float64)
  * 
  *   for i in range(1, dummy_mat.shape[0]):             # <<<<<<<<<<<<<<
@@ -15474,7 +15474,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   for (__pyx_t_22 = 1; __pyx_t_22 < __pyx_t_21; __pyx_t_22+=1) {
     __pyx_v_i = __pyx_t_22;
 
-    /* "../../pyoti/cython/dense/array.pxi":1123
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1123
  *     # get the i'th row of elements to operate.
  *     # row_indices = dummy_mat[i].data - 1
  *     row_indices = dummy_mat.data[dummy_mat.indptr[i]:dummy_mat.indptr[i+1]] - 1             # <<<<<<<<<<<<<<
@@ -15505,7 +15505,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_XDECREF_SET(__pyx_v_row_indices, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1125
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1125
  *     row_indices = dummy_mat.data[dummy_mat.indptr[i]:dummy_mat.indptr[i+1]] - 1
  * 
  *     row_idx = idx_coo[row_indices]             # <<<<<<<<<<<<<<
@@ -15517,7 +15517,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_XDECREF_SET(__pyx_v_row_idx, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1126
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1126
  * 
  *     row_idx = idx_coo[row_indices]
  *     row_ord = ord_coo[row_indices]             # <<<<<<<<<<<<<<
@@ -15529,7 +15529,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_XDECREF_SET(__pyx_v_row_ord, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1129
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1129
  * 
  *     # Get the imaginary direation from the OTI rhs
  *     tmp_rhs[:,:] = b.get_imdir( row_idx[ZERO], row_ord[ZERO], copy=False )             # <<<<<<<<<<<<<<
@@ -15551,7 +15551,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_tmp_rhs), __pyx_tuple__20, __pyx_t_1) < 0)) __PYX_ERR(3, 1129, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1133
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1133
  *     # print("RHS:\n",tmp_rhs)
  * 
  *     k = row_idx.size-1             # <<<<<<<<<<<<<<
@@ -15567,7 +15567,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
     __pyx_v_k = __pyx_t_23;
 
-    /* "../../pyoti/cython/dense/array.pxi":1135
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1135
  *     k = row_idx.size-1
  *     # Get A imaginary times b real.
  *     np.dot( A.get_imdir(row_idx[ZERO], row_ord[ZERO], copy=False ),             # <<<<<<<<<<<<<<
@@ -15592,7 +15592,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __pyx_t_14 = ((struct __pyx_vtabstruct_5pyoti_5dense_omat *)__pyx_v_A->__pyx_vtab)->get_imdir(__pyx_v_A, __pyx_t_24, __pyx_t_5, 0, &__pyx_t_25); if (unlikely(!__pyx_t_14)) __PYX_ERR(3, 1135, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_14);
 
-    /* "../../pyoti/cython/dense/array.pxi":1136
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1136
  *     # Get A imaginary times b real.
  *     np.dot( A.get_imdir(row_idx[ZERO], row_ord[ZERO], copy=False ),
  *           res.get_imdir(row_idx[   k], row_ord[   k], copy=False ), out = tmp_dot )             # <<<<<<<<<<<<<<
@@ -15612,7 +15612,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __pyx_t_15 = ((struct __pyx_vtabstruct_5pyoti_5dense_omat *)__pyx_v_res->__pyx_vtab)->get_imdir(__pyx_v_res, __pyx_t_24, __pyx_t_5, 0, &__pyx_t_25); if (unlikely(!__pyx_t_15)) __PYX_ERR(3, 1136, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_15);
 
-    /* "../../pyoti/cython/dense/array.pxi":1135
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1135
  *     k = row_idx.size-1
  *     # Get A imaginary times b real.
  *     np.dot( A.get_imdir(row_idx[ZERO], row_ord[ZERO], copy=False ),             # <<<<<<<<<<<<<<
@@ -15628,7 +15628,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __pyx_t_14 = 0;
     __pyx_t_15 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1136
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1136
  *     # Get A imaginary times b real.
  *     np.dot( A.get_imdir(row_idx[ZERO], row_ord[ZERO], copy=False ),
  *           res.get_imdir(row_idx[   k], row_ord[   k], copy=False ), out = tmp_dot )             # <<<<<<<<<<<<<<
@@ -15639,7 +15639,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_GOTREF(__pyx_t_15);
     if (PyDict_SetItem(__pyx_t_15, __pyx_n_s_out, ((PyObject *)__pyx_v_tmp_dot)) < 0) __PYX_ERR(3, 1136, __pyx_L1_error)
 
-    /* "../../pyoti/cython/dense/array.pxi":1135
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1135
  *     k = row_idx.size-1
  *     # Get A imaginary times b real.
  *     np.dot( A.get_imdir(row_idx[ZERO], row_ord[ZERO], copy=False ),             # <<<<<<<<<<<<<<
@@ -15653,7 +15653,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
     __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1138
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1138
  *           res.get_imdir(row_idx[   k], row_ord[   k], copy=False ), out = tmp_dot )
  * 
  *     tmp_rhs -= tmp_dot             # <<<<<<<<<<<<<<
@@ -15685,7 +15685,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_DECREF_SET(__pyx_v_tmp_rhs, ((PyArrayObject *)__pyx_t_14));
     __pyx_t_14 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1142
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1142
  *     # print("RHS:\n",tmp_rhs)
  *     # Solving
  *     for j in range(1,row_idx.size-1):             # <<<<<<<<<<<<<<
@@ -15703,7 +15703,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     for (__pyx_t_23 = 1; __pyx_t_23 < __pyx_t_27; __pyx_t_23+=1) {
       __pyx_v_j = __pyx_t_23;
 
-      /* "../../pyoti/cython/dense/array.pxi":1144
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1144
  *     for j in range(1,row_idx.size-1):
  * 
  *       k = (row_idx.size-1) - j             # <<<<<<<<<<<<<<
@@ -15725,7 +15725,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
       __pyx_v_k = __pyx_t_28;
 
-      /* "../../pyoti/cython/dense/array.pxi":1148
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1148
  *       # Get A imaginary times b real.
  * 
  *       np.dot( A.get_imdir(row_idx[j], row_ord[j], copy=False ),             # <<<<<<<<<<<<<<
@@ -15750,7 +15750,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
       __pyx_t_16 = ((struct __pyx_vtabstruct_5pyoti_5dense_omat *)__pyx_v_A->__pyx_vtab)->get_imdir(__pyx_v_A, __pyx_t_24, __pyx_t_5, 0, &__pyx_t_25); if (unlikely(!__pyx_t_16)) __PYX_ERR(3, 1148, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_16);
 
-      /* "../../pyoti/cython/dense/array.pxi":1149
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1149
  * 
  *       np.dot( A.get_imdir(row_idx[j], row_ord[j], copy=False ),
  *             res.get_imdir(row_idx[k], row_ord[k], copy=False ),out = tmp_dot )             # <<<<<<<<<<<<<<
@@ -15770,7 +15770,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
       __pyx_t_14 = ((struct __pyx_vtabstruct_5pyoti_5dense_omat *)__pyx_v_res->__pyx_vtab)->get_imdir(__pyx_v_res, __pyx_t_24, __pyx_t_5, 0, &__pyx_t_25); if (unlikely(!__pyx_t_14)) __PYX_ERR(3, 1149, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_14);
 
-      /* "../../pyoti/cython/dense/array.pxi":1148
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1148
  *       # Get A imaginary times b real.
  * 
  *       np.dot( A.get_imdir(row_idx[j], row_ord[j], copy=False ),             # <<<<<<<<<<<<<<
@@ -15786,7 +15786,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
       __pyx_t_16 = 0;
       __pyx_t_14 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":1149
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1149
  * 
  *       np.dot( A.get_imdir(row_idx[j], row_ord[j], copy=False ),
  *             res.get_imdir(row_idx[k], row_ord[k], copy=False ),out = tmp_dot )             # <<<<<<<<<<<<<<
@@ -15797,7 +15797,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
       __Pyx_GOTREF(__pyx_t_14);
       if (PyDict_SetItem(__pyx_t_14, __pyx_n_s_out, ((PyObject *)__pyx_v_tmp_dot)) < 0) __PYX_ERR(3, 1149, __pyx_L1_error)
 
-      /* "../../pyoti/cython/dense/array.pxi":1148
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1148
  *       # Get A imaginary times b real.
  * 
  *       np.dot( A.get_imdir(row_idx[j], row_ord[j], copy=False ),             # <<<<<<<<<<<<<<
@@ -15811,7 +15811,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":1150
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1150
  *       np.dot( A.get_imdir(row_idx[j], row_ord[j], copy=False ),
  *             res.get_imdir(row_idx[k], row_ord[k], copy=False ),out = tmp_dot )
  *       tmp_rhs -= tmp_dot             # <<<<<<<<<<<<<<
@@ -15844,7 +15844,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
       __pyx_t_16 = 0;
     }
 
-    /* "../../pyoti/cython/dense/array.pxi":1155
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1155
  *     # print("\n\nFinal RHS:\n",tmp_rhs)
  *     # Solve the system of equations.
  *     tmp = lu_solve(factorization, tmp_rhs )             # <<<<<<<<<<<<<<
@@ -15920,7 +15920,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_DECREF_SET(__pyx_v_tmp, ((PyArrayObject *)__pyx_t_16));
     __pyx_t_16 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1158
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1158
  * 
  *     # Write the result on the system.
  *     res.set_imdir( tmp, vec_form_idx[i], vec_form_ord[i])             # <<<<<<<<<<<<<<
@@ -15940,7 +15940,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
     __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":1162
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1162
  *   # end for
  * 
  *   free(matform.p_im)             # <<<<<<<<<<<<<<
@@ -15949,7 +15949,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
  */
   free(__pyx_v_matform.p_im);
 
-  /* "../../pyoti/cython/dense/array.pxi":1163
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1163
  * 
  *   free(matform.p_im)
  *   free(matform.p_ord)             # <<<<<<<<<<<<<<
@@ -15958,7 +15958,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
  */
   free(__pyx_v_matform.p_ord);
 
-  /* "../../pyoti/cython/dense/array.pxi":1164
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1164
  *   free(matform.p_im)
  *   free(matform.p_ord)
  *   free(matform.p_rows)             # <<<<<<<<<<<<<<
@@ -15967,7 +15967,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
  */
   free(__pyx_v_matform.p_rows);
 
-  /* "../../pyoti/cython/dense/array.pxi":1165
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1165
  *   free(matform.p_ord)
  *   free(matform.p_rows)
  *   free(matform.p_cols)             # <<<<<<<<<<<<<<
@@ -15976,7 +15976,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
  */
   free(__pyx_v_matform.p_cols);
 
-  /* "../../pyoti/cython/dense/array.pxi":1167
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1167
  *   free(matform.p_cols)
  * 
  *   return res             # <<<<<<<<<<<<<<
@@ -15988,7 +15988,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1051
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1051
  * 
  * #*****************************************************************************************************
  * def solve(omat A, omat b):             # <<<<<<<<<<<<<<
@@ -16054,7 +16054,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_18solve(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/array.pxi":1175
+/* "../../src/python/pyoti/cython/dense/array.pxi":1175
  * 
  * #*****************************************************************************************************
  * def solve_latex(bases_t nbases, ord_t order, real = 're'):             # <<<<<<<<<<<<<<
@@ -16202,7 +16202,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __pyx_pybuffernd_ord_coo.data = NULL;
   __pyx_pybuffernd_ord_coo.rcbuffer = &__pyx_pybuffer_ord_coo;
 
-  /* "../../pyoti/cython/dense/array.pxi":1184
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1184
  *   global dhl
  * 
  *   from scipy.sparse import coo_matrix             # <<<<<<<<<<<<<<
@@ -16224,7 +16224,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1201
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1201
  *   #                                           export_sparse =True)
  * 
  *   matform = dhelp_matrix_form_indices(nbases,order,dhl)             # <<<<<<<<<<<<<<
@@ -16233,7 +16233,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
  */
   __pyx_v_matform = dhelp_matrix_form_indices(__pyx_v_nbases, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/array.pxi":1203
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1203
  *   matform = dhelp_matrix_form_indices(nbases,order,dhl)
  * 
  *   rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)             # <<<<<<<<<<<<<<
@@ -16262,7 +16262,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __pyx_v_rows = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1204
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1204
  * 
  *   rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)
  *   cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)             # <<<<<<<<<<<<<<
@@ -16291,7 +16291,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __pyx_v_cols = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1205
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1205
  *   rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)
  *   cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)
  *   idx_coo = c_ptr_to_np_1darray_uint64( matform.p_im  , matform.nonzero)             # <<<<<<<<<<<<<<
@@ -16320,7 +16320,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __pyx_v_idx_coo = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1206
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1206
  *   cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)
  *   idx_coo = c_ptr_to_np_1darray_uint64( matform.p_im  , matform.nonzero)
  *   ord_coo = c_ptr_to_np_1darray_uint8 ( matform.p_ord , matform.nonzero)             # <<<<<<<<<<<<<<
@@ -16349,7 +16349,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __pyx_v_ord_coo = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1210
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1210
  * 
  * 
  *   indices = np.arange( 1, matform.nonzero+1, dtype = np.uint64)             # <<<<<<<<<<<<<<
@@ -16388,7 +16388,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __pyx_v_indices = __pyx_t_9;
   __pyx_t_9 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1212
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1212
  *   indices = np.arange( 1, matform.nonzero+1, dtype = np.uint64)
  * 
  *   dummy_mat = coo_matrix( ( indices, (rows.copy(), cols.copy()) ), dtype = np.uint64 )             # <<<<<<<<<<<<<<
@@ -16466,7 +16466,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __pyx_v_dummy_mat = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1213
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1213
  * 
  *   dummy_mat = coo_matrix( ( indices, (rows.copy(), cols.copy()) ), dtype = np.uint64 )
  *   dummy_mat = dummy_mat.tocsr()             # <<<<<<<<<<<<<<
@@ -16493,7 +16493,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_dummy_mat, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1216
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1216
  * 
  *   # first_col_indices = dummy_mat[:,0].data-1
  *   first_col_indices = indices[ (matform.sizex-1) : (2*matform.sizex-1) ] - 1             # <<<<<<<<<<<<<<
@@ -16508,7 +16508,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __pyx_v_first_col_indices = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1222
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1222
  *   # vec_form_ord = ord_coo[first_col_indices]
  * 
  *   string = "\\begin{align}"             # <<<<<<<<<<<<<<
@@ -16518,7 +16518,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_INCREF(__pyx_kp_s_begin_align);
   __pyx_v_string = __pyx_kp_s_begin_align;
 
-  /* "../../pyoti/cython/dense/array.pxi":1225
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1225
  * 
  *   # Fist solve real system of equations.
  *   string += "A_{"             # <<<<<<<<<<<<<<
@@ -16530,7 +16530,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1226
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1226
  *   # Fist solve real system of equations.
  *   string += "A_{"
  *   string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re" )             # <<<<<<<<<<<<<<
@@ -16571,7 +16571,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_9);
   __pyx_t_9 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1227
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1227
  *   string += "A_{"
  *   string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re" )
  *   string += "}"             # <<<<<<<<<<<<<<
@@ -16583,7 +16583,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_9);
   __pyx_t_9 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1229
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1229
  *   string += "}"
  * 
  *   string += "x_{"             # <<<<<<<<<<<<<<
@@ -16595,7 +16595,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_9);
   __pyx_t_9 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1230
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1230
  * 
  *   string += "x_{"
  *   string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re")             # <<<<<<<<<<<<<<
@@ -16636,7 +16636,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1231
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1231
  *   string += "x_{"
  *   string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re")
  *   string += "}"             # <<<<<<<<<<<<<<
@@ -16648,7 +16648,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1233
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1233
  *   string += "}"
  * 
  *   string += "&="             # <<<<<<<<<<<<<<
@@ -16660,7 +16660,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1235
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1235
  *   string += "&="
  * 
  *   string += "b_{"             # <<<<<<<<<<<<<<
@@ -16672,7 +16672,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1236
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1236
  * 
  *   string += "b_{"
  *   string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re")             # <<<<<<<<<<<<<<
@@ -16713,7 +16713,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_9);
   __pyx_t_9 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1237
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1237
  *   string += "b_{"
  *   string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re")
  *   string += "}"             # <<<<<<<<<<<<<<
@@ -16725,7 +16725,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_9);
   __pyx_t_9 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1239
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1239
  *   string += "}"
  * 
  *   string += "\\\\"             # <<<<<<<<<<<<<<
@@ -16737,7 +16737,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_9);
   __pyx_t_9 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1243
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1243
  *   # Solve the imaginary systems.
  * 
  *   for i in range(1, dummy_mat.shape[0]):             # <<<<<<<<<<<<<<
@@ -16755,7 +16755,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   for (__pyx_t_12 = 1; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
     __pyx_v_i = __pyx_t_12;
 
-    /* "../../pyoti/cython/dense/array.pxi":1246
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1246
  * 
  * 
  *     string += "A_{"             # <<<<<<<<<<<<<<
@@ -16767,7 +16767,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_7);
     __pyx_t_7 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1247
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1247
  * 
  *     string += "A_{"
  *     string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re" )             # <<<<<<<<<<<<<<
@@ -16808,7 +16808,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1248
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1248
  *     string += "A_{"
  *     string += get_latex_dir( idx_coo[first_col_indices[ZERO]], ord_coo[first_col_indices[ZERO]], real = "re" )
  *     string += "}"             # <<<<<<<<<<<<<<
@@ -16820,7 +16820,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1250
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1250
  *     string += "}"
  * 
  *     string += "x_{"             # <<<<<<<<<<<<<<
@@ -16832,7 +16832,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1251
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1251
  * 
  *     string += "x_{"
  *     string += get_latex_dir( idx_coo[first_col_indices[i]], ord_coo[first_col_indices[i]] )             # <<<<<<<<<<<<<<
@@ -16906,7 +16906,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1252
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1252
  *     string += "x_{"
  *     string += get_latex_dir( idx_coo[first_col_indices[i]], ord_coo[first_col_indices[i]] )
  *     string += "}"             # <<<<<<<<<<<<<<
@@ -16918,7 +16918,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1259
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1259
  *     # row_els = dummy_mat[i]
  *     # row_indices = dummy_mat[i].data - 1
  *     row_indices = dummy_mat.data[dummy_mat.indptr[i]:dummy_mat.indptr[i+1]] - 1             # <<<<<<<<<<<<<<
@@ -16949,7 +16949,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_XDECREF_SET(__pyx_v_row_indices, __pyx_t_8);
     __pyx_t_8 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1261
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1261
  *     row_indices = dummy_mat.data[dummy_mat.indptr[i]:dummy_mat.indptr[i+1]] - 1
  * 
  *     row_idx = idx_coo[row_indices]             # <<<<<<<<<<<<<<
@@ -16961,7 +16961,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_XDECREF_SET(__pyx_v_row_idx, __pyx_t_8);
     __pyx_t_8 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1262
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1262
  * 
  *     row_idx = idx_coo[row_indices]
  *     row_ord = ord_coo[row_indices]             # <<<<<<<<<<<<<<
@@ -16973,7 +16973,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_XDECREF_SET(__pyx_v_row_ord, __pyx_t_8);
     __pyx_t_8 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1264
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1264
  *     row_ord = ord_coo[row_indices]
  * 
  *     string += " &= "             # <<<<<<<<<<<<<<
@@ -16985,7 +16985,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_8);
     __pyx_t_8 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1266
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1266
  *     string += " &= "
  * 
  *     string += "b_{"             # <<<<<<<<<<<<<<
@@ -16997,7 +16997,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_8);
     __pyx_t_8 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1267
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1267
  * 
  *     string += "b_{"
  *     string += get_latex_dir( idx_coo[row_indices[ZERO]], ord_coo[row_indices[ZERO]] )             # <<<<<<<<<<<<<<
@@ -17071,7 +17071,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1268
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1268
  *     string += "b_{"
  *     string += get_latex_dir( idx_coo[row_indices[ZERO]], ord_coo[row_indices[ZERO]] )
  *     string += '} '             # <<<<<<<<<<<<<<
@@ -17083,7 +17083,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1271
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1271
  * 
  * 
  *     string += '-A_{'             # <<<<<<<<<<<<<<
@@ -17095,7 +17095,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1272
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1272
  * 
  *     string += '-A_{'
  *     string += get_latex_dir( idx_coo[row_indices[ZERO]], ord_coo[row_indices[ZERO]]  )             # <<<<<<<<<<<<<<
@@ -17169,7 +17169,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_8);
     __pyx_t_8 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1273
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1273
  *     string += '-A_{'
  *     string += get_latex_dir( idx_coo[row_indices[ZERO]], ord_coo[row_indices[ZERO]]  )
  *     string += '}x_{'             # <<<<<<<<<<<<<<
@@ -17181,7 +17181,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_8);
     __pyx_t_8 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1274
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1274
  *     string += get_latex_dir( idx_coo[row_indices[ZERO]], ord_coo[row_indices[ZERO]]  )
  *     string += '}x_{'
  *     string += get_latex_dir( idx_coo[row_indices[row_indices.size-1] ], ord_coo[row_indices[ row_indices.size - 1 ]], real = "re" )             # <<<<<<<<<<<<<<
@@ -17234,7 +17234,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1275
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1275
  *     string += '}x_{'
  *     string += get_latex_dir( idx_coo[row_indices[row_indices.size-1] ], ord_coo[row_indices[ row_indices.size - 1 ]], real = "re" )
  *     string += '} '             # <<<<<<<<<<<<<<
@@ -17246,7 +17246,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/array.pxi":1278
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1278
  * 
  *     # Solving
  *     for j in range(1,row_indices.size-1):             # <<<<<<<<<<<<<<
@@ -17264,7 +17264,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     for (__pyx_t_14 = 1; __pyx_t_14 < __pyx_t_16; __pyx_t_14+=1) {
       __pyx_v_j = __pyx_t_14;
 
-      /* "../../pyoti/cython/dense/array.pxi":1280
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1280
  *     for j in range(1,row_indices.size-1):
  * 
  *       k = (row_indices.size-1) - j             # <<<<<<<<<<<<<<
@@ -17286,7 +17286,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __pyx_v_k = __pyx_t_17;
 
-      /* "../../pyoti/cython/dense/array.pxi":1281
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1281
  * 
  *       k = (row_indices.size-1) - j
  *       string += ""             # <<<<<<<<<<<<<<
@@ -17298,7 +17298,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
       __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
       __pyx_t_2 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":1282
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1282
  *       k = (row_indices.size-1) - j
  *       string += ""
  *       string += "-A_{"             # <<<<<<<<<<<<<<
@@ -17310,7 +17310,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
       __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
       __pyx_t_2 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":1283
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1283
  *       string += ""
  *       string += "-A_{"
  *       string += get_latex_dir( idx_coo[row_indices[j]], ord_coo[row_indices[j]] )             # <<<<<<<<<<<<<<
@@ -17384,7 +17384,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
       __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_13);
       __pyx_t_13 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":1284
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1284
  *       string += "-A_{"
  *       string += get_latex_dir( idx_coo[row_indices[j]], ord_coo[row_indices[j]] )
  *       string += '}x_{'             # <<<<<<<<<<<<<<
@@ -17396,7 +17396,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
       __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_13);
       __pyx_t_13 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":1285
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1285
  *       string += get_latex_dir( idx_coo[row_indices[j]], ord_coo[row_indices[j]] )
  *       string += '}x_{'
  *       string += get_latex_dir( idx_coo[row_indices[k]], ord_coo[row_indices[k]] )             # <<<<<<<<<<<<<<
@@ -17470,7 +17470,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
       __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
       __pyx_t_2 = 0;
 
-      /* "../../pyoti/cython/dense/array.pxi":1286
+      /* "../../src/python/pyoti/cython/dense/array.pxi":1286
  *       string += '}x_{'
  *       string += get_latex_dir( idx_coo[row_indices[k]], ord_coo[row_indices[k]] )
  *       string += '} '             # <<<<<<<<<<<<<<
@@ -17483,7 +17483,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
       __pyx_t_2 = 0;
     }
 
-    /* "../../pyoti/cython/dense/array.pxi":1291
+    /* "../../src/python/pyoti/cython/dense/array.pxi":1291
  * 
  * 
  *     string += "\\\\ "             # <<<<<<<<<<<<<<
@@ -17496,7 +17496,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
     __pyx_t_2 = 0;
   }
 
-  /* "../../pyoti/cython/dense/array.pxi":1297
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1297
  * 
  *   # end for
  *   string += "\\end{align}"             # <<<<<<<<<<<<<<
@@ -17508,7 +17508,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __Pyx_DECREF_SET(__pyx_v_string, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1299
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1299
  *   string += "\\end{align}"
  * 
  *   free(matform.p_im)             # <<<<<<<<<<<<<<
@@ -17517,7 +17517,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
  */
   free(__pyx_v_matform.p_im);
 
-  /* "../../pyoti/cython/dense/array.pxi":1300
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1300
  * 
  *   free(matform.p_im)
  *   free(matform.p_ord)             # <<<<<<<<<<<<<<
@@ -17526,7 +17526,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
  */
   free(__pyx_v_matform.p_ord);
 
-  /* "../../pyoti/cython/dense/array.pxi":1301
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1301
  *   free(matform.p_im)
  *   free(matform.p_ord)
  *   free(matform.p_rows)             # <<<<<<<<<<<<<<
@@ -17535,7 +17535,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
  */
   free(__pyx_v_matform.p_rows);
 
-  /* "../../pyoti/cython/dense/array.pxi":1302
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1302
  *   free(matform.p_ord)
  *   free(matform.p_rows)
  *   free(matform.p_cols)             # <<<<<<<<<<<<<<
@@ -17544,7 +17544,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
  */
   free(__pyx_v_matform.p_cols);
 
-  /* "../../pyoti/cython/dense/array.pxi":1305
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1305
  * 
  * 
  *   return string             # <<<<<<<<<<<<<<
@@ -17556,7 +17556,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   __pyx_r = __pyx_v_string;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1175
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1175
  * 
  * #*****************************************************************************************************
  * def solve_latex(bases_t nbases, ord_t order, real = 're'):             # <<<<<<<<<<<<<<
@@ -17607,7 +17607,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_20solve_latex(CYTHON_UNUSED PyObject *__
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/utils.pxi":12
+/* "../../src/python/pyoti/cython/dense/utils.pxi":12
  * 
  * #*****************************************************************************************************
  * def e( hum_dir ,ord_t order = 0,bases_t nbases = 0):             # <<<<<<<<<<<<<<
@@ -17721,7 +17721,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
   __pyx_t_5pyoti_8c_otilib_ord_t __pyx_t_11;
   __Pyx_RefNannySetupContext("e", 0);
 
-  /* "../../pyoti/cython/dense/utils.pxi":23
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":23
  * 
  *   cdef imdir_t indx_hd
  *   cdef ord_t order_hd = 0             # <<<<<<<<<<<<<<
@@ -17730,7 +17730,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
  */
   __pyx_v_order_hd = 0;
 
-  /* "../../pyoti/cython/dense/utils.pxi":24
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":24
  *   cdef imdir_t indx_hd
  *   cdef ord_t order_hd = 0
  *   cdef bases_t bases_hd = 0             # <<<<<<<<<<<<<<
@@ -17739,7 +17739,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
  */
   __pyx_v_bases_hd = 0;
 
-  /* "../../pyoti/cython/dense/utils.pxi":29
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":29
  * 
  *   # Get the index and order of the human direction.
  *   [indx_hd, order_hd] = imdir(hum_dir)             # <<<<<<<<<<<<<<
@@ -17778,7 +17778,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
   __pyx_v_indx_hd = __pyx_t_4;
   __pyx_v_order_hd = __pyx_t_5;
 
-  /* "../../pyoti/cython/dense/utils.pxi":32
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":32
  * 
  *   # Get the number of bases from the hum_dir direction
  *   if order_hd !=0:             # <<<<<<<<<<<<<<
@@ -17788,7 +17788,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
   __pyx_t_6 = ((__pyx_v_order_hd != 0) != 0);
   if (__pyx_t_6) {
 
-    /* "../../pyoti/cython/dense/utils.pxi":33
+    /* "../../src/python/pyoti/cython/dense/utils.pxi":33
  *   # Get the number of bases from the hum_dir direction
  *   if order_hd !=0:
  *     bases_hd = (dhelp_get_imdir( indx_hd, order_hd, dhl))[order_hd-1]             # <<<<<<<<<<<<<<
@@ -17797,7 +17797,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
  */
     __pyx_v_bases_hd = (dhelp_get_imdir(__pyx_v_indx_hd, __pyx_v_order_hd, __pyx_v_5pyoti_5dense_dhl)[(__pyx_v_order_hd - 1)]);
 
-    /* "../../pyoti/cython/dense/utils.pxi":32
+    /* "../../src/python/pyoti/cython/dense/utils.pxi":32
  * 
  *   # Get the number of bases from the hum_dir direction
  *   if order_hd !=0:             # <<<<<<<<<<<<<<
@@ -17806,7 +17806,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
  */
   }
 
-  /* "../../pyoti/cython/dense/utils.pxi":36
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":36
  *   # end if
  * 
  *   res = oti_createZero(max(bases_hd,nbases), max(order_hd,order), dhl)             # <<<<<<<<<<<<<<
@@ -17829,7 +17829,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
   }
   __pyx_v_res = oti_createZero(__pyx_t_9, __pyx_t_11, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/utils.pxi":40
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":40
  *   # Set the coefficient to 1.
  * 
  *   oti_setIm_IdxOrd(1.0,indx_hd,order_hd,&res,dhl)             # <<<<<<<<<<<<<<
@@ -17838,7 +17838,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
  */
   oti_setIm_IdxOrd(1.0, __pyx_v_indx_hd, __pyx_v_order_hd, (&__pyx_v_res), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/utils.pxi":42
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":42
  *   oti_setIm_IdxOrd(1.0,indx_hd,order_hd,&res,dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -17852,7 +17852,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/utils.pxi":12
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":12
  * 
  * #*****************************************************************************************************
  * def e( hum_dir ,ord_t order = 0,bases_t nbases = 0):             # <<<<<<<<<<<<<<
@@ -17873,7 +17873,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_22e(CYTHON_UNUSED PyObject *__pyx_self, 
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/utils.pxi":46
+/* "../../src/python/pyoti/cython/dense/utils.pxi":46
  * #-----------------------------------------------------------------------------------------------------
  * 
  * cpdef multiply_val(otinum a ):             # <<<<<<<<<<<<<<
@@ -17889,7 +17889,7 @@ static PyObject *__pyx_f_5pyoti_5dense_multiply_val(struct __pyx_obj_5pyoti_5den
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("multiply_val", 0);
 
-  /* "../../pyoti/cython/dense/utils.pxi":49
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":49
  * 
  *   # return a*a*a*a*a
  *   return mul(mul(mul(mul(a,a),a),a),a)             # <<<<<<<<<<<<<<
@@ -17912,7 +17912,7 @@ static PyObject *__pyx_f_5pyoti_5dense_multiply_val(struct __pyx_obj_5pyoti_5den
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/utils.pxi":46
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":46
  * #-----------------------------------------------------------------------------------------------------
  * 
  * cpdef multiply_val(otinum a ):             # <<<<<<<<<<<<<<
@@ -17973,7 +17973,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_24multiply_val(CYTHON_UNUSED PyObject *_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/utils.pxi":66
+/* "../../src/python/pyoti/cython/dense/utils.pxi":66
  * 
  * #***************************************************************************************************
  * cpdef otinum add(otinum lhs, otinum rhs):             # <<<<<<<<<<<<<<
@@ -17989,7 +17989,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_add(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("add", 0);
 
-  /* "../../pyoti/cython/dense/utils.pxi":82
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":82
  *   cdef otinum_t res
  * 
  *   res = oti_sum_oo(&lhs.num, &rhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -17998,7 +17998,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_add(struct _
  */
   __pyx_v_res = oti_sum_oo((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/utils.pxi":84
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":84
  *   res = oti_sum_oo(&lhs.num, &rhs.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -18012,7 +18012,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_add(struct _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/utils.pxi":66
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":66
  * 
  * #***************************************************************************************************
  * cpdef otinum add(otinum lhs, otinum rhs):             # <<<<<<<<<<<<<<
@@ -18122,7 +18122,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_26add(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/utils.pxi":90
+/* "../../src/python/pyoti/cython/dense/utils.pxi":90
  * 
  * #***************************************************************************************************
  * cpdef add_to(otinum lhs, otinum rhs, otinum out):             # <<<<<<<<<<<<<<
@@ -18136,7 +18136,7 @@ static PyObject *__pyx_f_5pyoti_5dense_add_to(struct __pyx_obj_5pyoti_5dense_oti
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("add_to", 0);
 
-  /* "../../pyoti/cython/dense/utils.pxi":105
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":105
  *   global dhl
  * 
  *   oti_sum_oo_to(&lhs.num, &rhs.num, &out.num ,dhl)             # <<<<<<<<<<<<<<
@@ -18145,7 +18145,7 @@ static PyObject *__pyx_f_5pyoti_5dense_add_to(struct __pyx_obj_5pyoti_5dense_oti
  */
   oti_sum_oo_to((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), (&__pyx_v_out->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/utils.pxi":90
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":90
  * 
  * #***************************************************************************************************
  * cpdef add_to(otinum lhs, otinum rhs, otinum out):             # <<<<<<<<<<<<<<
@@ -18263,7 +18263,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_28add_to(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/utils.pxi":117
+/* "../../src/python/pyoti/cython/dense/utils.pxi":117
  * 
  * #***************************************************************************************************
  * cpdef otinum mul(otinum lhs, otinum rhs):             # <<<<<<<<<<<<<<
@@ -18279,7 +18279,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_mul(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("mul", 0);
 
-  /* "../../pyoti/cython/dense/utils.pxi":134
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":134
  *   cdef otinum_t res
  * 
  *   res = oti_mul_oo(&lhs.num, &rhs.num,dhl)             # <<<<<<<<<<<<<<
@@ -18288,7 +18288,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_mul(struct _
  */
   __pyx_v_res = oti_mul_oo((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/utils.pxi":136
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":136
  *   res = oti_mul_oo(&lhs.num, &rhs.num,dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -18302,7 +18302,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_mul(struct _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/utils.pxi":117
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":117
  * 
  * #***************************************************************************************************
  * cpdef otinum mul(otinum lhs, otinum rhs):             # <<<<<<<<<<<<<<
@@ -18412,7 +18412,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_30mul(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/utils.pxi":143
+/* "../../src/python/pyoti/cython/dense/utils.pxi":143
  * 
  * #***************************************************************************************************
  * cpdef mul_to(otinum lhs, otinum rhs, otinum res):             # <<<<<<<<<<<<<<
@@ -18426,7 +18426,7 @@ static PyObject *__pyx_f_5pyoti_5dense_mul_to(struct __pyx_obj_5pyoti_5dense_oti
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("mul_to", 0);
 
-  /* "../../pyoti/cython/dense/utils.pxi":160
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":160
  * 
  * 
  *   oti_mul_oo_to(&lhs.num, &rhs.num, &res.num, dhl)             # <<<<<<<<<<<<<<
@@ -18435,7 +18435,7 @@ static PyObject *__pyx_f_5pyoti_5dense_mul_to(struct __pyx_obj_5pyoti_5dense_oti
  */
   oti_mul_oo_to((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), (&__pyx_v_res->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/utils.pxi":143
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":143
  * 
  * #***************************************************************************************************
  * cpdef mul_to(otinum lhs, otinum rhs, otinum res):             # <<<<<<<<<<<<<<
@@ -18553,7 +18553,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_32mul_to(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/utils.pxi":168
+/* "../../src/python/pyoti/cython/dense/utils.pxi":168
  * 
  * #***************************************************************************************************
  * cpdef mulr_to(otinum lhs, coeff_t rhs, otinum res):             # <<<<<<<<<<<<<<
@@ -18567,7 +18567,7 @@ static PyObject *__pyx_f_5pyoti_5dense_mulr_to(struct __pyx_obj_5pyoti_5dense_ot
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("mulr_to", 0);
 
-  /* "../../pyoti/cython/dense/utils.pxi":183
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":183
  *   global dhl
  * 
  *   oti_mul_ro_to(rhs, &lhs.num,  &res.num, dhl)             # <<<<<<<<<<<<<<
@@ -18576,7 +18576,7 @@ static PyObject *__pyx_f_5pyoti_5dense_mulr_to(struct __pyx_obj_5pyoti_5dense_ot
  */
   oti_mul_ro_to(__pyx_v_rhs, (&__pyx_v_lhs->num), (&__pyx_v_res->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/utils.pxi":168
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":168
  * 
  * #***************************************************************************************************
  * cpdef mulr_to(otinum lhs, coeff_t rhs, otinum res):             # <<<<<<<<<<<<<<
@@ -18693,7 +18693,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_34mulr_to(CYTHON_UNUSED PyObject *__pyx_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/utils.pxi":192
+/* "../../src/python/pyoti/cython/dense/utils.pxi":192
  * 
  * #***************************************************************************************************
  * cpdef otinum sub(otinum lhs, otinum rhs):             # <<<<<<<<<<<<<<
@@ -18709,7 +18709,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sub(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sub", 0);
 
-  /* "../../pyoti/cython/dense/utils.pxi":208
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":208
  *   cdef otinum_t res
  *   #
  *   res = oti_sub_oo(&lhs.num, &rhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -18718,7 +18718,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sub(struct _
  */
   __pyx_v_res = oti_sub_oo((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/utils.pxi":210
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":210
  *   res = oti_sub_oo(&lhs.num, &rhs.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -18732,7 +18732,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sub(struct _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/utils.pxi":192
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":192
  * 
  * #***************************************************************************************************
  * cpdef otinum sub(otinum lhs, otinum rhs):             # <<<<<<<<<<<<<<
@@ -18842,7 +18842,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_36sub(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/utils.pxi":216
+/* "../../src/python/pyoti/cython/dense/utils.pxi":216
  * 
  * #***************************************************************************************************
  * cpdef sub_to(otinum lhs, otinum rhs, otinum out):             # <<<<<<<<<<<<<<
@@ -18856,7 +18856,7 @@ static PyObject *__pyx_f_5pyoti_5dense_sub_to(struct __pyx_obj_5pyoti_5dense_oti
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("sub_to", 0);
 
-  /* "../../pyoti/cython/dense/utils.pxi":231
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":231
  *   global dhl
  * 
  *   oti_sub_oo_to(&lhs.num, &rhs.num, &out.num ,dhl)             # <<<<<<<<<<<<<<
@@ -18865,7 +18865,7 @@ static PyObject *__pyx_f_5pyoti_5dense_sub_to(struct __pyx_obj_5pyoti_5dense_oti
  */
   oti_sub_oo_to((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), (&__pyx_v_out->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/utils.pxi":216
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":216
  * 
  * #***************************************************************************************************
  * cpdef sub_to(otinum lhs, otinum rhs, otinum out):             # <<<<<<<<<<<<<<
@@ -18983,7 +18983,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_38sub_to(CYTHON_UNUSED PyObject *__pyx_s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":11
+/* "../../src/python/pyoti/cython/dense/math.pxi":11
  * 
  * #*****************************************************************************************************
  * cpdef  otinum cos(otinum val):             # <<<<<<<<<<<<<<
@@ -18999,7 +18999,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_cos(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("cos", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":19
+  /* "../../src/python/pyoti/cython/dense/math.pxi":19
  *   global dhl
  * 
  *   cdef otinum_t res = oti_cos(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19008,7 +19008,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_cos(struct _
  */
   __pyx_v_res = oti_cos((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":21
+  /* "../../src/python/pyoti/cython/dense/math.pxi":21
  *   cdef otinum_t res = oti_cos(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19022,7 +19022,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_cos(struct _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":11
+  /* "../../src/python/pyoti/cython/dense/math.pxi":11
  * 
  * #*****************************************************************************************************
  * cpdef  otinum cos(otinum val):             # <<<<<<<<<<<<<<
@@ -19083,7 +19083,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_40cos(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":26
+/* "../../src/python/pyoti/cython/dense/math.pxi":26
  * 
  * #*****************************************************************************************************
  * cpdef  otinum sin(otinum val):             # <<<<<<<<<<<<<<
@@ -19099,7 +19099,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sin(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sin", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":33
+  /* "../../src/python/pyoti/cython/dense/math.pxi":33
  *   global dhl
  * 
  *   cdef otinum_t res = oti_sin(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19108,7 +19108,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sin(struct _
  */
   __pyx_v_res = oti_sin((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":35
+  /* "../../src/python/pyoti/cython/dense/math.pxi":35
  *   cdef otinum_t res = oti_sin(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19122,7 +19122,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sin(struct _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":26
+  /* "../../src/python/pyoti/cython/dense/math.pxi":26
  * 
  * #*****************************************************************************************************
  * cpdef  otinum sin(otinum val):             # <<<<<<<<<<<<<<
@@ -19183,7 +19183,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_42sin(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":40
+/* "../../src/python/pyoti/cython/dense/math.pxi":40
  * 
  * #*****************************************************************************************************
  * cpdef  otinum tan(otinum val):             # <<<<<<<<<<<<<<
@@ -19199,7 +19199,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_tan(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("tan", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":47
+  /* "../../src/python/pyoti/cython/dense/math.pxi":47
  *   global dhl
  * 
  *   cdef otinum_t res = oti_tan(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19208,7 +19208,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_tan(struct _
  */
   __pyx_v_res = oti_tan((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":49
+  /* "../../src/python/pyoti/cython/dense/math.pxi":49
  *   cdef otinum_t res = oti_tan(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19222,7 +19222,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_tan(struct _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":40
+  /* "../../src/python/pyoti/cython/dense/math.pxi":40
  * 
  * #*****************************************************************************************************
  * cpdef  otinum tan(otinum val):             # <<<<<<<<<<<<<<
@@ -19283,7 +19283,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_44tan(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":53
+/* "../../src/python/pyoti/cython/dense/math.pxi":53
  * 
  * #*****************************************************************************************************
  * cpdef  otinum atan(otinum val):             # <<<<<<<<<<<<<<
@@ -19299,7 +19299,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_atan(struct 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("atan", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":60
+  /* "../../src/python/pyoti/cython/dense/math.pxi":60
  *   global dhl
  * 
  *   cdef otinum_t res = oti_atan(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19308,7 +19308,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_atan(struct 
  */
   __pyx_v_res = oti_atan((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":62
+  /* "../../src/python/pyoti/cython/dense/math.pxi":62
  *   cdef otinum_t res = oti_atan(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19322,7 +19322,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_atan(struct 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":53
+  /* "../../src/python/pyoti/cython/dense/math.pxi":53
  * 
  * #*****************************************************************************************************
  * cpdef  otinum atan(otinum val):             # <<<<<<<<<<<<<<
@@ -19383,7 +19383,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_46atan(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":81
+/* "../../src/python/pyoti/cython/dense/math.pxi":81
  * 
  * #*****************************************************************************************************
  * cpdef  otinum acos(otinum val):             # <<<<<<<<<<<<<<
@@ -19399,7 +19399,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_acos(struct 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("acos", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":88
+  /* "../../src/python/pyoti/cython/dense/math.pxi":88
  *   global dhl
  * 
  *   cdef otinum_t res = oti_acos(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19408,7 +19408,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_acos(struct 
  */
   __pyx_v_res = oti_acos((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":90
+  /* "../../src/python/pyoti/cython/dense/math.pxi":90
  *   cdef otinum_t res = oti_acos(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19422,7 +19422,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_acos(struct 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":81
+  /* "../../src/python/pyoti/cython/dense/math.pxi":81
  * 
  * #*****************************************************************************************************
  * cpdef  otinum acos(otinum val):             # <<<<<<<<<<<<<<
@@ -19483,7 +19483,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_48acos(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":94
+/* "../../src/python/pyoti/cython/dense/math.pxi":94
  * 
  * #*****************************************************************************************************
  * cpdef  otinum asin(otinum val):             # <<<<<<<<<<<<<<
@@ -19499,7 +19499,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_asin(struct 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("asin", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":101
+  /* "../../src/python/pyoti/cython/dense/math.pxi":101
  *   global dhl
  * 
  *   cdef otinum_t res = oti_asin(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19508,7 +19508,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_asin(struct 
  */
   __pyx_v_res = oti_asin((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":103
+  /* "../../src/python/pyoti/cython/dense/math.pxi":103
  *   cdef otinum_t res = oti_asin(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19522,7 +19522,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_asin(struct 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":94
+  /* "../../src/python/pyoti/cython/dense/math.pxi":94
  * 
  * #*****************************************************************************************************
  * cpdef  otinum asin(otinum val):             # <<<<<<<<<<<<<<
@@ -19583,7 +19583,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_50asin(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":107
+/* "../../src/python/pyoti/cython/dense/math.pxi":107
  * 
  * #*****************************************************************************************************
  * cpdef  otinum sinh(otinum val):             # <<<<<<<<<<<<<<
@@ -19599,7 +19599,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sinh(struct 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sinh", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":114
+  /* "../../src/python/pyoti/cython/dense/math.pxi":114
  *   global dhl
  * 
  *   cdef otinum_t res = oti_sinh(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19608,7 +19608,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sinh(struct 
  */
   __pyx_v_res = oti_sinh((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":116
+  /* "../../src/python/pyoti/cython/dense/math.pxi":116
  *   cdef otinum_t res = oti_sinh(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19622,7 +19622,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sinh(struct 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":107
+  /* "../../src/python/pyoti/cython/dense/math.pxi":107
  * 
  * #*****************************************************************************************************
  * cpdef  otinum sinh(otinum val):             # <<<<<<<<<<<<<<
@@ -19683,7 +19683,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_52sinh(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":120
+/* "../../src/python/pyoti/cython/dense/math.pxi":120
  * 
  * #*****************************************************************************************************
  * cpdef  otinum asinh(otinum val):             # <<<<<<<<<<<<<<
@@ -19699,7 +19699,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_asinh(struct
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("asinh", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":127
+  /* "../../src/python/pyoti/cython/dense/math.pxi":127
  *   global dhl
  * 
  *   cdef otinum_t res = oti_asinh(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19708,7 +19708,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_asinh(struct
  */
   __pyx_v_res = oti_asinh((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":129
+  /* "../../src/python/pyoti/cython/dense/math.pxi":129
  *   cdef otinum_t res = oti_asinh(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19722,7 +19722,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_asinh(struct
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":120
+  /* "../../src/python/pyoti/cython/dense/math.pxi":120
  * 
  * #*****************************************************************************************************
  * cpdef  otinum asinh(otinum val):             # <<<<<<<<<<<<<<
@@ -19783,7 +19783,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_54asinh(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":133
+/* "../../src/python/pyoti/cython/dense/math.pxi":133
  * 
  * #*****************************************************************************************************
  * cpdef  otinum cosh(otinum val):             # <<<<<<<<<<<<<<
@@ -19799,7 +19799,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_cosh(struct 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("cosh", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":140
+  /* "../../src/python/pyoti/cython/dense/math.pxi":140
  *   global dhl
  * 
  *   cdef otinum_t res = oti_cosh(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19808,7 +19808,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_cosh(struct 
  */
   __pyx_v_res = oti_cosh((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":142
+  /* "../../src/python/pyoti/cython/dense/math.pxi":142
  *   cdef otinum_t res = oti_cosh(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19822,7 +19822,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_cosh(struct 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":133
+  /* "../../src/python/pyoti/cython/dense/math.pxi":133
  * 
  * #*****************************************************************************************************
  * cpdef  otinum cosh(otinum val):             # <<<<<<<<<<<<<<
@@ -19883,7 +19883,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_56cosh(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":146
+/* "../../src/python/pyoti/cython/dense/math.pxi":146
  * 
  * #*****************************************************************************************************
  * cpdef  otinum acosh(otinum val):             # <<<<<<<<<<<<<<
@@ -19899,7 +19899,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_acosh(struct
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("acosh", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":154
+  /* "../../src/python/pyoti/cython/dense/math.pxi":154
  *   global dhl
  * 
  *   cdef otinum_t res = oti_acosh(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -19908,7 +19908,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_acosh(struct
  */
   __pyx_v_res = oti_acosh((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":156
+  /* "../../src/python/pyoti/cython/dense/math.pxi":156
  *   cdef otinum_t res = oti_acosh(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -19922,7 +19922,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_acosh(struct
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":146
+  /* "../../src/python/pyoti/cython/dense/math.pxi":146
  * 
  * #*****************************************************************************************************
  * cpdef  otinum acosh(otinum val):             # <<<<<<<<<<<<<<
@@ -19983,7 +19983,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_58acosh(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":160
+/* "../../src/python/pyoti/cython/dense/math.pxi":160
  * 
  * #*****************************************************************************************************
  * cpdef  otinum tanh(otinum val):             # <<<<<<<<<<<<<<
@@ -19999,7 +19999,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_tanh(struct 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("tanh", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":167
+  /* "../../src/python/pyoti/cython/dense/math.pxi":167
  *   global dhl
  * 
  *   cdef otinum_t res = oti_tanh(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -20008,7 +20008,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_tanh(struct 
  */
   __pyx_v_res = oti_tanh((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":169
+  /* "../../src/python/pyoti/cython/dense/math.pxi":169
  *   cdef otinum_t res = oti_tanh(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -20022,7 +20022,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_tanh(struct 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":160
+  /* "../../src/python/pyoti/cython/dense/math.pxi":160
  * 
  * #*****************************************************************************************************
  * cpdef  otinum tanh(otinum val):             # <<<<<<<<<<<<<<
@@ -20083,7 +20083,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_60tanh(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":173
+/* "../../src/python/pyoti/cython/dense/math.pxi":173
  * 
  * #*****************************************************************************************************
  * cpdef  otinum atanh(otinum val):             # <<<<<<<<<<<<<<
@@ -20099,7 +20099,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_atanh(struct
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("atanh", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":181
+  /* "../../src/python/pyoti/cython/dense/math.pxi":181
  *   global dhl
  * 
  *   cdef otinum_t res = oti_atanh(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -20108,7 +20108,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_atanh(struct
  */
   __pyx_v_res = oti_atanh((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":183
+  /* "../../src/python/pyoti/cython/dense/math.pxi":183
  *   cdef otinum_t res = oti_atanh(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -20122,7 +20122,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_atanh(struct
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":173
+  /* "../../src/python/pyoti/cython/dense/math.pxi":173
  * 
  * #*****************************************************************************************************
  * cpdef  otinum atanh(otinum val):             # <<<<<<<<<<<<<<
@@ -20183,7 +20183,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_62atanh(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":188
+/* "../../src/python/pyoti/cython/dense/math.pxi":188
  * 
  * #*****************************************************************************************************
  * cpdef  otinum logb(otinum val, float base):             # <<<<<<<<<<<<<<
@@ -20199,7 +20199,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_logb(struct 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("logb", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":197
+  /* "../../src/python/pyoti/cython/dense/math.pxi":197
  *   global dhl
  * 
  *   cdef otinum_t res = oti_logb(&val.num, base, dhl)             # <<<<<<<<<<<<<<
@@ -20208,7 +20208,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_logb(struct 
  */
   __pyx_v_res = oti_logb((&__pyx_v_val->num), __pyx_v_base, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":199
+  /* "../../src/python/pyoti/cython/dense/math.pxi":199
  *   cdef otinum_t res = oti_logb(&val.num, base, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -20222,7 +20222,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_logb(struct 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":188
+  /* "../../src/python/pyoti/cython/dense/math.pxi":188
  * 
  * #*****************************************************************************************************
  * cpdef  otinum logb(otinum val, float base):             # <<<<<<<<<<<<<<
@@ -20331,7 +20331,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_64logb(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":203
+/* "../../src/python/pyoti/cython/dense/math.pxi":203
  * 
  * #*****************************************************************************************************
  * cpdef  otinum log10(otinum val):             # <<<<<<<<<<<<<<
@@ -20347,7 +20347,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_log10(struct
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("log10", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":211
+  /* "../../src/python/pyoti/cython/dense/math.pxi":211
  *   global dhl
  * 
  *   cdef otinum_t res = oti_log10(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -20356,7 +20356,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_log10(struct
  */
   __pyx_v_res = oti_log10((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":213
+  /* "../../src/python/pyoti/cython/dense/math.pxi":213
  *   cdef otinum_t res = oti_log10(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -20370,7 +20370,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_log10(struct
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":203
+  /* "../../src/python/pyoti/cython/dense/math.pxi":203
  * 
  * #*****************************************************************************************************
  * cpdef  otinum log10(otinum val):             # <<<<<<<<<<<<<<
@@ -20431,7 +20431,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_66log10(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":218
+/* "../../src/python/pyoti/cython/dense/math.pxi":218
  * 
  * #*****************************************************************************************************
  * cpdef  otinum log(otinum val):             # <<<<<<<<<<<<<<
@@ -20447,7 +20447,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_log(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("log", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":225
+  /* "../../src/python/pyoti/cython/dense/math.pxi":225
  *   global dhl
  * 
  *   cdef otinum_t res = oti_log(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -20456,7 +20456,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_log(struct _
  */
   __pyx_v_res = oti_log((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":227
+  /* "../../src/python/pyoti/cython/dense/math.pxi":227
  *   cdef otinum_t res = oti_log(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -20470,7 +20470,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_log(struct _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":218
+  /* "../../src/python/pyoti/cython/dense/math.pxi":218
  * 
  * #*****************************************************************************************************
  * cpdef  otinum log(otinum val):             # <<<<<<<<<<<<<<
@@ -20531,7 +20531,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_68log(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":232
+/* "../../src/python/pyoti/cython/dense/math.pxi":232
  * 
  * #*****************************************************************************************************
  * cpdef  otinum exp(otinum val):             # <<<<<<<<<<<<<<
@@ -20547,7 +20547,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_exp(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("exp", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":239
+  /* "../../src/python/pyoti/cython/dense/math.pxi":239
  *   global dhl
  * 
  *   cdef otinum_t res = oti_exp(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -20556,7 +20556,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_exp(struct _
  */
   __pyx_v_res = oti_exp((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":241
+  /* "../../src/python/pyoti/cython/dense/math.pxi":241
  *   cdef otinum_t res = oti_exp(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -20570,7 +20570,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_exp(struct _
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":232
+  /* "../../src/python/pyoti/cython/dense/math.pxi":232
  * 
  * #*****************************************************************************************************
  * cpdef  otinum exp(otinum val):             # <<<<<<<<<<<<<<
@@ -20631,7 +20631,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_70exp(CYTHON_UNUSED PyObject *__pyx_self
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":246
+/* "../../src/python/pyoti/cython/dense/math.pxi":246
  * 
  * #*****************************************************************************************************
  * cpdef  otinum power(otinum val, double exponent):             # <<<<<<<<<<<<<<
@@ -20647,7 +20647,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_power(struct
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("power", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":253
+  /* "../../src/python/pyoti/cython/dense/math.pxi":253
  *   global dhl
  * 
  *   cdef otinum_t res = oti_pow(&val.num, exponent, dhl)             # <<<<<<<<<<<<<<
@@ -20656,7 +20656,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_power(struct
  */
   __pyx_v_res = oti_pow((&__pyx_v_val->num), __pyx_v_exponent, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":255
+  /* "../../src/python/pyoti/cython/dense/math.pxi":255
  *   cdef otinum_t res = oti_pow(&val.num, exponent, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -20670,7 +20670,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_power(struct
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":246
+  /* "../../src/python/pyoti/cython/dense/math.pxi":246
  * 
  * #*****************************************************************************************************
  * cpdef  otinum power(otinum val, double exponent):             # <<<<<<<<<<<<<<
@@ -20779,7 +20779,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_72power(CYTHON_UNUSED PyObject *__pyx_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/math.pxi":259
+/* "../../src/python/pyoti/cython/dense/math.pxi":259
  * 
  * #*****************************************************************************************************
  * cpdef  otinum sqrt(otinum val):             # <<<<<<<<<<<<<<
@@ -20795,7 +20795,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sqrt(struct 
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("sqrt", 0);
 
-  /* "../../pyoti/cython/dense/math.pxi":266
+  /* "../../src/python/pyoti/cython/dense/math.pxi":266
  *   global dhl
  * 
  *   cdef otinum_t res = oti_sqrt(&val.num, dhl)             # <<<<<<<<<<<<<<
@@ -20804,7 +20804,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sqrt(struct 
  */
   __pyx_v_res = oti_sqrt((&__pyx_v_val->num), __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/math.pxi":268
+  /* "../../src/python/pyoti/cython/dense/math.pxi":268
  *   cdef otinum_t res = oti_sqrt(&val.num, dhl)
  * 
  *   return otinum.create(&res)             # <<<<<<<<<<<<<<
@@ -20817,7 +20817,7 @@ static struct __pyx_obj_5pyoti_5dense_otinum *__pyx_f_5pyoti_5dense_sqrt(struct 
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/math.pxi":259
+  /* "../../src/python/pyoti/cython/dense/math.pxi":259
  * 
  * #*****************************************************************************************************
  * cpdef  otinum sqrt(otinum val):             # <<<<<<<<<<<<<<
@@ -20878,7 +20878,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_74sqrt(CYTHON_UNUSED PyObject *__pyx_sel
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":24
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":24
  * 
  *   #***************************************************************************************************
  *   def __cinit__(self, shape, bases_t nbases = 0 , ord_t order = 0, uint8_t spr_type = 2):             # <<<<<<<<<<<<<<
@@ -21006,7 +21006,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
   long __pyx_t_12;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":58
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":58
  * 
  * 
  *     self.order  = order             # <<<<<<<<<<<<<<
@@ -21015,7 +21015,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
  */
   __pyx_v_self->order = __pyx_v_order;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":59
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":59
  * 
  *     self.order  = order
  *     self.nbases = nbases             # <<<<<<<<<<<<<<
@@ -21024,7 +21024,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
  */
   __pyx_v_self->nbases = __pyx_v_nbases;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":60
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":60
  *     self.order  = order
  *     self.nbases = nbases
  *     self.nrows  = shape[0]             # <<<<<<<<<<<<<<
@@ -21037,7 +21037,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_self->nrows = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":61
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":61
  *     self.nbases = nbases
  *     self.nrows  = shape[0]
  *     self.ncols  = shape[1]             # <<<<<<<<<<<<<<
@@ -21050,7 +21050,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_self->ncols = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":62
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":62
  *     self.nrows  = shape[0]
  *     self.ncols  = shape[1]
  *     self.size   = self.nrows * self.ncols             # <<<<<<<<<<<<<<
@@ -21059,7 +21059,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
  */
   __pyx_v_self->size = (__pyx_v_self->nrows * __pyx_v_self->ncols);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":63
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":63
  *     self.ncols  = shape[1]
  *     self.size   = self.nrows * self.ncols
  *     self.ndir   = 0 # Initialize the number of imaginary directions.             # <<<<<<<<<<<<<<
@@ -21068,7 +21068,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
  */
   __pyx_v_self->ndir = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":64
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":64
  *     self.size   = self.nrows * self.ncols
  *     self.ndir   = 0 # Initialize the number of imaginary directions.
  *     self.spr_type = spr_type             # <<<<<<<<<<<<<<
@@ -21077,7 +21077,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
  */
   __pyx_v_self->spr_type = __pyx_v_spr_type;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":68
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":68
  * 
  * 
  *     base_sprmat_creator = self.get_base_sprmat_creator()             # <<<<<<<<<<<<<<
@@ -21089,7 +21089,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
   __pyx_v_base_sprmat_creator = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":73
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":73
  *     # create real element
  * 
  *     self.re = base_sprmat_creator( shape , dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -21120,7 +21120,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
   __pyx_v_self->re = __pyx_t_5;
   __pyx_t_5 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":75
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":75
  *     self.re = base_sprmat_creator( shape , dtype = np.float64)
  * 
  *     self.p_im   = np.empty( self.order, dtype=np.ndarray)             # <<<<<<<<<<<<<<
@@ -21154,7 +21154,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
   __pyx_v_self->p_im = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":76
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":76
  * 
  *     self.p_im   = np.empty( self.order, dtype=np.ndarray)
  *     self.p_ndpo = np.zeros( self.order, dtype=np.uint64)             # <<<<<<<<<<<<<<
@@ -21194,7 +21194,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
   __pyx_v_self->p_ndpo = ((PyArrayObject *)__pyx_t_6);
   __pyx_t_6 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":78
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":78
  *     self.p_ndpo = np.zeros( self.order, dtype=np.uint64)
  * 
  *     for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -21206,7 +21206,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
   for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
     __pyx_v_ordi = __pyx_t_9;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":80
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":80
  *     for ordi in range(self.order):
  * 
  *       self.p_ndpo[ordi] = dhelp_extract_ndirOrder( self.nbases, ordi+1, dhl )             # <<<<<<<<<<<<<<
@@ -21218,7 +21218,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
     if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->p_ndpo), __pyx_v_ordi, __pyx_t_6, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(6, 80, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":82
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":82
  *       self.p_ndpo[ordi] = dhelp_extract_ndirOrder( self.nbases, ordi+1, dhl )
  * 
  *       self.p_im[ordi]   = np.empty( self.p_ndpo[ordi], dtype=object)             # <<<<<<<<<<<<<<
@@ -21248,7 +21248,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
     if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->p_im), __pyx_v_ordi, __pyx_t_5, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(6, 82, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":84
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":84
  *       self.p_im[ordi]   = np.empty( self.p_ndpo[ordi], dtype=object)
  * 
  *       self.ndir += self.p_ndpo[ordi]             # <<<<<<<<<<<<<<
@@ -21267,7 +21267,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_self->ndir = __pyx_t_10;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":86
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":86
  *       self.ndir += self.p_ndpo[ordi]
  * 
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -21282,7 +21282,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
     for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_12; __pyx_t_2+=1) {
       __pyx_v_i = __pyx_t_2;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":88
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":88
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         self.p_im[ordi][i] = base_sprmat_creator( shape , dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -21315,7 +21315,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":24
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":24
  * 
  *   #***************************************************************************************************
  *   def __cinit__(self, shape, bases_t nbases = 0 , ord_t order = 0, uint8_t spr_type = 2):             # <<<<<<<<<<<<<<
@@ -21340,7 +21340,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat___cinit__(struct __pyx_obj_5pyoti_5d
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":100
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":100
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -21376,7 +21376,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":107
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":107
  *     #*************************************************************************************************
  * 
  *     head = '<spr_omat, '             # <<<<<<<<<<<<<<
@@ -21386,7 +21386,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   __Pyx_INCREF(__pyx_kp_s_spr_omat);
   __pyx_v_head = __pyx_kp_s_spr_omat;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":108
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":108
  * 
  *     head = '<spr_omat, '
  *     tail = ">"             # <<<<<<<<<<<<<<
@@ -21396,7 +21396,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   __Pyx_INCREF(__pyx_kp_s__13);
   __pyx_v_tail = __pyx_kp_s__13;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":109
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":109
  *     head = '<spr_omat, '
  *     tail = ">"
  *     body = ''             # <<<<<<<<<<<<<<
@@ -21406,7 +21406,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_body = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":110
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":110
  *     tail = ">"
  *     body = ''
  *     body += 'shape: ('+str(self.nrows)+","+str(self.ncols)+'), '             # <<<<<<<<<<<<<<
@@ -21442,7 +21442,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":111
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":111
  *     body = ''
  *     body += 'shape: ('+str(self.nrows)+","+str(self.ncols)+'), '
  *     body += 'ndir: ' + str(self.ndir) +', '             # <<<<<<<<<<<<<<
@@ -21466,7 +21466,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":112
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":112
  *     body += 'shape: ('+str(self.nrows)+","+str(self.ncols)+'), '
  *     body += 'ndir: ' + str(self.ndir) +', '
  *     body += 'nbases: ' + str(self.nbases) +', '             # <<<<<<<<<<<<<<
@@ -21490,7 +21490,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":113
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":113
  *     body += 'ndir: ' + str(self.ndir) +', '
  *     body += 'nbases: ' + str(self.nbases) +', '
  *     body += 'order: ' + str(self.order) + ', '             # <<<<<<<<<<<<<<
@@ -21514,7 +21514,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":115
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":115
  *     body += 'order: ' + str(self.order) + ', '
  * 
  *     if self.spr_type == 0:     # CSR Matrix             # <<<<<<<<<<<<<<
@@ -21524,7 +21524,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   switch (__pyx_v_self->spr_type) {
     case 0:
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":117
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":117
  *     if self.spr_type == 0:     # CSR Matrix
  * 
  *       body += "spr_type: csr"             # <<<<<<<<<<<<<<
@@ -21536,7 +21536,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
     __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":115
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":115
  *     body += 'order: ' + str(self.order) + ', '
  * 
  *     if self.spr_type == 0:     # CSR Matrix             # <<<<<<<<<<<<<<
@@ -21546,7 +21546,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
     break;
     case 1:
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":121
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":121
  *     elif self.spr_type == 1:   # COO Matrix
  * 
  *       body += "spr_type: coo"             # <<<<<<<<<<<<<<
@@ -21558,7 +21558,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
     __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":119
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":119
  *       body += "spr_type: csr"
  * 
  *     elif self.spr_type == 1:   # COO Matrix             # <<<<<<<<<<<<<<
@@ -21568,7 +21568,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
     break;
     case 2:
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":125
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":125
  *     elif self.spr_type == 2:
  * 
  *       body += "spr_type: lil"             # <<<<<<<<<<<<<<
@@ -21580,7 +21580,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
     __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":123
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":123
  *       body += "spr_type: coo"
  * 
  *     elif self.spr_type == 2:             # <<<<<<<<<<<<<<
@@ -21591,7 +21591,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
     default: break;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":128
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":128
  * 
  * 
  *     return (head + body + tail)             # <<<<<<<<<<<<<<
@@ -21608,7 +21608,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":100
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":100
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -21632,7 +21632,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_2__repr__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":133
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":133
  * 
  *   #***************************************************************************************************
  *   cpdef object get_base_sprmat_creator(self):             # <<<<<<<<<<<<<<
@@ -21700,7 +21700,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
     #endif
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":139
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":139
  *     """
  * 
  *     from scipy.sparse import csr_matrix, coo_matrix, lil_matrix             # <<<<<<<<<<<<<<
@@ -21738,7 +21738,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":141
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":141
  *     from scipy.sparse import csr_matrix, coo_matrix, lil_matrix
  * 
  *     if self.spr_type == 0:     # CSR Matrix             # <<<<<<<<<<<<<<
@@ -21748,7 +21748,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
   switch (__pyx_v_self->spr_type) {
     case 0:
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":143
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":143
  *     if self.spr_type == 0:     # CSR Matrix
  * 
  *       base_sprmat_creator = csr_matrix             # <<<<<<<<<<<<<<
@@ -21758,7 +21758,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
     __Pyx_INCREF(__pyx_v_csr_matrix);
     __pyx_v_base_sprmat_creator = __pyx_v_csr_matrix;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":141
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":141
  *     from scipy.sparse import csr_matrix, coo_matrix, lil_matrix
  * 
  *     if self.spr_type == 0:     # CSR Matrix             # <<<<<<<<<<<<<<
@@ -21768,7 +21768,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
     break;
     case 1:
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":147
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":147
  *     elif self.spr_type == 1:   # COO Matrix
  * 
  *       base_sprmat_creator = coo_matrix             # <<<<<<<<<<<<<<
@@ -21778,7 +21778,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
     __Pyx_INCREF(__pyx_v_coo_matrix);
     __pyx_v_base_sprmat_creator = __pyx_v_coo_matrix;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":145
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":145
  *       base_sprmat_creator = csr_matrix
  * 
  *     elif self.spr_type == 1:   # COO Matrix             # <<<<<<<<<<<<<<
@@ -21788,7 +21788,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
     break;
     case 2:
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":151
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":151
  *     elif self.spr_type == 2:   # LIL matrix
  * 
  *       base_sprmat_creator = lil_matrix             # <<<<<<<<<<<<<<
@@ -21798,7 +21798,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
     __Pyx_INCREF(__pyx_v_lil_matrix);
     __pyx_v_base_sprmat_creator = __pyx_v_lil_matrix;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":149
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":149
  *       base_sprmat_creator = coo_matrix
  * 
  *     elif self.spr_type == 2:   # LIL matrix             # <<<<<<<<<<<<<<
@@ -21808,7 +21808,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
     break;
     default:
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":155
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":155
  *     else:
  * 
  *       raise TypeError("Unknown spr_type: "+str(self.spr_type)+". Try 0: CSR matrix or 1: COO matrix.")             # <<<<<<<<<<<<<<
@@ -21835,7 +21835,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
     break;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":159
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":159
  *     # end if
  * 
  *     return base_sprmat_creator             # <<<<<<<<<<<<<<
@@ -21847,7 +21847,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_base_sprmat_creator(struct 
   __pyx_r = __pyx_v_base_sprmat_creator;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":133
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":133
  * 
  *   #***************************************************************************************************
  *   cpdef object get_base_sprmat_creator(self):             # <<<<<<<<<<<<<<
@@ -21910,7 +21910,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_4get_base_sprmat_creator(struc
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":164
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":164
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -21958,7 +21958,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   PyObject *__pyx_t_13 = NULL;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":178
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":178
  *     # cdef spr_otinum spr_oti
  * 
  *     head = '< spr_omat class, '             # <<<<<<<<<<<<<<
@@ -21968,7 +21968,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   __Pyx_INCREF(__pyx_kp_s_spr_omat_class);
   __pyx_v_head = __pyx_kp_s_spr_omat_class;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":179
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":179
  * 
  *     head = '< spr_omat class, '
  *     tail = " >"             # <<<<<<<<<<<<<<
@@ -21978,7 +21978,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   __Pyx_INCREF(__pyx_kp_s__29);
   __pyx_v_tail = __pyx_kp_s__29;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":181
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":181
  *     tail = " >"
  * 
  *     body = ''             # <<<<<<<<<<<<<<
@@ -21988,7 +21988,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_body = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":182
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":182
  * 
  *     body = ''
  *     body += 'shape: ('+str(self.nrows)+","+str(self.ncols)+'), '             # <<<<<<<<<<<<<<
@@ -22024,7 +22024,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":183
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":183
  *     body = ''
  *     body += 'shape: ('+str(self.nrows)+","+str(self.ncols)+'), '
  *     body += 'ndir: ' + str(self.ndir) +', '             # <<<<<<<<<<<<<<
@@ -22048,7 +22048,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":184
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":184
  *     body += 'shape: ('+str(self.nrows)+","+str(self.ncols)+'), '
  *     body += 'ndir: ' + str(self.ndir) +', '
  *     body += 'nbases: ' + str(self.nbases) +', '             # <<<<<<<<<<<<<<
@@ -22072,7 +22072,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":185
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":185
  *     body += 'ndir: ' + str(self.ndir) +', '
  *     body += 'nbases: ' + str(self.nbases) +', '
  *     body += 'order: ' + str(self.order) + ', \n'             # <<<<<<<<<<<<<<
@@ -22096,7 +22096,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":187
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":187
  *     body += 'order: ' + str(self.order) + ', \n'
  * 
  *     body += str(self.re)+"\n"             # <<<<<<<<<<<<<<
@@ -22114,7 +22114,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":188
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":188
  * 
  *     body += str(self.re)+"\n"
  *     for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -22126,7 +22126,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_ordi = __pyx_t_6;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":190
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":190
  *     for ordi in range(self.order):
  * 
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -22141,7 +22141,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_i = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":192
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":192
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         body += '+ e('             # <<<<<<<<<<<<<<
@@ -22153,7 +22153,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":194
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":194
  *         body += '+ e('
  * 
  *         body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')             # <<<<<<<<<<<<<<
@@ -22230,7 +22230,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":195
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":195
  * 
  *         body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')
  *         body += ") * \n"             # <<<<<<<<<<<<<<
@@ -22242,7 +22242,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":196
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":196
  *         body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')
  *         body += ") * \n"
  *         body += str(self.p_im[ordi][i])+'\n'             # <<<<<<<<<<<<<<
@@ -22268,7 +22268,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":201
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":201
  *     # end for
  * 
  *     return (head + body + tail)             # <<<<<<<<<<<<<<
@@ -22285,7 +22285,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":164
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":164
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -22312,7 +22312,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_6__str__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":206
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":206
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self, index):             # <<<<<<<<<<<<<<
@@ -22358,7 +22358,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
   Py_ssize_t __pyx_t_11;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":218
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":218
  * 
  *     # Try first the following:
  *     tmp = self.re[index]             # <<<<<<<<<<<<<<
@@ -22370,7 +22370,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
   __pyx_v_tmp = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":220
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":220
  *     tmp = self.re[index]
  * 
  *     if type(tmp) == np.float64:             # <<<<<<<<<<<<<<
@@ -22388,7 +22388,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":223
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":223
  * 
  *       # result is an otinum
  *       res_oti = oti_createEmpty(self.nbases, self.order, dhl)             # <<<<<<<<<<<<<<
@@ -22397,7 +22397,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
  */
     __pyx_v_res_oti = oti_createEmpty(__pyx_v_self->nbases, __pyx_v_self->order, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":225
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":225
  *       res_oti = oti_createEmpty(self.nbases, self.order, dhl)
  * 
  *       res_oti.re = self.re[index]             # <<<<<<<<<<<<<<
@@ -22410,7 +22410,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_res_oti.re = __pyx_t_4;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":227
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":227
  *       res_oti.re = self.re[index]
  * 
  *       for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -22422,7 +22422,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_v_ordi = __pyx_t_7;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":229
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":229
  *       for ordi in range(self.order):
  * 
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -22477,7 +22477,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
         __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_2);
         __pyx_t_2 = 0;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":231
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":231
  *         for i in range(self.p_ndpo[ordi]):
  * 
  *           res_oti.p_im[ordi][i] = self.p_im[ordi][i][index]             # <<<<<<<<<<<<<<
@@ -22497,7 +22497,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
         __pyx_t_11 = __Pyx_PyIndex_AsSsize_t(__pyx_v_i); if (unlikely((__pyx_t_11 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(6, 231, __pyx_L1_error)
         ((__pyx_v_res_oti.p_im[__pyx_v_ordi])[__pyx_t_11]) = __pyx_t_4;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":229
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":229
  *       for ordi in range(self.order):
  * 
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -22508,7 +22508,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":238
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":238
  *       # end for
  * 
  *       return otinum.create(&res_oti)             # <<<<<<<<<<<<<<
@@ -22522,7 +22522,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
     __pyx_t_1 = 0;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":220
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":220
  *     tmp = self.re[index]
  * 
  *     if type(tmp) == np.float64:             # <<<<<<<<<<<<<<
@@ -22531,7 +22531,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
  */
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":242
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":242
  *     else:
  * 
  *       res_mat = spr_omat( tmp.shape, nbases=self.nbases,             # <<<<<<<<<<<<<<
@@ -22553,7 +22553,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
     if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_nbases, __pyx_t_10) < 0) __PYX_ERR(6, 242, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":243
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":243
  * 
  *       res_mat = spr_omat( tmp.shape, nbases=self.nbases,
  *                           order=self.order,spr_type=self.spr_type   )             # <<<<<<<<<<<<<<
@@ -22569,7 +22569,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
     if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_spr_type, __pyx_t_10) < 0) __PYX_ERR(6, 242, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":242
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":242
  *     else:
  * 
  *       res_mat = spr_omat( tmp.shape, nbases=self.nbases,             # <<<<<<<<<<<<<<
@@ -22583,7 +22583,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
     __pyx_v_res_mat = ((struct __pyx_obj_5pyoti_5dense_spr_omat *)__pyx_t_10);
     __pyx_t_10 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":245
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":245
  *                           order=self.order,spr_type=self.spr_type   )
  * 
  *       res_mat.re = self.re[index]             # <<<<<<<<<<<<<<
@@ -22598,7 +22598,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
     __pyx_v_res_mat->re = __pyx_t_10;
     __pyx_t_10 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":247
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":247
  *       res_mat.re = self.re[index]
  * 
  *       for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -22610,7 +22610,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
     for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
       __pyx_v_ordi = __pyx_t_7;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":249
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":249
  *       for ordi in range(self.order):
  * 
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -22665,7 +22665,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
         __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_1);
         __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":251
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":251
  *         for i in range(self.p_ndpo[ordi]):
  * 
  *           res_mat.p_im[ordi][i] = self.p_im[ordi][i][index]             # <<<<<<<<<<<<<<
@@ -22686,7 +22686,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":249
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":249
  *       for ordi in range(self.order):
  * 
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -22697,7 +22697,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
       __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
     }
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":259
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":259
  * 
  * 
  *       return res_mat             # <<<<<<<<<<<<<<
@@ -22710,7 +22710,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
     goto __pyx_L0;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":206
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":206
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self, index):             # <<<<<<<<<<<<<<
@@ -22734,7 +22734,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_8__getitem__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":268
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":268
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, index, value):             # <<<<<<<<<<<<<<
@@ -22776,7 +22776,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
   PyObject *__pyx_t_9 = NULL;
   __Pyx_RefNannySetupContext("__setitem__", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":277
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":277
  *     cdef uint64_t i
  * 
  *     t_value = type(value)             # <<<<<<<<<<<<<<
@@ -22786,7 +22786,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_value)));
   __pyx_v_t_value = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_value)));
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":279
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":279
  *     t_value = type(value)
  * 
  *     if t_value == otinum:             # <<<<<<<<<<<<<<
@@ -22798,7 +22798,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":281
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":281
  *     if t_value == otinum:
  * 
  *       self.set_from_otinum(index, value)             # <<<<<<<<<<<<<<
@@ -22810,7 +22810,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":279
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":279
  *     t_value = type(value)
  * 
  *     if t_value == otinum:             # <<<<<<<<<<<<<<
@@ -22820,7 +22820,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":285
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":285
  *     else:
  * 
  *       self.re[index] = value             # <<<<<<<<<<<<<<
@@ -22830,7 +22830,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
   /*else*/ {
     if (unlikely(PyObject_SetItem(__pyx_v_self->re, __pyx_v_index, __pyx_v_value) < 0)) __PYX_ERR(6, 285, __pyx_L1_error)
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":288
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":288
  * 
  *       # Set the values of the imaginary directions to zero.
  *       for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -22842,7 +22842,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
       __pyx_v_ordi = __pyx_t_5;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":290
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":290
  *       for ordi in range(self.order):
  * 
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -22857,7 +22857,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
       for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
         __pyx_v_i = __pyx_t_8;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":292
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":292
  *         for i in range(self.p_ndpo[ordi]):
  * 
  *           self.p_im[ordi][i][index] = 0.0             # <<<<<<<<<<<<<<
@@ -22876,7 +22876,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":268
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":268
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, index, value):             # <<<<<<<<<<<<<<
@@ -22898,7 +22898,7 @@ static int __pyx_pf_5pyoti_5dense_8spr_omat_10__setitem__(struct __pyx_obj_5pyot
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":305
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":305
  * 
  *   #***************************************************************************************************
  *   cpdef set_from_otinum(self, index, otinum in_otinum):             # <<<<<<<<<<<<<<
@@ -23007,7 +23007,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
     #endif
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":316
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":316
  *     cdef bases_t
  * 
  *     greater_order  = in_otinum.num.order  > self.order             # <<<<<<<<<<<<<<
@@ -23016,7 +23016,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
  */
   __pyx_v_greater_order = (__pyx_v_in_otinum->num.order > __pyx_v_self->order);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":317
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":317
  * 
  *     greater_order  = in_otinum.num.order  > self.order
  *     greater_nbases = in_otinum.num.nbases > self.nbases             # <<<<<<<<<<<<<<
@@ -23025,7 +23025,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
  */
   __pyx_v_greater_nbases = (__pyx_v_in_otinum->num.nbases > __pyx_v_self->nbases);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":320
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":320
  * 
  * 
  *     if greater_nbases:             # <<<<<<<<<<<<<<
@@ -23035,7 +23035,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
   __pyx_t_7 = (__pyx_v_greater_nbases != 0);
   if (__pyx_t_7) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":322
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":322
  *     if greater_nbases:
  * 
  *       self.change_nbases(in_otinum.num.nbases)             # <<<<<<<<<<<<<<
@@ -23046,7 +23046,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":320
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":320
  * 
  * 
  *     if greater_nbases:             # <<<<<<<<<<<<<<
@@ -23055,7 +23055,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
  */
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":327
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":327
  * 
  * 
  *     if greater_order:             # <<<<<<<<<<<<<<
@@ -23065,7 +23065,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
   __pyx_t_7 = (__pyx_v_greater_order != 0);
   if (__pyx_t_7) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":329
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":329
  *     if greater_order:
  * 
  *       self.change_order(in_otinum.num.order)             # <<<<<<<<<<<<<<
@@ -23076,7 +23076,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":327
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":327
  * 
  * 
  *     if greater_order:             # <<<<<<<<<<<<<<
@@ -23085,7 +23085,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
  */
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":335
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":335
  * 
  * 
  *     self.re[index] = in_otinum.num.re             # <<<<<<<<<<<<<<
@@ -23097,7 +23097,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
   if (unlikely(PyObject_SetItem(__pyx_v_self->re, __pyx_v_index, __pyx_t_1) < 0)) __PYX_ERR(6, 335, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":339
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":339
  *     # At this point they either have the same nbases and order or the number has lower.
  * 
  *     for ordi in range(in_otinum.num.order):             # <<<<<<<<<<<<<<
@@ -23109,7 +23109,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
   for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
     __pyx_v_ordi = __pyx_t_10;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":341
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":341
  *     for ordi in range(in_otinum.num.order):
  * 
  *       for i in range(in_otinum.num.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -23121,7 +23121,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
     for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
       __pyx_v_i = __pyx_t_13;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":343
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":343
  *       for i in range(in_otinum.num.p_ndpo[ordi]):
  * 
  *         self.p_im[ordi][i][index] = in_otinum.num.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -23140,7 +23140,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     }
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":348
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":348
  * 
  *       # Fill the others with zero.
  *       for i in range(in_otinum.num.p_ndpo[ordi],self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -23155,7 +23155,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
     for (__pyx_t_13 = (__pyx_v_in_otinum->num.p_ndpo[__pyx_v_ordi]); __pyx_t_13 < __pyx_t_15; __pyx_t_13+=1) {
       __pyx_v_i = __pyx_t_13;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":350
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":350
  *       for i in range(in_otinum.num.p_ndpo[ordi],self.p_ndpo[ordi]):
  * 
  *           self.p_im[ordi][i][index] = 0.0             # <<<<<<<<<<<<<<
@@ -23172,7 +23172,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":356
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":356
  *     # end for
  * 
  *     for ordi in range(in_otinum.num.order,self.order):             # <<<<<<<<<<<<<<
@@ -23184,7 +23184,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
   for (__pyx_t_10 = __pyx_v_in_otinum->num.order; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
     __pyx_v_ordi = __pyx_t_10;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":359
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":359
  * 
  *       # Fill the others with zero.
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -23199,7 +23199,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
     for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_15; __pyx_t_13+=1) {
       __pyx_v_i = __pyx_t_13;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":361
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":361
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *           self.p_im[ordi][i][index] = 0.0             # <<<<<<<<<<<<<<
@@ -23216,7 +23216,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_from_otinum(struct __pyx_ob
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":305
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":305
  * 
  *   #***************************************************************************************************
  *   cpdef set_from_otinum(self, index, otinum in_otinum):             # <<<<<<<<<<<<<<
@@ -23331,7 +23331,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_12set_from_otinum(struct __pyx
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":372
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":372
  * 
  *   #***************************************************************************************************
  *   cdef set_and_sum_from_otinum_t(self, tuple index, otinum_t* num):             # <<<<<<<<<<<<<<
@@ -23360,7 +23360,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
   PyObject *__pyx_t_12 = NULL;
   __Pyx_RefNannySetupContext("set_and_sum_from_otinum_t", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":382
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":382
  *     cdef bases_t
  * 
  *     greater_order  = num[ZERO].order  > self.order             # <<<<<<<<<<<<<<
@@ -23369,7 +23369,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
  */
   __pyx_v_greater_order = ((__pyx_v_num[__pyx_v_5pyoti_4core_ZERO]).order > __pyx_v_self->order);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":383
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":383
  * 
  *     greater_order  = num[ZERO].order  > self.order
  *     greater_nbases = num[ZERO].nbases > self.nbases             # <<<<<<<<<<<<<<
@@ -23378,7 +23378,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
  */
   __pyx_v_greater_nbases = ((__pyx_v_num[__pyx_v_5pyoti_4core_ZERO]).nbases > __pyx_v_self->nbases);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":386
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":386
  * 
  * 
  *     if greater_nbases:             # <<<<<<<<<<<<<<
@@ -23388,7 +23388,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
   __pyx_t_1 = (__pyx_v_greater_nbases != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":388
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":388
  *     if greater_nbases:
  * 
  *       self.change_nbases(num[ZERO].nbases)             # <<<<<<<<<<<<<<
@@ -23399,7 +23399,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":386
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":386
  * 
  * 
  *     if greater_nbases:             # <<<<<<<<<<<<<<
@@ -23408,7 +23408,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
  */
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":393
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":393
  * 
  * 
  *     if greater_order:             # <<<<<<<<<<<<<<
@@ -23418,7 +23418,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
   __pyx_t_1 = (__pyx_v_greater_order != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":395
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":395
  *     if greater_order:
  * 
  *       self.change_order(num[ZERO].order)             # <<<<<<<<<<<<<<
@@ -23429,7 +23429,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":393
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":393
  * 
  * 
  *     if greater_order:             # <<<<<<<<<<<<<<
@@ -23438,7 +23438,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
  */
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":401
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":401
  * 
  * 
  *     self.re[index] = num[ZERO].re             # <<<<<<<<<<<<<<
@@ -23450,7 +23450,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
   if (unlikely(PyObject_SetItem(__pyx_v_self->re, __pyx_v_index, __pyx_t_2) < 0)) __PYX_ERR(6, 401, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":405
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":405
  *     # At this point they either have the same nbases and order or the number has lower.
  * 
  *     for ordi in range(num[ZERO].order):             # <<<<<<<<<<<<<<
@@ -23462,7 +23462,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_ordi = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":407
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":407
  *     for ordi in range(num[ZERO].order):
  * 
  *       for i in range(num[ZERO].p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -23474,7 +23474,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_i = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":409
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":409
  *       for i in range(num[ZERO].p_ndpo[ordi]):
  * 
  *         self.p_im[ordi][i][index] += num[ZERO].p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -23503,7 +23503,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":372
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":372
  * 
  *   #***************************************************************************************************
  *   cdef set_and_sum_from_otinum_t(self, tuple index, otinum_t* num):             # <<<<<<<<<<<<<<
@@ -23528,7 +23528,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_set_and_sum_from_otinum_t(struc
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":418
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":418
  * 
  *   #***************************************************************************************************
  *   def set_and_sum_from_otinum(self, tuple index, otinum in_otinum):             # <<<<<<<<<<<<<<
@@ -23625,7 +23625,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
   PyObject *__pyx_t_12 = NULL;
   __Pyx_RefNannySetupContext("set_and_sum_from_otinum", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":428
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":428
  *     cdef bases_t
  * 
  *     greater_order  = in_otinum.num.order  > self.order             # <<<<<<<<<<<<<<
@@ -23634,7 +23634,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
  */
   __pyx_v_greater_order = (__pyx_v_in_otinum->num.order > __pyx_v_self->order);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":429
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":429
  * 
  *     greater_order  = in_otinum.num.order  > self.order
  *     greater_nbases = in_otinum.num.nbases > self.nbases             # <<<<<<<<<<<<<<
@@ -23643,7 +23643,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
  */
   __pyx_v_greater_nbases = (__pyx_v_in_otinum->num.nbases > __pyx_v_self->nbases);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":432
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":432
  * 
  * 
  *     if greater_nbases:             # <<<<<<<<<<<<<<
@@ -23653,7 +23653,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
   __pyx_t_1 = (__pyx_v_greater_nbases != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":434
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":434
  *     if greater_nbases:
  * 
  *       self.change_nbases(in_otinum.num.nbases)             # <<<<<<<<<<<<<<
@@ -23664,7 +23664,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":432
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":432
  * 
  * 
  *     if greater_nbases:             # <<<<<<<<<<<<<<
@@ -23673,7 +23673,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
  */
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":439
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":439
  * 
  * 
  *     if greater_order:             # <<<<<<<<<<<<<<
@@ -23683,7 +23683,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
   __pyx_t_1 = (__pyx_v_greater_order != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":441
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":441
  *     if greater_order:
  * 
  *       self.change_order(in_otinum.num.order)             # <<<<<<<<<<<<<<
@@ -23694,7 +23694,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
     __Pyx_GOTREF(__pyx_t_2);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":439
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":439
  * 
  * 
  *     if greater_order:             # <<<<<<<<<<<<<<
@@ -23703,7 +23703,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
  */
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":447
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":447
  * 
  * 
  *     self.re[index] = in_otinum.num.re             # <<<<<<<<<<<<<<
@@ -23715,7 +23715,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
   if (unlikely(PyObject_SetItem(__pyx_v_self->re, __pyx_v_index, __pyx_t_2) < 0)) __PYX_ERR(6, 447, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":451
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":451
  *     # At this point they either have the same nbases and order or the number has lower.
  * 
  *     for ordi in range(in_otinum.num.order):             # <<<<<<<<<<<<<<
@@ -23727,7 +23727,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_ordi = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":453
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":453
  *     for ordi in range(in_otinum.num.order):
  * 
  *       for i in range(in_otinum.num.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -23739,7 +23739,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_i = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":455
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":455
  *       for i in range(in_otinum.num.p_ndpo[ordi]):
  * 
  *         self.p_im[ordi][i][index] += in_otinum.num.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -23768,7 +23768,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":418
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":418
  * 
  *   #***************************************************************************************************
  *   def set_and_sum_from_otinum(self, tuple index, otinum in_otinum):             # <<<<<<<<<<<<<<
@@ -23793,7 +23793,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_14set_and_sum_from_otinum(stru
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":467
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":467
  * 
  *   #***************************************************************************************************
  *   def change_nbases_order(self,bases_t new_nbases, ord_t new_order):             # <<<<<<<<<<<<<<
@@ -23869,7 +23869,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_16change_nbases_order(struct _
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("change_nbases_order", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":475
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":475
  * 
  *     # First change nbases.
  *     self.change_nbases(new_nbases)             # <<<<<<<<<<<<<<
@@ -23880,7 +23880,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_16change_nbases_order(struct _
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":478
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":478
  * 
  *     # then change order.
  *     self.change_order(new_order)             # <<<<<<<<<<<<<<
@@ -23891,7 +23891,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_16change_nbases_order(struct _
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":467
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":467
  * 
  *   #***************************************************************************************************
  *   def change_nbases_order(self,bases_t new_nbases, ord_t new_order):             # <<<<<<<<<<<<<<
@@ -23912,7 +23912,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_16change_nbases_order(struct _
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":483
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":483
  * 
  *   #***************************************************************************************************
  *   cpdef change_order(self, ord_t new_order):             # <<<<<<<<<<<<<<
@@ -23992,7 +23992,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
     #endif
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":494
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":494
  *     # cdef np.ndarray new_p_im, new_p_ndpo
  * 
  *     shape = (self.nrows, self.ncols) # Get shape             # <<<<<<<<<<<<<<
@@ -24014,7 +24014,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
   __pyx_v_shape = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":496
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":496
  *     shape = (self.nrows, self.ncols) # Get shape
  * 
  *     base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.             # <<<<<<<<<<<<<<
@@ -24026,7 +24026,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
   __pyx_v_base_sprmat_creator = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":499
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":499
  * 
  *     # In case the order changes.
  *     if( new_order > self.order ):             # <<<<<<<<<<<<<<
@@ -24036,7 +24036,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
   __pyx_t_6 = ((__pyx_v_new_order > __pyx_v_self->order) != 0);
   if (__pyx_t_6) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":503
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":503
  * 
  *       # Requires creation of new element
  *       self.p_im   = np.resize(self.p_im  ,new_order)             # <<<<<<<<<<<<<<
@@ -24104,7 +24104,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
     __pyx_v_self->p_im = ((PyArrayObject *)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":505
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":505
  *       self.p_im   = np.resize(self.p_im  ,new_order)
  * 
  *       self.p_ndpo = np.resize(self.p_ndpo,new_order)             # <<<<<<<<<<<<<<
@@ -24172,7 +24172,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
     __pyx_v_self->p_ndpo = ((PyArrayObject *)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":508
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":508
  * 
  *       # just modify the new ones
  *       for ordi in range(self.order, new_order):             # <<<<<<<<<<<<<<
@@ -24184,7 +24184,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
     for (__pyx_t_10 = __pyx_v_self->order; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
       __pyx_v_ordi = __pyx_t_10;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":510
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":510
  *       for ordi in range(self.order, new_order):
  * 
  *         self.p_ndpo[ordi] = dhelp_extract_ndirOrder( self.nbases, ordi+1, dhl )             # <<<<<<<<<<<<<<
@@ -24196,7 +24196,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
       if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->p_ndpo), __pyx_v_ordi, __pyx_t_4, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(6, 510, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":512
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":512
  *         self.p_ndpo[ordi] = dhelp_extract_ndirOrder( self.nbases, ordi+1, dhl )
  * 
  *         self.p_im[ordi]   = np.empty( self.p_ndpo[ordi], dtype=object)             # <<<<<<<<<<<<<<
@@ -24226,7 +24226,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
       if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->p_im), __pyx_v_ordi, __pyx_t_1, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(6, 512, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":515
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":515
  * 
  *         # Create new arrays to the new elements.
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -24241,7 +24241,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
       for (__pyx_t_13 = 0; __pyx_t_13 < __pyx_t_12; __pyx_t_13+=1) {
         __pyx_v_i = __pyx_t_13;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":517
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":517
  *         for i in range(self.p_ndpo[ordi]):
  * 
  *           self.p_im[ordi][i] = base_sprmat_creator( shape , dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -24274,7 +24274,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
       }
     }
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":523
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":523
  *       # end for
  * 
  *       self.order = new_order             # <<<<<<<<<<<<<<
@@ -24283,7 +24283,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
  */
     __pyx_v_self->order = __pyx_v_new_order;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":499
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":499
  * 
  *     # In case the order changes.
  *     if( new_order > self.order ):             # <<<<<<<<<<<<<<
@@ -24293,7 +24293,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":525
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":525
  *       self.order = new_order
  * 
  *     elif( new_order < self.order ):             # <<<<<<<<<<<<<<
@@ -24303,7 +24303,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
   __pyx_t_6 = ((__pyx_v_new_order < __pyx_v_self->order) != 0);
   if (__pyx_t_6) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":529
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":529
  *       # Requires creation of new element
  * 
  *       self.p_im   = np.resize(self.p_im  ,new_order)             # <<<<<<<<<<<<<<
@@ -24371,7 +24371,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
     __pyx_v_self->p_im = ((PyArrayObject *)__pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":530
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":530
  * 
  *       self.p_im   = np.resize(self.p_im  ,new_order)
  *       self.p_ndpo = np.resize(self.p_ndpo,new_order)             # <<<<<<<<<<<<<<
@@ -24439,7 +24439,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
     __pyx_v_self->p_ndpo = ((PyArrayObject *)__pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":532
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":532
  *       self.p_ndpo = np.resize(self.p_ndpo,new_order)
  * 
  *       self.order = new_order             # <<<<<<<<<<<<<<
@@ -24448,7 +24448,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
  */
     __pyx_v_self->order = __pyx_v_new_order;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":525
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":525
  *       self.order = new_order
  * 
  *     elif( new_order < self.order ):             # <<<<<<<<<<<<<<
@@ -24458,7 +24458,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":537
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":537
  * 
  *     # Recompute ndir.
  *     self.recompute_ndir()             # <<<<<<<<<<<<<<
@@ -24469,7 +24469,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_order(struct __pyx_obj_5
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":483
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":483
  * 
  *   #***************************************************************************************************
  *   cpdef change_order(self, ord_t new_order):             # <<<<<<<<<<<<<<
@@ -24543,7 +24543,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_18change_order(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":542
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":542
  * 
  *   #***************************************************************************************************
  *   cpdef change_nbases(self,bases_t new_nbases):             # <<<<<<<<<<<<<<
@@ -24626,7 +24626,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
     #endif
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":551
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":551
  *     # cdef np.ndarray tmp_p_im_i
  * 
  *     shape = (self.nrows, self.ncols) # Get shape             # <<<<<<<<<<<<<<
@@ -24648,7 +24648,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
   __pyx_v_shape = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":553
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":553
  *     shape = (self.nrows, self.ncols) # Get shape
  * 
  *     base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.             # <<<<<<<<<<<<<<
@@ -24660,7 +24660,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
   __pyx_v_base_sprmat_creator = __pyx_t_4;
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":555
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":555
  *     base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.
  * 
  *     if(new_nbases > self.nbases ):             # <<<<<<<<<<<<<<
@@ -24670,7 +24670,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
   __pyx_t_6 = ((__pyx_v_new_nbases > __pyx_v_self->nbases) != 0);
   if (__pyx_t_6) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":558
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":558
  * 
  *       # Elements should be resized and allocated.
  *       for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -24682,7 +24682,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_ordi = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":560
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":560
  *       for ordi in range(self.order):
  * 
  *         new_ndir = dhelp_extract_ndirOrder( new_nbases, ordi+1, dhl )             # <<<<<<<<<<<<<<
@@ -24691,7 +24691,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
  */
       __pyx_v_new_ndir = dhelp_extract_ndirOrder(__pyx_v_new_nbases, (__pyx_v_ordi + 1), __pyx_v_5pyoti_5dense_dhl);
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":562
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":562
  *         new_ndir = dhelp_extract_ndirOrder( new_nbases, ordi+1, dhl )
  * 
  *         self.p_im[ordi] = np.resize( self.p_im[ordi], new_ndir)             # <<<<<<<<<<<<<<
@@ -24759,7 +24759,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
       if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->p_im), __pyx_v_ordi, __pyx_t_4, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(6, 562, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":566
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":566
  *         # tmp_p_im_i[1:self.p_ndpo[ordi]] = self.p_im[ordi][:]
  * 
  *         for i in range(self.p_ndpo[ordi], new_ndir):             # <<<<<<<<<<<<<<
@@ -24775,7 +24775,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
       for (__pyx_t_15 = __pyx_t_13; __pyx_t_15 < __pyx_t_14; __pyx_t_15+=1) {
         __pyx_v_i = __pyx_t_15;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":568
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":568
  *         for i in range(self.p_ndpo[ordi], new_ndir):
  * 
  *           self.p_im[ordi][i] = base_sprmat_creator( shape , dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -24807,7 +24807,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       }
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":572
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":572
  *         # end for
  * 
  *         self.p_ndpo[ordi] = new_ndir             # <<<<<<<<<<<<<<
@@ -24820,7 +24820,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":576
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":576
  *       # end for
  * 
  *       self.nbases = new_nbases             # <<<<<<<<<<<<<<
@@ -24829,7 +24829,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
  */
     __pyx_v_self->nbases = __pyx_v_new_nbases;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":555
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":555
  *     base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.
  * 
  *     if(new_nbases > self.nbases ):             # <<<<<<<<<<<<<<
@@ -24839,7 +24839,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":578
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":578
  *       self.nbases = new_nbases
  * 
  *     elif(new_nbases < self.nbases ):             # <<<<<<<<<<<<<<
@@ -24849,7 +24849,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
   __pyx_t_6 = ((__pyx_v_new_nbases < __pyx_v_self->nbases) != 0);
   if (__pyx_t_6) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":581
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":581
  * 
  *       # Elements should be resized but remains with the same number of elements.
  *       for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -24861,7 +24861,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_ordi = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":583
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":583
  *       for ordi in range(self.order):
  * 
  *         new_ndir = dhelp_extract_ndirOrder( new_nbases, ordi+1, dhl )             # <<<<<<<<<<<<<<
@@ -24870,7 +24870,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
  */
       __pyx_v_new_ndir = dhelp_extract_ndirOrder(__pyx_v_new_nbases, (__pyx_v_ordi + 1), __pyx_v_5pyoti_5dense_dhl);
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":585
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":585
  *         new_ndir = dhelp_extract_ndirOrder( new_nbases, ordi+1, dhl )
  * 
  *         self.p_im[ordi] = np.resize( self.p_im[ordi], new_ndir)             # <<<<<<<<<<<<<<
@@ -24938,7 +24938,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
       if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->p_im), __pyx_v_ordi, __pyx_t_3, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(6, 585, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":587
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":587
  *         self.p_im[ordi] = np.resize( self.p_im[ordi], new_ndir)
  * 
  *         self.p_ndpo[ordi] = new_ndir             # <<<<<<<<<<<<<<
@@ -24951,7 +24951,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":591
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":591
  *       # end for
  * 
  *       self.nbases = new_nbases             # <<<<<<<<<<<<<<
@@ -24960,7 +24960,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
  */
     __pyx_v_self->nbases = __pyx_v_new_nbases;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":578
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":578
  *       self.nbases = new_nbases
  * 
  *     elif(new_nbases < self.nbases ):             # <<<<<<<<<<<<<<
@@ -24970,7 +24970,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":596
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":596
  * 
  *     # Recompute ndir.
  *     self.recompute_ndir()             # <<<<<<<<<<<<<<
@@ -24981,7 +24981,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_change_nbases(struct __pyx_obj_
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":542
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":542
  * 
  *   #***************************************************************************************************
  *   cpdef change_nbases(self,bases_t new_nbases):             # <<<<<<<<<<<<<<
@@ -25056,7 +25056,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_20change_nbases(struct __pyx_o
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":600
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":600
  * 
  *   #***************************************************************************************************
  *   cpdef recompute_ndir(self):             # <<<<<<<<<<<<<<
@@ -25125,7 +25125,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_recompute_ndir(struct __pyx_obj
     #endif
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":611
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":611
  *     cdef ord_t ordi
  * 
  *     self.ndir = 0             # <<<<<<<<<<<<<<
@@ -25134,7 +25134,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_recompute_ndir(struct __pyx_obj
  */
   __pyx_v_self->ndir = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":613
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":613
  *     self.ndir = 0
  * 
  *     for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -25146,7 +25146,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_recompute_ndir(struct __pyx_obj
   for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
     __pyx_v_ordi = __pyx_t_7;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":615
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":615
  *     for ordi in range(self.order):
  * 
  *       self.ndir += self.p_ndpo[ordi]             # <<<<<<<<<<<<<<
@@ -25166,7 +25166,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_recompute_ndir(struct __pyx_obj
     __pyx_v_self->ndir = __pyx_t_8;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":600
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":600
  * 
  *   #***************************************************************************************************
  *   cpdef recompute_ndir(self):             # <<<<<<<<<<<<<<
@@ -25227,7 +25227,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_22recompute_ndir(struct __pyx_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":623
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":623
  * 
  *   #***************************************************************************************************
  *   def to_csr(self):             # <<<<<<<<<<<<<<
@@ -25265,7 +25265,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_24to_csr(struct __pyx_obj_5pyo
   uint64_t __pyx_t_9;
   __Pyx_RefNannySetupContext("to_csr", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":634
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":634
  *     cdef ord_t ordi
  * 
  *     self.re = self.re.tocsr()             # <<<<<<<<<<<<<<
@@ -25295,7 +25295,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_24to_csr(struct __pyx_obj_5pyo
   __pyx_v_self->re = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":636
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":636
  *     self.re = self.re.tocsr()
  * 
  *     for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -25307,7 +25307,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_24to_csr(struct __pyx_obj_5pyo
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_ordi = __pyx_t_6;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":638
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":638
  *     for ordi in range(self.order):
  * 
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -25322,7 +25322,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_24to_csr(struct __pyx_obj_5pyo
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_i = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":640
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":640
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         self.p_im[ordi][i] = self.p_im[ordi][i].tocsr()             # <<<<<<<<<<<<<<
@@ -25360,7 +25360,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_24to_csr(struct __pyx_obj_5pyo
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":646
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":646
  *     # end for
  * 
  *     self.spr_type = 0             # <<<<<<<<<<<<<<
@@ -25369,7 +25369,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_24to_csr(struct __pyx_obj_5pyo
  */
   __pyx_v_self->spr_type = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":623
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":623
  * 
  *   #***************************************************************************************************
  *   def to_csr(self):             # <<<<<<<<<<<<<<
@@ -25392,7 +25392,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_24to_csr(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":652
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":652
  * 
  *   #***************************************************************************************************
  *   def to_coo(self):             # <<<<<<<<<<<<<<
@@ -25430,7 +25430,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_26to_coo(struct __pyx_obj_5pyo
   uint64_t __pyx_t_9;
   __Pyx_RefNannySetupContext("to_coo", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":662
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":662
  *     cdef ord_t ordi
  * 
  *     self.re = self.re.tocoo()             # <<<<<<<<<<<<<<
@@ -25460,7 +25460,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_26to_coo(struct __pyx_obj_5pyo
   __pyx_v_self->re = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":664
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":664
  *     self.re = self.re.tocoo()
  * 
  *     for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -25472,7 +25472,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_26to_coo(struct __pyx_obj_5pyo
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_ordi = __pyx_t_6;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":666
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":666
  *     for ordi in range(self.order):
  * 
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -25487,7 +25487,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_26to_coo(struct __pyx_obj_5pyo
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_i = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":668
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":668
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         self.p_im[ordi][i] = self.p_im[ordi][i].tocoo()             # <<<<<<<<<<<<<<
@@ -25525,7 +25525,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_26to_coo(struct __pyx_obj_5pyo
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":674
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":674
  *     # end for
  * 
  *     self.spr_type = 1             # <<<<<<<<<<<<<<
@@ -25534,7 +25534,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_26to_coo(struct __pyx_obj_5pyo
  */
   __pyx_v_self->spr_type = 1;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":652
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":652
  * 
  *   #***************************************************************************************************
  *   def to_coo(self):             # <<<<<<<<<<<<<<
@@ -25557,7 +25557,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_26to_coo(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":679
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":679
  * 
  *   #***************************************************************************************************
  *   def to_lil(self):             # <<<<<<<<<<<<<<
@@ -25595,7 +25595,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_28to_lil(struct __pyx_obj_5pyo
   uint64_t __pyx_t_9;
   __Pyx_RefNannySetupContext("to_lil", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":689
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":689
  *     cdef ord_t ordi
  * 
  *     self.re = self.re.tolil()             # <<<<<<<<<<<<<<
@@ -25625,7 +25625,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_28to_lil(struct __pyx_obj_5pyo
   __pyx_v_self->re = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":691
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":691
  *     self.re = self.re.tolil()
  * 
  *     for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -25637,7 +25637,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_28to_lil(struct __pyx_obj_5pyo
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_ordi = __pyx_t_6;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":693
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":693
  *     for ordi in range(self.order):
  * 
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -25652,7 +25652,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_28to_lil(struct __pyx_obj_5pyo
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_i = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":695
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":695
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         self.p_im[ordi][i] = self.p_im[ordi][i].tolil()             # <<<<<<<<<<<<<<
@@ -25690,7 +25690,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_28to_lil(struct __pyx_obj_5pyo
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":701
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":701
  *     # end for
  * 
  *     self.spr_type = 2             # <<<<<<<<<<<<<<
@@ -25699,7 +25699,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_28to_lil(struct __pyx_obj_5pyo
  */
   __pyx_v_self->spr_type = 2;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":679
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":679
  * 
  *   #***************************************************************************************************
  *   def to_lil(self):             # <<<<<<<<<<<<<<
@@ -25722,7 +25722,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_28to_lil(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":706
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":706
  * 
  *   #***************************************************************************************************
  *   def to_dense(self):             # <<<<<<<<<<<<<<
@@ -25761,7 +25761,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_30to_dense(struct __pyx_obj_5p
   uint64_t __pyx_t_9;
   __Pyx_RefNannySetupContext("to_dense", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":720
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":720
  *     cdef oarr_t res
  * 
  *     res = oarr_createEmpty(self.nrows, self.ncols, self.nbases, self.order, dhl)             # <<<<<<<<<<<<<<
@@ -25770,7 +25770,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_30to_dense(struct __pyx_obj_5p
  */
   __pyx_v_res = oarr_createEmpty(__pyx_v_self->nrows, __pyx_v_self->ncols, __pyx_v_self->nbases, __pyx_v_self->order, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":722
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":722
  *     res = oarr_createEmpty(self.nrows, self.ncols, self.nbases, self.order, dhl)
  * 
  *     copy_numpy2d_to_ptr_f64(self.re.toarray(),res.re)             # <<<<<<<<<<<<<<
@@ -25800,7 +25800,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_30to_dense(struct __pyx_obj_5p
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":724
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":724
  *     copy_numpy2d_to_ptr_f64(self.re.toarray(),res.re)
  * 
  *     for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -25812,7 +25812,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_30to_dense(struct __pyx_obj_5p
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_ordi = __pyx_t_6;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":726
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":726
  *     for ordi in range(self.order):
  * 
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -25827,7 +25827,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_30to_dense(struct __pyx_obj_5p
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_i = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":728
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":728
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         copy_numpy2d_to_ptr_f64(self.p_im[ordi][i].toarray(),res.p_im[ordi][i])             # <<<<<<<<<<<<<<
@@ -25865,7 +25865,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_30to_dense(struct __pyx_obj_5p
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":734
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":734
  *     # end for
  * 
  *     return omat.create(&res)             # <<<<<<<<<<<<<<
@@ -25879,7 +25879,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_30to_dense(struct __pyx_obj_5p
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":706
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":706
  * 
  *   #***************************************************************************************************
  *   def to_dense(self):             # <<<<<<<<<<<<<<
@@ -25900,7 +25900,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_30to_dense(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":739
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":739
  * 
  *   #***************************************************************************************************
  *   def get_deriv(self, hum_dir):             # <<<<<<<<<<<<<<
@@ -25936,7 +25936,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_32get_deriv(struct __pyx_obj_5
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("get_deriv", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":747
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":747
  *     global dhl
  * 
  *     cdef list item = imdir(hum_dir)             # <<<<<<<<<<<<<<
@@ -25948,7 +25948,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_32get_deriv(struct __pyx_obj_5
   __pyx_v_item = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":753
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":753
  *     # Check first if derivative is the real coefficient.
  * 
  *     if item[ONE] == 0: # order 0.             # <<<<<<<<<<<<<<
@@ -25968,7 +25968,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_32get_deriv(struct __pyx_obj_5
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":755
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":755
  *     if item[ONE] == 0: # order 0.
  * 
  *       return self.re             # <<<<<<<<<<<<<<
@@ -25980,7 +25980,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_32get_deriv(struct __pyx_obj_5
     __pyx_r = __pyx_v_self->re;
     goto __pyx_L0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":753
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":753
  *     # Check first if derivative is the real coefficient.
  * 
  *     if item[ONE] == 0: # order 0.             # <<<<<<<<<<<<<<
@@ -25989,7 +25989,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_32get_deriv(struct __pyx_obj_5
  */
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":759
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":759
  *     else:
  * 
  *       factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)             # <<<<<<<<<<<<<<
@@ -26015,7 +26015,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_32get_deriv(struct __pyx_obj_5
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_v_factor = dhelp_get_deriv_factor(__pyx_t_4, __pyx_t_5, __pyx_v_5pyoti_5dense_dhl);
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":761
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":761
  *       factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
  * 
  *       return factor * self.p_im[ item[ONE]-1 ][ item[ZERO] ]             # <<<<<<<<<<<<<<
@@ -26056,7 +26056,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_32get_deriv(struct __pyx_obj_5
     goto __pyx_L0;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":739
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":739
  * 
  *   #***************************************************************************************************
  *   def get_deriv(self, hum_dir):             # <<<<<<<<<<<<<<
@@ -26079,7 +26079,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_32get_deriv(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":769
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":769
  * 
  *   #***************************************************************************************************
  *   def get_deriv(self, hum_dir):             # <<<<<<<<<<<<<<
@@ -26113,7 +26113,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_34get_deriv(struct __pyx_obj_5
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("get_deriv", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":777
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":777
  *     global dhl
  * 
  *     cdef list item = imdir(hum_dir)             # <<<<<<<<<<<<<<
@@ -26125,7 +26125,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_34get_deriv(struct __pyx_obj_5
   __pyx_v_item = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":779
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":779
  *     cdef list item = imdir(hum_dir)
  * 
  *     cdef coeff_t factor = 1.0             # <<<<<<<<<<<<<<
@@ -26134,7 +26134,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_34get_deriv(struct __pyx_obj_5
  */
   __pyx_v_factor = 1.0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":784
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":784
  * 
  * 
  *     factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)             # <<<<<<<<<<<<<<
@@ -26159,7 +26159,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_34get_deriv(struct __pyx_obj_5
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_factor = dhelp_get_deriv_factor(__pyx_t_2, __pyx_t_3, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":786
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":786
  *     factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
  * 
  *     return factor * self.get_imdir( item[ZERO], item[ONE] )             # <<<<<<<<<<<<<<
@@ -26195,7 +26195,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_34get_deriv(struct __pyx_obj_5
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":769
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":769
  * 
  *   #***************************************************************************************************
  *   def get_deriv(self, hum_dir):             # <<<<<<<<<<<<<<
@@ -26217,7 +26217,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_34get_deriv(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":791
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":791
  * 
  *   #***************************************************************************************************
  *   cpdef get_imdir(self, imdir_t idx , ord_t order):             # <<<<<<<<<<<<<<
@@ -26327,7 +26327,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
     #endif
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":803
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":803
  * 
  * 
  *     if order <= self.order:             # <<<<<<<<<<<<<<
@@ -26337,7 +26337,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
   __pyx_t_9 = ((__pyx_v_order <= __pyx_v_self->order) != 0);
   if (__pyx_t_9) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":805
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":805
  *     if order <= self.order:
  * 
  *       if order == 0:             # <<<<<<<<<<<<<<
@@ -26347,7 +26347,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
     __pyx_t_9 = ((__pyx_v_order == 0) != 0);
     if (__pyx_t_9) {
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":807
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":807
  *       if order == 0:
  * 
  *         tmp = self.re             # <<<<<<<<<<<<<<
@@ -26359,7 +26359,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
       __pyx_v_tmp = __pyx_t_1;
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":805
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":805
  *     if order <= self.order:
  * 
  *       if order == 0:             # <<<<<<<<<<<<<<
@@ -26369,7 +26369,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
       goto __pyx_L4;
     }
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":811
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":811
  *       else:
  * 
  *         if idx < self.p_ndpo[order-1]:             # <<<<<<<<<<<<<<
@@ -26389,7 +26389,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       if (__pyx_t_9) {
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":813
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":813
  *         if idx < self.p_ndpo[order-1]:
  * 
  *           tmp =  self.p_im[ order-1 ][ idx ]             # <<<<<<<<<<<<<<
@@ -26405,7 +26405,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
         __pyx_v_tmp = __pyx_t_2;
         __pyx_t_2 = 0;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":811
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":811
  *       else:
  * 
  *         if idx < self.p_ndpo[order-1]:             # <<<<<<<<<<<<<<
@@ -26415,7 +26415,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
         goto __pyx_L5;
       }
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":817
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":817
  *         else:
  * 
  *           base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.             # <<<<<<<<<<<<<<
@@ -26428,7 +26428,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
         __pyx_v_base_sprmat_creator = __pyx_t_2;
         __pyx_t_2 = 0;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":818
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":818
  * 
  *           base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.
  *           tmp = base_sprmat_creator(self.shape,dtype=self.re.dtype)             # <<<<<<<<<<<<<<
@@ -26459,7 +26459,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
     }
     __pyx_L4:;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":803
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":803
  * 
  * 
  *     if order <= self.order:             # <<<<<<<<<<<<<<
@@ -26469,7 +26469,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":826
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":826
  *     else:
  * 
  *       base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.             # <<<<<<<<<<<<<<
@@ -26482,7 +26482,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
     __pyx_v_base_sprmat_creator = __pyx_t_1;
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":827
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":827
  * 
  *       base_sprmat_creator = self.get_base_sprmat_creator() # Get creator.
  *       tmp = base_sprmat_creator(self.shape,dtype=self.re.dtype)             # <<<<<<<<<<<<<<
@@ -26511,7 +26511,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":831
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":831
  *     # end if
  * 
  *     return tmp             # <<<<<<<<<<<<<<
@@ -26523,7 +26523,7 @@ static PyObject *__pyx_f_5pyoti_5dense_8spr_omat_get_imdir(struct __pyx_obj_5pyo
   __pyx_r = __pyx_v_tmp;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":791
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":791
  * 
  *   #***************************************************************************************************
  *   cpdef get_imdir(self, imdir_t idx , ord_t order):             # <<<<<<<<<<<<<<
@@ -27579,7 +27579,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8spr_omat_40__setstate_cython__(CYTHON_U
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":872
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":872
  * 
  * #*****************************************************************************************************
  * def spsolve(spr_omat A, omat b, solver='LU'):             # <<<<<<<<<<<<<<
@@ -27774,7 +27774,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_pybuffernd_ord_coo.data = NULL;
   __pyx_pybuffernd_ord_coo.rcbuffer = &__pyx_pybuffer_ord_coo;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":881
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":881
  *   global dhl
  * 
  *   from scipy.sparse import coo_matrix, linalg as spla             # <<<<<<<<<<<<<<
@@ -27804,7 +27804,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":882
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":882
  * 
  *   from scipy.sparse import coo_matrix, linalg as spla
  *   from scipy.linalg import lu_factor, lu_solve             # <<<<<<<<<<<<<<
@@ -27834,7 +27834,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":899
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":899
  *   cdef np.ndarray[ uint8_t, ndim=1] ord_coo
  * 
  *   maxorder  = max(A.order, b.arr.order)             # <<<<<<<<<<<<<<
@@ -27853,7 +27853,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_maxorder = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":900
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":900
  * 
  *   maxorder  = max(A.order, b.arr.order)
  *   maxnbases = max(A.nbases,b.arr.nbases)             # <<<<<<<<<<<<<<
@@ -27872,7 +27872,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_maxnbases = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":902
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":902
  *   maxnbases = max(A.nbases,b.arr.nbases)
  * 
  *   res = zeros(b.arr.nrows, b.arr.ncols, nbases = maxnbases, order = maxorder)             # <<<<<<<<<<<<<<
@@ -27889,7 +27889,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_omat *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":905
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":905
  * 
  *   # TODO: use matrix inner product from dmat object.
  *   matform = dhelp_matrix_form_indices(maxnbases,maxorder,dhl)             # <<<<<<<<<<<<<<
@@ -27900,7 +27900,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_t_5 = __Pyx_PyInt_As_uint8_t(__pyx_v_maxorder); if (unlikely((__pyx_t_5 == ((uint8_t)-1)) && PyErr_Occurred())) __PYX_ERR(6, 905, __pyx_L1_error)
   __pyx_v_matform = dhelp_matrix_form_indices(__pyx_t_8, __pyx_t_5, __pyx_v_5pyoti_5dense_dhl);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":907
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":907
  *   matform = dhelp_matrix_form_indices(maxnbases,maxorder,dhl)
  * 
  *   rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)             # <<<<<<<<<<<<<<
@@ -27929,7 +27929,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_rows = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":908
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":908
  * 
  *   rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)
  *   cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)             # <<<<<<<<<<<<<<
@@ -27958,7 +27958,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_cols = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":909
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":909
  *   rows    = c_ptr_to_np_1darray_uint64( matform.p_rows, matform.nonzero)
  *   cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)
  *   idx_coo = c_ptr_to_np_1darray_uint64( matform.p_im  , matform.nonzero)             # <<<<<<<<<<<<<<
@@ -27987,7 +27987,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_idx_coo = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":910
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":910
  *   cols    = c_ptr_to_np_1darray_uint64( matform.p_cols, matform.nonzero)
  *   idx_coo = c_ptr_to_np_1darray_uint64( matform.p_im  , matform.nonzero)
  *   ord_coo = c_ptr_to_np_1darray_uint8 ( matform.p_ord , matform.nonzero)             # <<<<<<<<<<<<<<
@@ -28016,7 +28016,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_ord_coo = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":912
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":912
  *   ord_coo = c_ptr_to_np_1darray_uint8 ( matform.p_ord , matform.nonzero)
  * 
  *   indices = np.arange( 1, matform.nonzero+1, dtype = np.uint64)             # <<<<<<<<<<<<<<
@@ -28055,7 +28055,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_indices = __pyx_t_16;
   __pyx_t_16 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":914
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":914
  *   indices = np.arange( 1, matform.nonzero+1, dtype = np.uint64)
  * 
  *   dummy_mat = coo_matrix( ( indices, (rows.copy(), cols.copy()) ), dtype = np.uint64 )             # <<<<<<<<<<<<<<
@@ -28133,7 +28133,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_dummy_mat = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":915
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":915
  * 
  *   dummy_mat = coo_matrix( ( indices, (rows.copy(), cols.copy()) ), dtype = np.uint64 )
  *   dummy_mat = dummy_mat.tocsr()             # <<<<<<<<<<<<<<
@@ -28160,7 +28160,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __Pyx_DECREF_SET(__pyx_v_dummy_mat, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":918
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":918
  * 
  *   # first_col_indices = dummy_mat[:,0].data-1
  *   first_col_indices = indices[ (matform.sizex-1) : (2*matform.sizex-1) ] - 1             # <<<<<<<<<<<<<<
@@ -28175,7 +28175,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_first_col_indices = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":921
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":921
  * 
  *   # Get vector form index and order pairs
  *   vec_form_idx = idx_coo[first_col_indices]             # <<<<<<<<<<<<<<
@@ -28187,7 +28187,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_vec_form_idx = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":922
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":922
  *   # Get vector form index and order pairs
  *   vec_form_idx = idx_coo[first_col_indices]
  *   vec_form_ord = ord_coo[first_col_indices]             # <<<<<<<<<<<<<<
@@ -28199,7 +28199,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_vec_form_ord = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":924
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":924
  *   vec_form_ord = ord_coo[first_col_indices]
  * 
  *   sol = solver.upper() # Convert to uppercase the string.             # <<<<<<<<<<<<<<
@@ -28226,7 +28226,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_sol = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":927
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":927
  * 
  *   # Factorize system.
  *   if   (sol == 'LU'):             # <<<<<<<<<<<<<<
@@ -28236,7 +28236,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_t_17 = (__Pyx_PyString_Equals(__pyx_v_sol, __pyx_n_s_LU, Py_EQ)); if (unlikely(__pyx_t_17 < 0)) __PYX_ERR(6, 927, __pyx_L1_error)
   if (__pyx_t_17) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":928
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":928
  *   # Factorize system.
  *   if   (sol == 'LU'):
  *     lu = spla.splu( A.get_imdir(0,0).tocsc() )             # <<<<<<<<<<<<<<
@@ -28284,7 +28284,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __pyx_v_lu = __pyx_t_1;
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":927
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":927
  * 
  *   # Factorize system.
  *   if   (sol == 'LU'):             # <<<<<<<<<<<<<<
@@ -28294,7 +28294,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":929
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":929
  *   if   (sol == 'LU'):
  *     lu = spla.splu( A.get_imdir(0,0).tocsc() )
  *   elif (sol == 'ILU'):             # <<<<<<<<<<<<<<
@@ -28304,7 +28304,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_t_17 = (__Pyx_PyString_Equals(__pyx_v_sol, __pyx_n_s_ILU, Py_EQ)); if (unlikely(__pyx_t_17 < 0)) __PYX_ERR(6, 929, __pyx_L1_error)
   if (__pyx_t_17) {
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":930
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":930
  *     lu = spla.splu( A.get_imdir(0,0).tocsc() )
  *   elif (sol == 'ILU'):
  *     lu = spla.spilu( A.get_imdir(0,0).tocsc() )             # <<<<<<<<<<<<<<
@@ -28352,7 +28352,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __pyx_v_lu = __pyx_t_1;
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":929
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":929
  *   if   (sol == 'LU'):
  *     lu = spla.splu( A.get_imdir(0,0).tocsc() )
  *   elif (sol == 'ILU'):             # <<<<<<<<<<<<<<
@@ -28362,7 +28362,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":936
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":936
  * 
  *   # Convert first to csr format (faster for operations)
  *   A.to_csr()             # <<<<<<<<<<<<<<
@@ -28388,7 +28388,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":939
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":939
  * 
  *   # Solve the real system of equations.
  *   tmp = lu.solve( b.get_imdir(0,0) )             # <<<<<<<<<<<<<<
@@ -28439,7 +28439,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_tmp = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":940
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":940
  *   # Solve the real system of equations.
  *   tmp = lu.solve( b.get_imdir(0,0) )
  *   res.set_imdir( tmp, 0, 0)             # <<<<<<<<<<<<<<
@@ -28450,7 +28450,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":943
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":943
  * 
  *   # Solve the imaginary systems.
  *   tmp_rhs = np.zeros(b.shape,dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -28506,7 +28506,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_tmp_rhs = ((PyArrayObject *)__pyx_t_15);
   __pyx_t_15 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":944
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":944
  *   # Solve the imaginary systems.
  *   tmp_rhs = np.zeros(b.shape,dtype = np.float64)
  *   tmp_dot = np.zeros(b.shape,dtype = np.float64)             # <<<<<<<<<<<<<<
@@ -28562,7 +28562,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_v_tmp_dot = ((PyArrayObject *)__pyx_t_16);
   __pyx_t_16 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":946
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":946
  *   tmp_dot = np.zeros(b.shape,dtype = np.float64)
  * 
  *   for i in range(1, dummy_mat.shape[0]):             # <<<<<<<<<<<<<<
@@ -28580,7 +28580,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   for (__pyx_t_23 = 1; __pyx_t_23 < __pyx_t_22; __pyx_t_23+=1) {
     __pyx_v_i = __pyx_t_23;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":951
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":951
  *     # get the i'th row of elements to operate.
  *     # row_indices = dummy_mat[i].data - 1
  *     row_indices = dummy_mat.data[dummy_mat.indptr[i]:dummy_mat.indptr[i+1]] - 1             # <<<<<<<<<<<<<<
@@ -28611,7 +28611,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __Pyx_XDECREF_SET(__pyx_v_row_indices, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":953
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":953
  *     row_indices = dummy_mat.data[dummy_mat.indptr[i]:dummy_mat.indptr[i+1]] - 1
  * 
  *     row_idx = idx_coo[row_indices]             # <<<<<<<<<<<<<<
@@ -28623,7 +28623,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __Pyx_XDECREF_SET(__pyx_v_row_idx, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":954
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":954
  * 
  *     row_idx = idx_coo[row_indices]
  *     row_ord = ord_coo[row_indices]             # <<<<<<<<<<<<<<
@@ -28635,7 +28635,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __Pyx_XDECREF_SET(__pyx_v_row_ord, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":957
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":957
  * 
  *     # Get the imaginary direation from the OTI rhs
  *     tmp_rhs[:,:] = b.get_imdir( row_idx[ZERO], row_ord[ZERO])             # <<<<<<<<<<<<<<
@@ -28655,7 +28655,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     if (unlikely(PyObject_SetItem(((PyObject *)__pyx_v_tmp_rhs), __pyx_tuple__20, __pyx_t_1) < 0)) __PYX_ERR(6, 957, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":961
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":961
  *     # print("RHS:\n",tmp_rhs)
  * 
  *     k = row_idx.size-1             # <<<<<<<<<<<<<<
@@ -28671,7 +28671,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
     __pyx_v_k = __pyx_t_24;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":964
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":964
  * 
  *     # Get A imaginary times b real.
  *     tmp_dot = A.get_imdir(row_idx[ZERO], row_ord[ZERO]).dot( res.get_imdir(row_idx[k],row_ord[k]) )             # <<<<<<<<<<<<<<
@@ -28740,7 +28740,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __Pyx_DECREF_SET(__pyx_v_tmp_dot, ((PyArrayObject *)__pyx_t_16));
     __pyx_t_16 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":965
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":965
  *     # Get A imaginary times b real.
  *     tmp_dot = A.get_imdir(row_idx[ZERO], row_ord[ZERO]).dot( res.get_imdir(row_idx[k],row_ord[k]) )
  *     tmp_rhs -= tmp_dot             # <<<<<<<<<<<<<<
@@ -28772,7 +28772,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __Pyx_DECREF_SET(__pyx_v_tmp_rhs, ((PyArrayObject *)__pyx_t_16));
     __pyx_t_16 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":968
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":968
  * 
  *     # Solving
  *     for j in range(1,row_idx.size-1):             # <<<<<<<<<<<<<<
@@ -28790,7 +28790,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     for (__pyx_t_24 = 1; __pyx_t_24 < __pyx_t_27; __pyx_t_24+=1) {
       __pyx_v_j = __pyx_t_24;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":970
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":970
  *     for j in range(1,row_idx.size-1):
  * 
  *       k = (row_idx.size-1) - j             # <<<<<<<<<<<<<<
@@ -28812,7 +28812,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __pyx_v_k = __pyx_t_28;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":973
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":973
  * 
  *       # Get A imaginary times b real.
  *       tmp_dot = A.get_imdir(row_idx[j], row_ord[j]).dot( res.get_imdir(row_idx[k], row_ord[k]) )             # <<<<<<<<<<<<<<
@@ -28881,7 +28881,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
       __Pyx_DECREF_SET(__pyx_v_tmp_dot, ((PyArrayObject *)__pyx_t_1));
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":974
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":974
  *       # Get A imaginary times b real.
  *       tmp_dot = A.get_imdir(row_idx[j], row_ord[j]).dot( res.get_imdir(row_idx[k], row_ord[k]) )
  *       tmp_rhs -= tmp_dot             # <<<<<<<<<<<<<<
@@ -28914,7 +28914,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
       __pyx_t_1 = 0;
     }
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":979
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":979
  * 
  *     # Solve the system of equations.
  *     tmp = lu.solve( tmp_rhs )             # <<<<<<<<<<<<<<
@@ -28962,7 +28962,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __Pyx_DECREF_SET(__pyx_v_tmp, ((PyArrayObject *)__pyx_t_1));
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":982
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":982
  * 
  *     # Write the result on the system.
  *     res.set_imdir( tmp, vec_form_idx[i], vec_form_ord[i])             # <<<<<<<<<<<<<<
@@ -28982,7 +28982,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":986
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":986
  *   # end for
  * 
  *   free(matform.p_im)             # <<<<<<<<<<<<<<
@@ -28991,7 +28991,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
  */
   free(__pyx_v_matform.p_im);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":987
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":987
  * 
  *   free(matform.p_im)
  *   free(matform.p_ord)             # <<<<<<<<<<<<<<
@@ -29000,7 +29000,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
  */
   free(__pyx_v_matform.p_ord);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":988
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":988
  *   free(matform.p_im)
  *   free(matform.p_ord)
  *   free(matform.p_rows)             # <<<<<<<<<<<<<<
@@ -29009,7 +29009,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
  */
   free(__pyx_v_matform.p_rows);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":989
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":989
  *   free(matform.p_ord)
  *   free(matform.p_rows)
  *   free(matform.p_cols)             # <<<<<<<<<<<<<<
@@ -29018,7 +29018,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
  */
   free(__pyx_v_matform.p_cols);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":991
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":991
  *   free(matform.p_cols)
  * 
  *   return res             # <<<<<<<<<<<<<<
@@ -29030,7 +29030,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":872
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":872
  * 
  * #*****************************************************************************************************
  * def spsolve(spr_omat A, omat b, solver='LU'):             # <<<<<<<<<<<<<<
@@ -29098,7 +29098,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_76spsolve(CYTHON_UNUSED PyObject *__pyx_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/sparse_array.pxi":1258
+/* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1258
  * 
  * #*****************************************************************************************************
  * def helper_get_multpl(hum_dir):             # <<<<<<<<<<<<<<
@@ -29148,7 +29148,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   uint64_t __pyx_t_14;
   __Pyx_RefNannySetupContext("helper_get_multpl", 0);
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1262
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1262
  *     global h
  * 
  *     cdef uint64_t i=0, k=0, Nmultpl=1             # <<<<<<<<<<<<<<
@@ -29159,7 +29159,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   __pyx_v_k = 0;
   __pyx_v_Nmultpl = 1;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1268
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1268
  *     cdef np.ndarray exp
  * 
  *     bases, exp = h.get_base_exp(*imdir(hum_dir))             # <<<<<<<<<<<<<<
@@ -29230,7 +29230,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   __pyx_v_exp = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1270
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1270
  *     bases, exp = h.get_base_exp(*imdir(hum_dir))
  * 
  *     order = np.sum(exp)             # <<<<<<<<<<<<<<
@@ -29260,7 +29260,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   __pyx_v_order = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1272
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1272
  *     order = np.sum(exp)
  * 
  *     multiple = np.empty(exp.size, dtype = np.uint8)             # <<<<<<<<<<<<<<
@@ -29297,7 +29297,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   __pyx_v_multiple = ((PyArrayObject *)__pyx_t_6);
   __pyx_t_6 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1274
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1274
  *     multiple = np.empty(exp.size, dtype = np.uint8)
  * 
  *     for i in range(exp.size):             # <<<<<<<<<<<<<<
@@ -29312,7 +29312,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
     __pyx_v_i = __pyx_t_9;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":1276
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1276
  *     for i in range(exp.size):
  *       # Multiply by the number of possible values of each basis exponent.
  *       Nmultpl *= exp[i]+1;             # <<<<<<<<<<<<<<
@@ -29334,7 +29334,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_v_Nmultpl = __pyx_t_10;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":1279
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1279
  * 
  *       # Initialize the multiple holder's values.
  *       multiple[i] = 0;  # First multiple is real (all exps zero).             # <<<<<<<<<<<<<<
@@ -29344,7 +29344,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
     if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_multiple), __pyx_v_i, __pyx_int_0, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 0, 0, 1) < 0)) __PYX_ERR(6, 1279, __pyx_L1_error)
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1283
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1283
  *     # end for
  * 
  *     multiples = np.zeros( ( Nmultpl, exp.size ), dtype = np.uint8)             # <<<<<<<<<<<<<<
@@ -29391,7 +29391,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   __pyx_v_multiples = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1285
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1285
  *     multiples = np.zeros( ( Nmultpl, exp.size ), dtype = np.uint8)
  * 
  *     for i in range(1,Nmultpl):             # <<<<<<<<<<<<<<
@@ -29403,7 +29403,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   for (__pyx_t_11 = 1; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
     __pyx_v_i = __pyx_t_11;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":1287
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1287
  *     for i in range(1,Nmultpl):
  * 
  *       passed = 0; # termination flag off.             # <<<<<<<<<<<<<<
@@ -29412,7 +29412,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
  */
     __pyx_v_passed = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":1288
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1288
  * 
  *       passed = 0; # termination flag off.
  *       k=0;        # Set the counter to the initial position             # <<<<<<<<<<<<<<
@@ -29421,7 +29421,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
  */
     __pyx_v_k = 0;
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":1290
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1290
  *       k=0;        # Set the counter to the initial position
  * 
  *       while(passed == 0 and k<exp.size):             # <<<<<<<<<<<<<<
@@ -29448,7 +29448,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
       __pyx_L11_bool_binop_done:;
       if (!__pyx_t_12) break;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":1294
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1294
  *         # Check if the current exponent can be summed 1 and still meet the
  *         # exponent array limits.
  *         if( (multiple[k]+1) > exp[k]) :             # <<<<<<<<<<<<<<
@@ -29469,7 +29469,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       if (__pyx_t_12) {
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":1298
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1298
  *             # This means that if the current k'th exponent + 1 will not meet
  *             # the conditions.
  *             multiple[k] = 0 # reset the current exponent             # <<<<<<<<<<<<<<
@@ -29478,7 +29478,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
  */
         if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_multiple), __pyx_v_k, __pyx_int_0, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 0, 0, 1) < 0)) __PYX_ERR(6, 1298, __pyx_L1_error)
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":1299
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1299
  *             # the conditions.
  *             multiple[k] = 0 # reset the current exponent
  *             k+=1             # go to next position.             # <<<<<<<<<<<<<<
@@ -29487,7 +29487,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
  */
         __pyx_v_k = (__pyx_v_k + 1);
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":1294
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1294
  *         # Check if the current exponent can be summed 1 and still meet the
  *         # exponent array limits.
  *         if( (multiple[k]+1) > exp[k]) :             # <<<<<<<<<<<<<<
@@ -29497,7 +29497,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
         goto __pyx_L13;
       }
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":1304
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1304
  * 
  *             # the exponent can be summed 1.
  *             multiple[k] += 1             # <<<<<<<<<<<<<<
@@ -29514,7 +29514,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
         if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_multiple), __pyx_t_14, __pyx_t_6, uint64_t, 0, __Pyx_PyInt_From_uint64_t, 0, 0, 1) < 0)) __PYX_ERR(6, 1304, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-        /* "../../pyoti/cython/dense/sparse_array.pxi":1305
+        /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1305
  *             # the exponent can be summed 1.
  *             multiple[k] += 1
  *             passed = 1        # rise the flag.             # <<<<<<<<<<<<<<
@@ -29526,7 +29526,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
       __pyx_L13:;
     }
 
-    /* "../../pyoti/cython/dense/sparse_array.pxi":1311
+    /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1311
  *       # end while
  * 
  *       for k in range(exp.size):             # <<<<<<<<<<<<<<
@@ -29541,7 +29541,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
     for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_8; __pyx_t_14+=1) {
       __pyx_v_k = __pyx_t_14;
 
-      /* "../../pyoti/cython/dense/sparse_array.pxi":1313
+      /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1313
  *       for k in range(exp.size):
  * 
  *           multiples[i,k] = multiple[k];             # <<<<<<<<<<<<<<
@@ -29568,7 +29568,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
     }
   }
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1319
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1319
  *     # end for
  * 
  *     return bases,multiples             # <<<<<<<<<<<<<<
@@ -29588,7 +29588,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   __pyx_t_6 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1258
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1258
  * 
  * #*****************************************************************************************************
  * def helper_get_multpl(hum_dir):             # <<<<<<<<<<<<<<
@@ -29616,7 +29616,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_78helper_get_multpl(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":30
+/* "../../src/python/pyoti/cython/dense/generic.pxi":30
  *   #***************************************************************************************************
  *   #
  *   def __init__(self, ord_t order, bases_t nbases = 1, type dtype = object,             # <<<<<<<<<<<<<<
@@ -29643,7 +29643,7 @@ static int __pyx_pw_5pyoti_5dense_7otibase_1__init__(PyObject *__pyx_v_self, PyO
     PyObject* values[4] = {0,0,0,0};
     values[2] = (PyObject *)__pyx_k__33;
 
-    /* "../../pyoti/cython/dense/generic.pxi":31
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":31
  *   #
  *   def __init__(self, ord_t order, bases_t nbases = 1, type dtype = object,
  *     object zero = None):             # <<<<<<<<<<<<<<
@@ -29726,7 +29726,7 @@ static int __pyx_pw_5pyoti_5dense_7otibase_1__init__(PyObject *__pyx_v_self, PyO
   if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_dtype), (&PyType_Type), 1, "dtype", 1))) __PYX_ERR(0, 30, __pyx_L1_error)
   __pyx_r = __pyx_pf_5pyoti_5dense_7otibase___init__(((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_v_self), __pyx_v_order, __pyx_v_nbases, __pyx_v_dtype, __pyx_v_zero);
 
-  /* "../../pyoti/cython/dense/generic.pxi":30
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":30
  *   #***************************************************************************************************
  *   #
  *   def __init__(self, ord_t order, bases_t nbases = 1, type dtype = object,             # <<<<<<<<<<<<<<
@@ -29768,7 +29768,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
   uint64_t __pyx_t_16;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":60
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":60
  *     cdef ord_t ordi
  * 
  *     self.nbases = nbases             # <<<<<<<<<<<<<<
@@ -29777,7 +29777,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
  */
   __pyx_v_self->nbases = __pyx_v_nbases;
 
-  /* "../../pyoti/cython/dense/generic.pxi":61
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":61
  * 
  *     self.nbases = nbases
  *     self.order  = order             # <<<<<<<<<<<<<<
@@ -29786,7 +29786,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
  */
   __pyx_v_self->order = __pyx_v_order;
 
-  /* "../../pyoti/cython/dense/generic.pxi":62
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":62
  *     self.nbases = nbases
  *     self.order  = order
  *     self.ndir   =  0      # Initialize element.             # <<<<<<<<<<<<<<
@@ -29795,7 +29795,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
  */
   __pyx_v_self->ndir = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":63
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":63
  *     self.order  = order
  *     self.ndir   =  0      # Initialize element.
  *     self.dtype  = dtype             # <<<<<<<<<<<<<<
@@ -29808,7 +29808,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
   __Pyx_DECREF(((PyObject *)__pyx_v_self->dtype));
   __pyx_v_self->dtype = __pyx_v_dtype;
 
-  /* "../../pyoti/cython/dense/generic.pxi":67
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":67
  * 
  *     # Try if the zeroth element passed has a copy method.
  *     has_copy = True             # <<<<<<<<<<<<<<
@@ -29817,7 +29817,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
  */
   __pyx_v_has_copy = 1;
 
-  /* "../../pyoti/cython/dense/generic.pxi":68
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":68
  *     # Try if the zeroth element passed has a copy method.
  *     has_copy = True
  *     try:             # <<<<<<<<<<<<<<
@@ -29833,7 +29833,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "../../pyoti/cython/dense/generic.pxi":69
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":69
  *     has_copy = True
  *     try:
  *       zero.copy()             # <<<<<<<<<<<<<<
@@ -29859,7 +29859,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":68
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":68
  *     # Try if the zeroth element passed has a copy method.
  *     has_copy = True
  *     try:             # <<<<<<<<<<<<<<
@@ -29876,7 +29876,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":70
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":70
  *     try:
  *       zero.copy()
  *     except:             # <<<<<<<<<<<<<<
@@ -29890,7 +29890,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GOTREF(__pyx_t_6);
 
-      /* "../../pyoti/cython/dense/generic.pxi":71
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":71
  *       zero.copy()
  *     except:
  *       has_copy = False             # <<<<<<<<<<<<<<
@@ -29905,7 +29905,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     }
     __pyx_L5_except_error:;
 
-    /* "../../pyoti/cython/dense/generic.pxi":68
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":68
  *     # Try if the zeroth element passed has a copy method.
  *     has_copy = True
  *     try:             # <<<<<<<<<<<<<<
@@ -29925,7 +29925,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     __pyx_L8_try_end:;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":74
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":74
  *     # end Try.
  * 
  *     if has_copy:             # <<<<<<<<<<<<<<
@@ -29935,7 +29935,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
   __pyx_t_7 = (__pyx_v_has_copy != 0);
   if (__pyx_t_7) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":75
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":75
  * 
  *     if has_copy:
  *       element = zero.copy()             # <<<<<<<<<<<<<<
@@ -29962,7 +29962,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     __pyx_v_element = __pyx_t_6;
     __pyx_t_6 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":74
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":74
  *     # end Try.
  * 
  *     if has_copy:             # <<<<<<<<<<<<<<
@@ -29972,7 +29972,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     goto __pyx_L11;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":77
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":77
  *       element = zero.copy()
  *     else:
  *       element = zero             # <<<<<<<<<<<<<<
@@ -29985,7 +29985,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
   }
   __pyx_L11:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":80
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":80
  *     # end if
  * 
  *     self.re = zero             # <<<<<<<<<<<<<<
@@ -29998,7 +29998,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
   __Pyx_DECREF(__pyx_v_self->re);
   __pyx_v_self->re = __pyx_v_zero;
 
-  /* "../../pyoti/cython/dense/generic.pxi":82
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":82
  *     self.re = zero
  * 
  *     self.p_im   = np.empty( self.order, dtype=np.ndarray)             # <<<<<<<<<<<<<<
@@ -30032,7 +30032,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
   __pyx_v_self->p_im = ((PyArrayObject *)__pyx_t_8);
   __pyx_t_8 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":83
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":83
  * 
  *     self.p_im   = np.empty( self.order, dtype=np.ndarray)
  *     self.p_ndpo = np.zeros( self.order, dtype=np.uint64)             # <<<<<<<<<<<<<<
@@ -30072,7 +30072,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
   __pyx_v_self->p_ndpo = ((PyArrayObject *)__pyx_t_9);
   __pyx_t_9 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":88
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":88
  *     # self.identity = identity
  * 
  *     for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -30084,7 +30084,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
   for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
     __pyx_v_ordi = __pyx_t_12;
 
-    /* "../../pyoti/cython/dense/generic.pxi":90
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":90
  *     for ordi in range(self.order):
  * 
  *       self.p_ndpo[ordi] = dhelp_extract_ndirOrder( self.nbases, ordi+1, dhl )             # <<<<<<<<<<<<<<
@@ -30096,7 +30096,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->p_ndpo), __pyx_v_ordi, __pyx_t_9, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(0, 90, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":92
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":92
  *       self.p_ndpo[ordi] = dhelp_extract_ndirOrder( self.nbases, ordi+1, dhl )
  * 
  *       self.p_im[ordi]   = np.zeros( self.p_ndpo[ordi], dtype = object)             # <<<<<<<<<<<<<<
@@ -30126,7 +30126,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->p_im), __pyx_v_ordi, __pyx_t_6, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(0, 92, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":94
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":94
  *       self.p_im[ordi]   = np.zeros( self.p_ndpo[ordi], dtype = object)
  * 
  *       self.ndir += self.p_ndpo[ordi]             # <<<<<<<<<<<<<<
@@ -30145,7 +30145,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_self->ndir = __pyx_t_13;
 
-    /* "../../pyoti/cython/dense/generic.pxi":96
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":96
  *       self.ndir += self.p_ndpo[ordi]
  * 
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -30160,7 +30160,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
       __pyx_v_i = __pyx_t_16;
 
-      /* "../../pyoti/cython/dense/generic.pxi":98
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":98
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         if has_copy:             # <<<<<<<<<<<<<<
@@ -30170,7 +30170,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
       __pyx_t_7 = (__pyx_v_has_copy != 0);
       if (__pyx_t_7) {
 
-        /* "../../pyoti/cython/dense/generic.pxi":99
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":99
  * 
  *         if has_copy:
  *           element = zero.copy()             # <<<<<<<<<<<<<<
@@ -30197,7 +30197,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
         __Pyx_DECREF_SET(__pyx_v_element, __pyx_t_4);
         __pyx_t_4 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":98
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":98
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         if has_copy:             # <<<<<<<<<<<<<<
@@ -30207,7 +30207,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
         goto __pyx_L16;
       }
 
-      /* "../../pyoti/cython/dense/generic.pxi":101
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":101
  *           element = zero.copy()
  *         else:
  *           element = zero             # <<<<<<<<<<<<<<
@@ -30220,7 +30220,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
       }
       __pyx_L16:;
 
-      /* "../../pyoti/cython/dense/generic.pxi":104
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":104
  *         # end if
  * 
  *         self.p_im[ordi][i] = element             # <<<<<<<<<<<<<<
@@ -30234,7 +30234,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
     }
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":30
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":30
  *   #***************************************************************************************************
  *   #
  *   def __init__(self, ord_t order, bases_t nbases = 1, type dtype = object,             # <<<<<<<<<<<<<<
@@ -30259,7 +30259,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase___init__(struct __pyx_obj_5pyoti_5den
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":137
+/* "../../src/python/pyoti/cython/dense/generic.pxi":137
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -30292,7 +30292,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_2__repr__(struct __pyx_obj_5pyo
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":145
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":145
  *     #*************************************************************************************************
  * 
  *     return self.__str__()             # <<<<<<<<<<<<<<
@@ -30321,7 +30321,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_2__repr__(struct __pyx_obj_5pyo
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":137
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":137
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -30342,7 +30342,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_2__repr__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":152
+/* "../../src/python/pyoti/cython/dense/generic.pxi":152
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -30391,7 +30391,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
   PyObject *__pyx_t_13 = NULL;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":168
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":168
  * 
  * 
  *     head      = ''             # <<<<<<<<<<<<<<
@@ -30401,7 +30401,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_head = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/generic.pxi":169
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":169
  * 
  *     head      = ''
  *     body      = ''             # <<<<<<<<<<<<<<
@@ -30411,7 +30411,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_body = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/generic.pxi":171
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":171
  *     body      = ''
  * 
  *     body += str(self.re)             # <<<<<<<<<<<<<<
@@ -30426,7 +30426,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":173
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":173
  *     body += str(self.re)
  * 
  *     for ordi in range(0,self.order):             # <<<<<<<<<<<<<<
@@ -30438,7 +30438,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
   for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
     __pyx_v_ordi = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/generic.pxi":175
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":175
  *     for ordi in range(0,self.order):
  * 
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -30453,7 +30453,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_i = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":177
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":177
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         body += print_options['im_obj_separator']             # <<<<<<<<<<<<<<
@@ -30471,7 +30471,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_2);
       __pyx_t_2 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":178
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":178
  * 
  *         body += print_options['im_obj_separator']
  *         body += "+"             # <<<<<<<<<<<<<<
@@ -30483,7 +30483,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_2);
       __pyx_t_2 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":179
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":179
  *         body += print_options['im_obj_separator']
  *         body += "+"
  *         body += print_options['epsilon']+'('             # <<<<<<<<<<<<<<
@@ -30504,7 +30504,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":180
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":180
  *         body += "+"
  *         body += print_options['epsilon']+'('
  *         body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')             # <<<<<<<<<<<<<<
@@ -30581,7 +30581,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":181
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":181
  *         body += print_options['epsilon']+'('
  *         body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')
  *         body += ")"             # <<<<<<<<<<<<<<
@@ -30593,7 +30593,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":182
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":182
  *         body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')
  *         body += ")"
  *         body += print_options['term_separator']             # <<<<<<<<<<<<<<
@@ -30611,7 +30611,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
       __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":183
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":183
  *         body += ")"
  *         body += print_options['term_separator']
  *         num   = str(self.p_im[ordi][i])             # <<<<<<<<<<<<<<
@@ -30629,7 +30629,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
       __Pyx_XDECREF_SET(__pyx_v_num, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":185
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":185
  *         num   = str(self.p_im[ordi][i])
  * 
  *         body += num             # <<<<<<<<<<<<<<
@@ -30643,7 +30643,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
     }
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":191
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":191
  *     # end for
  * 
  *     tail = ''             # <<<<<<<<<<<<<<
@@ -30653,7 +30653,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_tail = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/generic.pxi":193
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":193
  *     tail = ''
  * 
  *     return (head + body + tail)             # <<<<<<<<<<<<<<
@@ -30670,7 +30670,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":152
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":152
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -30698,7 +30698,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_4__str__(struct __pyx_obj_5pyot
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":199
+/* "../../src/python/pyoti/cython/dense/generic.pxi":199
  * 
  *   #***************************************************************************************************
  *   def empty_like(self):             # <<<<<<<<<<<<<<
@@ -30727,7 +30727,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_6empty_like(struct __pyx_obj_5p
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("empty_like", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":201
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":201
  *   def empty_like(self):
  * 
  *     return otibase(self.order, nbases=self.nbases, dtype = self.dtype, zero = None)             # <<<<<<<<<<<<<<
@@ -30758,7 +30758,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_6empty_like(struct __pyx_obj_5p
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":199
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":199
  * 
  *   #***************************************************************************************************
  *   def empty_like(self):             # <<<<<<<<<<<<<<
@@ -30779,7 +30779,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_6empty_like(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":206
+/* "../../src/python/pyoti/cython/dense/generic.pxi":206
  * 
  *   #***************************************************************************************************
  *   def copy(self):             # <<<<<<<<<<<<<<
@@ -30822,7 +30822,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
   PyObject *__pyx_t_13 = NULL;
   __Pyx_RefNannySetupContext("copy", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":208
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":208
  *   def copy(self):
  * 
  *     cdef otibase res = self.empty_like()             # <<<<<<<<<<<<<<
@@ -30850,7 +30850,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
   __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":211
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":211
  * 
  *     # Has copy?
  *     has_copy = True             # <<<<<<<<<<<<<<
@@ -30859,7 +30859,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
  */
   __pyx_v_has_copy = 1;
 
-  /* "../../pyoti/cython/dense/generic.pxi":212
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":212
  *     # Has copy?
  *     has_copy = True
  *     try:             # <<<<<<<<<<<<<<
@@ -30875,7 +30875,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
     __Pyx_XGOTREF(__pyx_t_6);
     /*try:*/ {
 
-      /* "../../pyoti/cython/dense/generic.pxi":213
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":213
  *     has_copy = True
  *     try:
  *       self.re.copy()             # <<<<<<<<<<<<<<
@@ -30901,7 +30901,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":212
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":212
  *     # Has copy?
  *     has_copy = True
  *     try:             # <<<<<<<<<<<<<<
@@ -30918,7 +30918,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":214
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":214
  *     try:
  *       self.re.copy()
  *     except:             # <<<<<<<<<<<<<<
@@ -30932,7 +30932,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_GOTREF(__pyx_t_3);
 
-      /* "../../pyoti/cython/dense/generic.pxi":215
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":215
  *       self.re.copy()
  *     except:
  *       has_copy = False             # <<<<<<<<<<<<<<
@@ -30947,7 +30947,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
     }
     __pyx_L5_except_error:;
 
-    /* "../../pyoti/cython/dense/generic.pxi":212
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":212
  *     # Has copy?
  *     has_copy = True
  *     try:             # <<<<<<<<<<<<<<
@@ -30967,7 +30967,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
     __pyx_L8_try_end:;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":218
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":218
  *     # end Try.
  * 
  *     if has_copy:             # <<<<<<<<<<<<<<
@@ -30977,7 +30977,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
   __pyx_t_7 = (__pyx_v_has_copy != 0);
   if (__pyx_t_7) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":220
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":220
  *     if has_copy:
  * 
  *       res.re = self.re.copy()             # <<<<<<<<<<<<<<
@@ -31007,7 +31007,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
     __pyx_v_res->re = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":222
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":222
  *       res.re = self.re.copy()
  * 
  *       for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -31019,7 +31019,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
     for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
       __pyx_v_ordi = __pyx_t_10;
 
-      /* "../../pyoti/cython/dense/generic.pxi":224
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":224
  *       for ordi in range(self.order):
  * 
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -31074,7 +31074,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
         __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_2);
         __pyx_t_2 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":226
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":226
  *         for i in range(self.p_ndpo[ordi]):
  * 
  *           res.p_im[ordi][i] = self.p_im[ordi][i].copy()             # <<<<<<<<<<<<<<
@@ -31110,7 +31110,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":224
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":224
  *       for ordi in range(self.order):
  * 
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -31121,7 +31121,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":218
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":218
  *     # end Try.
  * 
  *     if has_copy:             # <<<<<<<<<<<<<<
@@ -31131,7 +31131,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
     goto __pyx_L11;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":234
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":234
  *     else:
  * 
  *       res.re = self.re             # <<<<<<<<<<<<<<
@@ -31147,7 +31147,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
     __pyx_v_res->re = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":236
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":236
  *       res.re = self.re
  * 
  *       for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -31159,7 +31159,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
     for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
       __pyx_v_ordi = __pyx_t_10;
 
-      /* "../../pyoti/cython/dense/generic.pxi":238
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":238
  *       for ordi in range(self.order):
  * 
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -31214,7 +31214,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
         __Pyx_XDECREF_SET(__pyx_v_i, __pyx_t_2);
         __pyx_t_2 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":240
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":240
  *         for i in range(self.p_ndpo[ordi]):
  * 
  *           res.p_im[ordi][i] = self.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -31232,7 +31232,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":238
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":238
  *       for ordi in range(self.order):
  * 
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -31245,7 +31245,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
   }
   __pyx_L11:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":247
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":247
  * 
  *     # end if
  *     return res             # <<<<<<<<<<<<<<
@@ -31257,7 +31257,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":206
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":206
  * 
  *   #***************************************************************************************************
  *   def copy(self):             # <<<<<<<<<<<<<<
@@ -31281,7 +31281,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_8copy(struct __pyx_obj_5pyoti_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":257
+/* "../../src/python/pyoti/cython/dense/generic.pxi":257
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self,item):             # <<<<<<<<<<<<<<
@@ -31326,7 +31326,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
   __pyx_t_5pyoti_8c_otilib_ndir_t __pyx_t_12;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":265
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":265
  *     # get all items from other elements.
  * 
  *     cdef otibase res = otibase(self.order, nbases=self.nbases, dtype = self.dtype, zero = None);             # <<<<<<<<<<<<<<
@@ -31355,7 +31355,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
   __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":269
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":269
  *     cdef ord_t ordi
  *     # Try to propagate the get item through all operations.
  *     try:             # <<<<<<<<<<<<<<
@@ -31371,7 +31371,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
     __Pyx_XGOTREF(__pyx_t_6);
     /*try:*/ {
 
-      /* "../../pyoti/cython/dense/generic.pxi":271
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":271
  *     try:
  * 
  *       res.re = self.re[item]             # <<<<<<<<<<<<<<
@@ -31386,7 +31386,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
       __pyx_v_res->re = __pyx_t_3;
       __pyx_t_3 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":273
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":273
  *       res.re = self.re[item]
  * 
  *       for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -31398,7 +31398,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
       for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
         __pyx_v_ordi = __pyx_t_9;
 
-        /* "../../pyoti/cython/dense/generic.pxi":274
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":274
  * 
  *       for ordi in range(self.order):
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -31413,7 +31413,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
         for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_11; __pyx_t_12+=1) {
           __pyx_v_i = __pyx_t_12;
 
-          /* "../../pyoti/cython/dense/generic.pxi":275
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":275
  *       for ordi in range(self.order):
  *         for i in range(self.p_ndpo[ordi]):
  *           res.p_im[ordi][i] = (self.p_im[ordi][i])[item]             # <<<<<<<<<<<<<<
@@ -31436,7 +31436,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
         }
       }
 
-      /* "../../pyoti/cython/dense/generic.pxi":269
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":269
  *     cdef ord_t ordi
  *     # Try to propagate the get item through all operations.
  *     try:             # <<<<<<<<<<<<<<
@@ -31453,7 +31453,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
     __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":279
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":279
  *       # end
  * 
  *     except:             # <<<<<<<<<<<<<<
@@ -31472,7 +31472,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
     __pyx_L8_try_end:;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":284
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":284
  *     # end try.
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -31484,7 +31484,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":257
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":257
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self,item):             # <<<<<<<<<<<<<<
@@ -31506,7 +31506,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_10__getitem__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":290
+/* "../../src/python/pyoti/cython/dense/generic.pxi":290
  * 
  *   #***************************************************************************************************
  *   def changeOrder(self, ord_t newOrder):             # <<<<<<<<<<<<<<
@@ -31556,7 +31556,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
   __pyx_t_5pyoti_8c_otilib_ord_t __pyx_t_10;
   __Pyx_RefNannySetupContext("changeOrder", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":298
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":298
  *     cdef ord_t ordi
  *     cdef imdir_t i
  *     if newOrder<self.order:             # <<<<<<<<<<<<<<
@@ -31566,7 +31566,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
   __pyx_t_1 = ((__pyx_v_newOrder < __pyx_v_self->order) != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":300
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":300
  *     if newOrder<self.order:
  * 
  *       self.p_im = self.p_im[:newOrder]             # <<<<<<<<<<<<<<
@@ -31582,7 +31582,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     __pyx_v_self->p_im = ((PyArrayObject *)__pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":301
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":301
  * 
  *       self.p_im = self.p_im[:newOrder]
  *       self.p_ndpo = self.p_ndpo[:newOrder]             # <<<<<<<<<<<<<<
@@ -31598,7 +31598,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     __pyx_v_self->p_ndpo = ((PyArrayObject *)__pyx_t_2);
     __pyx_t_2 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":303
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":303
  *       self.p_ndpo = self.p_ndpo[:newOrder]
  * 
  *       self.ndir = np.sum(self.p_ndpo)             # <<<<<<<<<<<<<<
@@ -31629,7 +31629,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __pyx_v_self->ndir = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/generic.pxi":298
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":298
  *     cdef ord_t ordi
  *     cdef imdir_t i
  *     if newOrder<self.order:             # <<<<<<<<<<<<<<
@@ -31639,7 +31639,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":306
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":306
  * 
  * 
  *     elif newOrder>self.order:             # <<<<<<<<<<<<<<
@@ -31649,7 +31649,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
   __pyx_t_1 = ((__pyx_v_newOrder > __pyx_v_self->order) != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":308
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":308
  *     elif newOrder>self.order:
  * 
  *       new_p_im = np.empty(newOrder,dtype=np.ndarray)             # <<<<<<<<<<<<<<
@@ -31679,7 +31679,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     __pyx_v_new_p_im = __pyx_t_6;
     __pyx_t_6 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":309
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":309
  * 
  *       new_p_im = np.empty(newOrder,dtype=np.ndarray)
  *       new_p_ndpo =  np.zeros( newOrder, dtype=np.uint64)             # <<<<<<<<<<<<<<
@@ -31715,7 +31715,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     __pyx_v_new_p_ndpo = __pyx_t_7;
     __pyx_t_7 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":312
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":312
  * 
  *       # copy info
  *       new_p_im[:self.order] = self.p_im[:]             # <<<<<<<<<<<<<<
@@ -31727,7 +31727,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     if (__Pyx_PyObject_SetSlice(__pyx_v_new_p_im, __pyx_t_7, 0, __pyx_v_self->order, NULL, NULL, NULL, 0, 1, 1) < 0) __PYX_ERR(0, 312, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":313
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":313
  *       # copy info
  *       new_p_im[:self.order] = self.p_im[:]
  *       new_p_ndpo[:self.order] = self.p_ndpo[:]             # <<<<<<<<<<<<<<
@@ -31739,7 +31739,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     if (__Pyx_PyObject_SetSlice(__pyx_v_new_p_ndpo, __pyx_t_7, 0, __pyx_v_self->order, NULL, NULL, NULL, 0, 1, 1) < 0) __PYX_ERR(0, 313, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":315
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":315
  *       new_p_ndpo[:self.order] = self.p_ndpo[:]
  * 
  *       for ordi in range(self.order, newOrder):             # <<<<<<<<<<<<<<
@@ -31751,7 +31751,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     for (__pyx_t_10 = __pyx_v_self->order; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
       __pyx_v_ordi = __pyx_t_10;
 
-      /* "../../pyoti/cython/dense/generic.pxi":317
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":317
  *       for ordi in range(self.order, newOrder):
  * 
  *         new_p_ndpo[ordi] = dhelp_extract_ndirOrder( self.nbases, ordi+1, dhl )             # <<<<<<<<<<<<<<
@@ -31763,7 +31763,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
       if (unlikely(__Pyx_SetItemInt(__pyx_v_new_p_ndpo, __pyx_v_ordi, __pyx_t_7, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(0, 317, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":319
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":319
  *         new_p_ndpo[ordi] = dhelp_extract_ndirOrder( self.nbases, ordi+1, dhl )
  * 
  *         new_p_im[ordi]   = np.zeros( new_p_ndpo[ordi], dtype = object)             # <<<<<<<<<<<<<<
@@ -31793,7 +31793,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
       if (unlikely(__Pyx_SetItemInt(__pyx_v_new_p_im, __pyx_v_ordi, __pyx_t_2, __pyx_t_5pyoti_8c_otilib_ord_t, 0, __Pyx_PyInt_From_uint8_t, 0, 0, 1) < 0)) __PYX_ERR(0, 319, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":321
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":321
  *         new_p_im[ordi]   = np.zeros( new_p_ndpo[ordi], dtype = object)
  * 
  *         self.ndir += new_p_ndpo[ordi]             # <<<<<<<<<<<<<<
@@ -31813,7 +31813,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
       __pyx_v_self->ndir = __pyx_t_5;
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":326
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":326
  * 
  * 
  *       self.p_im   = new_p_im             # <<<<<<<<<<<<<<
@@ -31829,7 +31829,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     __pyx_v_self->p_im = ((PyArrayObject *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":327
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":327
  * 
  *       self.p_im   = new_p_im
  *       self.p_ndpo = new_p_ndpo             # <<<<<<<<<<<<<<
@@ -31845,7 +31845,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
     __pyx_v_self->p_ndpo = ((PyArrayObject *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":306
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":306
  * 
  * 
  *     elif newOrder>self.order:             # <<<<<<<<<<<<<<
@@ -31855,7 +31855,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":329
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":329
  *       self.p_ndpo = new_p_ndpo
  * 
  *     self.order = newOrder             # <<<<<<<<<<<<<<
@@ -31864,7 +31864,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
  */
   __pyx_v_self->order = __pyx_v_newOrder;
 
-  /* "../../pyoti/cython/dense/generic.pxi":290
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":290
  * 
  *   #***************************************************************************************************
  *   def changeOrder(self, ord_t newOrder):             # <<<<<<<<<<<<<<
@@ -31891,7 +31891,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_12changeOrder(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":334
+/* "../../src/python/pyoti/cython/dense/generic.pxi":334
  * 
  *   #***************************************************************************************************
  *   def getIm(self, list item):             # <<<<<<<<<<<<<<
@@ -31935,7 +31935,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
   PyObject *__pyx_t_9 = NULL;
   __Pyx_RefNannySetupContext("getIm", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":341
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":341
  *     # global dhl
  * 
  *     cdef imdir_t idx = item[ZERO]             # <<<<<<<<<<<<<<
@@ -31952,7 +31952,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_idx = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/generic.pxi":342
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":342
  * 
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]             # <<<<<<<<<<<<<<
@@ -31969,7 +31969,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_order = __pyx_t_3;
 
-  /* "../../pyoti/cython/dense/generic.pxi":343
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":343
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]
  *     cdef object res = None             # <<<<<<<<<<<<<<
@@ -31979,7 +31979,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
   __Pyx_INCREF(Py_None);
   __pyx_v_res = Py_None;
 
-  /* "../../pyoti/cython/dense/generic.pxi":345
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":345
  *     cdef object res = None
  * 
  *     if order == 0:             # <<<<<<<<<<<<<<
@@ -31989,7 +31989,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
   __pyx_t_4 = ((__pyx_v_order == 0) != 0);
   if (__pyx_t_4) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":347
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":347
  *     if order == 0:
  * 
  *       res = self.re             # <<<<<<<<<<<<<<
@@ -32001,7 +32001,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
     __Pyx_DECREF_SET(__pyx_v_res, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":345
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":345
  *     cdef object res = None
  * 
  *     if order == 0:             # <<<<<<<<<<<<<<
@@ -32011,7 +32011,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":351
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":351
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -32028,7 +32028,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
       __Pyx_XGOTREF(__pyx_t_7);
       /*try:*/ {
 
-        /* "../../pyoti/cython/dense/generic.pxi":352
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":352
  * 
  *       try:
  *         res = self.p_im[order-1][idx]             # <<<<<<<<<<<<<<
@@ -32044,7 +32044,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
         __Pyx_DECREF_SET(__pyx_v_res, __pyx_t_9);
         __pyx_t_9 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":351
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":351
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -32060,7 +32060,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":353
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":353
  *       try:
  *         res = self.p_im[order-1][idx]
  *       except:             # <<<<<<<<<<<<<<
@@ -32081,7 +32081,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":358
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":358
  *     # end if
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -32093,7 +32093,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
   __pyx_r = __pyx_v_res;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":334
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":334
  * 
  *   #***************************************************************************************************
  *   def getIm(self, list item):             # <<<<<<<<<<<<<<
@@ -32114,7 +32114,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_14getIm(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":363
+/* "../../src/python/pyoti/cython/dense/generic.pxi":363
  * 
  *   #***************************************************************************************************
  *   def extract_im(self, list item):             # <<<<<<<<<<<<<<
@@ -32169,7 +32169,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
   long __pyx_t_14;
   __Pyx_RefNannySetupContext("extract_im", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":370
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":370
  *     global dhl
  * 
  *     cdef imdir_t idx = item[ZERO]             # <<<<<<<<<<<<<<
@@ -32186,7 +32186,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_idx = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/generic.pxi":371
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":371
  * 
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]             # <<<<<<<<<<<<<<
@@ -32203,7 +32203,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_order = __pyx_t_3;
 
-  /* "../../pyoti/cython/dense/generic.pxi":372
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":372
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]
  *     cdef object res = None             # <<<<<<<<<<<<<<
@@ -32213,7 +32213,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
   __Pyx_INCREF(Py_None);
   __pyx_v_res = Py_None;
 
-  /* "../../pyoti/cython/dense/generic.pxi":377
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":377
  *     cdef coeff_t factor_res, factor_i
  * 
  *     if order == 0:             # <<<<<<<<<<<<<<
@@ -32223,7 +32223,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
   __pyx_t_4 = ((__pyx_v_order == 0) != 0);
   if (__pyx_t_4) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":379
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":379
  *     if order == 0:
  * 
  *       res = self.copy()             # <<<<<<<<<<<<<<
@@ -32250,7 +32250,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
     __Pyx_DECREF_SET(__pyx_v_res, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":377
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":377
  *     cdef coeff_t factor_res, factor_i
  * 
  *     if order == 0:             # <<<<<<<<<<<<<<
@@ -32260,7 +32260,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":383
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":383
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -32277,7 +32277,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
       __Pyx_XGOTREF(__pyx_t_9);
       /*try:*/ {
 
-        /* "../../pyoti/cython/dense/generic.pxi":385
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":385
  *       try:
  * 
  *         res = otibase(self.order-order, nbases=self.nbases, dtype=self.dtype, zero=0.0)             # <<<<<<<<<<<<<<
@@ -32306,7 +32306,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
         __Pyx_DECREF_SET(__pyx_v_res, __pyx_t_6);
         __pyx_t_6 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":388
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":388
  * 
  *         # Set the real value
  *         res.re = self.p_im[order-1][idx]             # <<<<<<<<<<<<<<
@@ -32322,7 +32322,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
         if (__Pyx_PyObject_SetAttrStr(__pyx_v_res, __pyx_n_s_re_2, __pyx_t_1) < 0) __PYX_ERR(0, 388, __pyx_L4_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":390
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":390
  *         res.re = self.p_im[order-1][idx]
  * 
  *         for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -32337,7 +32337,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
         for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_11; __pyx_t_3+=1) {
           __pyx_v_ordi = __pyx_t_3;
 
-          /* "../../pyoti/cython/dense/generic.pxi":391
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":391
  * 
  *         for ordi in range(res.order):
  *           for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -32355,7 +32355,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
           for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_13; __pyx_t_2+=1) {
             __pyx_v_i = __pyx_t_2;
 
-            /* "../../pyoti/cython/dense/generic.pxi":393
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":393
  *           for i in range(res.p_ndpo[ordi]):
  * 
  *             dhelp_multDir( i,  ordi+1, idx, order, &i_res, &ord_res, dhl)             # <<<<<<<<<<<<<<
@@ -32364,7 +32364,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
  */
             dhelp_multDir(__pyx_v_i, (__pyx_v_ordi + 1), __pyx_v_idx, __pyx_v_order, (&__pyx_v_i_res), (&__pyx_v_ord_res), __pyx_v_5pyoti_5dense_dhl);
 
-            /* "../../pyoti/cython/dense/generic.pxi":395
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":395
  *             dhelp_multDir( i,  ordi+1, idx, order, &i_res, &ord_res, dhl)
  * 
  *             factor_i   = dhelp_get_deriv_factor(    i,  ordi+1, dhl);             # <<<<<<<<<<<<<<
@@ -32373,7 +32373,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
  */
             __pyx_v_factor_i = dhelp_get_deriv_factor(__pyx_v_i, (__pyx_v_ordi + 1), __pyx_v_5pyoti_5dense_dhl);
 
-            /* "../../pyoti/cython/dense/generic.pxi":396
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":396
  * 
  *             factor_i   = dhelp_get_deriv_factor(    i,  ordi+1, dhl);
  *             factor_res = dhelp_get_deriv_factor(i_res, ord_res, dhl);             # <<<<<<<<<<<<<<
@@ -32382,7 +32382,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
  */
             __pyx_v_factor_res = dhelp_get_deriv_factor(__pyx_v_i_res, __pyx_v_ord_res, __pyx_v_5pyoti_5dense_dhl);
 
-            /* "../../pyoti/cython/dense/generic.pxi":398
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":398
  *             factor_res = dhelp_get_deriv_factor(i_res, ord_res, dhl);
  * 
  *             res.p_im[ordi][i] = self.p_im[ord_res-1][i_res]             # <<<<<<<<<<<<<<
@@ -32406,7 +32406,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
           }
         }
 
-        /* "../../pyoti/cython/dense/generic.pxi":383
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":383
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -32423,7 +32423,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":403
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":403
  *         # end
  * 
  *       except:             # <<<<<<<<<<<<<<
@@ -32437,7 +32437,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_GOTREF(__pyx_t_6);
 
-        /* "../../pyoti/cython/dense/generic.pxi":405
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":405
  *       except:
  * 
  *         res = 0.0             # <<<<<<<<<<<<<<
@@ -32453,7 +32453,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
       }
       __pyx_L6_except_error:;
 
-      /* "../../pyoti/cython/dense/generic.pxi":383
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":383
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -32475,7 +32475,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":410
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":410
  *     # end if
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -32487,7 +32487,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
   __pyx_r = __pyx_v_res;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":363
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":363
  * 
  *   #***************************************************************************************************
  *   def extract_im(self, list item):             # <<<<<<<<<<<<<<
@@ -32509,7 +32509,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_16extract_im(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":415
+/* "../../src/python/pyoti/cython/dense/generic.pxi":415
  * 
  *   #***************************************************************************************************
  *   def extract_deriv(self, list item):             # <<<<<<<<<<<<<<
@@ -32564,7 +32564,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
   long __pyx_t_14;
   __Pyx_RefNannySetupContext("extract_deriv", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":422
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":422
  *     global dhl
  * 
  *     cdef imdir_t idx = item[ZERO]             # <<<<<<<<<<<<<<
@@ -32581,7 +32581,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_idx = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/generic.pxi":423
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":423
  * 
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]             # <<<<<<<<<<<<<<
@@ -32598,7 +32598,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_order = __pyx_t_3;
 
-  /* "../../pyoti/cython/dense/generic.pxi":424
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":424
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]
  *     cdef object res = None             # <<<<<<<<<<<<<<
@@ -32608,7 +32608,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
   __Pyx_INCREF(Py_None);
   __pyx_v_res = Py_None;
 
-  /* "../../pyoti/cython/dense/generic.pxi":429
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":429
  *     cdef int factor_res, factor_i
  * 
  *     if order == 0:             # <<<<<<<<<<<<<<
@@ -32618,7 +32618,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
   __pyx_t_4 = ((__pyx_v_order == 0) != 0);
   if (__pyx_t_4) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":431
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":431
  *     if order == 0:
  * 
  *       res = self.copy()             # <<<<<<<<<<<<<<
@@ -32645,7 +32645,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
     __Pyx_DECREF_SET(__pyx_v_res, __pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":429
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":429
  *     cdef int factor_res, factor_i
  * 
  *     if order == 0:             # <<<<<<<<<<<<<<
@@ -32655,7 +32655,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":435
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":435
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -32672,7 +32672,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
       __Pyx_XGOTREF(__pyx_t_9);
       /*try:*/ {
 
-        /* "../../pyoti/cython/dense/generic.pxi":437
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":437
  *       try:
  * 
  *         res = otibase(self.order-order, nbases=self.nbases, dtype=self.dtype, zero=0.0)             # <<<<<<<<<<<<<<
@@ -32701,7 +32701,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
         __Pyx_DECREF_SET(__pyx_v_res, __pyx_t_6);
         __pyx_t_6 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":440
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":440
  * 
  *         # Set the real value
  *         factor_res = int( dhelp_get_deriv_factor(  idx,   order, dhl) );             # <<<<<<<<<<<<<<
@@ -32710,7 +32710,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
  */
         __pyx_v_factor_res = ((int)dhelp_get_deriv_factor(__pyx_v_idx, __pyx_v_order, __pyx_v_5pyoti_5dense_dhl));
 
-        /* "../../pyoti/cython/dense/generic.pxi":442
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":442
  *         factor_res = int( dhelp_get_deriv_factor(  idx,   order, dhl) );
  * 
  *         res.re = (factor_res)*self.p_im[order-1][idx]             # <<<<<<<<<<<<<<
@@ -32732,7 +32732,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
         if (__Pyx_PyObject_SetAttrStr(__pyx_v_res, __pyx_n_s_re_2, __pyx_t_1) < 0) __PYX_ERR(0, 442, __pyx_L4_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":444
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":444
  *         res.re = (factor_res)*self.p_im[order-1][idx]
  * 
  *         for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -32747,7 +32747,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
         for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_11; __pyx_t_3+=1) {
           __pyx_v_ordi = __pyx_t_3;
 
-          /* "../../pyoti/cython/dense/generic.pxi":446
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":446
  *         for ordi in range(res.order):
  * 
  *           for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -32765,7 +32765,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
           for (__pyx_t_2 = 0; __pyx_t_2 < __pyx_t_13; __pyx_t_2+=1) {
             __pyx_v_i = __pyx_t_2;
 
-            /* "../../pyoti/cython/dense/generic.pxi":448
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":448
  *           for i in range(res.p_ndpo[ordi]):
  * 
  *             dhelp_multDir( i,  ordi+1, idx, order, &i_res, &ord_res, dhl)             # <<<<<<<<<<<<<<
@@ -32774,7 +32774,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
  */
             dhelp_multDir(__pyx_v_i, (__pyx_v_ordi + 1), __pyx_v_idx, __pyx_v_order, (&__pyx_v_i_res), (&__pyx_v_ord_res), __pyx_v_5pyoti_5dense_dhl);
 
-            /* "../../pyoti/cython/dense/generic.pxi":450
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":450
  *             dhelp_multDir( i,  ordi+1, idx, order, &i_res, &ord_res, dhl)
  * 
  *             factor_i   = int( dhelp_get_deriv_factor(    i,  ordi+1, dhl) );             # <<<<<<<<<<<<<<
@@ -32783,7 +32783,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
  */
             __pyx_v_factor_i = ((int)dhelp_get_deriv_factor(__pyx_v_i, (__pyx_v_ordi + 1), __pyx_v_5pyoti_5dense_dhl));
 
-            /* "../../pyoti/cython/dense/generic.pxi":451
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":451
  * 
  *             factor_i   = int( dhelp_get_deriv_factor(    i,  ordi+1, dhl) );
  *             factor_res = int( dhelp_get_deriv_factor(i_res, ord_res, dhl) );             # <<<<<<<<<<<<<<
@@ -32792,7 +32792,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
  */
             __pyx_v_factor_res = ((int)dhelp_get_deriv_factor(__pyx_v_i_res, __pyx_v_ord_res, __pyx_v_5pyoti_5dense_dhl));
 
-            /* "../../pyoti/cython/dense/generic.pxi":453
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":453
  *             factor_res = int( dhelp_get_deriv_factor(i_res, ord_res, dhl) );
  * 
  *             res.p_im[ordi][i] = (factor_res)*self.p_im[ord_res-1][i_res]/(factor_i)             # <<<<<<<<<<<<<<
@@ -32828,7 +32828,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
           }
         }
 
-        /* "../../pyoti/cython/dense/generic.pxi":435
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":435
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -32845,7 +32845,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":459
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":459
  *         # end
  * 
  *       except:             # <<<<<<<<<<<<<<
@@ -32859,7 +32859,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_GOTREF(__pyx_t_6);
 
-        /* "../../pyoti/cython/dense/generic.pxi":461
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":461
  *       except:
  * 
  *         res = 0.0             # <<<<<<<<<<<<<<
@@ -32875,7 +32875,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
       }
       __pyx_L6_except_error:;
 
-      /* "../../pyoti/cython/dense/generic.pxi":435
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":435
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -32897,7 +32897,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":466
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":466
  *     # end if
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -32909,7 +32909,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
   __pyx_r = __pyx_v_res;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":415
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":415
  * 
  *   #***************************************************************************************************
  *   def extract_deriv(self, list item):             # <<<<<<<<<<<<<<
@@ -32931,7 +32931,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_18extract_deriv(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":471
+/* "../../src/python/pyoti/cython/dense/generic.pxi":471
  * 
  *   #***************************************************************************************************
  *   def setIm(self, list item, object value):             # <<<<<<<<<<<<<<
@@ -33021,7 +33021,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
   long __pyx_t_8;
   __Pyx_RefNannySetupContext("setIm", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":478
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":478
  *     # global dhl
  * 
  *     cdef imdir_t idx = item[ZERO]             # <<<<<<<<<<<<<<
@@ -33038,7 +33038,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_idx = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/generic.pxi":479
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":479
  * 
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]             # <<<<<<<<<<<<<<
@@ -33055,7 +33055,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_order = __pyx_t_3;
 
-  /* "../../pyoti/cython/dense/generic.pxi":484
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":484
  * 
  * 
  *     if order == 0:             # <<<<<<<<<<<<<<
@@ -33065,7 +33065,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
   __pyx_t_4 = ((__pyx_v_order == 0) != 0);
   if (__pyx_t_4) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":486
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":486
  *     if order == 0:
  * 
  *       self.re = value             # <<<<<<<<<<<<<<
@@ -33078,7 +33078,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
     __Pyx_DECREF(__pyx_v_self->re);
     __pyx_v_self->re = __pyx_v_value;
 
-    /* "../../pyoti/cython/dense/generic.pxi":484
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":484
  * 
  * 
  *     if order == 0:             # <<<<<<<<<<<<<<
@@ -33088,7 +33088,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":490
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":490
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -33105,7 +33105,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
       __Pyx_XGOTREF(__pyx_t_7);
       /*try:*/ {
 
-        /* "../../pyoti/cython/dense/generic.pxi":491
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":491
  * 
  *       try:
  *         self.p_im[order-1][idx] = value             # <<<<<<<<<<<<<<
@@ -33118,7 +33118,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
         if (unlikely(__Pyx_SetItemInt(__pyx_t_1, __pyx_v_idx, __pyx_v_value, __pyx_t_5pyoti_8c_otilib_imdir_t, 0, __Pyx_PyInt_From_uint64_t, 0, 0, 1) < 0)) __PYX_ERR(0, 491, __pyx_L4_error)
         __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-        /* "../../pyoti/cython/dense/generic.pxi":490
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":490
  *     else:
  * 
  *       try:             # <<<<<<<<<<<<<<
@@ -33133,7 +33133,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
       __pyx_L4_error:;
       __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "../../pyoti/cython/dense/generic.pxi":492
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":492
  *       try:
  *         self.p_im[order-1][idx] = value
  *       except:             # <<<<<<<<<<<<<<
@@ -33154,7 +33154,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":471
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":471
  * 
  *   #***************************************************************************************************
  *   def setIm(self, list item, object value):             # <<<<<<<<<<<<<<
@@ -33175,7 +33175,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_20setIm(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":503
+/* "../../src/python/pyoti/cython/dense/generic.pxi":503
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, item, value):             # <<<<<<<<<<<<<<
@@ -33217,7 +33217,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase_22__setitem__(struct __pyx_obj_5pyoti
   PyObject *__pyx_t_10 = NULL;
   __Pyx_RefNannySetupContext("__setitem__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":514
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":514
  *     cdef ord_t ordi
  * 
  *     if type(value) == self.dtype:             # <<<<<<<<<<<<<<
@@ -33229,7 +33229,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase_22__setitem__(struct __pyx_obj_5pyoti
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":516
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":516
  *     if type(value) == self.dtype:
  * 
  *       self.re[item] = value.re             # <<<<<<<<<<<<<<
@@ -33241,7 +33241,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase_22__setitem__(struct __pyx_obj_5pyoti
     if (unlikely(PyObject_SetItem(__pyx_v_self->re, __pyx_v_item, __pyx_t_1) < 0)) __PYX_ERR(0, 516, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":518
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":518
  *       self.re[item] = value.re
  * 
  *       for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -33253,7 +33253,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase_22__setitem__(struct __pyx_obj_5pyoti
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
       __pyx_v_ordi = __pyx_t_5;
 
-      /* "../../pyoti/cython/dense/generic.pxi":519
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":519
  * 
  *       for ordi in range(self.order):
  *         for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -33268,7 +33268,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase_22__setitem__(struct __pyx_obj_5pyoti
       for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
         __pyx_v_i = __pyx_t_8;
 
-        /* "../../pyoti/cython/dense/generic.pxi":520
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":520
  *       for ordi in range(self.order):
  *         for i in range(self.p_ndpo[ordi]):
  *           self.p_im[ordi][i] [item] = value.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -33294,7 +33294,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase_22__setitem__(struct __pyx_obj_5pyoti
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":514
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":514
  *     cdef ord_t ordi
  * 
  *     if type(value) == self.dtype:             # <<<<<<<<<<<<<<
@@ -33304,7 +33304,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase_22__setitem__(struct __pyx_obj_5pyoti
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":526
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":526
  *     else:
  * 
  *       self.re[item] = value             # <<<<<<<<<<<<<<
@@ -33316,7 +33316,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase_22__setitem__(struct __pyx_obj_5pyoti
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":503
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":503
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, item, value):             # <<<<<<<<<<<<<<
@@ -33338,7 +33338,7 @@ static int __pyx_pf_5pyoti_5dense_7otibase_22__setitem__(struct __pyx_obj_5pyoti
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":533
+/* "../../src/python/pyoti/cython/dense/generic.pxi":533
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -33380,7 +33380,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_24__neg__(struct __pyx_obj_5pyo
   __pyx_t_5pyoti_8c_otilib_ndir_t __pyx_t_9;
   __Pyx_RefNannySetupContext("__neg__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":547
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":547
  *     global dhl
  * 
  *     cdef otibase res = self.empty_like()             # <<<<<<<<<<<<<<
@@ -33408,7 +33408,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_24__neg__(struct __pyx_obj_5pyo
   __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":553
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":553
  *     # propagate negation.
  * 
  *     res.re = -self.re             # <<<<<<<<<<<<<<
@@ -33423,7 +33423,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_24__neg__(struct __pyx_obj_5pyo
   __pyx_v_res->re = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":555
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":555
  *     res.re = -self.re
  * 
  *     for ordi in range(self.order):             # <<<<<<<<<<<<<<
@@ -33435,7 +33435,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_24__neg__(struct __pyx_obj_5pyo
   for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
     __pyx_v_ordi = __pyx_t_6;
 
-    /* "../../pyoti/cython/dense/generic.pxi":557
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":557
  *     for ordi in range(self.order):
  * 
  *       for i in range(self.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -33450,7 +33450,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_24__neg__(struct __pyx_obj_5pyo
     for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
       __pyx_v_i = __pyx_t_9;
 
-      /* "../../pyoti/cython/dense/generic.pxi":559
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":559
  *       for i in range(self.p_ndpo[ordi]):
  * 
  *         res.p_im[ordi][i] = -self.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -33473,7 +33473,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_24__neg__(struct __pyx_obj_5pyo
     }
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":565
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":565
  *     # end
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -33485,7 +33485,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_24__neg__(struct __pyx_obj_5pyo
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":533
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":533
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -33507,7 +33507,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_24__neg__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":572
+/* "../../src/python/pyoti/cython/dense/generic.pxi":572
  * 
  *   #***************************************************************************************************
  *   def __add__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -33560,7 +33560,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
   PyObject *__pyx_t_16 = NULL;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":595
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":595
  *     cdef ndir_t i
  * 
  *     isoti_lhs = isinstance(lhs,otibase)             # <<<<<<<<<<<<<<
@@ -33570,7 +33570,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
   __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_lhs, __pyx_ptype_5pyoti_5dense_otibase); 
   __pyx_v_isoti_lhs = __pyx_t_1;
 
-  /* "../../pyoti/cython/dense/generic.pxi":596
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":596
  * 
  *     isoti_lhs = isinstance(lhs,otibase)
  *     isoti_rhs = isinstance(rhs,otibase)             # <<<<<<<<<<<<<<
@@ -33580,7 +33580,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
   __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_rhs, __pyx_ptype_5pyoti_5dense_otibase); 
   __pyx_v_isoti_rhs = __pyx_t_1;
 
-  /* "../../pyoti/cython/dense/generic.pxi":598
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":598
  *     isoti_rhs = isinstance(rhs,otibase)
  * 
  *     if ( isoti_lhs and isoti_rhs) : # Case Sum between two OTI-like elements.             # <<<<<<<<<<<<<<
@@ -33598,7 +33598,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":600
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":600
  *     if ( isoti_lhs and isoti_rhs) : # Case Sum between two OTI-like elements.
  * 
  *       tlhs = lhs             # <<<<<<<<<<<<<<
@@ -33611,7 +33611,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_tlhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":601
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":601
  * 
  *       tlhs = lhs
  *       trhs = rhs             # <<<<<<<<<<<<<<
@@ -33624,7 +33624,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_trhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":603
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":603
  *       trhs = rhs
  * 
  *       res = lhs.empty_like()             # <<<<<<<<<<<<<<
@@ -33652,7 +33652,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":605
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":605
  *       res = lhs.empty_like()
  * 
  *       res.re = tlhs.re + trhs.re             # <<<<<<<<<<<<<<
@@ -33667,7 +33667,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_res->re = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":607
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":607
  *       res.re = tlhs.re + trhs.re
  * 
  *       for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -33679,7 +33679,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":609
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":609
  *       for ordi in range(res.order):
  * 
  *         for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -33694,7 +33694,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_i = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/generic.pxi":611
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":611
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           res.p_im[ordi][i] = tlhs.p_im[ordi][i] + trhs.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -33723,7 +33723,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":598
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":598
  *     isoti_rhs = isinstance(rhs,otibase)
  * 
  *     if ( isoti_lhs and isoti_rhs) : # Case Sum between two OTI-like elements.             # <<<<<<<<<<<<<<
@@ -33733,7 +33733,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":617
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":617
  *       # end
  * 
  *     elif (isoti_lhs): # OTI-like + scalar             # <<<<<<<<<<<<<<
@@ -33743,7 +33743,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
   __pyx_t_1 = (__pyx_v_isoti_lhs != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":619
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":619
  *     elif (isoti_lhs): # OTI-like + scalar
  * 
  *       tlhs = lhs             # <<<<<<<<<<<<<<
@@ -33756,7 +33756,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_tlhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":620
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":620
  * 
  *       tlhs = lhs
  *       res = lhs.empty_like()             # <<<<<<<<<<<<<<
@@ -33784,7 +33784,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":621
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":621
  *       tlhs = lhs
  *       res = lhs.empty_like()
  *       res.re = tlhs.re + rhs             # <<<<<<<<<<<<<<
@@ -33799,7 +33799,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_res->re = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":624
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":624
  * 
  * 
  *       for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -33811,7 +33811,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":626
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":626
  *       for ordi in range(res.order):
  * 
  *         for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -33826,7 +33826,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_i = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/generic.pxi":628
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":628
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           try:             # <<<<<<<<<<<<<<
@@ -33842,7 +33842,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
           __Pyx_XGOTREF(__pyx_t_14);
           /*try:*/ {
 
-            /* "../../pyoti/cython/dense/generic.pxi":629
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":629
  * 
  *           try:
  *             res.p_im[ordi][i] = tlhs.p_im[ordi][i].copy()             # <<<<<<<<<<<<<<
@@ -33878,7 +33878,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-            /* "../../pyoti/cython/dense/generic.pxi":628
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":628
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           try:             # <<<<<<<<<<<<<<
@@ -33895,7 +33895,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-          /* "../../pyoti/cython/dense/generic.pxi":630
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":630
  *           try:
  *             res.p_im[ordi][i] = tlhs.p_im[ordi][i].copy()
  *           except:             # <<<<<<<<<<<<<<
@@ -33909,7 +33909,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
             __Pyx_GOTREF(__pyx_t_5);
             __Pyx_GOTREF(__pyx_t_4);
 
-            /* "../../pyoti/cython/dense/generic.pxi":631
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":631
  *             res.p_im[ordi][i] = tlhs.p_im[ordi][i].copy()
  *           except:
  *             res.p_im[ordi][i] = tlhs.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -33933,7 +33933,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
           }
           __pyx_L16_except_error:;
 
-          /* "../../pyoti/cython/dense/generic.pxi":628
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":628
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           try:             # <<<<<<<<<<<<<<
@@ -33955,7 +33955,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":617
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":617
  *       # end
  * 
  *     elif (isoti_lhs): # OTI-like + scalar             # <<<<<<<<<<<<<<
@@ -33965,7 +33965,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":637
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":637
  *       # end
  * 
  *     elif (isoti_rhs): #  scalar + OTI-like             # <<<<<<<<<<<<<<
@@ -33975,7 +33975,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
   __pyx_t_1 = (__pyx_v_isoti_rhs != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":639
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":639
  *     elif (isoti_rhs): #  scalar + OTI-like
  * 
  *       trhs = rhs             # <<<<<<<<<<<<<<
@@ -33988,7 +33988,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_trhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":640
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":640
  * 
  *       trhs = rhs
  *       res = rhs.empty_like()             # <<<<<<<<<<<<<<
@@ -34016,7 +34016,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":641
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":641
  *       trhs = rhs
  *       res = rhs.empty_like()
  *       res.re = lhs + trhs.re             # <<<<<<<<<<<<<<
@@ -34031,7 +34031,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     __pyx_v_res->re = __pyx_t_4;
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":643
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":643
  *       res.re = lhs + trhs.re
  * 
  *       for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -34043,7 +34043,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":645
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":645
  *       for ordi in range(res.order):
  * 
  *         for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -34058,7 +34058,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_i = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/generic.pxi":646
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":646
  * 
  *         for i in range(res.p_ndpo[ordi]):
  *           try:             # <<<<<<<<<<<<<<
@@ -34074,7 +34074,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
           __Pyx_XGOTREF(__pyx_t_12);
           /*try:*/ {
 
-            /* "../../pyoti/cython/dense/generic.pxi":647
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":647
  *         for i in range(res.p_ndpo[ordi]):
  *           try:
  *             res.p_im[ordi][i] = trhs.p_im[ordi][i].copy()             # <<<<<<<<<<<<<<
@@ -34110,7 +34110,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-            /* "../../pyoti/cython/dense/generic.pxi":646
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":646
  * 
  *         for i in range(res.p_ndpo[ordi]):
  *           try:             # <<<<<<<<<<<<<<
@@ -34129,7 +34129,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-          /* "../../pyoti/cython/dense/generic.pxi":648
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":648
  *           try:
  *             res.p_im[ordi][i] = trhs.p_im[ordi][i].copy()
  *           except:             # <<<<<<<<<<<<<<
@@ -34143,7 +34143,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
             __Pyx_GOTREF(__pyx_t_5);
             __Pyx_GOTREF(__pyx_t_3);
 
-            /* "../../pyoti/cython/dense/generic.pxi":649
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":649
  *             res.p_im[ordi][i] = trhs.p_im[ordi][i].copy()
  *           except:
  *             res.p_im[ordi][i] = trhs.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -34167,7 +34167,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
           }
           __pyx_L30_except_error:;
 
-          /* "../../pyoti/cython/dense/generic.pxi":646
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":646
  * 
  *         for i in range(res.p_ndpo[ordi]):
  *           try:             # <<<<<<<<<<<<<<
@@ -34189,7 +34189,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":637
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":637
  *       # end
  * 
  *     elif (isoti_rhs): #  scalar + OTI-like             # <<<<<<<<<<<<<<
@@ -34199,7 +34199,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":659
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":659
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -34214,7 +34214,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":664
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":664
  * 
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -34226,7 +34226,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":572
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":572
  * 
  *   #***************************************************************************************************
  *   def __add__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -34252,7 +34252,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_26__add__(PyObject *__pyx_v_lhs
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":670
+/* "../../src/python/pyoti/cython/dense/generic.pxi":670
  * 
  *   #***************************************************************************************************
  *   def __iadd__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -34283,7 +34283,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_28__iadd__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__iadd__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":680
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":680
  *     #*************************************************************************************************
  * 
  *     return lhs + rhs             # <<<<<<<<<<<<<<
@@ -34297,7 +34297,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_28__iadd__(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":670
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":670
  * 
  *   #***************************************************************************************************
  *   def __iadd__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -34316,7 +34316,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_28__iadd__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":686
+/* "../../src/python/pyoti/cython/dense/generic.pxi":686
  * 
  *   #***************************************************************************************************
  *   def __sub__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -34369,7 +34369,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
   PyObject *__pyx_t_16 = NULL;
   __Pyx_RefNannySetupContext("__sub__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":703
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":703
  *     cdef ndir_t i
  * 
  *     isoti_lhs = isinstance(lhs,otibase)             # <<<<<<<<<<<<<<
@@ -34379,7 +34379,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
   __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_lhs, __pyx_ptype_5pyoti_5dense_otibase); 
   __pyx_v_isoti_lhs = __pyx_t_1;
 
-  /* "../../pyoti/cython/dense/generic.pxi":704
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":704
  * 
  *     isoti_lhs = isinstance(lhs,otibase)
  *     isoti_rhs = isinstance(rhs,otibase)             # <<<<<<<<<<<<<<
@@ -34389,7 +34389,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
   __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_rhs, __pyx_ptype_5pyoti_5dense_otibase); 
   __pyx_v_isoti_rhs = __pyx_t_1;
 
-  /* "../../pyoti/cython/dense/generic.pxi":706
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":706
  *     isoti_rhs = isinstance(rhs,otibase)
  * 
  *     if ( isoti_lhs and isoti_rhs) : # Case Sum between two OTI-like elements.             # <<<<<<<<<<<<<<
@@ -34407,7 +34407,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":708
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":708
  *     if ( isoti_lhs and isoti_rhs) : # Case Sum between two OTI-like elements.
  * 
  *       tlhs = lhs             # <<<<<<<<<<<<<<
@@ -34420,7 +34420,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_tlhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":709
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":709
  * 
  *       tlhs = lhs
  *       trhs = rhs             # <<<<<<<<<<<<<<
@@ -34433,7 +34433,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_trhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":711
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":711
  *       trhs = rhs
  * 
  *       res = lhs.empty_like()             # <<<<<<<<<<<<<<
@@ -34461,7 +34461,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":713
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":713
  *       res = lhs.empty_like()
  * 
  *       res.re = tlhs.re - trhs.re             # <<<<<<<<<<<<<<
@@ -34476,7 +34476,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_res->re = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":715
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":715
  *       res.re = tlhs.re - trhs.re
  * 
  *       for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -34488,7 +34488,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":717
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":717
  *       for ordi in range(res.order):
  * 
  *         for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -34503,7 +34503,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_i = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/generic.pxi":719
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":719
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           res.p_im[ordi][i] = tlhs.p_im[ordi][i] - trhs.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -34532,7 +34532,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":706
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":706
  *     isoti_rhs = isinstance(rhs,otibase)
  * 
  *     if ( isoti_lhs and isoti_rhs) : # Case Sum between two OTI-like elements.             # <<<<<<<<<<<<<<
@@ -34542,7 +34542,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":725
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":725
  *       # end
  * 
  *     elif (isoti_lhs): # OTI-like + scalar             # <<<<<<<<<<<<<<
@@ -34552,7 +34552,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
   __pyx_t_1 = (__pyx_v_isoti_lhs != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":727
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":727
  *     elif (isoti_lhs): # OTI-like + scalar
  * 
  *       tlhs = lhs             # <<<<<<<<<<<<<<
@@ -34565,7 +34565,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_tlhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":728
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":728
  * 
  *       tlhs = lhs
  *       res = lhs.empty_like()             # <<<<<<<<<<<<<<
@@ -34593,7 +34593,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":729
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":729
  *       tlhs = lhs
  *       res = lhs.empty_like()
  *       res.re = tlhs.re + rhs             # <<<<<<<<<<<<<<
@@ -34608,7 +34608,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_res->re = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":732
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":732
  * 
  * 
  *       for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -34620,7 +34620,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":734
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":734
  *       for ordi in range(res.order):
  * 
  *         for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -34635,7 +34635,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_i = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/generic.pxi":736
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":736
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           try:             # <<<<<<<<<<<<<<
@@ -34651,7 +34651,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
           __Pyx_XGOTREF(__pyx_t_14);
           /*try:*/ {
 
-            /* "../../pyoti/cython/dense/generic.pxi":737
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":737
  * 
  *           try:
  *             res.p_im[ordi][i] = tlhs.p_im[ordi][i].copy()             # <<<<<<<<<<<<<<
@@ -34687,7 +34687,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-            /* "../../pyoti/cython/dense/generic.pxi":736
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":736
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           try:             # <<<<<<<<<<<<<<
@@ -34704,7 +34704,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-          /* "../../pyoti/cython/dense/generic.pxi":738
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":738
  *           try:
  *             res.p_im[ordi][i] = tlhs.p_im[ordi][i].copy()
  *           except:             # <<<<<<<<<<<<<<
@@ -34718,7 +34718,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
             __Pyx_GOTREF(__pyx_t_5);
             __Pyx_GOTREF(__pyx_t_4);
 
-            /* "../../pyoti/cython/dense/generic.pxi":739
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":739
  *             res.p_im[ordi][i] = tlhs.p_im[ordi][i].copy()
  *           except:
  *             res.p_im[ordi][i] = tlhs.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -34742,7 +34742,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
           }
           __pyx_L16_except_error:;
 
-          /* "../../pyoti/cython/dense/generic.pxi":736
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":736
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           try:             # <<<<<<<<<<<<<<
@@ -34764,7 +34764,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":725
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":725
  *       # end
  * 
  *     elif (isoti_lhs): # OTI-like + scalar             # <<<<<<<<<<<<<<
@@ -34774,7 +34774,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":745
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":745
  *       # end
  * 
  *     elif (isoti_rhs): #  scalar + OTI-like             # <<<<<<<<<<<<<<
@@ -34784,7 +34784,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
   __pyx_t_1 = (__pyx_v_isoti_rhs != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":747
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":747
  *     elif (isoti_rhs): #  scalar + OTI-like
  * 
  *       trhs = rhs             # <<<<<<<<<<<<<<
@@ -34797,7 +34797,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_trhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":748
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":748
  * 
  *       trhs = rhs
  *       res = rhs.empty_like()             # <<<<<<<<<<<<<<
@@ -34825,7 +34825,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":749
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":749
  *       trhs = rhs
  *       res = rhs.empty_like()
  *       res.re = lhs - trhs.re             # <<<<<<<<<<<<<<
@@ -34840,7 +34840,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     __pyx_v_res->re = __pyx_t_4;
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":751
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":751
  *       res.re = lhs - trhs.re
  * 
  *       for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -34852,7 +34852,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":753
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":753
  *       for ordi in range(res.order):
  * 
  *         for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -34867,7 +34867,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_i = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/generic.pxi":754
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":754
  * 
  *         for i in range(res.p_ndpo[ordi]):
  *           try:             # <<<<<<<<<<<<<<
@@ -34883,7 +34883,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
           __Pyx_XGOTREF(__pyx_t_12);
           /*try:*/ {
 
-            /* "../../pyoti/cython/dense/generic.pxi":755
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":755
  *         for i in range(res.p_ndpo[ordi]):
  *           try:
  *             res.p_im[ordi][i] = -trhs.p_im[ordi][i].copy()             # <<<<<<<<<<<<<<
@@ -34922,7 +34922,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
             __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-            /* "../../pyoti/cython/dense/generic.pxi":754
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":754
  * 
  *         for i in range(res.p_ndpo[ordi]):
  *           try:             # <<<<<<<<<<<<<<
@@ -34941,7 +34941,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-          /* "../../pyoti/cython/dense/generic.pxi":756
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":756
  *           try:
  *             res.p_im[ordi][i] = -trhs.p_im[ordi][i].copy()
  *           except:             # <<<<<<<<<<<<<<
@@ -34955,7 +34955,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
             __Pyx_GOTREF(__pyx_t_4);
             __Pyx_GOTREF(__pyx_t_3);
 
-            /* "../../pyoti/cython/dense/generic.pxi":757
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":757
  *             res.p_im[ordi][i] = -trhs.p_im[ordi][i].copy()
  *           except:
  *             res.p_im[ordi][i] = -trhs.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -34982,7 +34982,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
           }
           __pyx_L30_except_error:;
 
-          /* "../../pyoti/cython/dense/generic.pxi":754
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":754
  * 
  *         for i in range(res.p_ndpo[ordi]):
  *           try:             # <<<<<<<<<<<<<<
@@ -35004,7 +35004,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":745
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":745
  *       # end
  * 
  *     elif (isoti_rhs): #  scalar + OTI-like             # <<<<<<<<<<<<<<
@@ -35014,7 +35014,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":767
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":767
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -35029,7 +35029,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":772
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":772
  * 
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -35041,7 +35041,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":686
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":686
  * 
  *   #***************************************************************************************************
  *   def __sub__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -35067,7 +35067,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_30__sub__(PyObject *__pyx_v_lhs
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":778
+/* "../../src/python/pyoti/cython/dense/generic.pxi":778
  * 
  *   #***************************************************************************************************
  *   def __isub__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -35098,7 +35098,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_32__isub__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__isub__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":790
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":790
  *     #*************************************************************************************************
  * 
  *     return lhs - rhs             # <<<<<<<<<<<<<<
@@ -35112,7 +35112,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_32__isub__(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":778
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":778
  * 
  *   #***************************************************************************************************
  *   def __isub__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -35131,7 +35131,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_32__isub__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":796
+/* "../../src/python/pyoti/cython/dense/generic.pxi":796
  * 
  *   #***************************************************************************************************
  *   def __mul__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -35195,7 +35195,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
   PyObject *__pyx_t_18 = NULL;
   __Pyx_RefNannySetupContext("__mul__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":816
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":816
  *     cdef imdir_t i_res
  * 
  *     isoti_lhs = isinstance(lhs,otibase)             # <<<<<<<<<<<<<<
@@ -35205,7 +35205,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
   __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_lhs, __pyx_ptype_5pyoti_5dense_otibase); 
   __pyx_v_isoti_lhs = __pyx_t_1;
 
-  /* "../../pyoti/cython/dense/generic.pxi":817
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":817
  * 
  *     isoti_lhs = isinstance(lhs,otibase)
  *     isoti_rhs = isinstance(rhs,otibase)             # <<<<<<<<<<<<<<
@@ -35215,7 +35215,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
   __pyx_t_1 = __Pyx_TypeCheck(__pyx_v_rhs, __pyx_ptype_5pyoti_5dense_otibase); 
   __pyx_v_isoti_rhs = __pyx_t_1;
 
-  /* "../../pyoti/cython/dense/generic.pxi":819
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":819
  *     isoti_rhs = isinstance(rhs,otibase)
  * 
  *     if ( isoti_lhs and isoti_rhs) : # Case Sum between two OTI-like elements.             # <<<<<<<<<<<<<<
@@ -35233,7 +35233,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":822
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":822
  * 
  *       # not implemented
  *       tlhs = lhs             # <<<<<<<<<<<<<<
@@ -35246,7 +35246,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_tlhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":823
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":823
  *       # not implemented
  *       tlhs = lhs
  *       trhs = rhs             # <<<<<<<<<<<<<<
@@ -35259,7 +35259,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_trhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":826
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":826
  * 
  *       # Initialize as zero.
  *       res = otibase(tlhs.order, nbases = tlhs.nbases, zero = 0 )             # <<<<<<<<<<<<<<
@@ -35287,7 +35287,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":829
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":829
  * 
  *       # real x real
  *       res.re = tlhs.re * trhs.re             # <<<<<<<<<<<<<<
@@ -35302,7 +35302,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_res->re = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":832
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":832
  * 
  *       # real x im and im x real
  *       for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -35314,7 +35314,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":834
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":834
  *       for ordi in range(res.order):
  * 
  *         for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -35329,7 +35329,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_i = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/generic.pxi":836
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":836
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           res.p_im[ordi][i] = tlhs.p_im[ordi][i] * trhs.re + tlhs.re * trhs.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -35364,7 +35364,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":842
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":842
  *       # end
  * 
  *       for ordi in range( res.order ):             # <<<<<<<<<<<<<<
@@ -35376,7 +35376,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":844
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":844
  *       for ordi in range( res.order ):
  * 
  *         for ordj in range(res.order-ordi-1):             # <<<<<<<<<<<<<<
@@ -35388,7 +35388,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
       for (__pyx_t_12 = 0; __pyx_t_12 < __pyx_t_10; __pyx_t_12+=1) {
         __pyx_v_ordj = __pyx_t_12;
 
-        /* "../../pyoti/cython/dense/generic.pxi":846
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":846
  *         for ordj in range(res.order-ordi-1):
  * 
  *           ord_res = ordi + ordj + 1             # <<<<<<<<<<<<<<
@@ -35397,7 +35397,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
  */
         __pyx_v_ord_res = ((__pyx_v_ordi + __pyx_v_ordj) + 1);
 
-        /* "../../pyoti/cython/dense/generic.pxi":848
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":848
  *           ord_res = ordi + ordj + 1
  * 
  *           if ordi < ordj:             # <<<<<<<<<<<<<<
@@ -35407,7 +35407,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
         __pyx_t_1 = ((__pyx_v_ordi < __pyx_v_ordj) != 0);
         if (__pyx_t_1) {
 
-          /* "../../pyoti/cython/dense/generic.pxi":850
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":850
  *           if ordi < ordj:
  * 
  *             tmp_multtabl = dhl.p_dh[ord_res].p_multtabls[ordi];             # <<<<<<<<<<<<<<
@@ -35416,7 +35416,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
  */
           __pyx_v_tmp_multtabl = ((__pyx_v_5pyoti_5dense_dhl.p_dh[__pyx_v_ord_res]).p_multtabls[__pyx_v_ordi]);
 
-          /* "../../pyoti/cython/dense/generic.pxi":851
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":851
  * 
  *             tmp_multtabl = dhl.p_dh[ord_res].p_multtabls[ordi];
  *             tmpi = tlhs             # <<<<<<<<<<<<<<
@@ -35426,7 +35426,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
           __Pyx_INCREF(((PyObject *)__pyx_v_tlhs));
           __Pyx_XDECREF_SET(__pyx_v_tmpi, __pyx_v_tlhs);
 
-          /* "../../pyoti/cython/dense/generic.pxi":852
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":852
  *             tmp_multtabl = dhl.p_dh[ord_res].p_multtabls[ordi];
  *             tmpi = tlhs
  *             ord_ti = ordi             # <<<<<<<<<<<<<<
@@ -35435,7 +35435,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
  */
           __pyx_v_ord_ti = __pyx_v_ordi;
 
-          /* "../../pyoti/cython/dense/generic.pxi":853
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":853
  *             tmpi = tlhs
  *             ord_ti = ordi
  *             tmpj = trhs             # <<<<<<<<<<<<<<
@@ -35445,7 +35445,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
           __Pyx_INCREF(((PyObject *)__pyx_v_trhs));
           __Pyx_XDECREF_SET(__pyx_v_tmpj, __pyx_v_trhs);
 
-          /* "../../pyoti/cython/dense/generic.pxi":854
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":854
  *             ord_ti = ordi
  *             tmpj = trhs
  *             ord_tj = ordj             # <<<<<<<<<<<<<<
@@ -35454,7 +35454,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
  */
           __pyx_v_ord_tj = __pyx_v_ordj;
 
-          /* "../../pyoti/cython/dense/generic.pxi":848
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":848
  *           ord_res = ordi + ordj + 1
  * 
  *           if ordi < ordj:             # <<<<<<<<<<<<<<
@@ -35464,7 +35464,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
           goto __pyx_L14;
         }
 
-        /* "../../pyoti/cython/dense/generic.pxi":858
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":858
  *           else:
  * 
  *             tmp_multtabl = dhl.p_dh[ord_res].p_multtabls[ordj];             # <<<<<<<<<<<<<<
@@ -35474,7 +35474,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
         /*else*/ {
           __pyx_v_tmp_multtabl = ((__pyx_v_5pyoti_5dense_dhl.p_dh[__pyx_v_ord_res]).p_multtabls[__pyx_v_ordj]);
 
-          /* "../../pyoti/cython/dense/generic.pxi":859
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":859
  * 
  *             tmp_multtabl = dhl.p_dh[ord_res].p_multtabls[ordj];
  *             tmpj = tlhs             # <<<<<<<<<<<<<<
@@ -35484,7 +35484,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
           __Pyx_INCREF(((PyObject *)__pyx_v_tlhs));
           __Pyx_XDECREF_SET(__pyx_v_tmpj, __pyx_v_tlhs);
 
-          /* "../../pyoti/cython/dense/generic.pxi":860
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":860
  *             tmp_multtabl = dhl.p_dh[ord_res].p_multtabls[ordj];
  *             tmpj = tlhs
  *             ord_tj = ordi             # <<<<<<<<<<<<<<
@@ -35493,7 +35493,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
  */
           __pyx_v_ord_tj = __pyx_v_ordi;
 
-          /* "../../pyoti/cython/dense/generic.pxi":861
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":861
  *             tmpj = tlhs
  *             ord_tj = ordi
  *             tmpi = trhs             # <<<<<<<<<<<<<<
@@ -35503,7 +35503,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
           __Pyx_INCREF(((PyObject *)__pyx_v_trhs));
           __Pyx_XDECREF_SET(__pyx_v_tmpi, __pyx_v_trhs);
 
-          /* "../../pyoti/cython/dense/generic.pxi":862
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":862
  *             ord_tj = ordi
  *             tmpi = trhs
  *             ord_ti = ordj             # <<<<<<<<<<<<<<
@@ -35514,7 +35514,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
         }
         __pyx_L14:;
 
-        /* "../../pyoti/cython/dense/generic.pxi":866
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":866
  *           # end if
  * 
  *           for i in range(tmpi.p_ndpo[ord_ti]):             # <<<<<<<<<<<<<<
@@ -35529,7 +35529,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
         for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_14; __pyx_t_11+=1) {
           __pyx_v_i = __pyx_t_11;
 
-          /* "../../pyoti/cython/dense/generic.pxi":867
+          /* "../../src/python/pyoti/cython/dense/generic.pxi":867
  * 
  *           for i in range(tmpi.p_ndpo[ord_ti]):
  *             for j in range(tmpj.p_ndpo[ord_tj]):             # <<<<<<<<<<<<<<
@@ -35544,7 +35544,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
           for (__pyx_t_17 = 0; __pyx_t_17 < __pyx_t_16; __pyx_t_17+=1) {
             __pyx_v_j = __pyx_t_17;
 
-            /* "../../pyoti/cython/dense/generic.pxi":869
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":869
  *             for j in range(tmpj.p_ndpo[ord_tj]):
  * 
  *               i_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],i,j)             # <<<<<<<<<<<<<<
@@ -35553,7 +35553,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
  */
             __pyx_v_i_res = array2d_getel_ui64_t(__pyx_v_tmp_multtabl.p_arr, (__pyx_v_tmp_multtabl.shape[1]), __pyx_v_i, __pyx_v_j);
 
-            /* "../../pyoti/cython/dense/generic.pxi":870
+            /* "../../src/python/pyoti/cython/dense/generic.pxi":870
  * 
  *               i_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],i,j)
  *               res.p_im[ord_res][i_res] = res.p_im[ord_res][i_res]+tmpi.p_im[ord_ti][i]*tmpj.p_im[ord_tj][j]             # <<<<<<<<<<<<<<
@@ -35593,7 +35593,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":819
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":819
  *     isoti_rhs = isinstance(rhs,otibase)
  * 
  *     if ( isoti_lhs and isoti_rhs) : # Case Sum between two OTI-like elements.             # <<<<<<<<<<<<<<
@@ -35603,7 +35603,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":881
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":881
  * 
  * 
  *     elif (isoti_lhs): # OTI-like * scalar             # <<<<<<<<<<<<<<
@@ -35613,7 +35613,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
   __pyx_t_1 = (__pyx_v_isoti_lhs != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":883
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":883
  *     elif (isoti_lhs): # OTI-like * scalar
  * 
  *       tlhs = lhs             # <<<<<<<<<<<<<<
@@ -35626,7 +35626,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_tlhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_18);
     __pyx_t_18 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":884
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":884
  * 
  *       tlhs = lhs
  *       res = lhs.empty_like()             # <<<<<<<<<<<<<<
@@ -35654,7 +35654,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_18);
     __pyx_t_18 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":885
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":885
  *       tlhs = lhs
  *       res = lhs.empty_like()
  *       res.re = tlhs.re * rhs             # <<<<<<<<<<<<<<
@@ -35669,7 +35669,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_res->re = __pyx_t_18;
     __pyx_t_18 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":888
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":888
  * 
  * 
  *       for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -35681,7 +35681,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":890
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":890
  *       for ordi in range(res.order):
  * 
  *         for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -35696,7 +35696,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_i = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/generic.pxi":892
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":892
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           res.p_im[ordi][i] = tlhs.p_im[ordi][i]*rhs             # <<<<<<<<<<<<<<
@@ -35719,7 +35719,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":881
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":881
  * 
  * 
  *     elif (isoti_lhs): # OTI-like * scalar             # <<<<<<<<<<<<<<
@@ -35729,7 +35729,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":898
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":898
  *       # end
  * 
  *     elif (isoti_rhs): #  scalar + OTI-like             # <<<<<<<<<<<<<<
@@ -35739,7 +35739,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
   __pyx_t_1 = (__pyx_v_isoti_rhs != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/generic.pxi":900
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":900
  *     elif (isoti_rhs): #  scalar + OTI-like
  * 
  *       trhs = rhs             # <<<<<<<<<<<<<<
@@ -35752,7 +35752,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_trhs = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_18);
     __pyx_t_18 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":901
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":901
  * 
  *       trhs = rhs
  *       res = rhs.empty_like()             # <<<<<<<<<<<<<<
@@ -35780,7 +35780,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_otibase *)__pyx_t_18);
     __pyx_t_18 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":902
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":902
  *       trhs = rhs
  *       res = rhs.empty_like()
  *       res.re = lhs * trhs.re             # <<<<<<<<<<<<<<
@@ -35795,7 +35795,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     __pyx_v_res->re = __pyx_t_18;
     __pyx_t_18 = 0;
 
-    /* "../../pyoti/cython/dense/generic.pxi":904
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":904
  *       res.re = lhs * trhs.re
  * 
  *       for ordi in range(res.order):             # <<<<<<<<<<<<<<
@@ -35807,7 +35807,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     for (__pyx_t_8 = 0; __pyx_t_8 < __pyx_t_7; __pyx_t_8+=1) {
       __pyx_v_ordi = __pyx_t_8;
 
-      /* "../../pyoti/cython/dense/generic.pxi":906
+      /* "../../src/python/pyoti/cython/dense/generic.pxi":906
  *       for ordi in range(res.order):
  * 
  *         for i in range(res.p_ndpo[ordi]):             # <<<<<<<<<<<<<<
@@ -35822,7 +35822,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
       for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
         __pyx_v_i = __pyx_t_11;
 
-        /* "../../pyoti/cython/dense/generic.pxi":908
+        /* "../../src/python/pyoti/cython/dense/generic.pxi":908
  *         for i in range(res.p_ndpo[ordi]):
  * 
  *           res.p_im[ordi][i] = lhs*trhs.p_im[ordi][i]             # <<<<<<<<<<<<<<
@@ -35845,7 +35845,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
       }
     }
 
-    /* "../../pyoti/cython/dense/generic.pxi":898
+    /* "../../src/python/pyoti/cython/dense/generic.pxi":898
  *       # end
  * 
  *     elif (isoti_rhs): #  scalar + OTI-like             # <<<<<<<<<<<<<<
@@ -35855,7 +35855,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/generic.pxi":917
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":917
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -35870,7 +35870,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/generic.pxi":922
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":922
  * 
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -35882,7 +35882,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":796
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":796
  * 
  *   #***************************************************************************************************
  *   def __mul__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -35909,7 +35909,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_34__mul__(PyObject *__pyx_v_lhs
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/generic.pxi":928
+/* "../../src/python/pyoti/cython/dense/generic.pxi":928
  * 
  *   #***************************************************************************************************
  *   def __imul__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -35940,7 +35940,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_36__imul__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__imul__", 0);
 
-  /* "../../pyoti/cython/dense/generic.pxi":940
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":940
  *     #*************************************************************************************************
  * 
  *     return lhs * rhs             # <<<<<<<<<<<<<<
@@ -35954,7 +35954,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_36__imul__(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":928
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":928
  * 
  *   #***************************************************************************************************
  *   def __imul__(lhs, rhs):             # <<<<<<<<<<<<<<
@@ -36949,7 +36949,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_7otibase_40__setstate_cython__(struct __
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":21
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":21
  *   #***************************************************************************************************
  *   # not _cinit_ to avoid creation with _new_
  *   def __init__(self, coeff_t real, coeff_t e1 = 0., coeff_t e2 = 0.,             # <<<<<<<<<<<<<<
@@ -37098,7 +37098,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2___init__(struct __pyx_obj_5pyoti_5de
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":46
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":46
  *     #*************************************************************************************************
  * 
  *     self.re = real             # <<<<<<<<<<<<<<
@@ -37107,7 +37107,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2___init__(struct __pyx_obj_5pyoti_5de
  */
   __pyx_v_self->re = __pyx_v_real;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":47
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":47
  * 
  *     self.re = real
  *     self.e1 = e1             # <<<<<<<<<<<<<<
@@ -37116,7 +37116,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2___init__(struct __pyx_obj_5pyoti_5de
  */
   __pyx_v_self->e1 = __pyx_v_e1;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":48
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":48
  *     self.re = real
  *     self.e1 = e1
  *     self.e2 = e2             # <<<<<<<<<<<<<<
@@ -37125,7 +37125,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2___init__(struct __pyx_obj_5pyoti_5de
  */
   __pyx_v_self->e2 = __pyx_v_e2;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":49
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":49
  *     self.e1 = e1
  *     self.e2 = e2
  *     self.e11 = e11             # <<<<<<<<<<<<<<
@@ -37134,7 +37134,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2___init__(struct __pyx_obj_5pyoti_5de
  */
   __pyx_v_self->e11 = __pyx_v_e11;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":50
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":50
  *     self.e2 = e2
  *     self.e11 = e11
  *     self.e12 = e12             # <<<<<<<<<<<<<<
@@ -37143,7 +37143,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2___init__(struct __pyx_obj_5pyoti_5de
  */
   __pyx_v_self->e12 = __pyx_v_e12;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":51
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":51
  *     self.e11 = e11
  *     self.e12 = e12
  *     self.e22 = e22             # <<<<<<<<<<<<<<
@@ -37152,7 +37152,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2___init__(struct __pyx_obj_5pyoti_5de
  */
   __pyx_v_self->e22 = __pyx_v_e22;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":21
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":21
  *   #***************************************************************************************************
  *   # not _cinit_ to avoid creation with _new_
  *   def __init__(self, coeff_t real, coeff_t e1 = 0., coeff_t e2 = 0.,             # <<<<<<<<<<<<<<
@@ -37166,7 +37166,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2___init__(struct __pyx_obj_5pyoti_5de
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":57
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":57
  *   #***************************************************************************************************
  *   @property
  *   def  ndir(self):             # <<<<<<<<<<<<<<
@@ -37192,7 +37192,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_4ndir___get__(CYTHON_UNUSED st
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":63
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":63
  *     #*************************************************************************************************
  * 
  *     return 6             # <<<<<<<<<<<<<<
@@ -37204,7 +37204,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_4ndir___get__(CYTHON_UNUSED st
   __pyx_r = __pyx_int_6;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":57
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":57
  *   #***************************************************************************************************
  *   @property
  *   def  ndir(self):             # <<<<<<<<<<<<<<
@@ -37219,7 +37219,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_4ndir___get__(CYTHON_UNUSED st
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":69
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":69
  *   #***************************************************************************************************
  *   @property
  *   def nbases(self):             # <<<<<<<<<<<<<<
@@ -37245,7 +37245,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6nbases___get__(CYTHON_UNUSED 
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":75
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":75
  *     #*************************************************************************************************
  * 
  *     return 2             # <<<<<<<<<<<<<<
@@ -37257,7 +37257,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6nbases___get__(CYTHON_UNUSED 
   __pyx_r = __pyx_int_2;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":69
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":69
  *   #***************************************************************************************************
  *   @property
  *   def nbases(self):             # <<<<<<<<<<<<<<
@@ -37272,7 +37272,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6nbases___get__(CYTHON_UNUSED 
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":82
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":82
  *   #***************************************************************************************************
  *   @property
  *   def  order(self):             # <<<<<<<<<<<<<<
@@ -37298,7 +37298,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_5order___get__(CYTHON_UNUSED s
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":91
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":91
  *     #*************************************************************************************************
  * 
  *     return 2             # <<<<<<<<<<<<<<
@@ -37310,7 +37310,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_5order___get__(CYTHON_UNUSED s
   __pyx_r = __pyx_int_2;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":82
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":82
  *   #***************************************************************************************************
  *   @property
  *   def  order(self):             # <<<<<<<<<<<<<<
@@ -37325,7 +37325,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_5order___get__(CYTHON_UNUSED s
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":96
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":96
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -37358,7 +37358,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_2__repr__(struct __pyx_obj_5py
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__repr__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":105
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":105
  * 
  * 
  *     return self.__str__()             # <<<<<<<<<<<<<<
@@ -37387,7 +37387,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_2__repr__(struct __pyx_obj_5py
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":96
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":96
  * 
  *   #***************************************************************************************************
  *   def __repr__(self):             # <<<<<<<<<<<<<<
@@ -37408,7 +37408,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_2__repr__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":110
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":110
  * 
  *   #***************************************************************************************************
  *   def short_repr(self):             # <<<<<<<<<<<<<<
@@ -37441,7 +37441,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_4short_repr(struct __pyx_obj_5
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("short_repr", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":120
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":120
  *     global dhl
  * 
  *     head      = 'oti_n2m2('             # <<<<<<<<<<<<<<
@@ -37451,7 +37451,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_4short_repr(struct __pyx_obj_5
   __Pyx_INCREF(__pyx_kp_s_oti_n2m2);
   __pyx_v_head = __pyx_kp_s_oti_n2m2;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":121
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":121
  * 
  *     head      = 'oti_n2m2('
  *     body      = ''             # <<<<<<<<<<<<<<
@@ -37461,7 +37461,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_4short_repr(struct __pyx_obj_5
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_body = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":122
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":122
  *     head      = 'oti_n2m2('
  *     body      = ''
  *     tail = str(self.re)+", ndir: "+str(self.ndir)+', order: '+str(self.order)+')'             # <<<<<<<<<<<<<<
@@ -37503,7 +37503,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_4short_repr(struct __pyx_obj_5
   __pyx_v_tail = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":124
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":124
  *     tail = str(self.re)+", ndir: "+str(self.ndir)+', order: '+str(self.order)+')'
  * 
  *     return (head + body + tail)             # <<<<<<<<<<<<<<
@@ -37520,7 +37520,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_4short_repr(struct __pyx_obj_5
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":110
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":110
  * 
  *   #***************************************************************************************************
  *   def short_repr(self):             # <<<<<<<<<<<<<<
@@ -37544,7 +37544,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_4short_repr(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":129
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":129
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -37579,7 +37579,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("__str__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":137
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":137
  *     #*************************************************************************************************
  * 
  *     head      = ''             # <<<<<<<<<<<<<<
@@ -37589,7 +37589,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_head = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":138
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":138
  * 
  *     head      = ''
  *     body      = ''             # <<<<<<<<<<<<<<
@@ -37599,7 +37599,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_body = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":141
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":141
  * 
  *     # Real
  *     body += '%g'%self.re+' '             # <<<<<<<<<<<<<<
@@ -37620,7 +37620,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":144
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":144
  * 
  *     # Order 1
  *     body += '%+g'%self.e1 +' * e([1]) '             # <<<<<<<<<<<<<<
@@ -37641,7 +37641,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":145
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":145
  *     # Order 1
  *     body += '%+g'%self.e1 +' * e([1]) '
  *     body += '%+g'%self.e2 +' * e([2]) '             # <<<<<<<<<<<<<<
@@ -37662,7 +37662,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":148
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":148
  * 
  *     # Order 2
  *     body += '%+g'%self.e11 +' * e([[1,2]]) '             # <<<<<<<<<<<<<<
@@ -37683,7 +37683,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":149
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":149
  *     # Order 2
  *     body += '%+g'%self.e11 +' * e([[1,2]]) '
  *     body += '%+g'%self.e12 +' * e([1,2]) '             # <<<<<<<<<<<<<<
@@ -37704,7 +37704,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":150
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":150
  *     body += '%+g'%self.e11 +' * e([[1,2]]) '
  *     body += '%+g'%self.e12 +' * e([1,2]) '
  *     body += '%+g'%self.e22 +' * e([[2,2]]) '             # <<<<<<<<<<<<<<
@@ -37725,7 +37725,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __Pyx_DECREF_SET(__pyx_v_body, __pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":152
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":152
  *     body += '%+g'%self.e22 +' * e([[2,2]]) '
  * 
  *     tail = ''             # <<<<<<<<<<<<<<
@@ -37735,7 +37735,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __Pyx_INCREF(__pyx_kp_s__2);
   __pyx_v_tail = __pyx_kp_s__2;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":154
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":154
  *     tail = ''
  * 
  *     return (head + body + tail)             # <<<<<<<<<<<<<<
@@ -37752,7 +37752,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":129
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":129
  * 
  *   #***************************************************************************************************
  *   def __str__(self):             # <<<<<<<<<<<<<<
@@ -37775,7 +37775,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_6__str__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":161
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":161
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self, list item):             # <<<<<<<<<<<<<<
@@ -37818,7 +37818,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
   int __pyx_t_5;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":168
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":168
  * 
  * 
  *     cdef imdir_t idx = item[ZERO]             # <<<<<<<<<<<<<<
@@ -37835,7 +37835,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_idx = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":169
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":169
  * 
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]             # <<<<<<<<<<<<<<
@@ -37852,7 +37852,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_order = __pyx_t_3;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":170
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":170
  *     cdef imdir_t idx = item[ZERO]
  *     cdef ord_t order = item[ONE]
  *     cdef coeff_t res = 0.0             # <<<<<<<<<<<<<<
@@ -37861,7 +37861,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
  */
   __pyx_v_res = 0.0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":172
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":172
  *     cdef coeff_t res = 0.0
  * 
  *     if (order == 0):             # <<<<<<<<<<<<<<
@@ -37871,7 +37871,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
   switch (__pyx_v_order) {
     case 0:
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":173
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":173
  * 
  *     if (order == 0):
  *       res = self.re             # <<<<<<<<<<<<<<
@@ -37881,7 +37881,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     __pyx_t_4 = __pyx_v_self->re;
     __pyx_v_res = __pyx_t_4;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":172
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":172
  *     cdef coeff_t res = 0.0
  * 
  *     if (order == 0):             # <<<<<<<<<<<<<<
@@ -37891,7 +37891,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     break;
     case 1:
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":175
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":175
  *       res = self.re
  *     elif (order == 1) :
  *       if item == 0:             # <<<<<<<<<<<<<<
@@ -37903,7 +37903,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_5) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":176
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":176
  *     elif (order == 1) :
  *       if item == 0:
  *         res = self.e1             # <<<<<<<<<<<<<<
@@ -37913,7 +37913,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
       __pyx_t_4 = __pyx_v_self->e1;
       __pyx_v_res = __pyx_t_4;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":175
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":175
  *       res = self.re
  *     elif (order == 1) :
  *       if item == 0:             # <<<<<<<<<<<<<<
@@ -37923,7 +37923,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
       goto __pyx_L3;
     }
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":177
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":177
  *       if item == 0:
  *         res = self.e1
  *       elif item == 1:             # <<<<<<<<<<<<<<
@@ -37935,7 +37935,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_5) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":178
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":178
  *         res = self.e1
  *       elif item == 1:
  *         res = self.e2             # <<<<<<<<<<<<<<
@@ -37945,7 +37945,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
       __pyx_t_4 = __pyx_v_self->e2;
       __pyx_v_res = __pyx_t_4;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":177
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":177
  *       if item == 0:
  *         res = self.e1
  *       elif item == 1:             # <<<<<<<<<<<<<<
@@ -37955,7 +37955,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     }
     __pyx_L3:;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":174
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":174
  *     if (order == 0):
  *       res = self.re
  *     elif (order == 1) :             # <<<<<<<<<<<<<<
@@ -37965,7 +37965,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     break;
     case 2:
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":181
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":181
  *       # end if
  *     elif (order == 2):
  *       if item == 0:             # <<<<<<<<<<<<<<
@@ -37977,7 +37977,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_5) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":182
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":182
  *     elif (order == 2):
  *       if item == 0:
  *         res = self.e11             # <<<<<<<<<<<<<<
@@ -37987,7 +37987,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
       __pyx_t_4 = __pyx_v_self->e11;
       __pyx_v_res = __pyx_t_4;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":181
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":181
  *       # end if
  *     elif (order == 2):
  *       if item == 0:             # <<<<<<<<<<<<<<
@@ -37997,7 +37997,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
       goto __pyx_L4;
     }
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":183
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":183
  *       if item == 0:
  *         res = self.e11
  *       elif item == 1:             # <<<<<<<<<<<<<<
@@ -38009,7 +38009,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_5) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":184
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":184
  *         res = self.e11
  *       elif item == 1:
  *         res = self.e12             # <<<<<<<<<<<<<<
@@ -38019,7 +38019,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
       __pyx_t_4 = __pyx_v_self->e12;
       __pyx_v_res = __pyx_t_4;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":183
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":183
  *       if item == 0:
  *         res = self.e11
  *       elif item == 1:             # <<<<<<<<<<<<<<
@@ -38029,7 +38029,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
       goto __pyx_L4;
     }
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":185
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":185
  *       elif item == 1:
  *         res = self.e12
  *       elif item == 2:             # <<<<<<<<<<<<<<
@@ -38041,7 +38041,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_5) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":186
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":186
  *         res = self.e12
  *       elif item == 2:
  *         res = self.e22             # <<<<<<<<<<<<<<
@@ -38051,7 +38051,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
       __pyx_t_4 = __pyx_v_self->e22;
       __pyx_v_res = __pyx_t_4;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":185
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":185
  *       elif item == 1:
  *         res = self.e12
  *       elif item == 2:             # <<<<<<<<<<<<<<
@@ -38061,7 +38061,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     }
     __pyx_L4:;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":180
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":180
  *         res = self.e2
  *       # end if
  *     elif (order == 2):             # <<<<<<<<<<<<<<
@@ -38072,7 +38072,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
     default: break;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":189
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":189
  *       # end if
  *     # end if
  *     return res             # <<<<<<<<<<<<<<
@@ -38086,7 +38086,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":161
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":161
  * 
  *   #***************************************************************************************************
  *   def __getitem__(self, list item):             # <<<<<<<<<<<<<<
@@ -38105,7 +38105,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_8__getitem__(struct __pyx_obj_
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":195
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":195
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, list item, coeff_t value):             # <<<<<<<<<<<<<<
@@ -38158,7 +38158,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
   int __pyx_t_4;
   __Pyx_RefNannySetupContext("__setitem__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":201
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":201
  *     """
  *     #*************************************************************************************************
  *     cdef int i = 0, j = 1             # <<<<<<<<<<<<<<
@@ -38168,7 +38168,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
   __pyx_v_i = 0;
   __pyx_v_j = 1;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":202
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":202
  *     #*************************************************************************************************
  *     cdef int i = 0, j = 1
  *     cdef imdir_t index = item[i]             # <<<<<<<<<<<<<<
@@ -38185,7 +38185,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_index = __pyx_t_2;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":203
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":203
  *     cdef int i = 0, j = 1
  *     cdef imdir_t index = item[i]
  *     cdef ord_t   order = item[j]             # <<<<<<<<<<<<<<
@@ -38202,7 +38202,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_order = __pyx_t_3;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":205
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":205
  *     cdef ord_t   order = item[j]
  * 
  *     if (order == 0):             # <<<<<<<<<<<<<<
@@ -38212,7 +38212,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
   switch (__pyx_v_order) {
     case 0:
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":206
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":206
  * 
  *     if (order == 0):
  *       self.re = value             # <<<<<<<<<<<<<<
@@ -38221,7 +38221,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
  */
     __pyx_v_self->re = __pyx_v_value;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":205
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":205
  *     cdef ord_t   order = item[j]
  * 
  *     if (order == 0):             # <<<<<<<<<<<<<<
@@ -38231,7 +38231,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     break;
     case 1:
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":208
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":208
  *       self.re = value
  *     elif (order == 1) :
  *       if item == 0:             # <<<<<<<<<<<<<<
@@ -38243,7 +38243,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_4) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":209
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":209
  *     elif (order == 1) :
  *       if item == 0:
  *         self.e1 = value             # <<<<<<<<<<<<<<
@@ -38252,7 +38252,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
  */
       __pyx_v_self->e1 = __pyx_v_value;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":208
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":208
  *       self.re = value
  *     elif (order == 1) :
  *       if item == 0:             # <<<<<<<<<<<<<<
@@ -38262,7 +38262,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
       goto __pyx_L3;
     }
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":210
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":210
  *       if item == 0:
  *         self.e1 = value
  *       elif item == 1:             # <<<<<<<<<<<<<<
@@ -38274,7 +38274,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_4) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":211
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":211
  *         self.e1 = value
  *       elif item == 1:
  *         self.e2 = value             # <<<<<<<<<<<<<<
@@ -38283,7 +38283,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
  */
       __pyx_v_self->e2 = __pyx_v_value;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":210
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":210
  *       if item == 0:
  *         self.e1 = value
  *       elif item == 1:             # <<<<<<<<<<<<<<
@@ -38293,7 +38293,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     }
     __pyx_L3:;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":207
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":207
  *     if (order == 0):
  *       self.re = value
  *     elif (order == 1) :             # <<<<<<<<<<<<<<
@@ -38303,7 +38303,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     break;
     case 2:
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":214
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":214
  *       # end if
  *     elif (order == 2):
  *       if item == 0:             # <<<<<<<<<<<<<<
@@ -38315,7 +38315,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_4) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":215
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":215
  *     elif (order == 2):
  *       if item == 0:
  *         self.e11 = value             # <<<<<<<<<<<<<<
@@ -38324,7 +38324,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
  */
       __pyx_v_self->e11 = __pyx_v_value;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":214
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":214
  *       # end if
  *     elif (order == 2):
  *       if item == 0:             # <<<<<<<<<<<<<<
@@ -38334,7 +38334,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
       goto __pyx_L4;
     }
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":216
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":216
  *       if item == 0:
  *         self.e11 = value
  *       elif item == 1:             # <<<<<<<<<<<<<<
@@ -38346,7 +38346,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_4) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":217
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":217
  *         self.e11 = value
  *       elif item == 1:
  *         self.e12 = value             # <<<<<<<<<<<<<<
@@ -38355,7 +38355,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
  */
       __pyx_v_self->e12 = __pyx_v_value;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":216
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":216
  *       if item == 0:
  *         self.e11 = value
  *       elif item == 1:             # <<<<<<<<<<<<<<
@@ -38365,7 +38365,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
       goto __pyx_L4;
     }
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":218
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":218
  *       elif item == 1:
  *         self.e12 = value
  *       elif item == 2:             # <<<<<<<<<<<<<<
@@ -38377,7 +38377,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (__pyx_t_4) {
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":219
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":219
  *         self.e12 = value
  *       elif item == 2:
  *         self.e22 = value             # <<<<<<<<<<<<<<
@@ -38386,7 +38386,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
  */
       __pyx_v_self->e22 = __pyx_v_value;
 
-      /* "../../pyoti/cython/dense/oti_n2m2.pxi":218
+      /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":218
  *       elif item == 1:
  *         self.e12 = value
  *       elif item == 2:             # <<<<<<<<<<<<<<
@@ -38396,7 +38396,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     }
     __pyx_L4:;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":213
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":213
  *         self.e2 = value
  *       # end if
  *     elif (order == 2):             # <<<<<<<<<<<<<<
@@ -38407,7 +38407,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
     default: break;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":195
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":195
  * 
  *   #***************************************************************************************************
  *   def __setitem__(self, list item, coeff_t value):             # <<<<<<<<<<<<<<
@@ -38427,7 +38427,7 @@ static int __pyx_pf_5pyoti_5dense_8oti_n2m2_10__setitem__(struct __pyx_obj_5pyot
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":230
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":230
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -38460,7 +38460,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__neg__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":243
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":243
  *     #*************************************************************************************************
  *     cdef:
  *       oti_n2m2 tmp1 = self, res = oti_n2m2(0.0)             # <<<<<<<<<<<<<<
@@ -38474,7 +38474,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
   __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":249
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":249
  * 
  * 
  *     res.re  = -tmp1.re             # <<<<<<<<<<<<<<
@@ -38483,7 +38483,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
  */
   __pyx_v_res->re = (-__pyx_v_tmp1->re);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":251
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":251
  *     res.re  = -tmp1.re
  * 
  *     res.e1  = -tmp1.e1             # <<<<<<<<<<<<<<
@@ -38492,7 +38492,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
  */
   __pyx_v_res->e1 = (-__pyx_v_tmp1->e1);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":252
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":252
  * 
  *     res.e1  = -tmp1.e1
  *     res.e2  = -tmp1.e2             # <<<<<<<<<<<<<<
@@ -38501,7 +38501,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
  */
   __pyx_v_res->e2 = (-__pyx_v_tmp1->e2);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":254
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":254
  *     res.e2  = -tmp1.e2
  * 
  *     res.e11 = -tmp1.e11             # <<<<<<<<<<<<<<
@@ -38510,7 +38510,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
  */
   __pyx_v_res->e11 = (-__pyx_v_tmp1->e11);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":255
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":255
  * 
  *     res.e11 = -tmp1.e11
  *     res.e12 = -tmp1.e12             # <<<<<<<<<<<<<<
@@ -38519,7 +38519,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
  */
   __pyx_v_res->e12 = (-__pyx_v_tmp1->e12);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":256
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":256
  *     res.e11 = -tmp1.e11
  *     res.e12 = -tmp1.e12
  *     res.e22 = -tmp1.e22             # <<<<<<<<<<<<<<
@@ -38528,7 +38528,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
  */
   __pyx_v_res->e22 = (-__pyx_v_tmp1->e22);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":259
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":259
  * 
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -38540,7 +38540,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":230
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":230
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -38561,7 +38561,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_12__neg__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":266
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":266
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other_in):             # <<<<<<<<<<<<<<
@@ -38601,7 +38601,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_5;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":284
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":284
  * 
  *     cdef:
  *       oti_n2m2 tmp1, tmp2, res = oti_n2m2(0.0)             # <<<<<<<<<<<<<<
@@ -38613,7 +38613,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":286
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":286
  *       oti_n2m2 tmp1, tmp2, res = oti_n2m2(0.0)
  * 
  *     type1 = type(self)     # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -38623,7 +38623,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_type1 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":287
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":287
  * 
  *     type1 = type(self)     # takes 100 ns ...
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -38633,7 +38633,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":293
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":293
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -38644,7 +38644,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":294
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":294
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -38657,7 +38657,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":295
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":295
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -38670,7 +38670,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":297
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":297
  *       tmp2 = other_in
  * 
  *       res.re  = tmp1.re + tmp2.re             # <<<<<<<<<<<<<<
@@ -38679,7 +38679,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
  */
     __pyx_v_res->re = (__pyx_v_tmp1->re + __pyx_v_tmp2->re);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":299
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":299
  *       res.re  = tmp1.re + tmp2.re
  * 
  *       res.e1  = tmp1.e1 + tmp2.e1             # <<<<<<<<<<<<<<
@@ -38688,7 +38688,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e1 = (__pyx_v_tmp1->e1 + __pyx_v_tmp2->e1);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":300
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":300
  * 
  *       res.e1  = tmp1.e1 + tmp2.e1
  *       res.e2  = tmp1.e2 + tmp2.e2             # <<<<<<<<<<<<<<
@@ -38697,7 +38697,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e2 = (__pyx_v_tmp1->e2 + __pyx_v_tmp2->e2);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":302
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":302
  *       res.e2  = tmp1.e2 + tmp2.e2
  * 
  *       res.e11 = tmp1.e11+ tmp2.e11             # <<<<<<<<<<<<<<
@@ -38706,7 +38706,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e11 = (__pyx_v_tmp1->e11 + __pyx_v_tmp2->e11);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":303
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":303
  * 
  *       res.e11 = tmp1.e11+ tmp2.e11
  *       res.e12 = tmp1.e12+ tmp2.e12             # <<<<<<<<<<<<<<
@@ -38715,7 +38715,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e12 = (__pyx_v_tmp1->e12 + __pyx_v_tmp2->e12);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":304
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":304
  *       res.e11 = tmp1.e11+ tmp2.e11
  *       res.e12 = tmp1.e12+ tmp2.e12
  *       res.e22 = tmp1.e22+ tmp2.e22             # <<<<<<<<<<<<<<
@@ -38724,7 +38724,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e22 = (__pyx_v_tmp1->e22 + __pyx_v_tmp2->e22);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":293
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":293
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -38734,7 +38734,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":306
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":306
  *       res.e22 = tmp1.e22+ tmp2.e22
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -38748,7 +38748,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":308
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":308
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -38761,7 +38761,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":310
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":310
  *       tmp1 = self
  * 
  *       res.re  = tmp1.re + other_in             # <<<<<<<<<<<<<<
@@ -38777,7 +38777,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->re = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":312
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":312
  *       res.re  = tmp1.re + other_in
  * 
  *       res.e1  = tmp1.e1             # <<<<<<<<<<<<<<
@@ -38787,7 +38787,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e1;
     __pyx_v_res->e1 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":313
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":313
  * 
  *       res.e1  = tmp1.e1
  *       res.e2  = tmp1.e2             # <<<<<<<<<<<<<<
@@ -38797,7 +38797,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e2;
     __pyx_v_res->e2 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":315
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":315
  *       res.e2  = tmp1.e2
  * 
  *       res.e11 = tmp1.e11             # <<<<<<<<<<<<<<
@@ -38807,7 +38807,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e11;
     __pyx_v_res->e11 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":316
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":316
  * 
  *       res.e11 = tmp1.e11
  *       res.e12 = tmp1.e12             # <<<<<<<<<<<<<<
@@ -38817,7 +38817,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e12;
     __pyx_v_res->e12 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":317
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":317
  *       res.e11 = tmp1.e11
  *       res.e12 = tmp1.e12
  *       res.e22 = tmp1.e22             # <<<<<<<<<<<<<<
@@ -38827,7 +38827,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e22;
     __pyx_v_res->e22 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":306
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":306
  *       res.e22 = tmp1.e22+ tmp2.e22
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -38837,7 +38837,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":319
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":319
  *       res.e22 = tmp1.e22
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -38851,7 +38851,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":321
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":321
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
  * 
  *       tmp1 = other_in             # <<<<<<<<<<<<<<
@@ -38864,7 +38864,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":323
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":323
  *       tmp1 = other_in
  * 
  *       res.re  = tmp1.re + self             # <<<<<<<<<<<<<<
@@ -38880,7 +38880,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_res->re = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":325
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":325
  *       res.re  = tmp1.re + self
  * 
  *       res.e1  = tmp1.e1             # <<<<<<<<<<<<<<
@@ -38890,7 +38890,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e1;
     __pyx_v_res->e1 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":326
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":326
  * 
  *       res.e1  = tmp1.e1
  *       res.e2  = tmp1.e2             # <<<<<<<<<<<<<<
@@ -38900,7 +38900,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e2;
     __pyx_v_res->e2 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":328
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":328
  *       res.e2  = tmp1.e2
  * 
  *       res.e11 = tmp1.e11             # <<<<<<<<<<<<<<
@@ -38910,7 +38910,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e11;
     __pyx_v_res->e11 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":329
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":329
  * 
  *       res.e11 = tmp1.e11
  *       res.e12 = tmp1.e12             # <<<<<<<<<<<<<<
@@ -38920,7 +38920,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e12;
     __pyx_v_res->e12 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":330
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":330
  *       res.e11 = tmp1.e11
  *       res.e12 = tmp1.e12
  *       res.e22 = tmp1.e22             # <<<<<<<<<<<<<<
@@ -38930,7 +38930,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e22;
     __pyx_v_res->e22 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":319
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":319
  *       res.e22 = tmp1.e22
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -38940,7 +38940,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":334
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":334
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -38955,7 +38955,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":339
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":339
  * 
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -38967,7 +38967,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":266
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":266
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other_in):             # <<<<<<<<<<<<<<
@@ -38992,7 +38992,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_14__add__(PyObject *__pyx_v_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":345
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":345
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other_in):             # <<<<<<<<<<<<<<
@@ -39030,7 +39030,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_5;
   __Pyx_RefNannySetupContext("__iadd__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":356
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":356
  * 
  *     cdef:
  *       oti_n2m2 tmp1, tmp2, res = self             # <<<<<<<<<<<<<<
@@ -39040,7 +39040,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __pyx_v_res = __pyx_v_self;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":358
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":358
  *       oti_n2m2 tmp1, tmp2, res = self
  * 
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -39050,7 +39050,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":364
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":364
  * 
  * 
  *     if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -39061,7 +39061,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":366
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":366
  *     if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.
  * 
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -39074,7 +39074,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":368
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":368
  *       tmp2 = other_in
  * 
  *       res.re  += tmp2.re             # <<<<<<<<<<<<<<
@@ -39083,7 +39083,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
  */
     __pyx_v_res->re = (__pyx_v_res->re + __pyx_v_tmp2->re);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":370
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":370
  *       res.re  += tmp2.re
  * 
  *       res.e1  += tmp2.e1             # <<<<<<<<<<<<<<
@@ -39092,7 +39092,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
  */
     __pyx_v_res->e1 = (__pyx_v_res->e1 + __pyx_v_tmp2->e1);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":371
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":371
  * 
  *       res.e1  += tmp2.e1
  *       res.e2  += tmp2.e2             # <<<<<<<<<<<<<<
@@ -39101,7 +39101,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
  */
     __pyx_v_res->e2 = (__pyx_v_res->e2 + __pyx_v_tmp2->e2);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":373
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":373
  *       res.e2  += tmp2.e2
  * 
  *       res.e11 += tmp2.e11             # <<<<<<<<<<<<<<
@@ -39110,7 +39110,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
  */
     __pyx_v_res->e11 = (__pyx_v_res->e11 + __pyx_v_tmp2->e11);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":374
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":374
  * 
  *       res.e11 += tmp2.e11
  *       res.e12 += tmp2.e12             # <<<<<<<<<<<<<<
@@ -39119,7 +39119,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
  */
     __pyx_v_res->e12 = (__pyx_v_res->e12 + __pyx_v_tmp2->e12);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":375
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":375
  *       res.e11 += tmp2.e11
  *       res.e12 += tmp2.e12
  *       res.e22 += tmp2.e22             # <<<<<<<<<<<<<<
@@ -39128,7 +39128,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
  */
     __pyx_v_res->e22 = (__pyx_v_res->e22 + __pyx_v_tmp2->e22);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":364
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":364
  * 
  * 
  *     if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -39138,7 +39138,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":377
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":377
  *       res.e22 += tmp2.e22
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -39152,7 +39152,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":379
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":379
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       res.re  += other_in             # <<<<<<<<<<<<<<
@@ -39168,7 +39168,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->re = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":377
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":377
  *       res.e22 += tmp2.e22
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -39178,7 +39178,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":383
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":383
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -39193,7 +39193,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":388
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":388
  * 
  * 
  *     return self             # <<<<<<<<<<<<<<
@@ -39205,7 +39205,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":345
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":345
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other_in):             # <<<<<<<<<<<<<<
@@ -39228,7 +39228,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_16__iadd__(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":393
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":393
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -39268,7 +39268,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_5;
   __Pyx_RefNannySetupContext("__sub__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":404
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":404
  * 
  *     cdef:
  *       oti_n2m2 tmp1, tmp2, res = oti_n2m2(0.0)             # <<<<<<<<<<<<<<
@@ -39280,7 +39280,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":406
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":406
  *       oti_n2m2 tmp1, tmp2, res = oti_n2m2(0.0)
  * 
  *     type1 = type(self)     # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -39290,7 +39290,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_type1 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":407
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":407
  * 
  *     type1 = type(self)     # takes 100 ns ...
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -39300,7 +39300,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":413
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":413
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -39311,7 +39311,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":414
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":414
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -39324,7 +39324,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":415
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":415
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -39337,7 +39337,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":417
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":417
  *       tmp2 = other_in
  * 
  *       res.re  = tmp1.re - tmp2.re             # <<<<<<<<<<<<<<
@@ -39346,7 +39346,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->re = (__pyx_v_tmp1->re - __pyx_v_tmp2->re);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":419
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":419
  *       res.re  = tmp1.re - tmp2.re
  * 
  *       res.e1  = tmp1.e1 - tmp2.e1             # <<<<<<<<<<<<<<
@@ -39355,7 +39355,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e1 = (__pyx_v_tmp1->e1 - __pyx_v_tmp2->e1);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":420
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":420
  * 
  *       res.e1  = tmp1.e1 - tmp2.e1
  *       res.e2  = tmp1.e2 - tmp2.e2             # <<<<<<<<<<<<<<
@@ -39364,7 +39364,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e2 = (__pyx_v_tmp1->e2 - __pyx_v_tmp2->e2);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":422
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":422
  *       res.e2  = tmp1.e2 - tmp2.e2
  * 
  *       res.e11 = tmp1.e11- tmp2.e11             # <<<<<<<<<<<<<<
@@ -39373,7 +39373,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e11 = (__pyx_v_tmp1->e11 - __pyx_v_tmp2->e11);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":423
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":423
  * 
  *       res.e11 = tmp1.e11- tmp2.e11
  *       res.e12 = tmp1.e12- tmp2.e12             # <<<<<<<<<<<<<<
@@ -39382,7 +39382,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e12 = (__pyx_v_tmp1->e12 - __pyx_v_tmp2->e12);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":424
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":424
  *       res.e11 = tmp1.e11- tmp2.e11
  *       res.e12 = tmp1.e12- tmp2.e12
  *       res.e22 = tmp1.e22- tmp2.e22             # <<<<<<<<<<<<<<
@@ -39391,7 +39391,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e22 = (__pyx_v_tmp1->e22 - __pyx_v_tmp2->e22);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":413
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":413
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -39401,7 +39401,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":426
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":426
  *       res.e22 = tmp1.e22- tmp2.e22
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -39415,7 +39415,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":428
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":428
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -39428,7 +39428,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":430
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":430
  *       tmp1 = self
  * 
  *       res.re  = tmp1.re - other_in             # <<<<<<<<<<<<<<
@@ -39444,7 +39444,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->re = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":432
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":432
  *       res.re  = tmp1.re - other_in
  * 
  *       res.e1  = tmp1.e1             # <<<<<<<<<<<<<<
@@ -39454,7 +39454,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e1;
     __pyx_v_res->e1 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":433
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":433
  * 
  *       res.e1  = tmp1.e1
  *       res.e2  = tmp1.e2             # <<<<<<<<<<<<<<
@@ -39464,7 +39464,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e2;
     __pyx_v_res->e2 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":435
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":435
  *       res.e2  = tmp1.e2
  * 
  *       res.e11 = tmp1.e11             # <<<<<<<<<<<<<<
@@ -39474,7 +39474,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e11;
     __pyx_v_res->e11 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":436
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":436
  * 
  *       res.e11 = tmp1.e11
  *       res.e12 = tmp1.e12             # <<<<<<<<<<<<<<
@@ -39484,7 +39484,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e12;
     __pyx_v_res->e12 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":437
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":437
  *       res.e11 = tmp1.e11
  *       res.e12 = tmp1.e12
  *       res.e22 = tmp1.e22             # <<<<<<<<<<<<<<
@@ -39494,7 +39494,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __pyx_t_5 = __pyx_v_tmp1->e22;
     __pyx_v_res->e22 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":426
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":426
  *       res.e22 = tmp1.e22- tmp2.e22
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -39504,7 +39504,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":439
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":439
  *       res.e22 = tmp1.e22
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -39518,7 +39518,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":441
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":441
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
  * 
  *       tmp1 = other_in             # <<<<<<<<<<<<<<
@@ -39531,7 +39531,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":443
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":443
  *       tmp1 = other_in
  * 
  *       res.re  = -tmp1.re + self             # <<<<<<<<<<<<<<
@@ -39547,7 +39547,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_res->re = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":445
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":445
  *       res.re  = -tmp1.re + self
  * 
  *       res.e1  = -tmp1.e1             # <<<<<<<<<<<<<<
@@ -39556,7 +39556,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e1 = (-__pyx_v_tmp1->e1);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":446
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":446
  * 
  *       res.e1  = -tmp1.e1
  *       res.e2  = -tmp1.e2             # <<<<<<<<<<<<<<
@@ -39565,7 +39565,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e2 = (-__pyx_v_tmp1->e2);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":448
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":448
  *       res.e2  = -tmp1.e2
  * 
  *       res.e11 = -tmp1.e11             # <<<<<<<<<<<<<<
@@ -39574,7 +39574,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e11 = (-__pyx_v_tmp1->e11);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":449
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":449
  * 
  *       res.e11 = -tmp1.e11
  *       res.e12 = -tmp1.e12             # <<<<<<<<<<<<<<
@@ -39583,7 +39583,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e12 = (-__pyx_v_tmp1->e12);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":450
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":450
  *       res.e11 = -tmp1.e11
  *       res.e12 = -tmp1.e12
  *       res.e22 = -tmp1.e22             # <<<<<<<<<<<<<<
@@ -39592,7 +39592,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e22 = (-__pyx_v_tmp1->e22);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":439
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":439
  *       res.e22 = tmp1.e22
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -39602,7 +39602,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":454
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":454
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -39617,7 +39617,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":459
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":459
  * 
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -39629,7 +39629,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":393
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":393
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -39654,7 +39654,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_18__sub__(PyObject *__pyx_v_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":466
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":466
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -39692,7 +39692,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_5;
   __Pyx_RefNannySetupContext("__isub__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":479
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":479
  * 
  *     cdef:
  *       oti_n2m2 tmp1, tmp2, res = self             # <<<<<<<<<<<<<<
@@ -39702,7 +39702,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __pyx_v_res = __pyx_v_self;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":481
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":481
  *       oti_n2m2 tmp1, tmp2, res = self
  * 
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -39712,7 +39712,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":487
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":487
  * 
  * 
  *     if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -39723,7 +39723,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":489
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":489
  *     if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.
  * 
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -39736,7 +39736,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":491
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":491
  *       tmp2 = other_in
  * 
  *       res.re  -= tmp2.re             # <<<<<<<<<<<<<<
@@ -39745,7 +39745,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
  */
     __pyx_v_res->re = (__pyx_v_res->re - __pyx_v_tmp2->re);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":493
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":493
  *       res.re  -= tmp2.re
  * 
  *       res.e1  -= tmp2.e1             # <<<<<<<<<<<<<<
@@ -39754,7 +39754,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
  */
     __pyx_v_res->e1 = (__pyx_v_res->e1 - __pyx_v_tmp2->e1);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":494
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":494
  * 
  *       res.e1  -= tmp2.e1
  *       res.e2  -= tmp2.e2             # <<<<<<<<<<<<<<
@@ -39763,7 +39763,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
  */
     __pyx_v_res->e2 = (__pyx_v_res->e2 - __pyx_v_tmp2->e2);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":496
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":496
  *       res.e2  -= tmp2.e2
  * 
  *       res.e11 -= tmp2.e11             # <<<<<<<<<<<<<<
@@ -39772,7 +39772,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
  */
     __pyx_v_res->e11 = (__pyx_v_res->e11 - __pyx_v_tmp2->e11);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":497
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":497
  * 
  *       res.e11 -= tmp2.e11
  *       res.e12 -= tmp2.e12             # <<<<<<<<<<<<<<
@@ -39781,7 +39781,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
  */
     __pyx_v_res->e12 = (__pyx_v_res->e12 - __pyx_v_tmp2->e12);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":498
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":498
  *       res.e11 -= tmp2.e11
  *       res.e12 -= tmp2.e12
  *       res.e22 -= tmp2.e22             # <<<<<<<<<<<<<<
@@ -39790,7 +39790,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
  */
     __pyx_v_res->e22 = (__pyx_v_res->e22 - __pyx_v_tmp2->e22);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":487
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":487
  * 
  * 
  *     if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -39800,7 +39800,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":500
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":500
  *       res.e22 -= tmp2.e22
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -39814,7 +39814,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":502
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":502
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       res.re  -= other_in             # <<<<<<<<<<<<<<
@@ -39830,7 +39830,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->re = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":500
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":500
  *       res.e22 -= tmp2.e22
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -39840,7 +39840,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":506
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":506
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -39855,7 +39855,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":511
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":511
  * 
  * 
  *     return self             # <<<<<<<<<<<<<<
@@ -39867,7 +39867,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":466
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":466
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -39890,7 +39890,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_20__isub__(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":517
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":517
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -39930,7 +39930,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_5;
   __Pyx_RefNannySetupContext("__mul__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":530
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":530
  * 
  *     cdef:
  *       oti_n2m2 tmp1, tmp2, res = oti_n2m2(0.0)             # <<<<<<<<<<<<<<
@@ -39942,7 +39942,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   __pyx_v_res = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":532
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":532
  *       oti_n2m2 tmp1, tmp2, res = oti_n2m2(0.0)
  * 
  *     type1 = type(self)     # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -39952,7 +39952,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_type1 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":533
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":533
  * 
  *     type1 = type(self)     # takes 100 ns ...
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -39962,7 +39962,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":539
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":539
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -39973,7 +39973,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":540
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":540
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -39986,7 +39986,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":541
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":541
  *     if ( type1 is type2) : # Case Sum between OTIs.
  *       tmp1 = self
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -39999,7 +39999,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":543
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":543
  *       tmp2 = other_in
  * 
  *       res.re  = tmp1.re * tmp2.re             # <<<<<<<<<<<<<<
@@ -40008,7 +40008,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
  */
     __pyx_v_res->re = (__pyx_v_tmp1->re * __pyx_v_tmp2->re);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":545
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":545
  *       res.re  = tmp1.re * tmp2.re
  * 
  *       res.e1  = tmp1.e1*tmp2.re + tmp1.re * tmp2.e1             # <<<<<<<<<<<<<<
@@ -40017,7 +40017,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e1 = ((__pyx_v_tmp1->e1 * __pyx_v_tmp2->re) + (__pyx_v_tmp1->re * __pyx_v_tmp2->e1));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":546
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":546
  * 
  *       res.e1  = tmp1.e1*tmp2.re + tmp1.re * tmp2.e1
  *       res.e2  = tmp1.e2*tmp2.re + tmp1.re * tmp2.e2             # <<<<<<<<<<<<<<
@@ -40026,7 +40026,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e2 = ((__pyx_v_tmp1->e2 * __pyx_v_tmp2->re) + (__pyx_v_tmp1->re * __pyx_v_tmp2->e2));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":548
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":548
  *       res.e2  = tmp1.e2*tmp2.re + tmp1.re * tmp2.e2
  * 
  *       res.e11 = tmp1.e11*tmp2.re+ tmp1.re*tmp2.e11 + tmp1.e1*tmp2.e1             # <<<<<<<<<<<<<<
@@ -40035,7 +40035,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e11 = (((__pyx_v_tmp1->e11 * __pyx_v_tmp2->re) + (__pyx_v_tmp1->re * __pyx_v_tmp2->e11)) + (__pyx_v_tmp1->e1 * __pyx_v_tmp2->e1));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":549
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":549
  * 
  *       res.e11 = tmp1.e11*tmp2.re+ tmp1.re*tmp2.e11 + tmp1.e1*tmp2.e1
  *       res.e12 = tmp1.e12*tmp2.re+ tmp1.re*tmp2.e12 + tmp1.e1*tmp2.e2 + tmp1.e2*tmp2.e1             # <<<<<<<<<<<<<<
@@ -40044,7 +40044,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e12 = ((((__pyx_v_tmp1->e12 * __pyx_v_tmp2->re) + (__pyx_v_tmp1->re * __pyx_v_tmp2->e12)) + (__pyx_v_tmp1->e1 * __pyx_v_tmp2->e2)) + (__pyx_v_tmp1->e2 * __pyx_v_tmp2->e1));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":550
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":550
  *       res.e11 = tmp1.e11*tmp2.re+ tmp1.re*tmp2.e11 + tmp1.e1*tmp2.e1
  *       res.e12 = tmp1.e12*tmp2.re+ tmp1.re*tmp2.e12 + tmp1.e1*tmp2.e2 + tmp1.e2*tmp2.e1
  *       res.e22 = tmp1.e22*tmp2.re+ tmp1.re*tmp2.e22 + tmp1.e2*tmp2.e2             # <<<<<<<<<<<<<<
@@ -40053,7 +40053,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
  */
     __pyx_v_res->e22 = (((__pyx_v_tmp1->e22 * __pyx_v_tmp2->re) + (__pyx_v_tmp1->re * __pyx_v_tmp2->e22)) + (__pyx_v_tmp1->e2 * __pyx_v_tmp2->e2));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":539
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":539
  * 
  * 
  *     if ( type1 is type2) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -40063,7 +40063,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":552
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":552
  *       res.e22 = tmp1.e22*tmp2.re+ tmp1.re*tmp2.e22 + tmp1.e2*tmp2.e2
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -40077,7 +40077,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":554
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":554
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       tmp1 = self             # <<<<<<<<<<<<<<
@@ -40090,7 +40090,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":556
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":556
  *       tmp1 = self
  * 
  *       res.re  = tmp1.re*other_in             # <<<<<<<<<<<<<<
@@ -40106,7 +40106,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->re = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":558
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":558
  *       res.re  = tmp1.re*other_in
  * 
  *       res.e1  = tmp1.e1*other_in             # <<<<<<<<<<<<<<
@@ -40122,7 +40122,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_res->e1 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":559
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":559
  * 
  *       res.e1  = tmp1.e1*other_in
  *       res.e2  = tmp1.e2*other_in             # <<<<<<<<<<<<<<
@@ -40138,7 +40138,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->e2 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":561
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":561
  *       res.e2  = tmp1.e2*other_in
  * 
  *       res.e11 = tmp1.e11*other_in             # <<<<<<<<<<<<<<
@@ -40154,7 +40154,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_res->e11 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":562
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":562
  * 
  *       res.e11 = tmp1.e11*other_in
  *       res.e12 = tmp1.e12*other_in             # <<<<<<<<<<<<<<
@@ -40170,7 +40170,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->e12 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":563
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":563
  *       res.e11 = tmp1.e11*other_in
  *       res.e12 = tmp1.e12*other_in
  *       res.e22 = tmp1.e22*other_in             # <<<<<<<<<<<<<<
@@ -40186,7 +40186,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_res->e22 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":552
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":552
  *       res.e22 = tmp1.e22*tmp2.re+ tmp1.re*tmp2.e22 + tmp1.e2*tmp2.e2
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -40196,7 +40196,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":565
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":565
  *       res.e22 = tmp1.e22*other_in
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -40210,7 +40210,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":567
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":567
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.
  * 
  *       tmp1 = other_in             # <<<<<<<<<<<<<<
@@ -40223,7 +40223,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __pyx_v_tmp1 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":569
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":569
  *       tmp1 = other_in
  * 
  *       res.re  = tmp1.re*self             # <<<<<<<<<<<<<<
@@ -40239,7 +40239,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->re = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":571
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":571
  *       res.re  = tmp1.re*self
  * 
  *       res.e1  = tmp1.e1*self             # <<<<<<<<<<<<<<
@@ -40255,7 +40255,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_res->e1 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":572
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":572
  * 
  *       res.e1  = tmp1.e1*self
  *       res.e2  = tmp1.e2*self             # <<<<<<<<<<<<<<
@@ -40271,7 +40271,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->e2 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":574
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":574
  *       res.e2  = tmp1.e2*self
  * 
  *       res.e11 = tmp1.e11*self             # <<<<<<<<<<<<<<
@@ -40287,7 +40287,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_res->e11 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":575
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":575
  * 
  *       res.e11 = tmp1.e11*self
  *       res.e12 = tmp1.e12*self             # <<<<<<<<<<<<<<
@@ -40303,7 +40303,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->e12 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":576
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":576
  *       res.e11 = tmp1.e11*self
  *       res.e12 = tmp1.e12*self
  *       res.e22 = tmp1.e22*self             # <<<<<<<<<<<<<<
@@ -40319,7 +40319,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_res->e22 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":565
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":565
  *       res.e22 = tmp1.e22*other_in
  * 
  *     elif (type1 in number_types): # Case 1.5. reverse Sum to real number.             # <<<<<<<<<<<<<<
@@ -40329,7 +40329,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":580
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":580
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -40344,7 +40344,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":585
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":585
  * 
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -40356,7 +40356,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":517
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":517
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -40381,7 +40381,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_22__mul__(PyObject *__pyx_v_se
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":591
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":591
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -40419,7 +40419,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_5;
   __Pyx_RefNannySetupContext("__imul__", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":604
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":604
  * 
  *     cdef:
  *       oti_n2m2 tmp1, tmp2, res = self             # <<<<<<<<<<<<<<
@@ -40429,7 +40429,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __pyx_v_res = __pyx_v_self;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":606
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":606
  *       oti_n2m2 tmp1, tmp2, res = self
  * 
  *     type2 = type(other_in) # takes 100 ns ...             # <<<<<<<<<<<<<<
@@ -40439,7 +40439,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other_in)));
   __pyx_v_type2 = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other_in)));
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":612
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":612
  * 
  * 
  *     if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -40450,7 +40450,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":614
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":614
  *     if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.
  * 
  *       tmp2 = other_in             # <<<<<<<<<<<<<<
@@ -40463,7 +40463,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
     __pyx_v_tmp2 = ((struct __pyx_obj_5pyoti_5dense_oti_n2m2 *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":616
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":616
  *       tmp2 = other_in
  * 
  *       res.re  *= tmp2.re             # <<<<<<<<<<<<<<
@@ -40472,7 +40472,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
  */
     __pyx_v_res->re = (__pyx_v_res->re * __pyx_v_tmp2->re);
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":618
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":618
  *       res.re  *= tmp2.re
  * 
  *       res.e1  = res.e1*tmp2.re + res.re * tmp2.e1             # <<<<<<<<<<<<<<
@@ -40481,7 +40481,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
  */
     __pyx_v_res->e1 = ((__pyx_v_res->e1 * __pyx_v_tmp2->re) + (__pyx_v_res->re * __pyx_v_tmp2->e1));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":619
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":619
  * 
  *       res.e1  = res.e1*tmp2.re + res.re * tmp2.e1
  *       res.e2  = res.e2*tmp2.re + res.re * tmp2.e2             # <<<<<<<<<<<<<<
@@ -40490,7 +40490,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
  */
     __pyx_v_res->e2 = ((__pyx_v_res->e2 * __pyx_v_tmp2->re) + (__pyx_v_res->re * __pyx_v_tmp2->e2));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":621
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":621
  *       res.e2  = res.e2*tmp2.re + res.re * tmp2.e2
  * 
  *       res.e11 = res.e11*tmp2.re+ res.re*tmp2.e11 + res.e1*tmp2.e1             # <<<<<<<<<<<<<<
@@ -40499,7 +40499,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
  */
     __pyx_v_res->e11 = (((__pyx_v_res->e11 * __pyx_v_tmp2->re) + (__pyx_v_res->re * __pyx_v_tmp2->e11)) + (__pyx_v_res->e1 * __pyx_v_tmp2->e1));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":622
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":622
  * 
  *       res.e11 = res.e11*tmp2.re+ res.re*tmp2.e11 + res.e1*tmp2.e1
  *       res.e12 = res.e12*tmp2.re+ res.re*tmp2.e12 + res.e1*tmp2.e2 + res.e2*tmp2.e1             # <<<<<<<<<<<<<<
@@ -40508,7 +40508,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
  */
     __pyx_v_res->e12 = ((((__pyx_v_res->e12 * __pyx_v_tmp2->re) + (__pyx_v_res->re * __pyx_v_tmp2->e12)) + (__pyx_v_res->e1 * __pyx_v_tmp2->e2)) + (__pyx_v_res->e2 * __pyx_v_tmp2->e1));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":623
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":623
  *       res.e11 = res.e11*tmp2.re+ res.re*tmp2.e11 + res.e1*tmp2.e1
  *       res.e12 = res.e12*tmp2.re+ res.re*tmp2.e12 + res.e1*tmp2.e2 + res.e2*tmp2.e1
  *       res.e22 = res.e22*tmp2.re+ res.re*tmp2.e22 + res.e2*tmp2.e2             # <<<<<<<<<<<<<<
@@ -40517,7 +40517,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
  */
     __pyx_v_res->e22 = (((__pyx_v_res->e22 * __pyx_v_tmp2->re) + (__pyx_v_res->re * __pyx_v_tmp2->e22)) + (__pyx_v_res->e2 * __pyx_v_tmp2->e2));
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":612
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":612
  * 
  * 
  *     if ( type2 is oti_n2m2 ) : # Case Sum between OTIs.             # <<<<<<<<<<<<<<
@@ -40527,7 +40527,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":625
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":625
  *       res.e22 = res.e22*tmp2.re+ res.re*tmp2.e22 + res.e2*tmp2.e2
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -40541,7 +40541,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
   __pyx_t_1 = (__pyx_t_2 != 0);
   if (__pyx_t_1) {
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":627
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":627
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...
  * 
  *       res.re  *= other_in             # <<<<<<<<<<<<<<
@@ -40557,7 +40557,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->re = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":629
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":629
  *       res.re  *= other_in
  * 
  *       res.e1  *= other_in             # <<<<<<<<<<<<<<
@@ -40573,7 +40573,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_res->e1 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":630
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":630
  * 
  *       res.e1  *= other_in
  *       res.e2  *= other_in             # <<<<<<<<<<<<<<
@@ -40589,7 +40589,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->e2 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":632
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":632
  *       res.e2  *= other_in
  * 
  *       res.e11 *= other_in             # <<<<<<<<<<<<<<
@@ -40605,7 +40605,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_res->e11 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":633
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":633
  * 
  *       res.e11 *= other_in
  *       res.e12 *= other_in             # <<<<<<<<<<<<<<
@@ -40621,7 +40621,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __pyx_v_res->e12 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":634
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":634
  *       res.e11 *= other_in
  *       res.e12 *= other_in
  *       res.e22 *= other_in             # <<<<<<<<<<<<<<
@@ -40637,7 +40637,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_res->e22 = __pyx_t_5;
 
-    /* "../../pyoti/cython/dense/oti_n2m2.pxi":625
+    /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":625
  *       res.e22 = res.e22*tmp2.re+ res.re*tmp2.e22 + res.e2*tmp2.e2
  * 
  *     elif (type2 in number_types): # Case Sum to real number. Very slow, consider changing this...             # <<<<<<<<<<<<<<
@@ -40647,7 +40647,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
     goto __pyx_L3;
   }
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":638
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":638
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -40662,7 +40662,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
   }
   __pyx_L3:;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":643
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":643
  * 
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -40674,7 +40674,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
   __pyx_r = ((PyObject *)__pyx_v_res);
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":591
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":591
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -40697,7 +40697,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_24__imul__(struct __pyx_obj_5p
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":649
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":649
  * 
  *   #***************************************************************************************************
  *   def __truediv__(self, other_in):             # <<<<<<<<<<<<<<
@@ -40734,7 +40734,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_26__truediv__(CYTHON_UNUSED Py
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":665
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":665
  * 
  *   #***************************************************************************************************
  *   def __pow__(self, n,z):             # <<<<<<<<<<<<<<
@@ -40771,7 +40771,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_28__pow__(CYTHON_UNUSED PyObje
   return __pyx_r;
 }
 
-/* "../../pyoti/cython/dense/oti_n2m2.pxi":677
+/* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":677
  * 
  *   #***************************************************************************************************
  *   def copy(self):             # <<<<<<<<<<<<<<
@@ -40801,7 +40801,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_30copy(struct __pyx_obj_5pyoti
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("copy", 0);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":687
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":687
  *     """
  *     #*************************************************************************************************
  *     return oti_n2m2(self.re, e1=self.e1, e2=self.e2, e11=self.e11, e12=self.e12, e22=self.e22)             # <<<<<<<<<<<<<<
@@ -40846,7 +40846,7 @@ static PyObject *__pyx_pf_5pyoti_5dense_8oti_n2m2_30copy(struct __pyx_obj_5pyoti
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":677
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":677
  * 
  *   #***************************************************************************************************
  *   def copy(self):             # <<<<<<<<<<<<<<
@@ -46506,9 +46506,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_Try_0_CSR_matrix_or_1_COO_matri, __pyx_k_Try_0_CSR_matrix_or_1_COO_matri, sizeof(__pyx_k_Try_0_CSR_matrix_or_1_COO_matri), 0, 0, 1, 0},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_kp_s_Unknown_spr_type, __pyx_k_Unknown_spr_type, sizeof(__pyx_k_Unknown_spr_type), 0, 0, 1, 0},
-  {&__pyx_kp_s_Users_maristi7_coding_otilib_py, __pyx_k_Users_maristi7_coding_otilib_py, sizeof(__pyx_k_Users_maristi7_coding_otilib_py), 0, 0, 1, 0},
-  {&__pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_k_Users_maristi7_coding_otilib_py_2, sizeof(__pyx_k_Users_maristi7_coding_otilib_py_2), 0, 0, 1, 0},
-  {&__pyx_kp_s_Users_maristi7_coding_otilib_py_3, __pyx_k_Users_maristi7_coding_otilib_py_3, sizeof(__pyx_k_Users_maristi7_coding_otilib_py_3), 0, 0, 1, 0},
+  {&__pyx_kp_s_Users_maristi7_coding_otilib_sr, __pyx_k_Users_maristi7_coding_otilib_sr, sizeof(__pyx_k_Users_maristi7_coding_otilib_sr), 0, 0, 1, 0},
+  {&__pyx_kp_s_Users_maristi7_coding_otilib_sr_2, __pyx_k_Users_maristi7_coding_otilib_sr_2, sizeof(__pyx_k_Users_maristi7_coding_otilib_sr_2), 0, 0, 1, 0},
+  {&__pyx_kp_s_Users_maristi7_coding_otilib_sr_3, __pyx_k_Users_maristi7_coding_otilib_sr_3, sizeof(__pyx_k_Users_maristi7_coding_otilib_sr_3), 0, 0, 1, 0},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
   {&__pyx_kp_s__12, __pyx_k__12, sizeof(__pyx_k__12), 0, 0, 1, 0},
   {&__pyx_kp_s__13, __pyx_k__13, sizeof(__pyx_k__13), 0, 0, 1, 0},
@@ -46767,7 +46767,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "../../pyoti/cython/dense/num.pxi":267
+  /* "../../src/python/pyoti/cython/dense/num.pxi":267
  * 
  *         num = '%+g'%self.num.p_im[ordi][i]
  *         body += ' '+num[0]+" "+num[1:]             # <<<<<<<<<<<<<<
@@ -46778,7 +46778,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_slice__5);
   __Pyx_GIVEREF(__pyx_slice__5);
 
-  /* "../../pyoti/cython/dense/num.pxi":270
+  /* "../../src/python/pyoti/cython/dense/num.pxi":270
  *         body += ' * e('
  * 
  *         body += str(h.get_compact_fulldir(i,ordi+1)).replace(' ','')             # <<<<<<<<<<<<<<
@@ -46789,7 +46789,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
-  /* "../../pyoti/cython/dense/num.pxi":720
+  /* "../../src/python/pyoti/cython/dense/num.pxi":720
  *         if order == 0:
  * 
  *           res = np.empty((1,),dtype=np.float64)             # <<<<<<<<<<<<<<
@@ -46822,7 +46822,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__10);
   __Pyx_GIVEREF(__pyx_tuple__10);
 
-  /* "../../pyoti/cython/dense/array.pxi":53
+  /* "../../src/python/pyoti/cython/dense/array.pxi":53
  *       if ndim >=3:
  * 
  *         raise ValueError("Only 1D and 2D arrays are supported.")             # <<<<<<<<<<<<<<
@@ -46833,7 +46833,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__11);
   __Pyx_GIVEREF(__pyx_tuple__11);
 
-  /* "../../pyoti/cython/dense/array.pxi":868
+  /* "../../src/python/pyoti/cython/dense/array.pxi":868
  *     if (arr.shape[0] != self.arr.nrows or arr.shape[1] != self.arr.ncols):
  * 
  *       raise IndexError("Dimension mismatch in set_imdir() method.")             # <<<<<<<<<<<<<<
@@ -46863,7 +46863,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__18);
   __Pyx_GIVEREF(__pyx_tuple__18);
 
-  /* "../../pyoti/cython/dense/array.pxi":1129
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1129
  * 
  *     # Get the imaginary direation from the OTI rhs
  *     tmp_rhs[:,:] = b.get_imdir( row_idx[ZERO], row_ord[ZERO], copy=False )             # <<<<<<<<<<<<<<
@@ -46896,7 +46896,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__32);
   __Pyx_GIVEREF(__pyx_tuple__32);
 
-  /* "../../pyoti/cython/dense/oti_n2m2.pxi":243
+  /* "../../src/python/pyoti/cython/dense/oti_n2m2.pxi":243
  *     #*************************************************************************************************
  *     cdef:
  *       oti_n2m2 tmp1 = self, res = oti_n2m2(0.0)             # <<<<<<<<<<<<<<
@@ -46984,7 +46984,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__43);
   __Pyx_GIVEREF(__pyx_tuple__43);
 
-  /* "../../pyoti/cython/dense/array.pxi":1051
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1051
  * 
  * #*****************************************************************************************************
  * def solve(omat A, omat b):             # <<<<<<<<<<<<<<
@@ -46994,9 +46994,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__44 = PyTuple_Pack(28, __pyx_n_s_A, __pyx_n_s_b, __pyx_n_s_coo_matrix, __pyx_n_s_lu_factor, __pyx_n_s_lu_solve, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_k, __pyx_n_s_res, __pyx_n_s_tmp, __pyx_n_s_tmp_rhs, __pyx_n_s_tmp_dot, __pyx_n_s_matform, __pyx_n_s_rows, __pyx_n_s_cols, __pyx_n_s_idx_coo, __pyx_n_s_ord_coo, __pyx_n_s_maxorder, __pyx_n_s_maxnbases, __pyx_n_s_indices, __pyx_n_s_dummy_mat, __pyx_n_s_first_col_indices, __pyx_n_s_vec_form_idx, __pyx_n_s_vec_form_ord, __pyx_n_s_factorization, __pyx_n_s_row_indices, __pyx_n_s_row_idx, __pyx_n_s_row_ord); if (unlikely(!__pyx_tuple__44)) __PYX_ERR(3, 1051, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__44);
   __Pyx_GIVEREF(__pyx_tuple__44);
-  __pyx_codeobj__45 = (PyObject*)__Pyx_PyCode_New(2, 0, 28, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__44, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py, __pyx_n_s_solve, 1051, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__45)) __PYX_ERR(3, 1051, __pyx_L1_error)
+  __pyx_codeobj__45 = (PyObject*)__Pyx_PyCode_New(2, 0, 28, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__44, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_sr, __pyx_n_s_solve, 1051, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__45)) __PYX_ERR(3, 1051, __pyx_L1_error)
 
-  /* "../../pyoti/cython/dense/array.pxi":1175
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1175
  * 
  * #*****************************************************************************************************
  * def solve_latex(bases_t nbases, ord_t order, real = 're'):             # <<<<<<<<<<<<<<
@@ -47006,9 +47006,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__46 = PyTuple_Pack(19, __pyx_n_s_nbases, __pyx_n_s_order, __pyx_n_s_real, __pyx_n_s_coo_matrix, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_k, __pyx_n_s_matform, __pyx_n_s_rows, __pyx_n_s_cols, __pyx_n_s_idx_coo, __pyx_n_s_ord_coo, __pyx_n_s_indices, __pyx_n_s_dummy_mat, __pyx_n_s_first_col_indices, __pyx_n_s_string, __pyx_n_s_row_indices, __pyx_n_s_row_idx, __pyx_n_s_row_ord); if (unlikely(!__pyx_tuple__46)) __PYX_ERR(3, 1175, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__46);
   __Pyx_GIVEREF(__pyx_tuple__46);
-  __pyx_codeobj__47 = (PyObject*)__Pyx_PyCode_New(3, 0, 19, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__46, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py, __pyx_n_s_solve_latex, 1175, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__47)) __PYX_ERR(3, 1175, __pyx_L1_error)
+  __pyx_codeobj__47 = (PyObject*)__Pyx_PyCode_New(3, 0, 19, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__46, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_sr, __pyx_n_s_solve_latex, 1175, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__47)) __PYX_ERR(3, 1175, __pyx_L1_error)
 
-  /* "../../pyoti/cython/dense/utils.pxi":12
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":12
  * 
  * #*****************************************************************************************************
  * def e( hum_dir ,ord_t order = 0,bases_t nbases = 0):             # <<<<<<<<<<<<<<
@@ -47018,9 +47018,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__48 = PyTuple_Pack(7, __pyx_n_s_hum_dir, __pyx_n_s_order, __pyx_n_s_nbases, __pyx_n_s_indx_hd, __pyx_n_s_order_hd, __pyx_n_s_bases_hd, __pyx_n_s_res); if (unlikely(!__pyx_tuple__48)) __PYX_ERR(4, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__48);
   __Pyx_GIVEREF(__pyx_tuple__48);
-  __pyx_codeobj__49 = (PyObject*)__Pyx_PyCode_New(3, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__48, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_2, __pyx_n_s_e_3, 12, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__49)) __PYX_ERR(4, 12, __pyx_L1_error)
+  __pyx_codeobj__49 = (PyObject*)__Pyx_PyCode_New(3, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__48, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_sr_2, __pyx_n_s_e_3, 12, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__49)) __PYX_ERR(4, 12, __pyx_L1_error)
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":872
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":872
  * 
  * #*****************************************************************************************************
  * def spsolve(spr_omat A, omat b, solver='LU'):             # <<<<<<<<<<<<<<
@@ -47030,9 +47030,9 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__50 = PyTuple_Pack(31, __pyx_n_s_A, __pyx_n_s_b, __pyx_n_s_solver, __pyx_n_s_coo_matrix, __pyx_n_s_spla, __pyx_n_s_lu_factor, __pyx_n_s_lu_solve, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_k, __pyx_n_s_res, __pyx_n_s_tmp, __pyx_n_s_tmp_rhs, __pyx_n_s_tmp_dot, __pyx_n_s_matform, __pyx_n_s_rows, __pyx_n_s_cols, __pyx_n_s_idx_coo, __pyx_n_s_ord_coo, __pyx_n_s_maxorder, __pyx_n_s_maxnbases, __pyx_n_s_indices, __pyx_n_s_dummy_mat, __pyx_n_s_first_col_indices, __pyx_n_s_vec_form_idx, __pyx_n_s_vec_form_ord, __pyx_n_s_sol, __pyx_n_s_lu, __pyx_n_s_row_indices, __pyx_n_s_row_idx, __pyx_n_s_row_ord); if (unlikely(!__pyx_tuple__50)) __PYX_ERR(6, 872, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__50);
   __Pyx_GIVEREF(__pyx_tuple__50);
-  __pyx_codeobj__51 = (PyObject*)__Pyx_PyCode_New(3, 0, 31, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__50, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_3, __pyx_n_s_spsolve, 872, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__51)) __PYX_ERR(6, 872, __pyx_L1_error)
+  __pyx_codeobj__51 = (PyObject*)__Pyx_PyCode_New(3, 0, 31, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__50, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_sr_3, __pyx_n_s_spsolve, 872, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__51)) __PYX_ERR(6, 872, __pyx_L1_error)
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1258
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1258
  * 
  * #*****************************************************************************************************
  * def helper_get_multpl(hum_dir):             # <<<<<<<<<<<<<<
@@ -47042,7 +47042,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __pyx_tuple__52 = PyTuple_Pack(10, __pyx_n_s_hum_dir, __pyx_n_s_i, __pyx_n_s_k, __pyx_n_s_Nmultpl, __pyx_n_s_passed, __pyx_n_s_multiple, __pyx_n_s_multiples, __pyx_n_s_bases, __pyx_n_s_exp, __pyx_n_s_order); if (unlikely(!__pyx_tuple__52)) __PYX_ERR(6, 1258, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__52);
   __Pyx_GIVEREF(__pyx_tuple__52);
-  __pyx_codeobj__53 = (PyObject*)__Pyx_PyCode_New(1, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__52, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_py_3, __pyx_n_s_helper_get_multpl, 1258, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__53)) __PYX_ERR(6, 1258, __pyx_L1_error)
+  __pyx_codeobj__53 = (PyObject*)__Pyx_PyCode_New(1, 0, 10, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__52, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_Users_maristi7_coding_otilib_sr_3, __pyx_n_s_helper_get_multpl, 1258, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__53)) __PYX_ERR(6, 1258, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_otibase(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
@@ -48069,7 +48069,7 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(12, 2, __pyx_L1_error)
   #endif
 
-  /* "../../pyoti/cython/dense/include.pxi":5
+  /* "../../src/python/pyoti/cython/dense/include.pxi":5
  * #-----------------------------------------------------------------------------------------------------
  * 
  * import numpy as np                  # General numerical library             # <<<<<<<<<<<<<<
@@ -48081,7 +48081,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(16, 5, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/include.pxi":12
+  /* "../../src/python/pyoti/cython/dense/include.pxi":12
  * from libc.stdlib cimport free      # import memory managment functions.
  * 
  * from pyoti.core import   number_types, dHelp, imdir # To make them available on import.             # <<<<<<<<<<<<<<
@@ -48112,7 +48112,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/include.pxi":13
+  /* "../../src/python/pyoti/cython/dense/include.pxi":13
  * 
  * from pyoti.core import   number_types, dHelp, imdir # To make them available on import.
  * from pyoti.core import   dhelp_get_matrix_form             # <<<<<<<<<<<<<<
@@ -48133,7 +48133,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/include.pxi":14
+  /* "../../src/python/pyoti/cython/dense/include.pxi":14
  * from pyoti.core import   number_types, dHelp, imdir # To make them available on import.
  * from pyoti.core import   dhelp_get_matrix_form
  * from pyoti.core import   get_latex_dir, set_trunc_order, get_trunc_order             # <<<<<<<<<<<<<<
@@ -48168,7 +48168,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "../../pyoti/cython/dense/include.pxi":24
+  /* "../../src/python/pyoti/cython/dense/include.pxi":24
  * 
  * 
  * from pyoti.real import  dmat             # <<<<<<<<<<<<<<
@@ -48185,7 +48185,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/include.pxi":34
+  /* "../../src/python/pyoti/cython/dense/include.pxi":34
  * 
  * 
  * cdef dHelp      h = get_cython_dHelp()             # <<<<<<<<<<<<<<
@@ -48198,7 +48198,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/include.pxi":35
+  /* "../../src/python/pyoti/cython/dense/include.pxi":35
  * 
  * cdef dHelp      h = get_cython_dHelp()
  * cdef dhelpl_t dhl = h.dhl             # <<<<<<<<<<<<<<
@@ -48206,7 +48206,7 @@ if (!__Pyx_RefNanny) {
   __pyx_t_3 = __pyx_v_5pyoti_5dense_h->dhl;
   __pyx_v_5pyoti_5dense_dhl = __pyx_t_3;
 
-  /* "../../pyoti/cython/dense/array.pxi":1051
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1051
  * 
  * #*****************************************************************************************************
  * def solve(omat A, omat b):             # <<<<<<<<<<<<<<
@@ -48218,7 +48218,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_solve, __pyx_t_1) < 0) __PYX_ERR(3, 1051, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/array.pxi":1175
+  /* "../../src/python/pyoti/cython/dense/array.pxi":1175
  * 
  * #*****************************************************************************************************
  * def solve_latex(bases_t nbases, ord_t order, real = 're'):             # <<<<<<<<<<<<<<
@@ -48230,7 +48230,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_solve_latex, __pyx_t_1) < 0) __PYX_ERR(3, 1175, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/utils.pxi":12
+  /* "../../src/python/pyoti/cython/dense/utils.pxi":12
  * 
  * #*****************************************************************************************************
  * def e( hum_dir ,ord_t order = 0,bases_t nbases = 0):             # <<<<<<<<<<<<<<
@@ -48242,7 +48242,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_e_3, __pyx_t_1) < 0) __PYX_ERR(4, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":872
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":872
  * 
  * #*****************************************************************************************************
  * def spsolve(spr_omat A, omat b, solver='LU'):             # <<<<<<<<<<<<<<
@@ -48254,7 +48254,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_spsolve, __pyx_t_1) < 0) __PYX_ERR(6, 872, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/sparse_array.pxi":1258
+  /* "../../src/python/pyoti/cython/dense/sparse_array.pxi":1258
  * 
  * #*****************************************************************************************************
  * def helper_get_multpl(hum_dir):             # <<<<<<<<<<<<<<
@@ -48266,7 +48266,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_helper_get_multpl, __pyx_t_1) < 0) __PYX_ERR(6, 1258, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":1
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":1
  * print_options = {}             # <<<<<<<<<<<<<<
  * print_options['im_obj_separator'] = "\n"
  * print_options['term_separator']   = "*\n"
@@ -48276,7 +48276,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_print_options, __pyx_t_1) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":2
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":2
  * print_options = {}
  * print_options['im_obj_separator'] = "\n"             # <<<<<<<<<<<<<<
  * print_options['term_separator']   = "*\n"
@@ -48287,7 +48287,7 @@ if (!__Pyx_RefNanny) {
   if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_n_s_im_obj_separator, __pyx_kp_s__14) < 0)) __PYX_ERR(0, 2, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":3
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":3
  * print_options = {}
  * print_options['im_obj_separator'] = "\n"
  * print_options['term_separator']   = "*\n"             # <<<<<<<<<<<<<<
@@ -48299,7 +48299,7 @@ if (!__Pyx_RefNanny) {
   if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_n_s_term_separator, __pyx_kp_s__54) < 0)) __PYX_ERR(0, 3, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":4
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":4
  * print_options['im_obj_separator'] = "\n"
  * print_options['term_separator']   = "*\n"
  * print_options['epsilon']          = "e"             # <<<<<<<<<<<<<<
@@ -48311,7 +48311,7 @@ if (!__Pyx_RefNanny) {
   if (unlikely(PyObject_SetItem(__pyx_t_1, __pyx_n_s_epsilon, __pyx_n_s_e_3) < 0)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense/generic.pxi":30
+  /* "../../src/python/pyoti/cython/dense/generic.pxi":30
  *   #***************************************************************************************************
  *   #
  *   def __init__(self, ord_t order, bases_t nbases = 1, type dtype = object,             # <<<<<<<<<<<<<<
@@ -48345,7 +48345,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_pyx_unpickle_oti_n2m2, __pyx_t_1) < 0) __PYX_ERR(2, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "../../pyoti/cython/dense.pyx":2
+  /* "../../src/python/pyoti/cython/dense.pyx":2
  * 
  * # Append directives             # <<<<<<<<<<<<<<
  * include "common/directives.pxi"

@@ -318,7 +318,7 @@ cdef class sotinum:
 
     head = 'sotinum('
     body = str(self.num.re) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max) 
-    body += ', order: ' + str(self.num.order) + "\n"
+    body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"
 
     for i in range(0, self.num.order):
 

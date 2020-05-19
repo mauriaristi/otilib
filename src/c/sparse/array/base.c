@@ -72,7 +72,16 @@ inline void arrso_set_all_r( coeff_t num, arrso_t* arr, dhelpl_t dhl){
 inline void arrso_set_item_i_r( coeff_t num, uint64_t i, arrso_t* arr, dhelpl_t dhl){
         
     if( i<arr->size ){
+        
         soti_set_r( num, &arr->p_data[i], dhl);
+
+    } else {
+
+        // res = soti_init();
+        
+        printf("ERROR: Index out of bounds in arrso_get_item_i(...)\n Exiting...\n");
+        exit(OTI_BadIndx);
+
     }
 
 }
@@ -109,10 +118,13 @@ inline void arrso_set_item_i_o( sotinum_t* src, uint64_t i, arrso_t* arr, dhelpl
 
         soti_copy_to(src, &arr->p_data[i],dhl);
 
-    } else{
-        // Raise error ??
-        printf("Error: Trying to set an item out of bounds in arrso_set_item\n");
+    }  else {
+
+        // res = soti_init();
+        
+        printf("ERROR: Index out of bounds in arrso_get_item_i(...)\n Exiting...\n");
         exit(OTI_BadIndx);
+
     }
 }
 // ----------------------------------------------------------------------------------------------------
@@ -130,7 +142,24 @@ inline void arrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, arrso_t
 
 
 
+// ****************************************************************************************************
+darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
+    
+    darr_t res = darr_zeros( arr->nrows, arr->ncols);
+    uint64_t i;
+    
+    for( i = 0; i < arr->size ; i++ ){
+        
+        darr_set_item_i(  
+            soti_get_item( idx, order, &arr->p_data[i],  dhl), 
+            i, &res);
 
+    }
+
+    return res;
+    
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -145,11 +174,14 @@ inline sotinum_t arrso_get_item_i(arrso_t* arr, uint64_t i, dhelpl_t dhl){
     if (i < arr->size){
 
         res = arr->p_data[i];
+        res.flag = 0;
         
     } else {
 
-        res = soti_init();
-        // Raise error?
+        // res = soti_init();
+        
+        printf("ERROR: Index out of bounds in arrso_get_item_i(...)\n Exiting...\n");
+        exit(OTI_BadIndx);
 
     }
 
@@ -267,6 +299,9 @@ arrso_t arrso_zeros_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t 
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
 
 // ****************************************************************************************************
 arrso_t arrso_eye(uint64_t nrows, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl){

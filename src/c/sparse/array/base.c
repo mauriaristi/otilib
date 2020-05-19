@@ -304,7 +304,7 @@ arrso_t arrso_zeros_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t 
 
 
 // ****************************************************************************************************
-arrso_t arrso_eye(uint64_t nrows, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
+arrso_t arrso_eye(uint64_t nrows, ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
 
     arrso_t  res = arrso_zeros( nrows, nrows, p_nnz, order, dhl);
     uint64_t i;
@@ -321,7 +321,7 @@ arrso_t arrso_eye(uint64_t nrows, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-arrso_t arrso_ones(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
+arrso_t arrso_ones(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
 
     arrso_t  res = arrso_createEmpty_predef(nrows, ncols, p_nnz, order, dhl);
     uint64_t i;
@@ -336,7 +336,7 @@ arrso_t arrso_ones(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t or
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-arrso_t arrso_zeros(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
+arrso_t arrso_zeros(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
 
     arrso_t  res = arrso_createEmpty_predef(nrows, ncols, p_nnz, order, dhl);
     uint64_t i;
@@ -399,7 +399,7 @@ inline arrso_t arrso_createEmpty_bases(uint64_t nrows, uint64_t ncols,
 
 // ****************************************************************************************************
 inline arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols, 
-                        const ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
+                        ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
 
     arrso_t  res = arrso_init();
     void*    memory = NULL;
@@ -432,11 +432,11 @@ inline arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols,
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-size_t arrso_memory_size( uint64_t size, const ndir_t* p_nnz, ord_t order){
+size_t arrso_memory_size( uint64_t size,  ndir_t* p_nnz, ord_t order){
 
     size_t allocation_size = 0 ;
 
-    uint64_t otinum_size;
+    // uint64_t otinum_size;
 
     //  Memory for p_data.
     allocation_size += size  * sizeof(sotinum_t); 
@@ -453,13 +453,13 @@ size_t arrso_memory_size( uint64_t size, const ndir_t* p_nnz, ord_t order){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, 
+void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols,  ndir_t* p_nnz, 
                                 ord_t order, flag_t flag, arrso_t* res){
     // size_t allocation_size=0;
-    uint64_t i;
+    // uint64_t i;
     void* memory = mem;
 
-    flag_t otinum_flag = 0;
+    // flag_t otinum_flag = 0;
 
     // Set static elements accordingly.
     res->flag  = flag;
@@ -469,7 +469,7 @@ void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const nd
 
     // Distribute data memory.
     res->p_data  = (sotinum_t* )memory;
-    memory    += res->size * sizeof(sotinum_t); // Move memory pointer.
+    // memory    += res->size * sizeof(sotinum_t); // Move memory pointer.
     
     // // Loop for all elements in the array
     // for(i = 0; i < res->size; i++){
@@ -495,8 +495,10 @@ void arrso_free(arrso_t* arr){
     
     }
 
-    if (arr->flag && 1){
+    if ( (arr->flag != 0) && (arr->p_data!= NULL) ){
+        
         free(arr->p_data);
+
     }
 
     (*arr) = arrso_init();

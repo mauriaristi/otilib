@@ -1,280 +1,500 @@
 
 
 
-
-
-
-
 #*****************************************************************************************************
-cpdef sotinum sotinum_cos(sotinum val):
+cpdef cos(object val):
   """
   PURPOSE:  Mathematical function of cosine for OTI numbers
   """
   #***************************************************************************************************
 
-  global dhl
-  
-  cdef sotinum_t res = soti_cos(&val.num, dhl)
+  tval = type(val)
 
-  return sotinum.create(&res)
+  if tval is sotinum:
+
+    return sotinum_cos(val)
+
+  elif tval is matso:
+
+    return matso_cos(val)
+
+  else:
+
+    return NotImplemented
+
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_sin(sotinum val):
+cpdef sin(object val):
   """
   PURPOSE:  Mathematical function of sine for OTI numbers.
   """
   #***************************************************************************************************
-  global dhl
   
-  cdef sotinum_t res = soti_sin(&val.num, dhl)
+  tval = type(val)
 
-  return sotinum.create(&res)
+  if tval is sotinum:
+
+    return sotinum_sin(val)
+
+  elif tval is matso:
+
+    return matso_sin(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_tan(sotinum val):
+cpdef tan(object val):
   """
   PURPOSE:  Mathematical function of tangent for OTI numbers 
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_tan(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_tan(val)
+
+  elif tval is matso:
+
+    return matso_tan(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_arctan(sotinum val):
+cpdef arctan(object val):
   """
   PURPOSE:  Mathematical function of arctangent for OTI numbers
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_atan(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_arctan(val)
+
+  elif tval is matso:
+
+    return matso_arctan(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 # #*****************************************************************************************************
-# cpdef sotinum sotinum_atan2(sotinum valx, sotinum valy):
+# cpdef atan2(object valx, object valy):
 #   """
 #   PURPOSE:  Mathematical function of arctangent for OTI numbers
    
 #   EXAMPLE:   
 #   """
 #   #***************************************************************************************************
-#   global dhl
+# 
   
-#   cdef sotinum_t res = soti_atan2(&valx.num, &valy.num, dhl)
+#   cdef return sotinum_t res = soti_atan2(&valx.num, &valy.num, dhl)
 
-#   return sotinum.create(&res)
+#   return object.create(&res)
 # #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_arccos(sotinum val):
+cpdef arccos(object val):
   """
   PURPOSE:  Mathematical function of inverse cosine for OTI numbers
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_acos(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_arccos(val)
+
+  elif tval is matso:
+
+    return matso_arccos(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_arcsin(sotinum val):
+cpdef arcsin(object val):
   """
   PURPOSE:  Mathematical function of inverse sine for OTI numbers
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_asin(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_arcsin(val)
+
+  elif tval is matso:
+
+    return matso_arcsin(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_sinh(sotinum val):
+cpdef sinh(object val):
   """
   PURPOSE:  Mathematical function of hyperbolic sine for OTI numbers
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_sinh(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_sinh(val)
+
+  elif tval is matso:
+
+    return matso_sinh(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_arcsinh(sotinum val):
+cpdef arcsinh(object val):
   """
   PURPOSE:  Mathematical function of inverse hyperbolic sine for OTI numbers  
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_asinh(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_arcsinh(val)
+
+  elif tval is matso:
+
+    return matso_arcsinh(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_cosh(sotinum val):
+cpdef cosh(object val):
   """
   PURPOSE:  Mathematical function of hyperbolic cosine for OTI numbers 
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_cosh(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_cosh(val)
+
+  elif tval is matso:
+
+    return matso_cosh(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_arccosh(sotinum val):
+cpdef arccosh(object val):
   """
   PURPOSE:  Mathematical function of inverse hyperbolic cosine for OTI numbers
 
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_acosh(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_arccosh(val)
+
+  elif tval is matso:
+
+    return matso_arccosh(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_tanh(sotinum val):
+cpdef tanh(object val):
   """
   PURPOSE:  Mathematical function of hyperbolic tangent for OTI numbers  
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_tanh(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_tanh(val)
+
+  elif tval is matso:
+
+    return matso_tanh(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_arctanh(sotinum val):
+cpdef arctanh(object val):
   """
   PURPOSE:  Mathematical function of Inverse hyperbolic tangent for OTI numbers
 
   """
   #***************************************************************************************************
-  global dhl
-  
-  cdef sotinum_t res = soti_atanh(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_arctanh(val)
+
+  elif tval is matso:
+
+    return matso_arctanh(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_logb(sotinum val, double base):
+cpdef logb(object val, double base):
   """
   PURPOSE:  Logarithm base b for OTI numbers.
   """
   #***************************************************************************************************  
 
-  
-  global dhl
-  
-  cdef sotinum_t res = soti_logb(&val.num, base, dhl)
+  tval = type(val)
 
-  return sotinum.create(&res)
+  if tval is sotinum:
+
+    return sotinum_logb(val,base)
+
+  elif tval is matso:
+
+    return matso_logb(val,base)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_log10(sotinum val):
+cpdef log10(object val):
   """
   PURPOSE:  Natural logarithm base 10 for OTI numbers.
   """
   #***************************************************************************************************  
 
-  global dhl
-  
-  cdef sotinum_t res = soti_log10(&val.num, dhl)
+  tval = type(val)
 
-  return sotinum.create(&res)
+  if tval is sotinum:
+
+    return sotinum_log10(val)
+
+  elif tval is matso:
+
+    return matso_log10(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_log(sotinum val):
+cpdef log(object val):
   """
   PURPOSE:  Natural logarithm for OTI numbers. 
   """
   #***************************************************************************************************  
-  global dhl
-  
-  cdef sotinum_t res = soti_log(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_log(val)
+
+  elif tval is matso:
+
+    return matso_log(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_exp(sotinum val):
+cpdef exp(object val):
   """
   PURPOSE:  Exponential function for OTI numbers.
   """
   #*************************************************************************************************** 
-  global dhl
-  
-  cdef sotinum_t res = soti_exp(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_exp(val)
+
+  elif tval is matso:
+
+    return matso_exp(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_power(sotinum val, double exponent):
+cpdef power(object val, double exponent):
   """
   PURPOSE:  Power function for OTI numbers, for non integer exponents.
   """
   #*************************************************************************************************** 
-  global dhl
 
-  cdef sotinum_t res = soti_pow(&val.num, exponent, dhl)
+  tval = type(val)
 
-  return sotinum.create(&res)
+  if tval is sotinum:
+
+    return sotinum_power(val,exponent)
+
+  elif tval is matso:
+
+    return matso_power(val,exponent)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_sqrt(sotinum val):
+cpdef sqrt(object val):
   """
   PURPOSE:  Square root function for OTI numbers, for non integer exponents. 
   """
   #*************************************************************************************************** 
-  global dhl
-  
-  cdef sotinum_t res = soti_sqrt(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_sqrt(val)
+
+  elif tval is matso:
+
+    return matso_sqrt(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum sotinum_cbrt(sotinum val):
+cpdef cbrt(object val):
   """
   PURPOSE:  Square root function for OTI numbers, for non integer exponents. 
   """
   #*************************************************************************************************** 
-  global dhl
-  
-  cdef sotinum_t res = soti_cbrt(&val.num, dhl)
 
-  return sotinum.create(&res)
+  tval = type(val)
+
+  if tval is sotinum:
+
+    return sotinum_cbrt(val)
+
+  elif tval is matso:
+
+    return matso_cbrt(val)
+
+  else:
+
+    return NotImplemented
+    
+  # end if 
+
 #-----------------------------------------------------------------------------------------------------

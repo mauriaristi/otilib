@@ -16,7 +16,7 @@ void arrso_dimCheck_OO_matmul(arrso_t* arr1, arrso_t* arr2, arrso_t* res);
 void arrso_dimCheck_RO_matmul(darr_t*  arr1, arrso_t* arr2, arrso_t* res);
 void arrso_dimCheck_OR_matmul(arrso_t* arr1, darr_t*  arr2, arrso_t* res);
 
-void arrso_dimCheck_OR_squareness(arrso_t* arr1, arrso_t* res);
+void arrso_dimCheck_O_squareness(arrso_t* arr1, arrso_t* res);
 // ----------------------------------------------------------------------------------------------------
 
 

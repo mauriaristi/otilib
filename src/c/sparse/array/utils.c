@@ -84,13 +84,17 @@ inline void arrso_dimCheck_O_squareness( arrso_t* arr1, arrso_t* res){
 ord_t arrso_get_order( arrso_t* arr ){
 	
 	ord_t order = 0;
+	uint64_t i;
 
-	if( arr->size !=0 ){
-		// Extract the order information from the first sotinum element.
-		order = arr->p_data[0].order;
+	// Finds the maximum order in the array.
+	for( i=0; i<arr->size; i++ ){
+		
+		order = MAX(order,arr->p_data[0].order);
+	
 	}
 
 	return order;
+	
 }
 // ----------------------------------------------------------------------------------------------------
 

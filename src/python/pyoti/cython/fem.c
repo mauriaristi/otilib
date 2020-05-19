@@ -1388,9 +1388,9 @@ struct __pyx_opt_args_5pyoti_6sparse_7sotinum_create {
 /* "../../include/pyoti/sparse/utils.pxd":8
  * 
  * # Array specific functions.
- * cpdef matso eye(uint64_t size, bases_t nbases=*, ord_t order=*)             # <<<<<<<<<<<<<<
+ * cpdef matso eye(   uint64_t size,  bases_t nbases=*, ord_t order=*)             # <<<<<<<<<<<<<<
  * cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)
- * cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=*, ord_t order=*)
+ * cpdef matso ones(  uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)
  */
 struct __pyx_opt_args_5pyoti_6sparse_eye {
   int __pyx_n;
@@ -1400,9 +1400,9 @@ struct __pyx_opt_args_5pyoti_6sparse_eye {
 
 /* "../../include/pyoti/sparse/utils.pxd":9
  * # Array specific functions.
- * cpdef matso eye(uint64_t size, bases_t nbases=*, ord_t order=*)
+ * cpdef matso eye(   uint64_t size,  bases_t nbases=*, ord_t order=*)
  * cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)             # <<<<<<<<<<<<<<
- * cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=*, ord_t order=*)
+ * cpdef matso ones(  uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)
  * 
  */
 struct __pyx_opt_args_5pyoti_6sparse_zeros {
@@ -1412,9 +1412,9 @@ struct __pyx_opt_args_5pyoti_6sparse_zeros {
 };
 
 /* "../../include/pyoti/sparse/utils.pxd":10
- * cpdef matso eye(uint64_t size, bases_t nbases=*, ord_t order=*)
+ * cpdef matso eye(   uint64_t size,  bases_t nbases=*, ord_t order=*)
  * cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)
- * cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=*, ord_t order=*)             # <<<<<<<<<<<<<<
+ * cpdef matso ones(  uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)             # <<<<<<<<<<<<<<
  * 
  * 
  */

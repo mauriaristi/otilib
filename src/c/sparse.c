@@ -49,7 +49,7 @@
 #include "sparse/array/algebra_elementwise_to.c"
 
 // Array algebra: Matrix operations such as matmul, determinant and invertion.
-// #include "sparse/array/algebra_matops.c"
+#include "sparse/array/algebra_matops.c"
 #include "sparse/array/algebra_matops_to.c"
 
 #include "sparse/array/utils.c"
@@ -57,6 +57,7 @@
 
 // Array functions: Elementwise function evaluation.
 #include "sparse/array/functions.c"
+#include "sparse/array/functions_to.c"
 
 
 // ----------------------------------------------------------------------------------------------------

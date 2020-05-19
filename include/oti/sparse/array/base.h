@@ -88,7 +88,7 @@ arrso_t arrso_empty_like(arrso_t* arr, dhelpl_t dhl);
 @param[in] order  Truncation order of the array.
 @param[in] dhl    Direction helper list object.
 ******************************************************************************************************/ 
-arrso_t arrso_eye(uint64_t nrows, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+arrso_t arrso_eye(uint64_t nrows, ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
 arrso_t arrso_eye_bases(uint64_t nrows, bases_t nbases, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ arrso_t arrso_eye_bases(uint64_t nrows, bases_t nbases, ord_t order, dhelpl_t dh
 @param[in] order  Truncation order of the array.
 @param[in] dhl    Direction helper list object.
 ******************************************************************************************************/ 
-arrso_t arrso_ones(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+arrso_t arrso_ones(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
 arrso_t arrso_ones_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -116,7 +116,7 @@ arrso_t arrso_ones_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t o
 @param[in] order  Truncation order of the array.
 @param[in] dhl    Direction helper list object.
 ******************************************************************************************************/ 
-arrso_t arrso_zeros(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+arrso_t arrso_zeros(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
 arrso_t arrso_zeros_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ arrso_t arrso_zeros_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t 
 @param[in] order  Truncation order of the array.
 @param[in] dhl    Direction helper list object.
 ******************************************************************************************************/ 
-arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+arrso_t arrso_createEmpty_predef(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
 arrso_t arrso_createEmpty_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ arrso_t arrso_createEmpty_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, 
 @param[in] order  Truncation order of the array.
 @param[in] dhl    Direction helper list object.
 ******************************************************************************************************/ 
-size_t arrso_memory_size( uint64_t size, const ndir_t* p_nnz, ord_t order);
+size_t arrso_memory_size( uint64_t size, ndir_t* p_nnz, ord_t order);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -158,7 +158,7 @@ size_t arrso_memory_size( uint64_t size, const ndir_t* p_nnz, ord_t order);
 @param[in] order Truncation order of the array.
 @param[in] dhl   Direction helper list object.
 ******************************************************************************************************/ 
-void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, const ndir_t* p_nnz, ord_t order, 
+void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, 
     flag_t flag, arrso_t* res);
 // ----------------------------------------------------------------------------------------------------
 

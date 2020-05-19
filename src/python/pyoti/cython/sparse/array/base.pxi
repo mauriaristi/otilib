@@ -168,26 +168,50 @@ cdef class matso:
 
   #--------------------------------------------------------------------------------------------------- 
 
+  # #*************************************************************************************************** 
+  # def get_real(self):
+
+  #   cdef np.ndarray[coeff_t, ndim=2] tmp
+  #   cdef uint64_t i,j,k
+
+  #   tmp = np.empty( self.shape , dtype = np.float64)
+
+  #   for i in range(self.arr.nrows):
+  #     for j in range(self.arr.ncols):
+  #       k = j+i*self.arr.ncols
+  #       tmp[i,j] = self.arr.p_data[k].re
+  #     # end for 
+  #   # end for 
+
+  #   return tmp
+  # #--------------------------------------------------------------------------------------------------- 
+
   #*************************************************************************************************** 
-  def get_real(self):
+  def short_repr(self):
+    """
+    PURPOSE:      A short representation of the object.
+  
+    """
+    #*************************************************************************************************
 
-    cdef np.ndarray[coeff_t, ndim=2] tmp
-    cdef uint64_t i,j,k
+    global dhl
 
-    tmp = np.empty( self.shape , dtype = np.float64)
+    cdef np.ndarray[uint64_t, ndim=1] tmp 
 
-    for i in range(self.arr.nrows):
-      for j in range(self.arr.ncols):
-        k = j+i*self.arr.ncols
-        tmp[i,j] = self.arr.p_data[k].re
-      # end for 
-    # end for 
+    out =  "matso< "
+    out += "shape: "+str(self.shape)+ ", "
+    out += "re:\n"
+    # first print the real part:
+    out += repr( self.real )
 
-    return tmp
+    out += ">"
+
+    return out
+
   #--------------------------------------------------------------------------------------------------- 
 
   #*************************************************************************************************** 
-  def __repr__(self):
+  def long_repr(self):
     """
     PURPOSE:      A short representation of the object.
   
@@ -206,6 +230,34 @@ cdef class matso:
 
     out += ">"
 
+    return out
+
+  #---------------------------------------------------------------------------------------------------
+
+  #*************************************************************************************************** 
+  def __repr__(self):
+    """
+    PURPOSE:      Representation of the object.
+  
+    """
+    #*************************************************************************************************
+
+    global dhl
+  
+    cdef sotinum_t d_soti
+    cdef sotinum   soti
+    out  = ""
+
+    out += "["
+    for i in range(self.arr.nrows):
+      out += "["
+      for j in range(self.arr.ncols):
+        d_soti = arrso_get_item_ij(&self.arr, i, j, dhl)
+        out+= (sotinum.create(&d_soti,FLAGS=0)).__str__()+", "
+      # end for 
+      out = out[:-2] + "],\n"
+    # end for 
+    out =out[:-2] + "]"
     return out
 
   #--------------------------------------------------------------------------------------------------- 

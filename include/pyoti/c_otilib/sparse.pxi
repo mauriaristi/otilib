@@ -82,6 +82,9 @@ cdef extern from "oti/oti.h" nogil:
   sotinum_t arrso_norm(    arrso_t* arr1,                  dhelpl_t dhl);
   void      arrso_norm_to( arrso_t* arr1,  sotinum_t* res, dhelpl_t dhl);
 
+  sotinum_t arrso_pnorm(    arrso_t* arr1, coeff_t p,                 dhelpl_t dhl);
+  void      arrso_pnorm_to( arrso_t* arr1, coeff_t p, sotinum_t* res, dhelpl_t dhl);
+
   arrso_t arrso_div_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl);
   arrso_t arrso_div_OR(arrso_t* arr1, darr_t* arr2, dhelpl_t dhl);
   arrso_t arrso_div_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl);

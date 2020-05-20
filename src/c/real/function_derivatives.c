@@ -768,7 +768,7 @@ void der_r_pow(coeff_t x, coeff_t e, ord_t order, coeff_t* derivs){
     
     for (i=0; i<(order+1); i++){
         if( power_i != 0.0){            
-            derivs[i]=factor*pow(x0,power_i);
+            derivs[i] = factor * pow(x0,power_i);
             factor = factor*power_i;
             power_i -= 1.;
         }else{

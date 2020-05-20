@@ -4,8 +4,6 @@
 
 
 // Algebraic operations:
-
-
 // Negation
 
 // ****************************************************************************************************
@@ -19,7 +17,7 @@ void soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 void soti_abs_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 
-    if (res->re < 0){
+    if (num->re < 0){
         
         soti_neg_to(num,res,dhl);
 
@@ -30,6 +28,11 @@ void soti_abs_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 
 

@@ -605,8 +605,8 @@ void arrso_pnorm_to(arrso_t* arr1, coeff_t p, sotinum_t* res, dhelpl_t dhl){
     for( i = 0; i<arr1->size; i++){
 
         // tmp1 = (arr1->p_data[i])^p;
-        soti_pow_to( &arr1->p_data[i], p, &tmp1, dhl);
-        soti_abs_to( &tmp1, &tmp1, dhl);
+        soti_abs_to( &arr1->p_data[i], &tmp2, dhl);
+        soti_pow_to( &tmp2, p, &tmp1, dhl);
         
         // tmp2 = tmp3 + tmp1;
         soti_sum_oo_to( &tmp1, &tmp3, &tmp2, dhl);

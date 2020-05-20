@@ -200,7 +200,7 @@ void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     sotinum_t tmp1, tmp2, tmp3, det;
 
     // Check dimensions.
-    arrso_dimCheck_O_squareness( arr1, arr1);
+    arrso_dimCheck_O_squareness( arr1, res);
 
     order = arrso_get_order( arr1 );
 
@@ -435,13 +435,11 @@ void arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
 
     ord_t order;
     sotinum_t tmp1, tmp2, tmp3;
+    // printf("Here 1\n");
 
     // Check dimensions.
     arrso_dimCheck_O_squareness( arr1, arr1);
-
-    res = 0;
-    soti_set_r( 0.0, res, dhl);
-
+    
     order = arrso_get_order( arr1 );
 
     // Extract temporal 5.
@@ -453,7 +451,7 @@ void arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
 
         soti_copy_to(&arr1->p_data[0], res, dhl);
 
-    } else if (arr1->ncols >= 2){
+    } else if (arr1->ncols == 2){
 
         soti_mul_oo_to(
             &arr1->p_data[0],
@@ -474,7 +472,7 @@ void arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
             dhl);
 
     } else if (arr1->ncols >= 3){
-
+        
         // tmp3 = 0
         soti_set_r( 0.0, &tmp3, dhl);
 
@@ -507,7 +505,7 @@ void arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
             soti_set_o( &tmp2, &tmp3, dhl);             
 
         }
-
+        
         for ( j = 0; j<arr1->ncols; j++){
             
             // tmp1 = arr1->p_data[arr1->ncols-1-j];
@@ -538,6 +536,7 @@ void arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
 
         }
 
+        // res = tmp3
         soti_set_o(&tmp3, res, dhl);
 
     }

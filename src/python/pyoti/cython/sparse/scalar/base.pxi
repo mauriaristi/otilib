@@ -781,6 +781,38 @@ cdef class sotinum:
 
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
+  def get_active_bases(self):
+
+    global dhl
+
+    cdef bases_t  size = dhl.p_dh[0].Nbasis
+    cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
+    cdef uint64_t i
+    
+    # Initialize all elements as zero (deactivated)
+    for i in range(size):
+
+      bases_list[i]=0
+
+    # end for 
+
+    soti_get_active_bases( &self.num, bases_list, dhl)
+
+    res = []
+    for i in range(size):
+
+      if bases_list[i]==1:
+      
+        res.append(i+1)
+
+      # end if 
+
+    # end for 
+
+    return res
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
 

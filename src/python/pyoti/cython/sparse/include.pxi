@@ -14,7 +14,9 @@ from libc.stdlib cimport realloc          #    "              "
 
 from pyoti.core import   number_types, dHelp, imdir
 from pyoti.core cimport  ZERO, ONE, get_cython_dHelp, dHelp, imdir
-from pyoti.core cimport  c_ptr_to_np_1darray_double, c_ptr_to_np_1darray_uint64
+from pyoti.core cimport  c_ptr_to_np_1darray_double, c_ptr_to_np_1darray_uint64 
+from pyoti.core cimport  c_ptr_to_np_1darray_uint8
+
 
 from pyoti.real import  dmat
 from pyoti.real cimport dmat

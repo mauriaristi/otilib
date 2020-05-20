@@ -14,7 +14,7 @@ cpdef matso dot(matso A, matso B):
 
 
 #*****************************************************************************************************
-cpdef matso invert(matso A):
+cpdef matso inv(matso A):
   """
   PURPOSE: Matrix invertion.
   """
@@ -73,7 +73,7 @@ cpdef sotinum norm(matso A, double p = 2.0):
 
   # end if 
 
-  
+
   return sotinum.create(&res)
   
 #-----------------------------------------------------------------------------------------------------
@@ -90,7 +90,10 @@ cpdef sotinum norm(matso A, double p = 2.0):
 
 #*****************************************************************************************************
 cpdef matso eye(uint64_t size, bases_t nbases=0, ord_t order=0):
-  
+  """
+  PURPOSE: Create identity matrix of shape: (size,size).
+
+  """
   global dhl
 
   cdef arrso_t res = arrso_eye_bases(size, nbases, order, dhl)
@@ -101,7 +104,10 @@ cpdef matso eye(uint64_t size, bases_t nbases=0, ord_t order=0):
 
 #*****************************************************************************************************
 cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):
-  
+  """
+  PURPOSE: Create matrix filled with zeroes of shape: (nrows,ncols).
+
+  """
   global dhl
 
   cdef arrso_t res = arrso_zeros_bases(nrows,ncols,nbases,order,dhl)
@@ -112,7 +118,10 @@ cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order
 
 #*****************************************************************************************************
 cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):
-  
+  """
+  PURPOSE: Create matrix filled with ones of shape: (nrows,ncols).
+
+  """
   global dhl
 
   cdef arrso_t res = arrso_ones_bases(nrows,ncols,nbases,order,dhl)
@@ -125,12 +134,9 @@ cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0)
 
 # #*****************************************************************************************************
 # def solve(matso A, matso b):
-#   """
-  
+#   """  
 #   PORPUSE: To solve a dense linear system of equations of OTI algebra.
-
 #   """
-  
 #   global dhl
 
 #   from scipy.sparse import coo_matrix
@@ -151,7 +157,7 @@ cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0)
 #   cdef np.ndarray[uint64_t, ndim=1] idx_coo  
 #   cdef np.ndarray[ uint8_t, ndim=1] ord_coo
 
-#   maxorder  = max(A.arr.order, b.arr.order)
+#   maxorder  = max(arrso_get_order(&A.arr),arrso_get_order(&b.arr))
 #   maxnbases = max(A.arr.nbases,b.arr.nbases)
 
 #   res = zeros(b.arr.nrows, b.arr.ncols, nbases = maxnbases, order = maxorder)
@@ -243,3 +249,88 @@ cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0)
 #   return res
 
 # #-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+#***************************************************************************************************
+def get_active_bases(obj_in):
+  """
+
+  """
+  global dhl
+
+  cdef bases_t  size       = dhl.p_dh[0].Nbasis
+  cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
+  cdef matso SO
+  cdef sotinum so
+  cdef uint64_t i
+  
+  # Initialize all elements as zero (deactivated)
+  for i in range(size):
+
+    bases_list[i]=0
+
+  # end for 
+  tobj_in = type(obj_in)
+
+  if tobj_in is list:
+
+    for obj in obj_in:
+      
+      tobj = type(obj)
+
+      if tobj is matso:
+
+        SO = obj
+        arrso_get_active_bases( &SO.arr, bases_list, dhl)
+
+      elif tobj is sotinum:
+        
+        so = obj
+        soti_get_active_bases( &so.num, bases_list, dhl) 
+
+      else:
+
+        raise ValueError("Input should be list of sotinum or matso.") 
+
+      # end if 
+
+    # end for
+
+  elif tobj_in is matso:
+
+    SO = obj_in
+    arrso_get_active_bases( &SO.arr, bases_list, dhl)
+
+  elif tobj_in is sotinum:
+    
+    so = obj_in
+    soti_get_active_bases( &so.num, bases_list, dhl)        
+
+  else:
+
+    raise ValueError("Input should be list of sotinum and/or matso.") 
+
+  # end if 
+  
+  res = []
+
+  for i in range(size):
+
+    if bases_list[i] == 1:
+    
+      res.append(i+1)
+
+    # end if 
+
+  # end for 
+
+  return res
+
+  #---------------------------------------------------------------------------------------------------

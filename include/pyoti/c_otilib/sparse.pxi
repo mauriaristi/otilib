@@ -28,6 +28,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "sparse.h"
   #---------------------------------------------------------------------------------------------------
+  
+  void arrso_get_active_bases(arrso_t* arr, imdir_t* list_vals, dhelpl_t dhl);
   arrso_t arrso_atanh(   arrso_t* arr,               dhelpl_t dhl);
   void    arrso_atanh_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_asinh(   arrso_t* arr,               dhelpl_t dhl);
@@ -113,6 +115,7 @@ cdef extern from "oti/oti.h" nogil:
   
   arrso_t arrso_neg(arrso_t* arr, dhelpl_t dhl);
   
+  ord_t arrso_get_order( arrso_t* arr )
   darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
   void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_copy(arrso_t* arr, dhelpl_t dhl);
@@ -138,6 +141,14 @@ cdef extern from "oti/oti.h" nogil:
       flag_t flag, arrso_t* res);
 
 
+
+
+
+
+
+
+
+  void soti_get_active_bases(sotinum_t* num, imdir_t* list_vals, dhelpl_t dhl);
 
   sotinum_t soti_cbrt(sotinum_t* num, dhelpl_t dhl);
   void      soti_cbrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);

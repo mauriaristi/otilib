@@ -45,4 +45,10 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
 void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
+
+void soti_get_active_bases(sotinum_t* num, imdir_t* list, dhelpl_t dhl);
+
+
+
 #endif

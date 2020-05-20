@@ -364,14 +364,33 @@ matrix_form_t dhelp_matrix_form_indices( bases_t nbases, uint8_t order, dhelpl_t
 // ----------------------------------------------------------------------------------------------------
 
 
+int global_test = 0;
 
 
-
-void (*__PY_ERROR_OTI_EXIT)(int64_t);
-uint64_t is_python_error_def;
+void (*__PY_ERROR_OTI_EXIT)(int64_t)=NULL;
+uint64_t is_python_error_def=0;
 
 // void (**__PY_ERROR_OTI_EXIT_ptr)(int64_t)=&__PY_ERROR_OTI_EXIT;
 // uint64_t* is_python_error_def_ptr = &is_python_error_def;
+
+// ****************************************************************************************************
+void set_global_test(int x){
+
+
+    global_test = x;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void print_global_test(void){
+
+
+    printf("This is global_test: %d \n",global_test);
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
@@ -393,15 +412,19 @@ void set_python_error_function(void (*error_function)(int64_t)){
 
     usage_python_error_function(error_function, 0, 0);
     // printf("In set_python_error_function()\nDefining error function from python: \n");
-    // __PY_ERROR_OTI_EXIT = error_function;
+    __PY_ERROR_OTI_EXIT = error_function;
     // error_function(OTI_OutOfMemory);
-    // is_python_error_def = is_python_error_def + 1;
+    is_python_error_def = 1;
     // printf("is_python_error_def: %llu\n",is_python_error_def);
     // (*__PY_ERROR_OTI_EXIT_ptr)(OTI_OutOfMemory);
 
 }
 // ----------------------------------------------------------------------------------------------------
 
+void print_python_error_def(void ){
+
+    printf("This is is_python_error_def: %d \n",is_python_error_def);
+}
 
 // ****************************************************************************************************
 void usage_python_error_function(void (*error_function)(int64_t), int64_t error_id, int64_t status){
@@ -450,11 +473,11 @@ void error_exit(int64_t error_id){
     // printf("In error_exit()\nis_python_error_def: %llu\n",is_python_error_def);
     // usage_python_error_function(NULL,error_id,1);
     if (is_python_error_def != 0 ){
-
+        printf("Exit from Python error function\n");
         (*__PY_ERROR_OTI_EXIT)(error_id);
 
     } else {
-
+        printf("Exit from C exit function\n");
         exit(error_id);
 
     }

@@ -16,11 +16,14 @@ inline void arrso_dimCheck_OO_elementwise(arrso_t* arr1,arrso_t* arr2,arrso_t* r
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline void arrso_dimCheck_RO_elementwise(darr_t* arr1,arrso_t* arr2,arrso_t* res){
+inline void arrso_dimCheck_RO_elementwise(darr_t* arr1,arrso_t* arr2, arrso_t* res){
 
      if( arr1->size  != arr2->size  || 
          arr1->ncols != arr2->ncols ||
-         arr1->nrows != arr2->nrows   ){
+         arr1->nrows != arr2->nrows ||
+         arr1->size  !=  res->size  || 
+         arr1->ncols !=  res->ncols ||
+         arr1->nrows !=  res->nrows    ){
         printf("ERROR: Wrong dimensions in elementwise operation between arrso and real arrays.\n");
         exit(OTI_BadDim);
      }
@@ -32,7 +35,9 @@ inline void arrso_dimCheck_RO_elementwise(darr_t* arr1,arrso_t* arr2,arrso_t* re
 // ****************************************************************************************************
 inline void arrso_dimCheck_OO_matmul( arrso_t* arr1, arrso_t* arr2, arrso_t* res){
 
-     if( arr1->nrows != arr2->ncols ){
+     if( arr1->ncols != arr2->nrows ||
+         arr1->nrows !=  res->nrows || 
+         arr2->ncols !=  res->ncols    ){
         printf("ERROR: Wrong dimensions in matmul-like operation between two arrso arrays.\n");
         exit(OTI_BadDim);
      }

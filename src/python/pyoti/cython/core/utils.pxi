@@ -1087,8 +1087,23 @@ def dhelp_get_matrix_form(bases_t nbases, ord_t order, export_latex = True,
 
 
 
+def set_global_test_py(int x):
+
+  set_global_test(x)
 
 
+def print_global_test_py():
+
+  print_global_test() 
+
+def print_python_error_py():
+
+  print_python_error_def( )
+
+
+def exit_with_error():
+  
+  error_exit(-1);
 
 
 #*****************************************************************************************************

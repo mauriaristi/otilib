@@ -148,4 +148,11 @@ typedef struct{
 
 
 
+
+
+
+// GLOBALS:
+
+extern int global_test;
+
 #endif

@@ -2,6 +2,10 @@
 
 
 cdef extern from "oti/oti.h" nogil:
+  # globals
+  int global_test;
+  uint64_t is_python_error_def;
+  void (*__PY_ERROR_OTI_EXIT)(int64_t) nogil;
 
   # Defs from "core.h"
   ctypedef struct imdir2d_t:
@@ -57,6 +61,13 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "core.h"
   #---------------------------------------------------------------------------------------------------
+  
+  void print_python_error_def( );
+  
+  void set_global_test(int x);
+
+  void print_global_test();
+
   void error_exit(int64_t error_id);
 
   void set_python_error_function(void (*error_function)(int64_t) nogil );

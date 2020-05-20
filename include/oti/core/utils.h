@@ -6,6 +6,10 @@ extern uint64_t is_python_error_def;
 
 // extern void (**__PY_ERROR_OTI_EXIT_ptr)(int64_t);
 // extern uint64_t* is_python_error_def_ptr;
+
+void set_global_test(int x);
+void print_global_test(void);
+void print_python_error_def(void );
 void start_python_error_function(void);
 void set_python_error_function(void (*error_function)(int64_t));
 void usage_python_error_function(void (*error_function)(int64_t), int64_t error_id, int64_t status);
@@ -54,6 +58,9 @@ uint64_t array2d_getel_ui64_t( uint64_t* arr,uint64_t ncols, uint64_t i, uint64_
 double   array2d_getel_f64_t(  double*   arr,uint64_t ncols, uint64_t i, uint64_t j );
 float    array2d_getel_f32_t(  float*    arr,uint64_t ncols, uint64_t i, uint64_t j );
 // ----------------------------------------------------------------------------------------------------
+
+
+
 
 
 #endif

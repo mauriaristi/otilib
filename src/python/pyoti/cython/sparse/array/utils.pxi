@@ -1,61 +1,103 @@
 
 #*****************************************************************************************************
-cpdef matso dot(matso A, matso B):
+def dot(matso A, matso B, matso out = None):
   """
   PURPOSE: Matrix multiplication.
   """
   global dhl
   
-  cdef arrso_t res = arrso_matmul_OO( &A.arr, &B.arr , dhl)
+  cdef arrso_t res 
 
-  return matso.create(&res)
+
+  if out is not None:
+    
+    arrso_matmul_OO_to( &A.arr, &B.arr ,&out.arr, dhl)
+
+  else:
+
+    res = arrso_matmul_OO( &A.arr, &B.arr , dhl)
+
+    return matso.create(&res)
+
+  # end if 
+
 
 #-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************
-cpdef matso inv(matso A):
+def inv(matso A, matso out = None):
   """
   PURPOSE: Matrix invertion.
   """
   global dhl
 
-  cdef arrso_t res = arrso_invert( &A.arr, dhl )
+  cdef arrso_t res
 
-  return matso.create(&res)
+  if out is None:
+
+    res = arrso_invert( &A.arr, dhl )
+
+    return matso.create(&res)
+
+  else:
+
+    arrso_invert_to( &A.arr, &out.arr, dhl )
+
+  # end if 
 
 #-----------------------------------------------------------------------------------------------------
 
 
 
 #*****************************************************************************************************
-cpdef matso transpose(matso A):
+def transpose(matso A, matso out = None):
   """
   PURPOSE: Matrix transpose.
   """
   global dhl
 
-  cdef arrso_t res = arrso_transpose( &A.arr, dhl )
+  cdef arrso_t res
 
-  return matso.create(&res)
+  if out is None:
+
+    res = arrso_transpose( &A.arr, dhl )
+
+    return matso.create(&res)
+
+  else:
+
+    arrso_transpose_to( &A.arr, &out.arr, dhl )
+
+  # end if 
 
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum det(matso A):
+def det(matso A, sotinum out = None):
   """
   PURPOSE: Matrix determinant.
   """
   global dhl
 
-  cdef sotinum_t res = arrso_det( &A.arr, dhl)
+  cdef sotinum_t res 
 
-  return sotinum.create(&res)
+  if out is None:
+
+    res = arrso_det( &A.arr, dhl)
+
+    return sotinum.create(&res)
+
+  else: 
+
+    arrso_det_to( &A.arr, &out.num, dhl)
+
+  # end if 
   
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef sotinum norm(matso A, double p = 2.0):
+def norm(matso A, double p = 2.0, sotinum out = None):
   """
   PURPOSE: Matrix norm.
   """
@@ -63,19 +105,35 @@ cpdef sotinum norm(matso A, double p = 2.0):
 
   cdef sotinum_t res 
 
-  if (p == 2.0):
+  if out is None:
 
-    res = arrso_norm( &A.arr, dhl)
+    if (p == 2.0):
+
+      res = arrso_norm( &A.arr, dhl)
+
+    else:
+      
+      res = arrso_pnorm( &A.arr, p, dhl)    
+
+    # end if 
+
+
+    return sotinum.create(&res)
 
   else:
-    
-    res = arrso_pnorm( &A.arr, p, dhl)    
+
+    if (p == 2.0):
+
+      arrso_norm_to( &A.arr, &out.num, dhl)
+
+    else:
+      
+      arrso_pnorm_to( &A.arr, p, &out.num, dhl)    
+
+    # end if 
 
   # end if 
 
-
-  return sotinum.create(&res)
-  
 #-----------------------------------------------------------------------------------------------------
 
 

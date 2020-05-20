@@ -135,6 +135,7 @@ cdef extern from "oti/oti.h" nogil:
       flag_t flag, arrso_t* res);
 
 
+
   sotinum_t soti_cbrt(sotinum_t* num, dhelpl_t dhl);
   void      soti_cbrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl);
@@ -184,6 +185,9 @@ cdef extern from "oti/oti.h" nogil:
   sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
   sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
   void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
+
+  sotinum_t soti_abs(   sotinum_t* num,                 dhelpl_t dhl);
+  void      soti_abs_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den, dhelpl_t dhl);
   sotinum_t soti_div_ro(coeff_t num, sotinum_t* den, dhelpl_t dhl);
   sotinum_t soti_div_or(sotinum_t* num, coeff_t val, dhelpl_t dhl);

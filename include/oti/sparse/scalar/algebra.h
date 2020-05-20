@@ -90,4 +90,14 @@ sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl);
 void      soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Performs real absolute operation of the number.
+
+@param[in] num OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_abs(   sotinum_t* num,                 dhelpl_t dhl);
+void      soti_abs_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 #endif

@@ -31,6 +31,7 @@ sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
     res.p_nnz  = dhl.p_dh[order-1].p_nnz[ntmp]; 
     res.p_size = dhl.p_dh[order-1].p_size[ntmp]; 
     res.order  = order; 
+    res.flag   = 0; 
 
     for (i=0; i<order; i++){
 
@@ -70,6 +71,7 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
     res.p_nnz  = dhl.p_dh[order-1].p_nnz[ ntmp+10]; 
     res.p_size = dhl.p_dh[order-1].p_size[ntmp+10]; 
     res.order  = order; 
+    res.flag   = 0; 
 
     for (i=0; i<order; i++){
 
@@ -241,7 +243,7 @@ void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
         } else {
 
             // TODO: What happens if this is a tmp value?
-            printf("ERROR: Cant change memory of \n");
+            printf("ERROR: Cant change memory of given OTI number.\n");
             exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
 
         }

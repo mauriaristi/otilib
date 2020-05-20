@@ -194,8 +194,213 @@ void arrso_transpose_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 // 2.3. Inversion.
 // ****************************************************************************************************
 void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
-    
-   
+
+    arrso_t tmpA1 = arrso_init();
+    ord_t order;
+    sotinum_t tmp1, tmp2, tmp3, det;
+
+    // Check dimensions.
+    arrso_dimCheck_O_squareness( arr1, arr1);
+
+    order = arrso_get_order( arr1 );
+
+    tmp1 = soti_get_tmp( 5, order, dhl);
+    tmp2 = soti_get_tmp( 6, order, dhl);
+    tmp3 = soti_get_tmp( 7, order, dhl);
+    det  = soti_get_tmp( 8, order, dhl);
+
+    if(arr1->ncols == 1){
+
+        soti_pow_to(&arr1->p_data[0],-1.0,&res->p_data[0],dhl);
+
+    } else if (arr1->ncols == 2){
+
+        arrso_det_to( arr1, &det, dhl); // Get determinant.
+
+        // res->p_data[0] =  arr1->p_data[3]/det;
+        soti_div_oo_to(&arr1->p_data[3],&det,&tmp1,dhl);
+        soti_set_o( &tmp1, &res->p_data[0],dhl);
+
+        // res->p_data[1] = -arr1->p_data[1]/det;
+        soti_div_oo_to(&arr1->p_data[1],&det,&tmp1,dhl);
+        soti_set_o( &tmp1, &res->p_data[1],dhl);
+        soti_neg_to(&res->p_data[1],&res->p_data[1],dhl);
+
+        // res->p_data[2] = -arr1->p_data[2]/det;
+        soti_div_oo_to(&arr1->p_data[2],&det,&tmp1,dhl);
+        soti_set_o( &tmp1, &res->p_data[2],dhl);
+        soti_neg_to(&res->p_data[2],&res->p_data[2],dhl);
+
+        // res->p_data[3] =  arr1->p_data[0]/det;
+        soti_div_oo_to(&arr1->p_data[0],&det,&tmp1,dhl);
+        soti_set_o( &tmp1, &res->p_data[3],dhl);
+
+    } else if (arr1->ncols == 3){
+        
+        tmpA1 = arrso_zeros_bases( 2, 2, 0, 0,dhl );
+        tmpA1.p_data[0] = soti_get_tmp(  9, order, dhl);
+        tmpA1.p_data[1] = soti_get_tmp( 10, order, dhl);
+        tmpA1.p_data[2] = soti_get_tmp( 11, order, dhl);
+        tmpA1.p_data[3] = soti_get_tmp( 12, order, dhl);
+        
+        arrso_det_to( arr1, &det, dhl); // Get determinant.
+        
+        // Set position 0,0
+        // tmpA1.p_data[0] = arr1->p_data[4];
+        soti_set_o( &arr1->p_data[4], &tmpA1.p_data[0],dhl);
+        // tmpA1.p_data[1] = arr1->p_data[5];
+        soti_set_o( &arr1->p_data[5], &tmpA1.p_data[1],dhl);
+        // tmpA1.p_data[2] = arr1->p_data[7];
+        soti_set_o( &arr1->p_data[7], &tmpA1.p_data[2],dhl);
+        // tmpA1.p_data[3] = arr1->p_data[8];
+        soti_set_o( &arr1->p_data[8], &tmpA1.p_data[3],dhl);
+        
+        
+        
+        
+        // res->p_data[0] = darr_det( &tmpA1 )/det;
+        arrso_det_to(  &tmpA1, &tmp1,                  dhl);
+        soti_div_oo_to( &tmp1,  &det, &res->p_data[0], dhl);
+
+        
+
+        // Set position 0,1
+        // tmpA1.p_data[0] = arr1->p_data[2];
+        soti_set_o( &arr1->p_data[2], &tmpA1.p_data[0],dhl);
+        // tmpA1.p_data[1] = arr1->p_data[1];
+        soti_set_o( &arr1->p_data[1], &tmpA1.p_data[1],dhl);
+        // tmpA1.p_data[2] = arr1->p_data[8];
+        soti_set_o( &arr1->p_data[8], &tmpA1.p_data[2],dhl);
+        // tmpA1.p_data[3] = arr1->p_data[7];
+        soti_set_o( &arr1->p_data[7], &tmpA1.p_data[3],dhl);
+
+        
+        // res->p_data[1] = darr_det( &tmpA1 )/det;
+        arrso_det_to(  &tmpA1, &tmp1,                  dhl);
+        soti_div_oo_to( &tmp1,  &det, &res->p_data[1], dhl);
+
+
+
+
+        // Set position 0,2
+        // tmpA1.p_data[0] = arr1->p_data[1];
+        soti_set_o( &arr1->p_data[1], &tmpA1.p_data[0],dhl);
+        // tmpA1.p_data[1] = arr1->p_data[2];
+        soti_set_o( &arr1->p_data[2], &tmpA1.p_data[1],dhl);
+        // tmpA1.p_data[2] = arr1->p_data[4];
+        soti_set_o( &arr1->p_data[4], &tmpA1.p_data[2],dhl);
+        // tmpA1.p_data[3] = arr1->p_data[5];
+        soti_set_o( &arr1->p_data[5], &tmpA1.p_data[3],dhl);
+        
+        // res->p_data[2] = darr_det( &tmpA1 )/det;
+        arrso_det_to(  &tmpA1, &tmp1,                  dhl);
+        soti_div_oo_to( &tmp1,  &det, &res->p_data[2], dhl);
+
+
+
+        // Set position 1,0
+        // tmpA1.p_data[0] = arr1->p_data[5];
+        soti_set_o( &arr1->p_data[5], &tmpA1.p_data[0],dhl);
+        // tmpA1.p_data[1] = arr1->p_data[3];
+        soti_set_o( &arr1->p_data[3], &tmpA1.p_data[1],dhl);
+        // tmpA1.p_data[2] = arr1->p_data[8];
+        soti_set_o( &arr1->p_data[8], &tmpA1.p_data[2],dhl);
+        // tmpA1.p_data[3] = arr1->p_data[6];
+        soti_set_o( &arr1->p_data[6], &tmpA1.p_data[3],dhl);
+        
+        // res->p_data[3] = darr_det( &tmpA1 )/det;
+        arrso_det_to(  &tmpA1, &tmp1,                  dhl);
+        soti_div_oo_to( &tmp1,  &det, &res->p_data[3], dhl);
+
+
+
+        // Set position 1,1
+        // tmpA1.p_data[0] = arr1->p_data[0];
+        soti_set_o( &arr1->p_data[0], &tmpA1.p_data[0],dhl);
+        // tmpA1.p_data[1] = arr1->p_data[2];
+        soti_set_o( &arr1->p_data[2], &tmpA1.p_data[1],dhl);
+        // tmpA1.p_data[2] = arr1->p_data[6];
+        soti_set_o( &arr1->p_data[6], &tmpA1.p_data[2],dhl);
+        // tmpA1.p_data[3] = arr1->p_data[8];
+        soti_set_o( &arr1->p_data[8], &tmpA1.p_data[3],dhl);
+        
+
+        // res->p_data[4] = darr_det( &tmpA1 )/det;
+        arrso_det_to(  &tmpA1, &tmp1,                  dhl);
+        soti_div_oo_to( &tmp1,  &det, &res->p_data[4], dhl);
+
+
+
+
+        // Set position 1,2
+        // tmpA1.p_data[0] = arr1->p_data[2];
+        soti_set_o( &arr1->p_data[2], &tmpA1.p_data[0],dhl);
+        // tmpA1.p_data[1] = arr1->p_data[0];
+        soti_set_o( &arr1->p_data[0], &tmpA1.p_data[1],dhl);
+        // tmpA1.p_data[2] = arr1->p_data[5];
+        soti_set_o( &arr1->p_data[5], &tmpA1.p_data[2],dhl);
+        // tmpA1.p_data[3] = arr1->p_data[3];
+        soti_set_o( &arr1->p_data[3], &tmpA1.p_data[3],dhl);
+        
+        // res->p_data[5] = darr_det( &tmpA1 )/det;
+        arrso_det_to(  &tmpA1, &tmp1,                  dhl);
+        soti_div_oo_to( &tmp1,  &det, &res->p_data[5], dhl);
+
+
+
+
+
+        // Set position 2,0
+        // tmpA1.p_data[0] = arr1->p_data[3];
+        soti_set_o( &arr1->p_data[3], &tmpA1.p_data[0],dhl);
+        // tmpA1.p_data[1] = arr1->p_data[4];
+        soti_set_o( &arr1->p_data[4], &tmpA1.p_data[1],dhl);
+        // tmpA1.p_data[2] = arr1->p_data[6];
+        soti_set_o( &arr1->p_data[6], &tmpA1.p_data[2],dhl);
+        // tmpA1.p_data[3] = arr1->p_data[7];
+        soti_set_o( &arr1->p_data[7], &tmpA1.p_data[3],dhl);
+        
+        // res->p_data[6] = darr_det( &tmpA1 )/det;
+        arrso_det_to(  &tmpA1, &tmp1,                  dhl);
+        soti_div_oo_to( &tmp1,  &det, &res->p_data[6], dhl);
+
+
+
+
+        // Set position 2,1
+        // tmpA1.p_data[0] = arr1->p_data[1];
+        soti_set_o( &arr1->p_data[1], &tmpA1.p_data[0],dhl);
+        // tmpA1.p_data[1] = arr1->p_data[0];
+        soti_set_o( &arr1->p_data[0], &tmpA1.p_data[1],dhl);
+        // tmpA1.p_data[2] = arr1->p_data[7];
+        soti_set_o( &arr1->p_data[7], &tmpA1.p_data[2],dhl);
+        // tmpA1.p_data[3] = arr1->p_data[6];
+        soti_set_o( &arr1->p_data[6], &tmpA1.p_data[3],dhl);
+        
+        // res->p_data[7] = darr_det( &tmpA1 )/det;
+        arrso_det_to(  &tmpA1, &tmp1,                  dhl);
+        soti_div_oo_to( &tmp1,  &det, &res->p_data[7], dhl);
+
+
+
+
+        // Set position 2,2
+        // tmpA1.p_data[0] = arr1->p_data[0];
+        soti_set_o( &arr1->p_data[0], &tmpA1.p_data[0],dhl);
+        // tmpA1.p_data[1] = arr1->p_data[1];
+        soti_set_o( &arr1->p_data[1], &tmpA1.p_data[1],dhl);
+        // tmpA1.p_data[2] = arr1->p_data[3];
+        soti_set_o( &arr1->p_data[3], &tmpA1.p_data[2],dhl);
+        // tmpA1.p_data[3] = arr1->p_data[4];
+        soti_set_o( &arr1->p_data[4], &tmpA1.p_data[3],dhl);
+
+        // res->p_data[8] = darr_det( &tmpA1 )/det;
+        arrso_det_to(  &tmpA1, &tmp1,                  dhl);
+        soti_div_oo_to( &tmp1,  &det, &res->p_data[8], dhl);
+
+        arrso_free(&tmpA1);
+
+    } 
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -377,6 +582,42 @@ void arrso_norm_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
 
     // res = sqrt(tmp3);
     soti_sqrt_to(&tmp3, res, dhl);
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void arrso_pnorm_to(arrso_t* arr1, coeff_t p, sotinum_t* res, dhelpl_t dhl){
+    
+    
+    uint64_t i;
+    ord_t order;
+    sotinum_t tmp1, tmp2, tmp3;
+
+    order = arrso_get_order( arr1 );
+
+    tmp1 = soti_get_tmp( 5, order, dhl);
+    tmp2 = soti_get_tmp( 6, order, dhl);
+    tmp3 = soti_get_tmp( 7, order, dhl);
+    
+    soti_set_r( 0.0, &tmp3, dhl);    
+    // 
+    for( i = 0; i<arr1->size; i++){
+
+        // tmp1 = (arr1->p_data[i])^p;
+        soti_pow_to( &arr1->p_data[i], p, &tmp1, dhl);
+        soti_abs_to( &tmp1, &tmp1, dhl);
+        
+        // tmp2 = tmp3 + tmp1;
+        soti_sum_oo_to( &tmp1, &tmp3, &tmp2, dhl);
+
+        // tmp3 = tmp2;
+        soti_set_o( &tmp2, &tmp3, dhl);
+    
+    }
+
+    // res = (tmp3)^(1/p);
+    soti_pow_to(&tmp3, 1.0/p, res, dhl);
     
 }
 // ----------------------------------------------------------------------------------------------------

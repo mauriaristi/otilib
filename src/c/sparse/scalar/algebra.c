@@ -284,86 +284,120 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     // Multiply real coefficients.
     tmpdest->re = num1->re * num2->re;
+
+    // Set source with the same real value.
     tmpsrc->re  = tmpdest->re;
 
-    if (num1->re != 0.0 && num2->order > 0 ){
+    // printf("Multiplying lhs(ord:%hhu) by rhs(ord:%hhu)\n",num1->order,num2->order);
+    // printf("Multiply lhs.re:%g x im of rhs ========= \n", num1->re);
+    // soti_print(num2,dhl);
 
+    if (num1->re != 0.0 && num2->order > 0 ){
+        
         // Swap pointers
-        tmpswap=tmpsrc; 
-        tmpsrc=tmpdest; 
-        tmpdest=tmpswap;
+        tmpswap = tmpsrc; 
+        tmpsrc  = tmpdest; 
+        tmpdest = tmpswap;
 
         for (ordi1 = 0; ordi1<num2->order; ordi1++){
 
             // Perform multiplication
             dhelp_sparse_mult_real(num1->re,
                                num2->p_im[ordi1], num2->p_idx[ordi1], num2->p_nnz[ordi1],
-                               tmp2.p_im[ordi1], tmp2.p_idx[ordi1], &tmp2.p_nnz[ordi1],       
+                                tmp2.p_im[ordi1],  tmp2.p_idx[ordi1], &tmp2.p_nnz[ordi1],       
                                dhl);              
 
-            dhelp_sparse_add_dirs(tmp2.p_im[ordi1], tmp2.p_idx[ordi1], tmp2.p_nnz[ordi1],
-                                  tmpsrc->p_im[ordi1], tmpsrc->p_idx[ordi1], tmpsrc->p_nnz[ordi1],
+            dhelp_sparse_add_dirs(    tmp2.p_im[ordi1],     tmp2.p_idx[ordi1],      tmp2.p_nnz[ordi1],
+                                   tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
                                   tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
 
         }
+        
+        // printf("\n -- \n");
+        // soti_print(tmpdest,dhl);
 
     }
+    
+    // printf("\n\nMultiply rhs.re:%g x im of lhs =========  \n", num2->re);
+    // soti_print(num1,dhl);
+
 
     if (num2->re != 0.0 && num1->order > 0 ){
 
         // Swap pointers
-        tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
+        tmpswap = tmpsrc; 
+        tmpsrc  = tmpdest; 
+        tmpdest = tmpswap;
 
         for (ordi1 = 0; ordi1<num1->order; ordi1++){
 
             // Perform multiplication
             dhelp_sparse_mult_real(num2->re,
-                               num1->p_im[ordi1], num1->p_idx[ordi1], num1->p_nnz[ordi1],
-                               tmp2.p_im[ordi1], tmp2.p_idx[ordi1], &tmp2.p_nnz[ordi1],       
+                               num1->p_im[ordi1], num1->p_idx[ordi1],  num1->p_nnz[ordi1],
+                                tmp2.p_im[ordi1],  tmp2.p_idx[ordi1],  &tmp2.p_nnz[ordi1],       
                                dhl);  
 
-            dhelp_sparse_add_dirs(tmp2.p_im[ordi1], tmp2.p_idx[ordi1], tmp2.p_nnz[ordi1],
-                                  tmpsrc->p_im[ordi1], tmpsrc->p_idx[ordi1], tmpsrc->p_nnz[ordi1],
+            dhelp_sparse_add_dirs(    tmp2.p_im[ordi1],     tmp2.p_idx[ordi1],      tmp2.p_nnz[ordi1],
+                                   tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
                                   tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
 
         }
+        // printf("\n -- \n");
+        // soti_print(tmpdest,dhl);
 
     }
     
-    if ( num1->order > 0 && num1->order > 0 ){
+    if ( num1->order > 0 && num2->order > 0 ){
         
+
+        // Start with both temporals with the same values.
+        soti_copy_nomemchk_to(tmpdest,tmpsrc,dhl);
+        
+        // Assign order 1 elements to src.
         tmpsrc->p_im[0]  = tmpdest->p_im[0] ;
         tmpsrc->p_idx[0] = tmpdest->p_idx[0];
-        tmpsrc->p_nnz[0] = tmpdest->p_nnz[0];
+        tmpsrc->p_nnz[0] = tmpdest->p_nnz[0];  
+        
+        
 
-        ordlim1 = MIN(num1->order, res_ord - 1);
+        ordlim1 = MIN( num1->order, res_ord - 1 );
         
         for(ordi1=0; ordi1<ordlim1; ordi1++){
 
-            ordlim2 = MIN(num2->order, res_ord - (ordi1+1) );
+            ordlim2 = MIN( num2->order, res_ord - (ordi1+1) );
 
-            tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
+            tmpswap = tmpsrc; 
+            tmpsrc  = tmpdest; 
+            tmpdest = tmpswap;
 
             // Multiply elements of order ordi1 times all elements of order 
             for (ordi2=0; ordi2<ordlim2; ordi2++){
 
                 ordires = ordi1 + ordi2 +1;
 
-                dhelp_sparse_mult(num1->p_im[ordi1], num1->p_idx[ordi1], num1->p_nnz[ordi1],ordi1+1,
-                                  num2->p_im[ordi2], num2->p_idx[ordi2], num2->p_nnz[ordi2],ordi2+1,
-                                  tmp2.p_im[ordires],tmp2.p_idx[ordires],&tmp2.p_nnz[ordires], dhl);
+                dhelp_sparse_mult( num1->p_im[ordi1],   num1->p_idx[ordi1],    num1->p_nnz[ordi1],  ordi1+1,
+                                   num2->p_im[ordi2],   num2->p_idx[ordi2],    num2->p_nnz[ordi2],  ordi2+1,
+                                    tmp2.p_im[ordires],  tmp2.p_idx[ordires],  &tmp2.p_nnz[ordires],         dhl);
 
-                dhelp_sparse_add_dirs(tmp2.p_im[ordires], tmp2.p_idx[ordires], tmp2.p_nnz[ordires],
-                                      tmpsrc->p_im[ordires], tmpsrc->p_idx[ordires], tmpsrc->p_nnz[ordires],
+                dhelp_sparse_add_dirs(    tmp2.p_im[ordires],     tmp2.p_idx[ordires],      tmp2.p_nnz[ordires],
+                                       tmpsrc->p_im[ordires],  tmpsrc->p_idx[ordires],   tmpsrc->p_nnz[ordires],
                                       tmpdest->p_im[ordires], tmpdest->p_idx[ordires], &tmpdest->p_nnz[ordires], dhl);
 
             }
+            ordires = ordi1+1;
+            
+            tmpsrc->p_im[ ordires] = tmpdest->p_im[ ordires];
+            tmpsrc->p_idx[ordires] = tmpdest->p_idx[ordires];
+            tmpsrc->p_nnz[ordires] = tmpdest->p_nnz[ordires];
 
-            tmpsrc->p_im[ ordi1+1] = tmpdest->p_im[ ordi1+1];
-            tmpsrc->p_idx[ordi1+1] = tmpdest->p_idx[ordi1+1];
-            tmpsrc->p_nnz[ordi1+1] = tmpdest->p_nnz[ordi1+1];
+            // printf("\n -- \n");
+            // printf("     Multiplying lhs(ord:%hhu) x rhs\n",ordi1+1);
+            // soti_print(tmpdest,dhl);
 
         }
+
+        // printf("\n -- \n");
+        // soti_print(tmpdest,dhl);
     
     }
     
@@ -372,6 +406,17 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 // ****************************************************************************************************
 sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
@@ -397,9 +442,9 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     // printf("Multiplying order %hhu x %hhu\n", num1->order, num2->order);
 
-    for( order=1; order<=res_ord; order++){
+    for( order = 1; order<=res_ord; order++){
 
-        ordi = order-1;
+        ordi = order - 1;
 
         // First multiply  re x ordi         
         if ( order <= num2->order && num1->re != 0.0){
@@ -662,12 +707,3 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-

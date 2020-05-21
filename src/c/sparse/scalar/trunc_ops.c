@@ -77,7 +77,7 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
     sotinum_t* tmpswap;
     ord_t res_ord = MAX(num1->order,num2->order);
     ord_t ordlim1, ordlim2;
-    ord_t ordi1, ordi2,ordires;
+    ord_t ordi1, ordi2, ordires;
 
     // Retreive sotinum temporals.
     // All tmps are created with no elements in imaginary directions (but allocated).
@@ -108,9 +108,11 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
             
         }
 
-        tmpsrc->p_im[ ordi1+ord2] = tmpdest->p_im[ ordi1+ord2];
-        tmpsrc->p_idx[ordi1+ord2] = tmpdest->p_idx[ordi1+ord2];
-        tmpsrc->p_nnz[ordi1+ord2] = tmpdest->p_nnz[ordi1+ord2];
+        ordires = ordi1+ord2;
+
+        tmpsrc->p_im[ ordires] = tmpdest->p_im[ ordires];
+        tmpsrc->p_idx[ordires] = tmpdest->p_idx[ordires];
+        tmpsrc->p_nnz[ordires] = tmpdest->p_nnz[ordires];
 
     }
     
@@ -127,7 +129,7 @@ void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl){
     // Assumes both have the space allocated and both have the same truncation order
     ord_t i;
 
-    for ( i =ord-1; i<src->order; i++){
+    for ( i = ord-1; i<src->order; i++){
         
         // Set number of non-zero and allocated size to 0.
         dest->p_nnz[i]  = src->p_nnz[i];

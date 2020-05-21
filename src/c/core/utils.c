@@ -110,14 +110,24 @@ void printArrayUI16(uint16_t* ptr_,uint8_t n){
     */
     // ************************************************************************************************
 
+    int i=0;
+
     printf("[");
 
-    for (int i = 0; i<n ; i++){
+    for (i = 0; i<n ; i++){
 
-        printf(" %hu,",ptr_[i]);
+        printf("%hu,",ptr_[i]);
     }
+    if (i>0){
+        
+        printf("\b]");    
 
-    printf("]");
+    } else {
+
+        printf("]");    
+
+    }
+    
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -137,7 +147,7 @@ void printArrayUI8(uint8_t* ptr_,uint8_t n){
 
     for (int i = 0; i<n ; i++){
 
-        printf(" %hhu,",ptr_[i]);
+        printf("%hhu,",ptr_[i]);
     }
 
     printf("]");

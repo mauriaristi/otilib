@@ -484,6 +484,34 @@ void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+inline void soti_copy_nomemchk_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
+    // Only recommended to use when using temporals.
+    // when memory is guaranteed to be allocated.
+    ord_t i;
+
+    // Copy real coefficient
+    dest->re = src->re;
+
+    // Copy imaginary coefficients
+    for ( i = 0; i < src->order; i++){
+        
+        // Copy memory to dest number. Only copy non zeros.
+        memcpy(dest->p_im[i], src->p_im[i], src->p_nnz[i]*sizeof(coeff_t) );
+        memcpy(dest->p_idx[i],src->p_idx[i],src->p_nnz[i]*sizeof(imdir_t) );
+
+        dest->p_nnz[i] = src->p_nnz[i]; 
+
+    }  
+
+    // Set all other elements in the imaginary directions to zero.
+    for (; i<dest->order;i++){
+        dest->p_nnz[i] = 0;
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 
 
@@ -525,6 +553,7 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
 
     ndir_t nnz_total = 1, dir;
     ord_t ordi,ord;
+    bases_t* imdir_bases;
     
     for( ordi = 0; ordi<num->order; ordi++){
         nnz_total += num->p_nnz[ordi];
@@ -532,18 +561,26 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
 
     printf("  Order: "_PORDT", non_zero: "_PNDIRT", re: %11.4e\n",
         num->order, nnz_total, num->re);
-    printf("  ORD ,    IMDIR  ,   VALUE   \n");
+    // printf("  ORD ,    IMDIR  ,   VALUE   \n");
+    printf("      VALUE   ,    IMDIR  \n");
 
-    printf("    0 ,         0 , "_PCOEFFT"\n",num->re);
+    // printf("    0 ,         0 , "_PCOEFFT"\n",num->re);
+    printf("  " _PCOEFFT " , [0]\n",num->re);
 
     for( ord = 1; ord<=num->order; ord++){
 
-        ndir_t ndir_i = num->p_nnz[ord];
+        ndir_t ndir_i = num->p_nnz[ord-1];
 
         for ( dir=0; dir< ndir_i; dir++){
             
-            printf(" " _PORDT " , " _PNDIRT " ," _PCOEFFT "\n",
-                ord, num->p_idx[ord-1][dir], num->p_im[ord-1][dir]);
+            // printf(" " _PORDT " , " _PNDIRT " ," _PCOEFFT "\n",
+            printf("  " _PCOEFFT " , ",  num->p_im[ord-1][dir]);
+
+            imdir_bases = dhelp_get_imdir( num->p_idx[ord-1][dir], ord, dhl);
+            
+            printArrayUI16( imdir_bases, ord);
+
+            printf("\n");
 
         }
 

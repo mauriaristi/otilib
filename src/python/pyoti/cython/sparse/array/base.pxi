@@ -841,7 +841,43 @@ cdef class matso:
     return res
 
   #---------------------------------------------------------------------------------------------------
+
+
+  #***************************************************************************************************
+  cpdef matso extract_im(self, hum_dir):
+    """
+    PURPOSE: Get the corresponding imaginary direction in the matso object.
+    """
+    #*************************************************************************************************
+    global dhl
+    
+    cdef list item = imdir(hum_dir)
+    cdef arrso_t res
+    
+
+    res = arrso_extract_im( item[ZERO],  item[ONE], &self.arr,  dhl)
+
+    return matso.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
   
+  #***************************************************************************************************
+  cpdef matso extract_deriv(self, hum_dir):
+    """
+    PURPOSE: Get the corresponding derivative in the matso object, as OTI number.
+    """
+    #*************************************************************************************************
+    global dhl
+    
+    cdef list item = imdir(hum_dir)
+    cdef arrso_t res
+    
+    res = arrso_extract_deriv( item[ZERO],  item[ONE], &self.arr,  dhl)
+
+    return matso.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
   #***************************************************************************************************
   def get_active_bases(self):
     """

@@ -1699,6 +1699,8 @@ struct __pyx_vtabstruct_5pyoti_6sparse_sotinum {
   struct __pyx_obj_5pyoti_6sparse_sotinum *(*init)(void);
   __pyx_t_5pyoti_8c_otilib_coeff_t (*get_deriv)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
   __pyx_t_5pyoti_8c_otilib_coeff_t (*get_im)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
+  struct __pyx_obj_5pyoti_6sparse_sotinum *(*extract_im)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
+  struct __pyx_obj_5pyoti_6sparse_sotinum *(*extract_deriv)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_6sparse_sotinum *__pyx_vtabptr_5pyoti_6sparse_sotinum;
 
@@ -1713,6 +1715,8 @@ static struct __pyx_vtabstruct_5pyoti_6sparse_sotinum *__pyx_vtabptr_5pyoti_6spa
 
 struct __pyx_vtabstruct_5pyoti_6sparse_matso {
   struct __pyx_obj_5pyoti_6sparse_matso *(*create)(arrso_t *);
+  struct __pyx_obj_5pyoti_6sparse_matso *(*extract_im)(struct __pyx_obj_5pyoti_6sparse_matso *, PyObject *, int __pyx_skip_dispatch);
+  struct __pyx_obj_5pyoti_6sparse_matso *(*extract_deriv)(struct __pyx_obj_5pyoti_6sparse_matso *, PyObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_6sparse_matso *__pyx_vtabptr_5pyoti_6sparse_matso;
 

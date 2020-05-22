@@ -19,6 +19,8 @@ cdef class sotinum:
 
   cpdef coeff_t get_deriv( self, object humdir)
   cpdef coeff_t get_im( self, object humdir)
+  cpdef sotinum extract_im( self, object humdir)
+  cpdef sotinum extract_deriv( self, object humdir)
   
   # cpdef sin(self)
   # cpdef cos(self)

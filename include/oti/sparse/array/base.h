@@ -2,9 +2,15 @@
 #define OTI_SPARSE_ARRAY_BASE_H
 
 
+arrso_t arrso_extract_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+void    arrso_extract_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+darr_t  arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+arrso_t arrso_extract_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+void    arrso_extract_deriv_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 
 
 darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Copy an existing array. Data is copied to the new memory.

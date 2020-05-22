@@ -1,6 +1,29 @@
 #ifndef OTI_SPARSE_SCALAR_BASE_H
 #define OTI_SPARSE_SCALAR_BASE_H
 
+
+
+
+
+
+
+
+sotinum_t soti_extract_deriv(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
+void      soti_extract_deriv_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+sotinum_t soti_extract_im(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
+void      soti_extract_im_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 /**************************************************************************************************//**
 @brief Function that distribute memory along the different components of an OTI number.
 

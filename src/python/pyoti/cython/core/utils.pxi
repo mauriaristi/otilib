@@ -1,12 +1,67 @@
 
 
 
+#*****************************************************************************************************
+def div_imdir_idxord( imdir_t numidx, ord_t numord, imdir_t denidx, ord_t denord):
+  
+  global h
+  global dhl
+
+  cdef imdir_t residx
+  cdef ord_t   resord
+  cdef int success;
+
+  dhelp_div_imdir(numidx, numord, denidx, denord, &residx, &resord, &success, dhl)
+
+  if (success != 0):
+
+    return -1
+
+  else:
+
+    return [residx,resord]
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
 
 
+#*****************************************************************************************************
+def div_imdir(humdir_num, humdir_den):
+  
+  global h
+  global dhl
 
+  cdef imdir_t numidx, denidx, residx
+  cdef ord_t   numord, denord, resord
+  cdef int success;
 
+  numidx, numord = imdir(humdir_num)
+  denidx, denord = imdir(humdir_den)
 
+  dhelp_div_imdir(numidx, numord, denidx, denord, &residx, &resord, &success, dhl)
 
+  if (success != 0):
+
+    return -1
+
+  else:
+
+    return h.get_compact_fulldir(residx,resord)
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
+def print_capabilities():
+  
+  global h
+
+  h.print_capabilities()
+#-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************

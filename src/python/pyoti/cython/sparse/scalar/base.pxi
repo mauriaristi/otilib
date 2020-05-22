@@ -294,7 +294,7 @@ cdef class sotinum:
     #*************************************************************************************************
     global h
 
-    soti_set_o(&rhs.num, &self.num,dhl)
+    soti_set_o( &rhs.num, &self.num, dhl)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -764,6 +764,48 @@ cdef class sotinum:
 
     indx, order = imdir(humdir)
     return soti_get_item(indx,order, &self.num, dhl) 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef sotinum extract_im( self, object humdir):
+    """
+    PURPOSE:      to retrieve the coefficient in the oti direction.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef sotinum_t res
+    
+    indx, order = imdir(humdir)
+
+    res = soti_extract_im(indx,order, &self.num, dhl) 
+
+    return sotinum.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef sotinum extract_deriv( self, object humdir):
+    """
+    PURPOSE:      Get the derivative as an OTI number.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef sotinum_t res
+    
+    indx, order = imdir(humdir)
+
+    res = soti_extract_deriv(indx,order, &self.num, dhl)
+
+    return sotinum.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 

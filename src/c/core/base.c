@@ -275,6 +275,133 @@ void dhelp_imdir2str(imdir_t imdir, ord_t ord, dhelpl_t* dhl, char* str){
 
 
 
+// ****************************************************************************************************
+void dhelp_get_idx_ord(bases_t* dir, ord_t len, imdir_t* residx, ord_t* resord, dhelpl_t dhl){
+
+    ord_t i, resorder = len;
+    bases_t imb;
+    imdir_t indx = 0;
+
+    // Only when the order is valid.
+    if (len <= dhl.ndh){
+
+        for( i = 0; i < len; i++){
+  
+            imb = dir[i];
+      
+            // Only when the base is valid.
+            if (imb == 0){
+                
+                if (resorder != 0){
+
+                    resorder -= 1;
+
+                }
+                
+            } else {
+
+                if ( imb <= dhl.p_dh[i].Nbasis && imb != 0) {
+            
+                    indx += dhl.p_dh[i].p_ndirs[imb-1];
+      
+                } else {
+      
+                    printf("ERROR: No precomputed data available\n");
+                    exit(OTI_NonPreComp);
+      
+                }    
+            
+            }
+            
+  
+        }
+  
+    } else {
+  
+        printf("ERROR: No precomputed data available\n");
+        exit(OTI_NonPreComp);
+  
+    }
+
+    (*residx) = indx;
+    (*resord) = resorder;
+
+}
+
+
+// ****************************************************************************************************
+void dhelp_div_imdir(imdir_t  numidx, ord_t  numord, 
+                     imdir_t  denidx, ord_t  denord,
+                     imdir_t* residx, ord_t* resord, 
+                        int* success, dhelpl_t dhl){
+
+    bases_t* numdirs; 
+    bases_t* dendirs;
+    bases_t resdirs[_MAXORDER_OTI];
+    ord_t i, j=0, k=0;
+        
+    (*success) = -1;
+
+    if ( denord < numord && denord != 0 ){
+        
+        (*success) = 0;
+        
+        (*resord) = numord - denord;
+        numdirs = dhelp_get_imdir( numidx, numord, dhl);
+        dendirs = dhelp_get_imdir( denidx, denord, dhl);
+
+        for ( i = 0; i < numord; i++){
+        
+            if ( k < denord ){
+
+                if (numdirs[i] < dendirs[k] ){
+
+                    resdirs[j] = numdirs[i];
+                    j++;
+
+                }else if (numdirs[i] > dendirs[k] ){
+
+                    (*success) = -1;
+                    break;
+
+                } else {
+
+                    k++;
+
+                }
+                
+            } else {
+                
+                resdirs[j] = numdirs[i];
+                j++;
+            }
+
+        }
+
+        if (k < denord){
+            
+            (*success) = -1;
+
+        } else {
+
+            //
+            dhelp_get_idx_ord( resdirs, *resord, residx, resord, dhl);
+        }
+
+    } else if (denord == 0 ) {
+
+        (*residx)  = 0;
+        (*resord)  = 0;
+        (*success) = 0;
+
+    }
+    
+    
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
 
 // ****************************************************************************************************
 coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhelpl_t dhl){
@@ -314,6 +441,46 @@ coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+// // ****************************************************************************************************
+// coeff_t dhelp_get_deriv_factor(imdir_t numidx, ord_t numord, imdir_t denidx, ord_t denord, dhelpl_t dhl){
+
+//     coeff_t factor = 1.0;
+//     bases_t* dirs;
+//     bases_t dir_prev;
+//     ord_t i, j = 2;
+    
+//     if ( order != 0 ){
+
+//         dirs = dhelp_get_imdir( idx, order, dhl);
+
+//         dir_prev = dirs[0];
+
+//         for (i=1; i<order; i++){
+
+//             if (dirs[i] == dir_prev){
+                
+//                 factor *= j;
+//                 j+=1;
+
+//             } else{
+
+//                 j=2;
+
+//                 dir_prev = dirs[i];
+                
+//             }
+
+//         }    
+
+//     }
+    
+
+//     return factor;
+
+// }
+// // ----------------------------------------------------------------------------------------------------
 
 
 

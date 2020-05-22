@@ -2697,6 +2697,7 @@ static const char __pyx_k_x[] = "x_{";
     static const char __pyx_k_first_col_indices[] = "first_col_indices";
     static const char __pyx_k_helper_get_multpl[] = "helper_get_multpl";
     static const char __pyx_k_cline_in_traceback[] = "cline_in_traceback";
+    static const char __pyx_k_print_capabilities[] = "print_capabilities";
     static const char __pyx_k_get_compact_fulldir[] = "get_compact_fulldir";
     static const char __pyx_k_pyx_unpickle_otibase[] = "__pyx_unpickle_otibase";
     static const char __pyx_k_dhelp_get_matrix_form[] = "dhelp_get_matrix_form";
@@ -2907,6 +2908,7 @@ static const char __pyx_k_x[] = "x_{";
     static PyObject *__pyx_n_s_passed;
     static PyObject *__pyx_n_s_pickle;
     static PyObject *__pyx_n_s_print;
+    static PyObject *__pyx_n_s_print_capabilities;
     static PyObject *__pyx_n_s_print_options;
     static PyObject *__pyx_n_s_pyoti_core;
     static PyObject *__pyx_n_s_pyoti_dense;
@@ -46661,6 +46663,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_passed, __pyx_k_passed, sizeof(__pyx_k_passed), 0, 0, 1, 1},
   {&__pyx_n_s_pickle, __pyx_k_pickle, sizeof(__pyx_k_pickle), 0, 0, 1, 1},
   {&__pyx_n_s_print, __pyx_k_print, sizeof(__pyx_k_print), 0, 0, 1, 1},
+  {&__pyx_n_s_print_capabilities, __pyx_k_print_capabilities, sizeof(__pyx_k_print_capabilities), 0, 0, 1, 1},
   {&__pyx_n_s_print_options, __pyx_k_print_options, sizeof(__pyx_k_print_options), 0, 0, 1, 1},
   {&__pyx_n_s_pyoti_core, __pyx_k_pyoti_core, sizeof(__pyx_k_pyoti_core), 0, 0, 1, 1},
   {&__pyx_n_s_pyoti_dense, __pyx_k_pyoti_dense, sizeof(__pyx_k_pyoti_dense), 0, 0, 1, 1},
@@ -48085,7 +48088,7 @@ if (!__Pyx_RefNanny) {
  * from libc.stdlib cimport free      # import memory managment functions.
  * 
  * from pyoti.core import   number_types, dHelp, imdir # To make them available on import.             # <<<<<<<<<<<<<<
- * from pyoti.core import   dhelp_get_matrix_form
+ * from pyoti.core import   dhelp_get_matrix_form, print_capabilities
  * from pyoti.core import   get_latex_dir, set_trunc_order, get_trunc_order
  */
   __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(16, 12, __pyx_L1_error)
@@ -48115,15 +48118,18 @@ if (!__Pyx_RefNanny) {
   /* "../../src/python/pyoti/cython/dense/include.pxi":13
  * 
  * from pyoti.core import   number_types, dHelp, imdir # To make them available on import.
- * from pyoti.core import   dhelp_get_matrix_form             # <<<<<<<<<<<<<<
+ * from pyoti.core import   dhelp_get_matrix_form, print_capabilities             # <<<<<<<<<<<<<<
  * from pyoti.core import   get_latex_dir, set_trunc_order, get_trunc_order
  * 
  */
-  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(16, 13, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(16, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_dhelp_get_matrix_form);
   __Pyx_GIVEREF(__pyx_n_s_dhelp_get_matrix_form);
   PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_dhelp_get_matrix_form);
+  __Pyx_INCREF(__pyx_n_s_print_capabilities);
+  __Pyx_GIVEREF(__pyx_n_s_print_capabilities);
+  PyList_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_print_capabilities);
   __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(16, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -48131,11 +48137,15 @@ if (!__Pyx_RefNanny) {
   __Pyx_GOTREF(__pyx_t_2);
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_dhelp_get_matrix_form, __pyx_t_2) < 0) __PYX_ERR(16, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_print_capabilities); if (unlikely(!__pyx_t_2)) __PYX_ERR(16, 13, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_print_capabilities, __pyx_t_2) < 0) __PYX_ERR(16, 13, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../src/python/pyoti/cython/dense/include.pxi":14
  * from pyoti.core import   number_types, dHelp, imdir # To make them available on import.
- * from pyoti.core import   dhelp_get_matrix_form
+ * from pyoti.core import   dhelp_get_matrix_form, print_capabilities
  * from pyoti.core import   get_latex_dir, set_trunc_order, get_trunc_order             # <<<<<<<<<<<<<<
  * 
  * from pyoti.core cimport  c_ptr_to_np_1darray_double, ZERO, ONE

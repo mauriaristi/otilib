@@ -29,6 +29,12 @@ cdef extern from "oti/oti.h" nogil:
   # Include functions from "sparse.h"
   #---------------------------------------------------------------------------------------------------
   
+  arrso_t arrso_extract_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+  void    arrso_extract_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+  darr_t  arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+  arrso_t arrso_extract_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+  void    arrso_extract_deriv_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+  
   void arrso_get_active_bases(arrso_t* arr, imdir_t* list_vals, dhelpl_t dhl);
   arrso_t arrso_atanh(   arrso_t* arr,               dhelpl_t dhl);
   void    arrso_atanh_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
@@ -146,8 +152,11 @@ cdef extern from "oti/oti.h" nogil:
 
 
 
+  sotinum_t soti_extract_deriv(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
+  void      soti_extract_deriv_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 
-
+  sotinum_t soti_extract_im(imdir_t idx, ord_t order, sotinum_t* num,  dhelpl_t dhl);
+  void      soti_extract_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   void soti_get_active_bases(sotinum_t* num, imdir_t* list_vals, dhelpl_t dhl);
 
   sotinum_t soti_cbrt(sotinum_t* num, dhelpl_t dhl);

@@ -10,7 +10,7 @@ cimport cython                      #
 from libc.stdlib cimport free      # import memory managment functions.
 
 from pyoti.core import   number_types, dHelp, imdir # To make them available on import.
-from pyoti.core import   dhelp_get_matrix_form
+from pyoti.core import   dhelp_get_matrix_form, print_capabilities
 from pyoti.core import   get_latex_dir, set_trunc_order, get_trunc_order
 
 from pyoti.core cimport  c_ptr_to_np_1darray_double, ZERO, ONE

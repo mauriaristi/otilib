@@ -117,6 +117,26 @@ cdef class dHelp:
 
     return out
   #--------------------------------------------------------------------------------------------------- 
+  
+  #***************************************************************************************************
+  def print_capabilities(self):
+    """
+    PURPOSE: Print capabilities of the direction helper.
+    """
+    out = ""
+    out += "Current capabilities of the library: "+str(self.dhl.ndh)+" helpers:\n"
+    out += "Summary: Maximum order: "+str(self.dhl.ndh)+"\n"
+
+    # Loop over all direction helpers
+    for i in range(self.dhl.ndh):
+      
+      out += " -> order: {0:3d}, ".format(i+1)
+      out += " - Max nbases: " + str(self.dhl.p_dh[i].Nbasis)+"\n"
+
+    # end for
+    out = out[:-1]
+    print(out)
+  #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
   def get_fulldir(self, imdir_t indx, ord_t order):

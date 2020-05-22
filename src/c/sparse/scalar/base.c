@@ -306,20 +306,7 @@ void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 
 
 // Getters.
-
-// ****************************************************************************************************
-coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
-
-    coeff_t coef   = soti_get_item(idx,order,num,dhl);
-    coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
-
-    // error_exit(OTI_OutOfMemory);
-
-    return coef*factor;
-}
-// ----------------------------------------------------------------------------------------------------
-
-
+// Coefficient extractors.
 // ****************************************************************************************************
 coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     
@@ -348,6 +335,168 @@ coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_extract_im(imdir_t idx, ord_t order, sotinum_t* num,  dhelpl_t dhl){
+
+    sotinum_t res = soti_init();
+
+    soti_extract_im_to(idx, order, num, &res, dhl);
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_extract_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+    
+    int  success;
+    ord_t   resord, i, j;
+    imdir_t residx;
+    ndir_t ndir_ordi, diri;
+    sotinum_t tmp;
+    
+    if (order == 0){
+        
+        // If getting the "real" part, it is the same number.
+        soti_set_o(num,res,dhl);
+
+    } else if (order > num->order){
+
+        // If the requested order is greater, it will be zero.
+        soti_set_r(0.0, res, dhl);
+
+    } else {
+
+        // use temporal 0.
+        tmp = soti_get_tmp(0, num->order-order, dhl);
+        
+        // Get real part.
+        tmp.re = soti_get_item(idx, order, num, dhl);
+
+        // loop for the remaining orders:
+        for(i = order; i<num->order; i++){
+
+            // Divide the remaining directions in the number by the requested direction
+            // 
+            ndir_ordi = num->p_nnz[i];
+
+            for ( diri = 0; diri< ndir_ordi; diri++){ 
+
+                dhelp_div_imdir( num->p_idx[i][diri], i + 1, idx, order, &residx, &resord, &success, dhl);
+                // if derivative is possible:
+                if (success == 0){
+
+                    j = resord-1;
+                    
+                    tmp.p_idx[j][tmp.p_nnz[j]] = residx;
+                    tmp.p_im[ j][tmp.p_nnz[j]] = num->p_im[i][diri] ;
+                    tmp.p_nnz[j]++;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    soti_copy_to(&tmp,res,dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// Derivative extractors
+
+// ****************************************************************************************************
+coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t coef   = soti_get_item(idx,order,num,dhl);
+    coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
+
+    // error_exit(OTI_OutOfMemory);
+
+    return coef*factor;
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+sotinum_t soti_extract_deriv(imdir_t idx, ord_t order, sotinum_t* num,  dhelpl_t dhl){
+
+    sotinum_t res = soti_init();
+
+    soti_extract_deriv_to(idx, order, num, &res, dhl);
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+    
+    int  success;
+    ord_t   resord, i, j;
+    imdir_t residx;
+    coeff_t factornum, factorden;
+    ndir_t ndir_ordi, diri;
+    sotinum_t tmp;
+    
+    if (order == 0){
+        
+        // If getting the "real" part, it is the same number.
+        soti_set_o(num,res,dhl);
+
+    } else if (order > num->order){
+
+        // If the requested order is greater, it will be zero.
+        soti_set_r(0.0, res, dhl);
+
+    } else {
+
+        // use temporal 0.
+        tmp = soti_get_tmp(0, num->order-order, dhl);
+        
+        // Get real part.
+        tmp.re = soti_get_item(idx, order, num, dhl) * dhelp_get_deriv_factor(idx, order, dhl);
+
+        // loop for the remaining orders:
+        for(i = order; i<num->order; i++){
+
+            // Divide the remaining directions in the number by the requested direction
+            
+            ndir_ordi = num->p_nnz[i];
+
+            for ( diri = 0; diri< ndir_ordi; diri++){ 
+
+                dhelp_div_imdir( num->p_idx[i][diri], i + 1, idx, order, &residx, &resord, &success, dhl);
+                // if derivative is possible:
+                if (success == 0){
+
+                    j = resord-1;
+
+                    factornum = dhelp_get_deriv_factor(num->p_idx[i][diri], i+1, dhl);
+                    factorden = dhelp_get_deriv_factor(residx, resord, dhl);
+
+                    tmp.p_idx[j][tmp.p_nnz[j]] = residx;
+                    tmp.p_im[ j][tmp.p_nnz[j]] = num->p_im[i][diri] * (factornum/factorden);
+                    tmp.p_nnz[j]++;
+
+                }
+
+            }
+
+        }
+
+    }
+
+    soti_copy_to(&tmp,res,dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
 
 // ****************************************************************************************************
 uint64_t soti_get_min_memsize(sotinum_t* num, dhelpl_t dhl){

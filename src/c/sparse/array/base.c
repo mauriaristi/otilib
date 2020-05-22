@@ -142,6 +142,10 @@ inline void arrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, arrso_t
 
 
 
+
+
+
+
 // ****************************************************************************************************
 darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
@@ -160,6 +164,107 @@ darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
 }
 // ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+arrso_t arrso_extract_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
+    
+    arrso_t res = arrso_zeros_bases( arr->nrows, arr->ncols, 0, 0, dhl);
+    
+    arrso_extract_im_to( idx, order, arr, &res, dhl);
+
+    return res;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void arrso_extract_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
+    
+    // Check first dimensions.
+    arrso_dimCheck_OO_elementwise(arr,arr,res);
+
+    for( i = 0; i < arr->size ; i++ ){
+                
+        soti_extract_im_to( idx, order, &arr->p_data[i], &res->p_data[i],  dhl);
+
+    }
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+darr_t arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
+    
+    darr_t res = darr_zeros( arr->nrows, arr->ncols);
+    uint64_t i;
+    
+    for( i = 0; i < arr->size ; i++ ){
+        
+        darr_set_item_i(  
+            soti_get_deriv( idx, order, &arr->p_data[i],  dhl), 
+            i, &res);
+
+    }
+
+    return res;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+arrso_t arrso_extract_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
+    
+    arrso_t res = arrso_zeros_bases( arr->nrows, arr->ncols, 0, 0, dhl);
+    
+    arrso_extract_deriv_to( idx, order, arr, &res, dhl);
+
+    return res;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void arrso_extract_deriv_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
+    
+    // Check first dimensions.
+    arrso_dimCheck_OO_elementwise(arr,arr,res);
+
+    for( i = 0; i < arr->size ; i++ ){
+                
+        soti_extract_deriv_to( idx, order, &arr->p_data[i], &res->p_data[i],  dhl);
+
+    }
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

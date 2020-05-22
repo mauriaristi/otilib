@@ -61,7 +61,13 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "core.h"
   #---------------------------------------------------------------------------------------------------
-  
+  void dhelp_div_imdir(imdir_t  numidx, ord_t  numord, 
+                       imdir_t  denidx, ord_t  denord,
+                       imdir_t* residx, ord_t* resord, 
+                          int* success, dhelpl_t dhl);
+
+  void dhelp_get_idx_ord(bases_t* dir, ord_t len, imdir_t* residx, ord_t* resord, dhelpl_t dhl);
+
   void print_python_error_def( );
   
   void set_global_test(int x);

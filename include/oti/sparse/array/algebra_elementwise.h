@@ -107,6 +107,10 @@ void arrso_mul_OO_to(arrso_t*   lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_mul_RO_to(darr_t*    lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_mul_oO_to(sotinum_t* lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_mul_rO_to(coeff_t    lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+
+// ARR1 * ARR2 + ARR3
+void arrso_gem_OO_to(  arrso_t* arr1, arrso_t* arr2, arrso_t* arr3, arrso_t* res, dhelpl_t dhl);
+void arrso_gem_oO_to(sotinum_t* arr1, arrso_t* arr2, arrso_t* arr3, arrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

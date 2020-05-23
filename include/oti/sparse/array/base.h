@@ -49,8 +49,10 @@ void arrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, arrso_t* arr, 
 @brief Getter functions. These functions extract a member of the array.
 
 ******************************************************************************************************/ 
-sotinum_t arrso_get_item_i(arrso_t* arr, uint64_t i, dhelpl_t dhl);
-sotinum_t arrso_get_item_ij(arrso_t* arr, uint64_t i, uint64_t j, dhelpl_t dhl);
+sotinum_t arrso_get_item_i(    arrso_t* arr, uint64_t i,                             dhelpl_t dhl);
+void      arrso_get_item_i_to( arrso_t* arr, uint64_t i,             sotinum_t* res, dhelpl_t dhl);
+sotinum_t arrso_get_item_ij(   arrso_t* arr, uint64_t i, uint64_t j,                 dhelpl_t dhl);
+void      arrso_get_item_ij_to(arrso_t* arr, uint64_t i, uint64_t j, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 

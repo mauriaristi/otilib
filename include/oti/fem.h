@@ -7,17 +7,19 @@
 #include "oti/comm.h"
 #include "oti/real.h"
 #include "oti/dense.h"
+#include "oti/sparse.h"
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------    END EXTERNAL LIBRARIES     -------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-
-// Structure definitions
-#include "fem/structures.h"
+// Gaussian array.
+#include "fem/gauss.h"
+// #include "fem/feoarr.h"
 
 // Enums.
 #include "fem/enums.h"
+
 
 // Basis functions.
 #include "fem/basis_functions.h"
@@ -31,8 +33,7 @@
 // Finite ELement integration point computation.
 #include "fem/integration_points.h"
 
-// Gaussian array.
-#include "fem/feoarr.h"
+
 
 
 #endif

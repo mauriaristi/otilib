@@ -8,6 +8,9 @@
 // } arrso_t;                ///< Array of OTIs type.
 
 
+
+
+
 // 1. Elementwise operations.
 // 1.1. Negation.
 // ****************************************************************************************************
@@ -299,7 +302,43 @@ void arrso_mul_rO_to(coeff_t num, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 
 
 
+// ****************************************************************************************************
+void arrso_gem_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* arr3, arrso_t* res, dhelpl_t dhl){
+    // This function does GEM (GEneral Multiplication): RES = ARR1*ARR2 + ARR3
+    // Allows to do the following RES = ARR1*ARR2 + RES
+    uint64_t i;
 
+    // Check inputs:
+    arrso_dimCheck_OO_elementwise(arr1,arr2,res);
+    arrso_dimCheck_OO_elementwise(arr1,arr3,res);
+
+    // Loop for every element and add real to the oti number.
+    for ( i = 0; i < res->size; i++){
+
+        soti_gem_oo_to(&arr1->p_data[i], &arr2->p_data[i], &arr3->p_data[i], &res->p_data[i], dhl);
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void arrso_gem_oO_to(sotinum_t* arr1, arrso_t* arr2, arrso_t* arr3, arrso_t* res, dhelpl_t dhl){
+    // This function does GEM (GEneral Multiplication): RES = ARR1*ARR2 + ARR3
+    // Allows to do the following RES = ARR1*ARR2 + RES
+    uint64_t i;
+
+    // Check inputs:
+    arrso_dimCheck_OO_elementwise(arr2,arr3,res);
+
+    // Loop for every element and add real to the oti number.
+    for ( i = 0; i < res->size; i++){
+
+        soti_gem_oo_to( arr1 , &arr2->p_data[i], &arr3->p_data[i], &res->p_data[i], dhl);
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

@@ -34,8 +34,12 @@ cdef extern from "oti/oti.h" nogil:
   darr_t  arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
   arrso_t arrso_extract_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
   void    arrso_extract_deriv_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
-  
+
+  void      arrso_get_item_i_to( arrso_t* arr, uint64_t i,             sotinum_t* res, dhelpl_t dhl);
+  void      arrso_get_item_ij_to(arrso_t* arr, uint64_t i, uint64_t j, sotinum_t* res, dhelpl_t dhl);
+
   void arrso_get_active_bases(arrso_t* arr, imdir_t* list_vals, dhelpl_t dhl);
+  
   arrso_t arrso_atanh(   arrso_t* arr,               dhelpl_t dhl);
   void    arrso_atanh_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_asinh(   arrso_t* arr,               dhelpl_t dhl);

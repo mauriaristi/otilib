@@ -1,12 +1,5 @@
 
 
-
-
-
-
-
-
-
 // ****************************************************************************************************
 int64_t fem_defFunctFrom_otiFunc(oarr_t* p_arr1, uint64_t derIndx, elemProps_t* elem, 
     feoarr_t* res, dhelpl_t dhl) {

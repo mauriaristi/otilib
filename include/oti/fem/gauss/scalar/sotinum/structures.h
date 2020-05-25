@@ -7,7 +7,7 @@
 
 typedef struct{
     sotinum_t*  p_data;   ///< Data array
-    uint64_t    nIntPts;  ///< Number of integration points.
+    uint64_t    nip;      ///< Number of integration points.
 } fesoti_t;
 
 // ----------------------------------------------------------------------------------------------------

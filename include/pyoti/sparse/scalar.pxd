@@ -22,23 +22,6 @@ cdef class sotinum:
   cpdef sotinum extract_im( self, object humdir)
   cpdef sotinum extract_deriv( self, object humdir)
   
-  # cpdef sin(self)
-  # cpdef cos(self)
-  # cpdef tan(self)
-  # cpdef arctan(self)
-  # cpdef arccos(self)
-  # cpdef arcsin(self)
-  # cpdef sinh(self)
-  # cpdef arcsinh(self)
-  # cpdef cosh(self)
-  # cpdef arccosh(self)
-  # cpdef tanh(self)
-  # cpdef arctanh(self)
-  # cpdef log10(self)
-  # cpdef log(self)
-  # cpdef exp(self)
-  # cpdef sqrt(self)
-  # cpdef cbrt(self)
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::: END OF CLASS SPR_OTINUM :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -4,9 +4,19 @@
 
 
 
+/**************************************************************************************************//**
+@brief Copy functions.
+
+@param[in] num Number to copy into res.
+@param[in] res Result
+@param[in] dhl Direction helper list
+******************************************************************************************************/
+fesoti_t fesoti_copy(    fesoti_t* src,                dhelpl_t dhl);
+void     fesoti_copy_to( fesoti_t* src, fesoti_t* dst, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Setter.
+@brief Set all elements as given num.
 
 @param[in] num Number to set in res.
 @param[in] res Result
@@ -15,6 +25,20 @@
 void fesoti_set_all_o( sotinum_t* num, fesoti_t* res, dhelpl_t dhl);
 void fesoti_set_all_r(    coeff_t num, fesoti_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Set a specific imaginary direction.
+
+@param[in] num OTI number to set the item.
+@param[in] k   Integration point to set.
+@param[in] res Integration point to set.
+@param[in] dhl Direction helper list
+******************************************************************************************************/
+void fesoti_set_item_k_f( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
+void fesoti_set_item_k_r(   coeff_t  num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 
 /**************************************************************************************************//**
 @brief Getter
@@ -28,8 +52,23 @@ void      fesoti_get_item_k_to(fesoti_t* num, uint64_t k, sotinum_t* res, dhelpl
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Free Gauss Sparse oti number.
+@brief Create a gauss scalar filled with zeros.
 
+@param[in] nIntPts Number of integration points. 
+@param[in] nbases  Number of imaginary bases. 
+@param[in] order   Truncation prder of the number
+@param[in] dhl Direction helper list
+******************************************************************************************************/
+fesoti_t fesoti_zeros_bases(uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Reserve memory for gauss scalar.
+
+@param[in] nIntPts Number of integration points. 
+@param[in] nbases  Number of imaginary bases. 
+@param[in] order   Truncation prder of the number
 @param[in] dhl Direction helper list
 ******************************************************************************************************/
 fesoti_t fesoti_createEmpty_bases(uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl);
@@ -42,6 +81,14 @@ fesoti_t fesoti_empty_like(fesoti_t* arr, dhelpl_t dhl);
 @param[in] num FEsoti to free
 ******************************************************************************************************/
 void fesoti_free(fesoti_t* num);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Get OTI truncation order.
+
+@param[in] num FEsoti
+******************************************************************************************************/
+ord_t fesoti_get_order( fesoti_t* num );
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

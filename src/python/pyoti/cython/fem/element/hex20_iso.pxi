@@ -73,33 +73,33 @@ cpdef hex20_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
 
   """
   
-  cdef otinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
-  cdef otinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
-  cdef otinum chi = chi_r + e( 3, order = derOrder, nbases = 3)
+  cdef sotinum xi  = xi_r  + e( 1, order = derOrder, nbases = 3)
+  cdef sotinum eta = eta_r + e( 2, order = derOrder, nbases = 3)
+  cdef sotinum chi = chi_r + e( 3, order = derOrder, nbases = 3)
 
   # Vertex nodes.
-  cdef otinum N0 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * (-xi - eta - chi - 2.0 ) #(-1,-1,-1)
-  cdef otinum N1 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * ( xi - eta - chi - 2.0 ) #( 1,-1,-1)
-  cdef otinum N2 = 0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * ( xi + eta - chi - 2.0 ) #( 1, 1,-1)
-  cdef otinum N3 = 0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * (-xi + eta - chi - 2.0 ) #(-1, 1,-1)
-  cdef otinum N4 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * (-xi - eta + chi - 2.0 ) #(-1, 1, 1)
-  cdef otinum N5 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * ( xi - eta + chi - 2.0 ) #( 1,-1, 1)
-  cdef otinum N6 = 0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) * ( xi + eta + chi - 2.0 ) #( 1, 1, 1)
-  cdef otinum N7 = 0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) * (-xi + eta + chi - 2.0 ) #(-1, 1, 1)
+  cdef sotinum N0 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * (-xi - eta - chi - 2.0 ) #(-1,-1,-1)
+  cdef sotinum N1 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 - chi ) * ( xi - eta - chi - 2.0 ) #( 1,-1,-1)
+  cdef sotinum N2 = 0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * ( xi + eta - chi - 2.0 ) #( 1, 1,-1)
+  cdef sotinum N3 = 0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 - chi ) * (-xi + eta - chi - 2.0 ) #(-1, 1,-1)
+  cdef sotinum N4 = 0.125 * ( 1.0 - xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * (-xi - eta + chi - 2.0 ) #(-1, 1, 1)
+  cdef sotinum N5 = 0.125 * ( 1.0 + xi ) * ( 1.0 - eta ) * ( 1.0 + chi ) * ( xi - eta + chi - 2.0 ) #( 1,-1, 1)
+  cdef sotinum N6 = 0.125 * ( 1.0 + xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) * ( xi + eta + chi - 2.0 ) #( 1, 1, 1)
+  cdef sotinum N7 = 0.125 * ( 1.0 - xi ) * ( 1.0 + eta ) * ( 1.0 + chi ) * (-xi + eta + chi - 2.0 ) #(-1, 1, 1)
 
   # Edge nodes
-  cdef otinum N8 = 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 - chi      )
-  cdef otinum N9 = 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )
-  cdef otinum N10= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )
-  cdef otinum N11= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )
-  cdef otinum N12= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )
-  cdef otinum N13= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 + eta      ) * ( 1.0 - chi      )
-  cdef otinum N14= 0.250 * ( 1.0 + xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )
-  cdef otinum N15= 0.250 * ( 1.0 - xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )
-  cdef otinum N16= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 + chi      )
-  cdef otinum N17= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 + chi      )
-  cdef otinum N18= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 + chi      )
-  cdef otinum N19= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 + eta      ) * ( 1.0 + chi      )
+  cdef sotinum N8 = 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 - chi      )
+  cdef sotinum N9 = 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )
+  cdef sotinum N10= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )
+  cdef sotinum N11= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 - chi      )
+  cdef sotinum N12= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta      ) * ( 1.0 - chi ** 2 )
+  cdef sotinum N13= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 + eta      ) * ( 1.0 - chi      )
+  cdef sotinum N14= 0.250 * ( 1.0 + xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )
+  cdef sotinum N15= 0.250 * ( 1.0 - xi      ) * ( 1.0 + eta      ) * ( 1.0 - chi ** 2 )
+  cdef sotinum N16= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 - eta      ) * ( 1.0 + chi      )
+  cdef sotinum N17= 0.250 * ( 1.0 - xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 + chi      )
+  cdef sotinum N18= 0.250 * ( 1.0 + xi      ) * ( 1.0 - eta ** 2 ) * ( 1.0 + chi      )
+  cdef sotinum N19= 0.250 * ( 1.0 - xi ** 2 ) * ( 1.0 + eta      ) * ( 1.0 + chi      )
 
   return [ N0, N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12, N13, N14, N15, N16, N17, N18, N19 ]
    

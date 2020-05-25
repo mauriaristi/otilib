@@ -1,14 +1,10 @@
 
 
 
-
-
-
-
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  matso    ::::::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  sotife    ::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class matso:
+cdef class sotife:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -20,9 +16,9 @@ cdef class matso:
 
   #***************************************************************************************************
   
-  def __init__(self, realArray, ord_t order = 0, bases_t nbases = 0, object nnz = None): 
+  def __init__(self, real, uint64_t nip, ord_t order = 0, bases_t nbases = 0): 
     """
-    PURPOSE:      Python level constructor of the matso class.
+    PURPOSE:      Python level constructor of the sotife class.
 
     DESCRIPTION:  Creates a new matrix, reserving memory Assumes coefficient values to be all zeroes.
                  
@@ -30,52 +26,16 @@ cdef class matso:
     #*************************************************************************************************
     global dhl
     
-    cdef uint64_t nrows, ncols, i,j
+    cdef uint64_t i,j
     cdef ord_t ordi
-    cdef coeff_t val 
 
-
-    if isinstance( realArray, np.ndarray):
-      
-      ndim = realArray.ndim
-      
-      if ndim >=3:
-      
-        raise ValueError("Only 1D and 2D arrays are supported.")
-      
-      elif (ndim == 1):
-      
-        ncols = 1      
-        nrows = realArray.shape[0]
-
-        self.arr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
-
-        for i in range(self.arr.nrows):
-      
-          val = realArray[i]
-          arrso_set_item_i_r( val, i, &self.arr, dhl)
-        
-        # end for
-      
-      else: # ndim =2
-
-        nrows = realArray.shape[0]
-        ncols = realArray.shape[1]
-        self.arr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
-
-        for i in range(self.arr.nrows):      
-          for j in range(self.arr.ncols):
-            
-            val = realArray[i,j]
-            arrso_set_item_ij_r( val, i, j, &self.arr, dhl)
-          
-          # end for        
-        # end for
-
-      # end if
-    # end if 
+    #
+    self.num = fesoti_zeros_bases(nip, nbases, order, dhl)
     
-    self.FLAGS = 1
+    # Set all elements in the number as real.
+    fesoti_set_all_r( real, &self.num, dhl)
+
+
 
   #---------------------------------------------------------------------------------------------------
 
@@ -86,9 +46,9 @@ cdef class matso:
     """
     #*************************************************************************************************
     
-    if self.FLAGS != 0:
-      
-      arrso_free(&self.arr)
+    if( self.FLAGS == 1):
+
+      fesoti_free(&self.num)
 
     # end if 
     
@@ -96,13 +56,13 @@ cdef class matso:
 
   #***************************************************************************************************
   @property
-  def shape(self): 
+  def nip(self): 
     """
-    PURPOSE:      Return the shape of the stored matrix. 
+    PURPOSE:     Return the number of integration points. 
     """
     #*************************************************************************************************
 
-    return (self.arr.nrows,self.arr.ncols)
+    return self.num.nip
 
   #---------------------------------------------------------------------------------------------------
 
@@ -114,23 +74,10 @@ cdef class matso:
     """
     #*************************************************************************************************
 
-    return arrso_get_order(&self.arr)
+    return fesoti_get_order(&self.num)
 
   #---------------------------------------------------------------------------------------------------
 
-
-  #***************************************************************************************************
-  @property
-  def  size(self): 
-    """
-    PURPOSE:      Return the size of array.                
-    """
-    #*************************************************************************************************
-
-    return self.arr.size
-
-  #---------------------------------------------------------------------------------------------------
-  
   #***************************************************************************************************
   @property
   def real(self):
@@ -140,38 +87,24 @@ cdef class matso:
     """
     #*************************************************************************************************
 
-    cdef np.ndarray[coeff_t, ndim=2] tmp
-    cdef uint64_t i,j,k
+    cdef np.ndarray[coeff_t, ndim=1] tmp
+    cdef uint64_t i
 
-    tmp = np.empty( self.shape , dtype = np.float64)
+    tmp = np.empty( self.nip , dtype = np.float64)
 
-    for i in range(self.arr.nrows):
-      for j in range(self.arr.ncols):
-        k = j+i*self.arr.ncols
-        tmp[i,j] = self.arr.p_data[k].re
-      # end for 
+    for i in range(self.num.nip):
+
+      tmp[i] = self.num.p_data[i].re
+
     # end for 
 
     return tmp
 
   #---------------------------------------------------------------------------------------------------
 
-  # #***************************************************************************************************
-  # @property
-  # def order(self):
-  #   """
-  #   PURPOSE:      Gets the truncation order the OTI array.
-
-  #   """
-  #   #*************************************************************************************************
-
-  #   return tmp
-
-  # #---------------------------------------------------------------------------------------------------
-
   #***************************************************************************************************
   @staticmethod
-  cdef matso create(arrso_t* arr, uint8_t FLAGS = 1):
+  cdef sotife create(fesoti_t* num, uint8_t FLAGS = 1):
     """
     PURPOSE:      C-level constructor of the class. Use this when creating objects within 
                   Cython
@@ -180,32 +113,14 @@ cdef class matso:
     #*************************************************************************************************
 
     # create new empty object:
-    cdef matso mat = <matso> matso.__new__(matso)
+    cdef sotife res = <sotife> sotife.__new__(sotife)
 
-    mat.arr = arr[0]
-    mat.FLAGS = FLAGS
-    
-    return mat
+    res.num = num[0]
+    res.FLAGS = FLAGS
+
+    return res
 
   #--------------------------------------------------------------------------------------------------- 
-
-  # #*************************************************************************************************** 
-  # def get_real(self):
-
-  #   cdef np.ndarray[coeff_t, ndim=2] tmp
-  #   cdef uint64_t i,j,k
-
-  #   tmp = np.empty( self.shape , dtype = np.float64)
-
-  #   for i in range(self.arr.nrows):
-  #     for j in range(self.arr.ncols):
-  #       k = j+i*self.arr.ncols
-  #       tmp[i,j] = self.arr.p_data[k].re
-  #     # end for 
-  #   # end for 
-
-  #   return tmp
-  # #--------------------------------------------------------------------------------------------------- 
 
   #*************************************************************************************************** 
   def short_repr(self):
@@ -217,8 +132,8 @@ cdef class matso:
 
     global dhl
 
-    out =  "matso< "
-    out += "shape: "+str(self.shape)+ ", "
+    out =  "sotife< "
+    out += "nip: "+str(self.nip)+ ", "
     out += "re:\n"
     # first print the real part:
     out += repr( self.real )
@@ -241,7 +156,7 @@ cdef class matso:
 
     cdef np.ndarray[uint64_t, ndim=1] tmp 
 
-    out =  "matso< "
+    out =  "sotife< "
     out += "shape: "+str(self.shape)+ ", "
     out += "re:\n"
     # first print the real part:
@@ -263,22 +178,19 @@ cdef class matso:
 
     global dhl
 
-    cdef uint64_t i,j 
+    cdef uint64_t i
     cdef sotinum tmp
 
+    out =  "sotife< "
+    out += "nip: "+str(self.nip)+ ", \n"
 
-    out =  "matso< "
-    out += "shape: "+str(self.shape)+ ", \n"
-
-    for j in range(self.arr.ncols):
-      for i in range(self.arr.nrows):
-
-        out += "({0:d},{1:d}) ".format(i,j)
-        tmp = self[i,j]
-        out += tmp.__str__()
-        out += "\n"
-
-      # end for 
+    for i in range(self.nip):
+      
+      out += "({0:d}) ".format(i)
+      tmp = self[i]
+      out += tmp.__str__()
+      out += "\n"
+      
     # end for 
 
     out += ">"
@@ -299,19 +211,9 @@ cdef class matso:
   
     cdef sotinum_t d_soti
     cdef sotinum   soti
-    out  = self.list_repr()
-    # out=""
 
-    # out += "["
-    # for i in range(self.arr.nrows):
-    #   out += "["
-    #   for j in range(self.arr.ncols):
-    #     d_soti = arrso_get_item_ij(&self.arr, i, j, dhl)
-    #     out+= (sotinum.create(&d_soti,FLAGS=0)).__str__()+", "
-    #   # end for 
-    #   out = out[:-2] + "],\n"
-    # # end for 
-    # out =out[:-2] + "]"
+    out  = self.list_repr()
+
     return out
 
   #--------------------------------------------------------------------------------------------------- 
@@ -327,18 +229,9 @@ cdef class matso:
   
     cdef sotinum_t d_soti
     cdef sotinum   soti
+
     out  = self.list_repr()
 
-    # out += "["
-    # for i in range(self.arr.nrows):
-    #   out += "["
-    #   for j in range(self.arr.ncols):
-    #     d_soti = arrso_get_item_ij(&self.arr, i, j, dhl)
-    #     out+= (sotinum.create(&d_soti,FLAGS=0)).__str__()+", "
-    #   # end for 
-    #   out = out[:-2] + "],\n"
-    # # end for 
-    # out =out[:-2] + "]"
     return out
 
   #---------------------------------------------------------------------------------------------------  
@@ -358,11 +251,11 @@ cdef class matso:
 
     if (isinstance(val, int)):
       
-      res = arrso_get_item_i( &self.arr, val, dhl)
+      res = fesoti_get_item_k( &self.num, val, dhl)
     
     else:
       
-      res = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
+      return NotImplemented
 
     # end if
 
@@ -389,26 +282,17 @@ cdef class matso:
       if tval == sotinum:
 
         valt = value
-        arrso_set_item_i_o( &valt.num, val, &self.arr, dhl)
+        fesoti_set_item_k_f( &valt.num, val, &self.num, dhl)
 
       else:
 
-        arrso_set_item_i_r( value, val, &self.arr, dhl)
+        fesoti_set_item_k_r( value, val, &self.num, dhl)
 
       # end if 
     
     else:
-      
-      if tval == sotinum:
-        
-        valt = value
-        arrso_set_item_ij_o( &valt.num, val[0], val[1], &self.arr, dhl)
 
-      else:
-
-        arrso_set_item_ij_r( value, val[0], val[1], &self.arr, dhl)
-
-      # end if 
+      raise IndexError("Error: Index must be scalar.")
 
     # end if
 
@@ -425,9 +309,9 @@ cdef class matso:
     
     global dhl
     
-    cdef arrso_t res = arrso_copy(&self.arr, dhl)
+    cdef fesoti_t res = fesoti_copy(&self.num, dhl)
 
-    return matso.create(&res)
+    return sotife.create(&res)
   #---------------------------------------------------------------------------------------------------
 
 
@@ -440,9 +324,9 @@ cdef class matso:
     
     global dhl
     
-    cdef arrso_t res = arrso_neg(&self.arr, dhl)
+    cdef fesoti_t res = fesoti_neg(&self.num, dhl)
 
-    return matso.create(&res)
+    return sotife.create(&res)
   #---------------------------------------------------------------------------------------------------
 
 
@@ -457,8 +341,8 @@ cdef class matso:
     
     global dhl
     
-    cdef arrso_t res 
-    cdef matso lhs,rhs
+    cdef fesoti_t res 
+    cdef sotife lhs,rhs
     cdef dmat dlhs,drhs
     cdef sotinum olhs,orhs
     
@@ -470,45 +354,59 @@ cdef class matso:
       lhs = self
       rhs = other
 
-      res = arrso_sum_OO(&lhs.arr,&rhs.arr,dhl)
+      res = fesoti_sum_ff(&lhs.num,&rhs.num,dhl)
 
     elif ( tlhs  == sotinum ):
 
       olhs = self
       rhs = other
 
-      res = arrso_sum_oO(&olhs.num,&rhs.arr, dhl)
+      res = fesoti_sum_of(&olhs.num,&rhs.num, dhl)
 
     elif ( trhs  == sotinum ):
 
       lhs = self
       orhs = other
 
-      res = arrso_sum_oO(&orhs.num,&lhs.arr, dhl)
+      res = fesoti_sum_of(&orhs.num,&lhs.num, dhl)
     
     elif (tlhs in number_types):
       
       rhs = other
-      res = arrso_sum_rO(self, &rhs.arr, dhl)
+      res = fesoti_sum_rf(self, &rhs.num, dhl)
 
     elif (trhs in number_types):
         
       lhs = self
-      res = arrso_sum_rO(other, &lhs.arr, dhl)
+      res = fesoti_sum_rf(other, &lhs.num, dhl)
 
-    elif ( tlhs  == dmat ):
+    # elif ( tlhs  == matso ):
 
-      dlhs = self
-      rhs = other
+    #   dlhs = self
+    #   rhs = other
 
-      res = arrso_sum_RO(&dlhs.arr,&rhs.arr, dhl)
+    #   res = fesoti_sum_RO(&dlhs.num,&rhs.num, dhl)
 
-    elif ( trhs  == dmat ):
+    # elif ( trhs  == matso ):
 
-      lhs = self
-      drhs = other
+    #   lhs = self
+    #   drhs = other
 
-      res = arrso_sum_RO(&drhs.arr,&lhs.arr, dhl)
+    #   res = fesoti_sum_RO(&drhs.num,&lhs.num, dhl)
+
+    # elif ( tlhs  == dmat ):
+
+    #   dlhs = self
+    #   rhs = other
+
+    #   res = fesoti_sum_RO(&dlhs.num,&rhs.num, dhl)
+
+    # elif ( trhs  == dmat ):
+
+    #   lhs = self
+    #   drhs = other
+
+    #   res = fesoti_sum_RO(&drhs.num,&lhs.num, dhl)
 
     else:
 
@@ -516,7 +414,7 @@ cdef class matso:
 
     # end if 
       
-    return matso.create(&res)
+    return sotife.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -542,9 +440,9 @@ cdef class matso:
     
     global dhl
     
-    cdef arrso_t res 
-    cdef matso lhs,rhs
-    cdef dmat dlhs,drhs
+    cdef fesoti_t res 
+    cdef sotife   lhs, rhs
+    cdef dmat    dlhs,drhs
     cdef sotinum olhs,orhs
     
     tlhs = type(self)
@@ -555,45 +453,45 @@ cdef class matso:
       lhs = self
       rhs = other
 
-      res = arrso_sub_OO(&lhs.arr,&rhs.arr,dhl)
+      res = fesoti_sub_ff(&lhs.num,&rhs.num,dhl)
 
     elif ( tlhs  == sotinum ):
 
       olhs = self
       rhs = other
 
-      res = arrso_sub_oO(&olhs.num,&rhs.arr, dhl)
+      res = fesoti_sub_of(&olhs.num,&rhs.num, dhl)
 
     elif ( trhs  == sotinum ):
 
       lhs = self
       orhs = other
 
-      res = arrso_sub_Oo(&lhs.arr, &orhs.num, dhl)
+      res = fesoti_sub_fo(&lhs.num, &orhs.num, dhl)
     
     elif (tlhs in number_types):
       
       rhs = other
-      res = arrso_sub_rO(self, &rhs.arr, dhl)
+      res = fesoti_sub_rf(self, &rhs.num, dhl)
 
     elif (trhs in number_types):
         
       lhs = self
-      res = arrso_sub_Or(&lhs.arr, other, dhl)
+      res = fesoti_sub_fr(&lhs.num, other, dhl)
 
-    elif ( tlhs  == dmat ):
+    # elif ( tlhs  == dmat ):
 
-      dlhs = self
-      rhs = other
+    #   dlhs = self
+    #   rhs = other
 
-      res = arrso_sub_RO(&dlhs.arr,&rhs.arr, dhl)
+    #   res = fesoti_sub_RO(&dlhs.num,&rhs.num, dhl)
 
-    elif ( trhs  == dmat ):
+    # elif ( trhs  == dmat ):
 
-      lhs = self
-      drhs = other
+    #   lhs = self
+    #   drhs = other
 
-      res = arrso_sub_OR(&lhs.arr, &drhs.arr, dhl)
+    #   res = fesoti_sub_OR(&lhs.num, &drhs.num, dhl)
 
     else:
 
@@ -601,7 +499,7 @@ cdef class matso:
 
     # end if 
       
-    return matso.create(&res)
+    return sotife.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -627,8 +525,8 @@ cdef class matso:
     
     global dhl
     
-    cdef arrso_t res 
-    cdef matso lhs,rhs
+    cdef fesoti_t res 
+    cdef sotife lhs,rhs
     cdef dmat dlhs,drhs
     cdef sotinum olhs,orhs
     
@@ -640,45 +538,45 @@ cdef class matso:
       lhs = self
       rhs = other
 
-      res = arrso_mul_OO(&lhs.arr,&rhs.arr,dhl)
+      res = fesoti_mul_ff(&lhs.num,&rhs.num,dhl)
 
     elif ( tlhs  == sotinum ):
 
       olhs = self
       rhs = other
 
-      res = arrso_mul_oO(&olhs.num,&rhs.arr, dhl)
+      res = fesoti_mul_of(&olhs.num,&rhs.num, dhl)
 
     elif ( trhs  == sotinum ):
 
       lhs = self
       orhs = other
 
-      res = arrso_mul_oO(&orhs.num,&lhs.arr, dhl)
+      res = fesoti_mul_of(&orhs.num,&lhs.num, dhl)
     
     elif (tlhs in number_types):
       
       rhs = other
-      res = arrso_mul_rO(self, &rhs.arr, dhl)
+      res = fesoti_mul_rf(self, &rhs.num, dhl)
 
     elif (trhs in number_types):
         
       lhs = self
-      res = arrso_mul_rO(other, &lhs.arr, dhl)
+      res = fesoti_mul_rf(other, &lhs.num, dhl)
 
-    elif ( tlhs  == dmat ):
+    # elif ( tlhs  == dmat ):
 
-      dlhs = self
-      rhs = other
+    #   dlhs = self
+    #   rhs = other
 
-      res = arrso_mul_RO(&dlhs.arr,&rhs.arr, dhl)
+    #   res = fesoti_mul_RO(&dlhs.num,&rhs.num, dhl)
 
-    elif ( trhs  == dmat ):
+    # elif ( trhs  == dmat ):
 
-      lhs = self
-      drhs = other
+    #   lhs = self
+    #   drhs = other
 
-      res = arrso_mul_RO(&drhs.arr,&lhs.arr, dhl)
+    #   res = fesoti_mul_RO(&drhs.num,&lhs.num, dhl)
 
     else:
 
@@ -686,9 +584,7 @@ cdef class matso:
 
     # end if 
       
-    return matso.create(&res)
-
-    
+    return sotife.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -714,8 +610,8 @@ cdef class matso:
     
     global dhl
     
-    cdef arrso_t res 
-    cdef matso lhs,rhs
+    cdef fesoti_t res 
+    cdef sotife lhs,rhs
     cdef dmat dlhs,drhs
     cdef sotinum olhs,orhs
     
@@ -727,45 +623,45 @@ cdef class matso:
       lhs = self
       rhs = other
 
-      res = arrso_div_OO(&lhs.arr,&rhs.arr,dhl)
+      res = fesoti_div_ff(&lhs.num,&rhs.num,dhl)
 
     elif ( tlhs  == sotinum ):
 
       olhs = self
       rhs = other
 
-      res = arrso_div_oO(&olhs.num,&rhs.arr, dhl)
+      res = fesoti_div_of(&olhs.num,&rhs.num, dhl)
 
     elif ( trhs  == sotinum ):
 
       lhs = self
       orhs = other
 
-      res = arrso_div_Oo(&lhs.arr, &orhs.num, dhl)
+      res = fesoti_div_fo(&lhs.num, &orhs.num, dhl)
     
     elif (tlhs in number_types):
       
       rhs = other
-      res = arrso_div_rO(self, &rhs.arr, dhl)
+      res = fesoti_div_rf(self, &rhs.num, dhl)
 
     elif (trhs in number_types):
         
       lhs = self
-      res = arrso_div_Or(&lhs.arr, other, dhl)
+      res = fesoti_div_fr(&lhs.num, other, dhl)
 
-    elif ( tlhs  == dmat ):
+    # elif ( tlhs  == dmat ):
 
-      dlhs = self
-      rhs = other
+    #   dlhs = self
+    #   rhs = other
 
-      res = arrso_div_RO(&dlhs.arr,&rhs.arr, dhl)
+    #   res = fesoti_div_RO(&dlhs.num,&rhs.num, dhl)
 
-    elif ( trhs  == dmat ):
+    # elif ( trhs  == dmat ):
 
-      lhs = self
-      drhs = other
+    #   lhs = self
+    #   drhs = other
 
-      res = arrso_div_OR(&lhs.arr, &drhs.arr, dhl)
+    #   res = fesoti_div_OR(&lhs.num, &drhs.num, dhl)
 
     else:
 
@@ -773,157 +669,193 @@ cdef class matso:
 
     # end if 
       
-    return matso.create(&res)
+    return sotife.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
   def __pow__(self, n,z):
     """
-    PURPOSE:      Power function oversload
+    PURPOSE:      Power function overload
+
+    res = self ** n
+
     """
     #*************************************************************************************************
     
     global dhl
 
-    cdef arrso_t res 
-    cdef matso S = self
+    cdef fesoti_t res 
+    cdef sotife S = self
 
-    res = arrso_pow( &S.arr, n, dhl)
+    res = fesoti_pow( &S.num, n, dhl)
     
-    return matso.create(&res)
+    return sotife.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
-  def get_deriv(self, hum_dir ):
+  def gauss_integrate(self, sotife w  ):
     """
     PURPOSE: Get the corresponding derivative of the system.
     """
     #*************************************************************************************************
     global dhl
 
-    cdef list item = imdir(hum_dir)
-    cdef np.ndarray[coeff_t, ndim=2] tmp
-    cdef coeff_t factor = 1
+    cdef sotinum_t res = soti_init()
 
-    tmp = self.get_im(hum_dir)
+    res = fesoti_integrate( &self.num, &w.num, dhl)
 
-    factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
-
-    return tmp * factor
-
-  #---------------------------------------------------------------------------------------------------  
-
-  #***************************************************************************************************
-  def get_im(self, hum_dir):
-    """
-    PURPOSE: Get the corresponding imaginary direction in the matso object.
-    """
-    #*************************************************************************************************
-    global dhl
-    
-    cdef list item = imdir(hum_dir)
-    cdef darr_t res_darr
-    cdef dmat res_dmat
-    cdef uint64_t i,j, k
-    cdef np.ndarray[double, ndim=2] res
-
-    res_darr = arrso_get_im( item[ZERO],  item[ONE], &self.arr,  dhl)
-
-    res = np.empty( self.shape , dtype = np.float64)
-
-    k=0
-
-    for i in range(self.arr.nrows):
-
-      for j in range(self.arr.ncols):
-
-        res[i,j] = res_darr.p_data[k]
-        k+=1
-
-      # end for 
-
-    #end for
-
-    return res
+    return sotinum.create(&res)
 
   #---------------------------------------------------------------------------------------------------
+  # #***************************************************************************************************
+  # def get_deriv(self, hum_dir ):
+  #   """
+  #   PURPOSE: Get the corresponding derivative of the system.
+  #   """
+  #   #*************************************************************************************************
+  #   global dhl
 
+  #   cdef list item = imdir(hum_dir)
+  #   cdef np.ndarray[coeff_t, ndim=2] tmp
+  #   cdef coeff_t factor = 1
 
-  #***************************************************************************************************
-  cpdef matso extract_im(self, hum_dir):
-    """
-    PURPOSE: Get the corresponding imaginary direction in the matso object.
-    """
-    #*************************************************************************************************
-    global dhl
+  #   tmp = self.get_im(hum_dir)
+
+  #   factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
+
+  #   return tmp * factor
+
+  # #---------------------------------------------------------------------------------------------------  
+
+  # #***************************************************************************************************
+  # def get_im(self, hum_dir):
+  #   """
+  #   PURPOSE: Get the corresponding imaginary direction in the sotife object.
+  #   """
+  #   #*************************************************************************************************
+  #   global dhl
     
-    cdef list item = imdir(hum_dir)
-    cdef arrso_t res
+  #   cdef list item = imdir(hum_dir)
+  #   cdef darr_t res_darr
+  #   cdef dmat res_dmat
+  #   cdef uint64_t i,j, k
+  #   cdef np.ndarray[double, ndim=2] res
+
+  #   res_darr = fesoti_get_im( item[ZERO],  item[ONE], &self.num,  dhl)
+
+  #   res_dmat = darr.create(&res_darr)
+
+  #   res = np.empty( self.shape , dtype = np.float64)
+
+  #   k=0
+
+  #   for i in range(self.num.nrows):
+
+  #     for j in range(self.num.ncols):
+
+  #       res[i,j] = res_darr.p_data[k]
+  #       k+=1
+
+  #     # end for 
+
+  #   # end for
+
+
+  #   return res
+
+  # #---------------------------------------------------------------------------------------------------
+
+
+  # #***************************************************************************************************
+  # cpdef sotife extract_im(self, hum_dir):
+  #   """
+  #   PURPOSE: Get the corresponding imaginary direction in the sotife object.
+  #   """
+  #   #*************************************************************************************************
+  #   global dhl
+    
+  #   cdef list item = imdir(hum_dir)
+  #   cdef fesoti_t res
     
 
-    res = arrso_extract_im( item[ZERO],  item[ONE], &self.arr,  dhl)
+  #   res = fesoti_extract_im( item[ZERO],  item[ONE], &self.num,  dhl)
 
-    return matso.create(&res)
+  #   return sotife.create(&res)
 
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
   
-  #***************************************************************************************************
-  cpdef matso extract_deriv(self, hum_dir):
-    """
-    PURPOSE: Get the corresponding derivative in the matso object, as OTI number.
-    """
-    #*************************************************************************************************
-    global dhl
+  # #***************************************************************************************************
+  # cpdef sotife extract_deriv(self, hum_dir):
+  #   """
+  #   PURPOSE: Get the corresponding derivative in the sotife object, as OTI number.
+  #   """
+  #   #*************************************************************************************************
+  #   global dhl
     
-    cdef list item = imdir(hum_dir)
-    cdef arrso_t res
+  #   cdef list item = imdir(hum_dir)
+  #   cdef fesoti_t res
     
-    res = arrso_extract_deriv( item[ZERO],  item[ONE], &self.arr,  dhl)
+  #   res = fesoti_extract_deriv( item[ZERO],  item[ONE], &self.num,  dhl)
 
-    return matso.create(&res)
+  #   return sotife.create(&res)
 
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  def get_active_bases(self):
-    """
+  # #***************************************************************************************************
+  # def get_active_bases(self):
+  #   """
 
-    """
-    global dhl
+  #   """
+  #   global dhl
 
-    cdef bases_t  size       = dhl.p_dh[0].Nbasis
-    cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
-    cdef uint64_t i
+  #   cdef bases_t  size       = dhl.p_dh[0].Nbasis
+  #   cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
+  #   cdef uint64_t i
     
-    # Initialize all elements as zero (deactivated)
-    for i in range(size):
+  #   # Initialize all elements as zero (deactivated)
+  #   for i in range(size):
 
-      bases_list[i]=0
+  #     bases_list[i]=0
 
-    # end for 
+  #   # end for 
 
-    arrso_get_active_bases( &self.arr, bases_list, dhl)
+  #   fesoti_get_active_bases( &self.num, bases_list, dhl)
 
-    res = []
-    for i in range(size):
+  #   res = []
+  #   for i in range(size):
 
-      if bases_list[i]==1:
+  #     if bases_list[i]==1:
       
-        res.append(i+1)
+  #       res.append(i+1)
 
-      # end if 
+  #     # end if 
 
-    # end for 
+  #   # end for 
 
-    return res
+  #   return res
 
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
   
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: END OF CLASS matso ::::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS sotife ::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

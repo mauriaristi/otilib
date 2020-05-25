@@ -12,7 +12,7 @@ int64_t fem_defFunctFrom_otiFunc(oarr_t* p_arr1, uint64_t derIndx, elemProps_t* 
         // Initialize counter as 0.
         oti_createEmpty(&tmpcnt,0,elem->otiorder);
 
-        for ( i=0; i<elem->nbasis ; i++){
+        for ( i = 0; i<elem->nbasis ; i++){
      
             // tmp3 = p_arr1->p_data[i] * &elem->p_basis[0,i,k];
             feoarr_get_item_ijk(&elem->p_basis[derIndx],0,i,k,&tmp1);

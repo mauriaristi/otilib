@@ -10,10 +10,11 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------
   
   cdef arrso_t arr
+  cdef uint8_t FLAGS
   #---------------------------------------------------------------------------------------------------  
   
   @staticmethod
-  cdef matso create(arrso_t* num)
+  cdef matso create(arrso_t* num, uint8_t FLAGS = *)
   cpdef matso extract_im(self, hum_dir)
   cpdef matso extract_deriv(self, hum_dir)
   

@@ -18,7 +18,7 @@
 #include "fem/gauss.c"
 
 // // Element functionality.
-// #include "fem/element.c"
+#include "fem/element.c"
 
 
 
@@ -26,8 +26,8 @@
 // // Base FEM functions:
 // #include "fem/basis_functions.c"
 
-// // Setup integration points.
-// #include "fem/integration_points.c"
+// Setup integration points.
+#include "fem/integration_points.c"
 
 // // Element structure various functions.
 // #include "fem/elem.c"

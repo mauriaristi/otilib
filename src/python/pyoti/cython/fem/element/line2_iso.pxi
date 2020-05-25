@@ -6,10 +6,10 @@ cpdef line2_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
  
   NODE NUMBERING:
   
-                          (0)* * * * *(1)
+                          (0)---------(1)
 
   INPUTS:
-    -> xi:  Xi coordinate for this element.
+    -> xi:  Xi  coordinate for this element.
     -> eta: Eta coordinate for this element.
     -> chi: Chi coordinate for this element.
     -> derOrder: Order of derivative required.

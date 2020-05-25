@@ -15,6 +15,9 @@
 // Define algebra
 #include "sotinum/algebra.h"
 
+// Define functions
+#include "sotinum/functions.h"
+
 //Define utility functions.
 #include "sotinum/utils.h"
 

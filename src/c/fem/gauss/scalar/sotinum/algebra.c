@@ -21,7 +21,7 @@ void fesoti_neg_to(fesoti_t* num, fesoti_t* res, dhelpl_t dhl){
     // Check dimensions
     fesoti_dimCheck(num,res);
 
-    for ( i = 0; i < num->nIntPts; i++){
+    for ( i = 0; i < num->nip; i++){
     
         soti_neg_to( &num->p_data[i], &res->p_data[i], dhl);
 
@@ -100,7 +100,7 @@ void fesoti_sum_ff_to(fesoti_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl)
     fesoti_dimCheck( rhs, res );
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < lhs->nIntPts; i++){
+    for ( i = 0; i < lhs->nip; i++){
 
         soti_sum_oo_to(&lhs->p_data[i], &rhs->p_data[i], &res->p_data[i], dhl);
 
@@ -119,7 +119,7 @@ void fesoti_sum_of_to(sotinum_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl
     fesoti_dimCheck(rhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < rhs->nIntPts; i++){
+    for ( i = 0; i < rhs->nip; i++){
         soti_sum_oo_to( lhs, &rhs->p_data[i], &res->p_data[i], dhl);
     }
 
@@ -136,7 +136,7 @@ void fesoti_sum_rf_to(coeff_t lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl){
     fesoti_dimCheck(rhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < rhs->nIntPts; i++){
+    for ( i = 0; i < rhs->nip; i++){
         soti_sum_ro_to(lhs, &rhs->p_data[i], &res->p_data[i],dhl);        
     }
 
@@ -241,7 +241,7 @@ void fesoti_sub_ff_to(fesoti_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl)
     fesoti_dimCheck( rhs, res );
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < lhs->nIntPts; i++){
+    for ( i = 0; i < lhs->nip; i++){
 
         soti_sub_oo_to(&lhs->p_data[i], &rhs->p_data[i], &res->p_data[i], dhl);
 
@@ -260,7 +260,7 @@ void fesoti_sub_of_to(sotinum_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl
     fesoti_dimCheck(rhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < rhs->nIntPts; i++){
+    for ( i = 0; i < rhs->nip; i++){
         soti_sub_oo_to( lhs, &rhs->p_data[i], &res->p_data[i], dhl);
     }
 
@@ -277,7 +277,7 @@ void fesoti_sub_fo_to(fesoti_t* lhs, sotinum_t* rhs, fesoti_t* res, dhelpl_t dhl
     fesoti_dimCheck(lhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < lhs->nIntPts; i++){
+    for ( i = 0; i < lhs->nip; i++){
         soti_sub_oo_to( &lhs->p_data[i],  rhs, &res->p_data[i], dhl);
     }
 
@@ -294,7 +294,7 @@ void fesoti_sub_rf_to(coeff_t lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl){
     fesoti_dimCheck(rhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < rhs->nIntPts; i++){
+    for ( i = 0; i < rhs->nip; i++){
         soti_sub_ro_to(lhs, &rhs->p_data[i], &res->p_data[i],dhl);        
     }
 
@@ -311,7 +311,7 @@ void fesoti_sub_fr_to(fesoti_t* lhs, coeff_t rhs, fesoti_t* res, dhelpl_t dhl){
     fesoti_dimCheck(lhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < lhs->nIntPts; i++){
+    for ( i = 0; i < lhs->nip; i++){
         soti_sub_or_to(&lhs->p_data[i], rhs, &res->p_data[i],dhl);        
     }
 
@@ -395,7 +395,7 @@ void fesoti_mul_ff_to(fesoti_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl)
     fesoti_dimCheck( rhs, res );
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < lhs->nIntPts; i++){
+    for ( i = 0; i < lhs->nip; i++){
 
         soti_mul_oo_to(&lhs->p_data[i], &rhs->p_data[i], &res->p_data[i], dhl);
 
@@ -414,7 +414,7 @@ void fesoti_mul_of_to(sotinum_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl
     fesoti_dimCheck(rhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < rhs->nIntPts; i++){
+    for ( i = 0; i < rhs->nip; i++){
         soti_mul_oo_to( lhs, &rhs->p_data[i], &res->p_data[i], dhl);
     }
 
@@ -431,7 +431,7 @@ void fesoti_mul_rf_to(coeff_t lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl){
     fesoti_dimCheck(rhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < rhs->nIntPts; i++){
+    for ( i = 0; i < rhs->nip; i++){
         soti_mul_ro_to(lhs, &rhs->p_data[i], &res->p_data[i],dhl);        
     }
 
@@ -545,7 +545,7 @@ void fesoti_div_ff_to(fesoti_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl)
     fesoti_dimCheck( rhs, res );
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < lhs->nIntPts; i++){
+    for ( i = 0; i < lhs->nip; i++){
 
         soti_div_oo_to(&lhs->p_data[i], &rhs->p_data[i], &res->p_data[i], dhl);
 
@@ -564,7 +564,7 @@ void fesoti_div_of_to(sotinum_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl
     fesoti_dimCheck(rhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < rhs->nIntPts; i++){
+    for ( i = 0; i < rhs->nip; i++){
         soti_div_oo_to( lhs, &rhs->p_data[i], &res->p_data[i], dhl);
     }
 
@@ -581,7 +581,7 @@ void fesoti_div_fo_to(fesoti_t* lhs, sotinum_t* rhs, fesoti_t* res, dhelpl_t dhl
     fesoti_dimCheck(lhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < lhs->nIntPts; i++){
+    for ( i = 0; i < lhs->nip; i++){
         soti_div_oo_to( &lhs->p_data[i],  rhs, &res->p_data[i], dhl);
     }
 
@@ -598,7 +598,7 @@ void fesoti_div_rf_to(coeff_t lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl){
     fesoti_dimCheck(rhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < rhs->nIntPts; i++){
+    for ( i = 0; i < rhs->nip; i++){
         soti_div_ro_to(lhs, &rhs->p_data[i], &res->p_data[i],dhl);        
     }
 
@@ -615,7 +615,7 @@ void fesoti_div_fr_to(fesoti_t* lhs, coeff_t rhs, fesoti_t* res, dhelpl_t dhl){
     fesoti_dimCheck(lhs,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < lhs->nIntPts; i++){
+    for ( i = 0; i < lhs->nip; i++){
         soti_div_or_to(&lhs->p_data[i], rhs, &res->p_data[i],dhl);        
     }
 

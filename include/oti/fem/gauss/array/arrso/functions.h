@@ -1,0 +1,22 @@
+#ifndef OTI_FEM_GAUSS_ARRAY_ARRSO_FUNCTIONS_H
+#define OTI_FEM_GAUSS_ARRAY_ARRSO_FUNCTIONS_H
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#endif

@@ -123,19 +123,35 @@ cdef class dHelp:
     """
     PURPOSE: Print capabilities of the direction helper.
     """
-    out = ""
-    out += "Current capabilities of the library: "+str(self.dhl.ndh)+" helpers:\n"
-    out += "Summary: Maximum order: "+str(self.dhl.ndh)+"\n"
+    import pandas as pd
+    cdef np.ndarray[ uint64_t, ndim=2] data = np.zeros((self.dhl.ndh,3),dtype=np.uint64)
 
-    # Loop over all direction helpers
     for i in range(self.dhl.ndh):
       
-      out += " -> order: {0:3d}, ".format(i+1)
-      out += " - Max nbases: " + str(self.dhl.p_dh[i].Nbasis)+"\n"
+      data[i,ZERO] = i+1
+      data[i,ONE ] = self.dhl.p_dh[i].Nbasis
+      data[i,TWO ] =  self.dhl.p_dh[i].Ndir
 
     # end for
-    out = out[:-1]
-    print(out)
+
+    df = pd.DataFrame(data,columns=['Order', 'Nbases', 'Ndir'])
+    with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+      print(df.to_string(index=False))
+
+    # out = ""
+    # out += "Current capabilities of the library: "+str(self.dhl.ndh)+" helpers:\n"
+    # out += "Summary: Maximum order: "+str(self.dhl.ndh)+"\n"
+
+    # # Loop over all direction helpers
+    # for i in range(self.dhl.ndh):
+      
+    #   out += " -> order: {0:3d}, ".format(i+1)
+    #   out += " - Max nbases: {0:8d}".format(int(self.dhl.p_dh[i].Nbasis))
+    #   out += " - Ndir: {0:8d}".format(int(self.dhl.p_dh[i].Ndir))+"\n"
+
+    # # end for
+    # out = out[:-1]
+    # print(out)
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************

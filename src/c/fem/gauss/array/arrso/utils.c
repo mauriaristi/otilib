@@ -29,7 +29,7 @@
 
 //     // printf("\nIntegrating over element.\n");
 
-//     for (k = 0; k<elem->nIntPts; k++){
+//     for (k = 0; k<elem->nip; k++){
 
 //         tmp_arr = arr->p_data[k];
 
@@ -71,7 +71,7 @@
 //             soti_createEmpty(&tmp1,0,arr->order);
 
            
-//             for (k = 0; k<elem->nIntPts; k++){
+//             for (k = 0; k<elem->nip; k++){
 //                 // printf("    Summing integration point %llu\n",k);
 //                 // printf("    Getting element of integration function\n");
 //                 feoarr_get_item_ijk(arr, i, j, k, &tmp2);
@@ -167,7 +167,7 @@ inline void fearrso_dimCheck_FF_elementwise(fearrso_t* arr1,fearrso_t* arr2,fear
 
      if( arr1->size != arr2->size || arr1->ncols != arr2->ncols || arr1->nrows != arr2->nrows ||
          arr1->size !=  res->size || arr1->ncols !=  res->ncols || arr1->nrows !=  res->nrows ||
-         arr1->nIntPts != res->nIntPts || arr2->nIntPts != res->nIntPts                         ){
+         arr1->nip != res->nip || arr2->nip != res->nip                         ){
         printf("ERROR: Wrong dimensions in elementwise operation between two fearrso arrays.\n");
         exit(OTI_BadDim);
      }
@@ -179,7 +179,7 @@ inline void fearrso_dimCheck_FF_elementwise(fearrso_t* arr1,fearrso_t* arr2,fear
 inline void fearrso_dimCheck_fF_elementwise(fesoti_t* arr1,fearrso_t* arr2,fearrso_t* res){
 
      if( arr2->size !=  res->size || arr2->ncols !=  res->ncols || arr2->nrows !=  res->nrows ||
-         arr1->nIntPts != res->nIntPts || arr2->nIntPts != res->nIntPts                         ){
+         arr1->nip != res->nip || arr2->nip != res->nip                         ){
         printf("ERROR: Wrong dimensions in elementwise operation between two fearrso arrays.\n");
         exit(OTI_BadDim);
      }
@@ -191,7 +191,7 @@ inline void fearrso_dimCheck_fF_elementwise(fesoti_t* arr1,fearrso_t* arr2,fearr
 inline void fearrso_dimCheck_Ff_elementwise(fearrso_t* arr1,fesoti_t* arr2,fearrso_t* res){
 
      if( arr1->size !=  res->size || arr1->ncols !=  res->ncols || arr1->nrows !=  res->nrows ||
-         arr1->nIntPts != res->nIntPts || arr2->nIntPts != res->nIntPts                         ){
+         arr1->nip != res->nip || arr2->nip != res->nip                         ){
         printf("ERROR: Wrong dimensions in elementwise operation between two fearrso arrays.\n");
         exit(OTI_BadDim);
      }
@@ -204,7 +204,7 @@ inline void fearrso_dimCheck_OF_elementwise(arrso_t* arr1,fearrso_t* arr2, fearr
 
      if( arr1->size != arr2->size || arr1->ncols != arr2->ncols || arr1->nrows != arr2->nrows ||
          arr1->size !=  res->size || arr1->ncols !=  res->ncols || arr1->nrows !=  res->nrows ||
-         arr2->nIntPts !=  res->nIntPts   ){
+         arr2->nip !=  res->nip   ){
         printf("ERROR: Wrong dimensions in elementwise operation between fearrso and real arrays.\n");
         exit(OTI_BadDim);
      }
@@ -217,7 +217,7 @@ inline void fearrso_dimCheck_RF_elementwise(darr_t* arr1, fearrso_t* arr2, fearr
 
     if( arr1->size != arr2->size || arr1->ncols != arr2->ncols || arr1->nrows != arr2->nrows ||
         arr1->size !=  res->size || arr1->ncols !=  res->ncols || arr1->nrows !=  res->nrows ||
-        arr2->nIntPts != res->nIntPts                         ){
+        arr2->nip != res->nip                         ){
         printf("ERROR: Wrong dimensions in elementwise operation between fearrso and real arrays.\n");
         exit(OTI_BadDim);
     }
@@ -231,7 +231,7 @@ inline void fearrso_dimCheck_RF_elementwise(darr_t* arr1, fearrso_t* arr2, fearr
 inline void fearrso_dimCheck_FfO_integrate(fearrso_t* arr,fesoti_t* num,arrso_t* res){
 
      if( arr->size !=  res->size || arr->ncols != res->ncols || arr->nrows != res->nrows ||
-         arr->nIntPts != num->nIntPts   ){
+         arr->nip != num->nip   ){
         printf("ERROR: Wrong dimensions in integration operation between two fearrso arrays.\n");
         exit(OTI_BadDim);
      }
@@ -255,8 +255,8 @@ inline void fearrso_dimCheck_FF_matmul( fearrso_t* arr1, fearrso_t* arr2, fearrs
     if( arr1->ncols != arr2->nrows ||
         arr1->nrows !=  res->nrows || 
         arr2->ncols !=  res->ncols ||
-        arr1->nIntPts !=  res->nIntPts || 
-        arr2->nIntPts !=  res->nIntPts      ){
+        arr1->nip !=  res->nip || 
+        arr2->nip !=  res->nip      ){
        printf("ERROR: Wrong dimensions in matmul-like operation between two fearrso arrays.\n");
        exit(OTI_BadDim);
     }
@@ -270,7 +270,7 @@ inline void fearrso_dimCheck_OF_matmul( arrso_t* arr1, fearrso_t* arr2, fearrso_
     if( arr1->ncols != arr2->nrows ||
         arr1->nrows !=  res->nrows || 
         arr2->ncols !=  res->ncols ||
-        arr2->nIntPts !=  res->nIntPts      ){
+        arr2->nip !=  res->nip      ){
         printf("ERROR: Wrong dimensions in matmul-like operation between darr and fearrso arrays.\n");
         exit(OTI_BadDim);
     }
@@ -284,7 +284,7 @@ inline void fearrso_dimCheck_RF_matmul( darr_t* arr1, fearrso_t* arr2, fearrso_t
     if( arr1->ncols != arr2->nrows ||
         arr1->nrows !=  res->nrows || 
         arr2->ncols !=  res->ncols ||
-        arr2->nIntPts !=  res->nIntPts      ){
+        arr2->nip !=  res->nip      ){
         printf("ERROR: Wrong dimensions in matmul-like operation between darr and fearrso arrays.\n");
         exit(OTI_BadDim);
      }
@@ -301,7 +301,7 @@ inline void fearrso_dimCheck_FO_matmul( fearrso_t* arr1, arrso_t* arr2, fearrso_
     if( arr1->ncols != arr2->nrows ||
         arr1->nrows !=  res->nrows || 
         arr2->ncols !=  res->ncols ||
-        arr1->nIntPts !=  res->nIntPts    ){
+        arr1->nip !=  res->nip    ){
         printf("ERROR: Wrong dimensions in matmul-like operation between fearrso and darr arrays.\n");
         exit(OTI_BadDim);
      }
@@ -315,7 +315,7 @@ inline void fearrso_dimCheck_FR_matmul( fearrso_t* arr1, darr_t* arr2, fearrso_t
     if( arr1->ncols != arr2->nrows ||
         arr1->nrows !=  res->nrows || 
         arr2->ncols !=  res->ncols ||
-        arr1->nIntPts !=  res->nIntPts     ){
+        arr1->nip !=  res->nip     ){
         printf("ERROR: Wrong dimensions in matmul-like operation between fearrso and darr arrays.\n");
         exit(OTI_BadDim);
      }
@@ -340,7 +340,7 @@ inline void fearrso_dimCheck_F_squareness( fearrso_t* arr1, fearrso_t* res){
     if( arr1->ncols != arr1->nrows ||
         arr1->nrows !=  res->nrows || 
         arr1->ncols !=  res->ncols ||
-        arr1->nIntPts !=  res->nIntPts   ){
+        arr1->nip !=  res->nip   ){
         printf("ERROR: fearrso array not square.\n");
         exit(OTI_BadDim);
      }
@@ -356,7 +356,7 @@ inline void fearrso_dimCheck_F_transpose( fearrso_t* arr1, fearrso_t* res){
 
     if( arr1->nrows !=  res->ncols || 
         arr1->ncols !=  res->nrows ||
-        arr1->nIntPts !=  res->nIntPts   ){
+        arr1->nip !=  res->nip   ){
         printf("ERROR: fearrso array not compliant with transpose operation.\n");
         exit(OTI_BadDim);
      }

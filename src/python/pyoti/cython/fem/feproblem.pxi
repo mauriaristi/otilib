@@ -128,7 +128,9 @@ cdef class feproblem:
       dofTest_i = funcTest.baseSpace.elType.nbasis
 
       if dofSolu_i != dofTest_i:
+
         raise ValueError("Test and solution functions must match one to one its D.O.F.s.")
+        
       # end if 
 
       

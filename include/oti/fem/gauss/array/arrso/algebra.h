@@ -14,7 +14,8 @@ RES = - ARR
 @param[in] res Result
 @param[in] dhl Direction helper list.
 ******************************************************************************************************/
-void fearrso_neg_to(fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+fearrso_t fearrso_neg(    fearrso_t* arr,                 dhelpl_t dhl);
+void      fearrso_neg_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -113,6 +114,9 @@ RES = LHS * RHS
 fearrso_t fearrso_mul_FF(   fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
 void      fearrso_mul_FF_to(fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
 
+fearrso_t fearrso_mul_fF(    fesoti_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+void      fearrso_mul_fF_to( fesoti_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+
 fearrso_t fearrso_mul_OF(     arrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
 void      fearrso_mul_OF_to(  arrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
 
@@ -141,6 +145,12 @@ RES = LHS / RHS
 ******************************************************************************************************/
 fearrso_t fearrso_div_FF(    fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
 void      fearrso_div_FF_to( fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+
+fearrso_t fearrso_div_fF(     fesoti_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+void      fearrso_div_fF_to(  fesoti_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+
+fearrso_t fearrso_div_Ff(    fearrso_t* lhs,  fesoti_t* rhs,                 dhelpl_t dhl);
+void      fearrso_div_Ff_to( fearrso_t* lhs,  fesoti_t* rhs, fearrso_t* res, dhelpl_t dhl);
 
 fearrso_t fearrso_div_OF(      arrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
 void      fearrso_div_OF_to(   arrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
@@ -211,8 +221,20 @@ RES = MATMUL( LHS, RHS )
 @param[in] res result
 @param[in] dhl Direction helper list
 ******************************************************************************************************/
-fearrso_t   fearrso_matmul_FF(   fearrso_t* lhs, fearrso_t* rhs, dhelpl_t dhl);
-void        fearrso_matmul_FF_to(fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+fearrso_t fearrso_matmul_FF(    fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+void      fearrso_matmul_FF_to( fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+
+fearrso_t fearrso_matmul_OF(    arrso_t*   lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+void      fearrso_matmul_OF_to( arrso_t*   lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+
+fearrso_t fearrso_matmul_FO(    fearrso_t* lhs, arrso_t*   rhs,                 dhelpl_t dhl);
+void      fearrso_matmul_FO_to( fearrso_t* lhs, arrso_t*   rhs, fearrso_t* res, dhelpl_t dhl);
+
+fearrso_t fearrso_matmul_RF(    darr_t*    lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+void      fearrso_matmul_RF_to( darr_t*    lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+
+fearrso_t fearrso_matmul_FR(    fearrso_t* lhs, darr_t*    rhs,                 dhelpl_t dhl);
+void      fearrso_matmul_FR_to( fearrso_t* lhs, darr_t*    rhs, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

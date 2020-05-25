@@ -15,6 +15,9 @@
 // Define algebra
 #include "arrso/algebra.h"
 
+// Define algebra
+#include "arrso/functions.h"
+
 //Define utility functions.
 #include "arrso/utils.h"
 

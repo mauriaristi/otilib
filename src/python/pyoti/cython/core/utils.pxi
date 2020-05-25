@@ -3,7 +3,8 @@
 
 #*****************************************************************************************************
 def div_imdir_idxord( imdir_t numidx, ord_t numord, imdir_t denidx, ord_t denord):
-  
+  """
+  """
   global h
   global dhl
 
@@ -28,7 +29,8 @@ def div_imdir_idxord( imdir_t numidx, ord_t numord, imdir_t denidx, ord_t denord
 
 #*****************************************************************************************************
 def div_imdir(humdir_num, humdir_den):
-  
+  """
+  """
   global h
   global dhl
 
@@ -112,7 +114,8 @@ cpdef list imdir(hum_dir):
 
 #*****************************************************************************************************
 cpdef list expand_imdir(hum_dir):
-  
+  """
+  """
   cpdef list res = []
   if type(hum_dir) in int_types:
 

@@ -6,7 +6,8 @@ cpdef line1_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder ):
 
   NODE NUMBERING:
                           
-                 --------(0)--------
+                          ------(0)------
+
   INPUTS:
     -> xi:  Xi  coordinate for this element.
     -> eta: Eta coordinate for this element.

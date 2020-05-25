@@ -7,11 +7,29 @@
 
 
 
+/**************************************************************************************************//**
+@brief Extract derivative from an OTI number as an oti number.
 
+@param[in]  idx   Index of imaginary direction to extract.
+@param[in]  ord   Order of imaginary direction to extract.
+@param[in]  num   OTI number to extract direction
+@param[in]  res   Addres of the resulting OTI number that will hold result.
+@param[in]  dhl   Direction helper list.
+******************************************************************************************************/
 sotinum_t soti_extract_deriv(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
 void      soti_extract_deriv_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
+/**************************************************************************************************//**
+@brief Extract imaginary direction as an OTI number.
+
+@param[in]  idx   Index of imaginary direction to extract.
+@param[in]  ord   Order of imaginary direction to extract.
+@param[in]  num   OTI number to extract direction
+@param[in]  res   Addres of the resulting OTI number that will hold result.
+@param[in]  dhl   Direction helper list.
+******************************************************************************************************/
 sotinum_t soti_extract_im(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
 void      soti_extract_im_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------

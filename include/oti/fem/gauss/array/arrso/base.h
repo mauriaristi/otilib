@@ -22,6 +22,9 @@ void      fearrso_copy_to(fearrso_t* src, fearrso_t* res, dhelpl_t dhl);
 @param[in] res Gauss array, result.
 @param[in] dhl Direction helper list.
 ******************************************************************************************************/
+arrso_t   fearrso_get_item_k(  fearrso_t* arr, uint64_t k,                         dhelpl_t dhl);
+sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, dhelpl_t dhl);
+
 void fearrso_get_item_ij_to(  fearrso_t* arr, uint64_t i, uint64_t j, 
                               fearrso_t* res, dhelpl_t dhl);
 
@@ -42,7 +45,7 @@ void fearrso_get_item_ijk_to( fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k
 @param[in] k     Integration point.
 @param[in] dhl   Direction helper list.
 ******************************************************************************************************/
-void fearrso_set_item_ij( fearrso_t* elm, uint64_t i, uint64_t j,
+void fearrso_set_item_ij( fesoti_t* elm, uint64_t i, uint64_t j,
                           // 
                           fearrso_t* res, dhelpl_t dhl);
 
@@ -78,7 +81,7 @@ void fearrso_set_all_r(    coeff_t num, fearrso_t* arr, dhelpl_t dhl );
 @param[in] dhl      Direction helper list.
 ******************************************************************************************************/
 fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols, 
-                               uint64_t offsetx, uint64_t offsety, 
+                               // uint64_t offsetx, uint64_t offsety, 
                                uint64_t nIntPts, bases_t  nbases, 
                                ord_t    order,   dhelpl_t dhl     );
 // ----------------------------------------------------------------------------------------------------
@@ -96,7 +99,7 @@ fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols,
 @param[in] dhl      Direction helper list.
 ******************************************************************************************************/
 fearrso_t fearrso_createEmpty_bases( uint64_t nrows,   uint64_t ncols, 
-                                     uint64_t offsetx, uint64_t offsety, 
+                                     // uint64_t offsetx, uint64_t offsety, 
                                      uint64_t nIntPts, bases_t  nbases, 
                                      ord_t    order,   dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
@@ -116,6 +119,16 @@ void fearrso_free(fearrso_t* arr);
 fearrso_t fearrso_init(void);
 // ----------------------------------------------------------------------------------------------------
 
+
+/**************************************************************************************************//**
+@brief Get the max trunctation order of the OTI structure.
+
+@param[in] arr. Gauss array.
+@param[in] dhl. Direction helper list.
+@param[out] ord. Maximum truncation order.
+******************************************************************************************************/
+ord_t fearrso_get_order(fearrso_t* arr);
+// ----------------------------------------------------------------------------------------------------
 
 
 

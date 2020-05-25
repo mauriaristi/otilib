@@ -90,13 +90,19 @@ add_executable(otigen datagen/oti_gen_data.c)
 
 target_link_libraries (otigen oti)
 
-
+# -d Sets directory
+# -o Sets global order
+# -a sets the number of basis for all elements
+# -s Sets a starting order
+# -f Sets an ending order
+# -m sets the number of basis for the start-finish pair.
 SET(OTIGEN_FLAGS -d"${PROJECT_BINARY_DIR}/data/" -o150 -a2)
 SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s21 -f50 -m3)
 SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s11 -f20 -m5)
 SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s4 -f10 -m10)
 SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s3 -f3 -m100)
-SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s1 -f2 -m1000)
+SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s2 -f2 -m1000)
+SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s1 -f1 -m65000)
 
 
 # To generate data call

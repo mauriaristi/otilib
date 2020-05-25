@@ -11,7 +11,6 @@ include "sparse/include.pxi"
 
 
 #      SCALAR.
-
 # Base functions.
 include "sparse/scalar/base.pxi"
 
@@ -22,13 +21,15 @@ include "sparse/scalar/utils.pxi"
 include "sparse/scalar/math.pxi"
 include "sparse/scalar/math_to.pxi"
 
+# Gauss array
+include "sparse/scalar/gauss.pxi"
+
 
 
 
 
 
 #     ARRAY    .
-
 # Append base class.
 include "sparse/array/base.pxi"
 
@@ -36,9 +37,12 @@ include "sparse/array/base.pxi"
 include "sparse/array/math.pxi"
 include "sparse/array/math_to.pxi"
 
+
 # Utilities.
 include "sparse/array/utils.pxi"
 
+# Gauss capabilities.
+include "sparse/array/gauss.pxi"
 
 # # Append base OTI class. - > Base to create OTI number with other characteristics.
 # include "sparse/generic.pxi"
@@ -46,3 +50,5 @@ include "sparse/array/utils.pxi"
 
 # Common functions.
 include "sparse/math.pxi"
+
+include "sparse/linalg.pxi"

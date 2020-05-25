@@ -45,6 +45,9 @@
 // Append function declarations.
 #include "sparse/scalar/functions.h"
 
+// Gauss structure
+#include "sparse/scalar/gauss.h"
+
 
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------------     END SCALAR DECLARATIONS     ---------------------------------
@@ -74,6 +77,9 @@
 
 // Function evaluation (Elementwise).
 #include "sparse/array/functions.h"
+
+// Gauss structure
+#include "sparse/array/gauss.h"
 
 
 

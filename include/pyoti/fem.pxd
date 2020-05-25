@@ -18,9 +18,6 @@ include "fem/fespace.pxd"
 # Include gaussian array declarations.
 include "fem/gauss_array.pxd"
 
-# Include gaussian array declarations.
-include "fem/gauss.pxd"
-
 # Include mesh class declarations.
 include "fem/mesh.pxd"
 

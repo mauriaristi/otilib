@@ -920,6 +920,107 @@ cdef class matso:
     return res
 
   #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @staticmethod
+  def dot( matso lhs, matso rhs, matso out = None): 
+    """
+    PURPOSE: Matrix multiplication.
+    """
+    global dhl
+    
+    cdef arrso_t res 
+
+
+    if out is not None:
+      
+      arrso_matmul_OO_to( &lhs.arr, &rhs.arr ,&out.arr, dhl)
+
+    else:
+
+      res = arrso_matmul_OO( &lhs.arr, &rhs.arr , dhl)
+
+      return matso.create(&res)
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  
+
+  #***************************************************************************************************
+  @staticmethod
+  def inv( matso arr,  matso out = None): 
+    """
+    PURPOSE: Matrix invertion.
+    """
+    global dhl
+    
+    cdef arrso_t res 
+
+
+    if out is not None:
+      
+      arrso_invert_to( &arr.arr,&out.arr, dhl)
+
+    else:
+
+      res = arrso_invert( &arr.arr, dhl)
+
+      return matso.create(&res)
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @staticmethod
+  def transpose( matso arr,  matso out = None ): 
+    """
+    PURPOSE: Matrix transpose.
+    """
+    global dhl
+    
+    cdef arrso_t res 
+
+    if out is not None:
+      
+      arrso_transpose_to( &arr.arr, &out.arr, dhl)
+
+    else:
+
+      res = arrso_transpose( &arr.arr,  dhl)
+
+      return matso.create(&res)
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @staticmethod
+  def add( matso lhs, matso rhs, matso out = None): 
+    """
+    PURPOSE: Matrix elementwise addition.
+    """
+    global dhl
+    
+    cdef arrso_t res 
+
+
+    if out is not None:
+      
+      arrso_sum_OO_to( &lhs.arr, &rhs.arr ,&out.arr, dhl)
+
+    else:
+
+      res = arrso_sum_OO( &lhs.arr, &rhs.arr , dhl)
+
+      return matso.create(&res)
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
   
 
 

@@ -26,9 +26,305 @@ cdef extern from "oti/oti.h" nogil:
     uint64_t        size
     flag_t          flag
 
+  ctypedef struct fesoti_t:
+    sotinum_t*  p_data    # Data array
+    uint64_t    nip       # Number of integration points.
+
+  ctypedef struct fearrso_t:
+    arrso_t*      p_data # < Data array
+    uint64_t      nrows  # < Number of rows.
+    uint64_t      ncols  # < Number of cols.
+    uint64_t       size  # < size of the array
+    uint64_t        nip  # < Number of integration points.
+
   # Include functions from "sparse.h"
   #---------------------------------------------------------------------------------------------------
   
+  # Gauss: Array:
+  fearrso_t fearrso_atanh(    fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_atanh_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_asinh(    fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_asinh_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_acosh(    fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_acosh_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_tanh(     fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_tanh_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sinh(     fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_sinh_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_cosh(     fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_cosh_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_atan(     fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_atan_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_asin(     fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_asin_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_acos(     fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_acos_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_tan(      fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_tan_to(   fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sin(      fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_sin_to(   fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_cos(      fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_cos_to(   fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_logb(     fearrso_t* arr, double base,                 dhelpl_t dhl);
+  void      fearrso_logb_to(  fearrso_t* arr, double base, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_log10(    fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_log10_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_log(      fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_log_to(   fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_exp(      fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_exp_to(   fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_cbrt(     fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_cbrt_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sqrt(     fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_sqrt_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_pow(      fearrso_t* arr, double e,                    dhelpl_t dhl);
+  void      fearrso_pow_to(   fearrso_t* arr, double e, fearrso_t* res,    dhelpl_t dhl);
+  fearrso_t fearrso_neg(    fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_neg_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sum_FF(   fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sum_FF_to(fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sum_fF(    fesoti_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sum_fF_to( fesoti_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sum_OF(     arrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sum_OF_to(  arrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sum_RF(      darr_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sum_RF_to(   darr_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sum_oF(   sotinum_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sum_oF_to(sotinum_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sum_rF(     coeff_t  lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sum_rF_to(  coeff_t  lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sub_FF(    fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sub_FF_to( fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sub_fF(    fesoti_t* lhs, fearrso_t* rhs,                  dhelpl_t dhl);
+  void      fearrso_sub_fF_to( fesoti_t* lhs, fearrso_t* rhs, fearrso_t* res,  dhelpl_t dhl);
+  fearrso_t fearrso_sub_Ff(    fearrso_t* lhs, fesoti_t* rhs,                  dhelpl_t dhl);
+  void      fearrso_sub_Ff_to( fearrso_t* lhs, fesoti_t* rhs, fearrso_t* res,  dhelpl_t dhl);
+  fearrso_t fearrso_sub_OF(      arrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sub_OF_to(   arrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sub_FO(    fearrso_t* lhs,   arrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sub_FO_to( fearrso_t* lhs,   arrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sub_RF(       darr_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sub_RF_to(    darr_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sub_FR(    fearrso_t* lhs,    darr_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sub_FR_to( fearrso_t* lhs,    darr_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sub_oF(    sotinum_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sub_oF_to( sotinum_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sub_Fo(    fearrso_t* lhs, sotinum_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sub_Fo_to( fearrso_t* lhs, sotinum_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sub_rF(      coeff_t  lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_sub_rF_to(    coeff_t lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_sub_Fr(    fearrso_t* lhs,   coeff_t  rhs,                 dhelpl_t dhl);
+  void      fearrso_sub_Fr_to( fearrso_t* lhs,   coeff_t  rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_mul_FF(   fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_mul_FF_to(fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_mul_fF(    fesoti_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_mul_fF_to( fesoti_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_mul_OF(     arrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_mul_OF_to(  arrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_mul_RF(      darr_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_mul_RF_to(   darr_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_mul_oF(   sotinum_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_mul_oF_to(sotinum_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_mul_rF(     coeff_t  lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_mul_rF_to(  coeff_t  lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_FF(    fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_FF_to( fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_fF(     fesoti_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_fF_to(  fesoti_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_Ff(    fearrso_t* lhs,  fesoti_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_Ff_to( fearrso_t* lhs,  fesoti_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_OF(      arrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_OF_to(   arrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_FO(    fearrso_t* lhs,   arrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_FO_to( fearrso_t* lhs,   arrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_RF(       darr_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_RF_to(    darr_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_FR(    fearrso_t* lhs,    darr_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_FR_to( fearrso_t* lhs,    darr_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_oF(    sotinum_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_oF_to( sotinum_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_Fo(    fearrso_t* lhs, sotinum_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_Fo_to( fearrso_t* lhs, sotinum_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_rF(      coeff_t  lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_div_rF_to(    coeff_t lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_div_Fr(    fearrso_t* lhs,   coeff_t  rhs,                 dhelpl_t dhl);
+  void      fearrso_div_Fr_to( fearrso_t* lhs,   coeff_t  rhs, fearrso_t* res, dhelpl_t dhl);
+  arrso_t   fearrso_integrate(    fearrso_t* arr, fesoti_t* w,               dhelpl_t dhl);
+  void      fearrso_integrate_to( fearrso_t* arr, fesoti_t* w, arrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_matmul_FF(    fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_matmul_FF_to( fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_matmul_OF(    arrso_t*   lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_matmul_OF_to( arrso_t*   lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_matmul_FO(    fearrso_t* lhs, arrso_t*   rhs,                 dhelpl_t dhl);
+  void      fearrso_matmul_FO_to( fearrso_t* lhs, arrso_t*   rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_matmul_RF(    darr_t*    lhs, fearrso_t* rhs,                 dhelpl_t dhl);
+  void      fearrso_matmul_RF_to( darr_t*    lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_matmul_FR(    fearrso_t* lhs, darr_t*    rhs,                 dhelpl_t dhl);
+  void      fearrso_matmul_FR_to( fearrso_t* lhs, darr_t*    rhs, fearrso_t* res, dhelpl_t dhl);
+  fesoti_t fearrso_det(   fearrso_t* arr,                dhelpl_t dhl);
+  void     fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
+  fearrso_t   fearrso_invert(    fearrso_t* arr,                 dhelpl_t dhl);
+  void        fearrso_invert_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t   fearrso_transpose(   fearrso_t* arr,                 dhelpl_t dhl);
+  void        fearrso_transpose_to(fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  
+  void fearrso_dimCheck_FF_elementwise(fearrso_t* arr1, fearrso_t* arr2, fearrso_t* res);
+  void fearrso_dimCheck_OF_elementwise(  arrso_t* arr1, fearrso_t* arr2, fearrso_t* res);
+  void fearrso_dimCheck_RF_elementwise(   darr_t* arr1, fearrso_t* arr2, fearrso_t* res);
+  void fearrso_dimCheck_fF_elementwise( fesoti_t* num1, fearrso_t* arr2, fearrso_t* res);
+  void fearrso_dimCheck_Ff_elementwise(fearrso_t* arr1,  fesoti_t* num2, fearrso_t* res);
+  void fearrso_dimCheck_FF_matmul( fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res);
+  void fearrso_dimCheck_OF_matmul(   arrso_t* lhs, fearrso_t* rhs, fearrso_t* res);
+  void fearrso_dimCheck_RF_matmul(    darr_t* lhs, fearrso_t* rhs, fearrso_t* res);
+  void fearrso_dimCheck_FO_matmul( fearrso_t* lhs,   arrso_t* rhs, fearrso_t* res);
+  void fearrso_dimCheck_FR_matmul( fearrso_t* lhs,    darr_t* rhs, fearrso_t* res);
+  void fearrso_dimCheck_F_squareness( fearrso_t* arr1, fearrso_t* res);
+  void fearrso_dimCheck_F_transpose( fearrso_t* arr1, fearrso_t* res);
+  void fearrso_dimCheck_FfO_integrate(fearrso_t* arr, fesoti_t* num,arrso_t* res);
+
+  fearrso_t fearrso_copy(   fearrso_t* src,                 dhelpl_t dhl);
+  void      fearrso_copy_to(fearrso_t* src, fearrso_t* res, dhelpl_t dhl);
+  arrso_t   fearrso_get_item_k(  fearrso_t* arr, uint64_t k,                         dhelpl_t dhl);
+  sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, dhelpl_t dhl);
+  void fearrso_get_item_ij_to(  fearrso_t* arr, uint64_t i, uint64_t j, 
+                                fearrso_t* res, dhelpl_t dhl);
+
+  void fearrso_get_item_k_to(   fearrso_t* arr, uint64_t k, 
+                                  arrso_t* res, dhelpl_t dhl);
+
+  void fearrso_get_item_ijk_to( fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, 
+                                sotinum_t* res, dhelpl_t dhl);
+  void fearrso_set_item_ij( fesoti_t* elm, uint64_t i, uint64_t j,
+                            fearrso_t* res, dhelpl_t dhl);
+
+  void fearrso_set_item_k(    arrso_t* elm, 
+                            uint64_t k, 
+                            fearrso_t* res, dhelpl_t dhl);
+
+  void fearrso_set_item_ijk(sotinum_t* elm, uint64_t i, uint64_t j, 
+                            uint64_t k, 
+                            fearrso_t* res, dhelpl_t dhl);
+  void fearrso_set_all_o( sotinum_t* num, fearrso_t* arr, dhelpl_t dhl );
+  void fearrso_set_all_r(    coeff_t num, fearrso_t* arr, dhelpl_t dhl );
+  fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols, 
+                                 uint64_t nIntPts, bases_t  nbases, 
+                                 ord_t    order,   dhelpl_t dhl     );
+  fearrso_t fearrso_createEmpty_bases( uint64_t nrows,   uint64_t ncols,  
+                                       uint64_t nIntPts, bases_t  nbases, 
+                                       ord_t    order,   dhelpl_t dhl);
+  void fearrso_free(fearrso_t* arr);
+  ord_t fearrso_get_order(fearrso_t* arr);  
+  fearrso_t fearrso_init();
+
+
+
+
+
+
+
+
+  
+  # Gauss :: Scalar
+  fesoti_t fesoti_atanh(    fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_atanh_to( fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_asinh(    fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_asinh_to( fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_acosh(    fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_acosh_to( fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_tanh(     fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_tanh_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_cosh(     fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_cosh_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_sinh(     fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_sinh_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_asin(     fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_asin_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_acos(     fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_acos_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_atan(     fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_atan_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_tan(      fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_tan_to(   fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_cos(      fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_cos_to(   fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_sin(      fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_sin_to(   fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_logb(     fesoti_t* num, double base,                dhelpl_t dhl);
+  void     fesoti_logb_to(  fesoti_t* num, double base, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_log10(    fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_log10_to( fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_log(      fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_log_to(   fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_exp(      fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_exp_to(   fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_cbrt(     fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_cbrt_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_sqrt(     fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_sqrt_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
+  fesoti_t fesoti_pow(      fesoti_t* num, double e,                   dhelpl_t dhl);
+  void     fesoti_pow_to(   fesoti_t* num, double e, fesoti_t* res,    dhelpl_t dhl);
+
+  sotinum_t fesoti_integrate(    fesoti_t* num, fesoti_t* w,                 dhelpl_t dhl);
+  void      fesoti_integrate_to( fesoti_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_neg(   fesoti_t* num,                dhelpl_t dhl);
+  void     fesoti_neg_to(fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_sum_ff(   fesoti_t* lhs, fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_sum_ff_to(fesoti_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_sum_of(   sotinum_t* lhs, fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_sum_of_to(sotinum_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_sum_rf(   coeff_t lhs, fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_sum_rf_to(coeff_t lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_sub_ff(     fesoti_t* lhs,  fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_sub_ff_to(  fesoti_t* lhs,  fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_sub_of(    sotinum_t* lhs,  fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_sub_of_to( sotinum_t* lhs,  fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_sub_fo(     fesoti_t* lhs, sotinum_t* rhs,                dhelpl_t dhl);
+  void     fesoti_sub_fo_to(  fesoti_t* lhs, sotinum_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_sub_rf(       coeff_t lhs,  fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_sub_rf_to(    coeff_t lhs,  fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_sub_fr(     fesoti_t* lhs,    coeff_t rhs,                dhelpl_t dhl);
+  void     fesoti_sub_fr_to(  fesoti_t* lhs,    coeff_t rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_mul_ff(   fesoti_t* lhs, fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_mul_ff_to(fesoti_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_mul_of(   sotinum_t* lhs, fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_mul_of_to(sotinum_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_mul_rf(   coeff_t lhs, fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_mul_rf_to(coeff_t lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_div_ff(     fesoti_t* lhs,  fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_div_ff_to(  fesoti_t* lhs,  fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_div_of(    sotinum_t* lhs,  fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_div_of_to( sotinum_t* lhs,  fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_div_fo(     fesoti_t* lhs, sotinum_t* rhs,                dhelpl_t dhl);
+  void     fesoti_div_fo_to(  fesoti_t* lhs, sotinum_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_div_rf(       coeff_t lhs,  fesoti_t* rhs,                dhelpl_t dhl);
+  void     fesoti_div_rf_to(    coeff_t lhs,  fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_div_fr(     fesoti_t* lhs,    coeff_t rhs,                dhelpl_t dhl);
+  void     fesoti_div_fr_to(  fesoti_t* lhs,    coeff_t rhs, fesoti_t* res, dhelpl_t dhl);
+  void fesoti_dimCheck(fesoti_t* arr1,fesoti_t* arr2);
+  void fesoti_set_all_o( sotinum_t* num, fesoti_t* res, dhelpl_t dhl);
+  void fesoti_set_all_r(    coeff_t num, fesoti_t* res, dhelpl_t dhl);
+  void fesoti_set_item_k_f( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
+  void fesoti_set_item_k_r(   coeff_t  num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
+  sotinum_t fesoti_get_item_k(   fesoti_t* num, uint64_t k,                 dhelpl_t dhl);
+  void      fesoti_get_item_k_to(fesoti_t* num, uint64_t k, sotinum_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_zeros_bases(uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl);
+  fesoti_t fesoti_createEmpty_bases(uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl);
+  fesoti_t fesoti_empty_like(fesoti_t* arr, dhelpl_t dhl);
+  ord_t fesoti_get_order( fesoti_t* num );
+  fesoti_t fesoti_copy(    fesoti_t* src,                dhelpl_t dhl);
+  void     fesoti_copy_to( fesoti_t* src, fesoti_t* dst, dhelpl_t dhl);
+  void fesoti_free(fesoti_t* num);
+  fesoti_t fesoti_init();
+
+
+
+
+
+
+
+
+
+
   arrso_t arrso_extract_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
   void    arrso_extract_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   darr_t  arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
@@ -97,33 +393,55 @@ cdef extern from "oti/oti.h" nogil:
   sotinum_t arrso_pnorm(    arrso_t* arr1, coeff_t p,                 dhelpl_t dhl);
   void      arrso_pnorm_to( arrso_t* arr1, coeff_t p, sotinum_t* res, dhelpl_t dhl);
 
-  arrso_t arrso_div_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_div_OR(arrso_t* arr1, darr_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_div_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_div_oO(sotinum_t* num, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_div_Oo(arrso_t* arr1, sotinum_t* num, dhelpl_t dhl);
-  arrso_t arrso_div_rO(coeff_t num, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_div_Or(arrso_t* arr1, coeff_t num, dhelpl_t dhl);
-  
-  arrso_t arrso_mul_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_mul_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_mul_oO(sotinum_t* num, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_mul_rO(coeff_t num, arrso_t* arr2, dhelpl_t dhl);
-  
-  arrso_t arrso_sub_OO( arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_sub_OR( arrso_t* arr1, darr_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_sub_RO( darr_t* arr1, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_sub_Oo( arrso_t* arr1, sotinum_t* num, dhelpl_t dhl);
-  arrso_t arrso_sub_oO( sotinum_t* num, arrso_t* arr1, dhelpl_t dhl);
-  arrso_t arrso_sub_Or( arrso_t* arr1, coeff_t num, dhelpl_t dhl);
-  arrso_t arrso_sub_rO( coeff_t num, arrso_t* arr1, dhelpl_t dhl);
-  
-  arrso_t arrso_sum_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_sum_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl);
-  arrso_t arrso_sum_oO(sotinum_t* num, arrso_t* arr1, dhelpl_t dhl);
-  arrso_t arrso_sum_rO(coeff_t num, arrso_t* arr1, dhelpl_t dhl);
   
   arrso_t arrso_neg(arrso_t* arr, dhelpl_t dhl);
+  void arrso_neg_to(arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  arrso_t arrso_sum_OO(arrso_t*   lhs, arrso_t* rhs, dhelpl_t dhl);
+  arrso_t arrso_sum_RO(darr_t*    lhs, arrso_t* rhs, dhelpl_t dhl);
+  arrso_t arrso_sum_oO(sotinum_t* lhs, arrso_t* rhs, dhelpl_t dhl);
+  arrso_t arrso_sum_rO(coeff_t    lhs, arrso_t* rhs, dhelpl_t dhl);
+  void arrso_sum_OO_to(arrso_t*   lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_sum_RO_to(darr_t*    lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_sum_oO_to(sotinum_t* lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_sum_rO_to(coeff_t    lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  arrso_t arrso_sub_OO(arrso_t*   lhs, arrso_t*   rhs, dhelpl_t dhl);
+  arrso_t arrso_sub_RO(darr_t*    lhs, arrso_t*   rhs, dhelpl_t dhl);
+  arrso_t arrso_sub_OR(arrso_t*   lhs, darr_t*    rhs, dhelpl_t dhl);
+  arrso_t arrso_sub_oO(sotinum_t* lhs, arrso_t*   rhs, dhelpl_t dhl);
+  arrso_t arrso_sub_Oo(arrso_t*   lhs, sotinum_t* rhs, dhelpl_t dhl);
+  arrso_t arrso_sub_rO(coeff_t    lhs, arrso_t*   rhs, dhelpl_t dhl);
+  arrso_t arrso_sub_Or(arrso_t*   lhs, coeff_t    rhs, dhelpl_t dhl);
+  void arrso_sub_OO_to( arrso_t*   lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_sub_RO_to( darr_t*    lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_sub_OR_to( arrso_t*   lhs, darr_t*    rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_sub_oO_to( sotinum_t* lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_sub_Oo_to( arrso_t*   lhs, sotinum_t* rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_sub_rO_to( coeff_t    lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_sub_Or_to( arrso_t*   lhs, coeff_t    rhs, arrso_t* res, dhelpl_t dhl);
+  arrso_t arrso_mul_OO(arrso_t*   lhs, arrso_t* rhs, dhelpl_t dhl);
+  arrso_t arrso_mul_RO(darr_t*    lhs, arrso_t* rhs, dhelpl_t dhl);
+  arrso_t arrso_mul_oO(sotinum_t* lhs, arrso_t* rhs, dhelpl_t dhl);
+  arrso_t arrso_mul_rO(coeff_t    lhs, arrso_t* rhs, dhelpl_t dhl);
+  void arrso_mul_OO_to(arrso_t*   lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_mul_RO_to(darr_t*    lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_mul_oO_to(sotinum_t* lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_mul_rO_to(coeff_t    lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_gem_OO_to(  arrso_t* arr1, arrso_t* arr2, arrso_t* arr3, arrso_t* res, dhelpl_t dhl);
+  void arrso_gem_oO_to(sotinum_t* arr1, arrso_t* arr2, arrso_t* arr3, arrso_t* res, dhelpl_t dhl);
+  arrso_t arrso_div_OO(arrso_t*   lhs, arrso_t*   rhs, dhelpl_t dhl);
+  arrso_t arrso_div_OR(arrso_t*   lhs, darr_t*    rhs, dhelpl_t dhl);
+  arrso_t arrso_div_RO(darr_t*    lhs, arrso_t*   rhs, dhelpl_t dhl);
+  arrso_t arrso_div_oO(sotinum_t* lhs, arrso_t*   rhs, dhelpl_t dhl);
+  arrso_t arrso_div_Oo(arrso_t*   lhs, sotinum_t* rhs, dhelpl_t dhl);
+  arrso_t arrso_div_rO(coeff_t    lhs, arrso_t*   rhs, dhelpl_t dhl);
+  arrso_t arrso_div_Or(arrso_t*   lhs, coeff_t    rhs, dhelpl_t dhl);
+  void arrso_div_OO_to(arrso_t*   lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_div_RO_to(darr_t*    lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_div_OR_to(arrso_t*   lhs, darr_t*    rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_div_oO_to(sotinum_t* lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_div_Oo_to(arrso_t*   lhs, sotinum_t* rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_div_rO_to(coeff_t    lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_div_Or_to(arrso_t*   lhs, coeff_t    rhs, arrso_t* res, dhelpl_t dhl);
   
   ord_t arrso_get_order( arrso_t* arr )
   darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);

@@ -1,5 +1,5 @@
-#ifndef OTI_FEM_GAUSS_ARRAY_ARRSO_STRUCTURES_H
-#define OTI_FEM_GAUSS_ARRAY_ARRSO_STRUCTURES_H
+#ifndef OTI_SPARSE_ARRAY_GAUSS_STRUCTURES_H
+#define OTI_SPARSE_ARRAY_GAUSS_STRUCTURES_H
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------------      STRUCTURES        --------------------------------------

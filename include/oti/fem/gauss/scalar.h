@@ -7,7 +7,7 @@
 
 
 // Gauss Sparse OTI number.
-#include "scalar/fesotinum.h"
+// #include "scalar/fesotinum.h"
 
 // Gauss real number.
 #include "scalar/fereal.h"

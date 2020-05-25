@@ -172,6 +172,32 @@ void darr_sqrt_to(darr_t* arr, darr_t* res){
 
 
 
+darr_t darr_cbrt(darr_t* arr){
+
+	darr_t res = darr_createEmpty(arr->nrows,arr->ncols);
+	uint64_t i;
+
+	for (i=0; i<arr->size; i++ ){
+
+		res.p_data[i] = cbrt(arr->p_data[i]);
+
+	}
+
+	return res;
+    
+}
+
+void darr_cbrt_to(darr_t* arr, darr_t* res){
+    
+	uint64_t i;
+
+	for (i=0; i<arr->size; i++ ){
+
+		res->p_data[i] = cbrt(arr->p_data[i]);
+
+	}
+
+}
 
 
 

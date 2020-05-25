@@ -1,6 +1,9 @@
 
+
+
+
 #*****************************************************************************************************
-def dot(matso A, matso B, matso out = None):
+def matso_dot(matso lhs, matso rhs, matso out = None):
   """
   PURPOSE: Matrix multiplication.
   """
@@ -11,22 +14,21 @@ def dot(matso A, matso B, matso out = None):
 
   if out is not None:
     
-    arrso_matmul_OO_to( &A.arr, &B.arr ,&out.arr, dhl)
+    arrso_matmul_OO_to( &lhs.arr, &rhs.arr ,&out.arr, dhl)
 
   else:
 
-    res = arrso_matmul_OO( &A.arr, &B.arr , dhl)
+    res = arrso_matmul_OO( &lhs.arr, &rhs.arr , dhl)
 
     return matso.create(&res)
 
   # end if 
 
-
 #-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************
-def inv(matso A, matso out = None):
+def matso_inv(matso A, matso out = None):
   """
   PURPOSE: Matrix invertion.
   """
@@ -51,7 +53,7 @@ def inv(matso A, matso out = None):
 
 
 #*****************************************************************************************************
-def transpose(matso A, matso out = None):
+def matso_transpose(matso A, matso out = None):
   """
   PURPOSE: Matrix transpose.
   """
@@ -74,7 +76,7 @@ def transpose(matso A, matso out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-def det(matso A, sotinum out = None):
+def matso_det(matso A, sotinum out = None):
   """
   PURPOSE: Matrix determinant.
   """
@@ -97,7 +99,7 @@ def det(matso A, sotinum out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-def norm(matso A, double p = 2.0, sotinum out = None):
+def matso_norm(matso A, double p = 2.0, sotinum out = None):
   """
   PURPOSE: Matrix norm.
   """

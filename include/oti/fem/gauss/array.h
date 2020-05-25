@@ -7,7 +7,7 @@
 
 
 // Finite Element Array of Sparse OTI numbers.
-#include "array/fearrso.h"
+// #include "array/fearrso.h"
 
 // Finite Element real Array.
 #include "array/fedarr.h"

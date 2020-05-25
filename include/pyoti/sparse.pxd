@@ -8,5 +8,8 @@ include "sparse/scalar.pxd"
 # Include Array class declarations.
 include "sparse/array.pxd"
 
+# Include Array class declarations.
+include "sparse/gauss.pxd"
+
 # Include Utility functions declaration.
 include "sparse/utils.pxd"

@@ -38,6 +38,10 @@ inline void arrso_dimCheck_OO_matmul( arrso_t* arr1, arrso_t* arr2, arrso_t* res
      if( arr1->ncols != arr2->nrows ||
          arr1->nrows !=  res->nrows || 
          arr2->ncols !=  res->ncols    ){
+        printf("lhs(%llu,%llu), rhs(%llu,%llu), res(%llu,%llu)\n", 
+            arr1->nrows,arr1->ncols, 
+            arr2->nrows,arr2->ncols,
+             res->nrows, res->ncols  );
         printf("ERROR: Wrong dimensions in matmul-like operation between two arrso arrays.\n");
         exit(OTI_BadDim);
      }

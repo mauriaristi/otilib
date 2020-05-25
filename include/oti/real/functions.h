@@ -15,6 +15,9 @@ void   darr_acosh_to(darr_t* arr, darr_t* res);
 darr_t darr_tanh(darr_t* arr);
 void   darr_tanh_to(darr_t* arr, darr_t* res);
 
+darr_t darr_cbrt(darr_t* arr);
+void darr_cbrt_to(darr_t* arr, darr_t* res);
+
 darr_t darr_sqrt(darr_t* arr);
 void   darr_sqrt_to(darr_t* arr, darr_t* res);
 

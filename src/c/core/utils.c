@@ -377,8 +377,8 @@ matrix_form_t dhelp_matrix_form_indices( bases_t nbases, uint8_t order, dhelpl_t
 int global_test = 0;
 
 
-void (*__PY_ERROR_OTI_EXIT)(int64_t)=NULL;
-uint64_t is_python_error_def=0;
+void (*__PY_ERROR_OTI_EXIT)(int64_t) = NULL;
+uint64_t is_python_error_def         =    0;
 
 // void (**__PY_ERROR_OTI_EXIT_ptr)(int64_t)=&__PY_ERROR_OTI_EXIT;
 // uint64_t* is_python_error_def_ptr = &is_python_error_def;

@@ -272,6 +272,9 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     sotinum_t* tmpsrc  = &tmp ;
     sotinum_t* tmpdest = &tmp3;
     sotinum_t* tmpswap;
+    coeff_t*   p_im_swap;
+    imdir_t*  p_idx_swap;
+    ndir_t    p_nnz_swap;
     ord_t res_ord = MAX(num1->order,num2->order);
     ord_t ordlim1, ordlim2;
     ord_t ordi1, ordi2,ordires;
@@ -318,7 +321,8 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     }
     
-    // printf("\n\nMultiply rhs.re:%g x im of lhs =========  \n", num2->re);
+    // printf("\n//////////////////////////////////////\n");
+    // printf("\nMultiply rhs.re:%g x im of lhs =========  \n", num2->re);
     // soti_print(num1,dhl);
 
 
@@ -340,6 +344,29 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
             dhelp_sparse_add_dirs(    tmp2.p_im[ordi1],     tmp2.p_idx[ordi1],      tmp2.p_nnz[ordi1],
                                    tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
                                   tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
+
+        }
+
+        for (ordi2 = ordi1; ordi2<res_ord; ordi2++){
+
+            // // Perform multiplication
+            // dhelp_sparse_add_dirs(                NULL,                  NULL,                      0,
+            //                        tmpsrc->p_im[ordi2],  tmpsrc->p_idx[ordi2],   tmpsrc->p_nnz[ordi2],
+            //                       tmpdest->p_im[ordi2], tmpdest->p_idx[ordi2], &tmpdest->p_nnz[ordi2], dhl);
+
+            // // Swap 
+
+            p_im_swap  = tmpsrc->p_im[ordi2] ;
+            p_idx_swap = tmpsrc->p_idx[ordi2];
+            p_nnz_swap = tmpsrc->p_nnz[ordi2];
+
+            tmpsrc->p_im[ordi2]  = tmpdest->p_im[ordi2] ;
+            tmpsrc->p_idx[ordi2] = tmpdest->p_idx[ordi2];
+            tmpsrc->p_nnz[ordi2] = tmpdest->p_nnz[ordi2];
+
+            tmpdest->p_im[ordi2]  = p_im_swap ;
+            tmpdest->p_idx[ordi2] = p_idx_swap;
+            tmpdest->p_nnz[ordi2] = p_nnz_swap;
 
         }
         // printf("\n -- \n");

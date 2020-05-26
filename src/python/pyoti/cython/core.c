@@ -2267,9 +2267,9 @@ static PyArrayObject *__pyx_f_5pyoti_4core_c_ptr_to_np_1darray_uint8(void *, npy
 static PyObject *__pyx_f_5pyoti_4core_expand_imdir(PyObject *, int __pyx_skip_dispatch); /*proto*/
 static PyObject *__pyx_f_5pyoti_4core_imdir(PyObject *, int __pyx_skip_dispatch); /*proto*/
 static PyObject *__pyx_f_5pyoti_4core_get_deriv_factor(PyObject *, int __pyx_skip_dispatch); /*proto*/
+static void __pyx_f_5pyoti_4core_error_function(int64_t); /*proto*/
 static PyArrayObject *__pyx_f_5pyoti_4core_c_ptr_to_np_1darray_uint16(void *, npy_intp, struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_uint16 *__pyx_optional_args); /*proto*/
 static __pyx_t_5pyoti_8c_otilib_ord_t __pyx_f_5pyoti_4core_get_trunc_order(int __pyx_skip_dispatch); /*proto*/
-static void __pyx_f_5pyoti_4core_error_function(int64_t); /*proto*/
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn_uint64_t = { "uint64_t", NULL, sizeof(uint64_t), { 0 }, 0, IS_UNSIGNED(uint64_t) ? 'U' : 'I', IS_UNSIGNED(uint64_t), 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_double = { "double", NULL, sizeof(double), { 0 }, 0, 'R', 0, 0 };
 static __Pyx_TypeInfo __Pyx_TypeInfo_nn_uint16_t = { "uint16_t", NULL, sizeof(uint16_t), { 0 }, 0, IS_UNSIGNED(uint16_t) ? 'U' : 'I', IS_UNSIGNED(uint16_t), 0 };
@@ -15189,6 +15189,7 @@ static int __Pyx_modinit_function_export_code(void) {
   if (__Pyx_ExportFunction("imdir", (void (*)(void))__pyx_f_5pyoti_4core_imdir, "PyObject *(PyObject *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(5, 2, __pyx_L1_error)
   if (__Pyx_ExportFunction("copy_numpy2d_to_ptr_f64", (void (*)(void))__pyx_f_5pyoti_4core_copy_numpy2d_to_ptr_f64, "PyObject *(PyArrayObject *, __pyx_t_5pyoti_8c_otilib_coeff_t *)") < 0) __PYX_ERR(5, 2, __pyx_L1_error)
   if (__Pyx_ExportFunction("get_deriv_factor", (void (*)(void))__pyx_f_5pyoti_4core_get_deriv_factor, "PyObject *(PyObject *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(5, 2, __pyx_L1_error)
+  if (__Pyx_ExportFunction("error_function", (void (*)(void))__pyx_f_5pyoti_4core_error_function, "void (int64_t)") < 0) __PYX_ERR(5, 2, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;

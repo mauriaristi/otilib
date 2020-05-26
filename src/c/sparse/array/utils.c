@@ -9,7 +9,9 @@ inline void arrso_dimCheck_OO_elementwise(arrso_t* arr1,arrso_t* arr2,arrso_t* r
          arr1->ncols !=  res->ncols ||
          arr1->nrows !=  res->nrows    ){
         printf("ERROR: Wrong dimensions in elementwise operation between two arrso arrays.\n");
-        exit(OTI_BadDim);
+        printf("Exiting from test.\n");
+        error_exit(OTI_BadDim);
+        // exit(OTI_BadDim);
      }
 
 }

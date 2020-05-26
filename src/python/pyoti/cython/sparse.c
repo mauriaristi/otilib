@@ -2630,6 +2630,7 @@ static PyArrayObject *(*__pyx_f_5pyoti_4core_c_ptr_to_np_1darray_uint64)(void *,
 static PyArrayObject *(*__pyx_f_5pyoti_4core_c_ptr_to_np_1darray_uint8)(void *, npy_intp, struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_uint8 *__pyx_optional_args); /*proto*/
 static struct __pyx_obj_5pyoti_4core_dHelp *(*__pyx_f_5pyoti_4core_get_cython_dHelp)(void); /*proto*/
 static PyObject *(*__pyx_f_5pyoti_4core_imdir)(PyObject *, int __pyx_skip_dispatch); /*proto*/
+static void (*__pyx_f_5pyoti_4core_error_function)(int64_t); /*proto*/
 
 /* Module declarations from 'pyoti.real' */
 static PyTypeObject *__pyx_ptype_5pyoti_4real_dmat = 0;
@@ -53331,6 +53332,7 @@ static int __Pyx_modinit_function_import_code(void) {
   if (__Pyx_ImportFunction(__pyx_t_1, "c_ptr_to_np_1darray_uint8", (void (**)(void))&__pyx_f_5pyoti_4core_c_ptr_to_np_1darray_uint8, "PyArrayObject *(void *, npy_intp, struct __pyx_opt_args_5pyoti_4core_c_ptr_to_np_1darray_uint8 *__pyx_optional_args)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
   if (__Pyx_ImportFunction(__pyx_t_1, "get_cython_dHelp", (void (**)(void))&__pyx_f_5pyoti_4core_get_cython_dHelp, "struct __pyx_obj_5pyoti_4core_dHelp *(void)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
   if (__Pyx_ImportFunction(__pyx_t_1, "imdir", (void (**)(void))&__pyx_f_5pyoti_4core_imdir, "PyObject *(PyObject *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
+  if (__Pyx_ImportFunction(__pyx_t_1, "error_function", (void (**)(void))&__pyx_f_5pyoti_4core_error_function, "void (int64_t)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
   Py_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -53625,9 +53627,17 @@ if (!__Pyx_RefNanny) {
  * cdef dHelp h = get_cython_dHelp()
  * cdef dhelpl_t dhl = h.dhl             # <<<<<<<<<<<<<<
  * 
+ * set_python_error_function(error_function)
  */
   __pyx_t_3 = __pyx_v_5pyoti_6sparse_h->dhl;
   __pyx_v_5pyoti_6sparse_dhl = __pyx_t_3;
+
+  /* "../../src/python/pyoti/cython/sparse/include.pxi":33
+ * cdef dhelpl_t dhl = h.dhl
+ * 
+ * set_python_error_function(error_function)             # <<<<<<<<<<<<<<
+ */
+  set_python_error_function(__pyx_f_5pyoti_4core_error_function);
 
   /* "../../src/python/pyoti/cython/sparse/scalar/utils.pxi":4
  * 

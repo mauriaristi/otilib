@@ -154,5 +154,9 @@ typedef struct{
 // GLOBALS:
 
 extern int global_test;
+extern void (*__PY_ERROR_OTI_EXIT)(int64_t);
+extern uint64_t is_python_error_def;
+
+
 
 #endif

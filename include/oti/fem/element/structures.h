@@ -43,7 +43,7 @@ typedef struct elem_s{
     uint8_t     nDimAnalysis; ///< Number of dimensions of the analysis.
     darr_t            intPts; ///< (nIntPts x ndim) Array with the integration point coordinates.
     darr_t            intWts; ///< (nIntPts x 1   ) Array with the integration weights.
-    darr_t*      p_evalBasis; ///< (10) List of (nbasis x nIntPts) arrays with the evaluated basis functions.
+    darr_t*      p_evalBasis; ///< (4) List of (nbasis x nIntPts) arrays with the evaluated basis functions.
                               // p_evalBasis[0] -> N  
                               // p_evalBasis[1] -> Na 
                               // p_evalBasis[2] -> Nb 
@@ -54,10 +54,27 @@ typedef struct elem_s{
                               // p_evalBasis[7] -> Nac
                               // p_evalBasis[8] -> Nbc
                               // p_evalBasis[9] -> Ncc
-    // int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*); ///<  Interpolation function.
-    // 
 } elem_t;
 
+
+typedef struct soti_elem_spt_s{    
+    // FEM Spatial variables 
+    fearrso_t         J; ///< (nDimAn x nDimEl) Holder for Jacobian.
+    fearrso_t      Jinv; ///< (nDimEl x nDimAn) Holder for inverse of Jacobian.
+    fesoti_t       Jdet; ///< (1 x 1)           Holder for Determinant of Jacobian.
+    fearrso_t*  p_basis; ///< (nder) List (1 x nbasis) basis of the function in spatial coords.
+                         //  p_basis[0] -> N  
+                         //  p_basis[1] -> Nx 
+                         //  p_basis[2] -> Ny 
+                         //  p_basis[3] -> Nz 
+                         //  p_basis[4] -> Nxx
+                         //  p_basis[5] -> Nxy
+                         //  p_basis[6] -> Nyy
+                         //  p_basis[7] -> Nxz
+                         //  p_basis[8] -> Nyz
+                         //  p_basis[9] -> Nzz
+    fesoti_t   p_w_detJ; ///< ( 1 x 1 ) Gauss array with integration weights.
+} soti_elem_spt_t;
 
 
  

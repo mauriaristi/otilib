@@ -250,6 +250,24 @@ fesoti_t fearrso_det(   fearrso_t* arr,                dhelpl_t dhl);
 void     fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
+/**************************************************************************************************//**
+@brief P-norm of array.
+
+res = NORM( ARR )
+
+@param[in] arr Array.
+@param[in] p   Value p of norm.
+@param[in] res Result.
+@param[in] dhl Direction helper list.
+******************************************************************************************************/
+fesoti_t fearrso_norm(     fearrso_t* arr,                dhelpl_t dhl);
+void     fearrso_norm_to(  fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
+
+fesoti_t fearrso_pnorm(    fearrso_t* arr, coeff_t p,                dhelpl_t dhl);
+void     fearrso_pnorm_to( fearrso_t* arr, coeff_t p, fesoti_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 /**************************************************************************************************//**
 @brief Matrix invertion.
 

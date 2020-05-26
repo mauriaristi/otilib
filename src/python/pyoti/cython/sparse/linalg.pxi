@@ -607,11 +607,11 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
 
       fres = out
 
-      fearrso_det_to( &F.arr, &fres.num, dhl)
+      fearrso_pnorm_to( &F.arr, p, &fres.num, dhl)
 
     else:
 
-      cfres = fearrso_det( &F.arr, dhl)
+      cfres = fearrso_pnorm( &F.arr, p, dhl)
 
       res = sotife.create(&cfres)
 
@@ -625,11 +625,11 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
 
       ores = out
 
-      arrso_det_to( &O.arr, &ores.num, dhl)
+      arrso_pnorm_to( &O.arr, p, &ores.num, dhl)
 
     else:
 
-      cores = arrso_det( &O.arr,  dhl)
+      cores = arrso_pnorm( &O.arr, p, dhl)
 
       res = sotinum.create(&cores)
 
@@ -639,7 +639,7 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
     
     R = arr
 
-    crres = darr_det( &R.arr)
+    crres = darr_pnorm( &R.arr, p)
 
     if res_flag:
 
@@ -654,8 +654,6 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
   else:
 
     raise TypeError("Unsupported types at det operation.")
-    
-    # return NotImplemented
 
   # end if 
 

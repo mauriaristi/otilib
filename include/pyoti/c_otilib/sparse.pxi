@@ -163,6 +163,10 @@ cdef extern from "oti/oti.h" nogil:
   void      fearrso_matmul_FR_to( fearrso_t* lhs, darr_t*    rhs, fearrso_t* res, dhelpl_t dhl);
   fesoti_t fearrso_det(   fearrso_t* arr,                dhelpl_t dhl);
   void     fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fearrso_pnorm(   fearrso_t* arr, coeff_t p,                dhelpl_t dhl);
+  void     fearrso_pnorm_to(fearrso_t* arr, coeff_t p, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fearrso_norm(   fearrso_t* arr,                dhelpl_t dhl);
+  void     fearrso_norm_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
   fearrso_t   fearrso_invert(    fearrso_t* arr,                 dhelpl_t dhl);
   void        fearrso_invert_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
   fearrso_t   fearrso_transpose(   fearrso_t* arr,                 dhelpl_t dhl);
@@ -303,7 +307,7 @@ cdef extern from "oti/oti.h" nogil:
   void fesoti_dimCheck(fesoti_t* arr1,fesoti_t* arr2);
   void fesoti_set_all_o( sotinum_t* num, fesoti_t* res, dhelpl_t dhl);
   void fesoti_set_all_r(    coeff_t num, fesoti_t* res, dhelpl_t dhl);
-  void fesoti_set_item_k_f( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
+  void fesoti_set_item_k_o( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
   void fesoti_set_item_k_r(   coeff_t  num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
   sotinum_t fesoti_get_item_k(   fesoti_t* num, uint64_t k,                 dhelpl_t dhl);
   void      fesoti_get_item_k_to(fesoti_t* num, uint64_t k, sotinum_t* res, dhelpl_t dhl);

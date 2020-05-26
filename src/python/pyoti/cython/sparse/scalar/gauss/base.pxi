@@ -280,7 +280,7 @@ cdef class sotife:
       if tval == sotinum:
 
         valt = value
-        fesoti_set_item_k_f( &valt.num, val, &self.num, dhl)
+        fesoti_set_item_k_o( &valt.num, val, &self.num, dhl)
 
       else:
 
@@ -598,7 +598,6 @@ cdef class sotife:
 
   #---------------------------------------------------------------------------------------------------  
 
-
   #***************************************************************************************************
   def __truediv__(self, other):
     """
@@ -663,7 +662,7 @@ cdef class sotife:
 
     else:
 
-      return NotImplemented      
+      return NotImplemented
 
     # end if 
       
@@ -707,6 +706,9 @@ cdef class sotife:
     return sotinum.create(&res)
 
   #---------------------------------------------------------------------------------------------------
+
+
+
   # #***************************************************************************************************
   # def get_deriv(self, hum_dir ):
   #   """

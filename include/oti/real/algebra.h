@@ -153,6 +153,19 @@ coeff_t darr_det( darr_t* arr );
 
 
 /**************************************************************************************************//**
+@brief Norm of an array.
+
+res = Norm( ARR )
+
+@param[in] arr Array to compute norm.
+@param[in] p   Value that defines the norm.
+******************************************************************************************************/
+coeff_t darr_pnorm( darr_t* arr, coeff_t p );
+coeff_t darr_norm(  darr_t* arr );
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
 @brief Elementwise recursive negation of array type.
 
 RES = - RES

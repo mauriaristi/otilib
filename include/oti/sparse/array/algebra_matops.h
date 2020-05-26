@@ -83,7 +83,8 @@ RES  = PNORM( ARR1 )
 @param[in] p      P-value of norm.
 @param[in] dhl    Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t arrso_pnorm(arrso_t* arr1, coeff_t p, dhelpl_t dhl);
-void arrso_pnorm_to(arrso_t* arr1, coeff_t p, sotinum_t* res, dhelpl_t dhl);
+sotinum_t arrso_pnorm(    arrso_t* arr1, coeff_t p,                 dhelpl_t dhl);
+void      arrso_pnorm_to( arrso_t* arr1, coeff_t p, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 #endif

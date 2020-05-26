@@ -199,6 +199,37 @@ void fearrso_matmul_FR_to(fearrso_t* lhs, darr_t* rhs, fearrso_t* res, dhelpl_t 
 
 
 
+// ****************************************************************************************************
+fesoti_t fearrso_norm(fearrso_t* arr, dhelpl_t dhl){
+    
+    fesoti_t res = fesoti_init();
+
+    
+    res = fesoti_createEmpty_bases( arr->nip, 0, 0, dhl);
+
+    fearrso_norm_to( arr, &res, dhl );
+    
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_norm_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
+    
+    // Check dimensions (squareness)
+    fearrso_dimCheck_fF_elementwise(res,arr,arr);
+
+    for (i = 0; i<arr->nip; i++){
+
+        arrso_pnorm_to( &arr->p_data[i], 2.0, &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -206,6 +237,40 @@ void fearrso_matmul_FR_to(fearrso_t* lhs, darr_t* rhs, fearrso_t* res, dhelpl_t 
 
 
 
+
+
+
+// ****************************************************************************************************
+fesoti_t fearrso_pnorm(fearrso_t* arr, coeff_t p, dhelpl_t dhl){
+    
+    fesoti_t res = fesoti_init();
+
+    
+    res = fesoti_createEmpty_bases( arr->nip, 0, 0, dhl);
+
+    fearrso_pnorm_to( arr, p, &res, dhl );
+    
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_pnorm_to(fearrso_t* arr, coeff_t p, fesoti_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
+    
+    // Check dimensions (squareness)
+    fearrso_dimCheck_fF_elementwise(res,arr,arr);
+
+    for (i = 0; i<arr->nip; i++){
+
+        arrso_pnorm_to( &arr->p_data[i], p, &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -234,6 +299,7 @@ void fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl){
     
     // Check dimensions (squareness)
     fearrso_dimCheck_F_squareness( arr, arr);
+    fearrso_dimCheck_fF_elementwise(res,arr,arr);
 
     for (i = 0; i<arr->nip; i++){
 

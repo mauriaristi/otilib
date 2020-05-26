@@ -100,7 +100,7 @@ void fesoti_set_all_r( coeff_t num, fesoti_t* res, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-void fesoti_set_item_k_f( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl){
+void fesoti_set_item_k_o( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl){
     
     if (k < res->nip){
 

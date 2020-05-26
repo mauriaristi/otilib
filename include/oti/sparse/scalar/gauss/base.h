@@ -35,7 +35,7 @@ void fesoti_set_all_r(    coeff_t num, fesoti_t* res, dhelpl_t dhl);
 @param[in] res Integration point to set.
 @param[in] dhl Direction helper list
 ******************************************************************************************************/
-void fesoti_set_item_k_f( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
+void fesoti_set_item_k_o( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
 void fesoti_set_item_k_r(   coeff_t  num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 

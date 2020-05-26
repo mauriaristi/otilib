@@ -2040,14 +2040,15 @@ int64_t c_fem_defineSpatial( elemProps_t* elem, uint16_t derFlags, directionHelp
 
         // 0. basisN  
         // 1. basisNx 
-        // 2. basisNxx
-        // 3. basisNy 
-        // 4. basisNxy
-        // 5. basisNyy
-        // 6. basisNz 
+        // 2. basisNy 
+        // 3. basisNz 
+        // 4. basisNxx
+        // 5. basisNxy
+        // 6. basisNyy
         // 7. basisNxz
         // 8. basisNyz
         // 9. basisNzz
+
         derId = i+basisN;
 
 
@@ -2456,7 +2457,7 @@ int64_t c_fem_computeJacobian( elemProps_t* elem, sotiarray_t* xcoords, sotiarra
 
         } else if (elem->ndim == 1){
 
-            // sqrt( (dx/dxi)^2 + (dy/dxi)^2 + (dz/dxi)^2 )
+            // sqrt( (dx/dxi)^2 + (dy/dxi)^2 + (dz/dxi)^2 ) --> norm ([ (dx/dxi), (dy/dxi), (dz/dxi) ])
 
             // Loop for every integration point
             for ( intPt=0; intPt< elem->nIntPts; intPt++){
@@ -2538,7 +2539,7 @@ int64_t c_fem_computeJacobian( elemProps_t* elem, sotiarray_t* xcoords, sotiarra
         //     //       ||                              ||          
         //     //       ||  | dx/dxi |      | dx/deta | ||          
         //     //       ||  |        |      |         | ||          
-        //     //       ||  | dy/dxi |   x  | dy/deta | ||          
+        //     //       ||  | dy/dxi |   x  | dy/deta | ||    Vector norm.      
         //     //       ||  |        |      |         | ||          
         //     //       ||  | dz/dxi |      | dz/deta | ||          
         //     //       ||  |        |      |         | ||          

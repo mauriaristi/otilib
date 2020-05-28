@@ -110,6 +110,19 @@ void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
+@brief  Set the derivative corresponding to the index and order.
+
+@param[in] coef Derivative to be set.
+@param[in] idx Number of imaginary bases.
+@param[in] order Truncation order of the number.
+@param[in] num Address of the otin number to be modified.    
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+void soti_set_deriv_r(   coeff_t  coef, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+void soti_set_deriv_o( sotinum_t* coef, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
 @brief  Get the derivative corresponding to the index and order.
 
 @param[in] idx Number of imaginary bases.
@@ -127,7 +140,7 @@ coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
 @param[in] order Truncation order.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
+sotinum_t soti_get_tmp( ndir_t ntmp, ord_t order, dhelpl_t dhl);
 sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -156,18 +169,23 @@ void soti_insert_item(ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinum
 @param[inout] num OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+void soti_set_item(   coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+void soti_set_im_r(   coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Function that gets the specified item value.
+@brief Function that gets the specified imaginary direction.
 
 @param[in] idx Index of the imaginary direction
 @param[in] order Order that defines the imaginary direction.
 @param[in] num OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+coeff_t soti_get_item(    imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+coeff_t soti_get_im(      imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+void    soti_get_im_to_o( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+void    soti_get_im_to_r( imdir_t idx, ord_t order, sotinum_t* num,   coeff_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

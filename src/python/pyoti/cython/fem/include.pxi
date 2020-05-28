@@ -15,7 +15,8 @@ from pyoti.dense import  omat, otinum, e
 from pyoti.dense cimport omat, otinum
 
 from pyoti.sparse  import sotinum, matso, get_deriv, e as se
-from pyoti.sparse cimport sotinum, matso
+from pyoti.sparse  import sotife, matsofe
+from pyoti.sparse cimport sotinum, matso, sotife, matsofe
 
 import  numpy as np
 cimport numpy as np

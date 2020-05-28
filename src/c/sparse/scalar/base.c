@@ -205,12 +205,130 @@ void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void soti_set_im_r(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+    
+    flag_t flag;
+    imdir_t pos;
+    
+    if (order == 0){
+        
+        num->re = val;
+
+    }else{
+
+        if ( order <= num->order ){
+
+            pos = binSearchUI64(idx, num->p_idx[order-1], num->p_nnz[order-1], &flag );
+
+            if ( flag != 0 ){
+
+                // pos exists within num and already contains a value.
+                num->p_im[order-1][pos] = val;
+
+            } else {
+
+                // pos is not contained within num, thus has to be inserted.
+                soti_insert_item( pos, val, idx, order, num, dhl);
+
+            }
+
+        } // what happens if the order is greater than the number?
+        // Change order and add one element to the specified order.
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+    
+    imdir_t idxr;
+    ndir_t i;
+    sotinum_t tmp;
+    coeff_t factornum, factorden, value;
+    ord_t res_order, ordi, ordr;
+    
+    if (order == 0){
+        
+        soti_set_o( val, num, dhl);
+
+    }else{
+
+        res_order = MAX(num->order, order + val->order);
+        
+        tmp = soti_get_tmp(0, res_order, dhl);
+
+        soti_set_o(num, &tmp, dhl);
+
+        factorden = dhelp_get_deriv_factor(idx, order, dhl);
+        
+        soti_set_im_r(val->re/factorden, idx, order, &tmp, dhl);
+
+        for ( ordi = 0; ordi < val->order; ordi++){
+
+            for (i = 0; i < val->p_nnz[ordi]; i++){
+
+                dhelp_multDir( idx, order, val->p_idx[ordi][i], ordi+1, &idxr, &ordr, dhl);
+
+                factorden = dhelp_get_deriv_factor(idxr, ordr, dhl);
+                factornum = dhelp_get_deriv_factor(val->p_idx[ordi][i], ordi+1, dhl);
+                
+                value = val->p_im[ordi][i] * factornum / factorden;
+                
+                soti_set_im_r( value, idxr, ordr, &tmp, dhl);
+                
+            }
+            
+        }
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+    
+    imdir_t idxr;
+    ndir_t i;
+    sotinum_t tmp;
 
+    ord_t res_order, ordi, ordr;
+    
+    if (order == 0){
+        
+        soti_set_o( val, num, dhl);
 
+    }else{
+
+        res_order = MAX(num->order, order + val->order);
+        
+        tmp = soti_get_tmp(0, res_order, dhl);
+
+        soti_set_o(num, &tmp, dhl);
+
+        soti_set_im_r(val->re, idx, order, &tmp, dhl);
+
+        for ( ordi = 0; ordi < val->order; ordi++) {
+
+            for (i =0; i<val->p_nnz[ordi]; i++){
+
+                dhelp_multDir( idx, order, val->p_idx[ordi][i], ordi+1, &idxr, &ordr, dhl);
+                
+                soti_set_im_r(val->p_im[ordi][i], idxr, ordr, &tmp, dhl);                
+                
+            }
+            
+        }
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
@@ -337,6 +455,54 @@ coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+coeff_t soti_get_im(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+    
+    coeff_t res = 0.0; // Default answer.
+    flag_t flag;
+    imdir_t pos;
+    
+    if (order == 0){
+        
+        res = num->re;
+
+    } else {
+
+        if ( order<=num->order ){            
+            if(num->p_nnz[order-1] != 0){
+                pos = binSearchUI64(idx, num->p_idx[order-1], num->p_nnz[order-1], &flag );
+                if (flag != 0){
+                    res = num->p_im[order-1][pos];
+                }
+            }
+        }
+
+    }
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_get_im_to_o(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+    
+    coeff_t rres = soti_get_im(idx, order, num, dhl);
+
+    soti_set_r(rres,res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_get_im_to_r(imdir_t idx, ord_t order, sotinum_t* num, coeff_t* res, dhelpl_t dhl){
+    
+    *res = soti_get_im(idx, order, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
 sotinum_t soti_extract_im(imdir_t idx, ord_t order, sotinum_t* num,  dhelpl_t dhl){
 
     sotinum_t res = soti_init();
@@ -409,17 +575,42 @@ void soti_extract_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res
 
 // Derivative extractors
 
+
+// ****************************************************************************************************
+void soti_set_deriv_r( coeff_t coef, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+    
+    coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
+
+    soti_set_im_r( coef/factor, idx, order, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
 // ****************************************************************************************************
 coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 
     coeff_t coef   = soti_get_item(idx,order,num,dhl);
     coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
 
-    // error_exit(OTI_OutOfMemory);
-
     return coef*factor;
 }
 // ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_get_deriv_to( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+
+    coeff_t coef   = soti_get_item(idx,order,num,dhl);
+    coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
+
+    soti_set_r( coef * factor, res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 // ****************************************************************************************************
@@ -977,19 +1168,3 @@ void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_t
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-

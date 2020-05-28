@@ -11,7 +11,7 @@ ord_t fesoti_get_order( fesoti_t* num ){
     uint64_t i;
 
     // Finds the maximum order in the array.
-    for( i=0; i<num->nip; i++ ){
+    for( i = 0; i<num->nip; i++ ){
         
         order = MAX(order,num->p_data[0].order);
     
@@ -21,6 +21,31 @@ ord_t fesoti_get_order( fesoti_t* num ){
     
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ****************************************************************************************************
 void fesoti_set_to( fesoti_t* src, fesoti_t* dst, dhelpl_t dhl){
@@ -69,8 +94,30 @@ void fesoti_copy_to( fesoti_t* src, fesoti_t* dst, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void fesoti_set_all_o( sotinum_t* num, fesoti_t* res, dhelpl_t dhl){
+void fesoti_set_f( fesoti_t* num, fesoti_t* res, dhelpl_t dhl){
+    
+    fesoti_copy_to(num,res,dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void fesoti_set_o( sotinum_t* num, fesoti_t* res, dhelpl_t dhl){
     
     uint64_t i;
 
@@ -85,7 +132,7 @@ void fesoti_set_all_o( sotinum_t* num, fesoti_t* res, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
-void fesoti_set_all_r( coeff_t num, fesoti_t* res, dhelpl_t dhl){
+void fesoti_set_r( coeff_t num, fesoti_t* res, dhelpl_t dhl){
     
     uint64_t i;
 
@@ -183,12 +230,35 @@ void fesoti_get_item_k_to(fesoti_t* num, uint64_t k, sotinum_t* res, dhelpl_t dh
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
 fesoti_t fesoti_zeros_bases(uint64_t nip, bases_t nbases, ord_t order, dhelpl_t dhl){
 
     fesoti_t  res  = fesoti_createEmpty_bases(nip, nbases, order, dhl);
     
-    fesoti_set_all_r( 0.0, &res, dhl);
+    fesoti_set_r( 0.0, &res, dhl);
 
     // This is returned uninitialized.
     return res;

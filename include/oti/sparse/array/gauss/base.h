@@ -14,8 +14,55 @@ fearrso_t fearrso_copy(   fearrso_t* src,                 dhelpl_t dhl);
 void      fearrso_copy_to(fearrso_t* src, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
 /**************************************************************************************************//**
-@brief 
+@brief  Imaginary direction getters.
+
+@param[in] arr Gauss array.
+
+@param[in] res Gauss array, result.
+@param[in] dhl Direction helper list.
+******************************************************************************************************/
+fearrso_t fearrso_get_im(    imdir_t idx, ord_t order, fearrso_t* arr, 
+                                             dhelpl_t dhl);
+void      fearrso_get_im_to( imdir_t idx, ord_t order, fearrso_t* arr, 
+                             fearrso_t* res, dhelpl_t dhl);
+
+fearrso_t fearrso_get_deriv(    imdir_t idx, ord_t order, 
+                                 fearrso_t* arr, dhelpl_t dhl);
+void      fearrso_get_deriv_to( imdir_t idx, ord_t order, 
+                                 fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+/**************************************************************************************************//**
+@brief  Imaginary derivative extractors.
+
+@param[in] arr Gauss array.
+
+@param[in] res Gauss array, result.
+@param[in] dhl Direction helper list.
+******************************************************************************************************/
+fearrso_t fearrso_extract_im(    imdir_t idx, ord_t order, fearrso_t* arr, 
+                                                  dhelpl_t dhl);
+void      fearrso_extract_im_to( imdir_t idx, ord_t order, fearrso_t* arr, 
+                                  fearrso_t* res, dhelpl_t dhl);
+
+fearrso_t fearrso_extract_deriv(    imdir_t idx, ord_t order, 
+                                    fearrso_t* arr, dhelpl_t dhl);
+void      fearrso_extract_deriv_to( imdir_t idx, ord_t order, 
+                                    fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+/**************************************************************************************************//**
+@brief  Item getters.
 
 @param[in] arr Gauss array.
 
@@ -26,7 +73,7 @@ arrso_t   fearrso_get_item_k(  fearrso_t* arr, uint64_t k,                      
 sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, dhelpl_t dhl);
 
 void fearrso_get_item_ij_to(  fearrso_t* arr, uint64_t i, uint64_t j, 
-                              fearrso_t* res, dhelpl_t dhl);
+                               fesoti_t* res, dhelpl_t dhl);
 
 void fearrso_get_item_k_to(   fearrso_t* arr, uint64_t k, 
                                 arrso_t* res, dhelpl_t dhl);
@@ -45,27 +92,51 @@ void fearrso_get_item_ijk_to( fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k
 @param[in] k     Integration point.
 @param[in] dhl   Direction helper list.
 ******************************************************************************************************/
-void fearrso_set_item_ij( fesoti_t* elm, uint64_t i, uint64_t j,
-                          // 
+void fearrso_set_item_ij_r(   coeff_t  elm, uint64_t i, uint64_t j,
+                            fearrso_t* res, dhelpl_t dhl);
+
+void fearrso_set_item_ij_o(  sotinum_t* elm, uint64_t i, uint64_t j,
+                             fearrso_t* res, dhelpl_t dhl);
+
+void fearrso_set_item_ij_f(  fesoti_t* elm, uint64_t i, uint64_t j,
+                            fearrso_t* res, dhelpl_t dhl);
+
+void fearrso_set_item_k_r(    coeff_t  elm, uint64_t k, 
+                            fearrso_t* res, dhelpl_t dhl);
+
+void fearrso_set_item_k_o(  sotinum_t* elm, uint64_t k, 
+                            fearrso_t* res, dhelpl_t dhl);
+
+void fearrso_set_item_k_R(    arrso_t* elm, uint64_t k, 
                           fearrso_t* res, dhelpl_t dhl);
 
-void fearrso_set_item_k(    arrso_t* elm, 
-                          uint64_t k, 
+void fearrso_set_item_k_O(    arrso_t* elm, uint64_t k, 
                           fearrso_t* res, dhelpl_t dhl);
 
-void fearrso_set_item_ijk(sotinum_t* elm, uint64_t i, uint64_t j, 
-                          uint64_t k, 
-                          fearrso_t* res, dhelpl_t dhl);
+void fearrso_set_item_ijk_r(   coeff_t  elm, uint64_t i, uint64_t j, uint64_t k, 
+                             fearrso_t* res, dhelpl_t dhl);
+
+void fearrso_set_item_ijk_o( sotinum_t* elm, uint64_t i, uint64_t j, uint64_t k, 
+                             fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief 
+@brief Broadcasted setter.
 
 @param[in]
 @param[in] dhl Direction helper list.
 ******************************************************************************************************/
 void fearrso_set_all_o( sotinum_t* num, fearrso_t* arr, dhelpl_t dhl );
 void fearrso_set_all_r(    coeff_t num, fearrso_t* arr, dhelpl_t dhl );
+
+void fearrso_set_r(    coeff_t src, fearrso_t* res, dhelpl_t dhl );
+void fearrso_set_o( sotinum_t* src, fearrso_t* res, dhelpl_t dhl );
+void fearrso_set_f(  fesoti_t* src, fearrso_t* res, dhelpl_t dhl );
+
+void fearrso_set_R(    darr_t* src, fearrso_t* res, dhelpl_t dhl );
+void fearrso_set_O(   arrso_t* src, fearrso_t* res, dhelpl_t dhl );
+void fearrso_set_F( fearrso_t* src, fearrso_t* res, dhelpl_t dhl );
+
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

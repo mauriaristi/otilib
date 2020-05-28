@@ -4,12 +4,18 @@
 
 
 // Include structure.
-#include "element/structures.h"
+#include "element/real/structures.h"
 
 // Include basic functions.
-#include "element/base.h"
+#include "element/real/base.h"
 
 
+
+// Include structure.
+#include "element/soti/structures.h"
+
+// Include basic functions.
+#include "element/soti/base.h"
 
 
 

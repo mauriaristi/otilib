@@ -39,6 +39,19 @@ ord_t fearrso_get_order(fearrso_t* arr){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
 void fearrso_copy_to(fearrso_t* src, fearrso_t* dst, dhelpl_t dhl){
 
@@ -75,23 +88,21 @@ fearrso_t fearrso_copy(fearrso_t* src, dhelpl_t dhl){
 
 
 
-// ****************************************************************************************************
-// void fearrso_get_item_ij_to(fearrso_t* arr, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
-        
-//     uint64_t k;
 
-//     sotinum_t tmp = soti_get_tmp( 10, arr->order, dhl);
-    
-//     for (k = 0; k<arr->nip; k++){
-        
-//         fearrso_get_item_ijk_to( arr, i, j, k, &tmp, dhl);
 
-//         arrso_set_item_ij_o(&tmp, 0, 0, &res->p_data[k], dhl);
-    
-//     }
 
-// }
-// // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ****************************************************************************************************
 arrso_t fearrso_get_item_k(fearrso_t* arr, uint64_t k, dhelpl_t dhl){
@@ -108,12 +119,28 @@ arrso_t fearrso_get_item_k(fearrso_t* arr, uint64_t k, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+// ****************************************************************************************************
+fesoti_t fearrso_get_item_ij(fearrso_t* arr, uint64_t i, uint64_t j, dhelpl_t dhl){
+        
+    fesoti_t res = fesoti_init();
+    // TODO: Add bound checks.
+    
+    res = fesoti_zeros_bases(arr->nip, 0, 0, dhl);
+
+    fearrso_get_item_ij_to(arr, i, j, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
 // ****************************************************************************************************
 sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, dhelpl_t dhl){
     
     sotinum_t res;
     
-
     res = arrso_get_item_ij(&arr->p_data[k], i, j, dhl);
 
     return res;
@@ -124,23 +151,10 @@ sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t 
 
 
 
-// // ****************************************************************************************************
-// void fearrso_get_item_ij_to(fearrso_t* arr, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
-        
-//     uint64_t k;
 
-//     sotinum_t tmp = soti_get_tmp( 10, arr->order, dhl);
-    
-//     for (k = 0; k<arr->nip; k++){
-        
-//         fearrso_get_item_ijk_to( arr, i, j, k, &tmp, dhl);
 
-//         arrso_set_item_ij_o(&tmp, 0, 0, &res->p_data[k], dhl);
-    
-//     }
 
-// }
-// // ----------------------------------------------------------------------------------------------------
+
 
 // ****************************************************************************************************
 void fearrso_get_item_k_to(fearrso_t* arr, uint64_t k, arrso_t* res, dhelpl_t dhl){
@@ -153,11 +167,34 @@ void fearrso_get_item_k_to(fearrso_t* arr, uint64_t k, arrso_t* res, dhelpl_t dh
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+void fearrso_get_item_ij_to(fearrso_t* arr, uint64_t i, uint64_t j, fesoti_t* res, dhelpl_t dhl){
+        
+    uint64_t k;
+    
+    fearrso_dimCheck_fF_elementwise(res,arr,arr);
+
+    for (k = 0; k < arr->nip; k++){
+        
+        arrso_get_item_ij_to( &arr->p_data[k], i, j, &res->p_data[k], dhl);
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 void fearrso_get_item_ijk_to(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, sotinum_t* res, dhelpl_t dhl){
     
     // TODO: Add bound checks.
+    if ( k < arr->nip && i < arr->nrows && j < arr->ncols){
 
-    arrso_get_item_ij_to(&arr->p_data[k], i, j, res, dhl);
+        arrso_get_item_ij_to(&arr->p_data[k], i, j, res, dhl);
+
+    } else {
+
+        printf("Error: Bad index \n");
+        exit(OTI_BadIndx);
+    }
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -170,6 +207,21 @@ void fearrso_get_item_ijk_to(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k,
 
 
 
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void fearrso_set_item_k( arrso_t* arr , uint64_t k, fearrso_t* res, dhelpl_t dhl){
+    
+    // No new allocation needed.
+    arrso_copy_to( arr, &res->p_data[k], dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
@@ -188,19 +240,6 @@ void fearrso_set_item_ij(fesoti_t* num, uint64_t i, uint64_t j, fearrso_t* res, 
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-// ****************************************************************************************************
-void fearrso_set_item_k( arrso_t* arr , uint64_t k, fearrso_t* res, dhelpl_t dhl){
-    
-    // No new allocation needed.
-    arrso_copy_to( arr, &res->p_data[k], dhl);
-
-}
-// ----------------------------------------------------------------------------------------------------
-
 
 
 

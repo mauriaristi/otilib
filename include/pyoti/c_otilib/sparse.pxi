@@ -305,8 +305,9 @@ cdef extern from "oti/oti.h" nogil:
   fesoti_t fesoti_div_fr(     fesoti_t* lhs,    coeff_t rhs,                dhelpl_t dhl);
   void     fesoti_div_fr_to(  fesoti_t* lhs,    coeff_t rhs, fesoti_t* res, dhelpl_t dhl);
   void fesoti_dimCheck(fesoti_t* arr1,fesoti_t* arr2);
-  void fesoti_set_all_o( sotinum_t* num, fesoti_t* res, dhelpl_t dhl);
-  void fesoti_set_all_r(    coeff_t num, fesoti_t* res, dhelpl_t dhl);
+  void fesoti_set_r(    coeff_t num, fesoti_t* res, dhelpl_t dhl);
+  void fesoti_set_o( sotinum_t* num, fesoti_t* res, dhelpl_t dhl);
+  void fesoti_set_f(  fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
   void fesoti_set_item_k_o( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
   void fesoti_set_item_k_r(   coeff_t  num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
   sotinum_t fesoti_get_item_k(   fesoti_t* num, uint64_t k,                 dhelpl_t dhl);
@@ -529,9 +530,11 @@ cdef extern from "oti/oti.h" nogil:
                       sotinum_t* dest, dhelpl_t dhl );
   void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl);
   void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
+  void soti_set_r(    coeff_t src, sotinum_t* dest, dhelpl_t dhl);
+
   void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl);
-  void soti_set_r( coeff_t a, sotinum_t* num, dhelpl_t dhl);
   sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
+  
   sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
   void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
 

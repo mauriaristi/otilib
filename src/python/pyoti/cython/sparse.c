@@ -2642,6 +2642,9 @@ static PyTypeObject *__pyx_ptype_5pyoti_6sparse_sotife = 0;
 static PyTypeObject *__pyx_ptype_5pyoti_6sparse_matsofe = 0;
 static struct __pyx_obj_5pyoti_4core_dHelp *__pyx_v_5pyoti_6sparse_h = 0;
 static dhelpl_t __pyx_v_5pyoti_6sparse_dhl;
+static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_eye(uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_eye *__pyx_optional_args); /*proto*/
+static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_zeros(uint64_t, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_zeros *__pyx_optional_args); /*proto*/
+static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_ones(uint64_t, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_ones *__pyx_optional_args); /*proto*/
 static struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_f_5pyoti_6sparse_sotinum_cos(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_f_5pyoti_6sparse_sotinum_sin(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_f_5pyoti_6sparse_sotinum_tan(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch); /*proto*/
@@ -2661,9 +2664,6 @@ static struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_f_5pyoti_6sparse_sotinum_e
 static struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_f_5pyoti_6sparse_sotinum_power(struct __pyx_obj_5pyoti_6sparse_sotinum *, double, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_f_5pyoti_6sparse_sotinum_sqrt(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch); /*proto*/
 static struct __pyx_obj_5pyoti_6sparse_sotinum *__pyx_f_5pyoti_6sparse_sotinum_cbrt(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch); /*proto*/
-static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_eye(uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_eye *__pyx_optional_args); /*proto*/
-static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_zeros(uint64_t, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_zeros *__pyx_optional_args); /*proto*/
-static struct __pyx_obj_5pyoti_6sparse_matso *__pyx_f_5pyoti_6sparse_ones(uint64_t, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_ones *__pyx_optional_args); /*proto*/
 static struct __pyx_obj_5pyoti_6sparse_matsofe *__pyx_f_5pyoti_6sparse_fezeros(PyObject *, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_fezeros *__pyx_optional_args); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_cos(PyObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_cos *__pyx_optional_args); /*proto*/
 static PyObject *__pyx_f_5pyoti_6sparse_sin(PyObject *, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_sin *__pyx_optional_args); /*proto*/
@@ -10994,12 +10994,12 @@ static int __pyx_pf_5pyoti_6sparse_6sotife___init__(struct __pyx_obj_5pyoti_6spa
   /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":36
  * 
  *     # Set all elements in the number as real.
- *     fesoti_set_all_r( real, &self.num, dhl)             # <<<<<<<<<<<<<<
+ *     fesoti_set_r( real, &self.num, dhl)             # <<<<<<<<<<<<<<
  * 
  *   #---------------------------------------------------------------------------------------------------
  */
   __pyx_t_1 = __pyx_PyFloat_AsDouble(__pyx_v_real); if (unlikely((__pyx_t_1 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 36, __pyx_L1_error)
-  fesoti_set_all_r(__pyx_t_1, (&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
+  fesoti_set_r(__pyx_t_1, (&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
   /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":19
  *   #***************************************************************************************************
@@ -12513,7 +12513,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_18copy(struct __pyx_obj_5pyoti_
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":317
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":316
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -12545,7 +12545,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_20__neg__(struct __pyx_obj_5pyo
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__neg__", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":325
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":324
  *     global dhl
  * 
  *     cdef fesoti_t res = fesoti_neg(&self.num, dhl)             # <<<<<<<<<<<<<<
@@ -12554,7 +12554,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_20__neg__(struct __pyx_obj_5pyo
  */
   __pyx_v_res = fesoti_neg((&__pyx_v_self->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":327
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":326
  *     cdef fesoti_t res = fesoti_neg(&self.num, dhl)
  * 
  *     return sotife.create(&res)             # <<<<<<<<<<<<<<
@@ -12562,13 +12562,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_20__neg__(struct __pyx_obj_5pyo
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 327, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 326, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":317
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":316
  * 
  *   #***************************************************************************************************
  *   def __neg__(self):             # <<<<<<<<<<<<<<
@@ -12587,7 +12587,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_20__neg__(struct __pyx_obj_5pyo
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":334
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":330
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other):             # <<<<<<<<<<<<<<
@@ -12628,7 +12628,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__add__", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":347
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":343
  *     cdef sotinum olhs,orhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -12638,7 +12638,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":348
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":344
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -12648,45 +12648,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":350
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":346
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 350, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 350, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 346, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 346, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":352
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":348
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       rhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 352, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 348, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":353
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":349
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_sum_ff(&lhs.num,&rhs.num,dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 353, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 349, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":355
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":351
  *       rhs = other
  * 
  *       res = fesoti_sum_ff(&lhs.num,&rhs.num,dhl)             # <<<<<<<<<<<<<<
@@ -12695,7 +12695,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = fesoti_sum_ff((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":350
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":346
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -12705,45 +12705,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":357
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":353
  *       res = fesoti_sum_ff(&lhs.num,&rhs.num,dhl)
  * 
  *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
  * 
  *       olhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 357, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 357, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 353, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 353, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":359
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":355
  *     elif ( tlhs  == sotinum ):
  * 
  *       olhs = self             # <<<<<<<<<<<<<<
  *       rhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 359, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 355, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_olhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":360
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":356
  * 
  *       olhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_sum_of(&olhs.num,&rhs.num, dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 360, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 356, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":362
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":358
  *       rhs = other
  * 
  *       res = fesoti_sum_of(&olhs.num,&rhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -12752,7 +12752,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = fesoti_sum_of((&__pyx_v_olhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":357
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":353
  *       res = fesoti_sum_ff(&lhs.num,&rhs.num,dhl)
  * 
  *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
@@ -12762,45 +12762,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":364
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":360
  *       res = fesoti_sum_of(&olhs.num,&rhs.num, dhl)
  * 
  *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 364, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 364, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 360, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 360, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":366
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":362
  *     elif ( trhs  == sotinum ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       orhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 366, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 362, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":367
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":363
  * 
  *       lhs = self
  *       orhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_sum_of(&orhs.num,&lhs.num, dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 367, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 363, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_orhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":369
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":365
  *       orhs = other
  * 
  *       res = fesoti_sum_of(&orhs.num,&lhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -12809,7 +12809,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = fesoti_sum_of((&__pyx_v_orhs->num), (&__pyx_v_lhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":364
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":360
  *       res = fesoti_sum_of(&olhs.num,&rhs.num, dhl)
  * 
  *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
@@ -12819,44 +12819,44 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":371
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":367
  *       res = fesoti_sum_of(&orhs.num,&lhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
  * 
  *       rhs = other
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 371, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 367, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 371, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 367, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":373
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":369
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
  *       res = fesoti_sum_rf(self, &rhs.num, dhl)
  * 
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 373, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 369, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":374
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":370
  * 
  *       rhs = other
  *       res = fesoti_sum_rf(self, &rhs.num, dhl)             # <<<<<<<<<<<<<<
  * 
  *     elif (trhs in number_types):
  */
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 374, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 370, __pyx_L1_error)
     __pyx_v_res = fesoti_sum_rf(__pyx_t_4, (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":371
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":367
  *       res = fesoti_sum_of(&orhs.num,&lhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -12866,44 +12866,44 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":376
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":372
  *       res = fesoti_sum_rf(self, &rhs.num, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 376, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 372, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(5, 376, __pyx_L1_error)
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(5, 372, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":378
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":374
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       res = fesoti_sum_rf(other, &lhs.num, dhl)
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 378, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 374, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":379
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":375
  * 
  *       lhs = self
  *       res = fesoti_sum_rf(other, &lhs.num, dhl)             # <<<<<<<<<<<<<<
  * 
  *     # elif ( tlhs  == matso ):
  */
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 379, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 375, __pyx_L1_error)
     __pyx_v_res = fesoti_sum_rf(__pyx_t_4, (&__pyx_v_lhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":376
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":372
  *       res = fesoti_sum_rf(self, &rhs.num, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -12913,7 +12913,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":411
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":407
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -12928,7 +12928,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
   }
   __pyx_L3:;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":415
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":411
  *     # end if
  * 
  *     return sotife.create(&res)             # <<<<<<<<<<<<<<
@@ -12936,13 +12936,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 415, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 411, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":334
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":330
  * 
  *   #***************************************************************************************************
  *   def __add__(self, other):             # <<<<<<<<<<<<<<
@@ -12967,7 +12967,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_22__add__(PyObject *__pyx_v_sel
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":421
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":417
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other):             # <<<<<<<<<<<<<<
@@ -12998,7 +12998,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_24__iadd__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__iadd__", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":427
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":423
  *     #*************************************************************************************************
  * 
  *     return self + other             # <<<<<<<<<<<<<<
@@ -13006,13 +13006,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_24__iadd__(struct __pyx_obj_5py
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyNumber_Add(((PyObject *)__pyx_v_self), __pyx_v_other); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 427, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Add(((PyObject *)__pyx_v_self), __pyx_v_other); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 423, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":421
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":417
  * 
  *   #***************************************************************************************************
  *   def __iadd__(self, other):             # <<<<<<<<<<<<<<
@@ -13031,7 +13031,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_24__iadd__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":433
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":429
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other):             # <<<<<<<<<<<<<<
@@ -13072,7 +13072,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__sub__", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":446
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":442
  *     cdef sotinum olhs,orhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -13082,7 +13082,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":447
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":443
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -13092,45 +13092,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":449
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":445
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 449, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 449, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 445, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 445, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":451
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":447
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       rhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 451, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 447, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":452
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":448
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_sub_ff(&lhs.num,&rhs.num,dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 452, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 448, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":454
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":450
  *       rhs = other
  * 
  *       res = fesoti_sub_ff(&lhs.num,&rhs.num,dhl)             # <<<<<<<<<<<<<<
@@ -13139,7 +13139,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = fesoti_sub_ff((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":449
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":445
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -13149,45 +13149,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":456
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":452
  *       res = fesoti_sub_ff(&lhs.num,&rhs.num,dhl)
  * 
  *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
  * 
  *       olhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 456, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 456, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 452, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 452, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":458
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":454
  *     elif ( tlhs  == sotinum ):
  * 
  *       olhs = self             # <<<<<<<<<<<<<<
  *       rhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 458, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 454, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_olhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":459
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":455
  * 
  *       olhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_sub_of(&olhs.num,&rhs.num, dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 459, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 455, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":461
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":457
  *       rhs = other
  * 
  *       res = fesoti_sub_of(&olhs.num,&rhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -13196,7 +13196,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = fesoti_sub_of((&__pyx_v_olhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":456
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":452
  *       res = fesoti_sub_ff(&lhs.num,&rhs.num,dhl)
  * 
  *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
@@ -13206,45 +13206,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":463
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":459
  *       res = fesoti_sub_of(&olhs.num,&rhs.num, dhl)
  * 
  *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 463, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 463, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 459, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 459, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":465
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":461
  *     elif ( trhs  == sotinum ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       orhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 465, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 461, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":466
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":462
  * 
  *       lhs = self
  *       orhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_sub_fo(&lhs.num, &orhs.num, dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 466, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 462, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_orhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":468
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":464
  *       orhs = other
  * 
  *       res = fesoti_sub_fo(&lhs.num, &orhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -13253,7 +13253,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = fesoti_sub_fo((&__pyx_v_lhs->num), (&__pyx_v_orhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":463
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":459
  *       res = fesoti_sub_of(&olhs.num,&rhs.num, dhl)
  * 
  *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
@@ -13263,44 +13263,44 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":470
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":466
  *       res = fesoti_sub_fo(&lhs.num, &orhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
  * 
  *       rhs = other
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 470, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 466, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 470, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 466, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":472
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":468
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
  *       res = fesoti_sub_rf(self, &rhs.num, dhl)
  * 
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 472, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 468, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":473
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":469
  * 
  *       rhs = other
  *       res = fesoti_sub_rf(self, &rhs.num, dhl)             # <<<<<<<<<<<<<<
  * 
  *     elif (trhs in number_types):
  */
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 473, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 469, __pyx_L1_error)
     __pyx_v_res = fesoti_sub_rf(__pyx_t_4, (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":470
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":466
  *       res = fesoti_sub_fo(&lhs.num, &orhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -13310,44 +13310,44 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":475
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":471
  *       res = fesoti_sub_rf(self, &rhs.num, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 475, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 471, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(5, 475, __pyx_L1_error)
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(5, 471, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":477
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":473
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       res = fesoti_sub_fr(&lhs.num, other, dhl)
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 477, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 473, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":478
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":474
  * 
  *       lhs = self
  *       res = fesoti_sub_fr(&lhs.num, other, dhl)             # <<<<<<<<<<<<<<
  * 
  *     # elif ( tlhs  == dmat ):
  */
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 478, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 474, __pyx_L1_error)
     __pyx_v_res = fesoti_sub_fr((&__pyx_v_lhs->num), __pyx_t_4, __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":475
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":471
  *       res = fesoti_sub_rf(self, &rhs.num, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -13357,7 +13357,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":496
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":492
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -13372,7 +13372,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
   }
   __pyx_L3:;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":500
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":496
  *     # end if
  * 
  *     return sotife.create(&res)             # <<<<<<<<<<<<<<
@@ -13380,13 +13380,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 500, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 496, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":433
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":429
  * 
  *   #***************************************************************************************************
  *   def __sub__(self, other):             # <<<<<<<<<<<<<<
@@ -13411,7 +13411,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_26__sub__(PyObject *__pyx_v_sel
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":506
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":502
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -13442,7 +13442,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_28__isub__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__isub__", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":512
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":508
  *     #*************************************************************************************************
  * 
  *     return self - other_in             # <<<<<<<<<<<<<<
@@ -13450,13 +13450,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_28__isub__(struct __pyx_obj_5py
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyNumber_Subtract(((PyObject *)__pyx_v_self), __pyx_v_other_in); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 512, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Subtract(((PyObject *)__pyx_v_self), __pyx_v_other_in); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 508, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":506
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":502
  * 
  *   #***************************************************************************************************
  *   def __isub__(self, other_in):             # <<<<<<<<<<<<<<
@@ -13475,7 +13475,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_28__isub__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":518
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":514
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other):             # <<<<<<<<<<<<<<
@@ -13516,7 +13516,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__mul__", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":531
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":527
  *     cdef sotinum olhs,orhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -13526,7 +13526,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":532
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":528
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -13536,45 +13536,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":534
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":530
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 534, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 534, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 530, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 530, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":536
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":532
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       rhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 536, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 532, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":537
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":533
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_mul_ff(&lhs.num,&rhs.num,dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 537, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 533, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":539
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":535
  *       rhs = other
  * 
  *       res = fesoti_mul_ff(&lhs.num,&rhs.num,dhl)             # <<<<<<<<<<<<<<
@@ -13583,7 +13583,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = fesoti_mul_ff((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":534
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":530
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -13593,45 +13593,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":541
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":537
  *       res = fesoti_mul_ff(&lhs.num,&rhs.num,dhl)
  * 
  *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
  * 
  *       olhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 541, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 541, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 537, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 537, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":543
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":539
  *     elif ( tlhs  == sotinum ):
  * 
  *       olhs = self             # <<<<<<<<<<<<<<
  *       rhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 543, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 539, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_olhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":544
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":540
  * 
  *       olhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_mul_of(&olhs.num,&rhs.num, dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 544, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 540, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":546
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":542
  *       rhs = other
  * 
  *       res = fesoti_mul_of(&olhs.num,&rhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -13640,7 +13640,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = fesoti_mul_of((&__pyx_v_olhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":541
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":537
  *       res = fesoti_mul_ff(&lhs.num,&rhs.num,dhl)
  * 
  *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
@@ -13650,45 +13650,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":548
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":544
  *       res = fesoti_mul_of(&olhs.num,&rhs.num, dhl)
  * 
  *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 548, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 548, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 544, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 544, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":550
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":546
  *     elif ( trhs  == sotinum ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       orhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 550, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 546, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":551
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":547
  * 
  *       lhs = self
  *       orhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_mul_of(&orhs.num,&lhs.num, dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 551, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 547, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_orhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":553
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":549
  *       orhs = other
  * 
  *       res = fesoti_mul_of(&orhs.num,&lhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -13697,7 +13697,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
  */
     __pyx_v_res = fesoti_mul_of((&__pyx_v_orhs->num), (&__pyx_v_lhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":548
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":544
  *       res = fesoti_mul_of(&olhs.num,&rhs.num, dhl)
  * 
  *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
@@ -13707,44 +13707,44 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":555
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":551
  *       res = fesoti_mul_of(&orhs.num,&lhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
  * 
  *       rhs = other
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 555, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 551, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 555, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 551, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":557
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":553
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
  *       res = fesoti_mul_rf(self, &rhs.num, dhl)
  * 
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 557, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 553, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":558
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":554
  * 
  *       rhs = other
  *       res = fesoti_mul_rf(self, &rhs.num, dhl)             # <<<<<<<<<<<<<<
  * 
  *     elif (trhs in number_types):
  */
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 558, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 554, __pyx_L1_error)
     __pyx_v_res = fesoti_mul_rf(__pyx_t_4, (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":555
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":551
  *       res = fesoti_mul_of(&orhs.num,&lhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -13754,44 +13754,44 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":560
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":556
  *       res = fesoti_mul_rf(self, &rhs.num, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 560, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 556, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(5, 560, __pyx_L1_error)
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(5, 556, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":562
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":558
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       res = fesoti_mul_rf(other, &lhs.num, dhl)
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 562, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 558, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":563
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":559
  * 
  *       lhs = self
  *       res = fesoti_mul_rf(other, &lhs.num, dhl)             # <<<<<<<<<<<<<<
  * 
  *     # elif ( tlhs  == dmat ):
  */
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 563, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 559, __pyx_L1_error)
     __pyx_v_res = fesoti_mul_rf(__pyx_t_4, (&__pyx_v_lhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":560
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":556
  *       res = fesoti_mul_rf(self, &rhs.num, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -13801,7 +13801,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":581
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":577
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -13816,7 +13816,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
   }
   __pyx_L3:;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":585
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":581
  *     # end if
  * 
  *     return sotife.create(&res)             # <<<<<<<<<<<<<<
@@ -13824,13 +13824,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 585, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 581, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":518
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":514
  * 
  *   #***************************************************************************************************
  *   def __mul__(self, other):             # <<<<<<<<<<<<<<
@@ -13855,7 +13855,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_30__mul__(PyObject *__pyx_v_sel
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":591
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":587
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -13886,7 +13886,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_32__imul__(struct __pyx_obj_5py
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__imul__", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":597
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":593
  *     #*************************************************************************************************
  * 
  *     return self * other_in             # <<<<<<<<<<<<<<
@@ -13894,13 +13894,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_32__imul__(struct __pyx_obj_5py
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyNumber_Multiply(((PyObject *)__pyx_v_self), __pyx_v_other_in); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 597, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Multiply(((PyObject *)__pyx_v_self), __pyx_v_other_in); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 593, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":591
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":587
  * 
  *   #***************************************************************************************************
  *   def __imul__(self, other_in):             # <<<<<<<<<<<<<<
@@ -13919,7 +13919,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_32__imul__(struct __pyx_obj_5py
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":602
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":598
  * 
  *   #***************************************************************************************************
  *   def __truediv__(self, other):             # <<<<<<<<<<<<<<
@@ -13960,7 +13960,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
   __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_t_4;
   __Pyx_RefNannySetupContext("__truediv__", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":615
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":611
  *     cdef sotinum olhs,orhs
  * 
  *     tlhs = type(self)             # <<<<<<<<<<<<<<
@@ -13970,7 +13970,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_self)));
   __pyx_v_tlhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_self)));
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":616
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":612
  * 
  *     tlhs = type(self)
  *     trhs = type(other)             # <<<<<<<<<<<<<<
@@ -13980,45 +13980,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
   __Pyx_INCREF(((PyObject *)Py_TYPE(__pyx_v_other)));
   __pyx_v_trhs = ((PyTypeObject*)((PyObject *)Py_TYPE(__pyx_v_other)));
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":618
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":614
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 618, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 618, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_v_trhs), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 614, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 614, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":620
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":616
  *     if (tlhs == trhs):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       rhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 620, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 616, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":621
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":617
  * 
  *       lhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_div_ff(&lhs.num,&rhs.num,dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 621, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 617, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":623
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":619
  *       rhs = other
  * 
  *       res = fesoti_div_ff(&lhs.num,&rhs.num,dhl)             # <<<<<<<<<<<<<<
@@ -14027,7 +14027,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
  */
     __pyx_v_res = fesoti_div_ff((&__pyx_v_lhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":618
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":614
  *     trhs = type(other)
  * 
  *     if (tlhs == trhs):             # <<<<<<<<<<<<<<
@@ -14037,45 +14037,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":625
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":621
  *       res = fesoti_div_ff(&lhs.num,&rhs.num,dhl)
  * 
  *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
  * 
  *       olhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 625, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 625, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_tlhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 621, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 621, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":627
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":623
  *     elif ( tlhs  == sotinum ):
  * 
  *       olhs = self             # <<<<<<<<<<<<<<
  *       rhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 627, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 623, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_olhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":628
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":624
  * 
  *       olhs = self
  *       rhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_div_of(&olhs.num,&rhs.num, dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 628, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 624, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":630
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":626
  *       rhs = other
  * 
  *       res = fesoti_div_of(&olhs.num,&rhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -14084,7 +14084,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
  */
     __pyx_v_res = fesoti_div_of((&__pyx_v_olhs->num), (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":625
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":621
  *       res = fesoti_div_ff(&lhs.num,&rhs.num,dhl)
  * 
  *     elif ( tlhs  == sotinum ):             # <<<<<<<<<<<<<<
@@ -14094,45 +14094,45 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":632
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":628
  *       res = fesoti_div_of(&olhs.num,&rhs.num, dhl)
  * 
  *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 632, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 632, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(((PyObject *)__pyx_v_trhs), ((PyObject *)__pyx_ptype_5pyoti_6sparse_sotinum), Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 628, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 628, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":634
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":630
  *     elif ( trhs  == sotinum ):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       orhs = other
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 634, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 630, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":635
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":631
  * 
  *       lhs = self
  *       orhs = other             # <<<<<<<<<<<<<<
  * 
  *       res = fesoti_div_fo(&lhs.num, &orhs.num, dhl)
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 635, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotinum))))) __PYX_ERR(5, 631, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_orhs = ((struct __pyx_obj_5pyoti_6sparse_sotinum *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":637
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":633
  *       orhs = other
  * 
  *       res = fesoti_div_fo(&lhs.num, &orhs.num, dhl)             # <<<<<<<<<<<<<<
@@ -14141,7 +14141,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
  */
     __pyx_v_res = fesoti_div_fo((&__pyx_v_lhs->num), (&__pyx_v_orhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":632
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":628
  *       res = fesoti_div_of(&olhs.num,&rhs.num, dhl)
  * 
  *     elif ( trhs  == sotinum ):             # <<<<<<<<<<<<<<
@@ -14151,44 +14151,44 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":639
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":635
  *       res = fesoti_div_fo(&lhs.num, &orhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
  * 
  *       rhs = other
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 639, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 635, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 639, __pyx_L1_error)
+  __pyx_t_2 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_tlhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(5, 635, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_3 = (__pyx_t_2 != 0);
   if (__pyx_t_3) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":641
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":637
  *     elif (tlhs in number_types):
  * 
  *       rhs = other             # <<<<<<<<<<<<<<
  *       res = fesoti_div_rf(self, &rhs.num, dhl)
  * 
  */
-    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 641, __pyx_L1_error)
+    if (!(likely(((__pyx_v_other) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_other, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 637, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_other;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_rhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":642
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":638
  * 
  *       rhs = other
  *       res = fesoti_div_rf(self, &rhs.num, dhl)             # <<<<<<<<<<<<<<
  * 
  *     elif (trhs in number_types):
  */
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 642, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_self); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 638, __pyx_L1_error)
     __pyx_v_res = fesoti_div_rf(__pyx_t_4, (&__pyx_v_rhs->num), __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":639
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":635
  *       res = fesoti_div_fo(&lhs.num, &orhs.num, dhl)
  * 
  *     elif (tlhs in number_types):             # <<<<<<<<<<<<<<
@@ -14198,44 +14198,44 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":644
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":640
  *       res = fesoti_div_rf(self, &rhs.num, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
  * 
  *       lhs = self
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 644, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_1, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 640, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(5, 644, __pyx_L1_error)
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(((PyObject *)__pyx_v_trhs), __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(5, 640, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_2 = (__pyx_t_3 != 0);
   if (__pyx_t_2) {
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":646
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":642
  *     elif (trhs in number_types):
  * 
  *       lhs = self             # <<<<<<<<<<<<<<
  *       res = fesoti_div_fr(&lhs.num, other, dhl)
  * 
  */
-    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 646, __pyx_L1_error)
+    if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 642, __pyx_L1_error)
     __pyx_t_1 = __pyx_v_self;
     __Pyx_INCREF(__pyx_t_1);
     __pyx_v_lhs = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
     __pyx_t_1 = 0;
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":647
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":643
  * 
  *       lhs = self
  *       res = fesoti_div_fr(&lhs.num, other, dhl)             # <<<<<<<<<<<<<<
  * 
  *     # elif ( tlhs  == dmat ):
  */
-    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 647, __pyx_L1_error)
+    __pyx_t_4 = __pyx_PyFloat_AsDouble(__pyx_v_other); if (unlikely((__pyx_t_4 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 643, __pyx_L1_error)
     __pyx_v_res = fesoti_div_fr((&__pyx_v_lhs->num), __pyx_t_4, __pyx_v_5pyoti_6sparse_dhl);
 
-    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":644
+    /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":640
  *       res = fesoti_div_rf(self, &rhs.num, dhl)
  * 
  *     elif (trhs in number_types):             # <<<<<<<<<<<<<<
@@ -14245,7 +14245,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
     goto __pyx_L3;
   }
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":665
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":661
  *     else:
  * 
  *       return NotImplemented             # <<<<<<<<<<<<<<
@@ -14260,7 +14260,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
   }
   __pyx_L3:;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":669
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":665
  *     # end if
  * 
  *     return sotife.create(&res)             # <<<<<<<<<<<<<<
@@ -14268,13 +14268,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 669, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 665, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":602
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":598
  * 
  *   #***************************************************************************************************
  *   def __truediv__(self, other):             # <<<<<<<<<<<<<<
@@ -14299,7 +14299,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_34__truediv__(PyObject *__pyx_v
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":674
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":670
  * 
  *   #***************************************************************************************************
  *   def __pow__(self, n,z):             # <<<<<<<<<<<<<<
@@ -14333,30 +14333,30 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_36__pow__(PyObject *__pyx_v_sel
   double __pyx_t_2;
   __Pyx_RefNannySetupContext("__pow__", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":686
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":682
  * 
  *     cdef fesoti_t res
  *     cdef sotife S = self             # <<<<<<<<<<<<<<
  * 
  *     res = fesoti_pow( &S.num, n, dhl)
  */
-  if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 686, __pyx_L1_error)
+  if (!(likely(((__pyx_v_self) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_self, __pyx_ptype_5pyoti_6sparse_sotife))))) __PYX_ERR(5, 682, __pyx_L1_error)
   __pyx_t_1 = __pyx_v_self;
   __Pyx_INCREF(__pyx_t_1);
   __pyx_v_S = ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":688
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":684
  *     cdef sotife S = self
  * 
  *     res = fesoti_pow( &S.num, n, dhl)             # <<<<<<<<<<<<<<
  * 
  *     return sotife.create(&res)
  */
-  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_n); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 688, __pyx_L1_error)
+  __pyx_t_2 = __pyx_PyFloat_AsDouble(__pyx_v_n); if (unlikely((__pyx_t_2 == (double)-1) && PyErr_Occurred())) __PYX_ERR(5, 684, __pyx_L1_error)
   __pyx_v_res = fesoti_pow((&__pyx_v_S->num), __pyx_t_2, __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":690
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":686
  *     res = fesoti_pow( &S.num, n, dhl)
  * 
  *     return sotife.create(&res)             # <<<<<<<<<<<<<<
@@ -14364,13 +14364,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_36__pow__(PyObject *__pyx_v_sel
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 690, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotife->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 686, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":674
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":670
  * 
  *   #***************************************************************************************************
  *   def __pow__(self, n,z):             # <<<<<<<<<<<<<<
@@ -14390,7 +14390,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_36__pow__(PyObject *__pyx_v_sel
   return __pyx_r;
 }
 
-/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":695
+/* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":691
  * 
  *   #***************************************************************************************************
  *   def gauss_integrate(self, sotife w  ):             # <<<<<<<<<<<<<<
@@ -14405,7 +14405,7 @@ static PyObject *__pyx_pw_5pyoti_6sparse_6sotife_39gauss_integrate(PyObject *__p
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("gauss_integrate (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_w), __pyx_ptype_5pyoti_6sparse_sotife, 1, "w", 0))) __PYX_ERR(5, 695, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_w), __pyx_ptype_5pyoti_6sparse_sotife, 1, "w", 0))) __PYX_ERR(5, 691, __pyx_L1_error)
   __pyx_r = __pyx_pf_5pyoti_6sparse_6sotife_38gauss_integrate(((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_v_self), ((struct __pyx_obj_5pyoti_6sparse_sotife *)__pyx_v_w));
 
   /* function exit code */
@@ -14424,7 +14424,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_38gauss_integrate(struct __pyx_
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("gauss_integrate", 0);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":702
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":698
  *     global dhl
  * 
  *     cdef sotinum_t res = soti_init()             # <<<<<<<<<<<<<<
@@ -14433,7 +14433,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_38gauss_integrate(struct __pyx_
  */
   __pyx_v_res = soti_init();
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":704
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":700
  *     cdef sotinum_t res = soti_init()
  * 
  *     res = fesoti_integrate( &self.num, &w.num, dhl)             # <<<<<<<<<<<<<<
@@ -14442,7 +14442,7 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_38gauss_integrate(struct __pyx_
  */
   __pyx_v_res = fesoti_integrate((&__pyx_v_self->num), (&__pyx_v_w->num), __pyx_v_5pyoti_6sparse_dhl);
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":706
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":702
  *     res = fesoti_integrate( &self.num, &w.num, dhl)
  * 
  *     return sotinum.create(&res)             # <<<<<<<<<<<<<<
@@ -14450,13 +14450,13 @@ static PyObject *__pyx_pf_5pyoti_6sparse_6sotife_38gauss_integrate(struct __pyx_
  *   #---------------------------------------------------------------------------------------------------
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 706, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_vtabptr_5pyoti_6sparse_sotinum->create((&__pyx_v_res), NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(5, 702, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":695
+  /* "../../src/python/pyoti/cython/sparse/scalar/gauss/base.pxi":691
  * 
  *   #***************************************************************************************************
  *   def gauss_integrate(self, sotife w  ):             # <<<<<<<<<<<<<<
@@ -52605,25 +52605,6 @@ static int __Pyx_modinit_function_export_code(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_modinit_function_export_code", 0);
   /*--- Function export code ---*/
-  if (__Pyx_ExportFunction("sotinum_cos", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_cos, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_sin", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_sin, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_tan", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_tan, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_arctan", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_arctan, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_arccos", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_arccos, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_arcsin", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_arcsin, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_sinh", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_sinh, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_arcsinh", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_arcsinh, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_cosh", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_cosh, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_arccosh", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_arccosh, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_tanh", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_tanh, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_arctanh", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_arctanh, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_logb", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_logb, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, double, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_log10", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_log10, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_log", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_log, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_exp", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_exp, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_power", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_power, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, double, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_sqrt", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_sqrt, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
-  if (__Pyx_ExportFunction("sotinum_cbrt", (void (*)(void))__pyx_f_5pyoti_6sparse_sotinum_cbrt, "struct __pyx_obj_5pyoti_6sparse_sotinum *(struct __pyx_obj_5pyoti_6sparse_sotinum *, int __pyx_skip_dispatch)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
   if (__Pyx_ExportFunction("eye", (void (*)(void))__pyx_f_5pyoti_6sparse_eye, "struct __pyx_obj_5pyoti_6sparse_matso *(uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_eye *__pyx_optional_args)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
   if (__Pyx_ExportFunction("zeros", (void (*)(void))__pyx_f_5pyoti_6sparse_zeros, "struct __pyx_obj_5pyoti_6sparse_matso *(uint64_t, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_zeros *__pyx_optional_args)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)
   if (__Pyx_ExportFunction("ones", (void (*)(void))__pyx_f_5pyoti_6sparse_ones, "struct __pyx_obj_5pyoti_6sparse_matso *(uint64_t, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_6sparse_ones *__pyx_optional_args)") < 0) __PYX_ERR(12, 3, __pyx_L1_error)

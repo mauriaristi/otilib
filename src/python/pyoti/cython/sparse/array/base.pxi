@@ -274,8 +274,8 @@ cdef class matso:
       for i in range(self.arr.nrows):
 
         out += "({0:d},{1:d}) ".format(i,j)
-        tmp = self[i,j]
-        out += tmp.__str__()
+         
+        out += self[i,j].__str__()
         out += "\n"
 
       # end for 
@@ -366,7 +366,7 @@ cdef class matso:
 
     # end if
 
-    return sotinum.create(&res)
+    return sotinum.create(&res, FLAGS = 0)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -881,6 +881,27 @@ cdef class matso:
     cdef arrso_t res
     
     res = arrso_extract_deriv( item[ZERO],  item[ONE], &self.arr,  dhl)
+
+    return matso.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+  
+  #***************************************************************************************************
+  cpdef  truncate( self, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef arrso_t res
+    
+    indx, order = imdir(humdir)
+    
+    res = arrso_truncate_im( indx, order, &self.arr, dhl) 
 
     return matso.create(&res)
 

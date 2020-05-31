@@ -1,0 +1,164 @@
+
+# From oti/core/structures.h
+
+ctypedef struct : # {
+  imdir_t*    p_arr;
+  uint64_t shape[2];
+# } imdir2d_t;
+ctypedef struct: # {
+    imdir_t*        p_im;
+    ord_t*         p_ord;
+    uint64_t*     p_cols;
+    uint64_t*     p_rows;
+    uint64_t       sizex;
+    uint64_t       sizey;
+    uint64_t     nonzero;
+# } matrix_form_t;
+ctypedef struct : # {
+    bases_t*      p_fulldir;
+    imdir2d_t*   p_multtabls;
+    ndir_t*         p_ndirs;
+    coeff_t**          p_im;
+    imdir_t**         p_idx;
+    coeff_t***        p_ims;
+    imdir_t***        p_ids;
+    ndir_t**          p_nnz;
+    ndir_t**         p_size;
+  
+    ndir_t        allocSize;
+    ndir_t            Ntmps;
+    ndir_t             Ndir;
+    ord_t             Nmult;
+    bases_t          Nbasis;
+    ord_t             order;
+# } dhelp_t;
+ctypedef struct : # {
+   dhelp_t* p_dh;
+   ndh_t     ndh;
+   ord_t*  order;
+# } dhelpl_t;
+
+
+# =========================================================================================
+
+# From oti/core/utils.h
+
+extern void (*__PY_ERROR_OTI_EXIT)(int64_t);
+extern uint64_t is_python_error_def;
+void set_global_test(int x);
+void print_global_test();
+void print_python_error_def(void );
+void start_python_error_function();
+void set_python_error_function(void (*error_function)(int64_t));
+void usage_python_error_function(void (*error_function)(int64_t), int64_t error_id, int64_t status);
+void error_exit(int64_t error_id);
+uint64_t binSearchUI64(  uint64_t elem, uint64_t* p_arr, uint64_t size, flag_t* flag);
+void printArrayDBL(    double* ptr_, uint64_t n );
+void printArrayUI64( uint64_t* ptr_, uint64_t n );
+void printArrayUI16( uint16_t* ptr_, uint8_t  n );
+void printArrayUI8(   uint8_t* ptr_, uint8_t  n );
+uint8_t  array2d_getel_ui8_t(  uint8_t*  arr,uint64_t ncols, uint64_t i, uint64_t j );
+uint16_t array2d_getel_ui16_t( uint16_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
+uint32_t array2d_getel_ui32_t( uint32_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
+uint64_t array2d_getel_ui64_t( uint64_t* arr,uint64_t ncols, uint64_t i, uint64_t j );
+double   array2d_getel_f64_t(  double*   arr,uint64_t ncols, uint64_t i, uint64_t j );
+float    array2d_getel_f32_t(  float*    arr,uint64_t ncols, uint64_t i, uint64_t j );
+
+
+# From oti/core/dense.h
+
+void dhelp_dense_mult(coeff_t* p_im1, ndir_t ndir1, ord_t ord1,
+                      coeff_t* p_im2, ndir_t ndir2, ord_t ord2,
+                      coeff_t* p_imres, ndir_t ndirres,
+                      dhelpl_t dhl);
+void dhelp_dense_mult_real(coeff_t* p_im1, ndir_t ndir1,
+                      coeff_t a,
+                      coeff_t* p_imres, ndir_t ndirres,
+                      dhelpl_t dhl);
+
+
+# From oti/core/fileio.h
+
+void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape);
+void savenpy(char* filename, uint8_t dtype, void* data, uint64_t shapex, uint64_t shapey);
+void loadnpy_multtabls( char* strLocation, ord_t order, dhelp_t* p_dH);
+void loadnpy_ndirs( char* strLocation, ord_t order, dhelp_t* p_dH);
+void loadnpy_fulldir( char* strLocation, ord_t order, dhelp_t* p_dH);
+void concat_filename(const char* strLocation, const char* base_name,
+    ord_t after, ord_t order, char* filename);
+void print_progressbar(double i, double imax);
+
+
+# From oti/core/sparse.h
+
+void dhelp_add_coeff( coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+    coeff_t im, imdir_t idx );
+void dhelp_sparse_copy(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                       coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+                       dhelpl_t dhl);
+void dhelp_add_sparse(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                      coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2,
+                      coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+                      dhelpl_t dhl);                                       
+void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2,
+                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+                           dhelpl_t dhl);
+void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                           coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2,
+                           coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+                           dhelpl_t dhl);
+void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t ord1,
+                       coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2,
+                       coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+                       dhelpl_t dhl);
+void dhelp_sparse_mult_real(coeff_t val,
+                            coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+                            dhelpl_t dhl);
+void dhelp_search_prev_dir( coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t ord1,
+                            coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2,
+                            coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+                            imdir_t prev_idx, imdir_t next_idx, ndir_t curr_i1, ndir_t curr_i2,
+                            imdir2d_t tmp_multtabl);
+
+
+# From oti/core/precompute.h
+
+imdir_t dhelp_precompute_multiply(bases_t* dir1,ord_t ord1, bases_t* dir2,ord_t ord2, dhelpl_t dhl);
+void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl);
+void dhelp_precompute_fulldir(ord_t order, bases_t nbases, dhelpl_t* dhl);
+void dhelp_precompute_ndirs(ord_t order, bases_t nbases, dhelpl_t* dhl);
+void dhelp_save_fulldir(char* directory, bases_t base, ord_t order, dhelpl_t dhl );
+void dhelp_save_ndirs(char* directory, bases_t base, ord_t order,  dhelpl_t dhl);
+void dhelp_save_multtabls(char* directory, bases_t base, ord_t order,  dhelpl_t dhl);
+void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder );
+
+
+# From oti/core/base.h
+
+void dhelp_div_imdir(imdir_t  numidx, ord_t  numord,
+                     imdir_t  denidx, ord_t  denord,
+                     imdir_t* residx, ord_t* resord,
+                        int* success, dhelpl_t dhl);
+void dhelp_get_idx_ord(bases_t* dir, ord_t len, imdir_t* residx, ord_t* resord, dhelpl_t dhl);
+matrix_form_t dhelp_matrix_form_indices( bases_t nbases, ord_t order, dhelpl_t dhl);
+coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhelpl_t dhl);
+ndir_t dhelp_extract_ndirOrder(bases_t nbases, ord_t order,dhelpl_t dhl);
+ndir_t dhelp_extract_ndirTotal(bases_t nbases, ord_t order,dhelpl_t dhl);
+int64_t dhelp_comb(int64_t a, int64_t b);
+ndir_t dhelp_ndirTotal(bases_t nbases, ord_t order);
+ndir_t dhelp_ndirOrder(bases_t nbases, ord_t order);
+void dhelp_load_singl( char* strLoc, ord_t order, uint64_t nhelps, ndir_t allocSize,
+  dhelp_t* p_dH);
+void dhelp_multDir(imdir_t indx1, ord_t ord1, imdir_t indx2, ord_t ord2,
+    imdir_t* p_ixres, ord_t* p_ores, dhelpl_t dhl);
+void dhelp_freeItem(  dhelp_t* p_dH);
+bases_t* dhelp_get_imdir( imdir_t idx, ord_t order, dhelpl_t dhl);
+void dhelp_free( dhelpl_t* dhl);
+void dhelp_load( char* strLocation, dhelpl_t* dhl);
+void dhelp_load_tmps( dhelp_t* p_dH);
+void dhelp_print( dhelp_t* p_dH);
+void dhelp_printImdir(imdir_t indx, ord_t order, dhelpl_t dhl);
+void dhelp_printList( const dhelpl_t dhl);
+

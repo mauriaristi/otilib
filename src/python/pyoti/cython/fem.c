@@ -1381,6 +1381,8 @@ struct __pyx_opt_args_5pyoti_6sparse_7matsofe_create;
 struct __pyx_opt_args_5pyoti_6sparse_eye;
 struct __pyx_opt_args_5pyoti_6sparse_zeros;
 struct __pyx_opt_args_5pyoti_6sparse_ones;
+struct __pyx_opt_args_5pyoti_6sparse_array;
+struct __pyx_opt_args_5pyoti_6sparse_truncate;
 
 /* "../../include/pyoti/sparse/scalar.pxd":16
  * 
@@ -1399,7 +1401,7 @@ struct __pyx_opt_args_5pyoti_6sparse_7sotinum_create {
  *   @staticmethod
  *   cdef matso create(arrso_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
  * 
- * 
+ *   cpdef  truncate( self, object humdir)
  */
 struct __pyx_opt_args_5pyoti_6sparse_5matso_create {
   int __pyx_n;
@@ -1410,8 +1412,8 @@ struct __pyx_opt_args_5pyoti_6sparse_5matso_create {
  * 
  *   @staticmethod
  *   cdef sotife create(fesoti_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
- * 
- *   # cpdef coeff_t get_deriv( self, object humdir)
+ *   cpdef  truncate( self, object humdir)
+ *   cpdef extract_deriv( self, object humdir)
  */
 struct __pyx_opt_args_5pyoti_6sparse_6sotife_create {
   int __pyx_n;
@@ -1423,50 +1425,79 @@ struct __pyx_opt_args_5pyoti_6sparse_6sotife_create {
  *   @staticmethod
  *   cdef matsofe create(fearrso_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
  * 
- *   # cpdef coeff_t get_deriv( self, object humdir)
+ *   cpdef truncate( self, object humdir)
  */
 struct __pyx_opt_args_5pyoti_6sparse_7matsofe_create {
   int __pyx_n;
   uint8_t FLAGS;
 };
 
-/* "../../include/pyoti/sparse/utils.pxd":8
+/* "../../include/pyoti/sparse/utils.pxd":11
+ * cdef (uint64_t,uint64_t) process_shape(object shape_in)
  * 
- * # Array specific functions.
- * cpdef matso eye(   uint64_t size,  bases_t nbases=*, ord_t order=*)             # <<<<<<<<<<<<<<
- * cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)
- * cpdef matso ones(  uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)
+ * cpdef eye(   uint64_t   size, bases_t nbases = *, ord_t order = *, uint64_t nip = *)             # <<<<<<<<<<<<<<
+ * cpdef zeros( object shape_in, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+ * cpdef ones(  object shape_in, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
  */
 struct __pyx_opt_args_5pyoti_6sparse_eye {
   int __pyx_n;
   __pyx_t_5pyoti_8c_otilib_bases_t nbases;
   __pyx_t_5pyoti_8c_otilib_ord_t order;
+  uint64_t nip;
 };
 
-/* "../../include/pyoti/sparse/utils.pxd":9
- * # Array specific functions.
- * cpdef matso eye(   uint64_t size,  bases_t nbases=*, ord_t order=*)
- * cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)             # <<<<<<<<<<<<<<
- * cpdef matso ones(  uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)
+/* "../../include/pyoti/sparse/utils.pxd":12
+ * 
+ * cpdef eye(   uint64_t   size, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+ * cpdef zeros( object shape_in, bases_t nbases = *, ord_t order = *, uint64_t nip = *)             # <<<<<<<<<<<<<<
+ * cpdef ones(  object shape_in, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
  * 
  */
 struct __pyx_opt_args_5pyoti_6sparse_zeros {
   int __pyx_n;
   __pyx_t_5pyoti_8c_otilib_bases_t nbases;
   __pyx_t_5pyoti_8c_otilib_ord_t order;
+  uint64_t nip;
 };
 
-/* "../../include/pyoti/sparse/utils.pxd":10
- * cpdef matso eye(   uint64_t size,  bases_t nbases=*, ord_t order=*)
- * cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)
- * cpdef matso ones(  uint64_t nrows, uint64_t ncols, bases_t nbases=*, ord_t order=*)             # <<<<<<<<<<<<<<
+/* "../../include/pyoti/sparse/utils.pxd":13
+ * cpdef eye(   uint64_t   size, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+ * cpdef zeros( object shape_in, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+ * cpdef ones(  object shape_in, bases_t nbases = *, ord_t order = *, uint64_t nip = *)             # <<<<<<<<<<<<<<
  * 
- * 
+ * cpdef array( object arr, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
  */
 struct __pyx_opt_args_5pyoti_6sparse_ones {
   int __pyx_n;
   __pyx_t_5pyoti_8c_otilib_bases_t nbases;
   __pyx_t_5pyoti_8c_otilib_ord_t order;
+  uint64_t nip;
+};
+
+/* "../../include/pyoti/sparse/utils.pxd":15
+ * cpdef ones(  object shape_in, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+ * 
+ * cpdef array( object arr, bases_t nbases = *, ord_t order = *, uint64_t nip = *)             # <<<<<<<<<<<<<<
+ * cpdef truncate( object humdir, object val, object out = *)
+ * 
+ */
+struct __pyx_opt_args_5pyoti_6sparse_array {
+  int __pyx_n;
+  __pyx_t_5pyoti_8c_otilib_bases_t nbases;
+  __pyx_t_5pyoti_8c_otilib_ord_t order;
+  uint64_t nip;
+};
+
+/* "../../include/pyoti/sparse/utils.pxd":16
+ * 
+ * cpdef array( object arr, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+ * cpdef truncate( object humdir, object val, object out = *)             # <<<<<<<<<<<<<<
+ * 
+ * # cpdef get_im(     object humdir, object val, object out = *)
+ */
+struct __pyx_opt_args_5pyoti_6sparse_truncate {
+  int __pyx_n;
+  PyObject *out;
 };
 struct __pyx_opt_args_5pyoti_3fem_8elbaseso_allocate;
 
@@ -1793,6 +1824,10 @@ struct __pyx_vtabstruct_5pyoti_6sparse_sotinum {
   __pyx_t_5pyoti_8c_otilib_coeff_t (*get_im)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
   struct __pyx_obj_5pyoti_6sparse_sotinum *(*extract_im)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
   struct __pyx_obj_5pyoti_6sparse_sotinum *(*extract_deriv)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*set)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*set_im)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*set_deriv)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*truncate)(struct __pyx_obj_5pyoti_6sparse_sotinum *, PyObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_6sparse_sotinum *__pyx_vtabptr_5pyoti_6sparse_sotinum;
 
@@ -1809,6 +1844,7 @@ struct __pyx_vtabstruct_5pyoti_6sparse_matso {
   struct __pyx_obj_5pyoti_6sparse_matso *(*extract_im)(struct __pyx_obj_5pyoti_6sparse_matso *, PyObject *, int __pyx_skip_dispatch);
   struct __pyx_obj_5pyoti_6sparse_matso *(*extract_deriv)(struct __pyx_obj_5pyoti_6sparse_matso *, PyObject *, int __pyx_skip_dispatch);
   struct __pyx_obj_5pyoti_6sparse_matso *(*create)(arrso_t *, struct __pyx_opt_args_5pyoti_6sparse_5matso_create *__pyx_optional_args);
+  PyObject *(*truncate)(struct __pyx_obj_5pyoti_6sparse_matso *, PyObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_6sparse_matso *__pyx_vtabptr_5pyoti_6sparse_matso;
 
@@ -1823,6 +1859,8 @@ static struct __pyx_vtabstruct_5pyoti_6sparse_matso *__pyx_vtabptr_5pyoti_6spars
 
 struct __pyx_vtabstruct_5pyoti_6sparse_sotife {
   struct __pyx_obj_5pyoti_6sparse_sotife *(*create)(fesoti_t *, struct __pyx_opt_args_5pyoti_6sparse_6sotife_create *__pyx_optional_args);
+  PyObject *(*truncate)(struct __pyx_obj_5pyoti_6sparse_sotife *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*extract_deriv)(struct __pyx_obj_5pyoti_6sparse_sotife *, PyObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_6sparse_sotife *__pyx_vtabptr_5pyoti_6sparse_sotife;
 
@@ -1837,6 +1875,9 @@ static struct __pyx_vtabstruct_5pyoti_6sparse_sotife *__pyx_vtabptr_5pyoti_6spar
 
 struct __pyx_vtabstruct_5pyoti_6sparse_matsofe {
   struct __pyx_obj_5pyoti_6sparse_matsofe *(*create)(fearrso_t *, struct __pyx_opt_args_5pyoti_6sparse_7matsofe_create *__pyx_optional_args);
+  PyObject *(*truncate)(struct __pyx_obj_5pyoti_6sparse_matsofe *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*extract_im)(struct __pyx_obj_5pyoti_6sparse_matsofe *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*extract_deriv)(struct __pyx_obj_5pyoti_6sparse_matsofe *, PyObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_6sparse_matsofe *__pyx_vtabptr_5pyoti_6sparse_matsofe;
 

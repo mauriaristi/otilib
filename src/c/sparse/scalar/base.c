@@ -243,13 +243,13 @@ void soti_set_im_r(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
 
 
 // ****************************************************************************************************
-void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     
     imdir_t idxr;
     ndir_t i;
     sotinum_t tmp;
     coeff_t factornum, factorden, value;
-    ord_t res_order, ordi, ordr;
+    ord_t res_order, ordi, ordr, ord_iter;
     
     if (order == 0){
         
@@ -257,17 +257,32 @@ void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhe
 
     }else{
 
-        res_order = MAX(num->order, order + val->order);
+        res_order = MIN( dhl.ndh, MAX(num->order, order + val->order) );
         
         tmp = soti_get_tmp(0, res_order, dhl);
 
-        soti_set_o(num, &tmp, dhl);
+        // Copy to number. (TODO: Try to avoid this directly.)
+
+        // soti_set_o(num, &tmp, dhl);
+        ord_iter = MIN(num->order,res_order);
+        
+        for ( ordi = 0; ordi < ord_iter; ordi++){
+            
+            // Copy memory to dest number. Only copy non zeros.
+            memcpy(tmp.p_im[ordi], num->p_im[ordi], num->p_nnz[ordi]*sizeof(coeff_t) );
+            memcpy(tmp.p_idx[ordi],num->p_idx[ordi],num->p_nnz[ordi]*sizeof(imdir_t) );
+
+            tmp.p_nnz[ordi] = num->p_nnz[ordi]; 
+
+        }            
 
         factorden = dhelp_get_deriv_factor(idx, order, dhl);
         
         soti_set_im_r(val->re/factorden, idx, order, &tmp, dhl);
 
-        for ( ordi = 0; ordi < val->order; ordi++){
+        ord_iter = MIN(val->order,res_order-val->order);
+
+        for ( ordi = 0; ordi < ord_iter; ordi++){
 
             for (i = 0; i < val->p_nnz[ordi]; i++){
 
@@ -284,6 +299,9 @@ void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhe
             
         }
 
+        // Copy back to number.
+        soti_set_o( &tmp, num, dhl);
+
     }
 
 }
@@ -291,13 +309,13 @@ void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhe
 
 
 // ****************************************************************************************************
-void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     
     imdir_t idxr;
     ndir_t i;
     sotinum_t tmp;
 
-    ord_t res_order, ordi, ordr;
+    ord_t res_order, ordi, ordr, ord_iter;
     
     if (order == 0){
         
@@ -305,15 +323,28 @@ void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, 
 
     }else{
 
-        res_order = MAX(num->order, order + val->order);
+        res_order = MIN( dhl.ndh, MAX(num->order, order + val->order) );
         
         tmp = soti_get_tmp(0, res_order, dhl);
 
-        soti_set_o(num, &tmp, dhl);
+        // soti_set_o(num, &tmp, dhl);
+        ord_iter = MIN(num->order,res_order);
+        
+        for ( ordi = 0; ordi < ord_iter; ordi++){
+            
+            // Copy memory to dest number. Only copy non zeros.
+            memcpy(tmp.p_im[ordi], num->p_im[ordi], num->p_nnz[ordi]*sizeof(coeff_t) );
+            memcpy(tmp.p_idx[ordi],num->p_idx[ordi],num->p_nnz[ordi]*sizeof(imdir_t) );
+
+            tmp.p_nnz[ordi] = num->p_nnz[ordi]; 
+
+        }            
 
         soti_set_im_r(val->re, idx, order, &tmp, dhl);
 
-        for ( ordi = 0; ordi < val->order; ordi++) {
+        ord_iter = MIN(val->order,res_order);
+
+        for ( ordi = 0; ordi < ord_iter; ordi++) {
 
             for (i =0; i<val->p_nnz[ordi]; i++){
 
@@ -324,6 +355,8 @@ void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, 
             }
             
         }
+
+        soti_set_o( &tmp, num, dhl);
 
     }
 
@@ -564,10 +597,94 @@ void soti_extract_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res
             }
 
         }
+        
+        soti_copy_to(&tmp,res,dhl);
 
     }
 
-    soti_copy_to(&tmp,res,dhl);
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_truncate_im(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+    
+    sotinum_t res = soti_init();
+
+    soti_truncate_im_to( idx, order, num, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_truncate_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+    
+    int  success;
+    ord_t   resord, i;
+    imdir_t residx;
+    ndir_t ndir_ordi, diri;
+    sotinum_t tmp;
+    // bases_t* imdir_bases;
+    
+    
+    if (order == 0){
+        
+        // All the number is truncated zero.
+        soti_set_r( 0.0, res, dhl);
+        return;
+
+    } else if (order > num->order){
+        
+        // no need to truncate anything
+        soti_set_o(num,res,dhl);
+        return;
+
+    } else {
+
+        // use temporal 0.
+        tmp = soti_get_tmp( 0, num->order, dhl);
+        
+        // Set real part.
+        tmp.re = num->re;
+
+        // First, copy all elements up to order - 1 .
+
+        for(i = 0; i<order-1; i++){
+            
+            memcpy(tmp.p_im[i], num->p_im[i], num->p_nnz[i]*sizeof(coeff_t) );
+            memcpy(tmp.p_idx[i],num->p_idx[i],num->p_nnz[i]*sizeof(imdir_t) );
+
+            tmp.p_nnz[i] = num->p_nnz[i]; 
+
+        }
+        
+        for(i = order-1; i< num->order ; i++){
+
+            // Divide the remaining directions in the number by the requested direction
+            // 
+            ndir_ordi = num->p_nnz[i];
+
+            for ( diri = 0; diri< ndir_ordi; diri++){ 
+
+                dhelp_div_imdir( num->p_idx[i][diri], i + 1, idx, order, &residx, &resord, &success, dhl);
+                
+                // if derivative is not possible, number is preserved.
+                if (success != 0){
+                    
+                    tmp.p_idx[i][tmp.p_nnz[i]] = num->p_idx[i][diri];
+                    tmp.p_im [i][tmp.p_nnz[i]] = num->p_im[i] [diri];
+                    tmp.p_nnz[i]++;
+
+                }
+
+            }
+
+        }
+        
+        soti_copy_to(&tmp,res,dhl);
+
+    }  
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -594,6 +711,21 @@ coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
 
     return coef*factor;
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_get_deriv_o( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t coef   = soti_get_item(idx,order,num,dhl);
+    coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
+    sotinum_t res = soti_init();
+
+    // Set imaginary direction.
+    res.re = coef*factor;
+    
+    return res;
+
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -638,11 +770,13 @@ void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* 
         
         // If getting the "real" part, it is the same number.
         soti_set_o(num,res,dhl);
+        return;
 
     } else if (order > num->order){
 
         // If the requested order is greater, it will be zero.
         soti_set_r(0.0, res, dhl);
+        return;
 
     } else {
 
@@ -679,10 +813,10 @@ void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* 
             }
 
         }
-
+        soti_copy_to(&tmp,res,dhl);
     }
 
-    soti_copy_to(&tmp,res,dhl);
+    
 
 }
 // ----------------------------------------------------------------------------------------------------

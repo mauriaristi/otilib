@@ -8,6 +8,60 @@
 //     flag_t          flag; ///< Memory flag.
 // } arrso_t;                ///< Array of OTIs type.
 
+
+
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void arrso_truncate_im_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
+
+    arrso_dimCheck_OO_elementwise(arr,res,res);
+
+    for (i = 0; i<arr->size; i++ ){
+        
+        soti_truncate_im_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+arrso_t arrso_truncate_im( imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
+    
+    arrso_t res;
+
+    res = arrso_zeros_bases( arr->nrows, arr->ncols, 0, 0, dhl);
+
+    arrso_truncate_im_to( idx, order, arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Copy operations.
 // ****************************************************************************************************
 void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
@@ -17,14 +71,7 @@ void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
     if(res->nrows != arr->nrows || res->ncols != arr->ncols || res->size != arr->size){
         printf("ERROR: Assignment mismatch in dimensions. Check destination.\n");
         exit(OTI_undetErr);
-    } else if(arr->size != 0 ){
-        
-        if (res->p_data[0].order!=arr->p_data[0].order){
-           printf("ERROR: Assignment mismatch in truncation order. Reallocation not yet supported.\n");
-           exit(OTI_NotImplemented);
-        }
-
-    }
+    } 
 
     for (i=0; i<arr->size; i++){
 
@@ -165,6 +212,8 @@ darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+
 // ****************************************************************************************************
 arrso_t arrso_extract_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
@@ -218,6 +267,24 @@ darr_t arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     }
 
     return res;
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void arrso_get_deriv_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
+    
+    // Check first dimensions.
+    arrso_dimCheck_OO_elementwise(arr,arr,res);
+
+    for( i = 0; i < arr->size ; i++ ){
+        
+        soti_get_deriv_to( idx, order, &arr->p_data[i], &res->p_data[i],  dhl);
+
+    }
     
 }
 // ----------------------------------------------------------------------------------------------------

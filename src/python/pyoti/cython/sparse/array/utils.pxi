@@ -1,45 +1,5 @@
 
-#*****************************************************************************************************
-cpdef matso eye(uint64_t size, bases_t nbases=0, ord_t order=0):
-  """
-  PURPOSE: Create identity matrix of shape: (size,size).
 
-  """
-  global dhl
-
-  cdef arrso_t res = arrso_eye_bases(size, nbases, order, dhl)
-
-  return matso.create(&res)
-
-#-----------------------------------------------------------------------------------------------------
-
-#*****************************************************************************************************
-cpdef matso zeros( uint64_t nrows, uint64_t ncols, bases_t nbases=0, ord_t order=0):
-  """
-  PURPOSE: Create matrix filled with zeroes of shape: (nrows,ncols).
-
-  """
-  global dhl
-
-  cdef arrso_t res = arrso_zeros_bases(nrows,ncols,nbases,order,dhl)
-
-  return matso.create(&res)
-
-#-----------------------------------------------------------------------------------------------------
-
-#*****************************************************************************************************
-cpdef matso ones(uint64_t nrows,uint64_t ncols, bases_t nbases=0, ord_t order=0):
-  """
-  PURPOSE: Create matrix filled with ones of shape: (nrows,ncols).
-
-  """
-  global dhl
-
-  cdef arrso_t res = arrso_ones_bases(nrows,ncols,nbases,order,dhl)
-
-  return matso.create(&res)
-  
-#-----------------------------------------------------------------------------------------------------
 
 
 

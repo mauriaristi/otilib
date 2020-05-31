@@ -257,7 +257,7 @@ cdef class sotife:
 
     # end if
 
-    return sotinum.create(&res)
+    return sotinum.create(&res, FLAGS=0)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -703,7 +703,47 @@ cdef class sotife:
 
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
+  cpdef  truncate( self, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
 
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef fesoti_t res
+    
+    indx, order = imdir(humdir)
+    
+    res = fesoti_truncate_im( indx, order, &self.num, dhl) 
+
+    return sotife.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef  extract_deriv( self, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef fesoti_t res
+    
+    indx, order = imdir(humdir)
+    
+    res = fesoti_extract_deriv( indx, order, &self.num, dhl) 
+
+    return sotife.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
 
   # #***************************************************************************************************
   # def get_deriv(self, hum_dir ):

@@ -18,8 +18,11 @@ cdef class matso:
 
   @staticmethod
   cdef matso create(arrso_t* num, uint8_t FLAGS = *)
-
   
+  cpdef  truncate( self, object humdir)
+  
+  # cpdef  get_im( self, object humdir)
+  # cpdef  get_deriv( self, object humdir)
   
   # @staticmethod
   # cpdef matso inv( matso arr, matso out = *)

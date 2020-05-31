@@ -342,7 +342,7 @@ void dhelp_div_imdir(imdir_t  numidx, ord_t  numord,
         
     (*success) = -1;
 
-    if ( denord < numord && denord != 0 ){
+    if ( denord <= numord && denord != 0 ){
         
         (*success) = 0;
         

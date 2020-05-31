@@ -3,6 +3,14 @@
 
 
 
+
+
+fearrso_t fearrso_truncate_im(   imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+void      fearrso_truncate_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
 /**************************************************************************************************//**
 @brief Copy Gauss array.
 
@@ -23,15 +31,11 @@ void      fearrso_copy_to(fearrso_t* src, fearrso_t* res, dhelpl_t dhl);
 @param[in] res Gauss array, result.
 @param[in] dhl Direction helper list.
 ******************************************************************************************************/
-fearrso_t fearrso_get_im(    imdir_t idx, ord_t order, fearrso_t* arr, 
-                                             dhelpl_t dhl);
-void      fearrso_get_im_to( imdir_t idx, ord_t order, fearrso_t* arr, 
-                             fearrso_t* res, dhelpl_t dhl);
+fearrso_t fearrso_get_im(    imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+void      fearrso_get_im_to( imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 
-fearrso_t fearrso_get_deriv(    imdir_t idx, ord_t order, 
-                                 fearrso_t* arr, dhelpl_t dhl);
-void      fearrso_get_deriv_to( imdir_t idx, ord_t order, 
-                                 fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+fearrso_t fearrso_get_deriv(    imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+void      fearrso_get_deriv_to( imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -40,20 +44,17 @@ void      fearrso_get_deriv_to( imdir_t idx, ord_t order,
 /**************************************************************************************************//**
 @brief  Imaginary derivative extractors.
 
+@param[in] idx Imagianry index.
+@param[in] order Imagianry index.
 @param[in] arr Gauss array.
-
 @param[in] res Gauss array, result.
 @param[in] dhl Direction helper list.
 ******************************************************************************************************/
-fearrso_t fearrso_extract_im(    imdir_t idx, ord_t order, fearrso_t* arr, 
-                                                  dhelpl_t dhl);
-void      fearrso_extract_im_to( imdir_t idx, ord_t order, fearrso_t* arr, 
-                                  fearrso_t* res, dhelpl_t dhl);
+fearrso_t fearrso_extract_im(    imdir_t idx, ord_t order, fearrso_t* arr,                  dhelpl_t dhl);
+void      fearrso_extract_im_to( imdir_t idx, ord_t order, fearrso_t* arr,  fearrso_t* res, dhelpl_t dhl);
 
-fearrso_t fearrso_extract_deriv(    imdir_t idx, ord_t order, 
-                                    fearrso_t* arr, dhelpl_t dhl);
-void      fearrso_extract_deriv_to( imdir_t idx, ord_t order, 
-                                    fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+fearrso_t fearrso_extract_deriv(    imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+void      fearrso_extract_deriv_to( imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -139,6 +140,24 @@ void fearrso_set_F( fearrso_t* src, fearrso_t* res, dhelpl_t dhl );
 
 // ----------------------------------------------------------------------------------------------------
 
+
+/**************************************************************************************************//**
+@brief Create a gauss array as the identity matrix.
+
+@param[in] size     Size of the matrix (final shape: <size,size>)
+@param[in] offsetx  Offset in the row direction.
+@param[in] offsety  Offset in the column direction.
+@param[in] nIntPts  Number of integration points.
+@param[in] nbases   Number of imaginary basis.
+@param[in] order    Truncation order of the number.
+@param[in] dhl      Direction helper list.
+******************************************************************************************************/
+fearrso_t fearrso_eye_bases( uint64_t size,
+                               uint64_t nip, bases_t  nbases, 
+                               ord_t    order,   dhelpl_t dhl     );
+// ----------------------------------------------------------------------------------------------------
+
+
 /**************************************************************************************************//**
 @brief Create a gauss array of Zeros.
 
@@ -154,6 +173,23 @@ void fearrso_set_F( fearrso_t* src, fearrso_t* res, dhelpl_t dhl );
 fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols, 
                                // uint64_t offsetx, uint64_t offsety, 
                                uint64_t nIntPts, bases_t  nbases, 
+                               ord_t    order,   dhelpl_t dhl     );
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Create a gauss array of ones.
+
+@param[in] nrows    Number of rows
+@param[in] ncols    Number of columns
+@param[in] offsetx  Offset in the row direction.
+@param[in] offsety  Offset in the column direction.
+@param[in] nIntPts  Number of integration points.
+@param[in] nbases   Number of imaginary basis.
+@param[in] order    Truncation order of the number.
+@param[in] dhl      Direction helper list.
+******************************************************************************************************/
+fearrso_t fearrso_ones_bases( uint64_t nrows,   uint64_t ncols, 
+                               uint64_t nip, bases_t  nbases, 
                                ord_t    order,   dhelpl_t dhl     );
 // ----------------------------------------------------------------------------------------------------
 

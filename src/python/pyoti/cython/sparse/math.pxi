@@ -2546,7 +2546,7 @@ cpdef pow(object val, coeff_t e, object out = None):
 
 
 #*****************************************************************************************************
-def gauss_integrate(object val, sotife w, object out = None ):
+cpdef gauss_integrate(object val, sotife w, object out = None ):
   """
   PURPOSE: Integrate using Gauss rule.
 
@@ -2622,4 +2622,6 @@ def gauss_integrate(object val, sotife w, object out = None ):
     return res
   # end if 
 
-#---------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
+
+

@@ -25,11 +25,105 @@ ord_t fesoti_get_order( fesoti_t* num ){
 
 
 
+// set_im
+// set_deriv
+// get_im
+// get_deriv
+// extract_im
+
+// ****************************************************************************************************
+void fesoti_extract_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    fesoti_dimCheck(num,res);
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_extract_im_to( idx, order, &num->p_data[k], &res->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fesoti_t fesoti_extract_im( imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    fesoti_t res;
+
+    res = fesoti_zeros_bases( num->nip, 0, 0, dhl);
+
+    fesoti_extract_im_to( idx, order, num, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
 
+// ****************************************************************************************************
+void fesoti_extract_deriv_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl){
+    
+    uint64_t k;
 
+    fesoti_dimCheck(num,res);
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_extract_deriv_to( idx, order, &num->p_data[k], &res->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fesoti_t fesoti_extract_deriv( imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    fesoti_t res;
+
+    res = fesoti_zeros_bases( num->nip, 0, 0, dhl);
+
+    fesoti_extract_deriv_to( idx, order, num, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void fesoti_truncate_im_to( imdir_t idx, ord_t order, fesoti_t* num,  fesoti_t* res, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    fesoti_dimCheck(num,res);
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_truncate_im_to( idx, order, &num->p_data[k], &res->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fesoti_t fesoti_truncate_im( imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    fesoti_t res;
+
+    res = fesoti_zeros_bases( num->nip, 0, 0, dhl);
+
+    fesoti_truncate_im_to( idx, order, num, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -62,6 +156,11 @@ void fesoti_set_to( fesoti_t* src, fesoti_t* dst, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 // ****************************************************************************************************
 fesoti_t fesoti_copy( fesoti_t* src, dhelpl_t dhl){

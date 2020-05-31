@@ -1,14 +1,21 @@
 #ifndef OTI_SPARSE_ARRAY_BASE_H
 #define OTI_SPARSE_ARRAY_BASE_H
 
+arrso_t arrso_truncate_im(    imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
+void    arrso_truncate_im_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
-arrso_t arrso_extract_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+arrso_t arrso_extract_im(   imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
 void    arrso_extract_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
-darr_t  arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+darr_t  arrso_get_deriv(    imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
+void    arrso_get_deriv_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
-arrso_t arrso_extract_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
-void    arrso_extract_deriv_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+arrso_t arrso_extract_deriv(    imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+void    arrso_extract_deriv_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 
 darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
@@ -20,7 +27,7 @@ darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
 @param[in] arr    Address of array from which to get data.
 @param[in] dhl    Direction helper list object.
 ******************************************************************************************************/ 
-void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+void    arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 arrso_t arrso_copy(arrso_t* arr, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 

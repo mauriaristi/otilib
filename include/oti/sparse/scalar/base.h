@@ -3,9 +3,18 @@
 
 
 
+/**************************************************************************************************//**
+@brief Truncate an imaginary direction.
 
-
-
+@param[in]  num   OTI number to truncate direction
+@param[in]  idx   Index of imaginary direction to extract.
+@param[in]  ord   Order of imaginary direction to extract.
+@param[in]  res   Addres of the resulting OTI number that will hold result.
+@param[in]  dhl   Direction helper list.
+******************************************************************************************************/
+sotinum_t soti_truncate_im(    imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+void      soti_truncate_im_to( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Extract derivative from an OTI number as an oti number.
@@ -20,7 +29,6 @@ sotinum_t soti_extract_deriv(   imdir_t idx, ord_t ord, sotinum_t* num,         
 void      soti_extract_deriv_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-
 /**************************************************************************************************//**
 @brief Extract imaginary direction as an OTI number.
 
@@ -33,14 +41,6 @@ void      soti_extract_deriv_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_
 sotinum_t soti_extract_im(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
 void      soti_extract_im_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
 
 /**************************************************************************************************//**
 @brief Function that distribute memory along the different components of an OTI number.

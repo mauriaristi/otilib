@@ -19,7 +19,6 @@ include "sparse/scalar/utils.pxi"
 
 # Math functions.
 include "sparse/scalar/math.pxi"
-include "sparse/scalar/math_to.pxi"
 
 # Gauss array
 include "sparse/scalar/gauss.pxi"
@@ -49,6 +48,8 @@ include "sparse/array/gauss.pxi"
 
 
 # Common functions.
+include "sparse/utils.pxi"
+
 include "sparse/math.pxi"
 
 include "sparse/linalg.pxi"

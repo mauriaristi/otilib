@@ -18,10 +18,13 @@ cdef class matsofe:
   @staticmethod
   cdef matsofe create(fearrso_t* num, uint8_t FLAGS = *)
 
+  cpdef truncate( self, object humdir)
+  cpdef extract_im(    self, object humdir)
+  cpdef extract_deriv( self, object humdir)
+
   # cpdef coeff_t get_deriv( self, object humdir)
   # cpdef coeff_t get_im( self, object humdir)
-  # cpdef sotife extract_im( self, object humdir)
-  # cpdef sotife extract_deriv( self, object humdir)
+  # cpdef extract_im( self, object humdir)
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::: END OF CLASS MATSOFE ::::::::::::::::::::::::::::::::::::::::::::

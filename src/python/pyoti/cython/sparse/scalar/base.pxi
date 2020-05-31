@@ -285,19 +285,6 @@ cdef class sotinum:
 
   #---------------------------------------------------------------------------------------------------  
 
-
-  #*************************************************************************************************** 
-  def set(self, sotinum rhs):
-    """
-    PURPOSE:  Sets from another value.
-    """
-    #*************************************************************************************************
-    global h
-
-    soti_set_o( &rhs.num, &self.num, dhl)
-
-  #---------------------------------------------------------------------------------------------------  
-
   #*************************************************************************************************** 
   def long_repr(self):
     """
@@ -734,6 +721,112 @@ cdef class sotinum:
   #  =================================================================================================
 
   #***************************************************************************************************
+  cpdef set(self, object rhs):
+    """
+    PURPOSE:  Sets from another value.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef sotinum orhs
+    cdef coeff_t rrhs
+    trhs = type(rhs)
+
+    if trhs is sotinum:
+
+      orhs = rhs
+      soti_set_o( &orhs.num, &self.num, dhl)
+
+    else:
+      rrhs = rhs
+      soti_set_r( rrhs, &self.num, dhl)      
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef  set_im( self,  object val, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef sotinum oval
+    cdef coeff_t rval
+    indx, order = imdir(humdir)
+    tval = type(val)
+
+    if tval is sotinum:
+      
+      oval = val
+      soti_set_im_o( &oval.num, indx, order, &self.num, dhl) 
+
+    else:
+
+      rval = val
+      soti_set_im_r( val, indx, order, &self.num, dhl) 
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef  set_deriv( self,  object val, object humdir):
+    """
+    PURPOSE:      to set a specific derivative as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef sotinum oval
+    cdef coeff_t rval
+    indx, order = imdir(humdir)
+    tval = type(val)
+
+    if tval is sotinum:
+      
+      oval = val
+      soti_set_deriv_o( &oval.num, indx, order, &self.num, dhl) 
+
+    else:
+
+      rval = val
+      soti_set_deriv_r( val, indx, order, &self.num, dhl) 
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef  truncate( self, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef sotinum_t res
+    
+    indx, order = imdir(humdir)
+    
+    res = soti_truncate_im( indx, order, &self.num, dhl) 
+
+    return sotinum.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   cpdef coeff_t get_deriv( self, object humdir):
     """
     PURPOSE:      to retrieve the derivative contained in the oti number.
@@ -854,13 +947,6 @@ cdef class sotinum:
 
     return res
 
-  #---------------------------------------------------------------------------------------------------
-
-  #***************************************************************************************************
-
-  # @staticmethod
-  # cpdef sotinum add_to( sotinum lhs, sotinum rhs ):
-  
   #---------------------------------------------------------------------------------------------------
 
 

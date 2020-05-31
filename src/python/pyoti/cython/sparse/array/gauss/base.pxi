@@ -235,8 +235,11 @@ cdef class matsofe:
     for i in range(self.nip):
       out += "(ip - {0:d}) \n".format(i)
       out += "-------------------------\n"
+      
       tmp = self[i]
+      
       out += tmp.__str__()
+      
       out += "\n"
       out += "-------------------------\n"
      
@@ -867,6 +870,71 @@ cdef class matsofe:
     return matso.create(&res)
 
   #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef  truncate( self, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef fearrso_t res
+    
+    indx, order = imdir(humdir)
+    
+    res = fearrso_truncate_im( indx, order, &self.arr, dhl) 
+
+    return matsofe.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef  extract_im( self, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef fearrso_t res
+    
+    indx, order = imdir(humdir)
+    
+    res = fearrso_extract_im( indx, order, &self.arr, dhl) 
+
+    return matsofe.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef  extract_deriv( self, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef fearrso_t res
+    
+    indx, order = imdir(humdir)
+    
+    res = fearrso_extract_deriv( indx, order, &self.arr, dhl) 
+
+    return matsofe.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+
   # #***************************************************************************************************
   # def get_deriv(self, hum_dir ):
   #   """

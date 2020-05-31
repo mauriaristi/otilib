@@ -21,6 +21,10 @@ cdef class sotinum:
   cpdef coeff_t get_im( self, object humdir)
   cpdef sotinum extract_im( self, object humdir)
   cpdef sotinum extract_deriv( self, object humdir)
+  cpdef set(       self, object rhs)
+  cpdef set_im(    self,  object val, object humdir)
+  cpdef set_deriv( self,  object val, object humdir)
+  cpdef truncate(  self, object humdir)
   
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::: END OF CLASS SPR_OTINUM :::::::::::::::::::::::::::::::::::::::::

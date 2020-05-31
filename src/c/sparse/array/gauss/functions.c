@@ -8,7 +8,7 @@ fearrso_t fearrso_atanh(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
 
     fearrso_atanh_to(arr, &res, dhl);
     
@@ -22,7 +22,7 @@ fearrso_t fearrso_asinh(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
 
     fearrso_asinh_to(arr, &res, dhl);
     
@@ -36,7 +36,7 @@ fearrso_t fearrso_acosh(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
 
     fearrso_acosh_to(arr, &res, dhl);
     
@@ -50,7 +50,7 @@ fearrso_t fearrso_tanh(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
 
     fearrso_tanh_to(arr, &res, dhl);
     
@@ -64,7 +64,7 @@ fearrso_t fearrso_cbrt(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
 
     fearrso_cbrt_to(arr, &res, dhl);
     
@@ -78,7 +78,7 @@ fearrso_t fearrso_sqrt(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_sqrt_to(arr, &res, dhl);
     
@@ -92,7 +92,7 @@ fearrso_t fearrso_cosh(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_cosh_to(arr, &res, dhl);
     
@@ -106,7 +106,7 @@ fearrso_t fearrso_sinh(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_sinh_to(arr, &res, dhl);
     
@@ -120,7 +120,7 @@ fearrso_t fearrso_asin(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_asin_to(arr, &res, dhl);
     
@@ -134,7 +134,7 @@ fearrso_t fearrso_acos(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_acos_to(arr, &res, dhl);
     
@@ -148,7 +148,7 @@ fearrso_t fearrso_atan(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_atan_to(arr, &res, dhl);
     
@@ -162,7 +162,7 @@ fearrso_t fearrso_tan(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_tan_to(arr, &res, dhl);
     
@@ -176,7 +176,7 @@ fearrso_t fearrso_cos(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_cos_to(arr, &res, dhl);
     
@@ -190,7 +190,7 @@ fearrso_t fearrso_sin(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_sin_to(arr, &res, dhl);
     
@@ -204,7 +204,7 @@ fearrso_t fearrso_logb(fearrso_t* arr, double base, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_logb_to(arr, base, &res, dhl);
 
@@ -218,7 +218,7 @@ fearrso_t fearrso_log10(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_log10_to(arr, &res, dhl);
 
@@ -232,7 +232,7 @@ fearrso_t fearrso_log(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_log_to(arr, &res, dhl);
 
@@ -246,7 +246,7 @@ fearrso_t fearrso_exp(fearrso_t* arr, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
     
     fearrso_exp_to(arr, &res, dhl);
 
@@ -261,7 +261,7 @@ fearrso_t fearrso_pow(fearrso_t* arr, double e, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();
 
-    res = fearrso_zeros_bases(arr->ncols, arr->nrows, arr->nip, 0, 0, dhl);
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
 
     fearrso_pow_to(arr, e, &res, dhl);
     

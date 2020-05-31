@@ -3,6 +3,45 @@
 
 
 
+/**************************************************************************************************//**
+@brief Extract full derivative as oti number.
+
+@param[in] num   Number.
+@param[in] idx   Index of imaginary direction.
+@param[in] order Order of imaginary direction.
+@param[in] res   Result
+@param[in] dhl   Direction helper list
+******************************************************************************************************/
+fesoti_t fesoti_extract_im(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+void     fesoti_extract_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Extract full derivative as oti number.
+
+@param[in] num   Number.
+@param[in] idx   Index of imaginary direction.
+@param[in] order Order of imaginary direction.
+@param[in] res   Result
+@param[in] dhl   Direction helper list
+******************************************************************************************************/
+fesoti_t fesoti_extract_deriv(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+void     fesoti_extract_deriv_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Truncate by given imaginary direction.
+
+@param[in] num   Number.
+@param[in] idx   Index of imaginary direction.
+@param[in] order Order of imaginary direction.
+@param[in] res   Result
+@param[in] dhl   Direction helper list
+******************************************************************************************************/
+fesoti_t fesoti_truncate_im(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+void     fesoti_truncate_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 
 /**************************************************************************************************//**
 @brief Copy functions.

@@ -72,11 +72,45 @@ void fearrso_copy_to(fearrso_t* src, fearrso_t* dst, dhelpl_t dhl){
 // ****************************************************************************************************
 fearrso_t fearrso_copy(fearrso_t* src, dhelpl_t dhl){
 
-    fearrso_t res = fearrso_createEmpty_bases( src->nrows, src->ncols, 
-                        src->nip,  0,   
-                        0,    dhl);
+    fearrso_t res = fearrso_createEmpty_bases( src->nrows, src->ncols, src->nip, 0, 0, dhl);
     
     fearrso_copy_to( src, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void fearrso_truncate_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    // check memory;
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
+
+    for( i = 0; i < arr->nip; i++){
+
+        arrso_truncate_im_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fearrso_t fearrso_truncate_im(imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
+
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
+    
+    fearrso_truncate_im_to( idx, order, arr, &res, dhl);
 
     return res;
 
@@ -96,6 +130,84 @@ fearrso_t fearrso_copy(fearrso_t* src, dhelpl_t dhl){
 
 
 
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void fearrso_extract_deriv_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    // check memory;
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
+
+    for( i = 0; i < arr->nip; i++){
+
+        arrso_extract_deriv_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fearrso_t fearrso_extract_deriv( imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
+
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
+    
+    fearrso_extract_deriv_to( idx, order, arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void fearrso_extract_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    // check memory;
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
+
+    for( i = 0; i < arr->nip; i++){
+
+        arrso_extract_im_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fearrso_t fearrso_extract_im(imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
+
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
+    
+    fearrso_extract_im_to( idx, order, arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -326,6 +438,36 @@ void fearrso_set_all_r( coeff_t num, fearrso_t* res, dhelpl_t dhl ){
 // ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+fearrso_t fearrso_eye_bases( uint64_t size,
+                               uint64_t nip, bases_t  nbases, 
+                               ord_t    order,   dhelpl_t dhl     ){ 
+    
+    uint64_t i,k;
+
+    fearrso_t res = fearrso_createEmpty_bases( size, size, nip, nbases, order, dhl);
+    
+    for( k = 0; k < res.nip; k++){
+
+        arrso_set_all_r( 0.0, &res.p_data[k], dhl);
+
+    }
+    
+    for( i = 0; i < res.nrows; i++){
+    
+        for( k = 0; k < res.nip; k++){
+
+            arrso_set_item_ij_r( 1.0, i, i, &res.p_data[k], dhl);
+
+        }
+
+    }
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 // ****************************************************************************************************
 fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols, 
@@ -334,13 +476,31 @@ fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols,
     
     uint64_t i;
 
-    fearrso_t res = fearrso_createEmpty_bases( nrows, ncols, 
-                                               nip, nbases,   
-                                               order, dhl);
+    fearrso_t res = fearrso_createEmpty_bases( nrows, ncols, nip, nbases, order, dhl);
     
     for( i = 0; i < res.nip; i++){
 
         arrso_set_all_r( 0.0, &res.p_data[i], dhl);
+
+    }
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+fearrso_t fearrso_ones_bases( uint64_t nrows,   uint64_t ncols, uint64_t nip, bases_t  nbases, 
+                               ord_t    order,   dhelpl_t dhl     ){ 
+    
+    uint64_t i;
+
+    fearrso_t res = fearrso_createEmpty_bases( nrows, ncols, nip, nbases, order, dhl);
+    
+    for( i = 0; i < res.nip; i++){
+
+        arrso_set_all_r( 1.0, &res.p_data[i], dhl);
 
     }
 

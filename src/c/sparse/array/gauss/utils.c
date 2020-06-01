@@ -366,7 +366,20 @@ inline void fearrso_dimCheck_F_transpose( fearrso_t* arr1, fearrso_t* res){
 
 
 
-
+// ****************************************************************************************************
+void fearrso_get_active_bases(fearrso_t* arr, imdir_t* list_vals, dhelpl_t dhl){
+    
+    uint64_t i;
+    
+    // Finds the active imaginary directions in the array.
+    for( i=0; i<arr->nip; i++ ){
+        
+        arrso_get_active_bases( &arr->p_data[i], list_vals, dhl);
+    
+    }
+    
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

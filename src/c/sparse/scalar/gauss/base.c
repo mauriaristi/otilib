@@ -25,11 +25,17 @@ ord_t fesoti_get_order( fesoti_t* num ){
 
 
 
-// set_im
-// set_deriv
-// get_im
-// get_deriv
-// extract_im
+
+
+
+
+
+
+
+
+
+
+
 
 // ****************************************************************************************************
 void fesoti_extract_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl){
@@ -60,6 +66,14 @@ fesoti_t fesoti_extract_im( imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dh
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 
 
@@ -95,6 +109,100 @@ fesoti_t fesoti_extract_deriv( imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t
 // ----------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void fesoti_get_deriv_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    fesoti_dimCheck(num,res);
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_get_deriv_to( idx, order, &num->p_data[k], &res->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fesoti_t fesoti_get_deriv( imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    fesoti_t res;
+
+    res = fesoti_zeros_bases( num->nip, 0, 0, dhl);
+
+    fesoti_get_deriv_to( idx, order, num, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void fesoti_get_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    fesoti_dimCheck(num,res);
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_get_im_to_o( idx, order, &num->p_data[k], &res->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fesoti_t fesoti_get_im( imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    fesoti_t res;
+
+    res = fesoti_zeros_bases( num->nip, 0, 0, dhl);
+
+    fesoti_get_im_to( idx, order, num, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
 void fesoti_truncate_im_to( imdir_t idx, ord_t order, fesoti_t* num,  fesoti_t* res, dhelpl_t dhl){
     
@@ -124,6 +232,140 @@ fesoti_t fesoti_truncate_im( imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t d
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void fesoti_set_im_r( coeff_t val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_set_im_r( val, idx, order, &num->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fesoti_set_im_o( sotinum_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_set_im_o( val, idx, order, &num->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fesoti_set_im_f( fesoti_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    fesoti_dimCheck(val,num);
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_set_im_o( &val->p_data[k], idx, order, &num->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void fesoti_set_deriv_r( coeff_t val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_set_deriv_r( val, idx, order, &num->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fesoti_set_deriv_o( sotinum_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_set_deriv_o( val, idx, order, &num->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fesoti_set_deriv_f( fesoti_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    fesoti_dimCheck(val,num);
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_set_deriv_o( &val->p_data[k], idx, order, &num->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
 
 
 

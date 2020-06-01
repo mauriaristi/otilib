@@ -11,8 +11,8 @@ This function uses temporals 0 - 9.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den, dhelpl_t dhl);
-sotinum_t soti_div_ro(coeff_t num, sotinum_t* den, dhelpl_t dhl);
-sotinum_t soti_div_or(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+sotinum_t soti_div_ro(   coeff_t num, sotinum_t* den, dhelpl_t dhl);
+sotinum_t soti_div_or(sotinum_t* num,    coeff_t val, dhelpl_t dhl);
 
 void      soti_div_oo_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
 void      soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);

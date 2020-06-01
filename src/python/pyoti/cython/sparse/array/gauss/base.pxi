@@ -934,135 +934,83 @@ cdef class matsofe:
 
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
+  cpdef  get_im( self, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
 
-  # #***************************************************************************************************
-  # def get_deriv(self, hum_dir ):
-  #   """
-  #   PURPOSE: Get the corresponding derivative of the system.
-  #   """
-  #   #*************************************************************************************************
-  #   global dhl
+    """
+    #*************************************************************************************************
+    global dhl
 
-  #   cdef list item = imdir(hum_dir)
-  #   cdef np.ndarray[coeff_t, ndim=2] tmp
-  #   cdef coeff_t factor = 1
-
-  #   tmp = self.get_im(hum_dir)
-
-  #   factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
-
-  #   return tmp * factor
-
-  # #---------------------------------------------------------------------------------------------------  
-
-  # #***************************************************************************************************
-  # def get_im(self, hum_dir):
-  #   """
-  #   PURPOSE: Get the corresponding imaginary direction in the matsofe object.
-  #   """
-  #   #*************************************************************************************************
-  #   global dhl
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef fearrso_t res
     
-  #   cdef list item = imdir(hum_dir)
-  #   cdef darr_t res_darr
-  #   cdef dmat res_dmat
-  #   cdef uint64_t i,j, k
-  #   cdef np.ndarray[double, ndim=2] res
-
-  #   res_darr = fearrso_get_im( item[ZERO],  item[ONE], &self.arr,  dhl)
-
-  #   res_dmat = darr.create(&res_darr)
-
-  #   res = np.empty( self.shape , dtype = np.float64)
-
-  #   k=0
-
-  #   for i in range(self.arr.nrows):
-
-  #     for j in range(self.arr.ncols):
-
-  #       res[i,j] = res_darr.p_data[k]
-  #       k+=1
-
-  #     # end for 
-
-  #   # end for
-
-
-  #   return res
-
-  # #---------------------------------------------------------------------------------------------------
-
-
-  # #***************************************************************************************************
-  # cpdef matsofe extract_im(self, hum_dir):
-  #   """
-  #   PURPOSE: Get the corresponding imaginary direction in the matsofe object.
-  #   """
-  #   #*************************************************************************************************
-  #   global dhl
+    indx, order = imdir(humdir)
     
-  #   cdef list item = imdir(hum_dir)
-  #   cdef fearrso_t res
+    res = fearrso_get_im( indx, order, &self.arr, dhl) 
+
+    return matsofe.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef  get_deriv( self, object humdir):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef ord_t  order
+    cdef fearrso_t res
     
-
-  #   res = fearrso_extract_im( item[ZERO],  item[ONE], &self.arr,  dhl)
-
-  #   return matsofe.create(&res)
-
-  # #---------------------------------------------------------------------------------------------------
-  
-  # #***************************************************************************************************
-  # cpdef matsofe extract_deriv(self, hum_dir):
-  #   """
-  #   PURPOSE: Get the corresponding derivative in the matsofe object, as OTI number.
-  #   """
-  #   #*************************************************************************************************
-  #   global dhl
+    indx, order = imdir(humdir)
     
-  #   cdef list item = imdir(hum_dir)
-  #   cdef fearrso_t res
+    res = fearrso_get_deriv( indx, order, &self.arr, dhl) 
+
+    return matsofe.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+
+  #***************************************************************************************************
+  def get_active_bases(self):
+    """
+
+    """
+    global dhl
+
+    cdef bases_t  size       = dhl.p_dh[0].Nbasis
+    cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
+    cdef uint64_t i
     
-  #   res = fearrso_extract_deriv( item[ZERO],  item[ONE], &self.arr,  dhl)
+    # Initialize all elements as zero (deactivated)
+    for i in range(size):
 
-  #   return matsofe.create(&res)
+      bases_list[i]=0
 
-  # #---------------------------------------------------------------------------------------------------
+    # end for 
 
-  # #***************************************************************************************************
-  # def get_active_bases(self):
-  #   """
+    fearrso_get_active_bases( &self.arr, bases_list, dhl)
 
-  #   """
-  #   global dhl
+    res = []
+    for i in range(size):
 
-  #   cdef bases_t  size       = dhl.p_dh[0].Nbasis
-  #   cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
-  #   cdef uint64_t i
-    
-  #   # Initialize all elements as zero (deactivated)
-  #   for i in range(size):
-
-  #     bases_list[i]=0
-
-  #   # end for 
-
-  #   fearrso_get_active_bases( &self.arr, bases_list, dhl)
-
-  #   res = []
-  #   for i in range(size):
-
-  #     if bases_list[i]==1:
+      if bases_list[i]==1:
       
-  #       res.append(i+1)
+        res.append(i+1)
 
-  #     # end if 
+      # end if 
 
-  #   # end for 
+    # end for 
 
-  #   return res
+    return res
 
-  # #---------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------
   
 
 

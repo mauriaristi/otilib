@@ -1412,8 +1412,8 @@ struct __pyx_opt_args_5pyoti_6sparse_5matso_create {
  * 
  *   @staticmethod
  *   cdef sotife create(fesoti_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
- *   cpdef  truncate( self, object humdir)
- *   cpdef extract_deriv( self, object humdir)
+ * 
+ *   cpdef  truncate(      self, object humdir)
  */
 struct __pyx_opt_args_5pyoti_6sparse_6sotife_create {
   int __pyx_n;
@@ -1425,7 +1425,7 @@ struct __pyx_opt_args_5pyoti_6sparse_6sotife_create {
  *   @staticmethod
  *   cdef matsofe create(fearrso_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
  * 
- *   cpdef truncate( self, object humdir)
+ *   cpdef truncate(      self, object humdir)
  */
 struct __pyx_opt_args_5pyoti_6sparse_7matsofe_create {
   int __pyx_n;
@@ -1861,6 +1861,9 @@ struct __pyx_vtabstruct_5pyoti_6sparse_sotife {
   struct __pyx_obj_5pyoti_6sparse_sotife *(*create)(fesoti_t *, struct __pyx_opt_args_5pyoti_6sparse_6sotife_create *__pyx_optional_args);
   PyObject *(*truncate)(struct __pyx_obj_5pyoti_6sparse_sotife *, PyObject *, int __pyx_skip_dispatch);
   PyObject *(*extract_deriv)(struct __pyx_obj_5pyoti_6sparse_sotife *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*extract_im)(struct __pyx_obj_5pyoti_6sparse_sotife *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*get_im)(struct __pyx_obj_5pyoti_6sparse_sotife *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*get_deriv)(struct __pyx_obj_5pyoti_6sparse_sotife *, PyObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_6sparse_sotife *__pyx_vtabptr_5pyoti_6sparse_sotife;
 
@@ -1878,6 +1881,8 @@ struct __pyx_vtabstruct_5pyoti_6sparse_matsofe {
   PyObject *(*truncate)(struct __pyx_obj_5pyoti_6sparse_matsofe *, PyObject *, int __pyx_skip_dispatch);
   PyObject *(*extract_im)(struct __pyx_obj_5pyoti_6sparse_matsofe *, PyObject *, int __pyx_skip_dispatch);
   PyObject *(*extract_deriv)(struct __pyx_obj_5pyoti_6sparse_matsofe *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*get_im)(struct __pyx_obj_5pyoti_6sparse_matsofe *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*get_deriv)(struct __pyx_obj_5pyoti_6sparse_matsofe *, PyObject *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_6sparse_matsofe *__pyx_vtabptr_5pyoti_6sparse_matsofe;
 

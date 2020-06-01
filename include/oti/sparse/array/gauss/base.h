@@ -3,7 +3,13 @@
 
 
 
+fearrso_t fearrso_get_deriv(   imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+void      fearrso_get_deriv_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
+fearrso_t fearrso_get_im(      imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+void      fearrso_get_im_to(   imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 fearrso_t fearrso_truncate_im(   imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_truncate_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);

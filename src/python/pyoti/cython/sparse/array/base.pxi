@@ -271,6 +271,7 @@ cdef class matso:
     out += "shape: "+str(self.shape)+ ", \n"
 
     for j in range(self.arr.ncols):
+      out += " - Column " + str(j) +"\n"
       for i in range(self.arr.nrows):
 
         out += "({0:d},{1:d}) ".format(i,j)

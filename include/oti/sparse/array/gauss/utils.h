@@ -2,13 +2,6 @@
 #define OTI_SPARSE_ARRAY_GAUSS_UTILS_H
 
 
-
-
-
-
-
-
-
 // /**************************************************************************************************//**
 // @brief 
 // 
@@ -17,8 +10,6 @@
 // void fearrso_gaussIntegrateOverElement(fearrso_t* arr1, elemProps_t* elem, oarr_t* res, 
 //     dhelpl_t dhl);
 // // ----------------------------------------------------------------------------------------------------
-
-
 
 /**************************************************************************************************//**
 @brief Check dimensions for Elementwise matrix operation (such as addition or subtraction).
@@ -48,11 +39,6 @@ void fearrso_dimCheck_FO_matmul( fearrso_t* lhs,   arrso_t* rhs, fearrso_t* res)
 void fearrso_dimCheck_FR_matmul( fearrso_t* lhs,    darr_t* rhs, fearrso_t* res);
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
 /**************************************************************************************************//**
 @brief Check dimensions operation requiring square matrix (such as inversion or determinant).
 
@@ -62,11 +48,6 @@ void fearrso_dimCheck_FR_matmul( fearrso_t* lhs,    darr_t* rhs, fearrso_t* res)
 ******************************************************************************************************/ 
 void fearrso_dimCheck_F_squareness( fearrso_t* arr1, fearrso_t* res);
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
 
 /**************************************************************************************************//**
 @brief Check dimensions for transpose operation.
@@ -78,8 +59,6 @@ void fearrso_dimCheck_F_squareness( fearrso_t* arr1, fearrso_t* res);
 void fearrso_dimCheck_F_transpose( fearrso_t* arr1, fearrso_t* res);
 // ----------------------------------------------------------------------------------------------------
 
-
-
 /**************************************************************************************************//**
 @brief Check dimensions for integration operation.
 
@@ -88,6 +67,16 @@ void fearrso_dimCheck_F_transpose( fearrso_t* arr1, fearrso_t* res);
 @param[in] res Result
 ******************************************************************************************************/ 
 void fearrso_dimCheck_FfO_integrate(fearrso_t* arr, fesoti_t* num,arrso_t* res);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Get active bases of the oti structure.
+
+@param[in] arr Gauss Array.
+@param[in] list_vals Array to activate corresponding directions.
+@param[in] dhl Direction helper list
+******************************************************************************************************/ 
+void fearrso_get_active_bases(fearrso_t* arr, imdir_t* list_vals, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 

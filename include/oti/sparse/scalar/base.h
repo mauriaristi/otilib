@@ -130,7 +130,9 @@ void soti_set_deriv_o( sotinum_t* coef, imdir_t idx, ord_t order, sotinum_t* num
 @param[in] num Address of the otin number to be modified.    
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+coeff_t   soti_get_deriv(    imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+sotinum_t soti_get_deriv_o(  imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+void      soti_get_deriv_to( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -184,6 +186,7 @@ void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhe
 ******************************************************************************************************/ 
 coeff_t soti_get_item(    imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
 coeff_t soti_get_im(      imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+sotinum_t soti_get_im_o(  imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
 void    soti_get_im_to_o( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 void    soti_get_im_to_r( imdir_t idx, ord_t order, sotinum_t* num,   coeff_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------

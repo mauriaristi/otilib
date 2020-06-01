@@ -4,6 +4,63 @@
 
 
 /**************************************************************************************************//**
+@brief Get a specific imaginary direction from the number.
+
+@param[in] idx   Index of imaginary direction.
+@param[in] order Order of imaginary direction.
+@param[in] num   Number.
+@param[in] res   Result
+@param[in] dhl   Direction helper list
+******************************************************************************************************/
+fesoti_t fesoti_get_im(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+void     fesoti_get_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Get a specific derivative from the number.
+
+@param[in] idx   Index of imaginary direction.
+@param[in] order Order of imaginary direction.
+@param[in] num   Number.
+@param[in] res   Result
+@param[in] dhl   Direction helper list
+******************************************************************************************************/
+fesoti_t fesoti_get_deriv(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+void     fesoti_get_deriv_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Set a specific derivative.
+
+@param[in] idx   Index of imaginary direction.
+@param[in] order Order of imaginary direction.
+@param[in] num   Number.
+@param[in] res   Result
+@param[in] dhl   Direction helper list
+******************************************************************************************************/
+void fesoti_set_im_r(   coeff_t  val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+void fesoti_set_im_o( sotinum_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+void fesoti_set_im_f(  fesoti_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Set a specific derivative.
+
+@param[in] idx   Index of imaginary direction.
+@param[in] order Order of imaginary direction.
+@param[in] num   Number.
+@param[in] res   Result
+@param[in] dhl   Direction helper list
+******************************************************************************************************/
+void fesoti_set_deriv_r(   coeff_t  val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+void fesoti_set_deriv_o( sotinum_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+void fesoti_set_deriv_f(  fesoti_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+/**************************************************************************************************//**
 @brief Extract full derivative as oti number.
 
 @param[in] num   Number.

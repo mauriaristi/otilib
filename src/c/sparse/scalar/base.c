@@ -272,9 +272,9 @@ void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, 
             memcpy(tmp.p_im[ordi], num->p_im[ordi], num->p_nnz[ordi]*sizeof(coeff_t) );
             memcpy(tmp.p_idx[ordi],num->p_idx[ordi],num->p_nnz[ordi]*sizeof(imdir_t) );
 
-            tmp.p_nnz[ordi] = num->p_nnz[ordi]; 
+            tmp.p_nnz[ordi] = num->p_nnz[ordi];
 
-        }            
+        }
 
         factorden = dhelp_get_deriv_factor(idx, order, dhl);
         
@@ -517,6 +517,19 @@ coeff_t soti_get_im(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+sotinum_t soti_get_im_o(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
+    
+    sotinum_t res = soti_init();
+    coeff_t rres = soti_get_im(idx, order, num, dhl);
+
+    res.re = rres;
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 void soti_get_im_to_o(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
     
     coeff_t rres = soti_get_im(idx, order, num, dhl);
@@ -717,12 +730,10 @@ coeff_t soti_get_deriv( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 sotinum_t soti_get_deriv_o( imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t coef   = soti_get_item(idx,order,num,dhl);
-    coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
     sotinum_t res = soti_init();
 
     // Set imaginary direction.
-    res.re = coef*factor;
+    soti_get_deriv_to( idx, order, num, &res, dhl);
     
     return res;
 

@@ -173,6 +173,82 @@ fearrso_t fearrso_extract_deriv( imdir_t idx, ord_t order, fearrso_t* arr, dhelp
 
 
 
+// ****************************************************************************************************
+void fearrso_get_deriv_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    // check memory;
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
+
+    for( i = 0; i < arr->nip; i++){
+
+        arrso_get_deriv_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fearrso_t fearrso_get_deriv(imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
+
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
+    
+    fearrso_get_deriv_to( idx, order, arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void fearrso_get_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    // check memory;
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
+
+    for( i = 0; i < arr->nip; i++){
+
+        arrso_get_im_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fearrso_t fearrso_get_im(imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
+
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
+    
+    fearrso_get_im_to( idx, order, arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -688,6 +688,38 @@ cdef class sotife:
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
+  cpdef set(self, object rhs):
+    """
+    PURPOSE:  Sets from another value.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef sotife  frhs
+    cdef sotinum orhs
+    cdef coeff_t rrhs
+    trhs = type(rhs)
+
+    if   trhs is sotinum:
+
+      orhs = rhs
+      fesoti_set_o( &orhs.num, &self.num, dhl)
+
+    elif trhs is sotife:
+
+      frhs = rhs
+      fesoti_set_f( &frhs.num, &self.num, dhl)      
+
+    else:
+
+      rrhs = rhs
+      fesoti_set_r( rrhs, &self.num, dhl)      
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   def gauss_integrate(self, sotife w  ):
     """
     PURPOSE: Get the corresponding derivative of the system.
@@ -808,7 +840,22 @@ cdef class sotife:
 
   #---------------------------------------------------------------------------------------------------
 
-  
+  #***************************************************************************************************
+  cpdef  get_order_im( self, ord_t order):
+    """
+    PURPOSE:      to set a specific imaginary direction as given.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef fesoti_t res
+    
+    res = fesoti_get_order_im( order, &self.num, dhl) 
+
+    return sotife.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def get_active_bases(self):

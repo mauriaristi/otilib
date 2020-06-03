@@ -41,6 +41,40 @@ ord_t fearrso_get_order(fearrso_t* arr){
 
 
 
+// ****************************************************************************************************
+void fearrso_get_order_im_to( ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
+
+    // check memory;
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
+
+    for (i = 0; i<arr->nip; i++ ){
+        
+        arrso_get_order_im_to( order, &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fearrso_t fearrso_get_order_im( ord_t order, fearrso_t* arr, dhelpl_t dhl){
+    
+    fearrso_t res;
+
+    res = fearrso_zeros_bases( arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
+
+    fearrso_get_order_im_to( order, arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 
@@ -430,6 +464,54 @@ void fearrso_set_item_ij(fesoti_t* num, uint64_t i, uint64_t j, fearrso_t* res, 
 // ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+void fearrso_set_item_ij_f(fesoti_t* num, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    //Check
+    fearrso_dimCheck_fF_elementwise(num,res,res);
+
+    for (k = 0; k < num->nip; k++){
+        
+        arrso_set_item_ij_o( &num->p_data[k], i, j, &res->p_data[k], dhl );
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void fearrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    //Check
+    for (k = 0; k < res->nip; k++){
+        
+        arrso_set_item_ij_o( num, i, j, &res->p_data[k], dhl );
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
+    
+    uint64_t k;
+
+    //Check
+    for (k = 0; k < res->nip; k++){
+        
+        arrso_set_item_ij_r( num, i, j, &res->p_data[k], dhl );
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 // ****************************************************************************************************
 void fearrso_set_item_ijk(sotinum_t* num, uint64_t i, uint64_t j, uint64_t k, 
@@ -472,6 +554,49 @@ void fearrso_set_item_ijk(sotinum_t* num, uint64_t i, uint64_t j, uint64_t k,
 
 
 
+// ****************************************************************************************************
+void fearrso_set_f( fesoti_t* num, fearrso_t* res, dhelpl_t dhl ){ 
+    
+    uint64_t i;
+    
+    fearrso_dimCheck_fF_elementwise(num,res,res);
+
+    for( i = 0; i < res->nip; i++){
+
+        arrso_set_all_o( &num->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_set_o( sotinum_t* num, fearrso_t* res, dhelpl_t dhl ){ 
+    
+    uint64_t i;
+    
+    for( i = 0; i < res->nip; i++){
+
+        arrso_set_all_o( num, &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_set_r( coeff_t num, fearrso_t* res, dhelpl_t dhl ){ 
+    
+    uint64_t i;
+    
+    for( i = 0; i < res->nip; i++){
+
+        arrso_set_all_r( num, &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -484,6 +609,23 @@ void fearrso_set_item_ijk(sotinum_t* num, uint64_t i, uint64_t j, uint64_t k,
 
 
 
+
+
+// ****************************************************************************************************
+void fearrso_set_all_f( fesoti_t* num, fearrso_t* res, dhelpl_t dhl ){ 
+    
+    uint64_t i;
+    
+    fearrso_dimCheck_fF_elementwise(num,res,res);
+
+    for( i = 0; i < res->nip; i++){
+
+        arrso_set_all_o( &num->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 void fearrso_set_all_o( sotinum_t* num, fearrso_t* res, dhelpl_t dhl ){ 

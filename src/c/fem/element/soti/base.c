@@ -92,7 +92,7 @@ int64_t elemso_start(elemso_t* elemso, uint64_t nbasis, int64_t geomBase,
 
         elemso->w    = fesoti_init();
         
-        elemso->p_evalBasis = (fearrso_t* ) malloc( elemso->nder*sizeof(fearrso_t  ) ) ;
+        elemso->p_evalBasis = (fearrso_t* ) malloc( elemso->nder * sizeof(fearrso_t  ) ) ;
 
         if( elemso->p_evalBasis == NULL ){
             printf("--- MemoryError ---\n");

@@ -9,10 +9,35 @@
 // } arrso_t;                ///< Array of OTIs type.
 
 
+// ****************************************************************************************************
+void arrso_get_order_im_to( ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
 
+    arrso_dimCheck_OO_elementwise(arr,res,res);
 
+    for (i = 0; i<arr->size; i++ ){
+        
+        soti_get_order_im_to( order, &arr->p_data[i], &res->p_data[i], dhl);
 
+    }
 
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+arrso_t arrso_get_order_im( ord_t order, arrso_t* arr, dhelpl_t dhl){
+    
+    arrso_t res;
+
+    res = arrso_zeros_bases( arr->nrows, arr->ncols, 0, 0, dhl);
+
+    arrso_get_order_im_to( order, arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -48,15 +73,6 @@ arrso_t arrso_truncate_im( imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl)
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
 
 
 
@@ -103,8 +119,21 @@ arrso_t arrso_copy(arrso_t* arr, dhelpl_t dhl){
 
 // Setters.
 // Setter by one index.
+
 // ****************************************************************************************************
 inline void arrso_set_all_r( coeff_t num, arrso_t* arr, dhelpl_t dhl){
+    
+    uint64_t i;
+
+    for (i = 0; i<arr->size; i++ ){
+        arrso_set_item_i_r( num, i, arr, dhl);
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void arrso_set_r( coeff_t num, arrso_t* arr, dhelpl_t dhl){
     
     uint64_t i;
 
@@ -159,6 +188,18 @@ inline void arrso_set_all_o( sotinum_t* num, arrso_t* arr, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+inline void arrso_set_o( sotinum_t* num, arrso_t* arr, dhelpl_t dhl){
+
+    uint64_t i;
+
+    for (i = 0; i<arr->size; i++ ){
+        arrso_set_item_i_o( num, i, arr, dhl);
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 inline void arrso_set_item_i_o( sotinum_t* src, uint64_t i, arrso_t* arr, dhelpl_t dhl){
     
     if (i < arr->size){
@@ -188,7 +229,13 @@ inline void arrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, arrso_t
 
 
 
+// ****************************************************************************************************
+void arrso_set_O( arrso_t* arrin, arrso_t* arr, dhelpl_t dhl){
 
+    arrso_copy_to( arrin, arr, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -462,6 +509,92 @@ void arrso_get_item_ij_to(arrso_t* arr, uint64_t i, uint64_t j, sotinum_t* res, 
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+// ****************************************************************************************************
+arrso_t arrso_get_slice( arrso_t* arr, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                        dhelpl_t dhl){
+
+    uint64_t ncols, nrows; // Resulting number of rows and columns
+    arrso_t res = arrso_init();
+
+    nrows =  ( ( stopi - starti - 1 ) / stepi + 1);
+    ncols =  ( ( stopj - startj - 1 ) / stepj + 1);
+
+    res = arrso_zeros_bases( nrows, ncols, 0, 0, dhl);
+
+    arrso_get_slice_to( arr, starti, stopi, stepi, startj, stopj, stepj, &res, dhl);
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void arrso_get_slice_to( arrso_t* arr, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                         arrso_t* res, dhelpl_t dhl){
+
+    int64_t ncols, nrows; // Resulting number of rows and columns
+    int64_t i, j, ii, jj; 
+
+    // Handle broadcasting?
+
+    nrows = ( ( stopi - starti - 1 ) / stepi + 1);
+    ncols = ( ( stopj - startj - 1 ) / stepj + 1);
+
+    // printf("nrows: %lld, ncols %lld \n",nrows, ncols);
+
+    // printf("i: (%lld, %lld, %lld) \n", starti, stopi, stepi);
+    // printf("j: (%lld, %lld, %lld) \n", startj, stopj, stepj);
+
+
+    // Check dimensions:
+    if ( (res->ncols != ncols) ||
+         (res->nrows != nrows)    ){
+
+        printf("Error: Wrong dimensions slicing array.\n");
+        exit(OTI_BadIndx);
+
+    }
+    
+    ii = starti;
+    
+    for ( i = 0; i < nrows; i++){
+
+        jj = startj;
+        
+        for ( j = 0; j < ncols; j++){
+
+            // printf("Setting result ( i, j) (%lld,%lld) from source (ii,jj) (%lld,%lld) \n", i, j, ii, jj);
+            // printf("( i, j) (%lld,%lld) equates: %lld\n",  i,  j,  j +  i * res->ncols );
+            // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
+
+            soti_copy_to( &arr->p_data[ jj + ii * arr->ncols ], 
+                          &res->p_data[  j +  i * res->ncols ], 
+                          dhl);
+
+            jj += stepj;
+        
+        }   
+
+        ii += stepi;
+
+    }
+
+
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
 
 
 

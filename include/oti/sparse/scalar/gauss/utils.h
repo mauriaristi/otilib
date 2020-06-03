@@ -12,7 +12,16 @@
 void fesoti_dimCheck(fesoti_t* arr1,fesoti_t* arr2);
 // ----------------------------------------------------------------------------------------------------
 
+
+/**************************************************************************************************//**
+@brief Get active oti bases from num.
+
+@param[in] num       Gauss scalar.
+@param[in] list_vals List of bases active.
+@param[in] dhl       Direction helper list.
+******************************************************************************************************/
 void fesoti_get_active_bases(fesoti_t* num, imdir_t* list_vals, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 
 

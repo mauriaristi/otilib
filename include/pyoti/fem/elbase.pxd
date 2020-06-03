@@ -53,14 +53,41 @@ cdef class elbaseso:
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
 
-  cdef uint8_t FLAG           # Defines if the elemen is defined in python or c.
-  cdef public uint8_t elorder # Element type order.
-  cdef elemso_t     elem      # C-level memory structure of element class.
-  cdef elemso_spt_t elem_spt  # C-level memory structure of spatial element components.
-  cdef public list boundEls   # List of boundary element types.
-  cdef public object basis    # Function that calculates the basis functions of the element.
-  cdef public object N        # List of evaluated basis.
+  cdef uint8_t FLAG             # Defines if the elemen is defined in python or c.
+  cdef public uint8_t elorder   # Element type order.
+  cdef public ord_t   otiorder  # OTI order
+  cdef public bases_t otinbases # OTI order
+  cdef elemso_t     elem        # C-level memory structure of element class.
+  cdef elemso_spt_t elem_spt    # C-level memory structure of spatial element components.
+  cdef public list boundEls     # List of boundary element types.
+  cdef public object basis      # Function that calculates the basis functions of the element.
+  cdef public object Neval      # List of evaluated basis.
 
+  cdef public sotife xi         # Xi natural coordinate. (integration points)
+  cdef public sotife eta        # Eta natural coordinate. (integration points)
+  cdef public sotife zeta       # Zeta natural coordinate. (integration points)
+  cdef public sotife w          # Integration weights
+
+  cdef public matsofe N         # Real basis.
+  cdef public matsofe Nxi       # dN/d xi    basis.
+  cdef public matsofe Neta      # dN/d eta   basis.
+  cdef public matsofe Nzeta     # dN/d zeta  basis.
+
+  cdef public matsofe Nx        # dN/dx basis.
+  cdef public matsofe Ny        # dN/dy basis.
+  cdef public matsofe Nz        # dN/dz basis.
+
+  cdef public matsofe x         # Elemental xcoord basis.
+  cdef public matsofe y         # Elemental xcoord basis.
+  cdef public matsofe z         # Elemental xcoord basis.
+
+  cdef public matsofe    J      # Elemental Jacobian.
+  cdef public sotife  detJ      # Determinant of Jacobian.
+  cdef public matsofe    Jinv   # Jacobian inverse.
+
+  cdef public sotife  w_dJ      # integration weight dOmega.
+
+  
   #---------------------------------------------------------------------------------------------------
   
   cdef is_allocated(self)
@@ -68,6 +95,7 @@ cdef class elbaseso:
 
   cpdef allocate(self, uint64_t intorder, bases_t nbases = * , ord_t order = * )
   cpdef end(self)
+  # cpdef get_basis(self, imdir_t idx, ord_t order)
 
   # cpdef initElement(self, uint64_t order, uint8_t otiorder, uint8_t nDimAnalysis)
   # cpdef uninitElement(self)

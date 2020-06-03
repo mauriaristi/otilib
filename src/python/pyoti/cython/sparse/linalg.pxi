@@ -364,6 +364,8 @@ cpdef inv(object arr, object out = None):
 
 
 
+
+
 #*****************************************************************************************************
 cpdef transpose(object arr, object out = None):
   """
@@ -654,6 +656,118 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
   else:
 
     raise TypeError("Unsupported types at det operation.")
+
+  # end if 
+
+  if res_flag == 0:
+
+    return res
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#*****************************************************************************************************
+cpdef inv_block(object arr, object out = None):
+  """
+  PURPOSE:   Matrix inverse using block solver.
+  """
+  #***************************************************************************************************
+
+  cdef matso      O, Ores, tmp
+  cdef arrso_t   cOres
+  # cdef dmat       R, Rres
+  # cdef darr_t    cRres
+  # cdef matsofe    F, Fres
+  # cdef fearrso_t cFres
+
+  cdef uint64_t i,j,k,l
+  cdef ord_t ordi, ord_lhs, ord_rhs, Oord
+
+  cdef uint8_t res_flag = 1
+
+  cdef object res
+
+  tarr = type(arr)
+
+  if out is None:
+
+    res_flag = 0
+
+  # end if 
+
+  # supported types:
+  #    -  matso
+
+  if   tarr is matso:
+    
+    O = arr
+
+    if res_flag:
+
+      Ores = out
+
+    else:
+
+      Ores = zeros(O.shape)
+
+    # end if
+
+    # res = Ores
+
+    inverse = np.linalg.inv(O.real)
+
+    # Copy the inverse to the values of the inverse.
+    for i in range(Ores.arr.nrows):
+      for j in range(Ores.arr.ncols):
+        k = j + i * Ores.arr.ncols
+        arrso_set_item_ij_r( inverse[i,j], i, j, &Ores.arr, dhl)
+      # end for
+    # end for
+    
+    Oord = O.order
+    
+    tmp = O.copy()
+
+    for ordi in range( 1, Oord + 1 ):
+      
+      tmp.set(0)
+
+      for ord_rhs in range(ordi):
+
+        ord_lhs = ordi - ord_rhs
+
+        tmp -= dot( O.get_order_im(ord_lhs), Ores.get_order_im(ord_rhs))
+
+      # end for 
+
+      Ores += dot( Ores.get_order_im(0), tmp)
+
+    # end for 
+
+    res = Ores
+
+  else:
+
+    raise TypeError("Unsupported types at Block-solver inverse operation.")
+    
+    # return NotImplemented
 
   # end if 
 

@@ -153,8 +153,17 @@ cdef class elbaseso:
 
           for i in range(self.elem.nbasis):
 
-            body += " ---- " + enum2string( i + derN ) + "\n"
-            body += repr(self.N[i]) + "\n"
+            body += "\n ==== " + enum2string( 0 + derN ) + "\n"
+            body += repr( self.N ) + "\n"
+
+            body += "\n ==== " + enum2string( 1 + derN ) + "\n"
+            body += repr( self.Nxi ) + "\n"
+
+            body += "\n ==== " + enum2string( 2 + derN ) + "\n"
+            body += repr( self.Neta ) + "\n"
+
+            body += "\n ==== " + enum2string( 3 + derN ) + "\n"
+            body += repr( self.Nzeta ) + "\n"
 
           # end for 
 
@@ -174,14 +183,15 @@ cdef class elbaseso:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cpdef allocate(self, uint64_t intorder, bases_t nbases = 0, ord_t order = 0):
+  cpdef allocate(self, uint64_t intorder, bases_t nbases=0, ord_t order=0):
     """
-    DESCRIPTION:
+    DESCRIPTION: Allocate all items as integration points.
     """
 
     global dhl
 
     cdef uint64_t i, j, k
+    cdef sotife tmp
 
     if self.is_allocated():
       self.end()
@@ -189,60 +199,106 @@ cdef class elbaseso:
     
     elemso_allocate(&self.elem, intorder, nbases, order, dhl)
 
+    self.N     = matsofe.create(&self.elem.p_evalBasis[0],FLAGS=0)
+    self.Nxi   = matsofe.create(&self.elem.p_evalBasis[1],FLAGS=0)
+    self.Neta  = matsofe.create(&self.elem.p_evalBasis[2],FLAGS=0)
+    self.Nzeta = matsofe.create(&self.elem.p_evalBasis[3],FLAGS=0)
+
+    self.w    = sotife.create(&self.elem.w    ,FLAGS=0)
+    self.xi   = sotife.create(&self.elem.xi   ,FLAGS=0)
+    self.eta  = sotife.create(&self.elem.eta  ,FLAGS=0)
+    self.zeta = sotife.create(&self.elem.zeta ,FLAGS=0)
+
+    # Allocate Spatial variables.
+    self.J    = None
+    self.detJ = None
+    self.Jinv = None
+    self.w_dJ = None
+
+
+
 
     # Call the basis function, get the 
-    self.N = self.basis(  self.xi + se(1),  self.eta + se(2), self.zeta + se(3) )
+    N = self.basis(  self.xi + e(1),  self.eta + e(2), self.zeta + e(3) )
 
     # Call evaluation of basis functions at integration points.
-    # for i in range(self.elem.nip):
-
-    #   # get integration point.
-    #   xi, eta, chi = self.get_integration_point(i)
+    for i in range(self.elem.nbasis):
       
-    #   # Evaluates all basis functions for the given coords.
-    #   N = self.basis(xi, eta, chi, 1)
-    #   # N[j] has the jth basis evaluated at xi,eta,chi; with its derivatives.
+      # Standard basis.
+      # self.N[i,0] = get_deriv( 0, N[i])
+      tmp = get_deriv( 0, N[i])
+      fearrso_set_item_ij_f( &tmp.num, i, 0, &self.N.arr,     dhl)
+      
+      # First order derivatives
+      # self.Nxi[i,0] = get_deriv( 1, N[i])
+      tmp = get_deriv( 1, N[i])
+      fearrso_set_item_ij_f( &tmp.num, i, 0, &self.Nxi.arr,   dhl)
+      
+      # self.Neta[i,0] = get_deriv( 2, N[i])
+      tmp = get_deriv( 2, N[i])
+      fearrso_set_item_ij_f( &tmp.num, i, 0, &self.Neta.arr,  dhl)
+      
+      # self.Nzeta[i,0] = get_deriv( 3, N[i])
+      tmp = get_deriv( 3, N[i])
+      fearrso_set_item_ij_f( &tmp.num, i, 0, &self.Nzeta.arr, dhl)
 
-    #   for j in range(self.elem.nbasis):
-    #     k = 0
-    #     # Evaluated basis
-    #     darr_set_item_ij(N[j].get_deriv([0]),j,i,&self.elem.p_evalBasis[k]); k+=1
-
-    #     # First order derivatives
-    #     darr_set_item_ij(N[j].get_deriv([1]),j,i,&self.elem.p_evalBasis[k]); k+=1
-    #     darr_set_item_ij(N[j].get_deriv([2]),j,i,&self.elem.p_evalBasis[k]); k+=1
-    #     darr_set_item_ij(N[j].get_deriv([3]),j,i,&self.elem.p_evalBasis[k]); k+=1
-
-    #     # Second order derivatives
-    #     darr_set_item_ij(N[j].get_deriv([[1,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1
-    #     darr_set_item_ij(N[j].get_deriv( [1,2] ),j,i,&self.elem.p_evalBasis[k]); k+=1
-    #     darr_set_item_ij(N[j].get_deriv([[2,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1
-    #     darr_set_item_ij(N[j].get_deriv( [1,3] ),j,i,&self.elem.p_evalBasis[k]); k+=1
-    #     darr_set_item_ij(N[j].get_deriv( [2,3] ),j,i,&self.elem.p_evalBasis[k]); k+=1
-    #     darr_set_item_ij(N[j].get_deriv([[3,2]]),j,i,&self.elem.p_evalBasis[k]); k+=1
-
-    #   # self.set_basis(N)
-
-    # # end for
+    # end for
 
   #---------------------------------------------------------------------------------------------------
 
+
+  # #***************************************************************************************************
+  # cpdef allocate_spatial(self, uint64_t nDimAnalysis):
+  #   """
+  #   DESCRIPTION: Allocate all spatial variables.
+  #   """
+
+  #   global dhl
+
+  #   cdef uint64_t i, j, k
+  #   cdef sotife tmp
+
+  #   if self.is_allocated():
+
+  #     self.nDimAnalysis = nDimAnalysis
+
+  #     self.J    = None
+  #     self.Jinv = None
+      
+  #     self.detJ = sotife(0.,nbases=self.nbases,order=self.order,nip=self.nip )
+  #     self.w_dJ = None
+      
+
+  #   else:
+
+  #     raise ValueError("Must allocate element first. Trying to allocate spatial coordinates with no allocated element.")
+
+  #   # end if 
+
+  # #---------------------------------------------------------------------------------------------------
+
   #***************************************************************************************************
   cdef is_allocated(self):
+    """
+    """
 
     return elemso_is_allocated(&self.elem)
+
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   cdef is_initialized(self):
+    """
+    """
 
     return elemso_is_started(&self.elem)
-  #---------------------------------------------------------------------------------------------------
 
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   cpdef end(self):
-    
+    """
+    """
     if (self.FLAG &1):
       
       elemso_end(&self.elem)
@@ -251,56 +307,54 @@ cdef class elbaseso:
 
   #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  @property
-  def w(self):
-    """
-    PURPOSE:      Returns the integration weights.
+  # #***************************************************************************************************
+  # cpdef get_basis(self, imdir_t idx, ord_t order):
+  #   """
+  #   """
+  #   if   order == 0:
 
-    """
-    #*************************************************************************************************
+  #     return matsofe.create( &self.elem.p_evalBasis[0], FLAGS=0)
 
-    return  sotife.create(&self.elem.w,FLAGS=0)
+  #   elif order == 1:
 
-  #---------------------------------------------------------------------------------------------------
+  #     if idx ==0:
+      
+  #       return matsofe.create( &self.elem.p_evalBasis[1], FLAGS=0)
+      
+  #     elif idx ==1:
+      
+  #       return matsofe.create( &self.elem.p_evalBasis[2], FLAGS=0)
+      
+  #     elif idx ==2:
+      
+  #       return matsofe.create( &self.elem.p_evalBasis[3], FLAGS=0)
 
+  #     # end if 
 
-  #***************************************************************************************************
-  @property
-  def xi(self):
-    """
-    PURPOSE:      Get self.elemProps.intPoints
+  #   # end if 
 
-    """
-    #*************************************************************************************************
-
-    return sotife.create(&self.elem.xi,FLAGS=0)
-
-  #---------------------------------------------------------------------------------------------------
-
-  #***************************************************************************************************
-  @property
-  def eta(self):
-    """
-    PURPOSE:      Get self.elemProps.intPoints
-
-    """
-    #*************************************************************************************************
-
-    return sotife.create(&self.elem.eta,FLAGS=0)
-
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  @property
-  def zeta(self):
-    """
-    PURPOSE:      Get self.elemProps.intPoints
+  def set_coordinates(self, matso x, matso y, matso z):
+    
+    #set coordinates of the number
+    
+    self.x[:,:] = x
 
-    """
-    #*************************************************************************************************
+    
+    if self.ndim >= 1:
+    
+      self.y[:,:] = y
+    
+    # end if
+    
+    if self.ndim >= 2:
+      
+      self.z[:,:] = z
 
-    return sotife.create(&self.elem.zeta,FLAGS=0)
+    # end if 
+
 
   #---------------------------------------------------------------------------------------------------
 

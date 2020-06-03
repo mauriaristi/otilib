@@ -12,17 +12,17 @@ cdef class matso:
   cdef arrso_t arr
   cdef uint8_t FLAGS
   #---------------------------------------------------------------------------------------------------  
-  
-  cpdef matso extract_im(   self, hum_dir)
-  cpdef matso extract_deriv(self, hum_dir)
 
   @staticmethod
   cdef matso create(arrso_t* num, uint8_t FLAGS = *)
   
-  cpdef  truncate( self, object humdir)
-  
-  # cpdef  get_im( self, object humdir)
-  # cpdef  get_deriv( self, object humdir)
+  cpdef truncate(      self, object humdir)
+  cpdef extract_im(    self, object humdir)
+  cpdef extract_deriv( self, object humdir)
+  cpdef get_im(        self, object humdir)
+  cpdef get_deriv(     self, object humdir)
+  cpdef set(           self, object rhs   )
+  cpdef get_order_im(     self, ord_t order  )
   
   # @staticmethod
   # cpdef matso inv( matso arr, matso out = *)

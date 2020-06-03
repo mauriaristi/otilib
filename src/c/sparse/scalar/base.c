@@ -3,6 +3,86 @@
 
 
 
+// ****************************************************************************************************
+sotinum_t soti_get_order_im( ord_t order, sotinum_t* num, dhelpl_t dhl){
+
+    sotinum_t res = soti_createEmpty( 0, dhl);
+
+    // Set imaginary direction.
+    soti_get_order_im_to( order, num, &res, dhl);
+    
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_get_order_im_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+
+    uint8_t reallocate = 0;
+
+    // Copy real coefficient
+    if (order == 0){
+    
+        soti_set_r(0.0,res,dhl);
+        res->re = num->re;
+    
+    } else {
+
+        // Check if reallocation is necessary
+        if (res->order < order ){
+            reallocate = 0xFF; // True
+        } else {
+            if ( num->p_nnz[order-1] > res->p_size[order-1] ){
+                reallocate = 0xFF; // True
+            }
+        }
+
+        // TODO: Add check to wheather dest has not been initialized.
+        // TODO: Add case when the two elements have different orders.
+        // TODO: Add check if dest is a tmp function.
+
+        if( reallocate ){
+            // Reallocation IS required.
+            // Easiest way: Free current memory in dest and allocate new memory.
+            if (res->flag != 0){
+                soti_free(res);  
+                (*res) = soti_createEmpty_like( num, dhl);
+            } else {
+                // TODO: What happens if this is a tmp value?
+                printf("ERROR: Cant change memory of the given number (function soti_copy_to(...) ) \n");
+                exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
+            }
+        }
+
+        // Set as zero, as well as all non-zero counters
+        soti_set_r(0.0,res,dhl);
+
+        if (order <= num->order){
+            
+            // Copy only order.
+            memcpy(res->p_im[order-1], num->p_im[order-1],  num->p_nnz[order-1]*sizeof(coeff_t) );
+            memcpy(res->p_idx[order-1],num->p_idx[order-1], num->p_nnz[order-1]*sizeof(imdir_t) );
+
+            res->p_nnz[order-1] = num->p_nnz[order-1]; 
+
+        }
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 // Temporal number extractors.
 
@@ -750,6 +830,16 @@ void soti_get_deriv_to( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
 
 
 

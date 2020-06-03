@@ -855,6 +855,55 @@ cdef class matsofe:
 
   #---------------------------------------------------------------------------------------------------  
 
+
+  #***************************************************************************************************
+  cpdef set(self, object rhs):
+    """
+    PURPOSE:  Sets from another value.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef sotife  frhs
+    cdef sotinum orhs
+    cdef coeff_t rrhs
+
+    cdef matsofe Frhs
+    cdef matso   Orhs
+    cdef dmat    Rrhs
+
+    trhs = type(rhs)
+
+    if   trhs is sotinum:
+
+      orhs = rhs
+      fearrso_set_o( &orhs.num, &self.arr, dhl)
+
+    elif trhs is sotife:
+
+      frhs = rhs
+      fearrso_set_f( &frhs.num, &self.arr, dhl)      
+
+    # elif trhs is matso:
+
+    #   Orhs = rhs
+    #   fearrso_set_O( &Orhs.arr, &self.arr, dhl)   
+
+    # elif trhs is matsofe:
+
+    #   Frhs = rhs
+    #   fearrso_set_F( &Frhs.arr, &self.arr, dhl)   
+
+    else:
+
+      rrhs = rhs
+      fearrso_set_r( rrhs, &self.arr, dhl)      
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+
   #***************************************************************************************************
   def gauss_integrate(self, sotife w  ):
     """
@@ -975,7 +1024,22 @@ cdef class matsofe:
     return matsofe.create(&res)
 
   #---------------------------------------------------------------------------------------------------
+  
+  #***************************************************************************************************
+  cpdef  get_order_im(self, ord_t order):
+    """
+    PURPOSE: Get the corresponding derivative in the matso object, as OTI number.
+    """
+    #*************************************************************************************************
+    global dhl
+    
+    cdef fearrso_t res
+    
+    res = fearrso_get_order_im( order, &self.arr,  dhl)
 
+    return matsofe.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def get_active_bases(self):

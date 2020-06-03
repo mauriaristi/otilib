@@ -156,19 +156,6 @@ cdef class matso:
 
   #---------------------------------------------------------------------------------------------------
 
-  # #***************************************************************************************************
-  # @property
-  # def order(self):
-  #   """
-  #   PURPOSE:      Gets the truncation order the OTI array.
-
-  #   """
-  #   #*************************************************************************************************
-
-  #   return tmp
-
-  # #---------------------------------------------------------------------------------------------------
-
   #***************************************************************************************************
   @staticmethod
   cdef matso create(arrso_t* arr, uint8_t FLAGS = 1):
@@ -188,24 +175,6 @@ cdef class matso:
     return mat
 
   #--------------------------------------------------------------------------------------------------- 
-
-  # #*************************************************************************************************** 
-  # def get_real(self):
-
-  #   cdef np.ndarray[coeff_t, ndim=2] tmp
-  #   cdef uint64_t i,j,k
-
-  #   tmp = np.empty( self.shape , dtype = np.float64)
-
-  #   for i in range(self.arr.nrows):
-  #     for j in range(self.arr.ncols):
-  #       k = j+i*self.arr.ncols
-  #       tmp[i,j] = self.arr.p_data[k].re
-  #     # end for 
-  #   # end for 
-
-  #   return tmp
-  # #--------------------------------------------------------------------------------------------------- 
 
   #*************************************************************************************************** 
   def short_repr(self):
@@ -355,19 +324,131 @@ cdef class matso:
     
     global dhl
 
-    cdef sotinum_t res
+    cdef sotinum_t ores
+    cdef arrso_t   Ores
+    cdef object res = None
+    cdef int64_t starti, stopi, stepi
+    cdef int64_t startj, stopj, stepj
 
-    if (isinstance(val, int)):
-      
-      res = arrso_get_item_i( &self.arr, val, dhl)
+    tval = type(val)
     
-    else:
+    if tval == int:
       
-      res = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
+      # This is a slice
+      if val < self.arr.nrows:
+        
+        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
+        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+        Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+        res  = matso.create(&Ores)
+
+      else:
+
+        raise IndexError("Index out of bounds.")
+
+      # end if 
+
+    #   ores = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
+    #   res  = sotinum.create( &ores, FLAGS = 0 )
+
+    elif tval == slice: #slice of multiple items
+      
+      # print(val)
+      # This is a slice
+      starti, stopi, stepi = val.indices( self.arr.nrows )
+      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+      # print("i: ( {0}, {1}, {2})".format(starti, stopi, stepi) )
+      # print("j: ( {0}, {1}, {2})".format(startj, stopj, stepj) )
+
+      Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+      res  = matso.create(&Ores)
+    
+    elif tval == tuple:
+      
+      if len(val) == 2:
+
+        tval0 = type(val[0])
+        tval1 = type(val[1])
+
+        if   tval0 == int and tval1 == int:
+          
+          # print("Case 1")
+          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
+          
+            ores = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
+            res = sotinum.create(&ores, FLAGS = 0)        
+          
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif tval0 == int and tval1 == slice:
+
+          # print("Case 2")
+          if val[0] < self.arr.nrows:
+
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+            Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+            res  = matso.create(&Ores)  
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif tval0 == slice and tval1 == int:
+
+          # print("Case 3")
+          if val[1] < self.arr.ncols:
+
+            starti, stopi, stepi = val[0].indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+            res  = matso.create(&Ores)  
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+
+        elif tval0 == slice and tval1 == slice:
+
+          # print("Case 3")
+          starti, stopi, stepi = val[0].indices( self.arr.nrows )
+          startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+          Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+          res  = matso.create(&Ores) 
+
+        else:
+
+          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
+
+        # end if 
+
+      else:
+
+        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
+
+      # end if 
+
+    else:
+
+      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
 
     # end if
 
-    return sotinum.create(&res, FLAGS = 0)
+    return res
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -797,7 +878,7 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
-  def get_deriv(self, hum_dir ):
+  cpdef get_deriv(self, object hum_dir ):
     """
     PURPOSE: Get the corresponding derivative of the system.
     """
@@ -817,7 +898,7 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
-  def get_im(self, hum_dir):
+  cpdef get_im(self, object hum_dir):
     """
     PURPOSE: Get the corresponding imaginary direction in the matso object.
     """
@@ -853,7 +934,7 @@ cdef class matso:
 
 
   #***************************************************************************************************
-  cpdef matso extract_im(self, hum_dir):
+  cpdef extract_im(self, object hum_dir):
     """
     PURPOSE: Get the corresponding imaginary direction in the matso object.
     """
@@ -871,7 +952,7 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------
   
   #***************************************************************************************************
-  cpdef matso extract_deriv(self, hum_dir):
+  cpdef  extract_deriv(self, object hum_dir):
     """
     PURPOSE: Get the corresponding derivative in the matso object, as OTI number.
     """
@@ -887,6 +968,24 @@ cdef class matso:
 
   #---------------------------------------------------------------------------------------------------
   
+
+  #***************************************************************************************************
+  cpdef  get_order_im(self, ord_t order):
+    """
+    PURPOSE: Get the corresponding derivative in the matso object, as OTI number.
+    """
+    #*************************************************************************************************
+    global dhl
+    
+    cdef arrso_t res
+    
+    res = arrso_get_order_im( order, &self.arr,  dhl)
+
+    return matso.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+  
+
   #***************************************************************************************************
   cpdef  truncate( self, object humdir):
     """
@@ -905,6 +1004,40 @@ cdef class matso:
     res = arrso_truncate_im( indx, order, &self.arr, dhl) 
 
     return matso.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef set(self, object rhs):
+    """
+    PURPOSE:  Sets from another value.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    
+    cdef sotinum orhs
+    cdef coeff_t rrhs
+
+    cdef matso Orhs
+    trhs = type(rhs)
+
+    if   trhs is sotinum:
+
+      orhs = rhs
+      arrso_set_o( &orhs.num, &self.arr, dhl)
+
+    elif trhs is matso:
+
+      Orhs = rhs
+      arrso_set_O( &Orhs.arr, &self.arr, dhl)      
+
+    else:
+
+      rrhs = rhs
+      arrso_set_r( rrhs, &self.arr, dhl)
+
+    # end if 
 
   #---------------------------------------------------------------------------------------------------
 

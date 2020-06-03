@@ -3,6 +3,10 @@
 
 
 
+
+void      fearrso_get_order_im_to( ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+fearrso_t fearrso_get_order_im(    ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+
 fearrso_t fearrso_get_deriv(   imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_get_deriv_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
@@ -134,7 +138,8 @@ void fearrso_set_item_ijk_o( sotinum_t* elm, uint64_t i, uint64_t j, uint64_t k,
 @param[in] dhl Direction helper list.
 ******************************************************************************************************/
 void fearrso_set_all_o( sotinum_t* num, fearrso_t* arr, dhelpl_t dhl );
-void fearrso_set_all_r(    coeff_t num, fearrso_t* arr, dhelpl_t dhl );
+void fearrso_set_all_r(   coeff_t  num, fearrso_t* arr, dhelpl_t dhl );
+void fearrso_set_all_f(  fesoti_t* num, fearrso_t* arr, dhelpl_t dhl );
 
 void fearrso_set_r(    coeff_t src, fearrso_t* res, dhelpl_t dhl );
 void fearrso_set_o( sotinum_t* src, fearrso_t* res, dhelpl_t dhl );

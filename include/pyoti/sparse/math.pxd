@@ -1,29 +1,29 @@
 
-cpdef cos(   object val)
-cpdef arccos(object val)
+cpdef dot(      object lhs,  object rhs,    object out = *)
+cpdef inv(      object arr,                 object out = *)
+cpdef det(      object arr,                 object out = *)
+cpdef transpose(object arr,                 object out = *)
+cpdef norm(     object arr, coeff_t p = *,  object out = *)
 
-cpdef sin(   object val)
-cpdef arcsin(object val)
 
-cpdef tan(   object val)
-cpdef arctan(object val)
 
-cpdef sinh(   object val)
-cpdef arcsinh(object val)
-
-cpdef cosh(   object val)
-cpdef arccosh(object val)
-
-cpdef tanh(   object val)
-cpdef arctanh(object val)
-
-cpdef logb(  object val, double base)
-cpdef log10( object val)
-cpdef log(   object val)
-cpdef exp(   object val)
-
-cpdef power(object val, double exponent)
-
-cpdef sqrt( object val)
-cpdef cbrt( object val)
-
+cpdef cos(            object val,            object out = * )
+cpdef sin(            object val,            object out = * )
+cpdef tan(            object val,            object out = * )
+cpdef acos(           object val,            object out = * )
+cpdef asin(           object val,            object out = * )
+cpdef atan(           object val,            object out = * )
+cpdef sinh(           object val,            object out = * )
+cpdef cosh(           object val,            object out = * )
+cpdef tanh(           object val,            object out = * )
+cpdef acosh(          object val,            object out = * )
+cpdef asinh(          object val,            object out = * )
+cpdef atanh(          object val,            object out = * )
+cpdef exp(            object val,            object out = * )
+cpdef log(            object val,            object out = * )
+cpdef log10(          object val,            object out = * )
+cpdef logb(           object val, coeff_t b, object out = * )
+cpdef sqrt(           object val,            object out = * )
+cpdef cbrt(           object val,            object out = * )
+cpdef pow(            object val, coeff_t e, object out = * )
+cpdef gauss_integrate(object val, sotife w,  object out = * )

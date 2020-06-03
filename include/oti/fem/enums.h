@@ -88,11 +88,11 @@ enum operEnum {
   // Derivative types.
   derN          =  601,   ///<      N
   derNa         =  602,   ///<  da( N )
-  derNb         =  604,   ///<  db( N )
-  derNc         =  607,   ///<  dc( N )
-  derNaa        =  603,   ///< daa( N )
-  derNab        =  605,   ///< dab( N )
-  derNbb        =  606,   ///< dbb( N )
+  derNb         =  603,   ///<  db( N )
+  derNc         =  604,   ///<  dc( N )
+  derNaa        =  605,   ///< daa( N )
+  derNab        =  606,   ///< dab( N )
+  derNbb        =  607,   ///< dbb( N )
   derNac        =  608,   ///< dac( N )
   derNbc        =  609,   ///< dbc( N )
   derNcc        =  610,   ///< dcc( N )

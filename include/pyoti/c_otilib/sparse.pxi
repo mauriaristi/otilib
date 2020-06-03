@@ -213,7 +213,19 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/array/base.h
-
+  void    arrso_get_order_im_to( ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+  arrso_t arrso_get_order_im(    ord_t order, arrso_t* arr,               dhelpl_t dhl);
+  arrso_t arrso_get_slice( arrso_t* arr, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj,
+                          dhelpl_t dhl);
+  void arrso_get_slice_to( arrso_t* arr, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj,
+                           arrso_t* res, dhelpl_t dhl);
+  void arrso_set_r(   coeff_t  num,   arrso_t* arr, dhelpl_t dhl);
+  void arrso_set_o( sotinum_t* num,   arrso_t* arr, dhelpl_t dhl);
+  void arrso_set_O(   arrso_t* arrin, arrso_t* arr, dhelpl_t dhl);
   darr_t  arrso_get_im(   imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
   arrso_t arrso_get_im_o( imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
   void    arrso_get_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
@@ -415,6 +427,8 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/array/gauss/base.h
+  void      fearrso_get_order_im_to( ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_get_order_im(    ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
   fearrso_t fearrso_get_deriv(   imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
   void      fearrso_get_deriv_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
   fearrso_t fearrso_get_im(      imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
@@ -582,6 +596,8 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/scalar/base.h
+  sotinum_t soti_get_order_im(    ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+  void      soti_get_order_im_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_truncate_im(   imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
   void      soti_truncate_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_extract_deriv(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
@@ -711,6 +727,8 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/scalar/gauss/base.h
+  void     fesoti_get_order_im_to( ord_t order, fesoti_t* arr, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_get_order_im(    ord_t order, fesoti_t* arr,                dhelpl_t dhl);
   fesoti_t fesoti_get_deriv(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
   void     fesoti_get_deriv_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
   void fesoti_set_im_r(   coeff_t  val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);

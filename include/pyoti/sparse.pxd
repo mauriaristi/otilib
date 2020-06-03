@@ -13,3 +13,6 @@ include "sparse/gauss.pxd"
 
 # Include Utility functions declaration.
 include "sparse/utils.pxd"
+
+# Include Math functions.
+include "sparse/math.pxd"

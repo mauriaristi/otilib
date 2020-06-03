@@ -827,7 +827,7 @@ cdef class sotinum:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cpdef coeff_t get_deriv( self, object humdir):
+  cpdef get_deriv( self, object humdir):
     """
     PURPOSE:      to retrieve the derivative contained in the oti number.
 
@@ -844,7 +844,7 @@ cdef class sotinum:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
-  cpdef coeff_t get_im( self, object humdir):
+  cpdef get_im( self, object humdir):
     """
     PURPOSE:      to retrieve the coefficient in the oti direction.
 
@@ -861,7 +861,7 @@ cdef class sotinum:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cpdef sotinum extract_im( self, object humdir):
+  cpdef extract_im( self, object humdir):
     """
     PURPOSE:      to retrieve the coefficient in the oti direction.
 
@@ -882,7 +882,7 @@ cdef class sotinum:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cpdef sotinum extract_deriv( self, object humdir):
+  cpdef extract_deriv( self, object humdir):
     """
     PURPOSE:      Get the derivative as an OTI number.
 
@@ -897,6 +897,23 @@ cdef class sotinum:
     indx, order = imdir(humdir)
 
     res = soti_extract_deriv(indx,order, &self.num, dhl)
+
+    return sotinum.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef get_order_im( self, ord_t order):
+    """
+    PURPOSE:      Get the derivative as an OTI number.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef sotinum_t res
+    
+    res = soti_get_order_im( order, &self.num, dhl)
 
     return sotinum.create(&res)
 

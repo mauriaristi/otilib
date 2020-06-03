@@ -2,6 +2,17 @@
 #define OTI_SPARSE_SCALAR_BASE_H
 
 
+/**************************************************************************************************//**
+@brief Truncate everything but the coefficeints at a given order.
+
+@param[in]  ord   Order of imaginary direction to extract.
+@param[in]  num   OTI number to truncate direction
+@param[in]  res   Addres of the resulting OTI number that will hold result.
+@param[in]  dhl   Direction helper list.
+******************************************************************************************************/
+sotinum_t soti_get_order_im(    ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+void      soti_get_order_im_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Truncate an imaginary direction.

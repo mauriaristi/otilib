@@ -3,6 +3,10 @@
 
 
 
+void     fesoti_get_order_im_to( ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+fesoti_t fesoti_get_order_im(    ord_t order, fesoti_t* num,                dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 /**************************************************************************************************//**
 @brief Get a specific imaginary direction from the number.
 

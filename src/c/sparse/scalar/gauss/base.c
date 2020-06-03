@@ -4,6 +4,12 @@
 // } fesoti_t;
 
 
+
+
+
+
+
+
 // ****************************************************************************************************
 ord_t fesoti_get_order( fesoti_t* num ){
     
@@ -25,7 +31,35 @@ ord_t fesoti_get_order( fesoti_t* num ){
 
 
 
+// ****************************************************************************************************
+void fesoti_get_order_im_to( ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl){
+    
+    uint64_t k;
 
+    fesoti_dimCheck(num,res);
+
+    for (k = 0; k<num->nip; k++ ){
+        
+        soti_get_order_im_to( order, &num->p_data[k], &res->p_data[k], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+fesoti_t fesoti_get_order_im( ord_t order, fesoti_t* num, dhelpl_t dhl){
+    
+    fesoti_t res;
+
+    res = fesoti_zeros_bases( num->nip, 0, 0, dhl);
+
+    fesoti_get_order_im_to( order, num, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

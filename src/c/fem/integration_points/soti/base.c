@@ -883,7 +883,7 @@ uint64_t fem_addLineIntPts_soti(uint8_t nperm, uint64_t start, double a,  double
     } else if (nperm == 2){
 
         // Point 1
-        fesoti_set_item_k_r( a, i, xi     , dhl);
+        fesoti_set_item_k_r(-a, i, xi     , dhl);
         fesoti_set_item_k_r( w, i, weights, dhl);
 
         // Point 2

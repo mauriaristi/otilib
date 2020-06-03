@@ -3,7 +3,17 @@
 
 
 
+void    arrso_get_order_im_to( ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+arrso_t arrso_get_order_im(    ord_t order, arrso_t* arr,               dhelpl_t dhl);
 
+arrso_t arrso_get_slice( arrso_t* arr, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                        dhelpl_t dhl);
+void arrso_get_slice_to( arrso_t* arr, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                         arrso_t* res, dhelpl_t dhl);
 
 arrso_t arrso_truncate_im(    imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
 void    arrso_truncate_im_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
@@ -49,6 +59,10 @@ void arrso_set_item_i_r( coeff_t num, uint64_t i, arrso_t* arr, dhelpl_t dhl);
 void arrso_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, arrso_t* arr, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
+void arrso_set_r(   coeff_t  num,   arrso_t* arr, dhelpl_t dhl);
+void arrso_set_o( sotinum_t* num,   arrso_t* arr, dhelpl_t dhl);
+void arrso_set_O(   arrso_t* arrin, arrso_t* arr, dhelpl_t dhl);
 
 /**************************************************************************************************//**
 @brief Setter functions. These functions sets the specified elements of an array given an OTI number.

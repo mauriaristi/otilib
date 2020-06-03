@@ -13,6 +13,9 @@ from pyoti.dense cimport omat
 # Import sparse dependencies
 from pyoti.sparse  import e as se
 
+from pyoti.sparse  import sotife, matsofe, sotinum, matso
+from pyoti.sparse cimport sotife, matsofe, sotinum, matso
+
 
 # from pyoti.otimat  cimport otimat
 # from pyoti.ndarray cimport ndarray

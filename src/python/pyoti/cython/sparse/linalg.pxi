@@ -828,7 +828,15 @@ cpdef solve(object K_in, matso b_in, matso out = None):
 
   elif tK is csr_matso:
 
-    pass
+    if res_flag:
+
+      solve_sparse( K_in, b_in, out = out)
+
+    else:
+      
+      res = solve_sparse(K_in, b_in)
+
+    # end if
 
   else:
 
@@ -854,7 +862,7 @@ cpdef solve(object K_in, matso b_in, matso out = None):
 #*****************************************************************************************************
 cdef solve_dense(matso K_in, matso b_in, matso out = None):
   """
-  PURPOSE:   Solve OTI linear system of equations.
+  PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
   #***************************************************************************************************
   global dhl
@@ -879,7 +887,7 @@ cdef solve_dense(matso K_in, matso b_in, matso out = None):
   lu = lu_factor(K_in.real)
   rhs = b_in.real
   # Solve the real system of equations, using LU solver:
-  lu_solve(lu,rhs,overwrite_b=True)
+  lu_solve(lu,rhs, overwrite_b=True)
 
   # Solve the real coefficient
   for i in range(Ores.nrows):      
@@ -906,8 +914,9 @@ cdef solve_dense(matso K_in, matso b_in, matso out = None):
     
     # Convert tmp to array (for specific order)
     rhs = get_order_im_array(ordi,tmp)
-
-    lu_solve( lu, rhs, overwrite_b = True )
+    # print(rhs)
+    rhs = lu_solve( lu, rhs )
+    # print(rhs)
     set_order_im_from_array( ordi, rhs, Ores)
 
   # end for 
@@ -921,6 +930,76 @@ cdef solve_dense(matso K_in, matso b_in, matso out = None):
 #-----------------------------------------------------------------------------------------------------
 
 
+
+#*****************************************************************************************************
+cdef solve_sparse(csr_matso K_in, matso b_in, matso out = None):
+  """
+  PURPOSE:   Solve OTI linear system of equations for a dense K_in.
+  """
+  #***************************************************************************************************
+  global dhl
+
+  from scipy.sparse.linalg import splu
+
+  cdef matso      O, Ores, Otmp
+  cdef uint64_t i,j,k,l
+  cdef ord_t ordi, ord_lhs, ord_rhs, Oord
+  cdef uint8_t res_flag = 1
+
+  if out is None:
+    res_flag = 0
+  # end if      
+  
+  if res_flag:
+    Ores = out
+  else:
+    Ores = zeros(b_in.shape)
+  # end if
+
+  lu = splu(K_in.real.tocsc())
+  rhs = b_in.real
+  # Solve the real system of equations, using LU solver:
+  rhs = lu.solve(rhs)
+
+  # Solve the real coefficient
+  for i in range(Ores.nrows):      
+    for j in range(Ores.ncols):
+
+      arrso_set_item_ij_r( rhs[i,j], i, j, &Ores.arr, dhl)
+
+    # end for
+  # end for
+  
+  Oord = max( K_in.order, b_in.order)
+
+  for ordi in range( 1, Oord + 1 ):
+        
+    tmp = b_in.get_order_im( ordi )
+
+    for ord_rhs in range( ordi ):
+
+      ord_lhs = ordi - ord_rhs
+
+      tmp -= dot( K_in.get_order_im( ord_lhs ), Ores.get_order_im( ord_rhs ) )
+
+    # end for 
+    
+    # Convert tmp to array (for specific order)
+    rhs = get_order_im_array( ordi, tmp )
+    # print(rhs)
+    rhs = lu.solve( rhs )
+    # print(rhs)
+    set_order_im_from_array( ordi, rhs, Ores)
+
+  # end for 
+
+  if res_flag == 0:
+
+    return Ores
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
 
 
 

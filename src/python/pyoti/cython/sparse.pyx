@@ -28,7 +28,7 @@ include "sparse/scalar/gauss.pxi"
 
 
 
-#     ARRAY    .
+#           ARRAY
 # Append base class.
 include "sparse/array/base.pxi"
 
@@ -45,6 +45,34 @@ include "sparse/array/gauss.pxi"
 
 # # Append base OTI class. - > Base to create OTI number with other characteristics.
 # include "sparse/generic.pxi"
+
+
+
+
+
+
+
+
+
+
+
+
+
+#     SPARSE ARRAY
+# Append base class.
+include "sparse/sprarray/lil/base.pxi"
+include "sparse/sprarray/csr/base.pxi"
+include "sparse/sprarray/csc/base.pxi"
+
+
+
+
+
+
+
+
+
+
 
 
 # Common functions.

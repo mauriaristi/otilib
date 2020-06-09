@@ -20,3 +20,6 @@ cpdef extract_im( object humdir, object val, object out = *)
 
 cpdef get_deriv(     object humdir, object val, object out = *)
 cpdef extract_deriv( object humdir, object val, object out = *)
+
+
+cdef uint64_t binSearch_list(list a, uint64_t x)

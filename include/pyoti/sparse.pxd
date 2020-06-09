@@ -16,3 +16,7 @@ include "sparse/utils.pxd"
 
 # Include Math functions.
 include "sparse/math.pxd"
+
+
+# Include sparse arrays functions.
+include "sparse/sparse_array.pxd"

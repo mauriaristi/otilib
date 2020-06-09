@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::     CLASS  TRUSS      :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-class truss:
+cdef class truss:
   """
   CLASS TRUSS:  Class FEM truss from the module FEM of the pyoti library.
 
@@ -29,7 +29,7 @@ class truss:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def __init__(self, nodes, elements, displ, forces, E, A):
+  def __cinit__(self, nodes, elements, displ, forces, E, A):
     """
     DESCRIPTION:
 
@@ -199,8 +199,8 @@ class truss:
     
     # Compute the angle of inclination of the element.
     # theta = np.arctan2(delta_y,delta_x) # (y,x)
-    c_th = delta_x / L_e # np.cos(theta)
-    s_th = delta_y / L_e # np.sin(theta)
+    c_th = delta_x / L_e # cos(theta)
+    s_th = delta_y / L_e # sin(theta)
     
     cc = c_th * c_th * ( A_i * E_i / L_e )
     ss = s_th * s_th * ( A_i * E_i / L_e )

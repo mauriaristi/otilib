@@ -14,6 +14,9 @@ cpdef dot(object lhs, object rhs, object out = None):
   cdef darr_t    cRres
   cdef matsofe    Flhs, Frhs, Fres
   cdef fearrso_t cFres
+
+  cdef csr_matso  Slhs
+
   cdef uint8_t res_flag = 1
   cdef object res = None
 
@@ -160,6 +163,30 @@ cpdef dot(object lhs, object rhs, object out = None):
       
     # end if    
 
+  elif tlhs is csr_matso:
+
+    Slhs = lhs
+
+    if   trhs is matso: # SO
+
+      if res_flag:
+
+        Ores = out
+        csrmatso_matmul_SO_to( lhs, rhs, Ores)
+
+      else:
+
+        res = csrmatso_matmul_SO( lhs, rhs)
+
+      # end if 
+
+    else:
+
+      raise TypeError("Unsupported types at dot operation.")
+      
+    # end if  
+
+
   elif tlhs is dmat:
     
     Rlhs = lhs
@@ -239,132 +266,6 @@ cpdef dot(object lhs, object rhs, object out = None):
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-#*****************************************************************************************************
-cpdef inv(object arr, object out = None):
-  """
-  PURPOSE:   Matrix inverse. Only supported up to 3x3 matrices.
-  """
-  #***************************************************************************************************
-
-  cdef matso      O, Ores
-  cdef arrso_t   cOres
-  cdef dmat       R, Rres
-  cdef darr_t    cRres
-  cdef matsofe    F, Fres
-  cdef fearrso_t cFres
-
-  cdef uint8_t res_flag = 1
-
-  cdef object res
-
-  tarr = type(arr)
-
-  if out is None:
-
-    res_flag = 0
-
-  # end if 
-
-  # supported types:
-  #    -  matso
-  #    -  matsofe
-  #    -  darr
-
-  if   tarr is matsofe:
-    
-    F = arr
-
-
-    if res_flag:
-
-      Fres = out
-
-      fearrso_invert_to( &F.arr, &Fres.arr, dhl)
-
-    else:
-
-      cFres = fearrso_invert( &F.arr, dhl)
-
-      res = matsofe.create(&cFres)
-
-    # end if 
-
-  elif tarr is matso:
-
-    O = arr
-
-    if res_flag:
-
-      Ores = out
-
-      arrso_invert_to( &O.arr, &Ores.arr, dhl)
-
-    else:
-
-      cOres = arrso_invert( &O.arr,  dhl)
-
-      res = matso.create(&cOres)
-
-    # end if    
-
-  elif tarr is dmat:
-    
-    R = arr
-
-    if res_flag:
-
-      Rres = out
-
-      darr_invert_to( &R.arr, &Rres.arr)
-
-    else:
-
-      cRres = darr_invert( &R.arr)
-
-      res = dmat.create(&cRres)
-
-    # end if 
-
-  else:
-
-    raise TypeError("Unsupported types at inverse operation.")
-    
-    # return NotImplemented
-
-  # end if 
-
-  if res_flag == 0:
-
-    return res
-
-  # end if 
-
-#-----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #*****************************************************************************************************
 cpdef transpose(object arr, object out = None):
@@ -467,19 +368,6 @@ cpdef transpose(object arr, object out = None):
 
 #-----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 #*****************************************************************************************************
 cpdef det(object arr, object out = None):
   """
@@ -564,9 +452,6 @@ cpdef det(object arr, object out = None):
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
-
-
-
 
 #*****************************************************************************************************
 cpdef norm(object arr, coeff_t p = 2.0, object out = None):
@@ -675,6 +560,117 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
 
 
 
+#*****************************************************************************************************
+cpdef inv(object arr, object out = None):
+  """
+  PURPOSE:   Matrix inverse. Only supported up to 3x3 matrices.
+  """
+  #***************************************************************************************************
+
+  cdef matso      O, Ores
+  cdef arrso_t   cOres
+  cdef dmat       R, Rres
+  cdef darr_t    cRres
+  cdef matsofe    F, Fres
+  cdef fearrso_t cFres
+
+  cdef uint8_t res_flag = 1
+
+  cdef object res
+
+  tarr = type(arr)
+
+  if out is None:
+
+    res_flag = 0
+
+  # end if 
+
+  # supported types:
+  #    -  matso
+  #    -  matsofe
+  #    -  csr_matso
+  #    -  darr
+
+  if   tarr is matsofe:
+    
+    F = arr
+
+
+    if res_flag:
+
+      Fres = out
+
+      fearrso_invert_to( &F.arr, &Fres.arr, dhl)
+
+    else:
+
+      cFres = fearrso_invert( &F.arr, dhl)
+
+      res = matsofe.create(&cFres)
+
+    # end if 
+
+  elif tarr is matso:
+
+    O = arr
+
+    if res_flag:
+
+      Ores = out
+
+      arrso_invert_to( &O.arr, &Ores.arr, dhl)
+
+    else:
+
+      cOres = arrso_invert( &O.arr,  dhl)
+
+      res = matso.create(&cOres)
+
+    # end if    
+
+  elif tarr is dmat:
+    
+    R = arr
+
+    if res_flag:
+
+      Rres = out
+
+      darr_invert_to( &R.arr, &Rres.arr)
+
+    else:
+
+      cRres = darr_invert( &R.arr)
+
+      res = dmat.create(&cRres)
+
+    # end if 
+
+  else:
+
+    raise TypeError("Unsupported types at inverse operation.")
+    
+    # return NotImplemented
+
+  # end if 
+
+  if res_flag == 0:
+
+    return res
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 
 
@@ -692,6 +688,7 @@ cpdef inv_block(object arr, object out = None):
 
   cdef matso      O, Ores, tmp
   cdef arrso_t   cOres
+  cdef csr_matso  S, Sres
   # cdef dmat       R, Rres
   # cdef darr_t    cRres
   # cdef matsofe    F, Fres
@@ -714,6 +711,7 @@ cpdef inv_block(object arr, object out = None):
 
   # supported types:
   #    -  matso
+  #    -  csr_matso
 
   if   tarr is matso:
     
@@ -778,3 +776,272 @@ cpdef inv_block(object arr, object out = None):
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+#*****************************************************************************************************
+cpdef solve(object K_in, matso b_in, matso out = None):
+  """
+  PURPOSE:   Solve OTI linear system of equations.
+  """
+  #***************************************************************************************************
+  global dhl
+
+  from scipy.linalg import lu_factor, lu_solve
+  import scipy.sparse.linalg as spla
+
+  cdef matso      O, Ores, Otmp
+  cdef csr_matso  S, Sres, Stmp  
+  cdef uint64_t i,j,k,l
+  cdef ord_t ordi, ord_lhs, ord_rhs, Oord
+  cdef uint8_t res_flag = 1
+  cdef object res
+
+  tK = type(K_in)
+
+  if out is None:
+
+    res_flag = 0
+
+  # end if 
+
+  # supported types:
+  #    -  matso
+  #    -  csr_matso
+
+  if   tK is matso:
+    
+    if res_flag:
+
+      solve_dense( K_in, b_in, out = out)
+
+    else:
+      
+      res = solve_dense(K_in, b_in)
+
+    # end if
+
+  elif tK is csr_matso:
+
+    pass
+
+  else:
+
+    raise TypeError("Unsupported types at Block-solver inverse operation.")
+    
+    # return NotImplemented
+
+  # end if 
+
+  if res_flag == 0:
+
+    return res
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+#*****************************************************************************************************
+cdef solve_dense(matso K_in, matso b_in, matso out = None):
+  """
+  PURPOSE:   Solve OTI linear system of equations.
+  """
+  #***************************************************************************************************
+  global dhl
+
+  from scipy.linalg import lu_factor, lu_solve
+
+  cdef matso      O, Ores, Otmp
+  cdef uint64_t i,j,k,l
+  cdef ord_t ordi, ord_lhs, ord_rhs, Oord
+  cdef uint8_t res_flag = 1
+
+  if out is None:
+    res_flag = 0
+  # end if      
+  
+  if res_flag:
+    Ores = out
+  else:
+    Ores = zeros(b_in.shape)
+  # end if
+
+  lu = lu_factor(K_in.real)
+  rhs = b_in.real
+  # Solve the real system of equations, using LU solver:
+  lu_solve(lu,rhs,overwrite_b=True)
+
+  # Solve the real coefficient
+  for i in range(Ores.nrows):      
+    for j in range(Ores.ncols):
+
+      arrso_set_item_ij_r( rhs[i,j], i, j, &Ores.arr, dhl)
+
+    # end for
+  # end for
+  
+  Oord = max( K_in.order, b_in.order)
+
+  for ordi in range( 1, Oord + 1 ):
+        
+    tmp = b_in.get_order_im(ordi)
+
+    for ord_rhs in range(ordi):
+
+      ord_lhs = ordi - ord_rhs
+
+      tmp -= dot( K_in.get_order_im(ord_lhs), Ores.get_order_im(ord_rhs))
+
+    # end for 
+    
+    # Convert tmp to array (for specific order)
+    rhs = get_order_im_array(ordi,tmp)
+
+    lu_solve( lu, rhs, overwrite_b = True )
+    set_order_im_from_array( ordi, rhs, Ores)
+
+  # end for 
+
+  if res_flag == 0:
+
+    return Ores
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+#*****************************************************************************************************
+cpdef get_order_im_array(ord_t ordi, matso tmp):
+  """
+  PURPOSE:   Get a specific order from .
+  """
+  #***************************************************************************************************
+  global dhl
+
+  cdef np.ndarray res
+  cdef sotinum_t otmp
+  cdef bases_t* bases_list
+  cdef ndir_t nnz
+  cdef imdir_t maxidx = 0
+  cdef uint64_t i,j,k
+
+  for i in range(tmp.size):    
+    otmp = tmp.arr.p_data[i]
+
+    if otmp.order >= ordi:
+      nnz = otmp.p_nnz[ordi-1]
+      
+      if nnz > 0:
+        maxidx = max( maxidx, otmp.p_idx[ordi-1][nnz-1])
+      # end if
+
+    # end if 
+  # end for
+
+  # get maximum basis for this index:
+  bases_list = dhelp_get_imdir( maxidx, ordi, dhl)
+
+  maxidx = dhelp_ndirOrder( bases_list[ordi-1], ordi )
+
+  res = np.zeros((tmp.nrows,tmp.ncols*maxidx), dtype = np.float64)
+
+  for i in range(tmp.nrows):
+    for j in range(tmp.ncols):
+
+      otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
+
+      if otmp.order >= ordi:
+        
+        nnz = otmp.p_nnz[ordi-1]
+        
+        for k in range( nnz ):          
+          res[ i, j + tmp.ncols * otmp.p_idx[ordi-1][k] ] = otmp.p_im[ordi-1][k]
+        # end for
+
+      # end if 
+    # end for 
+  # end for
+
+  return res
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+#*****************************************************************************************************
+cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
+  """
+  PURPOSE:   Set a specific order from an array.
+  """
+  #***************************************************************************************************
+  global dhl
+
+  cdef sotinum_t otmp
+  cdef ndir_t nnz, nnz_set
+  cdef coeff_t val
+  cdef uint64_t i,j,k
+
+  nnz = arr.shape[1]/tmp.ncols
+
+  otmp = soti_get_tmp(5, ordi, dhl)
+
+  for i in range(tmp.nrows):
+    
+    for j in range(tmp.ncols):
+
+      soti_set_r(0.0, &otmp, dhl)
+
+      nnz_set = 0
+        
+      for k in range( nnz ):          
+        
+        val = arr[ i, j + tmp.ncols * k ] 
+        
+        if val != 0.0:
+
+          otmp.p_idx[ordi-1][nnz_set]= k
+          otmp.p_im[ordi-1][nnz_set] = val
+          nnz_set += 1
+          otmp.p_nnz[ordi-1] += 1
+
+        # end if
+
+      # end for
+
+      tmp[i,j] += sotinum.create( &otmp, FLAGS = 0)
+
+    # end for 
+  # end for
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+

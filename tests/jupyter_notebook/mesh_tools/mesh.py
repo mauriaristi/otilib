@@ -136,6 +136,7 @@ class mesh:
 
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
   def get_all_elements_pd(self):
 
     import pandas as pd
@@ -177,6 +178,7 @@ class mesh:
 
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
   def get_all_elements(self):
 
 
@@ -196,6 +198,7 @@ class mesh:
 
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
   def get_number_elements(self, dim = -1):
 
     nels = 0
@@ -215,7 +218,9 @@ class mesh:
   #---------------------------------------------------------------------------------------------------
 
   def to_vtk(self, dims = None, pd = None, pd_names= None):
-
+    """
+    PORPUSE: Obtain an equivalent VTK object that can be used in the 
+    """
     import vtk
     import vtk.util.numpy_support as np_support
 
@@ -251,7 +256,7 @@ class mesh:
 
     # First loop through all dimensions.
     for dim in loop_vals:
-      
+      print(dim)
       # Get the equivalent element type
       for etypei in range(self.elements[dim]['types'].size):
         
@@ -279,7 +284,7 @@ class mesh:
     # end for 
 
 
-    if type(pd) == list:
+    if type(pd) == list :
 
       for i in range(len(pd)):
 
@@ -312,6 +317,8 @@ class mesh:
         # end if
 
       # end for 
+
+    # end if 
 
     return vtk_grid
   #---------------------------------------------------------------------------------------------------

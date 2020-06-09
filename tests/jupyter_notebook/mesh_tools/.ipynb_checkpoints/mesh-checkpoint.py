@@ -3,6 +3,15 @@
 
 import numpy as np
 
+
+
+
+
+
+
+
+
+
   
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::     CLASS  MESH       :::::::::::::::::::::::::::::::::::::::::
@@ -35,7 +44,7 @@ class mesh:
     self.groups      = []
     self.group_names = {}
 
-    
+    self.ndim = -1
     self.nodes     = None
 
     self.fespaces       = []
@@ -91,27 +100,42 @@ class mesh:
     # Reshape the nodal coordinates to (nNodes x 3) matrix:
     nodalCoord = nodalCoord.reshape((nNodes,3))
 
+    Th.ndim = gmodel.getDimension()
+
     # get the elements for each dimension
-    for dim in range(4):
+    for dim in range(Th.ndim+1):
 
       elTypes , elTags , nodeIdx = get_elements_from_gmsh( gmesh, dim=dim, tag=-1 )
 
       # Set the elements to the Mesh object.
       Th.elements[dim] = {}
 
-      Th.elements[dim]['types'] = elTypes.copy()
-      Th.elements[dim]['tags']  = elTags.copy()
-      Th.elements[dim]['nodes'] = nodeIdx.copy()
+      Th.elements[dim]['types'] = elTypes
+      Th.elements[dim]['tags']  = elTags
+      Th.elements[dim]['nodes'] = nodeIdx
+      Th.elements[dim]['groups'] = []
 
     # end for 
 
-    Th.nodes = nodalCoord.copy()
+    # Get all phisical groups
+    physGroups = gmodel.getPhysicalGroups()
+    for pg in physGroups:
+      name = gmodel.getPhysicalName(*pg)
+      Th.groups.append([pg[0],pg[1]])
+      Th.group_names[name] = pg[1]
+      entities = gmodel.getEntitiesForPhysicalGroup(*pg)
+      for entity in entities:
+        elTypes, elTags, nodeIdx = gmesh.getElements(pg[0],entity)
+      # end for 
+
+    # end for 
+
+    Th.nodes = nodalCoord 
 
     return Th
 
   #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
   def get_all_elements_pd(self):
 
     import pandas as pd
@@ -129,7 +153,7 @@ class mesh:
     ncols = 4 #
     data = np.empty((nels,ncols),dtype=object)
     k = 0
-    for dim in range(4):
+    for dim in range(self.ndim+1):
 
       for j in range(self.elements[dim]['types'].size):
 
@@ -148,40 +172,35 @@ class mesh:
       index=data[:,2],
       columns = ["Dim","Type","Tag","Nodes"])
 
+
+
+
   #---------------------------------------------------------------------------------------------------
 
-  # #***************************************************************************************************
-  # def get_all_elements(self):
+  def get_all_elements(self):
 
 
-  #   # Get first the number of elements:
-  #   nels = self.get_number_elements()
+    # Get first the number of elements:
+    nels = self.get_number_elements()
 
-  #   # Set the number of columns:
-  #   # Col 1: Element Dimension 
-  #   # Col 2: Element type
-  #   # Col 3: Element tag
-  #   # Col 4: Element nodes
-  #   ncols = 5 #
-  #   data = np.emtpy((nels,ncols),dtype=object)
+    # Set the number of columns:
+    # Col 1: Element Dimension 
+    # Col 2: Element type
+    # Col 3: Element tag
+    # Col 4: Element nodes
+    ncols = 5 #
+    data = np.emtpy((nels,ncols),dtype=object)
 
 
-  # #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  def get_number_elements(self, dims = -1):
+
+  #---------------------------------------------------------------------------------------------------
+
+  def get_number_elements(self, dim = -1):
 
     nels = 0
 
-    if dims == -1
-      dims = range(4)
-    else:
-      if isinstance(dims, int):
-        dims = [dims]
-      # end if 
-    # end if 
-
-    for dim in dims:
+    for dim in range(self.ndim+1):
       
       for j in range(self.elements[dim]['types'].size):
 
@@ -195,17 +214,14 @@ class mesh:
 
   #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
   def to_vtk(self, dims = None, pd = None, pd_names= None):
 
     import vtk
     import vtk.util.numpy_support as np_support
 
+    # First copy the nodal points to the VTK format.
     vtk_pts = vtk.vtkPoints()
-    
     vtk_pts.SetData(np_support.numpy_to_vtk(self.nodes,deep=1))
-
-    # print("here3")
 
     # Create the unstructured grid for all data.
     vtk_grid = vtk.vtkUnstructuredGrid()
@@ -262,7 +278,6 @@ class mesh:
     
     # end for 
 
-    # print("here2")
 
     if type(pd) == list:
 
@@ -300,18 +315,14 @@ class mesh:
 
     return vtk_grid
   #---------------------------------------------------------------------------------------------------
-  def test(self):
 
-    import pyvista as pv
-
-    pv.Sphere().plot()
 
   #***************************************************************************************************
-  def to_pv(self, **kwargs):    
+  def to_pv():    
 
     import pyvista as pv
 
-    return pv.UnstructuredGrid( self.to_vtk(**kwargs) )
+    return pv.UnstructuredGrid(self.to_vtk())
 
   #---------------------------------------------------------------------------------------------------
   
@@ -1019,7 +1030,6 @@ class mesh:
 #           UTILITY FUNCTIONS:
 
 #
-#*****************************************************************************************************
 def get_elements_from_gmsh( mesh, dim=-1, tag=-1 ):
   """
   This function allows to get the elements from a gmsh mesh and reshape the 
@@ -1039,10 +1049,8 @@ def get_elements_from_gmsh( mesh, dim=-1, tag=-1 ):
   
   return elTypes,elTags,nodes
 
-#-----------------------------------------------------------------------------------------------------
+#
 
-
-#*****************************************************************************************************
 def map_indices(idxSrc,idxMap):
   
   srcShape = idxSrc.shape
@@ -1056,7 +1064,6 @@ def map_indices(idxSrc,idxMap):
 
   return reshaped.reshape(idxSrc.shape)
 
-#-----------------------------------------------------------------------------------------------------
 
 
 
@@ -1082,72 +1089,6 @@ element_type_map_vtk[3]  = 9
 element_type_map_vtk[8]  = 21
 element_type_map_vtk[9]  = 22
 element_type_map_vtk[16] = 23
-
-
-
-
-
-
-
-
-#*****************************************************************************************************
-def square(width, hight, he = 1.0):
-
-  import gmsh
-
-
-  gmsh.initialize()
-  # gmsh.fltk.initialize()
-
-  # Lets create a simple square element:
-  model = gmsh.model
-  geo   = model.geo
-  option= gmsh.option
-
-
-  P1 = geo.addPoint(     -width/2.0,    hight/2.0, 0, he, 1)
-  P2 = geo.addPoint(     -width/2.0,   -hight/2.0, 0, he, 2)
-  P3 = geo.addPoint(width-width/2.0,    hight/2.0, 0, he, 3)
-  P4 = geo.addPoint(width-width/2.0,   -hight/2.0, 0, he, 4)
-
-  L1 = geo.addLine(P1,P2) # Left
-  L2 = geo.addLine(P2,P4) # bottom
-  L3 = geo.addLine(P4,P3) # right
-  L4 = geo.addLine(P3,P1) # up
-
-  loop1 = geo.addCurveLoop([L1,L2,L3,L4])
-
-  surface = geo.addPlaneSurface([loop1])
-
-  model.addPhysicalGroup(0, [P2], 200 )
-  model.addPhysicalGroup(1, [L1], 201 )
-  model.addPhysicalGroup(1, [L2], 202 )
-  model.addPhysicalGroup(1, [L3], 203 )
-  model.addPhysicalGroup(1, [L4], 204 )
-  model.addPhysicalGroup(2, [surface], 301 )
-
-  model.setPhysicalName(0,200,"Pressure")
-  model.setPhysicalName(1,201,"left")
-  model.setPhysicalName(1,202,"bottom")
-  model.setPhysicalName(1,203,"right")
-  model.setPhysicalName(1,204,"up")
-  model.setPhysicalName(2,301,"fluid")
-
-
-  geo.synchronize()
-
-  # model.mesh.setRecombine(2)
-  option.setNumber('Mesh.ElementOrder',2)
-
-
-  model.mesh.generate(2)
-  
-  Th = mesh.from_gmsh(gmsh)
-
-  gmsh.finalize()
-
-  return Th
-# end function
 
 
 

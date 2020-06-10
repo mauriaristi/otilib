@@ -242,7 +242,7 @@ class mesh:
 
     if type(dims) == type(None):
 
-      loop_vals = range(4)
+      loop_vals = range(self.ndim+1)
 
     elif type(dims) == int:
 
@@ -325,11 +325,11 @@ class mesh:
 
 
   #***************************************************************************************************
-  def to_pv():    
+  def to_pv(self, dims = None, pd = None, pd_names= None):    
 
     import pyvista as pv
 
-    return pv.UnstructuredGrid(self.to_vtk())
+    return pv.UnstructuredGrid(self.to_vtk(dims = dims, pd = pd, pd_names= pd_names))
 
   #---------------------------------------------------------------------------------------------------
   

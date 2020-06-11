@@ -3,6 +3,18 @@
 
 
 /**************************************************************************************************//**
+@brief Perform a taylor series integration according to the OTI imaginary directions.
+
+@param[in]  deltas Array with the deltas for every imaginary basis.
+@param[in]  num   OTI number to Taylor-integrate.
+@param[in]  res   Addres of the resulting OTI number that will hold result.
+@param[in]  dhl   Direction helper list.
+******************************************************************************************************/
+sotinum_t soti_taylor_integrate(    coeff_t* deltas, sotinum_t* num,                 dhelpl_t dhl);
+void      soti_taylor_integrate_to( coeff_t* deltas, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
 @brief Truncate everything but the coefficeints at a given order.
 
 @param[in]  ord   Order of imaginary direction to extract.

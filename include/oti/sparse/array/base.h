@@ -1,7 +1,8 @@
 #ifndef OTI_SPARSE_ARRAY_BASE_H
 #define OTI_SPARSE_ARRAY_BASE_H
 
-
+void    arrso_taylor_integrate_to( coeff_t* deltas, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+arrso_t arrso_taylor_integrate(    coeff_t* deltas, arrso_t* arr,               dhelpl_t dhl);
 
 void    arrso_get_order_im_to( ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 arrso_t arrso_get_order_im(    ord_t order, arrso_t* arr,               dhelpl_t dhl);

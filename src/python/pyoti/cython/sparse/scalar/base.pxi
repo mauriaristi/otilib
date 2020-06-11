@@ -935,7 +935,10 @@ cdef class sotinum:
 
   #***************************************************************************************************
   def get_active_bases(self):
-
+    """
+    PURPOSE:      Get all the active bases.
+    """
+    #*************************************************************************************************
     global dhl
 
     cdef bases_t  size = dhl.p_dh[0].Nbasis
@@ -968,7 +971,50 @@ cdef class sotinum:
 
 
   #***************************************************************************************************
+  def taylor_integrate(self, object bases, object deltas):
+    """
+    PURPOSE:     Perform a Taylor series integration.
+    """
+    #*************************************************************************************************
+    global dhl
 
+    cdef bases_t  size = dhl.p_dh[0].Nbasis
+    cdef coeff_t* c_deltas = dhl.p_dh[0].p_im[0]
+    cdef int64_t i
+    cdef sotinum_t res
+    
+    # Initialize all elements as zero
+    memset( c_deltas, 0, size*sizeof(coeff_t))
+
+    try:
+      
+      bases_eval  = bases
+      deltas_eval = deltas
+
+      if len(bases_eval) != len(deltas_eval):
+      
+        raise ValueError("Both bases and deltas must have the same dimension")
+
+      # end if 
+
+    except:
+
+      bases_eval = np.array(self.get_active_bases(),dtype=np.uint16)
+      deltas_eval= np.ones(len(bases_eval),dtype=np.float64) * deltas
+
+    # end
+
+    for i in range(len(bases_eval)):
+
+      c_deltas[ bases[i] - 1 ] = deltas[i]
+
+    # end for 
+
+    res = soti_taylor_integrate( c_deltas, &self.num, dhl)
+
+    return sotinum.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
 
 
 

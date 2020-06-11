@@ -213,6 +213,8 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/array/base.h
+  void    arrso_taylor_integrate_to( coeff_t* deltas, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+  arrso_t arrso_taylor_integrate(    coeff_t* deltas, arrso_t* arr,               dhelpl_t dhl);
   void    arrso_get_order_im_to( ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_get_order_im(    ord_t order, arrso_t* arr,               dhelpl_t dhl);
   arrso_t arrso_get_slice( arrso_t* arr, 
@@ -596,6 +598,8 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/scalar/base.h
+  sotinum_t soti_taylor_integrate(    coeff_t* deltas, sotinum_t* num,                 dhelpl_t dhl);
+  void      soti_taylor_integrate_to( coeff_t* deltas, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_get_order_im(    ord_t order, sotinum_t* num,                 dhelpl_t dhl);
   void      soti_get_order_im_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_truncate_im(   imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);

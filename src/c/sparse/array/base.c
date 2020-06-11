@@ -10,6 +10,40 @@
 
 
 // ****************************************************************************************************
+void arrso_taylor_integrate_to( coeff_t* deltas, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
+
+    arrso_dimCheck_OO_elementwise(arr,res,res);
+
+    for (i = 0; i<arr->size; i++ ){
+        
+        soti_taylor_integrate_to( deltas, &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+arrso_t arrso_taylor_integrate( coeff_t* deltas, arrso_t* arr, dhelpl_t dhl){
+    
+    arrso_t res;
+
+    res = arrso_zeros_bases( arr->nrows, arr->ncols, 0, 0, dhl);
+
+    arrso_taylor_integrate_to( deltas, arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+// ****************************************************************************************************
 void arrso_get_order_im_to( ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
     
     uint64_t i;

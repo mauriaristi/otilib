@@ -52,7 +52,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   cdef matso     Ores
   cdef matsofe   Fres
   cdef object res
-  cdef np.ndarray[object] np_arr
+  cdef np.ndarray np_arr
 
   tin = type(array)
   
@@ -76,14 +76,14 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 
         Oarr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
         Ores = matso.create(&Oarr)
-        Ores.set_ij( np_arr.item(0), 0, 0)
+        Ores[0,0] = np_arr.item(0)
         res = Ores
 
       else:
  
         Farr = fearrso_zeros_bases( nrows, ncols, nip, nbases, order, dhl)
         Fres = matsofe.create(&Farr)
-        Fres.set_ij( np_arr.item(0), 0, 0)
+        Fres[0,0] = np_arr.item(0)
         res = Fres
 
       # end if
@@ -99,7 +99,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
         Oarr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
         Ores = matso.create(&Oarr)
         for i in range(nrows):
-          Ores.set_ij( np_arr.item(i), i, 0)
+          Ores[i,0] =  np_arr[i] # Column vectors.
         # end for 
         res = Ores
 
@@ -108,7 +108,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
         Farr = fearrso_zeros_bases( nrows, ncols, nip, nbases, order, dhl)
         Fres = matsofe.create(&Farr)
         for i in range(nrows):
-          Fres.set_ij( np_arr.item(i), i, 0)
+          Fres[i,0] =  np_arr[i] # Column vectors.
         # end for
         res = Fres
 
@@ -127,7 +127,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
         for i in range(nrows):
           for j in range(ncols):
             
-            Ores.set_ij( np_arr[i,j], i, j) 
+            Ores[i,j] = np_arr[i,j]
 
           # end for 
         # end for 
@@ -140,7 +140,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
         for i in range(nrows):
           for j in range(ncols):
             
-            Fres.set_ij( np_arr[i,j], i, j ) 
+            Fres[i,j] = np_arr[i,j] 
 
           # end for 
         # end for 

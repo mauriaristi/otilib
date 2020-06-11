@@ -3,6 +3,7 @@
 #---------------------------------   EXTERNAL LIBRARIES IMPORTS     ----------------------------------
 #-----------------------------------------------------------------------------------------------------
 from pyoti.c_otilib cimport *  
+cimport cython
 
 from pyoti.core import   number_types, dHelp
 from pyoti.core cimport  c_ptr_to_np_1darray_double, ZERO, ONE

@@ -61,6 +61,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # Include functions from "core.h"
   #---------------------------------------------------------------------------------------------------
+  coeff_t dhelp_compute_delta(imdir_t  idx, ord_t  ord, coeff_t* deltas, dhelpl_t dhl);
+
   void dhelp_div_imdir(imdir_t  numidx, ord_t  numord, 
                        imdir_t  denidx, ord_t  denord,
                        imdir_t* residx, ord_t* resord, 

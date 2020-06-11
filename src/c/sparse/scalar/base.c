@@ -1,5 +1,44 @@
 
+// ****************************************************************************************************
+sotinum_t soti_taylor_integrate(coeff_t* deltas, sotinum_t* num, dhelpl_t dhl){
+    
+    
+    sotinum_t res = soti_createEmpty( 0, dhl); 
+    
+    soti_taylor_integrate_to( deltas, num, &res, dhl);
 
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_taylor_integrate_to(coeff_t* deltas, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+    
+    ord_t   ordi;
+    ndir_t  ndir_ordi, diri;
+    coeff_t val = 0.0, delta;
+    
+    val = num->re;
+    
+    for(ordi = 0; ordi < num->order ; ordi++ ){
+
+        // 
+        ndir_ordi = num->p_nnz[ordi];
+
+        for ( diri = 0; diri< ndir_ordi; diri++){ 
+            
+            delta  = dhelp_compute_delta( num->p_idx[ordi][diri], ordi + 1, deltas, dhl);
+            val   += num->p_im[ordi][diri] * delta;
+
+        }
+
+    }
+    
+    soti_set_r(val,res,dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

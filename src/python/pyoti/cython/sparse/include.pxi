@@ -8,11 +8,14 @@ cimport numpy as np                 # C-level functions of numpy
 from c_otilib cimport *             # OTI lib in C.
 cimport cython                      #
 
+
+
 import scipy.sparse as sci_spr
 
 
 from libc.stdlib cimport malloc,free      # import memory managment functions.
 from libc.stdlib cimport realloc          #    "              "
+from libc.string cimport memset
 
 
 from pyoti.core import   number_types, dHelp, imdir, print_capabilities

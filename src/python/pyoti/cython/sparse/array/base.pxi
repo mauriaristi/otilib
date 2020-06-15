@@ -1038,7 +1038,6 @@ cdef class matso:
     """
     #*************************************************************************************************
     global dhl
-
     
     cdef sotinum orhs
     cdef coeff_t rrhs
@@ -1056,11 +1055,15 @@ cdef class matso:
       Orhs = rhs
       arrso_set_O( &Orhs.arr, &self.arr, dhl)      
 
-    else:
+    elif trhs in number_types:
 
       rrhs = rhs
       arrso_set_r( rrhs, &self.arr, dhl)
 
+    else:
+
+      raise ValueError( "Cant assign '{0}' into a matso object.".format(trhs) )
+      
     # end if 
 
   #---------------------------------------------------------------------------------------------------

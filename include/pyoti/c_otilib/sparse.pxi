@@ -636,6 +636,8 @@ cdef extern from "oti/oti.h" nogil:
   void      soti_copy_nomemchk_to( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
   void soti_print(sotinum_t* num, dhelpl_t dhl);
   void soti_free(sotinum_t* num);
+  sotinum_t soti_createReal_bases(  coeff_t num, bases_t nbases, ord_t order, dhelpl_t dhl);
+  sotinum_t soti_createEmpty_bases(              bases_t nbases, ord_t order, dhelpl_t dhl);
   sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl);
   sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl);
   sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl);

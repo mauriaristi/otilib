@@ -61,17 +61,17 @@ cdef class elbaseso:
 
     DESCRIPTION:  Creates and associates an element that can be called from the Problem class.
 
-    PARAMETERS:
+    INPUTS:
 
       -> nbasis:   Number of basis - Number of degrees of freedom - Number of nodes.
       -> order:    Maximum order of the element.
       -> geomBase: Geometric element type - elLine, elTriangle, etc ...
       -> kind:     Kind of element: Affine - IsoParametric
-      -> ndim:     Number of dimensions of the element. (1 -> 1D, 2 -> 2D, 3 -> 3D)
+      -> ndim:     Number of dimensions of the element. (0-> 0D, 1 -> 1D, 2 -> 2D, 3 -> 3D)
       -> basis:    Function that evaluates the interpolation basis (N) of the element at the 
                    integration points:
 
-                    [N0,N1,...] = basis(xi,eta,chi,derOrder)
+                    [N0,N1,...] = basis( xi, eta, chi)
 
       -> boundEls: List of the already defined interpolation functions that define the boundary 
                    interpolation, in the following order.  --> [0D, 1D, 2D]
@@ -81,12 +81,12 @@ cdef class elbaseso:
 
     EXAMPLE:
 
-            TriP1 = elbaseso.createNewElement(3,           \ # Number of basis 
-                                            1,           \ # Characteristic order of the polynomials
-                                            elTriangle,  \ # Geometric type
-                                            elkindiso,   \ # Kind of element 
-                                            2,           \ # Number of dimensions
-                                            &c_fem_basisFunctions_N_TriangP1_2Diso) # Basis functions.
+            tri3 = elbaseso.createNewElement(3,           \ # Number of basis 
+                                             1,           \ # Characteristic order of the polynomials
+                                             elTriangle,  \ # Geometric type
+                                             elkindiso,   \ # Kind of element 
+                                             2,           \ # Number of dimensions
+                                             &tri3_iso)     # Basis functions.
 
                   
     """
@@ -103,6 +103,7 @@ cdef class elbaseso:
     elemso_start( &newElement.elem, nbasis, geomBase, kind, ndim, dhl)
     newElement.basis = basis
     newElement.FLAG = 1 # Defined in c.
+    newElement.boundEls = boundEls
 
     return newElement
   #---------------------------------------------------------------------------------------------------
@@ -110,7 +111,7 @@ cdef class elbaseso:
   #***************************************************************************************************
   def __repr__(self):
     """
-    PURPOSE: Get represerntation of the structure.
+    PURPOSE: Get representation of the structure.
 
     """
 
@@ -186,6 +187,17 @@ cdef class elbaseso:
   cpdef allocate(self, uint64_t intorder, bases_t nbases=0, ord_t order=0):
     """
     DESCRIPTION: Allocate all items as integration points.
+
+    INPUTS:
+      
+      -> intorder: Integration order of the element (helps define the number of integration points).
+      -> nbases:   Number of OTI imaginary bases to allocate.
+      -> order:    Truncation order of the OTI members of the number.
+
+    OUTPUTS: 
+
+      None. Things occur internally.
+
     """
 
     global dhl
@@ -197,6 +209,9 @@ cdef class elbaseso:
       self.end()
     # end if 
     
+    self.otiorder  = order
+    self.otinbases = nbases
+
     elemso_allocate(&self.elem, intorder, nbases, order, dhl)
 
     self.N     = matsofe.create(&self.elem.p_evalBasis[0],FLAGS=0)
@@ -209,16 +224,13 @@ cdef class elbaseso:
     self.eta  = sotife.create(&self.elem.eta  ,FLAGS=0)
     self.zeta = sotife.create(&self.elem.zeta ,FLAGS=0)
 
-    # Allocate Spatial variables.
+    # Initialize Spatial variables.
     self.J    = None
     self.detJ = None
     self.Jinv = None
     self.w_dJ = None
 
-
-
-
-    # Call the basis function, get the 
+    # Call the basis function, get the derivatives using OTI numbers.
     N = self.basis(  self.xi + e(1),  self.eta + e(2), self.zeta + e(3) )
 
     # Call evaluation of basis functions at integration points.
@@ -248,7 +260,7 @@ cdef class elbaseso:
 
 
   # #***************************************************************************************************
-  # cpdef allocate_spatial(self, uint64_t nDimAnalysis):
+  # cpdef allocate_spatial(self, uint64_t nDimAnalysis, uint8_t compute_Jinv = False ):
   #   """
   #   DESCRIPTION: Allocate all spatial variables.
   #   """
@@ -262,16 +274,28 @@ cdef class elbaseso:
 
   #     self.nDimAnalysis = nDimAnalysis
 
-  #     self.J    = None
-  #     self.Jinv = None
+  #     self.J    = None # zeros( (), nbases=self.otinbases, order=self.otiorder, nip=self.nip)
+  #     self.x    = None
+  #     self.y    = None
+  #     self.z    = None
+
+  #     self.detJ = sotife( 0., nbases=self.otinbases, order=self.otiorder, nip=self.nip )
+  #     self.w_dJ = sotife( 0., nbases=self.otinbases, order=self.otiorder, nip=self.nip )
+
+  #     if compute_Jinv :
+
+  #       self.Jinv = None #  zeros( (,), nbases=self.otinbases, order=self.otiorder, nip=self.nip)
+        
+  #       self.Nx = None #  zeros( (,), nbases=self.otinbases, order=self.otiorder, nip=self.nip)
+  #       self.Ny = None #  zeros( (,), nbases=self.otinbases, order=self.otiorder, nip=self.nip)
+  #       self.Nz = None #  zeros( (,), nbases=self.otinbases, order=self.otiorder, nip=self.nip)
       
-  #     self.detJ = sotife(0.,nbases=self.nbases,order=self.order,nip=self.nip )
-  #     self.w_dJ = None
-      
+  #     # end if 
 
   #   else:
 
-  #     raise ValueError("Must allocate element first. Trying to allocate spatial coordinates with no allocated element.")
+  #     raise ValueError("Element must be allocated first. "+
+  #       "Trying to allocate spatial coordinates with no allocated element.")
 
   #   # end if 
 
@@ -280,6 +304,7 @@ cdef class elbaseso:
   #***************************************************************************************************
   cdef is_allocated(self):
     """
+    Return boolean if the element is allocated.
     """
 
     return elemso_is_allocated(&self.elem)
@@ -289,6 +314,7 @@ cdef class elbaseso:
   #***************************************************************************************************
   cdef is_initialized(self):
     """
+    Return boolean if the element is initialized.
     """
 
     return elemso_is_started(&self.elem)
@@ -298,6 +324,7 @@ cdef class elbaseso:
   #***************************************************************************************************
   cpdef end(self):
     """
+    Finalize element memory allocation.
     """
     if (self.FLAG &1):
       
@@ -306,34 +333,6 @@ cdef class elbaseso:
     # end if 
 
   #---------------------------------------------------------------------------------------------------
-
-  # #***************************************************************************************************
-  # cpdef get_basis(self, imdir_t idx, ord_t order):
-  #   """
-  #   """
-  #   if   order == 0:
-
-  #     return matsofe.create( &self.elem.p_evalBasis[0], FLAGS=0)
-
-  #   elif order == 1:
-
-  #     if idx ==0:
-      
-  #       return matsofe.create( &self.elem.p_evalBasis[1], FLAGS=0)
-      
-  #     elif idx ==1:
-      
-  #       return matsofe.create( &self.elem.p_evalBasis[2], FLAGS=0)
-      
-  #     elif idx ==2:
-      
-  #       return matsofe.create( &self.elem.p_evalBasis[3], FLAGS=0)
-
-  #     # end if 
-
-  #   # end if 
-
-  # #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def set_coordinates(self, matso x, matso y, matso z):
@@ -362,7 +361,7 @@ cdef class elbaseso:
   @property
   def nip(self):
     """
-    PURPOSE:      Get self.elemProps.nIntPts
+    PURPOSE:      Get element number of integration points.
 
     """
     #*************************************************************************************************
@@ -376,7 +375,7 @@ cdef class elbaseso:
   @property
   def nder(self):
     """
-    PURPOSE:      Get self.elemProps.nder
+    PURPOSE:      Get element number of derivatives.
 
     """
     #*************************************************************************************************
@@ -391,7 +390,7 @@ cdef class elbaseso:
   @property
   def isInit(self):
     """
-    PURPOSE:      Get self.elemProps.isInit
+    PURPOSE:      Get if Element is initialized
 
     """
     #*************************************************************************************************
@@ -406,7 +405,7 @@ cdef class elbaseso:
   @property
   def nbasis(self):
     """
-    PURPOSE:      Get self.elemProps.nbasis
+    PURPOSE:      Get number of basis functions of the element.
 
     """
     #*************************************************************************************************
@@ -419,7 +418,7 @@ cdef class elbaseso:
   @property
   def order(self):
     """
-    PURPOSE:      Get self.elemProps.order
+    PURPOSE:      Get Element integration order
 
     """
     #*************************************************************************************************
@@ -432,7 +431,7 @@ cdef class elbaseso:
   @property
   def geomBase(self):
     """
-    PURPOSE:      Get self.elemProps.geomBase
+    PURPOSE:      Get element geometric base.
 
     """
     #*************************************************************************************************
@@ -445,7 +444,7 @@ cdef class elbaseso:
   @property
   def kind(self):
     """
-    PURPOSE:      Get self.elemProps.kind
+    PURPOSE:      Get element kind.
 
     """
     #*************************************************************************************************
@@ -458,7 +457,12 @@ cdef class elbaseso:
   @property
   def ndim(self):
     """
-    PURPOSE:      Get self.elemProps.ndim
+    PURPOSE:      Get element number of dimensions  
+                  
+                  - 0 for point, 
+                  - 1 for line, 
+                  - 2 for triangle/quad, 
+                  - 3 for tetrahedra and brick element.
 
     """
     #*************************************************************************************************

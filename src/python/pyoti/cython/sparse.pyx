@@ -34,6 +34,7 @@ include "sparse/array/base.pxi"
 
 # Math operations.
 include "sparse/array/math.pxi"
+
 include "sparse/array/math_to.pxi"
 
 
@@ -61,7 +62,9 @@ include "sparse/array/gauss.pxi"
 #     SPARSE ARRAY
 # Append base class.
 include "sparse/sprarray/lil/base.pxi"
+
 include "sparse/sprarray/csr/base.pxi"
+
 include "sparse/sprarray/csc/base.pxi"
 
 
@@ -76,8 +79,11 @@ include "sparse/sprarray/csc/base.pxi"
 
 
 # Common functions.
+include "sparse/creators.pxi"
+
 include "sparse/utils.pxi"
 
 include "sparse/math.pxi"
+
 
 include "sparse/linalg.pxi"

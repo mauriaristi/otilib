@@ -245,6 +245,18 @@ void soti_free(sotinum_t* num);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
+@brief Create a new oti number with reserved memory and given real coefficient. 
+
+@param[in] num Real coefficient of the OTI number.
+@param[in] nbases Number of bases.
+@param[in] order Truncation order.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_createReal_bases(  coeff_t num, bases_t nbases, ord_t order, dhelpl_t dhl);
+sotinum_t soti_createEmpty_bases(              bases_t nbases, ord_t order, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
 @brief Create a new oti number with a real coefficient given by the input parameter and 
 
 @param[in] num Real coefficient of the OTI number.

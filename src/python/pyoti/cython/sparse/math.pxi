@@ -2041,11 +2041,11 @@ cpdef logb(object val, coeff_t b, object out = None):
     if res_flag:
       
       ores = out
-      soti_logb_to( &o.num, e, &ores.num, dhl)
+      soti_logb_to( &o.num, b, &ores.num, dhl)
 
     else:
 
-      cores = soti_logb( &o.num, e,  dhl)
+      cores = soti_logb( &o.num, b,  dhl)
       res   = sotinum.create(&cores)
 
     # end if 
@@ -2054,11 +2054,11 @@ cpdef logb(object val, coeff_t b, object out = None):
     if res_flag:
       
       fres = out
-      fesoti_logb_to( &f.num, e, &fres.num, dhl)
+      fesoti_logb_to( &f.num, b, &fres.num, dhl)
 
     else:
 
-      cfres = fesoti_logb( &f.num, e,  dhl)
+      cfres = fesoti_logb( &f.num, b,  dhl)
       res   = sotife.create(&cfres)
 
     # end if  
@@ -2067,11 +2067,11 @@ cpdef logb(object val, coeff_t b, object out = None):
     if res_flag:
 
       Fres = out
-      fearrso_logb_to( &F.arr, e, &Fres.arr, dhl)
+      fearrso_logb_to( &F.arr, b, &Fres.arr, dhl)
 
     else:
 
-      cFres = fearrso_logb( &F.arr, e, dhl)
+      cFres = fearrso_logb( &F.arr, b, dhl)
       res   = matsofe.create(&cFres)
 
     # end if 
@@ -2080,11 +2080,11 @@ cpdef logb(object val, coeff_t b, object out = None):
     if res_flag:
       
       Ores = out
-      arrso_logb_to( &O.arr, e, &Ores.arr, dhl)
+      arrso_logb_to( &O.arr, b, &Ores.arr, dhl)
 
     else:
 
-      cOres = arrso_logb( &O.arr, e,  dhl)
+      cOres = arrso_logb( &O.arr, b,  dhl)
       res   = matso.create(&cOres)
 
     # end if    
@@ -2093,18 +2093,18 @@ cpdef logb(object val, coeff_t b, object out = None):
     if res_flag:
       
       Rres = out
-      darr_logb_to( &R.arr, e, &Rres.arr)
+      darr_logb_to( &R.arr, b, &Rres.arr)
 
     else:
 
-      cRres = darr_logb( &R.arr , e)
+      cRres = darr_logb( &R.arr , b)
       res = dmat.create( &cRres )
 
     # end if 
   elif tval in number_types:
     import math    
     r    = val
-    rres = math.logb(r,e)
+    rres = math.logb(r,b)
     if res_flag:      
       out = rres
     else:

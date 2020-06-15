@@ -1252,10 +1252,46 @@ void soti_free(sotinum_t* num){
         free(num->p_im);
     }
 
-    *num = soti_init();
+    (*num) = soti_init();
     
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+sotinum_t soti_createReal_bases(coeff_t num, bases_t nbases, ord_t order, dhelpl_t dhl){
+    
+    sotinum_t res = soti_createEmpty_bases(nbases,order,dhl);
+
+    res.re = num;
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_createEmpty_bases( bases_t nbases, ord_t order, dhelpl_t dhl){
+    
+    sotinum_t res;
+    
+    ndir_t p_nnz[_MAXORDER_OTI]; 
+    ord_t i;
+    
+    // Define allocation sizes.
+    for ( i = 0; i < order; i++){
+        p_nnz[i] = dhelp_ndirOrder( nbases, i + 1 );
+    }
+    
+    res = soti_createEmpty_predef(p_nnz, order, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
 
 // ****************************************************************************************************
 sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl){
@@ -1267,7 +1303,7 @@ sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl){
     return res;
 }
 // ----------------------------------------------------------------------------------------------------
-
+ 
 // ****************************************************************************************************
 sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
     

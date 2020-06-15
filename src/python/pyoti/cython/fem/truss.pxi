@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::     CLASS  TRUSS      :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class truss:
+cdef class truss2D:
   """
   CLASS TRUSS:  Class FEM truss from the module FEM of the pyoti library.
 
@@ -55,15 +55,15 @@ cdef class truss:
     self.forces   = forces
 
     if isinstance( E, np.ndarray):
-      self.E = E
+      self.E = array(E)
     else:
-      self.E = E * ones( (self.elements.shape[0],) )
+      self.E = E * ones( ( self.elements.shape[0], 1 ) )
     # end if 
 
     if isinstance( A, np.ndarray):
-      self.A = A
+      self.A = array(A)
     else:
-      self.A = A * ones((self.elements.shape[0],))
+      self.A = A * ones( ( self.elements.shape[0], 1 ) )
     # end if
 
   #---------------------------------------------------------------------------------------------------
@@ -71,43 +71,35 @@ cdef class truss:
 
 
   #***************************************************************************************************
-  def plot(self, plt = None, scaleFactor=1.0, colors=[], marker='o-'):
+  def plot(self, plt = None, scaleF=1.0, colors=[], marker='o-', integrate=False, bases=None, 
+                 deltas=None):
     """
     DESCRIPTION:   Function that plots the given truss system using a displacement array
 
     INPUTS:
-      - nds:    Nodes.
-      - els:    Elements.
-      - dsp:    Displacemnent Boundary conditions.
-      - fce:    Force vector.
-      - U:      Displacement vector.
-      - scaleF: Default scaleF=1.0
-      - C:      color ArrayDefault C=[] 
-      - M:      Plot Marker. Default M='o-'
-
-
-    def MAC_PlotSys(nds, els, dsp, fce, U, scaleF=1.0, C=[], M='o-'):
+      - scaleF: Scalr Factor (Default 1.0)
+      - colors: Color Array (Default colors=[])
+      - marker: Plot Marker. (Default marker='o-')
 
     """
-
     # 
     
     ax = plt.axes()
 
-    U_plot = self.U.copy()
-    U_plot = U_plot.reshape(self.nodes.shape[0],2)
+    U_plot  = self.U.real
+    U_plot  = U_plot.reshape(self.nodes.shape[0],2)
     U_plot *= scaleF
     
-    Ci = C.copy()
+    Ci = colors.copy()
 
     # PLOT ELEMENTS
     for i in range(0,self.elements.shape[0]):
 
-      v0x=self.nodes[self.elements[i,0],0]+U_plot[self.elements[i,0],0]
-      v0y=self.nodes[self.elements[i,0],1]+U_plot[self.elements[i,0],1]
+      v0x = self.nodes[ self.elements[i,0], 0 ] + U_plot[ self.elements[i,0], 0 ]
+      v0y = self.nodes[ self.elements[i,0], 1 ] + U_plot[ self.elements[i,0], 1 ]
       
-      v1x=self.nodes[self.elements[i,1],0]+U_plot[self.elements[i,1],0]
-      v1y=self.nodes[self.elements[i,1],1]+U_plot[self.elements[i,1],1]
+      v1x = self.nodes[ self.elements[i,1], 0 ] + U_plot[ self.elements[i,1], 0 ]
+      v1y = self.nodes[ self.elements[i,1], 1 ] + U_plot[ self.elements[i,1], 1 ]
 
       if len(Ci)==0:
         plt.plot( [v0x, v1x], [v0y, v1y], M, color='k', linewidth=2)
@@ -125,21 +117,21 @@ cdef class truss:
     # PLOT DISPLACEMENTS
     for i in range(0,self.displ.shape[0]):
       
-      v0x = self.nodes[int(self.displ[i,0]),0] + U_plot[int(self.displ[i,0]),0]
-      v0y = self.nodes[int(self.displ[i,0]),1] + U_plot[int(self.displ[i,0]),1]
+      v0x = self.nodes[ int(self.displ[i,0]), 0 ] + U_plot[ int( self.displ[i,0] ), 0 ]
+      v0y = self.nodes[ int(self.displ[i,0]), 1 ] + U_plot[ int( self.displ[i,0] ), 1 ]
       
-      v1x = v0x - 0.2 * (1-self.displ[i,1])
-      v1y = v0y - 0.2 * (  self.displ[i,1])
+      v1x = v0x - 0.2 * ( 1 - self.displ[i,1] )
+      v1y = v0y - 0.2 * (     self.displ[i,1] )
       
-      plt.plot([v0x, v1x], [v0y, v1y],'r--', linewidth=3)
+      plt.plot( [v0x, v1x], [v0y, v1y], 'r--', linewidth=3)
     
     # end for
     
     # PLOT FORCES
     for i in range(0,self.forces.shape[0]):
       
-      v0x=self.nodes[int(self.forces[i,0]),0]+U_plot[int(self.forces[i,0]),0]
-      v0y=self.nodes[int(self.forces[i,0]),1]+U_plot[int(self.forces[i,0]),1]
+      v0x = self.nodes[ int( self.forces[i,0] ), 0 ]+U_plot[ int( self.forces[i,0] ), 0 ]
+      v0y = self.nodes[ int( self.forces[i,0] ), 1 ]+U_plot[ int( self.forces[i,0] ), 1 ]
       
       v1x=0.1*(self.forces[i,1])
       v1y=0.1*(self.forces[i,2])
@@ -149,8 +141,8 @@ cdef class truss:
     # end for
 
     # Setup the max and min points.
-    tsf=self.nodes+U_plot
-    mgn=0.5
+    tsf = self.nodes.real+U_plot
+    mgn = 0.5
     
     minX = np.min(tsf[:,0])
     maxX = np.max(tsf[:,0])
@@ -193,8 +185,8 @@ cdef class truss:
     """
 
     # Compute elemental stiffness matrix
-    delta_x = self.nodes[el_i[1],0]-self.nodes[el_i[0],0]
-    delta_y = self.nodes[el_i[1],1]-self.nodes[el_i[0],1]
+    delta_x = self.nodes[ el_i[1], 0 ] - self.nodes[ el_i[0], 0 ]
+    delta_y = self.nodes[ el_i[1], 1 ] - self.nodes[ el_i[0], 1 ]
     L_e     = ( delta_x**2 + delta_y**2 )**0.5
     
     # Compute the angle of inclination of the element.
@@ -202,19 +194,38 @@ cdef class truss:
     c_th = delta_x / L_e # cos(theta)
     s_th = delta_y / L_e # sin(theta)
     
-    cc = c_th * c_th * ( A_i * E_i / L_e )
-    ss = s_th * s_th * ( A_i * E_i / L_e )
-    cs = c_th * s_th * ( A_i * E_i / L_e )
+    C = ( A_i * E_i / L_e )
+    cc = c_th * c_th * C
+    ss = s_th * s_th * C
+    cs = c_th * s_th * C
 
     # Form the elemental stiffness matrix
-    K_e = np.array([
-        [ cc, cs,-cc,-cs],
-        [ cs, ss,-cs,-ss],
-        [-cc,-cs, cc, cs],
-        [-cs,-ss, cs, ss],
-      ], dtype = object )
-    
-    return K_e
+    self.K_e[0,0] =  cc
+    self.K_e[0,1] =  cs
+    self.K_e[0,2] = -cc
+    self.K_e[0,3] = -cs
+
+    self.K_e[1,0] =  cs
+    self.K_e[1,1] =  ss
+    self.K_e[1,2] = -cs
+    self.K_e[1,3] = -ss
+
+    self.K_e[2,0] = -cc
+    self.K_e[2,1] = -cs
+    self.K_e[2,2] =  cc
+    self.K_e[2,3] =  cs
+
+    self.K_e[3,0] = -cs
+    self.K_e[3,1] = -ss
+    self.K_e[3,2] =  cs
+    self.K_e[3,3] =  ss
+
+    # K_e = array([
+    #     [ cc, cs,-cc,-cs],
+    #     [ cs, ss,-cs,-ss],
+    #     [-cc,-cs, cc, cs],
+    #     [-cs,-ss, cs, ss],
+    #   ], dtype = object )
 
   #---------------------------------------------------------------------------------------------------
 
@@ -242,22 +253,19 @@ cdef class truss:
         j1 = j * 2    
         j2 = j * 2 + 1
         
-        self.K_s[e_i1,e_j1] = self.K_s[e_i1,e_j1] + K_e[i1,j1]
-        self.K_s[e_i1,e_j2] = self.K_s[e_i1,e_j2] + K_e[i1,j2]
-        self.K_s[e_i2,e_j1] = self.K_s[e_i2,e_j1] + K_e[i2,j1]
-        self.K_s[e_i2,e_j2] = self.K_s[e_i2,e_j2] + K_e[i2,j2]
+        self.K_s[ e_i1, e_j1 ] = self.K_s[ e_i1, e_j1 ] + self.K_e[ i1, j1 ]
+        self.K_s[ e_i1, e_j2 ] = self.K_s[ e_i1, e_j2 ] + self.K_e[ i1, j2 ]
+        self.K_s[ e_i2, e_j1 ] = self.K_s[ e_i2, e_j1 ] + self.K_e[ i2, j1 ]
+        self.K_s[ e_i2, e_j2 ] = self.K_s[ e_i2, e_j2 ] + self.K_e[ i2, j2 ]
         
       # end for
-
     # end for
 
   #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-
 
   # ****************************************************************************************************
-  def solve(self,nbases = 0, order = 0):
+  def solve(self, nbases = 0, order = 0):
     """
     DESCRIPTION: Solve the Truss problem
 
@@ -268,14 +276,19 @@ cdef class truss:
     
     # SOLVE THE SYSTEM   
     # Global matrix.
-    self.K_s = spr_omat( (self.nodes.shape[0]*2 , self.nodes.shape[0]*2) , nbases, order)
-    self.F_s = zeros( self.nodes.shape[0]*2, 1, nbases= nbases, order= order ) # create dense oti force vector.
+    self.K_s = spr_matso( ( self.nodes.shape[0]*2 , self.nodes.shape[0]*2), nbases = nbases, order = order )
+    # create force vector.
+    self.F_s =     zeros( ( self.nodes.shape[0]*2 , 1                    ), nbases = nbases, order = order )
+
+    self.K_e =     zeros( ( 4,4 ) )
     
     # Compute global K
     for i in range(0,els.shape[0]):
+
       el_i = self.elements[i,:]
       
-      K_e = self.computeElementalK(el_i,self.A[i,0],self.E[i,0])
+      # Compute Elemental K_e
+      self.computeElementalK(el_i,self.A[i,0],self.E[i,0])
       
       # Assemble the global matrix
       self.assembleK( K_e, el_i )
@@ -286,8 +299,8 @@ cdef class truss:
     # Implement force boundary conditions
     for i in range(0,fce.shape[0]):
 
-      F_s[int(fce[i,0])*2]  = F_s[int(fce[i,0])*2]+ fce[i,1]
-      F_s[int(fce[i,0]*2+1)] = F_s[int(fce[i,0]*2+1)] + fce[i,2]
+      F_s[ int( self.forces[i,0]*2    ), 0 ] = F_s[ int( self.forces[i,0] )*2   , 0 ] + fce[i,1]
+      F_s[ int( self.forces[i,0]*2 + 1), 0 ] = F_s[ int( self.forces[i,0]*2+1 ) , 0 ] + fce[i,2]
       
     # end for
     
@@ -295,16 +308,19 @@ cdef class truss:
 
     # Setup displacement boundary conditions.
     # Implement displacement boundary conditions
-    for i in range(0,dsp.shape[0]):
-      
-      K_s[e_i,e_j]=TGV
-      F_s[e_i]=dsp[i,2]*TGV
+    for i in range(  0,  self.displ.shape[0]  ):
+   
+      e_i = int( self.displ[i,0]*2 + self.displ[i,1])
+      e_j = e_i
+
+      self.K_s[e_i, e_j] = TGV
+      self.F_s[e_i,   0] = TGV * self.displ[i,2]
         
     # end for
 
-    U_s = spsolve(K_s,F_s)
+    self.U = solve(self.K_s,self.F_s)
     
-    return (U_s,K_s,F_s)
+  #---------------------------------------------------------------------------------------------------
 
 
 

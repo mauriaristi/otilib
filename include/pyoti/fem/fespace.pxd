@@ -11,7 +11,7 @@
 #   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
 #   #---------------------------------------------------------------------------------------------------
 
-#   cdef public mesh    mesh        # Triangulation related to this space.
+#   cdef public mesh    mesh       # Triangulation related to this space.
 #   cdef public elBase  elType     # Element type that defines the interpolation functions.
 #   cdef public uint8_t fespaceId  # Id of the finite element space in the mesh.
 

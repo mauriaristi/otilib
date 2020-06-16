@@ -233,10 +233,11 @@ cdef class matsofe:
     out += "nip: "+str(self.nip)+ ", \n"
 
     for i in range(self.nip):
-      out += "(ip - {0:d}) \n".format(i)
+
+      out += "(Integration point - {0:d}) \n".format(i)
       out += "-------------------------\n"
       
-      tmp = self[i]
+      tmp = self.get_ip( i )
       
       out += tmp.__str__()
       
@@ -297,63 +298,322 @@ cdef class matsofe:
     """
     #*************************************************************************************************
     
+    # global dhl
+
+    # cdef arrso_t res
+
+    # if (isinstance(val, int)):
+      
+    #   res = fearrso_get_item_k( &self.arr, val, dhl)
+    
+    # else:
+      
+    #   return NotImplemented
+
+    # # end if
+
+    # return matso.create(&res)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     global dhl
 
-    cdef arrso_t res
+    cdef sotinum_t ores
+    cdef fesoti_t  fres
+    cdef arrso_t   Ores
+    cdef fearrso_t Fres
+    cdef object res = None
+    cdef int64_t starti, stopi, stepi
+    cdef int64_t startj, stopj, stepj
 
-    if (isinstance(val, int)):
-      
-      res = fearrso_get_item_k( &self.arr, val, dhl)
+    tval = type(val)
     
-    else:
+    if tval == int:
       
-      return NotImplemented
+      # This is a slice
+      if val < self.arr.nrows:
+        
+        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
+        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+        Fres = fearrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+        res  = matsofe.create(&Fres)
+
+      else:
+
+        raise IndexError("Index out of bounds.")
+
+      # end if 
+
+    #   ores = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
+    #   res  = sotinum.create( &ores, FLAGS = 0 )
+
+    elif tval == slice: #slice of multiple items
+      
+      # print(val)
+      # This is a slice
+      starti, stopi, stepi = val.indices( self.arr.nrows )
+      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+      # print("i: ( {0}, {1}, {2})".format(starti, stopi, stepi) )
+      # print("j: ( {0}, {1}, {2})".format(startj, stopj, stepj) )
+
+      Fres = fearrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+      res  = matsofe.create(&Fres)
+    
+    elif tval == tuple:
+      
+      if len(val) == 2:
+
+        tval0 = type(val[0])
+        tval1 = type(val[1])
+
+        if   tval0 == int and tval1 == int:
+          
+          # print("Case 1")
+          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
+          
+            fres = fearrso_get_item_ij( &self.arr, val[0], val[1], dhl)
+            res  = sotife.create( &fres )
+          
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif tval0 == int and tval1 == slice:
+
+          # print("Case 2")
+          if val[0] < self.arr.nrows:
+
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+            Fres = fearrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+            res  = matsofe.create(&Fres)  
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif tval0 == slice and tval1 == int:
+
+          # print("Case 3")
+          if val[1] < self.arr.ncols:
+
+            starti, stopi, stepi = val[0].indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            Fres = fearrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+            res  = matsofe.create(&Fres)  
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+
+        elif tval0 == slice and tval1 == slice:
+
+          # print("Case 3")
+          starti, stopi, stepi = val[0].indices( self.arr.nrows )
+          startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+          Fres = fearrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+          res  = matsofe.create(&Fres) 
+
+        else:
+
+          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
+
+        # end if 
+
+      else:
+
+        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
+
+      # end if 
+
+    else:
+
+      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
 
     # end if
 
-    return matso.create(&res)
+    return res
 
   #---------------------------------------------------------------------------------------------------  
 
 
-  # #***************************************************************************************************
-  # def __setitem__(self, val, value):
-  #   """
-  #   PURPOSE: Set an element of the item to the specified value.
-  #   """
-  #   #*************************************************************************************************
+  #***************************************************************************************************
+  def __setitem__(self, indices, value):
+    """
+    PURPOSE: Set an element of the item to the specified value.
+    """
+    #*************************************************************************************************
         
-  #   global dhl
+    global dhl
 
-  #   cdef sotinum valt
-  #   cdef matso valt
+    cdef sotinum oin
+    cdef matso   Oin
+    cdef matsofe Fin
+    cdef sotife  fin
     
-  #   tval = type(value)
+    tindices = type(indices)
+    tvalue   = type(value)
 
-  #   if (isinstance(val, int)):
+    if tindices == int:
+      raise IndexError("Slicing not yet implemented in matsofe class.")
+    #   # This is a slice
+    #   if val < self.arr.nrows:
+        
+    #     starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
+    #     startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+    #     Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+    #     res  = matso.create(&Ores)
+
+    #   else:
+
+    #     raise IndexError("Index out of bounds.")
+
+    #   # end if 
+
+    # #   ores = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
+    # #   res  = sotinum.create( &ores, FLAGS = 0 )
+
+    # elif tval == slice: #slice of multiple items
       
-  #     if tval == matso:
+    #   # print(val)
+    #   # This is a slice
+    #   starti, stopi, stepi = val.indices( self.arr.nrows )
+    #   startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
 
+    #   # print("i: ( {0}, {1}, {2})".format(starti, stopi, stepi) )
+    #   # print("j: ( {0}, {1}, {2})".format(startj, stopj, stepj) )
 
-  #     elif tval == sotinum:
-
-  #       valt = value
-  #       fearrso_set_item_k_f( &valt.num, val, &self.arr, dhl)
-
-  #     else:
-
-  #       fearrso_set_item_k_r( value, val, &self.arr, dhl)
-
-  #     # end if 
+    #   Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+    #   res  = matso.create(&Ores)
     
-  #   else:
+    elif tindices == tuple:
+      
+      if len(indices) == 2:
 
-  #     raise IndexError("Error: Index must be scalar.")
+        tind0 = type(indices[0])
+        tind1 = type(indices[1])
 
-  #   # end if
+        if tind0 == int and tind1 == int:
+          
+          # print("Case 1")
+          if indices[0] < self.arr.nrows and indices[1] < self.arr.ncols:
+            
+            if ( tvalue == sotinum ):
+
+              oin = value
+              fearrso_set_item_ij_o( &oin.num, indices[0], indices[1], &self.arr, dhl)
+
+            elif ( tvalue == sotife ):
+              
+              fin = value
+              fearrso_set_item_ij_f( &fin.num, indices[0], indices[1], &self.arr, dhl)
+
+            elif ( tvalue in number_types ):
+
+              fearrso_set_item_ij_r(    value, indices[0], indices[1], &self.arr, dhl)              
+
+            else:
+
+              raise ValueError("Cant assign an item as {0}.".format( tvalue ))
+            # end if 
+            
+          else:
+
+            raise IndexError("Index out of bounds for indices {0} and shape {1}.".format(indices,self.shape))
+
+          # end if 
+
+        # elif tval0 == int and tval1 == slice:
+
+        #   # print("Case 2")
+        #   if val[0] < self.arr.nrows:
+
+        #     starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+        #     startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+        #     Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+        #     res  = matso.create(&Ores)  
+
+        #   else:
+
+        #     raise IndexError("Index out of bounds.")
+
+        #   # end if 
+
+        # elif tval0 == slice and tval1 == int:
+
+        #   # print("Case 3")
+        #   if val[1] < self.arr.ncols:
+
+        #     starti, stopi, stepi = val[0].indices( self.arr.nrows )
+        #     startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+        #     Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+        #     res  = matso.create(&Ores)  
+
+        #   else:
+
+        #     raise IndexError("Index out of bounds.")
+
+        #   # end if 
 
 
-  # #---------------------------------------------------------------------------------------------------  
+        # elif tval0 == slice and tval1 == slice:
+
+        #   # print("Case 3")
+        #   starti, stopi, stepi = val[0].indices( self.arr.nrows )
+        #   startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+        #   Ores = arrso_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj, dhl)
+        #   res  = matso.create(&Ores) 
+
+        else:
+
+          raise IndexError("ERROR: Integer indices ( i, j) or slices (`:`) are valid getters.")
+
+        # end if 
+
+      else:
+
+        raise IndexError("ERROR: Only tuples of two integers are supported.")
+
+      # end if 
+
+    else:
+
+      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+
+    # end if
+
+
+  #---------------------------------------------------------------------------------------------------  
 
 
   #***************************************************************************************************
@@ -896,8 +1156,16 @@ cdef class matsofe:
 
     else:
 
-      rrhs = rhs
-      fearrso_set_r( rrhs, &self.arr, dhl)      
+      try:
+      
+        rrhs = rhs
+        fearrso_set_r( rrhs, &self.arr, dhl)      
+      
+      except:
+      
+        raise ValueError("Supported values are real scalar, sotinum and sotife.")
+
+      # end try
 
     # end if 
 
@@ -1001,6 +1269,35 @@ cdef class matsofe:
     res = fearrso_get_im( indx, order, &self.arr, dhl) 
 
     return matsofe.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef  get_ip( self, int64_t ip):
+    """
+    PURPOSE:      Get an Integration point.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef arrso_t res
+
+    if (ip < 0):
+
+      ip += self.nip
+
+    # end if  
+
+    if (ip > self.nip or ip < 0 ):
+
+      raise IndexError("Index out of bounds for ip ({0:d}) and nip ({1:d}).".format(ip,self.nip))
+
+    # end if
+
+    res = fearrso_get_item_k( &self.arr, ip, dhl)
+    
+    return matso.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 

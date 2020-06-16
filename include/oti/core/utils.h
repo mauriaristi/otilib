@@ -16,6 +16,16 @@ void usage_python_error_function(void (*error_function)(int64_t), int64_t error_
 void error_exit(int64_t error_id);
 
 /**************************************************************************************************//**
+@brief Get the size of a slice.
+
+@param[in] start Starting index of the slice.
+@param[in] stop  Final index of the slice.
+@param[in] step  Step of the slice.
+******************************************************************************************************/ 
+int64_t slice_size(int64_t start, int64_t stop, int64_t step);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
 @brief Function that searches the index of a given element in an ordered array. If the element is not 
 in the array, the algorithm outputs a flag that tells the item must be inserted at the given position
 to preserve order.

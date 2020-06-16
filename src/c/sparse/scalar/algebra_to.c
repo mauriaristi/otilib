@@ -58,6 +58,14 @@ void soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t d
 
 
 // ****************************************************************************************************
+void soti_sum_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl){
+    
+    soti_sum_ro_to(val, num, res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 void soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
     
     soti_copy_to( num, res, dhl);
@@ -141,6 +149,14 @@ void soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t d
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+void soti_mul_or_to( sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl){
+    
+    soti_mul_ro_to(val, num, res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
     
     ord_t i;
@@ -178,7 +194,13 @@ void soti_gem_oo_to(sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dh
 // ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+void soti_gem_or_to( sotinum_t* b, coeff_t a, sotinum_t* c, sotinum_t* res, dhelpl_t dhl){
+    
+    soti_gem_ro_to( a, b, c, res, dhl);
 
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 void soti_gem_ro_to(coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl){

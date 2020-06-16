@@ -494,3 +494,28 @@ void error_exit(int64_t error_id){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+inline int64_t slice_size(int64_t start, int64_t stop, int64_t step){
+    
+    uint64_t size;
+
+    if (step > 0){      
+
+        size =  ( ( stop - start - 1 ) / step + 1);
+
+    } else if (step < 0){
+
+        size =  ( ( start - stop - 1 ) / ( - step ) + 1);
+
+    } else {
+
+        printf("ERROR: Slice step cannot be zero.");
+        exit(OTI_BadIndx);
+
+    }
+
+    return size;
+}
+// ----------------------------------------------------------------------------------------------------

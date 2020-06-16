@@ -243,6 +243,18 @@ cdef extern from "oti/oti.h" nogil:
   darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
   void arrso_copy_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_copy(arrso_t* arr, dhelpl_t dhl);
+  void arrso_set_slice_r( coeff_t val, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj,
+                           arrso_t* res, dhelpl_t dhl);
+  void arrso_set_slice_O( arrso_t* arr, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj,
+                           arrso_t* res, dhelpl_t dhl);
+  void arrso_set_slice_o( sotinum_t* num, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj,
+                           arrso_t* res, dhelpl_t dhl);
   void arrso_set_all_r( coeff_t num, arrso_t* arr, dhelpl_t dhl);
   void arrso_set_item_i_r( coeff_t num, uint64_t i, arrso_t* arr, dhelpl_t dhl);
   void arrso_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, arrso_t* arr, dhelpl_t dhl);
@@ -456,6 +468,7 @@ cdef extern from "oti/oti.h" nogil:
   void      fearrso_extract_deriv_to( imdir_t idx, ord_t order,
                                       fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
   arrso_t   fearrso_get_item_k(  fearrso_t* arr, uint64_t k,                         dhelpl_t dhl);
+  fesoti_t  fearrso_get_item_ij( fearrso_t* arr, uint64_t i, uint64_t j,             dhelpl_t dhl);
   sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, dhelpl_t dhl);
   void fearrso_get_item_ij_to(  fearrso_t* arr, uint64_t i, uint64_t j,
                                  fesoti_t* res, dhelpl_t dhl);
@@ -481,6 +494,14 @@ cdef extern from "oti/oti.h" nogil:
                                fearrso_t* res, dhelpl_t dhl);
   void fearrso_set_item_ijk_o( sotinum_t* elm, uint64_t i, uint64_t j, uint64_t k,
                                fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_get_slice(fearrso_t* arr, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj, 
+                             dhelpl_t dhl);
+  void      fearrso_get_slice_to(fearrso_t* arr, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj, 
+                            fearrso_t* res, dhelpl_t dhl);
   void fearrso_set_all_o( sotinum_t* num, fearrso_t* arr, dhelpl_t dhl );
   void fearrso_set_all_r(    coeff_t num, fearrso_t* arr, dhelpl_t dhl );
   void fearrso_set_r(    coeff_t src, fearrso_t* res, dhelpl_t dhl );
@@ -524,12 +545,16 @@ cdef extern from "oti/oti.h" nogil:
   void      soti_div_oo_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
   void      soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl);
   void      soti_div_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
-  sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-  sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl);
-  sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  sotinum_t soti_mul_oo(   sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
+  sotinum_t soti_mul_ro(      coeff_t num1, sotinum_t* num2,                 dhelpl_t dhl);
+  sotinum_t soti_mul_or(   sotinum_t* num1,    coeff_t num2,                 dhelpl_t dhl);
+  sotinum_t soti_base_mul( sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
   void      soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-  void      soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+  void      soti_mul_ro_to(   coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+  void      soti_mul_or_to(sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
   void soti_gem_oo_to(sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
+  void soti_gem_or_to( sotinum_t* a,    coeff_t b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
+  void soti_gem_ro_to(    coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
   sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num, dhelpl_t dhl);
   sotinum_t soti_sub_or(sotinum_t* num, coeff_t val, dhelpl_t dhl);
@@ -537,11 +562,13 @@ cdef extern from "oti/oti.h" nogil:
   void      soti_sub_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
   void      soti_sub_ro_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   void      soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
-  sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-  sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl);
-  sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-  void      soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-  void      soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t soti_sum_oo(    sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
+  sotinum_t soti_sum_ro(       coeff_t num1, sotinum_t* num2,                 dhelpl_t dhl);
+  sotinum_t soti_sum_or(    sotinum_t* num1,    coeff_t num2,                 dhelpl_t dhl);
+  sotinum_t soti_base_sum(  sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  void      soti_sum_oo_to( sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+  void      soti_sum_ro_to(    coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+  void      soti_sum_or_to( sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl);
   void      soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_abs(   sotinum_t* num,                 dhelpl_t dhl);

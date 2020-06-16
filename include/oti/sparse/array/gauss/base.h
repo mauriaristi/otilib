@@ -81,6 +81,7 @@ void      fearrso_extract_deriv_to( imdir_t idx, ord_t order, fearrso_t* arr, fe
 @param[in] dhl Direction helper list.
 ******************************************************************************************************/
 arrso_t   fearrso_get_item_k(  fearrso_t* arr, uint64_t k,                         dhelpl_t dhl);
+fesoti_t  fearrso_get_item_ij( fearrso_t* arr, uint64_t i, uint64_t j,             dhelpl_t dhl);
 sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, dhelpl_t dhl);
 
 void fearrso_get_item_ij_to(  fearrso_t* arr, uint64_t i, uint64_t j, 
@@ -130,6 +131,19 @@ void fearrso_set_item_ijk_r(   coeff_t  elm, uint64_t i, uint64_t j, uint64_t k,
 void fearrso_set_item_ijk_o( sotinum_t* elm, uint64_t i, uint64_t j, uint64_t k, 
                              fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+
+fearrso_t fearrso_get_slice(fearrso_t* arr, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                           dhelpl_t dhl);
+
+void      fearrso_get_slice_to(fearrso_t* arr, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 
 /**************************************************************************************************//**
 @brief Broadcasted setter.

@@ -241,8 +241,6 @@ inline void arrso_set_item_i_o( sotinum_t* src, uint64_t i, arrso_t* arr, dhelpl
         soti_copy_to(src, &arr->p_data[i],dhl);
 
     }  else {
-
-        // res = soti_init();
         
         printf("ERROR: Index out of bounds in arrso_get_item_i(...)\n Exiting...\n");
         exit(OTI_BadIndx);
@@ -254,13 +252,180 @@ inline void arrso_set_item_i_o( sotinum_t* src, uint64_t i, arrso_t* arr, dhelpl
 // ****************************************************************************************************
 inline void arrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, arrso_t* arr, dhelpl_t dhl){
 
-    arrso_set_item_i_o( num, j + i*arr->ncols, arr, dhl);
+    if ( i < arr->nrows && j < arr->ncols ){
+
+        arrso_set_item_i_o( num, j + i*arr->ncols, arr, dhl);
+
+    } else {
+
+        printf("ERROR: Index out of bounds in arrso_get_item_ij(...)\n Exiting...\n");
+        exit(OTI_BadIndx);
+
+    }
 
 }
 // ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+void arrso_set_slice_O( arrso_t* arr, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                         arrso_t* res, dhelpl_t dhl){
 
+    int64_t ncols = 0, nrows = 0; // Resulting number of rows and columns
+    int64_t i, j, ii, jj; 
+
+    // Handle broadcasting?
+
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    // printf("nrows: %lld, ncols %lld \n",nrows, ncols);
+
+    // printf("i: (%lld, %lld, %lld) \n", starti, stopi, stepi);
+    // printf("j: (%lld, %lld, %lld) \n", startj, stopj, stepj);
+
+    // Check dimensions:
+    if ( (arr->ncols != ncols) ||
+         (arr->nrows != nrows)    ){
+
+        printf("ERROR: Wrong dimensions for input array.\n");
+        exit(OTI_BadIndx);
+
+    }
+    
+    ii = starti;
+    
+    for ( i = 0; i < nrows; i++){
+
+        jj = startj;
+        
+        for ( j = 0; j < ncols; j++){
+
+            // printf("Setting result ( i, j) (%lld,%lld) from source (ii,jj) (%lld,%lld) \n", i, j, ii, jj);
+            // printf("( i, j) (%lld,%lld) equates: %lld\n",  i,  j,  j +  i * res->ncols );
+            // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
+
+            soti_copy_to( &arr->p_data[  j +  i * arr->ncols ], 
+                          &res->p_data[ jj + ii * res->ncols ], 
+                          dhl);
+
+            jj += stepj;
+        
+        }   
+
+        ii += stepi;
+
+    }
+
+
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void arrso_set_slice_o( sotinum_t* num, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                         arrso_t* res, dhelpl_t dhl){
+
+    int64_t ncols = 0, nrows = 0; // Resulting number of rows and columns
+    int64_t i, j, ii, jj; 
+
+    // Handle broadcasting?
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    // Check dimensions:
+    if ( (res->ncols < ncols) ||
+         (res->nrows < nrows)    ){
+
+        printf("ERROR: Wrong dimensions resulting slicing array.\n");
+        exit(OTI_BadIndx);
+
+    }
+    
+    ii = starti;
+    
+    for ( i = 0; i < nrows; i++){
+
+        jj = startj;
+        
+        for ( j = 0; j < ncols; j++){
+
+            soti_set_o( num, 
+                       &res->p_data[ jj + ii * res->ncols ],  
+                        dhl);
+
+            jj += stepj;
+        
+        }   
+
+        ii += stepi;
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void arrso_set_slice_r( coeff_t val, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                         arrso_t* res, dhelpl_t dhl){
+
+    int64_t ncols = 0, nrows = 0; // Resulting number of rows and columns
+    int64_t i, j, ii, jj; 
+
+    // Handle broadcasting?
+
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    // printf("nrows: %lld, ncols %lld \n",nrows, ncols);
+
+    // printf("i: (%lld, %lld, %lld) \n", starti, stopi, stepi);
+    // printf("j: (%lld, %lld, %lld) \n", startj, stopj, stepj);
+
+
+    // Check dimensions:
+    if ( (res->ncols < ncols) ||
+         (res->nrows < nrows)    ){
+
+        printf("ERROR: Wrong dimensions resulting slicing array.\n");
+        exit(OTI_BadIndx);
+
+    }
+    
+    ii = starti;
+    
+    for ( i = 0; i < nrows; i++){
+
+        jj = startj;
+        
+        for ( j = 0; j < ncols; j++){
+
+            // printf("Setting result ( i, j) (%lld,%lld) from source (ii,jj) (%lld,%lld) \n", i, j, ii, jj);
+            // printf("( i, j) (%lld,%lld) equates: %lld\n",  i,  j,  j +  i * res->ncols );
+            // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
+
+            soti_set_r( val, 
+                        &res->p_data[ jj + ii * res->ncols ],  
+                        dhl);
+
+            jj += stepj;
+        
+        }   
+
+        ii += stepi;
+
+    }
+
+
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
@@ -270,6 +435,48 @@ void arrso_set_O( arrso_t* arrin, arrso_t* arr, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -547,7 +754,6 @@ void arrso_get_item_ij_to(arrso_t* arr, uint64_t i, uint64_t j, sotinum_t* res, 
 
 
 
-
 // ****************************************************************************************************
 arrso_t arrso_get_slice( arrso_t* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
@@ -557,9 +763,9 @@ arrso_t arrso_get_slice( arrso_t* arr,
     uint64_t ncols, nrows; // Resulting number of rows and columns
     arrso_t res = arrso_init();
 
-    nrows =  ( ( stopi - starti - 1 ) / stepi + 1);
-    ncols =  ( ( stopj - startj - 1 ) / stepj + 1);
-
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+    
     res = arrso_zeros_bases( nrows, ncols, 0, 0, dhl);
 
     arrso_get_slice_to( arr, starti, stopi, stepi, startj, stopj, stepj, &res, dhl);
@@ -575,25 +781,18 @@ void arrso_get_slice_to( arrso_t* arr,
                         int64_t startj, int64_t stopj, int64_t stepj,
                          arrso_t* res, dhelpl_t dhl){
 
-    int64_t ncols, nrows; // Resulting number of rows and columns
+    int64_t ncols = 0, nrows = 0; // Resulting number of rows and columns
     int64_t i, j, ii, jj; 
 
     // Handle broadcasting?
 
-    nrows = ( ( stopi - starti - 1 ) / stepi + 1);
-    ncols = ( ( stopj - startj - 1 ) / stepj + 1);
-
-    // printf("nrows: %lld, ncols %lld \n",nrows, ncols);
-
-    // printf("i: (%lld, %lld, %lld) \n", starti, stopi, stepi);
-    // printf("j: (%lld, %lld, %lld) \n", startj, stopj, stepj);
-
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
 
     // Check dimensions:
-    if ( (res->ncols != ncols) ||
-         (res->nrows != nrows)    ){
+    if ( (res->ncols != ncols) || (res->nrows != nrows) ){
 
-        printf("Error: Wrong dimensions slicing array.\n");
+        printf("ERROR: Wrong dimensions resulting slicing array.\n");
         exit(OTI_BadIndx);
 
     }
@@ -621,8 +820,6 @@ void arrso_get_slice_to( arrso_t* arr,
         ii += stepi;
 
     }
-
-
 
 }
 // ----------------------------------------------------------------------------------------------------

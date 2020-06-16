@@ -43,13 +43,17 @@ RES = LHS * RHS
 @param[inout] res: Resulting array.
 ******************************************************************************************************/
 darr_t darr_mul_RR(    darr_t* lhs, darr_t* rhs              );
-darr_t darr_mul_rR(    coeff_t lhs, darr_t* rhs              );
-
 void   darr_mul_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res );
+
+darr_t darr_mul_rR(    coeff_t lhs, darr_t* rhs              );
 void   darr_mul_rR_to( coeff_t lhs, darr_t* rhs, darr_t* res );
+
+darr_t darr_mul_Rr(    darr_t* lhs, coeff_t rhs              );
+void   darr_mul_Rr_to( darr_t* lhs, coeff_t rhs, darr_t* res );
 
 void darr_mul_and_selfsum_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res);
 void darr_mul_and_selfsum_rR_to( coeff_t lhs, darr_t* rhs, darr_t* res);
+void darr_mul_and_selfsum_Rr_to( darr_t* lhs, coeff_t rhs, darr_t* res);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -85,6 +89,9 @@ void   darr_sum_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res );
 
 darr_t darr_sum_rR(    coeff_t lhs, darr_t* rhs              );
 void   darr_sum_rR_to( coeff_t lhs, darr_t* rhs, darr_t* res );
+
+darr_t darr_sum_Rr(    darr_t* lhs, coeff_t rhs              );
+void   darr_sum_Rr_to( darr_t* lhs, coeff_t rhs, darr_t* res );
 // ----------------------------------------------------------------------------------------------------
 
 

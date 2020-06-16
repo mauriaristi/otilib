@@ -39,11 +39,11 @@ cdef class matso:
       
       ndim = realArray.ndim
       
-      if ndim >=3:
+      if ( ndim >= 3 ):
       
         raise ValueError("Only 1D and 2D arrays are supported.")
       
-      elif (ndim == 1):
+      elif ( ndim == 1 ):
       
         ncols = 1      
         nrows = realArray.shape[0]
@@ -92,6 +92,23 @@ cdef class matso:
 
     # end if 
     
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
+  def T(self): 
+    """
+    PURPOSE:      Return the transpose of the stored matrix. 
+    """
+    #*************************************************************************************************
+    global dhl
+    
+    cdef arrso_t res 
+      
+    res = arrso_transpose( &self.arr,  dhl)
+
+    return matso.create(&res)
+
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
@@ -293,6 +310,7 @@ cdef class matso:
   
     cdef sotinum_t d_soti
     cdef sotinum   soti
+    
     out  = self.list_repr()
     # out=""
 
@@ -321,6 +339,7 @@ cdef class matso:
   
     cdef sotinum_t d_soti
     cdef sotinum   soti
+
     out  = self.list_repr()
 
     # out += "["
@@ -486,41 +505,377 @@ cdef class matso:
         
     global dhl
 
-    cdef sotinum valt
-    
-    tval = type(value)
+    tvalue = type(value)
 
-    if (isinstance(val, int)):
-      
-      if tval == sotinum:
+    if ( tvalue == sotinum ):
 
-        valt = value
-        arrso_set_item_i_o( &valt.num, val, &self.arr, dhl)
+      self.__setitem__o( val, value )
 
-      else:
+    elif ( tvalue == matso ):
 
-        arrso_set_item_i_r( value, val, &self.arr, dhl)
+      self.__setitem__O( val, value )
 
-      # end if 
-    
+    elif ( tvalue == dmat ):
+
+      self.__setitem__R( val, value )
+
+    elif ( tvalue in number_types ):
+
+      self.__setitem__r( val, value )
+
     else:
+
+      raise IndexError("ERROR: Cant set item of type {0} in matso object.".format(tvalue))
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------  
+
+  #***************************************************************************************************
+  cdef __setitem__r(self, object val, coeff_t value):
+    """
+    PURPOSE: Set item from real value.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    tval = type(val)
+
+    if tval == int:
       
-      if tval == sotinum:
+      # This is a slice
+      if val < self.arr.nrows:
         
-        valt = value
-        arrso_set_item_ij_o( &valt.num, val[0], val[1], &self.arr, dhl)
+        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
+        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+        arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+        
+      else:
+
+        raise IndexError("Index out of bounds.")
+
+      # end if 
+
+    elif tval == slice: #slice of multiple items
+      
+      # This is a slice
+      starti, stopi, stepi = val.indices( self.arr.nrows )
+      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+      arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+    
+    elif tval == tuple:
+      
+      if len(val) == 2:
+
+        tval0 = type(val[0])
+        tval1 = type(val[1])
+
+        if ( tval0 == int and tval1 == int ):
+          
+          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
+          
+            arrso_set_item_ij_r( value, val[0], val[1], &self.arr, dhl)
+            
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == int and tval1 == slice):
+
+          if val[0] < self.arr.nrows:
+
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+            arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == slice and tval1 == int):
+
+          if val[1] < self.arr.ncols:
+
+            starti, stopi, stepi = val[0].indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            arrso_set_slice_r(value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == slice and tval1 == slice):
+
+          starti, stopi, stepi = val[0].indices( self.arr.nrows )
+          startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+          arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+
+        else:
+
+          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
+
+        # end if 
 
       else:
 
-        arrso_set_item_ij_r( value, val[0], val[1], &self.arr, dhl)
+        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
 
       # end if 
+
+    else:
+
+      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+
+    # end if
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cdef __setitem__o(self,  object val, sotinum value):
+    """
+    PURPOSE: Set item from sotinum value.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    tval = type(val)
+
+    if tval == int:
+      
+      # This is a slice
+      if val < self.arr.nrows:
+        
+        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
+        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+        arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+        
+      else:
+
+        raise IndexError("Index out of bounds.")
+
+      # end if 
+
+    elif tval == slice: #slice of multiple items
+      
+      # This is a slice
+      starti, stopi, stepi = val.indices( self.arr.nrows )
+      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+      arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+    
+    elif tval == tuple:
+      
+      if len(val) == 2:
+
+        tval0 = type(val[0])
+        tval1 = type(val[1])
+
+        if ( tval0 == int and tval1 == int ):
+          
+          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
+          
+            arrso_set_item_ij_o( &value.num, val[0], val[1], &self.arr, dhl)
+            
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == int and tval1 == slice):
+
+          if val[0] < self.arr.nrows:
+
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+            arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == slice and tval1 == int):
+
+          if val[1] < self.arr.ncols:
+
+            starti, stopi, stepi = val[0].indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == slice and tval1 == slice):
+
+          starti, stopi, stepi = val[0].indices( self.arr.nrows )
+          startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+          arrso_set_slice_o( &value.num, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+
+        else:
+
+          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
+
+        # end if 
+
+      else:
+
+        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
+
+      # end if 
+
+    else:
+
+      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
 
     # end if
 
 
-  #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
+  cdef __setitem__R(self,  object val, dmat value):
+    """
+    PURPOSE: Set item from real array.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    raise NotImplementedError("Error Setting from Real array not yet supported.")
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cdef __setitem__O(self,  object val, matso value):
+    """
+    PURPOSE: Set item from OTI array.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    tval = type(val)
+
+    if tval == int:
+      
+      # This is a slice
+      if val < self.arr.nrows:
+        
+        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
+        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+        arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+        
+      else:
+
+        raise IndexError("Index out of bounds.")
+
+      # end if 
+
+    elif tval == slice: #slice of multiple items
+      
+      # This is a slice
+      starti, stopi, stepi = val.indices( self.arr.nrows )
+      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+      arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+    
+    elif tval == tuple:
+      
+      if len(val) == 2:
+
+        tval0 = type(val[0])
+        tval1 = type(val[1])
+
+        if ( tval0 == int and tval1 == int ):
+          
+          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
+          
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+            
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == int and tval1 == slice):
+
+          if val[0] < self.arr.nrows:
+
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+            arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == slice and tval1 == int):
+
+          if val[1] < self.arr.ncols:
+
+            starti, stopi, stepi = val[0].indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == slice and tval1 == slice):
+
+          starti, stopi, stepi = val[0].indices( self.arr.nrows )
+          startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+          arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
+
+        else:
+
+          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
+
+        # end if 
+
+      else:
+
+        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
+
+      # end if 
+
+    else:
+
+      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+
+    # end if
+
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def copy(self):
@@ -550,9 +905,6 @@ cdef class matso:
 
     return matso.create(&res)
   #---------------------------------------------------------------------------------------------------
-
-
-
 
   #***************************************************************************************************
   def __add__(self, other):

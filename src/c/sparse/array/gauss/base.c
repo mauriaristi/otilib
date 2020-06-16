@@ -370,7 +370,27 @@ sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t 
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+fearrso_t fearrso_get_slice(fearrso_t* arr, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                           dhelpl_t dhl){
+    
+    int64_t ncols, nrows;
+    fearrso_t res = fearrso_init();
 
+    // TODO: Add bound checks.
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    res = fearrso_zeros_bases( nrows, ncols, arr->nip, 0, 0, dhl);
+
+    fearrso_get_slice_to( arr, starti, stopi, stepi, startj, stopj, stepj, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -422,7 +442,34 @@ void fearrso_get_item_ijk_to(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k,
 // ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+void fearrso_get_slice_to(fearrso_t* arr, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl){
+        
+    uint64_t k;
+    int64_t ncols, nrows;
 
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    // Check dimensions:
+    if ( (res->ncols != ncols) || (res->nrows != nrows) || (res->nip != arr->nip)){
+
+        printf("ERROR: Wrong dimensions resulting slicing array.\n");
+        exit(OTI_BadIndx);
+
+    }
+
+    for (k = 0; k < arr->nip; k++){
+        
+        arrso_get_slice_to( &arr->p_data[k], starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -446,22 +493,22 @@ void fearrso_set_item_k( arrso_t* arr , uint64_t k, fearrso_t* res, dhelpl_t dhl
 // ----------------------------------------------------------------------------------------------------
 
 
-// ****************************************************************************************************
-void fearrso_set_item_ij(fesoti_t* num, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
+// // ****************************************************************************************************
+// void fearrso_set_item_ij(fesoti_t* num, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
     
-    uint64_t k;
+//     uint64_t k;
 
-    //Check
-    fearrso_dimCheck_fF_elementwise(num,res,res);
+//     //Check
+//     fearrso_dimCheck_fF_elementwise(num,res,res);
 
-    for (k = 0; k < num->nip; k++){
+//     for (k = 0; k < num->nip; k++){
         
-        arrso_set_item_ij_o( &num->p_data[k], i, j, &res->p_data[k], dhl );
+//         arrso_set_item_ij_o( &num->p_data[k], i, j, &res->p_data[k], dhl );
 
-    }
+//     }
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
+// // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************

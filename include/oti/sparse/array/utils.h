@@ -27,6 +27,14 @@ void arrso_dimCheck_O_squareness(arrso_t* arr1, arrso_t* res);
 ******************************************************************************************************/ 
 ord_t arrso_get_order(arrso_t* arr);
 // ----------------------------------------------------------------------------------------------------
+/**************************************************************************************************//**
+@brief Get active OTI bases in the array.
 
+@param[in]    arr        Array.
+@param[inout] list_vals  Initialized list of values. Must come with all directions deactivated.
+@param[in]    dhl        Direction helper list.
+******************************************************************************************************/ 
 void arrso_get_active_bases(arrso_t* arr, imdir_t* list_vals, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 #endif

@@ -277,7 +277,7 @@ cdef class sotife:
     
     tval = type(value)
 
-    if (isinstance(val, int)):
+    if ( isinstance( val, int ) ):
       
       if tval == sotinum:
 
@@ -286,13 +286,13 @@ cdef class sotife:
 
       else:
 
-        fesoti_set_item_k_r( value, val, &self.num, dhl)
+        fesoti_set_item_k_r(     value, val, &self.num, dhl)
 
       # end if 
     
     else:
 
-      raise IndexError("Error: Index must be scalar.")
+      raise IndexError("Error: Index must be integer.")
 
     # end if
 

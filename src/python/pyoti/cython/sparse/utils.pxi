@@ -227,6 +227,7 @@ cpdef extract_im(object humdir, object val, object out = None):
   cdef arrso_t   cOres
   cdef fearrso_t cFres
   cdef uint8_t res_flag = 1
+  cdef int64_t   i 
   cdef object res
 
   indx, order = imdir(humdir)

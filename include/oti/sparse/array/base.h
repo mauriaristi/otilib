@@ -1,12 +1,71 @@
 #ifndef OTI_SPARSE_ARRAY_BASE_H
 #define OTI_SPARSE_ARRAY_BASE_H
 
+
+/**************************************************************************************************//**
+@brief Perform taylor series evaluation given the array of deltas..
+
+@param[in]    deltas Array of delta values for every imaginary basis.
+@param[in]    arr    Address of array from which to get data.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
 void    arrso_taylor_integrate_to( coeff_t* deltas, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 arrso_t arrso_taylor_integrate(    coeff_t* deltas, arrso_t* arr,               dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Get all imaginary coefficients of given order in arrso object.
+
+@param[in]    order  Order to get data from.
+@param[in]    arr    Address of array from which to get data.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
 void    arrso_get_order_im_to( ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 arrso_t arrso_get_order_im(    ord_t order, arrso_t* arr,               dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Set slice to arrso object.
+
+@param[in]    val    Value to set in res array.
+@param[in]    starti Starting row index.
+@param[in]    stopi  Final row index.
+@param[in]    stepi  Row step.
+@param[in]    startj Starting column index.
+@param[in]    stopj  Final column index.
+@param[in]    stepj  Column step.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
+void arrso_set_slice_r( coeff_t val, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                         arrso_t* res, dhelpl_t dhl);
+void arrso_set_slice_O( arrso_t* val, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                         arrso_t* res, dhelpl_t dhl);
+void arrso_set_slice_o( sotinum_t* val, 
+                        int64_t starti, int64_t stopi, int64_t stepi,
+                        int64_t startj, int64_t stopj, int64_t stepj,
+                         arrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Get slice from arrso object.
+
+@param[in]    arr    Address of array from which to get data.
+@param[in]    starti Starting row index.
+@param[in]    stopi  Final row index.
+@param[in]    stepi  Row step.
+@param[in]    startj Starting column index.
+@param[in]    stopj  Final column index.
+@param[in]    stepj  Column step.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
 arrso_t arrso_get_slice( arrso_t* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
                         int64_t startj, int64_t stopj, int64_t stepj,
@@ -15,25 +74,70 @@ void arrso_get_slice_to( arrso_t* arr,
                         int64_t starti, int64_t stopi, int64_t stepi,
                         int64_t startj, int64_t stopj, int64_t stepj,
                          arrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Truncate imaginary direction in arrso object.
+
+@param[in]    idx    Imaginary index.
+@param[in]    order  Order of the imaignary direction.
+@param[in]    arr    Address of array from which to get data.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
 arrso_t arrso_truncate_im(    imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
 void    arrso_truncate_im_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Imaignary direction extractor from arrso object..
+
+@param[in]    idx    Imaginary index.
+@param[in]    order  Order of the imaignary direction.
+@param[in]    arr    Address of array from which to get data.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
 arrso_t arrso_extract_im(   imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
 void    arrso_extract_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Get derivative from arrso object..
+
+@param[in]    idx    Imaginary index.
+@param[in]    order  Order of the imaignary direction.
+@param[in]    arr    Address of array from which to get data.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
 darr_t  arrso_get_deriv(    imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
 void    arrso_get_deriv_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 arrso_t arrso_get_deriv_o(  imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-arrso_t arrso_extract_deriv(    imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
+/**************************************************************************************************//**
+@brief Derivative extractor from arrso object.
+
+@param[in]    idx    Imaginary index.
+@param[in]    order  Order of the imaignary direction.
+@param[in]    arr    Address of array from which to get data.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
+arrso_t arrso_extract_deriv(    imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
 void    arrso_extract_deriv_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Get imaginary direction from arrso object..
 
+@param[in]    idx    Imaginary index.
+@param[in]    order  Order of the imaignary direction.
+@param[in]    arr    Address of array from which to get data.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
 darr_t  arrso_get_im(   imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
 arrso_t arrso_get_im_o( imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
 void    arrso_get_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);

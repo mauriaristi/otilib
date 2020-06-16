@@ -28,12 +28,15 @@ This function uses temporals 0, 1, 2, 3, 4, 5.
 @param[in] num2 OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+sotinum_t soti_mul_oo(   sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
+sotinum_t soti_mul_ro(      coeff_t num1, sotinum_t* num2,                 dhelpl_t dhl);
+sotinum_t soti_mul_or(   sotinum_t* num1,    coeff_t num2,                 dhelpl_t dhl);
 
-sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+sotinum_t soti_base_mul( sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
+
 void      soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-void      soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+void      soti_mul_ro_to(   coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void      soti_mul_or_to(sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -45,7 +48,9 @@ This function uses temporals 0, 1, 2, 3, 4, 5.
 @param[in] num2 OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-void soti_gem_oo_to(sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
+void soti_gem_oo_to( sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
+void soti_gem_or_to( sotinum_t* a,    coeff_t b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
+void soti_gem_ro_to(    coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -55,15 +60,18 @@ void soti_gem_oo_to(sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dh
 @param[in] num2 OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num, dhelpl_t dhl);
-sotinum_t soti_sub_or(sotinum_t* num, coeff_t val, dhelpl_t dhl);
+sotinum_t soti_sub_oo(    sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
+sotinum_t soti_sub_ro(       coeff_t num1, sotinum_t* num2,                 dhelpl_t dhl);
+sotinum_t soti_sub_or(    sotinum_t* num1,    coeff_t num2,                 dhelpl_t dhl);
 
 sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-void      soti_sub_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-void      soti_sub_ro_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
-void      soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl);
+
+void      soti_sub_oo_to( sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void      soti_sub_ro_to(    coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void      soti_sub_or_to( sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+
 
 /**************************************************************************************************//**
 @brief Add two sparse oti numbers.
@@ -72,12 +80,15 @@ void      soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t d
 @param[in] num2 OTI number.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl);
+sotinum_t soti_sum_oo(    sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
+sotinum_t soti_sum_ro(       coeff_t num1, sotinum_t* num2,                 dhelpl_t dhl);
+sotinum_t soti_sum_or(    sotinum_t* num1,    coeff_t num2,                 dhelpl_t dhl);
 
-sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
-void      soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
-void      soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+sotinum_t soti_base_sum(  sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+
+void      soti_sum_oo_to( sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void      soti_sum_ro_to(    coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+void      soti_sum_or_to( sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

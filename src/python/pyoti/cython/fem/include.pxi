@@ -18,14 +18,14 @@ from pyoti.dense cimport omat, otinum
 
 from pyoti.sparse  import e
 from pyoti.sparse  import sotinum, matso, sotife, matsofe, get_deriv
-from pyoti.sparse  import zeros, array, ones, eye, truncate
-from pyoti.sparse  import det, norm, inv, dot, transpose
+from pyoti.sparse  import zeros, array, ones, eye, truncate, one, zero, number
+from pyoti.sparse  import det, norm, inv, dot, transpose, sqrt, pow
 from pyoti.sparse  import gauss_integrate
 
 # from pyoti.sparse cimport e
 from pyoti.sparse cimport sotinum, matso, sotife, matsofe, get_deriv
-from pyoti.sparse cimport zeros, array, ones, eye, truncate
-from pyoti.sparse cimport det, norm, inv, dot, transpose
+from pyoti.sparse cimport zeros, array, ones, eye, truncate, one, zero, number
+from pyoti.sparse cimport det, norm, inv, dot, transpose, sqrt, pow
 from pyoti.sparse cimport gauss_integrate
 
 import  numpy as np

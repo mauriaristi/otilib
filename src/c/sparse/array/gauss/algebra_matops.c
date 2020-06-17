@@ -12,6 +12,125 @@
 
 
 // ****************************************************************************************************
+fesoti_t fearrso_dotproduct_FF(fearrso_t* lhs, fearrso_t* rhs, dhelpl_t dhl){
+
+    fesoti_t res = fesoti_init();
+
+    res = fesoti_createEmpty_bases( rhs->nip, 0, 0, dhl);
+
+    fearrso_dotproduct_FF_to(lhs, rhs, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_dotproduct_FF_to(fearrso_t* lhs, fearrso_t* rhs, fesoti_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    // Check Dimensions
+    fearrso_dimCheck_FF_samesize(lhs, rhs, res);
+
+    for (i = 0; i<res->nip; i++){
+
+        arrso_dotproduct_OO_to( &lhs->p_data[i], &rhs->p_data[i], &res->p_data[i], dhl );
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+fesoti_t fearrso_dotproduct_OF(arrso_t* lhs, fearrso_t* rhs, dhelpl_t dhl){
+
+    fesoti_t res = fesoti_init();
+
+    res = fesoti_createEmpty_bases( rhs->nip, 0, 0, dhl);
+
+    fearrso_dotproduct_OF_to( lhs, rhs, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_dotproduct_OF_to( arrso_t* lhs, fearrso_t* rhs, fesoti_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    // Check Dimensions
+    fearrso_dimCheck_OF_samesize(lhs, rhs, res);
+
+    for (i = 0; i < res->nip; i++){
+
+        arrso_dotproduct_OO_to( lhs, &rhs->p_data[i], &res->p_data[i], dhl );
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+// ****************************************************************************************************
+fesoti_t fearrso_dotproduct_RF( darr_t* lhs, fearrso_t* rhs, dhelpl_t dhl){
+
+    fesoti_t res = fesoti_init();
+
+    res = fesoti_createEmpty_bases( rhs->nip, 0, 0, dhl);
+
+    fearrso_dotproduct_RF_to( lhs, rhs, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_dotproduct_RF_to( darr_t* lhs, fearrso_t* rhs, fesoti_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    // Check Dimensions
+    fearrso_dimCheck_RF_samesize(lhs, rhs, res);
+
+    for (i = 0; i < res->nip; i++){
+
+        arrso_dotproduct_RO_to( lhs, &rhs->p_data[i], &res->p_data[i], dhl );
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
 fearrso_t fearrso_matmul_FF(fearrso_t* lhs, fearrso_t* rhs, dhelpl_t dhl){
 
     fearrso_t res = fearrso_init();

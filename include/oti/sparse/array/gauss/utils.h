@@ -2,14 +2,18 @@
 #define OTI_SPARSE_ARRAY_GAUSS_UTILS_H
 
 
-// /**************************************************************************************************//**
-// @brief 
-// 
-// @param[in]
-// ******************************************************************************************************/ 
-// void fearrso_gaussIntegrateOverElement(fearrso_t* arr1, elemProps_t* elem, oarr_t* res, 
-//     dhelpl_t dhl);
-// // ----------------------------------------------------------------------------------------------------
+/**************************************************************************************************//**
+@brief Check dimensions for arrays to have the same number of elements. (specific for dot product oper.)
+
+@param[in] lhs Left hand side
+@param[in] rhs Right hand side
+@param[in] res Result
+******************************************************************************************************/ 
+void fearrso_dimCheck_FF_samesize(fearrso_t* arr1, fearrso_t* arr2, fesoti_t* res);
+void fearrso_dimCheck_OF_samesize(  arrso_t* arr1, fearrso_t* arr2, fesoti_t* res);
+void fearrso_dimCheck_RF_samesize(   darr_t* arr1, fearrso_t* arr2, fesoti_t* res);
+// ----------------------------------------------------------------------------------------------------
+
 
 /**************************************************************************************************//**
 @brief Check dimensions for Elementwise matrix operation (such as addition or subtraction).

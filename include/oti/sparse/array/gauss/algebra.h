@@ -204,8 +204,27 @@ void    fearrso_integrate_to( fearrso_t* arr, fesoti_t* w, arrso_t* res, dhelpl_
 
 
 
+// VECTOR ALGEBRA
 
+/**************************************************************************************************//**
+@brief Dot product between two vectors
 
+RES = DOT_PRODUCT( LHS, RHS )
+
+@param[in] lhs Left hand side.
+@param[in] rhs Right hand side.
+@param[in] res result
+@param[in] dhl Direction helper list
+******************************************************************************************************/
+fesoti_t fearrso_dotproduct_FF(    fearrso_t* lhs, fearrso_t* rhs,                dhelpl_t dhl);
+void     fearrso_dotproduct_FF_to( fearrso_t* lhs, fearrso_t* rhs, fesoti_t* res, dhelpl_t dhl);
+
+fesoti_t fearrso_dotproduct_OF(      arrso_t* lhs, fearrso_t* rhs,                dhelpl_t dhl);
+void     fearrso_dotproduct_OF_to(   arrso_t* lhs, fearrso_t* rhs, fesoti_t* res, dhelpl_t dhl);
+
+fesoti_t fearrso_dotproduct_RF(       darr_t* lhs, fearrso_t* rhs,                dhelpl_t dhl);
+void     fearrso_dotproduct_RF_to(    darr_t* lhs, fearrso_t* rhs, fesoti_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 
 

@@ -1,12 +1,4 @@
 
-cpdef dot(      object lhs,  object rhs,    object out = *)
-cpdef inv(      object arr,                 object out = *)
-cpdef det(      object arr,                 object out = *)
-cpdef transpose(object arr,                 object out = *)
-cpdef norm(     object arr, coeff_t p = *,  object out = *)
-
-
-
 cpdef cos(            object val,            object out = * )
 cpdef sin(            object val,            object out = * )
 cpdef tan(            object val,            object out = * )

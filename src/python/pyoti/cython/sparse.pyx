@@ -85,5 +85,6 @@ include "sparse/utils.pxi"
 
 include "sparse/math.pxi"
 
-
 include "sparse/linalg.pxi"
+
+include "sparse/algebra.pxi"

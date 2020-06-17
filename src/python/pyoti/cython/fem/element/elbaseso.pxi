@@ -445,24 +445,39 @@ cdef class elbaseso:
     """
     
     cdef uint64_t i, j
+
+    cdef sotife tmp1, tmp2, tmp3
     
+    tmp1 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
     
     if self.ndim == 1:
       
       if   self.ndim_an == 1:
-      
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        
+        # self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        dot_product(self.Nxi,  self.x, out = tmp1)
+        self.J[0,0] = tmp1
      
       elif self.ndim_an == 2:
       
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        # self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        # self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        dot_product(self.Nxi,  self.x, out = tmp1)
+        self.J[0,0] = tmp1
+        dot_product(self.Nxi,  self.y, out = tmp1)
+        self.J[0,1] = tmp1
       
       else:
       
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
-        self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+        # self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        # self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        # self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+        dot_product(self.Nxi,  self.x, out = tmp1)
+        self.J[0,0] = tmp1
+        dot_product(self.Nxi,  self.y, out = tmp1)
+        self.J[0,1] = tmp1
+        dot_product(self.Nxi,  self.z, out = tmp1)
+        self.J[0,2] = tmp1
       
       # end if
 
@@ -470,42 +485,90 @@ cdef class elbaseso:
       
       if self.ndim_an == 2:
         
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        # self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        # self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
         
-        self.J[1,0] = dot(self.Neta, self.x)[0,0]
-        self.J[1,1] = dot(self.Neta, self.y)[0,0]
+        # self.J[1,0] = dot(self.Neta, self.x)[0,0]
+        # self.J[1,1] = dot(self.Neta, self.y)[0,0]
+
+        dot_product(self.Nxi,  self.x, out = tmp1)
+        self.J[0,0] = tmp1
+        dot_product(self.Nxi,  self.y, out = tmp1)
+        self.J[0,1] = tmp1
+
+        dot_product(self.Neta,  self.x, out = tmp1)
+        self.J[1,0] = tmp1
+        dot_product(self.Neta,  self.y, out = tmp1)
+        self.J[1,1] = tmp1
 
       else:
 
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
-        self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+        # self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        # self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        # self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
 
-        self.J[1,0] = dot(self.Neta, self.x)[0,0]
-        self.J[1,1] = dot(self.Neta, self.y)[0,0]
-        self.J[1,2] = dot(self.Neta, self.z)[0,0]
+        # self.J[1,0] = dot(self.Neta, self.x)[0,0]
+        # self.J[1,1] = dot(self.Neta, self.y)[0,0]
+        # self.J[1,2] = dot(self.Neta, self.z)[0,0]
+
+        dot_product(self.Nxi,  self.x, out = tmp1)
+        self.J[0,0] = tmp1
+        dot_product(self.Nxi,  self.y, out = tmp1)
+        self.J[0,1] = tmp1
+        dot_product(self.Nxi,  self.z, out = tmp1)
+        self.J[0,2] = tmp1
+
+        dot_product(self.Neta,  self.x, out = tmp1)
+        self.J[1,0] = tmp1
+        dot_product(self.Neta,  self.y, out = tmp1)
+        self.J[1,1] = tmp1
+        dot_product(self.Neta,  self.z, out = tmp1)
+        self.J[1,2] = tmp1
 
       # end if
 
     else:
 
-      self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-      self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
-      self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+      # self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+      # self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+      # self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
 
-      self.J[1,0] = dot(self.Neta, self.x)[0,0]
-      self.J[1,1] = dot(self.Neta, self.y)[0,0]
-      self.J[1,2] = dot(self.Neta, self.z)[0,0]
+      # self.J[1,0] = dot(self.Neta, self.x)[0,0]
+      # self.J[1,1] = dot(self.Neta, self.y)[0,0]
+      # self.J[1,2] = dot(self.Neta, self.z)[0,0]
 
-      self.J[2,0] = dot(self.Nzeta,self.x)[0,0]
-      self.J[2,1] = dot(self.Nzeta,self.y)[0,0]
-      self.J[2,2] = dot(self.Nzeta,self.z)[0,0]
+      # self.J[2,0] = dot(self.Nzeta,self.x)[0,0]
+      # self.J[2,1] = dot(self.Nzeta,self.y)[0,0]
+      # self.J[2,2] = dot(self.Nzeta,self.z)[0,0]
+
+      dot_product(self.Nxi,  self.x, out = tmp1)
+      self.J[0,0] = tmp1
+      dot_product(self.Nxi,  self.y, out = tmp1)
+      self.J[0,1] = tmp1
+      dot_product(self.Nxi,  self.z, out = tmp1)
+      self.J[0,2] = tmp1
+
+      dot_product(self.Neta,  self.x, out = tmp1)
+      self.J[1,0] = tmp1
+      dot_product(self.Neta,  self.y, out = tmp1)
+      self.J[1,1] = tmp1
+      dot_product(self.Neta,  self.z, out = tmp1)
+      self.J[1,2] = tmp1
+
+      dot_product(self.Nzeta,  self.x, out = tmp1)
+      self.J[2,0] = tmp1
+      dot_product(self.Nzeta,  self.y, out = tmp1)
+      self.J[2,1] = tmp1
+      dot_product(self.Nzeta,  self.z, out = tmp1)
+      self.J[2,2] = tmp1
+
+    # end if 
 
     if self.ndim == self.ndim_an:
 
       det(self.J, out = self.detJ)
-      self.w_dJ = self.w * self.detJ
+      mul(self.w, self.detJ, out = self.w_dJ)
+      # self.w_dJ = self.w * self.detJ
 
       if self.compute_Jinv:
 

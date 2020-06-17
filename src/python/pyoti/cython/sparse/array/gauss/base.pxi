@@ -136,25 +136,21 @@ cdef class matsofe:
     """
     #*************************************************************************************************
 
-    cdef np.ndarray[coeff_t, ndim=1] tmp
+    cdef np.ndarray[coeff_t, ndim=3] tmp
     cdef uint64_t i, j, k
     cdef sotinum_t soti_tmp
 
-    tmp = np.empty( (self.arr.nrows,self.arr.ncols,self.nip) , dtype = np.float64)
+    tmp = np.empty( (self.arr.nrows,self.arr.ncols,self.arr.nip) , dtype = np.float64)
 
     for k in range(self.arr.nip):
-      
       for i in range(self.arr.nrows):
-        
         for j in range(self.arr.ncols):
           
-          soti_tmp = fearrso_get_item_ijk(&self.arr, i,j,k,dhl);
+          soti_tmp = fearrso_get_item_ijk(&self.arr, i, j, k, dhl);
           tmp[i,j,k] = soti_tmp.re
         
         # end for
-      
       # end for
-    
     # end for
 
     return tmp
@@ -308,38 +304,6 @@ cdef class matsofe:
     PURPOSE: Get the value of an element of the item.
     """
     #*************************************************************************************************
-    
-    # global dhl
-
-    # cdef arrso_t res
-
-    # if (isinstance(val, int)):
-      
-    #   res = fearrso_get_item_k( &self.arr, val, dhl)
-    
-    # else:
-      
-    #   return NotImplemented
-
-    # # end if
-
-    # return matso.create(&res)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     global dhl
 

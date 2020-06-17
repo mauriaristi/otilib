@@ -288,8 +288,9 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/array/gauss/utils.h
-
-  void fearrso_get_active_bases(fearrso_t* arr, imdir_t* list_vals, dhelpl_t dhl);
+  void fearrso_dimCheck_FF_samesize(fearrso_t* arr1, fearrso_t* arr2, fesoti_t* res);
+  void fearrso_dimCheck_OF_samesize(  arrso_t* arr1, fearrso_t* arr2, fesoti_t* res);
+  void fearrso_dimCheck_RF_samesize(   darr_t* arr1, fearrso_t* arr2, fesoti_t* res);
   void fearrso_dimCheck_FF_elementwise(fearrso_t* arr1, fearrso_t* arr2, fearrso_t* res);
   void fearrso_dimCheck_OF_elementwise(  arrso_t* arr1, fearrso_t* arr2, fearrso_t* res);
   void fearrso_dimCheck_RF_elementwise(   darr_t* arr1, fearrso_t* arr2, fearrso_t* res);
@@ -303,6 +304,7 @@ cdef extern from "oti/oti.h" nogil:
   void fearrso_dimCheck_F_squareness( fearrso_t* arr1, fearrso_t* res);
   void fearrso_dimCheck_F_transpose( fearrso_t* arr1, fearrso_t* res);
   void fearrso_dimCheck_FfO_integrate(fearrso_t* arr, fesoti_t* num,arrso_t* res);
+  void fearrso_get_active_bases(fearrso_t* arr, imdir_t* list_vals, dhelpl_t dhl);
 
 
   # From oti/sparse/array/gauss/algebra.h
@@ -379,6 +381,12 @@ cdef extern from "oti/oti.h" nogil:
   void      fearrso_div_Fr_to( fearrso_t* lhs,   coeff_t  rhs, fearrso_t* res, dhelpl_t dhl);
   arrso_t fearrso_integrate(    fearrso_t* arr, fesoti_t* w,               dhelpl_t dhl);
   void    fearrso_integrate_to( fearrso_t* arr, fesoti_t* w, arrso_t* res, dhelpl_t dhl);
+  fesoti_t fearrso_dotproduct_FF(    fearrso_t* lhs, fearrso_t* rhs,                dhelpl_t dhl);
+  void     fearrso_dotproduct_FF_to( fearrso_t* lhs, fearrso_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fearrso_dotproduct_OF(      arrso_t* lhs, fearrso_t* rhs,                dhelpl_t dhl);
+  void     fearrso_dotproduct_OF_to(   arrso_t* lhs, fearrso_t* rhs, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fearrso_dotproduct_RF(       darr_t* lhs, fearrso_t* rhs,                dhelpl_t dhl);
+  void     fearrso_dotproduct_RF_to(    darr_t* lhs, fearrso_t* rhs, fesoti_t* res, dhelpl_t dhl);
   fearrso_t fearrso_matmul_FF(    fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
   void      fearrso_matmul_FF_to( fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
   fearrso_t fearrso_matmul_OF(    arrso_t*   lhs, fearrso_t* rhs,                 dhelpl_t dhl);

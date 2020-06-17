@@ -1,223 +1,54 @@
 
+include "algebra_utils/dot_product.pxi"
 
-# #*****************************************************************************************************
-# cpdef dot_product(object lhs, object rhs, object out = None):
-#   """
-#   PURPOSE:  Matrix inner product (standard matrix multiplication).
-#   """
-#   #***************************************************************************************************
+#*****************************************************************************************************
+cpdef dot_product(object lhs, object rhs, object out = None):
+  """
+  PURPOSE:  Vector dot product (For matrices, sum product).
 
-#   cdef matso      Olhs, Orhs, Ores
-#   cdef dmat       Rlhs, Rrhs, Rres
-#   cdef matsofe    Flhs, Frhs, Fres
-#   cdef sotinum ores
-#   cdef sotife  fres
-#   cdef sotinum_t cores
-#   cdef fesoti_t  cfres
+  """
+  #***************************************************************************************************
+  
+  cdef uint8_t res_flag = 1
+  cdef object res = None
 
-#   cdef uint8_t res_flag = 1
-#   cdef object res = None
+  tlhs = type(lhs)
 
-#   tlhs = type(lhs)
-#   trhs = type(rhs)
+  if out is None:
+    res_flag = 0
+  # end if 
 
-#   if out is None:
-#     res_flag = 0
-#   # end if 
+  # supported types for lhs and rhs:
+  #    -  matso
+  #    -  matsofe
+  #    -  darr
+  # Supported output types:
+  #    - sotinum
+  #    - sotife
 
-#   # supported types:
-#   #    -  matso
-#   #    -  matsofe
-#   #    -  darr
+  if   tlhs is matsofe:
 
-#   if   tlhs is matsofe:
+    res = __dot_product_FX( lhs, rhs, out = out)
+
+  elif tlhs is matso:
+
+    res = __dot_product_OX( lhs, rhs, out = out)
+
+  elif tlhs is dmat:
     
-#     Flhs = lhs
+    res = __dot_product_RX( lhs, rhs, out = out)
 
-#     if   trhs is matsofe: # FF
+  else:
 
-#       Frhs = rhs
+    raise TypeError("Unsupported types {0}, {1} at dot_product operation.".format(tlhs,type(rhs)))
 
-#       if res_flag:
+  # end if 
 
-#         Fres = out
+  if res_flag == 0:
+    return res
+  # end if 
 
-#         fearrso_dotproduct_FF_to( &Flhs.arr, &Frhs.arr ,&Fres.arr, dhl)
-
-#       else:
-
-#         cFres = fearrso_dotproduct_FF( &Flhs.arr, &Frhs.arr , dhl)
-
-#         res = matsofe.create(&cFres)
-
-#       # end if 
-
-#     elif trhs is matso:   # FO
-
-#       Orhs = rhs
-
-#       if res_flag:
-
-#         Fres = out
-
-#         fearrso_dotproduct_FO_to( &Flhs.arr, &Orhs.arr ,&Fres.arr, dhl)
-
-#       else:
-
-#         cFres = fearrso_dotproduct_FO( &Flhs.arr, &Orhs.arr , dhl)
-
-#         res = sotinum.create(&cFres)
-
-#       # end if 
-
-
-#     elif tlhs is dmat:    # FR
-
-#       Rrhs = rhs
-
-#       if res_flag:
-
-#         Fres = out
-
-#         fearrso_dotproduct_FR_to( &Flhs.arr, &Rrhs.arr ,&Fres.arr, dhl)
-
-#       else:
-
-#         cFres = fearrso_dotproduct_FR( &Flhs.arr, &Rrhs.arr , dhl)
-
-#         res = sotinum.create(&cFres)
-
-#       # end if 
-
-#     else:
-
-#       raise TypeError("Unsupported types at dot operation.")
-      
-#     # end if 
-
-#   elif tlhs is matso:
-
-#     Olhs = lhs
-
-#     if   trhs is matsofe: # OF
-
-#       Frhs = rhs
-
-#       if res_flag:
-
-#         Fres = out
-
-#         fearrso_dotproduct_OF_to( &Olhs.arr, &Frhs.arr ,&Fres.arr, dhl)
-
-#       else:
-
-#         cFres = fearrso_dotproduct_OF( &Olhs.arr, &Frhs.arr , dhl)
-
-#         res = sotinum.create(&cFres)
-
-#       # end if 
-
-#     elif trhs is matso:   # OO
-    
-#       Orhs = rhs
-
-#       if res_flag:
-
-#         Ores = out
-
-#         arrso_dotproduct_OO_to( &Olhs.arr, &Orhs.arr ,&Ores.arr, dhl)
-
-#       else:
-
-#         cOres = arrso_dotproduct_OO( &Olhs.arr, &Orhs.arr , dhl)
-
-#         res = sotinum.create(&cOres)
-
-#       # end if 
-
-#     elif tlhs is dmat:    # OR
-    
-#       Rrhs = rhs
-
-#       if res_flag:
-
-#         Ores = out
-
-#         arrso_dotproduct_OR_to( &Olhs.arr, &Rrhs.arr ,&Ores.arr, dhl)
-
-#       else:
-
-#         cOres = arrso_dotproduct_OR( &Olhs.arr, &Rrhs.arr , dhl)
-
-#         res = sotinum.create(&cOres)
-
-#       # end if 
-
-#     else:
-
-#       raise TypeError("Unsupported types at dot operation.")
-      
-#     # end if    
-
-#   elif tlhs is dmat:
-    
-#     Rlhs = lhs
-
-#     if   trhs is matsofe: # RF
-
-#       Frhs = rhs
-
-#       if res_flag:
-
-#         Fres = out
-
-#         fearrso_dotproduct_RF_to( &Rlhs.arr, &Frhs.arr ,&Fres.arr, dhl)
-
-#       else:
-
-#         cores = fearrso_dotproduct_RF( &Rlhs.arr, &Frhs.arr , dhl)
-
-#         res = sotinum.create(&cores)
-
-#       # end if 
-
-#     elif trhs is matso:   # RO
-
-#       Orhs = rhs
-
-#       if res_flag:
-
-#         Ores = out
-
-#         arrso_dotproduct_RO_to( &Rlhs.arr, &Orhs.arr ,&Ores.arr, dhl)
-
-#       else:
-
-#         cores = arrso_dotproduct_RO( &Rlhs.arr, &Orhs.arr , dhl)
-
-#         res = sotinum.create(&cOres)
-
-#       # end if 
-
-#     else:
-
-#       raise TypeError("Unsupported types at dot operation.")
-      
-#     # end if 
-
-#   else:
-
-#     raise TypeError("Unsupported types at dot operation.")
-    
-#     # return NotImplemented
-
-#   # end if 
-
-#   if res_flag == 0:
-#     return res
-#   # end if 
-
-# #-----------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------
 
 
 
@@ -253,9 +84,7 @@ cpdef dot(object lhs, object rhs, object out = None):
   trhs = type(rhs)
 
   if out is None:
-
     res_flag = 0
-
   # end if 
 
   # supported types:
@@ -266,232 +95,141 @@ cpdef dot(object lhs, object rhs, object out = None):
   if   tlhs is matsofe:
     
     Flhs = lhs
-
     if   trhs is matsofe: # FF
-
       Frhs = rhs
-
       if res_flag:
-
         Fres = out
-
         fearrso_matmul_FF_to( &Flhs.arr, &Frhs.arr ,&Fres.arr, dhl)
-
       else:
-
         cFres = fearrso_matmul_FF( &Flhs.arr, &Frhs.arr , dhl)
-
         res = matsofe.create(&cFres)
-
       # end if 
 
     elif trhs is matso:   # FO
 
       Orhs = rhs
-
       if res_flag:
-
         Fres = out
-
         fearrso_matmul_FO_to( &Flhs.arr, &Orhs.arr ,&Fres.arr, dhl)
-
       else:
-
         cFres = fearrso_matmul_FO( &Flhs.arr, &Orhs.arr , dhl)
-
         res = matsofe.create(&cFres)
-
       # end if 
-
 
     elif tlhs is dmat:    # FR
 
       Rrhs = rhs
-
       if res_flag:
-
         Fres = out
-
         fearrso_matmul_FR_to( &Flhs.arr, &Rrhs.arr ,&Fres.arr, dhl)
-
       else:
-
         cFres = fearrso_matmul_FR( &Flhs.arr, &Rrhs.arr , dhl)
-
         res = matsofe.create(&cFres)
-
       # end if 
 
     else:
-
-      raise TypeError("Unsupported types at dot operation.")
-      
+      raise TypeError("Unsupported types at dot operation.")      
     # end if 
 
   elif tlhs is matso:
 
     Olhs = lhs
-
     if   trhs is matsofe: # OF
-
       Frhs = rhs
-
       if res_flag:
-
         Fres = out
-
         fearrso_matmul_OF_to( &Olhs.arr, &Frhs.arr ,&Fres.arr, dhl)
-
       else:
-
         cFres = fearrso_matmul_OF( &Olhs.arr, &Frhs.arr , dhl)
-
         res = matsofe.create(&cFres)
-
       # end if 
 
     elif trhs is matso:   # OO
-    
+
       Orhs = rhs
-
       if res_flag:
-
         Ores = out
-
         arrso_matmul_OO_to( &Olhs.arr, &Orhs.arr ,&Ores.arr, dhl)
-
       else:
-
         cOres = arrso_matmul_OO( &Olhs.arr, &Orhs.arr , dhl)
-
         res = matso.create(&cOres)
-
       # end if 
 
     elif tlhs is dmat:    # OR
     
       Rrhs = rhs
-
       if res_flag:
-
         Ores = out
-
         arrso_matmul_OR_to( &Olhs.arr, &Rrhs.arr ,&Ores.arr, dhl)
-
       else:
-
         cOres = arrso_matmul_OR( &Olhs.arr, &Rrhs.arr , dhl)
-
         res = matso.create(&cOres)
-
       # end if 
 
     else:
-
-      raise TypeError("Unsupported types at dot operation.")
-      
+      raise TypeError("Unsupported types at dot operation.")      
     # end if    
 
   elif tlhs is csr_matso:
 
-    Slhs = lhs
-
+    # Slhs = lhs
     if   trhs is matso: # SO
-
       if res_flag:
-
         Ores = out
         csrmatso_matmul_SO_to( lhs, rhs, Ores)
-
       else:
-
         res = csrmatso_matmul_SO( lhs, rhs)
-
       # end if 
 
     else:
-
-      raise TypeError("Unsupported types at dot operation.")
-      
+      raise TypeError("Unsupported types at dot operation.")      
     # end if  
 
 
   elif tlhs is dmat:
     
     Rlhs = lhs
-
     if   trhs is matsofe: # RF
-
       Frhs = rhs
-
       if res_flag:
-
         Fres = out
-
         fearrso_matmul_RF_to( &Rlhs.arr, &Frhs.arr ,&Fres.arr, dhl)
-
       else:
-
         cFres = fearrso_matmul_RF( &Rlhs.arr, &Frhs.arr , dhl)
-
         res = matsofe.create(&cFres)
-
       # end if 
 
     elif trhs is matso:   # RO
-
       Orhs = rhs
-
       if res_flag:
-
         Ores = out
-
         arrso_matmul_RO_to( &Rlhs.arr, &Orhs.arr ,&Ores.arr, dhl)
-
       else:
-
         cOres = arrso_matmul_RO( &Rlhs.arr, &Orhs.arr , dhl)
-
         res = matso.create(&cOres)
-
       # end if 
 
     elif tlhs is dmat:    # RR
-
       Rrhs = rhs
-
       if res_flag:
-
         Rres = out
-
         darr_matmul_to( &Rlhs.arr, &Rrhs.arr , &Rres.arr)
-
       else:
-
         cRres = darr_matmul( &Rlhs.arr, &Rrhs.arr)
-
-        res = dmat.create(&cRres)
-   
+        res = dmat.create(&cRres)   
       # end if 
     
     else:
-
-      raise TypeError("Unsupported types at dot operation.")
-      
+      raise TypeError("Unsupported types at dot operation.")      
     # end if 
 
   else:
-
     raise TypeError("Unsupported types at dot operation.")
-    
-    # return NotImplemented
 
   # end if 
 
   if res_flag == 0:
-
     return res
-
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
@@ -530,69 +268,42 @@ cpdef transpose(object arr, object out = None):
   if   tarr is matsofe:
     
     F = arr
-
     if res_flag:
-
       Fres = out
-
       fearrso_transpose_to( &F.arr, &Fres.arr, dhl)
-
     else:
-
       cFres = fearrso_transpose( &F.arr, dhl)
-
       res = matsofe.create(&cFres)
-
     # end if 
 
   elif tarr is matso:
 
     O = arr
-
     if res_flag:
-
       Ores = out
-
       arrso_transpose_to( &O.arr, &Ores.arr, dhl)
-
     else:
-
       cOres = arrso_transpose( &O.arr,  dhl)
-
       res = matso.create(&cOres)
-
     # end if    
 
   elif tarr is dmat:
     
     R = arr
-
     if res_flag:
-
       Rres = out
-
       darr_transpose_to( &R.arr, &Rres.arr)
-
     else:
-
       cRres = darr_transpose( &R.arr)
-
       res = dmat.create(&cRres)
-
-    # end if 
+    # end if
 
   else:
-
     raise TypeError("Unsupported types at transpose operation.")
-    
-    # return NotImplemented
-
   # end if 
 
   if res_flag == 0:
-
     return res
-
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
@@ -631,33 +342,23 @@ cpdef det(object arr, object out = None):
   if   tarr is matsofe:
     
     F = arr
-
     if res_flag:
-
       fres = out
       fearrso_det_to( &F.arr, &fres.num, dhl)
-
     else:
-
       cfres = fearrso_det( &F.arr, dhl)
       res = sotife.create(&cfres)
-
     # end if 
 
   elif tarr is matso:
-
+    
     O = arr
-
-    if res_flag:
-      
+    if res_flag:      
       ores = out
       arrso_det_to( &O.arr, &ores.num, dhl)
-
     else:
-
       cores = arrso_det( &O.arr,  dhl)
       res = sotinum.create(&cores)
-
     # end if    
 
   elif tarr is dmat:
@@ -718,65 +419,41 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
   if   tarr is matsofe:
     
     F = arr
-
     if res_flag:
-
       fres = out
-
       fearrso_pnorm_to( &F.arr, p, &fres.num, dhl)
-
     else:
-
       cfres = fearrso_pnorm( &F.arr, p, dhl)
-
       res = sotife.create(&cfres)
-
     # end if 
 
   elif tarr is matso:
 
     O = arr
-
     if res_flag:
-
       ores = out
-
       arrso_pnorm_to( &O.arr, p, &ores.num, dhl)
-
     else:
-
       cores = arrso_pnorm( &O.arr, p, dhl)
-
       res = sotinum.create(&cores)
-
     # end if    
 
   elif tarr is dmat:
     
     R = arr
-
     crres = darr_pnorm( &R.arr, p)
-
     if res_flag:
-
       out = crres
-
     else:
-
       res = crres
-
     # end if 
 
   else:
-
     raise TypeError("Unsupported types at det operation.")
-
   # end if 
 
   if res_flag == 0:
-
     return res
-
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
@@ -810,84 +487,47 @@ cpdef inv(object arr, object out = None):
   tarr = type(arr)
 
   if out is None:
-
     res_flag = 0
-
   # end if 
 
   # supported types:
   #    -  matso
   #    -  matsofe
-  #    -  csr_matso
   #    -  darr
 
-  if   tarr is matsofe:
-    
+  if   tarr is matsofe:    
     F = arr
-
-
     if res_flag:
-
       Fres = out
-
       fearrso_invert_to( &F.arr, &Fres.arr, dhl)
-
     else:
-
       cFres = fearrso_invert( &F.arr, dhl)
-
       res = matsofe.create(&cFres)
-
     # end if 
-
   elif tarr is matso:
-
     O = arr
-
     if res_flag:
-
       Ores = out
-
       arrso_invert_to( &O.arr, &Ores.arr, dhl)
-
     else:
-
       cOres = arrso_invert( &O.arr,  dhl)
-
       res = matso.create(&cOres)
-
-    # end if    
-
-  elif tarr is dmat:
-    
+    # end if
+  elif tarr is dmat:    
     R = arr
-
     if res_flag:
-
       Rres = out
-
       darr_invert_to( &R.arr, &Rres.arr)
-
     else:
-
       cRres = darr_invert( &R.arr)
-
       res = dmat.create(&cRres)
-
     # end if 
-
   else:
-
-    raise TypeError("Unsupported types at inverse operation.")
-    
-    # return NotImplemented
-
+    raise TypeError("Unsupported types at inverse operation.")    
   # end if 
 
   if res_flag == 0:
-
     return res
-
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
@@ -942,22 +582,15 @@ cpdef inv_block(object arr, object out = None):
   #    -  matso
   #    -  csr_matso
 
-  if   tarr is matso:
-    
+  if   tarr is matso:    
     O = arr
-
     if res_flag:
-
       Ores = out
-
     else:
-
       Ores = zeros(O.shape)
-
     # end if
 
     # res = Ores
-
     inverse = np.linalg.inv(O.real)
 
     # Copy the inverse to the values of the inverse.
@@ -966,12 +599,10 @@ cpdef inv_block(object arr, object out = None):
         k = j + i * Ores.arr.ncols
         arrso_set_item_ij_r( inverse[i,j], i, j, &Ores.arr, dhl)
       # end for
-    # end for
-    
-    Oord = O.order
-    
-    tmp = O.copy()
+    # end for    
 
+    Oord = O.order    
+    tmp = O.copy()
     for ordi in range( 1, Oord + 1 ):
       
       tmp.set(0)
@@ -983,25 +614,15 @@ cpdef inv_block(object arr, object out = None):
         tmp -= dot( O.get_order_im(ord_lhs), Ores.get_order_im(ord_rhs))
 
       # end for 
-
       Ores += dot( Ores.get_order_im(0), tmp)
-
     # end for 
-
     res = Ores
-
   else:
-
     raise TypeError("Unsupported types at Block-solver inverse operation.")
-    
-    # return NotImplemented
-
   # end if 
 
   if res_flag == 0:
-
     return res
-
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
@@ -1034,9 +655,7 @@ cpdef solve(object K_in, matso b_in, matso out = None):
   tK = type(K_in)
 
   if out is None:
-
     res_flag = 0
-
   # end if 
 
   # supported types:
@@ -1046,39 +665,25 @@ cpdef solve(object K_in, matso b_in, matso out = None):
   if   tK is matso:
     
     if res_flag:
-
       solve_dense( K_in, b_in, out = out)
-
-    else:
-      
+    else:      
       res = solve_dense(K_in, b_in)
-
     # end if
 
   elif tK is csr_matso:
 
     if res_flag:
-
       solve_sparse( K_in, b_in, out = out)
-
-    else:
-      
+    else:      
       res = solve_sparse(K_in, b_in)
-
     # end if
 
   else:
-
     raise TypeError("Unsupported types at Block-solver inverse operation.")
-    
-    # return NotImplemented
-
   # end if 
 
   if res_flag == 0:
-
     return res
-
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
@@ -1340,16 +945,5 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
   # end for
 
 #-----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
 
 

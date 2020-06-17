@@ -145,7 +145,38 @@
 
 
 
+// ****************************************************************************************************
+inline void fearrso_dimCheck_FF_samesize(fearrso_t* arr1,fearrso_t* arr2,fesoti_t* res){
 
+     if( arr1->size != arr2->size || arr1->nip != arr2->nip || arr2->nip != res->nip ){
+        printf("ERROR: Wrong dimensions in elementwise operation between two fearrso arrays.\n");
+        exit(OTI_BadDim);
+     }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void fearrso_dimCheck_OF_samesize(arrso_t* arr1,fearrso_t* arr2, fesoti_t* res){
+
+     if( arr1->size != arr2->size || arr2->nip != res->nip ){
+        printf("ERROR: Wrong dimensions in elementwise operation between fearrso and real arrays.\n");
+        exit(OTI_BadDim);
+     }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void fearrso_dimCheck_RF_samesize(darr_t* arr1, fearrso_t* arr2, fesoti_t* res){
+
+    if( arr1->size != arr2->size || arr2->nip != res->nip ){
+        printf("ERROR: Wrong dimensions in elementwise operation between fearrso and real arrays.\n");
+        exit(OTI_BadDim);
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

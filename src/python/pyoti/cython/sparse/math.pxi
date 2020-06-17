@@ -2591,11 +2591,11 @@ cpdef gauss_integrate(object val, sotife w, object out = None ):
     if res_flag:
       
       ores = out
-      fesoti_integrate_to( &f.num, &w.num, &ores.num, dhl)
+      fesoti_integrate_f_to( &f.num, &w.num, &ores.num, dhl)
 
     else:
 
-      cores = fesoti_integrate( &f.num, &w.num, dhl)
+      cores = fesoti_integrate_f( &f.num, &w.num, dhl)
       res   = sotinum.create(&cores)
 
     # end if  
@@ -2612,9 +2612,38 @@ cpdef gauss_integrate(object val, sotife w, object out = None ):
       res   = matso.create(&cOres)
 
     # end if 
-  else:
+  elif tval is sotinum:
+    o = val
+    if res_flag:
+      
+      ores = out
+      fesoti_integrate_o_to( &o.num, &w.num, &ores.num, dhl)
 
-    raise TypeError("Unsupported types at gauss_integrate operation.")
+    else:
+
+      cores = fesoti_integrate_o( &o.num, &w.num, dhl)
+      res   = sotinum.create(&cores)
+
+    # end if
+  else:
+    try:
+      r = val
+      if res_flag:
+        
+        ores = out
+        fesoti_integrate_r_to( r, &w.num, &ores.num, dhl)
+
+      else:
+
+        cores = fesoti_integrate_r( r, &w.num, dhl)
+        res   = sotinum.create(&cores)
+
+      # end if  
+    except:
+
+      raise TypeError("Unsupported type {0} at gauss_integrate operation.".format(tval))
+    
+    # end try
 
   # end if 
 

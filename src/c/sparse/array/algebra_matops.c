@@ -97,7 +97,33 @@ arrso_t arrso_transpose(arrso_t* arr1, dhelpl_t dhl){
 
 
 
+// 1. Vector operations.
+// 1.1.  Dot product.
+// 1.1.1  dotproduct(O,O)
+// ****************************************************************************************************
+sotinum_t arrso_dotproduct_OO(arrso_t* arr1, arrso_t* arr2,               dhelpl_t dhl){
 
+    
+    sotinum_t res = soti_init();
+
+    arrso_dotproduct_OO_to( arr1, arr2, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t arrso_dotproduct_RO(darr_t* arr1, arrso_t* arr2,               dhelpl_t dhl){
+
+    sotinum_t res = soti_init();
+
+    arrso_dotproduct_RO_to( arr1, arr2, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

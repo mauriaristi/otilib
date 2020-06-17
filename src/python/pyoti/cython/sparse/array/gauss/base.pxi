@@ -103,6 +103,17 @@ cdef class matsofe:
 
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
+  @property
+  def shape(self): 
+    """
+    PURPOSE:      Return the shape of the stored matrix. 
+    """
+    #*************************************************************************************************
+
+    return (self.arr.nrows,self.arr.ncols)
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @property
@@ -129,7 +140,7 @@ cdef class matsofe:
     cdef uint64_t i, j, k
     cdef sotinum_t soti_tmp
 
-    tmp = np.empty( (self.nrows,self.ncols,self.nip) , dtype = np.float64)
+    tmp = np.empty( (self.arr.nrows,self.arr.ncols,self.nip) , dtype = np.float64)
 
     for k in range(self.arr.nip):
       

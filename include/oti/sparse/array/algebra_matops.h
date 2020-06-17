@@ -1,8 +1,21 @@
 #ifndef OTI_SPARSE_ARRAY_ALGEBRA_MATOPS_H
 #define OTI_SPARSE_ARRAY_ALGEBRA_MATOPS_H
 
+/**************************************************************************************************//**
+@brief Vector dot product
 
+RES  = DOT_PRODUCT( LHS,  RHS)
 
+@param[in] lhs    Left hand side array.
+@param[in] rhs    Right hand side array.
+@param[in] dhl    Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t arrso_dotproduct_OO(    arrso_t* lhs, arrso_t* rhs,                 dhelpl_t dhl);
+void      arrso_dotproduct_OO_to( arrso_t* lhs, arrso_t* rhs, sotinum_t* res, dhelpl_t dhl);
+
+sotinum_t arrso_dotproduct_RO(     darr_t* lhs, arrso_t* rhs,                 dhelpl_t dhl);
+void      arrso_dotproduct_RO_to(  darr_t* lhs, arrso_t* rhs, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 
 /**************************************************************************************************//**

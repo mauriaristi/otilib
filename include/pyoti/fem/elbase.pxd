@@ -93,13 +93,14 @@ cdef class elbaseso:
   
   #---------------------------------------------------------------------------------------------------
   
-  cdef is_allocated(self)
-  cdef is_initialized(self)
+  cpdef is_allocated(   self )
+  cpdef is_initialized( self )
 
-  cpdef allocate(self, uint64_t intorder, bases_t nbases = * , ord_t order = * )
-  cpdef end(self)
+  cpdef allocate( self, uint64_t intorder, bases_t nbases = * , ord_t order = * )
+  cpdef end( self )
 
-  cpdef allocate_spatial(self, uint64_t ndim_an, uint8_t compute_Jinv = * )
+  cpdef allocate_spatial( self, uint64_t ndim_an, uint8_t compute_Jinv = * )
+  cpdef reset( self )
   # cpdef uninitElement(self)
   # cdef sndarray Ke(self,sndarray coords, np.ndarray connect, other)
   # cdef sndarray fe(self,sndarray coords, np.ndarray connect, other)

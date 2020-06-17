@@ -1,22 +1,22 @@
-int64_t fem_intPts_soti( uint64_t order, int64_t elementType, 
-                         fesoti_t*  xi,   fesoti_t*   eta,   fesoti_t* zeta, 
-                         fesoti_t* weights, dhelpl_t dhl);
+// int64_t fem_intPts_soti( uint64_t order, int64_t elementType, 
+//                          fesoti_t*  xi,   fesoti_t*   eta,   fesoti_t* zeta, 
+//                          fesoti_t* weights, dhelpl_t dhl);
 
 
 
-uint64_t fem_addLineIntPts_soti(uint8_t nperm, uint64_t start, double a,  double w,
-                                fesoti_t* xi, fesoti_t* eta, fesoti_t* zeta, 
-                                fesoti_t* weights, dhelpl_t dhl);
+// uint64_t fem_addLineIntPts_soti(uint8_t nperm, uint64_t start, double a,  double w,
+//                                 fesoti_t* xi, fesoti_t* eta, fesoti_t* zeta, 
+//                                 fesoti_t* weights, dhelpl_t dhl);
 
-uint64_t fem_addTriangleIntPts_soti(uint8_t nperm, uint64_t start, 
-                                    double a, double b, double c, double w,
-                                    fesoti_t* xi, fesoti_t* eta, fesoti_t* zeta, 
-                                    fesoti_t* weights, dhelpl_t dhl);
+// uint64_t fem_addTriangleIntPts_soti(uint8_t nperm, uint64_t start, 
+//                                     double a, double b, double c, double w,
+//                                     fesoti_t* xi, fesoti_t* eta, fesoti_t* zeta, 
+//                                     fesoti_t* weights, dhelpl_t dhl);
 
-uint64_t fem_addTetrahedraIntPts_soti(uint8_t nperm, uint64_t start, 
-                                      double a, double b, double c, double d, double w,
-                                      fesoti_t* xi, fesoti_t* eta, fesoti_t* zeta, 
-                                      fesoti_t* weights, dhelpl_t dhl);
+// uint64_t fem_addTetrahedraIntPts_soti(uint8_t nperm, uint64_t start, 
+//                                       double a, double b, double c, double d, double w,
+//                                       fesoti_t* xi, fesoti_t* eta, fesoti_t* zeta, 
+//                                       fesoti_t* weights, dhelpl_t dhl);
 
 
 
@@ -668,15 +668,15 @@ int64_t fem_intPts_soti( uint64_t order, int64_t elementType,
             // Point 0
             i = 0; 
             a = 0.250000000000000; b = a; c = a; d = a;
-            w =-0.013155555555556; w /= 6.0;
+            w =-0.013155555555556; //w /= 6.0;
             i = fem_addTetrahedraIntPts_soti(1, i, a, b, c, d, w, xi, eta, zeta, weights, dhl);
 
             a = 0.785714285714286; b = 0.071428571428571; c = b; d = b;
-            w = 0.007622222222222; w /= 6.0;
+            w = 0.007622222222222; //w /= 6.0;
             i = fem_addTetrahedraIntPts_soti(4, i, a, b, c, d, w, xi, eta, zeta, weights, dhl);
 
             a = 0.399403576166799; b = 0.100596423833201; c = a; d = b;
-            w = 0.024888888888889; w /= 6.0;
+            w = 0.024888888888889; //w /= 6.0;
             i = fem_addTetrahedraIntPts_soti(6, i, a, b, c, d, w, xi, eta, zeta, weights, dhl);
         
         } else { // Order >= 5.
@@ -692,19 +692,19 @@ int64_t fem_intPts_soti( uint64_t order, int64_t elementType,
             // Point 0
             i = 0; 
             a = 0.250000000000000; b = a; c = a; d = a;
-            w = 0.030283678097089; w /= 6.0;
+            w = 0.030283678097089; //w /= 6.0;
             i = fem_addTetrahedraIntPts_soti(1, i, a, b, c, d, w, xi, eta, zeta, weights, dhl);
 
             a = 0.000000000000000; b = 0.333333333333333; c = b; d = b;
-            w = 0.006026785714286; w /= 6.0;
+            w = 0.006026785714286; //w /= 6.0;
             i = fem_addTetrahedraIntPts_soti(4, i, a, b, c, d, w, xi, eta, zeta, weights, dhl);
 
             a = 0.727272727272727; b = 0.090909090909091; c = b; d = b;
-            w = 0.011645249086029; w /= 6.0;
+            w = 0.011645249086029; //w /= 6.0;
             i = fem_addTetrahedraIntPts_soti(4, i, a, b, c, d, w, xi, eta, zeta, weights, dhl);
 
             a = 0.066550153573664; b = 0.433449846426336; c = a; d = b;
-            w = 0.010949141561386; w /= 6.0;
+            w = 0.010949141561386; //w /= 6.0;
             i = fem_addTetrahedraIntPts_soti(6, i, a, b, c, d, w, xi, eta, zeta, weights, dhl);
 
 

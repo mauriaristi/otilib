@@ -112,8 +112,17 @@ res = \sum_{i=1}^{i=nip} w[i] * num[i]
 @param[in] res Result.
 @param[in] dhl Direction helper list.
 ******************************************************************************************************/
-sotinum_t fesoti_integrate(    fesoti_t* num, fesoti_t* w,                 dhelpl_t dhl);
-void      fesoti_integrate_to( fesoti_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
+sotinum_t fesoti_integrate(       fesoti_t* num, fesoti_t* w,                 dhelpl_t dhl);
+void      fesoti_integrate_to(    fesoti_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
+
+sotinum_t fesoti_integrate_f(     fesoti_t* num, fesoti_t* w,                 dhelpl_t dhl);
+void      fesoti_integrate_f_to(  fesoti_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
+
+sotinum_t fesoti_integrate_r(       coeff_t num, fesoti_t* w,                 dhelpl_t dhl);
+void      fesoti_integrate_r_to(    coeff_t num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
+
+sotinum_t fesoti_integrate_o(    sotinum_t* num, fesoti_t* w,                 dhelpl_t dhl);
+void      fesoti_integrate_o_to( sotinum_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 

@@ -340,7 +340,7 @@ cdef class elbaseso:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cdef is_allocated(self):
+  cpdef is_allocated(self):
     """
     Return boolean if the element is allocated.
     """
@@ -350,12 +350,38 @@ cdef class elbaseso:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cdef is_initialized(self):
+  cpdef is_initialized(self):
     """
     Return boolean if the element is initialized.
     """
 
     return elemso_is_started(&self.elem)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef reset(self):
+    """
+    Reset the values of all spatial variables.
+    """
+    self.J.set(0) 
+
+    self.x.set(0)
+    self.y.set(0)
+    self.z.set(0)
+
+    self.detJ.set(0)
+    self.w_dJ.set(0)
+
+    if self.compute_Jinv :
+
+      self.Jinv.set(0)
+      
+      self.Nx.set(0)
+      self.Ny.set(0)
+      self.Nz.set(0)
+
+    # end if
 
   #---------------------------------------------------------------------------------------------------
 

@@ -78,9 +78,31 @@ inline void arrso_dimCheck_OR_matmul( arrso_t* arr1, darr_t* arr2, arrso_t* res)
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+inline void arrso_dimCheck_OO_samesize( arrso_t* arr1, arrso_t* arr2){
+
+     if( arr1->size != arr2->size ){
+        printf("ERROR: Arrays don't have the same number of elements.\n");
+        exit(OTI_BadDim);
+     }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void arrso_dimCheck_RO_samesize( darr_t* arr1, arrso_t* arr2){
+
+     if( arr1->size != arr2->size ){
+        printf("ERROR: Arrays don't have the same number of elements.\n");
+        exit(OTI_BadDim);
+     }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 inline void arrso_dimCheck_O_squareness( arrso_t* arr1, arrso_t* res){
 
-     if( arr1->ncols != arr1->nrows ||
+     if( arr1->nrows != arr1->ncols ||
          arr1->nrows !=  res->nrows || 
          arr1->ncols !=  res->ncols    ){
         printf("ERROR: Arrso array not square.\n");

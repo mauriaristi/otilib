@@ -1,5 +1,234 @@
 
 
+# #*****************************************************************************************************
+# cpdef dot_product(object lhs, object rhs, object out = None):
+#   """
+#   PURPOSE:  Matrix inner product (standard matrix multiplication).
+#   """
+#   #***************************************************************************************************
+
+#   cdef matso      Olhs, Orhs, Ores
+#   cdef dmat       Rlhs, Rrhs, Rres
+#   cdef matsofe    Flhs, Frhs, Fres
+#   cdef sotinum ores
+#   cdef sotife  fres
+#   cdef sotinum_t cores
+#   cdef fesoti_t  cfres
+
+#   cdef uint8_t res_flag = 1
+#   cdef object res = None
+
+#   tlhs = type(lhs)
+#   trhs = type(rhs)
+
+#   if out is None:
+#     res_flag = 0
+#   # end if 
+
+#   # supported types:
+#   #    -  matso
+#   #    -  matsofe
+#   #    -  darr
+
+#   if   tlhs is matsofe:
+    
+#     Flhs = lhs
+
+#     if   trhs is matsofe: # FF
+
+#       Frhs = rhs
+
+#       if res_flag:
+
+#         Fres = out
+
+#         fearrso_dotproduct_FF_to( &Flhs.arr, &Frhs.arr ,&Fres.arr, dhl)
+
+#       else:
+
+#         cFres = fearrso_dotproduct_FF( &Flhs.arr, &Frhs.arr , dhl)
+
+#         res = matsofe.create(&cFres)
+
+#       # end if 
+
+#     elif trhs is matso:   # FO
+
+#       Orhs = rhs
+
+#       if res_flag:
+
+#         Fres = out
+
+#         fearrso_dotproduct_FO_to( &Flhs.arr, &Orhs.arr ,&Fres.arr, dhl)
+
+#       else:
+
+#         cFres = fearrso_dotproduct_FO( &Flhs.arr, &Orhs.arr , dhl)
+
+#         res = sotinum.create(&cFres)
+
+#       # end if 
+
+
+#     elif tlhs is dmat:    # FR
+
+#       Rrhs = rhs
+
+#       if res_flag:
+
+#         Fres = out
+
+#         fearrso_dotproduct_FR_to( &Flhs.arr, &Rrhs.arr ,&Fres.arr, dhl)
+
+#       else:
+
+#         cFres = fearrso_dotproduct_FR( &Flhs.arr, &Rrhs.arr , dhl)
+
+#         res = sotinum.create(&cFres)
+
+#       # end if 
+
+#     else:
+
+#       raise TypeError("Unsupported types at dot operation.")
+      
+#     # end if 
+
+#   elif tlhs is matso:
+
+#     Olhs = lhs
+
+#     if   trhs is matsofe: # OF
+
+#       Frhs = rhs
+
+#       if res_flag:
+
+#         Fres = out
+
+#         fearrso_dotproduct_OF_to( &Olhs.arr, &Frhs.arr ,&Fres.arr, dhl)
+
+#       else:
+
+#         cFres = fearrso_dotproduct_OF( &Olhs.arr, &Frhs.arr , dhl)
+
+#         res = sotinum.create(&cFres)
+
+#       # end if 
+
+#     elif trhs is matso:   # OO
+    
+#       Orhs = rhs
+
+#       if res_flag:
+
+#         Ores = out
+
+#         arrso_dotproduct_OO_to( &Olhs.arr, &Orhs.arr ,&Ores.arr, dhl)
+
+#       else:
+
+#         cOres = arrso_dotproduct_OO( &Olhs.arr, &Orhs.arr , dhl)
+
+#         res = sotinum.create(&cOres)
+
+#       # end if 
+
+#     elif tlhs is dmat:    # OR
+    
+#       Rrhs = rhs
+
+#       if res_flag:
+
+#         Ores = out
+
+#         arrso_dotproduct_OR_to( &Olhs.arr, &Rrhs.arr ,&Ores.arr, dhl)
+
+#       else:
+
+#         cOres = arrso_dotproduct_OR( &Olhs.arr, &Rrhs.arr , dhl)
+
+#         res = sotinum.create(&cOres)
+
+#       # end if 
+
+#     else:
+
+#       raise TypeError("Unsupported types at dot operation.")
+      
+#     # end if    
+
+#   elif tlhs is dmat:
+    
+#     Rlhs = lhs
+
+#     if   trhs is matsofe: # RF
+
+#       Frhs = rhs
+
+#       if res_flag:
+
+#         Fres = out
+
+#         fearrso_dotproduct_RF_to( &Rlhs.arr, &Frhs.arr ,&Fres.arr, dhl)
+
+#       else:
+
+#         cores = fearrso_dotproduct_RF( &Rlhs.arr, &Frhs.arr , dhl)
+
+#         res = sotinum.create(&cores)
+
+#       # end if 
+
+#     elif trhs is matso:   # RO
+
+#       Orhs = rhs
+
+#       if res_flag:
+
+#         Ores = out
+
+#         arrso_dotproduct_RO_to( &Rlhs.arr, &Orhs.arr ,&Ores.arr, dhl)
+
+#       else:
+
+#         cores = arrso_dotproduct_RO( &Rlhs.arr, &Orhs.arr , dhl)
+
+#         res = sotinum.create(&cOres)
+
+#       # end if 
+
+#     else:
+
+#       raise TypeError("Unsupported types at dot operation.")
+      
+#     # end if 
+
+#   else:
+
+#     raise TypeError("Unsupported types at dot operation.")
+    
+#     # return NotImplemented
+
+#   # end if 
+
+#   if res_flag == 0:
+#     return res
+#   # end if 
+
+# #-----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
 
 #*****************************************************************************************************
 cpdef dot(object lhs, object rhs, object out = None):

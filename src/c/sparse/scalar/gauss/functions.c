@@ -680,11 +680,113 @@ void fesoti_pow_to(fesoti_t* num, double e, fesoti_t* res, dhelpl_t dhl){
 
 
 
+// ****************************************************************************************************
+sotinum_t fesoti_integrate_r(coeff_t num, fesoti_t* w, dhelpl_t dhl){
+
+    sotinum_t  res = soti_init(); // res = 0.0
+
+    fesoti_integrate_r_to(num, w, &res,  dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fesoti_integrate_r_to(coeff_t num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl){
+
+    uint64_t i = 0;
+
+    sotinum_t tmp = soti_get_tmp( 1, fesoti_get_order( w ), dhl);
+
+    // res may not come as zero, Modify this?
+    soti_set_r(0,&tmp,dhl);
+
+    // The loop for every element in num.
+    for (i = 0; i < w->nip; i++){
+        
+        soti_sum_oo_to(  &tmp, &w->p_data[i], &tmp, dhl);
+
+    }
+
+    soti_mul_ro_to( num, &tmp, res, dhl);
 
 
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t fesoti_integrate_o(sotinum_t* num, fesoti_t* w, dhelpl_t dhl){
+
+    sotinum_t  res = soti_init(); // res = 0.0
+
+    fesoti_integrate_o_to(num, w, &res,  dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fesoti_integrate_o_to(sotinum_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl){
+
+    uint64_t i = 0;
+
+    sotinum_t tmp = soti_get_tmp( 1, fesoti_get_order( w ), dhl);
+
+    // res may not come as zero, Modify this?
+    soti_set_r(0, &tmp, dhl);
+
+    // The loop for every element in num.
+    for (i = 0; i < w->nip; i++){
+        
+        soti_sum_oo_to(  &tmp, &w->p_data[i], &tmp, dhl);
+
+    }
+
+    soti_mul_oo_to( num, &tmp, res, dhl);
 
 
+}
+// ----------------------------------------------------------------------------------------------------
 
+
+// ****************************************************************************************************
+sotinum_t fesoti_integrate_f(fesoti_t* num, fesoti_t* w, dhelpl_t dhl){
+
+    sotinum_t  res = soti_init(); // res = 0.0
+
+    fesoti_integrate_to(num, w, &res,  dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fesoti_integrate_f_to(fesoti_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl){
+
+    uint64_t i = 0;
+    sotinum_t tmp = soti_get_tmp( 1, fesoti_get_order( w ), dhl);
+
+    // Check dimensions.
+    fesoti_dimCheck( num, w);
+
+
+    // res may not come as zero, Modify this?
+    soti_set_r(0,&tmp,dhl);
+
+    // The loop for every element in num.
+    for (i = 0; i < num->nip; i++){
+        
+        soti_gem_oo_to( &w->p_data[i], &num->p_data[i], &tmp, &tmp, dhl);
+
+    }
+
+    soti_set_o(&tmp, res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
@@ -703,19 +805,24 @@ sotinum_t fesoti_integrate(fesoti_t* num, fesoti_t* w, dhelpl_t dhl){
 void fesoti_integrate_to(fesoti_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl){
 
     uint64_t i = 0;
+    sotinum_t tmp = soti_get_tmp( 1, fesoti_get_order( w ), dhl);
 
     // Check dimensions.
     fesoti_dimCheck( num, w);
+
+
+    // res may not come as zero, Modify this?
+    soti_set_r(0,&tmp,dhl);
 
     // res may not come as zero, Modify this?
 
     // The loop for every element in num.
     for (i = 0; i < num->nip; i++){
         
-        soti_gem_oo_to( &w->p_data[i], &num->p_data[i], res, res, dhl);
+        soti_gem_oo_to( &w->p_data[i], &num->p_data[i], &tmp, &tmp, dhl);
 
     }
 
-
+    soti_set_o(&tmp, res, dhl);
 }
 // ----------------------------------------------------------------------------------------------------

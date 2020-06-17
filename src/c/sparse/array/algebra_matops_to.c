@@ -1,6 +1,62 @@
 
 
 
+// 1. Vector operations.
+// 1.1.  Dot product.
+// 1.1.1  dotproduct(O,O)
+// ****************************************************************************************************
+void arrso_dotproduct_OO_to(arrso_t* arr1, arrso_t* arr2, sotinum_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+    ord_t order;
+    sotinum_t tmp;
+
+    // check for dimensions.
+    arrso_dimCheck_OO_samesize( arr1, arr2 );
+
+    // Extract temporal 5.
+    order = MAX(arrso_get_order( arr1 ), arrso_get_order( arr2 ));
+    tmp = soti_get_tmp( 5, order ,dhl);
+
+    soti_set_r( 0.0, &tmp, dhl);
+
+    for ( i = 0; i < arr1->size; i++){
+
+        soti_gem_oo_to( &arr1->p_data[ i ], &arr2->p_data[ i ], &tmp, &tmp, dhl);
+                   
+    }
+
+    soti_set_o(&tmp, res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void arrso_dotproduct_RO_to(darr_t* arr1, arrso_t* arr2, sotinum_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+    ord_t order;
+    sotinum_t tmp;
+
+    // check for dimensions.
+    arrso_dimCheck_RO_samesize( arr1, arr2 );
+
+    // Extract temporal 5.
+    order =  arrso_get_order( arr2 );
+    tmp = soti_get_tmp( 5, order ,dhl);
+
+    soti_set_r( 0.0, &tmp, dhl);
+
+    for ( i = 0; i < arr1->size; i++){
+
+        soti_gem_ro_to( arr1->p_data[ i ], &arr2->p_data[ i ], &tmp, &tmp, dhl);
+                   
+    }
+
+    soti_set_o(&tmp, res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

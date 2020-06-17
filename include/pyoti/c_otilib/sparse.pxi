@@ -147,7 +147,10 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/array/algebra_matops.h
-
+  sotinum_t arrso_dotproduct_OO(    arrso_t* lhs, arrso_t* rhs,                 dhelpl_t dhl);
+  void      arrso_dotproduct_OO_to( arrso_t* lhs, arrso_t* rhs, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t arrso_dotproduct_RO(     darr_t* lhs, arrso_t* rhs,                 dhelpl_t dhl);
+  void      arrso_dotproduct_RO_to(  darr_t* lhs, arrso_t* rhs, sotinum_t* res, dhelpl_t dhl);
   arrso_t arrso_matmul_OO(    arrso_t* lhs, arrso_t* rhs,               dhelpl_t dhl);
   arrso_t arrso_matmul_OR(    arrso_t* lhs,  darr_t* rhs,               dhelpl_t dhl);
   arrso_t arrso_matmul_RO(     darr_t* lhs, arrso_t* rhs,               dhelpl_t dhl);
@@ -757,6 +760,12 @@ cdef extern from "oti/oti.h" nogil:
   void     fesoti_pow_to(   fesoti_t* num, double e, fesoti_t* res,    dhelpl_t dhl);
   sotinum_t fesoti_integrate(    fesoti_t* num, fesoti_t* w,                 dhelpl_t dhl);
   void      fesoti_integrate_to( fesoti_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t fesoti_integrate_f(     fesoti_t* num, fesoti_t* w,                 dhelpl_t dhl);
+  void      fesoti_integrate_f_to(  fesoti_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t fesoti_integrate_r(       coeff_t num, fesoti_t* w,                 dhelpl_t dhl);
+  void      fesoti_integrate_r_to(    coeff_t num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t fesoti_integrate_o(    sotinum_t* num, fesoti_t* w,                 dhelpl_t dhl);
+  void      fesoti_integrate_o_to( sotinum_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
 
 
   # From oti/sparse/scalar/gauss/base.h

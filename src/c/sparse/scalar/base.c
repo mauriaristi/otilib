@@ -1017,7 +1017,7 @@ uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest){
     ord_t i;
 
     // Check if reallocation is necessary
-    if (src->order != dest->order ){
+    if (src->order > dest->order ){
 
         reallocate = 0xFF; // True
 
@@ -1056,8 +1056,7 @@ void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 
     if( reallocate ){
         // Reallocation IS required.
-        // Easiest way: Free current memory in dest and allocate new memory.
-        
+        // Easiest way: Free current memory in dest and allocate new memory.       
 
         if (dest->flag != 0){
 

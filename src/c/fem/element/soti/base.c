@@ -177,8 +177,8 @@ int64_t elemso_allocate(elemso_t* elemso, uint64_t intorder, bases_t bases, ord_
         for(derIdx = 0; derIdx<elemso->nder; derIdx++){
 
             // Allocate new array
-            elemso->p_evalBasis[derIdx] = fearrso_zeros_bases( 1,  elemso->nbasis, elemso->nip, 
-                                                               bases, order, dhl);
+            elemso->p_evalBasis[derIdx] 
+                           =   fearrso_zeros_bases( 1, elemso->nbasis, elemso->nip, 0, 0, dhl);
 
         }
         

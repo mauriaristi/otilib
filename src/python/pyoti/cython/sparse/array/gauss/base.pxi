@@ -1276,6 +1276,31 @@ cdef class matsofe:
 
   #---------------------------------------------------------------------------------------------------
 
+
+  #***************************************************************************************************
+  cpdef  get_item_ij( self, int64_t i, int64_t j, sotife out=None):
+    """
+    PURPOSE:      Get an item from matsofe array.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef fesoti_t res;
+
+    if ( i >= self.arr.nrows or  j >= self.arr.ncols ):
+      raise IndexError("Index out of bounds for ({0:d},{1:d}) and shape {2}.".format(i,j,self.shape))
+    # end if
+    
+    if out is None:
+      res = fearrso_get_item_ij( &self.arr, i, j, dhl)
+      return sotife.create(&res)
+    else:
+      fearrso_get_item_ij_to(  &self.arr, i,  j, &out.num, dhl)
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
   #***************************************************************************************************
   cpdef  get_deriv( self, object humdir):
     """

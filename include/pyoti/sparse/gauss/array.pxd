@@ -29,6 +29,7 @@ cdef class matsofe:
   cpdef get_order_im(  self, ord_t order  )
   
   cpdef get_ip(        self, int64_t ip   )
+  cpdef get_item_ij(   self, int64_t i, int64_t j, sotife out=*)
 
   cpdef set(           self, object rhs   )
   # cpdef set_ip(        self, int64_t ip   )

@@ -1,7 +1,7 @@
 
 include "algebra_utils/add.pxi"
-include "algebra_utils/mul.pxi"
 include "algebra_utils/sub.pxi"
+include "algebra_utils/mul.pxi"
 include "algebra_utils/div.pxi"
 
 

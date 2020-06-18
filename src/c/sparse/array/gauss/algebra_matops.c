@@ -421,7 +421,7 @@ void fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl){
     fearrso_dimCheck_fF_elementwise(res,arr,arr);
 
     for (i = 0; i<arr->nip; i++){
-
+        
         arrso_det_to( &arr->p_data[i], &res->p_data[i], dhl);
 
     }

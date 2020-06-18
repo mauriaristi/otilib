@@ -13,19 +13,6 @@ cdef class elbaseso:
 
   #---------------------------------------------------------------------------------------------------
 
-  # #***************************************************************************************************
-  # def __init__(self):
-  #   """
-  #   PURPOSE:      Constructor of the base element class. Its main purpose is to 
-  #                 allow a base for every new element definition.
-
-
-  #   """
-  #   self.elem = elemso_init()
-  #   self.FLAG = 0
-
-  # #---------------------------------------------------------------------------------------------------
-
   #***************************************************************************************************
   def __cinit__(self):
     """
@@ -446,7 +433,7 @@ cdef class elbaseso:
     
     cdef uint64_t i, j
 
-    cdef sotife tmp1, tmp2, tmp3
+    cdef sotife tmp1, tmp2, tmp3, tmp4
     
     tmp1 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
     
@@ -525,9 +512,10 @@ cdef class elbaseso:
         dot_product(self.Neta,  self.z, out = tmp1)
         self.J[1,2] = tmp1
 
+
       # end if
 
-    else:
+    else: # ndim == 3
 
       # self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
       # self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
@@ -540,7 +528,7 @@ cdef class elbaseso:
       # self.J[2,0] = dot(self.Nzeta,self.x)[0,0]
       # self.J[2,1] = dot(self.Nzeta,self.y)[0,0]
       # self.J[2,2] = dot(self.Nzeta,self.z)[0,0]
-
+      
       dot_product(self.Nxi,  self.x, out = tmp1)
       self.J[0,0] = tmp1
       dot_product(self.Nxi,  self.y, out = tmp1)
@@ -561,14 +549,242 @@ cdef class elbaseso:
       self.J[2,1] = tmp1
       dot_product(self.Nzeta,  self.z, out = tmp1)
       self.J[2,2] = tmp1
+      
+    # end if 
+
+    if self.ndim == self.ndim_an:
+      
+      det(self.J, out = self.detJ)
+      
+      mul(self.w, self.detJ, out = self.w_dJ)
+            # self.w_dJ = self.w * self.detJ
+
+      if self.compute_Jinv:
+
+        inv( self.J , out = self.Jinv)
+
+        tmp2 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
+        tmp3 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
+        # tmp4 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
+        
+        if self.ndim_an == 1:
+
+          dot( self.Jinv, self.Nxi, out = self.Nx )
+
+        elif self.ndim_an == 2:
+
+          for i in range(self.nbasis):
+
+            # self.Nx[0,i] = self.Jinv[0,0]*self.Nxi[0,i] + self.Jinv[0,1]*self.Neta[0,i]  
+            # self.Ny[0,i] = self.Jinv[1,0]*self.Nxi[0,i] + self.Jinv[1,1]*self.Neta[0,i]
+            self.Jinv.get_item_ij(0,0,out=tmp1); self.Nxi.get_item_ij(0,i,out=tmp2)
+            mul(tmp1,tmp2,out=tmp2)
+            self.Jinv.get_item_ij(0,1,out=tmp1); self.Neta.get_item_ij(0,i,out=tmp3)
+            mul(tmp1,tmp3,out=tmp3)
+            sum(tmp3,tmp2,out=tmp2)
+            self.Nx[0,i]= tmp2
+
+
+            self.Jinv.get_item_ij(1,0,out=tmp1); self.Nxi.get_item_ij(0,i,out=tmp2)
+            mul(tmp1,tmp2,out=tmp2)
+            self.Jinv.get_item_ij(1,1,out=tmp1); self.Neta.get_item_ij(0,i,out=tmp3)
+            mul(tmp1,tmp3,out=tmp3)
+            sum(tmp2,tmp3,out=tmp2)
+            self.Ny[0,i]= tmp2
+
+          # end for
+
+        else:
+          
+          for i in range(self.nbasis):
+
+            # self.Nx[0,i] = self.Jinv[0,0]*self.Nxi[0,i] + self.Jinv[0,1]*self.Neta[0,i] + self.Jinv[0,2]*self.Nzeta[0,i] 
+            # self.Ny[0,i] = self.Jinv[1,0]*self.Nxi[0,i] + self.Jinv[1,1]*self.Neta[0,i] + self.Jinv[1,2]*self.Nzeta[0,i] 
+            # self.Nz[0,i] = self.Jinv[2,0]*self.Nxi[0,i] + self.Jinv[2,1]*self.Neta[0,i] + self.Jinv[2,2]*self.Nzeta[0,i] 
+
+            self.Jinv.get_item_ij(0,0,out=tmp1); self.Nxi.get_item_ij(0,i,out=tmp2)
+            mul(tmp1,tmp2,out=tmp2)
+            self.Jinv.get_item_ij(0,1,out=tmp1); self.Neta.get_item_ij(0,i,out=tmp3)
+            mul(tmp1,tmp3,out=tmp3)
+            self.Jinv.get_item_ij(0,2,out=tmp1); self.Nzeta.get_item_ij(0,i,out=tmp3)
+            mul(tmp1,tmp3,out=tmp3)
+            sum(tmp3,tmp2,out=tmp2)
+            self.Nx[0,i]= tmp2
+
+            self.Jinv.get_item_ij(1,0,out=tmp1); self.Nxi.get_item_ij(0,i,out=tmp2)
+            mul(tmp1,tmp2,out=tmp2)
+            self.Jinv.get_item_ij(1,1,out=tmp1); self.Neta.get_item_ij(0,i,out=tmp3)
+            mul(tmp1,tmp3,out=tmp3)
+            self.Jinv.get_item_ij(1,2,out=tmp1); self.Nzeta.get_item_ij(0,i,out=tmp3)
+            mul(tmp1,tmp3,out=tmp3)
+            sum(tmp3,tmp2,out=tmp2)
+            self.Ny[0,i]= tmp2
+
+            self.Jinv.get_item_ij(2,0,out=tmp1); self.Nxi.get_item_ij(0,i,out=tmp2)
+            mul(tmp1,tmp2,out=tmp2)
+            self.Jinv.get_item_ij(2,1,out=tmp1); self.Neta.get_item_ij(0,i,out=tmp3)
+            mul(tmp1,tmp3,out=tmp3)
+            self.Jinv.get_item_ij(2,2,out=tmp1); self.Nzeta.get_item_ij(0,i,out=tmp3)
+            mul(tmp1,tmp3,out=tmp3)
+            sum(tmp3,tmp2,out=tmp2)
+            self.Nz[0,i]= tmp2
+
+          # end for
+
+        # end if 
+
+      # end if
+
+    elif self.ndim == 1:
+      
+      self.detJ.set(0) # Necessary?
+      
+      tmp2 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
+      tmp3 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
+      
+      for i in range(self.ndim_an):
+        # self.detJ += self.J[0,i]**2
+        self.J.get_item_ij( 0, i, out =  tmp1 )
+        pow(      tmp1,    2, out =      tmp1 )
+        sum( self.detJ, tmp1, out = self.detJ )
+      # end for
+
+      # self.detJ = sqrt(self.detJ)
+      sqrt(self.detJ,out=self.detJ)
+
+      # self.w_dJ = self.w * self.detJ
+      mul( self.w, self.detJ, out=self.w_dJ)
+
+    else:
+
+      self.detJ.set(0) # Necessary?
+
+      tmp2 = zero( nip=self.nip, nbases = self.otinbases, order=self.otiorder)
+      tmp3 = zero( nip=self.nip, nbases = self.otinbases, order=self.otiorder)
+
+      # self.detJ += (self.J[0,1]*self.J[1,2]-self.J[0,2]*self.J[1,1])**2
+      # self.detJ += (self.J[0,2]*self.J[1,0]-self.J[0,0]*self.J[1,2])**2
+      # self.detJ += (self.J[0,0]*self.J[1,1]-self.J[0,1]*self.J[1,0])**2
+
+
+      self.J.get_item_ij(0,1,out=tmp1); self.J.get_item_ij(1,2,out=tmp2)
+      mul(tmp1,tmp2,out=tmp2)
+      self.J.get_item_ij(0,2,out=tmp1); self.J.get_item_ij(1,1,out=tmp3)
+      mul(tmp1,tmp3,out=tmp3)
+      sub(tmp2,tmp3,out=tmp2)
+      pow(tmp2,2,out=tmp2)
+      sum(self.detJ,tmp2,out=self.detJ)
+
+      self.J.get_item_ij(0,2,out=tmp1); self.J.get_item_ij(1,0,out=tmp2)
+      mul(tmp1,tmp2,out=tmp2)
+      self.J.get_item_ij(0,0,out=tmp1); self.J.get_item_ij(1,2,out=tmp3)
+      mul(tmp1,tmp3,out=tmp3)
+      sub(tmp2,tmp3,out=tmp2)
+      pow(tmp2,2,out=tmp2)
+      sum(self.detJ,tmp2,out=self.detJ)
+
+      self.J.get_item_ij(0,0,out=tmp1); self.J.get_item_ij(1,1,out=tmp2)
+      mul(tmp1,tmp2,out=tmp2)
+      self.J.get_item_ij(0,1,out=tmp1); self.J.get_item_ij(1,0,out=tmp3)
+      mul(tmp1,tmp3,out=tmp3)
+      sub(tmp2,tmp3,out=tmp2)
+      pow(tmp2,2,out=tmp2)
+      sum(self.detJ,tmp2,out=self.detJ)
+      
+      # self.detJ = sqrt(self.detJ)
+      sqrt(self.detJ,out=self.detJ)
+
+      # self.w_dJ = self.w * self.detJ
+      mul( self.w, self.detJ, out=self.w_dJ)
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+
+  #***************************************************************************************************
+  def compute_jacobian_bruteforce(self):
+    """
+    DESCRIPTION: Compute jacobian and derived functions.
+
+    INPUTS:
+      
+      -> x, y, z:        Global vertices coordinates.
+      -> elem_indices:   Array with the indices of the corresponding elements in the .
+
+    OUTPUTS: 
+
+      None. Things occur internally.
+
+    """
+    
+    cdef uint64_t i, j
+
+    # cdef sotife tmp1, tmp2, tmp3, tmp4
+    
+    # tmp1 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
+    
+    if self.ndim == 1:
+      
+      if   self.ndim_an == 1:
+        
+        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+             
+      elif self.ndim_an == 2:
+      
+        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+              
+      else:
+      
+        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+              
+      # end if
+
+    elif self.ndim == 2:
+      
+      if self.ndim_an == 2:
+        
+        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        
+        self.J[1,0] = dot(self.Neta, self.x)[0,0]
+        self.J[1,1] = dot(self.Neta, self.y)[0,0]
+
+      else:
+
+        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+
+        self.J[1,0] = dot(self.Neta, self.x)[0,0]
+        self.J[1,1] = dot(self.Neta, self.y)[0,0]
+        self.J[1,2] = dot(self.Neta, self.z)[0,0]
+
+      # end if
+
+    else:
+
+      self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+      self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+      self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+
+      self.J[1,0] = dot(self.Neta, self.x)[0,0]
+      self.J[1,1] = dot(self.Neta, self.y)[0,0]
+      self.J[1,2] = dot(self.Neta, self.z)[0,0]
+
+      self.J[2,0] = dot(self.Nzeta,self.x)[0,0]
+      self.J[2,1] = dot(self.Nzeta,self.y)[0,0]
+      self.J[2,2] = dot(self.Nzeta,self.z)[0,0]
 
     # end if 
 
     if self.ndim == self.ndim_an:
-
+      
       det(self.J, out = self.detJ)
-      mul(self.w, self.detJ, out = self.w_dJ)
-      # self.w_dJ = self.w * self.detJ
+      self.w_dJ = self.w * self.detJ
 
       if self.compute_Jinv:
 
@@ -579,12 +795,12 @@ cdef class elbaseso:
           dot( self.Jinv, self.Nxi, out = self.Nx )
 
         elif self.ndim_an == 2:
-          
+
           for i in range(self.nbasis):
 
             self.Nx[0,i] = self.Jinv[0,0]*self.Nxi[0,i] + self.Jinv[0,1]*self.Neta[0,i]  
             self.Ny[0,i] = self.Jinv[1,0]*self.Nxi[0,i] + self.Jinv[1,1]*self.Neta[0,i]
-
+            
           # end for
 
         else:
@@ -604,9 +820,11 @@ cdef class elbaseso:
     elif self.ndim == 1:
       
       self.detJ.set(0) # Necessary?
-
+      
       for i in range(self.ndim_an):
+        
         self.detJ += self.J[0,i]**2
+        
       # end for
 
       self.detJ = sqrt(self.detJ)

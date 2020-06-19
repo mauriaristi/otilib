@@ -94,6 +94,43 @@ void fearrso_get_item_ijk_to( fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k
                               sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Get slice from fearrso object.
+
+@param[in]    arr    array to get slice.
+@param[in]    starti Starting row index.
+@param[in]    stopi  Final row index.
+@param[in]    stepi  Row step.
+@param[in]    startj Starting column index.
+@param[in]    stopj  Final column index.
+@param[in]    stepj  Column step.
+@param[inout] res    Address of the result holder (if any)
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
+fearrso_t fearrso_get_slice(fearrso_t* arr, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                           dhelpl_t dhl);
+
+void      fearrso_get_slice_to(fearrso_t* arr, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**************************************************************************************************//**
 @brief Item setters
@@ -133,16 +170,48 @@ void fearrso_set_item_ijk_o( sotinum_t* elm, uint64_t i, uint64_t j, uint64_t k,
 // ----------------------------------------------------------------------------------------------------
 
 
-fearrso_t fearrso_get_slice(fearrso_t* arr, 
-                          int64_t starti, int64_t stopi, int64_t stepi,
-                          int64_t startj, int64_t stopj, int64_t stepj, 
-                           dhelpl_t dhl);
 
-void      fearrso_get_slice_to(fearrso_t* arr, 
-                          int64_t starti, int64_t stopi, int64_t stepi,
-                          int64_t startj, int64_t stopj, int64_t stepj, 
+
+
+
+
+/**************************************************************************************************//**
+@brief Set slice to fearrso object.
+
+@param[in]    val    Value to set in res array.
+@param[in]    starti Starting row index.
+@param[in]    stopi  Final row index.
+@param[in]    stepi  Row step.
+@param[in]    startj Starting column index.
+@param[in]    stopj  Final column index.
+@param[in]    stepj  Column step.
+@param[inout] res    Address of the result holder
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
+void fearrso_set_slice_r( coeff_t val, 
+                         int64_t starti, int64_t stopi, int64_t stepi,
+                         int64_t startj, int64_t stopj, int64_t stepj,
+                          fearrso_t* res, dhelpl_t dhl);
+void fearrso_set_slice_o( sotinum_t* val, 
+                         int64_t starti, int64_t stopi, int64_t stepi,
+                         int64_t startj, int64_t stopj, int64_t stepj,
+                          fearrso_t* res, dhelpl_t dhl);
+void fearrso_set_slice_f( fesoti_t* val, 
+                         int64_t starti, int64_t stopi, int64_t stepi,
+                         int64_t startj, int64_t stopj, int64_t stepj,
+                          fearrso_t* res, dhelpl_t dhl);
+void fearrso_set_slice_O( arrso_t* val, 
+                         int64_t starti, int64_t stopi, int64_t stepi,
+                         int64_t startj, int64_t stopj, int64_t stepj,
+                          fearrso_t* res, dhelpl_t dhl);
+void fearrso_set_slice_F( fearrso_t* val, 
+                         int64_t starti, int64_t stopi, int64_t stepi,
+                         int64_t startj, int64_t stopj, int64_t stepj,
                           fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+
+
 
 
 /**************************************************************************************************//**

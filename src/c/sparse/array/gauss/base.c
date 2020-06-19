@@ -479,9 +479,149 @@ void fearrso_get_slice_to(fearrso_t* arr,
 
 
 
+// void arrso_set_slice_r( coeff_t val, 
+//                         int64_t starti, int64_t stopi, int64_t stepi,
+//                         int64_t startj, int64_t stopj, int64_t stepj,
+//                          arrso_t* res, dhelpl_t dhl);
+// void arrso_set_slice_O( arrso_t* val, 
+//                         int64_t starti, int64_t stopi, int64_t stepi,
+//                         int64_t startj, int64_t stopj, int64_t stepj,
+//                          arrso_t* res, dhelpl_t dhl);
+// void arrso_set_slice_o( sotinum_t* val, 
+//                         int64_t starti, int64_t stopi, int64_t stepi,
+//                         int64_t startj, int64_t stopj, int64_t stepj,
+//                          arrso_t* res, dhelpl_t dhl);
+
+// ****************************************************************************************************
+void fearrso_set_slice_r( coeff_t val, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl){
+        
+    uint64_t k;
+    int64_t ncols, nrows;
+
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    // Check dimensions:
+    if ( (res->ncols < ncols) || (res->nrows < nrows) ){
+
+        printf("ERROR: Wrong dimensions resulting slicing array.\n");
+        exit(OTI_BadIndx);
+
+    }
+
+    for (k = 0; k < res->nip; k++){
+        
+        arrso_set_slice_r( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_set_slice_o( sotinum_t* val, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl){
+        
+    uint64_t k;
+    int64_t ncols, nrows;
+
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    for (k = 0; k < res->nip; k++){
+        
+        arrso_set_slice_o( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_set_slice_f( fesoti_t* val, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl){
+        
+    uint64_t k;
+    int64_t ncols, nrows;
+
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    // Check dimensions:
+    if ( (res->nip != val->nip) ){
+
+        printf("ERROR: Wrong number of integration points.\n");
+        exit(OTI_BadIndx);
+
+    }
+
+    for (k = 0; k < res->nip; k++){
+        
+        arrso_set_slice_o( &val->p_data[k], starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
+// ****************************************************************************************************
+void fearrso_set_slice_O( arrso_t* val, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl){
+        
+    uint64_t k;
+    int64_t ncols, nrows;
+
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    for (k = 0; k < res->nip; k++){
+        
+        arrso_set_slice_O( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_set_slice_F( fearrso_t* val, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl){
+        
+    uint64_t k;
+    int64_t ncols, nrows;
+
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    // Check dimensions:
+    if ( (res->nip != val->nip) ){
+
+        printf("ERROR: Wrong number of integration points.\n");
+        exit(OTI_BadIndx);
+
+    }
+
+    for (k = 0; k < res->nip; k++){
+        
+        arrso_set_slice_O( &val->p_data[k], starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 void fearrso_set_item_k( arrso_t* arr , uint64_t k, fearrso_t* res, dhelpl_t dhl){

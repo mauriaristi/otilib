@@ -513,6 +513,26 @@ cdef extern from "oti/oti.h" nogil:
                             int64_t starti, int64_t stopi, int64_t stepi,
                             int64_t startj, int64_t stopj, int64_t stepj, 
                             fearrso_t* res, dhelpl_t dhl);
+  void fearrso_set_slice_r( coeff_t val, 
+                           int64_t starti, int64_t stopi, int64_t stepi,
+                           int64_t startj, int64_t stopj, int64_t stepj,
+                            fearrso_t* res, dhelpl_t dhl);
+  void fearrso_set_slice_o( sotinum_t* val, 
+                           int64_t starti, int64_t stopi, int64_t stepi,
+                           int64_t startj, int64_t stopj, int64_t stepj,
+                            fearrso_t* res, dhelpl_t dhl);
+  void fearrso_set_slice_f( fesoti_t* val, 
+                           int64_t starti, int64_t stopi, int64_t stepi,
+                           int64_t startj, int64_t stopj, int64_t stepj,
+                            fearrso_t* res, dhelpl_t dhl);
+  void fearrso_set_slice_O( arrso_t* val, 
+                           int64_t starti, int64_t stopi, int64_t stepi,
+                           int64_t startj, int64_t stopj, int64_t stepj,
+                            fearrso_t* res, dhelpl_t dhl);
+  void fearrso_set_slice_F( fearrso_t* val, 
+                           int64_t starti, int64_t stopi, int64_t stepi,
+                           int64_t startj, int64_t stopj, int64_t stepj,
+                            fearrso_t* res, dhelpl_t dhl);
   void fearrso_set_all_o( sotinum_t* num, fearrso_t* arr, dhelpl_t dhl );
   void fearrso_set_all_r(    coeff_t num, fearrso_t* arr, dhelpl_t dhl );
   void fearrso_set_r(    coeff_t src, fearrso_t* res, dhelpl_t dhl );

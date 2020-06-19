@@ -1,5 +1,6 @@
 
 include "algebra_utils/dot_product.pxi"
+# include "algebra_utils/cross_product.pxi"
 
 #*****************************************************************************************************
 cpdef dot_product(object lhs, object rhs, object out = None):
@@ -49,6 +50,57 @@ cpdef dot_product(object lhs, object rhs, object out = None):
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
+
+
+# #*****************************************************************************************************
+# cpdef cross_product(object lhs, object rhs, object out = None):
+#   """
+#   PURPOSE:  Vector cross product (only allows size-3 vectors).
+
+#   """
+#   #***************************************************************************************************
+  
+#   cdef uint8_t res_flag = 1
+#   cdef object res = None
+
+#   tlhs = type(lhs)
+
+#   if out is None:
+#     res_flag = 0
+#   # end if 
+
+#   # supported types for lhs and rhs:
+#   #    -  matso
+#   #    -  matsofe
+#   #    -  darr
+#   # Supported output types:
+#   #    - sotinum
+#   #    - sotife
+
+#   if   tlhs is matsofe:
+
+#     res = __cross_product_FX( lhs, rhs, out = out)
+
+#   elif tlhs is matso:
+
+#     res = __cross_product_OX( lhs, rhs, out = out)
+
+#   elif tlhs is dmat:
+    
+#     res = __cross_product_RX( lhs, rhs, out = out)
+
+#   else:
+
+#     raise TypeError("Unsupported types {0}, {1} at Cross_product operation.".format(tlhs,type(rhs)))
+
+#   # end if 
+
+#   if res_flag == 0:
+#     return res
+#   # end if 
+
+# #-----------------------------------------------------------------------------------------------------
+
 
 
 

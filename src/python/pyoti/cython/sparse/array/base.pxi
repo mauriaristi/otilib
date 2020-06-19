@@ -552,9 +552,7 @@ cdef class matso:
         arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
         
       else:
-
         raise IndexError("Index out of bounds.")
-
       # end if 
 
     elif tval == slice: #slice of multiple items
@@ -579,9 +577,7 @@ cdef class matso:
             arrso_set_item_ij_r( value, val[0], val[1], &self.arr, dhl)
             
           else:
-
             raise IndexError("Index out of bounds.")
-
           # end if 
 
         elif (tval0 == int and tval1 == slice):
@@ -594,9 +590,7 @@ cdef class matso:
             arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
 
           else:
-
             raise IndexError("Index out of bounds.")
-
           # end if 
 
         elif (tval0 == slice and tval1 == int):
@@ -609,9 +603,7 @@ cdef class matso:
             arrso_set_slice_r(value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
 
           else:
-
             raise IndexError("Index out of bounds.")
-
           # end if 
 
         elif (tval0 == slice and tval1 == slice):
@@ -622,21 +614,15 @@ cdef class matso:
           arrso_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
 
         else:
-
           raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
-
         # end if 
 
       else:
-
         raise IndexError("ERROR: Getting integration points by index is not yet supported.")
-
       # end if 
 
     else:
-
       raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
-
     # end if
 
   #---------------------------------------------------------------------------------------------------

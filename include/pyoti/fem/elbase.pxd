@@ -84,9 +84,10 @@ cdef class elbaseso:
       
   cdef public matsofe    J          # Elemental Jacobian.
   cdef public sotife  detJ          # Determinant of Jacobian.
+  cdef public sotife  w_dJ          # integration weight dOmega.
+  
   cdef public matsofe    Jinv       # Jacobian inverse.
       
-  cdef public sotife  w_dJ          # integration weight dOmega.
 
   cdef public uint8_t compute_Jinv
 

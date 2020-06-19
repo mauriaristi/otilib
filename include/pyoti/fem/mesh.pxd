@@ -14,14 +14,23 @@ cdef class mesh:
   #                                       #   1D elems ->    ... ,
   #                                       #   2D elems ->    ... ,
   #                                       #   3D elems ->    ... ]
+
   cdef public list            groups      # List of groups in the mesh.
   cdef public dict            group_names # Dictionary with the group names.
   cdef public dict            group_ids   # Dictionary with the group names.
+
   cdef public int8_t          ndim        # Maximum dimension of the mesh.
+  
   cdef public np.ndarray      nodes       # Nodes in numpy array format.
+  
   cdef public list            spaces      # List of finite element spaces. (needed?)
   cdef public uint64_t        opCount     # Counter for the number of operations. ??
+  
   cdef public uint8_t         xyzInit     # flag for initialization of x,y,z
+
+  cdef public matso           x           # x Nodal coordinates
+  cdef public matso           y           # y Nodal coordinates
+  cdef public matso           z           # z Nodal coordinates
 
   # cdef public dict     cells        # Elements
   # cdef public dict     point_data   # Contains information of the points

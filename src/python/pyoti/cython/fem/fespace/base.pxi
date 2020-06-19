@@ -32,7 +32,6 @@ cdef class fespace:
     self.special    = special      # Reference to element special.
     self.fespaceId  = self.mesh.addNewSpace(self) # Stack
 
-
     # TODO: How to add warning on how to require mesh and element type?
     
   #---------------------------------------------------------------------------------------------------

@@ -1,20 +1,5 @@
 
 
-
-
-
-
-import numpy as np
-
-
-
-
-
-
-
-
-
-
   
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::     CLASS  MESH       :::::::::::::::::::::::::::::::::::::::::
@@ -24,7 +9,6 @@ cdef class mesh:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
-
 
 
   #---------------------------------------------------------------------------------------------------
@@ -48,10 +32,16 @@ cdef class mesh:
     self.group_ids   = {}
 
     self.ndim        = -1
-    self.nodes       = None
-    self.spaces      = []    
+
+    # self.nodes       = None
+
+    self.spaces      = []
     self.opCount     = 0
     self.xyzInit     = 0
+    
+    self.x           = None
+    self.y           = None
+    self.z           = None
 
   #---------------------------------------------------------------------------------------------------
 
@@ -69,18 +59,14 @@ cdef class mesh:
     out += str(self.get_number_elements())+" elements "
     out += "of types ( "
 
-    for elem_dim in self.elements:
-    
+    for elem_dim in self.elements:    
       if elem_dim is not None:
-
         for elmType in elem_dim['types']:
           
           out += element_type_name[elmType] + ", "
         
         # end for 
-
       # end if
-
     # end for 
     
     out = out[:len(out)-2]+" )"
@@ -105,18 +91,14 @@ cdef class mesh:
     out += str(self.get_number_elements())+" elements "
     out += "of types ( "
 
-    for elem_dim in self.elements:
-    
+    for elem_dim in self.elements:    
       if elem_dim is not None:
-
         for elmType in elem_dim['types']:
           
           out += element_type_name[elmType] + ", "
         
         # end for 
-
       # end if
-
     # end for 
     
     out = out[:len(out)-2]+" )"
@@ -290,9 +272,50 @@ cdef class mesh:
 
     # end for 
 
-    Th.nodes = nodalCoord 
+    # Th.nodes = nodalCoord 
+    Th.x = array( nodalCoord[ : , 0 ] )
+    Th.y = array( nodalCoord[ : , 1 ] )
+    Th.z = array( nodalCoord[ : , 2 ] )
 
     return Th
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
+  def nnodes(self):
+    """
+    PORPUSE: Get Number of nodes.
+
+    """
+    #*************************************************************************************************
+    
+    return self.x.arr.nrows
+    
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
+  def nodes(self):
+    """
+    PORPUSE: Get nodes as numpy array.
+
+    """
+    #*************************************************************************************************
+    
+    cdef np.ndarray[coeff_t, ndim=2] res
+    cdef int64_t i
+    
+    res = np.c_[self.x.real,self.y.real,self.z.real]
+    # for i in range(self.nnodes):
+
+    #   res[i,0] = self.x[i,0].real
+    #   res[i,1] = self.y[i,0].real
+    #   res[i,2] = self.z[i,0]
+
+    # # end for 
+
+    return res   
 
   #---------------------------------------------------------------------------------------------------
 
@@ -437,7 +460,6 @@ cdef class mesh:
     # Set the previously created points
     vtk_grid.SetPoints(vtk_pts)
 
-
     nels = self.get_number_elements()
 
     # Allocate to store all elements.
@@ -478,12 +500,9 @@ cdef class mesh:
               nnodes_el,        # Number of nodes in this cell.
               elementsi[ elem ] # Nodal indices.
               )
-          # end for 
-      
+          # end for       
         # end for 
-
-      # end if 
-    
+      # end if     
     # end for 
 
     if type(pd) == list :
@@ -550,26 +569,6 @@ cdef class mesh:
 
   #---------------------------------------------------------------------------------------------------
   
-
-  
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-
 
   # #***************************************************************************************************
   # @property
@@ -868,122 +867,6 @@ cdef class mesh:
   #   # end if 
 
   #   return (normalx,normaly,normalz)
-
-  # #---------------------------------------------------------------------------------------------------
-
-
-
-  # #***************************************************************************************************
-  # def exportToVTK(self,filename,list pd=[],list pdNames=[]):
-  #   """
-  #   PURPOSE: Export mesh and solution functions to vtk format.
-
-  #   """
-
-  #   f = open(filename, "w")
-
-  #   f.write("# vtk DataFile Version 4.1\n")# Header
-  #   f.write("Exported OTI solution\n")# Header
-  #   f.write("ASCII\n")# Header
-
-  #   f.write("DATASET UNSTRUCTURED_GRID\n")
-
-  #   #First add the point data 
-  #   cdef np.ndarray nodesx = self.xcoords.real
-  #   cdef np.ndarray nodesy = self.ycoords.real
-  #   cdef np.ndarray nodesz = self.zcoords.real
-  #   cdef uint64_t nnodes, nels, elDof
-  #   cdef list humDir
-    
-  #   elDof = self.getBaseDOFs()
-  #   nnodes = np.max( self.domainEls[:,:elDof] )
-
-
-  #   f.write("POINTS "+str(nnodes)+" double\n")
-
-  #   cdef uint64_t i, i0=0,j,k
-  #   for i in range(nnodes):
-  #     f.write(str(nodesx[i,i0])+" "+str(nodesy[i,i0])+" "+str(nodesz[i,i0])+"\n")
-  #   # end for 
-
-  #   # add the elements
-  #   nels = self.domainEls.shape[0]
-
-  #   f.write("CELLS "+str(nels)+" "+str(nels*( int( elDof+1 ) ) )+" \n")
-  #   for i in range(nels):
-  #     f.write(str(elDof)+" ")
-  #     for j in range(elDof):
-  #       f.write(str( int( self.domainEls[i,j] - 1 ) )+" ")
-  #     #end for 
-  #     f.write("\n")
-  #   # end for 
-
-  #   cdef uint64_t cellVtkType = self.getDomainVtkCellId(elDof)
-  #   cdef uint64_t ndata, nImDir
-  #   f.write("CELL_TYPES "+str(nels)+" \n")
-  #   for i in range(nels):
-  #     f.write(str(cellVtkType)+"\n")
-  #   # end for 
-
-  #   if len(pd)!=0:
-  #     if len(pdNames)!=len(pd):
-  #       f.close()
-  #       raise ValueError("pd and pdNames must match one to one.")
-  #     # end if 
-
-  #     f.write("POINT_DATA "+str(nnodes)+"\n")
-
-  #     for j in range(len(pd)):
-        
-  #       if type(pd[j]) == list:
-  #         # vector data
-          
-  #         flist = pd[j]
-  #         ndata = len(flist)
-  #         nImDir = flist[i0].data.Ndir
-  #         order  = flist[i0].data.order
-          
-  #         for ndir in range(nImDir):       
-  #           e_dir = getLatexDir(ndir,order)
-  #           # end if 
-  #           f.write("VECTORS "+pdNames[j]+'-'+e_dir+" double\n")
-  #           for i in range(nnodes):
-  #             for k in range(ndata):
-                
-  #               f.write(str(flist[k].data.data[i,ndir])+" ")
-
-  #             # end for 
-  #             for k in range(ndata,3):
-  #               f.write("0 ")
-  #             # end for 
-  #             f.write("\n")
-  #           # end for 
-  #         # end for 
-  #       else:
-  #         # point data
-  #         f.write("")
-  #         nImDir= pd[j].data.Ndir
-  #         order = pd[j].data.order
-  #         # f.write("SCALARS "+pdNames[j]+" double "+str(j)+"\n")
-  #         for ndir in range(nImDir):
-  #           e_dir = getLatexDir(ndir,order)
-  #           f.write("SCALARS "+pdNames[j]+'-'+e_dir+" double\n")
-  #           f.write("LOOKUP_TABLE default\n")
-  #           for i in range(nnodes):
-              
-  #             f.write(str(pd[j].data.data[i,ndir])+" ")
-              
-  #             f.write("\n")
-  #           # end for 
-  #         # end for
-
-  #       # end if 
-
-  #     # end for 
-
-  #   # end if 
-
-  #   f.close()
 
   # #---------------------------------------------------------------------------------------------------
 

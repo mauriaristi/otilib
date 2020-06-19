@@ -21,8 +21,6 @@ cdef class mesh:
 
   cdef public int8_t          ndim        # Maximum dimension of the mesh.
   
-  cdef public np.ndarray      nodes       # Nodes in numpy array format.
-  
   cdef public list            spaces      # List of finite element spaces. (needed?)
   cdef public uint64_t        opCount     # Counter for the number of operations. ??
   

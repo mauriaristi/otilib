@@ -10,9 +10,12 @@ cdef extern from "oti/oti.h" nogil:
     opMul         =   3 ,
     opTruediv     =   4 ,
     opPowr        =   5 ,
+    
+    # opInt0d       =  60 ,
     opInt1d       =   6 ,
     opInt2d       =   7 ,
     opInt3d       =   8 ,
+
     opDx          =   9 ,
     opDy          =   10,
     opDz          =   11,
@@ -22,9 +25,11 @@ cdef extern from "oti/oti.h" nogil:
     opDxz         =   15,
     opDyz         =   16,
     opDzz         =   17,
+
     opDef         =   18,
     opOn          =   19,
     opNeg         =   20,
+
     opDxi         =   21,
     opDeta        =   22,
     opDzeta       =   23,
@@ -34,6 +39,7 @@ cdef extern from "oti/oti.h" nogil:
     opDxizeta     =   27,
     opDetazeta    =   28,
     opDzetazeta   =   29,
+
     subOpDefBasis =   50,
     subOpDefKnown =   51,
     subOpInt      =   52,
@@ -59,16 +65,20 @@ cdef extern from "oti/oti.h" nogil:
     kindReal      =  202,
     kindScalar    =  203,
     kindFunc      =  204,
+
     feConstant    =  301,
     feVariable    =  302,
+
     elNode        =  400,
     elLine        =  401,
     elTriangle    =  402,
     elQuadrangle  =  403,
     elTetrahedra  =  404,
     elHexahedra   =  405,
+
     elkindIso     =  501,
     elkindAff     =  502,
+
     derN          =  601,
     derNa         =  602,
     derNb         =  603,
@@ -79,6 +89,7 @@ cdef extern from "oti/oti.h" nogil:
     derNac        =  608,
     derNbc        =  609,
     derNcc        =  610,
+
     feNatTest     =  701,
     feNatUndef    =  702,
     feNatDef      =  703,

@@ -23,27 +23,33 @@ cdef class elbaseso:
 
     self.elem      = elemso_init()
 
-    self.FLAGS      = 0             
+    self.FLAGS     = 0             
     self.elorder   = 0 
     self.otiorder  = 0 
     self.otinbases = 0
-    self.ndim_an   = 0  
+    self.ndim_an   = 0 
+
     self.boundEls  = None
     self.basis     = None
+
     self.xi        = None
     self.eta       = None
     self.zeta      = None
     self.w         = None
+
     self.N         = None
     self.Nxi       = None
     self.Neta      = None
     self.Nzeta     = None
+
     self.Nx        = None
     self.Ny        = None
     self.Nz        = None
+
     self.x         = None
     self.y         = None
     self.z         = None
+    
     self.J         = None
     self.detJ      = None
     self.Jinv      = None
@@ -828,8 +834,35 @@ cdef class elbaseso:
       # end for
 
       self.detJ = sqrt(self.detJ)
-
       self.w_dJ = self.w * self.detJ
+
+      if self.compute_Jinv:
+
+        # Right inverse ()
+        self.Jinv = dot( transpose(self.J), inv( dot( self.J, transpose(self.J) ) ) )
+        
+        if self.ndim_an == 2:
+
+          for i in range(self.nbasis):
+
+            self.Nx[0,i] = self.Jinv[0,0]*self.Nxi[0,i]  
+            self.Ny[0,i] = self.Jinv[1,0]*self.Nxi[0,i]
+            
+          # end for
+
+        else:
+          
+          for i in range(self.nbasis):
+
+            self.Nx[0,i] = self.Jinv[0,0]*self.Nxi[0,i]
+            self.Ny[0,i] = self.Jinv[1,0]*self.Nxi[0,i]
+            self.Nz[0,i] = self.Jinv[2,0]*self.Nxi[0,i]
+
+          # end for
+
+        # end if 
+
+      # end if
 
     else:
 
@@ -839,9 +872,24 @@ cdef class elbaseso:
       self.detJ += (self.J[0,2]*self.J[1,0]-self.J[0,0]*self.J[1,2])**2
       self.detJ += (self.J[0,0]*self.J[1,1]-self.J[0,1]*self.J[1,0])**2
 
-      self.detJ = sqrt(self.detJ)      
+      self.detJ = sqrt( self.detJ )  
 
       self.w_dJ = self.w * self.detJ
+
+      if self.compute_Jinv:
+
+        # Right inverse
+        self.Jinv = dot( transpose(self.J), inv( dot( self.J, transpose(self.J) ) ) )
+        
+        for i in range(self.nbasis):
+
+          self.Nx[0,i] = self.Jinv[0,0]*self.Nxi[0,i] + self.Jinv[0,1]*self.Neta[0,i] 
+          self.Ny[0,i] = self.Jinv[1,0]*self.Nxi[0,i] + self.Jinv[1,1]*self.Neta[0,i] 
+          self.Nz[0,i] = self.Jinv[2,0]*self.Nxi[0,i] + self.Jinv[2,1]*self.Neta[0,i] 
+
+        # end for
+
+      # end if
 
     # end if 
 

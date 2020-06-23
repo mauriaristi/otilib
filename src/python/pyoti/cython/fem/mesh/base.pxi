@@ -307,11 +307,12 @@ cdef class mesh:
     cdef int64_t i
     
     res = np.c_[self.x.real,self.y.real,self.z.real]
+    
     # for i in range(self.nnodes):
 
     #   res[i,0] = self.x[i,0].real
     #   res[i,1] = self.y[i,0].real
-    #   res[i,2] = self.z[i,0]
+    #   res[i,2] = self.z[i,0].real
 
     # # end for 
 
@@ -413,31 +414,30 @@ cdef class mesh:
       
       elem_dim = self.elements[dim]
 
-      if elem_dim is not None:
-        
+      if elem_dim is not None:        
         for j in range(elem_dim['types'].size):
 
           nels += elem_dim['tags'][j].size
 
         # end for
-
       # end if 
-
     # end for
 
     return nels
 
   #---------------------------------------------------------------------------------------------------
 
-  def to_vtk(self, dims = None, pd = None, pd_names= None):
+  #***************************************************************************************************
+  def to_vtk(self, dims = None, pd = None, pd_names= None, linearize = False):
     """
     PORPUSE: Export mesh as vtk object. Requires VTK.
 
     INPUTS:
 
-        - dims(None):     Dimensions to export.
-        - pd(None):       Point Data (can be given in matso or numpy array formats).
-        - pd_names(None): Point data names to export.
+        - dims(None):      Dimensions to export.
+        - pd(None):        Point Data (can be given in matso or numpy array formats).
+        - pd_names(None):  Point data names to export.
+        - linearize(None): Export as linear (order 1) elements. 
 
     OUTPUTS:
 
@@ -534,11 +534,8 @@ cdef class mesh:
 
           vtk_grid.GetPointData().SetVectors(vtk_array)
 
-
         # end if
-
       # end for 
-
     # end if 
 
     return vtk_grid
@@ -764,11 +761,10 @@ cdef class mesh:
   # #---------------------------------------------------------------------------------------------------
 
 
-
+    
 
   # #***************************************************************************************************
   # def getBoundNormals(self,list boundIds):
-
 
   #   normalx = np.zeros(self.xcoords.shape,dtype = np.double)
   #   normaly = np.zeros(self.xcoords.shape,dtype = np.double)
@@ -800,7 +796,7 @@ cdef class mesh:
   #           if col[0]==0:
   #             normalx[int(boundEls[j,0]-1),0]=-1.0
   #           else:
-  #             normalx[int(boundEls[j,0]-1),0]=1.0
+  #             normalx[int(boundEls[j,0]-1),0]=1.0    
   #           # end if
 
   #       elif self.ndim==2:

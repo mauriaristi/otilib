@@ -4,9 +4,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::     CLASS  elemental_operation    ::::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::     CLASS  FEFUNCTION    :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class elemental_operation:
+cdef class fefunction:
 
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
@@ -19,7 +19,7 @@ cdef class elemental_operation:
   def __init__(self, fespace baseSpace, int64_t nature, int64_t interpDer = basisN, \
                object data = None ):
     """
-    PURPOSE:      Constructor of the elemental operation class. Its main purpose is to define 
+    PURPOSE:      Constructor of the finite element function class. Its main purpose is to define 
                   a common parameter to store all the procedures and variables to be performed
                   during the Finite Element calculations.
 
@@ -27,25 +27,24 @@ cdef class elemental_operation:
 
           -> baseSpace: Finite element space that this function is associated.
 
-          -> nature:    Nature of the operation. Can be:
-                        * feNatUndef: For function with no known data. 
+          -> nature:    Nature of the problem. Can be:
+                        * feNatTest:  For test function
+                        * feNatUndef: For function that will be solved as a FE problem. 
                         * feNatDef:   Defined, and has data already.
 
-          -> interpDer: Basis function derivative to be used. Can be:
-                        
-                        * basisN
-
-                        * basisNx
-                        * basisNy
-                        * basisNz
+          -> interpDer: *Optional* Basis function derivative with which it will be approximated.
 
     """
     #*************************************************************************************************
 
-    self.baseSpace = baseSpace
-    self.interpDer = interpDer
-    self.nature    = nature
-    self.intorder  = self.baseSpace.order  # modify it outside if required.
+    self.baseSpace  = baseSpace
+
+    self.interpDer  = interpDer
+
+    self.nature = nature
+
+    self.intorder  = self.baseSpace.elType.order  # modify it outside if required.
+
     self.funcid    = self.baseSpace.addNewOperation()
     
     if self.nature == feNatDef:
@@ -63,11 +62,11 @@ cdef class elemental_operation:
     self.baseFunc = [ self ] 
 
     if self.nature == feNatTest:
-      # shape = ( DOF,   1 )
+
       self.shape = [baseSpace.elType.nbasis,1]
 
     elif self.nature == feNatUndef:
-      # shape = (   1, DOF )
+
       self.shape = [1,baseSpace.elType.nbasis]
 
     else:
@@ -76,33 +75,34 @@ cdef class elemental_operation:
 
     # end if 
                       # 0D, 1D, 2D
-    # self.shapeBounds = [[], [], []]
+    self.shapeBounds = [[], [], []]
 
-    # cdef int64_t i
+    cdef int64_t i
 
-    # for i in range(len(baseSpace.elType.boundEls)):
+    for i in range(len(baseSpace.elType.boundEls)):
 
-    #   if self.nature == feNatTest:
+      if self.nature == feNatTest:
 
-    #     self.shapeBounds[i] = [baseSpace.elType.boundEls[i].nbasis,1]
+        self.shapeBounds[i] = [baseSpace.elType.boundEls[i].nbasis,1]
 
-    #   elif self.nature == feNatUndef:
+      elif self.nature == feNatUndef:
 
-    #     self.shapeBounds[i] = [1,baseSpace.elType.boundEls[i].nbasis]
+        self.shapeBounds[i] = [1,baseSpace.elType.boundEls[i].nbasis]
 
-    #   else:
+      else:
 
-    #     self.shapeBounds[i] = [1,1]
+        self.shapeBounds[i] = [1,1]
 
-    #   # end if 
-    # # end for 
+      # end if 
+
+    # end for 
     
-    # self.operation_graph = 
-    # self.Koper        = np.array([[opDef, self.funcid, self.funcid, 0]],dtype = np.int64) # definitions goes only in the matrix. 
 
-    # self.foper        = np.array([[opDef, self.funcid, self.funcid, 0]],dtype = np.int64) #
+    self.Koper        = np.array([[opDef, self.funcid, self.funcid, 0]],dtype = np.int64) # definitions goes only in the matrix. 
 
-    # self.essentialOper= np.array([[opDef, self.funcid, self.funcid, 0]],dtype = np.int64) # 
+    self.foper        = np.array([[opDef, self.funcid, self.funcid, 0]],dtype = np.int64) #
+
+    self.essentialOper= np.array([[opDef, self.funcid, self.funcid, 0]],dtype = np.int64) # 
 
 
   #---------------------------------------------------------------------------------------------------
@@ -127,32 +127,25 @@ cdef class elemental_operation:
 
   #***************************************************************************************************
   @staticmethod
-  cdef elemental_operation create(int64_t operId, elemental_operation lhs, elemental_operation rhs):
+  cdef fefunction newFromOperation(int64_t operId, fefunction func1, fefunction func2):
     """
-    PURPOSE:  Create a new elemental operation from an operation Id and two functions
+    PURPOSE:  Create a new element from 
 
 
     INPUTS:  
 
-      -> operId: Id of the operation. Operations can be:
-        * Unary: Only one input, 'rhs' will be None.
-          - opDef: Definition operation. 
-          - opInt0d, opInt1d, opInt2d, opInt3d: Integral operations 
-          - opDx, opDy, opDz, opDxx, opDxy, opDyy, opDxz, opDyz, opDzz, 
+      -> operId:Id that characterizes the operation.
 
-        * Binary: Two inputs are performed.
-          - opAdd, opSub: Addition and subtraction operations.
-          - opMul:        Multiplication operation. 
-          - opTruediv:    Division operator.
-          - opPowr:       Power function operator (e.g. x ** 2 ). 
-
-      -> lhs: Left hand side operator.
-      -> rhs: Right hand side operator.
-
+              opAdd    , opSub    , opMul    , 
+              opTruediv, opPowr   , opInt1d  , 
+              opInt2d  , opInt3d  , opDx     , 
+              opDxx    , opDy     , opDxy    , 
+              opDyy    , opDz     , opDxz    , 
+              opDyz    , opDzz    , opDef    ,                   
     """
     #*************************************************************************************************
     
-    cdef elemental_operation res = <elemental_operation> elemental_operation.__new__(elemental_operation)
+    cdef fefunction res = <fefunction> fefunction.__new__(fefunction)
     cdef np.ndarray newOperation 
     res.interpDer  = basisN
 
@@ -683,11 +676,63 @@ cdef class elemental_operation:
 
 
     # % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-    # % % % % % % % % % % % % % % %     INTEGRALS     % % % % % % % % % % % % % % % % % % % %
+    # % % % % % % % % % % % % % % %       DOMAIN INTEGRAL     % % % % % % % % % % % % % % % %
     # % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     elif operId == opInt3d:   # integral over domain
 
-      
+        res.baseSpace = func1.baseSpace
+        
+        res.intorder = func1.intorder
+        res.funcid   = res.baseSpace.addNewOperation()
+
+        res.baseFunc = func1.baseFunc.copy()
+        
+        # Add itself to the list of baseFunctions
+        res.baseFunc.append(res)
+
+        if func1.nature == feNatTest:
+
+          # append both foper matrices
+          res.foper = func1.foper.copy()
+
+          # append both Koper matrices
+          res.Koper = np.array([],dtype=np.int64)
+
+          # add new operation to the operation matrix
+          res.foper = np.append(res.foper,\
+                               [[operId,res.funcid,func1.funcid,0]],\
+                                axis = 0)
+
+          # initialize the other two operation matrices as void.
+          res.essentialOper = np.array([],dtype=np.int64)
+
+        elif func1.nature == feNatOperRes:
+
+          # append both foper matrices
+          res.foper = np.array([],dtype=np.int64)
+
+          # append both Koper matrices
+          res.Koper = func1.Koper.copy()
+
+          # add new operation to the operation matrix
+          res.Koper = np.append(res.Koper,\
+                               [[operId,res.funcid,func1.funcid,0]],\
+                                axis = 0)
+
+          # initialize the other two operation matrices as void.
+          res.essentialOper = np.array([],dtype=np.int64)
+
+        else:
+
+          raise ValueError("Domain integral only supports natures "+\
+            str(feNatTest)+" or "+str(feNatOperRes)+".")
+
+        # end if 
+        # TODO: ADD INDICATION TO THE INTEGRATION REGION!
+        res.nature   = feNatPostIntK 
+        res.shape    = []
+        res.shapeBounds = [[],[],[]]
+        res.position = [0]
 
 
     # % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -738,8 +783,10 @@ cdef class elemental_operation:
                               axis = 0)
       
       else:
+
         raise ValueError("Boundary integral only supports natures "+\
             str(feNatTest)+" or "+str(feNatOperRes)+".")
+
       # end if 
 
       # TODO: ADD INDICATION TO THE INTEGRATION REGION!
@@ -753,16 +800,167 @@ cdef class elemental_operation:
     # % % % % % % % % % % % % % % %    BOUNDARY CONDITION     % % % % % % % % % % % % % % % %
     # % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     elif operId == opOn:   # Boundary value condition.
-      
-      res = __create_opOn__(operId, lhs) 
 
+      res.baseSpace = func1.baseSpace
+      
+      res.intorder = func1.intorder
+      res.funcid   = res.baseSpace.addNewOperation()
+
+      res.baseFunc = func1.baseFunc.copy()
+      
+      # Add itself to the list of baseFunctions
+      res.baseFunc.append(res)
+
+      # append both foper matrices
+      res.foper = func1.foper.copy()
+
+      # append both Koper matrices
+      res.Koper = np.array([],dtype=np.int64)
+
+      # add new operation to the operation matrix
+      if func1.essentialOper.ndim != 1:
+        res.essentialOper = np.append(func1.essentialOper,\
+                           [[operId,res.funcid,func1.funcid,func2.funcid]],\
+                            axis = 0)
+      else:
+        res.essentialOper = np.array([[operId,res.funcid,func1.funcid,func2.funcid]],dtype=np.int64)
+      # end if 
+
+      # initialize the other two operation matrices as void.
+      res.foper = np.array([],dtype=np.int64)
+
+
+      # TODO: ADD INDICATION TO THE INTEGRATION REGION!
+      res.nature = feNatPostIntK
+      res.shape =[]
+      res.shapeBounds = [[],[],[]]
+      res.position = [0] #  Add here the position of the variable that is being defined.
+
+    # % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+    # % % % % % % % % % % % % % % % % % % %    NEGATION     % % % % % % % % % % % % % % % % % 
+    # % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     elif operId == opNeg:   # Negation operation.
 
-      res = __create_opNeg__(operId, lhs) 
+      if func1.nature == feNatDef :
+        
+        # TODO: Operation between two defined functions that have
+        #       different spaces should be performed as an operation
+        #       to be done later rather than an operation inplace.
 
+        # Perform the operation
+        res = func1.baseSpace.newFunction(-func1.data)
+
+        return res
+
+      # end if 
+
+      res.baseSpace = func1.baseSpace
+      
+      res.intorder = func1.intorder
+      res.funcid   = res.baseSpace.addNewOperation()
+
+      res.baseFunc = func1.baseFunc.copy()
+      
+      # Add itself to the list of baseFunctions
+      res.baseFunc.append(res)
+
+      # append both foper matrices
+      res.foper = func1.foper.copy()
+
+      if res.foper.ndim != 1:
+        res.foper = np.append(res.foper,\
+                           [[operId,res.funcid,func1.funcid,0]],\
+                            axis = 0)
+      # end if 
+
+      res.Koper = func1.Koper.copy()
+      if res.Koper.ndim != 1:
+        res.Koper = np.append(res.Koper,\
+                           [[operId,res.funcid,func1.funcid,0]],\
+                            axis = 0)
+      # end if 
+
+      res.essentialOper = func1.essentialOper.copy()
+      if res.essentialOper.ndim != 1:
+        res.essentialOper = np.append(res.essentialOper,\
+                           [[operId,res.funcid,func1.funcid,0]],\
+                            axis = 0)
+      # end if 
+
+
+      # TODO: ADD INDICATION TO THE INTEGRATION REGION!
+      res.nature = func1.nature
+      res.shape = func1.shape.copy()
+      res.shapeBounds = func1.shapeBounds.copy()
+      res.position = func1.position.copy()
+
+
+    # % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+    # % % % % % % % % % % % % % % % % % % %    DERIV. X     % % % % % % % % % % % % % % % % % 
+    # % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     elif operId == opDx or operId == opDy or operId == opDz:   # Derivative with respect to x.
 
-      res = __create_opDxx__(operId, lhs)      
+      # For now: Not supported dx( dx(...) )
+
+      res.baseSpace = func1.baseSpace
+      
+      res.intorder = func1.intorder-1
+
+      if func1.interpDer != basisN:
+        raise ValueError("multiple concatenation of derivative operations is "+
+                         "currently not supported")
+
+      if   operId == opDx:
+
+        res.interpDer= basisNx 
+
+      elif operId == opDy:
+
+        res.interpDer= basisNy 
+
+      elif operId == opDz:
+
+        res.interpDer= basisNz  
+
+      # end if 
+
+      res.funcid   = res.baseSpace.addNewOperation()
+
+      res.baseFunc = func1.baseFunc.copy()
+      
+      # Add itself to the list of baseFunctions
+      res.baseFunc.append(res)
+
+      # append both foper matrices
+      res.foper = func1.foper.copy()
+
+      if res.foper.ndim != 1:
+        res.foper = np.append(res.foper,\
+                           [[operId,res.funcid,func1.funcid,0]],\
+                            axis = 0)
+      # end if 
+
+      res.Koper = func1.Koper.copy()
+      if res.Koper.ndim != 1:
+        res.Koper = np.append(res.Koper,\
+                           [[operId,res.funcid,func1.funcid,0]],\
+                            axis = 0)
+      # end if 
+
+      res.essentialOper = func1.essentialOper.copy()
+      if res.essentialOper.ndim != 1:
+        res.essentialOper = np.append(res.essentialOper,\
+                           [[operId,res.funcid,func1.funcid,0]],\
+                            axis = 0)
+      # end if 
+
+
+      # TODO: ADD INDICATION TO THE INTEGRATION REGION!
+      res.nature = func1.nature
+      res.shape = func1.shape.copy()
+      res.shapeBounds = func1.shapeBounds.copy()
+      res.position = func1.position.copy()
+      
     
     # % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
     # % % % % % % % % % % % % % % %        NOT DEFINED        % % % % % % % % % % % % % % % %
@@ -895,8 +1093,8 @@ cdef class elemental_operation:
   #***************************************************************************************************
   def __neg__(self):
     
-    cdef elemental_operation res 
-    res   = elemental_operation.newFromOperation(opNeg,self,None)            
+    cdef fefunction res 
+    res   = fefunction.newFromOperation(opNeg,self,None)            
 
     return res
   #---------------------------------------------------------------------------------------------------
@@ -904,18 +1102,18 @@ cdef class elemental_operation:
   #***************************************************************************************************
   def __add__(self,other):
     
-    cdef elemental_operation res 
-    cdef elemental_operation func1
-    cdef elemental_operation func2
+    cdef fefunction res 
+    cdef fefunction func1
+    cdef fefunction func2
     
     type1 = type(self)
     type2 = type(other)
     
-    if type1 == type2:   # Case both are of class elemental_operation
+    if type1 == type2:   # Case both are of class fefunction
       
       func1 = self
       func2 = other
-      res   = elemental_operation.newFromOperation(opAdd,func1,func2)
+      res   = fefunction.newFromOperation(opAdd,func1,func2)
 
     # end if 
             
@@ -933,27 +1131,27 @@ cdef class elemental_operation:
   #***************************************************************************************************
   def __mul__(self,other):
     
-    cdef elemental_operation res 
-    cdef elemental_operation func1
-    cdef elemental_operation func2
+    cdef fefunction res 
+    cdef fefunction func1
+    cdef fefunction func2
     
     type1 = type(self)    
     type2 = type(other)
     
-    if type1 == type2:   # Case both are of class elemental_operation
+    if type1 == type2:   # Case both are of class fefunction
       
       func1 = self
       func2 = other
-      res   = elemental_operation.newFromOperation(opMul,func1,func2)
+      res   = fefunction.newFromOperation(opMul,func1,func2)
 
-    elif type2 == elemental_operation:
+    elif type2 == fefunction:
       
       func2 = other
       func1 = func2.baseSpace.newFunction(self)
 
       res = func1*func2 
 
-    elif type1 == elemental_operation:
+    elif type1 == fefunction:
 
       func1 = self
       func2 = func1.baseSpace.newFunction(other)
@@ -1005,6 +1203,35 @@ cdef class elemental_operation:
   # #---------------------------------------------------------------------------------------------------
 
   # #***************************************************************************************************
+  # def __pow__(self,exp,z):
+    
+  #   cdef fevar res 
+  #   cdef fevar S
+    
+    
+  #   S = self 
+  #   res = fevar(S.base)
+  #   res.kind = fem_checkFevarKind(opPowr,(S.kind,) )
+  #   res.intorder = S.intorder*exp
+
+  #   res.pos = S.base.msh.addNewVariable(res.kind)
+
+  #   # Deprecated:
+  #   # S.base.msh.addOperConst('pow', S, exp, res)
+
+  #   S.base.msh.addOperNp([opPowr,                         \
+  #     S.num,    S.kind,  S.pos,                           \
+  #     S.base.msh.addNewConstant(np.float64(exp), kindReal) , kindReal , \
+  #     res.num, res.kind, res.pos])
+
+  #   # Add vars
+  #   res.baseVars = self.baseVars.copy()
+  #   # TODO: Add to constant arrays.
+
+  #   return res
+  # #---------------------------------------------------------------------------------------------------
+
+  # #***************************************************************************************************
   # def set(self,expr):
     
   #   self.data = expr
@@ -1031,6 +1258,7 @@ cdef class elemental_operation:
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::: END OF CLASS ELEMENTAL_OPERATION :::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::: END OF CLASS FEFUNCTION ::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 

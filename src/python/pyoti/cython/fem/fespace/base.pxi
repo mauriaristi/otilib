@@ -65,14 +65,15 @@ cdef class space:
     
     if len_args == 0:
 
-      return res = fefunction(self, feNatUndef)
+      print("Creating undefined function.")
+      # return fefunction(self, feNatUndef)
 
     else:
 
       if len_args == 1:
 
+        print("Creating defined function from space.")
         data = args[0]
-
         tdata = type(data)
 
         if is_fefunction_supported( tdata ):
@@ -121,50 +122,50 @@ cdef class space:
   #   return res
   # #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  def newFunction(self, object data):
-    """
-    PURPOSE:      Add a new Finite Element function that is defined in the space.
+  # #***************************************************************************************************
+  # def newFunction(self, object data):
+  #   """
+  #   PURPOSE:      Add a new Finite Element function that is defined in the space.
 
-    """
-    cdef object data_conv
+  #   """
+  #   cdef object data_conv
 
-    tdata = type(data)
+  #   tdata = type(data)
 
-    if tdata in number_types:
+  #   if tdata in number_types:
 
-      data_conv = number(data)
+  #     data_conv = number(data)
 
-    elif tdata == sotinum or  tdata == matso or tdata == dmat:
+  #   elif tdata == sotinum or  tdata == matso or tdata == dmat:
     
-      data_conv = data
+  #     data_conv = data
 
-    elif tdata == np.ndarray:
+  #   elif tdata == np.ndarray:
 
-      data_conv = array( data )
+  #     data_conv = array( data )
 
-    else:
-      raise ValueError("Can't create function from data type ", type(data) )
-    # end if 
+  #   else:
+  #     raise ValueError("Can't create function from data type ", type(data) )
+  #   # end if 
 
 
 
-    res = fefunction(self, feNatDef, data = data_conv) 
-    res.shape = [1,1]
-    return res
-  #---------------------------------------------------------------------------------------------------
+  #   res = fefunction(self, feNatDef, data = data_conv) 
+  #   res.shape = [1,1]
+  #   return res
+  # #---------------------------------------------------------------------------------------------------
 
-  #***************************************************************************************************
-  cdef uint64_t addNewOperation(self):
-    """
-    PURPOSE:      Add a new Finite Element operation. 
-                  Returns an Id of the operation
+  # #***************************************************************************************************
+  # cdef uint64_t addNewOperation(self):
+  #   """
+  #   PURPOSE:      Add a new Finite Element operation. 
+  #                 Returns an Id of the operation
 
-    """
+  #   """
     
-    return self.mesh.addNewOperation()
+  #   return self.mesh.addNewOperation()
 
-  #---------------------------------------------------------------------------------------------------
+  # #---------------------------------------------------------------------------------------------------
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

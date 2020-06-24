@@ -160,30 +160,30 @@ cdef class elbaseso:
         body += " - Number of Integration points: - " + str(self.elem.nip)+"\n"
         body += " - Integration points: \n"
         body += " ----   xi: \n"
-        body += repr(self.xi)
+        body += repr(self.xi.real)
         body += " ----  eta: \n"
-        body += repr(self.eta)
+        body += repr(self.eta.real)
         body += " ---- zeta: \n"
-        body += repr(self.zeta)
+        body += repr(self.zeta.real)
         body += "\n - Integration weights: \n"
-        body += repr(self.w)
+        body += repr(self.w.real)
         body += "\n - Evaluated basis functions: \n"
 
-        for i in range(self.elem.nbasis):
+        # for i in range(self.elem.nbasis):
 
-          body += "\n ==== " + enum2string( 0 + derN ) + "\n"
-          body += repr( self.N ) + "\n"
+        #   body += "\n ==== " + enum2string( 0 + derN ) + "\n"
+        #   body += repr( self.N ) + "\n"
 
-          body += "\n ==== " + enum2string( 1 + derN ) + "\n"
-          body += repr( self.Nxi ) + "\n"
+        #   body += "\n ==== " + enum2string( 1 + derN ) + "\n"
+        #   body += repr( self.Nxi ) + "\n"
 
-          body += "\n ==== " + enum2string( 2 + derN ) + "\n"
-          body += repr( self.Neta ) + "\n"
+        #   body += "\n ==== " + enum2string( 2 + derN ) + "\n"
+        #   body += repr( self.Neta ) + "\n"
 
-          body += "\n ==== " + enum2string( 3 + derN ) + "\n"
-          body += repr( self.Nzeta ) + "\n"
+        #   body += "\n ==== " + enum2string( 3 + derN ) + "\n"
+        #   body += repr( self.Nzeta ) + "\n"
 
-        # end for 
+        # # end for 
 
       else:
 

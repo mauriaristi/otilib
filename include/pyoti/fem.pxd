@@ -23,3 +23,10 @@ include "fem/mesh.pxd"
 
 # Include Utility functions declaration.
 include "fem/utils.pxd"
+
+
+
+
+
+# Include Elemental operation class declarations.
+include "fem/elemental_operation.pxd"

@@ -8,6 +8,8 @@ point1 = elbaseso.createElement(1,            # Number of basis
                                 point1_iso,   # Basis functions.
                                 [])   
 
+
+
 # Line elements
 # 1 node line
 line1 = elbaseso.createElement( 1,            # Number of basis 
@@ -33,6 +35,8 @@ line3 = elbaseso.createElement( 3,            # Number of basis
                                 1,            # Number of dimensions
                                 line2_iso,    # Basis functions.
                                 [point1,])   
+
+
 
 # 2D elements:
 # Triangle elements.
@@ -60,6 +64,7 @@ tri4 = elbaseso.createElement(  4,            # Number of basis
                                 2,            # Number of dimensions
                                 tri4_iso,     # Basis functions.
                                 [point1,line2])   
+
 # 6 node triangle
 tri6 = elbaseso.createElement(  6,            # Number of basis 
                                 2,            # Characteristic order of the polynomials

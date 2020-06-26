@@ -203,9 +203,9 @@ cdef class mesh:
       # Set the elements to the Mesh object.
       Th.elements[dim] = {}
 
-      Th.elements[dim]['types'] = elTypes
-      Th.elements[dim]['tags']  = elTags
-      Th.elements[dim]['nodes'] = nodeIdx
+      Th.elements[dim]['types']   = elTypes
+      Th.elements[dim]['tags']    = elTags
+      Th.elements[dim]['indices'] = nodeIdx
       # Th.elements[dim]['groups'] = []
       
       # print( gmodel.getEntities(dim=dim) )
@@ -241,8 +241,13 @@ cdef class mesh:
       Th.group_names[name] = {}
       
       gname = Th.group_names[name]
-      gname['dim'] = pg[0] 
-      gname['id']  = pg[1]
+      gname['dim']   = pg[0] 
+      gname['id']    = pg[1]
+
+      # Get the nodes that belong to the physical group.
+      pgNodeTags, pgNodeCoords = gmesh.getNodesForPhysicalGroup(*pg)
+      
+      gname['nodes'] = pgNodeTags - 1
       
       entities = gmodel.getEntitiesForPhysicalGroup(*pg)
       
@@ -256,11 +261,12 @@ cdef class mesh:
         
         # elTypes, elTags, nodeIdx = gmesh.getElements(pg[0],entity)
         elTypes, elTags, nodeIdx = get_elements_from_gmsh( gmesh, dim=pg[0], tag=entity )
+        # pgNodeTags, pgNodeCoords, pgNodeParamCoords = mesh.getNodes( dim=pg[0], tag=entity )
         gname['members'].append({})
-        gname['members'][k]['types'] = elTypes
-        gname['members'][k]['tags']  = elTags
-        gname['members'][k]['nodes'] = nodeIdx
-       
+        gname['members'][k]['types']   = elTypes
+        gname['members'][k]['tags']    = elTags
+        gname['members'][k]['nodes']   = pgNodeTags
+        gname['members'][k]['indices'] = nodeIdx
         k += 1
         # print('Entity:'    , entity    )
         # print('-- Types:\n', elTypes   )

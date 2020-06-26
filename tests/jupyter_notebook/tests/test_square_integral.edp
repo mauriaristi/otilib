@@ -1,12 +1,12 @@
 
-int n = 10;
+int n = 50;
 
 
-mesh Th = square(n,n,[2*(x-0.5),1*(y-0.5)]);
+mesh Th = square(2*n,n,[2*(x-0.5),1*(y-0.5)]);
 
-fespace Vh(Th,P2);
+fespace Vh(Th,P1);
 
-Vh f = sin(x)^2;
+Vh f = sin(x*y)^2;
 
 real res = int2d(Th)( f );
 
@@ -14,7 +14,7 @@ real coef=100;
 
 cout << "Hello" << endl;
 cout << "Function maximum: " << f[].max << endl;
-cout << "integral result: " << res << endl;
+cout << "integral result: "  << res << endl;
 
 //plot([ux,uy],wait=1,ps="lamevect.eps",coef=coef);
 

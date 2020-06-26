@@ -29,4 +29,4 @@ include "fem/utils.pxd"
 
 
 # Include Elemental operation class declarations.
-include "fem/elemental_operation.pxd"
+# include "fem/elemental_operation.pxd"

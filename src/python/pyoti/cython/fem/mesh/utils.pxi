@@ -5,7 +5,7 @@
 
 element_type_name = np.empty(100,dtype=object)
 # Supported
-element_type_name[15] = "point"
+element_type_name[15] = "point1"
 
 element_type_name[1 ] = "line2"
 element_type_name[8 ] = "line3"
@@ -71,7 +71,7 @@ element_type_name[56] = "tri30"
 
 
 
-element_type_map_vtk= np.empty(100,dtype=int)
+element_type_map_vtk= np.empty(100, dtype=int)
 
 element_type_map_vtk[15] = 1   # "point"
 
@@ -114,10 +114,58 @@ element_geom_type[11] = elTetrahedra
 element_geom_type[5 ] = elHexahedra
 element_geom_type[17] = elHexahedra
 
+
+
+element = {}
+
+# Node element. (Order 0 element)
+element[15] = point1
+
+# Order 1 ('Linear') elements.
+element[1 ] = line2
+element[2 ] = tri3
+element[3 ] = quad4
+element[4 ] = tet4
+element[5 ] = hex8
+
+# Order 2. ('Quadratic') elements
+element[8 ] = line3
+element[9 ] = tri6
+element[10] = quad9
+element[11] = tet10
+
+# Serendipity elements.
+element[16] = quad8
+element[17] = hex20
+
+
+
+# element[15]['vtk']        = 1
+# element[15]['linear_eq']  = 15
+# element[15]['geom_type']  = elNode
+# element[15]['name']       = 'point1'
+# element[15]['element']    = point1
+
+
 #-----------------------------------------------------------------------------------------------------
   
 
 #           UTILITY FUNCTIONS:
+
+#*****************************************************************************************************
+def end_elements():
+  """
+  This function deallocates all elements if already allocated.
+  """
+  #***************************************************************************************************
+  
+  for elem in element.values():
+    elem.end()
+  # end for 
+
+#-----------------------------------------------------------------------------------------------------
+
+
 
 #*****************************************************************************************************
 def get_elements_from_gmsh( mesh, dim=-1, tag=-1 ):
@@ -211,8 +259,6 @@ def square(double width, double hight, double he = 1.0, element_order = 1, quads
 
   model.addPhysicalGroup( 2, [surface],   301 )
 
-
-
   model.setPhysicalName( 0, 101, "topleft"     )
   model.setPhysicalName( 0, 102, "bottomleft"  )
   model.setPhysicalName( 0, 103, "topright"    )
@@ -221,7 +267,7 @@ def square(double width, double hight, double he = 1.0, element_order = 1, quads
   model.setPhysicalName( 1, 201, "left"        )
   model.setPhysicalName( 1, 202, "bottom"      )
   model.setPhysicalName( 1, 203, "right"       )
-  model.setPhysicalName( 1, 204, "up"          )
+  model.setPhysicalName( 1, 204, "top"         )
 
   model.setPhysicalName( 2, 301, "domain"      )
 
@@ -235,18 +281,22 @@ def square(double width, double hight, double he = 1.0, element_order = 1, quads
   if quads:
     
     # Set body to recombine into quads.
-    # model.mesh.recombine()
     option.setNumber('Mesh.SecondOrderIncomplete',quad_incomplete)
     option.setNumber('Mesh.SecondOrderLinear',    quad_linear    )
     option.setNumber('Mesh.RecombineAll',         1)
 
+  else:
+
+    option.setNumber('Mesh.SecondOrderIncomplete',quad_incomplete)
+    option.setNumber('Mesh.SecondOrderLinear',    quad_linear    )
+    option.setNumber('Mesh.RecombineAll',         0)
+
   # end if 
 
   if structured:
-
     model.mesh.setTransfiniteSurface(surface)
-
   # end if 
+
   model.mesh.generate(2)
 
   if save:

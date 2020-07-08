@@ -7,7 +7,7 @@ cdef __create_opElementwise__(int64_t operId, elemental_operation lhs, elemental
 
   INPUTS:
 
-    - operId: Operation id, expecting only opTruediv.
+    - operId: Operation id, expecting: opMul, opSum, opSub.
     - lhs:    Left hand side operation.
     - rhs:    Right hand side operation.
     
@@ -19,7 +19,7 @@ cdef __create_opElementwise__(int64_t operId, elemental_operation lhs, elemental
   cdef np.ndarray newOperation 
   
   res.interpDer  = basisN
-
+  
 
   return res
 

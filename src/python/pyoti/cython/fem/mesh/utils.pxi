@@ -314,6 +314,75 @@ def square(double width, double hight, double he = 1.0, element_order = 1, quads
 
 
 
+#*****************************************************************************************************
+cpdef op_int2d(mesh Th, matso f, intorder = None, region = None ):
+  """
+  PORPUSE: Integrate over 2D elements.
+  """
+  #***************************************************************************************************
+  cdef int64_t  i, j, ii
+  cdef sotinum  integral, tmp2
+  cdef sotife  tmp1
+  cdef matso  fh
+  cdef elbaseso elem
+
+  els = Th.elements[2]
+
+  integral = zero()
+  
+  end_elements()
+  
+  #integrate 2D a fem array.
+  for j in range(els['types'].size):
+
+    elem = element[ els['types'][j] ]
+
+    if not elem.is_allocated():
+      
+      elem.end()
+      elem.allocate(intorder)
+      elem.allocate_spatial(2,compute_Jinv = False)
+
+      # Here the temporals shhould be created.
+      fh = zeros( ( elem.nbasis, 1 ) )
+      
+      tmp1 = zero(nip=elem.nip)
+      
+      tmp2 = zero()
+
+    # end if 
+
+    elm_nodes = els['indices'][j]
+
+    for i in range(elm_nodes.shape[0]):
+
+      elem.set_coordinates(Th.x,Th.y,Th.z,elm_nodes[i,:])
+      elem.compute_jacobian()
+
+      for ii in range(elem.nbasis):
+        fh[ii,0] = f[ int(elm_nodes[i,ii]),0]
+      # end for 
+      
+      dot_product(fh,elem.N,out=tmp1)
+      gauss_integrate(tmp1,elem.w_dJ, out=tmp2)
+      sum(tmp2,integral, out=integral)
+            
+      # integral = integral + gauss_integrate( dot_product( fh, elem.N), elem.w_dJ)
+              
+      # integral = integral + oti.dot_product( fh, oti.gauss_integrate( element.N, element.w_dJ) )
+
+    # end for
+
+  # end for
+  
+  end_elements()
+  
+  return integral
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
 
 
 

@@ -385,7 +385,7 @@ cdef class mesh:
             data[k,0] = dim
             data[k,1] = element_type_name[elem_dim['types'][j]]
             data[k,2] = elem_dim['tags'][j][l]
-            data[k,3] = elem_dim['nodes'][j][l]
+            data[k,3] = elem_dim['indices'][j][l]
             # data[k,4] = elem_dim['groups'][j][l]
             # k+=1
 
@@ -494,7 +494,7 @@ cdef class mesh:
       
           
           # Get numebr of elements and number of nodes per elements
-          elementsi = elem_dim['nodes'][etypei]
+          elementsi = elem_dim['indices'][etypei]
           nelsi, nnodes_el = elementsi.shape
       
           # Loop for all elements in the array:

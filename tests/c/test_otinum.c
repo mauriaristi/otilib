@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[]){
 	// Declarations
-	char data_folder[] = "/home/maristi7/coding/otilib/src/datagen/data"; // Useful for linux and macos distributions.
+	char data_folder[] = "../../data"; // Useful for linux and macos distributions.
 	dhelpl_t dhl; // Direction helper.
 
 

@@ -18,9 +18,10 @@ include "fem/gauss_array.pxi"
 include "fem/mesh.pxi"
 
 # # FE functions.
-# include "fem/fefunction.pxi"
+include "fem/space.pxi"
 
-# include "fem/fespace.pxi"
+include "fem/elemental_operation.pxi"
+
 
 # include "fem/feproblem.pxi"
 

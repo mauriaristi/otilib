@@ -2654,3 +2654,123 @@ cpdef gauss_integrate(object val, sotife w, object out = None ):
 #-----------------------------------------------------------------------------------------------------
 
 
+#*****************************************************************************************************
+cpdef neg(object val, object out = None):
+  """
+  PURPOSE:  Algebraic negation.
+  
+  Supported types:
+
+      -  matso
+      -  matsofe
+      -  darr
+      -  sotinum
+      -  sotife
+      -  real
+  """
+  #***************************************************************************************************
+
+  cdef matso      O, Ores
+  cdef dmat       R, Rres
+  cdef matsofe    F, Fres
+  cdef sotinum    o, ores
+  cdef coeff_t    r, rres
+  cdef sotife     f, fres
+  cdef coeff_t   crres
+  cdef sotinum_t cores
+  cdef fesoti_t  cfres
+  cdef darr_t    cRres
+  cdef arrso_t   cOres
+  cdef fearrso_t cFres
+  cdef uint8_t res_flag = 1
+  cdef object res
+
+  tval = type(val)
+
+  if out is None:
+    res_flag = 0
+  # end if 
+  #
+  if   tval is sotinum:
+    o = val
+    if res_flag:
+      
+      ores = out
+      soti_neg_to( &o.num, &ores.num, dhl)
+
+    else:
+
+      cores = soti_neg( &o.num,  dhl)
+      res   = sotinum.create(&cores)
+
+    # end if 
+  elif tval is sotife:
+    f = val
+    if res_flag:
+      
+      fres = out
+      fesoti_neg_to( &f.num, &fres.num, dhl)
+
+    else:
+
+      cfres = fesoti_neg( &f.num,  dhl)
+      res   = sotife.create(&cfres)
+
+    # end if         
+  elif tval is matsofe:    
+    F = val
+    if res_flag:
+
+      Fres = out
+      fearrso_neg_to( &F.arr, &Fres.arr, dhl)
+
+    else:
+
+      cFres = fearrso_neg( &F.arr, dhl)
+      res   = matsofe.create(&cFres)
+
+    # end if 
+  elif tval is matso:
+    O = val
+    if res_flag:
+      
+      Ores = out
+      arrso_neg_to( &O.arr, &Ores.arr, dhl)
+
+    else:
+
+      cOres = arrso_neg( &O.arr,  dhl)
+      res   = matso.create(&cOres)
+
+    # end if    
+  elif tval is dmat:
+    R = val
+    if res_flag:
+      
+      Rres = out
+      darr_neg_to( &R.arr, &Rres.arr)
+
+    else:
+
+      cRres = darr_neg( &R.arr )
+      res = dmat.create( &cRres )
+
+    # end if 
+  elif tval in number_types:
+    import math    
+    r    = val
+    rres = -r
+    if res_flag:      
+      out = rres
+    else:
+      res = rres
+    # end if   
+  else:
+    raise TypeError("Unsupported types at cos operation.")    
+  # end if 
+
+  if res_flag == 0:
+    return res
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------

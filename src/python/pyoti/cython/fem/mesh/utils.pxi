@@ -212,6 +212,60 @@ def map_indices(idxSrc,idxMap):
 
 
 
+#*****************************************************************************************************
+def line(double a, double b, double he = 1.0, element_order = 1, save=False):
+  """
+  PORPUSE: Define a line mesh.
+  """
+  #***************************************************************************************************
+  import gmsh
+
+  cdef mesh Th
+
+  gmsh.initialize()
+  # gmsh.fltk.initialize()
+
+  # Lets create a simple square element:
+  model = gmsh.model
+  geo   = model.geo
+  option= gmsh.option
+
+  P1 = geo.addPoint( a,  0, 0, he, 1)
+  P2 = geo.addPoint( b,  0, 0, he, 2)
+
+  L1 = geo.addLine(P1,P2) # Line
+
+  model.addPhysicalGroup( 0, [P1],        101 )
+  model.addPhysicalGroup( 0, [P2],        102 )
+
+  model.addPhysicalGroup( 1, [L1],        201 )
+
+  model.setPhysicalName( 0, 101, "left"     )
+  model.setPhysicalName( 0, 102, "right"    )
+
+  model.setPhysicalName( 1, 201, "domain"   )
+
+
+  geo.synchronize()
+  
+  option.setNumber('Mesh.ElementOrder',element_order)
+  
+
+  model.mesh.generate(1)
+
+  if save:
+    gmsh.write("line.msh")
+  # end if 
+
+  Th = mesh.from_gmsh(gmsh)
+
+  gmsh.finalize()
+
+  return Th
+
+#-----------------------------------------------------------------------------------------------------
+
+
 
 
 #*****************************************************************************************************

@@ -11,7 +11,7 @@ cdef extern from "oti/oti.h" nogil:
     opTruediv     =   4 ,
     opPowr        =   5 ,
     
-    # opInt0d       =  60 ,
+    opInt0d       =  60 ,
     opInt1d       =   6 ,
     opInt2d       =   7 ,
     opInt3d       =   8 ,
@@ -27,6 +27,7 @@ cdef extern from "oti/oti.h" nogil:
     opDzz         =   17,
 
     opDef         =   18,
+    opDefData     =   61,
     opOn          =   19,
     opNeg         =   20,
 
@@ -97,7 +98,8 @@ cdef extern from "oti/oti.h" nogil:
     feNatOperRes  =  705,
     feNatPostIntK =  706,
     feNatPostIntF =  707,
-    feNatBoundary =  708
+    feNatBoundary =  708,
+    feUndefined   =  709 
   # };
 
   # From oti/fem/gauss/array/oarr/structures.h

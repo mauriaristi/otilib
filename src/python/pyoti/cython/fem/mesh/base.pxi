@@ -184,14 +184,15 @@ cdef class mesh:
     gmesh.renumberElements()
 
     # Get enodal values.
-    nodeTags, nodalCoord, parametricCoord = gmesh.getNodes() # this gets all Nodal coordinates.
+    nodeTags, nodalCoords, parametricCoord = gmesh.getNodes() # this gets all Nodal coordinates.
     nodeTags -= 1 # Change to python indices.
-
+    # print(nodeTags)
     # Get the number of nodes:
     nNodes = nodeTags.size
 
     # Reshape the nodal coordinates to (nNodes x 3) matrix:
-    nodalCoord = nodalCoord.reshape((nNodes,3))
+    nodalCoord = np.zeros((nNodes,3),dtype=np.float64)
+    nodalCoord[nodeTags,:] = nodalCoords.reshape((nNodes,3))
 
     Th.ndim = gmodel.getDimension()
 

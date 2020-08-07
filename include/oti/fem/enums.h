@@ -14,6 +14,7 @@ enum operEnum {
   opMul         =   3 ,   ///< a *  b
   opTruediv     =   4 ,   ///< a /  b
   opPowr        =   5 ,   ///< a ** b
+  opInt0d       =   60,   ///< int0d(a)
   opInt1d       =   6 ,   ///< int1d(a)
   opInt2d       =   7 ,   ///< int2d(a)
   opInt3d       =   8 ,   ///< int3d(a)
@@ -27,6 +28,7 @@ enum operEnum {
   opDyz         =   16,   ///< dyz(a)
   opDzz         =   17,   ///< dzz(a)
   opDef         =   18,   ///< Define something (probably basis function arrays)
+  opDefData     =   61,   ///< Define from data.
   opOn          =   19,   ///< Essential boundary definition integral.
   opNeg         =   20,   ///< -a
   opDxi         =   21,   ///< dxi      (a)
@@ -68,7 +70,6 @@ enum operEnum {
   kindScalar    =  203,    ///<  .
   kindFunc      =  204,    ///<  Function.
 
-
   // Determine the type of FE variable, if Constant or Variable.
   feConstant    =  301,    ///< varConst
   feVariable    =  302,    ///< varVaria
@@ -105,7 +106,8 @@ enum operEnum {
   feNatOperRes  =  705,   ///< Defined as the result between a test and a undefined function.
   feNatPostIntK =  706,   ///< integral type operation for K matrix.
   feNatPostIntF =  707,   ///< integral type operation for F vector.
-  feNatBoundary =  708    ///< Boundary definition. (essential)
+  feNatBoundary =  708,   ///< Boundary definition. (essential)
+  feUndefined   =  709    ///< Undefined nature.
 };
 
 

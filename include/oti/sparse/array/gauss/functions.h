@@ -19,6 +19,7 @@ fearrso_t fearrso_asinh(    fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_asinh_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 fearrso_t fearrso_acosh(    fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_acosh_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief hyperbolic functions.
@@ -33,6 +34,7 @@ fearrso_t fearrso_sinh(     fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_sinh_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 fearrso_t fearrso_cosh(     fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_cosh_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 
 /**************************************************************************************************//**
@@ -48,6 +50,7 @@ fearrso_t fearrso_asin(     fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_asin_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 fearrso_t fearrso_acos(     fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_acos_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Trigonometric functions.
@@ -62,6 +65,7 @@ fearrso_t fearrso_sin(      fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_sin_to(   fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 fearrso_t fearrso_cos(      fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_cos_to(   fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 
 /**************************************************************************************************//**
@@ -80,6 +84,7 @@ fearrso_t fearrso_log(      fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_log_to(   fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 fearrso_t fearrso_exp(      fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_exp_to(   fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Power functions.
@@ -95,6 +100,7 @@ fearrso_t fearrso_sqrt(     fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_sqrt_to(  fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 fearrso_t fearrso_pow(      fearrso_t* arr, double e,                    dhelpl_t dhl);
 void      fearrso_pow_to(   fearrso_t* arr, double e, fearrso_t* res,    dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 
 

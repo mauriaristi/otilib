@@ -35,6 +35,40 @@ onumm2n5_t onumm2n5_set_r(  double lhs){
   return res;
 }
 
+void onumm2n5_print(  onumm2n5_t lhs){
+
+  // Print function.
+  //  Real;
+  printf("%.8g",lhs.r);
+  //  Order 1;
+  printf(" + %.8g * e1",lhs.e1);
+  printf(" + %.8g * e2",lhs.e2);
+  //  Order 2;
+  printf(" + %.8g * e11",lhs.e11);
+  printf(" + %.8g * e12",lhs.e12);
+  printf(" + %.8g * e22",lhs.e22);
+  //  Order 3;
+  printf(" + %.8g * e111",lhs.e111);
+  printf(" + %.8g * e112",lhs.e112);
+  printf(" + %.8g * e122",lhs.e122);
+  printf(" + %.8g * e222",lhs.e222);
+  //  Order 4;
+  printf(" + %.8g * e1111",lhs.e1111);
+  printf(" + %.8g * e1112",lhs.e1112);
+  printf(" + %.8g * e1122",lhs.e1122);
+  printf(" + %.8g * e1222",lhs.e1222);
+  printf(" + %.8g * e2222",lhs.e2222);
+  //  Order 5;
+  printf(" + %.8g * e11111",lhs.e11111);
+  printf(" + %.8g * e11112",lhs.e11112);
+  printf(" + %.8g * e11122",lhs.e11122);
+  printf(" + %.8g * e11222",lhs.e11222);
+  printf(" + %.8g * e12222",lhs.e12222);
+  printf(" + %.8g * e22222",lhs.e22222);
+  printf("\n");
+
+}
+
 onumm2n5_t onumm2n5_add_oo(  onumm2n5_t lhs,  onumm2n5_t rhs){
   onumm2n5_t res;
 

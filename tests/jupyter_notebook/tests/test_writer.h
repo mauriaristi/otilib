@@ -69,6 +69,7 @@ typedef struct {
 
 onumm2n5_t onumm2n5_sum_oo(  onumm2n5_t lhs,  onumm2n5_t rhs);
 onumm2n5_t onumm2n5_set_r(  double lhs);
+void onumm2n5_print(  onumm2n5_t lhs);
 onumm2n5_t onumm2n5_add_oo(  onumm2n5_t lhs,  onumm2n5_t rhs);
 onumm2n5_t onumm2n5_add_ro(  double lhs,  onumm2n5_t rhs);
 onumm2n5_t onumm2n5_add_or(  onumm2n5_t lhs,  double rhs);

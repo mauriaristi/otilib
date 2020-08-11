@@ -1,4 +1,38 @@
 
+// 1. Vector operations.
+// 1.1.  Dot product.
+// 1.1.1  dotproduct(O,O)
+// ****************************************************************************************************
+coeff_t darr_dotproduct_RR( darr_t* arr1, darr_t* arr2 ){
+   
+    coeff_t res;
+
+    darr_dotproduct_RR_to( arr1, arr2, &res );
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void darr_dotproduct_RR_to(darr_t* arr1, darr_t* arr2, coeff_t* res){
+
+    uint64_t i;
+    coeff_t tmp = 0.0;
+
+    // check for dimensions.
+    darr_dimCheck_RR_samesize( arr1, arr2 );
+
+    for ( i = 0; i < arr1->size; i++){
+
+        tmp += arr1->p_data[ i ]*arr2->p_data[ i ];
+                   
+    }
+
+    (*res) = tmp;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -48,6 +82,80 @@ darr_t darr_matmul(darr_t* arr1, darr_t* arr2 ){
 
 // ****************************************************************************************************
 void darr_matmul_to(darr_t* arr1, darr_t* arr2, darr_t* aRes ){
+
+    uint64_t i, j, k;
+    coeff_t tmp1;
+
+    // Check correctness of dimensions:
+    // if( (arr1->ncols != arr2->nrows) ){
+    //     printf("--- DimensionError in matrix sum ---\n");
+    //     exit(1);
+    // }
+    // if (aRes->p_data == NULL){
+    //     soarr_zeros( aRes, arr1->nrows, arr2->ncols, arr2->order);
+    // }
+    for (i = 0; i<arr1->nrows; i++){
+        
+        for(j = 0; j<arr2->ncols; j++){
+                
+            tmp1 = 0;
+
+            for(k=0; k<arr1->ncols; k++){
+
+                tmp1 += arr1->p_data[k+i*arr1->ncols] * arr2->p_data[j+k*arr2->ncols];
+
+            }
+
+            darr_set_item_ij( tmp1, i, j, aRes);
+
+        }
+
+    }    
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+darr_t darr_matmul_RR(darr_t* arr1, darr_t* arr2 ){
+
+    darr_t aRes;
+    uint64_t i, j, k;
+    coeff_t tmp1;
+
+    // Check correctness of dimensions:
+    if( (arr1->ncols != arr2->nrows) ){
+        printf("--- DimensionError in matrix sum ---\n");
+        exit(1);
+    }
+
+    aRes = darr_createEmpty( arr1->nrows, arr2->ncols);
+
+    for (i=0; i<arr1->nrows; i++){
+        
+        for(j=0; j<arr2->ncols; j++){
+                
+            tmp1 = 0;
+
+            for(k=0; k<arr1->ncols; k++){
+
+                tmp1 += arr1->p_data[k+i*arr1->ncols] * arr2->p_data[j+k*arr2->ncols];
+
+            }
+
+            darr_set_item_ij( tmp1, i, j, &aRes);
+
+        }
+
+    }
+    
+    return aRes;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void darr_matmul_RR_to(darr_t* arr1, darr_t* arr2, darr_t* aRes ){
 
     uint64_t i, j, k;
     coeff_t tmp1;
@@ -450,6 +558,14 @@ void darr_invert_to(darr_t* arr1, darr_t* aRes){
 // 2.4. Determinant.
 
 // ****************************************************************************************************
+void darr_det_to( darr_t* arr1, coeff_t* res ){
+
+    (*res) = darr_det(arr1);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 coeff_t darr_det( darr_t* arr1 ){
     
     uint64_t i, j ;
@@ -536,9 +652,25 @@ coeff_t darr_pnorm( darr_t* arr1, coeff_t p ){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+void darr_pnorm_to( darr_t* arr1, coeff_t p, coeff_t* res ){
+    
+    
+    (*res) = darr_pnorm( arr1, p );
+    
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 coeff_t darr_norm( darr_t* arr1 ){
     
     return darr_pnorm( arr1, 2.0 );
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void darr_norm_to( darr_t* arr1, coeff_t* res ){
+    
+    (*res) = darr_pnorm( arr1, 2.0 );
 }
 // ----------------------------------------------------------------------------------------------------
 

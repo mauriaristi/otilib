@@ -11,25 +11,36 @@
 
 
 
-// Append structures
-#include "real/structures.h"
-
 // Derivatives of real functions.
 #include "real/derivatives.h"
 
 
+// Gauss Scalar 
+#include "real/scalar/gauss/structures.h"
+#include "real/scalar/gauss/base.h"
+#include "real/scalar/gauss/algebra.h"
+#include "real/scalar/gauss/functions.h"
+#include "real/scalar/gauss/utils.h"
 
-// Array specific
-// Array operations.
-#include "real/base.h"
+// 
+// Array Class.
+#include "real/array/structures.h"
+#include "real/array/base.h"
+#include "real/array/algebra.h"
+#include "real/array/functions.h"
+#include "real/array/utils.h"
 
-// Algebra
-#include "real/algebra.h"
+// Gauss Array.
+#include "real/array/gauss/structures.h"
+#include "real/array/gauss/base.h"
+#include "real/array/gauss/algebra.h"
+#include "real/array/gauss/functions.h"
+#include "real/array/gauss/utils.h"
 
-// Math functions for array class.
-#include "real/functions.h"
 
-// Utilities
-#include "real/utils.h"
+
+
+
+
 
 #endif

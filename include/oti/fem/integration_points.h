@@ -3,7 +3,8 @@
 
 
 
-#include "integration_points/base.h"
+#include "integration_points/soti/base.h"
+#include "integration_points/real/base.h"
 
 
 

@@ -893,7 +893,7 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
-  def pprint_scalar_function(self, level = "", lhs_name= "lhs", fmt = "\%.8g",tab = "  "):
+  def pprint_scalar_function(self, level = "", lhs_name= "lhs", fmt = "%.8g",tab = "  "):
     """
     PORPUSE:  getim like function between two OTIs.
     """
@@ -1935,7 +1935,8 @@ class writer:
         f_close = "", overload = "=",generator = self.assignr_like_function)
       contents += endl
 
-      contents += self.write_scalar_function_print( level = level, lhs_name= "lhs", tab = tab)
+      # Print scalar
+      contents += self.write_scalar_function_print( level = level, tab = tab)
       contents += endl      
 
       # Standard Addition

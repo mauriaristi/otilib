@@ -97,6 +97,19 @@ void   darr_sum_Rr_to( darr_t* lhs, coeff_t rhs, darr_t* res );
 
 
 
+/**************************************************************************************************//**
+@brief Vector dot product
+
+RES  = DOT_PRODUCT( LHS,  RHS)
+
+@param[in] lhs    Left hand side array.
+@param[in] rhs    Right hand side array.
+@param[in] res    result.
+******************************************************************************************************/ 
+coeff_t darr_dotproduct_RR(    darr_t* lhs, darr_t* rh              );
+void    darr_dotproduct_RR_to( darr_t* lhs, darr_t* rh, coeff_t* res);
+// ----------------------------------------------------------------------------------------------------
+
 
 /**************************************************************************************************//**
 @brief Matrix multiplication between two arrays.
@@ -119,6 +132,10 @@ RES = MATMUL ( LHS, RHS )
 ******************************************************************************************************/
 darr_t darr_matmul(    darr_t* lhs, darr_t* rhs               );
 void   darr_matmul_to( darr_t* lhs, darr_t* rhs, darr_t* res );
+
+darr_t darr_matmul_RR(    darr_t* lhs, darr_t* rhs               );
+void   darr_matmul_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res );
+
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -162,13 +179,16 @@ coeff_t darr_det( darr_t* arr );
 /**************************************************************************************************//**
 @brief Norm of an array.
 
-res = Norm( ARR )
+res = norm( ARR )
 
 @param[in] arr Array to compute norm.
 @param[in] p   Value that defines the norm.
 ******************************************************************************************************/
 coeff_t darr_pnorm( darr_t* arr, coeff_t p );
 coeff_t darr_norm(  darr_t* arr );
+
+void darr_pnorm_to( darr_t* arr1, coeff_t p, coeff_t* res );
+void darr_norm_to( darr_t* arr1, coeff_t* res );
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -219,6 +239,21 @@ void darr_self_mul_R( darr_t* rhs, darr_t* res );
 void darr_self_mul_r( coeff_t rhs, darr_t* res );
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief General multiplication. 
+
+RES = ARR1 * ARR2 + ARR3
+
+@param[in] lhs Left hand side
+@param[in] rhs Right hand side
+@param[inout] res: Resulting array.
+******************************************************************************************************/
+darr_t darr_gem_RR(   darr_t* arr1, darr_t* arr2, darr_t* arr3             );
+darr_t darr_gem_rR(   coeff_t arr1, darr_t* arr2, darr_t* arr3             );
+
+void   darr_gem_RR_to(darr_t* arr1, darr_t* arr2, darr_t* arr3, darr_t* res);
+void   darr_gem_rR_to(coeff_t arr1, darr_t* arr2, darr_t* arr3, darr_t* res);
+// ----------------------------------------------------------------------------------------------------
 
 
 

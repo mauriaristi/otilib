@@ -13,19 +13,28 @@
 // Function derivatives
 #include "real/function_derivatives.c"
 
-
-// Array of real numbers:
+// Array 
 // Base functions to support manipulation.
-#include "real/array_base.c"
+#include "real/array/base.c"
+#include "real/array/algebra_elementwise.c"
+#include "real/array/algebra_matops.c"
+#include "real/array/functions.c"
+#include "real/array/utils.c"
 
-// Algebra: Elementwise operations.
-#include "real/array_algebra_elementwise.c"
+// Gauss Scalar
+#include "real/scalar/gauss/base.c"
+#include "real/scalar/gauss/algebra.c"
+#include "real/scalar/gauss/utils.c"
+#include "real/scalar/gauss/functions.c"
 
-// Algebra: Matrix operations.
-#include "real/array_algebra_matops.c"
 
-// Function evaluation.
-#include "real/array_function.c"
+// Gauss Array
+#include "real/array/gauss/base.c"
+#include "real/array/gauss/algebra_elementwise.c"
+// #include "real/array/gauss/algebra_matops.c"
+// #include "real/array/gauss/functions.c"
+#include "real/array/gauss/utils.c"
+
 
 
 // ----------------------------------------------------------------------------------------------------

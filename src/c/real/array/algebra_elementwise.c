@@ -660,3 +660,53 @@ void darr_div_rR_to(coeff_t num, darr_t* arr2, darr_t* aRes){
 
 
 
+
+
+
+
+
+
+
+
+
+// ****************************************************************************************************
+void darr_gem_RR_to(darr_t* arr1, darr_t* arr2, darr_t* arr3, darr_t* res){
+    // This function does GEM (GEneral Multiplication): RES = ARR1*ARR2 + ARR3
+    // Allows to do the following RES = ARR1*ARR2 + RES
+    uint64_t i;
+
+    // Check inputs:
+    darr_dimCheck_RR_elementwise(arr1,arr2,res);
+    darr_dimCheck_RR_elementwise(arr1,arr3,res);
+
+    // Loop for every element and add real to the oti number.
+    for ( i = 0; i < res->size; i++){
+
+        res->p_data[i] = arr1->p_data[i] * arr2->p_data[i] + arr3->p_data[i];
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void darr_gem_rR_to(coeff_t arr1, darr_t* arr2, darr_t* arr3, darr_t* res){
+    // This function does GEM (GEneral Multiplication): RES = ARR1*ARR2 + ARR3
+    // Allows to do the following RES = ARR1*ARR2 + RES
+    uint64_t i;
+
+    // Check inputs:
+    darr_dimCheck_RR_elementwise(arr2,arr3,res);
+
+    // Loop for every element and add real to the oti number.
+    for ( i = 0; i < res->size; i++){
+
+        res->p_data[i] = arr1 * arr2->p_data[i] + arr3->p_data[i];
+
+    }
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+

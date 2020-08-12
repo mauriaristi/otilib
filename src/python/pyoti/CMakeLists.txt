@@ -76,7 +76,8 @@ ADD_CUSTOM_COMMAND (
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/__init__.py      ${CYTHON_BUILD_DIR}/
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/whereotilib.py   ${CYTHON_BUILD_DIR}/
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/auxFunctions.py  ${CYTHON_BUILD_DIR}/
-	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/module_writer.py ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/fmod_writer.py ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/cmod_writer.py ${CYTHON_BUILD_DIR}/
 )
 
 # -------------------------------------------------------------------

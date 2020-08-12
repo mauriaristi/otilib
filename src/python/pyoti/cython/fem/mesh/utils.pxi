@@ -139,12 +139,30 @@ element[16] = quad8
 element[17] = hex20
 
 
+delement = {}
 
-# element[15]['vtk']        = 1
-# element[15]['linear_eq']  = 15
-# element[15]['geom_type']  = elNode
-# element[15]['name']       = 'point1'
-# element[15]['element']    = point1
+# Node element. (Order 0 element)
+delement[15] = dpoint1
+
+# Order 1 ('Linear') elements.
+delement[1 ] = dline2
+delement[2 ] = dtri3
+delement[3 ] = dquad4
+delement[4 ] = dtet4
+delement[5 ] = dhex8
+
+# Order 2. ('Quadratic') elements
+delement[8 ] = dline3
+delement[9 ] = dtri6
+delement[10] = dquad9
+delement[11] = dtet10
+
+# Serendipity elements.
+delement[16] = dquad8
+delement[17] = dhex20
+
+
+
 
 
 #-----------------------------------------------------------------------------------------------------
@@ -160,6 +178,19 @@ def end_elements():
   #***************************************************************************************************
   
   for elem in element.values():
+    elem.end()
+  # end for 
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
+def end_delements():
+  """
+  This function deallocates all elements if already allocated.
+  """
+  #***************************************************************************************************
+  
+  for elem in delement.values():
     elem.end()
   # end for 
 
@@ -213,15 +244,15 @@ def map_indices(idxSrc,idxMap):
 
 
 #*****************************************************************************************************
-def line(double a, double b, double he = 1.0, element_order = 1, save=False):
+def line(double a, double b, double he = 1.0, element_order = 1, save=False, real= False):
   """
   PORPUSE: Define a line mesh.
   """
   #***************************************************************************************************
   import gmsh
 
-  cdef mesh Th
-
+  cdef object res
+  
   gmsh.initialize()
   # gmsh.fltk.initialize()
 
@@ -257,11 +288,14 @@ def line(double a, double b, double he = 1.0, element_order = 1, save=False):
     gmsh.write("line.msh")
   # end if 
 
-  Th = mesh.from_gmsh(gmsh)
-
+  if real == True:
+    res = dmesh.from_gmsh(gmsh)
+  else:
+    res = mesh.from_gmsh(gmsh)
+  # end if
   gmsh.finalize()
 
-  return Th
+  return res
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -270,14 +304,14 @@ def line(double a, double b, double he = 1.0, element_order = 1, save=False):
 
 #*****************************************************************************************************
 def square(double width, double hight, double he = 1.0, element_order = 1, quads = False, 
-           quad_incomplete = 1, quad_linear = 1, structured = False, save=False):
+           quad_incomplete = 1, quad_linear = 1, structured = False, save=False, real= False):
   """
   PORPUSE: Define a square mesh.
   """
   #***************************************************************************************************
   import gmsh
 
-  cdef mesh Th
+  cdef object res
 
   gmsh.initialize()
   # gmsh.fltk.initialize()
@@ -357,11 +391,14 @@ def square(double width, double hight, double he = 1.0, element_order = 1, quads
     gmsh.write("square.msh")
   # end if 
 
-  Th = mesh.from_gmsh(gmsh)
-
+  if real == True:
+    res = dmesh.from_gmsh(gmsh)
+  else:
+    res = mesh.from_gmsh(gmsh)
+  # end if
   gmsh.finalize()
 
-  return Th
+  return res
 
 #-----------------------------------------------------------------------------------------------------
 

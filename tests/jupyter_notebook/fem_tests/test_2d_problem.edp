@@ -1,0 +1,40 @@
+
+
+//
+//               +-----------------+ ((1,1))
+//               |                 |
+//     Tleft     |                 |  Tright
+//               |                 |
+//               |                 |
+//      ((0,0))  +-----------------+
+//
+
+
+mesh Th = square(100,100);
+
+//plot(Th, wait=1);
+fespace Vh(Th,P2);
+
+Vh T, v, f, Tanalytic,error;
+f = 2*( x^2 + y^2 - x - y);
+
+Tanalytic = x*(1-x)*y*(1-y);
+
+problem laplace(T,v)=
+   int2d(Th)(   -dx(T) * dx(v) ) +
+   int2d(Th)(   -dy(T) * dy(v) ) +
+   int2d(Th)( -f*v   ) + 
+   on(1,T=0) + on(2,T=0) + on(3,T=0) +// Tleft
+   on(4,T=0);
+   //
+   
+
+
+
+laplace;
+error = abs(T-Tanalytic);
+
+plot(Th, T, wait=1);
+plot(Th, error , wait=1);
+//plot(Th,Theta,wait=1,cmm="Hello");
+

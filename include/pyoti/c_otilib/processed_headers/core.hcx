@@ -52,6 +52,7 @@ void start_python_error_function();
 void set_python_error_function(void (*error_function)(int64_t));
 void usage_python_error_function(void (*error_function)(int64_t), int64_t error_id, int64_t status);
 void error_exit(int64_t error_id);
+int64_t slice_size(int64_t start, int64_t stop, int64_t step);
 uint64_t binSearchUI64(  uint64_t elem, uint64_t* p_arr, uint64_t size, flag_t* flag);
 void printArrayDBL(    double* ptr_, uint64_t n );
 void printArrayUI64( uint64_t* ptr_, uint64_t n );
@@ -137,6 +138,7 @@ void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder );
 
 # From oti/core/base.h
 
+coeff_t dhelp_compute_delta(imdir_t  idx, ord_t  ord, coeff_t* deltas, dhelpl_t dhl);
 void dhelp_div_imdir(imdir_t  numidx, ord_t  numord,
                      imdir_t  denidx, ord_t  denord,
                      imdir_t* residx, ord_t* resord,

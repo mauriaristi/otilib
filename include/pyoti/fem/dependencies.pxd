@@ -6,6 +6,9 @@ from pyoti.c_otilib cimport *
 from pyoti.real   import dmat
 from pyoti.real  cimport dmat, darr_2_npy
 
+import  pyoti.real as r
+cimport pyoti.real as r
+
 # Import dense dependencies.
 from pyoti.dense  import omat
 from pyoti.dense cimport omat

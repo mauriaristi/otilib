@@ -13,6 +13,9 @@ from pyoti.core cimport  get_cython_dHelp, dHelp, imdir
 from pyoti.real import  dmat
 from pyoti.real cimport dmat
 
+import  pyoti.real as r
+cimport pyoti.real as r
+
 from pyoti.dense import  omat, otinum, e as eps
 from pyoti.dense cimport omat, otinum
 

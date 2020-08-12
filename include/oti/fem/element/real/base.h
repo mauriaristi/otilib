@@ -98,7 +98,7 @@ int64_t elemd_start( elemd_t* elemd, uint64_t nbasis, int64_t geomBase,
 @param[inout] elemd: Address of the element structure. Must come after a call to elemd_start(...).
 @param[in] intorder: Integration order, defines number of integration points for numerical integration.
 ******************************************************************************************************/ 
-int64_t elemd_allocate(elemd_t* elemd, uint64_t intorder, bases_t bases, ord_t order );
+int64_t elemd_allocate(elemd_t* elemd, uint64_t intorder );
 // ----------------------------------------------------------------------------------------------------
 
 

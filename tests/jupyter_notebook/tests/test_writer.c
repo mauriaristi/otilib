@@ -1,6 +1,7 @@
 #include"test_writer.h"
 
-onumm2n5_t onumm2n5_set_r(  double lhs){
+onumm2n5_t onumm2n5_create_r(  double lhs){
+
   onumm2n5_t res;
 
   // Assign like function 'lhs'
@@ -33,6 +34,7 @@ onumm2n5_t onumm2n5_set_r(  double lhs){
   res.e22222 = 0.0;
 
   return res;
+
 }
 
 void onumm2n5_print(  onumm2n5_t lhs){
@@ -102,6 +104,7 @@ onumm2n5_t onumm2n5_add_oo(  onumm2n5_t lhs,  onumm2n5_t rhs){
   res.e22222 = lhs.e22222 + rhs.e22222;
 
   return res;
+
 }
 
 onumm2n5_t onumm2n5_add_ro(  double lhs,  onumm2n5_t rhs){
@@ -137,6 +140,7 @@ onumm2n5_t onumm2n5_add_ro(  double lhs,  onumm2n5_t rhs){
   res.e22222 =  + rhs.e22222;
 
   return res;
+
 }
 
 onumm2n5_t onumm2n5_add_or(  onumm2n5_t lhs,  double rhs){
@@ -172,6 +176,7 @@ onumm2n5_t onumm2n5_add_or(  onumm2n5_t lhs,  double rhs){
   res.e22222 = lhs.e22222;
 
   return res;
+
 }
 
 onumm2n5_t onumm2n5_neg(  onumm2n5_t lhs){
@@ -242,6 +247,7 @@ onumm2n5_t onumm2n5_sub_oo(  onumm2n5_t lhs,  onumm2n5_t rhs){
   res.e22222 = lhs.e22222 - rhs.e22222;
 
   return res;
+
 }
 
 onumm2n5_t onumm2n5_sub_ro(  double lhs,  onumm2n5_t rhs){
@@ -277,6 +283,7 @@ onumm2n5_t onumm2n5_sub_ro(  double lhs,  onumm2n5_t rhs){
   res.e22222 =  - rhs.e22222;
 
   return res;
+
 }
 
 onumm2n5_t onumm2n5_sub_or(  onumm2n5_t lhs,  double rhs){
@@ -312,6 +319,7 @@ onumm2n5_t onumm2n5_sub_or(  onumm2n5_t lhs,  double rhs){
   res.e22222 = lhs.e22222;
 
   return res;
+
 }
 
 onumm2n5_t onumm2n5_mul_oo(  onumm2n5_t lhs,  onumm2n5_t rhs){
@@ -364,6 +372,7 @@ onumm2n5_t onumm2n5_mul_oo(  onumm2n5_t lhs,  onumm2n5_t rhs){
              + lhs.e22 * rhs.e222;
 
   return res;
+
 }
 
 onumm2n5_t onumm2n5_mul_ro(  double lhs,  onumm2n5_t rhs){
@@ -399,6 +408,7 @@ onumm2n5_t onumm2n5_mul_ro(  double lhs,  onumm2n5_t rhs){
   res.e22222 = lhs * rhs.e22222;
 
   return res;
+
 }
 
 onumm2n5_t onumm2n5_mul_or(  onumm2n5_t lhs,  double rhs){
@@ -434,5 +444,6 @@ onumm2n5_t onumm2n5_mul_or(  onumm2n5_t lhs,  double rhs){
   res.e22222 = lhs.e22222 * rhs;
 
   return res;
+
 }
 

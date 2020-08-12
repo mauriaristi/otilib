@@ -111,3 +111,71 @@ cdef class elbaseso:
 # :::::::::::::::::::::::::::::::::::: END OF CLASS elBaseso :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+
+
+
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  elBased     ::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+cdef class elbased:
+  
+  #---------------------------------------------------------------------------------------------------
+  #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
+  #---------------------------------------------------------------------------------------------------
+
+  cdef        uint8_t  FLAGS        # Defines if the elemen is defined in python or c.
+  cdef        elemd_t  elem         # C-level memory structure of element class.
+
+  cdef public uint8_t  elorder      # Element type order.
+  cdef public uint64_t ndim_an      # Number of dimensions of the analysis
+  cdef public list     boundEls     # List of boundary element types.
+  cdef public object   basis        # Function that calculates the basis functions of the element.
+      
+  cdef public r.dnumfe   xi         # Xi natural coordinate. (integration points)
+  cdef public r.dnumfe   eta        # Eta natural coordinate. (integration points)
+  cdef public r.dnumfe   zeta       # Zeta natural coordinate. (integration points)
+
+  cdef public r.dnumfe   w          # Integration weights
+      
+  cdef public r.dmatfe   N          # Real basis.
+  cdef public r.dmatfe   Nxi        # dN/d xi    basis.
+  cdef public r.dmatfe   Neta       # dN/d eta   basis.
+  cdef public r.dmatfe   Nzeta      # dN/d zeta  basis.
+      
+  cdef public r.dmatfe   Nx         # dN/dx basis.
+  cdef public r.dmatfe   Ny         # dN/dy basis.
+  cdef public r.dmatfe   Nz         # dN/dz basis.
+      
+  cdef public r.dmat     x          # Elemental xcoord basis.
+  cdef public r.dmat     y          # Elemental xcoord basis.
+  cdef public r.dmat     z          # Elemental xcoord basis.
+      
+  cdef public r.dmatfe     J        # Elemental Jacobian.
+  cdef public r.dnumfe  detJ        # Determinant of Jacobian.
+  cdef public r.dnumfe  w_dJ        # integration weight dOmega.
+  
+  cdef public r.dmatfe     Jinv     # Jacobian inverse.
+      
+
+  cdef public uint8_t compute_Jinv
+
+  
+  #---------------------------------------------------------------------------------------------------
+  
+  cpdef is_allocated(   self )
+  cpdef is_initialized( self )
+
+  cpdef allocate( self, uint64_t intorder )
+  cpdef end( self )
+
+  cpdef allocate_spatial( self, uint64_t ndim_an, uint8_t compute_Jinv = * )
+  cpdef reset( self )
+  # cpdef uninitElement(self)
+  # cdef sndarray Ke(self,sndarray coords, np.ndarray connect, other)
+  # cdef sndarray fe(self,sndarray coords, np.ndarray connect, other)
+
+
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS elBased  :::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+

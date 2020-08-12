@@ -183,7 +183,24 @@ cdef extern from "oti/oti.h" nogil:
   # } elemso_spt_t;
    
 
+  # From oti/fem/element/real/structures.h
 
+  ctypedef struct elemd_t: # {    
+      uint64_t          nbasis;
+      uint64_t           order;
+      int64_t         geomBase;
+      int64_t             kind;
+      uint8_t             ndim;
+      uint64_t             nip;
+      uint8_t             nder;
+      uint8_t           isInit;
+      uint8_t     nDimAnalysis;
+      fednum_t              xi;
+      fednum_t             eta;
+      fednum_t            zeta;
+      fednum_t               w;
+      fedarr_t*    p_evalBasis;
+  # } elemd_t;
   
 
 
@@ -449,6 +466,23 @@ cdef extern from "oti/oti.h" nogil:
                                         fesoti_t* xi, fesoti_t* eta, fesoti_t* zeta,
                                         fesoti_t* weights, dhelpl_t dhl);
 
+
+
+
+  # From oti/fem/element/real/base.h
+
+  uint8_t elemd_is_started(   elemd_t* elemd );
+  uint8_t elemd_is_allocated( elemd_t* elemd );
+  void elemd_clear_flag_start(elemd_t* elemd );
+  void elemd_raise_flag_start(elemd_t* elemd );
+  void elemd_clear_flag_alloc(elemd_t* elemd );
+  void elemd_raise_flag_alloc(elemd_t* elemd );
+  int64_t elemd_end(elemd_t* elemd);
+  int64_t elemd_free( elemd_t* elemd );
+  elemd_t  elemd_init();
+  int64_t elemd_start( elemd_t* elemd, uint64_t nbasis, int64_t geomBase,
+                        int64_t kind, uint8_t ndim );
+  int64_t elemd_allocate(elemd_t* elemd, uint64_t intorder );
 
 
 #-----------------------------------------------------------------------------------------------------

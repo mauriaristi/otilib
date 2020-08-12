@@ -62,6 +62,57 @@ cdef class mesh:
 
 
 
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  OTIMESH    :::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+cdef class dmesh:
+  
+  #---------------------------------------------------------------------------------------------------
+  #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
+  #---------------------------------------------------------------------------------------------------
+
+  
+  cdef public list            elements    # List of elements in each dimension 
+  #                                       # [ 0D elems ->    ... ,
+  #                                       #   1D elems ->    ... ,
+  #                                       #   2D elems ->    ... ,
+  #                                       #   3D elems ->    ... ]
+
+  cdef public list            groups      # List of groups in the mesh.
+  cdef public dict            group_names # Dictionary with the group names.
+  cdef public dict            group_ids   # Dictionary with the group names.
+
+  cdef public int8_t          ndim        # Maximum dimension of the mesh.
+  
+  cdef public list            spaces      # List of finite element spaces. (needed?)
+  cdef public uint64_t        opCount     # Counter for the number of operations. ??
+  
+  cdef public uint8_t         xyzInit     # flag for initialization of x,y,z
+
+  cdef public r.dmat          x           # x Nodal coordinates
+  cdef public r.dmat          y           # y Nodal coordinates
+  cdef public r.dmat          z           # z Nodal coordinates
+
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS OTIMESH ::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # # ::::::::::::::::::::::::::::::::::     CLASS  OTIMESH    :::::::::::::::::::::::::::::::::::::::::::

@@ -53,19 +53,22 @@ cdef class mesh:
     """
     #*************************************************************************************************
     cdef str out = ''
-    
-    out = "< mesh object with "
+    cdef int64_t i
+    out = "< mesh (soti) object with "
     out += str(self.nodes.shape[0])+" nodes, "
     out += str(self.get_number_elements())+" elements "
     out += "of types ( "
 
     for elem_dim in self.elements:    
       if elem_dim is not None:
-        for elmType in elem_dim['types']:
+        for i in range(len(elem_dim['types'])):
+
+          elmType = elem_dim['types'][i]
           
-          out += element_type_name[elmType] + ", "
-        
-        # end for 
+          out += element_type_name[elmType] + " (" + str(elem_dim['indices'][i].shape[0]) + ")"
+          out += ", "
+          
+        # end for  
       # end if
     # end for 
     
@@ -85,18 +88,21 @@ cdef class mesh:
     """
     #*************************************************************************************************
     cdef str out = ''
-    
-    out = "< mesh object with "
+    cdef int64_t i
+    out = "< mesh (soti) object with "
     out += str(self.nodes.shape[0])+" nodes, "
     out += str(self.get_number_elements())+" elements "
     out += "of types ( "
 
     for elem_dim in self.elements:    
       if elem_dim is not None:
-        for elmType in elem_dim['types']:
+        for i in range(len(elem_dim['types'])):
+
+          elmType = elem_dim['types'][i]
           
-          out += element_type_name[elmType] + ", "
-        
+          out += element_type_name[elmType] + " (" + str(elem_dim['indices'][i].shape[0]) + ")"
+          out += ", "
+          
         # end for 
       # end if
     # end for 

@@ -1,109 +1,5 @@
 
 #*****************************************************************************************************
-cpdef dmat dot(dmat A, dmat B):
-  
-  cdef darr_t res = darr_matmul( &A.arr, &B.arr )
-
-  # TODO: Add check in python code.
-
-  return dmat.create(&res)
-
-#-----------------------------------------------------------------------------------------------------
-
-
-#*****************************************************************************************************
-cpdef dmat invert(dmat A):
-  
-  cdef darr_t res = darr_invert( &A.arr )
-
-  # TODO: Add check in python code.
-
-  return dmat.create(&res)
-
-#-----------------------------------------------------------------------------------------------------
-
-
-
-#*****************************************************************************************************
-cpdef dmat transpose(dmat A):
-  
-  cdef darr_t res = darr_transpose( &A.arr )
-
-  # TODO: Add check in python code.
-
-  return dmat.create(&res)
-
-#-----------------------------------------------------------------------------------------------------
-
-#*****************************************************************************************************
-cpdef coeff_t det(dmat A):
-  
-  return darr_det( &A.arr ) 
-
-#-----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-#*****************************************************************************************************
-cpdef dmat eye(uint64_t size):
-  
-  cdef darr_t res = darr_zeros(size,size)
-  cdef uint64_t i;
-
-  for i in range(size):
-
-    darr_set_item_ij( 1.0, i, i,&res)
-
-  # end for 
-
-
-  return dmat.create(&res)
-
-#-----------------------------------------------------------------------------------------------------
-
-#*****************************************************************************************************
-cpdef dmat zeros(uint64_t nrows,uint64_t ncols):
-  
-  cdef darr_t res = darr_zeros(nrows,ncols)
-
-  return dmat.create(&res)
-
-#-----------------------------------------------------------------------------------------------------
-
-#*****************************************************************************************************
-cpdef dmat ones(uint64_t nrows,uint64_t ncols):
-  
-  cdef darr_t res = darr_ones(nrows,ncols)
-
-  return dmat.create(&res)
-  
-#-----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#*****************************************************************************************************
 cdef np.ndarray darr_2_npy(darr_t* array ):
   """
     
@@ -128,3 +24,86 @@ cdef np.ndarray darr_2_npy(darr_t* array ):
   return nparray
 
 #-----------------------------------------------------------------------------------------------------
+
+
+
+
+#*****************************************************************************************************
+cdef (uint64_t,uint64_t) process_shape_r(object shape_in):
+  """
+  PURPOSE: Review if shape can be created as a 2D matrix. (nrows,ncols).
+
+  """
+  cdef uint64_t nrows, ncols
+
+  if isinstance(shape_in, int) :
+
+    nrows = shape_in
+    ncols = 1
+
+  elif ( len(shape_in) == 1 ):
+
+    nrows = shape_in[0]
+    ncols = 1
+
+  elif ( len(shape_in) == 2 ):
+
+    nrows = shape_in[0]
+    ncols = shape_in[1]
+
+  else:
+
+    raise ValueError(" Can't create matrix with more than 2 dimensions.")
+
+  # end if 
+
+  return (nrows, ncols)
+#-----------------------------------------------------------------------------------------------------
+
+
+  
+
+#*****************************************************************************************************
+cdef inline uint64_t binSearch_list(list a, uint64_t x):
+  """
+  PURPOSE:   Binary search in a sorted list. List is assumed to contain 64 bit integers.
+
+  INPUTS:
+      - a: List to search in
+      - x: Value to search for
+
+  OUTPUTS:
+  
+      - j: int
+          Index at value (if present), or at the point to which
+          it can be inserted maintaining order.
+
+  """
+  #***************************************************************************************************
+
+  cdef uint64_t hi = len(a)
+  cdef uint64_t lo = 0
+  cdef uint64_t mid, v
+
+  while lo < hi:
+
+    mid = lo + (hi - lo) // 2
+
+    v = a[mid]
+
+    if v < x:
+
+      lo = mid + 1
+
+    else:
+
+      hi = mid
+
+    # end if
+
+  # end while
+
+  return lo
+
+#-----------------------------------------------------------------------------------------------------
+

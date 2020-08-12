@@ -279,9 +279,8 @@ void fedarr_pnorm_to(fedarr_t* arr, coeff_t p, fednum_t* res){
 fednum_t fedarr_det(fedarr_t* arr){
     
     fednum_t res = fednum_init();
-
     
-    res = fednum_createEmpty( arr->nip);
+    res = fednum_createEmpty( arr->nip );
 
     fedarr_det_to( arr, &res );
     

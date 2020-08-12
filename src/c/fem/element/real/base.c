@@ -155,7 +155,7 @@ int64_t elemd_end(elemd_t* elemd) {
 
 
 // ****************************************************************************************************
-int64_t elemd_allocate(elemd_t* elemd, uint64_t intorder, bases_t bases, ord_t order){
+int64_t elemd_allocate(elemd_t* elemd, uint64_t intorder){
 
 
     int64_t  derIdx;

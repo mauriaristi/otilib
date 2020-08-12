@@ -31,8 +31,8 @@
 // Gauss Array
 #include "real/array/gauss/base.c"
 #include "real/array/gauss/algebra_elementwise.c"
-// #include "real/array/gauss/algebra_matops.c"
-// #include "real/array/gauss/functions.c"
+#include "real/array/gauss/algebra_matops.c"
+#include "real/array/gauss/functions.c"
 #include "real/array/gauss/utils.c"
 
 

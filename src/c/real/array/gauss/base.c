@@ -275,6 +275,28 @@ void fedarr_set_slice_f( fednum_t* val,
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+void fedarr_set_slice_R(  darr_t* val, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fedarr_t* res){
+        
+    uint64_t k;
+    int64_t ncols, nrows;
+
+    nrows = get_slice_size(starti, stopi, stepi);
+    ncols = get_slice_size(startj, stopj, stepj);
+
+    for (k = 0; k < res->nip; k++){
+        
+        darr_set_slice_R( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k]);
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
 void fedarr_set_slice_F( fedarr_t* val, 
                           int64_t starti, int64_t stopi, int64_t stepi,
                           int64_t startj, int64_t stopj, int64_t stepj, 
@@ -366,7 +388,7 @@ void fedarr_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, fedarr_t* res){
 
 
 // ****************************************************************************************************
-void fedarr_set_item_ijk(coeff_t num, uint64_t i, uint64_t j, uint64_t k, fedarr_t* res){
+void fedarr_set_item_ijk_r(coeff_t num, uint64_t i, uint64_t j, uint64_t k, fedarr_t* res){
     
     if ( k < res->nip ){
 
@@ -426,6 +448,28 @@ void fedarr_set_f( fednum_t* num, fedarr_t* res ){
         darr_set_all_r( num->p_data[i], &res->p_data[i]);
 
     }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fedarr_set_R( darr_t* arr, fedarr_t* res ){ 
+    
+    uint64_t k;
+    
+    for( k = 0; k < res->nip; k++){
+
+        darr_copy_to( arr, &res->p_data[k]);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fedarr_set_F( fedarr_t* num, fedarr_t* res ){ 
+    
+    fedarr_copy_to(num,res);
 
 }
 // ----------------------------------------------------------------------------------------------------

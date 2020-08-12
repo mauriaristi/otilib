@@ -1,4 +1,53 @@
 
+
+
+
+
+
+// ****************************************************************************************************
+inline void fedarr_dimCheck_FF_samesize(fedarr_t* arr1,fedarr_t* arr2,fednum_t* res){
+
+     if( arr1->size != arr2->size || arr1->nip != arr2->nip || arr2->nip != res->nip ){
+        printf("ERROR: Wrong dimensions in elementwise operation between two fedarr arrays.\n");
+        exit(OTI_BadDim);
+     }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline void fedarr_dimCheck_RF_samesize(darr_t* arr1, fedarr_t* arr2, fednum_t* res){
+
+    if( arr1->size != arr2->size || arr2->nip != res->nip ){
+        printf("ERROR: Wrong dimensions in elementwise operation between fedarr and real arrays.\n");
+        exit(OTI_BadDim);
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
 inline void fedarr_dimCheck_FF_elementwise(fedarr_t* arr1,fedarr_t* arr2,fedarr_t* res){
 

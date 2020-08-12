@@ -7,6 +7,7 @@ cdef enum operEnum : # {
   opMul         =   3 ,
   opTruediv     =   4 ,
   opPowr        =   5 ,
+  opInt0d       =   60,
   opInt1d       =   6 ,
   opInt2d       =   7 ,
   opInt3d       =   8 ,
@@ -20,6 +21,7 @@ cdef enum operEnum : # {
   opDyz         =   16,
   opDzz         =   17,
   opDef         =   18,
+  opDefData     =   61,
   opOn          =   19,
   opNeg         =   20,
   opDxi         =   21,
@@ -68,11 +70,11 @@ cdef enum operEnum : # {
   elkindAff     =  502,
   derN          =  601,
   derNa         =  602,
-  derNb         =  604,
-  derNc         =  607,
-  derNaa        =  603,
-  derNab        =  605,
-  derNbb        =  606,
+  derNb         =  603,
+  derNc         =  604,
+  derNaa        =  605,
+  derNab        =  606,
+  derNbb        =  607,
   derNac        =  608,
   derNbc        =  609,
   derNcc        =  610,
@@ -83,11 +85,32 @@ cdef enum operEnum : # {
   feNatOperRes  =  705,
   feNatPostIntK =  706,
   feNatPostIntF =  707,
-  feNatBoundary =  708
+  feNatBoundary =  708,
+  feUndefined   =  709
 # };
 
 
 # From oti/fem/element/real/structures.h
+
+ctypedef struct elemd_s: # {    
+    uint64_t          nbasis;
+    uint64_t           order;
+    int64_t         geomBase;
+    int64_t             kind;
+    uint8_t             ndim;
+    uint64_t             nip;
+    uint8_t             nder;
+    uint8_t           isInit;
+    uint8_t     nDimAnalysis;
+    fednum_t              xi;
+    fednum_t             eta;
+    fednum_t            zeta;
+    fednum_t               w;
+    fedarr_t*    p_evalBasis;
+# } elemd_t;
+
+
+# From oti/fem/element/old/real/structures.h
 
 ctypedef struct elemprops_s: # {
     ord_t           otiorder;
@@ -172,15 +195,6 @@ ctypedef struct: # {
 
 # From oti/fem/gauss/array/darr/structures.h
 
-ctypedef struct: # {
-    arrso_t*      p_data;
-    uint64_t      nrows;
-    uint64_t      ncols;
-    uint64_t    nIntPts;
-    uint64_t    offsetx;
-    uint64_t    offsety;
-    uint64_t       size;
-# } fedarr_t;
 
 
 # From oti/fem/gauss/scalar/real/structures.h
@@ -243,19 +257,6 @@ feoarr_t feoarr_createEmpty( uint64_t nrows, uint64_t ncols, uint64_t offsetx, u
 
 # From oti/fem/functions.h
 
-int64_t fem_defFunctFrom_otiFunc(oarr_t* arr1, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
-    dhelpl_t dhl);
-int64_t fem_defFunctFrom_oti(otinum_t* num, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
-    dhelpl_t dhl);
-int64_t fem_defFunctFrom_R(coeff_t num, uint64_t derIndx, elemProps_t* elem, feoarr_t* res,
-    dhelpl_t dhl);
-int64_t fem_defineSpatial( elemProps_t* elem, uint16_t derFlags, dhelpl_t dhl);
-int64_t fem_computeJacobian( elemProps_t* elem, oarr_t* xcoords, oarr_t* ycoords,
-                               oarr_t* zcoords, dhelpl_t dhl);
-int64_t fem_unInitElement(elemProps_t* elem);
-int64_t fem_initElement(uint64_t order, uint8_t otiorder,uint8_t nDimAnalysis, elemProps_t* elem);
-int64_t fem_integrateSOTIfunct(oarr_t* f_eval, darr_t* weights, otinum_t* res,
-                                 dhelpl_t dhl);
 
 
 # From oti/fem/basis_functions.h
@@ -279,6 +280,22 @@ int64_t fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, darr
 
 
 # From oti/fem/element/real/base.h
+
+uint8_t elemd_is_started(   elemd_t* elemd );
+uint8_t elemd_is_allocated( elemd_t* elemd );
+void elemd_clear_flag_start(elemd_t* elemd );
+void elemd_raise_flag_start(elemd_t* elemd );
+void elemd_clear_flag_alloc(elemd_t* elemd );
+void elemd_raise_flag_alloc(elemd_t* elemd );
+int64_t elemd_end(elemd_t* elemd);
+int64_t elemd_free( elemd_t* elemd );
+elemd_t  elemd_init();
+int64_t elemd_start( elemd_t* elemd, uint64_t nbasis, int64_t geomBase,
+                      int64_t kind, uint8_t ndim );
+int64_t elemd_allocate(elemd_t* elemd, uint64_t intorder );
+
+
+# From oti/fem/element/old/real/base.h
 
 uint8_t elem_is_started(   elem_t* elem );
 uint8_t elem_is_allocated( elem_t* elem );
@@ -403,7 +420,25 @@ feoarr_t feoarr_createEmpty( uint64_t nrows, uint64_t ncols, uint64_t offsetx, u
 
 
 
-# From oti/fem/integration_points/base.h
+# From oti/fem/integration_points/real/base.h
+
+int64_t fem_intPts_real( uint64_t order, int64_t elementType,
+                         fednum_t*  xi,   fednum_t*   eta,   fednum_t* zeta,
+                         fednum_t* weights );
+uint64_t fem_addLineIntPts_real(uint8_t nperm, uint64_t start, double a,  double w,
+                                fednum_t* xi, fednum_t* eta, fednum_t* zeta,
+                                fednum_t* weights );
+uint64_t fem_addTriangleIntPts_real(uint8_t nperm, uint64_t start,
+                                    double a, double b, double c, double w,
+                                    fednum_t* xi, fednum_t* eta, fednum_t* zeta,
+                                    fednum_t* weights );
+uint64_t fem_addTetrahedraIntPts_real(uint8_t nperm, uint64_t start,
+                                      double a, double b, double c, double d, double w,
+                                      fednum_t* xi, fednum_t* eta, fednum_t* zeta,
+                                      fednum_t* weights );
+
+
+# From oti/fem/integration_points/soti/base.h
 
 int64_t fem_integrationPoints(uint64_t order, int64_t elementType,
                                 darr_t* coords, darr_t* weights);

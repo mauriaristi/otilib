@@ -1279,12 +1279,12 @@ class writer:
     res = "res"
     f_prev = self.func_name
     lhs_t = self.type_names[lhs_type]
-    f_post = lhs_type.copy()
+    f_post = lhs_type
    
     if lhs_ptr == True:
       lhs_t += '*'
     # end if
-    
+
 
     func_name = f_prev + "_" + function_name + "_" + f_post
 
@@ -1379,30 +1379,22 @@ class writer:
     rhs = "rhs"
     res = "res"
 
-    if lhs_type is self.real_str:
-      f_prev = self.func_name
-      lhs_t = self.coeff_t
-      f_post = self.real_str
-    else:
-      f_prev = self.func_name
-      f_post = 'o'
-      lhs_t = self.type_name
-      if lhs_ptr == True:
-        lhs_t += '*'
-      # end if
-    # end if 
+    f_prev = self.func_name
+    
+    lhs_t  = self.type_names[lhs_type]
+    f_post = lhs_type
+  
+    if lhs_ptr == True:
+      lhs_t += '*'
+    # end if
 
-    if rhs_type is self.real_str:
-      f_post += self.real_str
-      rhs_t   = self.coeff_t
-    else:
-      f_post += 'o'
-      rhs_t = "TYPE("+self.type_name+")"
-      rhs_t = self.type_name
-      if rhs_ptr == True:
-        rhs_t += '*'
-      # end if
-    # end if 
+    rhs_t  = self.type_names[rhs_type]
+    f_post += rhs_type
+  
+    if rhs_ptr == True:
+      rhs_t += '*'
+    # end if
+  
 
 
     func_name = f_prev + "_" + function_name + "_"+ f_post

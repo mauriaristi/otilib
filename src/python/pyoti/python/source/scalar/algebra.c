@@ -3,21 +3,355 @@
 
 
 
+
+
+// Algebraic operations:
+// Negation
+
+// ****************************************************************************************************
+void soti_neg_to(sotinum_t* num, sotinum_t* res){{
+    
+    soti_mul_ro_to(-1.0,num,res,dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_abs_to(sotinum_t* num, sotinum_t* res){{
+
+    if (num->re < 0){{
+        
+        soti_neg_to(num,res,dhl);
+
+    }} else {{
+
+        soti_copy_to(num,res,dhl);
+    }}
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Addition.
+
+// ****************************************************************************************************
+void soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res){{
+
+    sotinum_t tmp;
+
+    tmp = soti_base_sum( num1, num2, dhl);
+
+    soti_copy_to(&tmp, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void soti_sum_or_to(sotinum_t* num, coeff_t val, sotinum_t* res){{
+    
+    soti_sum_ro_to(val, num, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res){{
+    
+    soti_copy_to( num, res, dhl);
+
+    res->re += val;
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Subtraction.
+
+// ****************************************************************************************************
+void soti_sub_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res){{
+
+    sotinum_t tmp;
+
+    tmp = soti_base_sub( num1, num2, dhl);
+
+    soti_copy_to(&tmp, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void soti_sub_ro_to( coeff_t val, sotinum_t* num, sotinum_t* res){{
+
+    soti_neg_to(num,res,dhl);
+    
+    res->re += val;
+}}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res){{
+
+    soti_sum_ro_to(-val,num,res,dhl);
+}}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+// Multiplication.
+
+// ****************************************************************************************************
+void soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res){{
+
+    
+    sotinum_t  tmp;
+
+    tmp = soti_base_mul(num1,num2,dhl);
+
+    soti_copy_to(&tmp, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_mul_or_to( sotinum_t* num, coeff_t val, sotinum_t* res){{
+    
+    soti_mul_ro_to(val, num, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res){{
+    
+    ord_t i;
+    ndir_t j;
+
+    soti_copy_to(num,res,dhl);
+
+    res->re *= val;
+
+    for ( i=0; i<res->order; i++){{
+        
+        for ( j = 0; j<res->p_nnz[i]; j++){{
+
+            res->p_im[i][j] *= val;
+
+        }}
+
+    }}
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_gem_oo_to(sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res){{
+    // This function does GEM (GEneral Multiplication): res = a*b + c
+
+    sotinum_t  tmp1, tmp2;
+
+    tmp1 = soti_base_mul(    a, b, dhl);  // This is temporal 3, 4 or 5
+    tmp2 = soti_base_sum( &tmp1, c, dhl); // this is temporal 7.
+
+    soti_copy_to(&tmp2, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void soti_gem_or_to( sotinum_t* b, coeff_t a, sotinum_t* c, sotinum_t* res){{
+    
+    soti_gem_ro_to( a, b, c, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_gem_ro_to(coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res){{
+    // This function does GEM (GEneral Multiplication): res = a*b + c
+
+    sotinum_t tmp1 = soti_get_tmp( 0, b->order, dhl);
+    sotinum_t tmp2;
+
+    soti_mul_ro_to( a, b, &tmp1, dhl); // This is temporal 10
+    
+    tmp2 = soti_base_sum( &tmp1, c, dhl); // this is temporal 7.
+
+    soti_copy_to(&tmp2, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Division.
+
+// ****************************************************************************************************
+void soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res){{
+
+    
+    sotinum_t inv = soti_get_rtmp(6, den->order, dhl);
+    soti_pow_to( den, -1, &inv, dhl);
+    soti_mul_ro_to(num,&inv,res,dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_div_oo_to(sotinum_t* num, sotinum_t* den, sotinum_t* res){{
+
+    sotinum_t inv = soti_get_rtmp(6, den->order, dhl);
+    
+    soti_pow_to( den, -1, &inv, dhl);
+    
+    soti_mul_oo_to( num, &inv, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_div_or_to(sotinum_t* num, coeff_t val, sotinum_t* res){{
+
+    soti_mul_ro_to(1.0/val, num, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Function evaluation.
+
+// ****************************************************************************************************
+void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res ){{
+    
+    sotinum_t tmp = soti_base_feval(feval_re, num, dhl);
+    
+    soti_copy_to( &tmp, res, dhl);
+
+}}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Algebraic operations:
 
 
 // Negation
 
 // ****************************************************************************************************
-sotinum_t soti_neg(sotinum_t* num){
+sotinum_t soti_neg(sotinum_t* num){{
     
     return soti_mul_ro(-1.0,num,dhl);
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_abs(sotinum_t* num){
+sotinum_t soti_abs(sotinum_t* num){{
     
     sotinum_t res;
 
@@ -27,7 +361,7 @@ sotinum_t soti_abs(sotinum_t* num){
 
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -40,7 +374,7 @@ sotinum_t soti_abs(sotinum_t* num){
 // Addition.
 
 // ****************************************************************************************************
-sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2){
+sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2){{
 
     sotinum_t res, tmp;
 
@@ -50,19 +384,19 @@ sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2){
 
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sum_or(sotinum_t* num, coeff_t val){
+sotinum_t soti_sum_or(sotinum_t* num, coeff_t val){{
     
     return soti_sum_ro(val, num, dhl);
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num){
+sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num){{
     
     sotinum_t res = soti_copy(num,dhl);
 
@@ -70,11 +404,11 @@ sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num){
 
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2){
+inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2){{
 
     sotinum_t tmp;
     ord_t res_ord = MAX(num1->order,num2->order);
@@ -87,51 +421,51 @@ inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2){
 
     // TODO: divide in three for loops
     // ord_t min_ord = MIN(num1->order,num2->order);
-    // for(ordi=0; ordi<min_ord; ordi++){ 
+    // for(ordi=0; ordi<min_ord; ordi++){{ 
     //     dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
     //                           num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
     //                           tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-    // }
+    // }}
 
-    // for(ordi=min_ord; ordi< num1->order; ordi++){ 
+    // for(ordi=min_ord; ordi< num1->order; ordi++){{ 
     //     dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
     //                           NULL, NULL, 0,
     //                           tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-    // }
+    // }}
 
-    // for(ordi=min_ord; ordi< num2->order; ordi++){ 
+    // for(ordi=min_ord; ordi< num2->order; ordi++){{ 
     //     dhelp_sparse_add_dirs(num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
     //                           NULL, NULL, 0,
     //                           tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);    
-    // }
+    // }}
     
-    for(ordi=0; ordi<res_ord; ordi++){
+    for(ordi=0; ordi<res_ord; ordi++){{
         
-        if (ordi < num1->order && ordi < num2->order){
+        if (ordi < num1->order && ordi < num2->order){{
             
             dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else if (ordi < num1->order){
+        }} else if (ordi < num1->order){{
 
             dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   NULL, NULL, 0,
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else {
+        }} else {{
 
             dhelp_sparse_add_dirs(num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
                                   NULL, NULL, 0,
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
 
-        }
+        }}
 
-    }
+    }}
 
     return tmp;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -148,7 +482,7 @@ inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2){
 
 
 // ****************************************************************************************************
-sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2){
+sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2){{
 
     sotinum_t res, tmp;
 
@@ -158,29 +492,29 @@ sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2){
 
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num){
+sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num){{
 
     sotinum_t res = soti_neg(num,dhl);
     
     res.re += val;
 
     return res;
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sub_or(sotinum_t* num, coeff_t val){
+sotinum_t soti_sub_or(sotinum_t* num, coeff_t val){{
 
     return soti_sum_ro(-val,num,dhl);
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2){
+inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2){{
 
     sotinum_t tmp;
     ord_t res_ord = MAX(num1->order,num2->order);
@@ -190,34 +524,34 @@ inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2){
 
     tmp.re = num1->re - num2->re;
 
-    for(ordi=0; ordi<res_ord; ordi++){
+    for(ordi=0; ordi<res_ord; ordi++){{
 
         
-        if (ordi < num1->order && ordi < num2->order){
+        if (ordi < num1->order && ordi < num2->order){{
             
             dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else if (ordi < num1->order){
+        }} else if (ordi < num1->order){{
 
             dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   NULL, NULL, 0,
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else {
+        }} else {{
 
             dhelp_sparse_sub_dirs(NULL, NULL, 0,
                                   num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
 
-        }
+        }}
 
-    }
+    }}
 
     return tmp;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -233,7 +567,7 @@ inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2){
 // Multiplication.
 
 // ****************************************************************************************************
-sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2){
+sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2){{
 
     
     sotinum_t res, tmp;
@@ -244,19 +578,19 @@ sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2){
 
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_mul_or(sotinum_t* num, coeff_t val){
+sotinum_t soti_mul_or(sotinum_t* num, coeff_t val){{
 
     return soti_mul_ro(val, num, dhl);
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num){
+sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num){{
     
     ord_t i;
     ndir_t j;
@@ -265,23 +599,23 @@ sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num){
 
     res.re *= val;
 
-    for ( i=0; i<res.order; i++){
+    for ( i=0; i<res.order; i++){{
         
-        for ( j = 0; j<res.p_nnz[i]; j++){
+        for ( j = 0; j<res.p_nnz[i]; j++){{
 
             res.p_im[i][j] *= val;
 
-        }
+        }}
 
-    }
+    }}
 
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
+inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){{
 
     sotinum_t tmp, tmp2, tmp3;
 
@@ -311,14 +645,14 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
     // printf("Multiply lhs.re:%g x im of rhs ========= \n", num1->re);
     // soti_print(num2,dhl);
 
-    if (num1->re != 0.0 && num2->order > 0 ){
+    if (num1->re != 0.0 && num2->order > 0 ){{
         
         // Swap pointers
         tmpswap = tmpsrc; 
         tmpsrc  = tmpdest; 
         tmpdest = tmpswap;
 
-        for (ordi1 = 0; ordi1<num2->order; ordi1++){
+        for (ordi1 = 0; ordi1<num2->order; ordi1++){{
 
             // Perform multiplication
             dhelp_sparse_mult_real(num1->re,
@@ -330,26 +664,26 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
                                    tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
                                   tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
 
-        }
+        }}
         
         // printf("\n -- \n");
         // soti_print(tmpdest,dhl);
 
-    }
+    }}
     
     // printf("\n//////////////////////////////////////\n");
     // printf("\nMultiply rhs.re:%g x im of lhs =========  \n", num2->re);
     // soti_print(num1,dhl);
 
 
-    if (num2->re != 0.0 && num1->order > 0 ){
+    if (num2->re != 0.0 && num1->order > 0 ){{
 
         // Swap pointers
         tmpswap = tmpsrc; 
         tmpsrc  = tmpdest; 
         tmpdest = tmpswap;
 
-        for (ordi1 = 0; ordi1<num1->order; ordi1++){
+        for (ordi1 = 0; ordi1<num1->order; ordi1++){{
 
             // Perform multiplication
             dhelp_sparse_mult_real(num2->re,
@@ -361,9 +695,9 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
                                    tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
                                   tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
 
-        }
+        }}
 
-        for (ordi2 = ordi1; ordi2<res_ord; ordi2++){
+        for (ordi2 = ordi1; ordi2<res_ord; ordi2++){{
 
             // // Perform multiplication
             // dhelp_sparse_add_dirs(                NULL,                  NULL,                      0,
@@ -384,13 +718,13 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
             tmpdest->p_idx[ordi2] = p_idx_swap;
             tmpdest->p_nnz[ordi2] = p_nnz_swap;
 
-        }
+        }}
         // printf("\n -- \n");
         // soti_print(tmpdest,dhl);
 
-    }
+    }}
     
-    if ( num1->order > 0 && num2->order > 0 ){
+    if ( num1->order > 0 && num2->order > 0 ){{
         
 
         // Start with both temporals with the same values.
@@ -405,7 +739,7 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
 
         ordlim1 = MIN( num1->order, res_ord - 1 );
         
-        for(ordi1=0; ordi1<ordlim1; ordi1++){
+        for(ordi1=0; ordi1<ordlim1; ordi1++){{
 
             ordlim2 = MIN( num2->order, res_ord - (ordi1+1) );
 
@@ -414,7 +748,7 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
             tmpdest = tmpswap;
 
             // Multiply elements of order ordi1 times all elements of order 
-            for (ordi2=0; ordi2<ordlim2; ordi2++){
+            for (ordi2=0; ordi2<ordlim2; ordi2++){{
 
                 ordires = ordi1 + ordi2 +1;
 
@@ -426,7 +760,7 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
                                        tmpsrc->p_im[ordires],  tmpsrc->p_idx[ordires],   tmpsrc->p_nnz[ordires],
                                       tmpdest->p_im[ordires], tmpdest->p_idx[ordires], &tmpdest->p_nnz[ordires], dhl);
 
-            }
+            }}
             ordires = ordi1+1;
             
             tmpsrc->p_im[ ordires] = tmpdest->p_im[ ordires];
@@ -437,17 +771,17 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
             // printf("     Multiplying lhs(ord:%hhu) x rhs\n",ordi1+1);
             // soti_print(tmpdest,dhl);
 
-        }
+        }}
 
         // printf("\n -- \n");
         // soti_print(tmpdest,dhl);
     
-    }
+    }}
     
     // This returns whatever temporal is selected at this time.
     return *tmpdest;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -462,7 +796,7 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
 
 
 // ****************************************************************************************************
-sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){
+sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){{
 
     sotinum_t res, tmp, tmp2, tmp3;
     sotinum_t* tmpsrc= &tmp ;
@@ -485,12 +819,12 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){
 
     // printf("Multiplying order %hhu x %hhu\n", num1->order, num2->order);
 
-    for( order = 1; order<=res_ord; order++){
+    for( order = 1; order<=res_ord; order++){{
 
         ordi = order - 1;
 
         // First multiply  re x ordi         
-        if ( order <= num2->order && num1->re != 0.0){
+        if ( order <= num2->order && num1->re != 0.0){{
             
             // Perform multiplication
             dhelp_sparse_mult_real(num1->re,
@@ -506,11 +840,11 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){
                                   tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
                                   tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
 
-        }
+        }}
 
 
         // Then multiply   ordi x re
-        if ( order <= num1->order && num2->re != 0.0){
+        if ( order <= num1->order && num2->re != 0.0){{
             
             // Perform multiplication
             dhelp_sparse_mult_real(num2->re,
@@ -526,14 +860,14 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){
                                   tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
                                   tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
 
-        }
+        }}
 
-        for ( ord_mul1 = 1; ord_mul1 <= order/2; ord_mul1++){
+        for ( ord_mul1 = 1; ord_mul1 <= order/2; ord_mul1++){{
 
             ord_t ord_mul2 = order - ord_mul1;
             // printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
 
-            if ( ord_mul1 <= num1->order && ord_mul2 <= num2->order){
+            if ( ord_mul1 <= num1->order && ord_mul2 <= num2->order){{
                 
                 dhelp_sparse_mult(num1->p_im[ord_mul1-1], num1->p_idx[ord_mul1-1], num1->p_nnz[ord_mul1-1],ord_mul1,
                                   num2->p_im[ord_mul2-1], num2->p_idx[ord_mul2-1], num2->p_nnz[ord_mul2-1],ord_mul2,
@@ -546,12 +880,12 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){
                                       tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
                                       tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
 
-            }
+            }}
             
 
-            if (ord_mul1 != ord_mul2){
+            if (ord_mul1 != ord_mul2){{
                 
-                if ( ord_mul2 <= num1->order && ord_mul1 <= num2->order){
+                if ( ord_mul2 <= num1->order && ord_mul1 <= num2->order){{
                     dhelp_sparse_mult(num1->p_im[ord_mul2-1], num1->p_idx[ord_mul2-1], num1->p_nnz[ord_mul2-1],ord_mul2,
                                       num2->p_im[ord_mul1-1], num2->p_idx[ord_mul1-1], num2->p_nnz[ord_mul1-1],ord_mul1,
                                       tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
@@ -563,25 +897,25 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){
                     dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
                                           tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
                                           tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
-                }
+                }}
 
-            }  
+            }}  
 
-        }
+        }}
 
-    }
+    }}
 
     // reset the size values of the tmp number    
-    for(ordi=0; ordi<res_ord; ordi++){
+    for(ordi=0; ordi<res_ord; ordi++){{
 
         tmpdest->p_size[ordi] = MAX(dhl.p_dh[ordi].allocSize,tmpdest->p_nnz[ordi]);
-    }
+    }}
 
     res = soti_copy(tmpdest, dhl);
 
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -625,7 +959,7 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){
 // Division.
 
 // ****************************************************************************************************
-sotinum_t soti_div_ro(coeff_t num, sotinum_t* den){
+sotinum_t soti_div_ro(coeff_t num, sotinum_t* den){{
 
     
     sotinum_t inv = soti_pow(den,-1,dhl);
@@ -635,11 +969,11 @@ sotinum_t soti_div_ro(coeff_t num, sotinum_t* den){
 
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den){
+sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den){{
 
     
     sotinum_t inv = soti_get_rtmp(7,den->order,dhl);
@@ -648,15 +982,15 @@ sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den){
     
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_div_or(sotinum_t* num, coeff_t val){
+sotinum_t soti_div_or(sotinum_t* num, coeff_t val){{
 
     return soti_mul_ro(1.0/val,num,dhl);
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -689,7 +1023,7 @@ sotinum_t soti_div_or(sotinum_t* num, coeff_t val){
 // Function evaluation.
 
 // ****************************************************************************************************
-inline sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num ){
+inline sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num ){{
     
     
     sotinum_t res;
@@ -700,12 +1034,12 @@ inline sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num ){
 
     return res;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num ){
+inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num ){{
     
     ord_t i ;
 
@@ -717,7 +1051,7 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num ){
 
     soti_set_o( num, &tmp2, dhl);
 
-    for ( i = 1; i < num->order; i++){
+    for ( i = 1; i < num->order; i++){{
         
         factor *= i;
 
@@ -731,9 +1065,9 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num ){
         soti_set_r( 0.0, &tmp2, dhl);
         soti_trunc_mul(&tmp1, i, num, 1, &tmp2, dhl );
 
-    }
+    }}
 
-    for (; i<=num->order; i++){
+    for (; i<=num->order; i++){{
         
         factor *= i;
         val = feval_re[i]/factor;        
@@ -741,12 +1075,12 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num ){
         soti_trunc_smul_real( val, i, &tmp2, dhl);
         soti_trunc_ssum( &tmp2, i, &tmp3, dhl );
 
-    }
+    }}
 
     // Set real value.
     tmp3.re = feval_re[0];
     
     return tmp3;
 
-}
+}}
 // ----------------------------------------------------------------------------------------------------

@@ -69,15 +69,17 @@ ADD_CUSTOM_COMMAND (
 	# COMMAND CC=icc python3 ${CYTHON_SETUP_DIR}/setup.py build_ext -b${PROJECT_BINARY_DIR} 
 	COMMAND ${CYTHON_CMD_CALL_PREC} python3 ${CYTHON_SETUP_DIR}/setup.py -q build_ext -b${PROJECT_BINARY_DIR} 
 )
-
+# TODO: This may not work in Windows.... Check this, maybe change to FILE(COPY ...)
+#  ---- 
 ADD_CUSTOM_COMMAND (
 	TARGET  oticython
 	# COMMAND pwd
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/__init__.py      ${CYTHON_BUILD_DIR}/
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/whereotilib.py   ${CYTHON_BUILD_DIR}/
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/auxFunctions.py  ${CYTHON_BUILD_DIR}/
-	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/fmod_writer.py ${CYTHON_BUILD_DIR}/
-	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/cmod_writer.py ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/fmod_writer.py   ${CYTHON_BUILD_DIR}/
+	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/cmod_writer.py   ${CYTHON_BUILD_DIR}/
+	COMMAND cp -R ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/source        ${CYTHON_BUILD_DIR}/
 )
 
 # -------------------------------------------------------------------

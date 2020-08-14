@@ -630,6 +630,10 @@ class writer:
 
             mults[i].append([ dirsj[j], dirsk[k] ])
 
+            if  ordj != ordk:
+              mults[i].append([ dirsk[k],dirsj[j] ])
+            # end if 
+
           # end for
         # end for 
       # end for 

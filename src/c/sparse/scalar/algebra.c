@@ -9,7 +9,7 @@
 // Negation
 
 // ****************************************************************************************************
-sotinum_t soti_neg(sotinum_t* num){
+sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl){
     
     return soti_mul_ro(-1.0,num,dhl);
 
@@ -17,7 +17,7 @@ sotinum_t soti_neg(sotinum_t* num){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_abs(sotinum_t* num){
+sotinum_t soti_abs(sotinum_t* num, dhelpl_t dhl){
     
     sotinum_t res;
 
@@ -40,7 +40,7 @@ sotinum_t soti_abs(sotinum_t* num){
 // Addition.
 
 // ****************************************************************************************************
-sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2){
+sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp;
 
@@ -54,7 +54,7 @@ sotinum_t soti_sum_oo(sotinum_t* num1, sotinum_t* num2){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sum_or(sotinum_t* num, coeff_t val){
+sotinum_t soti_sum_or(sotinum_t* num, coeff_t val, dhelpl_t dhl){
     
     return soti_sum_ro(val, num, dhl);
 
@@ -62,7 +62,7 @@ sotinum_t soti_sum_or(sotinum_t* num, coeff_t val){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num){
+sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl){
     
     sotinum_t res = soti_copy(num,dhl);
 
@@ -74,7 +74,7 @@ sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2){
+inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
     ord_t res_ord = MAX(num1->order,num2->order);
@@ -148,7 +148,7 @@ inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2){
 
 
 // ****************************************************************************************************
-sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2){
+sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp;
 
@@ -162,7 +162,7 @@ sotinum_t soti_sub_oo(sotinum_t* num1, sotinum_t* num2){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num){
+sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num, dhelpl_t dhl){
 
     sotinum_t res = soti_neg(num,dhl);
     
@@ -173,14 +173,14 @@ sotinum_t soti_sub_ro( coeff_t val, sotinum_t* num){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_sub_or(sotinum_t* num, coeff_t val){
+sotinum_t soti_sub_or(sotinum_t* num, coeff_t val, dhelpl_t dhl){
 
     return soti_sum_ro(-val,num,dhl);
 }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2){
+inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
     ord_t res_ord = MAX(num1->order,num2->order);
@@ -233,7 +233,7 @@ inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2){
 // Multiplication.
 
 // ****************************************************************************************************
-sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2){
+sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     
     sotinum_t res, tmp;
@@ -248,7 +248,7 @@ sotinum_t soti_mul_oo(sotinum_t* num1, sotinum_t* num2){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_mul_or(sotinum_t* num, coeff_t val){
+sotinum_t soti_mul_or(sotinum_t* num, coeff_t val, dhelpl_t dhl){
 
     return soti_mul_ro(val, num, dhl);
 
@@ -256,7 +256,7 @@ sotinum_t soti_mul_or(sotinum_t* num, coeff_t val){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num){
+sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl){
     
     ord_t i;
     ndir_t j;
@@ -281,7 +281,7 @@ sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
+inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp, tmp2, tmp3;
 
@@ -462,7 +462,7 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2){
 
 
 // ****************************************************************************************************
-sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){
+sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t res, tmp, tmp2, tmp3;
     sotinum_t* tmpsrc= &tmp ;
@@ -625,7 +625,7 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2){
 // Division.
 
 // ****************************************************************************************************
-sotinum_t soti_div_ro(coeff_t num, sotinum_t* den){
+sotinum_t soti_div_ro(coeff_t num, sotinum_t* den, dhelpl_t dhl){
 
     
     sotinum_t inv = soti_pow(den,-1,dhl);
@@ -639,7 +639,7 @@ sotinum_t soti_div_ro(coeff_t num, sotinum_t* den){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den){
+sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den, dhelpl_t dhl){
 
     
     sotinum_t inv = soti_get_rtmp(7,den->order,dhl);
@@ -652,7 +652,7 @@ sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_div_or(sotinum_t* num, coeff_t val){
+sotinum_t soti_div_or(sotinum_t* num, coeff_t val, dhelpl_t dhl){
 
     return soti_mul_ro(1.0/val,num,dhl);
 
@@ -689,7 +689,7 @@ sotinum_t soti_div_or(sotinum_t* num, coeff_t val){
 // Function evaluation.
 
 // ****************************************************************************************************
-inline sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num ){
+inline sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num , dhelpl_t dhl){
     
     
     sotinum_t res;
@@ -705,7 +705,7 @@ inline sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num ){
 
 
 // ****************************************************************************************************
-inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num ){
+inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num , dhelpl_t dhl){
     
     ord_t i ;
 

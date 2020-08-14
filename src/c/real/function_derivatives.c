@@ -168,6 +168,9 @@ void der_r_atanh(coeff_t x0, ord_t order, coeff_t* derivs){
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
 // ****************************************************************************************************
 void der_r_asinh(coeff_t x0, ord_t order, coeff_t* derivs){
     
@@ -176,7 +179,7 @@ void der_r_asinh(coeff_t x0, ord_t order, coeff_t* derivs){
     for( i=0; i<(order+1); i++){    
     switch(i){
     case 0:
-    derivs[0]  =  acosh(x0);
+    derivs[0]  =  asinh(x0);
     case 1:
     derivs[1]  =  pow(pow(x0, 2) + 1., -1.0L/2.0L);
     case 2:

@@ -1,32 +1,30 @@
 #*****************************************************************************************************
-cdef object __sub__FX__(matsofe Flhs, object rhs, object out = None):
+cdef object __sub__FX__({fearr_pytype} Flhs, object rhs, object out = None):
   """
-  PORPUSE: Subtraction between matsofe and object.
+  PORPUSE: Subtraction between {fearr_pytype} and object.
 
   """
   #***************************************************************************************************
 
-  global dhl
-
   # Scalar types:
-  cdef sotinum    orhs, ores
-  cdef sotinum_t cores
+  cdef {num_pytype}    orhs, ores
+  cdef {num_type} cores
 
-  cdef sotife     frhs, fres
-  cdef fesoti_t  cfres
+  cdef {fenum_pytype}     frhs, fres
+  cdef {fenum_type}  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef matso      Orhs, Ores
-  cdef arrso_t   cOres
+  cdef {arr_pytype}      Orhs, Ores
+  cdef {arr_type}   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef matsofe    Frhs, Fres
-  cdef fearrso_t cFres
+  cdef {fearr_pytype}    Frhs, Fres
+  cdef {fearr_type} cFres
 
   cdef uint8_t res_flag = 1
   cdef object  res = None
@@ -37,62 +35,62 @@ cdef object __sub__FX__(matsofe Flhs, object rhs, object out = None):
     res_flag = 0
   # end if
 
-  if trhs == sotinum:
+  if trhs == {num_pytype}:
     orhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_Fo_to( &Flhs.arr, &orhs.num, &Fres.arr, dhl )
+      {fearr_func}_sub_Fo_to( &Flhs.arr, &orhs.num, &Fres.arr )
     else:
-      cFres = fearrso_sub_Fo( &Flhs.arr, &orhs.num, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_Fo( &Flhs.arr, &orhs.num )
+      res = {fearr_pytype}.create( &cFres )
     # end if
-  elif trhs == sotife:
+  elif trhs == {fenum_pytype}:
     frhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_Ff_to( &Flhs.arr, &frhs.num, &Fres.arr, dhl )
+      {fearr_func}_sub_Ff_to( &Flhs.arr, &frhs.num, &Fres.arr )
     else:
-      cFres = fearrso_sub_Ff( &Flhs.arr, &frhs.num, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_Ff( &Flhs.arr, &frhs.num )
+      res = {fearr_pytype}.create( &cFres )
     # end if
-  elif trhs == matsofe:
+  elif trhs == {fearr_pytype}:
     Frhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_FF_to( &Flhs.arr, &Frhs.arr, &Fres.arr, dhl )
+      {fearr_func}_sub_FF_to( &Flhs.arr, &Frhs.arr, &Fres.arr )
     else:
-      cFres = fearrso_sub_FF( &Flhs.arr, &Frhs.arr, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_FF( &Flhs.arr, &Frhs.arr )
+      res = {fearr_pytype}.create( &cFres )
     # end if
-  elif trhs == matso:
+  elif trhs == {arr_pytype}:
     Orhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_FO_to( &Flhs.arr, &Orhs.arr, &Fres.arr, dhl )
+      {fearr_func}_sub_FO_to( &Flhs.arr, &Orhs.arr, &Fres.arr )
     else:
-      cFres = fearrso_sub_FO( &Flhs.arr, &Orhs.arr, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_FO( &Flhs.arr, &Orhs.arr )
+      res = {fearr_pytype}.create( &cFres )
     # end if
   elif trhs == dmat:
     Rrhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_FR_to( &Flhs.arr, &Rrhs.arr, &Fres.arr, dhl )
+      {fearr_func}_sub_FR_to( &Flhs.arr, &Rrhs.arr, &Fres.arr )
     else:
-      cFres = fearrso_sub_FR( &Flhs.arr, &Rrhs.arr, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_FR( &Flhs.arr, &Rrhs.arr )
+      res = {fearr_pytype}.create( &cFres )
     # end if
   elif trhs in number_types:
     rrhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_Fr_to( &Flhs.arr, rrhs, &Fres.arr, dhl )
+      {fearr_func}_sub_Fr_to( &Flhs.arr, rrhs, &Fres.arr )
     else:
-      cFres = fearrso_sub_Fr( &Flhs.arr, rrhs, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_Fr( &Flhs.arr, rrhs )
+      res = {fearr_pytype}.create( &cFres )
     # end if
   else:
-    raise TypeError("Unsupported sub operation between {0} and {1}.".format(type(Flhs),trhs))
+    raise TypeError("Unsupported sub operation between {{0}} and {{1}}.".format(type(Flhs),trhs))
   # end if
 
   if res_flag == 0:
@@ -103,34 +101,34 @@ cdef object __sub__FX__(matsofe Flhs, object rhs, object out = None):
 
 
 #*****************************************************************************************************
-cdef object __sub__OX__(matso Olhs, object rhs, object out = None):
+cdef object __sub__OX__({arr_pytype} Olhs, object rhs, object out = None):
   """
-  PORPUSE: Subtraction between matso and object.
+  PORPUSE: Subtraction between {arr_pytype} and object.
 
   """
   #***************************************************************************************************
 
-  global dhl
+  
 
   # Scalar types:
-  cdef sotinum    orhs, ores
-  cdef sotinum_t cores
+  cdef {num_pytype}    orhs, ores
+  cdef {num_type} cores
 
-  cdef sotife     frhs, fres
-  cdef fesoti_t  cfres
+  cdef {fenum_pytype}     frhs, fres
+  cdef {fenum_type}  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef matso      Orhs, Ores
-  cdef arrso_t   cOres
+  cdef {arr_pytype}      Orhs, Ores
+  cdef {arr_type}   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef matsofe    Frhs, Fres
-  cdef fearrso_t cFres
+  cdef {fearr_pytype}    Frhs, Fres
+  cdef {fearr_type} cFres
 
   cdef uint8_t res_flag = 1
   cdef object  res = None
@@ -141,53 +139,53 @@ cdef object __sub__OX__(matso Olhs, object rhs, object out = None):
     res_flag = 0
   # end if
 
-  if trhs == sotinum:
+  if trhs == {num_pytype}:
     orhs = rhs
     if res_flag:
       Ores = out
-      arrso_sub_Oo_to( &Olhs.arr, &orhs.num, &Ores.arr, dhl )
+      {arr_func}_sub_Oo_to( &Olhs.arr, &orhs.num, &Ores.arr )
     else:
-      cOres = arrso_sub_Oo( &Olhs.arr, &orhs.num, dhl )
-      res = matso.create( &cOres )
+      cOres = {arr_func}_sub_Oo( &Olhs.arr, &orhs.num )
+      res = {arr_pytype}.create( &cOres )
     # end if
-  elif trhs == matsofe:
+  elif trhs == {fearr_pytype}:
     Frhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_OF_to( &Olhs.arr, &Frhs.arr, &Fres.arr, dhl )
+      {fearr_func}_sub_OF_to( &Olhs.arr, &Frhs.arr, &Fres.arr )
     else:
-      cFres = fearrso_sub_OF( &Olhs.arr, &Frhs.arr, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_OF( &Olhs.arr, &Frhs.arr )
+      res = {fearr_pytype}.create( &cFres )
     # end if
-  elif trhs == matso:
+  elif trhs == {arr_pytype}:
     Orhs = rhs
     if res_flag:
       Ores = out
-      arrso_sub_OO_to( &Olhs.arr, &Orhs.arr, &Ores.arr, dhl )
+      {arr_func}_sub_OO_to( &Olhs.arr, &Orhs.arr, &Ores.arr )
     else:
-      cOres = arrso_sub_OO( &Olhs.arr, &Orhs.arr, dhl )
-      res = matso.create( &cOres )
+      cOres = {arr_func}_sub_OO( &Olhs.arr, &Orhs.arr )
+      res = {arr_pytype}.create( &cOres )
     # end if
   elif trhs == dmat:
     Rrhs = rhs
     if res_flag:
       Ores = out
-      arrso_sub_OR_to( &Olhs.arr, &Rrhs.arr, &Ores.arr, dhl )
+      {arr_func}_sub_OR_to( &Olhs.arr, &Rrhs.arr, &Ores.arr )
     else:
-      cOres = arrso_sub_OR( &Olhs.arr, &Rrhs.arr, dhl )
-      res = matso.create( &cOres )
+      cOres = {arr_func}_sub_OR( &Olhs.arr, &Rrhs.arr )
+      res = {arr_pytype}.create( &cOres )
     # end if
   elif trhs in number_types:
     rrhs = rhs
     if res_flag:
       Ores = out
-      arrso_sub_Or_to( &Olhs.arr, rrhs, &Ores.arr, dhl )
+      {arr_func}_sub_Or_to( &Olhs.arr, rrhs, &Ores.arr )
     else:
-      cOres = arrso_sub_Or( &Olhs.arr, rrhs, dhl )
-      res = matso.create( &cOres )
+      cOres = {arr_func}_sub_Or( &Olhs.arr, rrhs )
+      res = {arr_pytype}.create( &cOres )
     # end if
   else:
-    raise TypeError("Unsupported sub operation between {0} and {1}.".format(type(Olhs),trhs))
+    raise TypeError("Unsupported sub operation between {{0}} and {{1}}.".format(type(Olhs),trhs))
   # end if
 
   if res_flag == 0:
@@ -205,27 +203,27 @@ cdef object __sub__RX__(dmat Rlhs, object rhs, object out = None):
   """
   #***************************************************************************************************
 
-  global dhl
+  
 
   # Scalar types:
-  cdef sotinum    orhs, ores
-  cdef sotinum_t cores
+  cdef {num_pytype}    orhs, ores
+  cdef {num_type} cores
 
-  cdef sotife     frhs, fres
-  cdef fesoti_t  cfres
+  cdef {fenum_pytype}     frhs, fres
+  cdef {fenum_type}  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef matso      Orhs, Ores
-  cdef arrso_t   cOres
+  cdef {arr_pytype}      Orhs, Ores
+  cdef {arr_type}   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef matsofe    Frhs, Fres
-  cdef fearrso_t cFres
+  cdef {fearr_pytype}    Frhs, Fres
+  cdef {fearr_type} cFres
 
   cdef uint8_t res_flag = 1
   cdef object  res = None
@@ -236,23 +234,23 @@ cdef object __sub__RX__(dmat Rlhs, object rhs, object out = None):
     res_flag = 0
   # end if
 
-  if trhs == matsofe:
+  if trhs == {fearr_pytype}:
     Frhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_RF_to( &Rlhs.arr, &Frhs.arr, &Fres.arr, dhl )
+      {fearr_func}_sub_RF_to( &Rlhs.arr, &Frhs.arr, &Fres.arr )
     else:
-      cFres = fearrso_sub_RF( &Rlhs.arr, &Frhs.arr, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_RF( &Rlhs.arr, &Frhs.arr )
+      res = {fearr_pytype}.create( &cFres )
     # end if
-  elif trhs == matso:
+  elif trhs == {arr_pytype}:
     Orhs = rhs
     if res_flag:
       Ores = out
-      arrso_sub_RO_to( &Rlhs.arr, &Orhs.arr, &Ores.arr, dhl )
+      {arr_func}_sub_RO_to( &Rlhs.arr, &Orhs.arr, &Ores.arr )
     else:
-      cOres = arrso_sub_RO( &Rlhs.arr, &Orhs.arr, dhl )
-      res = matso.create( &cOres )
+      cOres = {arr_func}_sub_RO( &Rlhs.arr, &Orhs.arr )
+      res = {arr_pytype}.create( &cOres )
     # end if
   elif trhs == dmat:
     Rrhs = rhs
@@ -273,7 +271,7 @@ cdef object __sub__RX__(dmat Rlhs, object rhs, object out = None):
       res = dmat.create( &cRres )
     # end if
   else:
-    raise TypeError("Unsupported sub operation between {0} and {1}.".format(type(Rlhs),trhs))
+    raise TypeError("Unsupported sub operation between {{0}} and {{1}}.".format(type(Rlhs),trhs))
   # end if
 
   if res_flag == 0:
@@ -284,34 +282,34 @@ cdef object __sub__RX__(dmat Rlhs, object rhs, object out = None):
 
 
 #*****************************************************************************************************
-cdef object __sub__oX__(sotinum olhs, object rhs, object out = None):
+cdef object __sub__oX__({num_pytype} olhs, object rhs, object out = None):
   """
-  PORPUSE: Subtraction between sotinum and object.
+  PORPUSE: Subtraction between {num_pytype} and object.
 
   """
   #***************************************************************************************************
 
-  global dhl
+  
 
   # Scalar types:
-  cdef sotinum    orhs, ores
-  cdef sotinum_t cores
+  cdef {num_pytype}    orhs, ores
+  cdef {num_type} cores
 
-  cdef sotife     frhs, fres
-  cdef fesoti_t  cfres
+  cdef {fenum_pytype}     frhs, fres
+  cdef {fenum_type}  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef matso      Orhs, Ores
-  cdef arrso_t   cOres
+  cdef {arr_pytype}      Orhs, Ores
+  cdef {arr_type}   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef matsofe    Frhs, Fres
-  cdef fearrso_t cFres
+  cdef {fearr_pytype}    Frhs, Fres
+  cdef {fearr_type} cFres
 
   cdef uint8_t res_flag = 1
   cdef object  res = None
@@ -322,53 +320,53 @@ cdef object __sub__oX__(sotinum olhs, object rhs, object out = None):
     res_flag = 0
   # end if
 
-  if trhs == sotinum:
+  if trhs == {num_pytype}:
     orhs = rhs
     if res_flag:
       ores = out
-      soti_sub_oo_to( &olhs.num, &orhs.num, &ores.num, dhl )
+      {num_func}_sub_oo_to( &olhs.num, &orhs.num, &ores.num )
     else:
-      cores = soti_sub_oo( &olhs.num, &orhs.num, dhl )
-      res = sotinum.create( &cores )
+      cores = {num_func}_sub_oo( &olhs.num, &orhs.num )
+      res = {num_pytype}.create( &cores )
     # end if
-  elif trhs == sotife:
+  elif trhs == {fenum_pytype}:
     frhs = rhs
     if res_flag:
       fres = out
-      fesoti_sub_of_to( &olhs.num, &frhs.num, &fres.num, dhl )
+      {fenum_func}_sub_of_to( &olhs.num, &frhs.num, &fres.num )
     else:
-      cfres = fesoti_sub_of( &olhs.num, &frhs.num, dhl )
-      res = sotife.create( &cfres )
+      cfres = {fenum_func}_sub_of( &olhs.num, &frhs.num )
+      res = {fenum_pytype}.create( &cfres )
     # end if
-  elif trhs == matsofe:
+  elif trhs == {fearr_pytype}:
     Frhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_oF_to( &olhs.num, &Frhs.arr, &Fres.arr, dhl )
+      {fearr_func}_sub_oF_to( &olhs.num, &Frhs.arr, &Fres.arr )
     else:
-      cFres = fearrso_sub_oF( &olhs.num, &Frhs.arr, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_oF( &olhs.num, &Frhs.arr )
+      res = {fearr_pytype}.create( &cFres )
     # end if
-  elif trhs == matso:
+  elif trhs == {arr_pytype}:
     Orhs = rhs
     if res_flag:
       Ores = out
-      arrso_sub_oO_to( &olhs.num, &Orhs.arr, &Ores.arr, dhl )
+      {arr_func}_sub_oO_to( &olhs.num, &Orhs.arr, &Ores.arr )
     else:
-      cOres = arrso_sub_oO( &olhs.num, &Orhs.arr, dhl )
-      res = matso.create( &cOres )
+      cOres = {arr_func}_sub_oO( &olhs.num, &Orhs.arr )
+      res = {arr_pytype}.create( &cOres )
     # end if
   elif trhs in number_types:
     rrhs = rhs
     if res_flag:
       ores = out
-      soti_sub_or_to( &olhs.num, rrhs, &ores.num, dhl )
+      {num_func}_sub_or_to( &olhs.num, rrhs, &ores.num )
     else:
-      cores = soti_sub_or( &olhs.num, rrhs, dhl )
-      res = sotinum.create( &cores )
+      cores = {num_func}_sub_or( &olhs.num, rrhs )
+      res = {num_pytype}.create( &cores )
     # end if
   else:
-    raise TypeError("Unsupported sub operation between {0} and {1}.".format(type(olhs),trhs))
+    raise TypeError("Unsupported sub operation between {{0}} and {{1}}.".format(type(olhs),trhs))
   # end if
 
   if res_flag == 0:
@@ -379,34 +377,32 @@ cdef object __sub__oX__(sotinum olhs, object rhs, object out = None):
 
 
 #*****************************************************************************************************
-cdef object __sub__fX__(sotife flhs, object rhs, object out = None):
+cdef object __sub__fX__({fenum_pytype} flhs, object rhs, object out = None):
   """
-  PORPUSE: Subtraction between sotife and object.
+  PORPUSE: Subtraction between {fenum_pytype} and object.
 
   """
   #***************************************************************************************************
 
-  global dhl
-
   # Scalar types:
-  cdef sotinum    orhs, ores
-  cdef sotinum_t cores
+  cdef {num_pytype}    orhs, ores
+  cdef {num_type} cores
 
-  cdef sotife     frhs, fres
-  cdef fesoti_t  cfres
+  cdef {fenum_pytype}     frhs, fres
+  cdef {fenum_type}  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef matso      Orhs, Ores
-  cdef arrso_t   cOres
+  cdef {arr_pytype}      Orhs, Ores
+  cdef {arr_type}   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef matsofe    Frhs, Fres
-  cdef fearrso_t cFres
+  cdef {fearr_pytype}    Frhs, Fres
+  cdef {fearr_type} cFres
 
   cdef uint8_t res_flag = 1
   cdef object  res = None
@@ -417,44 +413,44 @@ cdef object __sub__fX__(sotife flhs, object rhs, object out = None):
     res_flag = 0
   # end if
 
-  if trhs == sotinum:
+  if trhs == {num_pytype}:
     orhs = rhs
     if res_flag:
       fres = out
-      fesoti_sub_fo_to( &flhs.num, &orhs.num, &fres.num, dhl )
+      {fenum_func}_sub_fo_to( &flhs.num, &orhs.num, &fres.num )
     else:
-      cfres = fesoti_sub_fo( &flhs.num, &orhs.num, dhl )
-      res = sotife.create( &cfres )
+      cfres = {fenum_func}_sub_fo( &flhs.num, &orhs.num )
+      res = {fenum_pytype}.create( &cfres )
     # end if
-  elif trhs == sotife:
+  elif trhs == {fenum_pytype}:
     frhs = rhs
     if res_flag:
       fres = out
-      fesoti_sub_ff_to( &flhs.num, &frhs.num, &fres.num, dhl )
+      {fenum_func}_sub_ff_to( &flhs.num, &frhs.num, &fres.num )
     else:
-      cfres = fesoti_sub_ff( &flhs.num, &frhs.num, dhl )
-      res = sotife.create( &cfres )
+      cfres = {fenum_func}_sub_ff( &flhs.num, &frhs.num )
+      res = {fenum_pytype}.create( &cfres )
     # end if
-  elif trhs == matsofe:
+  elif trhs == {fearr_pytype}:
     Frhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_fF_to( &flhs.num, &Frhs.arr, &Fres.arr, dhl )
+      {fearr_func}_sub_fF_to( &flhs.num, &Frhs.arr, &Fres.arr )
     else:
-      cFres = fearrso_sub_fF( &flhs.num, &Frhs.arr, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_fF( &flhs.num, &Frhs.arr )
+      res = {fearr_pytype}.create( &cFres )
     # end if
   elif trhs in number_types:
     rrhs = rhs
     if res_flag:
       fres = out
-      fesoti_sub_fr_to( &flhs.num, rrhs, &fres.num, dhl )
+      {fenum_func}_sub_fr_to( &flhs.num, rrhs, &fres.num )
     else:
-      cfres = fesoti_sub_fr( &flhs.num, rrhs, dhl )
-      res = sotife.create( &cfres )
+      cfres = {fenum_func}_sub_fr( &flhs.num, rrhs )
+      res = {fenum_pytype}.create( &cfres )
     # end if
   else:
-    raise TypeError("Unsupported sub operation between {0} and {1}.".format(type(flhs),trhs))
+    raise TypeError("Unsupported sub operation between {{0}} and {{1}}.".format(type(flhs),trhs))
   # end if
 
   if res_flag == 0:
@@ -472,27 +468,27 @@ cdef object __sub__rX__(coeff_t rlhs, object rhs, object out = None):
   """
   #***************************************************************************************************
 
-  global dhl
+  
 
   # Scalar types:
-  cdef sotinum    orhs, ores
-  cdef sotinum_t cores
+  cdef {num_pytype}    orhs, ores
+  cdef {num_type} cores
 
-  cdef sotife     frhs, fres
-  cdef fesoti_t  cfres
+  cdef {fenum_pytype}     frhs, fres
+  cdef {fenum_type}  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef matso      Orhs, Ores
-  cdef arrso_t   cOres
+  cdef {arr_pytype}      Orhs, Ores
+  cdef {arr_type}   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef matsofe    Frhs, Fres
-  cdef fearrso_t cFres
+  cdef {fearr_pytype}    Frhs, Fres
+  cdef {fearr_type} cFres
 
   cdef uint8_t res_flag = 1
   cdef object  res = None
@@ -503,41 +499,41 @@ cdef object __sub__rX__(coeff_t rlhs, object rhs, object out = None):
     res_flag = 0
   # end if
 
-  if trhs == sotinum:
+  if trhs == {num_pytype}:
     orhs = rhs
     if res_flag:
       ores = out
-      soti_sub_ro_to( rlhs, &orhs.num, &ores.num, dhl )
+      {num_func}_sub_ro_to( rlhs, &orhs.num, &ores.num )
     else:
-      cores = soti_sub_ro( rlhs, &orhs.num, dhl )
-      res = sotinum.create( &cores )
+      cores = {num_func}_sub_ro( rlhs, &orhs.num )
+      res = {num_pytype}.create( &cores )
     # end if
-  elif trhs == sotife:
+  elif trhs == {fenum_pytype}:
     frhs = rhs
     if res_flag:
       fres = out
-      fesoti_sub_rf_to( rlhs, &frhs.num, &fres.num, dhl )
+      {fenum_func}_sub_rf_to( rlhs, &frhs.num, &fres.num )
     else:
-      cfres = fesoti_sub_rf( rlhs, &frhs.num, dhl )
-      res = sotife.create( &cfres )
+      cfres = {fenum_func}_sub_rf( rlhs, &frhs.num )
+      res = {fenum_pytype}.create( &cfres )
     # end if
-  elif trhs == matsofe:
+  elif trhs == {fearr_pytype}:
     Frhs = rhs
     if res_flag:
       Fres = out
-      fearrso_sub_rF_to( rlhs, &Frhs.arr, &Fres.arr, dhl )
+      {fearr_func}_sub_rF_to( rlhs, &Frhs.arr, &Fres.arr )
     else:
-      cFres = fearrso_sub_rF( rlhs, &Frhs.arr, dhl )
-      res = matsofe.create( &cFres )
+      cFres = {fearr_func}_sub_rF( rlhs, &Frhs.arr )
+      res = {fearr_pytype}.create( &cFres )
     # end if
-  elif trhs == matso:
+  elif trhs == {arr_pytype}:
     Orhs = rhs
     if res_flag:
       Ores = out
-      arrso_sub_rO_to( rlhs, &Orhs.arr, &Ores.arr, dhl )
+      {arr_func}_sub_rO_to( rlhs, &Orhs.arr, &Ores.arr )
     else:
-      cOres = arrso_sub_rO( rlhs, &Orhs.arr, dhl )
-      res = matso.create( &cOres )
+      cOres = {arr_func}_sub_rO( rlhs, &Orhs.arr )
+      res = {arr_pytype}.create( &cOres )
     # end if
   elif trhs == dmat:
     Rrhs = rhs
@@ -552,7 +548,7 @@ cdef object __sub__rX__(coeff_t rlhs, object rhs, object out = None):
     rrhs = rhs
     res = rlhs-rrhs
   else:
-    raise TypeError("Unsupported sub operation between {0} and {1}.".format(type(rlhs),trhs))
+    raise TypeError("Unsupported sub operation between {{0}} and {{1}}.".format(type(rlhs),trhs))
   # end if
 
   if res_flag == 0:

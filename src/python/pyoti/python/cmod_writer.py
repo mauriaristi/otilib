@@ -1,5 +1,10 @@
 
 from pyoti.core import get_dHelp
+import pyoti.core as coti 
+import os
+import errno
+
+getpath = coti.whereotilib.getpath
 
 h = get_dHelp()
 
@@ -26,7 +31,7 @@ class writer:
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
-  def __init__(self, nbases, order, language = 'c', tab = "  ", coeff_type = "coeff_t", 
+  def __init__(self, nbases, order, tab = "  ", coeff_type = "coeff_t", mdual = False,
     type_name = None ):
     """
     PORPUSE:  The porpuse of this class is to create Modules that allow dense OTI structures
@@ -35,43 +40,30 @@ class writer:
 
     global imdir_base_name
     
-    self.order   = order
+    # Only pre-generated data for up to multidual of 10 imbases.
+    if mdual and (nbases <= 10) : 
+      self.order   = nbases
+    elif not mdual:
+      self.order   = order
+    else:
+      raise ValueError("Multidual with more than 10 bases are not supported.")
+    # end if
+
     self.nbases  = nbases
     self.tab     = tab
     self.coeff_t = coeff_type
-    self.lang    = language
 
-    if self.lang is 'fortran':
-      self.get = "%"
-      self.comment = "! "
-      self.endl = self.endl
-      imdir_base_name = 'E'
-      self.new_line_mark = '&'
-      self.real_str = 'R'
-      self.zero = '0.0_dp'
-    elif self.lang is 'c':
-      self.get = "."
-      self.get_ptr = "->"
-      self.comment = "// "
-      self.endl = ";\n"
-      self.real_str = 'r'
-      self.new_line_mark = ''
-      self.zero = '0.0'
-      imdir_base_name = 'e'
-    else: # Cython.
-      self.get = "."
-      self.comment = "# "
-      self.endl = self.endl
-      self.real_str = 'r'
-      self.new_line_mark = ''
-      self.zero = '0.0'
-      imdir_base_name = 'e'
-    # end if 
+    self.get = "."
+    self.get_ptr = "->"
+    self.comment = "// "
+    self.endl = ";\n"
+    self.real_str = 'r'
+    self.new_line_mark = ''
+    self.zero = '0.0'
+    imdir_base_name = 'e'
+    
 
-    if type_name is None and self.lang is 'fortran':
-      self.type_name = 'ONUMM'+str(self.nbases)+"N"+str(self.order)
-      self.func_name = 'ONUMM'+str(self.nbases)+"N"+str(self.order)
-    elif type_name is None and self.lang is 'c':
+    if not mdual:
       
       self.type_name = 'onumm'+str(self.nbases)+"n"+str(self.order)+"_t"
       self.type_name_arr = 'oarrm'+str(self.nbases)+"n"+str(self.order)+"_t"
@@ -89,8 +81,25 @@ class writer:
       self.type_names['R']='darr_t'
       self.type_names['O']=self.type_name_arr
       self.type_names['F']=self.type_name_fearr
+
     else:
-      self.type_name = type_name
+
+      self.type_name = 'mdnum'+str(self.nbases)+"_t"
+      self.type_name_arr = 'mdarr'+str(self.nbases)+"_t"
+      self.type_name_fe = 'femdnum'+str(self.nbases)+"_t"
+      self.type_name_fearr = 'femdarr'+str(self.nbases)+"_t"
+      self.func_name = 'mdnum'+str(self.nbases)
+      self.func_name_arr = 'mdarr'+str(self.nbases)
+      self.func_name_fe = 'femdnum'+str(self.nbases)
+      self.func_name_fearr = 'femdarr'+str(self.nbases)
+
+      self.type_names={}
+      self.type_names['r']=self.coeff_t
+      self.type_names['o']=self.type_name
+      self.type_names['f']=self.type_name_fe
+      self.type_names['R']='darr_t'
+      self.type_names['O']=self.type_name_arr
+      self.type_names['F']=self.type_name_fearr
     # end if 
 
 
@@ -101,9 +110,20 @@ class writer:
     self.name_imdir.append([])
     self.name_imdir[0].append('0')
 
+    self.idx_imdir = []
+    self.idx_imdir.append([])
+    self.idx_imdir[0].append(0)
+    
+    self.use_imdir = []
+    self.use_imdir.append([])
+    self.use_imdir[0].append(True)
+
+    # generate all imaginary directions
     for ordi in range(1,self.order+1):
 
       self.name_imdir.append([])
+      self.use_imdir.append([])
+      self.idx_imdir.append([])
       
       nimdir_i = h.get_ndir_order(self.nbases, ordi)
 
@@ -117,143 +137,62 @@ class writer:
 
           str_out += valid_chars[list_bases[i]]
 
-        # end for 
+        # end for        
 
-        self.name_imdir[ordi].append(str_out)  
+        
+        if not mdual:
+          self.name_imdir[ordi].append(str_out)
+          self.use_imdir[ordi].append(True)
+          self.idx_imdir[ordi].append(j)
+        else:
+          # Check if it is a valid multidual direction.
+          str_test = "".join(dict.fromkeys(str_out))
+          if str_test == str_out:
+            self.name_imdir[ordi].append(str_out)
+            self.use_imdir[ordi].append(True)
+            self.idx_imdir[ordi].append(j)
+          # end if 
+
+
 
       # end for 
 
     # end for 
+
     self.function_list = []
+    self.function_list_header = {}
+
+    self.function_list_header['base'] = []
+    self.function_list_header['algebra'] = []
+
+    # needed for c?
     self.overloads = {}
-    if self.lang is 'fortran':
-      self.overloads['*'] = []
-      self.overloads['+'] = []
-      self.overloads['-'] = []
-      self.overloads['/'] = []
-      self.overloads['='] = []
-      self.overloads['**'] = []
-      self.overloads['PPRINT'] = []
-      self.overloads['TRANSPOSE'] = []
-      self.overloads['MATMUL'] = []
-      self.overloads['SIN'] = []
-      self.overloads['COS'] = []
-      self.overloads['TAN'] = []
-      self.overloads['ASIN'] = []
-      self.overloads['ACOS'] = []
-      self.overloads['ATAN'] = []
-      self.overloads['SINH'] = []
-      self.overloads['COSH'] = []
-      self.overloads['TANH'] = []
-      self.overloads['ASINH'] = []
-      self.overloads['ACOSH'] = []
-      self.overloads['ATANH'] = []
-      self.overloads['LOG'] = []
-      self.overloads['EXP'] = []
-      self.overloads['LOG10'] = []
-    elif self.lang is 'c':
-      self.overloads['*'] = []
-      self.overloads['+'] = []
-      self.overloads['-'] = []
-      self.overloads['/'] = []
-      self.overloads['='] = []
-      self.overloads['pow'] = []
-      self.overloads['print'] = []
-      self.overloads['transpose'] = []
-      self.overloads['matmul'] = []
-      self.overloads['sin']   = []
-      self.overloads['cos']   = []
-      self.overloads['tan']   = []
-      self.overloads['asin']  = []
-      self.overloads['acos']  = []
-      self.overloads['atan']  = []
-      self.overloads['sinh']  = []
-      self.overloads['cosh']  = []
-      self.overloads['tanh']  = []
-      self.overloads['asinh'] = []
-      self.overloads['acosh'] = []
-      self.overloads['atanh'] = []
-      self.overloads['log']   = []
-      self.overloads['exp']   = []
-      self.overloads['log10'] = []
-    else:
-      self.overloads['*'] = []
-      self.overloads['+'] = []
-      self.overloads['-'] = []
-      self.overloads['/'] = []
-      self.overloads['='] = []
-      self.overloads['**'] = []
-      self.overloads['print'] = []
-      self.overloads['transpose'] = []
-      self.overloads['matmul'] = []
-      self.overloads['sin']   = []
-      self.overloads['cos']   = []
-      self.overloads['tan']   = []
-      self.overloads['asin']  = []
-      self.overloads['acos']  = []
-      self.overloads['atan']  = []
-      self.overloads['sinh']  = []
-      self.overloads['cosh']  = []
-      self.overloads['tanh']  = []
-      self.overloads['asinh'] = []
-      self.overloads['acosh'] = []
-      self.overloads['atanh'] = []
-      self.overloads['log']   = []
-      self.overloads['exp']   = []
-      self.overloads['log10'] = []
-    # end if 
 
-  #---------------------------------------------------------------------------------------------------  
+    self.overloads['*'] = []
+    self.overloads['+'] = []
+    self.overloads['-'] = []
+    self.overloads['/'] = []
+    self.overloads['='] = []
+    self.overloads['pow'] = []
+    self.overloads['print'] = []
+    self.overloads['transpose'] = []
+    self.overloads['matmul'] = []
+    self.overloads['sin']   = []
+    self.overloads['cos']   = []
+    self.overloads['tan']   = []
+    self.overloads['asin']  = []
+    self.overloads['acos']  = []
+    self.overloads['atan']  = []
+    self.overloads['sinh']  = []
+    self.overloads['cosh']  = []
+    self.overloads['tanh']  = []
+    self.overloads['asinh'] = []
+    self.overloads['acosh'] = []
+    self.overloads['atanh'] = []
+    self.overloads['log']   = []
+    self.overloads['exp']   = []
+    self.overloads['log10'] = []
 
-  #***************************************************************************************************
-  def set_constant_parameters(self, level = ""):
-    """
-    PORPUSE:  Define constant parameters of the fortran module .
-    """
-    
-    str_out = ""
-
-    str_out += level + "INTEGER, PARAMETER :: DP         = 8\n"
-    str_out += level + "INTEGER, PARAMETER :: NUM_IM_DIR = " + str(self.nimdir) + self.endl
-    str_out += level + "INTEGER, PARAMETER :: TORDER     = " + str(self.order) + self.endl
-
-    return str_out
-
-  #---------------------------------------------------------------------------------------------------  
-
-  #***************************************************************************************************
-  def set_type_fortran(self, level = ""):
-    """
-    PORPUSE:  The porpuse of this class is to create Modules that allow dense OTI structures
-              to be manipulated in languages like Fortran and Cython. 
-    """
-    global h
-
-    str_out = ""
-
-    str_out += level + "TYPE "+self.type_name+self.endl
-
-
-    # Write real part.
-    str_out += level + self.tab + self.comment + "Real" + self.endl
-    str_out += level + self.tab + self.coeff_t + " :: " + self.real_str + self.endl
-
-    for ordi in range(1,self.order+1):
-    
-      str_out += level + self.tab + self.comment + "Order " + str(ordi) + self.endl
-      dirs = self.name_imdir[ordi]
-
-      for j in range(len(dirs)):
-
-        str_out += level + self.tab + self.coeff_t + " :: " +dirs[j]+ self.endl
-
-      # end for 
-
-    # end for 
-
-    str_out += level + "END TYPE "+self.type_name+self.endl
-
-    return str_out
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -493,36 +432,41 @@ class writer:
 
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
 
       mults = []
       for j in range(len(dirs)):
         mults.append([]) 
 
-      # Multiply the different imaginary directions all togeather such thata resulting order is 
+      # Multiply the different imaginary directions all togeather such that resulting order is 
       # ordi.
       # print("Order "+str(ordi))
 
       for ordj in range(1, ordi // 2 + 1):
-        ordk = ordi-ordj
+        ordk = ordi - ordj
         # print("  Multiplying order "+str(ordj)+" x order " + str(ordk) )
         dirsj = self.name_imdir[ordj]
         dirsk = self.name_imdir[ordk]
-        
+
+        idxj = self.idx_imdir[ordj]
+        idxk = self.idx_imdir[ordk]
+
         for j in range(len(dirsj)):
           for k in range(len(dirsk)):
-            
-            i,iordi = h.mult_dir(j,ordj,k,ordk)
-            # print(dirs[i]+" = "+dirsj[j]+" x "+ dirsk[k])
-            mults[i].append([ dirsj[j], dirsk[k] ])
-            if  ordj != ordk:
-              # print(dirs[i]+" = "+dirsk[k]+" x "+ dirsj[j])
-              mults[i].append([ dirsk[k],dirsj[j] ])
-            # end if 
+
+            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+
+            if i in idxi:
+              ii = idxi.index(i)
+              mults[ii].append([ dirsj[j], dirsk[k] ])
+              if  ordj != ordk:
+                mults[ii].append([ dirsk[k],dirsj[j] ])
+              # end if 
+            #end if 
           # end for
         # end for 
       # end for 
-      # print(mults)
-      # res.append(mults)
+
 
       for j in range(len(dirs)):
         # R X IM
@@ -618,31 +562,37 @@ class writer:
 
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
 
       mults = []
       for j in range(len(dirs)):
         mults.append([]) 
 
-      # Multiply the different imaginary directions all togeather such thata resulting order is 
+      # Multiply the different imaginary directions all togeather such that resulting order is 
       # ordi.
       # print("Order "+str(ordi))
 
       for ordj in range(1, ordi // 2 + 1):
-        ordk = ordi-ordj
+        ordk = ordi - ordj
         # print("  Multiplying order "+str(ordj)+" x order " + str(ordk) )
         dirsj = self.name_imdir[ordj]
         dirsk = self.name_imdir[ordk]
+
+        idxj = self.idx_imdir[ordj]
+        idxk = self.idx_imdir[ordk]
         
         for j in range(len(dirsj)):
           for k in range(len(dirsk)):
-            
-            i,iordi = h.mult_dir(j,ordj,k,ordk)
 
-            mults[i].append([ dirsj[j], dirsk[k] ])
-            if  ordj != ordk:
-              # print(dirs[i]+" = "+dirsk[k]+" x "+ dirsj[j])
-              mults[i].append([ dirsk[k],dirsj[j] ])
-            # end if 
+            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+
+            if i in idxi:
+              ii = idxi.index(i)
+              mults[ii].append([ dirsj[j], dirsk[k] ])
+              if  ordj != ordk:
+                mults[ii].append([ dirsk[k],dirsj[j] ])
+              # end if 
+            #end if 
           # end for
         # end for 
       # end for 
@@ -741,28 +691,37 @@ class writer:
 
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
 
       mults = []
       for j in range(len(dirs)):
         mults.append([]) 
 
-      # Multiply the different imaginary directions all togeather such thata resulting order is 
+      # Multiply the different imaginary directions all togeather such that resulting order is 
       # ordi.
       # print("Order "+str(ordi))
 
       for ordj in range(1, ordi // 2 + 1):
-        ordk = ordi-ordj
+        ordk = ordi - ordj
         # print("  Multiplying order "+str(ordj)+" x order " + str(ordk) )
         dirsj = self.name_imdir[ordj]
         dirsk = self.name_imdir[ordk]
+
+        idxj = self.idx_imdir[ordj]
+        idxk = self.idx_imdir[ordk]
         
         for j in range(len(dirsj)):
           for k in range(len(dirsk)):
-            
-            i,iordi = h.mult_dir(j,ordj,k,ordk)
 
-            mults[i].append([ dirsj[j], dirsk[k] ])
+            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
 
+            if i in idxi:
+              ii = idxi.index(i)
+              mults[ii].append([ dirsj[j], dirsk[k] ])
+              if  ordj != ordk:
+                mults[ii].append([ dirsk[k],dirsj[j] ])
+              # end if 
+            #end if 
           # end for
         # end for 
       # end for 
@@ -1333,6 +1292,56 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
+  def setim_scalar_function(self, tab = "  ",level = "", lhs_name= "lhs", lhs_ptr=True,
+    f_name = "FUNCTION", res_name = "res", f_open = "(", f_close = ")", to=False):
+    """
+    PORPUSE:  getim like function between two OTIs.
+    """
+    global h
+    str_out = ""
+    
+    if lhs_ptr:
+      lhs_getter = self.get_ptr
+    else:
+      lhs_getter = self.get
+    # end if 
+
+    str_out += level + self.comment + "Set Imaginary coefficient." + endl
+    # str_out += level + "*" + res_name + " = " + self.zero + self.endl
+
+    # Write real part.
+    str_out += level + self.comment + "Real" + self.endl
+    str_out += level + "switch (order){"+endl
+    str_out += level + tab +  "case 0:" +endl
+    str_out += level + 2*tab + lhs_name + lhs_getter + self.real_str + " = " + 'val'  + self.endl
+    str_out += level + 2*tab + "break" + self.endl
+    
+
+    for ordi in range(1,self.order+1):
+      str_out += level + tab + "case "+str(ordi)+":"+endl
+      
+      dirs = self.name_imdir[ordi]
+      levelj = level + 2*tab 
+      str_out += levelj + "switch (idx){"+endl 
+      for j in range(len(dirs)):
+        
+        str_out += levelj+tab+ "case "+str(j) + ":" + endl
+        str_out += levelj+2*tab+lhs_name + lhs_getter + dirs[j] + " = " +  'val'  + self.endl
+        str_out += levelj+2*tab+"break"+self.endl
+      # end for 
+      
+      str_out += levelj + "}" + endl
+      str_out += levelj + "break"+self.endl
+    # end for 
+
+    str_out += level + "}"
+
+    return str_out
+
+
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
   def pprint_scalar_function(self, level = "", lhs_name= "lhs", fmt = "%.8g",tab = "  "):
     """
     PORPUSE:  getim like function between two OTIs.
@@ -1456,6 +1465,7 @@ class writer:
     func_header += ")"
 
     self.function_list.append(func_header)
+    self.function_list_header['base'].append(func_header)
 
     str_out += func_header +"{"+endl
     str_out += endl
@@ -1471,110 +1481,6 @@ class writer:
 
     return str_out
   #--------------------------------------------------------------------------------------------------- 
-
-
-  #***************************************************************************************************
-  def write_scalar_function_neg(self, function_name = "NEG", is_elemental = True, level = 0, tab = " ", 
-    f_name = "FUNCTION",  separator = ",", lhs_type= "O",
-    f_open = "(", f_close = ")", addition = " + ",generator = negation_like_function,
-    overload = None ):
-
-    str_out = ""
-    leveli = level
-
-    lhs = "LHS"
-    rhs = "RHS"
-    res = "RES"
-
-    if self.lang is 'c':
-      lhs = "lhs"
-      rhs = "rhs"
-      res = "res"
-    # end if
-
-    
-    if lhs_type is self.real_str:
-      f_prev = self.func_name
-      lhs_t = self.coeff_t
-    else:
-      f_prev = self.func_name
-      if self.lang is 'fortran':
-        lhs_t = "TYPE("+self.type_name+")"
-      else:
-        lhs_t = self.type_name
-      # end if 
-    # end if 
-
-    func_name = f_prev + "_" + function_name
-
-    # Write function start.
-    str_out += leveli*tab
-    leveli += 1
-    if is_elemental and self.lang is 'fortran':
-      str_out += 'ELEMENTAL '
-    # end if
-
-    if overload is not None:
-      self.overloads[overload].append(func_name)
-    # end if 
-
-    if self.lang is 'fortran':
-      str_out += "FUNCTION " + func_name + "(LHS)"+self.new_line_mark+endl
-      str_out += leveli*tab + "RESULT(RES)"+ endl
-
-      str_out += leveli*tab + "IMPLICIT NONE" + endl
-
-      
-      str_out += leveli*tab + lhs_t + ", INTENT(IN) :: LHS " + endl
-      str_out += leveli*tab + "TYPE("+self.type_name+") :: RES " + endl
-      str_out += endl
-
-    elif self.lang is 'c':
-      
-      func_header  = self.type_name + " " + func_name + "("
-      func_header += leveli*tab + lhs_t + " "+ lhs 
-      func_header += ")"
-
-      self.function_list.append(func_header)
-
-      str_out += func_header +"{"+endl
-      str_out += leveli*tab + self.type_name + " " + res + self.endl
-      str_out += endl
-      
-    # end if
-
-
-    str_out += generator(f_name = f_name, level = leveli*tab, f_open = f_open, f_close =f_close,
-      res_name = res, lhs_name = lhs)
-
-
-    str_out += endl
-
-
-    # Write function end.
-
-    if self.lang is 'fortran':
-      leveli -= 1
-      str_out += leveli*tab + "END FUNCTION "+ func_name + endl
-    elif self.lang is 'c':
-      str_out += leveli*tab + 'return ' + res + self.endl
-      leveli -= 1
-      str_out += leveli*tab + '}' + endl
-    # end if
-    
-
-
-    return str_out
-  #--------------------------------------------------------------------------------------------------- 
-
-
-
-
-
-
-
-
-
 
   #***************************************************************************************************
   def write_scalar_getitem(self, function_name = "get_item", is_elemental = True, level = 0, tab = " ", 
@@ -1612,6 +1518,7 @@ class writer:
     func_header += ")"
 
     self.function_list.append(func_header)
+    self.function_list_header['base'].append(func_header)
 
     str_out += func_header +"{"+endl+endl
 
@@ -1685,6 +1592,7 @@ class writer:
     func_header += ")"
 
     self.function_list.append(func_header)
+    self.function_list_header['algebra'].append(func_header)
 
     str_out += func_header +"{"+endl+endl
     
@@ -1716,7 +1624,69 @@ class writer:
     return str_out
   #--------------------------------------------------------------------------------------------------- 
 
+  #***************************************************************************************************
+  def write_scalar_setitem(self, function_name = "setim", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False,
+    f_open = "(", f_close = ")", addition = " + ", 
+    overload = None, write_charact=True ):
+    """
+    Write Univariate function.
 
+    This module writes the definition of the function, its inputs and output. The generator defines the
+    operations within the function block.
+
+    """
+
+    str_out = ""
+    leveli = level
+
+    res = "res"
+    lhs = "x"
+
+    to = False
+
+    lhs_t = self.type_names[lhs_type]
+    f_post = lhs_type
+   
+    if lhs_ptr == True:
+      lhs_t += '*'
+    # end if
+
+    f_prev = self.func_name
+    
+    func_name = f_prev + "_" + function_name 
+    
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = ''
+
+    func_header += 'void '
+
+    func_header +=  func_name + "(" +self.coeff_t+ " val, imdir_t idx, ord_t order, "
+    func_header +=  self.type_name + "* " + lhs
+
+    func_header += ")"
+
+    self.function_list.append(func_header)
+    self.function_list_header['base'].append(func_header)
+
+    str_out += func_header +"{"+endl+endl
+    
+
+
+    str_out += self.setim_scalar_function(level = leveli*tab, res_name = res, lhs_name=lhs, lhs_ptr=True, to=to)
+
+    str_out += endl
+    # Write function end.
+      
+    leveli -= 1
+    str_out += leveli*tab + '}' + endl
+
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
 
 
 
@@ -1752,6 +1722,7 @@ class writer:
     func_header += ")"
 
     self.function_list.append(func_header)
+    self.function_list_header['base'].append(func_header)
 
     str_out += func_header +"{"+endl+endl
 
@@ -1777,7 +1748,7 @@ class writer:
   def write_scalar_univar(self, function_name = "NEG", is_elemental = True, level = 0, tab = " ", 
     f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False,
     f_open = "(", f_close = ")", addition = " + ",generator = None, to = False,
-    overload = None, write_charact=True ):
+    overload = None, write_charact=True, header = 'base' ):
 
     """
     Write Univariate function.
@@ -1834,6 +1805,7 @@ class writer:
     func_header += ")"
 
     self.function_list.append(func_header)
+    self.function_list_header[header].append(func_header)
 
     str_out += func_header +"{"+endl+endl
 
@@ -1872,7 +1844,7 @@ class writer:
   def write_scalar_function(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
     f_name = "FUNCTION", lhs_type= "O", lhs_ptr=False, rhs_type= "O", rhs_ptr=False, separator = ",", 
     f_open = "(", f_close = ")", addition = " + ",generator = None, to=False,
-    overload = None, write_charact=True ):
+    overload = None, write_charact=True, header = 'base' ):
 
     str_out = ""
     leveli = level
@@ -1928,6 +1900,7 @@ class writer:
     func_header += ")"
 
     self.function_list.append(func_header)
+    self.function_list_header[header].append(func_header)
     
     str_out += func_header +"{"+endl
 
@@ -1966,7 +1939,7 @@ class writer:
   def write_scalar_trivar(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
     f_name = "FUNCTION", a_type= "o", a_ptr=False, b_type= "o", b_ptr=False, c_type= "o", c_ptr=False,
     separator = ",", f_open = "(", f_close = ")", addition = " + ",generator = None, to=False,
-    overload = None, write_charact=True ):
+    overload = None, write_charact=True, header = 'base' ):
 
     str_out = ""
     leveli = level
@@ -2031,6 +2004,7 @@ class writer:
     func_header += ")"
 
     self.function_list.append(func_header)
+    self.function_list_header[header].append(func_header)
     
     str_out += func_header +"{"+endl
 
@@ -2069,314 +2043,348 @@ class writer:
 
 
   #***************************************************************************************************
-  def write_file(self, filename = None, tab = '  ', is_std_matmul=True):
+  def write_file(self, modulename = None, tab = '  ', base_dir=''):
     """
     PORPUSE:  Write file of module containing OTI operations.
     """
     
     str_out = ""
 
-    module_name = "OTIM"+str(self.nbases)+"N"+str(self.order)
-
-    fname = module_name.lower()+'.c'    
-
-    if filename is not None:
-      fname = filename
+    if modulename is not None:
+      mname = modulename
+    else:
+      mname = self.func_name.lower()
     # end if 
 
-    if self.lang is 'c':
-
-      # 1. Write module name if in fortran ...
-      level = 0
-
-      # Define parameters
-      # str_out += self.set_constant_parameters( level = level*tab ) + endl
-      dependencies  = ""
-      dependencies += self.comment + " Dependencies"+endl
-      dependencies += "#include<stdlib.h>"   + endl
-      dependencies += "#include<string.h>"   + endl
-      dependencies += "#include<stdio.h>"    + endl
-      dependencies += "#include<stdint.h>"   + endl
-      # dependencies += "#include<stdbool.h>"  + endl
-      dependencies += "#include<inttypes.h>" + endl
-      dependencies += "#include<math.h>"     + endl + endl
-
-      header_file = ""
-      header_file += "#ifndef " + filename.upper() + "__H" + endl
-      header_file += "#define " + filename.upper() + "__H" + endl + endl
-      header_file += dependencies
-      header_file += "typedef uint8_t ord_t;\n"
-      header_file += "typedef uint64_t imdir_t ;\n"
-      header_file += "typedef double coeff_t ;\n"
-      code_file   = '#include\"'+filename+'.h'+'\"' + endl + endl
-
-      # Define type
-      header_file += self.set_type_c( level = level*tab ) + endl
-      
-      # Start writing functions
-      
-
-      # SCALAR:
-      contents = ""
-      
-      # Init function
-      contents+=self.write_scalar_init(function_name = "init", level = level, tab = tab, 
-        generator = self.init_like_function)
-      contents += endl
-
-      # Standard assignment
-      contents += self.write_scalar_univar(function_name = "create", is_elemental = True, level = level, 
-        tab = tab, lhs_type = 'r', f_name = "",   f_open = "", 
-        f_close = "", overload = "=",generator = self.assignr_like_function)
-      contents += endl
-
-      contents += self.write_scalar_univar(function_name = "set", is_elemental = True, level = level, 
-        tab = tab, lhs_type = 'r', f_name = "",   f_open = "", to=True,
-        f_close = "", overload = "=",generator = self.assignr_like_function)
-      contents += endl
-
-      contents += self.write_scalar_univar(function_name = "set", is_elemental = True, level = level, 
-        tab = tab, lhs_type = 'o', lhs_ptr = True, f_name = "",   f_open = "", to=True,
-        f_close = "", overload = "=",generator = self.assigno_like_function)
-      contents += endl
-
-      # Get item
-      contents += self.write_scalar_getitem(function_name = "get_item",level = level, tab = tab, 
-        lhs_type = 'o', lhs_ptr=True, generator = self.getim_scalar_function)
-      contents += endl 
-
-      # Copy functions
-      contents += self.write_scalar_univar(function_name = "copy", is_elemental = True, level = level, 
-        tab = tab, lhs_type = 'o',lhs_ptr=True, f_name = "",   f_open = "",  to=False,
-        f_close = "", overload = "=",generator = self.assigno_like_function, write_charact=False)
-      contents += endl
-      contents += self.write_scalar_univar(function_name = "copy", is_elemental = True, level = level, 
-        tab = tab, lhs_type = 'o',lhs_ptr=True, f_name = "",   f_open = "", to=True,
-        f_close = "", overload = "=",generator = self.assigno_like_function, write_charact=False)
-      contents += endl
-
-      # Print scalar
-      contents += self.write_scalar_function_print( level = level, tab = tab)
-      contents += endl      
-
-     
-
-      # Standard NEGATION
-      contents += self.write_scalar_univar(function_name = "neg", is_elemental = True, level = level, 
-        tab = tab, f_name = "",   f_open = "-", lhs_type='o', lhs_ptr=True, to=False, write_charact=False,
-        f_close = "", overload = "-",generator = self.negation_like_function)
-      contents += endl
-
-      contents += self.write_scalar_univar(function_name = "neg", is_elemental = True, level = level, 
-        tab = tab, f_name = "",   f_open = "-", lhs_type='o', lhs_ptr=True, to=True, write_charact=False,
-        f_close = "", overload = "-",generator = self.negation_like_function)
-      contents += endl
-
-
-
-
-      # Standard Addition
-      contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " + ", f_open = "", 
-        lhs_ptr=True,rhs_ptr=True,
-        f_close = "", generator = self.addition_like_function_oo, overload = "+")
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " + ", f_open = "", 
-        lhs_ptr=True,rhs_ptr=True,
-        f_close = "", generator = self.addition_like_function_oo, overload = "+", to=True)
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "o", separator = " + ", f_open = "", 
-        lhs_ptr=False, rhs_ptr=True,
-        f_close = "", generator = self.addition_like_function_ro, overload = "+" )
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "o", separator = " + ", f_open = "", 
-        lhs_ptr=False, rhs_ptr=True,
-        f_close = "", generator = self.addition_like_function_ro, overload = "+" , to=True)
-      contents += endl
-
-
-
-
-
-
-
-
-
-      # Standard Subtraction
-      contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " - ", f_open = "", 
-        lhs_ptr=False, rhs_ptr= True, to=False,
-        f_close = "", generator = self.addition_like_function_oo, overload = "-" )
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " - ", f_open = "", 
-        lhs_ptr=False, rhs_ptr= True, to=True,
-        f_close = "", generator = self.addition_like_function_oo, overload = "-" )
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type=  "r", rhs_type= "o", separator = " - ", 
-        lhs_ptr=False, rhs_ptr= True, to=False,
-        f_open = "", f_close = "", generator = self.addition_like_function_ro, overload = "-" )
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type=  "r", rhs_type= "o", separator = " - ", 
-        lhs_ptr=False, rhs_ptr= True, to=True,
-        f_open = "", f_close = "", generator = self.addition_like_function_ro, overload = "-" )
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type=  "r", separator = " - ", f_open = "", 
-        lhs_ptr=True, rhs_ptr= False, to=False,
-        f_close = "", generator = self.addition_like_function_or, overload = "-")
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type=  "r", separator = " - ", f_open = "", 
-        lhs_ptr=True, rhs_ptr= False, to=True,
-        f_close = "", generator = self.addition_like_function_or, overload = "-")
-      contents += endl
-
-
-
-
-
-
-
-
-
-
-
-
-      # Standard Multiplication
-      contents += self.write_scalar_function(function_name = "mul", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " * ", f_open = "", 
-        lhs_ptr=True, rhs_ptr= True, to=False,
-        f_close = "", generator = self.multiplication_like_function_oo, overload = "*" )
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "mul", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " * ", f_open = "", 
-        lhs_ptr=True, rhs_ptr= True, to=True,
-        f_close = "", generator = self.multiplication_like_function_oo, overload = "*" )
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "mul", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "r", rhs_type= "o", separator = " * ", f_open = "", 
-        lhs_ptr=False, rhs_ptr= True, to=False,
-        f_close = "", generator = self.multiplication_like_function_ro, overload = "*" )
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "mul", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "r", rhs_type= "o", separator = " * ", f_open = "", 
-        lhs_ptr=False, rhs_ptr= True, to=True,
-        f_close = "", generator = self.multiplication_like_function_ro, overload = "*" )
-      contents += endl
-
-        
-
-      # Standard Multiplication
-      contents += self.write_scalar_function(function_name = "trunc_mul", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " * ", f_open = "", 
-        lhs_ptr=True, rhs_ptr= True, to=False,
-        f_close = "", generator = self.truncmul_like_function_oo, overload = "*" )
-      contents += endl
-
-      contents += self.write_scalar_function(function_name = "trunc_mul", is_elemental = True, level = level, 
-        tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " * ", f_open = "", 
-        lhs_ptr=True, rhs_ptr= True, to=True,
-        f_close = "", generator = self.truncmul_like_function_oo, overload = "*" )
-      contents += endl
-
-
-
-
-
-
-      contents += self.write_scalar_trivar(function_name = "gem", is_elemental = True, level = level, 
-        tab = tab, f_name = "", a_type= "o", b_type= "o", c_type = "o", 
-        a_ptr = True, b_ptr = True, c_ptr = True, to=False, 
-        separator = " * ", f_open = "", 
-        f_close = "", generator = self.gem_like_function_oo, overload = "*", write_charact=True )
-      contents += endl
-
-      contents += self.write_scalar_trivar(function_name = "gem", is_elemental = True, level = level, 
-        tab = tab, f_name = "", a_type= "o", b_type= "o", c_type = "o", 
-        a_ptr = True, b_ptr = True, c_ptr = True, to=True, 
-        separator = " * ", f_open = "", 
-        f_close = "", generator = self.gem_like_function_oo, overload = "*", write_charact=True )
-      contents += endl
-
-      contents += self.write_scalar_trivar(function_name = "gem", is_elemental = True, level = level, 
-        tab = tab, f_name = "", a_type= "r", b_type= "o", c_type = "o", 
-        a_ptr = False, b_ptr = True, c_ptr = True, to=False, 
-        separator = " * ", f_open = "", 
-        f_close = "", generator = self.gem_like_function_ro, overload = "*", write_charact=True )
-      contents += endl
-
-      contents += self.write_scalar_trivar(function_name = "gem", is_elemental = True, level = level, 
-        tab = tab, f_name = "", a_type= "r", b_type= "o", c_type = "o", 
-        a_ptr = False, b_ptr = True, c_ptr = True, to=True, 
-        separator = " * ", f_open = "", 
-        f_close = "", generator = self.gem_like_function_ro, overload = "*", write_charact=True )
-      contents += endl
     
-      
 
-      #FEVAL
-      contents += self.write_scalar_feval(function_name = "feval", is_elemental = True, level = level, tab = tab, 
-        lhs_type= "o", lhs_ptr = True, to = False )
-      contents += endl
+    # 1. Write module name if in fortran ...
+    level = 0
 
-      contents += self.write_scalar_feval(function_name = "feval", is_elemental = True, level = level, tab = tab, 
-        lhs_type= "o", lhs_ptr = True, to = True )
-      contents += endl
+    # Define parameters
+    # str_out += self.set_constant_parameters( level = level*tab ) + endl
+    dependencies  = ""
+    dependencies += self.comment + " Dependencies"+endl
+    dependencies += "#include<stdlib.h>"   + endl
+    dependencies += "#include<string.h>"   + endl
+    dependencies += "#include<stdio.h>"    + endl
+    dependencies += "#include<stdint.h>"   + endl
+    # dependencies += "#include<stdbool.h>"  + endl
+    dependencies += "#include<inttypes.h>" + endl
+    dependencies += "#include<math.h>"     + endl + endl
 
-      
+    header_file = ""
+    header_file += "#ifndef " + mname.upper() + "__H" + endl
+    header_file += "#define " + mname.upper() + "__H" + endl + endl
+    header_file += dependencies
+    header_file += "typedef uint8_t ord_t;\n"
+    header_file += "typedef uint64_t imdir_t ;\n"
+    header_file += "typedef double coeff_t ;\n"
+    code_file   = '#include\"' + mname + '.h' + '\"' + endl + endl
+
+    # Define type
+    header_file += self.set_type_c( level = level*tab ) + endl
+    
+    # Start writing functions
+    
+
+    contents = ""
+
+    contents += self.gen_base_file( level = level, tab = tab)
+    contents += self.gen_algebra_file( level = level, tab = tab)
+
+    
+
+    
+
+    # Define Overloads
+
+    code_file += contents
+
+    file_name_str = os.path.join(base_dir,mname)+"/base.c"
+    self.check_file_and_dirs(file_name_str)
+
+    # Write the code file
+    f = open(file_name_str, "w" )
+
+    f.write(code_file)
+
+    f.close()
 
 
-      # Define Overloads
+    for funct in self.function_list:
+      header_file += funct+";"+endl
+    # end for 
 
-      code_file += contents
-
-      # Write the code file
-      f = open(fname+".c", "w" )
-
-      f.write(code_file)
-
-      f.close()
-
-      
-      # Write the header file
-      f = open(fname+".h", "w" )
-
-      for funct in self.function_list:
-        header_file += funct+";"+endl
-      # end for 
-
-      header_file += endl
-      header_file += "#endif"
-      f.write(header_file)
-
-      f.close()
-
-    # end if 
+    header_file += endl
+    header_file += "#endif"
 
 
 
+    file_name_str = os.path.join(base_dir,mname)+"/base.h"
+    self.check_file_and_dirs(file_name_str)
 
+    # Write the header file
+    f = open(file_name_str, "w" )
+    f.write(header_file)
 
-
+    f.close()
 
     # return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+
+
+
+
+  #***************************************************************************************************
+  def check_file_and_dirs(self, filename):
+    dir_name = os.path.dirname(filename)
+    if dir_name is not '':
+      if not os.path.exists(dir_name):
+        try:
+          os.makedirs(dir_name)
+        except OSError as exc: # Guard against race condition
+          if exc.errno != errno.EEXIST:
+              raise
+
+  #--------------------------------------------------------------------------------------------------- 
+
+
+  #***************************************************************************************************
+  def gen_base_file(self, level = 0, tab = ' '):
+    
+
+    contents = ""
+    
+    # Init function
+    contents+=self.write_scalar_init(function_name = "init", level = level, tab = tab, 
+      generator = self.init_like_function)
+    contents += endl
+
+    # Standard assignment
+    contents += self.write_scalar_univar(function_name = "create", is_elemental = True, level = level, 
+      tab = tab, lhs_type = 'r', f_name = "",   f_open = "", header = 'base',
+      f_close = "", overload = "=",generator = self.assignr_like_function)
+    contents += endl
+
+    contents += self.write_scalar_univar(function_name = "set", is_elemental = True, level = level, 
+      tab = tab, lhs_type = 'r', f_name = "",   f_open = "", to=True, header = 'base',
+      f_close = "", overload = "=",generator = self.assignr_like_function)
+    contents += endl
+
+    contents += self.write_scalar_univar(function_name = "set", is_elemental = True, level = level, 
+      tab = tab, lhs_type = 'o', lhs_ptr = True, f_name = "",   f_open = "", to=True, header = 'base',
+      f_close = "", overload = "=",generator = self.assigno_like_function)
+    contents += endl
+
+    # Get item
+    contents += self.write_scalar_getitem(function_name = "get_item",level = level, tab = tab, 
+      lhs_type = 'o', lhs_ptr=True, generator = self.getim_scalar_function)
+    contents += endl 
+
+    # Set item
+    contents += self.write_scalar_setitem(function_name = "set_item",level = level, tab = tab, 
+      lhs_type = 'o', lhs_ptr=True)
+    contents += endl 
+
+    # Copy functions
+    contents += self.write_scalar_univar(function_name = "copy", is_elemental = True, level = level, 
+      tab = tab, lhs_type = 'o',lhs_ptr=True, f_name = "",   f_open = "",  to=False,header = 'base',
+      f_close = "", overload = "=",generator = self.assigno_like_function, write_charact=False)
+    contents += endl
+    contents += self.write_scalar_univar(function_name = "copy", is_elemental = True, level = level, 
+      tab = tab, lhs_type = 'o',lhs_ptr=True, f_name = "",   f_open = "", to=True,header = 'base',
+      f_close = "", overload = "=",generator = self.assigno_like_function, write_charact=False)
+    contents += endl
+
+    # Print scalar
+    contents += self.write_scalar_function_print( level = level, tab = tab)
+    contents += endl  
+
+    return contents
+
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def gen_algebra_file(self, level = 0, tab = ' '):
+    
+
+    append_header = 'algebra'
+
+    contents = ""
+
+    # Standard NEGATION
+    contents += self.write_scalar_univar(function_name = "neg", is_elemental = True, level = level, 
+      tab = tab, f_name = "",   f_open = "-", lhs_type='o', lhs_ptr=True, to=False, write_charact=False,
+      f_close = "", overload = "-",generator = self.negation_like_function,header = 'algebra')
+    contents += endl
+
+    contents += self.write_scalar_univar(function_name = "neg", is_elemental = True, level = level, 
+      tab = tab, f_name = "",   f_open = "-", lhs_type='o', lhs_ptr=True, to=True, write_charact=False,
+      f_close = "", overload = "-",generator = self.negation_like_function,header = 'algebra')
+    contents += endl
+
+
+    # Standard ADDITION
+    contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " + ", f_open = "", 
+      lhs_ptr=True,rhs_ptr=True,header = 'algebra',
+      f_close = "", generator = self.addition_like_function_oo, overload = "+")
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " + ", f_open = "", 
+      lhs_ptr=True,rhs_ptr=True,header = 'algebra',
+      f_close = "", generator = self.addition_like_function_oo, overload = "+", to=True)
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "o", separator = " + ", f_open = "", 
+      lhs_ptr=False, rhs_ptr=True,header = 'algebra',
+      f_close = "", generator = self.addition_like_function_ro, overload = "+" )
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "o", separator = " + ", f_open = "", 
+      lhs_ptr=False, rhs_ptr=True,header = 'algebra',
+      f_close = "", generator = self.addition_like_function_ro, overload = "+" , to=True)
+    contents += endl
+
+
+    # Standard SUBTRACTION
+    contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " - ", f_open = "", 
+      lhs_ptr=False, rhs_ptr= True, to=False,header = 'algebra',
+      f_close = "", generator = self.addition_like_function_oo, overload = "-" )
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " - ", f_open = "", 
+      lhs_ptr=False, rhs_ptr= True, to=True,header = 'algebra',
+      f_close = "", generator = self.addition_like_function_oo, overload = "-" )
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type=  "r", rhs_type= "o", separator = " - ", 
+      lhs_ptr=False, rhs_ptr= True, to=False,header = 'algebra',
+      f_open = "", f_close = "", generator = self.addition_like_function_ro, overload = "-" )
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type=  "r", rhs_type= "o", separator = " - ", 
+      lhs_ptr=False, rhs_ptr= True, to=True,header = 'algebra',
+      f_open = "", f_close = "", generator = self.addition_like_function_ro, overload = "-" )
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type=  "r", separator = " - ", f_open = "", 
+      lhs_ptr=True, rhs_ptr= False, to=False,header = 'algebra',
+      f_close = "", generator = self.addition_like_function_or, overload = "-")
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type=  "r", separator = " - ", f_open = "", 
+      lhs_ptr=True, rhs_ptr= False, to=True,header = 'algebra',
+      f_close = "", generator = self.addition_like_function_or, overload = "-")
+    contents += endl
+
+
+
+
+
+
+
+
+
+
+
+
+    # Standard MULTIPLICATION
+    contents += self.write_scalar_function(function_name = "mul", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " * ", f_open = "", 
+      lhs_ptr=True, rhs_ptr= True, to=False,header = 'algebra',
+      f_close = "", generator = self.multiplication_like_function_oo, overload = "*" )
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "mul", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " * ", f_open = "", 
+      lhs_ptr=True, rhs_ptr= True, to=True,header = 'algebra',
+      f_close = "", generator = self.multiplication_like_function_oo, overload = "*" )
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "mul", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "r", rhs_type= "o", separator = " * ", f_open = "", 
+      lhs_ptr=False, rhs_ptr= True, to=False,header = 'algebra',
+      f_close = "", generator = self.multiplication_like_function_ro, overload = "*" )
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "mul", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "r", rhs_type= "o", separator = " * ", f_open = "", 
+      lhs_ptr=False, rhs_ptr= True, to=True,header = 'algebra',
+      f_close = "", generator = self.multiplication_like_function_ro, overload = "*" )
+    contents += endl
+
+      
+
+    # Truncated MULTIPLICATION
+    contents += self.write_scalar_function(function_name = "trunc_mul", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " * ", f_open = "", 
+      lhs_ptr=True, rhs_ptr= True, to=False,header = 'algebra',
+      f_close = "", generator = self.truncmul_like_function_oo, overload = "*" )
+    contents += endl
+
+    contents += self.write_scalar_function(function_name = "trunc_mul", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " * ", f_open = "", 
+      lhs_ptr=True, rhs_ptr= True, to=True,header = 'algebra',
+      f_close = "", generator = self.truncmul_like_function_oo, overload = "*" )
+    contents += endl
+
+
+
+
+
+    # General multiplication a * b + c
+    contents += self.write_scalar_trivar(function_name = "gem", is_elemental = True, level = level, 
+      tab = tab, f_name = "", a_type= "o", b_type= "o", c_type = "o", 
+      a_ptr = True, b_ptr = True, c_ptr = True, to=False, 
+      separator = " * ", f_open = "",header = 'algebra', 
+      f_close = "", generator = self.gem_like_function_oo, overload = "*", write_charact=True )
+    contents += endl
+
+    contents += self.write_scalar_trivar(function_name = "gem", is_elemental = True, level = level, 
+      tab = tab, f_name = "", a_type= "o", b_type= "o", c_type = "o", 
+      a_ptr = True, b_ptr = True, c_ptr = True, to=True, 
+      separator = " * ", f_open = "",header = 'algebra', 
+      f_close = "", generator = self.gem_like_function_oo, overload = "*", write_charact=True )
+    contents += endl
+
+    contents += self.write_scalar_trivar(function_name = "gem", is_elemental = True, level = level, 
+      tab = tab, f_name = "", a_type= "r", b_type= "o", c_type = "o", 
+      a_ptr = False, b_ptr = True, c_ptr = True, to=False, 
+      separator = " * ", f_open = "",header = 'algebra', 
+      f_close = "", generator = self.gem_like_function_ro, overload = "*", write_charact=True )
+    contents += endl
+
+    contents += self.write_scalar_trivar(function_name = "gem", is_elemental = True, level = level, 
+      tab = tab, f_name = "", a_type= "r", b_type= "o", c_type = "o", 
+      a_ptr = False, b_ptr = True, c_ptr = True, to=True, 
+      separator = " * ", f_open = "",header = 'algebra', 
+      f_close = "", generator = self.gem_like_function_ro, overload = "*", write_charact=True )
+    contents += endl
+  
+    
+
+    #Function EVALuation
+    contents += self.write_scalar_feval(function_name = "feval", is_elemental = True, level = level, tab = tab, 
+      lhs_type= "o", lhs_ptr = True, to = False )
+    contents += endl
+
+    contents += self.write_scalar_feval(function_name = "feval", is_elemental = True, level = level, tab = tab, 
+      lhs_type= "o", lhs_ptr = True, to = True )
+    contents += endl
+
+    return contents
   #--------------------------------------------------------------------------------------------------- 
 
 

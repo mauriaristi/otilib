@@ -2,15 +2,15 @@
 
 
 // Base implementation / memory management.
-#include "gauss/{fearr_func}_base.c"
+#include "gauss/base.c"
 
 // Algebra
-#include "gauss/{fearr_func}_algebra_matops.c"
-#include "gauss/{fearr_func}_algebra_elementwise.c"
+#include "gauss/algebra_matops.c"
+#include "gauss/algebra_elementwise.c"
 
 // Functions
-#include "gauss/{fearr_func}_functions.c"
+#include "gauss/functions.c"
 
 // Utilities
-#include "gauss/{fearr_func}_utils.c"
+#include "gauss/utils.c"
 

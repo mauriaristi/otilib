@@ -79,7 +79,7 @@ ADD_CUSTOM_COMMAND (
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/auxFunctions.py  ${CYTHON_BUILD_DIR}/
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/fmod_writer.py   ${CYTHON_BUILD_DIR}/
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/cmod_writer.py   ${CYTHON_BUILD_DIR}/
-	COMMAND cp -R ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/source        ${CYTHON_BUILD_DIR}/
+	COMMAND cp -R ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/source_conv   ${CYTHON_BUILD_DIR}/
 )
 
 # -------------------------------------------------------------------

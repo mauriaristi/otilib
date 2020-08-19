@@ -1,223 +1,322 @@
+// typedef struct{
+//     arrso_t*      p_data; ///< Data array
+//     uint64_t      nrows;  ///< Number of rows.
+//     uint64_t      ncols;  ///< Number of cols.
+//     uint64_t       size;  ///< size of the array
+//     uint64_t    nip;  ///< Number of integration points.
+// } fearrso_t;
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-ord_t {fearr_func}_get_order({fearr_type}* arr){{
+ord_t fearrso_get_order(fearrso_t* arr){
 
     ord_t ord = 0;
     uint64_t i;
 
-    for( i = 0; i < arr->nip; i++){{
+    for( i = 0; i < arr->nip; i++){
 
-        ord = MAX( ord, {arr_func}_get_order( &arr->p_data[i]) );
+        ord = MAX( ord, arrso_get_order( &arr->p_data[i]) );
 
-    }}
+    }
 
     return ord;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_get_order_im_to( ord_t order, {fearr_type}* arr, {fearr_type}* res){{
+void fearrso_get_order_im_to( ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
     
     uint64_t i;
 
     // check memory;
-    {fearr_func}_dimCheck_FF_elementwise(arr, res, res);
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
 
-    for (i = 0; i<arr->nip; i++ ){{
+    for (i = 0; i<arr->nip; i++ ){
         
-        {arr_func}_get_order_im_to( order, &arr->p_data[i], &res->p_data[i]);
+        arrso_get_order_im_to( order, &arr->p_data[i], &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_get_order_im( ord_t order, {fearr_type}* arr){{
+fearrso_t fearrso_get_order_im( ord_t order, fearrso_t* arr, dhelpl_t dhl){
     
-    {fearr_type} res;
+    fearrso_t res;
 
-    res = {fearr_func}_zeros( arr->nrows, arr->ncols, arr->nip);
+    res = fearrso_zeros_bases( arr->nrows, arr->ncols, arr->nip, dhl);
 
-    {fearr_func}_get_order_im_to( order, arr, &res);
+    fearrso_get_order_im_to( order, arr, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_copy_to({fearr_type}* src, {fearr_type}* dst){{
+void fearrso_copy_to(fearrso_t* src, fearrso_t* dst, dhelpl_t dhl){
 
     uint64_t i;
 
     // check memory;
-    {fearr_func}_dimCheck_FF_elementwise(src, dst, dst);
+    fearrso_dimCheck_FF_elementwise(src, dst, dst);
 
-    for( i = 0; i < src->nip; i++){{
+    for( i = 0; i < src->nip; i++){
 
-        {arr_func}_copy_to( &src->p_data[i], &dst->p_data[i]);
+        arrso_copy_to( &src->p_data[i], &dst->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_copy({fearr_type}* src){{
+fearrso_t fearrso_copy(fearrso_t* src, dhelpl_t dhl){
 
-    {fearr_type} res = {fearr_func}_createEmpty( src->nrows, src->ncols, src->nip);
+    fearrso_t res = fearrso_createEmpty_bases( src->nrows, src->ncols, src->nip, dhl);
     
-    {fearr_func}_copy_to( src, &res);
+    fearrso_copy_to( src, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_type}_truncate_im_to(imdir_t idx, ord_t order, {fearr_type}* arr, {fearr_type}* res){{
+void fearrso_truncate_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
 
     uint64_t i;
 
     // check memory;
-    {fearr_func}_dimCheck_FF_elementwise(arr, res, res);
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
 
-    for( i = 0; i < arr->nip; i++){{
+    for( i = 0; i < arr->nip; i++){
 
-        {arr_type}_truncate_im_to( idx, order, &arr->p_data[i], &res->p_data[i]);
+        arrso_truncate_im_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_type}_truncate_im(imdir_t idx, ord_t order, {fearr_type}* arr){{
+fearrso_t fearrso_truncate_im(imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
 
-    {fearr_type} res = {fearr_func}_createEmpty( arr->nrows, arr->ncols, arr->nip);
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, dhl);
     
-    {fearr_type}_truncate_im_to( idx, order, arr, &res);
+    fearrso_truncate_im_to( idx, order, arr, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_extract_deriv_to(imdir_t idx, ord_t order, {fearr_type}* arr, {fearr_type}* res){{
+void fearrso_extract_deriv_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
 
     uint64_t i;
 
     // check memory;
-    {fearr_func}_dimCheck_FF_elementwise(arr, res, res);
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
 
-    for( i = 0; i < arr->nip; i++){{
+    for( i = 0; i < arr->nip; i++){
 
-        {arr_func}_extract_deriv_to( idx, order, &arr->p_data[i], &res->p_data[i]);
+        arrso_extract_deriv_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_extract_deriv( imdir_t idx, ord_t order, {fearr_type}* arr){{
+fearrso_t fearrso_extract_deriv( imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
 
-    {fearr_type} res = {fearr_func}_createEmpty( arr->nrows, arr->ncols, arr->nip);
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, dhl);
     
-    {fearr_func}_extract_deriv_to( idx, order, arr, &res);
+    fearrso_extract_deriv_to( idx, order, arr, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_get_deriv_to(imdir_t idx, ord_t order, {fearr_type}* arr, {fearr_type}* res){{
+void fearrso_get_deriv_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
 
     uint64_t i;
 
     // check memory;
-    {fearr_func}_dimCheck_FF_elementwise(arr, res, res);
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
 
-    for( i = 0; i < arr->nip; i++){{
+    for( i = 0; i < arr->nip; i++){
 
-        {arr_func}_get_deriv_to( idx, order, &arr->p_data[i], &res->p_data[i]);
+        arrso_get_deriv_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_get_deriv(imdir_t idx, ord_t order, {fearr_type}* arr){{
+fearrso_t fearrso_get_deriv(imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
 
-    {fearr_type} res = {fearr_func}_createEmpty( arr->nrows, arr->ncols, arr->nip);
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, dhl);
     
-    {fearr_func}_get_deriv_to( idx, order, arr, &res);
+    fearrso_get_deriv_to( idx, order, arr, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_get_im_to(imdir_t idx, ord_t order, {fearr_type}* arr, {fearr_type}* res){{
+void fearrso_get_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
 
     uint64_t i;
 
     // check memory;
-    {fearr_func}_dimCheck_FF_elementwise(arr, res, res);
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
 
-    for( i = 0; i < arr->nip; i++){{
+    for( i = 0; i < arr->nip; i++){
 
-        {arr_func}_get_im_to( idx, order, &arr->p_data[i], &res->p_data[i]);
+        arrso_get_im_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_get_im(imdir_t idx, ord_t order, {fearr_type}* arr){{
+fearrso_t fearrso_get_im(imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
 
-    {fearr_type} res = {fearr_func}_createEmpty( arr->nrows, arr->ncols, arr->nip);
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, dhl);
     
-    {fearr_func}_get_im_to( idx, order, arr, &res);
+    fearrso_get_im_to( idx, order, arr, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_extract_im_to(imdir_t idx, ord_t order, {fearr_type}* arr, {fearr_type}* res){{
+void fearrso_extract_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
 
     uint64_t i;
 
     // check memory;
-    {fearr_func}_dimCheck_FF_elementwise(arr, res, res);
+    fearrso_dimCheck_FF_elementwise(arr, res, res);
 
-    for( i = 0; i < arr->nip; i++){{
+    for( i = 0; i < arr->nip; i++){
 
-        {arr_func}_extract_im_to( idx, order, &arr->p_data[i], &res->p_data[i]);
+        arrso_extract_im_to( idx, order, &arr->p_data[i], &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_extract_im(imdir_t idx, ord_t order, {fearr_type}* arr){{
+fearrso_t fearrso_extract_im(imdir_t idx, ord_t order, fearrso_t* arr, dhelpl_t dhl){
 
-    {fearr_type} res = {fearr_func}_createEmpty( arr->nrows, arr->ncols, arr->nip);
+    fearrso_t res = fearrso_createEmpty_bases( arr->nrows, arr->ncols, arr->nip, dhl);
     
-    {fearr_func}_extract_im_to( idx, order, arr, &res);
+    fearrso_extract_im_to( idx, order, arr, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -228,117 +327,126 @@ void {fearr_func}_extract_im_to(imdir_t idx, ord_t order, {fearr_type}* arr, {fe
 
 
 // ****************************************************************************************************
-{arr_type} {fearr_func}_get_item_k({fearr_type}* arr, uint64_t k){{
+arrso_t fearrso_get_item_k(fearrso_t* arr, uint64_t k, dhelpl_t dhl){
     
-    {arr_type} res;
+    arrso_t res;
     // TODO: Add bound checks.
     
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
 
-    {fearr_func}_get_item_k_to(arr, k, &res);
+    fearrso_get_item_k_to(arr, k, &res, dhl);
 
     return res;    
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-{fenum_type} {fearr_func}_get_item_ij({fearr_type}* arr, uint64_t i, uint64_t j){{
+fesoti_t fearrso_get_item_ij(fearrso_t* arr, uint64_t i, uint64_t j, dhelpl_t dhl){
         
-    {fenum_type} res = {fenum_func}_init();
+    fesoti_t res = fesoti_init();
     // TODO: Add bound checks.
     
-    res = {fenum_func}_zeros(arr->nip);
+    res = fesoti_zeros_bases(arr->nip, dhl);
 
-    {fearr_func}_get_item_ij_to(arr, i, j, &res);
-
-    return res;
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {fearr_func}_get_item_ijk({fearr_type}* arr, uint64_t i, uint64_t j, uint64_t k){{
-    
-    {num_type} res;
-    
-    res = {arr_func}_get_item_ij(&arr->p_data[k], i, j);
+    fearrso_get_item_ij_to(arr, i, j, &res, dhl);
 
     return res;
 
-}}
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, dhelpl_t dhl){
+    
+    sotinum_t res;
+    
+    res = arrso_get_item_ij(&arr->p_data[k], i, j, dhl);
+
+    return res;
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_get_slice({fearr_type}* arr, 
+fearrso_t fearrso_get_slice(fearrso_t* arr, 
                           int64_t starti, int64_t stopi, int64_t stepi,
-                          int64_t startj, int64_t stopj, int64_t stepj){{
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                           dhelpl_t dhl){
     
     int64_t ncols, nrows;
-    {fearr_type} res = {fearr_func}_init();
+    fearrso_t res = fearrso_init();
 
     // TODO: Add bound checks.
     nrows = slice_size(starti, stopi, stepi);
     ncols = slice_size(startj, stopj, stepj);
 
-    res = {fearr_func}_zeros( nrows, ncols, arr->nip);
+    res = fearrso_zeros_bases( nrows, ncols, arr->nip, dhl);
 
-    {fearr_func}_get_slice_to( arr, starti, stopi, stepi, startj, stopj, stepj, &res);
+    fearrso_get_slice_to( arr, starti, stopi, stepi, startj, stopj, stepj, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_get_item_k_to({fearr_type}* arr, uint64_t k, {arr_type}* res){{
+void fearrso_get_item_k_to(fearrso_t* arr, uint64_t k, arrso_t* res, dhelpl_t dhl){
     
     // TODO: Add bound checks.
 
-    {arr_func}_copy_to( &arr->p_data[k], res);
+    arrso_copy_to( &arr->p_data[k], res, dhl);
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_get_item_ij_to({fearr_type}* arr, uint64_t i, uint64_t j, {fenum_type}* res){{
+void fearrso_get_item_ij_to(fearrso_t* arr, uint64_t i, uint64_t j, fesoti_t* res, dhelpl_t dhl){
         
     uint64_t k;
     
-    {fearr_func}_dimCheck_fF_elementwise(res,arr,arr);
+    fearrso_dimCheck_fF_elementwise(res,arr,arr);
 
-    for (k = 0; k < arr->nip; k++){{
+    for (k = 0; k < arr->nip; k++){
         
-        {arr_func}_get_item_ij_to( &arr->p_data[k], i, j, &res->p_data[k]);
+        arrso_get_item_ij_to( &arr->p_data[k], i, j, &res->p_data[k], dhl);
     
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_get_item_ijk_to({fearr_type}* arr, uint64_t i, uint64_t j, uint64_t k, {num_type}* res){{
+void fearrso_get_item_ijk_to(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, sotinum_t* res, dhelpl_t dhl){
     
     // TODO: Add bound checks.
-    if ( k < arr->nip && i < arr->nrows && j < arr->ncols){{
+    if ( k < arr->nip && i < arr->nrows && j < arr->ncols){
 
-        {arr_func}_get_item_ij_to(&arr->p_data[k], i, j, res);
+        arrso_get_item_ij_to(&arr->p_data[k], i, j, res, dhl);
 
-    }} else {{
+    } else {
 
         printf("Error: Bad index \n");
         exit(OTI_BadIndx);
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
 // ****************************************************************************************************
-void {fearr_func}_get_slice_to({fearr_type}* arr, 
+void fearrso_get_slice_to(fearrso_t* arr, 
                           int64_t starti, int64_t stopi, int64_t stepi,
                           int64_t startj, int64_t stopj, int64_t stepj, 
-                          {fearr_type}* res){{
+                          fearrso_t* res, dhelpl_t dhl){
         
     uint64_t k;
     int64_t ncols, nrows;
@@ -347,27 +455,48 @@ void {fearr_func}_get_slice_to({fearr_type}* arr,
     ncols = slice_size(startj, stopj, stepj);
 
     // Check dimensions:
-    if ( (res->ncols != ncols) || (res->nrows != nrows) || (res->nip != arr->nip)){{
+    if ( (res->ncols != ncols) || (res->nrows != nrows) || (res->nip != arr->nip)){
 
         printf("ERROR: Wrong dimensions resulting slicing array.\n");
         exit(OTI_BadIndx);
 
-    }}
+    }
 
-    for (k = 0; k < arr->nip; k++){{
+    for (k = 0; k < arr->nip; k++){
         
-        {arr_func}_get_slice_to( &arr->p_data[k], starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k]);
+        arrso_get_slice_to( &arr->p_data[k], starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
     
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+// void arrso_set_slice_r( coeff_t val, 
+//                         int64_t starti, int64_t stopi, int64_t stepi,
+//                         int64_t startj, int64_t stopj, int64_t stepj,
+//                          arrso_t* res, dhelpl_t dhl);
+// void arrso_set_slice_O( arrso_t* val, 
+//                         int64_t starti, int64_t stopi, int64_t stepi,
+//                         int64_t startj, int64_t stopj, int64_t stepj,
+//                          arrso_t* res, dhelpl_t dhl);
+// void arrso_set_slice_o( sotinum_t* val, 
+//                         int64_t starti, int64_t stopi, int64_t stepi,
+//                         int64_t startj, int64_t stopj, int64_t stepj,
+//                          arrso_t* res, dhelpl_t dhl);
+
 // ****************************************************************************************************
-void {fearr_func}_set_slice_r( coeff_t val, 
+void fearrso_set_slice_r( coeff_t val, 
                           int64_t starti, int64_t stopi, int64_t stepi,
                           int64_t startj, int64_t stopj, int64_t stepj, 
-                          {fearr_type}* res){{
+                          fearrso_t* res, dhelpl_t dhl){
         
     uint64_t k;
     int64_t ncols, nrows;
@@ -376,27 +505,27 @@ void {fearr_func}_set_slice_r( coeff_t val,
     ncols = slice_size(startj, stopj, stepj);
 
     // Check dimensions:
-    if ( (res->ncols < ncols) || (res->nrows < nrows) ){{
+    if ( (res->ncols < ncols) || (res->nrows < nrows) ){
 
         printf("ERROR: Wrong dimensions resulting slicing array.\n");
         exit(OTI_BadIndx);
 
-    }}
+    }
 
-    for (k = 0; k < res->nip; k++){{
+    for (k = 0; k < res->nip; k++){
         
-        {arr_func}_set_slice_r( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k]);
+        arrso_set_slice_r( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
     
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_set_slice_o( {num_type}* val, 
+void fearrso_set_slice_o( sotinum_t* val, 
                           int64_t starti, int64_t stopi, int64_t stepi,
                           int64_t startj, int64_t stopj, int64_t stepj, 
-                          {fearr_type}* res){{
+                          fearrso_t* res, dhelpl_t dhl){
         
     uint64_t k;
     int64_t ncols, nrows;
@@ -404,70 +533,20 @@ void {fearr_func}_set_slice_o( {num_type}* val,
     nrows = slice_size(starti, stopi, stepi);
     ncols = slice_size(startj, stopj, stepj);
 
-    for (k = 0; k < res->nip; k++){{
+    for (k = 0; k < res->nip; k++){
         
-        {arr_func}_set_slice_o( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k]);
+        arrso_set_slice_o( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
     
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_set_slice_f( {fenum_type}* val, 
+void fearrso_set_slice_f( fesoti_t* val, 
                           int64_t starti, int64_t stopi, int64_t stepi,
                           int64_t startj, int64_t stopj, int64_t stepj, 
-                          {fearr_type}* res){{
-        
-    uint64_t k;
-    int64_t ncols, nrows;
-
-    nrows = slice_size(starti, stopi, stepi);
-    ncols = slice_size(startj, stopj, stepj);
-
-    // Check dimensions:
-    if ( (res->nip != val->nip) ){{
-
-        printf("ERROR: Wrong number of integration points.\n");
-        exit(OTI_BadIndx);
-
-    }}
-
-    for (k = 0; k < res->nip; k++){{
-        
-        {arr_func}_set_slice_o( &val->p_data[k], starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k]);
-    
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {fearr_func}_set_slice_O( {arr_type}* val, 
-                          int64_t starti, int64_t stopi, int64_t stepi,
-                          int64_t startj, int64_t stopj, int64_t stepj, 
-                          {fearr_type}* res){{
-        
-    uint64_t k;
-    int64_t ncols, nrows;
-
-    nrows = slice_size(starti, stopi, stepi);
-    ncols = slice_size(startj, stopj, stepj);
-
-    for (k = 0; k < res->nip; k++){{
-        
-        {arr_func}_set_slice_O( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k]);
-    
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {fearr_func}_set_slice_F( {fearr_type}* val, 
-                          int64_t starti, int64_t stopi, int64_t stepi,
-                          int64_t startj, int64_t stopj, int64_t stepj, 
-                          {fearr_type}* res){{
+                          fearrso_t* res, dhelpl_t dhl){
         
     uint64_t k;
     int64_t ncols, nrows;
@@ -476,236 +555,378 @@ void {fearr_func}_set_slice_F( {fearr_type}* val,
     ncols = slice_size(startj, stopj, stepj);
 
     // Check dimensions:
-    if ( (res->nip != val->nip) ){{
+    if ( (res->nip != val->nip) ){
 
         printf("ERROR: Wrong number of integration points.\n");
         exit(OTI_BadIndx);
 
-    }}
+    }
 
-    for (k = 0; k < res->nip; k++){{
+    for (k = 0; k < res->nip; k++){
         
-        {arr_func}_set_slice_O( &val->p_data[k], starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k]);
+        arrso_set_slice_o( &val->p_data[k], starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
     
-    }}
+    }
 
-}}
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void fearrso_set_slice_O( arrso_t* val, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl){
+        
+    uint64_t k;
+    int64_t ncols, nrows;
+
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    for (k = 0; k < res->nip; k++){
+        
+        arrso_set_slice_O( val, starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
+    
+    }
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_set_item_k( {arr_type}* arr , uint64_t k, {fearr_type}* res){{
+void fearrso_set_slice_F( fearrso_t* val, 
+                          int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, 
+                          fearrso_t* res, dhelpl_t dhl){
+        
+    uint64_t k;
+    int64_t ncols, nrows;
+
+    nrows = slice_size(starti, stopi, stepi);
+    ncols = slice_size(startj, stopj, stepj);
+
+    // Check dimensions:
+    if ( (res->nip != val->nip) ){
+
+        printf("ERROR: Wrong number of integration points.\n");
+        exit(OTI_BadIndx);
+
+    }
+
+    for (k = 0; k < res->nip; k++){
+        
+        arrso_set_slice_O( &val->p_data[k], starti, stopi, stepi, startj, stopj, stepj, &res->p_data[k], dhl);
+    
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_set_item_k( arrso_t* arr , uint64_t k, fearrso_t* res, dhelpl_t dhl){
     
     // No new allocation needed.
-    {arr_func}_copy_to( arr, &res->p_data[k]);
+    arrso_copy_to( arr, &res->p_data[k], dhl);
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+// // ****************************************************************************************************
+// void fearrso_set_item_ij(fesoti_t* num, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
+    
+//     uint64_t k;
+
+//     //Check
+//     fearrso_dimCheck_fF_elementwise(num,res,res);
+
+//     for (k = 0; k < num->nip; k++){
+        
+//         arrso_set_item_ij_o( &num->p_data[k], i, j, &res->p_data[k], dhl );
+
+//     }
+
+// }
+// // ----------------------------------------------------------------------------------------------------
+
+
 // ****************************************************************************************************
-void {fearr_func}_set_item_ij_f({fenum_type}* num, uint64_t i, uint64_t j, {fearr_type}* res){{
+void fearrso_set_item_ij_f(fesoti_t* num, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
     
     uint64_t k;
 
     //Check
-    {fearr_func}_dimCheck_fF_elementwise(num,res,res);
+    fearrso_dimCheck_fF_elementwise(num,res,res);
 
-    for (k = 0; k < num->nip; k++){{
+    for (k = 0; k < num->nip; k++){
         
-        {arr_func}_set_item_ij_o( &num->p_data[k], i, j, &res->p_data[k] );
+        arrso_set_item_ij_o( &num->p_data[k], i, j, &res->p_data[k], dhl );
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
 // ****************************************************************************************************
-void {fearr_func}_set_item_ij_o( {num_type}* num, uint64_t i, uint64_t j, {fearr_type}* res){{
+void fearrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
     
     uint64_t k;
 
     //Check
-    for (k = 0; k < res->nip; k++){{
+    for (k = 0; k < res->nip; k++){
         
-        {arr_func}_set_item_ij_o( num, i, j, &res->p_data[k] );
+        arrso_set_item_ij_o( num, i, j, &res->p_data[k], dhl );
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, {fearr_type}* res){{
+void fearrso_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, fearrso_t* res, dhelpl_t dhl){
     
     uint64_t k;
 
     //Check
-    for (k = 0; k < res->nip; k++){{
+    for (k = 0; k < res->nip; k++){
         
-        {arr_func}_set_item_ij_r( num, i, j, &res->p_data[k] );
+        arrso_set_item_ij_r( num, i, j, &res->p_data[k], dhl );
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
 // ****************************************************************************************************
-void {fearr_func}_set_item_ijk({num_type}* num, uint64_t i, uint64_t j, uint64_t k, 
-        {fearr_type}* res){{
+void fearrso_set_item_ijk(sotinum_t* num, uint64_t i, uint64_t j, uint64_t k, 
+        fearrso_t* res, dhelpl_t dhl){
 
-    {arr_func}_set_item_ij_o( num, i, j, &res->p_data[k]);
+    arrso_set_item_ij_o( num, i, j, &res->p_data[k], dhl);
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_set_f_to( {fenum_type}* num, {fearr_type}* res ){{ 
+void fearrso_set_f( fesoti_t* num, fearrso_t* res, dhelpl_t dhl ){ 
     
     uint64_t i;
     
-    {fearr_func}_dimCheck_fF_elementwise(num,res,res);
+    fearrso_dimCheck_fF_elementwise(num,res,res);
 
-    for( i = 0; i < res->nip; i++){{
+    for( i = 0; i < res->nip; i++){
 
-        {arr_func}_set_o_to( &num->p_data[i], &res->p_data[i]);
+        arrso_set_all_o( &num->p_data[i], &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_set_o_to( {num_type}* num, {fearr_type}* res ){{ 
+void fearrso_set_o( sotinum_t* num, fearrso_t* res, dhelpl_t dhl ){ 
     
     uint64_t i;
     
-    for( i = 0; i < res->nip; i++){{
+    for( i = 0; i < res->nip; i++){
 
-        {arr_func}_set_o_to( num, &res->p_data[i]);
+        arrso_set_all_o( num, &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_set_r_to( coeff_t num, {fearr_type}* res ){{ 
+void fearrso_set_r( coeff_t num, fearrso_t* res, dhelpl_t dhl ){ 
     
     uint64_t i;
     
-    for( i = 0; i < res->nip; i++){{
+    for( i = 0; i < res->nip; i++){
 
-        {arr_func}set_r_to( num, &res->p_data[i]);
+        arrso_set_all_r( num, &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_set_f_to( {fenum_type}* num, {fearr_type}* res ){{ 
+void fearrso_set_all_f( fesoti_t* num, fearrso_t* res, dhelpl_t dhl ){ 
     
     uint64_t i;
     
-    {fearr_func}_dimCheck_fF_elementwise(num,res,res);
+    fearrso_dimCheck_fF_elementwise(num,res,res);
 
-    for( i = 0; i < res->nip; i++){{
+    for( i = 0; i < res->nip; i++){
 
-        {arr_func}_set_o_to( &num->p_data[i], &res->p_data[i]);
+        arrso_set_all_o( &num->p_data[i], &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_set_o_to( {num_type}* num, {fearr_type}* res ){{ 
+void fearrso_set_all_o( sotinum_t* num, fearrso_t* res, dhelpl_t dhl ){ 
     
     uint64_t i;
     
-    for( i = 0; i < res->nip; i++){{
+    for( i = 0; i < res->nip; i++){
 
-        {arr_func}_set_o_to( num, &res->p_data[i]);
+        arrso_set_all_o( num, &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}set_r_to( coeff_t num, {fearr_type}* res ){{ 
+void fearrso_set_all_r( coeff_t num, fearrso_t* res, dhelpl_t dhl ){ 
     
     uint64_t i;
     
-    for( i = 0; i < res->nip; i++){{
+    for( i = 0; i < res->nip; i++){
 
-        {arr_func}set_r_to( num, &res->p_data[i]);
+        arrso_set_all_r( num, &res->p_data[i], dhl);
 
-    }}
+    }
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_eye( uint64_t size, uint64_t nip){{ 
+fearrso_t fearrso_eye_bases( uint64_t size,
+                               uint64_t nip, bases_t  nbases, 
+                               ord_t    order,   dhelpl_t dhl     ){ 
     
     uint64_t i,k;
 
-    {fearr_type} res = {fearr_func}_createEmpty( size, size, nip);
+    fearrso_t res = fearrso_createEmpty_bases( size, size, nip, nbases, order, dhl);
     
-    for( k = 0; k < res.nip; k++){{
-        {arr_func}set_r_to( 0.0, &res.p_data[k]);
-    }}
+    for( k = 0; k < res.nip; k++){
+
+        arrso_set_all_r( 0.0, &res.p_data[k], dhl);
+
+    }
     
-    for( i = 0; i < res.nrows; i++){{    
-        for( k = 0; k < res.nip; k++){{
-            {arr_func}_set_item_ij_r( 1.0, i, i, &res.p_data[k]);
-        }}
-    }}
+    for( i = 0; i < res.nrows; i++){
+    
+        for( k = 0; k < res.nip; k++){
+
+            arrso_set_item_ij_r( 1.0, i, i, &res.p_data[k], dhl);
+
+        }
+
+    }
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_zeros( uint64_t nrows,   uint64_t ncols, uint64_t nip ){{ 
+fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols, 
+                               uint64_t nip, bases_t  nbases, 
+                               ord_t    order,   dhelpl_t dhl     ){ 
     
     uint64_t i;
 
-    {fearr_type} res = {fearr_func}_createEmpty( nrows, ncols, nip);
+    fearrso_t res = fearrso_createEmpty_bases( nrows, ncols, nip, nbases, order, dhl);
     
-    for( i = 0; i < res.nip; i++){{
-        {arr_func}set_r_to( 0.0, &res.p_data[i]);
-    }}
+    for( i = 0; i < res.nip; i++){
+
+        arrso_set_all_r( 0.0, &res.p_data[i], dhl);
+
+    }
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_ones( uint64_t nrows,   uint64_t ncols, uint64_t nip  ){{ 
+fearrso_t fearrso_ones_bases( uint64_t nrows,   uint64_t ncols, uint64_t nip, bases_t  nbases, 
+                               ord_t    order,   dhelpl_t dhl     ){ 
     
     uint64_t i;
 
-    {fearr_type} res = {fearr_func}_createEmpty( nrows, ncols, nip);
+    fearrso_t res = fearrso_createEmpty_bases( nrows, ncols, nip, nbases, order, dhl);
     
-    for( i = 0; i < res.nip; i++){{
-        {arr_func}_set_r_to( 1.0, &res.p_data[i]);
-    }}
+    for( i = 0; i < res.nip; i++){
+
+        arrso_set_all_r( 1.0, &res.p_data[i], dhl);
+
+    }
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_createEmpty( uint64_t nrows, uint64_t ncols, uint64_t nip){{  
+fearrso_t fearrso_createEmpty_bases( uint64_t nrows,   uint64_t ncols, 
+                                     uint64_t nip, bases_t  nbases, 
+                                     ord_t    order,   dhelpl_t dhl){  
     
     uint64_t i;
 
-    {fearr_type} res = {fearr_func}_init();
+    fearrso_t res = fearrso_init();
 
     res.nrows    =  nrows;
     res.ncols    =  ncols;
@@ -714,55 +935,91 @@ void {fearr_func}set_r_to( coeff_t num, {fearr_type}* res ){{
     res.nip  =  nip;
 
     // Allocate memory.
-    res.p_data   = ({arr_type}*) malloc( res.nip * sizeof({arr_type}) );
+    res.p_data   = (arrso_t*) malloc( res.nip * sizeof(arrso_t) );
 
-    if (res.p_data == NULL){{
+    // sotiarray_createEmpty(sotiarray_t* p_array, uint64_t nrows, uint64_t ncols, uint8_t order);
+    if (res.p_data == NULL){
         printf("--- MemoryError ---\n");
         exit(1);
-    }}
+    }
 
-    for( i = 0; i < res.nip; i++){{
-        res.p_data[i] = {arr_func}_createEmpty( nrows, ncols);
-    }}
+    for( i = 0; i < res.nip; i++){
+
+        res.p_data[i] = arrso_createEmpty_bases( nrows, ncols, nbases, order, dhl);
+
+    }
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ****************************************************************************************************
-void {fearr_func}_free({fearr_type}* arr){{
+void fearrso_free(fearrso_t* arr){
     
     uint64_t i;
 
     // Free all memory within each coefficient in p_array
 
-    if (arr->p_data != NULL){{
+    if (arr->p_data != NULL){
+
         // Free all arrays.
-        for (i = 0; i<arr->nip; i++){{        
-            {arr_func}_free(&arr->p_data[i]); 
-        }}
+        for (i = 0; i<arr->nip; i++){
+        
+            arrso_free(&arr->p_data[i]); 
+
+        }
+
         // Free pointer 
         free(arr->p_data);
-    }}
 
-    *arr = {fearr_func}_init();
+    }
+
+    *arr = fearrso_init();
     
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_init(void){{
+fearrso_t fearrso_init(void){
     
-    {fearr_type} res;
+    fearrso_t res;
     
     res.p_data  = NULL;  
     res.nrows   = 0;   
     res.ncols   = 0;   
     res.size    = 0;    
-    res.nip     = 0; 
+    res.nip = 0; 
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
+

@@ -1,12 +1,15 @@
 
+
+
 // Base implementation / memory management.
-#include "gauss/{fenum_func}_base.c"
+#include "gauss/base.c"
 
 // Algebra
-#include "gauss/{fenum_func}_algebra.c"
+#include "gauss/algebra.c"
 
 // Functions
-#include "gauss/{fenum_func}_functions.c"
+#include "gauss/functions.c"
 
 // Utilities
-#include "gauss/{fenum_func}_utils.c"
+#include "gauss/utils.c"
+

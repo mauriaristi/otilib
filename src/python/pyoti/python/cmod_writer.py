@@ -38,7 +38,7 @@ class writer:
               to be manipulated in languages like Fortran and Cython. 
     """
 
-    global imdir_base_name
+    global imdir_base_name, h
     
     # Only pre-generated data for up to multidual of 10 imbases.
     if mdual and (nbases <= 10) : 
@@ -152,11 +152,47 @@ class writer:
             self.use_imdir[ordi].append(True)
             self.idx_imdir[ordi].append(j)
           # end if 
-
-
-
       # end for 
+    # end for 
 
+    # Precimpute multiplication
+    self.mult_res = []
+    for ordi in range(1,self.order+1):
+
+      dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
+
+      self.mult_res.append([])
+      mults = self.mult_res[-1]
+      for j in range(len(dirs)):
+        mults.append([]) 
+      # end for
+
+      for ordj in range(1, ordi // 2 + 1):
+        
+        ordk = ordi - ordj
+
+        dirsj = self.name_imdir[ordj]
+        dirsk = self.name_imdir[ordk]
+
+        idxj = self.idx_imdir[ordj]
+        idxk = self.idx_imdir[ordk]
+
+        for j in range(len(dirsj)):
+          for k in range(len(dirsk)):
+
+            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+
+            if i in idxi:
+              ii = idxi.index(i)
+              mults[ii].append([ dirsj[j], dirsk[k] ])
+              if  ordj != ordk:
+                mults[ii].append([ dirsk[k],dirsj[j] ])
+              # end if 
+            #end if 
+          # end for
+        # end for 
+      # end for 
     # end for 
 
     self.function_list = []
@@ -229,36 +265,36 @@ class writer:
 
     str_out += level + "} " + self.type_name + self.endl + endl
 
-    # -------------------- Array
-    str_out += level + self.comment + "Array" + endl
+    # # -------------------- Array
+    # str_out += level + self.comment + "Array" + endl
     
-    str_out += level + "typedef struct "+"{"+endl
-    str_out += level + self.tab + self.comment + "Data" + endl
-    str_out += level + self.tab + self.type_name + "* p_data" + self.endl
-    str_out += level + self.tab + "uint64_t nrows" + self.endl
-    str_out += level + self.tab + "uint64_t ncols" + self.endl
-    str_out += level + self.tab + "uint64_t size " + self.endl
-    str_out += level + "} " + self.type_name_arr + self.endl + endl
+    # str_out += level + "typedef struct "+"{"+endl
+    # str_out += level + self.tab + self.comment + "Data" + endl
+    # str_out += level + self.tab + self.type_name + "* p_data" + self.endl
+    # str_out += level + self.tab + "uint64_t nrows" + self.endl
+    # str_out += level + self.tab + "uint64_t ncols" + self.endl
+    # str_out += level + self.tab + "uint64_t size " + self.endl
+    # str_out += level + "} " + self.type_name_arr + self.endl + endl
 
-    # -------------------- Gauss Structures
-    str_out += level + self.comment + "Gauss Scalar" + endl
-    str_out += level + "typedef struct "+"{"+endl
-    str_out += level + self.tab + self.comment + "Data" + endl
-    str_out += level + self.tab + self.type_name + "* p_data" + self.endl
-    str_out += level + self.tab + "uint64_t nip" + self.endl
-    str_out += level + "} " + self.type_name_fe + self.endl + endl
+    # # -------------------- Gauss Structures
+    # str_out += level + self.comment + "Gauss Scalar" + endl
+    # str_out += level + "typedef struct "+"{"+endl
+    # str_out += level + self.tab + self.comment + "Data" + endl
+    # str_out += level + self.tab + self.type_name + "* p_data" + self.endl
+    # str_out += level + self.tab + "uint64_t nip" + self.endl
+    # str_out += level + "} " + self.type_name_fe + self.endl + endl
     
 
-    # -------------------- Gauss Array
-    str_out += level + self.comment + "Gauss Array" + endl
-    str_out += level + "typedef struct "+"{"+endl
-    str_out += level + self.tab + self.comment + "Data" + endl
-    str_out += level + self.tab + self.type_name_arr + "* p_data" + self.endl
-    str_out += level + self.tab + "uint64_t nrows" + self.endl
-    str_out += level + self.tab + "uint64_t ncols" + self.endl
-    str_out += level + self.tab + "uint64_t size " + self.endl
-    str_out += level + self.tab + "uint64_t nip  " + self.endl
-    str_out += level + "} " +  self.type_name_fearr + self.endl + endl
+    # # -------------------- Gauss Array
+    # str_out += level + self.comment + "Gauss Array" + endl
+    # str_out += level + "typedef struct "+"{"+endl
+    # str_out += level + self.tab + self.comment + "Data" + endl
+    # str_out += level + self.tab + self.type_name_arr + "* p_data" + self.endl
+    # str_out += level + self.tab + "uint64_t nrows" + self.endl
+    # str_out += level + self.tab + "uint64_t ncols" + self.endl
+    # str_out += level + self.tab + "uint64_t size " + self.endl
+    # str_out += level + self.tab + "uint64_t nip  " + self.endl
+    # str_out += level + "} " +  self.type_name_fearr + self.endl + endl
 
     return str_out
 
@@ -942,7 +978,7 @@ class writer:
     str_out += level +"deltax.r = " + self.zero + self.endl
     str_out += level +"deltax_power.r = " + self.zero + self.endl
 
-    str_out += level + self.func_name + "_set_r_to("+self.zero+", "
+    str_out += level + self.func_name + "_set_r("+self.zero+", "
     
     if not to:
       str_out+="&"
@@ -1185,7 +1221,7 @@ class writer:
 
   #***************************************************************************************************
   def assigno_like_function(self, level = "", f_name = "FUNCTION", lhs_name= "LHS",lhs_ptr=True,
-    res_name = "RES", f_open = "(", f_close = ")", to=False):
+    res_name = "RES", f_open = "(", f_close = ")", to=False, order_specific = False ):
     """
     PORPUSE:  Addition like function between two OTIs.
     """
@@ -1194,8 +1230,10 @@ class writer:
 
     if to:
       res_getter = self.get_ptr
+      res_prev = '*'
     else:
       res_getter = self.get
+      res_prev = ''
     # end if 
 
     if lhs_ptr:
@@ -1204,14 +1242,20 @@ class writer:
       lhs_getter = self.get
     # end if 
 
+    if order_specific:
+      str_out += level + res_prev + res + " = "+self.func_name+"_init()"+self.endl
+      str_out += level + "switch( order ){" + endl
+      str_out += level + tab + "case 0:" + endl
+
+
     str_out += level + self.comment + "Assign like function \'"
     str_out += f_name + f_open + lhs_name + f_close
     str_out += "\'\n"
 
 
     # Write real part.
-    str_out += level + self.comment + "Real" + self.endl
-    str_out += level + res_name + res_getter + self.real_str + " = "
+    str_out += level + 2*tab + self.comment + "Real" + self.endl
+    str_out += level + 2*tab + res_name + res_getter + self.real_str + " = "
     str_out += f_name + f_open
     str_out +=         lhs_name + lhs_getter + self.real_str + f_close + self.endl
 
@@ -1789,7 +1833,9 @@ class writer:
 
     if to:
       func_header += 'void '
-      func_name += '_to'
+      if function_name != 'set':
+        func_name += '_to'
+      # end if 
     else:
       func_header += self.type_name + " "
     # end if 
@@ -2043,7 +2089,7 @@ class writer:
 
 
   #***************************************************************************************************
-  def write_file(self, modulename = None, tab = '  ', base_dir=''):
+  def write_files(self, modulename = None, tab = '  ', base_dir=''):
     """
     PORPUSE:  Write file of module containing OTI operations.
     """
@@ -2055,6 +2101,26 @@ class writer:
     else:
       mname = self.func_name.lower()
     # end if 
+
+
+    src_path = getpath()+"source_conv/"
+    
+    print(src_path)
+
+    files=[]
+    
+    supp_ext = ['h','pxd','pxi','c','pyx']
+
+    # r=>root, d=>directories, f=>files
+    
+    for r, d, f in os.walk(src_path):
+      for item in f:
+        ext = item.split('.')[-1]
+        if ext in supp_ext:
+          files.append(os.path.join(r.replace(src_path,""), item))
+        #
+      #
+    #
 
     
 
@@ -2084,7 +2150,7 @@ class writer:
 
     # Define type
     header_file += self.set_type_c( level = level*tab ) + endl
-    
+    num_struct = self.set_type_c( level = level*tab ) + endl
     # Start writing functions
     
 
@@ -2092,9 +2158,37 @@ class writer:
 
     contents += self.gen_base_file( level = level, tab = tab)
     contents += self.gen_algebra_file( level = level, tab = tab)
-
     
+    base_str = self.gen_base_file( level = level, tab = tab)
+    base_include = self.write_header( header = 'base')
+    
+    algebra_str = self.gen_algebra_file( level = level, tab = tab)
 
+    algebra_include = self.write_header( header = 'algebra')
+
+    for file in files:
+      # Write the header file
+      src_file = src_path+file
+      print("Processing: ",file)
+      f = open(src_file, "r" )
+      f_str=f.read()
+      f.close()
+
+      exp_file = base_dir+'/'+file.replace("number",mname)
+      os.makedirs(os.path.dirname(exp_file), exist_ok=True)
+      
+      f_exp = f_str.format(  num_type   = self.type_name,       num_func   = self.func_name,       num_pytype   = self.type_name,       num_pyfunc   = self.func_name,       
+                   fenum_type = self.type_name_fe,    fenum_func = self.func_name_fe,    fenum_pytype = self.type_name_fe,    fenum_pyfunc = self.func_name_fe,    
+                   arr_type   = self.type_name_arr,   arr_func   = self.func_name_arr,   arr_pytype   = self.type_name_arr,   arr_pyfunc   = self.func_name_arr,   
+                   fearr_type = self.type_name_fearr, fearr_func = self.func_name_fearr, fearr_pytype = self.type_name_fearr, fearr_pyfunc = self.func_name_fearr, 
+                   oti_order=self.order, real_str=self.real_str, module_name = mname, module_name_upper = mname.upper(), base_src = base_str, algebra_src = algebra_str,
+                   base_include = base_include, algebra_include = algebra_include, utils_include="",  num_struct=num_struct)
+
+      f = open(exp_file, "w" )
+
+      
+      f.write(f_exp)
+      f.close()
     
 
     # Define Overloads
@@ -2102,14 +2196,14 @@ class writer:
     code_file += contents
 
     file_name_str = os.path.join(base_dir,mname)+"/base.c"
-    self.check_file_and_dirs(file_name_str)
+    # self.check_file_and_dirs(file_name_str)
 
-    # Write the code file
-    f = open(file_name_str, "w" )
+    # # Write the code file
+    # f = open(file_name_str, "w" )
 
-    f.write(code_file)
+    # f.write(code_file)
 
-    f.close()
+    # f.close()
 
 
     for funct in self.function_list:
@@ -2121,21 +2215,28 @@ class writer:
 
 
 
-    file_name_str = os.path.join(base_dir,mname)+"/base.h"
-    self.check_file_and_dirs(file_name_str)
+    # file_name_str = os.path.join(base_dir,mname)+"/base.h"
+    # self.check_file_and_dirs(file_name_str)
 
-    # Write the header file
-    f = open(file_name_str, "w" )
-    f.write(header_file)
+    # # Write the header file
+    # f = open(file_name_str, "w" )
+    # f.write(header_file)
 
-    f.close()
+    # f.close()
 
     # return str_out
   #--------------------------------------------------------------------------------------------------- 
 
+  #***************************************************************************************************
+  def write_header(self, header = ''):
+    
+    header_file = ''
+    for funct in self.function_list_header[header]:
+      header_file += funct+";"+endl
+    # end for 
 
-
-
+    return header_file
+  #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
   def check_file_and_dirs(self, filename):

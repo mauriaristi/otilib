@@ -1,418 +1,25 @@
 
-// 1. Elementwise operations.
-// 1.1. Negation.
-// ****************************************************************************************************
-void {arr_func}_neg_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-    // Check first dimensions.
-    {arr_func}_dimCheck_OO_elementwise(arr,arr,res);
-
-    // The loop for every element in arr.
-    for (i = 0; i<arr->size; i++){{
-        {num_func}_neg_to( &arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// 1.2. Addition.
-// ****************************************************************************************************
-void {arr_func}_sum_OO_to({arr_type}* arr1, {arr_type}* arr2, {arr_type}* res){{
-    // Perform O + O.
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sum_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sum_RO_to(darr_t* arr1, {arr_type}* arr2, {arr_type}* res){{
-    
-    // Perform R + O.
-
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_RO_elementwise(arr1,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sum_ro_to(arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);        
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sum_oO_to({num_type}* num, {arr_type}* arr1, {arr_type}* res){{
-    // Perform o + O.
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sum_oo_to( num, &arr1->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sum_rO_to(coeff_t num, {arr_type}* arr1, {arr_type}* res){{
-
-    // Perform r + O.
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sum_ro_to(num, &arr1->p_data[i], &res->p_data[i]);        
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// 1.3. Subtraction.
-// ****************************************************************************************************
-void {arr_func}_sub_OO_to( {arr_type}* arr1, {arr_type}* arr2, {arr_type}* res){{
-    // Perform O - O
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr2, res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sub_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sub_OR_to( {arr_type}* arr1, darr_t* arr2, {arr_type}* res){{
-    // Perform O - R
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_RO_elementwise(arr2,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sub_or_to(&arr1->p_data[i], arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sub_RO_to( darr_t* arr1, {arr_type}* arr2, {arr_type}* res){{
-    // Perform R - O
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_RO_elementwise(arr1,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sub_ro_to( arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sub_Oo_to( {arr_type}* arr1, {num_type}* num, {arr_type}* res){{
-    // Perform O - o
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sub_oo_to( &arr1->p_data[i], num, &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sub_oO_to( {num_type}* num, {arr_type}* arr1, {arr_type}* res){{
-    // Prrform o - O
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sub_oo_to( num, &arr1->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sub_Or_to( {arr_type}* arr1, coeff_t num, {arr_type}* res){{
-    // Prrform O - r
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sub_or_to( &arr1->p_data[i], num, &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sub_rO_to( coeff_t num, {arr_type}* arr1, {arr_type}* res){{
-    // Prrform r - O
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_sub_ro_to( num, &arr1->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// 1.4. Multiplication.
-// ****************************************************************************************************
-void {arr_func}_mul_OO_to({arr_type}* arr1, {arr_type}* arr2, {arr_type}* res){{
-    // Perform O * O
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_mul_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_mul_RO_to(darr_t* arr1, {arr_type}* arr2, {arr_type}* res){{
-    // Perform R * O
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_RO_elementwise(arr1,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_mul_ro_to(arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_mul_oO_to({num_type}* num, {arr_type}* arr2, {arr_type}* res){{
-    // Perform o * O
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr2,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr2->size; i++){{
-        {num_func}_mul_oo_to(num, &arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_mul_rO_to(coeff_t num, {arr_type}* arr2, {arr_type}* res){{
-    // Perform r * O
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr2,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr2->size; i++){{
-        {num_func}_mul_ro_to(num, &arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-// ****************************************************************************************************
-void {arr_func}_gem_OO_to({arr_type}* arr1, {arr_type}* arr2, {arr_type}* arr3, {arr_type}* res){{
-    // This function does GEM (GEneral Multiplication): RES = ARR1*ARR2 + ARR3
-    // Allows to do the following RES = ARR1*ARR2 + RES
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr2,res);
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr3,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < res->size; i++){{
-        {num_func}_gem_oo_to(&arr1->p_data[i], &arr2->p_data[i], &arr3->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-void {arr_func}_gem_oO_to({num_type}* arr1, {arr_type}* arr2, {arr_type}* arr3, {arr_type}* res){{
-    // This function does GEM (GEneral Multiplication): RES = ARR1*ARR2 + ARR3
-    // Allows to do the following RES = ARR1*ARR2 + RES
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr2,arr3,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < res->size; i++){{
-        {num_func}_gem_oo_to( arr1 , &arr2->p_data[i], &arr3->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// 1.5. Division
-// ****************************************************************************************************
-void {arr_func}_div_OO_to({arr_type}* arr1, {arr_type}* arr2, {arr_type}* res){{
-    // Perform O/O
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_div_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_div_OR_to({arr_type}* arr1, darr_t* arr2, {arr_type}* res){{
-    // Perform O/R
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_RO_elementwise(arr2,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_div_or_to(&arr1->p_data[i], arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_div_RO_to(darr_t* arr1, {arr_type}* arr2, {arr_type}* res){{
-    // Perform R/O
-
-    uint64_t i;
-
-    // Check inputs:
-    {arr_func}_dimCheck_RO_elementwise(arr1,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr2->size; i++){{
-        {num_func}_div_ro_to( arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_div_oO_to({num_type}* num, {arr_type}* arr2, {arr_type}* res){{
-    // Perform o/O
-    uint64_t i;
-    
-        // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr2,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr2->size; i++){{
-        {num_func}_div_oo_to( num, &arr2->p_data[i], &res->p_data[i]);
-    }}
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_div_Oo_to({arr_type}* arr1, {num_type}* num, {arr_type}* res){{
-    // Perform O/o
-    uint64_t i;
-    
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_div_oo_to(&arr1->p_data[i], num, &res->p_data[i]);
-    }}
-}}   
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_div_rO_to(coeff_t num, {arr_type}* arr2, {arr_type}* res){{
-    // Perform r/O
-    uint64_t i;
-    
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr2,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr2->size; i++){{
-        {num_func}_div_ro_to( num, &arr2->p_data[i], &res->p_data[i]);
-    }}
-}} 
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_div_Or_to({arr_type}* arr1, coeff_t num, {arr_type}* res){{
-    // Perform O/r
-    uint64_t i;
-    
-    // Check inputs:
-    {arr_func}_dimCheck_OO_elementwise(arr1,arr1,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){{
-        {num_func}_div_or_to(&arr1->p_data[i], num, &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-
-
+// typedef struct {
+//     sotinum_t*    p_data; ///< Pointer to array of Sparse otinums.
+//     uint64_t       nrows; ///< Number of rows.
+//     uint64_t       ncols; ///< Number of cols.
+//     uint64_t        size; ///< Size of array.
+//     flag_t          flag; ///< Memory flag.
+//     return res;
+// } arrso_t;                ///< Array of OTIs type.
 
 
 // 1. Elementwise operations.
 // 1.1. Negation.
 // ****************************************************************************************************
-{arr_type} {arr_func}_neg({arr_type}* arr){{
+arrso_t arrso_neg(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_empty_like( arr);
+    arrso_t res = arrso_empty_like( arr, dhl);
 
-    {arr_func}_neg_to(arr,&res);
+    arrso_neg_to(arr,&res,dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -423,52 +30,52 @@ void {arr_func}_div_Or_to({arr_type}* arr1, coeff_t num, {arr_type}* res){{
 
 // 1.2. Addition.
 // ****************************************************************************************************
-{arr_type} {arr_func}_sum_OO({arr_type}* arr1, {arr_type}* arr2){{
+arrso_t arrso_sum_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl){
     // Perform O + O.
-    {arr_type} res;
+    arrso_t res;
 
-    res = {arr_func}_empty_like( arr1);
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_sum_OO_to( arr1, arr2, &res);
+    arrso_sum_OO_to( arr1, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sum_RO(darr_t* arr1, {arr_type}* arr2){{
+arrso_t arrso_sum_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl){
     // Perform R + O.
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr2);
+    arrso_t res;
+    res = arrso_empty_like( arr2, dhl);
 
-    {arr_func}_sum_RO_to( arr1, arr2, &res);
+    arrso_sum_RO_to( arr1, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sum_oO({num_type}* num, {arr_type}* arr1){{
+arrso_t arrso_sum_oO(sotinum_t* num, arrso_t* arr1, dhelpl_t dhl){
     // Perform o + O.
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_sum_oO_to( num, arr1, &res);
+    arrso_sum_oO_to( num, arr1, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sum_rO(coeff_t num, {arr_type}* arr1){{
+arrso_t arrso_sum_rO(coeff_t num, arrso_t* arr1, dhelpl_t dhl){
     // Perform r + O.
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_sum_rO_to( num, arr1, &res);
+    arrso_sum_rO_to( num, arr1, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -487,87 +94,87 @@ void {arr_func}_div_Or_to({arr_type}* arr1, coeff_t num, {arr_type}* res){{
 
 // 1.3. Subtraction.
 // ****************************************************************************************************
-{arr_type} {arr_func}_sub_OO( {arr_type}* arr1, {arr_type}* arr2){{
+arrso_t arrso_sub_OO( arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl){
     // Perform O - O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_sub_OO_to( arr1, arr2, &res);
+    arrso_sub_OO_to( arr1, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sub_OR( {arr_type}* arr1, darr_t* arr2){{
+arrso_t arrso_sub_OR( arrso_t* arr1, darr_t* arr2, dhelpl_t dhl){
     // Perform O - R
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_sub_OR_to( arr1, arr2, &res);
+    arrso_sub_OR_to( arr1, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sub_RO( darr_t* arr1, {arr_type}* arr2){{
+arrso_t arrso_sub_RO( darr_t* arr1, arrso_t* arr2, dhelpl_t dhl){
     // Perform R - O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr2);
+    arrso_t res;
+    res = arrso_empty_like( arr2, dhl);
 
-    {arr_func}_sub_RO_to( arr1, arr2, &res);
+    arrso_sub_RO_to( arr1, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sub_Oo( {arr_type}* arr1, {num_type}* num){{
+arrso_t arrso_sub_Oo( arrso_t* arr1, sotinum_t* num, dhelpl_t dhl){
     // Perform O - o
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_sub_Oo_to( arr1, num, &res);
+    arrso_sub_Oo_to( arr1, num, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sub_oO( {num_type}* num, {arr_type}* arr1){{
+arrso_t arrso_sub_oO( sotinum_t* num, arrso_t* arr1, dhelpl_t dhl){
     // Prrform o - O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_sub_oO_to( num, arr1, &res);
+    arrso_sub_oO_to( num, arr1, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sub_Or( {arr_type}* arr1, coeff_t num){{
+arrso_t arrso_sub_Or( arrso_t* arr1, coeff_t num, dhelpl_t dhl){
     // Prrform O - r
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_sub_Or_to( arr1, num, &res);
+    arrso_sub_Or_to( arr1, num, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sub_rO( coeff_t num, {arr_type}* arr1){{
+arrso_t arrso_sub_rO( coeff_t num, arrso_t* arr1, dhelpl_t dhl){
     // Prrform r - O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_sub_rO_to( num, arr1, &res);
+    arrso_sub_rO_to( num, arr1, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -586,51 +193,51 @@ void {arr_func}_div_Or_to({arr_type}* arr1, coeff_t num, {arr_type}* res){{
 
 // 1.4. Multiplication.
 // ****************************************************************************************************
-{arr_type} {arr_func}_mul_OO({arr_type}* arr1, {arr_type}* arr2){{
+arrso_t arrso_mul_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl){
     // Perform O * O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_mul_OO_to( arr1, arr2, &res);
+    arrso_mul_OO_to( arr1, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_mul_RO(darr_t* arr1, {arr_type}* arr2){{
+arrso_t arrso_mul_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl){
     // Perform R * O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr2);
+    arrso_t res;
+    res = arrso_empty_like( arr2, dhl);
 
-    {arr_func}_mul_RO_to( arr1, arr2, &res);
+    arrso_mul_RO_to( arr1, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_mul_oO({num_type}* num, {arr_type}* arr2){{
+arrso_t arrso_mul_oO(sotinum_t* num, arrso_t* arr2, dhelpl_t dhl){
     // Perform o * O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr2);
+    arrso_t res;
+    res = arrso_empty_like( arr2, dhl);
 
-    {arr_func}_mul_oO_to( num, arr2, &res);
+    arrso_mul_oO_to( num, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_mul_rO(coeff_t num, {arr_type}* arr2){{
+arrso_t arrso_mul_rO(coeff_t num, arrso_t* arr2, dhelpl_t dhl){
     // Perform r * O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr2);
+    arrso_t res;
+    res = arrso_empty_like( arr2, dhl);
 
-    {arr_func}_mul_rO_to( num, arr2, &res);
+    arrso_mul_rO_to( num, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -647,86 +254,86 @@ void {arr_func}_div_Or_to({arr_type}* arr1, coeff_t num, {arr_type}* res){{
 
 // 1.5. Division
 // ****************************************************************************************************
-{arr_type} {arr_func}_div_OO({arr_type}* arr1, {arr_type}* arr2){{
+arrso_t arrso_div_OO(arrso_t* arr1, arrso_t* arr2, dhelpl_t dhl){
     // Perform O/O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_div_OO_to( arr1, arr2, &res);
+    arrso_div_OO_to( arr1, arr2, &res, dhl);
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_div_OR({arr_type}* arr1, darr_t* arr2){{
+arrso_t arrso_div_OR(arrso_t* arr1, darr_t* arr2, dhelpl_t dhl){
     // Perform O/R
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_div_OR_to( arr1, arr2, &res);
+    arrso_div_OR_to( arr1, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_div_RO(darr_t* arr1, {arr_type}* arr2){{
+arrso_t arrso_div_RO(darr_t* arr1, arrso_t* arr2, dhelpl_t dhl){
     // Perform R/O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr2);
+    arrso_t res;
+    res = arrso_empty_like( arr2, dhl);
 
-    {arr_func}_div_RO_to( arr1, arr2, &res);
+    arrso_div_RO_to( arr1, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_div_oO({num_type}* num, {arr_type}* arr2){{
+arrso_t arrso_div_oO(sotinum_t* num, arrso_t* arr2, dhelpl_t dhl){
     // Perform o/O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr2);
+    arrso_t res;
+    res = arrso_empty_like( arr2, dhl);
 
-    {arr_func}_div_oO_to( num, arr2, &res);
+    arrso_div_oO_to( num, arr2, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_div_Oo({arr_type}* arr1, {num_type}* num){{
+arrso_t arrso_div_Oo(arrso_t* arr1, sotinum_t* num, dhelpl_t dhl){
     // Perform O/o
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_div_Oo_to( arr1, num, &res);
+    arrso_div_Oo_to( arr1, num, &res, dhl);
 
     return res;
-}}   
+}   
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_div_rO(coeff_t num, {arr_type}* arr2){{
+arrso_t arrso_div_rO(coeff_t num, arrso_t* arr2, dhelpl_t dhl){
     // Perform r/O
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr2);
+    arrso_t res;
+    res = arrso_empty_like( arr2, dhl);
 
-    {arr_func}_div_rO_to( num, arr2, &res);
+    arrso_div_rO_to( num, arr2, &res, dhl);
 
     return res;
-}} 
+} 
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_div_Or({arr_type}* arr1, coeff_t num){{
+arrso_t arrso_div_Or(arrso_t* arr1, coeff_t num, dhelpl_t dhl){
     // Perform O/r
-    {arr_type} res;
-    res = {arr_func}_empty_like( arr1);
+    arrso_t res;
+    res = arrso_empty_like( arr1, dhl);
 
-    {arr_func}_div_Or_to( arr1, num, &res);
+    arrso_div_Or_to( arr1, num, &res, dhl);
 
     return res;
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 

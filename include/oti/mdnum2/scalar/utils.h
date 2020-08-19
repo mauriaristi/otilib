@@ -1,0 +1,6 @@
+#ifndef OTI_MDNUM2_SCALAR_UTILS_H
+#define OTI_MDNUM2_SCALAR_UTILS_H
+
+
+
+#endif

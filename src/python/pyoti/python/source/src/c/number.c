@@ -1,47 +1,30 @@
-#include "oti/sparse.h"
-
-
-
-
-
+#include "oti/<<<module_name>>>.h"
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------------    SCALAR FUNCTIONS   ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
 // Base functions to support manipulation.
-#include "sparse/scalar/base.c"
-
-// Operations where a truncation is recquired.
-#include "sparse/scalar/trunc_ops.c"
+#include "<<<module_name>>>/scalar/base.c"
 
 // Basic algebraic operations, such as addition and multiplication.
-#include "sparse/scalar/algebra.c"
-#include "sparse/scalar/algebra_to.c"
+#include "<<<module_name>>>/scalar/algebra.c"
+#include "<<<module_name>>>/scalar/algebra_to.c"
 
 // Analytic and Trascendental function evaluation.
-#include "sparse/scalar/functions.c"
-#include "sparse/scalar/functions_to.c"
+#include "<<<module_name>>>/scalar/functions.c"
+#include "<<<module_name>>>/scalar/functions_to.c"
 
 // Utils
-#include "sparse/scalar/utils.c"
+#include "<<<module_name>>>/scalar/utils.c"
 
 // Gauss 
-#include "sparse/scalar/gauss.c"
+#include "<<<module_name>>>/scalar/gauss.c"
 
 
 // ----------------------------------------------------------------------------------------------------
 // -----------------------------------   END SCALAR FUNCTIONS   ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------------    ARRAY  FUNCTIONS   ---------------------------------------
@@ -49,25 +32,25 @@
 
 // Array of OTIs support:
 // Base functions to support memory manipulation.
-#include "sparse/array/base.c"
+#include "<<<module_name>>>/array/base.c"
 
 // Array algebra.
-#include "sparse/array/algebra_elementwise.c"
-#include "sparse/array/algebra_elementwise_to.c"
+#include "<<<module_name>>>/array/algebra_elementwise.c"
+#include "<<<module_name>>>/array/algebra_elementwise_to.c"
 
 // Array algebra: Matrix operations such as matmul, determinant and invertion.
-#include "sparse/array/algebra_matops.c"
-#include "sparse/array/algebra_matops_to.c"
+#include "<<<module_name>>>/array/algebra_matops.c"
+#include "<<<module_name>>>/array/algebra_matops_to.c"
 
-#include "sparse/array/utils.c"
+#include "<<<module_name>>>/array/utils.c"
 
 
 // Array functions: Elementwise function evaluation.
-#include "sparse/array/functions.c"
-#include "sparse/array/functions_to.c"
+#include "<<<module_name>>>/array/functions.c"
+#include "<<<module_name>>>/array/functions_to.c"
 
 // Gauss 
-#include "sparse/array/gauss.c"
+#include "<<<module_name>>>/array/gauss.c"
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------------  END ARRAY FUNCTIONS   --------------------------------------

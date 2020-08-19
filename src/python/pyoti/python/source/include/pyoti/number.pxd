@@ -1,25 +1,25 @@
 
 # Include Dependencies of this module.
-include "sparse/dependencies.pxd"
+include "<<<module_name>>>/dependencies.pxd"
 
 # Include scalar class declarations.
-include "sparse/scalar.pxd"
+include "<<<module_name>>>/scalar.pxd"
 
 # Include Array class declarations.
-include "sparse/array.pxd"
+include "<<<module_name>>>/array.pxd"
 
 # Include Array class declarations.
-include "sparse/gauss.pxd"
+include "<<<module_name>>>/gauss.pxd"
 
 # Include Utility functions declaration.
-include "sparse/utils.pxd"
+include "<<<module_name>>>/utils.pxd"
 
 # Include Math functions.
-include "sparse/math.pxd"
+include "<<<module_name>>>/math.pxd"
 
 # Include Math functions.
-include "sparse/algebra.pxd"
+include "<<<module_name>>>/algebra.pxd"
 
 
 # Include sparse arrays functions.
-include "sparse/sparse_array.pxd"
+include "<<<module_name>>>/sparse_array.pxd"

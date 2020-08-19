@@ -1,381 +1,246 @@
 
+
+
+
 // ****************************************************************************************************
-void {num_func}_atanh_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_atanh(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_atanh(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_asinh_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_asinh(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_asinh(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_asinh(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_acosh_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_acosh(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_acosh(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_acosh(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_tanh_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_tanh(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_tanh(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_tanh(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_cbrt_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_cbrt(sotinum_t* num, dhelpl_t dhl){
 
-    {num_func}_pow_to(num, 1./3., res);
+    return soti_pow(num,1./3.,dhl);
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_sqrt_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_sqrt(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_sqrt(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_sqrt(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_cosh_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_cosh(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];    
-    der_r_cosh(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_cosh(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_sinh_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_sinh(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_sinh(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_sinh(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_asin_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_asin(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_asin(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_asin(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_acos_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_acos(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_acos(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_acos(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_atan_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_atan(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_atan(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_atan(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_tan_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_tan(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_tan(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_tan(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_cos_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_cos(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_cos(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_cos(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_sin_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_sin(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_sin(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_sin(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_logb_to({num_type}* num, double base, {num_type}* res){{
+sotinum_t soti_logb(sotinum_t* num, double base, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_logb(num->{real_str}, base, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_logb(num-><<<real_str>>>, base, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_log10_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_log10(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_log10(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_log10(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_log_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_log(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_log(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_log(num-><<<real_str>>>, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {num_func}_exp_to({num_type}* num, {num_type}* res){{
+sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_exp(num->{real_str}, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
-// ----------------------------------------------------------------------------------------------------
+    der_r_exp(num-><<<real_str>>>, <<<oti_order>>>, derivs);
 
+    return soti_feval(derivs, num, dhl);
 
-// ****************************************************************************************************
-void {num_func}_pow_to({num_type}* num, double e, {num_type}* res){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_pow(num->{real_str}, e, {oti_order}, derivs);
-    {num_func}_feval_to(derivs, num, res);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_atanh({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_atanh(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_asinh({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_asinh(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_acosh({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_acosh(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_tanh({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_tanh(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_cbrt({num_type}* num){{
-
-    return {num_func}_pow(num,1./3.);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_sqrt({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-
-    der_r_sqrt(num->{real_str}, {oti_order}, derivs);
-
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_cosh({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_cosh(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_sinh({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_sinh(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_asin({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_asin(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_acos({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_acos(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_atan({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_atan(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_tan({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_tan(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_cos({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_cos(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_sin({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_sin(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_logb({num_type}* num, double base){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_logb(num->{real_str}, base, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_log10({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_log10(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_log({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_log(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{num_type} {num_func}_exp({num_type}* num){{
-
-    coeff_t derivs[{oti_order}+1];
-    der_r_exp(num->{real_str}, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
-
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-{num_type} {num_func}_pow({num_type}* num, double e){{
+sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl){
 
-    coeff_t derivs[{oti_order}+1];
-    der_r_pow(num->{real_str}, e, {oti_order}, derivs);
-    return {num_func}_feval(derivs, num);
+    coeff_t derivs[_MAXORDER_OTI+1];
 
-}}
+    der_r_pow(num-><<<real_str>>>, e, <<<oti_order>>>, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

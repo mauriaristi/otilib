@@ -1,497 +1,277 @@
-// ****************************************************************************************************
-void {arr_func}_atanh_to({arr_type}* arr, {arr_type}* res){{
 
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_atanh_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_asinh_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_asinh_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_acosh_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_acosh_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_type}anh_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_tanh_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_cbrt_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_cbrt_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sqrt_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_sqrt_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_cosh_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_cosh_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sinh_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_sinh_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_asin_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_asin_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_acos_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_acos_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_atan_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_atan_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_type}an_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_tan_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_cos_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_cos_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_sin_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_sin_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_logb_to({arr_type}* arr, double base, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_logb_to(&arr->p_data[i], base, &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_log10_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_log10_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_log_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_log_to(&arr->p_data[i], &res->p_data[i]);
-    }} 
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void {arr_func}_exp_to({arr_type}* arr, {arr_type}* res){{
-
-    uint64_t i;
-
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_exp_to(&arr->p_data[i], &res->p_data[i]);
-    }}
-
-}}
-// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-void {arr_func}_pow_to({arr_type}* arr, double e, {arr_type}* res){{
+arrso_t arrso_atanh(arrso_t* arr, dhelpl_t dhl){
 
-    uint64_t i;
+    arrso_t res = arrso_init();
 
-    for( i = 0; i<arr->size; i++){{        
-        {num_func}_pow_to(&arr->p_data[i], e, &res->p_data[i]);
-    }}
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
 
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{arr_type} {arr_func}_atanh({arr_type}* arr){{
-
-    {arr_type} res = {arr_func}_init();
-
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
-
-    {arr_func}_atanh_to(arr, &res);
+    arrso_atanh_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_asinh({arr_type}* arr){{
+arrso_t arrso_asinh(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
 
-    {arr_func}_asinh_to(arr, &res);
+    arrso_asinh_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_acosh({arr_type}* arr){{
+arrso_t arrso_acosh(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
 
-    {arr_func}_acosh_to(arr, &res);
+    arrso_acosh_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_type}anh({arr_type}* arr){{
+arrso_t arrso_tanh(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
 
-    {arr_type}anh_to(arr, &res);
+    arrso_tanh_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_cbrt({arr_type}* arr){{
+arrso_t arrso_cbrt(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
 
-    {arr_func}_cbrt_to(arr, &res);
+    arrso_cbrt_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sqrt({arr_type}* arr){{
+arrso_t arrso_sqrt(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_sqrt_to(arr, &res);
+    arrso_sqrt_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_cosh({arr_type}* arr){{
+arrso_t arrso_cosh(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_cosh_to(arr, &res);
+    arrso_cosh_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sinh({arr_type}* arr){{
+arrso_t arrso_sinh(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_sinh_to(arr, &res);
+    arrso_sinh_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_asin({arr_type}* arr){{
+arrso_t arrso_asin(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_asin_to(arr, &res);
+    arrso_asin_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_acos({arr_type}* arr){{
+arrso_t arrso_acos(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_acos_to(arr, &res);
+    arrso_acos_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_atan({arr_type}* arr){{
+arrso_t arrso_atan(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_atan_to(arr, &res);
+    arrso_atan_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_type}an({arr_type}* arr){{
+arrso_t arrso_tan(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_type}an_to(arr, &res);
+    arrso_tan_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_cos({arr_type}* arr){{
+arrso_t arrso_cos(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_cos_to(arr, &res);
+    arrso_cos_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_sin({arr_type}* arr){{
+arrso_t arrso_sin(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_sin_to(arr, &res);
+    arrso_sin_to(arr, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_logb({arr_type}* arr, double base){{
+arrso_t arrso_logb(arrso_t* arr, double base, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_logb_to(arr, base, &res);
+    arrso_logb_to(arr, base, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_log10({arr_type}* arr){{
+arrso_t arrso_log10(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_log10_to(arr, &res);
+    arrso_log10_to(arr, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_log({arr_type}* arr){{
+arrso_t arrso_log(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_log_to(arr, &res);
+    arrso_log_to(arr, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_exp({arr_type}* arr){{
+arrso_t arrso_exp(arrso_t* arr, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
     
-    {arr_func}_exp_to(arr, &res);
+    arrso_exp_to(arr, &res, dhl);
 
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
-{arr_type} {arr_func}_pow({arr_type}* arr, double e){{
+arrso_t arrso_pow(arrso_t* arr, double e, dhelpl_t dhl){
 
-    {arr_type} res = {arr_func}_init();
+    arrso_t res = arrso_init();
 
-    res = {arr_func}_zeros(arr->nrows, arr->ncols);
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, dhl);
 
-    {arr_func}_pow_to(arr, e, &res);
+    arrso_pow_to(arr, e, &res, dhl);
     
     return res;
 
-}}
+}
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+

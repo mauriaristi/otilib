@@ -1,9 +1,9 @@
 
 # ARRAY
 #*****************************************************************************************************
-cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
+cdef object __add__FX__(mdmatfe3 Flhs, object rhs, object out = None):
   """
-  PORPUSE: Addition between femdarr3_t and object.
+  PORPUSE: Addition between mdmatfe3 and object.
 
   """
   #***************************************************************************************************
@@ -11,23 +11,23 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
   
 
   # Scalar types:
-  cdef mdnum3_t    orhs, ores
+  cdef mdnum3    orhs, ores
   cdef mdnum3_t cores
 
-  cdef femdnum3_t     frhs, fres
+  cdef mdnumfe3     frhs, fres
   cdef femdnum3_t  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef mdarr3_t      Orhs, Ores
+  cdef mdmat3      Orhs, Ores
   cdef mdarr3_t   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef femdarr3_t    Frhs, Fres
+  cdef mdmatfe3    Frhs, Fres
   cdef femdarr3_t cFres
 
   cdef uint8_t res_flag = 1
@@ -38,41 +38,41 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
     res_flag = 0
   # end if
 
-  if trhs == mdnum3_t:
+  if trhs == mdnum3:
     orhs = rhs
     if res_flag:
       Fres = out
       femdarr3_sum_oF_to( &orhs.num, &Flhs.arr, &Fres.arr )
     else:
       cFres = femdarr3_sum_oF( &orhs.num, &Flhs.arr )
-      res = femdarr3_t.create( &cFres )
+      res = mdmatfe3.create( &cFres )
     # end if
-  elif trhs == femdnum3_t:
+  elif trhs == mdnumfe3:
     frhs = rhs
     if res_flag:
       Fres = out
       femdarr3_sum_fF_to( &frhs.num, &Flhs.arr, &Fres.arr )
     else:
       cFres = femdarr3_sum_fF( &frhs.num, &Flhs.arr )
-      res = femdarr3_t.create( &cFres )
+      res = mdmatfe3.create( &cFres )
     # end if
-  elif trhs == femdarr3_t:
+  elif trhs == mdmatfe3:
     Frhs = rhs
     if res_flag:
       Fres = out
       femdarr3_sum_FF_to( &Flhs.arr, &Frhs.arr, &Fres.arr )
     else:
       cFres = femdarr3_sum_FF( &Flhs.arr, &Frhs.arr )
-      res = femdarr3_t.create( &cFres )
+      res = mdmatfe3.create( &cFres )
     # end if
-  elif trhs == mdarr3_t:
+  elif trhs == mdmat3:
     Orhs = rhs
     if res_flag:
       Fres = out
       femdarr3_sum_OF_to( &Orhs.arr, &Flhs.arr, &Fres.arr )
     else:
       cFres = femdarr3_sum_OF( &Orhs.arr, &Flhs.arr )
-      res = femdarr3_t.create( &cFres )
+      res = mdmatfe3.create( &cFres )
     # end if
   elif trhs == dmat:
     Rrhs = rhs
@@ -81,7 +81,7 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
       femdarr3_sum_RF_to( &Rrhs.arr, &Flhs.arr, &Fres.arr )
     else:
       cFres = femdarr3_sum_RF( &Rrhs.arr, &Flhs.arr )
-      res = femdarr3_t.create( &cFres )
+      res = mdmatfe3.create( &cFres )
     # end if
   elif trhs in number_types:
     rrhs = rhs
@@ -90,7 +90,7 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
       femdarr3_sum_rF_to( rrhs, &Flhs.arr, &Fres.arr )
     else:
       cFres = femdarr3_sum_rF( rrhs, &Flhs.arr )
-      res = femdarr3_t.create( &cFres )
+      res = mdmatfe3.create( &cFres )
     # end if
   else:
     raise TypeError("Unsupported add operation between {0} and {1}.".format(type(Flhs),trhs))
@@ -103,9 +103,9 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 #-----------------------------------------------------------------------------------------------------
 
 # #*****************************************************************************************************
-# cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
+# cdef object __add__FX__(mdmatfe3 Flhs, object rhs, object out = None):
 #   """
-#   PURPOSE:  Addition between femdarr3_t and object.
+#   PURPOSE:  Addition between mdmatfe3 and object.
 
 #   """
 #   #***************************************************************************************************
@@ -113,23 +113,23 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 #   
 
 #   # Scalar types
-#   cdef mdnum3_t    orhs, ores
+#   cdef mdnum3    orhs, ores
 #   cdef mdnum3_t cores
 
-#   cdef femdnum3_t     frhs, fres
+#   cdef mdnumfe3     frhs, fres
 #   cdef femdnum3_t  cfres
 
 #   cdef coeff_t    rrhs, rres
 #   cdef coeff_t   crres
 
 #   # Array types
-#   cdef mdarr3_t      Orhs, Ores
+#   cdef mdmat3      Orhs, Ores
 #   cdef mdarr3_t   cOres
 
 #   cdef dmat       Rrhs, Rres
 #   cdef darr_t    cRres
 
-#   cdef femdarr3_t    Frhs, Fres
+#   cdef mdmatfe3    Frhs, Fres
 #   cdef femdarr3_t cFres
 
 #   cdef uint8_t res_flag = 1
@@ -141,7 +141,7 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 #     res_flag = 0
 #   # end if 
 
-#   if   trhs == mdnum3_t:
+#   if   trhs == mdnum3:
 
 #     orhs = rhs
 #     if res_flag:
@@ -149,10 +149,10 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 #       femdarr3_sum_oF_to( &orhs.num, &Flhs.arr ,&Fres.arr)
 #     else:
 #       cFres = femdarr3_sum_oF( &orhs.num, &Flhs.arr )
-#       res = femdarr3_t.create(&cFres)
+#       res = mdmatfe3.create(&cFres)
 #     # end if
 
-#   elif trhs == femdnum3_t:
+#   elif trhs == mdnumfe3:
 
 #     frhs = rhs
 #     if res_flag:
@@ -160,10 +160,10 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 #       femdarr3_sum_fF_to( &frhs.num, &Flhs.arr, &Fres.arr)
 #     else:      
 #       cFres = femdarr3_sum_fF( &frhs.num, &Flhs.arr)
-#       res = femdarr3_t.create(&cFres)
+#       res = mdmatfe3.create(&cFres)
 #     # end if
 
-#   elif trhs == mdarr3_t:
+#   elif trhs == mdmat3:
 
 #     Orhs = rhs
 #     if res_flag:
@@ -171,10 +171,10 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 #       femdarr3_sum_OF_to( &Orhs.arr, &Flhs.arr, &Fres.arr)
 #     else:      
 #       cFres = femdarr3_sum_OF( &Orhs.arr, &Flhs.arr)
-#       res = femdarr3_t.create( &cFres )
+#       res = mdmatfe3.create( &cFres )
 #     # end if
 
-#   elif trhs == femdarr3_t:
+#   elif trhs == mdmatfe3:
 
 #     Frhs = rhs
 #     if res_flag:
@@ -182,7 +182,7 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 #       femdarr3_sum_FF_to( &Flhs.arr, &Frhs.arr ,&Fres.arr)
 #     else:      
 #       cFres = femdarr3_sum_FF( &Flhs.arr, &Frhs.arr)
-#       res = femdarr3_t.create(&cFres)
+#       res = mdmatfe3.create(&cFres)
 #     # end if
 
 #   elif trhs == dmat:
@@ -193,7 +193,7 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 #       femdarr3_sum_RF_to( &Rrhs.arr, &Flhs.arr, &Fres.arr)
 #     else:      
 #       cFres = femdarr3_sum_RF( &Rrhs.arr, &Flhs.arr)
-#       res = femdarr3_t.create(&cFres)
+#       res = mdmatfe3.create(&cFres)
 #     # end if
 
 #   elif trhs in number_types:
@@ -204,7 +204,7 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 #       femdarr3_sum_rF_to( rrhs, &Flhs.arr, &Fres.arr)
 #     else:
 #       cFres = femdarr3_sum_rF( rrhs, &Flhs.arr)
-#       res = femdarr3_t.create(&cFres)
+#       res = mdmatfe3.create(&cFres)
 #     # end if
 
 #   else:
@@ -218,9 +218,9 @@ cdef object __add__FX__(femdarr3_t Flhs, object rhs, object out = None):
 # #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
+cdef object __add__OX__(mdmat3 Olhs, object rhs, object out = None):
   """
-  PURPOSE:  Addition between mdarr3_t and an object.
+  PURPOSE:  Addition between mdmat3 and an object.
 
   """
   #***************************************************************************************************
@@ -228,23 +228,23 @@ cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
   
 
   # Scalar types
-  cdef mdnum3_t    orhs, ores
+  cdef mdnum3    orhs, ores
   cdef mdnum3_t cores
 
-  cdef femdnum3_t     frhs, fres
+  cdef mdnumfe3     frhs, fres
   cdef femdnum3_t  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef mdarr3_t      Orhs, Ores
+  cdef mdmat3      Orhs, Ores
   cdef mdarr3_t   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef femdarr3_t    Frhs, Fres
+  cdef mdmatfe3    Frhs, Fres
   cdef femdarr3_t cFres
 
   cdef uint8_t res_flag = 1
@@ -258,7 +258,7 @@ cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
 
   # end if 
 
-  if   trhs == mdnum3_t:
+  if   trhs == mdnum3:
 
     orhs = rhs
     if res_flag:
@@ -266,10 +266,10 @@ cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
       mdarr3_sum_oO_to( &orhs.num, &Olhs.arr ,&Ores.arr)
     else:
       cOres = mdarr3_sum_oO( &orhs.num, &Olhs.arr )
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
     # end if
 
-  # elif trhs == femdnum3_t:
+  # elif trhs == mdnumfe3:
 
   #   Orhs = rhs
   #   if res_flag:
@@ -277,10 +277,10 @@ cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
   #     femdnum3_sum_Of_to( &Orhs.arr, &flhs.num ,&Fres.arr)
   #   else:      
   #     cFres = femdnum3_sum_Of( &Orhs.arr, &flhs.num)
-  #     res = femdarr3_t.create(&cFres)
+  #     res = mdmatfe3.create(&cFres)
   #   # end if
 
-  elif trhs == mdarr3_t:
+  elif trhs == mdmat3:
 
     Orhs = rhs
     if res_flag:
@@ -288,7 +288,7 @@ cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
       mdarr3_sum_OO_to( &Olhs.arr, &Orhs.arr ,&Ores.arr)
     else:      
       cOres = mdarr3_sum_OO( &Orhs.arr, &Orhs.arr)
-      res = mdarr3_t.create( &cOres )
+      res = mdmat3.create( &cOres )
     # end if
 
   elif trhs == dmat:
@@ -299,10 +299,10 @@ cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
       mdarr3_sum_RO_to( &Rrhs.arr, &Olhs.arr ,&Ores.arr)
     else:      
       cOres = mdarr3_sum_RO( &Rrhs.arr, &Olhs.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
     # end if
 
-  elif trhs == femdarr3_t:
+  elif trhs == mdmatfe3:
 
     Frhs = rhs
     if res_flag:
@@ -310,7 +310,7 @@ cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
       femdarr3_sum_OF_to( &Olhs.arr, &Frhs.arr ,&Fres.arr)
     else:      
       cFres = femdarr3_sum_OF( &Olhs.arr, &Frhs.arr)
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if
 
   elif trhs in number_types:
@@ -321,7 +321,7 @@ cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
       mdarr3_sum_rO_to( rrhs, &Olhs.arr, &Ores.arr)
     else:
       cOres = mdarr3_sum_rO( rrhs, &Olhs.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
     # end if
 
   else:    
@@ -337,7 +337,7 @@ cdef object __add__OX__(mdarr3_t Olhs, object rhs, object out = None):
 #*****************************************************************************************************
 cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   """
-  PURPOSE:  Addition between mdnum3_t and an object.
+  PURPOSE:  Addition between mdnum3 and an object.
 
   """
   #***************************************************************************************************
@@ -345,23 +345,23 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   
 
   # Scalar types
-  cdef mdnum3_t    orhs, ores
+  cdef mdnum3    orhs, ores
   cdef mdnum3_t cores
 
-  cdef femdnum3_t     frhs, fres
+  cdef mdnumfe3     frhs, fres
   cdef femdnum3_t  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef mdarr3_t      Orhs, Ores
+  cdef mdmat3      Orhs, Ores
   cdef mdarr3_t   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef femdarr3_t    Frhs, Fres
+  cdef mdmatfe3    Frhs, Fres
   cdef femdarr3_t cFres
 
   cdef uint8_t res_flag = 1
@@ -375,7 +375,7 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
 
   # end if 
 
-  # if   trhs == mdnum3_t:
+  # if   trhs == mdnum3:
 
   #   orhs = rhs
   #   if res_flag:
@@ -383,10 +383,10 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   #     mdnum3_sum_Ro_to( &Rlhs.arr, &orhs.num ,&ores.num)
   #   else:
   #     cores = mdnum3_sum_Ro( &Rlhs.arr, &orhs.num )
-  #     res = mdnum3_t.create(&cores)
+  #     res = mdnum3.create(&cores)
   #   # end if
 
-  # elif trhs == femdnum3_t:
+  # elif trhs == mdnumfe3:
 
   #   frhs = rhs
   #   if res_flag:
@@ -394,10 +394,10 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   #     femdnum3_sum_Rf_to( &Rlhs.arr, &frhs.num ,&fres.num)
   #   else:      
   #     cfres = femdnum3_sum_Rf( &Rlhs.arr, &frhs.num)
-  #     res = femdnum3_t.create(&cfres)
+  #     res = mdnumfe3.create(&cfres)
     # end if
 
-  if trhs == mdarr3_t:
+  if trhs == mdmat3:
 
     Orhs = rhs
     if res_flag:
@@ -405,10 +405,10 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
       mdarr3_sum_RO_to( &Rlhs.arr, &Orhs.arr ,&Ores.arr)
     else:      
       cOres = mdarr3_sum_RO( &Rlhs.arr, &Orhs.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
     # end if
 
-  elif trhs == femdarr3_t:
+  elif trhs == mdmatfe3:
 
     Frhs = rhs
     if res_flag:
@@ -416,7 +416,7 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
       femdarr3_sum_RF_to( &Rlhs.arr, &Frhs.arr ,&Fres.arr)
     else:      
       cFres = femdarr3_sum_RF( &Rlhs.arr, &Frhs.arr)
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if
 
   elif trhs == dmat:
@@ -454,9 +454,9 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
 #    SCALAR
 
 #*****************************************************************************************************
-cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
+cdef object __add__fX__(mdnumfe3 flhs, object rhs, object out = None):
   """
-  PURPOSE:  Addition between femdnum3_t and an object.
+  PURPOSE:  Addition between mdnumfe3 and an object.
 
   """
   #***************************************************************************************************
@@ -464,23 +464,23 @@ cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
   
 
   # Scalar types
-  cdef mdnum3_t    orhs, ores
+  cdef mdnum3    orhs, ores
   cdef mdnum3_t cores
 
-  cdef femdnum3_t     frhs, fres
+  cdef mdnumfe3     frhs, fres
   cdef femdnum3_t  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef mdarr3_t      Orhs, Ores
+  cdef mdmat3      Orhs, Ores
   cdef mdarr3_t   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef femdarr3_t    Frhs, Fres
+  cdef mdmatfe3    Frhs, Fres
   cdef femdarr3_t cFres
 
   cdef uint8_t res_flag = 1
@@ -494,7 +494,7 @@ cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
 
   # end if 
 
-  if   trhs == mdnum3_t:
+  if   trhs == mdnum3:
 
     orhs = rhs
     if res_flag:
@@ -502,10 +502,10 @@ cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
       femdnum3_sum_of_to( &orhs.num, &flhs.num ,&fres.num)
     else:
       cfres = femdnum3_sum_of( &orhs.num, &flhs.num )
-      res = femdnum3_t.create(&cfres)
+      res = mdnumfe3.create(&cfres)
     # end if
 
-  elif trhs == femdnum3_t:
+  elif trhs == mdnumfe3:
 
     frhs = rhs
     if res_flag:
@@ -513,10 +513,10 @@ cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
       femdnum3_sum_ff_to( &flhs.num, &frhs.num ,&fres.num)
     else:      
       cfres = femdnum3_sum_ff( &flhs.num, &frhs.num)
-      res = femdnum3_t.create(&cfres)
+      res = mdnumfe3.create(&cfres)
     # end if
 
-  # elif trhs == mdarr3_t:
+  # elif trhs == mdmat3:
 
   #   Orhs = rhs
   #   if res_flag:
@@ -524,7 +524,7 @@ cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
   #     femdnum3_sum_Of_to( &Orhs.arr, &flhs.num ,&Fres.arr)
   #   else:      
   #     cFres = femdnum3_sum_Of( &Orhs.arr, &flhs.num)
-  #     res = femdarr3_t.create(&cFres)
+  #     res = mdmatfe3.create(&cFres)
   #   # end if
 
   # elif trhs == dmat:
@@ -535,10 +535,10 @@ cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
   #     femdnum3_sum_Rf_to( &Rrhs.arr, &flhs.num ,&Fres.arr)
   #   else:      
   #     cFres = femdnum3_sum_Rf( &Rrhs.arr, &flhs.num)
-  #     res = femdarr3_t.create(&cFres)
+  #     res = mdmatfe3.create(&cFres)
   #   # end if
 
-  elif trhs == femdarr3_t:
+  elif trhs == mdmatfe3:
 
     Frhs = rhs
     if res_flag:
@@ -546,7 +546,7 @@ cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
       femdarr3_sum_fF_to( &flhs.num, &Frhs.arr ,&Fres.arr)
     else:      
       cFres = femdarr3_sum_fF( &flhs.num, &Frhs.arr)
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if
 
   elif trhs in number_types:
@@ -557,7 +557,7 @@ cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
       femdnum3_sum_rf_to( rrhs, &flhs.num, &fres.num)
     else:
       cfres = femdnum3_sum_rf( rrhs, &flhs.num)
-      res = mdnum3_t.create(&cores)
+      res = mdnum3.create(&cores)
     # end if
 
   else:
@@ -571,9 +571,9 @@ cdef object __add__fX__(femdnum3_t flhs, object rhs, object out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
+cdef object __add__oX__(mdnum3 olhs, object rhs, object out = None):
   """
-  PURPOSE:  Addition between mdnum3_t and an object.
+  PURPOSE:  Addition between mdnum3 and an object.
 
   """
   #***************************************************************************************************
@@ -581,23 +581,23 @@ cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
   
 
   # Scalar types
-  cdef mdnum3_t    orhs, ores
+  cdef mdnum3    orhs, ores
   cdef mdnum3_t cores
 
-  cdef femdnum3_t     frhs, fres
+  cdef mdnumfe3     frhs, fres
   cdef femdnum3_t  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef mdarr3_t      Orhs, Ores
+  cdef mdmat3      Orhs, Ores
   cdef mdarr3_t   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef femdarr3_t    Frhs, Fres
+  cdef mdmatfe3    Frhs, Fres
   cdef femdarr3_t cFres
 
   cdef uint8_t res_flag = 1
@@ -611,7 +611,7 @@ cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
 
   # end if 
 
-  if   trhs == mdnum3_t:
+  if   trhs == mdnum3:
 
     orhs = rhs
     if res_flag:
@@ -619,10 +619,10 @@ cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
       mdnum3_sum_oo_to( &olhs.num, &orhs.num ,&ores.num)
     else:
       cores = mdnum3_sum_oo( &olhs.num, &orhs.num )
-      res = mdnum3_t.create(&cores)
+      res = mdnum3.create(&cores)
     # end if
 
-  elif trhs == femdnum3_t:
+  elif trhs == mdnumfe3:
 
     frhs = rhs
     if res_flag:
@@ -630,10 +630,10 @@ cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
       femdnum3_sum_of_to( &olhs.num, &frhs.num ,&fres.num)
     else:      
       cfres = femdnum3_sum_of( &olhs.num, &frhs.num)
-      res = femdnum3_t.create(&cfres)
+      res = mdnumfe3.create(&cfres)
     # end if
 
-  elif trhs == mdarr3_t:
+  elif trhs == mdmat3:
 
     Orhs = rhs
     if res_flag:
@@ -641,10 +641,10 @@ cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
       mdarr3_sum_oO_to( &olhs.num, &Orhs.arr ,&Ores.arr)
     else:      
       cOres = mdarr3_sum_oO( &olhs.num, &Orhs.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
     # end if
 
-  elif trhs == femdarr3_t:
+  elif trhs == mdmatfe3:
 
     Frhs = rhs
     if res_flag:
@@ -652,7 +652,7 @@ cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
       femdarr3_sum_oF_to( &olhs.num, &Frhs.arr ,&Fres.arr)
     else:      
       cFres = femdarr3_sum_oF( &olhs.num, &Frhs.arr)
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if
 
   # elif trhs == dmat:
@@ -663,7 +663,7 @@ cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
   #     mdnum3_sum_oR_to( &olhs.num, &Rrhs.arr ,&Ores.arr)
   #   else:      
   #     cOres = mdnum3_sum_oR( &olhs.num, &Rrhs.arr)
-  #     res = mdarr3_t.create(&cOres)
+  #     res = mdmat3.create(&cOres)
   #   # end if
 
   elif trhs in number_types:
@@ -674,7 +674,7 @@ cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
       mdnum3_sum_ro_to( rrhs, &olhs.num, &ores.num)
     else:
       cores = mdnum3_sum_ro( rrhs, &olhs.num)
-      res = mdnum3_t.create(&cores)
+      res = mdnum3.create(&cores)
     # end if
 
   else:
@@ -690,7 +690,7 @@ cdef object __add__oX__(mdnum3_t olhs, object rhs, object out = None):
 #*****************************************************************************************************
 cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
   """
-  PURPOSE:  Addition between mdnum3_t and an object.
+  PURPOSE:  Addition between mdnum3 and an object.
 
   """
   #***************************************************************************************************
@@ -698,23 +698,23 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
   
 
   # Scalar types
-  cdef mdnum3_t    orhs, ores
+  cdef mdnum3    orhs, ores
   cdef mdnum3_t cores
 
-  cdef femdnum3_t     frhs, fres
+  cdef mdnumfe3     frhs, fres
   cdef femdnum3_t  cfres
 
   cdef coeff_t    rrhs, rres
   cdef coeff_t   crres
 
   # Array types
-  cdef mdarr3_t      Orhs, Ores
+  cdef mdmat3      Orhs, Ores
   cdef mdarr3_t   cOres
 
   cdef dmat       Rrhs, Rres
   cdef darr_t    cRres
 
-  cdef femdarr3_t    Frhs, Fres
+  cdef mdmatfe3    Frhs, Fres
   cdef femdarr3_t cFres
 
   cdef uint8_t res_flag = 1
@@ -728,7 +728,7 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
 
   # end if 
 
-  if   trhs == mdnum3_t:
+  if   trhs == mdnum3:
 
     orhs = rhs
     if res_flag:
@@ -736,10 +736,10 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
       mdnum3_sum_ro_to( rlhs, &orhs.num ,&ores.num)
     else:
       cores = mdnum3_sum_ro( rlhs, &orhs.num )
-      res = mdnum3_t.create(&cores)
+      res = mdnum3.create(&cores)
     # end if
 
-  elif trhs == femdnum3_t:
+  elif trhs == mdnumfe3:
 
     frhs = rhs
     if res_flag:
@@ -747,10 +747,10 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
       femdnum3_sum_rf_to( rlhs, &frhs.num ,&fres.num)
     else:      
       cfres = femdnum3_sum_rf( rlhs, &frhs.num)
-      res = femdnum3_t.create(&cfres)
+      res = mdnumfe3.create(&cfres)
     # end if
 
-  elif trhs == mdarr3_t:
+  elif trhs == mdmat3:
 
     Orhs = rhs
     if res_flag:
@@ -758,10 +758,10 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
       mdarr3_sum_rO_to( rlhs, &Orhs.arr ,&Ores.arr)
     else:      
       cOres = mdarr3_sum_rO( rlhs, &Orhs.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
     # end if
 
-  elif trhs == femdarr3_t:
+  elif trhs == mdmatfe3:
 
     Frhs = rhs
     if res_flag:
@@ -769,7 +769,7 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
       femdarr3_sum_rF_to( rlhs, &Frhs.arr ,&Fres.arr)
     else:      
       cFres = femdarr3_sum_rF( rlhs, &Frhs.arr)
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if
 
   elif trhs in number_types:

@@ -16,84 +16,16 @@ cdef class sotinum:
 
 
   #***************************************************************************************************
-  def __init__(self, coeff_t re_coeff, bases_t nbases = 0,ord_t order = 0, uint8_t FLAGS = 1, 
-    object nnz = None):
+  def __init__(self, coeff_t re_coeff):
     """
     DESCRIPTION: Constructor of a sparse OTI number.
     """
     #*************************************************************************************************
-    global dhl, ONE, ZERO
-    
-
-    # Add warning for higher orders and orders that are not required
-    self.FLAGS = FLAGS
-    cdef ndir_t* p_nnz # Static allocation of this array.
-    cdef ord_t orderdef, i, size
-    
     
     # First initialize the number.
-    self.num = soti_init()
-
-    # In case that nnz was defined.
-    if nnz is not None:
-      
-      size = len(nnz)
-      orderdef = max(size,order)
-
-      p_nnz = dhl.p_dh[dhl.ndh-ONE].p_nnz[ZERO]
-
-      for i in range(size):
-        p_nnz[i] = nnz[i]
-      # end for 
-
-      for i in range(size,orderdef):
-        p_nnz[i] = ZERO
-      # end for 
-      
-      self.num =  soti_createEmpty_predef(p_nnz, orderdef, dhl)
-
-      # Set real coefficient.
-      self.num.re = re_coeff
-    
-    elif nbases != 0 and order !=0 :
-
-      p_nnz = dhl.p_dh[order-ONE].p_nnz[ZERO]
-
-      for i in range(order):
-        p_nnz[i] = dhelp_extract_ndirOrder( nbases, i+1, dhl )
-      # end for 
-      
-      self.num =  soti_createEmpty_predef(p_nnz, order, dhl)
-
-      # Set real coefficient.
-      self.num.re = re_coeff  
-
-    else:
-      
-      self.num =  soti_createReal(re_coeff, order, dhl)
-    
-    # end if 
+    self.num = soti_create_r(re_coeff)
 
   #---------------------------------------------------------------------------------------------------  
-
-  #***************************************************************************************************
-  def __dealloc__(self): 
-    """
-    PURPOSE:      Destructor of the class. 
-
-    DESCRIPTION:  Frees all pointers allocated in the 
-                  
-    """
-    #*************************************************************************************************
-    
-    if self.FLAGS & 1: # If memory is owned by this otinum.
-
-      soti_free(&self.num)
-
-    #end if 
-    
-  #---------------------------------------------------------------------------------------------------
-  
 
   #***************************************************************************************************
   @property
@@ -106,24 +38,9 @@ cdef class sotinum:
     """
     #*************************************************************************************************
 
-    return self.num.order
+    return soti_get_order(&self.num)
 
   #---------------------------------------------------------------------------------------------------
-
-  # #***************************************************************************************************
-  # @order.setter
-  # def  order(self): 
-  #   """
-  #   PURPOSE:      Set the truncation order of the number.
-
-  #   DESCRIPTION:  Reads the value in num.
-                  
-  #   """
-  #   #*************************************************************************************************
-
-  #   return self.num.order
-
-  # #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @property
@@ -136,7 +53,7 @@ cdef class sotinum:
     """
     #*************************************************************************************************
 
-    return self.num.re
+    return self.num.<<<real_str>>>
 
   #---------------------------------------------------------------------------------------------------
 
@@ -152,7 +69,7 @@ cdef class sotinum:
     """
     #*************************************************************************************************
 
-    self.num.re = value
+    self.num.<<<real_str>>> = value
 
   #---------------------------------------------------------------------------------------------------
 
@@ -179,46 +96,11 @@ cdef class sotinum:
     # create new empty object:
     cdef sotinum otin = <sotinum> sotinum.__new__(sotinum)
 
-
-    otin.num.re     = num[ZERO].re    
-    otin.num.p_im   = num[ZERO].p_im  
-    otin.num.p_idx  = num[ZERO].p_idx 
-    otin.num.p_nnz  = num[ZERO].p_nnz 
-    otin.num.p_size = num[ZERO].p_size
-    otin.num.order  = num[ZERO].order 
-    otin.num.flag   = num[ZERO].flag 
-
-    otin.FLAGS      = FLAGS
+    otin.num     = soti_copy(num)
     
     return otin
 
   #--------------------------------------------------------------------------------------------------- 
-
-  #***************************************************************************************************
-  @staticmethod
-  cdef sotinum init(  ):
-    """
-    PURPOSE:      Initialize memory for OTI num.
-
-    DESCRIPTION:  Resets all pointer addresses to null, to avoid wrong memory reads.
-
-    RESULT:       
-            A new otinum python object.
-                  
-    """
-    #*************************************************************************************************
-
-    # create new empty object:
-    cdef sotinum otin = <sotinum> sotinum.__new__(sotinum)
-
-    otin.num        = soti_init()
-
-    otin.FLAGS      = 1
-    
-    return otin
-
-  #--------------------------------------------------------------------------------------------------- 
-
 
   #*************************************************************************************************** 
   def __repr__(self):
@@ -231,23 +113,24 @@ cdef class sotinum:
 
     
     cdef ord_t ordi, j
-    cdef ndir_t i;
-    cdef bases_t* dirs;
+    cdef ndir_t i, idx;
 
     head      = ''
     body      = ''
     
-    body += '%.4f'%self.num.re
+    body += '%.4f'%self.num.<<<real_str>>>
 
-    for ordi in range(0,self.num.order):
+    for ordi in range(1,self.order+1):
 
-      for i in range(self.num.p_nnz[ordi]):
+      for i in range( soti_get_ndir_order(ordi,&self.num) ):
         
-        num = '%+.4f'%self.num.p_im[ordi][i] 
+        idx = soti_get_indx(i, ordi) 
+        num = '%+.4f'%( soti_get_item(idx,ordi,&self.num) )
+
         body += ' '+num[0]+" "+num[1:]
         body += ' * e(' 
         
-        body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
+        body += str(h.get_compact_fulldir(idx,ordi)).replace(' ','')
         body += ")"
       
       # end for
@@ -269,56 +152,15 @@ cdef class sotinum:
     global h
     global p_dH
 
-    cdef ndir_t ndir_total = 1, i;
-
-    for i in range(0, self.num.order):
-
-      ndir_total += self.num.p_nnz[i]
-
-    # end for
+    cdef ndir_t ndir_total, i;
 
     head = 'sotinum('
-    body = str(self.num.re) + ", nnz: " + str(ndir_total) + ', order: ' + str(self.num.order)
+    body = str(self.num.<<<real_str>>>) + ", nnz: " + str(soti_get_ndir_total(&self.num)) + ', order: ' + str(self.order)
     tail = ')'
 
     return (head + body + tail)
 
   #---------------------------------------------------------------------------------------------------  
-
-  #*************************************************************************************************** 
-  def long_repr(self):
-    """
-    PURPOSE:  To print a representation of the sotinum object in a full detail form.
-    """
-    #*************************************************************************************************
-    global h
-    global p_dH
-
-    cdef ndir_t ndir_total = 1, ndir_max = 1, i;
-
-    for i in range(0, self.num.order):
-
-      ndir_total += self.num.p_nnz[i]
-      ndir_max   += self.num.p_size[i]
-
-    # end for
-
-    head = 'sotinum('
-    body = str(self.num.re) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max) 
-    body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"
-
-    for i in range(0, self.num.order):
-
-      body += "Order {0}->   nnz: {1}  size: {2} \n".format(i+1, self.num.p_nnz[i],self.num.p_size[i])
-
-    # end for 
-
-    tail = ')'
-
-    return (head + body + tail)
-
-  #---------------------------------------------------------------------------------------------------  
-
 
   #***************************************************************************************************
   def __str__(self):
@@ -333,24 +175,25 @@ cdef class sotinum:
     global h
 
     
-    cdef ord_t ordi, j
-    cdef ndir_t i;
-    cdef bases_t* dirs;
+    cdef ord_t ordi
+    cdef ndir_t i, idx
 
     head      = ''
     body      = ''
     
-    body += '%g'%self.num.re
+    body += '%.4f'%self.num.<<<real_str>>>
 
-    for ordi in range(0,self.num.order):
+    for ordi in range(1,self.order+1):
 
-      for i in range(self.num.p_nnz[ordi]):
+      for i in range( soti_get_ndir_order(ordi,&self.num) ):
         
-        num = '%+g'%self.num.p_im[ordi][i] 
+        idx = soti_get_indx(i, ordi) 
+        num = '%+.4f'%( soti_get_item(idx,ordi,&self.num) )
+
         body += ' '+num[0]+" "+num[1:]
         body += ' * e(' 
         
-        body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
+        body += str(h.get_compact_fulldir(idx,ordi)).replace(' ','')
         body += ")"
       
       # end for

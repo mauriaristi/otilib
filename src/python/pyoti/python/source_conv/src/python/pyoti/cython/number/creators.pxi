@@ -1,6 +1,6 @@
 
 #*****************************************************************************************************
-cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef e( object hum_dir, uint64_t nip = 0):
   """
   PURPOSE:  To create a {num_pytype} with value 1 at the specified imaginary direction
             in a human friendly manner
@@ -20,22 +20,18 @@ cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
   
   [indx_hd, order_hd] = imdir(hum_dir)
 
-  order_res = max( order, order_hd )
-
   if nip == 0: 
 
     # Create a {num_pytype}
-    ores = {num_func}_createReal(0.0, order_res)
+    ores = {num_func}_create_r(0.0)
 
     # Set the coefficient to 1.
     {num_func}_set_item(1.0, indx_hd, order_hd, &ores) 
-
     res = {num_pytype}.create(&ores)
 
   else:
     
-    fres = {fenum_pytype}(0.0, nip, order = order_res, nbases = nbases)
-
+    fres = {fenum_pytype}(0.0, nip)
     {fenum_func}_set_im_r( 1.0, indx_hd, order_hd, &fres.num)
 
     res = fres
@@ -47,7 +43,7 @@ cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef zero(  uint64_t nip = 0):
   """
   PURPOSE:  To create a scalar with real value 0 and every imaginary coefficient as zeros.
 
@@ -64,14 +60,12 @@ cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
   if nip == 0: 
 
     # Create a {num_pytype}
-    ores = {num_func}_createReal(0.0)
-
+    ores = {num_func}_create_r(0.0)
     res = {num_pytype}.create(&ores)
 
   else:
     
-    fres = {fenum_pytype}(0.0, nip, order = order, nbases = nbases)
-
+    fres = {fenum_pytype}(0.0, nip)
     res = fres
 
   # end if 
@@ -81,7 +75,7 @@ cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef one( uint64_t nip = 0):
   """
   PURPOSE:  To create a scalar with real value 1 and every imaginary coefficient as zeros.
 
@@ -98,14 +92,12 @@ cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
   if nip == 0: 
 
     # Create a {num_pytype}
-    ores = {num_func}_createReal(1.0)
-
+    ores = {num_func}_create_r(1.0)
     res = {num_pytype}.create(&ores)
 
   else:
     
-    fres = {fenum_pytype}(1.0, nip, order = order, nbases = nbases)
-
+    fres = {fenum_pytype}(1.0, nip)
     res = fres
 
   # end if 
@@ -115,7 +107,7 @@ cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef number( coeff_t num, uint64_t nip = 0):
   """
   PURPOSE:  To create a {num_pytype} with value 1 at the specified imaginary direction
             in a human friendly manner
@@ -133,14 +125,12 @@ cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 
   if nip == 0: 
 
     # Create a {num_pytype}
-    ores = {num_func}_createReal(num)
-
+    ores = {num_func}_create_r(num)
     res = {num_pytype}.create(&ores)
 
   else:
     
-    fres = {fenum_pytype}(num, nip, order = order, nbases = nbases)
-
+    fres = {fenum_pytype}(num, nip)
     res = fres
 
   # end if 
@@ -150,7 +140,7 @@ cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef eye(uint64_t size, uint64_t nip = 0):
   """
   PURPOSE: Create identity matrix of shape: (size,size).
 
@@ -163,14 +153,14 @@ cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   if nip == 0:
 
     # This will create an {arr_pytype}.
-    Ores = {arr_func}_eye(size,nbases,order)
+    Ores = {arr_func}_eye(size)
 
     return {arr_pytype}.create(&Ores)
 
   else:
 
     # This will create a {fearr_pytype}
-    Fres = {fearr_func}_eye(size,nip,nbases,order)
+    Fres = {fearr_func}_eye(size,nip)
 
     return {fearr_pytype}.create(&Fres)
   
@@ -179,7 +169,7 @@ cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef array( object arr,  uint64_t nip = 0):
   """
   PURPOSE: Create a matrix for OTI algebra, according to the given array values.
 
@@ -330,7 +320,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef zeros( object shape_in, uint64_t nip = 0):
   """
   PURPOSE: Create matrix filled with zeroes of shape: (nrows,ncols).
 
@@ -345,14 +335,14 @@ cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip 
   if nip == 0:
 
     # This will create an {arr_pytype}.
-    Ores = {arr_func}_zeros(nrows,ncols,nbases,order)
+    Ores = {arr_func}_zeros(nrows,ncols)
 
     return {arr_pytype}.create(&Ores)
 
   else:
 
     # This will create a {fearr_pytype}
-    Fres = {fearr_func}_zeros(nrows,ncols,nip,nbases,order)
+    Fres = {fearr_func}_zeros(nrows,ncols,nip)
 
     return {fearr_pytype}.create(&Fres)
   
@@ -361,7 +351,7 @@ cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip 
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef ones( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef ones( object shape_in,  uint64_t nip = 0):
   """
   PURPOSE: Create matrix filled with ones of shape: (nrows,ncols).
 
@@ -376,14 +366,14 @@ cpdef ones( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip =
   if nip == 0:
 
     # This will create an {arr_pytype}.
-    Ores = {arr_func}_ones(nrows,ncols,nbases,order)
+    Ores = {arr_func}_ones(nrows,ncols)
 
     return {arr_pytype}.create(&Ores)
 
   else:
 
     # This will create a {fearr_pytype}
-    Fres = {fearr_func}_ones(nrows,ncols,nip,nbases,order)
+    Fres = {fearr_func}_ones(nrows,ncols,nip)
            # {fearr_func}_ones(nrows,ncols,nip,nbases,order)
 
     return {fearr_pytype}.create(&Fres)

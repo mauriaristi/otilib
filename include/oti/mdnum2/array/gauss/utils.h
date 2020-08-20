@@ -78,7 +78,7 @@ void femdarr2_dimCheck_FfO_integrate(femdarr2_t* arr, femdnum2_t* num,mdarr2_t* 
 @param[in] list_vals Array to activate corresponding directions.
 @param[in] dhl Direction helper list
 ******************************************************************************************************/ 
-void femdarr2_get_active(femdarr2_t* arr, imdir_t* list_vals);
+void femdarr2_get_active_bases(femdarr2_t* arr, imdir_t* list_vals);
 // ----------------------------------------------------------------------------------------------------
 
 #endif

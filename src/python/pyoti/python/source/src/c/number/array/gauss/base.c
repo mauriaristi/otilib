@@ -844,9 +844,7 @@ void fearrso_set_all_r( coeff_t num, fearrso_t* res, dhelpl_t dhl ){
 
 
 // ****************************************************************************************************
-fearrso_t fearrso_eye_bases( uint64_t size,
-                               uint64_t nip, bases_t  nbases, 
-                               ord_t    order,   dhelpl_t dhl     ){ 
+fearrso_t fearrso_eye_bases( uint64_t size, uint64_t nip, dhelpl_t dhl ){ 
     
     uint64_t i,k;
 
@@ -875,9 +873,7 @@ fearrso_t fearrso_eye_bases( uint64_t size,
 
 
 // ****************************************************************************************************
-fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols, 
-                               uint64_t nip, bases_t  nbases, 
-                               ord_t    order,   dhelpl_t dhl     ){ 
+fearrso_t fearrso_zeros_bases( uint64_t nrows, uint64_t ncols, uint64_t nip, dhelpl_t dhl ){ 
     
     uint64_t i;
 
@@ -896,8 +892,7 @@ fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols,
 
 
 // ****************************************************************************************************
-fearrso_t fearrso_ones_bases( uint64_t nrows,   uint64_t ncols, uint64_t nip, bases_t  nbases, 
-                               ord_t    order,   dhelpl_t dhl     ){ 
+fearrso_t fearrso_ones_bases( uint64_t nrows, uint64_t ncols, uint64_t nip, dhelpl_t dhl  ){ 
     
     uint64_t i;
 
@@ -920,9 +915,7 @@ fearrso_t fearrso_ones_bases( uint64_t nrows,   uint64_t ncols, uint64_t nip, ba
 
 
 // ****************************************************************************************************
-fearrso_t fearrso_createEmpty_bases( uint64_t nrows,   uint64_t ncols, 
-                                     uint64_t nip, bases_t  nbases, 
-                                     ord_t    order,   dhelpl_t dhl){  
+fearrso_t fearrso_createEmpty_bases( uint64_t nrows, uint64_t ncols, uint64_t nip, dhelpl_t dhl){  
     
     uint64_t i;
 

@@ -3,7 +3,7 @@
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::     CLASS  MATSO   ::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class mdarr3_t: 
+cdef class mdmat3: 
   
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
@@ -14,7 +14,7 @@ cdef class mdarr3_t:
   #---------------------------------------------------------------------------------------------------  
 
   @staticmethod
-  cdef mdarr3_t create(mdarr3_t* num, uint8_t FLAGS = *)
+  cdef mdmat3 create(mdarr3_t* num, uint8_t FLAGS = *)
   
   cpdef truncate(      self, object humdir)
   cpdef extract_im(    self, object humdir)
@@ -26,8 +26,8 @@ cdef class mdarr3_t:
 
   cdef __setitem__r(self, object val, coeff_t value)
   cdef __setitem__R(self, object val, dmat    value)
-  cdef __setitem__o(self, object val, mdnum3_t value)
-  cdef __setitem__O(self, object val, mdarr3_t   value)
+  cdef __setitem__o(self, object val, mdnum3 value)
+  cdef __setitem__O(self, object val, mdmat3   value)
     
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::: END OF CLASS MATSO ::::::::::::::::::::::::::::::::::::::::::::::

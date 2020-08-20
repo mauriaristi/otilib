@@ -3,7 +3,7 @@
 // ****************************************************************************************************
 void mdnum2_div_ro_to(coeff_t num, mdnum2_t* den, mdnum2_t* res){
 
-    mdnum2_t inv = mdnum2_get_rtmp(6, den->order);
+    mdnum2_t inv;
     mdnum2_pow_to( den, -1, &inv);
     mdnum2_mul_ro_to(num,&inv,res);
 
@@ -24,6 +24,18 @@ void mdnum2_div_oo_to(mdnum2_t* num, mdnum2_t* den, mdnum2_t* res){
 void mdnum2_div_or_to(mdnum2_t* num, coeff_t val, mdnum2_t* res){
 
     mdnum2_mul_ro_to(1.0/val, num, res);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void mdnum2_abs_to(mdnum2_t* num, mdnum2_t* res){
+
+	if (num->r < 0){
+		mdnum2_neg_to(num,res);
+	} else {
+		mdnum2_copy_to(num,res);
+	}
 
 }
 // ----------------------------------------------------------------------------------------------------

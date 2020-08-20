@@ -122,7 +122,7 @@ ord_t arrso_get_order( arrso_t* arr ){
     // Finds the maximum order in the array.
     for( i=0; i<arr->size; i++ ){
         
-        order = MAX(order,arr->p_data[0].order);
+        order = MAX( order, soti_get_order(&arr->p_data[i]) );
     
     }
 
@@ -139,7 +139,7 @@ void arrso_get_active_bases(arrso_t* arr, imdir_t* list_vals, dhelpl_t dhl){
     uint64_t i;
     
     // Finds the active imaginary directions in the array.
-    for( i=0; i<arr->size; i++ ){
+    for( i = 0; i < arr->size; i++ ){
         
         soti_get_active_bases( &arr->p_data[i], list_vals, dhl);
     

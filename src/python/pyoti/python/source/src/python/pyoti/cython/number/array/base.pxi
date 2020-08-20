@@ -20,7 +20,7 @@ cdef class matso:
 
   #***************************************************************************************************
   
-  def __init__(self, realArray, ord_t order = 0, bases_t nbases = 0, object nnz = None): 
+  def __init__(self, realArray): 
     """
     PURPOSE:      Python level constructor of the matso class.
 
@@ -48,7 +48,7 @@ cdef class matso:
         ncols = 1      
         nrows = realArray.shape[0]
 
-        self.arr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
+        self.arr = arrso_zeros_bases( nrows, ncols, dhl)
 
         for i in range(self.arr.nrows):
       
@@ -61,7 +61,7 @@ cdef class matso:
 
         nrows = realArray.shape[0]
         ncols = realArray.shape[1]
-        self.arr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
+        self.arr = arrso_zeros_bases( nrows, ncols, dhl)
 
         for i in range(self.arr.nrows):      
           for j in range(self.arr.ncols):
@@ -1240,24 +1240,39 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
-  cpdef get_deriv(self, object hum_dir ):
+  cpdef get_deriv(self, object hum_dir):
     """
-    PURPOSE: Get the corresponding derivative of the system.
+    PURPOSE: Get the corresponding imaginary direction in the matso object.
     """
     #*************************************************************************************************
     global dhl
-
+    
     cdef list item = imdir(hum_dir)
-    cdef np.ndarray[coeff_t, ndim=2] tmp
-    cdef coeff_t factor = 1
+    cdef darr_t res_darr
+    cdef dmat res_dmat
+    cdef uint64_t i,j, k
+    cdef np.ndarray[double, ndim=2] res
 
-    tmp = self.get_im(hum_dir)
+    res_darr = arrso_get_deriv( item[ZERO],  item[ONE], &self.arr,  dhl)
 
-    factor = dhelp_get_deriv_factor(item[ZERO], item[ONE], dhl)
+    res = np.empty( self.shape , dtype = np.float64)
 
-    return tmp * factor
+    k=0
 
-  #---------------------------------------------------------------------------------------------------  
+    for i in range(self.arr.nrows):
+
+      for j in range(self.arr.ncols):
+
+        res[i,j] = res_darr.p_data[k]
+        k+=1
+
+      # end for 
+
+    #end for
+
+    return res
+
+  #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
   cpdef get_im(self, object hum_dir):

@@ -1,0 +1,491 @@
+pyoti.onumm1n1 ::::
+scalar x+x ---------------------------------------            1.34X
+scalar x*x ---------------------------------------            1.57X
+scalar sin(x) ------------------------------------            0.00X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.77X
+scalar mul(x,x,out=xout) -------------------------            0.83X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.01X
+scalar xg+xg -------------------------------------            2.50X
+scalar xg*xg -------------------------------------            2.71X
+scalar sin(xg) -----------------------------------            1.90X
+scalar gauss_integrate(xg,xg) --------------------            2.02X
+scalar sum(xg,xg,out=xgout) ----------------------            1.04X
+scalar mul(xg,xg,out=xgout) ----------------------            1.50X
+scalar sin(xg,out=xgout) -------------------------            1.82X
+scalar gauss_integrate(xg,xg,out=x) --------------            1.07X
+array X+X ----------------------------------------            2.03X
+array X*X ----------------------------------------            1.58X
+array dot(X,X) -----------------------------------            1.52X
+array sin(X) -------------------------------------            1.67X
+array sum(X,X,out=Xout) --------------------------            0.69X
+array mul(X,X,out=Xout) --------------------------            0.86X
+array dot(X,X,out=Xout) --------------------------            0.96X
+array sin(X,out=Xout) ----------------------------            2.32X
+gauss_array Xg+Xg --------------------------------            0.64X
+gauss_array Xg*Xg --------------------------------            0.75X
+gauss_array dot(Xg,Xg) ---------------------------            0.90X
+gauss_array sin(Xg) ------------------------------            1.04X
+gauss_array gauss_integrate(Xg,xg) ---------------            2.12X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            1.13X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            1.69X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------            1.44X
+gauss_array sin(Xg,out=Xgout) --------------------            2.68X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------            2.56X
+
+
+
+pyoti.mdnum2 ::::
+scalar x+x ---------------------------------------            1.37X
+scalar x*x ---------------------------------------            1.62X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.74X
+scalar mul(x,x,out=xout) -------------------------            0.90X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.01X
+scalar xg+xg -------------------------------------            1.32X
+scalar xg*xg -------------------------------------            2.08X
+scalar sin(xg) -----------------------------------            2.03X
+scalar gauss_integrate(xg,xg) --------------------            1.29X
+scalar sum(xg,xg,out=xgout) ----------------------            1.05X
+scalar mul(xg,xg,out=xgout) ----------------------            1.33X
+scalar sin(xg,out=xgout) -------------------------            1.93X
+scalar gauss_integrate(xg,xg,out=x) --------------            1.39X
+array X+X ----------------------------------------            1.51X
+array X*X ----------------------------------------            1.62X
+array dot(X,X) -----------------------------------            1.65X
+array sin(X) -------------------------------------            1.87X
+array sum(X,X,out=Xout) --------------------------            0.76X
+array mul(X,X,out=Xout) --------------------------            0.98X
+array dot(X,X,out=Xout) --------------------------            1.04X
+array sin(X,out=Xout) ----------------------------            1.41X
+gauss_array Xg+Xg --------------------------------            1.32X
+gauss_array Xg*Xg --------------------------------            1.43X
+gauss_array dot(Xg,Xg) ---------------------------            1.90X
+gauss_array sin(Xg) ------------------------------            1.34X
+gauss_array gauss_integrate(Xg,xg) ---------------            1.90X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            0.82X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            1.40X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------            1.43X
+gauss_array sin(Xg,out=Xgout) --------------------            2.76X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------            2.33X
+
+
+
+pyoti.mdnum3 ::::
+scalar x+x ---------------------------------------            1.56X
+scalar x*x ---------------------------------------            1.80X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            1.33X
+scalar mul(x,x,out=xout) -------------------------            0.95X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.01X
+scalar xg+xg -------------------------------------            0.92X
+scalar xg*xg -------------------------------------            2.88X
+scalar sin(xg) -----------------------------------            2.67X
+scalar gauss_integrate(xg,xg) --------------------            1.89X
+scalar sum(xg,xg,out=xgout) ----------------------            2.07X
+scalar mul(xg,xg,out=xgout) ----------------------            2.23X
+scalar sin(xg,out=xgout) -------------------------            4.32X
+scalar gauss_integrate(xg,xg,out=x) --------------            2.01X
+array X+X ----------------------------------------            2.41X
+array X*X ----------------------------------------            1.92X
+array dot(X,X) -----------------------------------            2.54X
+array sin(X) -------------------------------------            4.15X
+array sum(X,X,out=Xout) --------------------------            0.75X
+array mul(X,X,out=Xout) --------------------------            1.16X
+array dot(X,X,out=Xout) --------------------------            1.74X
+array sin(X,out=Xout) ----------------------------            2.12X
+gauss_array Xg+Xg --------------------------------            1.24X
+gauss_array Xg*Xg --------------------------------            1.28X
+gauss_array dot(Xg,Xg) ---------------------------            2.11X
+gauss_array sin(Xg) ------------------------------            3.27X
+gauss_array gauss_integrate(Xg,xg) ---------------            5.26X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            1.29X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            2.64X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------            3.10X
+gauss_array sin(Xg,out=Xgout) --------------------            6.05X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------            5.33X
+
+
+
+pyoti.mdnum4 ::::
+scalar x+x ---------------------------------------            1.75X
+scalar x*x ---------------------------------------            2.48X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.83X
+scalar mul(x,x,out=xout) -------------------------            1.00X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.01X
+scalar xg+xg -------------------------------------            1.19X
+scalar xg*xg -------------------------------------            3.96X
+scalar sin(xg) -----------------------------------           10.46X
+scalar gauss_integrate(xg,xg) --------------------            5.30X
+scalar sum(xg,xg,out=xgout) ----------------------            1.32X
+scalar mul(xg,xg,out=xgout) ----------------------            4.69X
+scalar sin(xg,out=xgout) -------------------------           12.92X
+scalar gauss_integrate(xg,xg,out=x) --------------            5.15X
+array X+X ----------------------------------------            6.94X
+array X*X ----------------------------------------            8.05X
+array dot(X,X) -----------------------------------            7.13X
+array sin(X) -------------------------------------           15.04X
+array sum(X,X,out=Xout) --------------------------            0.76X
+array mul(X,X,out=Xout) --------------------------            1.47X
+array dot(X,X,out=Xout) --------------------------            3.70X
+array sin(X,out=Xout) ----------------------------            6.62X
+gauss_array Xg+Xg --------------------------------            5.27X
+gauss_array Xg*Xg --------------------------------            4.38X
+gauss_array dot(Xg,Xg) ---------------------------            6.20X
+gauss_array sin(Xg) ------------------------------            8.46X
+gauss_array gauss_integrate(Xg,xg) ---------------           13.13X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            1.93X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            5.41X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------           11.41X
+gauss_array sin(Xg,out=Xgout) --------------------           27.26X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------           14.61X
+
+
+
+pyoti.mdnum5 ::::
+scalar x+x ---------------------------------------            3.10X
+scalar x*x ---------------------------------------            3.78X
+scalar sin(x) ------------------------------------            0.03X
+scalar pow(x,100.) -------------------------------            0.03X
+scalar sum(x,x,out=xout) -------------------------            0.83X
+scalar mul(x,x,out=xout) -------------------------            1.16X
+scalar sin(x, out=xout) --------------------------            0.02X
+scalar pow(x,100., out=xout) ---------------------            0.02X
+scalar xg+xg -------------------------------------            1.75X
+scalar xg*xg -------------------------------------           12.83X
+scalar sin(xg) -----------------------------------           29.78X
+scalar gauss_integrate(xg,xg) --------------------           15.24X
+scalar sum(xg,xg,out=xgout) ----------------------            1.89X
+scalar mul(xg,xg,out=xgout) ----------------------           14.26X
+scalar sin(xg,out=xgout) -------------------------           44.41X
+scalar gauss_integrate(xg,xg,out=x) --------------           12.50X
+array X+X ----------------------------------------           12.48X
+array X*X ----------------------------------------           14.45X
+array dot(X,X) -----------------------------------           15.63X
+array sin(X) -------------------------------------           24.90X
+array sum(X,X,out=Xout) --------------------------            0.84X
+array mul(X,X,out=Xout) --------------------------            2.96X
+array dot(X,X,out=Xout) --------------------------            8.73X
+array sin(X,out=Xout) ----------------------------           17.34X
+gauss_array Xg+Xg --------------------------------            6.81X
+gauss_array Xg*Xg --------------------------------            9.27X
+gauss_array dot(Xg,Xg) ---------------------------           16.15X
+gauss_array sin(Xg) ------------------------------           22.05X
+gauss_array gauss_integrate(Xg,xg) ---------------           34.54X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            4.08X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------           23.62X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------           37.86X
+gauss_array sin(Xg,out=Xgout) --------------------          103.81X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------           69.22X
+
+
+
+pyoti.onumm1n2 ::::
+scalar x+x ---------------------------------------            2.14X
+scalar x*x ---------------------------------------            1.99X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.94X
+scalar mul(x,x,out=xout) -------------------------            1.17X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.01X
+scalar xg+xg -------------------------------------            1.73X
+scalar xg*xg -------------------------------------            2.00X
+scalar sin(xg) -----------------------------------            2.19X
+scalar gauss_integrate(xg,xg) --------------------            1.92X
+scalar sum(xg,xg,out=xgout) ----------------------            1.23X
+scalar mul(xg,xg,out=xgout) ----------------------            2.04X
+scalar sin(xg,out=xgout) -------------------------            2.12X
+scalar gauss_integrate(xg,xg,out=x) --------------            1.94X
+array X+X ----------------------------------------            2.57X
+array X*X ----------------------------------------            2.01X
+array dot(X,X) -----------------------------------            1.98X
+array sin(X) -------------------------------------            2.56X
+array sum(X,X,out=Xout) --------------------------            0.78X
+array mul(X,X,out=Xout) --------------------------            0.99X
+array dot(X,X,out=Xout) --------------------------            1.13X
+array sin(X,out=Xout) ----------------------------            1.56X
+gauss_array Xg+Xg --------------------------------            0.91X
+gauss_array Xg*Xg --------------------------------            0.88X
+gauss_array dot(Xg,Xg) ---------------------------            1.29X
+gauss_array sin(Xg) ------------------------------            1.34X
+gauss_array gauss_integrate(Xg,xg) ---------------            2.28X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            1.08X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            1.44X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------            1.75X
+gauss_array sin(Xg,out=Xgout) --------------------            3.60X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------            3.06X
+
+
+
+pyoti.onumm1n3 ::::
+scalar x+x ---------------------------------------            2.03X
+scalar x*x ---------------------------------------            2.23X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.90X
+scalar mul(x,x,out=xout) -------------------------            0.96X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.01X
+scalar xg+xg -------------------------------------            1.57X
+scalar xg*xg -------------------------------------            2.58X
+scalar sin(xg) -----------------------------------            2.50X
+scalar gauss_integrate(xg,xg) --------------------            1.81X
+scalar sum(xg,xg,out=xgout) ----------------------            8.49X
+scalar mul(xg,xg,out=xgout) ----------------------            5.14X
+scalar sin(xg,out=xgout) -------------------------            2.98X
+scalar gauss_integrate(xg,xg,out=x) --------------            1.55X
+array X+X ----------------------------------------            2.31X
+array X*X ----------------------------------------            1.89X
+array dot(X,X) -----------------------------------            2.25X
+array sin(X) -------------------------------------            2.59X
+array sum(X,X,out=Xout) --------------------------            0.81X
+array mul(X,X,out=Xout) --------------------------            1.06X
+array dot(X,X,out=Xout) --------------------------            1.32X
+array sin(X,out=Xout) ----------------------------            1.65X
+gauss_array Xg+Xg --------------------------------            1.12X
+gauss_array Xg*Xg --------------------------------            1.17X
+gauss_array dot(Xg,Xg) ---------------------------            1.52X
+gauss_array sin(Xg) ------------------------------            2.17X
+gauss_array gauss_integrate(Xg,xg) ---------------            3.62X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            0.83X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            2.08X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------            2.52X
+gauss_array sin(Xg,out=Xgout) --------------------            4.03X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------            2.89X
+
+
+
+pyoti.onumm1n5 ::::
+scalar x+x ---------------------------------------            1.73X
+scalar x*x ---------------------------------------            1.98X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.75X
+scalar mul(x,x,out=xout) -------------------------            1.14X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.01X
+scalar xg+xg -------------------------------------            0.92X
+scalar xg*xg -------------------------------------            2.06X
+scalar sin(xg) -----------------------------------            3.66X
+scalar gauss_integrate(xg,xg) --------------------            1.74X
+scalar sum(xg,xg,out=xgout) ----------------------            1.12X
+scalar mul(xg,xg,out=xgout) ----------------------            1.89X
+scalar sin(xg,out=xgout) -------------------------            3.85X
+scalar gauss_integrate(xg,xg,out=x) --------------            1.40X
+array X+X ----------------------------------------            2.72X
+array X*X ----------------------------------------            1.99X
+array dot(X,X) -----------------------------------            3.52X
+array sin(X) -------------------------------------            4.15X
+array sum(X,X,out=Xout) --------------------------            0.77X
+array mul(X,X,out=Xout) --------------------------            1.10X
+array dot(X,X,out=Xout) --------------------------            1.58X
+array sin(X,out=Xout) ----------------------------            2.53X
+gauss_array Xg+Xg --------------------------------            1.33X
+gauss_array Xg*Xg --------------------------------            1.49X
+gauss_array dot(Xg,Xg) ---------------------------            1.92X
+gauss_array sin(Xg) ------------------------------            2.85X
+gauss_array gauss_integrate(Xg,xg) ---------------            3.33X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            0.85X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            1.98X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------            2.96X
+gauss_array sin(Xg,out=Xgout) --------------------            8.87X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------            4.26X
+
+
+
+pyoti.onumm2n2 ::::
+scalar x+x ---------------------------------------            1.44X
+scalar x*x ---------------------------------------            1.67X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.75X
+scalar mul(x,x,out=xout) -------------------------            0.86X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.01X
+scalar xg+xg -------------------------------------            0.88X
+scalar xg*xg -------------------------------------            1.49X
+scalar sin(xg) -----------------------------------            1.83X
+scalar gauss_integrate(xg,xg) --------------------            1.47X
+scalar sum(xg,xg,out=xgout) ----------------------            1.15X
+scalar mul(xg,xg,out=xgout) ----------------------            1.64X
+scalar sin(xg,out=xgout) -------------------------            2.15X
+scalar gauss_integrate(xg,xg,out=x) --------------            1.40X
+array X+X ----------------------------------------            1.46X
+array X*X ----------------------------------------            1.66X
+array dot(X,X) -----------------------------------            2.20X
+array sin(X) -------------------------------------            2.56X
+array sum(X,X,out=Xout) --------------------------            0.79X
+array mul(X,X,out=Xout) --------------------------            1.00X
+array dot(X,X,out=Xout) --------------------------            1.26X
+array sin(X,out=Xout) ----------------------------            1.39X
+gauss_array Xg+Xg --------------------------------            1.30X
+gauss_array Xg*Xg --------------------------------            1.36X
+gauss_array dot(Xg,Xg) ---------------------------            1.98X
+gauss_array sin(Xg) ------------------------------            1.76X
+gauss_array gauss_integrate(Xg,xg) ---------------            2.68X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            0.83X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            1.38X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------            2.38X
+gauss_array sin(Xg,out=Xgout) --------------------            4.90X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------            4.82X
+
+
+
+pyoti.onumm3n3 ::::
+scalar x+x ---------------------------------------            2.23X
+scalar x*x ---------------------------------------            2.57X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.86X
+scalar mul(x,x,out=xout) -------------------------            1.00X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.02X
+scalar xg+xg -------------------------------------            1.63X
+scalar xg*xg -------------------------------------            7.78X
+scalar sin(xg) -----------------------------------            9.21X
+scalar gauss_integrate(xg,xg) --------------------            5.37X
+scalar sum(xg,xg,out=xgout) ----------------------            1.40X
+scalar mul(xg,xg,out=xgout) ----------------------            3.46X
+scalar sin(xg,out=xgout) -------------------------            7.56X
+scalar gauss_integrate(xg,xg,out=x) --------------            3.10X
+array X+X ----------------------------------------            6.24X
+array X*X ----------------------------------------            8.03X
+array dot(X,X) -----------------------------------            7.22X
+array sin(X) -------------------------------------            8.33X
+array sum(X,X,out=Xout) --------------------------            1.01X
+array mul(X,X,out=Xout) --------------------------            1.94X
+array dot(X,X,out=Xout) --------------------------            3.80X
+array sin(X,out=Xout) ----------------------------            6.99X
+gauss_array Xg+Xg --------------------------------            4.61X
+gauss_array Xg*Xg --------------------------------            5.55X
+gauss_array dot(Xg,Xg) ---------------------------            6.21X
+gauss_array sin(Xg) ------------------------------            6.86X
+gauss_array gauss_integrate(Xg,xg) ---------------           11.28X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            3.05X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            7.69X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------           12.22X
+gauss_array sin(Xg,out=Xgout) --------------------           20.09X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------           15.03X
+
+
+
+pyoti.onumm1n10 ::::
+scalar x+x ---------------------------------------            1.80X
+scalar x*x ---------------------------------------            2.59X
+scalar sin(x) ------------------------------------            0.02X
+scalar pow(x,100.) -------------------------------            0.02X
+scalar sum(x,x,out=xout) -------------------------            0.78X
+scalar mul(x,x,out=xout) -------------------------            1.10X
+scalar sin(x, out=xout) --------------------------            0.02X
+scalar pow(x,100., out=xout) ---------------------            0.02X
+scalar xg+xg -------------------------------------            1.46X
+scalar xg*xg -------------------------------------            4.67X
+scalar sin(xg) -----------------------------------           22.05X
+scalar gauss_integrate(xg,xg) --------------------            4.74X
+scalar sum(xg,xg,out=xgout) ----------------------            1.25X
+scalar mul(xg,xg,out=xgout) ----------------------            3.46X
+scalar sin(xg,out=xgout) -------------------------           23.85X
+scalar gauss_integrate(xg,xg,out=x) --------------            4.12X
+array X+X ----------------------------------------            1.63X
+array X*X ----------------------------------------            3.12X
+array dot(X,X) -----------------------------------            5.39X
+array sin(X) -------------------------------------           16.43X
+array sum(X,X,out=Xout) --------------------------            0.76X
+array mul(X,X,out=Xout) --------------------------            1.65X
+array dot(X,X,out=Xout) --------------------------            3.85X
+array sin(X,out=Xout) ----------------------------           17.64X
+gauss_array Xg+Xg --------------------------------            1.78X
+gauss_array Xg*Xg --------------------------------            2.52X
+gauss_array dot(Xg,Xg) ---------------------------            5.06X
+gauss_array sin(Xg) ------------------------------           12.67X
+gauss_array gauss_integrate(Xg,xg) ---------------            9.96X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            1.61X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            5.93X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------           10.38X
+gauss_array sin(Xg,out=Xgout) --------------------           61.03X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------           14.02X
+
+
+
+pyoti.onumm10n1 ::::
+scalar x+x ---------------------------------------            1.77X
+scalar x*x ---------------------------------------            1.95X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.87X
+scalar mul(x,x,out=xout) -------------------------            0.88X
+scalar sin(x, out=xout) --------------------------            0.01X
+scalar pow(x,100., out=xout) ---------------------            0.01X
+scalar xg+xg -------------------------------------            3.13X
+scalar xg*xg -------------------------------------            4.06X
+scalar sin(xg) -----------------------------------            3.59X
+scalar gauss_integrate(xg,xg) --------------------            3.81X
+scalar sum(xg,xg,out=xgout) ----------------------            1.43X
+scalar mul(xg,xg,out=xgout) ----------------------            1.58X
+scalar sin(xg,out=xgout) -------------------------            2.40X
+scalar gauss_integrate(xg,xg,out=x) --------------            1.62X
+array X+X ----------------------------------------            3.20X
+array X*X ----------------------------------------            1.69X
+array dot(X,X) -----------------------------------            4.84X
+array sin(X) -------------------------------------            3.64X
+array sum(X,X,out=Xout) --------------------------            0.93X
+array mul(X,X,out=Xout) --------------------------            0.94X
+array dot(X,X,out=Xout) --------------------------            1.97X
+array sin(X,out=Xout) ----------------------------            2.37X
+gauss_array Xg+Xg --------------------------------            3.78X
+gauss_array Xg*Xg --------------------------------            2.71X
+gauss_array dot(Xg,Xg) ---------------------------            3.36X
+gauss_array sin(Xg) ------------------------------            4.17X
+gauss_array gauss_integrate(Xg,xg) ---------------            5.73X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            1.68X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            1.78X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------            2.90X
+gauss_array sin(Xg,out=Xgout) --------------------            2.90X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------            6.60X
+
+
+
+pyoti.onumm2n5 ::::
+scalar x+x ---------------------------------------            1.86X
+scalar x*x ---------------------------------------            3.05X
+scalar sin(x) ------------------------------------            0.01X
+scalar pow(x,100.) -------------------------------            0.01X
+scalar sum(x,x,out=xout) -------------------------            0.88X
+scalar mul(x,x,out=xout) -------------------------            1.11X
+scalar sin(x, out=xout) --------------------------            0.02X
+scalar pow(x,100., out=xout) ---------------------            0.02X
+scalar xg+xg -------------------------------------            1.59X
+scalar xg*xg -------------------------------------            6.99X
+scalar sin(xg) -----------------------------------           19.97X
+scalar gauss_integrate(xg,xg) --------------------            6.94X
+scalar sum(xg,xg,out=xgout) ----------------------            1.70X
+scalar mul(xg,xg,out=xgout) ----------------------            5.14X
+scalar sin(xg,out=xgout) -------------------------           16.90X
+scalar gauss_integrate(xg,xg,out=x) --------------            4.76X
+array X+X ----------------------------------------            6.28X
+array X*X ----------------------------------------            8.60X
+array dot(X,X) -----------------------------------           11.43X
+array sin(X) -------------------------------------           15.28X
+array sum(X,X,out=Xout) --------------------------            0.92X
+array mul(X,X,out=Xout) --------------------------            2.14X
+array dot(X,X,out=Xout) --------------------------            5.34X
+array sin(X,out=Xout) ----------------------------           10.77X
+gauss_array Xg+Xg --------------------------------            4.21X
+gauss_array Xg*Xg --------------------------------            4.90X
+gauss_array dot(Xg,Xg) ---------------------------            7.95X
+gauss_array sin(Xg) ------------------------------           11.74X
+gauss_array gauss_integrate(Xg,xg) ---------------           16.42X
+gauss_array sum(Xg,Xg,out=Xgout) -----------------            2.85X
+gauss_array mul(Xg,Xg,out=Xgout) -----------------            9.57X
+gauss_array dot(Xg,Xg,out=Xgout) -----------------           16.71X
+gauss_array sin(Xg,out=Xgout) --------------------           44.35X
+gauss_array gauss_integrate(Xg,xg,out=Xout) ------           20.04X

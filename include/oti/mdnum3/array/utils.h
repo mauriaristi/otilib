@@ -36,7 +36,7 @@ ord_t mdarr3_get_order(mdarr3_t* arr);
 @param[inout] list_vals  Initialized list of values. Must come with all directions deactivated.
 @param[in]    dhl        Direction helper list.
 ******************************************************************************************************/ 
-void mdarr3_get_active(mdarr3_t* arr, imdir_t* list_vals);
+void mdarr3_get_active_bases(mdarr3_t* arr, imdir_t* list_vals);
 // ----------------------------------------------------------------------------------------------------
 
 #endif

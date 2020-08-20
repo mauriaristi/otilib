@@ -120,7 +120,7 @@ ord_t mdarr2_get_order( mdarr2_t* arr ){
     // Finds the maximum order in the array.
     for( i=0; i<arr->size; i++ ){
         
-        order = MAX(order,arr->p_data[0].order);
+        order = MAX( order, mdnum2_get_order(&arr->p_data[i]) );
     
     }
 
@@ -130,14 +130,14 @@ ord_t mdarr2_get_order( mdarr2_t* arr ){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void mdarr2_get_active(mdarr2_t* arr, imdir_t* list_vals){
+void mdarr2_get_active_bases(mdarr2_t* arr, imdir_t* list_vals){
     
     uint64_t i;
     
     // Finds the active imaginary directions in the array.
-    for( i=0; i<arr->size; i++ ){
+    for( i = 0; i < arr->size; i++ ){
         
-        mdnum2_get_active( &arr->p_data[i], list_vals);
+        mdnum2_get_active_bases( &arr->p_data[i], list_vals);
     
     }
     

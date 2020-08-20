@@ -42,21 +42,21 @@ cpdef truncate(object humdir, object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdmat3
+      -  mdmatfe3
+      -  mdnum3
+      -  mdnumfe3
   """
   #***************************************************************************************************
   cdef imdir_t indx
   cdef ord_t   order
-  cdef mdarr3_t      O, Ores
-  cdef csr_mdarr3_t  S, Sres
+  cdef mdmat3      O, Ores
+  cdef csr_mdmat3  S, Sres
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -77,7 +77,7 @@ cpdef truncate(object humdir, object val, object out = None):
   # end if 
   
   # Scalar Types
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -87,10 +87,10 @@ cpdef truncate(object humdir, object val, object out = None):
     else:
 
       cores = mdnum3_truncate_im( indx, order, &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -100,11 +100,11 @@ cpdef truncate(object humdir, object val, object out = None):
     else:
 
       cfres = femdnum3_truncate_im( indx, order, &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if
   # Array Types
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -114,10 +114,10 @@ cpdef truncate(object humdir, object val, object out = None):
     else:
 
       cOres = mdarr3_truncate_im( indx, order, &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -127,10 +127,10 @@ cpdef truncate(object humdir, object val, object out = None):
     else:
 
       cFres = femdarr3_truncate_im( indx, order, &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is csr_mdarr3_t:
+  elif tval is csr_mdmat3:
     S = val
     if res_flag:
       
@@ -172,21 +172,21 @@ cpdef extract_im(object humdir, object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdmat3
+      -  mdmatfe3
+      -  mdnum3
+      -  mdnumfe3
   """
   #***************************************************************************************************
   cdef imdir_t indx
   cdef ord_t   order
-  cdef mdarr3_t      O, Ores
-  cdef csr_mdarr3_t  S, Sres
+  cdef mdmat3      O, Ores
+  cdef csr_mdmat3  S, Sres
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -206,7 +206,7 @@ cpdef extract_im(object humdir, object val, object out = None):
   # end if 
   
   # Scalar Types
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -216,10 +216,10 @@ cpdef extract_im(object humdir, object val, object out = None):
     else:
 
       cores = mdnum3_extract_im( indx, order, &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -229,11 +229,11 @@ cpdef extract_im(object humdir, object val, object out = None):
     else:
 
       cfres = femdnum3_extract_im( indx, order, &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if
   # Array Types
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -243,10 +243,10 @@ cpdef extract_im(object humdir, object val, object out = None):
     else:
 
       cOres = mdarr3_extract_im( indx, order, &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -256,10 +256,10 @@ cpdef extract_im(object humdir, object val, object out = None):
     else:
 
       cFres = femdarr3_extract_im( indx, order, &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is csr_mdarr3_t:
+  elif tval is csr_mdmat3:
     S = val
     if res_flag:
       
@@ -301,21 +301,21 @@ cpdef extract_deriv(object humdir, object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdmat3
+      -  mdmatfe3
+      -  mdnum3
+      -  mdnumfe3
   """
   #***************************************************************************************************
   cdef imdir_t indx
   cdef ord_t   order
-  cdef mdarr3_t      O, Ores
-  cdef csr_mdarr3_t  S, Sres
+  cdef mdmat3      O, Ores
+  cdef csr_mdmat3  S, Sres
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -334,7 +334,7 @@ cpdef extract_deriv(object humdir, object val, object out = None):
   # end if 
   
   # Scalar Types
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -344,10 +344,10 @@ cpdef extract_deriv(object humdir, object val, object out = None):
     else:
 
       cores = mdnum3_extract_deriv( indx, order, &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -357,11 +357,11 @@ cpdef extract_deriv(object humdir, object val, object out = None):
     else:
 
       cfres = femdnum3_extract_deriv( indx, order, &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if
   # Array Types
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -371,10 +371,10 @@ cpdef extract_deriv(object humdir, object val, object out = None):
     else:
 
       cOres = mdarr3_extract_deriv( indx, order, &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -384,10 +384,10 @@ cpdef extract_deriv(object humdir, object val, object out = None):
     else:
 
       cFres = femdarr3_extract_deriv( indx, order, &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is csr_mdarr3_t:
+  elif tval is csr_mdmat3:
     S = val
     if res_flag:
       
@@ -429,21 +429,21 @@ cpdef get_im(object humdir, object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdmat3
+      -  mdmatfe3
+      -  mdnum3
+      -  mdnumfe3
   """
   #***************************************************************************************************
   cdef imdir_t indx
   cdef ord_t   order
-  cdef mdarr3_t      O, Ores
-  cdef csr_mdarr3_t  S, Sres
+  cdef mdmat3      O, Ores
+  cdef csr_mdmat3  S, Sres
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -462,7 +462,7 @@ cpdef get_im(object humdir, object val, object out = None):
   # end if 
   
   # Scalar Types
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -472,10 +472,10 @@ cpdef get_im(object humdir, object val, object out = None):
     else:
 
       cores = mdnum3_get_im_o( indx, order, &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -485,11 +485,11 @@ cpdef get_im(object humdir, object val, object out = None):
     else:
 
       cfres = femdnum3_get_im( indx, order, &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if
   # Array Types
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -499,10 +499,10 @@ cpdef get_im(object humdir, object val, object out = None):
     else:
 
       cOres = mdarr3_get_im_o( indx, order, &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -512,10 +512,10 @@ cpdef get_im(object humdir, object val, object out = None):
     else:
 
       cFres = femdarr3_get_im( indx, order, &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is csr_mdarr3_t:
+  elif tval is csr_mdmat3:
     S = val
     if res_flag:
       
@@ -557,21 +557,21 @@ cpdef get_deriv(object humdir, object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdmat3
+      -  mdmatfe3
+      -  mdnum3
+      -  mdnumfe3
   """
   #***************************************************************************************************
   cdef imdir_t indx
   cdef ord_t   order
-  cdef mdarr3_t      O, Ores
-  cdef csr_mdarr3_t  S, Sres
+  cdef mdmat3      O, Ores
+  cdef csr_mdmat3  S, Sres
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -590,7 +590,7 @@ cpdef get_deriv(object humdir, object val, object out = None):
   # end if 
   
   # Scalar Types
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -600,10 +600,10 @@ cpdef get_deriv(object humdir, object val, object out = None):
     else:
 
       cores = mdnum3_get_deriv_o( indx, order, &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -613,11 +613,11 @@ cpdef get_deriv(object humdir, object val, object out = None):
     else:
 
       cfres = femdnum3_get_deriv( indx, order, &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if
   # Array Types
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -627,10 +627,10 @@ cpdef get_deriv(object humdir, object val, object out = None):
     else:
 
       cOres = mdarr3_get_deriv_o( indx, order, &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -640,10 +640,10 @@ cpdef get_deriv(object humdir, object val, object out = None):
     else:
 
       cFres = femdarr3_get_deriv( indx, order, &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if
-  elif tval is csr_mdarr3_t:
+  elif tval is csr_mdmat3:
     S = val
     if res_flag:
       
@@ -685,19 +685,19 @@ cpdef get_order_im(ord_t order, object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdmat3
+      -  mdmatfe3
+      -  mdnum3
+      -  mdnumfe3
   """
   #***************************************************************************************************
-  cdef mdarr3_t      O, Ores
-  cdef csr_mdarr3_t  S, Sres
+  cdef mdmat3      O, Ores
+  cdef csr_mdmat3  S, Sres
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -714,7 +714,7 @@ cpdef get_order_im(ord_t order, object val, object out = None):
   # end if 
   
   # Scalar Types
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -724,10 +724,10 @@ cpdef get_order_im(ord_t order, object val, object out = None):
     else:
 
       cores = mdnum3_get_order_im( order, &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -737,11 +737,11 @@ cpdef get_order_im(ord_t order, object val, object out = None):
     else:
 
       cfres = femdnum3_get_order_im( order, &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if
   # Array Types
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -751,10 +751,10 @@ cpdef get_order_im(ord_t order, object val, object out = None):
     else:
 
       cOres = mdarr3_get_order_im( order, &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -764,10 +764,10 @@ cpdef get_order_im(ord_t order, object val, object out = None):
     else:
 
       cFres = femdarr3_get_order_im( order, &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if
-  elif tval is csr_mdarr3_t:
+  elif tval is csr_mdmat3:
     S = val
     if res_flag:
       

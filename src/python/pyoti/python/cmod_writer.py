@@ -74,6 +74,15 @@ class writer:
       self.func_name_fe = 'feonumm'+str(self.nbases)+"n"+str(self.order)
       self.func_name_fearr = 'feoarrm'+str(self.nbases)+"n"+str(self.order)
 
+      self.pytype_name = 'onumm'+str(self.nbases)+"n"+str(self.order)
+      self.pytype_name_arr = 'omatm'+str(self.nbases)+"n"+str(self.order)
+      self.pytype_name_fe = 'feonumm'+str(self.nbases)+"n"+str(self.order)
+      self.pytype_name_fearr = 'feomatm'+str(self.nbases)+"n"+str(self.order)
+      self.pyfunc_name = 'onumm'+str(self.nbases)+"n"+str(self.order)
+      self.pyfunc_name_arr = 'omatm'+str(self.nbases)+"n"+str(self.order)
+      self.pyfunc_name_fe = 'feomatm'+str(self.nbases)+"n"+str(self.order)
+      self.pyfunc_name_fearr = 'feomatm'+str(self.nbases)+"n"+str(self.order)
+
       self.type_names={}
       self.type_names['r']=self.coeff_t
       self.type_names['o']=self.type_name
@@ -92,6 +101,15 @@ class writer:
       self.func_name_arr = 'mdarr'+str(self.nbases)
       self.func_name_fe = 'femdnum'+str(self.nbases)
       self.func_name_fearr = 'femdarr'+str(self.nbases)
+
+      self.pytype_name = 'mdnum'+str(self.nbases)
+      self.pytype_name_arr = 'mdmat'+str(self.nbases)
+      self.pytype_name_fe = 'mdnumfe'+str(self.nbases)
+      self.pytype_name_fearr = 'mdmatfe'+str(self.nbases)
+      self.pyfunc_name = 'mdnum'+str(self.nbases)
+      self.pyfunc_name_arr = 'mdmat'+str(self.nbases)
+      self.pyfunc_name_fe = 'mdnumfe'+str(self.nbases)
+      self.pyfunc_name_fearr = 'mdmatfe'+str(self.nbases)
 
       self.type_names={}
       self.type_names['r']=self.coeff_t
@@ -157,6 +175,8 @@ class writer:
 
     # Precimpute multiplication
     self.mult_res = []
+    self.mult_res.append([]) # Order 0.
+
     for ordi in range(1,self.order+1):
 
       dirs = self.name_imdir[ordi]
@@ -189,7 +209,9 @@ class writer:
               if  ordj != ordk:
                 mults[ii].append([ dirsk[k],dirsj[j] ])
               # end if 
+
             #end if 
+            
           # end for
         # end for 
       # end for 
@@ -974,7 +996,7 @@ class writer:
     # Required variables 
     str_out += level + self.comment + " Definitions" + endl
     str_out += level + self.coeff_t + " factor=1, coef = 0"+self.endl
-    str_out += level + self.type_name + " tmp1, tmp2, deltax = (*"+lhs_name+"), deltax_power = (*"+lhs_name+")"+self.endl
+    str_out += level + self.type_name + " deltax = (*"+lhs_name+"), deltax_power = (*"+lhs_name+")"+self.endl
     str_out += level +"deltax.r = " + self.zero + self.endl
     str_out += level +"deltax_power.r = " + self.zero + self.endl
 
@@ -1189,6 +1211,67 @@ class writer:
     return str_out
   #--------------------------------------------------------------------------------------------------- 
 
+
+  #***************************************************************************************************
+  def taylorint_like_function(self, level = "", f_name = "FUNCTION", lhs_name= "LHS",lhs_ptr=True,
+    res_name = "RES", f_open = "(", f_close = ")", to=False):
+    """
+    PORPUSE:  Addition like function between two OTIs.
+    """
+    global h
+    str_out = ""
+
+    if to:
+      res_getter = self.get_ptr
+    else:
+      res_getter = self.get
+    # end if 
+
+    if lhs_ptr:
+      lhs_getter = self.get_ptr
+    else:
+      lhs_getter = self.get
+    # end if 
+
+    str_out += level + self.coeff_t + ' factor' + self.endl
+    str_out += level + self.comment + "Taylor integration"+endl
+
+    # Write real part.
+    str_out += level + self.comment + "Real" + self.endl
+    str_out += level + res_name + res_getter + self.real_str + " = "
+    str_out += f_name + f_open
+    str_out +=         lhs_name + lhs_getter + self.real_str+ f_close + self.endl
+
+
+    for ordi in range(1,self.order+1):
+      
+      str_out += level +self.comment + "Order " + str(ordi) + self.endl
+      dirs = self.name_imdir[ordi]
+
+      for j in range(len(dirs)):
+        
+        str_out += level + 'factor = ' 
+        
+        for k in range(self.nbases):
+          expon = dirs[j].count(str(k+1))
+          str_out += 'pow(deltas['+ str(k) + '],'+str(expon)+')*'
+        # end for 
+
+        str_out = str_out[:-1]
+
+        str_out += self.endl
+        
+        str_out += level + res_name + res_getter + dirs[j] + " = factor*"
+        str_out += f_name + f_open
+        str_out +=         lhs_name + lhs_getter + dirs[j] + f_close + self.endl 
+
+      # end for 
+
+    # end for 
+
+    return str_out
+  #---------------------------------------------------------------------------------------------------
+
   #***************************************************************************************************
   def init_like_function(self, level = "", res_name = "RES"):
     """
@@ -1221,7 +1304,7 @@ class writer:
 
   #***************************************************************************************************
   def assigno_like_function(self, level = "", f_name = "FUNCTION", lhs_name= "LHS",lhs_ptr=True,
-    res_name = "RES", f_open = "(", f_close = ")", to=False, order_specific = False ):
+    res_name = "RES", f_open = "(", f_close = ")", to=False, order_specific = False, tab=' '):
     """
     PORPUSE:  Addition like function between two OTIs.
     """
@@ -1241,48 +1324,185 @@ class writer:
     else:
       lhs_getter = self.get
     # end if 
-
+    
+    leveli = level
+    
     if order_specific:
-      str_out += level + res_prev + res + " = "+self.func_name+"_init()"+self.endl
-      str_out += level + "switch( order ){" + endl
-      str_out += level + tab + "case 0:" + endl
+      str_out += leveli + res_prev + res_name + " = "+self.func_name+"_init()"+self.endl
+      str_out += leveli + "switch( order ){" + endl
+      leveli = level + tab
+      str_out += leveli +  "case 0:" + endl
+      leveli = level + 2*tab
+    # end if
 
-
-    str_out += level + self.comment + "Assign like function \'"
+    str_out += leveli + self.comment + "Assign like function \'"
     str_out += f_name + f_open + lhs_name + f_close
     str_out += "\'\n"
 
 
     # Write real part.
-    str_out += level + 2*tab + self.comment + "Real" + self.endl
-    str_out += level + 2*tab + res_name + res_getter + self.real_str + " = "
+    str_out += leveli + self.comment + "Real" + self.endl
+    str_out += leveli + res_name + res_getter + self.real_str + " = "
     str_out += f_name + f_open
     str_out +=         lhs_name + lhs_getter + self.real_str + f_close + self.endl
 
 
+    if order_specific:
+      str_out += leveli + "break"+self.endl
+    # end if 
+
     for ordi in range(1,self.order+1):
       
-      str_out += level +self.comment + "Order " + str(ordi) + self.endl
+      if order_specific:
+        leveli = level + tab
+        str_out += leveli + "case " + str(ordi) + ":"+endl
+        leveli = level + 2*tab
+      # end if 
+
+      str_out += leveli +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
 
       for j in range(len(dirs)):
         
-        str_out += level + res_name + res_getter + dirs[j] + " = "
+        str_out += leveli + res_name + res_getter + dirs[j] + " = "
         str_out += f_name + f_open
         str_out += lhs_name + lhs_getter + dirs[j] 
         str_out += f_close
         str_out += self.endl
         
       # end for 
+      
+      if order_specific:
+        str_out += leveli + "break"+self.endl
+      # end if 
 
     # end for 
+
+
+    if order_specific:
+      leveli = level
+      str_out += leveli + "}" + endl
+    # end if 
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def truncim_scalar_function(self, tab = "  ",level = "", lhs_name= "lhs", lhs_ptr=True,
+    f_name = "FUNCTION", res_name = "res", f_open = "(", f_close = ")", to=False, deriv= False):
+    """
+    PORPUSE:  getim like function between two OTIs.
+    """
+    global h
+    str_out = ""
+
+    if to:
+      res_getter = self.get_ptr
+      res_prev = '*'
+    else:
+      res_getter = self.get
+      res_prev = ''
+    # end if 
+
+    if lhs_ptr:
+      lhs_getter = self.get_ptr
+      lhs_prev = '*'
+    else:
+      lhs_getter = self.get
+      lhs_prev = ''
+    # end if 
+
+    str_out += level + self.comment + "Copy number." + endl
+    str_out += level + res_prev + res_name + " = (" + lhs_prev + lhs_name + ')'+ self.endl
+
+    str_out += level + self.comment + "Truncate all other values when necessary." + endl
+    # Write real part.
+    str_out += level + self.comment + "Real" + self.endl
+    str_out += level + "switch (order){"+endl
+    str_out += level + tab +  "case 0:" +endl
+    str_out += level + 2*tab + res_prev + res_name + " = " + self.func_name +"_init()" + self.endl
+    str_out += level + 2*tab + "break" + self.endl
+    
+
+    for ordi in range(1,self.order+1):
+      str_out += level + tab + "case "+str(ordi)+":"+endl
+      
+      dirs = self.name_imdir[ordi]
+      levelj = level + 2*tab 
+      str_out += levelj + "switch (idx){"+endl 
+      for j in range(len(dirs)):
+        dir_search  = dirs[j]
+        jj = self.idx_imdir[ordi][j]
+        str_out += levelj+tab+ "case "+str(jj) + ": " + self.comment + " " + dir_search + endl
+        str_out += levelj+2*tab+ res_name + res_getter + dirs[j] + " = " + self.zero + self.endl
+        for ordj in range(ordi+1, self.order+1):
+          flag = False
+          for i in range(len(self.mult_res[ordj])):
+            for multiple in self.mult_res[ordj][i]:
+              if dir_search in multiple:
+                str_out += levelj+2*tab+ res_name + res_getter + self.name_imdir[ordj][i] + " = " + self.zero + self.endl
+                break
+              # end if 
+          # end for 
+        # end for 
+        str_out += levelj+2*tab+"break"+self.endl
+      # end for 
+      
+      str_out += levelj + "}" + endl
+      str_out += levelj + "break"+self.endl
+    # end for 
+
+    str_out += level + "}"
+
+    return str_out
+
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def getidx_scalar_function(self, tab = "  ",level = ""):
+    """
+    PORPUSE:  getim like function between two OTIs.
+    """
+    global h
+    str_out = ""
+    
+    # Write real part.
+    str_out += level + self.comment + "Real" + self.endl
+    str_out += level + "switch (order){"+endl
+    str_out += level + tab +  "case 0:" +endl
+    str_out += level + 2*tab + "return 0" + self.endl
+    str_out += level + 2*tab + "break" + self.endl
+    
+
+    for ordi in range(1,self.order+1):
+      str_out += level + tab + "case "+str(ordi)+":"+endl
+      
+      dirs = self.name_imdir[ordi]
+      levelj = level + 2*tab 
+      str_out += levelj + "switch (idx){"+endl 
+      for j in range(len(dirs)):
+        
+        jj = self.idx_imdir[ordi][j]
+        str_out += levelj+tab+ "case "+str(j) + ":" + endl
+        str_out += levelj+2*tab+"return "+str(jj)+self.endl
+        str_out += levelj+2*tab+"break"+self.endl
+      # end for 
+      
+      str_out += levelj + "}" + endl
+      str_out += levelj + "break"+self.endl
+    # end for 
+
+    str_out += levelj + "default:"+endl 
+    str_out += levelj+2*tab+"return 0"+self.endl
+    str_out += level + "}"
 
     return str_out
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
   def getim_scalar_function(self, tab = "  ",level = "", lhs_name= "lhs", lhs_ptr=True,
-    f_name = "FUNCTION", res_name = "res", f_open = "(", f_close = ")", to=False):
+    f_name = "FUNCTION", res_name = "res", f_open = "(", f_close = ")", to=False, deriv= False):
     """
     PORPUSE:  getim like function between two OTIs.
     """
@@ -1300,6 +1520,9 @@ class writer:
       lhs_getter = self.get
     # end if 
 
+    if deriv:
+      str_out += level + self.coeff_t + " factor"  + self.endl
+    # end if 
     str_out += level + self.comment + "Get Imaginary coefficient." + endl
     str_out += level + res_getter + res_name + " = " + self.zero + self.endl
 
@@ -1319,8 +1542,20 @@ class writer:
       str_out += levelj + "switch (idx){"+endl 
       for j in range(len(dirs)):
         
-        str_out += levelj+tab+ "case "+str(j) + ":" + endl
-        str_out += levelj+2*tab+res_getter + res_name + " = " + lhs_name + lhs_getter + dirs[j] + self.endl
+        jj = self.idx_imdir[ordi][j]
+        str_out += levelj+tab+ "case "+str(jj) + ":" + endl
+        
+        if deriv:
+          str_out += levelj+2*tab+"factor = {0:.16e}".format(h.get_deriv_factor(jj,ordi))+self.endl
+        # end if 
+        
+        str_out += levelj+2*tab+res_getter + res_name + " = " + lhs_name + lhs_getter + dirs[j] 
+
+        if deriv:
+          str_out += "*factor"
+        # end if 
+
+        str_out += self.endl
         str_out += levelj+2*tab+"break"+self.endl
       # end for 
       
@@ -1369,7 +1604,9 @@ class writer:
       str_out += levelj + "switch (idx){"+endl 
       for j in range(len(dirs)):
         
-        str_out += levelj+tab+ "case "+str(j) + ":" + endl
+        jj = self.idx_imdir[ordi][j]
+
+        str_out += levelj+tab+ "case "+str(jj) + ":" + endl
         str_out += levelj+2*tab+lhs_name + lhs_getter + dirs[j] + " = " +  'val'  + self.endl
         str_out += levelj+2*tab+"break"+self.endl
       # end for 
@@ -1481,7 +1718,48 @@ class writer:
 
   #--------------------------------------------------------------------------------------------------- 
 
+
+  #***************************************************************************************************
+  def write_util_function_getidx(self,level = 0, tab = " "):
+
+    str_out = ""
+    leveli = level
+
+    
+    lhs = "lhs"
   
+    f_prev = self.func_name
+    
+    lhs_t = self.type_name
+    
+    func_name = f_prev + "_get_indx" 
+
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+
+    
+    func_header  = "imdir_t " + func_name + "(imdir_t idx, ord_t order)"
+
+    self.function_list.append(func_header)
+    self.function_list_header['base'].append(func_header)
+
+    str_out += func_header +"{"+endl
+    str_out += endl
+
+    str_out += self.getidx_scalar_function( tab = tab,level = leveli*tab)
+
+    str_out += endl
+
+
+    # Write function end.
+    str_out += leveli*tab + 'return 0' + self.endl
+    leveli -= 1
+    str_out += leveli*tab + '}' + endl
+
+    return str_out
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def write_scalar_function_print(self, level = 0, tab = " "):
@@ -1528,6 +1806,81 @@ class writer:
 
   #***************************************************************************************************
   def write_scalar_getitem(self, function_name = "get_item", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False, res_type = 'r',
+    f_open = "(", f_close = ")", addition = " + ",generator = None, to = False, deriv= False,
+    overload = None, write_charact=True ):
+    """
+    Write Univariate function.
+
+    This module writes the definition of the function, its inputs and output. The generator defines the
+    operations within the function block.
+
+    """
+
+    str_out = ""
+    leveli = level
+
+    res = "res"
+    lhs = "lhs"
+
+    res_tp = self.type_names[res_type]
+
+    f_prev = self.func_name
+    
+    func_name = f_prev + "_" + function_name 
+    
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = ''
+
+    if to:
+      func_header += "void "
+      func_name += "_to"
+    else:
+      func_header += res_tp + " "
+    # end if 
+
+
+    func_header +=  func_name + "(" + "imdir_t idx, ord_t order, "
+    func_header +=  self.type_name + "* " + lhs
+
+    if to:
+      func_header += ", "+res_tp + "* " + res
+    # end if 
+
+    func_header += ")"
+
+    self.function_list.append(func_header)
+    self.function_list_header['base'].append(func_header)
+
+    str_out += func_header +"{"+endl+endl
+
+    if not to:
+      str_out += leveli*tab + res_tp + " " + res + self.endl
+      str_out += endl
+    # end if
+
+    str_out += generator(level = leveli*tab, res_name = res, lhs_name=lhs, lhs_ptr=True, tab= tab,
+      deriv=deriv, to=to)
+    
+
+    str_out += endl
+    # Write function end.
+
+    if not to:
+      str_out += leveli*tab + 'return ' + res + self.endl + endl
+    # end if 
+    leveli -= 1
+    str_out += leveli*tab + '}' + endl
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+
+  #***************************************************************************************************
+  def write_scalar_taylorint(self, function_name = "taylor_integrate", is_elemental = True, level = 0, tab = " ", 
     f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False,
     f_open = "(", f_close = ")", addition = " + ",generator = None, to = False,
     overload = None, write_charact=True ):
@@ -1554,11 +1907,19 @@ class writer:
     leveli += 1
     
     func_header = ''
+    if to:
+      func_header += "void "
+      func_name   += "_to"
+    else:
+      func_header += self.type_name + " "
+    # end if 
 
-    func_header += self.coeff_t + " "
-
-    func_header +=  func_name + "(" + "imdir_t idx, ord_t order, "
+    func_header +=  func_name + "(" + self.coeff_t+"* deltas,"
     func_header +=  self.type_name + "* " + lhs
+
+    if to:
+      func_header += ", " + self.type_name + "* " + res
+    #end if 
     func_header += ")"
 
     self.function_list.append(func_header)
@@ -1566,16 +1927,94 @@ class writer:
 
     str_out += func_header +"{"+endl+endl
 
-    str_out += leveli*tab + self.coeff_t + " " + res + self.endl
-    str_out += endl
+    if not to:
+      str_out += leveli*tab + self.type_name + " " + res + self.endl
+      str_out += endl
+    #end if 
 
-    str_out += generator(level = leveli*tab, res_name = res, lhs_name=lhs, lhs_ptr=True, tab= tab)
+    str_out += generator(level = leveli*tab, res_name = res, lhs_name=lhs, lhs_ptr=True,  
+      to=to, f_name = "", f_open = "", f_close = "")
     
 
     str_out += endl
     # Write function end.
 
-    str_out += leveli*tab + 'return ' + res + self.endl + endl
+    if not to:
+      str_out += leveli*tab + 'return ' + res + self.endl + endl
+    # end if 
+
+    leveli -= 1
+    str_out += leveli*tab + '}' + endl
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+
+  #***************************************************************************************************
+  def write_scalar_get_order_im(self, function_name = "get_order_im", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False, f_open = "(", f_close = ")", 
+    addition = " + ",generator = None, to = False, overload = None, write_charact=True ):
+    """
+    Write Univariate function.
+
+    This module writes the definition of the function, its inputs and output. The generator defines the
+    operations within the function block.
+
+    """
+
+    str_out = ""
+    leveli = level
+
+    res = "res"
+    lhs = "lhs"
+
+    f_prev = self.func_name
+    
+    func_name = f_prev + "_" + function_name 
+    
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = ''
+
+    if to:
+      func_header += "void "
+      func_name   += "_to"
+    else:
+      func_header += self.type_name + " " 
+    # end if 
+
+    func_header +=  func_name + "(" + "ord_t order, "
+    func_header +=  self.type_name + "* " + lhs
+
+    if to:
+      func_header += ", "+self.type_name + "* " + res
+    # end if 
+
+    func_header += ")"
+
+    self.function_list.append(func_header)
+    self.function_list_header['base'].append(func_header)
+
+    str_out += func_header +"{"+endl+endl
+
+    if not to:
+      str_out += leveli*tab + self.type_name + " " + res + self.endl
+
+    str_out += endl
+    
+    str_out += generator(level = leveli*tab, res_name = res, lhs_name=lhs, lhs_ptr=True, tab= tab, 
+      order_specific = True, f_name=f_name, f_open=f_open, f_close=f_close, to=to )
+    
+
+    str_out += endl
+    # Write function end.
+
+    if not to:
+      str_out += leveli*tab + 'return ' + res + self.endl + endl
+    # end if 
+
     leveli -= 1
     str_out += leveli*tab + '}' + endl
 
@@ -1671,8 +2110,7 @@ class writer:
   #***************************************************************************************************
   def write_scalar_setitem(self, function_name = "setim", is_elemental = True, level = 0, tab = " ", 
     f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False,
-    f_open = "(", f_close = ")", addition = " + ", 
-    overload = None, write_charact=True ):
+    f_open = "(", f_close = ")", addition = " + ", overload = None, write_charact=True ):
     """
     Write Univariate function.
 
@@ -1762,7 +2200,7 @@ class writer:
     func_header += self.type_name + " "
 
 
-    func_header +=  func_name + "("    
+    func_header +=  func_name + "(void"    
     func_header += ")"
 
     self.function_list.append(func_header)
@@ -1786,6 +2224,80 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
 
+
+
+  #***************************************************************************************************
+  def write_get_ndir(self, level = 0, tab = " ", header = 'base', total = False ):
+
+    str_out = ""
+    leveli = level
+    f_post = 'o'
+
+    
+    lhs = "num"
+    res = "res"
+    f_prev = self.func_name
+    lhs_t = self.type_names['o']
+    func_name = self.func_name + "_get_ndir_" 
+
+    if total:
+      func_name += 'total'
+    else:
+      func_name += 'order'
+    # end if 
+    
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = 'ndir_t '    
+
+    func_header +=  func_name + "("
+    if not total:
+      func_header += "ord_t order, "
+    # end if 
+    func_header += lhs_t + "* "+ lhs 
+    func_header += ")"
+
+    self.function_list.append(func_header)
+    self.function_list_header[header].append(func_header)
+
+    str_out += func_header +"{"+endl+endl
+
+    str_out += leveli*tab + "ndir_t " + res + self.endl
+    str_out += endl
+    
+    if total:
+      ndir = 0
+      for ordi in range(self.order):
+        ndir += len(self.name_imdir[ordi])
+      # end for
+      str_out += leveli*tab + res + ' = ' + str(ndir) + self.endl
+    else:
+
+      str_out += leveli*tab + 'switch(order){'+ endl
+
+      for ordi in range(self.order+1):
+        str_out += (leveli+1)*tab + 'case '+str(ordi)+':'+ endl
+        ndir = len(self.name_imdir[ordi])
+        str_out += (leveli+2)*tab + res + ' = ' + str(ndir) + self.endl
+        str_out += (leveli+2)*tab + 'break' + self.endl
+      # end for
+
+      str_out += leveli*tab + '}'+ endl
+    # end if 
+
+    str_out += endl
+    # Write function end.
+
+
+    str_out += leveli*tab + 'return ' + res + self.endl + endl
+    leveli -= 1
+    str_out += leveli*tab + '}' + endl
+
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
 
 
   #***************************************************************************************************
@@ -2177,12 +2689,12 @@ class writer:
       exp_file = base_dir+'/'+file.replace("number",mname)
       os.makedirs(os.path.dirname(exp_file), exist_ok=True)
       
-      f_exp = f_str.format(  num_type   = self.type_name,       num_func   = self.func_name,       num_pytype   = self.type_name,       num_pyfunc   = self.func_name,       
-                   fenum_type = self.type_name_fe,    fenum_func = self.func_name_fe,    fenum_pytype = self.type_name_fe,    fenum_pyfunc = self.func_name_fe,    
-                   arr_type   = self.type_name_arr,   arr_func   = self.func_name_arr,   arr_pytype   = self.type_name_arr,   arr_pyfunc   = self.func_name_arr,   
-                   fearr_type = self.type_name_fearr, fearr_func = self.func_name_fearr, fearr_pytype = self.type_name_fearr, fearr_pyfunc = self.func_name_fearr, 
+      f_exp = f_str.format(  num_type   = self.type_name,       num_func   = self.func_name,       num_pytype   = self.pytype_name,       num_pyfunc   = self.pyfunc_name,       
+                   fenum_type = self.type_name_fe,    fenum_func = self.func_name_fe,    fenum_pytype = self.pytype_name_fe,    fenum_pyfunc = self.pyfunc_name_fe,    
+                   arr_type   = self.type_name_arr,   arr_func   = self.func_name_arr,   arr_pytype   = self.pytype_name_arr,   arr_pyfunc   = self.pyfunc_name_arr,   
+                   fearr_type = self.type_name_fearr, fearr_func = self.func_name_fearr, fearr_pytype = self.pytype_name_fearr, fearr_pyfunc = self.pyfunc_name_fearr, 
                    oti_order=self.order, real_str=self.real_str, module_name = mname, module_name_upper = mname.upper(), base_src = base_str, algebra_src = algebra_str,
-                   base_include = base_include, algebra_include = algebra_include, utils_include="",  num_struct=num_struct)
+                   base_include = base_include, algebra_include = algebra_include, utils_include="",  num_struct=num_struct, nbases = self.nbases)
 
       f = open(exp_file, "w" )
 
@@ -2263,6 +2775,14 @@ class writer:
       generator = self.init_like_function)
     contents += endl
 
+    
+    # Get ndirs
+    contents+=self.write_get_ndir(level = level, tab = tab, header = 'base', total = False )
+    contents += endl
+
+    contents+=self.write_get_ndir(level = level, tab = tab, header = 'base', total = True )
+    contents += endl
+
     # Standard assignment
     contents += self.write_scalar_univar(function_name = "create", is_elemental = True, level = level, 
       tab = tab, lhs_type = 'r', f_name = "",   f_open = "", header = 'base',
@@ -2279,10 +2799,27 @@ class writer:
       f_close = "", overload = "=",generator = self.assigno_like_function)
     contents += endl
 
+    contents += self.write_scalar_get_order_im(function_name = "get_order_im", is_elemental = True, level = level, 
+      tab = tab, f_name = "",  separator = "", lhs_type= "o", lhs_ptr = True, f_open = "", f_close = "", 
+    addition = " + ",generator = self.assigno_like_function, to = False )
+    contents += endl
+
+    contents += self.write_scalar_get_order_im(function_name = "get_order_im", is_elemental = True, level = level, 
+      tab = tab, f_name = "",  separator = "", lhs_type= "o", lhs_ptr = True, f_open = "", f_close = "", 
+    addition = " + ",generator = self.assigno_like_function, to = True )
+    contents += endl
+
     # Get item
     contents += self.write_scalar_getitem(function_name = "get_item",level = level, tab = tab, 
       lhs_type = 'o', lhs_ptr=True, generator = self.getim_scalar_function)
     contents += endl 
+
+
+    # Get Deriv
+    contents += self.write_scalar_getitem(function_name = "get_deriv",level = level, tab = tab, deriv=True,
+      lhs_type = 'o', lhs_ptr=True, generator = self.getim_scalar_function)
+    contents += endl 
+
 
     # Set item
     contents += self.write_scalar_setitem(function_name = "set_item",level = level, tab = tab, 
@@ -2299,8 +2836,32 @@ class writer:
       f_close = "", overload = "=",generator = self.assigno_like_function, write_charact=False)
     contents += endl
 
+    # Taylor integration
+    contents += self.write_scalar_taylorint(function_name = "taylor_integrate",level = level, tab = tab, 
+      lhs_type = 'o', lhs_ptr=True, generator = self.taylorint_like_function, to=False)
+    contents += endl 
+
+    contents += self.write_scalar_taylorint(function_name = "taylor_integrate",level = level, tab = tab, 
+      lhs_type = 'o', lhs_ptr=True, generator = self.taylorint_like_function, to=True)
+    contents += endl 
+
+    # Truncate
+    contents += self.write_scalar_getitem(function_name = "truncate_im",level = level, tab = tab, 
+      lhs_type = 'o', lhs_ptr=True, generator = self.truncim_scalar_function, res_type = 'o')
+    contents += endl 
+
+    contents += self.write_scalar_getitem(function_name = "truncate_im",level = level, tab = tab, 
+      lhs_type = 'o', lhs_ptr=True, generator = self.truncim_scalar_function, to = True, res_type = 'o')
+    contents += endl 
+
+
     # Print scalar
     contents += self.write_scalar_function_print( level = level, tab = tab)
+    contents += endl   
+
+
+    # Get index
+    contents += self.write_util_function_getidx( level = level, tab = tab)
     contents += endl  
 
     return contents
@@ -2328,25 +2889,25 @@ class writer:
 
 
     # Standard ADDITION
-    contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
+    contents += self.write_scalar_function(function_name = "sum", is_elemental = True, level = level, 
       tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " + ", f_open = "", 
       lhs_ptr=True,rhs_ptr=True,header = 'algebra',
       f_close = "", generator = self.addition_like_function_oo, overload = "+")
     contents += endl
 
-    contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
+    contents += self.write_scalar_function(function_name = "sum", is_elemental = True, level = level, 
       tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " + ", f_open = "", 
       lhs_ptr=True,rhs_ptr=True,header = 'algebra',
       f_close = "", generator = self.addition_like_function_oo, overload = "+", to=True)
     contents += endl
 
-    contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
+    contents += self.write_scalar_function(function_name = "sum", is_elemental = True, level = level, 
       tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "o", separator = " + ", f_open = "", 
       lhs_ptr=False, rhs_ptr=True,header = 'algebra',
       f_close = "", generator = self.addition_like_function_ro, overload = "+" )
     contents += endl
 
-    contents += self.write_scalar_function(function_name = "add", is_elemental = True, level = level, 
+    contents += self.write_scalar_function(function_name = "sum", is_elemental = True, level = level, 
       tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "o", separator = " + ", f_open = "", 
       lhs_ptr=False, rhs_ptr=True,header = 'algebra',
       f_close = "", generator = self.addition_like_function_ro, overload = "+" , to=True)
@@ -2356,13 +2917,13 @@ class writer:
     # Standard SUBTRACTION
     contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
       tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " - ", f_open = "", 
-      lhs_ptr=False, rhs_ptr= True, to=False,header = 'algebra',
+      lhs_ptr=True, rhs_ptr= True, to=False,header = 'algebra',
       f_close = "", generator = self.addition_like_function_oo, overload = "-" )
     contents += endl
 
     contents += self.write_scalar_function(function_name = "sub", is_elemental = True, level = level, 
       tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " - ", f_open = "", 
-      lhs_ptr=False, rhs_ptr= True, to=True,header = 'algebra',
+      lhs_ptr=True, rhs_ptr= True, to=True,header = 'algebra',
       f_close = "", generator = self.addition_like_function_oo, overload = "-" )
     contents += endl
 

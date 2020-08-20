@@ -12,14 +12,14 @@ inline void femdnum3_dimCheck(femdnum3_t* num1,femdnum3_t* num){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void femdnum3_get_active(femdnum3_t* num, imdir_t* list_vals){
+void femdnum3_get_active_bases(femdnum3_t* num, imdir_t* list_vals){
     
     uint64_t i;
     
     // Finds the active imaginary directions in the array.
     for( i=0; i<num->nip; i++ ){
         
-        mdnum3_get_active( &num->p_data[i], list_vals);
+        mdnum3_get_active_bases( &num->p_data[i], list_vals);
     
     }
     

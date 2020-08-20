@@ -359,6 +359,10 @@ void fedarr_set_slice_f( fednum_t* val,
                          int64_t starti, int64_t stopi, int64_t stepi,
                          int64_t startj, int64_t stopj, int64_t stepj,
                           fedarr_t* res);
+void fedarr_set_slice_R( darr_t* val,
+                         int64_t starti, int64_t stopi, int64_t stepi,
+                         int64_t startj, int64_t stopj, int64_t stepj,
+                          fedarr_t* res);
 void fedarr_set_slice_F( fedarr_t* val,
                          int64_t starti, int64_t stopi, int64_t stepi,
                          int64_t startj, int64_t stopj, int64_t stepj,

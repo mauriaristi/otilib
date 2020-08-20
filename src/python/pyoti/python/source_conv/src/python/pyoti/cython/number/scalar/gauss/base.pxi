@@ -14,7 +14,7 @@ cdef class {fenum_pytype}:
 
   #***************************************************************************************************
   
-  def __init__(self, real, uint64_t nip, ord_t order = 0, bases_t nbases = 0): 
+  def __init__(self, real, uint64_t nip): 
     """
     PURPOSE:      Python level constructor of the {fenum_pytype} class.
 
@@ -848,7 +848,7 @@ cdef class {fenum_pytype}:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
 
     """
@@ -865,7 +865,7 @@ cdef class {fenum_pytype}:
 
     # end for 
 
-    {fenum_func}_get_active( &self.num, bases_list)
+    {fenum_func}_get_active_bases( &self.num, bases_list)
 
     res = []
     for i in range(size):

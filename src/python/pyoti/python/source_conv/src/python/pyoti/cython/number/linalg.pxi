@@ -293,9 +293,7 @@ cpdef transpose(object arr, object out = None):
   tarr = type(arr)
 
   if out is None:
-
     res_flag = 0
-
   # end if 
 
   # supported types:
@@ -843,49 +841,49 @@ cpdef get_order_im_array(ord_t ordi, {arr_pytype} tmp):
   #***************************************************************************************************
   
 
-  cdef np.ndarray res
-  cdef {num_type} otmp
-  cdef bases_t* bases_list
-  cdef ndir_t nnz
-  cdef imdir_t maxidx = 0
-  cdef uint64_t i,j,k
+  cdef np.ndarray res = np.zeros(1)
+  # cdef {num_type} otmp
+  # cdef bases_t* bases_list
+  # cdef ndir_t nnz
+  # cdef imdir_t maxidx = 0
+  # cdef uint64_t i,j,k
 
-  for i in range(tmp.size):    
-    otmp = tmp.arr.p_data[i]
+  # for i in range(tmp.size):    
+  #   otmp = tmp.arr.p_data[i]
 
-    if otmp.order >= ordi:
-      nnz = otmp.p_nnz[ordi-1]
+  #   if otmp.order >= ordi:
+  #     nnz = otmp.p_nnz[ordi-1]
       
-      if nnz > 0:
-        maxidx = max( maxidx, otmp.p_idx[ordi-1][nnz-1])
-      # end if
+  #     if nnz > 0:
+  #       maxidx = max( maxidx, otmp.p_idx[ordi-1][nnz-1])
+  #     # end if
 
-    # end if 
-  # end for
+  #   # end if 
+  # # end for
 
-  # get maximum basis for this index:
-  bases_list = dhelp_get_imdir( maxidx, ordi)
+  # # get maximum basis for this index:
+  # bases_list = dhelp_get_imdir( maxidx, ordi)
 
-  maxidx = dhelp_ndirOrder( bases_list[ordi-1], ordi )
+  # maxidx = dhelp_ndirOrder( bases_list[ordi-1], ordi )
 
-  res = np.zeros((tmp.nrows,tmp.ncols*maxidx), dtype = np.float64)
+  # res = np.zeros((tmp.nrows,tmp.ncols*maxidx), dtype = np.float64)
 
-  for i in range(tmp.nrows):
-    for j in range(tmp.ncols):
+  # for i in range(tmp.nrows):
+  #   for j in range(tmp.ncols):
 
-      otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
+  #     otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
 
-      if otmp.order >= ordi:
+  #     if otmp.order >= ordi:
         
-        nnz = otmp.p_nnz[ordi-1]
+  #       nnz = otmp.p_nnz[ordi-1]
         
-        for k in range( nnz ):          
-          res[ i, j + tmp.ncols * otmp.p_idx[ordi-1][k] ] = otmp.p_im[ordi-1][k]
-        # end for
+  #       for k in range( nnz ):          
+  #         res[ i, j + tmp.ncols * otmp.p_idx[ordi-1][k] ] = otmp.p_im[ordi-1][k]
+  #       # end for
 
-      # end if 
-    # end for 
-  # end for
+  #     # end if 
+  #   # end for 
+  # # end for
 
   return res
 
@@ -899,42 +897,42 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, {arr_pytype} tmp):
   #***************************************************************************************************
   
 
-  cdef {num_type} otmp
-  cdef ndir_t nnz, nnz_set
-  cdef coeff_t val
-  cdef uint64_t i,j,k
+  pass
+  
+  # cdef {num_type} otmp
+  # cdef ndir_t nnz, nnz_set
+  # cdef coeff_t val
+  # cdef uint64_t i,j,k
 
-  nnz = arr.shape[1]/tmp.ncols
+  # nnz = arr.shape[1]/tmp.ncols
 
-  otmp = {num_func}_get_tmp(5, ordi)
-
-  for i in range(tmp.nrows):
+  # for i in range(tmp.nrows):
     
-    for j in range(tmp.ncols):
+  #   for j in range(tmp.ncols):
 
-      {num_func}_set_r(0.0, &otmp)
+  #     {num_func}_set_r(0.0, &otmp)
 
-      nnz_set = 0
+  #     nnz_set = 0
         
-      for k in range( nnz ):          
+  #     for k in range( nnz ):          
         
-        val = arr[ i, j + tmp.ncols * k ] 
+  #       val = arr[ i, j + tmp.ncols * k ] 
         
-        if val != 0.0:
+  #       if val != 0.0:
 
-          otmp.p_idx[ordi-1][nnz_set]= k
-          otmp.p_im[ordi-1][nnz_set] = val
-          nnz_set += 1
-          otmp.p_nnz[ordi-1] += 1
+  #         otmp.p_idx[ordi-1][nnz_set]= k
+  #         otmp.p_im[ordi-1][nnz_set] = val
+  #         nnz_set += 1
+  #         otmp.p_nnz[ordi-1] += 1
 
-        # end if
+  #       # end if
 
-      # end for
+  #     # end for
 
-      tmp[i,j] += {num_pytype}.create( &otmp, FLAGS = 0)
+  #     tmp[i,j] += {num_pytype}.create( &otmp, FLAGS = 0)
 
-    # end for 
-  # end for
+  #   # end for 
+  # # end for
 
 #-----------------------------------------------------------------------------------------------------
 

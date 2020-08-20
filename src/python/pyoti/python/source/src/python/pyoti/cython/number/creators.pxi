@@ -1,6 +1,6 @@
 
 #*****************************************************************************************************
-cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef e( object hum_dir, uint64_t nip = 0):
   """
   PURPOSE:  To create a sotinum with value 1 at the specified imaginary direction
             in a human friendly manner
@@ -20,22 +20,18 @@ cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
   
   [indx_hd, order_hd] = imdir(hum_dir)
 
-  order_res = max( order, order_hd )
-
   if nip == 0: 
 
     # Create a sotinum
-    ores = soti_createReal(0.0, order_res, dhl)
+    ores = soti_create_r(0.0, dhl)
 
     # Set the coefficient to 1.
     soti_set_item(1.0, indx_hd, order_hd, &ores, dhl) 
-
     res = sotinum.create(&ores)
 
   else:
     
-    fres = sotife(0.0, nip, order = order_res, nbases = nbases)
-
+    fres = sotife(0.0, nip)
     fesoti_set_im_r( 1.0, indx_hd, order_hd, &fres.num, dhl)
 
     res = fres
@@ -48,7 +44,7 @@ cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
 
 
 #*****************************************************************************************************
-cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef zero(  uint64_t nip = 0):
   """
   PURPOSE:  To create a scalar with real value 0 and every imaginary coefficient as zeros.
 
@@ -65,14 +61,12 @@ cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
   if nip == 0: 
 
     # Create a sotinum
-    ores = soti_createReal_bases(0.0, nbases, order, dhl)
-
+    ores = soti_create_r(0.0, dhl)
     res = sotinum.create(&ores)
 
   else:
     
-    fres = sotife(0.0, nip, order = order, nbases = nbases)
-
+    fres = sotife(0.0, nip)
     res = fres
 
   # end if 
@@ -82,7 +76,7 @@ cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef one( uint64_t nip = 0):
   """
   PURPOSE:  To create a scalar with real value 1 and every imaginary coefficient as zeros.
 
@@ -99,14 +93,12 @@ cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
   if nip == 0: 
 
     # Create a sotinum
-    ores = soti_createReal_bases(1.0, nbases, order, dhl)
-
+    ores = soti_create_r(1.0, dhl)
     res = sotinum.create(&ores)
 
   else:
     
-    fres = sotife(1.0, nip, order = order, nbases = nbases)
-
+    fres = sotife(1.0, nip)
     res = fres
 
   # end if 
@@ -116,7 +108,7 @@ cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef number( coeff_t num, uint64_t nip = 0):
   """
   PURPOSE:  To create a sotinum with value 1 at the specified imaginary direction
             in a human friendly manner
@@ -134,14 +126,12 @@ cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 
   if nip == 0: 
 
     # Create a sotinum
-    ores = soti_createReal_bases(num, nbases, order, dhl)
-
+    ores = soti_create_r(num, dhl)
     res = sotinum.create(&ores)
 
   else:
     
-    fres = sotife(num, nip, order = order, nbases = nbases)
-
+    fres = sotife(num, nip)
     res = fres
 
   # end if 
@@ -152,7 +142,7 @@ cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 
 
 
 #*****************************************************************************************************
-cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef eye(uint64_t size, uint64_t nip = 0):
   """
   PURPOSE: Create identity matrix of shape: (size,size).
 
@@ -165,14 +155,14 @@ cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   if nip == 0:
 
     # This will create an matso.
-    Ores = arrso_eye_bases(size,nbases,order,dhl)
+    Ores = arrso_eye_bases(size,dhl)
 
     return matso.create(&Ores)
 
   else:
 
     # This will create a matsofe
-    Fres = fearrso_eye_bases(size,nip,nbases,order,dhl)
+    Fres = fearrso_eye_bases(size,nip,dhl)
 
     return matsofe.create(&Fres)
   
@@ -183,7 +173,7 @@ cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 
 
 #*****************************************************************************************************
-cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef array( object arr,  uint64_t nip = 0):
   """
   PURPOSE: Create a matrix for OTI algebra, according to the given array values.
 
@@ -227,14 +217,14 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 
       if nip == 0:
 
-        Oarr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
+        Oarr = arrso_zeros_bases( nrows, ncols, dhl)
         Ores = matso.create(&Oarr)
         Ores[0,0] = np_arr.item(0)
         res = Ores
 
       else:
  
-        Farr = fearrso_zeros_bases( nrows, ncols, nip, nbases, order, dhl)
+        Farr = fearrso_zeros_bases( nrows, ncols, nip, dhl)
         Fres = matsofe.create(&Farr)
         Fres[0,0] = np_arr.item(0)
         res = Fres
@@ -249,7 +239,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 
       if nip == 0:
       
-        Oarr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
+        Oarr = arrso_zeros_bases( nrows, ncols,  dhl)
         Ores = matso.create(&Oarr)
         for i in range(nrows):
           Ores[i,0] =  np_arr[i] # Column vectors.
@@ -258,7 +248,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 
       else:
  
-        Farr = fearrso_zeros_bases( nrows, ncols, nip, nbases, order, dhl)
+        Farr = fearrso_zeros_bases( nrows, ncols, nip, dhl)
         Fres = matsofe.create(&Farr)
         for i in range(nrows):
           Fres[i,0] =  np_arr[i] # Column vectors.
@@ -275,7 +265,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 
       if nip == 0:
       
-        Oarr = arrso_zeros_bases( nrows, ncols, nbases, order, dhl)
+        Oarr = arrso_zeros_bases( nrows, ncols, dhl)
         Ores = matso.create(&Oarr)
         for i in range(nrows):
           for j in range(ncols):
@@ -288,7 +278,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 
       else:
  
-        Farr = fearrso_zeros_bases( nrows, ncols, nip, nbases, order, dhl)
+        Farr = fearrso_zeros_bases( nrows, ncols, nip, dhl)
         Fres = matsofe.create(&Farr)
         for i in range(nrows):
           for j in range(ncols):
@@ -308,7 +298,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
       ncols = np_arr.shape[1]
       nip   = np_arr.shape[2]
 
-      Farr = fearrso_zeros_bases( nrows, ncols, nip, nbases, order, dhl)
+      Farr = fearrso_zeros_bases( nrows, ncols, nip, dhl)
       Fres = matsofe.create(&Farr)
 
       for i in range(nrows):
@@ -336,7 +326,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 
 
 #*****************************************************************************************************
-cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef zeros( object shape_in, uint64_t nip = 0):
   """
   PURPOSE: Create matrix filled with zeroes of shape: (nrows,ncols).
 
@@ -351,14 +341,14 @@ cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip 
   if nip == 0:
 
     # This will create an matso.
-    Ores = arrso_zeros_bases(nrows,ncols,nbases,order,dhl)
+    Ores = arrso_zeros_bases(nrows,ncols,dhl)
 
     return matso.create(&Ores)
 
   else:
 
     # This will create a matsofe
-    Fres = fearrso_zeros_bases(nrows,ncols,nip,nbases,order,dhl)
+    Fres = fearrso_zeros_bases(nrows,ncols,nip,dhl)
 
     return matsofe.create(&Fres)
   
@@ -367,7 +357,7 @@ cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip 
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef ones( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef ones( object shape_in,  uint64_t nip = 0):
   """
   PURPOSE: Create matrix filled with ones of shape: (nrows,ncols).
 
@@ -383,14 +373,14 @@ cpdef ones( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip =
   if nip == 0:
 
     # This will create an matso.
-    Ores = arrso_ones_bases(nrows,ncols,nbases,order,dhl)
+    Ores = arrso_ones_bases(nrows,ncols,dhl)
 
     return matso.create(&Ores)
 
   else:
 
     # This will create a matsofe
-    Fres = fearrso_ones_bases(nrows,ncols,nip,nbases,order,dhl)
+    Fres = fearrso_ones_bases(nrows,ncols,nip,dhl)
            # fearrso_ones_bases(nrows,ncols,nip,nbases,order,dhl)
 
     return matsofe.create(&Fres)

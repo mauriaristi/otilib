@@ -875,7 +875,7 @@
 
 #   # Solve the real system of equations.
 #   tmp = lu.solve( b.get_imdir(0,0) )
-#   res.set_imdir( tmp, 0, 0)
+#   res.set_imdir( tmp)
 
 #   # Solve the imaginary systems.
 #   tmp_rhs = np.zeros(b.shape,dtype = np.float64)

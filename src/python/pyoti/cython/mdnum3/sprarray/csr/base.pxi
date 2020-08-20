@@ -1,9 +1,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  lil_mdarr3_t    :::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  lil_mdmat3    :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class csr_mdarr3_t:
+cdef class csr_mdmat3:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -16,19 +16,19 @@ cdef class csr_mdarr3_t:
   
   def __init__(self, arg1, shape=None, copy = True): 
     """
-    PURPOSE:      Python level constructor of the csr_mdarr3_t class.
+    PURPOSE:      Python level constructor of the csr_mdmat3 class.
 
-    DESCRIPTION:  Creates a new empty csr_mdarr3_t matrix.
+    DESCRIPTION:  Creates a new empty csr_mdmat3 matrix.
                  
     """
     #*************************************************************************************************
     
     cdef uint64_t i, j, k, ncols, nrows
-    cdef lil_mdarr3_t lil
+    cdef lil_mdmat3 lil
     
     targ1 = type(arg1)
 
-    if targ1 == lil_mdarr3_t :
+    if targ1 == lil_mdmat3 :
       # Create CSR matrix from lil matrix type
       lil = arg1
       self.nrows, self.ncols = lil.shape
@@ -86,13 +86,13 @@ cdef class csr_mdarr3_t:
 
         for i in range(data.size):
           
-          if type(data) == mdnum3_t:
+          if type(data) == mdnum3:
 
             self.data[i] = data[i].copy()
 
           else:
             
-            self.data[i] = mdnum3_t( data[i] )
+            self.data[i] = mdnum3( data[i] )
 
           # end if   
 
@@ -190,7 +190,7 @@ cdef class csr_mdarr3_t:
     """
     #*************************************************************************************************
     cdef ord_t order = 0, ordi
-    cdef mdnum3_t onum
+    cdef mdnum3 onum
     cdef uint64_t i
 
     for i in range(self.data.size):
@@ -250,7 +250,7 @@ cdef class csr_mdarr3_t:
     
   
     cdef mdnum3_t d_mdnum3
-    cdef mdnum3_t   mdnum3
+    cdef mdnum3   mdnum3
     cdef uint64_t i, j, k
     out  = ""
 
@@ -277,7 +277,7 @@ cdef class csr_mdarr3_t:
     
     
 
-    cdef csr_mdarr3_t res = <csr_mdarr3_t> csr_mdarr3_t.__new__(csr_mdarr3_t)
+    cdef csr_mdmat3 res = <csr_mdmat3> csr_mdmat3.__new__(csr_mdmat3)
     cdef object[:]   data
     cdef uint64_t[:] indices
     cdef uint64_t[:] indptr
@@ -307,7 +307,7 @@ cdef class csr_mdarr3_t:
     """
     #*************************************************************************************************
     
-    cdef csr_mdarr3_t res = <csr_mdarr3_t> csr_mdarr3_t.__new__(csr_mdarr3_t)
+    cdef csr_mdmat3 res = <csr_mdmat3> csr_mdmat3.__new__(csr_mdmat3)
     cdef object[:]   data
     cdef uint64_t[:] indices
     cdef uint64_t[:] indptr
@@ -322,7 +322,7 @@ cdef class csr_mdarr3_t:
     
     for i in range(self.data.size):
 
-      res.data[i] = mdnum3_t(0.0)
+      res.data[i] = mdnum3(0.0)
 
     # end if 
 
@@ -340,7 +340,7 @@ cdef class csr_mdarr3_t:
     
   #   cdef mdarr3_t res = mdarr3_neg(&self.arr)
 
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
   # #---------------------------------------------------------------------------------------------------
 
   # #***************************************************************************************************
@@ -353,9 +353,9 @@ cdef class csr_mdarr3_t:
   #   
     
   #   cdef mdarr3_t res 
-  #   cdef mdarr3_t lhs,rhs
+  #   cdef mdmat3 lhs,rhs
   #   cdef dmat dlhs,drhs
-  #   cdef mdnum3_t olhs,orhs
+  #   cdef mdnum3 olhs,orhs
     
   #   tlhs = type(self)
   #   trhs = type(other)
@@ -367,14 +367,14 @@ cdef class csr_mdarr3_t:
 
   #     res = mdarr3_sum_OO(&lhs.arr,&rhs.arr)
 
-  #   elif ( tlhs  == mdnum3_t ):
+  #   elif ( tlhs  == mdnum3 ):
 
   #     olhs = self
   #     rhs = other
 
   #     res = mdarr3_sum_oO(&olhs.num,&rhs.arr)
 
-  #   elif ( trhs  == mdnum3_t ):
+  #   elif ( trhs  == mdnum3 ):
 
   #     lhs = self
   #     orhs = other
@@ -411,7 +411,7 @@ cdef class csr_mdarr3_t:
 
   #   # end if 
       
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
 
   # #---------------------------------------------------------------------------------------------------  
 
@@ -436,9 +436,9 @@ cdef class csr_mdarr3_t:
   #   
     
   #   cdef mdarr3_t res 
-  #   cdef mdarr3_t lhs,rhs
+  #   cdef mdmat3 lhs,rhs
   #   cdef dmat dlhs,drhs
-  #   cdef mdnum3_t olhs,orhs
+  #   cdef mdnum3 olhs,orhs
     
   #   tlhs = type(self)
   #   trhs = type(other)
@@ -450,14 +450,14 @@ cdef class csr_mdarr3_t:
 
   #     res = mdarr3_sub_OO(&lhs.arr,&rhs.arr)
 
-  #   elif ( tlhs  == mdnum3_t ):
+  #   elif ( tlhs  == mdnum3 ):
 
   #     olhs = self
   #     rhs = other
 
   #     res = mdarr3_sub_oO(&olhs.num,&rhs.arr)
 
-  #   elif ( trhs  == mdnum3_t ):
+  #   elif ( trhs  == mdnum3 ):
 
   #     lhs = self
   #     orhs = other
@@ -494,7 +494,7 @@ cdef class csr_mdarr3_t:
 
   #   # end if 
       
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
 
   # #---------------------------------------------------------------------------------------------------  
 
@@ -519,9 +519,9 @@ cdef class csr_mdarr3_t:
   #   
     
   #   cdef mdarr3_t res 
-  #   cdef mdarr3_t lhs,rhs
+  #   cdef mdmat3 lhs,rhs
   #   cdef dmat dlhs,drhs
-  #   cdef mdnum3_t olhs,orhs
+  #   cdef mdnum3 olhs,orhs
     
   #   tlhs = type(self)
   #   trhs = type(other)
@@ -533,14 +533,14 @@ cdef class csr_mdarr3_t:
 
   #     res = mdarr3_mul_OO(&lhs.arr,&rhs.arr)
 
-  #   elif ( tlhs  == mdnum3_t ):
+  #   elif ( tlhs  == mdnum3 ):
 
   #     olhs = self
   #     rhs = other
 
   #     res = mdarr3_mul_oO(&olhs.num,&rhs.arr)
 
-  #   elif ( trhs  == mdnum3_t ):
+  #   elif ( trhs  == mdnum3 ):
 
   #     lhs = self
   #     orhs = other
@@ -577,7 +577,7 @@ cdef class csr_mdarr3_t:
 
   #   # end if 
       
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
 
     
 
@@ -604,9 +604,9 @@ cdef class csr_mdarr3_t:
   #   
     
   #   cdef mdarr3_t res 
-  #   cdef mdarr3_t lhs,rhs
+  #   cdef mdmat3 lhs,rhs
   #   cdef dmat dlhs,drhs
-  #   cdef mdnum3_t olhs,orhs
+  #   cdef mdnum3 olhs,orhs
     
   #   tlhs = type(self)
   #   trhs = type(other)
@@ -618,14 +618,14 @@ cdef class csr_mdarr3_t:
 
   #     res = mdarr3_div_OO(&lhs.arr,&rhs.arr)
 
-  #   elif ( tlhs  == mdnum3_t ):
+  #   elif ( tlhs  == mdnum3 ):
 
   #     olhs = self
   #     rhs = other
 
   #     res = mdarr3_div_oO(&olhs.num,&rhs.arr)
 
-  #   elif ( trhs  == mdnum3_t ):
+  #   elif ( trhs  == mdnum3 ):
 
   #     lhs = self
   #     orhs = other
@@ -662,7 +662,7 @@ cdef class csr_mdarr3_t:
 
   #   # end if 
       
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
 
   # #---------------------------------------------------------------------------------------------------  
 
@@ -675,9 +675,9 @@ cdef class csr_mdarr3_t:
     
     
 
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i
-    cdef csr_mdarr3_t res
+    cdef csr_mdmat3 res
 
     res = self.zeros_like()
 
@@ -703,9 +703,9 @@ cdef class csr_mdarr3_t:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i
-    cdef csr_mdarr3_t res
+    cdef csr_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -732,9 +732,9 @@ cdef class csr_mdarr3_t:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef csr_mdarr3_t res
+    cdef csr_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -754,16 +754,16 @@ cdef class csr_mdarr3_t:
   #***************************************************************************************************
   cpdef extract_im(self, object hum_dir):
     """
-    PURPOSE: Get the corresponding imaginary direction in the mdarr3_t object.
+    PURPOSE: Get the corresponding imaginary direction in the mdmat3 object.
     """
     #*************************************************************************************************
     
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef csr_mdarr3_t res
+    cdef csr_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -783,16 +783,16 @@ cdef class csr_mdarr3_t:
   #***************************************************************************************************
   cpdef  extract_deriv(self, object hum_dir):
     """
-    PURPOSE: Get the corresponding derivative in the mdarr3_t object, as OTI number.
+    PURPOSE: Get the corresponding derivative in the mdmat3 object, as OTI number.
     """
     #*************************************************************************************************
     
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef csr_mdarr3_t res
+    cdef csr_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -812,14 +812,14 @@ cdef class csr_mdarr3_t:
   #***************************************************************************************************
   cpdef  get_order_im(self, ord_t order):
     """
-    PURPOSE: Get the corresponding derivative in the mdarr3_t object, as OTI number.
+    PURPOSE: Get the corresponding derivative in the mdmat3 object, as OTI number.
     """
     #*************************************************************************************************
     
     
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef csr_mdarr3_t res
+    cdef csr_mdmat3 res
 
     res = self.zeros_like()
 
@@ -846,9 +846,9 @@ cdef class csr_mdarr3_t:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef csr_mdarr3_t res
+    cdef csr_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -866,7 +866,7 @@ cdef class csr_mdarr3_t:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
     PORPUSE: Get the bases with non-zero coefficients in the OTI number.
     """
@@ -875,7 +875,7 @@ cdef class csr_mdarr3_t:
     cdef bases_t  size       = dhl.p_dh[0].Nbasis
     cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
     cdef uint64_t i, j
-    cdef mdnum3_t oval
+    cdef mdnum3 oval
     
     # Initialize all elements as zero (deactivated)
     for i in range(size):
@@ -887,7 +887,7 @@ cdef class csr_mdarr3_t:
     for i in range(self.data.size):
 
       oval = self.data[i]
-      mdnum3_get_active( &oval.num, bases_list)
+      mdnum3_get_active_bases( &oval.num, bases_list)
 
     # end if 
 
@@ -907,11 +907,11 @@ cdef class csr_mdarr3_t:
   #---------------------------------------------------------------------------------------------------
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: END OF CLASS csr_mdarr3_t ::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS csr_mdmat3 ::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 # ****************************************************************************************************
-cdef void csrmdarr3_t_matmul_SO_to(csr_mdarr3_t lhs, mdarr3_t rhs, mdarr3_t res):
+cdef void csrmdmat3_matmul_SO_to(csr_mdmat3 lhs, mdmat3 rhs, mdmat3 res):
   """
   PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
 
@@ -922,7 +922,7 @@ cdef void csrmdarr3_t_matmul_SO_to(csr_mdarr3_t lhs, mdarr3_t rhs, mdarr3_t res)
   cdef uint64_t i, j, k, l;
   cdef ord_t order;
   cdef mdnum3_t tmp;
-  cdef mdnum3_t olhs;
+  cdef mdnum3 olhs;
 
   # check for dimensions.
   if (lhs.ncols != rhs.nrows) or (lhs.nrows != res.nrows) or (rhs.ncols != res.ncols):
@@ -931,8 +931,6 @@ cdef void csrmdarr3_t_matmul_SO_to(csr_mdarr3_t lhs, mdarr3_t rhs, mdarr3_t res)
   # end if
 
   # Extract temporal 5.
-  order = max(lhs.order, rhs.order )
-  tmp = mdnum3_get_tmp( 5, order )
 
   for i in range(lhs.nrows):
       
@@ -962,18 +960,18 @@ cdef void csrmdarr3_t_matmul_SO_to(csr_mdarr3_t lhs, mdarr3_t rhs, mdarr3_t res)
 # ----------------------------------------------------------------------------------------------------
 
 # ****************************************************************************************************
-cdef mdarr3_t csrmdarr3_t_matmul_SO(csr_mdarr3_t lhs, mdarr3_t rhs):
+cdef mdmat3 csrmdmat3_matmul_SO(csr_mdmat3 lhs, mdmat3 rhs):
   """
   PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
 
   """
   
   
-  cdef mdarr3_t res
+  cdef mdmat3 res
   
   res = zeros((lhs.nrows,rhs.ncols))
 
-  csrmdarr3_t_matmul_SO_to( lhs, rhs, res)
+  csrmdmat3_matmul_SO_to( lhs, rhs, res)
 
   return res
 

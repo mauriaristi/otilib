@@ -12,14 +12,14 @@ inline void {fenum_func}_dimCheck({fenum_type}* num1,{fenum_type}* num){{
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fenum_func}_get_active({fenum_type}* num, imdir_t* list_vals){{
+void {fenum_func}_get_active_bases({fenum_type}* num, imdir_t* list_vals){{
     
     uint64_t i;
     
     // Finds the active imaginary directions in the array.
     for( i=0; i<num->nip; i++ ){{
         
-        {num_func}_get_active( &num->p_data[i], list_vals);
+        {num_func}_get_active_bases( &num->p_data[i], list_vals);
     
     }}
     

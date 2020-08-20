@@ -21,13 +21,13 @@ cpdef sum(object lhs, object rhs, object out = None):
     res_flag = 0
   # end if 
 
-  if   tlhs is mdnum3_t:
+  if   tlhs is mdnum3:
     res = __add__oX__(lhs, rhs, out = out)
-  elif tlhs is femdnum3_t:
+  elif tlhs is mdnumfe3:
     res = __add__fX__(lhs, rhs, out = out)
-  elif tlhs is mdarr3_t:
+  elif tlhs is mdmat3:
     res = __add__OX__(lhs, rhs, out = out)
-  elif tlhs is femdarr3_t:
+  elif tlhs is mdmatfe3:
     res = __add__FX__(lhs, rhs, out = out)
   elif tlhs is dmat:
     res = __add__RX__(lhs, rhs, out = out)
@@ -59,13 +59,13 @@ cpdef sub(object lhs, object rhs, object out = None):
     res_flag = 0
   # end if 
 
-  if   tlhs is mdnum3_t:
+  if   tlhs is mdnum3:
     res = __sub__oX__(lhs, rhs, out = out)
-  elif tlhs is femdnum3_t:
+  elif tlhs is mdnumfe3:
     res = __sub__fX__(lhs, rhs, out = out)
-  elif tlhs is mdarr3_t:
+  elif tlhs is mdmat3:
     res = __sub__OX__(lhs, rhs, out = out)
-  elif tlhs is femdarr3_t:
+  elif tlhs is mdmatfe3:
     res = __sub__FX__(lhs, rhs, out = out)
   elif tlhs is dmat:
     res = __sub__RX__(lhs, rhs, out = out)
@@ -97,13 +97,13 @@ cpdef mul(object lhs, object rhs, object out = None):
     res_flag = 0
   # end if 
 
-  if   tlhs is mdnum3_t:
+  if   tlhs is mdnum3:
     res = __mul__oX__(lhs, rhs, out = out)
-  elif tlhs is femdnum3_t:
+  elif tlhs is mdnumfe3:
     res = __mul__fX__(lhs, rhs, out = out)
-  elif tlhs is mdarr3_t:
+  elif tlhs is mdmat3:
     res = __mul__OX__(lhs, rhs, out = out)
-  elif tlhs is femdarr3_t:
+  elif tlhs is mdmatfe3:
     res = __mul__FX__(lhs, rhs, out = out)
   elif tlhs is dmat:
     res = __mul__RX__(lhs, rhs, out = out)
@@ -135,13 +135,13 @@ cpdef div(object lhs, object rhs, object out = None):
     res_flag = 0
   # end if 
 
-  if   tlhs is mdnum3_t:
+  if   tlhs is mdnum3:
     res = __div__oX__(lhs, rhs, out = out)
-  elif tlhs is femdnum3_t:
+  elif tlhs is mdnumfe3:
     res = __div__fX__(lhs, rhs, out = out)
-  elif tlhs is mdarr3_t:
+  elif tlhs is mdmat3:
     res = __div__OX__(lhs, rhs, out = out)
-  elif tlhs is femdarr3_t:
+  elif tlhs is mdmatfe3:
     res = __div__FX__(lhs, rhs, out = out)
   elif tlhs is dmat:
     res = __div__RX__(lhs, rhs, out = out)

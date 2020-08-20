@@ -29,7 +29,7 @@ void {arr_func}_taylor_integrate_to( coeff_t* deltas, {arr_type}* arr, {arr_type
     
     {arr_type} res;
 
-    res = {arr_func}_zeros( arr->nrows, arr->ncols, 0, 0);
+    res = {arr_func}_zeros( arr->nrows, arr->ncols);
 
     {arr_func}_taylor_integrate_to( deltas, arr, &res);
 
@@ -59,7 +59,7 @@ void {arr_func}_get_order_im_to( ord_t order, {arr_type}* arr, {arr_type}* res){
     
     {arr_type} res;
 
-    res = {arr_func}_zeros( arr->nrows, arr->ncols, 0, 0);
+    res = {arr_func}_zeros( arr->nrows, arr->ncols);
 
     {arr_func}_get_order_im_to( order, arr, &res);
 
@@ -89,7 +89,7 @@ void {arr_func}_truncate_im_to( imdir_t idx, ord_t order, {arr_type}* arr, {arr_
     
     {arr_type} res;
 
-    res = {arr_func}_zeros( arr->nrows, arr->ncols, 0, 0);
+    res = {arr_func}_zeros( arr->nrows, arr->ncols);
 
     {arr_func}_truncate_im_to( idx, order, arr, &res);
 
@@ -282,8 +282,7 @@ void {arr_func}_set_slice_O( {arr_type}* arr,
             // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
 
             {num_func}_copy_to( &arr->p_data[  j +  i * arr->ncols ], 
-                          &res->p_data[ jj + ii * res->ncols ], 
-                          dhl);
+                          &res->p_data[ jj + ii * res->ncols ]);
 
             jj += stepj;
         
@@ -327,8 +326,7 @@ void {arr_func}_set_slice_o( {num_type}* num,
         for ( j = 0; j < ncols; j++){{
 
             {num_func}_set_o( num, 
-                       &res->p_data[ jj + ii * res->ncols ],  
-                        dhl);
+                       &res->p_data[ jj + ii * res->ncols ]);
 
             jj += stepj;
         
@@ -382,8 +380,7 @@ void {arr_func}_set_slice_r( coeff_t val,
             // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
 
             {num_func}_set_r( val, 
-                        &res->p_data[ jj + ii * res->ncols ],  
-                        dhl);
+                        &res->p_data[ jj + ii * res->ncols ]);
 
             jj += stepj;
         
@@ -426,7 +423,7 @@ darr_t {arr_func}_get_im(imdir_t idx, ord_t order, {arr_type}* arr){{
 // ****************************************************************************************************
 {arr_type} {arr_func}_extract_im(imdir_t idx, ord_t order, {arr_type}* arr){{
     
-    {arr_type} res = {arr_func}_zeros( arr->nrows, arr->ncols, 0, 0);
+    {arr_type} res = {arr_func}_zeros( arr->nrows, arr->ncols);
     
     {arr_func}_extract_im_to( idx, order, arr, &res);
 
@@ -474,7 +471,7 @@ darr_t {arr_func}_get_deriv(imdir_t idx, ord_t order, {arr_type}* arr){{
 // ****************************************************************************************************
 {arr_type} {arr_func}_get_im_o(imdir_t idx, ord_t order, {arr_type}* arr){{
     
-    {arr_type} res = {arr_func}_zeros( arr->nrows, arr->ncols, 0, 0);
+    {arr_type} res = {arr_func}_zeros( arr->nrows, arr->ncols);
     
     {arr_func}_get_im_to( idx, order, arr, &res);
 
@@ -503,7 +500,7 @@ void {arr_func}_get_im_to(imdir_t idx, ord_t order, {arr_type}* arr, {arr_type}*
 // ****************************************************************************************************
 {arr_type} {arr_func}_get_deriv_o(imdir_t idx, ord_t order, {arr_type}* arr){{
     
-    {arr_type} res = {arr_func}_zeros( arr->nrows, arr->ncols, 0, 0);
+    {arr_type} res = {arr_func}_zeros( arr->nrows, arr->ncols);
     
     {arr_func}_get_deriv_to( idx, order, arr, &res);
 
@@ -532,7 +529,7 @@ void {arr_func}_get_deriv_to(imdir_t idx, ord_t order, {arr_type}* arr, {arr_typ
 // ****************************************************************************************************
 {arr_type} {arr_func}_extract_deriv(imdir_t idx, ord_t order, {arr_type}* arr){{
     
-    {arr_type} res = {arr_func}_zeros( arr->nrows, arr->ncols, 0, 0);
+    {arr_type} res = {arr_func}_zeros( arr->nrows, arr->ncols);
     
     {arr_func}_extract_deriv_to( idx, order, arr, &res);
 
@@ -568,7 +565,6 @@ inline {num_type} {arr_func}_get_item_i({arr_type}* arr, uint64_t i){{
     if (i < arr->size){{
 
         res = arr->p_data[i];
-        res.flag = 0;
         
     }} else {{
 
@@ -622,8 +618,7 @@ void {arr_func}_get_item_ij_to({arr_type}* arr, uint64_t i, uint64_t j, {num_typ
 // ****************************************************************************************************
 {arr_type} {arr_func}_get_slice( {arr_type}* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
-                        int64_t startj, int64_t stopj, int64_t stepj,
-                        dhelpl_t dhl){{
+                        int64_t startj, int64_t stopj, int64_t stepj){{
 
     uint64_t ncols, nrows; // Resulting number of rows and columns
     {arr_type} res = {arr_func}_init();
@@ -631,7 +626,7 @@ void {arr_func}_get_item_ij_to({arr_type}* arr, uint64_t i, uint64_t j, {num_typ
     nrows = slice_size(starti, stopi, stepi);
     ncols = slice_size(startj, stopj, stepj);
     
-    res = {arr_func}_zeros( nrows, ncols, 0, 0);
+    res = {arr_func}_zeros( nrows, ncols);
 
     {arr_func}_get_slice_to( arr, starti, stopi, stepi, startj, stopj, stepj, &res);
 
@@ -674,8 +669,7 @@ void {arr_func}_get_slice_to( {arr_type}* arr,
             // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
 
             {num_func}_copy_to( &arr->p_data[ jj + ii * arr->ncols ], 
-                          &res->p_data[  j +  i * res->ncols ], 
-                          dhl);
+                          &res->p_data[  j +  i * res->ncols ]);
 
             jj += stepj;
         
@@ -699,7 +693,7 @@ void {arr_func}_get_slice_to( {arr_type}* arr,
     res = {arr_func}_zeros( nrows, nrows);
     
     for (i=0; i<res.nrows; i++ ){{
-        res.p_data[ i + i*res.ncols ].re = 1.0;
+        res.p_data[ i + i*res.ncols ].{real_str} = 1.0;
     }}
     
     return res;
@@ -716,7 +710,7 @@ void {arr_func}_get_slice_to( {arr_type}* arr,
     res = {arr_func}_createEmpty(nrows, ncols);
 
     for (i=0; i<res.size; i++ ){{
-        res.p_data[i].re = 1.0;
+        {num_func}_set_r(1.0,&res.p_data[i]);
     }}
     
     return res;
@@ -733,54 +727,7 @@ void {arr_func}_get_slice_to( {arr_type}* arr,
     res = {arr_func}_createEmpty(nrows, ncols);
     
     for (i=0; i<res.size; i++ ){{
-        res.p_data[i].re = 0.0;
-    }}
-    
-    return res;
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{arr_type} {arr_func}_eye(uint64_t nrows, ndir_t* p_nnz, ord_t order){{
-
-    {arr_type}  res = {arr_func}_zeros( nrows, nrows, p_nnz, order);
-    uint64_t i;
-    
-    for (i=0; i<res.nrows; i++ ){{
-        
-        res.p_data[ i + i*res.ncols ].re = 1.0;
-
-    }}
-    
-    return res;
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{arr_type} {arr_func}_ones(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order){{
-
-    {arr_type}  res = {arr_func}_createEmpty(nrows, ncols, p_nnz, order);
-    uint64_t i;
-    
-    for (i=0; i<res.size; i++ ){{
-        res.p_data[i].re = 1.0;
-    }}
-    
-    return res;
-
-}}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-{arr_type} {arr_func}_zeros(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order){{
-
-    {arr_type}  res = {arr_func}_createEmpty(nrows, ncols, p_nnz, order);
-    uint64_t i;
-    
-    for (i=0; i<res.size; i++ ){{
-        res.p_data[i].re = 0.0;
+        {num_func}_set_r(0.0,&res.p_data[i]);
     }}
     
     return res;
@@ -792,18 +739,9 @@ void {arr_func}_get_slice_to( {arr_type}* arr,
 inline {arr_type} {arr_func}_empty_like({arr_type}* arr){{
 
     {arr_type}  res;
-    if (arr->size!=0){{
-        
-        res = {arr_func}_createEmpty(arr->nrows, arr->ncols, arr->p_data[0].p_size, 
-            arr->p_data[0].order);    
-
-    }}else{{
-
-        res = {arr_func}_createEmpty(arr->nrows, arr->ncols, NULL, 0);    
-
-    }}
     
-    
+    res = {arr_func}_createEmpty(arr->nrows, arr->ncols);    
+
     return res;
 
 }}
@@ -833,8 +771,6 @@ inline {arr_type} {arr_func}_createEmpty(uint64_t nrows, uint64_t ncols){{
 
 // ****************************************************************************************************
 void {arr_func}_free({arr_type}* arr){{
-    
-    uint64_t i;
 
     if ( (arr->flag != 0) && (arr->p_data!= NULL) ){{
         

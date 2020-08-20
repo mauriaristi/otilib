@@ -31,19 +31,20 @@ def remove_annotations(string):
     return str_nocomm
 
 
-files= ["oti/core.h",
-        "oti/dense.h",
-        "oti/sparse.h",
-        "oti/real.h",
-        ]
+# files= ["oti/core.h",
+#         "oti/dense.h",
+#         "oti/sparse.h",
+#         "oti/real.h",
+#         ]
 
 
-locations = [ "oti/core",
-              "oti/dense",
-              "oti/fem",
-              "oti/real",
-              "oti/sparse"
-]
+# locations = [ "oti/core",
+#               "oti/dense",
+#               "oti/fem",
+#               "oti/real",
+#               "oti/sparse",
+#               "oti/mdnum3",
+# ]
 
 # files_in_dir = []
 
@@ -53,6 +54,23 @@ folders['dense']=[]
 folders['fem']=[]
 folders['real']=[]
 folders['sparse']=[]
+
+# Add here Static codes added.
+folders['mdnum2']=[]
+folders['mdnum3']=[]
+folders['mdnum4']=[]
+folders['mdnum5']=[]
+
+folders['onumm1n1']=[]
+folders['onumm1n2']=[]
+folders['onumm1n3']=[]
+folders['onumm1n5']=[]
+folders['onumm2n2']=[]
+folders['onumm3n3']=[]
+folders['onumm1n10']=[]
+folders['onumm10n1']=[]
+folders['onumm2n5']=[]
+
 # r=>root, d=>directories, f=>files
 for key, files_in_dir in folders.items():
   location = 'oti/'+ key

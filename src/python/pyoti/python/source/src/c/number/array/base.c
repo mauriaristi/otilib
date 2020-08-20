@@ -699,7 +699,6 @@ inline sotinum_t arrso_get_item_i(arrso_t* arr, uint64_t i, dhelpl_t dhl){
     if (i < arr->size){
 
         res = arr->p_data[i];
-        res.flag = 0;
         
     } else {
 
@@ -757,8 +756,7 @@ void arrso_get_item_ij_to(arrso_t* arr, uint64_t i, uint64_t j, sotinum_t* res, 
 // ****************************************************************************************************
 arrso_t arrso_get_slice( arrso_t* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
-                        int64_t startj, int64_t stopj, int64_t stepj,
-                        dhelpl_t dhl){
+                        int64_t startj, int64_t stopj, int64_t stepj, dhelpl_t dhl){
 
     uint64_t ncols, nrows; // Resulting number of rows and columns
     arrso_t res = arrso_init();
@@ -810,8 +808,7 @@ void arrso_get_slice_to( arrso_t* arr,
             // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
 
             soti_copy_to( &arr->p_data[ jj + ii * arr->ncols ], 
-                          &res->p_data[  j +  i * res->ncols ], 
-                          dhl);
+                          &res->p_data[  j +  i * res->ncols ], dhl);
 
             jj += stepj;
         
@@ -859,7 +856,7 @@ arrso_t arrso_eye_bases(uint64_t nrows, bases_t nbases, ord_t order, dhelpl_t dh
     res = arrso_zeros_bases( nrows, nrows, nbases, order, dhl);
     
     for (i=0; i<res.nrows; i++ ){
-        res.p_data[ i + i*res.ncols ].re = 1.0;
+        res.p_data[ i + i*res.ncols ].<<<real_str>>> = 1.0;
     }
     
     return res;
@@ -876,7 +873,7 @@ arrso_t arrso_ones_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t o
     res = arrso_createEmpty_bases(nrows, ncols, nbases, order, dhl);
 
     for (i=0; i<res.size; i++ ){
-        res.p_data[i].re = 1.0;
+        soti_set_r(1.0,&res.p_data[i]);
     }
     
     return res;
@@ -893,57 +890,7 @@ arrso_t arrso_zeros_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t 
     res = arrso_createEmpty_bases(nrows, ncols, nbases, order, dhl);
     
     for (i=0; i<res.size; i++ ){
-        res.p_data[i].re = 0.0;
-    }
-    
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-// ****************************************************************************************************
-arrso_t arrso_eye(uint64_t nrows, ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
-
-    arrso_t  res = arrso_zeros( nrows, nrows, p_nnz, order, dhl);
-    uint64_t i;
-    
-    for (i=0; i<res.nrows; i++ ){
-        
-        res.p_data[ i + i*res.ncols ].re = 1.0;
-
-    }
-    
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-arrso_t arrso_ones(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
-
-    arrso_t  res = arrso_createEmpty_predef(nrows, ncols, p_nnz, order, dhl);
-    uint64_t i;
-    
-    for (i=0; i<res.size; i++ ){
-        res.p_data[i].re = 1.0;
-    }
-    
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-arrso_t arrso_zeros(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
-
-    arrso_t  res = arrso_createEmpty_predef(nrows, ncols, p_nnz, order, dhl);
-    uint64_t i;
-    
-    for (i=0; i<res.size; i++ ){
-        res.p_data[i].re = 0.0;
+        soti_set_r(0.0,&res.p_data[i]);
     }
     
     return res;
@@ -962,18 +909,9 @@ arrso_t arrso_zeros(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, 
 inline arrso_t arrso_empty_like(arrso_t* arr, dhelpl_t dhl){
 
     arrso_t  res;
-    if (arr->size!=0){
-        
-        res = arrso_createEmpty_predef(arr->nrows, arr->ncols, arr->p_data[0].p_size, 
-            arr->p_data[0].order, dhl);    
-
-    }else{
-
-        res = arrso_createEmpty_predef(arr->nrows, arr->ncols, NULL, 0, dhl);    
-
-    }
     
-    
+    res = arrso_createEmpty_predef(arr->nrows, arr->ncols, dhl);    
+
     return res;
 
 }
@@ -1005,8 +943,6 @@ inline arrso_t arrso_createEmpty_bases(uint64_t nrows, uint64_t ncols, dhelpl_t 
 
 // ****************************************************************************************************
 void arrso_free(arrso_t* arr){
-    
-    uint64_t i;
 
     if ( (arr->flag != 0) && (arr->p_data!= NULL) ){
         

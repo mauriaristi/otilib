@@ -936,7 +936,7 @@ cdef class lil_{arr_pytype}:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
 
     """
@@ -959,7 +959,7 @@ cdef class lil_{arr_pytype}:
       for j in range(len(self.data[i])):
         
         oval = self.data[i][j]
-        {num_func}_get_active( &oval.num, bases_list)
+        {num_func}_get_active_bases( &oval.num, bases_list)
 
       # end for 
 

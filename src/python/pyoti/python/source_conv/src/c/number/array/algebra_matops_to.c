@@ -7,7 +7,6 @@
 void {arr_func}_dotproduct_OO_to({arr_type}* arr1, {arr_type}* arr2, {num_type}* res){{
 
     uint64_t i;
-    ord_t order;
     {num_type} tmp;
 
     // check for dimensions.
@@ -30,7 +29,6 @@ void {arr_func}_dotproduct_OO_to({arr_type}* arr1, {arr_type}* arr2, {num_type}*
 void {arr_func}_dotproduct_RO_to(darr_t* arr1, {arr_type}* arr2, {num_type}* res){{
 
     uint64_t i;
-    ord_t order;
     {num_type} tmp;
 
     // check for dimensions.
@@ -62,7 +60,6 @@ void {arr_func}_dotproduct_RO_to(darr_t* arr1, {arr_type}* arr2, {num_type}* res
 void {arr_func}_matmul_OO_to({arr_type}* arr1, {arr_type}* arr2, {arr_type}* res){{
 
     uint64_t i, j, k;
-    ord_t order;
     {num_type} tmp;
 
     // check for dimensions.
@@ -100,7 +97,6 @@ void {arr_func}_matmul_OO_to({arr_type}* arr1, {arr_type}* arr2, {arr_type}* res
 void {arr_func}_matmul_OR_to({arr_type}* arr1, darr_t* arr2, {arr_type}* res){{
         
     uint64_t i, j, k;
-    ord_t order;
     {num_type} tmp;
 
     // check for dimensions.
@@ -135,7 +131,6 @@ void {arr_func}_matmul_OR_to({arr_type}* arr1, darr_t* arr2, {arr_type}* res){{
 void {arr_func}_matmul_RO_to(darr_t* arr1, {arr_type}* arr2, {arr_type}* res){{
         
     uint64_t i, j, k;
-    ord_t order;
     {num_type} tmp;
 
     // check for dimensions.
@@ -189,8 +184,7 @@ void {arr_type}ranspose_to({arr_type}* arr1, {arr_type}* res){{
 void {arr_func}_invert_to({arr_type}* arr1, {arr_type}* res){{
 
     {arr_type} tmpA1 = {arr_func}_init();
-    ord_t order;
-    {num_type} tmp1, tmp2, tmp3, det;
+    {num_type} tmp1, det;
 
     // Check dimensions.
     {arr_func}_dimCheck_O_squareness( arr1, res);
@@ -223,11 +217,7 @@ void {arr_func}_invert_to({arr_type}* arr1, {arr_type}* res){{
 
     }} else if (arr1->ncols == 3){{
         
-        tmpA1 = {arr_func}_zeros( 2, 2, 0, 0 );
-        tmpA1.p_data[0] = {num_func}_get_tmp(  9, order);
-        tmpA1.p_data[1] = {num_func}_get_tmp( 10, order);
-        tmpA1.p_data[2] = {num_func}_get_tmp( 11, order);
-        tmpA1.p_data[3] = {num_func}_get_tmp( 12, order);
+        tmpA1 = {arr_func}_zeros( 2, 2 );
         
         {arr_func}_det_to( arr1, &det); // Get determinant.
         
@@ -377,8 +367,6 @@ void {arr_func}_invert_to({arr_type}* arr1, {arr_type}* res){{
 void {arr_func}_det_to({arr_type}* arr1, {num_type}* res){{
     
     uint64_t i, j;
-
-    ord_t order;
     {num_type} tmp1, tmp2, tmp3;
     // printf("Here 1\n");
 
@@ -395,20 +383,17 @@ void {arr_func}_det_to({arr_type}* arr1, {num_type}* res){{
         {num_func}_mul_oo_to(
             &arr1->p_data[0],
             &arr1->p_data[3],
-            &tmp1,
-            dhl   ); 
+            &tmp1   ); 
 
         {num_func}_mul_oo_to(
             &arr1->p_data[1],
             &arr1->p_data[2],
-            &tmp2,
-            dhl   ); 
+            &tmp2   ); 
 
         {num_func}_sub_oo_to(
             &tmp1,
             &tmp2,
-            res,
-            dhl);
+            res);
 
     }} else if (arr1->ncols >= 3){{
         
@@ -426,8 +411,7 @@ void {arr_func}_det_to({arr_type}* arr1, {num_type}* res){{
                 {num_func}_mul_oo_to(
                     &tmp1,
                     &arr1->p_data[ ( (i+j)%arr1->ncols ) + i*arr1->ncols],
-                    &tmp2,
-                    dhl   ); 
+                    &tmp2   ); 
 
                 {num_func}_set_o( &tmp2, &tmp1);
 
@@ -437,8 +421,7 @@ void {arr_func}_det_to({arr_type}* arr1, {num_type}* res){{
             {num_func}_sum_oo_to(
                 &tmp1,
                 &tmp3,
-                &tmp2,
-                dhl   );
+                &tmp2   );
 
             // tmp3 = tmp2;
             {num_func}_set_o( &tmp2, &tmp3);             
@@ -456,8 +439,7 @@ void {arr_func}_det_to({arr_type}* arr1, {num_type}* res){{
                 {num_func}_mul_oo_to(
                     &tmp1,
                     &arr1->p_data[ (arr1->ncols-1 - (i+j)%arr1->ncols ) + i*arr1->ncols],
-                    &tmp2,
-                    dhl   ); 
+                    &tmp2   ); 
 
                 {num_func}_set_o( &tmp2, &tmp1);
 
@@ -467,8 +449,7 @@ void {arr_func}_det_to({arr_type}* arr1, {num_type}* res){{
             {num_func}_sub_oo_to(
                 &tmp3,
                 &tmp1,
-                &tmp2,
-                dhl   );
+                &tmp2   );
 
             // tmp3 = tmp2;
             {num_func}_set_o( &tmp2, &tmp3);  
@@ -490,7 +471,6 @@ void {arr_func}_norm_to({arr_type}* arr1, {num_type}* res){{
     
     
     uint64_t i;
-    ord_t order;
     {num_type} tmp1, tmp2, tmp3;
     
     {num_func}_set_r( 0.0, &tmp3);    
@@ -519,7 +499,6 @@ void {arr_func}_pnorm_to({arr_type}* arr1, coeff_t p, {num_type}* res){{
     
     
     uint64_t i;
-    ord_t order;
     {num_type} tmp1, tmp2, tmp3;
     
     {num_func}_set_r( 0.0, &tmp3);    

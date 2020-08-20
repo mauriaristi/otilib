@@ -1,18 +1,18 @@
 
 
 #*****************************************************************************************************
-cdef __cross_product_FX(femdarr3_t Flhs, object rhs, object out = None):
+cdef __cross_product_FX(mdmatfe3 Flhs, object rhs, object out = None):
   """
-  PURPOSE:  Vector cross product between femdarr3_t and other array.
+  PURPOSE:  Vector cross product between mdmatfe3 and other array.
 
   """
   #***************************************************************************************************
-  cdef mdarr3_t      Orhs, Ores
+  cdef mdmat3      Orhs, Ores
   cdef dmat       Rrhs, Rres
-  cdef femdarr3_t    Frhs, Fres
-  cdef mdnum3_t    orhs, ores
+  cdef mdmatfe3    Frhs, Fres
+  cdef mdnum3    orhs, ores
   cdef coeff_t    rrhs, rres
-  cdef femdnum3_t     frhs, fres
+  cdef mdnumfe3     frhs, fres
   # C- result holders
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -26,7 +26,7 @@ cdef __cross_product_FX(femdarr3_t Flhs, object rhs, object out = None):
     res_flag = 0
   # end if 
 
-  if   trhs is femdarr3_t: # FF
+  if   trhs is mdmatfe3: # FF
     Frhs = rhs
     if res_flag:
 
@@ -36,10 +36,10 @@ cdef __cross_product_FX(femdarr3_t Flhs, object rhs, object out = None):
     else:
 
       cFres = femdarr3_crossproduct_FF( &Flhs.arr, &Frhs.arr )
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if 
 
-  elif trhs is mdarr3_t:   # FO
+  elif trhs is mdmat3:   # FO
     Orhs = rhs
     if res_flag:
 
@@ -49,7 +49,7 @@ cdef __cross_product_FX(femdarr3_t Flhs, object rhs, object out = None):
     else:
 
       cFres = femdarr3_crossproduct_OF( &Orhs.arr, &Flhs.arr)
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
 
     # end if 
   elif trhs is dmat:    # FR
@@ -62,7 +62,7 @@ cdef __cross_product_FX(femdarr3_t Flhs, object rhs, object out = None):
     else:
 
       cFres = femdarr3_crossproduct_RF( &Rrhs.arr, &Flhs.arr)
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
 
     # end if
   else:
@@ -76,18 +76,18 @@ cdef __cross_product_FX(femdarr3_t Flhs, object rhs, object out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef __cross_product_OX( mdarr3_t Olhs, object rhs, object out = None):
+cdef __cross_product_OX( mdmat3 Olhs, object rhs, object out = None):
   """
-  PURPOSE:  Vector cross product between femdarr3_t and other array.
+  PURPOSE:  Vector cross product between mdmatfe3 and other array.
 
   """
   #***************************************************************************************************
-  cdef mdarr3_t      Orhs, Ores
+  cdef mdmat3      Orhs, Ores
   cdef dmat       Rrhs, Rres
-  cdef femdarr3_t    Frhs, Fres
-  cdef mdnum3_t    ores
+  cdef mdmatfe3    Frhs, Fres
+  cdef mdnum3    ores
   cdef coeff_t    rres
-  cdef femdnum3_t     fres
+  cdef mdnumfe3     fres
   # C- result holders
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -101,7 +101,7 @@ cdef __cross_product_OX( mdarr3_t Olhs, object rhs, object out = None):
     res_flag = 0
   # end if 
 
-  if   trhs is femdarr3_t: # OF
+  if   trhs is mdmatfe3: # OF
     Frhs = rhs
     if res_flag:
 
@@ -111,10 +111,10 @@ cdef __cross_product_OX( mdarr3_t Olhs, object rhs, object out = None):
     else:
 
       cFres = femdarr3_crossproduct_OF( &Olhs.arr, &Frhs.arr )
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if 
 
-  elif trhs is mdarr3_t:   # OO
+  elif trhs is mdmat3:   # OO
     Orhs = rhs
     if res_flag:
 
@@ -124,7 +124,7 @@ cdef __cross_product_OX( mdarr3_t Olhs, object rhs, object out = None):
     else:
 
       cOres = mdarr3_crossproduct_OO( &Olhs.arr, &Orhs.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
 
     # end if 
   elif trhs is dmat:    # OR
@@ -137,7 +137,7 @@ cdef __cross_product_OX( mdarr3_t Olhs, object rhs, object out = None):
     else:
 
       cOres = mdarr3_crossproduct_RO( &Rrhs.arr, &Olhs.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
 
     # end if 
 
@@ -154,16 +154,16 @@ cdef __cross_product_OX( mdarr3_t Olhs, object rhs, object out = None):
 #*****************************************************************************************************
 cdef __cross_product_RX( dmat Rlhs, object rhs, object out = None):
   """
-  PURPOSE:  Vector cross product between femdarr3_t and other array.
+  PURPOSE:  Vector cross product between mdmatfe3 and other array.
 
   """
   #***************************************************************************************************
-  cdef mdarr3_t      Orhs, Ores
+  cdef mdmat3      Orhs, Ores
   cdef dmat       Rrhs, Rres
-  cdef femdarr3_t    Frhs, Fres
-  cdef mdnum3_t    ores
+  cdef mdmatfe3    Frhs, Fres
+  cdef mdnum3    ores
   cdef coeff_t    rres
-  cdef femdnum3_t     fres
+  cdef mdnumfe3     fres
   # C- result holders
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -177,7 +177,7 @@ cdef __cross_product_RX( dmat Rlhs, object rhs, object out = None):
     res_flag = 0
   # end if 
 
-  if   trhs is femdarr3_t: # RF
+  if   trhs is mdmatfe3: # RF
     Frhs = rhs
     if res_flag:
 
@@ -187,10 +187,10 @@ cdef __cross_product_RX( dmat Rlhs, object rhs, object out = None):
     else:
 
       cFres = femdarr3_crossproduct_RF( &Rlhs.arr, &Frhs.arr )
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if 
 
-  elif trhs is mdarr3_t:   # RO
+  elif trhs is mdmat3:   # RO
     Orhs = rhs
     if res_flag:
 
@@ -200,7 +200,7 @@ cdef __cross_product_RX( dmat Rlhs, object rhs, object out = None):
     else:
 
       cOres = mdarr3_crossproduct_RO( &Rlhs.arr, &Orhs.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
 
     # end if 
   # elif trhs is dmat:    # RR

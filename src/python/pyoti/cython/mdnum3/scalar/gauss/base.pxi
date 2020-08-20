@@ -1,9 +1,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  femdnum3_t    ::::::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  mdnumfe3    ::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class femdnum3_t:
+cdef class mdnumfe3:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -14,9 +14,9 @@ cdef class femdnum3_t:
 
   #***************************************************************************************************
   
-  def __init__(self, real, uint64_t nip, ord_t order = 0, bases_t nbases = 0): 
+  def __init__(self, real, uint64_t nip): 
     """
-    PURPOSE:      Python level constructor of the femdnum3_t class.
+    PURPOSE:      Python level constructor of the mdnumfe3 class.
 
     DESCRIPTION:  Creates a new matrix, reserving memory Assumes coefficient values to be all zeroes.
                  
@@ -102,7 +102,7 @@ cdef class femdnum3_t:
 
   #***************************************************************************************************
   @staticmethod
-  cdef femdnum3_t create(femdnum3_t* num, uint8_t FLAGS = 1):
+  cdef mdnumfe3 create(femdnum3_t* num, uint8_t FLAGS = 1):
     """
     PURPOSE:      C-level constructor of the class. Use this when creating objects within 
                   Cython
@@ -111,7 +111,7 @@ cdef class femdnum3_t:
     #*************************************************************************************************
 
     # create new empty object:
-    cdef femdnum3_t res = <femdnum3_t> femdnum3_t.__new__(femdnum3_t)
+    cdef mdnumfe3 res = <mdnumfe3> mdnumfe3.__new__(mdnumfe3)
 
     res.num = num[0]
     res.FLAGS = FLAGS
@@ -130,7 +130,7 @@ cdef class femdnum3_t:
 
     
 
-    out =  "femdnum3_t< "
+    out =  "mdnumfe3< "
     out += "nip: "+str(self.nip)+ ", "
     out += "re:\n"
     # first print the real part:
@@ -154,7 +154,7 @@ cdef class femdnum3_t:
 
     cdef np.ndarray[uint64_t, ndim=1] tmp 
 
-    out =  "femdnum3_t< "
+    out =  "mdnumfe3< "
     out += "shape: "+str(self.shape)+ ", "
     out += "re:\n"
     # first print the real part:
@@ -177,9 +177,9 @@ cdef class femdnum3_t:
     
 
     cdef uint64_t i
-    cdef mdnum3_t tmp
+    cdef mdnum3 tmp
 
-    out =  "femdnum3_t< "
+    out =  "mdnumfe3< "
     out += "nip: "+str(self.nip)+ ", \n"
 
     for i in range(self.nip):
@@ -208,7 +208,7 @@ cdef class femdnum3_t:
     
   
     cdef mdnum3_t d_mdnum3
-    cdef mdnum3_t   mdnum3
+    cdef mdnum3   mdnum3
 
     out  = self.list_repr()
 
@@ -226,7 +226,7 @@ cdef class femdnum3_t:
     
   
     cdef mdnum3_t d_mdnum3
-    cdef mdnum3_t   mdnum3
+    cdef mdnum3   mdnum3
 
     out  = self.list_repr()
 
@@ -255,7 +255,7 @@ cdef class femdnum3_t:
 
     # end if
 
-    return mdnum3_t.create(&res, FLAGS=0)
+    return mdnum3.create(&res, FLAGS=0)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -268,13 +268,13 @@ cdef class femdnum3_t:
         
     
 
-    cdef mdnum3_t valt
+    cdef mdnum3 valt
     
     tval = type(value)
 
     if ( isinstance( val, int ) ):
       
-      if tval == mdnum3_t:
+      if tval == mdnum3:
 
         valt = value
         femdnum3_set_item_k_o( &valt.num, val, &self.num)
@@ -304,7 +304,7 @@ cdef class femdnum3_t:
     
     cdef femdnum3_t res = femdnum3_copy(&self.num)
 
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
   #---------------------------------------------------------------------------------------------------
   
   #***************************************************************************************************
@@ -318,7 +318,7 @@ cdef class femdnum3_t:
     
     cdef femdnum3_t res = femdnum3_neg(&self.num)
 
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
@@ -331,9 +331,9 @@ cdef class femdnum3_t:
     
     
     cdef femdnum3_t res 
-    cdef femdnum3_t lhs,rhs
+    cdef mdnumfe3 lhs,rhs
     cdef dmat dlhs,drhs
-    cdef mdnum3_t olhs,orhs
+    cdef mdnum3 olhs,orhs
     
     tlhs = type(self)
     trhs = type(other)
@@ -345,14 +345,14 @@ cdef class femdnum3_t:
 
       res = femdnum3_sum_ff(&lhs.num,&rhs.num)
 
-    elif ( tlhs  == mdnum3_t ):
+    elif ( tlhs  == mdnum3 ):
 
       olhs = self
       rhs = other
 
       res = femdnum3_sum_of(&olhs.num,&rhs.num)
 
-    elif ( trhs  == mdnum3_t ):
+    elif ( trhs  == mdnum3 ):
 
       lhs = self
       orhs = other
@@ -369,14 +369,14 @@ cdef class femdnum3_t:
       lhs = self
       res = femdnum3_sum_rf(other, &lhs.num)
 
-    # elif ( tlhs  == mdarr3_t ):
+    # elif ( tlhs  == mdmat3 ):
 
     #   dlhs = self
     #   rhs = other
 
     #   res = femdnum3_sum_RO(&dlhs.num,&rhs.num)
 
-    # elif ( trhs  == mdarr3_t ):
+    # elif ( trhs  == mdmat3 ):
 
     #   lhs = self
     #   drhs = other
@@ -403,7 +403,7 @@ cdef class femdnum3_t:
 
     # end if 
       
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -428,9 +428,9 @@ cdef class femdnum3_t:
     
     
     cdef femdnum3_t res 
-    cdef femdnum3_t   lhs, rhs
+    cdef mdnumfe3   lhs, rhs
     cdef dmat    dlhs,drhs
-    cdef mdnum3_t olhs,orhs
+    cdef mdnum3 olhs,orhs
     
     tlhs = type(self)
     trhs = type(other)
@@ -442,14 +442,14 @@ cdef class femdnum3_t:
 
       res = femdnum3_sub_ff(&lhs.num,&rhs.num)
 
-    elif ( tlhs  == mdnum3_t ):
+    elif ( tlhs  == mdnum3 ):
 
       olhs = self
       rhs = other
 
       res = femdnum3_sub_of(&olhs.num,&rhs.num)
 
-    elif ( trhs  == mdnum3_t ):
+    elif ( trhs  == mdnum3 ):
 
       lhs = self
       orhs = other
@@ -486,7 +486,7 @@ cdef class femdnum3_t:
 
     # end if 
       
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -511,9 +511,9 @@ cdef class femdnum3_t:
     
     
     cdef femdnum3_t res 
-    cdef femdnum3_t lhs,rhs
+    cdef mdnumfe3 lhs,rhs
     cdef dmat dlhs,drhs
-    cdef mdnum3_t olhs,orhs
+    cdef mdnum3 olhs,orhs
     
     tlhs = type(self)
     trhs = type(other)
@@ -525,14 +525,14 @@ cdef class femdnum3_t:
 
       res = femdnum3_mul_ff(&lhs.num,&rhs.num)
 
-    elif ( tlhs  == mdnum3_t ):
+    elif ( tlhs  == mdnum3 ):
 
       olhs = self
       rhs = other
 
       res = femdnum3_mul_of(&olhs.num,&rhs.num)
 
-    elif ( trhs  == mdnum3_t ):
+    elif ( trhs  == mdnum3 ):
 
       lhs = self
       orhs = other
@@ -569,7 +569,7 @@ cdef class femdnum3_t:
 
     # end if 
       
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -594,9 +594,9 @@ cdef class femdnum3_t:
     
     
     cdef femdnum3_t res 
-    cdef femdnum3_t lhs,rhs
+    cdef mdnumfe3 lhs,rhs
     cdef dmat dlhs,drhs
-    cdef mdnum3_t olhs,orhs
+    cdef mdnum3 olhs,orhs
     
     tlhs = type(self)
     trhs = type(other)
@@ -608,14 +608,14 @@ cdef class femdnum3_t:
 
       res = femdnum3_div_ff(&lhs.num,&rhs.num)
 
-    elif ( tlhs  == mdnum3_t ):
+    elif ( tlhs  == mdnum3 ):
 
       olhs = self
       rhs = other
 
       res = femdnum3_div_of(&olhs.num,&rhs.num)
 
-    elif ( trhs  == mdnum3_t ):
+    elif ( trhs  == mdnum3 ):
 
       lhs = self
       orhs = other
@@ -652,7 +652,7 @@ cdef class femdnum3_t:
 
     # end if 
       
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -669,11 +669,11 @@ cdef class femdnum3_t:
     
 
     cdef femdnum3_t res 
-    cdef femdnum3_t S = self
+    cdef mdnumfe3 S = self
 
     res = femdnum3_pow( &S.num, n)
     
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -685,17 +685,17 @@ cdef class femdnum3_t:
     #*************************************************************************************************
     
 
-    cdef femdnum3_t  frhs
-    cdef mdnum3_t orhs
+    cdef mdnumfe3  frhs
+    cdef mdnum3 orhs
     cdef coeff_t rrhs
     trhs = type(rhs)
 
-    if   trhs is mdnum3_t:
+    if   trhs is mdnum3:
 
       orhs = rhs
       femdnum3_set_o( &orhs.num, &self.num)
 
-    elif trhs is femdnum3_t:
+    elif trhs is mdnumfe3:
 
       frhs = rhs
       femdnum3_set_f( &frhs.num, &self.num)      
@@ -710,7 +710,7 @@ cdef class femdnum3_t:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def gauss_integrate(self, femdnum3_t w  ):
+  def gauss_integrate(self, mdnumfe3 w  ):
     """
     PURPOSE: Get the corresponding derivative of the system.
     """
@@ -721,7 +721,7 @@ cdef class femdnum3_t:
 
     res = femdnum3_integrate( &self.num, &w.num)
 
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -742,7 +742,7 @@ cdef class femdnum3_t:
     
     res = femdnum3_truncate_im( indx, order, &self.num) 
 
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -763,7 +763,7 @@ cdef class femdnum3_t:
     
     res = femdnum3_extract_deriv( indx, order, &self.num) 
 
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -784,7 +784,7 @@ cdef class femdnum3_t:
     
     res = femdnum3_extract_im( indx, order, &self.num) 
 
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -805,7 +805,7 @@ cdef class femdnum3_t:
     
     res = femdnum3_get_im( indx, order, &self.num) 
 
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -826,7 +826,7 @@ cdef class femdnum3_t:
     
     res = femdnum3_get_deriv( indx, order, &self.num) 
 
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -843,12 +843,12 @@ cdef class femdnum3_t:
     
     res = femdnum3_get_order_im( order, &self.num) 
 
-    return femdnum3_t.create(&res)
+    return mdnumfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
 
     """
@@ -865,7 +865,7 @@ cdef class femdnum3_t:
 
     # end for 
 
-    femdnum3_get_active( &self.num, bases_list)
+    femdnum3_get_active_bases( &self.num, bases_list)
 
     res = []
     for i in range(size):
@@ -884,6 +884,6 @@ cdef class femdnum3_t:
   
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: END OF CLASS femdnum3_t ::::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS mdnumfe3 ::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -155,6 +155,13 @@ cdef class dHelp:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
+  def get_deriv_factor(self, imdir_t indx, ord_t order):
+
+    return dhelp_get_deriv_factor( indx, order, self.dhl);
+
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
   def get_fulldir(self, imdir_t indx, ord_t order):
     """
     PURPOSE: Get the expanded representation of an imaginary direction as an array.

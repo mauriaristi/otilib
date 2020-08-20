@@ -36,7 +36,7 @@ ord_t {arr_func}_get_order({arr_type}* arr);
 @param[inout] list_vals  Initialized list of values. Must come with all directions deactivated.
 @param[in]    dhl        Direction helper list.
 ******************************************************************************************************/ 
-void {arr_func}_get_active({arr_type}* arr, imdir_t* list_vals);
+void {arr_func}_get_active_bases({arr_type}* arr, imdir_t* list_vals);
 // ----------------------------------------------------------------------------------------------------
 
 #endif

@@ -14,8 +14,6 @@ cdef class sotinum:
   
   @staticmethod
   cdef sotinum create(sotinum_t* num, uint8_t FLAGS = *)
-  @staticmethod
-  cdef sotinum init()
 
   cpdef get_deriv(     self, object humdir)
   cpdef get_im(        self, object humdir)

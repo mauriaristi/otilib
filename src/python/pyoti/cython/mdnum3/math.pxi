@@ -5,21 +5,21 @@ cpdef cos(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -35,7 +35,7 @@ cpdef cos(object val, object out = None):
     res_flag = 0
   # end if 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -45,10 +45,10 @@ cpdef cos(object val, object out = None):
     else:
 
       cores = mdnum3_cos( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -58,10 +58,10 @@ cpdef cos(object val, object out = None):
     else:
 
       cfres = femdnum3_cos( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if         
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -71,10 +71,10 @@ cpdef cos(object val, object out = None):
     else:
 
       cFres = femdarr3_cos( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -84,7 +84,7 @@ cpdef cos(object val, object out = None):
     else:
 
       cOres = mdarr3_cos( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -126,21 +126,21 @@ cpdef sin(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -157,7 +157,7 @@ cpdef sin(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -167,10 +167,10 @@ cpdef sin(object val, object out = None):
     else:
 
       cores = mdnum3_sin( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -180,10 +180,10 @@ cpdef sin(object val, object out = None):
     else:
 
       cfres = femdnum3_sin( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -193,10 +193,10 @@ cpdef sin(object val, object out = None):
     else:
 
       cFres = femdarr3_sin( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -206,7 +206,7 @@ cpdef sin(object val, object out = None):
     else:
 
       cOres = mdarr3_sin( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -249,21 +249,21 @@ cpdef tan(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -282,7 +282,7 @@ cpdef tan(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -292,10 +292,10 @@ cpdef tan(object val, object out = None):
     else:
 
       cores = mdnum3_tan( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -305,10 +305,10 @@ cpdef tan(object val, object out = None):
     else:
 
       cfres = femdnum3_tan( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -318,10 +318,10 @@ cpdef tan(object val, object out = None):
     else:
 
       cFres = femdarr3_tan( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -331,7 +331,7 @@ cpdef tan(object val, object out = None):
     else:
 
       cOres = mdarr3_tan( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -374,21 +374,21 @@ cpdef acos(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -407,7 +407,7 @@ cpdef acos(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -417,10 +417,10 @@ cpdef acos(object val, object out = None):
     else:
 
       cores = mdnum3_acos( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -430,10 +430,10 @@ cpdef acos(object val, object out = None):
     else:
 
       cfres = femdnum3_acos( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -443,10 +443,10 @@ cpdef acos(object val, object out = None):
     else:
 
       cFres = femdarr3_acos( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -456,7 +456,7 @@ cpdef acos(object val, object out = None):
     else:
 
       cOres = mdarr3_acos( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -499,21 +499,21 @@ cpdef asin(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -532,7 +532,7 @@ cpdef asin(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -542,10 +542,10 @@ cpdef asin(object val, object out = None):
     else:
 
       cores = mdnum3_asin( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -555,10 +555,10 @@ cpdef asin(object val, object out = None):
     else:
 
       cfres = femdnum3_asin( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -568,10 +568,10 @@ cpdef asin(object val, object out = None):
     else:
 
       cFres = femdarr3_asin( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -581,7 +581,7 @@ cpdef asin(object val, object out = None):
     else:
 
       cOres = mdarr3_asin( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -624,21 +624,21 @@ cpdef atan(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -657,7 +657,7 @@ cpdef atan(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -667,10 +667,10 @@ cpdef atan(object val, object out = None):
     else:
 
       cores = mdnum3_atan( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -680,10 +680,10 @@ cpdef atan(object val, object out = None):
     else:
 
       cfres = femdnum3_atan( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -693,10 +693,10 @@ cpdef atan(object val, object out = None):
     else:
 
       cFres = femdarr3_atan( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -706,7 +706,7 @@ cpdef atan(object val, object out = None):
     else:
 
       cOres = mdarr3_atan( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -749,21 +749,21 @@ cpdef sinh(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -782,7 +782,7 @@ cpdef sinh(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -792,10 +792,10 @@ cpdef sinh(object val, object out = None):
     else:
 
       cores = mdnum3_sinh( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -805,10 +805,10 @@ cpdef sinh(object val, object out = None):
     else:
 
       cfres = femdnum3_sinh( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -818,10 +818,10 @@ cpdef sinh(object val, object out = None):
     else:
 
       cFres = femdarr3_sinh( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -831,7 +831,7 @@ cpdef sinh(object val, object out = None):
     else:
 
       cOres = mdarr3_sinh( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -874,21 +874,21 @@ cpdef cosh(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -907,7 +907,7 @@ cpdef cosh(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -917,10 +917,10 @@ cpdef cosh(object val, object out = None):
     else:
 
       cores = mdnum3_cosh( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -930,10 +930,10 @@ cpdef cosh(object val, object out = None):
     else:
 
       cfres = femdnum3_cosh( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -943,10 +943,10 @@ cpdef cosh(object val, object out = None):
     else:
 
       cFres = femdarr3_cosh( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -956,7 +956,7 @@ cpdef cosh(object val, object out = None):
     else:
 
       cOres = mdarr3_cosh( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -999,21 +999,21 @@ cpdef tanh(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -1032,7 +1032,7 @@ cpdef tanh(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -1042,10 +1042,10 @@ cpdef tanh(object val, object out = None):
     else:
 
       cores = mdnum3_tanh( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -1055,10 +1055,10 @@ cpdef tanh(object val, object out = None):
     else:
 
       cfres = femdnum3_tanh( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -1068,10 +1068,10 @@ cpdef tanh(object val, object out = None):
     else:
 
       cFres = femdarr3_tanh( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -1081,7 +1081,7 @@ cpdef tanh(object val, object out = None):
     else:
 
       cOres = mdarr3_tanh( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -1124,21 +1124,21 @@ cpdef acosh(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -1157,7 +1157,7 @@ cpdef acosh(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -1167,10 +1167,10 @@ cpdef acosh(object val, object out = None):
     else:
 
       cores = mdnum3_acosh( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -1180,10 +1180,10 @@ cpdef acosh(object val, object out = None):
     else:
 
       cfres = femdnum3_acosh( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -1193,10 +1193,10 @@ cpdef acosh(object val, object out = None):
     else:
 
       cFres = femdarr3_acosh( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -1206,7 +1206,7 @@ cpdef acosh(object val, object out = None):
     else:
 
       cOres = mdarr3_acosh( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -1249,21 +1249,21 @@ cpdef asinh(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -1282,7 +1282,7 @@ cpdef asinh(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -1292,10 +1292,10 @@ cpdef asinh(object val, object out = None):
     else:
 
       cores = mdnum3_asinh( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -1305,10 +1305,10 @@ cpdef asinh(object val, object out = None):
     else:
 
       cfres = femdnum3_asinh( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -1318,10 +1318,10 @@ cpdef asinh(object val, object out = None):
     else:
 
       cFres = femdarr3_asinh( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -1331,7 +1331,7 @@ cpdef asinh(object val, object out = None):
     else:
 
       cOres = mdarr3_asinh( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -1374,21 +1374,21 @@ cpdef atanh(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -1407,7 +1407,7 @@ cpdef atanh(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -1417,10 +1417,10 @@ cpdef atanh(object val, object out = None):
     else:
 
       cores = mdnum3_atanh( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -1430,10 +1430,10 @@ cpdef atanh(object val, object out = None):
     else:
 
       cfres = femdnum3_atanh( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -1443,10 +1443,10 @@ cpdef atanh(object val, object out = None):
     else:
 
       cFres = femdarr3_atanh( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -1456,7 +1456,7 @@ cpdef atanh(object val, object out = None):
     else:
 
       cOres = mdarr3_atanh( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -1499,21 +1499,21 @@ cpdef exp(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -1532,7 +1532,7 @@ cpdef exp(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -1542,10 +1542,10 @@ cpdef exp(object val, object out = None):
     else:
 
       cores = mdnum3_exp( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -1555,10 +1555,10 @@ cpdef exp(object val, object out = None):
     else:
 
       cfres = femdnum3_exp( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -1568,10 +1568,10 @@ cpdef exp(object val, object out = None):
     else:
 
       cFres = femdarr3_exp( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -1581,7 +1581,7 @@ cpdef exp(object val, object out = None):
     else:
 
       cOres = mdarr3_exp( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -1624,11 +1624,11 @@ cpdef log(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
 
   INPUTS:
@@ -1642,12 +1642,12 @@ cpdef log(object val, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -1666,7 +1666,7 @@ cpdef log(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -1676,10 +1676,10 @@ cpdef log(object val, object out = None):
     else:
 
       cores = mdnum3_log( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -1689,10 +1689,10 @@ cpdef log(object val, object out = None):
     else:
 
       cfres = femdnum3_log( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -1702,10 +1702,10 @@ cpdef log(object val, object out = None):
     else:
 
       cFres = femdarr3_log( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -1715,7 +1715,7 @@ cpdef log(object val, object out = None):
     else:
 
       cOres = mdarr3_log( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -1758,11 +1758,11 @@ cpdef log10(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
 
   INPUTS:
@@ -1776,12 +1776,12 @@ cpdef log10(object val, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -1800,7 +1800,7 @@ cpdef log10(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -1810,10 +1810,10 @@ cpdef log10(object val, object out = None):
     else:
 
       cores = mdnum3_log10( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -1823,10 +1823,10 @@ cpdef log10(object val, object out = None):
     else:
 
       cfres = femdnum3_log10( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -1836,10 +1836,10 @@ cpdef log10(object val, object out = None):
     else:
 
       cFres = femdarr3_log10( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -1849,7 +1849,7 @@ cpdef log10(object val, object out = None):
     else:
 
       cOres = mdarr3_log10( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -1892,11 +1892,11 @@ cpdef logb(object val, coeff_t b, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
 
   INPUTS:
@@ -1911,12 +1911,12 @@ cpdef logb(object val, coeff_t b, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -1935,7 +1935,7 @@ cpdef logb(object val, coeff_t b, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -1945,10 +1945,10 @@ cpdef logb(object val, coeff_t b, object out = None):
     else:
 
       cores = mdnum3_logb( &o.num, b)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -1958,10 +1958,10 @@ cpdef logb(object val, coeff_t b, object out = None):
     else:
 
       cfres = femdnum3_logb( &f.num, b)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -1971,10 +1971,10 @@ cpdef logb(object val, coeff_t b, object out = None):
     else:
 
       cFres = femdarr3_logb( &F.arr, b)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -1984,7 +1984,7 @@ cpdef logb(object val, coeff_t b, object out = None):
     else:
 
       cOres = mdarr3_logb( &O.arr, b)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -2027,11 +2027,11 @@ cpdef sqrt(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
 
   INPUTS:
@@ -2045,12 +2045,12 @@ cpdef sqrt(object val, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -2069,7 +2069,7 @@ cpdef sqrt(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -2079,10 +2079,10 @@ cpdef sqrt(object val, object out = None):
     else:
 
       cores = mdnum3_sqrt( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -2092,10 +2092,10 @@ cpdef sqrt(object val, object out = None):
     else:
 
       cfres = femdnum3_sqrt( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -2105,10 +2105,10 @@ cpdef sqrt(object val, object out = None):
     else:
 
       cFres = femdarr3_sqrt( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -2118,7 +2118,7 @@ cpdef sqrt(object val, object out = None):
     else:
 
       cOres = mdarr3_sqrt( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -2160,11 +2160,11 @@ cpdef cbrt(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
 
   INPUTS:
@@ -2178,12 +2178,12 @@ cpdef cbrt(object val, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -2202,7 +2202,7 @@ cpdef cbrt(object val, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -2212,10 +2212,10 @@ cpdef cbrt(object val, object out = None):
     else:
 
       cores = mdnum3_cbrt( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -2225,10 +2225,10 @@ cpdef cbrt(object val, object out = None):
     else:
 
       cfres = femdnum3_cbrt( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -2238,10 +2238,10 @@ cpdef cbrt(object val, object out = None):
     else:
 
       cFres = femdarr3_cbrt( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -2251,7 +2251,7 @@ cpdef cbrt(object val, object out = None):
     else:
 
       cOres = mdarr3_cbrt( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -2294,11 +2294,11 @@ cpdef pow(object val, coeff_t e, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
 
   INPUTS:
@@ -2313,12 +2313,12 @@ cpdef pow(object val, coeff_t e, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -2337,7 +2337,7 @@ cpdef pow(object val, coeff_t e, object out = None):
   # end if 
 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -2347,10 +2347,10 @@ cpdef pow(object val, coeff_t e, object out = None):
     else:
 
       cores = mdnum3_pow( &o.num, e)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -2360,10 +2360,10 @@ cpdef pow(object val, coeff_t e, object out = None):
     else:
 
       cfres = femdnum3_pow( &f.num, e)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if  
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -2373,10 +2373,10 @@ cpdef pow(object val, coeff_t e, object out = None):
     else:
 
       cFres = femdarr3_pow( &F.arr, e)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -2386,7 +2386,7 @@ cpdef pow(object val, coeff_t e, object out = None):
     else:
 
       cOres = mdarr3_pow( &O.arr, e)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:
@@ -2423,7 +2423,7 @@ cpdef pow(object val, coeff_t e, object out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef gauss_integrate(object val, femdnum3_t w, object out = None ):
+cpdef gauss_integrate(object val, mdnumfe3 w, object out = None ):
   """
   PURPOSE: Integrate using Gauss rule.
 
@@ -2442,12 +2442,12 @@ cpdef gauss_integrate(object val, femdnum3_t w, object out = None ):
   #***************************************************************************************************
   
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -2463,7 +2463,7 @@ cpdef gauss_integrate(object val, femdnum3_t w, object out = None ):
     res_flag = 0
   # end if
 
-  if   tval is femdnum3_t:
+  if   tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -2473,10 +2473,10 @@ cpdef gauss_integrate(object val, femdnum3_t w, object out = None ):
     else:
 
       cores = femdnum3_integrate_f( &f.num, &w.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if  
-  elif tval is femdarr3_t:
+  elif tval is mdmatfe3:
     F = val
     if res_flag:
 
@@ -2486,10 +2486,10 @@ cpdef gauss_integrate(object val, femdnum3_t w, object out = None ):
     else:
 
       cOres = femdarr3_integrate( &F.arr, &w.num)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if 
-  elif tval is mdnum3_t:
+  elif tval is mdnum3:
     o = val
     if res_flag:
       
@@ -2499,7 +2499,7 @@ cpdef gauss_integrate(object val, femdnum3_t w, object out = None ):
     else:
 
       cores = femdnum3_integrate_o( &o.num, &w.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if
   else:
@@ -2513,7 +2513,7 @@ cpdef gauss_integrate(object val, femdnum3_t w, object out = None ):
       else:
 
         cores = femdnum3_integrate_r( r, &w.num)
-        res   = mdnum3_t.create(&cores)
+        res   = mdnum3.create(&cores)
 
       # end if  
     except:
@@ -2537,21 +2537,21 @@ cpdef neg(object val, object out = None):
   
   Supported types:
 
-      -  mdarr3_t
-      -  femdarr3_t
+      -  mdmat3
+      -  mdmatfe3
       -  darr
-      -  mdnum3_t
-      -  femdnum3_t
+      -  mdnum3
+      -  mdnumfe3
       -  real
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef dmat       R, Rres
-  cdef femdarr3_t    F, Fres
-  cdef mdnum3_t    o, ores
+  cdef mdmatfe3    F, Fres
+  cdef mdnum3    o, ores
   cdef coeff_t    r, rres
-  cdef femdnum3_t     f, fres
+  cdef mdnumfe3     f, fres
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
@@ -2567,7 +2567,7 @@ cpdef neg(object val, object out = None):
     res_flag = 0
   # end if 
   #
-  if   tval is mdnum3_t:
+  if   tval is mdnum3:
     o = val
     if res_flag:
       
@@ -2577,10 +2577,10 @@ cpdef neg(object val, object out = None):
     else:
 
       cores = mdnum3_neg( &o.num)
-      res   = mdnum3_t.create(&cores)
+      res   = mdnum3.create(&cores)
 
     # end if 
-  elif tval is femdnum3_t:
+  elif tval is mdnumfe3:
     f = val
     if res_flag:
       
@@ -2590,10 +2590,10 @@ cpdef neg(object val, object out = None):
     else:
 
       cfres = femdnum3_neg( &f.num)
-      res   = femdnum3_t.create(&cfres)
+      res   = mdnumfe3.create(&cfres)
 
     # end if         
-  elif tval is femdarr3_t:    
+  elif tval is mdmatfe3:    
     F = val
     if res_flag:
 
@@ -2603,10 +2603,10 @@ cpdef neg(object val, object out = None):
     else:
 
       cFres = femdarr3_neg( &F.arr)
-      res   = femdarr3_t.create(&cFres)
+      res   = mdmatfe3.create(&cFres)
 
     # end if 
-  elif tval is mdarr3_t:
+  elif tval is mdmat3:
     O = val
     if res_flag:
       
@@ -2616,7 +2616,7 @@ cpdef neg(object val, object out = None):
     else:
 
       cOres = mdarr3_neg( &O.arr)
-      res   = mdarr3_t.create(&cOres)
+      res   = mdmat3.create(&cOres)
 
     # end if    
   elif tval is dmat:

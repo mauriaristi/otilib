@@ -8,7 +8,6 @@
 void arrso_dotproduct_OO_to(arrso_t* arr1, arrso_t* arr2, sotinum_t* res, dhelpl_t dhl){
 
     uint64_t i;
-    ord_t order;
     sotinum_t tmp;
 
     // check for dimensions.
@@ -31,7 +30,6 @@ void arrso_dotproduct_OO_to(arrso_t* arr1, arrso_t* arr2, sotinum_t* res, dhelpl
 void arrso_dotproduct_RO_to(darr_t* arr1, arrso_t* arr2, sotinum_t* res, dhelpl_t dhl){
 
     uint64_t i;
-    ord_t order;
     sotinum_t tmp;
 
     // check for dimensions.
@@ -65,7 +63,6 @@ void arrso_dotproduct_RO_to(darr_t* arr1, arrso_t* arr2, sotinum_t* res, dhelpl_
 void arrso_matmul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 
     uint64_t i, j, k;
-    ord_t order;
     sotinum_t tmp;
 
     // check for dimensions.
@@ -105,7 +102,6 @@ void arrso_matmul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl
 void arrso_matmul_OR_to(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl){
         
     uint64_t i, j, k;
-    ord_t order;
     sotinum_t tmp;
 
     // check for dimensions.
@@ -141,7 +137,6 @@ void arrso_matmul_OR_to(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl)
 void arrso_matmul_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
         
     uint64_t i, j, k;
-    ord_t order;
     sotinum_t tmp;
 
     // check for dimensions.
@@ -233,8 +228,7 @@ void arrso_transpose_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 
     arrso_t tmpA1 = arrso_init();
-    ord_t order;
-    sotinum_t tmp1, tmp2, tmp3, det;
+    sotinum_t tmp1, det;
 
     // Check dimensions.
     arrso_dimCheck_O_squareness( arr1, res);
@@ -267,11 +261,7 @@ void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 
     } else if (arr1->ncols == 3){
         
-        tmpA1 = arrso_zeros_bases( 2, 2, 0, 0,dhl );
-        tmpA1.p_data[0] = soti_get_tmp(  9, order, dhl);
-        tmpA1.p_data[1] = soti_get_tmp( 10, order, dhl);
-        tmpA1.p_data[2] = soti_get_tmp( 11, order, dhl);
-        tmpA1.p_data[3] = soti_get_tmp( 12, order, dhl);
+        tmpA1 = arrso_zeros_bases( 2, 2, dhl );
         
         arrso_det_to( arr1, &det, dhl); // Get determinant.
         
@@ -462,8 +452,6 @@ void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 void arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
     
     uint64_t i, j;
-
-    ord_t order;
     sotinum_t tmp1, tmp2, tmp3;
     // printf("Here 1\n");
 
@@ -579,7 +567,6 @@ void arrso_norm_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
     
     
     uint64_t i;
-    ord_t order;
     sotinum_t tmp1, tmp2, tmp3;
     
     soti_set_r( 0.0, &tmp3, dhl);    
@@ -608,7 +595,6 @@ void arrso_pnorm_to(arrso_t* arr1, coeff_t p, sotinum_t* res, dhelpl_t dhl){
     
     
     uint64_t i;
-    ord_t order;
     sotinum_t tmp1, tmp2, tmp3;
     
     soti_set_r( 0.0, &tmp3, dhl);    

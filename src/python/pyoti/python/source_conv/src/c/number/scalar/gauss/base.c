@@ -12,7 +12,7 @@ ord_t {fenum_func}_get_order( {fenum_type}* num ){{
     // Finds the maximum order in the array.
     for( i = 0; i<num->nip; i++ ){{
         
-        order = MAX(order,num->p_data[0].order);
+        order = MAX(order, {num_func}_get_order(&num->p_data[i]) );
     
     }}
 
@@ -414,8 +414,7 @@ void {fenum_func}_set_item_k_r(   coeff_t  num, uint64_t k, {fenum_type}* res){{
     
     if (k < num->nip){{
 
-        res = num->p_data[k];   
-        res.flag = 0;
+        res = num->p_data[k];
 
     }} else {{
 
@@ -464,10 +463,7 @@ void {fenum_func}_get_item_k_to({fenum_type}* num, uint64_t k, {num_type}* res){
 // ****************************************************************************************************
 inline {fenum_type} {fenum_func}_createEmpty(uint64_t nip){{
 
-    {fenum_type}  res ;
-    ndir_t p_nnz[_MAXORDER_OTI];
-    ord_t    ordi;
-    uint64_t i;    
+    {fenum_type}  res ;  
     void * memory = NULL;
 
     // Allocate memory and check if correctly allocated.
@@ -489,23 +485,12 @@ inline {fenum_type} {fenum_func}_createEmpty(uint64_t nip){{
 
 // ****************************************************************************************************
 void {fenum_func}_free({fenum_type}* num){{
-    
-    uint64_t i;
 
     // Free all memory within each coefficient in p_array
 
     if (num->p_data != NULL){{
-
-        // Free all arrays.
-        for (i = 0; i<num->nip; i++){{
-        
-            {num_func}_free(&num->p_data[i]); 
-
-        }}
-
         // Free pointer 
         free(num->p_data);
-
     }}
 
     *num = {fenum_func}_init();
@@ -529,7 +514,7 @@ inline {fenum_type} {fenum_func}_init(void){{
 // ****************************************************************************************************
 inline {fenum_type} {fenum_func}_empty_like({fenum_type}* arr){{
 
-    {fenum_type} res = {fenum_func}_createEmpty(arr->nip, 0, 0);
+    {fenum_type} res = {fenum_func}_createEmpty(arr->nip);
 
     return res;
 

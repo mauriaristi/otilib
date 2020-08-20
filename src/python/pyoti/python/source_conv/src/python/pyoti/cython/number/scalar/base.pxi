@@ -19,31 +19,11 @@ cdef class {num_pytype}:
     DESCRIPTION: Constructor of a sparse OTI number.
     """
     #*************************************************************************************************
-
+    
     # First initialize the number.
-    self.num = {num_func}_init()
-    self.num.<<<real_str>>> = re_coeff
-    
+    self.num = {num_func}_create_r(re_coeff)
+
   #---------------------------------------------------------------------------------------------------  
-
-  #***************************************************************************************************
-  def __dealloc__(self): 
-    """
-    PURPOSE:      Destructor of the class. 
-
-    DESCRIPTION:  Frees all pointers allocated in the 
-                  
-    """
-    #*************************************************************************************************
-    
-    if self.FLAGS & 1: # If memory is owned by this otinum.
-
-      {num_func}_free(&self.num)
-
-    #end if 
-    
-  #---------------------------------------------------------------------------------------------------
-  
 
   #***************************************************************************************************
   @property
@@ -56,24 +36,9 @@ cdef class {num_pytype}:
     """
     #*************************************************************************************************
 
-    return self.num.order
+    return {num_func}_get_order(&self.num)
 
   #---------------------------------------------------------------------------------------------------
-
-  # #***************************************************************************************************
-  # @order.setter
-  # def  order(self): 
-  #   """
-  #   PURPOSE:      Set the truncation order of the number.
-
-  #   DESCRIPTION:  Reads the value in num.
-                  
-  #   """
-  #   #*************************************************************************************************
-
-  #   return self.num.order
-
-  # #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @property
@@ -86,7 +51,7 @@ cdef class {num_pytype}:
     """
     #*************************************************************************************************
 
-    return self.num.<<<real_str>>>
+    return self.num.{real_str}
 
   #---------------------------------------------------------------------------------------------------
 
@@ -101,7 +66,7 @@ cdef class {num_pytype}:
     """
     #*************************************************************************************************
 
-    self.num.<<<real_str>>> = value
+    self.num.{real_str} = value
 
   #---------------------------------------------------------------------------------------------------
 
@@ -127,7 +92,7 @@ cdef class {num_pytype}:
     # create new empty object:
     cdef {num_pytype} otin = <{num_pytype}> {num_pytype}.__new__({num_pytype})
 
-    otin.num = soti_copy(num);
+    otin.num     = {num_func}_copy(num)
     
     return otin
 
@@ -139,21 +104,29 @@ cdef class {num_pytype}:
     PURPOSE:  To print a representation of the {num_pytype} object in a compact form.
     """
     #*************************************************************************************************
+    
+    global h
+
+    
+    cdef ord_t ordi, j
+    cdef ndir_t i, idx;
 
     head      = ''
     body      = ''
     
-    body += '%.4f'%self.num.<<<real_str>>>
+    body += '%.4f'%self.num.{real_str}
 
-    for ordi in range(0,self.num.order):
+    for ordi in range(1,self.order+1):
 
-      for i in range(self.num.p_nnz[ordi]):
+      for i in range( {num_func}_get_ndir_order(ordi,&self.num) ):
         
-        num = '%+.4f'%self.num.p_im[ordi][i] 
+        idx = {num_func}_get_indx(i, ordi) 
+        num = '%+.4f'%( {num_func}_get_item(idx,ordi,&self.num) )
+
         body += ' '+num[0]+" "+num[1:]
         body += ' * e(' 
         
-        body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
+        body += str(h.get_compact_fulldir(idx,ordi)).replace(' ','')
         body += ")"
       
       # end for
@@ -175,50 +148,10 @@ cdef class {num_pytype}:
     global h
     global p_dH
 
-    cdef ndir_t ndir_total = 1, i;
-
-    for i in range(0, self.num.order):
-
-      ndir_total += self.num.p_nnz[i]
-
-    # end for
+    cdef ndir_t ndir_total, i;
 
     head = '{num_pytype}('
-    body = str(self.num.<<<real_str>>>) + ", nnz: " + str(ndir_total) + ', order: ' + str(self.num.order)
-    tail = ')'
-
-    return (head + body + tail)
-
-  #---------------------------------------------------------------------------------------------------  
-
-  #*************************************************************************************************** 
-  def long_repr(self):
-    """
-    PURPOSE:  To print a representation of the {num_pytype} object in a full detail form.
-    """
-    #*************************************************************************************************
-    global h
-    global p_dH
-
-    cdef ndir_t ndir_total = 1, ndir_max = 1, i;
-
-    for i in range(0, self.num.order):
-
-      ndir_total += self.num.p_nnz[i]
-      ndir_max   += self.num.p_size[i]
-
-    # end for
-
-    head = '{num_pytype}('
-    body = str(self.num.<<<real_str>>>) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max) 
-    body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"
-
-    for i in range(0, self.num.order):
-
-      body += "Order {{0}}->   nnz: {{1}}  size: {{2}} \n".format(i+1, self.num.p_nnz[i],self.num.p_size[i])
-
-    # end for 
-
+    body = str(self.num.{real_str}) + ", nnz: " + str({num_func}_get_ndir_total(&self.num)) + ', order: ' + str(self.order)
     tail = ')'
 
     return (head + body + tail)
@@ -238,24 +171,25 @@ cdef class {num_pytype}:
     global h
 
     
-    cdef ord_t ordi, j
-    cdef ndir_t i;
-    cdef bases_t* dirs;
+    cdef ord_t ordi
+    cdef ndir_t i, idx
 
     head      = ''
     body      = ''
     
-    body += '%g'%self.num.<<<real_str>>>
+    body += '%.4f'%self.num.{real_str}
 
-    for ordi in range(0,self.num.order):
+    for ordi in range(1,self.order+1):
 
-      for i in range(self.num.p_nnz[ordi]):
+      for i in range( {num_func}_get_ndir_order(ordi,&self.num) ):
         
-        num = '%+g'%self.num.p_im[ordi][i] 
+        idx = {num_func}_get_indx(i, ordi) 
+        num = '%+.4f'%( {num_func}_get_item(idx,ordi,&self.num) )
+
         body += ' '+num[0]+" "+num[1:]
         body += ' * e(' 
         
-        body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
+        body += str(h.get_compact_fulldir(idx,ordi)).replace(' ','')
         body += ")"
       
       # end for
@@ -799,7 +733,7 @@ cdef class {num_pytype}:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
     PURPOSE:      Get all the active bases.
     """
@@ -817,7 +751,7 @@ cdef class {num_pytype}:
 
     # end for 
 
-    {num_func}_get_active( &self.num, bases_list)
+    {num_func}_get_active_bases( &self.num, bases_list)
 
     res = []
     for i in range(size):
@@ -863,7 +797,7 @@ cdef class {num_pytype}:
 
     except:
 
-      bases_eval = np.array(self.get_active(),dtype=np.uint16)
+      bases_eval = np.array(self.get_active_bases(),dtype=np.uint16)
       deltas_eval= np.ones(len(bases_eval),dtype=np.float64) * deltas
 
     # end

@@ -78,7 +78,7 @@ void {fearr_func}_dimCheck_FfO_integrate({fearr_type}* arr, {fenum_type}* num,{a
 @param[in] list_vals Array to activate corresponding directions.
 @param[in] dhl Direction helper list
 ******************************************************************************************************/ 
-void {fearr_func}_get_active({fearr_type}* arr, imdir_t* list_vals);
+void {fearr_func}_get_active_bases({fearr_type}* arr, imdir_t* list_vals);
 // ----------------------------------------------------------------------------------------------------
 
 #endif

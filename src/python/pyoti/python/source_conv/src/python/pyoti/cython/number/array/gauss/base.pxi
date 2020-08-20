@@ -14,7 +14,7 @@ cdef class {fearr_pytype}:
 
   #***************************************************************************************************
   
-  def __init__(self, shape, uint64_t nip, ord_t order = 0, bases_t nbases = 0): 
+  def __init__(self, shape, uint64_t nip): 
     """
     PURPOSE:      Python level constructor of the {fearr_pytype} class.
 
@@ -1662,7 +1662,7 @@ cdef class {fearr_pytype}:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
 
     """
@@ -1679,7 +1679,7 @@ cdef class {fearr_pytype}:
 
     # end for 
 
-    {fearr_func}_get_active( &self.arr, bases_list)
+    {fearr_func}_get_active_bases( &self.arr, bases_list)
 
     res = []
     for i in range(size):

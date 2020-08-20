@@ -3,7 +3,7 @@
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::     CLASS  SPR_OTINUM   :::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class mdnum3_t:
+cdef class mdnum3:
   
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
@@ -14,84 +14,16 @@ cdef class mdnum3_t:
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
-  def __init__(self, coeff_t re_coeff, bases_t nbases = 0,ord_t order = 0, uint8_t FLAGS = 1, 
-    object nnz = None):
+  def __init__(self, coeff_t re_coeff):
     """
     DESCRIPTION: Constructor of a sparse OTI number.
     """
     #*************************************************************************************************
-    , ONE, ZERO
-    
-
-    # Add warning for higher orders and orders that are not required
-    self.FLAGS = FLAGS
-    cdef ndir_t* p_nnz # Static allocation of this array.
-    cdef ord_t orderdef, i, size
-    
     
     # First initialize the number.
-    self.num = mdnum3_init()
-
-    # In case that nnz was defined.
-    if nnz is not None:
-      
-      size = len(nnz)
-      orderdef = max(size,order)
-
-      p_nnz = dhl.p_dh[dhl.ndh-ONE].p_nnz[ZERO]
-
-      for i in range(size):
-        p_nnz[i] = nnz[i]
-      # end for 
-
-      for i in range(size,orderdef):
-        p_nnz[i] = ZERO
-      # end for 
-      
-      self.num =  mdnum3_createEmpty(p_nnz, orderdef)
-
-      # Set real coefficient.
-      self.num.re = re_coeff
-    
-    elif nbases != 0 and order !=0 :
-
-      p_nnz = dhl.p_dh[order-ONE].p_nnz[ZERO]
-
-      for i in range(order):
-        p_nnz[i] = dhelp_extract_ndirOrder( nbases, i+1 )
-      # end for 
-      
-      self.num =  mdnum3_createEmpty(p_nnz, order)
-
-      # Set real coefficient.
-      self.num.re = re_coeff  
-
-    else:
-      
-      self.num =  mdnum3_createReal(re_coeff, order)
-    
-    # end if 
+    self.num = mdnum3_create_r(re_coeff)
 
   #---------------------------------------------------------------------------------------------------  
-
-  #***************************************************************************************************
-  def __dealloc__(self): 
-    """
-    PURPOSE:      Destructor of the class. 
-
-    DESCRIPTION:  Frees all pointers allocated in the 
-                  
-    """
-    #*************************************************************************************************
-    
-    if self.FLAGS & 1: # If memory is owned by this otinum.
-
-      mdnum3_free(&self.num)
-
-    #end if 
-    
-  #---------------------------------------------------------------------------------------------------
-  
 
   #***************************************************************************************************
   @property
@@ -104,24 +36,9 @@ cdef class mdnum3_t:
     """
     #*************************************************************************************************
 
-    return self.num.order
+    return mdnum3_get_order(&self.num)
 
   #---------------------------------------------------------------------------------------------------
-
-  # #***************************************************************************************************
-  # @order.setter
-  # def  order(self): 
-  #   """
-  #   PURPOSE:      Set the truncation order of the number.
-
-  #   DESCRIPTION:  Reads the value in num.
-                  
-  #   """
-  #   #*************************************************************************************************
-
-  #   return self.num.order
-
-  # #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @property
@@ -134,7 +51,7 @@ cdef class mdnum3_t:
     """
     #*************************************************************************************************
 
-    return self.num.re
+    return self.num.r
 
   #---------------------------------------------------------------------------------------------------
 
@@ -149,13 +66,13 @@ cdef class mdnum3_t:
     """
     #*************************************************************************************************
 
-    self.num.re = value
+    self.num.r = value
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   @staticmethod
-  cdef mdnum3_t create( mdnum3_t* num, uint8_t FLAGS = 1 ):
+  cdef mdnum3 create( mdnum3_t* num, uint8_t FLAGS = 1 ):
     """
     PURPOSE:      C-level constructor of the otinum class. Use this when creating otinums within 
                   Cython
@@ -173,42 +90,9 @@ cdef class mdnum3_t:
     #*************************************************************************************************
 
     # create new empty object:
-    cdef mdnum3_t otin = <mdnum3_t> mdnum3_t.__new__(mdnum3_t)
+    cdef mdnum3 otin = <mdnum3> mdnum3.__new__(mdnum3)
 
-    otin.num.re     = num[ZERO].re    
-    otin.num.p_im   = num[ZERO].p_im  
-    otin.num.p_idx  = num[ZERO].p_idx 
-    otin.num.p_nnz  = num[ZERO].p_nnz 
-    otin.num.p_size = num[ZERO].p_size
-    otin.num.order  = num[ZERO].order 
-    otin.num.flag   = num[ZERO].flag 
-
-    otin.FLAGS      = FLAGS
-    
-    return otin
-
-  #--------------------------------------------------------------------------------------------------- 
-
-  #***************************************************************************************************
-  @staticmethod
-  cdef mdnum3_t init(  ):
-    """
-    PURPOSE:      Initialize memory for OTI num.
-
-    DESCRIPTION:  Resets all pointer addresses to null, to avoid wrong memory reads.
-
-    RESULT:       
-            A new otinum python object.
-                  
-    """
-    #*************************************************************************************************
-
-    # create new empty object:
-    cdef mdnum3_t otin = <mdnum3_t> mdnum3_t.__new__(mdnum3_t)
-
-    otin.num        = mdnum3_init()
-
-    otin.FLAGS      = 1
+    otin.num     = mdnum3_copy(num)
     
     return otin
 
@@ -217,7 +101,7 @@ cdef class mdnum3_t:
   #*************************************************************************************************** 
   def __repr__(self):
     """
-    PURPOSE:  To print a representation of the mdnum3_t object in a compact form.
+    PURPOSE:  To print a representation of the mdnum3 object in a compact form.
     """
     #*************************************************************************************************
     
@@ -225,23 +109,24 @@ cdef class mdnum3_t:
 
     
     cdef ord_t ordi, j
-    cdef ndir_t i;
-    cdef bases_t* dirs;
+    cdef ndir_t i, idx;
 
     head      = ''
     body      = ''
     
-    body += '%.4f'%self.num.re
+    body += '%.4f'%self.num.r
 
-    for ordi in range(0,self.num.order):
+    for ordi in range(1,self.order+1):
 
-      for i in range(self.num.p_nnz[ordi]):
+      for i in range( mdnum3_get_ndir_order(ordi,&self.num) ):
         
-        num = '%+.4f'%self.num.p_im[ordi][i] 
+        idx = mdnum3_get_indx(i, ordi) 
+        num = '%+.4f'%( mdnum3_get_item(idx,ordi,&self.num) )
+
         body += ' '+num[0]+" "+num[1:]
         body += ' * e(' 
         
-        body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
+        body += str(h.get_compact_fulldir(idx,ordi)).replace(' ','')
         body += ")"
       
       # end for
@@ -257,56 +142,16 @@ cdef class mdnum3_t:
   #*************************************************************************************************** 
   def short_repr(self):
     """
-    PURPOSE:  To print a representation of the mdnum3_t object in a compact form.
+    PURPOSE:  To print a representation of the mdnum3 object in a compact form.
     """
     #*************************************************************************************************
     global h
     global p_dH
 
-    cdef ndir_t ndir_total = 1, i;
+    cdef ndir_t ndir_total, i;
 
-    for i in range(0, self.num.order):
-
-      ndir_total += self.num.p_nnz[i]
-
-    # end for
-
-    head = 'mdnum3_t('
-    body = str(self.num.re) + ", nnz: " + str(ndir_total) + ', order: ' + str(self.num.order)
-    tail = ')'
-
-    return (head + body + tail)
-
-  #---------------------------------------------------------------------------------------------------  
-
-  #*************************************************************************************************** 
-  def long_repr(self):
-    """
-    PURPOSE:  To print a representation of the mdnum3_t object in a full detail form.
-    """
-    #*************************************************************************************************
-    global h
-    global p_dH
-
-    cdef ndir_t ndir_total = 1, ndir_max = 1, i;
-
-    for i in range(0, self.num.order):
-
-      ndir_total += self.num.p_nnz[i]
-      ndir_max   += self.num.p_size[i]
-
-    # end for
-
-    head = 'mdnum3_t('
-    body = str(self.num.re) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max) 
-    body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"
-
-    for i in range(0, self.num.order):
-
-      body += "Order {0}->   nnz: {1}  size: {2} \n".format(i+1, self.num.p_nnz[i],self.num.p_size[i])
-
-    # end for 
-
+    head = 'mdnum3('
+    body = str(self.num.r) + ", nnz: " + str(mdnum3_get_ndir_total(&self.num)) + ', order: ' + str(self.order)
     tail = ')'
 
     return (head + body + tail)
@@ -316,7 +161,7 @@ cdef class mdnum3_t:
   #***************************************************************************************************
   def __str__(self):
     """
-    PURPOSE: To print a representation of the mdnum3_t object that could 
+    PURPOSE: To print a representation of the mdnum3 object that could 
              be easy to read and understand.  
     
     """
@@ -326,24 +171,25 @@ cdef class mdnum3_t:
     global h
 
     
-    cdef ord_t ordi, j
-    cdef ndir_t i;
-    cdef bases_t* dirs;
+    cdef ord_t ordi
+    cdef ndir_t i, idx
 
     head      = ''
     body      = ''
     
-    body += '%g'%self.num.re
+    body += '%.4f'%self.num.r
 
-    for ordi in range(0,self.num.order):
+    for ordi in range(1,self.order+1):
 
-      for i in range(self.num.p_nnz[ordi]):
+      for i in range( mdnum3_get_ndir_order(ordi,&self.num) ):
         
-        num = '%+g'%self.num.p_im[ordi][i] 
+        idx = mdnum3_get_indx(i, ordi) 
+        num = '%+.4f'%( mdnum3_get_item(idx,ordi,&self.num) )
+
         body += ' '+num[0]+" "+num[1:]
         body += ' * e(' 
         
-        body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
+        body += str(h.get_compact_fulldir(idx,ordi)).replace(' ','')
         body += ")"
       
       # end for
@@ -359,7 +205,7 @@ cdef class mdnum3_t:
   #***************************************************************************************************
   def __getitem__(self, list index):
     """
-    PURPOSE:  To get the value of a mdnum3_t coefficient.
+    PURPOSE:  To get the value of a mdnum3 coefficient.
 
     """
     #*************************************************************************************************
@@ -374,7 +220,7 @@ cdef class mdnum3_t:
   #***************************************************************************************************
   def __setitem__(self, list item, coeff_t value):
     """
-    PURPOSE:  To set the value of a mdnum3_t coefficient.
+    PURPOSE:  To set the value of a mdnum3 coefficient.
 
     """
     #*************************************************************************************************
@@ -392,7 +238,7 @@ cdef class mdnum3_t:
   #***************************************************************************************************
   def __neg__(self):
     """
-    PURPOSE:      Negate a mdnum3_t
+    PURPOSE:      Negate a mdnum3
 
     """
     #*************************************************************************************************
@@ -401,14 +247,14 @@ cdef class mdnum3_t:
 
     cdef mdnum3_t res = mdnum3_neg(&self.num)
 
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
   def __add__(self, other_in):
     """
-    PURPOSE:      Add mdnum3_t with other things.
+    PURPOSE:      Add mdnum3 with other things.
 
     """
     #*************************************************************************************************
@@ -416,7 +262,7 @@ cdef class mdnum3_t:
     
     cdef: 
       mdnum3_t res
-      mdnum3_t tmp1, tmp2
+      mdnum3 tmp1, tmp2
       
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
@@ -446,7 +292,7 @@ cdef class mdnum3_t:
     # end if 
       
       
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -481,7 +327,7 @@ cdef class mdnum3_t:
     
     cdef: 
       mdnum3_t res
-      mdnum3_t tmp1, tmp2
+      mdnum3 tmp1, tmp2
       
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
@@ -511,7 +357,7 @@ cdef class mdnum3_t:
     # end if 
       
       
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
  
@@ -552,7 +398,7 @@ cdef class mdnum3_t:
     
     cdef: 
       mdnum3_t res
-      mdnum3_t tmp1, tmp2
+      mdnum3 tmp1, tmp2
       
     type1 = type(self)     # takes 100 ns ... 
     type2 = type(other_in) # takes 100 ns ...
@@ -582,7 +428,7 @@ cdef class mdnum3_t:
 
     # end if 
 
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -606,7 +452,7 @@ cdef class mdnum3_t:
   #***************************************************************************************************
   def __truediv__(self, other_in):
     """
-    PURPOSE:      To define how to divide two mdnum3_t numbers.
+    PURPOSE:      To define how to divide two mdnum3 numbers.
     
     DESCRIPTION:  It overloads the division operator "/". It allows the
                   division of spr_otinum numbers of different orders, and 
@@ -618,8 +464,8 @@ cdef class mdnum3_t:
     
     global p_dH
 
-    cdef mdnum3_t S
-    cdef mdnum3_t O
+    cdef mdnum3 S
+    cdef mdnum3 O
     cdef mdnum3_t res = mdnum3_init()
 
     type1 = type(self)     # takes 100 ns ... 
@@ -648,7 +494,7 @@ cdef class mdnum3_t:
 
     # end if 
 
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -662,11 +508,11 @@ cdef class mdnum3_t:
     
 
     cdef mdnum3_t res
-    cdef mdnum3_t S = self
+    cdef mdnum3 S = self
 
     res = mdnum3_pow(&S.num, n)
     
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -682,11 +528,11 @@ cdef class mdnum3_t:
     #*************************************************************************************************
     
 
-    cdef mdnum3_t orhs
+    cdef mdnum3 orhs
     cdef coeff_t rrhs
     trhs = type(rhs)
 
-    if trhs is mdnum3_t:
+    if trhs is mdnum3:
 
       orhs = rhs
       mdnum3_set_o( &orhs.num, &self.num)
@@ -710,12 +556,12 @@ cdef class mdnum3_t:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t oval
+    cdef mdnum3 oval
     cdef coeff_t rval
     indx, order = imdir(humdir)
     tval = type(val)
 
-    if tval is mdnum3_t:
+    if tval is mdnum3:
       
       oval = val
       mdnum3_set_im_o( &oval.num, indx, order, &self.num) 
@@ -740,12 +586,12 @@ cdef class mdnum3_t:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t oval
+    cdef mdnum3 oval
     cdef coeff_t rval
     indx, order = imdir(humdir)
     tval = type(val)
 
-    if tval is mdnum3_t:
+    if tval is mdnum3:
       
       oval = val
       mdnum3_set_deriv_o( &oval.num, indx, order, &self.num) 
@@ -776,7 +622,7 @@ cdef class mdnum3_t:
     
     res = mdnum3_truncate_im( indx, order, &self.num) 
 
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -831,7 +677,7 @@ cdef class mdnum3_t:
 
     res = mdnum3_extract_im(indx,order, &self.num) 
 
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -852,7 +698,7 @@ cdef class mdnum3_t:
 
     res = mdnum3_extract_deriv(indx,order, &self.num)
 
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -869,7 +715,7 @@ cdef class mdnum3_t:
     
     res = mdnum3_get_order_im( order, &self.num)
 
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -882,12 +728,12 @@ cdef class mdnum3_t:
     
 
     cdef mdnum3_t res = mdnum3_copy( &self.num )
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
     PURPOSE:      Get all the active bases.
     """
@@ -905,7 +751,7 @@ cdef class mdnum3_t:
 
     # end for 
 
-    mdnum3_get_active( &self.num, bases_list)
+    mdnum3_get_active_bases( &self.num, bases_list)
 
     res = []
     for i in range(size):
@@ -951,7 +797,7 @@ cdef class mdnum3_t:
 
     except:
 
-      bases_eval = np.array(self.get_active(),dtype=np.uint16)
+      bases_eval = np.array(self.get_active_bases(),dtype=np.uint16)
       deltas_eval= np.ones(len(bases_eval),dtype=np.float64) * deltas
 
     # end
@@ -964,10 +810,10 @@ cdef class mdnum3_t:
 
     res = mdnum3_taylor_integrate( c_deltas, &self.num)
 
-    return mdnum3_t.create(&res)
+    return mdnum3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: End of class mdnum3_t ::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: End of class mdnum3 ::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

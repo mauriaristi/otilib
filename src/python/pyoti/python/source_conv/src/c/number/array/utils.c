@@ -120,7 +120,7 @@ ord_t {arr_func}_get_order( {arr_type}* arr ){{
     // Finds the maximum order in the array.
     for( i=0; i<arr->size; i++ ){{
         
-        order = MAX(order,arr->p_data[0].order);
+        order = MAX( order, {num_func}_get_order(&arr->p_data[i]) );
     
     }}
 
@@ -130,14 +130,14 @@ ord_t {arr_func}_get_order( {arr_type}* arr ){{
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {arr_func}_get_active({arr_type}* arr, imdir_t* list_vals){{
+void {arr_func}_get_active_bases({arr_type}* arr, imdir_t* list_vals){{
     
     uint64_t i;
     
     // Finds the active imaginary directions in the array.
-    for( i=0; i<arr->size; i++ ){{
+    for( i = 0; i < arr->size; i++ ){{
         
-        {num_func}_get_active( &arr->p_data[i], list_vals);
+        {num_func}_get_active_bases( &arr->p_data[i], list_vals);
     
     }}
     

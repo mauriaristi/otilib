@@ -95,8 +95,7 @@ void {fearr_func}_get_item_ijk_to( {fearr_type}* arr, uint64_t i, uint64_t j, ui
 ******************************************************************************************************/ 
 {fearr_type} {fearr_func}_get_slice({fearr_type}* arr, 
                           int64_t starti, int64_t stopi, int64_t stepi,
-                          int64_t startj, int64_t stopj, int64_t stepj, 
-                           dhelpl_t dhl);
+                          int64_t startj, int64_t stopj, int64_t stepj);
 
 void      {fearr_func}_get_slice_to({fearr_type}* arr, 
                           int64_t starti, int64_t stopi, int64_t stepi,

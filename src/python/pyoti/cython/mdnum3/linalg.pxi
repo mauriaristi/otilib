@@ -20,18 +20,18 @@ cpdef dot_product(object lhs, object rhs, object out = None):
   # end if 
 
   # supported types for lhs and rhs:
-  #    -  mdarr3_t
-  #    -  femdarr3_t
+  #    -  mdmat3
+  #    -  mdmatfe3
   #    -  darr
   # Supported output types:
-  #    - mdnum3_t
-  #    - femdnum3_t
+  #    - mdnum3
+  #    - mdnumfe3
 
-  if   tlhs is femdarr3_t:
+  if   tlhs is mdmatfe3:
 
     res = __dot_product_FX( lhs, rhs, out = out)
 
-  elif tlhs is mdarr3_t:
+  elif tlhs is mdmat3:
 
     res = __dot_product_OX( lhs, rhs, out = out)
 
@@ -69,18 +69,18 @@ cpdef dot_product(object lhs, object rhs, object out = None):
 #   # end if 
 
 #   # supported types for lhs and rhs:
-#   #    -  mdarr3_t
-#   #    -  femdarr3_t
+#   #    -  mdmat3
+#   #    -  mdmatfe3
 #   #    -  darr
 #   # Supported output types:
-#   #    - mdnum3_t
-#   #    - femdnum3_t
+#   #    - mdnum3
+#   #    - mdnumfe3
 
-#   if   tlhs is femdarr3_t:
+#   if   tlhs is mdmatfe3:
 
 #     res = __cross_product_FX( lhs, rhs, out = out)
 
-#   elif tlhs is mdarr3_t:
+#   elif tlhs is mdmat3:
 
 #     res = __cross_product_OX( lhs, rhs, out = out)
 
@@ -107,14 +107,14 @@ cpdef dot(object lhs, object rhs, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      Olhs, Orhs, Ores
+  cdef mdmat3      Olhs, Orhs, Ores
   cdef mdarr3_t   cOres
   cdef dmat       Rlhs, Rrhs, Rres
   cdef darr_t    cRres
-  cdef femdarr3_t    Flhs, Frhs, Fres
+  cdef mdmatfe3    Flhs, Frhs, Fres
   cdef femdarr3_t cFres
 
-  cdef csr_mdarr3_t  Slhs
+  cdef csr_mdmat3  Slhs
 
   cdef uint8_t res_flag = 1
   cdef object res = None
@@ -127,24 +127,24 @@ cpdef dot(object lhs, object rhs, object out = None):
   # end if 
 
   # supported types:
-  #    -  mdarr3_t
-  #    -  femdarr3_t
+  #    -  mdmat3
+  #    -  mdmatfe3
   #    -  darr
 
-  if   tlhs is femdarr3_t:
+  if   tlhs is mdmatfe3:
     
     Flhs = lhs
-    if   trhs is femdarr3_t: # FF
+    if   trhs is mdmatfe3: # FF
       Frhs = rhs
       if res_flag:
         Fres = out
         femdarr3_matmul_FF_to( &Flhs.arr, &Frhs.arr ,&Fres.arr)
       else:
         cFres = femdarr3_matmul_FF( &Flhs.arr, &Frhs.arr )
-        res = femdarr3_t.create(&cFres)
+        res = mdmatfe3.create(&cFres)
       # end if 
 
-    elif trhs is mdarr3_t:   # FO
+    elif trhs is mdmat3:   # FO
 
       Orhs = rhs
       if res_flag:
@@ -152,7 +152,7 @@ cpdef dot(object lhs, object rhs, object out = None):
         femdarr3_matmul_FO_to( &Flhs.arr, &Orhs.arr ,&Fres.arr)
       else:
         cFres = femdarr3_matmul_FO( &Flhs.arr, &Orhs.arr )
-        res = femdarr3_t.create(&cFres)
+        res = mdmatfe3.create(&cFres)
       # end if 
 
     elif tlhs is dmat:    # FR
@@ -163,27 +163,27 @@ cpdef dot(object lhs, object rhs, object out = None):
         femdarr3_matmul_FR_to( &Flhs.arr, &Rrhs.arr ,&Fres.arr)
       else:
         cFres = femdarr3_matmul_FR( &Flhs.arr, &Rrhs.arr )
-        res = femdarr3_t.create(&cFres)
+        res = mdmatfe3.create(&cFres)
       # end if 
 
     else:
       raise TypeError("Unsupported types at dot operation.")      
     # end if 
 
-  elif tlhs is mdarr3_t:
+  elif tlhs is mdmat3:
 
     Olhs = lhs
-    if   trhs is femdarr3_t: # OF
+    if   trhs is mdmatfe3: # OF
       Frhs = rhs
       if res_flag:
         Fres = out
         femdarr3_matmul_OF_to( &Olhs.arr, &Frhs.arr ,&Fres.arr)
       else:
         cFres = femdarr3_matmul_OF( &Olhs.arr, &Frhs.arr )
-        res = femdarr3_t.create(&cFres)
+        res = mdmatfe3.create(&cFres)
       # end if 
 
-    elif trhs is mdarr3_t:   # OO
+    elif trhs is mdmat3:   # OO
 
       Orhs = rhs
       if res_flag:
@@ -191,7 +191,7 @@ cpdef dot(object lhs, object rhs, object out = None):
         mdarr3_matmul_OO_to( &Olhs.arr, &Orhs.arr ,&Ores.arr)
       else:
         cOres = mdarr3_matmul_OO( &Olhs.arr, &Orhs.arr )
-        res = mdarr3_t.create(&cOres)
+        res = mdmat3.create(&cOres)
       # end if 
 
     elif tlhs is dmat:    # OR
@@ -202,22 +202,22 @@ cpdef dot(object lhs, object rhs, object out = None):
         mdarr3_matmul_OR_to( &Olhs.arr, &Rrhs.arr ,&Ores.arr)
       else:
         cOres = mdarr3_matmul_OR( &Olhs.arr, &Rrhs.arr )
-        res = mdarr3_t.create(&cOres)
+        res = mdmat3.create(&cOres)
       # end if 
 
     else:
       raise TypeError("Unsupported types at dot operation.")      
     # end if    
 
-  elif tlhs is csr_mdarr3_t:
+  elif tlhs is csr_mdmat3:
 
     # Slhs = lhs
-    if   trhs is mdarr3_t: # SO
+    if   trhs is mdmat3: # SO
       if res_flag:
         Ores = out
-        csrmdarr3_t_matmul_SO_to( lhs, rhs, Ores)
+        csrmdmat3_matmul_SO_to( lhs, rhs, Ores)
       else:
-        res = csrmdarr3_t_matmul_SO( lhs, rhs)
+        res = csrmdmat3_matmul_SO( lhs, rhs)
       # end if 
 
     else:
@@ -227,24 +227,24 @@ cpdef dot(object lhs, object rhs, object out = None):
   elif tlhs is dmat:
     
     Rlhs = lhs
-    if   trhs is femdarr3_t: # RF
+    if   trhs is mdmatfe3: # RF
       Frhs = rhs
       if res_flag:
         Fres = out
         femdarr3_matmul_RF_to( &Rlhs.arr, &Frhs.arr ,&Fres.arr)
       else:
         cFres = femdarr3_matmul_RF( &Rlhs.arr, &Frhs.arr )
-        res = femdarr3_t.create(&cFres)
+        res = mdmatfe3.create(&cFres)
       # end if 
 
-    elif trhs is mdarr3_t:   # RO
+    elif trhs is mdmat3:   # RO
       Orhs = rhs
       if res_flag:
         Ores = out
         mdarr3_matmul_RO_to( &Rlhs.arr, &Orhs.arr ,&Ores.arr)
       else:
         cOres = mdarr3_matmul_RO( &Rlhs.arr, &Orhs.arr )
-        res = mdarr3_t.create(&cOres)
+        res = mdmat3.create(&cOres)
       # end if 
 
     elif tlhs is dmat:    # RR
@@ -279,11 +279,11 @@ cpdef transpose(object arr, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef mdarr3_t   cOres
   cdef dmat       R, Rres
   cdef darr_t    cRres
-  cdef femdarr3_t    F, Fres
+  cdef mdmatfe3    F, Fres
   cdef femdarr3_t cFres
 
   cdef uint8_t res_flag = 1
@@ -293,17 +293,15 @@ cpdef transpose(object arr, object out = None):
   tarr = type(arr)
 
   if out is None:
-
     res_flag = 0
-
   # end if 
 
   # supported types:
-  #    -  mdarr3_t
-  #    -  femdarr3_t
+  #    -  mdmat3
+  #    -  mdmatfe3
   #    -  darr
 
-  if   tarr is femdarr3_t:
+  if   tarr is mdmatfe3:
     
     F = arr
     if res_flag:
@@ -311,10 +309,10 @@ cpdef transpose(object arr, object out = None):
       femdarr3_transpose_to( &F.arr, &Fres.arr)
     else:
       cFres = femdarr3_transpose( &F.arr)
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if 
 
-  elif tarr is mdarr3_t:
+  elif tarr is mdmat3:
 
     O = arr
     if res_flag:
@@ -322,7 +320,7 @@ cpdef transpose(object arr, object out = None):
       mdarr3_transpose_to( &O.arr, &Ores.arr)
     else:
       cOres = mdarr3_transpose( &O.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
     # end if    
 
   elif tarr is dmat:
@@ -353,14 +351,14 @@ cpdef det(object arr, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O
+  cdef mdmat3      O
   cdef dmat       R
-  cdef femdarr3_t    F
+  cdef mdmatfe3    F
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
-  cdef femdnum3_t     fres
-  cdef mdnum3_t    ores
+  cdef mdnumfe3     fres
+  cdef mdnum3    ores
 
   cdef uint8_t res_flag = 1
 
@@ -373,11 +371,11 @@ cpdef det(object arr, object out = None):
   # end if 
 
   # supported types:
-  #    -  mdarr3_t
-  #    -  femdarr3_t
+  #    -  mdmat3
+  #    -  mdmatfe3
   #    -  darr
 
-  if   tarr is femdarr3_t:
+  if   tarr is mdmatfe3:
     
     F = arr
     if res_flag:
@@ -385,10 +383,10 @@ cpdef det(object arr, object out = None):
       femdarr3_det_to( &F.arr, &fres.num)
     else:
       cfres = femdarr3_det( &F.arr)
-      res = femdnum3_t.create(&cfres)
+      res = mdnumfe3.create(&cfres)
     # end if 
 
-  elif tarr is mdarr3_t:
+  elif tarr is mdmat3:
     
     O = arr
     if res_flag:      
@@ -396,7 +394,7 @@ cpdef det(object arr, object out = None):
       mdarr3_det_to( &O.arr, &ores.num)
     else:
       cores = mdarr3_det( &O.arr)
-      res = mdnum3_t.create(&cores)
+      res = mdnum3.create(&cores)
     # end if    
 
   elif tarr is dmat:
@@ -428,14 +426,14 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O
+  cdef mdmat3      O
   cdef dmat       R
-  cdef femdarr3_t    F
+  cdef mdmatfe3    F
   cdef coeff_t   crres
   cdef mdnum3_t cores
   cdef femdnum3_t  cfres
-  cdef femdnum3_t     fres
-  cdef mdnum3_t    ores
+  cdef mdnumfe3     fres
+  cdef mdnum3    ores
 
   cdef uint8_t res_flag = 1
 
@@ -450,11 +448,11 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
   # end if 
 
   # supported types:
-  #    -  mdarr3_t
-  #    -  femdarr3_t
+  #    -  mdmat3
+  #    -  mdmatfe3
   #    -  darr
 
-  if   tarr is femdarr3_t:
+  if   tarr is mdmatfe3:
     
     F = arr
     if res_flag:
@@ -462,10 +460,10 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
       femdarr3_pnorm_to( &F.arr, p, &fres.num)
     else:
       cfres = femdarr3_pnorm( &F.arr, p)
-      res = femdnum3_t.create(&cfres)
+      res = mdnumfe3.create(&cfres)
     # end if 
 
-  elif tarr is mdarr3_t:
+  elif tarr is mdmat3:
 
     O = arr
     if res_flag:
@@ -473,7 +471,7 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
       mdarr3_pnorm_to( &O.arr, p, &ores.num)
     else:
       cores = mdarr3_pnorm( &O.arr, p)
-      res = mdnum3_t.create(&cores)
+      res = mdnum3.create(&cores)
     # end if    
 
   elif tarr is dmat:
@@ -503,11 +501,11 @@ cpdef inv(object arr, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores
+  cdef mdmat3      O, Ores
   cdef mdarr3_t   cOres
   cdef dmat       R, Rres
   cdef darr_t    cRres
-  cdef femdarr3_t    F, Fres
+  cdef mdmatfe3    F, Fres
   cdef femdarr3_t cFres
 
   cdef uint8_t res_flag = 1
@@ -521,27 +519,27 @@ cpdef inv(object arr, object out = None):
   # end if 
 
   # supported types:
-  #    -  mdarr3_t
-  #    -  femdarr3_t
+  #    -  mdmat3
+  #    -  mdmatfe3
   #    -  darr
 
-  if   tarr is femdarr3_t:    
+  if   tarr is mdmatfe3:    
     F = arr
     if res_flag:
       Fres = out
       femdarr3_invert_to( &F.arr, &Fres.arr)
     else:
       cFres = femdarr3_invert( &F.arr)
-      res = femdarr3_t.create(&cFres)
+      res = mdmatfe3.create(&cFres)
     # end if 
-  elif tarr is mdarr3_t:
+  elif tarr is mdmat3:
     O = arr
     if res_flag:
       Ores = out
       mdarr3_invert_to( &O.arr, &Ores.arr)
     else:
       cOres = mdarr3_invert( &O.arr)
-      res = mdarr3_t.create(&cOres)
+      res = mdmat3.create(&cOres)
     # end if
   elif tarr is dmat:    
     R = arr
@@ -569,12 +567,12 @@ cpdef inv_block(object arr, object out = None):
   """
   #***************************************************************************************************
 
-  cdef mdarr3_t      O, Ores, tmp
+  cdef mdmat3      O, Ores, tmp
   cdef mdarr3_t   cOres
-  cdef csr_mdarr3_t  S, Sres
+  cdef csr_mdmat3  S, Sres
   # cdef dmat       R, Rres
   # cdef darr_t    cRres
-  # cdef femdarr3_t    F, Fres
+  # cdef mdmatfe3    F, Fres
   # cdef femdarr3_t cFres
 
   cdef uint64_t i,j,k,l
@@ -593,10 +591,10 @@ cpdef inv_block(object arr, object out = None):
   # end if 
 
   # supported types:
-  #    -  mdarr3_t
-  #    -  csr_mdarr3_t
+  #    -  mdmat3
+  #    -  csr_mdmat3
 
-  if   tarr is mdarr3_t:    
+  if   tarr is mdmat3:    
     O = arr
     if res_flag:
       Ores = out
@@ -642,7 +640,7 @@ cpdef inv_block(object arr, object out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef solve(object K_in, mdarr3_t b_in, mdarr3_t out = None):
+cpdef solve(object K_in, mdmat3 b_in, mdmat3 out = None):
   """
   PURPOSE:   Solve OTI linear system of equations.
   """
@@ -652,8 +650,8 @@ cpdef solve(object K_in, mdarr3_t b_in, mdarr3_t out = None):
   from scipy.linalg import lu_factor, lu_solve
   import scipy.sparse.linalg as spla
 
-  cdef mdarr3_t      O, Ores, Otmp
-  cdef csr_mdarr3_t  S, Sres, Stmp  
+  cdef mdmat3      O, Ores, Otmp
+  cdef csr_mdmat3  S, Sres, Stmp  
   cdef uint64_t i,j,k,l
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
   cdef uint8_t res_flag = 1
@@ -666,10 +664,10 @@ cpdef solve(object K_in, mdarr3_t b_in, mdarr3_t out = None):
   # end if 
 
   # supported types:
-  #    -  mdarr3_t
-  #    -  csr_mdarr3_t
+  #    -  mdmat3
+  #    -  csr_mdmat3
 
-  if   tK is mdarr3_t:
+  if   tK is mdmat3:
     
     if res_flag:
       solve_dense( K_in, b_in, out = out)
@@ -677,7 +675,7 @@ cpdef solve(object K_in, mdarr3_t b_in, mdarr3_t out = None):
       res = solve_dense(K_in, b_in)
     # end if
 
-  elif tK is csr_mdarr3_t:
+  elif tK is csr_mdmat3:
 
     if res_flag:
       solve_sparse( K_in, b_in, out = out)
@@ -696,7 +694,7 @@ cpdef solve(object K_in, mdarr3_t b_in, mdarr3_t out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef solve_dense(mdarr3_t K_in, mdarr3_t b_in, mdarr3_t out = None):
+cdef solve_dense(mdmat3 K_in, mdmat3 b_in, mdmat3 out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -705,7 +703,7 @@ cdef solve_dense(mdarr3_t K_in, mdarr3_t b_in, mdarr3_t out = None):
 
   from scipy.linalg import lu_factor, lu_solve
 
-  cdef mdarr3_t      O, Ores, Otmp
+  cdef mdmat3      O, Ores, Otmp
   cdef uint64_t i,j,k,l
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
   cdef uint8_t res_flag = 1
@@ -766,7 +764,7 @@ cdef solve_dense(mdarr3_t K_in, mdarr3_t b_in, mdarr3_t out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef solve_sparse(csr_mdarr3_t K_in, mdarr3_t b_in, mdarr3_t out = None):
+cdef solve_sparse(csr_mdmat3 K_in, mdmat3 b_in, mdmat3 out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -775,7 +773,7 @@ cdef solve_sparse(csr_mdarr3_t K_in, mdarr3_t b_in, mdarr3_t out = None):
 
   from scipy.sparse.linalg import splu
 
-  cdef mdarr3_t      O, Ores, Otmp
+  cdef mdmat3      O, Ores, Otmp
   cdef uint64_t i,j,k,l
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
   cdef uint8_t res_flag = 1
@@ -836,105 +834,105 @@ cdef solve_sparse(csr_mdarr3_t K_in, mdarr3_t b_in, mdarr3_t out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef get_order_im_array(ord_t ordi, mdarr3_t tmp):
+cpdef get_order_im_array(ord_t ordi, mdmat3 tmp):
   """
   PURPOSE:   Get a specific order from .
   """
   #***************************************************************************************************
   
 
-  cdef np.ndarray res
-  cdef mdnum3_t otmp
-  cdef bases_t* bases_list
-  cdef ndir_t nnz
-  cdef imdir_t maxidx = 0
-  cdef uint64_t i,j,k
+  cdef np.ndarray res = np.zeros(1)
+  # cdef mdnum3_t otmp
+  # cdef bases_t* bases_list
+  # cdef ndir_t nnz
+  # cdef imdir_t maxidx = 0
+  # cdef uint64_t i,j,k
 
-  for i in range(tmp.size):    
-    otmp = tmp.arr.p_data[i]
+  # for i in range(tmp.size):    
+  #   otmp = tmp.arr.p_data[i]
 
-    if otmp.order >= ordi:
-      nnz = otmp.p_nnz[ordi-1]
+  #   if otmp.order >= ordi:
+  #     nnz = otmp.p_nnz[ordi-1]
       
-      if nnz > 0:
-        maxidx = max( maxidx, otmp.p_idx[ordi-1][nnz-1])
-      # end if
+  #     if nnz > 0:
+  #       maxidx = max( maxidx, otmp.p_idx[ordi-1][nnz-1])
+  #     # end if
 
-    # end if 
-  # end for
+  #   # end if 
+  # # end for
 
-  # get maximum basis for this index:
-  bases_list = dhelp_get_imdir( maxidx, ordi)
+  # # get maximum basis for this index:
+  # bases_list = dhelp_get_imdir( maxidx, ordi)
 
-  maxidx = dhelp_ndirOrder( bases_list[ordi-1], ordi )
+  # maxidx = dhelp_ndirOrder( bases_list[ordi-1], ordi )
 
-  res = np.zeros((tmp.nrows,tmp.ncols*maxidx), dtype = np.float64)
+  # res = np.zeros((tmp.nrows,tmp.ncols*maxidx), dtype = np.float64)
 
-  for i in range(tmp.nrows):
-    for j in range(tmp.ncols):
+  # for i in range(tmp.nrows):
+  #   for j in range(tmp.ncols):
 
-      otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
+  #     otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
 
-      if otmp.order >= ordi:
+  #     if otmp.order >= ordi:
         
-        nnz = otmp.p_nnz[ordi-1]
+  #       nnz = otmp.p_nnz[ordi-1]
         
-        for k in range( nnz ):          
-          res[ i, j + tmp.ncols * otmp.p_idx[ordi-1][k] ] = otmp.p_im[ordi-1][k]
-        # end for
+  #       for k in range( nnz ):          
+  #         res[ i, j + tmp.ncols * otmp.p_idx[ordi-1][k] ] = otmp.p_im[ordi-1][k]
+  #       # end for
 
-      # end if 
-    # end for 
-  # end for
+  #     # end if 
+  #   # end for 
+  # # end for
 
   return res
 
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, mdarr3_t tmp):
+cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, mdmat3 tmp):
   """
   PURPOSE:   Set a specific order from an array.
   """
   #***************************************************************************************************
   
 
-  cdef mdnum3_t otmp
-  cdef ndir_t nnz, nnz_set
-  cdef coeff_t val
-  cdef uint64_t i,j,k
+  pass
+  
+  # cdef mdnum3_t otmp
+  # cdef ndir_t nnz, nnz_set
+  # cdef coeff_t val
+  # cdef uint64_t i,j,k
 
-  nnz = arr.shape[1]/tmp.ncols
+  # nnz = arr.shape[1]/tmp.ncols
 
-  otmp = mdnum3_get_tmp(5, ordi)
-
-  for i in range(tmp.nrows):
+  # for i in range(tmp.nrows):
     
-    for j in range(tmp.ncols):
+  #   for j in range(tmp.ncols):
 
-      mdnum3_set_r(0.0, &otmp)
+  #     mdnum3_set_r(0.0, &otmp)
 
-      nnz_set = 0
+  #     nnz_set = 0
         
-      for k in range( nnz ):          
+  #     for k in range( nnz ):          
         
-        val = arr[ i, j + tmp.ncols * k ] 
+  #       val = arr[ i, j + tmp.ncols * k ] 
         
-        if val != 0.0:
+  #       if val != 0.0:
 
-          otmp.p_idx[ordi-1][nnz_set]= k
-          otmp.p_im[ordi-1][nnz_set] = val
-          nnz_set += 1
-          otmp.p_nnz[ordi-1] += 1
+  #         otmp.p_idx[ordi-1][nnz_set]= k
+  #         otmp.p_im[ordi-1][nnz_set] = val
+  #         nnz_set += 1
+  #         otmp.p_nnz[ordi-1] += 1
 
-        # end if
+  #       # end if
 
-      # end for
+  #     # end for
 
-      tmp[i,j] += mdnum3_t.create( &otmp, FLAGS = 0)
+  #     tmp[i,j] += mdnum3.create( &otmp, FLAGS = 0)
 
-    # end for 
-  # end for
+  #   # end for 
+  # # end for
 
 #-----------------------------------------------------------------------------------------------------
 

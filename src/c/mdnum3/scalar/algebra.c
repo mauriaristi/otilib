@@ -34,6 +34,16 @@ mdnum3_t mdnum3_div_or(mdnum3_t* num, coeff_t val){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+mdnum3_t mdnum3_abs(mdnum3_t* num){
+
+	mdnum3_t res;
+    mdnum3_abs_to(num,&res);
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 mdnum3_t mdnum3_neg(  mdnum3_t* lhs){
 
   mdnum3_t res;
@@ -74,7 +84,7 @@ void mdnum3_neg_to(  mdnum3_t* lhs, mdnum3_t* res){
 
 }
 
-mdnum3_t mdnum3_add_oo(  mdnum3_t* lhs,  mdnum3_t* rhs){
+mdnum3_t mdnum3_sum_oo(  mdnum3_t* lhs,  mdnum3_t* rhs){
   mdnum3_t res;
 
   // Addition like function 'lhs + rhs'
@@ -95,7 +105,7 @@ mdnum3_t mdnum3_add_oo(  mdnum3_t* lhs,  mdnum3_t* rhs){
 
 }
 
-void mdnum3_add_oo_to(  mdnum3_t* lhs,  mdnum3_t* rhs, mdnum3_t* res){
+void mdnum3_sum_oo_to(  mdnum3_t* lhs,  mdnum3_t* rhs, mdnum3_t* res){
   // Addition like function 'lhs + rhs'
   //  Real
   res->r = lhs->r + rhs->r;
@@ -112,7 +122,7 @@ void mdnum3_add_oo_to(  mdnum3_t* lhs,  mdnum3_t* rhs, mdnum3_t* res){
 
 }
 
-mdnum3_t mdnum3_add_ro(  coeff_t lhs,  mdnum3_t* rhs){
+mdnum3_t mdnum3_sum_ro(  coeff_t lhs,  mdnum3_t* rhs){
   mdnum3_t res;
 
   // Addition like function 'lhs + rhs'
@@ -133,7 +143,7 @@ mdnum3_t mdnum3_add_ro(  coeff_t lhs,  mdnum3_t* rhs){
 
 }
 
-void mdnum3_add_ro_to(  coeff_t lhs,  mdnum3_t* rhs, mdnum3_t* res){
+void mdnum3_sum_ro_to(  coeff_t lhs,  mdnum3_t* rhs, mdnum3_t* res){
   // Addition like function 'lhs + rhs'
   // Real;
   res->r = lhs + rhs->r;
@@ -150,41 +160,41 @@ void mdnum3_add_ro_to(  coeff_t lhs,  mdnum3_t* rhs, mdnum3_t* res){
 
 }
 
-mdnum3_t mdnum3_sub_oo(  mdnum3_t lhs,  mdnum3_t* rhs){
+mdnum3_t mdnum3_sub_oo(  mdnum3_t* lhs,  mdnum3_t* rhs){
   mdnum3_t res;
 
   // Addition like function 'lhs - rhs'
   //  Real
-  res.r = lhs.r - rhs->r;
+  res.r = lhs->r - rhs->r;
   // Order 1
-  res.e1 = lhs.e1 - rhs->e1;
-  res.e2 = lhs.e2 - rhs->e2;
-  res.e3 = lhs.e3 - rhs->e3;
+  res.e1 = lhs->e1 - rhs->e1;
+  res.e2 = lhs->e2 - rhs->e2;
+  res.e3 = lhs->e3 - rhs->e3;
   // Order 2
-  res.e12 = lhs.e12 - rhs->e12;
-  res.e13 = lhs.e13 - rhs->e13;
-  res.e23 = lhs.e23 - rhs->e23;
+  res.e12 = lhs->e12 - rhs->e12;
+  res.e13 = lhs->e13 - rhs->e13;
+  res.e23 = lhs->e23 - rhs->e23;
   // Order 3
-  res.e123 = lhs.e123 - rhs->e123;
+  res.e123 = lhs->e123 - rhs->e123;
 
   return res;
 
 }
 
-void mdnum3_sub_oo_to(  mdnum3_t lhs,  mdnum3_t* rhs, mdnum3_t* res){
+void mdnum3_sub_oo_to(  mdnum3_t* lhs,  mdnum3_t* rhs, mdnum3_t* res){
   // Addition like function 'lhs - rhs'
   //  Real
-  res->r = lhs.r - rhs->r;
+  res->r = lhs->r - rhs->r;
   // Order 1
-  res->e1 = lhs.e1 - rhs->e1;
-  res->e2 = lhs.e2 - rhs->e2;
-  res->e3 = lhs.e3 - rhs->e3;
+  res->e1 = lhs->e1 - rhs->e1;
+  res->e2 = lhs->e2 - rhs->e2;
+  res->e3 = lhs->e3 - rhs->e3;
   // Order 2
-  res->e12 = lhs.e12 - rhs->e12;
-  res->e13 = lhs.e13 - rhs->e13;
-  res->e23 = lhs.e23 - rhs->e23;
+  res->e12 = lhs->e12 - rhs->e12;
+  res->e13 = lhs->e13 - rhs->e13;
+  res->e23 = lhs->e23 - rhs->e23;
   // Order 3
-  res->e123 = lhs.e123 - rhs->e123;
+  res->e123 = lhs->e123 - rhs->e123;
 
 }
 
@@ -475,10 +485,10 @@ mdnum3_t mdnum3_feval(coeff_t* feval_re, mdnum3_t* x){
   // feval function
   //  Definitions
   coeff_t factor=1, coef = 0;
-  mdnum3_t tmp1, tmp2, deltax = (*x), deltax_power = (*x);
+  mdnum3_t deltax = (*x), deltax_power = (*x);
   deltax.r = 0.0;
   deltax_power.r = 0.0;
-  mdnum3_set_r_to(0.0, &res);
+  mdnum3_set_r(0.0, &res);
   //  Real
   res.r = feval_re[0];
   // Order 1
@@ -505,10 +515,10 @@ void mdnum3_feval_to(coeff_t* feval_re, mdnum3_t* x, mdnum3_t* res){
   // feval function
   //  Definitions
   coeff_t factor=1, coef = 0;
-  mdnum3_t tmp1, tmp2, deltax = (*x), deltax_power = (*x);
+  mdnum3_t deltax = (*x), deltax_power = (*x);
   deltax.r = 0.0;
   deltax_power.r = 0.0;
-  mdnum3_set_r_to(0.0, res);
+  mdnum3_set_r(0.0, res);
   //  Real
   res->r = feval_re[0];
   // Order 1

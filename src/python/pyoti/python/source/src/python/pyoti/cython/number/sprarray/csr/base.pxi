@@ -967,8 +967,6 @@ cdef void csrmatso_matmul_SO_to(csr_matso lhs, matso rhs, matso res):
   # end if
 
   # Extract temporal 5.
-  order = max(lhs.order, rhs.order )
-  tmp = soti_get_tmp( 5, order ,dhl)
 
   for i in range(lhs.nrows):
       

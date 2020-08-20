@@ -67,8 +67,7 @@ void mdarr2_set_slice_o( mdnum2_t* val,
 ******************************************************************************************************/ 
 mdarr2_t mdarr2_get_slice( mdarr2_t* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
-                        int64_t startj, int64_t stopj, int64_t stepj,
-                        dhelpl_t dhl);
+                        int64_t startj, int64_t stopj, int64_t stepj);
 void mdarr2_get_slice_to( mdarr2_t* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
                         int64_t startj, int64_t stopj, int64_t stepj,

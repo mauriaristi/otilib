@@ -273,8 +273,7 @@ mdnum3_t femdarr3_get_item_ijk(femdarr3_t* arr, uint64_t i, uint64_t j, uint64_t
 // ****************************************************************************************************
 femdarr3_t femdarr3_get_slice(femdarr3_t* arr, 
                           int64_t starti, int64_t stopi, int64_t stepi,
-                          int64_t startj, int64_t stopj, int64_t stepj, 
-                           dhelpl_t dhl){
+                          int64_t startj, int64_t stopj, int64_t stepj){
     
     int64_t ncols, nrows;
     femdarr3_t res = femdarr3_init();
@@ -677,9 +676,7 @@ void femdarr3_set_all_r( coeff_t num, femdarr3_t* res ){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-femdarr3_t femdarr3_eye( uint64_t size,
-                               uint64_t nip, bases_t  nbases, 
-                               ord_t    order     ){ 
+femdarr3_t femdarr3_eye( uint64_t size, uint64_t nip ){ 
     
     uint64_t i,k;
 
@@ -707,9 +704,7 @@ femdarr3_t femdarr3_eye( uint64_t size,
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-femdarr3_t femdarr3_zeros( uint64_t nrows,   uint64_t ncols, 
-                               uint64_t nip, bases_t  nbases, 
-                               ord_t    order     ){ 
+femdarr3_t femdarr3_zeros( uint64_t nrows, uint64_t ncols, uint64_t nip ){ 
     
     uint64_t i;
 
@@ -727,8 +722,7 @@ femdarr3_t femdarr3_zeros( uint64_t nrows,   uint64_t ncols,
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-femdarr3_t femdarr3_ones( uint64_t nrows,   uint64_t ncols, uint64_t nip, bases_t  nbases, 
-                               ord_t    order     ){ 
+femdarr3_t femdarr3_ones( uint64_t nrows, uint64_t ncols, uint64_t nip  ){ 
     
     uint64_t i;
 
@@ -746,9 +740,7 @@ femdarr3_t femdarr3_ones( uint64_t nrows,   uint64_t ncols, uint64_t nip, bases_
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-femdarr3_t femdarr3_createEmpty( uint64_t nrows,   uint64_t ncols, 
-                                     uint64_t nip, bases_t  nbases, 
-                                     ord_t    order){  
+femdarr3_t femdarr3_createEmpty( uint64_t nrows, uint64_t ncols, uint64_t nip){  
     
     uint64_t i;
 

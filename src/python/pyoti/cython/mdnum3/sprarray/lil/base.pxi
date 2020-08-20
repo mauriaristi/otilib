@@ -1,9 +1,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  lil_mdarr3_t    :::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  lil_mdmat3    :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class lil_mdarr3_t:
+cdef class lil_mdmat3:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -16,9 +16,9 @@ cdef class lil_mdarr3_t:
   
   def __init__(self, shape): 
     """
-    PURPOSE:      Python level constructor of the lil_mdarr3_t class.
+    PURPOSE:      Python level constructor of the lil_mdmat3 class.
 
-    DESCRIPTION:  Creates a new empty lil_mdarr3_t matrix.
+    DESCRIPTION:  Creates a new empty lil_mdmat3 matrix.
                  
     """
     #*************************************************************************************************
@@ -191,7 +191,7 @@ cdef class lil_mdarr3_t:
     
   
     cdef mdnum3_t d_mdnum3
-    cdef mdnum3_t   mdnum3
+    cdef mdnum3   mdnum3
     cdef uint64_t i, j, k
     out  = ""
 
@@ -242,7 +242,7 @@ cdef class lil_mdarr3_t:
 
         else:
 
-          res = mdnum3_t(0.0)
+          res = mdnum3(0.0)
 
         # end if 
         
@@ -271,7 +271,7 @@ cdef class lil_mdarr3_t:
         
     
 
-    cdef mdnum3_t valt
+    cdef mdnum3 valt
     cdef uint64_t i, j, k, l, pos
     cdef list row, data
     
@@ -279,13 +279,13 @@ cdef class lil_mdarr3_t:
 
     if (isinstance(val, tuple)):
       
-      if tval == mdnum3_t:
+      if tval == mdnum3:
         
         valt = value.copy()
 
       else:
         
-        valt = mdnum3_t( value )
+        valt = mdnum3( value )
 
       # end if 
 
@@ -337,7 +337,7 @@ cdef class lil_mdarr3_t:
     
     
 
-    cdef lil_mdarr3_t res = lil_mdarr3_t(self.shape)
+    cdef lil_mdmat3 res = lil_mdmat3(self.shape)
     cdef uint64_t i, k
     
     for i in range(self.nrows):
@@ -365,7 +365,7 @@ cdef class lil_mdarr3_t:
     
     
 
-    cdef lil_mdarr3_t res = lil_mdarr3_t(self.shape)
+    cdef lil_mdmat3 res = lil_mdmat3(self.shape)
     cdef uint64_t i, j
     
     for i in range(self.nrows):
@@ -375,7 +375,7 @@ cdef class lil_mdarr3_t:
 
       for j in range(len(self.data[i])):
 
-        res.data[i][j] = mdnum3_t(0.0)
+        res.data[i][j] = mdnum3(0.0)
 
       # end for 
 
@@ -395,7 +395,7 @@ cdef class lil_mdarr3_t:
     
   #   cdef mdarr3_t res = mdarr3_neg(&self.arr)
 
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
   # #---------------------------------------------------------------------------------------------------
 
   # #***************************************************************************************************
@@ -408,9 +408,9 @@ cdef class lil_mdarr3_t:
   #   
     
   #   cdef mdarr3_t res 
-  #   cdef mdarr3_t lhs,rhs
+  #   cdef mdmat3 lhs,rhs
   #   cdef dmat dlhs,drhs
-  #   cdef mdnum3_t olhs,orhs
+  #   cdef mdnum3 olhs,orhs
     
   #   tlhs = type(self)
   #   trhs = type(other)
@@ -422,14 +422,14 @@ cdef class lil_mdarr3_t:
 
   #     res = mdarr3_sum_OO(&lhs.arr,&rhs.arr)
 
-  #   elif ( tlhs  == mdnum3_t ):
+  #   elif ( tlhs  == mdnum3 ):
 
   #     olhs = self
   #     rhs = other
 
   #     res = mdarr3_sum_oO(&olhs.num,&rhs.arr)
 
-  #   elif ( trhs  == mdnum3_t ):
+  #   elif ( trhs  == mdnum3 ):
 
   #     lhs = self
   #     orhs = other
@@ -466,7 +466,7 @@ cdef class lil_mdarr3_t:
 
   #   # end if 
       
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
 
   # #---------------------------------------------------------------------------------------------------  
 
@@ -491,9 +491,9 @@ cdef class lil_mdarr3_t:
   #   
     
   #   cdef mdarr3_t res 
-  #   cdef mdarr3_t lhs,rhs
+  #   cdef mdmat3 lhs,rhs
   #   cdef dmat dlhs,drhs
-  #   cdef mdnum3_t olhs,orhs
+  #   cdef mdnum3 olhs,orhs
     
   #   tlhs = type(self)
   #   trhs = type(other)
@@ -505,14 +505,14 @@ cdef class lil_mdarr3_t:
 
   #     res = mdarr3_sub_OO(&lhs.arr,&rhs.arr)
 
-  #   elif ( tlhs  == mdnum3_t ):
+  #   elif ( tlhs  == mdnum3 ):
 
   #     olhs = self
   #     rhs = other
 
   #     res = mdarr3_sub_oO(&olhs.num,&rhs.arr)
 
-  #   elif ( trhs  == mdnum3_t ):
+  #   elif ( trhs  == mdnum3 ):
 
   #     lhs = self
   #     orhs = other
@@ -549,7 +549,7 @@ cdef class lil_mdarr3_t:
 
   #   # end if 
       
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
 
   # #---------------------------------------------------------------------------------------------------  
 
@@ -574,9 +574,9 @@ cdef class lil_mdarr3_t:
   #   
     
   #   cdef mdarr3_t res 
-  #   cdef mdarr3_t lhs,rhs
+  #   cdef mdmat3 lhs,rhs
   #   cdef dmat dlhs,drhs
-  #   cdef mdnum3_t olhs,orhs
+  #   cdef mdnum3 olhs,orhs
     
   #   tlhs = type(self)
   #   trhs = type(other)
@@ -588,14 +588,14 @@ cdef class lil_mdarr3_t:
 
   #     res = mdarr3_mul_OO(&lhs.arr,&rhs.arr)
 
-  #   elif ( tlhs  == mdnum3_t ):
+  #   elif ( tlhs  == mdnum3 ):
 
   #     olhs = self
   #     rhs = other
 
   #     res = mdarr3_mul_oO(&olhs.num,&rhs.arr)
 
-  #   elif ( trhs  == mdnum3_t ):
+  #   elif ( trhs  == mdnum3 ):
 
   #     lhs = self
   #     orhs = other
@@ -632,7 +632,7 @@ cdef class lil_mdarr3_t:
 
   #   # end if 
       
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
 
     
 
@@ -659,9 +659,9 @@ cdef class lil_mdarr3_t:
   #   
     
   #   cdef mdarr3_t res 
-  #   cdef mdarr3_t lhs,rhs
+  #   cdef mdmat3 lhs,rhs
   #   cdef dmat dlhs,drhs
-  #   cdef mdnum3_t olhs,orhs
+  #   cdef mdnum3 olhs,orhs
     
   #   tlhs = type(self)
   #   trhs = type(other)
@@ -673,14 +673,14 @@ cdef class lil_mdarr3_t:
 
   #     res = mdarr3_div_OO(&lhs.arr,&rhs.arr)
 
-  #   elif ( tlhs  == mdnum3_t ):
+  #   elif ( tlhs  == mdnum3 ):
 
   #     olhs = self
   #     rhs = other
 
   #     res = mdarr3_div_oO(&olhs.num,&rhs.arr)
 
-  #   elif ( trhs  == mdnum3_t ):
+  #   elif ( trhs  == mdnum3 ):
 
   #     lhs = self
   #     orhs = other
@@ -717,7 +717,7 @@ cdef class lil_mdarr3_t:
 
   #   # end if 
       
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
 
   # #---------------------------------------------------------------------------------------------------  
 
@@ -731,11 +731,11 @@ cdef class lil_mdarr3_t:
   #   
 
   #   cdef mdarr3_t res 
-  #   cdef mdarr3_t S = self
+  #   cdef mdmat3 S = self
 
   #   res = mdarr3_pow( &S.arr, n)
     
-  #   return mdarr3_t.create(&res)
+  #   return mdmat3.create(&res)
 
   # #---------------------------------------------------------------------------------------------------  
 
@@ -749,9 +749,9 @@ cdef class lil_mdarr3_t:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef lil_mdarr3_t res
+    cdef lil_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -782,9 +782,9 @@ cdef class lil_mdarr3_t:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef lil_mdarr3_t res
+    cdef lil_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -808,16 +808,16 @@ cdef class lil_mdarr3_t:
   #***************************************************************************************************
   cpdef extract_im(self, object hum_dir):
     """
-    PURPOSE: Get the corresponding imaginary direction in the mdarr3_t object.
+    PURPOSE: Get the corresponding imaginary direction in the mdmat3 object.
     """
     #*************************************************************************************************
     
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef lil_mdarr3_t res
+    cdef lil_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -841,16 +841,16 @@ cdef class lil_mdarr3_t:
   #***************************************************************************************************
   cpdef  extract_deriv(self, object hum_dir):
     """
-    PURPOSE: Get the corresponding derivative in the mdarr3_t object, as OTI number.
+    PURPOSE: Get the corresponding derivative in the mdmat3 object, as OTI number.
     """
     #*************************************************************************************************
     
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef lil_mdarr3_t res
+    cdef lil_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -874,14 +874,14 @@ cdef class lil_mdarr3_t:
   #***************************************************************************************************
   cpdef  get_order_im(self, ord_t order):
     """
-    PURPOSE: Get the corresponding derivative in the mdarr3_t object, as OTI number.
+    PURPOSE: Get the corresponding derivative in the mdmat3 object, as OTI number.
     """
     #*************************************************************************************************
     
     
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef lil_mdarr3_t res
+    cdef lil_mdmat3 res
 
     res = self.zeros_like()
 
@@ -912,9 +912,9 @@ cdef class lil_mdarr3_t:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef mdnum3_t ores, oval
+    cdef mdnum3 ores, oval
     cdef uint64_t i, j, k
-    cdef lil_mdarr3_t res
+    cdef lil_mdmat3 res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -936,7 +936,7 @@ cdef class lil_mdarr3_t:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
 
     """
@@ -945,7 +945,7 @@ cdef class lil_mdarr3_t:
     cdef bases_t  size       = dhl.p_dh[0].Nbasis
     cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
     cdef uint64_t i, j
-    cdef mdnum3_t oval
+    cdef mdnum3 oval
     
     # Initialize all elements as zero (deactivated)
     for i in range(size):
@@ -959,7 +959,7 @@ cdef class lil_mdarr3_t:
       for j in range(len(self.data[i])):
         
         oval = self.data[i][j]
-        mdnum3_get_active( &oval.num, bases_list)
+        mdnum3_get_active_bases( &oval.num, bases_list)
 
       # end for 
 
@@ -985,11 +985,11 @@ cdef class lil_mdarr3_t:
     """
     PORPUSE:  Convert the matrix to CSR format.
     """
-    return csr_mdarr3_t(self,shape=self.shape)
+    return csr_mdmat3(self,shape=self.shape)
 
   #---------------------------------------------------------------------------------------------------
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: END OF CLASS mdarr3_t ::::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS mdmat3 ::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

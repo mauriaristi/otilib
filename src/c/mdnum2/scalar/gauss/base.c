@@ -12,7 +12,7 @@ ord_t femdnum2_get_order( femdnum2_t* num ){
     // Finds the maximum order in the array.
     for( i = 0; i<num->nip; i++ ){
         
-        order = MAX(order,num->p_data[0].order);
+        order = MAX(order, mdnum2_get_order(&num->p_data[i]) );
     
     }
 
@@ -414,8 +414,7 @@ mdnum2_t femdnum2_get_item_k(femdnum2_t* num, uint64_t k){
     
     if (k < num->nip){
 
-        res = num->p_data[k];   
-        res.flag = 0;
+        res = num->p_data[k];
 
     } else {
 
@@ -464,10 +463,7 @@ femdnum2_t femdnum2_zeros(uint64_t nip){
 // ****************************************************************************************************
 inline femdnum2_t femdnum2_createEmpty(uint64_t nip){
 
-    femdnum2_t  res ;
-    ndir_t p_nnz[_MAXORDER_OTI];
-    ord_t    ordi;
-    uint64_t i;    
+    femdnum2_t  res ;  
     void * memory = NULL;
 
     // Allocate memory and check if correctly allocated.
@@ -489,23 +485,12 @@ inline femdnum2_t femdnum2_createEmpty(uint64_t nip){
 
 // ****************************************************************************************************
 void femdnum2_free(femdnum2_t* num){
-    
-    uint64_t i;
 
     // Free all memory within each coefficient in p_array
 
     if (num->p_data != NULL){
-
-        // Free all arrays.
-        for (i = 0; i<num->nip; i++){
-        
-            mdnum2_free(&num->p_data[i]); 
-
-        }
-
         // Free pointer 
         free(num->p_data);
-
     }
 
     *num = femdnum2_init();
@@ -529,7 +514,7 @@ inline femdnum2_t femdnum2_init(void){
 // ****************************************************************************************************
 inline femdnum2_t femdnum2_empty_like(femdnum2_t* arr){
 
-    femdnum2_t res = femdnum2_createEmpty(arr->nip, 0, 0);
+    femdnum2_t res = femdnum2_createEmpty(arr->nip);
 
     return res;
 

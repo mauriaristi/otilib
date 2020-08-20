@@ -29,7 +29,7 @@ mdarr3_t mdarr3_taylor_integrate( coeff_t* deltas, mdarr3_t* arr){
     
     mdarr3_t res;
 
-    res = mdarr3_zeros( arr->nrows, arr->ncols, 0, 0);
+    res = mdarr3_zeros( arr->nrows, arr->ncols);
 
     mdarr3_taylor_integrate_to( deltas, arr, &res);
 
@@ -59,7 +59,7 @@ mdarr3_t mdarr3_get_order_im( ord_t order, mdarr3_t* arr){
     
     mdarr3_t res;
 
-    res = mdarr3_zeros( arr->nrows, arr->ncols, 0, 0);
+    res = mdarr3_zeros( arr->nrows, arr->ncols);
 
     mdarr3_get_order_im_to( order, arr, &res);
 
@@ -89,7 +89,7 @@ mdarr3_t mdarr3_truncate_im( imdir_t idx, ord_t order, mdarr3_t* arr){
     
     mdarr3_t res;
 
-    res = mdarr3_zeros( arr->nrows, arr->ncols, 0, 0);
+    res = mdarr3_zeros( arr->nrows, arr->ncols);
 
     mdarr3_truncate_im_to( idx, order, arr, &res);
 
@@ -282,8 +282,7 @@ void mdarr3_set_slice_O( mdarr3_t* arr,
             // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
 
             mdnum3_copy_to( &arr->p_data[  j +  i * arr->ncols ], 
-                          &res->p_data[ jj + ii * res->ncols ], 
-                          dhl);
+                          &res->p_data[ jj + ii * res->ncols ]);
 
             jj += stepj;
         
@@ -327,8 +326,7 @@ void mdarr3_set_slice_o( mdnum3_t* num,
         for ( j = 0; j < ncols; j++){
 
             mdnum3_set_o( num, 
-                       &res->p_data[ jj + ii * res->ncols ],  
-                        dhl);
+                       &res->p_data[ jj + ii * res->ncols ]);
 
             jj += stepj;
         
@@ -382,8 +380,7 @@ void mdarr3_set_slice_r( coeff_t val,
             // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
 
             mdnum3_set_r( val, 
-                        &res->p_data[ jj + ii * res->ncols ],  
-                        dhl);
+                        &res->p_data[ jj + ii * res->ncols ]);
 
             jj += stepj;
         
@@ -426,7 +423,7 @@ darr_t mdarr3_get_im(imdir_t idx, ord_t order, mdarr3_t* arr){
 // ****************************************************************************************************
 mdarr3_t mdarr3_extract_im(imdir_t idx, ord_t order, mdarr3_t* arr){
     
-    mdarr3_t res = mdarr3_zeros( arr->nrows, arr->ncols, 0, 0);
+    mdarr3_t res = mdarr3_zeros( arr->nrows, arr->ncols);
     
     mdarr3_extract_im_to( idx, order, arr, &res);
 
@@ -474,7 +471,7 @@ darr_t mdarr3_get_deriv(imdir_t idx, ord_t order, mdarr3_t* arr){
 // ****************************************************************************************************
 mdarr3_t mdarr3_get_im_o(imdir_t idx, ord_t order, mdarr3_t* arr){
     
-    mdarr3_t res = mdarr3_zeros( arr->nrows, arr->ncols, 0, 0);
+    mdarr3_t res = mdarr3_zeros( arr->nrows, arr->ncols);
     
     mdarr3_get_im_to( idx, order, arr, &res);
 
@@ -503,7 +500,7 @@ void mdarr3_get_im_to(imdir_t idx, ord_t order, mdarr3_t* arr, mdarr3_t* res){
 // ****************************************************************************************************
 mdarr3_t mdarr3_get_deriv_o(imdir_t idx, ord_t order, mdarr3_t* arr){
     
-    mdarr3_t res = mdarr3_zeros( arr->nrows, arr->ncols, 0, 0);
+    mdarr3_t res = mdarr3_zeros( arr->nrows, arr->ncols);
     
     mdarr3_get_deriv_to( idx, order, arr, &res);
 
@@ -532,7 +529,7 @@ void mdarr3_get_deriv_to(imdir_t idx, ord_t order, mdarr3_t* arr, mdarr3_t* res)
 // ****************************************************************************************************
 mdarr3_t mdarr3_extract_deriv(imdir_t idx, ord_t order, mdarr3_t* arr){
     
-    mdarr3_t res = mdarr3_zeros( arr->nrows, arr->ncols, 0, 0);
+    mdarr3_t res = mdarr3_zeros( arr->nrows, arr->ncols);
     
     mdarr3_extract_deriv_to( idx, order, arr, &res);
 
@@ -568,7 +565,6 @@ inline mdnum3_t mdarr3_get_item_i(mdarr3_t* arr, uint64_t i){
     if (i < arr->size){
 
         res = arr->p_data[i];
-        res.flag = 0;
         
     } else {
 
@@ -622,8 +618,7 @@ void mdarr3_get_item_ij_to(mdarr3_t* arr, uint64_t i, uint64_t j, mdnum3_t* res)
 // ****************************************************************************************************
 mdarr3_t mdarr3_get_slice( mdarr3_t* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
-                        int64_t startj, int64_t stopj, int64_t stepj,
-                        dhelpl_t dhl){
+                        int64_t startj, int64_t stopj, int64_t stepj){
 
     uint64_t ncols, nrows; // Resulting number of rows and columns
     mdarr3_t res = mdarr3_init();
@@ -631,7 +626,7 @@ mdarr3_t mdarr3_get_slice( mdarr3_t* arr,
     nrows = slice_size(starti, stopi, stepi);
     ncols = slice_size(startj, stopj, stepj);
     
-    res = mdarr3_zeros( nrows, ncols, 0, 0);
+    res = mdarr3_zeros( nrows, ncols);
 
     mdarr3_get_slice_to( arr, starti, stopi, stepi, startj, stopj, stepj, &res);
 
@@ -674,8 +669,7 @@ void mdarr3_get_slice_to( mdarr3_t* arr,
             // printf("(ii,jj) (%lld,%lld) equates: %lld\n", ii, jj, jj + ii * arr->ncols );
 
             mdnum3_copy_to( &arr->p_data[ jj + ii * arr->ncols ], 
-                          &res->p_data[  j +  i * res->ncols ], 
-                          dhl);
+                          &res->p_data[  j +  i * res->ncols ]);
 
             jj += stepj;
         
@@ -699,7 +693,7 @@ mdarr3_t mdarr3_eye(uint64_t nrows){
     res = mdarr3_zeros( nrows, nrows);
     
     for (i=0; i<res.nrows; i++ ){
-        res.p_data[ i + i*res.ncols ].re = 1.0;
+        res.p_data[ i + i*res.ncols ].r = 1.0;
     }
     
     return res;
@@ -716,7 +710,7 @@ mdarr3_t mdarr3_ones(uint64_t nrows, uint64_t ncols){
     res = mdarr3_createEmpty(nrows, ncols);
 
     for (i=0; i<res.size; i++ ){
-        res.p_data[i].re = 1.0;
+        mdnum3_set_r(1.0,&res.p_data[i]);
     }
     
     return res;
@@ -733,54 +727,7 @@ mdarr3_t mdarr3_zeros(uint64_t nrows, uint64_t ncols){
     res = mdarr3_createEmpty(nrows, ncols);
     
     for (i=0; i<res.size; i++ ){
-        res.p_data[i].re = 0.0;
-    }
-    
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-mdarr3_t mdarr3_eye(uint64_t nrows, ndir_t* p_nnz, ord_t order){
-
-    mdarr3_t  res = mdarr3_zeros( nrows, nrows, p_nnz, order);
-    uint64_t i;
-    
-    for (i=0; i<res.nrows; i++ ){
-        
-        res.p_data[ i + i*res.ncols ].re = 1.0;
-
-    }
-    
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-mdarr3_t mdarr3_ones(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order){
-
-    mdarr3_t  res = mdarr3_createEmpty(nrows, ncols, p_nnz, order);
-    uint64_t i;
-    
-    for (i=0; i<res.size; i++ ){
-        res.p_data[i].re = 1.0;
-    }
-    
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-mdarr3_t mdarr3_zeros(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order){
-
-    mdarr3_t  res = mdarr3_createEmpty(nrows, ncols, p_nnz, order);
-    uint64_t i;
-    
-    for (i=0; i<res.size; i++ ){
-        res.p_data[i].re = 0.0;
+        mdnum3_set_r(0.0,&res.p_data[i]);
     }
     
     return res;
@@ -792,18 +739,9 @@ mdarr3_t mdarr3_zeros(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order
 inline mdarr3_t mdarr3_empty_like(mdarr3_t* arr){
 
     mdarr3_t  res;
-    if (arr->size!=0){
-        
-        res = mdarr3_createEmpty(arr->nrows, arr->ncols, arr->p_data[0].p_size, 
-            arr->p_data[0].order);    
-
-    }else{
-
-        res = mdarr3_createEmpty(arr->nrows, arr->ncols, NULL, 0);    
-
-    }
     
-    
+    res = mdarr3_createEmpty(arr->nrows, arr->ncols);    
+
     return res;
 
 }
@@ -833,8 +771,6 @@ inline mdarr3_t mdarr3_createEmpty(uint64_t nrows, uint64_t ncols){
 
 // ****************************************************************************************************
 void mdarr3_free(mdarr3_t* arr){
-    
-    uint64_t i;
 
     if ( (arr->flag != 0) && (arr->p_data!= NULL) ){
         

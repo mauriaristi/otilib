@@ -587,7 +587,7 @@ void {fenum_func}_integrate_r_to(coeff_t num, {fenum_type}* w, {num_type}* res){
 
     uint64_t i = 0;
 
-    {num_type} tmp = {num_func}_get_tmp( 1, {fenum_func}_get_order( w ));
+    {num_type} tmp ;
 
     // res may not come as zero, Modify this?
     {num_func}_set_r(0,&tmp);
@@ -621,7 +621,7 @@ void {fenum_func}_integrate_o_to({num_type}* num, {fenum_type}* w, {num_type}* r
 
     uint64_t i = 0;
 
-    {num_type} tmp = {num_func}_get_tmp( 1, {fenum_func}_get_order( w ));
+    {num_type} tmp ;
 
     // res may not come as zero, Modify this?
     {num_func}_set_r(0, &tmp);
@@ -654,7 +654,7 @@ void {fenum_func}_integrate_o_to({num_type}* num, {fenum_type}* w, {num_type}* r
 void {fenum_func}_integrate_f_to({fenum_type}* num, {fenum_type}* w, {num_type}* res){{
 
     uint64_t i = 0;
-    {num_type} tmp = {num_func}_get_tmp( 1, {fenum_func}_get_order( w ));
+    {num_type} tmp ;
 
     // Check dimensions.
     {fenum_func}_dimCheck( num, w);
@@ -690,7 +690,7 @@ void {fenum_func}_integrate_f_to({fenum_type}* num, {fenum_type}* w, {num_type}*
 void {fenum_func}_integrate_to({fenum_type}* num, {fenum_type}* w, {num_type}* res){{
 
     uint64_t i = 0;
-    {num_type} tmp = {num_func}_get_tmp( 1, {fenum_func}_get_order( w ));
+    {num_type} tmp ;
 
     // Check dimensions.
     {fenum_func}_dimCheck( num, w);

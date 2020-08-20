@@ -95,8 +95,7 @@ void femdarr3_get_item_ijk_to( femdarr3_t* arr, uint64_t i, uint64_t j, uint64_t
 ******************************************************************************************************/ 
 femdarr3_t femdarr3_get_slice(femdarr3_t* arr, 
                           int64_t starti, int64_t stopi, int64_t stepi,
-                          int64_t startj, int64_t stopj, int64_t stepj, 
-                           dhelpl_t dhl);
+                          int64_t startj, int64_t stopj, int64_t stepj);
 
 void      femdarr3_get_slice_to(femdarr3_t* arr, 
                           int64_t starti, int64_t stopi, int64_t stepi,

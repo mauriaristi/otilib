@@ -273,8 +273,7 @@ void {fearr_func}_extract_im_to(imdir_t idx, ord_t order, {fearr_type}* arr, {fe
 // ****************************************************************************************************
 {fearr_type} {fearr_func}_get_slice({fearr_type}* arr, 
                           int64_t starti, int64_t stopi, int64_t stepi,
-                          int64_t startj, int64_t stopj, int64_t stepj, 
-                           dhelpl_t dhl){{
+                          int64_t startj, int64_t stopj, int64_t stepj){{
     
     int64_t ncols, nrows;
     {fearr_type} res = {fearr_func}_init();
@@ -677,9 +676,7 @@ void {fearr_func}_set_all_r( coeff_t num, {fearr_type}* res ){{
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_eye( uint64_t size,
-                               uint64_t nip, bases_t  nbases, 
-                               ord_t    order     ){{ 
+{fearr_type} {fearr_func}_eye( uint64_t size, uint64_t nip ){{ 
     
     uint64_t i,k;
 
@@ -707,9 +704,7 @@ void {fearr_func}_set_all_r( coeff_t num, {fearr_type}* res ){{
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_zeros( uint64_t nrows,   uint64_t ncols, 
-                               uint64_t nip, bases_t  nbases, 
-                               ord_t    order     ){{ 
+{fearr_type} {fearr_func}_zeros( uint64_t nrows, uint64_t ncols, uint64_t nip ){{ 
     
     uint64_t i;
 
@@ -727,8 +722,7 @@ void {fearr_func}_set_all_r( coeff_t num, {fearr_type}* res ){{
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_ones( uint64_t nrows,   uint64_t ncols, uint64_t nip, bases_t  nbases, 
-                               ord_t    order     ){{ 
+{fearr_type} {fearr_func}_ones( uint64_t nrows, uint64_t ncols, uint64_t nip  ){{ 
     
     uint64_t i;
 
@@ -746,9 +740,7 @@ void {fearr_func}_set_all_r( coeff_t num, {fearr_type}* res ){{
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-{fearr_type} {fearr_func}_createEmpty( uint64_t nrows,   uint64_t ncols, 
-                                     uint64_t nip, bases_t  nbases, 
-                                     ord_t    order){{  
+{fearr_type} {fearr_func}_createEmpty( uint64_t nrows, uint64_t ncols, uint64_t nip){{  
     
     uint64_t i;
 

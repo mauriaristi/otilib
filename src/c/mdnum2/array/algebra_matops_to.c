@@ -7,7 +7,6 @@
 void mdarr2_dotproduct_OO_to(mdarr2_t* arr1, mdarr2_t* arr2, mdnum2_t* res){
 
     uint64_t i;
-    ord_t order;
     mdnum2_t tmp;
 
     // check for dimensions.
@@ -30,7 +29,6 @@ void mdarr2_dotproduct_OO_to(mdarr2_t* arr1, mdarr2_t* arr2, mdnum2_t* res){
 void mdarr2_dotproduct_RO_to(darr_t* arr1, mdarr2_t* arr2, mdnum2_t* res){
 
     uint64_t i;
-    ord_t order;
     mdnum2_t tmp;
 
     // check for dimensions.
@@ -62,7 +60,6 @@ void mdarr2_dotproduct_RO_to(darr_t* arr1, mdarr2_t* arr2, mdnum2_t* res){
 void mdarr2_matmul_OO_to(mdarr2_t* arr1, mdarr2_t* arr2, mdarr2_t* res){
 
     uint64_t i, j, k;
-    ord_t order;
     mdnum2_t tmp;
 
     // check for dimensions.
@@ -100,7 +97,6 @@ void mdarr2_matmul_OO_to(mdarr2_t* arr1, mdarr2_t* arr2, mdarr2_t* res){
 void mdarr2_matmul_OR_to(mdarr2_t* arr1, darr_t* arr2, mdarr2_t* res){
         
     uint64_t i, j, k;
-    ord_t order;
     mdnum2_t tmp;
 
     // check for dimensions.
@@ -135,7 +131,6 @@ void mdarr2_matmul_OR_to(mdarr2_t* arr1, darr_t* arr2, mdarr2_t* res){
 void mdarr2_matmul_RO_to(darr_t* arr1, mdarr2_t* arr2, mdarr2_t* res){
         
     uint64_t i, j, k;
-    ord_t order;
     mdnum2_t tmp;
 
     // check for dimensions.
@@ -189,8 +184,7 @@ void mdarr2_transpose_to(mdarr2_t* arr1, mdarr2_t* res){
 void mdarr2_invert_to(mdarr2_t* arr1, mdarr2_t* res){
 
     mdarr2_t tmpA1 = mdarr2_init();
-    ord_t order;
-    mdnum2_t tmp1, tmp2, tmp3, det;
+    mdnum2_t tmp1, det;
 
     // Check dimensions.
     mdarr2_dimCheck_O_squareness( arr1, res);
@@ -223,11 +217,7 @@ void mdarr2_invert_to(mdarr2_t* arr1, mdarr2_t* res){
 
     } else if (arr1->ncols == 3){
         
-        tmpA1 = mdarr2_zeros( 2, 2, 0, 0 );
-        tmpA1.p_data[0] = mdnum2_get_tmp(  9, order);
-        tmpA1.p_data[1] = mdnum2_get_tmp( 10, order);
-        tmpA1.p_data[2] = mdnum2_get_tmp( 11, order);
-        tmpA1.p_data[3] = mdnum2_get_tmp( 12, order);
+        tmpA1 = mdarr2_zeros( 2, 2 );
         
         mdarr2_det_to( arr1, &det); // Get determinant.
         
@@ -377,8 +367,6 @@ void mdarr2_invert_to(mdarr2_t* arr1, mdarr2_t* res){
 void mdarr2_det_to(mdarr2_t* arr1, mdnum2_t* res){
     
     uint64_t i, j;
-
-    ord_t order;
     mdnum2_t tmp1, tmp2, tmp3;
     // printf("Here 1\n");
 
@@ -395,20 +383,17 @@ void mdarr2_det_to(mdarr2_t* arr1, mdnum2_t* res){
         mdnum2_mul_oo_to(
             &arr1->p_data[0],
             &arr1->p_data[3],
-            &tmp1,
-            dhl   ); 
+            &tmp1   ); 
 
         mdnum2_mul_oo_to(
             &arr1->p_data[1],
             &arr1->p_data[2],
-            &tmp2,
-            dhl   ); 
+            &tmp2   ); 
 
         mdnum2_sub_oo_to(
             &tmp1,
             &tmp2,
-            res,
-            dhl);
+            res);
 
     } else if (arr1->ncols >= 3){
         
@@ -426,8 +411,7 @@ void mdarr2_det_to(mdarr2_t* arr1, mdnum2_t* res){
                 mdnum2_mul_oo_to(
                     &tmp1,
                     &arr1->p_data[ ( (i+j)%arr1->ncols ) + i*arr1->ncols],
-                    &tmp2,
-                    dhl   ); 
+                    &tmp2   ); 
 
                 mdnum2_set_o( &tmp2, &tmp1);
 
@@ -437,8 +421,7 @@ void mdarr2_det_to(mdarr2_t* arr1, mdnum2_t* res){
             mdnum2_sum_oo_to(
                 &tmp1,
                 &tmp3,
-                &tmp2,
-                dhl   );
+                &tmp2   );
 
             // tmp3 = tmp2;
             mdnum2_set_o( &tmp2, &tmp3);             
@@ -456,8 +439,7 @@ void mdarr2_det_to(mdarr2_t* arr1, mdnum2_t* res){
                 mdnum2_mul_oo_to(
                     &tmp1,
                     &arr1->p_data[ (arr1->ncols-1 - (i+j)%arr1->ncols ) + i*arr1->ncols],
-                    &tmp2,
-                    dhl   ); 
+                    &tmp2   ); 
 
                 mdnum2_set_o( &tmp2, &tmp1);
 
@@ -467,8 +449,7 @@ void mdarr2_det_to(mdarr2_t* arr1, mdnum2_t* res){
             mdnum2_sub_oo_to(
                 &tmp3,
                 &tmp1,
-                &tmp2,
-                dhl   );
+                &tmp2   );
 
             // tmp3 = tmp2;
             mdnum2_set_o( &tmp2, &tmp3);  
@@ -490,7 +471,6 @@ void mdarr2_norm_to(mdarr2_t* arr1, mdnum2_t* res){
     
     
     uint64_t i;
-    ord_t order;
     mdnum2_t tmp1, tmp2, tmp3;
     
     mdnum2_set_r( 0.0, &tmp3);    
@@ -519,7 +499,6 @@ void mdarr2_pnorm_to(mdarr2_t* arr1, coeff_t p, mdnum2_t* res){
     
     
     uint64_t i;
-    ord_t order;
     mdnum2_t tmp1, tmp2, tmp3;
     
     mdnum2_set_r( 0.0, &tmp3);    

@@ -17,7 +17,7 @@ void femdnum2_dimCheck(femdnum2_t* arr1,femdnum2_t* arr2);
 @param[in] list_vals List of bases active.
 @param[in] dhl       Direction helper list.
 ******************************************************************************************************/
-void femdnum2_get_active(femdnum2_t* num, imdir_t* list_vals);
+void femdnum2_get_active_bases(femdnum2_t* num, imdir_t* list_vals);
 // ----------------------------------------------------------------------------------------------------
 
 #endif

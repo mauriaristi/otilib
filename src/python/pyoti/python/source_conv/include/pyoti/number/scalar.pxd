@@ -14,8 +14,6 @@ cdef class {num_pytype}:
   
   @staticmethod
   cdef {num_pytype} create({num_type}* num, uint8_t FLAGS = *)
-  @staticmethod
-  cdef {num_pytype} init()
 
   cpdef get_deriv(     self, object humdir)
   cpdef get_im(        self, object humdir)

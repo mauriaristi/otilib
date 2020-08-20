@@ -866,7 +866,7 @@ cdef class csr_{arr_pytype}:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
     PORPUSE: Get the bases with non-zero coefficients in the OTI number.
     """
@@ -887,7 +887,7 @@ cdef class csr_{arr_pytype}:
     for i in range(self.data.size):
 
       oval = self.data[i]
-      {num_func}_get_active( &oval.num, bases_list)
+      {num_func}_get_active_bases( &oval.num, bases_list)
 
     # end if 
 
@@ -931,8 +931,6 @@ cdef void csr{arr_pytype}_matmul_SO_to(csr_{arr_pytype} lhs, {arr_pytype} rhs, {
   # end if
 
   # Extract temporal 5.
-  order = max(lhs.order, rhs.order )
-  tmp = {num_func}_get_tmp( 5, order )
 
   for i in range(lhs.nrows):
       

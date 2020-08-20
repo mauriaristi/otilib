@@ -1,9 +1,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  femdarr3_t    :::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  mdmatfe3    :::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class femdarr3_t:
+cdef class mdmatfe3:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -14,9 +14,9 @@ cdef class femdarr3_t:
 
   #***************************************************************************************************
   
-  def __init__(self, shape, uint64_t nip, ord_t order = 0, bases_t nbases = 0): 
+  def __init__(self, shape, uint64_t nip): 
     """
-    PURPOSE:      Python level constructor of the femdarr3_t class.
+    PURPOSE:      Python level constructor of the mdmatfe3 class.
 
     DESCRIPTION:  Creates a new matrix, reserving memory Assumes coefficient values to be all zeroes.
                  
@@ -42,7 +42,7 @@ cdef class femdarr3_t:
 
       else:
 
-        raise ValueError("Cant create femdarr3_t for dimensions greater than 2.")
+        raise ValueError("Cant create mdmatfe3 for dimensions greater than 2.")
       
       # end if   
        
@@ -155,7 +155,7 @@ cdef class femdarr3_t:
 
   #***************************************************************************************************
   @staticmethod
-  cdef femdarr3_t create(femdarr3_t* arr, uint8_t FLAGS = 1):
+  cdef mdmatfe3 create(femdarr3_t* arr, uint8_t FLAGS = 1):
     """
     PURPOSE:      C-level constructor of the class. Use this when creating objects within 
                   Cython
@@ -164,7 +164,7 @@ cdef class femdarr3_t:
     #*************************************************************************************************
 
     # create new empty object:
-    cdef femdarr3_t res = <femdarr3_t> femdarr3_t.__new__(femdarr3_t)
+    cdef mdmatfe3 res = <mdmatfe3> mdmatfe3.__new__(mdmatfe3)
 
     res.arr = arr[0]
     res.FLAGS = FLAGS
@@ -183,7 +183,7 @@ cdef class femdarr3_t:
 
     
 
-    out =  "femdarr3_t< "
+    out =  "mdmatfe3< "
     out += "nip: "+str(self.nip)+ ", "
     out += "re:\n"
     # first print the real part:
@@ -207,7 +207,7 @@ cdef class femdarr3_t:
 
     cdef np.ndarray[uint64_t, ndim=1] tmp 
 
-    out =  "femdarr3_t< "
+    out =  "mdmatfe3< "
     out += "shape: "+str(self.shape)+ ", "
     out += "re:\n"
     # first print the real part:
@@ -230,9 +230,9 @@ cdef class femdarr3_t:
     
 
     cdef uint64_t i
-    cdef mdarr3_t tmp
+    cdef mdmat3 tmp
 
-    out =  "femdarr3_t< "
+    out =  "mdmatfe3< "
     out += "nip: "+str(self.nip)+ ", \n"
 
     for i in range(self.nip):
@@ -266,7 +266,7 @@ cdef class femdarr3_t:
     
   
     cdef mdnum3_t d_mdnum3
-    cdef mdnum3_t   mdnum3
+    cdef mdnum3   mdnum3
 
     out  = self.list_repr()
 
@@ -284,7 +284,7 @@ cdef class femdarr3_t:
     
   
     cdef mdnum3_t d_mdnum3
-    cdef mdnum3_t   mdnum3
+    cdef mdnum3   mdnum3
 
     out  = self.list_repr()
 
@@ -320,7 +320,7 @@ cdef class femdarr3_t:
         startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
 
         Fres = femdarr3_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
-        res  = femdarr3_t.create(&Fres)
+        res  = mdmatfe3.create(&Fres)
 
       else:
 
@@ -329,7 +329,7 @@ cdef class femdarr3_t:
       # end if 
 
     #   ores = mdarr3_get_item_ij( &self.arr, val[0], val[1])
-    #   res  = mdnum3_t.create( &ores, FLAGS = 0 )
+    #   res  = mdnum3.create( &ores, FLAGS = 0 )
 
     elif tval == slice: #slice of multiple items
       
@@ -342,7 +342,7 @@ cdef class femdarr3_t:
       # print("j: ( {0}, {1}, {2})".format(startj, stopj, stepj) )
 
       Fres = femdarr3_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
-      res  = femdarr3_t.create(&Fres)
+      res  = mdmatfe3.create(&Fres)
     
     elif tval == tuple:
       
@@ -357,7 +357,7 @@ cdef class femdarr3_t:
           if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
           
             fres = femdarr3_get_item_ij( &self.arr, val[0], val[1])
-            res  = femdnum3_t.create( &fres )
+            res  = mdnumfe3.create( &fres )
           
           else:
 
@@ -374,7 +374,7 @@ cdef class femdarr3_t:
             startj, stopj, stepj = val[1].indices( self.arr.ncols )
 
             Fres = femdarr3_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
-            res  = femdarr3_t.create(&Fres)  
+            res  = mdmatfe3.create(&Fres)  
 
           else:
 
@@ -391,7 +391,7 @@ cdef class femdarr3_t:
             startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
 
             Fres = femdarr3_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
-            res  = femdarr3_t.create(&Fres)  
+            res  = mdmatfe3.create(&Fres)  
 
           else:
 
@@ -406,7 +406,7 @@ cdef class femdarr3_t:
           startj, stopj, stepj = val[1].indices( self.arr.ncols )
 
           Fres = femdarr3_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
-          res  = femdarr3_t.create(&Fres) 
+          res  = mdmatfe3.create(&Fres) 
 
         else:
 
@@ -440,19 +440,19 @@ cdef class femdarr3_t:
 
     tvalue = type(value)
 
-    if ( tvalue == mdnum3_t ):
+    if ( tvalue == mdnum3 ):
 
       self.__setitem__o( indices, value )
 
-    elif ( tvalue == femdnum3_t ):
+    elif ( tvalue == mdnumfe3 ):
 
       self.__setitem__f( indices, value )
 
-    elif ( tvalue == mdarr3_t ):
+    elif ( tvalue == mdmat3 ):
 
       self.__setitem__O( indices, value )
 
-    elif ( tvalue == femdarr3_t ):
+    elif ( tvalue == mdmatfe3 ):
 
       self.__setitem__F( indices, value )
 
@@ -461,7 +461,7 @@ cdef class femdarr3_t:
       self.__setitem__r( indices, value )
 
     else:
-      raise IndexError("ERROR: Cant set item of type {0} in mdarr3_t object.".format(tvalue))
+      raise IndexError("ERROR: Cant set item of type {0} in mdmat3 object.".format(tvalue))
     # end if 
 
   #--------------------------------------------------------------------------------------------------- 
@@ -563,9 +563,9 @@ cdef class femdarr3_t:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cdef __setitem__o(self,  object val, mdnum3_t value):
+  cdef __setitem__o(self,  object val, mdnum3 value):
     """
-    PURPOSE: Set item from mdnum3_t value.
+    PURPOSE: Set item from mdnum3 value.
     """
     #*************************************************************************************************
     
@@ -659,9 +659,9 @@ cdef class femdarr3_t:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cdef __setitem__f(self,  object val, femdnum3_t value):
+  cdef __setitem__f(self,  object val, mdnumfe3 value):
     """
-    PURPOSE: Set item from femdnum3_t value.
+    PURPOSE: Set item from mdnumfe3 value.
     """
     #*************************************************************************************************
     
@@ -755,9 +755,9 @@ cdef class femdarr3_t:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cdef __setitem__F(self,  object val, femdarr3_t value):
+  cdef __setitem__F(self,  object val, mdmatfe3 value):
     """
-    PURPOSE: Set item from femdarr3_t value.
+    PURPOSE: Set item from mdmatfe3 value.
     """
     #*************************************************************************************************
     
@@ -841,9 +841,9 @@ cdef class femdarr3_t:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cdef __setitem__O(self,  object val, mdarr3_t value):
+  cdef __setitem__O(self,  object val, mdmat3 value):
     """
-    PURPOSE: Set item from femdarr3_t value.
+    PURPOSE: Set item from mdmatfe3 value.
     """
     #*************************************************************************************************
     
@@ -937,7 +937,7 @@ cdef class femdarr3_t:
     
     cdef femdarr3_t res = femdarr3_copy(&self.arr)
 
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
@@ -951,7 +951,7 @@ cdef class femdarr3_t:
     
     cdef femdarr3_t res = femdarr3_neg(&self.arr)
 
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
@@ -964,11 +964,11 @@ cdef class femdarr3_t:
     
     
     cdef femdarr3_t res 
-    cdef femdarr3_t Flhs,Frhs
-    cdef femdnum3_t  flhs,frhs
+    cdef mdmatfe3 Flhs,Frhs
+    cdef mdnumfe3  flhs,frhs
     cdef dmat    Dlhs,Drhs
-    cdef mdnum3_t olhs,orhs
-    cdef mdarr3_t   Olhs,Orhs
+    cdef mdnum3 olhs,orhs
+    cdef mdmat3   Olhs,Orhs
     
     tlhs = type(self)
     trhs = type(other)
@@ -980,28 +980,28 @@ cdef class femdarr3_t:
 
       res = femdarr3_sum_FF(&Flhs.arr,&Frhs.arr)
 
-    elif (tlhs == femdnum3_t): # fF
+    elif (tlhs == mdnumfe3): # fF
 
       flhs = self
       Frhs = other
 
       res = femdarr3_sum_fF(&flhs.num,&Frhs.arr)
 
-    elif (trhs == femdnum3_t): # Ff
+    elif (trhs == mdnumfe3): # Ff
 
       Flhs = self
       frhs = other
 
       res = femdarr3_sum_fF(&frhs.num,&Flhs.arr)
 
-    elif (tlhs == mdarr3_t): # OF
+    elif (tlhs == mdmat3): # OF
 
       Olhs = self
       Frhs = other
 
       res = femdarr3_sum_OF(&Olhs.arr,&Frhs.arr)
 
-    elif (trhs == mdarr3_t): # FO
+    elif (trhs == mdmat3): # FO
 
       Flhs = self
       Orhs = other
@@ -1022,14 +1022,14 @@ cdef class femdarr3_t:
 
     #   res = femdarr3_sum_RO(&Drhs.arr,&Flhs.arr)
 
-    elif ( tlhs  == mdnum3_t ): # oF
+    elif ( tlhs  == mdnum3 ): # oF
 
       olhs = self
       Frhs = other
 
       res = femdarr3_sum_oF(&olhs.num,&Frhs.arr)
 
-    elif ( trhs  == mdnum3_t ): # oF
+    elif ( trhs  == mdnum3 ): # oF
 
       Flhs = self
       orhs = other
@@ -1052,7 +1052,7 @@ cdef class femdarr3_t:
 
     # end if 
       
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -1077,11 +1077,11 @@ cdef class femdarr3_t:
     
     
     cdef femdarr3_t res 
-    cdef femdarr3_t Flhs,Frhs
-    cdef femdnum3_t  flhs,frhs
+    cdef mdmatfe3 Flhs,Frhs
+    cdef mdnumfe3  flhs,frhs
     cdef dmat    Dlhs,Drhs
-    cdef mdnum3_t olhs,orhs
-    cdef mdarr3_t   Olhs,Orhs
+    cdef mdnum3 olhs,orhs
+    cdef mdmat3   Olhs,Orhs
     
     tlhs = type(self)
     trhs = type(other)
@@ -1093,28 +1093,28 @@ cdef class femdarr3_t:
 
       res = femdarr3_sub_FF(&Flhs.arr,&Frhs.arr)
 
-    elif (tlhs == femdnum3_t): # fF
+    elif (tlhs == mdnumfe3): # fF
 
       flhs = self
       Frhs = other
 
       res = femdarr3_sub_fF(&flhs.num,&Frhs.arr)
 
-    elif (trhs == femdnum3_t): # Ff
+    elif (trhs == mdnumfe3): # Ff
 
       Flhs = self
       frhs = other
 
       res = femdarr3_sub_Ff(&Flhs.arr,&frhs.num)
 
-    elif (tlhs == mdarr3_t): # OF
+    elif (tlhs == mdmat3): # OF
 
       Olhs = self
       Frhs = other
 
       res = femdarr3_sub_OF(&Olhs.arr,&Frhs.arr)
 
-    elif (trhs == mdarr3_t): # FO
+    elif (trhs == mdmat3): # FO
 
       Flhs = self
       Orhs = other
@@ -1135,14 +1135,14 @@ cdef class femdarr3_t:
 
     #   res = femdarr3_sub_OR(&Drhs.arr,&Flhs.arr)
 
-    elif ( tlhs  == mdnum3_t ): # oF
+    elif ( tlhs  == mdnum3 ): # oF
 
       olhs = self
       Frhs = other
 
       res = femdarr3_sub_oF(&olhs.num,&Frhs.arr)
 
-    elif ( trhs  == mdnum3_t ): # Fo
+    elif ( trhs  == mdnum3 ): # Fo
 
       Flhs = self
       orhs = other
@@ -1165,7 +1165,7 @@ cdef class femdarr3_t:
 
     # end if 
       
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #-----------------------------------------------------------------------------------------------------
 
@@ -1190,11 +1190,11 @@ cdef class femdarr3_t:
     
     
     cdef femdarr3_t res 
-    cdef femdarr3_t Flhs,Frhs
-    cdef femdnum3_t  flhs,frhs
+    cdef mdmatfe3 Flhs,Frhs
+    cdef mdnumfe3  flhs,frhs
     cdef dmat    Dlhs,Drhs
-    cdef mdnum3_t olhs,orhs
-    cdef mdarr3_t   Olhs,Orhs
+    cdef mdnum3 olhs,orhs
+    cdef mdmat3   Olhs,Orhs
     
     tlhs = type(self)
     trhs = type(other)
@@ -1206,28 +1206,28 @@ cdef class femdarr3_t:
 
       res = femdarr3_mul_FF(&Flhs.arr,&Frhs.arr)
 
-    elif (tlhs == femdnum3_t): # fF
+    elif (tlhs == mdnumfe3): # fF
 
       flhs = self
       Frhs = other
 
       res = femdarr3_mul_fF(&flhs.num,&Frhs.arr)
 
-    elif (trhs == femdnum3_t): # Ff
+    elif (trhs == mdnumfe3): # Ff
 
       Flhs = self
       frhs = other
 
       res = femdarr3_mul_fF(&frhs.num,&Flhs.arr)
 
-    elif (tlhs == mdarr3_t): # OF
+    elif (tlhs == mdmat3): # OF
 
       Olhs = self
       Frhs = other
 
       res = femdarr3_mul_OF(&Olhs.arr,&Frhs.arr)
 
-    elif (trhs == mdarr3_t): # FO
+    elif (trhs == mdmat3): # FO
 
       Flhs = self
       Orhs = other
@@ -1248,14 +1248,14 @@ cdef class femdarr3_t:
 
     #   res = femdarr3_mul_RO(&Drhs.arr,&Flhs.arr)
 
-    elif ( tlhs  == mdnum3_t ): # oF
+    elif ( tlhs  == mdnum3 ): # oF
 
       olhs = self
       Frhs = other
 
       res = femdarr3_mul_oF(&olhs.num,&Frhs.arr)
 
-    elif ( trhs  == mdnum3_t ): # oF
+    elif ( trhs  == mdnum3 ): # oF
 
       Flhs = self
       orhs = other
@@ -1278,7 +1278,7 @@ cdef class femdarr3_t:
 
     # end if 
       
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -1303,11 +1303,11 @@ cdef class femdarr3_t:
     
     
     cdef femdarr3_t res 
-    cdef femdarr3_t Flhs,Frhs
-    cdef femdnum3_t  flhs,frhs
+    cdef mdmatfe3 Flhs,Frhs
+    cdef mdnumfe3  flhs,frhs
     cdef dmat    Dlhs,Drhs
-    cdef mdnum3_t olhs,orhs
-    cdef mdarr3_t   Olhs,Orhs
+    cdef mdnum3 olhs,orhs
+    cdef mdmat3   Olhs,Orhs
     
     tlhs = type(self)
     trhs = type(other)
@@ -1319,28 +1319,28 @@ cdef class femdarr3_t:
 
       res = femdarr3_div_FF(&Flhs.arr,&Frhs.arr)
 
-    elif (tlhs == femdnum3_t): # fF
+    elif (tlhs == mdnumfe3): # fF
 
       flhs = self
       Frhs = other
 
       res = femdarr3_div_fF(&flhs.num,&Frhs.arr)
 
-    elif (trhs == femdnum3_t): # Ff
+    elif (trhs == mdnumfe3): # Ff
 
       Flhs = self
       frhs = other
 
       res = femdarr3_div_Ff(&Flhs.arr,&frhs.num)
 
-    elif (tlhs == mdarr3_t): # OF
+    elif (tlhs == mdmat3): # OF
 
       Olhs = self
       Frhs = other
 
       res = femdarr3_div_OF(&Olhs.arr,&Frhs.arr)
 
-    elif (trhs == mdarr3_t): # FO
+    elif (trhs == mdmat3): # FO
 
       Flhs = self
       Orhs = other
@@ -1361,14 +1361,14 @@ cdef class femdarr3_t:
 
     #   res = femdarr3_div_OR(&Drhs.arr,&Flhs.arr)
 
-    elif ( tlhs  == mdnum3_t ): # oF
+    elif ( tlhs  == mdnum3 ): # oF
 
       olhs = self
       Frhs = other
 
       res = femdarr3_div_oF(&olhs.num,&Frhs.arr)
 
-    elif ( trhs  == mdnum3_t ): # Fo
+    elif ( trhs  == mdnum3 ): # Fo
 
       Flhs = self
       orhs = other
@@ -1391,7 +1391,7 @@ cdef class femdarr3_t:
 
     # end if 
       
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #-----------------------------------------------------------------------------------------------------
 
@@ -1408,11 +1408,11 @@ cdef class femdarr3_t:
     
 
     cdef femdarr3_t res 
-    cdef femdarr3_t S = self
+    cdef mdmatfe3 S = self
 
     res = femdarr3_pow( &S.arr, n)
     
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -1424,32 +1424,32 @@ cdef class femdarr3_t:
     #*************************************************************************************************
     
 
-    cdef femdnum3_t  frhs
-    cdef mdnum3_t orhs
+    cdef mdnumfe3  frhs
+    cdef mdnum3 orhs
     cdef coeff_t rrhs
 
-    cdef femdarr3_t Frhs
-    cdef mdarr3_t   Orhs
+    cdef mdmatfe3 Frhs
+    cdef mdmat3   Orhs
     cdef dmat    Rrhs
 
     trhs = type(rhs)
 
-    if   trhs is mdnum3_t:
+    if   trhs is mdnum3:
 
       orhs = rhs
       femdarr3_set_o( &orhs.num, &self.arr)
 
-    elif trhs is femdnum3_t:
+    elif trhs is mdnumfe3:
 
       frhs = rhs
       femdarr3_set_f( &frhs.num, &self.arr)      
 
-    # elif trhs is mdarr3_t:
+    # elif trhs is mdmat3:
 
     #   Orhs = rhs
     #   femdarr3_set_O( &Orhs.arr, &self.arr)   
 
-    # elif trhs is femdarr3_t:
+    # elif trhs is mdmatfe3:
 
     #   Frhs = rhs
     #   femdarr3_set_F( &Frhs.arr, &self.arr)   
@@ -1463,7 +1463,7 @@ cdef class femdarr3_t:
       
       except:
       
-        raise ValueError("Supported values are real scalar, mdnum3_t and femdnum3_t.")
+        raise ValueError("Supported values are real scalar, mdnum3 and mdnumfe3.")
 
       # end try
 
@@ -1472,7 +1472,7 @@ cdef class femdarr3_t:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def gauss_integrate(self, femdnum3_t w  ):
+  def gauss_integrate(self, mdnumfe3 w  ):
     """
     PURPOSE: Get the corresponding derivative of the system.
     """
@@ -1483,7 +1483,7 @@ cdef class femdarr3_t:
 
     res = femdarr3_integrate( &self.arr, &w.num)
 
-    return mdarr3_t.create(&res)
+    return mdmat3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -1504,7 +1504,7 @@ cdef class femdarr3_t:
     
     res = femdarr3_truncate_im( indx, order, &self.arr) 
 
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -1525,7 +1525,7 @@ cdef class femdarr3_t:
     
     res = femdarr3_extract_im( indx, order, &self.arr) 
 
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -1546,7 +1546,7 @@ cdef class femdarr3_t:
     
     res = femdarr3_extract_deriv( indx, order, &self.arr) 
 
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -1567,7 +1567,7 @@ cdef class femdarr3_t:
     
     res = femdarr3_get_im( indx, order, &self.arr) 
 
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -1596,14 +1596,14 @@ cdef class femdarr3_t:
 
     res = femdarr3_get_item_k( &self.arr, ip)
     
-    return mdarr3_t.create(&res)
+    return mdmat3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  cpdef  get_item_ij( self, int64_t i, int64_t j, femdnum3_t out=None):
+  cpdef  get_item_ij( self, int64_t i, int64_t j, mdnumfe3 out=None):
     """
-    PURPOSE:      Get an item from femdarr3_t array.
+    PURPOSE:      Get an item from mdmatfe3 array.
 
     """
     #*************************************************************************************************
@@ -1617,7 +1617,7 @@ cdef class femdarr3_t:
     
     if out is None:
       res = femdarr3_get_item_ij( &self.arr, i, j)
-      return femdnum3_t.create(&res)
+      return mdnumfe3.create(&res)
     else:
       femdarr3_get_item_ij_to(  &self.arr, i,  j, &out.num)
     # end if 
@@ -1641,14 +1641,14 @@ cdef class femdarr3_t:
     
     res = femdarr3_get_deriv( indx, order, &self.arr) 
 
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
   
   #***************************************************************************************************
   cpdef  get_order_im(self, ord_t order):
     """
-    PURPOSE: Get the corresponding derivative in the mdarr3_t object, as OTI number.
+    PURPOSE: Get the corresponding derivative in the mdmat3 object, as OTI number.
     """
     #*************************************************************************************************
     
@@ -1657,12 +1657,12 @@ cdef class femdarr3_t:
     
     res = femdarr3_get_order_im( order, &self.arr)
 
-    return femdarr3_t.create(&res)
+    return mdmatfe3.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def get_active(self):
+  def get_active_bases(self):
     """
 
     """
@@ -1679,7 +1679,7 @@ cdef class femdarr3_t:
 
     # end for 
 
-    femdarr3_get_active( &self.arr, bases_list)
+    femdarr3_get_active_bases( &self.arr, bases_list)
 
     res = []
     for i in range(size):
@@ -1698,6 +1698,6 @@ cdef class femdarr3_t:
   
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: END OF CLASS femdarr3_t ::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS mdmatfe3 ::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 

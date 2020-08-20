@@ -17,7 +17,7 @@ void {fenum_func}_dimCheck({fenum_type}* arr1,{fenum_type}* arr2);
 @param[in] list_vals List of bases active.
 @param[in] dhl       Direction helper list.
 ******************************************************************************************************/
-void {fenum_func}_get_active({fenum_type}* num, imdir_t* list_vals);
+void {fenum_func}_get_active_bases({fenum_type}* num, imdir_t* list_vals);
 // ----------------------------------------------------------------------------------------------------
 
 #endif

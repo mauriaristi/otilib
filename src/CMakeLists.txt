@@ -55,7 +55,25 @@ add_library (oti    c/core.c
 	                c/dense.c
 	                c/sparse.c
                     c/fem.c
+                    # add here static libraries (new)
+                    # Add Multidual libraries.
+                    c/mdnum2.c
+                    c/mdnum3.c
+                    c/mdnum4.c
+                    c/mdnum5.c
+                    # Add OTI static libraries
+                    c/onumm1n1.c
+                    c/onumm1n2.c
+                    c/onumm1n3.c
+                    c/onumm1n5.c
+                    c/onumm1n10.c
+                    c/onumm10n1.c
+                    c/onumm2n5.c
+                    c/onumm2n2.c
+                    c/onumm3n3.c
                     )
+
+
                     
 
 
@@ -68,6 +86,7 @@ endif(APPLE)
 
 # Link to math libraries
 target_link_libraries(oti m)
+
 # -------------------------------------------------------------------
 # --------------------------- BUILD OTI -----------------------------
 # -------------------------------------------------------------------
@@ -229,3 +248,6 @@ FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
 # # -------------------------------------------------------------------
 # # --------------------- BUILD OTILIB - PYTHON -----------------------
 # # -------------------------------------------------------------------
+
+# add_library (static_oti   c/mdnum3.c)
+# target_link_libraries(static_oti oti)

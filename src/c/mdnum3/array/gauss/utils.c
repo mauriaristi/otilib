@@ -207,14 +207,14 @@ inline void femdarr3_dimCheck_F_transpose( femdarr3_t* arr1, femdarr3_t* res){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void femdarr3_get_active(femdarr3_t* arr, imdir_t* list_vals){
+void femdarr3_get_active_bases(femdarr3_t* arr, imdir_t* list_vals){
     
     uint64_t i;
     
     // Finds the active imaginary directions in the array.
     for( i=0; i<arr->nip; i++ ){
         
-        mdarr3_get_active( &arr->p_data[i], list_vals);
+        mdarr3_get_active_bases( &arr->p_data[i], list_vals);
     
     }
     

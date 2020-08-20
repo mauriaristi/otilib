@@ -207,14 +207,14 @@ inline void {fearr_func}_dimCheck_F_transpose( {fearr_type}* arr1, {fearr_type}*
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void {fearr_func}_get_active({fearr_type}* arr, imdir_t* list_vals){{
+void {fearr_func}_get_active_bases({fearr_type}* arr, imdir_t* list_vals){{
     
     uint64_t i;
     
     // Finds the active imaginary directions in the array.
     for( i=0; i<arr->nip; i++ ){{
         
-        {arr_func}_get_active( &arr->p_data[i], list_vals);
+        {arr_func}_get_active_bases( &arr->p_data[i], list_vals);
     
     }}
     

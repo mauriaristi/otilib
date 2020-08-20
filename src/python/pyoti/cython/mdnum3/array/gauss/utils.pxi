@@ -1,7 +1,7 @@
 #*****************************************************************************************************
-cpdef femdarr3_t fezeros( shape, uint64_t nip, bases_t nbases = 0, ord_t order = 0 ):
+cpdef mdmatfe3 fezeros( shape, uint64_t nip, bases_t nbases = 0, ord_t order = 0 ):
   """
-  PURPOSE: create a femdarr3_t matrix with the given shape and number of integration points
+  PURPOSE: create a mdmatfe3 matrix with the given shape and number of integration points
   """
   
   
@@ -37,6 +37,6 @@ cpdef femdarr3_t fezeros( shape, uint64_t nip, bases_t nbases = 0, ord_t order =
   
   res = femdarr3_zeros(nrows, ncols, nip)  
 
-  return femdarr3_t.create(&res)
+  return mdmatfe3.create(&res)
 
 #-----------------------------------------------------------------------------------------------------

@@ -587,7 +587,7 @@ void femdnum3_integrate_r_to(coeff_t num, femdnum3_t* w, mdnum3_t* res){
 
     uint64_t i = 0;
 
-    mdnum3_t tmp = mdnum3_get_tmp( 1, femdnum3_get_order( w ));
+    mdnum3_t tmp ;
 
     // res may not come as zero, Modify this?
     mdnum3_set_r(0,&tmp);
@@ -621,7 +621,7 @@ void femdnum3_integrate_o_to(mdnum3_t* num, femdnum3_t* w, mdnum3_t* res){
 
     uint64_t i = 0;
 
-    mdnum3_t tmp = mdnum3_get_tmp( 1, femdnum3_get_order( w ));
+    mdnum3_t tmp ;
 
     // res may not come as zero, Modify this?
     mdnum3_set_r(0, &tmp);
@@ -654,7 +654,7 @@ mdnum3_t femdnum3_integrate_f(femdnum3_t* num, femdnum3_t* w){
 void femdnum3_integrate_f_to(femdnum3_t* num, femdnum3_t* w, mdnum3_t* res){
 
     uint64_t i = 0;
-    mdnum3_t tmp = mdnum3_get_tmp( 1, femdnum3_get_order( w ));
+    mdnum3_t tmp ;
 
     // Check dimensions.
     femdnum3_dimCheck( num, w);
@@ -690,7 +690,7 @@ mdnum3_t femdnum3_integrate(femdnum3_t* num, femdnum3_t* w){
 void femdnum3_integrate_to(femdnum3_t* num, femdnum3_t* w, mdnum3_t* res){
 
     uint64_t i = 0;
-    mdnum3_t tmp = mdnum3_get_tmp( 1, femdnum3_get_order( w ));
+    mdnum3_t tmp ;
 
     // Check dimensions.
     femdnum3_dimCheck( num, w);

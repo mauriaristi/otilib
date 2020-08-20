@@ -1,6 +1,6 @@
 
 #***************************************************************************************************
-def get_active(obj_in):
+def get_active_bases(obj_in):
   """
 
   """
@@ -8,8 +8,8 @@ def get_active(obj_in):
 
   cdef bases_t  size       = dhl.p_dh[0].Nbasis
   cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
-  cdef mdarr3_t SO
-  cdef mdnum3_t so
+  cdef mdmat3 SO
+  cdef mdnum3 so
   cdef uint64_t i
   
   # Initialize all elements as zero (deactivated)
@@ -25,37 +25,37 @@ def get_active(obj_in):
       
       tobj = type(obj)
 
-      if tobj is mdarr3_t:
+      if tobj is mdmat3:
 
         SO = obj
-        mdarr3_get_active( &SO.arr, bases_list)
+        mdarr3_get_active_bases( &SO.arr, bases_list)
 
-      elif tobj is mdnum3_t:
+      elif tobj is mdnum3:
         
         so = obj
-        mdnum3_get_active( &so.num, bases_list) 
+        mdnum3_get_active_bases( &so.num, bases_list) 
 
       else:
 
-        raise ValueError("Input should be list of mdnum3_t or mdarr3_t.") 
+        raise ValueError("Input should be list of mdnum3 or mdmat3.") 
 
       # end if 
 
     # end for
 
-  elif tobj_in is mdarr3_t:
+  elif tobj_in is mdmat3:
 
     SO = obj_in
-    mdarr3_get_active( &SO.arr, bases_list)
+    mdarr3_get_active_bases( &SO.arr, bases_list)
 
-  elif tobj_in is mdnum3_t:
+  elif tobj_in is mdnum3:
     
     so = obj_in
-    mdnum3_get_active( &so.num, bases_list)        
+    mdnum3_get_active_bases( &so.num, bases_list)        
 
   else:
 
-    raise ValueError("Input should be list of mdnum3_t and/or mdarr3_t.") 
+    raise ValueError("Input should be list of mdnum3 and/or mdmat3.") 
 
   # end if 
   

@@ -1,8 +1,8 @@
 
 #*****************************************************************************************************
-cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef e( object hum_dir, uint64_t nip = 0):
   """
-  PURPOSE:  To create a mdnum3_t with value 1 at the specified imaginary direction
+  PURPOSE:  To create a mdnum3 with value 1 at the specified imaginary direction
             in a human friendly manner
 
   """
@@ -16,26 +16,22 @@ cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
   cdef bases_t bases_hd
   cdef object res
   cdef mdnum3_t ores
-  cdef femdnum3_t fres
+  cdef mdnumfe3 fres
   
   [indx_hd, order_hd] = imdir(hum_dir)
 
-  order_res = max( order, order_hd )
-
   if nip == 0: 
 
-    # Create a mdnum3_t
-    ores = mdnum3_createReal(0.0, order_res)
+    # Create a mdnum3
+    ores = mdnum3_create_r(0.0)
 
     # Set the coefficient to 1.
     mdnum3_set_item(1.0, indx_hd, order_hd, &ores) 
-
-    res = mdnum3_t.create(&ores)
+    res = mdnum3.create(&ores)
 
   else:
     
-    fres = femdnum3_t(0.0, nip, order = order_res, nbases = nbases)
-
+    fres = mdnumfe3(0.0, nip)
     femdnum3_set_im_r( 1.0, indx_hd, order_hd, &fres.num)
 
     res = fres
@@ -47,7 +43,7 @@ cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef zero(  uint64_t nip = 0):
   """
   PURPOSE:  To create a scalar with real value 0 and every imaginary coefficient as zeros.
 
@@ -59,19 +55,17 @@ cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 
   cdef object     res
   cdef mdnum3_t ores
-  cdef femdnum3_t    fres
+  cdef mdnumfe3    fres
 
   if nip == 0: 
 
-    # Create a mdnum3_t
-    ores = mdnum3_createReal(0.0)
-
-    res = mdnum3_t.create(&ores)
+    # Create a mdnum3
+    ores = mdnum3_create_r(0.0)
+    res = mdnum3.create(&ores)
 
   else:
     
-    fres = femdnum3_t(0.0, nip, order = order, nbases = nbases)
-
+    fres = mdnumfe3(0.0, nip)
     res = fres
 
   # end if 
@@ -81,7 +75,7 @@ cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef one( uint64_t nip = 0):
   """
   PURPOSE:  To create a scalar with real value 1 and every imaginary coefficient as zeros.
 
@@ -93,19 +87,17 @@ cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 
   cdef object     res
   cdef mdnum3_t ores
-  cdef femdnum3_t    fres
+  cdef mdnumfe3    fres
 
   if nip == 0: 
 
-    # Create a mdnum3_t
-    ores = mdnum3_createReal(1.0)
-
-    res = mdnum3_t.create(&ores)
+    # Create a mdnum3
+    ores = mdnum3_create_r(1.0)
+    res = mdnum3.create(&ores)
 
   else:
     
-    fres = femdnum3_t(1.0, nip, order = order, nbases = nbases)
-
+    fres = mdnumfe3(1.0, nip)
     res = fres
 
   # end if 
@@ -115,9 +107,9 @@ cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+cpdef number( coeff_t num, uint64_t nip = 0):
   """
-  PURPOSE:  To create a mdnum3_t with value 1 at the specified imaginary direction
+  PURPOSE:  To create a mdnum3 with value 1 at the specified imaginary direction
             in a human friendly manner
 
   """
@@ -128,19 +120,17 @@ cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 
 
   cdef object     res
   cdef mdnum3_t ores
-  cdef femdnum3_t    fres
+  cdef mdnumfe3    fres
 
   if nip == 0: 
 
-    # Create a mdnum3_t
-    ores = mdnum3_createReal(num)
-
-    res = mdnum3_t.create(&ores)
+    # Create a mdnum3
+    ores = mdnum3_create_r(num)
+    res = mdnum3.create(&ores)
 
   else:
     
-    fres = femdnum3_t(num, nip, order = order, nbases = nbases)
-
+    fres = mdnumfe3(num, nip)
     res = fres
 
   # end if 
@@ -150,7 +140,7 @@ cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef eye(uint64_t size, uint64_t nip = 0):
   """
   PURPOSE: Create identity matrix of shape: (size,size).
 
@@ -162,24 +152,24 @@ cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 
   if nip == 0:
 
-    # This will create an mdarr3_t.
-    Ores = mdarr3_eye(size,nbases,order)
+    # This will create an mdmat3.
+    Ores = mdarr3_eye(size)
 
-    return mdarr3_t.create(&Ores)
+    return mdmat3.create(&Ores)
 
   else:
 
-    # This will create a femdarr3_t
-    Fres = femdarr3_eye(size,nip,nbases,order)
+    # This will create a mdmatfe3
+    Fres = femdarr3_eye(size,nip)
 
-    return femdarr3_t.create(&Fres)
+    return mdmatfe3.create(&Fres)
   
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef array( object arr,  uint64_t nip = 0):
   """
   PURPOSE: Create a matrix for OTI algebra, according to the given array values.
 
@@ -198,14 +188,14 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   cdef uint64_t ncols, nrows, i, j, k 
   cdef mdarr3_t   Oarr
   cdef femdarr3_t Farr
-  cdef mdarr3_t     Ores
-  cdef femdarr3_t   Fres
+  cdef mdmat3     Ores
+  cdef mdmatfe3   Fres
   cdef object res
   cdef np.ndarray np_arr
 
   tin = type(array)
   
-  if (tin is mdarr3_t) or (tin is femdarr3_t):
+  if (tin is mdmat3) or (tin is mdmatfe3):
 
     # check if neccesary
     return arr.copy()
@@ -224,14 +214,14 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
       if nip == 0:
 
         Oarr = mdarr3_zeros( nrows, ncols)
-        Ores = mdarr3_t.create(&Oarr)
+        Ores = mdmat3.create(&Oarr)
         Ores[0,0] = np_arr.item(0)
         res = Ores
 
       else:
  
         Farr = femdarr3_zeros( nrows, ncols, nip)
-        Fres = femdarr3_t.create(&Farr)
+        Fres = mdmatfe3.create(&Farr)
         Fres[0,0] = np_arr.item(0)
         res = Fres
 
@@ -246,7 +236,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
       if nip == 0:
       
         Oarr = mdarr3_zeros( nrows, ncols)
-        Ores = mdarr3_t.create(&Oarr)
+        Ores = mdmat3.create(&Oarr)
         for i in range(nrows):
           Ores[i,0] =  np_arr[i] # Column vectors.
         # end for 
@@ -255,7 +245,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
       else:
  
         Farr = femdarr3_zeros( nrows, ncols, nip)
-        Fres = femdarr3_t.create(&Farr)
+        Fres = mdmatfe3.create(&Farr)
         for i in range(nrows):
           Fres[i,0] =  np_arr[i] # Column vectors.
         # end for
@@ -272,7 +262,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
       if nip == 0:
       
         Oarr = mdarr3_zeros( nrows, ncols)
-        Ores = mdarr3_t.create(&Oarr)
+        Ores = mdmat3.create(&Oarr)
         for i in range(nrows):
           for j in range(ncols):
             
@@ -285,7 +275,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
       else:
  
         Farr = femdarr3_zeros( nrows, ncols, nip)
-        Fres = femdarr3_t.create(&Farr)
+        Fres = mdmatfe3.create(&Farr)
         for i in range(nrows):
           for j in range(ncols):
             
@@ -305,7 +295,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
       nip   = np_arr.shape[2]
 
       Farr = femdarr3_zeros( nrows, ncols, nip)
-      Fres = femdarr3_t.create(&Farr)
+      Fres = mdmatfe3.create(&Farr)
 
       for i in range(nrows):
         for j in range(ncols):
@@ -330,7 +320,7 @@ cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef zeros( object shape_in, uint64_t nip = 0):
   """
   PURPOSE: Create matrix filled with zeroes of shape: (nrows,ncols).
 
@@ -344,24 +334,24 @@ cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip 
 
   if nip == 0:
 
-    # This will create an mdarr3_t.
-    Ores = mdarr3_zeros(nrows,ncols,nbases,order)
+    # This will create an mdmat3.
+    Ores = mdarr3_zeros(nrows,ncols)
 
-    return mdarr3_t.create(&Ores)
+    return mdmat3.create(&Ores)
 
   else:
 
-    # This will create a femdarr3_t
-    Fres = femdarr3_zeros(nrows,ncols,nip,nbases,order)
+    # This will create a mdmatfe3
+    Fres = femdarr3_zeros(nrows,ncols,nip)
 
-    return femdarr3_t.create(&Fres)
+    return mdmatfe3.create(&Fres)
   
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef ones( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
+cpdef ones( object shape_in,  uint64_t nip = 0):
   """
   PURPOSE: Create matrix filled with ones of shape: (nrows,ncols).
 
@@ -375,18 +365,18 @@ cpdef ones( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip =
 
   if nip == 0:
 
-    # This will create an mdarr3_t.
-    Ores = mdarr3_ones(nrows,ncols,nbases,order)
+    # This will create an mdmat3.
+    Ores = mdarr3_ones(nrows,ncols)
 
-    return mdarr3_t.create(&Ores)
+    return mdmat3.create(&Ores)
 
   else:
 
-    # This will create a femdarr3_t
-    Fres = femdarr3_ones(nrows,ncols,nip,nbases,order)
+    # This will create a mdmatfe3
+    Fres = femdarr3_ones(nrows,ncols,nip)
            # femdarr3_ones(nrows,ncols,nip,nbases,order)
 
-    return femdarr3_t.create(&Fres)
+    return mdmatfe3.create(&Fres)
   
   # end if 
   

@@ -19,7 +19,7 @@ ord_t fesoti_get_order( fesoti_t* num ){
     // Finds the maximum order in the array.
     for( i = 0; i<num->nip; i++ ){
         
-        order = MAX(order,num->p_data[0].order);
+        order = MAX(order, soti_get_order(&num->p_data[i]) );
     
     }
 
@@ -566,8 +566,7 @@ sotinum_t fesoti_get_item_k(fesoti_t* num, uint64_t k, dhelpl_t dhl){
     
     if (k < num->nip){
 
-        res = num->p_data[k];   
-        res.flag = 0;
+        res = num->p_data[k];
 
     } else {
 
@@ -647,10 +646,7 @@ fesoti_t fesoti_zeros_bases(uint64_t nip, bases_t nbases, ord_t order, dhelpl_t 
 // ****************************************************************************************************
 inline fesoti_t fesoti_createEmpty_bases(uint64_t nip, bases_t nbases, ord_t order, dhelpl_t dhl){
 
-    fesoti_t  res ;
-    ndir_t p_nnz[_MAXORDER_OTI];
-    ord_t    ordi;
-    uint64_t i;    
+    fesoti_t  res ;  
     void * memory = NULL;
 
     // Allocate memory and check if correctly allocated.
@@ -682,23 +678,12 @@ inline fesoti_t fesoti_createEmpty_bases(uint64_t nip, bases_t nbases, ord_t ord
 
 // ****************************************************************************************************
 void fesoti_free(fesoti_t* num){
-    
-    uint64_t i;
 
     // Free all memory within each coefficient in p_array
 
     if (num->p_data != NULL){
-
-        // Free all arrays.
-        for (i = 0; i<num->nip; i++){
-        
-            soti_free(&num->p_data[i]); 
-
-        }
-
         // Free pointer 
         free(num->p_data);
-
     }
 
     *num = fesoti_init();

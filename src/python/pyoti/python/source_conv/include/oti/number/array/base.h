@@ -67,8 +67,7 @@ void {arr_func}_set_slice_o( {num_type}* val,
 ******************************************************************************************************/ 
 {arr_type} {arr_func}_get_slice( {arr_type}* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
-                        int64_t startj, int64_t stopj, int64_t stepj,
-                        dhelpl_t dhl);
+                        int64_t startj, int64_t stopj, int64_t stepj);
 void {arr_func}_get_slice_to( {arr_type}* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
                         int64_t startj, int64_t stopj, int64_t stepj,

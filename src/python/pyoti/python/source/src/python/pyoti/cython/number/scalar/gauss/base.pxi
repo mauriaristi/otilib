@@ -16,7 +16,7 @@ cdef class sotife:
 
   #***************************************************************************************************
   
-  def __init__(self, real, uint64_t nip, ord_t order = 0, bases_t nbases = 0): 
+  def __init__(self, real, uint64_t nip): 
     """
     PURPOSE:      Python level constructor of the sotife class.
 
@@ -30,7 +30,7 @@ cdef class sotife:
     cdef ord_t ordi
 
     #
-    self.num = fesoti_zeros_bases(nip, nbases, order, dhl)
+    self.num = fesoti_zeros_bases(nip, dhl)
     
     # Set all elements in the number as real.
     fesoti_set_r( real, &self.num, dhl)

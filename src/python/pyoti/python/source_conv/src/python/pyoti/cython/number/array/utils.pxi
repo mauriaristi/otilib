@@ -1,6 +1,6 @@
 
 #***************************************************************************************************
-def get_active(obj_in):
+def get_active_bases(obj_in):
   """
 
   """
@@ -28,12 +28,12 @@ def get_active(obj_in):
       if tobj is {arr_pytype}:
 
         SO = obj
-        {arr_func}_get_active( &SO.arr, bases_list)
+        {arr_func}_get_active_bases( &SO.arr, bases_list)
 
       elif tobj is {num_pytype}:
         
         so = obj
-        {num_func}_get_active( &so.num, bases_list) 
+        {num_func}_get_active_bases( &so.num, bases_list) 
 
       else:
 
@@ -46,12 +46,12 @@ def get_active(obj_in):
   elif tobj_in is {arr_pytype}:
 
     SO = obj_in
-    {arr_func}_get_active( &SO.arr, bases_list)
+    {arr_func}_get_active_bases( &SO.arr, bases_list)
 
   elif tobj_in is {num_pytype}:
     
     so = obj_in
-    {num_func}_get_active( &so.num, bases_list)        
+    {num_func}_get_active_bases( &so.num, bases_list)        
 
   else:
 

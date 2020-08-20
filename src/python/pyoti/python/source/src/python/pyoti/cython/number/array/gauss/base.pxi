@@ -16,7 +16,7 @@ cdef class matsofe:
 
   #***************************************************************************************************
   
-  def __init__(self, shape, uint64_t nip, ord_t order = 0, bases_t nbases = 0): 
+  def __init__(self, shape, uint64_t nip): 
     """
     PURPOSE:      Python level constructor of the matsofe class.
 
@@ -36,11 +36,11 @@ cdef class matsofe:
             
       if( ndim == 1 ):
       
-        self.arr = fearrso_zeros_bases(shape[0], 1, nip, nbases, order, dhl) 
+        self.arr = fearrso_zeros_bases(shape[0], 1, nip, dhl) 
       
       elif(ndim == 2):
 
-        self.arr = fearrso_zeros_bases(shape[0], shape[1], nip, nbases, order, dhl) 
+        self.arr = fearrso_zeros_bases(shape[0], shape[1], nip, dhl) 
 
       else:
 
@@ -50,7 +50,7 @@ cdef class matsofe:
        
     elif(isinstance(shape,int)):
 
-      self.arr = fearrso_zeros_bases(shape, 1, nip, nbases, order, dhl)
+      self.arr = fearrso_zeros_bases(shape, 1, nip,  dhl)
 
     else:
 

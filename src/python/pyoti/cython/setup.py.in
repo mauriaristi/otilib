@@ -66,7 +66,7 @@ Extension("pyoti.dense",
   depends=dependencies
   ),
 #
-Extension("pyoti.mdnum2",
+Extension("pyoti.static.mdnum2",
   sources = ["@CYTHON_SOUCE_DIR@/mdnum2.pyx"],
   include_dirs = include_dirs,
   define_macros = macros,

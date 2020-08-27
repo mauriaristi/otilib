@@ -1,9 +1,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  lil_matso    :::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  lil_matrix    ::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class lil_matso:
+cdef class lil_matrix:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -16,9 +16,9 @@ cdef class lil_matso:
   
   def __init__(self, shape): 
     """
-    PURPOSE:      Python level constructor of the lil_matso class.
+    PURPOSE:      Python level constructor of the lil_matrix class.
 
-    DESCRIPTION:  Creates a new empty lil_matso matrix.
+    DESCRIPTION:  Creates a new empty lil_matrix matrix.
                  
     """
     #*************************************************************************************************
@@ -342,7 +342,7 @@ cdef class lil_matso:
     
     global dhl
 
-    cdef lil_matso res = lil_matso(self.shape)
+    cdef lil_matrix res = lil_matrix(self.shape)
     cdef uint64_t i, k
     
     for i in range(self.nrows):
@@ -370,7 +370,7 @@ cdef class lil_matso:
     
     global dhl
 
-    cdef lil_matso res = lil_matso(self.shape)
+    cdef lil_matrix res = lil_matrix(self.shape)
     cdef uint64_t i, j
     
     for i in range(self.nrows):
@@ -766,7 +766,7 @@ cdef class lil_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef lil_matso res
+    cdef lil_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -799,7 +799,7 @@ cdef class lil_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef lil_matso res
+    cdef lil_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -833,7 +833,7 @@ cdef class lil_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef lil_matso res
+    cdef lil_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -866,7 +866,7 @@ cdef class lil_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef lil_matso res
+    cdef lil_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -897,7 +897,7 @@ cdef class lil_matso:
     
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef lil_matso res
+    cdef lil_matrix res
 
     res = self.zeros_like()
 
@@ -930,7 +930,7 @@ cdef class lil_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef lil_matso res
+    cdef lil_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -1002,7 +1002,7 @@ cdef class lil_matso:
     """
     PORPUSE:  Convert the matrix to CSR format.
     """
-    return csr_matso(self,shape=self.shape)
+    return csr_matrix(self,shape=self.shape)
 
   #---------------------------------------------------------------------------------------------------
 

@@ -24,6 +24,9 @@ from pyoti.core cimport  c_ptr_to_np_1darray_double, c_ptr_to_np_1darray_uint64
 from pyoti.core cimport  c_ptr_to_np_1darray_uint8, error_function
 
 
+import  pyoti.real as r
+cimport pyoti.real as r
+
 from pyoti.real import  dmat
 from pyoti.real cimport dmat
 

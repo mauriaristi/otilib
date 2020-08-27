@@ -2,8 +2,11 @@
 
 
 # Include base definitions.
-include "mesh/base.pxi"
-include "mesh/base_d.pxi"
+include "mesh/general/base.pxi"
+include "mesh/general/utils.pxi"
+
+# include "mesh/base_so.pxi"
+# include "mesh/base_d.pxi"
 
 # Include utilities.
-include "mesh/utils.pxi"
+# include "mesh/utils.pxi"

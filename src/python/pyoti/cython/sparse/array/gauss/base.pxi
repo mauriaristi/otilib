@@ -131,6 +131,34 @@ cdef class matsofe:
   @property
   def real(self):
     """
+    PURPOSE:      Get a real Gauss array with all coefficients in the real direction.
+
+    """
+    #*************************************************************************************************
+
+    cdef r.dmatfe tmp
+    cdef uint64_t i, j, k
+    cdef sotinum_t soti_tmp
+
+    tmp = r.zeros(self.shape, nip=self.nip)
+
+    for i in range(self.arr.nrows):
+      for j in range(self.arr.ncols):
+        for k in range(self.arr.nip):
+          soti_tmp = fearrso_get_item_ijk(&self.arr, i, j, k, dhl);
+          fedarr_set_item_ijk_r( soti_tmp.re , i, j, k, &tmp.arr);
+        # end for
+      # end for
+    # end for
+
+    return tmp
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
+  def real_numpy(self):
+    """
     PURPOSE:      Get a numpy array with all coefficients in the real direction.
 
     """
@@ -1434,6 +1462,41 @@ cdef class matsofe:
     return matsofe.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
+
+  #***************************************************************************************************
+  cpdef set_ijk(self, object rhs, uint64_t i, uint64_t j, uint64_t k):
+    """
+    PURPOSE:  Sets from another value.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef sotinum orhs
+    cdef coeff_t rrhs
+
+    trhs = type(rhs)
+
+    if   trhs is sotinum:
+
+      orhs = rhs
+      fearrso_set_item_ijk_o( &orhs.num, i, j, k, &self.arr, dhl)
+
+    else:
+
+      try:
+      
+        rrhs = rhs
+        fearrso_set_item_ijk_r( rrhs, i, j, k, &self.arr, dhl)      
+      
+      except:
+      
+        raise ValueError("Supported values are real scalar, sotinum and sotife.")
+
+      # end try
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
 
 
   #***************************************************************************************************

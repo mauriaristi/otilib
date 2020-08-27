@@ -23,3 +23,7 @@ include "real/gauss/array.pxd"
 
 # Include sparse arrays functions.
 include "real/sparse_array.pxd"
+
+
+# Include FEM helper
+include "real/fem.pxd"

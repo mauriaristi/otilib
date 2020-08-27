@@ -6,9 +6,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  lil_matso    :::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  lil_matrix    :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class csr_matso:
+cdef class csr_matrix:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -21,19 +21,19 @@ cdef class csr_matso:
   
   def __init__(self, arg1, shape=None, copy = True): 
     """
-    PURPOSE:      Python level constructor of the csr_matso class.
+    PURPOSE:      Python level constructor of the csr_matrix class.
 
-    DESCRIPTION:  Creates a new empty csr_matso matrix.
+    DESCRIPTION:  Creates a new empty csr_matrix matrix.
                  
     """
     #*************************************************************************************************
     
     cdef uint64_t i, j, k, ncols, nrows
-    cdef lil_matso lil
+    cdef lil_matrix lil
     
     targ1 = type(arg1)
 
-    if targ1 == lil_matso :
+    if targ1 == lil_matrix :
       # Create CSR matrix from lil matrix type
       lil = arg1
       self.nrows, self.ncols = lil.shape
@@ -282,7 +282,7 @@ cdef class csr_matso:
     
     global dhl
 
-    cdef csr_matso res = <csr_matso> csr_matso.__new__(csr_matso)
+    cdef csr_matrix res = <csr_matrix> csr_matrix.__new__(csr_matrix)
     cdef object[:]   data
     cdef uint64_t[:] indices
     cdef uint64_t[:] indptr
@@ -312,7 +312,7 @@ cdef class csr_matso:
     """
     #*************************************************************************************************
     
-    cdef csr_matso res = <csr_matso> csr_matso.__new__(csr_matso)
+    cdef csr_matrix res = <csr_matrix> csr_matrix.__new__(csr_matrix)
     cdef object[:]   data
     cdef uint64_t[:] indices
     cdef uint64_t[:] indptr
@@ -692,7 +692,7 @@ cdef class csr_matso:
 
     cdef sotinum ores, oval
     cdef uint64_t i
-    cdef csr_matso res
+    cdef csr_matrix res
 
     res = self.zeros_like()
 
@@ -720,7 +720,7 @@ cdef class csr_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i
-    cdef csr_matso res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -749,7 +749,7 @@ cdef class csr_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef csr_matso res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -779,7 +779,7 @@ cdef class csr_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef csr_matso res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -808,7 +808,7 @@ cdef class csr_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef csr_matso res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -835,7 +835,7 @@ cdef class csr_matso:
     
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef csr_matso res
+    cdef csr_matrix res
 
     res = self.zeros_like()
 
@@ -864,7 +864,7 @@ cdef class csr_matso:
     cdef ord_t  order
     cdef sotinum ores, oval
     cdef uint64_t i, j, k
-    cdef csr_matso res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -924,7 +924,7 @@ cdef class csr_matso:
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: END OF CLASS csr_matso ::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS csr_matrix ::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
@@ -947,7 +947,7 @@ cdef class csr_matso:
 
 
 # ****************************************************************************************************
-cdef void csrmatso_matmul_SO_to(csr_matso lhs, matso rhs, matso res):
+cdef void csrmatrix_matmul_SO_to(csr_matrix lhs, matso rhs, matso res):
   """
   PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
 
@@ -999,7 +999,7 @@ cdef void csrmatso_matmul_SO_to(csr_matso lhs, matso rhs, matso res):
 
 
 # ****************************************************************************************************
-cdef matso csrmatso_matmul_SO(csr_matso lhs, matso rhs):
+cdef matso csrmatrix_matmul_SO(csr_matrix lhs, matso rhs):
   """
   PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
 
@@ -1010,7 +1010,7 @@ cdef matso csrmatso_matmul_SO(csr_matso lhs, matso rhs):
   
   res = zeros((lhs.nrows,rhs.ncols))
 
-  csrmatso_matmul_SO_to( lhs, rhs, res)
+  csrmatrix_matmul_SO_to( lhs, rhs, res)
 
   return res
 

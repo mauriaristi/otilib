@@ -888,6 +888,7 @@ static const char *__pyx_f[] = {
   "scalar.pxd",
   "array.pxd",
   "sparse_array.pxd",
+  "fem.pxd",
   "include.pxi",
 };
 /* BufferFormatStructs.proto */
@@ -1280,7 +1281,8 @@ struct __pyx_obj_5pyoti_4core_dHelp;
 struct __pyx_obj_5pyoti_4real_dmat;
 struct __pyx_obj_5pyoti_4real_dnumfe;
 struct __pyx_obj_5pyoti_4real_dmatfe;
-struct __pyx_obj_5pyoti_4real_lil_dmat;
+struct __pyx_obj_5pyoti_4real_lil_matrix;
+struct __pyx_obj_5pyoti_4real_elm_help;
 struct __pyx_obj_5pyoti_5dense_otinum;
 struct __pyx_obj_5pyoti_5dense_otibase;
 struct __pyx_obj_5pyoti_5dense_omat;
@@ -1458,6 +1460,7 @@ struct __pyx_opt_args_5pyoti_4real_norm;
 struct __pyx_opt_args_5pyoti_4real_6dnumfe_create;
 struct __pyx_opt_args_5pyoti_4real_6dmatfe_create;
 struct __pyx_opt_args_5pyoti_4real_6dmatfe_get_item_ij;
+struct __pyx_opt_args_5pyoti_4real_8elm_help_allocate_spatial;
 
 /* "../../include/pyoti/real/array.pxd":18
  * 
@@ -2146,6 +2149,18 @@ struct __pyx_opt_args_5pyoti_4real_6dmatfe_get_item_ij {
   int __pyx_n;
   struct __pyx_obj_5pyoti_4real_dnumfe *out;
 };
+
+/* "../../include/pyoti/real/fem.pxd":49
+ *   cpdef is_allocated( self )
+ *   cpdef allocate(self, uint8_t ndim, uint64_t nbasis, uint64_t nip )
+ *   cpdef allocate_spatial( self, uint64_t ndim_an, uint8_t compute_Jinv = * )             # <<<<<<<<<<<<<<
+ *   cpdef reset( self )
+ *   cpdef end( self )
+ */
+struct __pyx_opt_args_5pyoti_4real_8elm_help_allocate_spatial {
+  int __pyx_n;
+  uint8_t compute_Jinv;
+};
 struct __pyx_opt_args_5pyoti_5dense_6otinum_create;
 struct __pyx_opt_args_5pyoti_5dense_4omat_create;
 struct __pyx_opt_args_5pyoti_5dense_4omat_get_im;
@@ -2315,17 +2330,54 @@ struct __pyx_obj_5pyoti_4real_dmatfe {
 /* "../../include/pyoti/real/sparse_array.pxd":4
  * # ::::::::::::::::::::::::::::::::::::    CLASS  lil_dmat    :::::::::::::::::::::::::::::::::::::::::
  * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
- * cdef class lil_dmat:             # <<<<<<<<<<<<<<
+ * cdef class lil_matrix:             # <<<<<<<<<<<<<<
  * 
  *   #---------------------------------------------------------------------------------------------------
  */
-struct __pyx_obj_5pyoti_4real_lil_dmat {
+struct __pyx_obj_5pyoti_4real_lil_matrix {
   PyObject_HEAD
   __Pyx_memviewslice data;
   __Pyx_memviewslice rows;
   uint64_t nrows;
   uint64_t ncols;
   uint64_t size;
+};
+
+
+/* "../../include/pyoti/real/fem.pxd":4
+ * # ::::::::::::::::::::::::::::::::::     CLASS  elm_help    ::::::::::::::::::::::::::::::::::::::::::
+ * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ * cdef class elm_help:             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+struct __pyx_obj_5pyoti_4real_elm_help {
+  PyObject_HEAD
+  struct __pyx_vtabstruct_5pyoti_4real_elm_help *__pyx_vtab;
+  PyObject *special;
+  uint8_t ndim;
+  uint8_t nbasis;
+  uint64_t ndim_an;
+  uint64_t nip;
+  struct __pyx_obj_5pyoti_4real_dnumfe *xi;
+  struct __pyx_obj_5pyoti_4real_dnumfe *eta;
+  struct __pyx_obj_5pyoti_4real_dnumfe *zeta;
+  struct __pyx_obj_5pyoti_4real_dnumfe *w;
+  struct __pyx_obj_5pyoti_4real_dmatfe *N;
+  struct __pyx_obj_5pyoti_4real_dmatfe *Nxi;
+  struct __pyx_obj_5pyoti_4real_dmatfe *Neta;
+  struct __pyx_obj_5pyoti_4real_dmatfe *Nzeta;
+  struct __pyx_obj_5pyoti_4real_dmatfe *Nx;
+  struct __pyx_obj_5pyoti_4real_dmatfe *Ny;
+  struct __pyx_obj_5pyoti_4real_dmatfe *Nz;
+  struct __pyx_obj_5pyoti_4real_dmat *x;
+  struct __pyx_obj_5pyoti_4real_dmat *y;
+  struct __pyx_obj_5pyoti_4real_dmat *z;
+  struct __pyx_obj_5pyoti_4real_dmatfe *J;
+  struct __pyx_obj_5pyoti_4real_dnumfe *detJ;
+  struct __pyx_obj_5pyoti_4real_dnumfe *dV;
+  struct __pyx_obj_5pyoti_4real_dmatfe *Jinv;
+  uint8_t compute_Jinv;
 };
 
 
@@ -2540,12 +2592,31 @@ struct __pyx_vtabstruct_5pyoti_4real_dmatfe {
   PyObject *(*get_ip)(struct __pyx_obj_5pyoti_4real_dmatfe *, int64_t, int __pyx_skip_dispatch);
   PyObject *(*get_item_ij)(struct __pyx_obj_5pyoti_4real_dmatfe *, int64_t, int64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_4real_6dmatfe_get_item_ij *__pyx_optional_args);
   PyObject *(*set)(struct __pyx_obj_5pyoti_4real_dmatfe *, PyObject *, int __pyx_skip_dispatch);
+  PyObject *(*set_ijk)(struct __pyx_obj_5pyoti_4real_dmatfe *, __pyx_t_5pyoti_8c_otilib_coeff_t, uint64_t, uint64_t, uint64_t, int __pyx_skip_dispatch);
   PyObject *(*__pyx___setitem__r)(struct __pyx_obj_5pyoti_4real_dmatfe *, PyObject *, __pyx_t_5pyoti_8c_otilib_coeff_t);
   PyObject *(*__pyx___setitem__R)(struct __pyx_obj_5pyoti_4real_dmatfe *, PyObject *, struct __pyx_obj_5pyoti_4real_dmat *);
   PyObject *(*__pyx___setitem__f)(struct __pyx_obj_5pyoti_4real_dmatfe *, PyObject *, struct __pyx_obj_5pyoti_4real_dnumfe *);
   PyObject *(*__pyx___setitem__F)(struct __pyx_obj_5pyoti_4real_dmatfe *, PyObject *, struct __pyx_obj_5pyoti_4real_dmatfe *);
 };
 static struct __pyx_vtabstruct_5pyoti_4real_dmatfe *__pyx_vtabptr_5pyoti_4real_dmatfe;
+
+
+/* "../../include/pyoti/real/fem.pxd":4
+ * # ::::::::::::::::::::::::::::::::::     CLASS  elm_help    ::::::::::::::::::::::::::::::::::::::::::
+ * # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+ * cdef class elm_help:             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+
+struct __pyx_vtabstruct_5pyoti_4real_elm_help {
+  PyObject *(*is_allocated)(struct __pyx_obj_5pyoti_4real_elm_help *, int __pyx_skip_dispatch);
+  PyObject *(*allocate)(struct __pyx_obj_5pyoti_4real_elm_help *, uint8_t, uint64_t, uint64_t, int __pyx_skip_dispatch);
+  PyObject *(*allocate_spatial)(struct __pyx_obj_5pyoti_4real_elm_help *, uint64_t, int __pyx_skip_dispatch, struct __pyx_opt_args_5pyoti_4real_8elm_help_allocate_spatial *__pyx_optional_args);
+  PyObject *(*reset)(struct __pyx_obj_5pyoti_4real_elm_help *, int __pyx_skip_dispatch);
+  PyObject *(*end)(struct __pyx_obj_5pyoti_4real_elm_help *, int __pyx_skip_dispatch);
+};
+static struct __pyx_vtabstruct_5pyoti_4real_elm_help *__pyx_vtabptr_5pyoti_4real_elm_help;
 
 
 /* "../../src/python/pyoti/cython/dense/num.pxi":9
@@ -3570,7 +3641,8 @@ static PyObject *(*__pyx_f_5pyoti_4core_copy_numpy2d_to_ptr_f64)(PyArrayObject *
 static PyTypeObject *__pyx_ptype_5pyoti_4real_dmat = 0;
 static PyTypeObject *__pyx_ptype_5pyoti_4real_dnumfe = 0;
 static PyTypeObject *__pyx_ptype_5pyoti_4real_dmatfe = 0;
-static PyTypeObject *__pyx_ptype_5pyoti_4real_lil_dmat = 0;
+static PyTypeObject *__pyx_ptype_5pyoti_4real_lil_matrix = 0;
+static PyTypeObject *__pyx_ptype_5pyoti_4real_elm_help = 0;
 
 /* Module declarations from 'pyoti.dense' */
 static PyTypeObject *__pyx_ptype_5pyoti_5dense_otinum = 0;
@@ -63088,8 +63160,11 @@ static int __Pyx_modinit_type_import_code(void) {
   __pyx_ptype_5pyoti_4real_dmatfe = __Pyx_ImportType(__pyx_t_1, "pyoti.real", "dmatfe", sizeof(struct __pyx_obj_5pyoti_4real_dmatfe), __Pyx_ImportType_CheckSize_Warn);
    if (!__pyx_ptype_5pyoti_4real_dmatfe) __PYX_ERR(17, 6, __pyx_L1_error)
   __pyx_vtabptr_5pyoti_4real_dmatfe = (struct __pyx_vtabstruct_5pyoti_4real_dmatfe*)__Pyx_GetVtable(__pyx_ptype_5pyoti_4real_dmatfe->tp_dict); if (unlikely(!__pyx_vtabptr_5pyoti_4real_dmatfe)) __PYX_ERR(17, 6, __pyx_L1_error)
-  __pyx_ptype_5pyoti_4real_lil_dmat = __Pyx_ImportType(__pyx_t_1, "pyoti.real", "lil_dmat", sizeof(struct __pyx_obj_5pyoti_4real_lil_dmat), __Pyx_ImportType_CheckSize_Warn);
-   if (!__pyx_ptype_5pyoti_4real_lil_dmat) __PYX_ERR(18, 4, __pyx_L1_error)
+  __pyx_ptype_5pyoti_4real_lil_matrix = __Pyx_ImportType(__pyx_t_1, "pyoti.real", "lil_matrix", sizeof(struct __pyx_obj_5pyoti_4real_lil_matrix), __Pyx_ImportType_CheckSize_Warn);
+   if (!__pyx_ptype_5pyoti_4real_lil_matrix) __PYX_ERR(18, 4, __pyx_L1_error)
+  __pyx_ptype_5pyoti_4real_elm_help = __Pyx_ImportType(__pyx_t_1, "pyoti.real", "elm_help", sizeof(struct __pyx_obj_5pyoti_4real_elm_help), __Pyx_ImportType_CheckSize_Warn);
+   if (!__pyx_ptype_5pyoti_4real_elm_help) __PYX_ERR(19, 4, __pyx_L1_error)
+  __pyx_vtabptr_5pyoti_4real_elm_help = (struct __pyx_vtabstruct_5pyoti_4real_elm_help*)__Pyx_GetVtable(__pyx_ptype_5pyoti_4real_elm_help->tp_dict); if (unlikely(!__pyx_vtabptr_5pyoti_4real_elm_help)) __PYX_ERR(19, 4, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -63347,9 +63422,9 @@ if (!__Pyx_RefNanny) {
  * cimport numpy as np                 # C-level functions of numpy
  * from c_otilib cimport *             # OTI lib in C.
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 5, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 5, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(19, 5, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(20, 5, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../src/python/pyoti/cython/dense/include.pxi":12
@@ -63359,7 +63434,7 @@ if (!__Pyx_RefNanny) {
  * from pyoti.core import   dhelp_get_matrix_form, print_capabilities
  * from pyoti.core import   get_latex_dir, set_trunc_order, get_trunc_order
  */
-  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 12, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_number_types);
   __Pyx_GIVEREF(__pyx_n_s_number_types);
@@ -63370,16 +63445,16 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_imdir);
   __Pyx_GIVEREF(__pyx_n_s_imdir);
   PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_imdir);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(19, 12, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(20, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_number_types); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_number_types, __pyx_t_1) < 0) __PYX_ERR(19, 12, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_number_types, __pyx_t_1) < 0) __PYX_ERR(20, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_imdir); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 12, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_imdir); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 12, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_imdir, __pyx_t_1) < 0) __PYX_ERR(19, 12, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_imdir, __pyx_t_1) < 0) __PYX_ERR(20, 12, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
@@ -63390,7 +63465,7 @@ if (!__Pyx_RefNanny) {
  * from pyoti.core import   get_latex_dir, set_trunc_order, get_trunc_order
  * 
  */
-  __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(19, 13, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(20, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_dhelp_get_matrix_form);
   __Pyx_GIVEREF(__pyx_n_s_dhelp_get_matrix_form);
@@ -63398,16 +63473,16 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_print_capabilities);
   __Pyx_GIVEREF(__pyx_n_s_print_capabilities);
   PyList_SET_ITEM(__pyx_t_2, 1, __pyx_n_s_print_capabilities);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 13, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_dhelp_get_matrix_form); if (unlikely(!__pyx_t_2)) __PYX_ERR(19, 13, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_dhelp_get_matrix_form); if (unlikely(!__pyx_t_2)) __PYX_ERR(20, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dhelp_get_matrix_form, __pyx_t_2) < 0) __PYX_ERR(19, 13, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_dhelp_get_matrix_form, __pyx_t_2) < 0) __PYX_ERR(20, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_print_capabilities); if (unlikely(!__pyx_t_2)) __PYX_ERR(19, 13, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_ImportFrom(__pyx_t_1, __pyx_n_s_print_capabilities); if (unlikely(!__pyx_t_2)) __PYX_ERR(20, 13, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_print_capabilities, __pyx_t_2) < 0) __PYX_ERR(19, 13, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_print_capabilities, __pyx_t_2) < 0) __PYX_ERR(20, 13, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
@@ -63418,7 +63493,7 @@ if (!__Pyx_RefNanny) {
  * 
  * from pyoti.core cimport  c_ptr_to_np_1darray_double, ZERO, ONE
  */
-  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 14, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_n_s_get_latex_dir);
   __Pyx_GIVEREF(__pyx_n_s_get_latex_dir);
@@ -63429,20 +63504,20 @@ if (!__Pyx_RefNanny) {
   __Pyx_INCREF(__pyx_n_s_get_trunc_order);
   __Pyx_GIVEREF(__pyx_n_s_get_trunc_order);
   PyList_SET_ITEM(__pyx_t_1, 2, __pyx_n_s_get_trunc_order);
-  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(19, 14, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_Import(__pyx_n_s_pyoti_core, __pyx_t_1, -1); if (unlikely(!__pyx_t_2)) __PYX_ERR(20, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_get_latex_dir); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 14, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_get_latex_dir); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_latex_dir, __pyx_t_1) < 0) __PYX_ERR(19, 14, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_latex_dir, __pyx_t_1) < 0) __PYX_ERR(20, 14, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_set_trunc_order); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 14, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_set_trunc_order); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_set_trunc_order, __pyx_t_1) < 0) __PYX_ERR(19, 14, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_set_trunc_order, __pyx_t_1) < 0) __PYX_ERR(20, 14, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_get_trunc_order); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 14, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_2, __pyx_n_s_get_trunc_order); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 14, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_trunc_order, __pyx_t_1) < 0) __PYX_ERR(19, 14, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_get_trunc_order, __pyx_t_1) < 0) __PYX_ERR(20, 14, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
@@ -63453,12 +63528,12 @@ if (!__Pyx_RefNanny) {
  * from pyoti.real cimport dmat
  * 
  */
-  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(19, 24, __pyx_L1_error)
+  __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(20, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_INCREF(__pyx_n_s_dmat);
   __Pyx_GIVEREF(__pyx_n_s_dmat);
   PyList_SET_ITEM(__pyx_t_2, 0, __pyx_n_s_dmat);
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_real, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 24, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_pyoti_real, __pyx_t_2, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -63469,7 +63544,7 @@ if (!__Pyx_RefNanny) {
  * cdef dHelp      h = get_cython_dHelp()             # <<<<<<<<<<<<<<
  * cdef dhelpl_t dhl = h.dhl
  */
-  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_4core_get_cython_dHelp()); if (unlikely(!__pyx_t_1)) __PYX_ERR(19, 34, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_5pyoti_4core_get_cython_dHelp()); if (unlikely(!__pyx_t_1)) __PYX_ERR(20, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_XGOTREF(((PyObject *)__pyx_v_5pyoti_5dense_h));
   __Pyx_DECREF_SET(__pyx_v_5pyoti_5dense_h, ((struct __pyx_obj_5pyoti_4core_dHelp *)__pyx_t_1));

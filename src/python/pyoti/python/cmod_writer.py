@@ -1,8 +1,12 @@
-
 from pyoti.core import get_dHelp
+
 import pyoti.core as coti 
+
 import os
+
 import errno
+
+import re
 
 getpath = coti.whereotilib.getpath
 
@@ -1223,8 +1227,10 @@ class writer:
 
     if to:
       res_getter = self.get_ptr
+      res_prev = "*"
     else:
       res_getter = self.get
+      res_prev = ""
     # end if 
 
     if lhs_ptr:
@@ -1233,6 +1239,7 @@ class writer:
       lhs_getter = self.get
     # end if 
 
+    str_out += level + res_prev + res_name + " = " + self.func_name + "_init()" + self.endl
     str_out += level + self.coeff_t + ' factor' + self.endl
     str_out += level + self.comment + "Taylor integration"+endl
 
@@ -1261,7 +1268,7 @@ class writer:
 
         str_out += self.endl
         
-        str_out += level + res_name + res_getter + dirs[j] + " = factor*"
+        str_out += level + res_name + res_getter + self.real_str + " += factor*"
         str_out += f_name + f_open
         str_out +=         lhs_name + lhs_getter + dirs[j] + f_close + self.endl 
 
@@ -2604,8 +2611,7 @@ class writer:
   def write_files(self, modulename = None, tab = '  ', base_dir=''):
     """
     PORPUSE:  Write file of module containing OTI operations.
-    """
-    
+    """    
     str_out = ""
 
     if modulename is not None:
@@ -2616,60 +2622,27 @@ class writer:
 
 
     src_path = getpath()+"source_conv/"
-    
-    print(src_path)
-
     files=[]
     
+    # Supported extensions.
     supp_ext = ['h','pxd','pxi','c','pyx']
 
     # r=>root, d=>directories, f=>files
-    
     for r, d, f in os.walk(src_path):
       for item in f:
         ext = item.split('.')[-1]
         if ext in supp_ext:
           files.append(os.path.join(r.replace(src_path,""), item))
-        #
-      #
-    #
-
+        # end if 
+      # end for 
+    # end for
     
 
     # 1. Write module name if in fortran ...
     level = 0
 
-    # Define parameters
-    # str_out += self.set_constant_parameters( level = level*tab ) + endl
-    dependencies  = ""
-    dependencies += self.comment + " Dependencies"+endl
-    dependencies += "#include<stdlib.h>"   + endl
-    dependencies += "#include<string.h>"   + endl
-    dependencies += "#include<stdio.h>"    + endl
-    dependencies += "#include<stdint.h>"   + endl
-    # dependencies += "#include<stdbool.h>"  + endl
-    dependencies += "#include<inttypes.h>" + endl
-    dependencies += "#include<math.h>"     + endl + endl
-
-    header_file = ""
-    header_file += "#ifndef " + mname.upper() + "__H" + endl
-    header_file += "#define " + mname.upper() + "__H" + endl + endl
-    header_file += dependencies
-    header_file += "typedef uint8_t ord_t;\n"
-    header_file += "typedef uint64_t imdir_t ;\n"
-    header_file += "typedef double coeff_t ;\n"
-    code_file   = '#include\"' + mname + '.h' + '\"' + endl + endl
-
     # Define type
-    header_file += self.set_type_c( level = level*tab ) + endl
     num_struct = self.set_type_c( level = level*tab ) + endl
-    # Start writing functions
-    
-
-    contents = ""
-
-    contents += self.gen_base_file( level = level, tab = tab)
-    contents += self.gen_algebra_file( level = level, tab = tab)
     
     base_str = self.gen_base_file( level = level, tab = tab)
     base_include = self.write_header( header = 'base')
@@ -2680,8 +2653,11 @@ class writer:
 
     for file in files:
       # Write the header file
-      src_file = src_path+file
+
+      src_file = src_path + file
+
       print("Processing: ",file)
+
       f = open(src_file, "r" )
       f_str=f.read()
       f.close()
@@ -2689,54 +2665,28 @@ class writer:
       exp_file = base_dir+'/'+file.replace("number",mname)
       os.makedirs(os.path.dirname(exp_file), exist_ok=True)
       
-      f_exp = f_str.format(  num_type   = self.type_name,       num_func   = self.func_name,       num_pytype   = self.pytype_name,       num_pyfunc   = self.pyfunc_name,       
-                   fenum_type = self.type_name_fe,    fenum_func = self.func_name_fe,    fenum_pytype = self.pytype_name_fe,    fenum_pyfunc = self.pyfunc_name_fe,    
-                   arr_type   = self.type_name_arr,   arr_func   = self.func_name_arr,   arr_pytype   = self.pytype_name_arr,   arr_pyfunc   = self.pyfunc_name_arr,   
-                   fearr_type = self.type_name_fearr, fearr_func = self.func_name_fearr, fearr_pytype = self.pytype_name_fearr, fearr_pyfunc = self.pyfunc_name_fearr, 
-                   oti_order=self.order, real_str=self.real_str, module_name = mname, module_name_upper = mname.upper(), base_src = base_str, algebra_src = algebra_str,
-                   base_include = base_include, algebra_include = algebra_include, utils_include="",  num_struct=num_struct, nbases = self.nbases)
+      f_exp = f_str.format(  num_type   = self.type_name,       num_func   = self.func_name,       
+        num_pytype   = self.pytype_name,       num_pyfunc   = self.pyfunc_name, 
+        fenum_type = self.type_name_fe,    fenum_func = self.func_name_fe,    
+        fenum_pytype = self.pytype_name_fe,    fenum_pyfunc = self.pyfunc_name_fe,    
+        arr_type   = self.type_name_arr,   arr_func   = self.func_name_arr,   
+        arr_pytype   = self.pytype_name_arr,   arr_pyfunc   = self.pyfunc_name_arr,   
+        fearr_type = self.type_name_fearr, fearr_func = self.func_name_fearr, 
+        fearr_pytype = self.pytype_name_fearr, fearr_pyfunc = self.pyfunc_name_fearr, 
+        oti_order = self.order, real_str = self.real_str, module_name = mname, 
+        module_name_upper = mname.upper(), base_src = base_str, algebra_src = algebra_str,
+        base_include = base_include, algebra_include = algebra_include, 
+        utils_include = "",  num_struct = num_struct, nbases = self.nbases)
 
       f = open(exp_file, "w" )
-
-      
       f.write(f_exp)
       f.close()
-    
 
-    # Define Overloads
-
-    code_file += contents
-
-    file_name_str = os.path.join(base_dir,mname)+"/base.c"
-    # self.check_file_and_dirs(file_name_str)
-
-    # # Write the code file
-    # f = open(file_name_str, "w" )
-
-    # f.write(code_file)
-
-    # f.close()
-
-
-    for funct in self.function_list:
-      header_file += funct+";"+endl
     # end for 
 
-    header_file += endl
-    header_file += "#endif"
+    self.process_headers_static( base_dir = base_dir, tab=tab)
+    self.process_static_include_files( base_dir = base_dir)
 
-
-
-    # file_name_str = os.path.join(base_dir,mname)+"/base.h"
-    # self.check_file_and_dirs(file_name_str)
-
-    # # Write the header file
-    # f = open(file_name_str, "w" )
-    # f.write(header_file)
-
-    # f.close()
-
-    # return str_out
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
@@ -2750,6 +2700,7 @@ class writer:
     return header_file
   #--------------------------------------------------------------------------------------------------- 
 
+  
   #***************************************************************************************************
   def check_file_and_dirs(self, filename):
     dir_name = os.path.dirname(filename)
@@ -3049,4 +3000,230 @@ class writer:
     return contents
   #--------------------------------------------------------------------------------------------------- 
 
+  #***************************************************************************************************
+  def process_static_include_files(self, base_dir = ''):
+    
+    folders = ['include/oti/',
+    'include/pyoti/c_otilib/',
+    'include/pyoti/',
+    'src/c/',
+    ]
+    
+    cython_types = ['pxi','pxd','pyx']
+    c_types = ['h','c']
+
+    c_files = []
+    cy_files = []
+    # r=>root, d=>directories, f=>files
+    for folder in folders:
+      src_path = os.path.join(base_dir,folder)
+      # print(src_path)
+      for r, d, f in os.walk(src_path):        
+        for item in f:
+          ext = item.split('.')[-1]
+          if 'static.' in item:
+            if ext in cython_types:
+              src_file = os.path.join(r, item)
+              walk_folder = os.path.join(r, 'static/')
+              cy_files.append([src_file,walk_folder,src_path])
+            elif ext in c_types:
+              src_file = os.path.join(r, item)
+              walk_folder = os.path.join(r, 'static/')
+              c_files.append([src_file,walk_folder,src_path])
+            # end if 
+          # end if 
+        # end for 
+        break
+      # end for
+    # end for
+
+    # print(c_files)
+    # print()
+    # print(cy_files)
+
+    # Replace Cython files:
+    for src_file,walk_folder,src_path in cy_files:
+      # print(src_file)
+      # print(walk)
+      str_out = "\n"
+      for r, d, f in os.walk(walk_folder): 
+        for item in f:
+          ext = item.split('.')[-1]
+          if ext in cython_types and "__init__" not in item:
+            str_out += 'include "{0}"\n\n'.format(os.path.join(r.replace(src_path,""),item))
+          # end if
+        # end for
+        break 
+      # end for 
+      file = open(src_file,'w')
+      file.write(str_out)
+      file.close()
+    # end for 
+
+    # Replace C files:
+    for src_file,walk_folder,src_path in c_files:
+      # print(src_file)
+      # print(walk)
+      name = "OTI_"+src_file.replace(src_path,"").upper().replace('/',"_").replace(".",'_')
+      str_out = ''
+      if '.h' in src_file:
+        str_out += "#ifndef "+name + endl
+        str_out += "#define "+name + endl + endl
+      # end if 
+      for r, d, f in os.walk(walk_folder): 
+        for item in f:
+          ext = item.split('.')[-1]
+          if ext in c_types:
+            str_out += '#include "{0}"\n\n'.format(os.path.join(r.replace(src_path,""),item))
+          # end if
+        # end for
+        break 
+      # end for 
+      if '.h' in src_file:
+        str_out += "#endif"+endl
+      # end if 
+      file = open(src_file,'w')
+      file.write(str_out)
+      file.close()
+    # end for 
+
+    
+    
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def process_headers_static(self, base_dir = '', tab='  '):
+
+    folders={}
+    # folders['static'] = []
+
+    
+    include_path_val = os.path.join(base_dir,'include/oti/static/')
+    for r, d, f in os.walk(include_path_val):
+      for direct in d:
+        folders[os.path.join(r,direct).replace(include_path_val,"")]=[]
+      break
+    #  
+
+    # r=>root, d=>directories, f=>files
+    for key, files_in_dir in folders.items():
+      location = include_path_val + key
+      for r, d, f in os.walk(location):
+        for item in f:
+          if '.h' in item:
+            files_in_dir.append(os.path.join(r, item))
+          #
+        #
+      #
+    #
+
+    out_dir = os.path.join(base_dir,"include/pyoti/c_otilib/static/")
+    InterHeader = """# ========================================================================================="""
+         
+    for key, files in folders.items():
+      structures = {}
+      structures['num']   = ""
+      structures['fenum'] = ""
+      structures['arr']   = ""
+      structures['fearr'] = ""
+
+      header_out = ""
+      str_out = "" 
+      # print(key)
+      for file in files:
+        # print(files)
+        f = open(file,"r")
+        string = f.read()
+        f.close()
+        if "enums" in file:
+          header_out += "\n# From "+file+"\n"
+          string =  remove_annotations(string).replace("enum", "cdef enum")
+          string = string.replace("typedef","ctypedef")
+          string = string.replace("}","# }")
+          string = string.replace("{",": # {")
+          header_out += string
+          header_out += "\n"
+        elif "structures" in file:
+          struct = "\n# From "+file+"\n"
+          string =  remove_annotations(string).replace("enum", "cdef enum")
+          string = string.replace("typedef","ctypedef")
+          pattern = "}(.*?);"
+          type_name = re.search(pattern, string).group(1)
+          string = string.replace("struct", 'struct '+type_name)
+          if 'array' in file:
+            if 'gauss' in file:
+              val_key = 'fearr'
+            else:
+              val_key = 'arr'
+            # end if
+          elif 'scalar' in file:
+            if 'gauss' in file:
+              val_key = 'fenum'
+            else:
+              val_key = 'num'
+            # end if 
+          # end if
+          string = string.replace("}","# }")
+          string = string.replace("{",": # {")
+
+          structures[val_key] = "\n# From "+file+"\n"
+          structures[val_key] += string + "\n"          
+        else:
+          str_out += "\n# From "+file+"\n"
+          string = remove_annotations(string).replace("(void)","()").replace("( void )","()")
+          for i in range(10):
+            string = string.replace(" \n","\n")
+          #
+          # string = string.replace(",\n",", &\n")
+          str_out += string
+          str_out += "\n"
+        # end if 
+      #
+      # Collect the structure files in correct order.
+      header_out += structures['num']
+      header_out += structures['arr']
+      header_out += structures['fenum']
+      header_out += structures['fearr']
+
+      str_out_file = header_out +InterHeader+ str_out
+      str_out_file = str_out_file.replace("\n","\n"+tab)
+      str_out_file = 'cdef extern from "oti/oti.h" nogil:\n\n' + str_out_file
+      
+      f=open(out_dir+key+".pxi","w")
+
+      f.write(str_out_file)
+      f.close()
+    # end for 
+  #--------------------------------------------------------------------------------------------------- 
+
+
+
+def comment_replacer(match): 
+  start,mid,end = match.group(1,2,3) 
+  if mid is None: 
+    # single line comment 
+    return '' 
+  elif start is not None or end is not None: 
+    # multi line comment at start or end of a line 
+    return '' 
+  elif '\n' in mid: 
+    # multi line comment with line break 
+    return '\n' 
+  else: 
+    # multi line comment without line break 
+    return ' ' 
+
+comment_re = re.compile( 
+  r'(^)?[^\S\n]*/(?:\*(.*?)\*/[^\S\n]*|/[^\n]*)($)?', 
+  re.DOTALL | re.MULTILINE 
+)
+
+
+def remove_annotations(string):
+  str_nocomm=comment_re.sub(comment_replacer, string)
+  str_nocomm= re.sub(r'(?m)^ *#.*\n?', '', str_nocomm)
+  for i in range(10):
+    str_nocomm = str_nocomm.replace("\n\n","\n")
+
+  return str_nocomm
 

@@ -181,7 +181,7 @@ cdef class {arr_pytype}:
     for i in range(self.arr.nrows):
       for j in range(self.arr.ncols):
         k = j+i*self.arr.ncols
-        tmp[i,j] = self.arr.p_data[k].re
+        tmp[i,j] = self.arr.p_data[k].{real_str}
       # end for 
     # end for 
 

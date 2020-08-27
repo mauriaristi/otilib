@@ -389,7 +389,7 @@ void fedarr_set_item_ij_r( coeff_t num, uint64_t i, uint64_t j, fedarr_t* res){
 
 // ****************************************************************************************************
 void fedarr_set_item_ijk_r(coeff_t num, uint64_t i, uint64_t j, uint64_t k, fedarr_t* res){
-    
+
     if ( k < res->nip ){
 
         darr_set_item_ij_r( num, i, j, &res->p_data[k]);
@@ -403,10 +403,6 @@ void fedarr_set_item_ijk_r(coeff_t num, uint64_t i, uint64_t j, uint64_t k, feda
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
 
 
 

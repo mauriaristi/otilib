@@ -16,6 +16,9 @@ from pyoti.real cimport dmat
 import  pyoti.real as r
 cimport pyoti.real as r
 
+import  pyoti.sparse as soti
+cimport pyoti.sparse as soti
+
 from pyoti.dense import  omat, otinum, e as eps
 from pyoti.dense cimport omat, otinum
 
@@ -30,6 +33,8 @@ from pyoti.sparse cimport sotinum, matso, sotife, matsofe, get_deriv
 from pyoti.sparse cimport zeros, array, ones, eye, truncate, one, zero, number
 from pyoti.sparse cimport det, norm, inv, dot, transpose, sqrt, pow, mul, sum, sub, div
 from pyoti.sparse cimport gauss_integrate, dot_product
+
+
 
 import  numpy as np
 cimport numpy as np

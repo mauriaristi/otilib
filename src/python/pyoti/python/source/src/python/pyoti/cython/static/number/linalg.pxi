@@ -127,7 +127,7 @@ cpdef dot(object lhs, object rhs, object out = None):
   cdef matsofe    Flhs, Frhs, Fres
   cdef fearrso_t cFres
 
-  cdef csr_matso  Slhs
+  cdef csr_matrix  Slhs
 
   cdef uint8_t res_flag = 1
   cdef object res = None
@@ -222,15 +222,15 @@ cpdef dot(object lhs, object rhs, object out = None):
       raise TypeError("Unsupported types at dot operation.")      
     # end if    
 
-  elif tlhs is csr_matso:
+  elif tlhs is csr_matrix:
 
     # Slhs = lhs
     if   trhs is matso: # SO
       if res_flag:
         Ores = out
-        csrmatso_matmul_SO_to( lhs, rhs, Ores)
+        csrmatrix_matmul_SO_to( lhs, rhs, Ores)
       else:
-        res = csrmatso_matmul_SO( lhs, rhs)
+        res = csrmatrix_matmul_SO( lhs, rhs)
       # end if 
 
     else:
@@ -607,7 +607,7 @@ cpdef inv_block(object arr, object out = None):
 
   cdef matso      O, Ores, tmp
   cdef arrso_t   cOres
-  cdef csr_matso  S, Sres
+  cdef csr_matrix  S, Sres
   # cdef dmat       R, Rres
   # cdef darr_t    cRres
   # cdef matsofe    F, Fres
@@ -630,7 +630,7 @@ cpdef inv_block(object arr, object out = None):
 
   # supported types:
   #    -  matso
-  #    -  csr_matso
+  #    -  csr_matrix
 
   if   tarr is matso:    
     O = arr
@@ -696,7 +696,7 @@ cpdef solve(object K_in, matso b_in, matso out = None):
   import scipy.sparse.linalg as spla
 
   cdef matso      O, Ores, Otmp
-  cdef csr_matso  S, Sres, Stmp  
+  cdef csr_matrix  S, Sres, Stmp  
   cdef uint64_t i,j,k,l
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
   cdef uint8_t res_flag = 1
@@ -710,7 +710,7 @@ cpdef solve(object K_in, matso b_in, matso out = None):
 
   # supported types:
   #    -  matso
-  #    -  csr_matso
+  #    -  csr_matrix
 
   if   tK is matso:
     
@@ -720,7 +720,7 @@ cpdef solve(object K_in, matso b_in, matso out = None):
       res = solve_dense(K_in, b_in)
     # end if
 
-  elif tK is csr_matso:
+  elif tK is csr_matrix:
 
     if res_flag:
       solve_sparse( K_in, b_in, out = out)
@@ -816,7 +816,7 @@ cdef solve_dense(matso K_in, matso b_in, matso out = None):
 
 
 #*****************************************************************************************************
-cdef solve_sparse(csr_matso K_in, matso b_in, matso out = None):
+cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -895,49 +895,37 @@ cpdef get_order_im_array(ord_t ordi, matso tmp):
   #***************************************************************************************************
   global dhl
 
-  cdef np.ndarray res = np.zeros(1)
-  # cdef sotinum_t otmp
-  # cdef bases_t* bases_list
-  # cdef ndir_t nnz
-  # cdef imdir_t maxidx = 0
-  # cdef uint64_t i,j,k
+  cdef np.ndarray res
+  cdef sotinum_t otmp
+  cdef ord_t order
+  cdef imdir_t maxidx = 0, idx
+  cdef uint64_t i, j, k
 
-  # for i in range(tmp.size):    
-  #   otmp = tmp.arr.p_data[i]
 
-  #   if otmp.order >= ordi:
-  #     nnz = otmp.p_nnz[ordi-1]
-      
-  #     if nnz > 0:
-  #       maxidx = max( maxidx, otmp.p_idx[ordi-1][nnz-1])
-  #     # end if
 
-  #   # end if 
-  # # end for
+  maxidx = soti_get_ndir_order(ordi,&tmp.arr.p_data[0])
+  order  = soti_get_order( &tmp.arr.p_data[0] )
+  
+  res = np.zeros(( tmp.nrows, tmp.ncols*maxidx ), dtype = np.float64)
 
-  # # get maximum basis for this index:
-  # bases_list = dhelp_get_imdir( maxidx, ordi, dhl)
+  for i in range(tmp.nrows):
+    for j in range(tmp.ncols):
 
-  # maxidx = dhelp_ndirOrder( bases_list[ordi-1], ordi )
+      otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
 
-  # res = np.zeros((tmp.nrows,tmp.ncols*maxidx), dtype = np.float64)
+      if order >= ordi:
 
-  # for i in range(tmp.nrows):
-  #   for j in range(tmp.ncols):
+        for k in range( maxidx ): 
+          
+          idx = soti_get_indx(k, ordi)
+          res[ i, j + tmp.ncols * k ] = soti_get_item( idx, ordi, &otmp)
 
-  #     otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
+        # end for
 
-  #     if otmp.order >= ordi:
-        
-  #       nnz = otmp.p_nnz[ordi-1]
-        
-  #       for k in range( nnz ):          
-  #         res[ i, j + tmp.ncols * otmp.p_idx[ordi-1][k] ] = otmp.p_im[ordi-1][k]
-  #       # end for
+      # end if 
 
-  #     # end if 
-  #   # end for 
-  # # end for
+    # end for 
+  # end for
 
   return res
 
@@ -956,43 +944,34 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
   """
   #***************************************************************************************************
   global dhl
-
-  pass
   
-  # cdef sotinum_t otmp
-  # cdef ndir_t nnz, nnz_set
-  # cdef coeff_t val
-  # cdef uint64_t i,j,k
+  cdef sotinum_t otmp
+  cdef imdir_t nnz, idx
+  cdef coeff_t val
+  cdef uint64_t i,j,k
 
-  # nnz = arr.shape[1]/tmp.ncols
+  nnz = arr.shape[1]/tmp.ncols
 
-  # for i in range(tmp.nrows):
+  for i in range(tmp.nrows):
     
-  #   for j in range(tmp.ncols):
+    for j in range(tmp.ncols):
 
-  #     soti_set_r(0.0, &otmp, dhl)
-
-  #     nnz_set = 0
+      soti_set_r(0.0, &otmp, dhl)
         
-  #     for k in range( nnz ):          
+      for k in range( nnz ):          
         
-  #       val = arr[ i, j + tmp.ncols * k ] 
+        val = arr[ i, j + tmp.ncols * k ] 
         
-  #       if val != 0.0:
+        idx = soti_get_indx(k, ordi)
 
-  #         otmp.p_idx[ordi-1][nnz_set]= k
-  #         otmp.p_im[ordi-1][nnz_set] = val
-  #         nnz_set += 1
-  #         otmp.p_nnz[ordi-1] += 1
+        soti_set_item( val, idx, ordi, &otmp, dhl)
 
-  #       # end if
+      # end for
 
-  #     # end for
+      tmp[i,j] += sotinum.create( &otmp)
 
-  #     tmp[i,j] += sotinum.create( &otmp, FLAGS = 0)
-
-  #   # end for 
-  # # end for
+    # end for 
+  # end for
 
 #-----------------------------------------------------------------------------------------------------
 

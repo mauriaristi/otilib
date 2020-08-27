@@ -127,7 +127,7 @@ cpdef dot(object lhs, object rhs, object out = None):
   cdef matsofe    Flhs, Frhs, Fres
   cdef fearrso_t cFres
 
-  cdef csr_matso  Slhs
+  cdef csr_matrix  Slhs
 
   cdef uint8_t res_flag = 1
   cdef object res = None
@@ -222,15 +222,15 @@ cpdef dot(object lhs, object rhs, object out = None):
       raise TypeError("Unsupported types at dot operation.")      
     # end if    
 
-  elif tlhs is csr_matso:
+  elif tlhs is csr_matrix:
 
     # Slhs = lhs
     if   trhs is matso: # SO
       if res_flag:
         Ores = out
-        csrmatso_matmul_SO_to( lhs, rhs, Ores)
+        csrmatrix_matmul_SO_to( lhs, rhs, Ores)
       else:
-        res = csrmatso_matmul_SO( lhs, rhs)
+        res = csrmatrix_matmul_SO( lhs, rhs)
       # end if 
 
     else:
@@ -609,7 +609,7 @@ cpdef inv_block(object arr, object out = None):
 
   cdef matso      O, Ores, tmp
   cdef arrso_t   cOres
-  cdef csr_matso  S, Sres
+  cdef csr_matrix  S, Sres
   # cdef dmat       R, Rres
   # cdef darr_t    cRres
   # cdef matsofe    F, Fres
@@ -632,7 +632,7 @@ cpdef inv_block(object arr, object out = None):
 
   # supported types:
   #    -  matso
-  #    -  csr_matso
+  #    -  csr_matrix
 
   if   tarr is matso:    
     O = arr
@@ -698,7 +698,7 @@ cpdef solve(object K_in, matso b_in, matso out = None):
   import scipy.sparse.linalg as spla
 
   cdef matso      O, Ores, Otmp
-  cdef csr_matso  S, Sres, Stmp  
+  cdef csr_matrix  S, Sres, Stmp  
   cdef uint64_t i,j,k,l
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
   cdef uint8_t res_flag = 1
@@ -712,7 +712,7 @@ cpdef solve(object K_in, matso b_in, matso out = None):
 
   # supported types:
   #    -  matso
-  #    -  csr_matso
+  #    -  csr_matrix
 
   if   tK is matso:
     
@@ -722,7 +722,7 @@ cpdef solve(object K_in, matso b_in, matso out = None):
       res = solve_dense(K_in, b_in)
     # end if
 
-  elif tK is csr_matso:
+  elif tK is csr_matrix:
 
     if res_flag:
       solve_sparse( K_in, b_in, out = out)
@@ -818,7 +818,7 @@ cdef solve_dense(matso K_in, matso b_in, matso out = None):
 
 
 #*****************************************************************************************************
-cdef solve_sparse(csr_matso K_in, matso b_in, matso out = None):
+cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """

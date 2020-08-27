@@ -220,7 +220,7 @@ cdef class elbased:
     
 
     cdef uint64_t i, j, k
-    cdef sotife tmp
+    cdef sotife tmp, xi, eta, zeta
 
     if self.is_allocated():
       self.end()

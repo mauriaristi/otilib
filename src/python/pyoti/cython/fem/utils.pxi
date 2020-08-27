@@ -53,6 +53,50 @@ elTypeNames = ["point",
 
 
 
+# This is a global variable "alg". Determines the base algbera to be used when performing 
+# FEM operations. It starts with sparse OTI numbers, but it can be changed to whatever
+# algebra is needed.
+
+cdef public object alg = soti # Start the algebra as sparse OTI.
+
+
+
+
+
+
+# ****************************************************************************************************
+cpdef get_global_algebra():
+  """
+  PORPUSE: Define the algebra used for the FEM analysis.
+  """
+  global alg
+
+  return alg
+    
+#-----------------------------------------------------------------------------------------------------
+
+# ****************************************************************************************************
+cpdef set_global_algebra(object algebra):
+  """
+  PORPUSE: Define the algebra used for the FEM analysis.
+  """
+  global alg
+
+  try:
+    
+    new_el_test      = algebra.elm_help()
+    new_gauss_array  = algebra.zeros((2,2),nip=2)
+    new_gauss_scalar = algebra.zero(nip=2)
+    
+    alg = algebra
+
+  except:
+    raise ValueError("Invalid algebra for << pyoti.fem >> module.")
+  # end try
+    
+#-----------------------------------------------------------------------------------------------------
+
+
 # #*****************************************************************************************************
 # cpdef int3d(fefunction func1, region = -1):
 #   """ 

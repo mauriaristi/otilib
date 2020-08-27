@@ -32,6 +32,7 @@ cdef class matsofe:
   cpdef get_item_ij(   self, int64_t i, int64_t j, sotife out=*)
 
   cpdef set(           self, object rhs   )
+  cpdef set_ijk(self, object rhs, uint64_t i, uint64_t j, uint64_t k)
 
   cdef __setitem__r(self, object val, coeff_t value)
   # cdef __setitem__R(self, object val, dmat    value)

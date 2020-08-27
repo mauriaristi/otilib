@@ -127,6 +127,34 @@ cdef class {fearr_pytype}:
   @property
   def real(self):
     """
+    PURPOSE:      Get a real Gauss array with all coefficients in the real direction.
+
+    """
+    #*************************************************************************************************
+
+    cdef r.dmatfe tmp
+    cdef uint64_t i, j, k
+    cdef {num_type} {num_func}_tmp
+
+    tmp = r.zeros(self.shape, nip=self.nip)
+
+    for i in range(self.arr.nrows):
+      for j in range(self.arr.ncols):
+        for k in range(self.arr.nip):
+          {num_func}_tmp = {fearr_func}_get_item_ijk(&self.arr, i, j, k);
+          fedarr_set_item_ijk_r( {num_func}_tmp.{real_str} , i, j, k, &tmp.arr);
+        # end for
+      # end for
+    # end for
+
+    return tmp
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
+  def real_numpy(self):
+    """
     PURPOSE:      Get a numpy array with all coefficients in the real direction.
 
     """
@@ -1415,6 +1443,41 @@ cdef class {fearr_pytype}:
     return {fearr_pytype}.create(&res)
 
   #---------------------------------------------------------------------------------------------------  
+
+  #***************************************************************************************************
+  cpdef set_ijk(self, object rhs, uint64_t i, uint64_t j, uint64_t k):
+    """
+    PURPOSE:  Sets from another value.
+    """
+    #*************************************************************************************************
+    
+
+    cdef {num_pytype} orhs
+    cdef coeff_t rrhs
+
+    trhs = type(rhs)
+
+    if   trhs is {num_pytype}:
+
+      orhs = rhs
+      {fearr_func}_set_item_ijk_o( &orhs.num, i, j, k, &self.arr)
+
+    else:
+
+      try:
+      
+        rrhs = rhs
+        {fearr_func}_set_item_ijk_r( rrhs, i, j, k, &self.arr)
+      
+      except:
+      
+        raise ValueError("Supported values are real scalar and {num_pytype}.")
+
+      # end try
+
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   cpdef set(self, object rhs):

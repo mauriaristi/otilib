@@ -1,9 +1,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  lil_{arr_pytype}    :::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  lil_matrix    :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class csr_{arr_pytype}:
+cdef class csr_matrix:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -16,19 +16,19 @@ cdef class csr_{arr_pytype}:
   
   def __init__(self, arg1, shape=None, copy = True): 
     """
-    PURPOSE:      Python level constructor of the csr_{arr_pytype} class.
+    PURPOSE:      Python level constructor of the csr_matrix class.
 
-    DESCRIPTION:  Creates a new empty csr_{arr_pytype} matrix.
+    DESCRIPTION:  Creates a new empty csr_matrix matrix.
                  
     """
     #*************************************************************************************************
     
     cdef uint64_t i, j, k, ncols, nrows
-    cdef lil_{arr_pytype} lil
+    cdef lil_matrix lil
     
     targ1 = type(arg1)
 
-    if targ1 == lil_{arr_pytype} :
+    if targ1 == lil_matrix :
       # Create CSR matrix from lil matrix type
       lil = arg1
       self.nrows, self.ncols = lil.shape
@@ -277,7 +277,7 @@ cdef class csr_{arr_pytype}:
     
     
 
-    cdef csr_{arr_pytype} res = <csr_{arr_pytype}> csr_{arr_pytype}.__new__(csr_{arr_pytype})
+    cdef csr_matrix res = <csr_matrix> csr_matrix.__new__(csr_matrix)
     cdef object[:]   data
     cdef uint64_t[:] indices
     cdef uint64_t[:] indptr
@@ -307,7 +307,7 @@ cdef class csr_{arr_pytype}:
     """
     #*************************************************************************************************
     
-    cdef csr_{arr_pytype} res = <csr_{arr_pytype}> csr_{arr_pytype}.__new__(csr_{arr_pytype})
+    cdef csr_matrix res = <csr_matrix> csr_matrix.__new__(csr_matrix)
     cdef object[:]   data
     cdef uint64_t[:] indices
     cdef uint64_t[:] indptr
@@ -677,7 +677,7 @@ cdef class csr_{arr_pytype}:
 
     cdef {num_pytype} ores, oval
     cdef uint64_t i
-    cdef csr_{arr_pytype} res
+    cdef csr_matrix res
 
     res = self.zeros_like()
 
@@ -705,7 +705,7 @@ cdef class csr_{arr_pytype}:
     cdef ord_t  order
     cdef {num_pytype} ores, oval
     cdef uint64_t i
-    cdef csr_{arr_pytype} res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -734,7 +734,7 @@ cdef class csr_{arr_pytype}:
     cdef ord_t  order
     cdef {num_pytype} ores, oval
     cdef uint64_t i, j, k
-    cdef csr_{arr_pytype} res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -763,7 +763,7 @@ cdef class csr_{arr_pytype}:
     cdef ord_t  order
     cdef {num_pytype} ores, oval
     cdef uint64_t i, j, k
-    cdef csr_{arr_pytype} res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -792,7 +792,7 @@ cdef class csr_{arr_pytype}:
     cdef ord_t  order
     cdef {num_pytype} ores, oval
     cdef uint64_t i, j, k
-    cdef csr_{arr_pytype} res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -819,7 +819,7 @@ cdef class csr_{arr_pytype}:
     
     cdef {num_pytype} ores, oval
     cdef uint64_t i, j, k
-    cdef csr_{arr_pytype} res
+    cdef csr_matrix res
 
     res = self.zeros_like()
 
@@ -848,7 +848,7 @@ cdef class csr_{arr_pytype}:
     cdef ord_t  order
     cdef {num_pytype} ores, oval
     cdef uint64_t i, j, k
-    cdef csr_{arr_pytype} res
+    cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
@@ -907,11 +907,11 @@ cdef class csr_{arr_pytype}:
   #---------------------------------------------------------------------------------------------------
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# :::::::::::::::::::::::::::::::::::: END OF CLASS csr_{arr_pytype} ::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::::: END OF CLASS csr_matrix ::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 # ****************************************************************************************************
-cdef void csr{arr_pytype}_matmul_SO_to(csr_{arr_pytype} lhs, {arr_pytype} rhs, {arr_pytype} res):
+cdef void csrmatrix_matmul_SO_to(csr_matrix lhs, {arr_pytype} rhs, {arr_pytype} res):
   """
   PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
 
@@ -960,7 +960,7 @@ cdef void csr{arr_pytype}_matmul_SO_to(csr_{arr_pytype} lhs, {arr_pytype} rhs, {
 # ----------------------------------------------------------------------------------------------------
 
 # ****************************************************************************************************
-cdef {arr_pytype} csr{arr_pytype}_matmul_SO(csr_{arr_pytype} lhs, {arr_pytype} rhs):
+cdef {arr_pytype} csrmatrix_matmul_SO(csr_matrix lhs, {arr_pytype} rhs):
   """
   PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
 
@@ -971,7 +971,7 @@ cdef {arr_pytype} csr{arr_pytype}_matmul_SO(csr_{arr_pytype} lhs, {arr_pytype} r
   
   res = zeros((lhs.nrows,rhs.ncols))
 
-  csr{arr_pytype}_matmul_SO_to( lhs, rhs, res)
+  csrmatrix_matmul_SO_to( lhs, rhs, res)
 
   return res
 

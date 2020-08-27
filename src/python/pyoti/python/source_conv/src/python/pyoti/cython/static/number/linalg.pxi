@@ -114,7 +114,7 @@ cpdef dot(object lhs, object rhs, object out = None):
   cdef {fearr_pytype}    Flhs, Frhs, Fres
   cdef {fearr_type} cFres
 
-  cdef csr_{arr_pytype}  Slhs
+  cdef csr_matrix  Slhs
 
   cdef uint8_t res_flag = 1
   cdef object res = None
@@ -209,15 +209,15 @@ cpdef dot(object lhs, object rhs, object out = None):
       raise TypeError("Unsupported types at dot operation.")      
     # end if    
 
-  elif tlhs is csr_{arr_pytype}:
+  elif tlhs is csr_matrix:
 
     # Slhs = lhs
     if   trhs is {arr_pytype}: # SO
       if res_flag:
         Ores = out
-        csr{arr_pytype}_matmul_SO_to( lhs, rhs, Ores)
+        csrmatrix_matmul_SO_to( lhs, rhs, Ores)
       else:
-        res = csr{arr_pytype}_matmul_SO( lhs, rhs)
+        res = csrmatrix_matmul_SO( lhs, rhs)
       # end if 
 
     else:
@@ -569,7 +569,7 @@ cpdef inv_block(object arr, object out = None):
 
   cdef {arr_pytype}      O, Ores, tmp
   cdef {arr_type}   cOres
-  cdef csr_{arr_pytype}  S, Sres
+  cdef csr_matrix  S, Sres
   # cdef dmat       R, Rres
   # cdef darr_t    cRres
   # cdef {fearr_pytype}    F, Fres
@@ -592,7 +592,7 @@ cpdef inv_block(object arr, object out = None):
 
   # supported types:
   #    -  {arr_pytype}
-  #    -  csr_{arr_pytype}
+  #    -  csr_matrix
 
   if   tarr is {arr_pytype}:    
     O = arr
@@ -651,7 +651,7 @@ cpdef solve(object K_in, {arr_pytype} b_in, {arr_pytype} out = None):
   import scipy.sparse.linalg as spla
 
   cdef {arr_pytype}      O, Ores, Otmp
-  cdef csr_{arr_pytype}  S, Sres, Stmp  
+  cdef csr_matrix  S, Sres, Stmp  
   cdef uint64_t i,j,k,l
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
   cdef uint8_t res_flag = 1
@@ -665,7 +665,7 @@ cpdef solve(object K_in, {arr_pytype} b_in, {arr_pytype} out = None):
 
   # supported types:
   #    -  {arr_pytype}
-  #    -  csr_{arr_pytype}
+  #    -  csr_matrix
 
   if   tK is {arr_pytype}:
     
@@ -675,7 +675,7 @@ cpdef solve(object K_in, {arr_pytype} b_in, {arr_pytype} out = None):
       res = solve_dense(K_in, b_in)
     # end if
 
-  elif tK is csr_{arr_pytype}:
+  elif tK is csr_matrix:
 
     if res_flag:
       solve_sparse( K_in, b_in, out = out)
@@ -764,7 +764,7 @@ cdef solve_dense({arr_pytype} K_in, {arr_pytype} b_in, {arr_pytype} out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef solve_sparse(csr_{arr_pytype} K_in, {arr_pytype} b_in, {arr_pytype} out = None):
+cdef solve_sparse(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -841,49 +841,35 @@ cpdef get_order_im_array(ord_t ordi, {arr_pytype} tmp):
   #***************************************************************************************************
   
 
-  cdef np.ndarray res = np.zeros(1)
-  # cdef {num_type} otmp
-  # cdef bases_t* bases_list
-  # cdef ndir_t nnz
-  # cdef imdir_t maxidx = 0
-  # cdef uint64_t i,j,k
+  cdef np.ndarray res
+  cdef {num_type} otmp
+  cdef ord_t order
+  cdef imdir_t maxidx = 0, idx
+  cdef uint64_t i, j, k
 
-  # for i in range(tmp.size):    
-  #   otmp = tmp.arr.p_data[i]
+  maxidx = {num_func}_get_ndir_order(ordi,&tmp.arr.p_data[0])
+  order  = {num_func}_get_order( &tmp.arr.p_data[0] )
+  
+  res = np.zeros(( tmp.nrows, tmp.ncols*maxidx ), dtype = np.float64)
 
-  #   if otmp.order >= ordi:
-  #     nnz = otmp.p_nnz[ordi-1]
-      
-  #     if nnz > 0:
-  #       maxidx = max( maxidx, otmp.p_idx[ordi-1][nnz-1])
-  #     # end if
+  for i in range(tmp.nrows):
+    for j in range(tmp.ncols):
 
-  #   # end if 
-  # # end for
+      otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
 
-  # # get maximum basis for this index:
-  # bases_list = dhelp_get_imdir( maxidx, ordi)
+      if order >= ordi:
 
-  # maxidx = dhelp_ndirOrder( bases_list[ordi-1], ordi )
+        for k in range( maxidx ): 
+          
+          idx = {num_func}_get_indx(k, ordi)
+          res[ i, j + tmp.ncols * k ] = {num_func}_get_item( idx, ordi, &otmp)
 
-  # res = np.zeros((tmp.nrows,tmp.ncols*maxidx), dtype = np.float64)
+        # end for
 
-  # for i in range(tmp.nrows):
-  #   for j in range(tmp.ncols):
+      # end if 
 
-  #     otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
-
-  #     if otmp.order >= ordi:
-        
-  #       nnz = otmp.p_nnz[ordi-1]
-        
-  #       for k in range( nnz ):          
-  #         res[ i, j + tmp.ncols * otmp.p_idx[ordi-1][k] ] = otmp.p_im[ordi-1][k]
-  #       # end for
-
-  #     # end if 
-  #   # end for 
-  # # end for
+    # end for 
+  # end for
 
   return res
 
@@ -896,43 +882,34 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, {arr_pytype} tmp):
   """
   #***************************************************************************************************
   
-
-  pass
   
-  # cdef {num_type} otmp
-  # cdef ndir_t nnz, nnz_set
-  # cdef coeff_t val
-  # cdef uint64_t i,j,k
+  cdef {num_type} otmp
+  cdef imdir_t nnz, idx
+  cdef coeff_t val
+  cdef uint64_t i,j,k
 
-  # nnz = arr.shape[1]/tmp.ncols
+  nnz = arr.shape[1]/tmp.ncols
 
-  # for i in range(tmp.nrows):
+  for i in range(tmp.nrows):
     
-  #   for j in range(tmp.ncols):
+    for j in range(tmp.ncols):
 
-  #     {num_func}_set_r(0.0, &otmp)
-
-  #     nnz_set = 0
+      {num_func}_set_r(0.0, &otmp)
         
-  #     for k in range( nnz ):          
+      for k in range( nnz ):          
         
-  #       val = arr[ i, j + tmp.ncols * k ] 
+        val = arr[ i, j + tmp.ncols * k ] 
         
-  #       if val != 0.0:
+        idx = {num_func}_get_indx(k, ordi)
 
-  #         otmp.p_idx[ordi-1][nnz_set]= k
-  #         otmp.p_im[ordi-1][nnz_set] = val
-  #         nnz_set += 1
-  #         otmp.p_nnz[ordi-1] += 1
+        {num_func}_set_item( val, idx, ordi, &otmp)
 
-  #       # end if
+      # end for
 
-  #     # end for
+      tmp[i,j] += {num_pytype}.create( &otmp)
 
-  #     tmp[i,j] += {num_pytype}.create( &otmp, FLAGS = 0)
-
-  #   # end for 
-  # # end for
+    # end for 
+  # end for
 
 #-----------------------------------------------------------------------------------------------------
 

@@ -80,6 +80,28 @@ cdef class {fenum_pytype}:
   @property
   def real(self):
     """
+    PURPOSE:      Get a real Gauss scalar with all coefficients in the real direction.
+
+    """
+    #*************************************************************************************************
+
+    cdef r.dnumfe tmp
+    cdef uint64_t i
+
+    tmp = r.zero(nip=self.nip)
+
+    for i in range(self.num.nip):
+      tmp[i] = self.num.p_data[i].{real_str}
+    # end for 
+
+    return tmp
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
+  def real_numpy(self):
+    """
     PURPOSE:      Get a numpy array with all coefficients in the real direction.
 
     """

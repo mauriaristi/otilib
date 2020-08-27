@@ -1,7 +1,7 @@
 
 
 # Append directives
-include "common/directives.pxi"
+include "../common/directives.pxi"
 
 # Append included libraries
 include "{module_name}/include.pxi"
@@ -55,3 +55,6 @@ include "{module_name}/math.pxi"
 include "{module_name}/linalg.pxi"
 
 include "{module_name}/algebra.pxi"
+
+# FEM helper
+include "{module_name}/fem/base.pxi"

@@ -1,9 +1,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  lil_dmat    :::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::     CLASS  lil_matrix    :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class lil_dmat:
+cdef class lil_matrix:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -16,9 +16,9 @@ cdef class lil_dmat:
   
   def __init__(self, shape): 
     """
-    PURPOSE:      Python level constructor of the lil_dmat class.
+    PURPOSE:      Python level constructor of the lil_matrix class.
 
-    DESCRIPTION:  Creates a new empty lil_dmat matrix.
+    DESCRIPTION:  Creates a new empty lil_matrix matrix.
                  
     """
     #*************************************************************************************************
@@ -302,7 +302,7 @@ cdef class lil_dmat:
     
     
 
-    cdef lil_dmat res = lil_dmat(self.shape)
+    cdef lil_matrix res = lil_matrix(self.shape)
     cdef uint64_t i, k
     
     for i in range(self.nrows):
@@ -324,7 +324,7 @@ cdef class lil_dmat:
     
     
 
-    cdef lil_dmat res = lil_dmat(self.shape)
+    cdef lil_matrix res = lil_matrix(self.shape)
     cdef uint64_t i, j
     
     for i in range(self.nrows):

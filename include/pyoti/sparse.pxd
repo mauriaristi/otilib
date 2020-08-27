@@ -23,3 +23,6 @@ include "sparse/algebra.pxd"
 
 # Include sparse arrays functions.
 include "sparse/sparse_array.pxd"
+
+# Inlcude FEM helper
+include "sparse/fem.pxd"

@@ -67,4 +67,7 @@ cdef object enum2string(int64_t enumId)
 # # cdef object c_femarray_print(femarray_t* array,style = *)
 # # cdef object c_elemprops_print_perElement(elemProps_t* array,style = *)
 
+cpdef get_global_algebra()
+cpdef set_global_algebra(object algebra)
+
 # ----------------------------------------------------------------------------------------------------

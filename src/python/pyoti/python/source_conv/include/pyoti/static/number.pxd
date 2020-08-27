@@ -22,3 +22,6 @@ include "{module_name}/algebra.pxd"
 
 # Include sparse arrays functions.
 include "{module_name}/sparse_array.pxd"
+
+# Include fem helper.
+include "{module_name}/fem.pxd"

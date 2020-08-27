@@ -51,7 +51,7 @@ cpdef truncate(object humdir, object val, object out = None):
   cdef imdir_t indx
   cdef ord_t   order
   cdef {arr_pytype}      O, Ores
-  cdef csr_{arr_pytype}  S, Sres
+  cdef csr_matrix  S, Sres
   cdef dmat       R, Rres
   cdef {fearr_pytype}    F, Fres
   cdef {num_pytype}    o, ores
@@ -130,7 +130,7 @@ cpdef truncate(object humdir, object val, object out = None):
       res   = {fearr_pytype}.create(&cFres)
 
     # end if 
-  elif tval is csr_{arr_pytype}:
+  elif tval is csr_matrix:
     S = val
     if res_flag:
       
@@ -181,7 +181,7 @@ cpdef extract_im(object humdir, object val, object out = None):
   cdef imdir_t indx
   cdef ord_t   order
   cdef {arr_pytype}      O, Ores
-  cdef csr_{arr_pytype}  S, Sres
+  cdef csr_matrix  S, Sres
   cdef dmat       R, Rres
   cdef {fearr_pytype}    F, Fres
   cdef {num_pytype}    o, ores
@@ -259,7 +259,7 @@ cpdef extract_im(object humdir, object val, object out = None):
       res   = {fearr_pytype}.create(&cFres)
 
     # end if 
-  elif tval is csr_{arr_pytype}:
+  elif tval is csr_matrix:
     S = val
     if res_flag:
       
@@ -310,7 +310,7 @@ cpdef extract_deriv(object humdir, object val, object out = None):
   cdef imdir_t indx
   cdef ord_t   order
   cdef {arr_pytype}      O, Ores
-  cdef csr_{arr_pytype}  S, Sres
+  cdef csr_matrix  S, Sres
   cdef dmat       R, Rres
   cdef {fearr_pytype}    F, Fres
   cdef {num_pytype}    o, ores
@@ -387,7 +387,7 @@ cpdef extract_deriv(object humdir, object val, object out = None):
       res   = {fearr_pytype}.create(&cFres)
 
     # end if 
-  elif tval is csr_{arr_pytype}:
+  elif tval is csr_matrix:
     S = val
     if res_flag:
       
@@ -438,7 +438,7 @@ cpdef get_im(object humdir, object val, object out = None):
   cdef imdir_t indx
   cdef ord_t   order
   cdef {arr_pytype}      O, Ores
-  cdef csr_{arr_pytype}  S, Sres
+  cdef csr_matrix  S, Sres
   cdef dmat       R, Rres
   cdef {fearr_pytype}    F, Fres
   cdef {num_pytype}    o, ores
@@ -515,7 +515,7 @@ cpdef get_im(object humdir, object val, object out = None):
       res   = {fearr_pytype}.create(&cFres)
 
     # end if 
-  elif tval is csr_{arr_pytype}:
+  elif tval is csr_matrix:
     S = val
     if res_flag:
       
@@ -566,7 +566,7 @@ cpdef get_deriv(object humdir, object val, object out = None):
   cdef imdir_t indx
   cdef ord_t   order
   cdef {arr_pytype}      O, Ores
-  cdef csr_{arr_pytype}  S, Sres
+  cdef csr_matrix  S, Sres
   cdef dmat       R, Rres
   cdef {fearr_pytype}    F, Fres
   cdef {num_pytype}    o, ores
@@ -643,7 +643,7 @@ cpdef get_deriv(object humdir, object val, object out = None):
       res   = {fearr_pytype}.create(&cFres)
 
     # end if
-  elif tval is csr_{arr_pytype}:
+  elif tval is csr_matrix:
     S = val
     if res_flag:
       
@@ -692,7 +692,7 @@ cpdef get_order_im(ord_t order, object val, object out = None):
   """
   #***************************************************************************************************
   cdef {arr_pytype}      O, Ores
-  cdef csr_{arr_pytype}  S, Sres
+  cdef csr_matrix  S, Sres
   cdef dmat       R, Rres
   cdef {fearr_pytype}    F, Fres
   cdef {num_pytype}    o, ores
@@ -767,7 +767,7 @@ cpdef get_order_im(ord_t order, object val, object out = None):
       res   = {fearr_pytype}.create(&cFres)
 
     # end if
-  elif tval is csr_{arr_pytype}:
+  elif tval is csr_matrix:
     S = val
     if res_flag:
       

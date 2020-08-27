@@ -35,3 +35,6 @@ include "real/utils.pxi"
 #     SPARSE ARRAY
 # Append base class.
 include "real/sprarray/lil/base.pxi"
+
+# FEM Helper
+include "real/fem/base.pxi"

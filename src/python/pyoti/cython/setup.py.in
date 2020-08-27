@@ -66,149 +66,6 @@ Extension("pyoti.dense",
   depends=dependencies
   ),
 #
-Extension("pyoti.static.mdnum2",
-  sources = ["@CYTHON_SOUCE_DIR@/mdnum2.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.mdnum3",
-  sources = ["@CYTHON_SOUCE_DIR@/mdnum3.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.mdnum4",
-  sources = ["@CYTHON_SOUCE_DIR@/mdnum4.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.mdnum5",
-  sources = ["@CYTHON_SOUCE_DIR@/mdnum5.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.onumm1n1",
-  sources = ["@CYTHON_SOUCE_DIR@/onumm1n1.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.onumm1n2",
-  sources = ["@CYTHON_SOUCE_DIR@/onumm1n2.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.onumm1n3",
-  sources = ["@CYTHON_SOUCE_DIR@/onumm1n3.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.onumm1n5",
-  sources = ["@CYTHON_SOUCE_DIR@/onumm1n5.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.onumm1n10",
-  sources = ["@CYTHON_SOUCE_DIR@/onumm1n10.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.onumm2n5",
-  sources = ["@CYTHON_SOUCE_DIR@/onumm2n5.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.onumm2n2",
-  sources = ["@CYTHON_SOUCE_DIR@/onumm2n2.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.onumm3n3",
-  sources = ["@CYTHON_SOUCE_DIR@/onumm3n3.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
-Extension("pyoti.onumm10n1",
-  sources = ["@CYTHON_SOUCE_DIR@/onumm10n1.pyx"],
-  include_dirs = include_dirs,
-  define_macros = macros,
-  libraries = libraries,
-  # language = language,
-  extra_compile_args = extra_compile_args,
-  # extra_link_args = extra_link_args,
-  depends=dependencies
-  ),
-#
 Extension("pyoti.sparse",
   sources = ["@CYTHON_SOUCE_DIR@/sparse.pyx"],
   include_dirs = include_dirs,
@@ -230,8 +87,41 @@ Extension("pyoti.fem",
   # extra_link_args = extra_link_args,
   depends=dependencies
   ),
-#
 ]
+
+
+
+
+
+# Search for files to compile within the static module.
+files=[]
+src_path = "@CYTHON_SOUCE_DIR@/static/"
+# r=>root, d=>directories, f=>files
+for r, d, f in os.walk(src_path):
+  for item in f:
+    ext = item.split('.')[-1]
+    if ext == 'pyx':
+      files.append(os.path.join(r, item))
+    # end if 
+  # end for 
+  break
+# end for
+
+# Add all found files to the extensions.
+for f in files:
+  fname = f.replace(src_path,"")
+  name = fname.split(".")[0]
+  extensions.append( Extension("pyoti.static."+name,
+   sources = [f],                             include_dirs = include_dirs,
+   define_macros = macros,                    libraries = libraries,
+   extra_compile_args = extra_compile_args,   depends=dependencies         ) )
+# end for 
+
+
+
+
+
+
 
 # @CYTHON_SOURCES_NAMES@
 # finally, we can pass all this to distutils

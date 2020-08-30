@@ -352,6 +352,51 @@ void mdnum2_gem_ro_to(  coeff_t a,  mdnum2_t* b,  mdnum2_t* c, mdnum2_t* res){
 
 }
 
+void mdnum2_trunc_gem_oo_to( ord_t ord_lhs,  mdnum2_t* a,  ord_t ord_rhs,  mdnum2_t* b,  mdnum2_t* c, mdnum2_t* res){
+  //  General multiplication like function 'a * b + c'
+  switch( ord_lhs ){
+    case 0:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 0
+          res->r = c->r + a->r * b->r;
+          break;
+        case 1:
+          // res order: 1
+          res->e1 = c->e1 + a->r * b->e1;
+          res->e2 = c->e2 + a->r * b->e2;
+          break;
+        case 2:
+          // res order: 2
+          res->e12 = c->e12 + a->r * b->e12;
+          break;
+      }
+      break;
+    case 1:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 1
+          res->e1 = c->e1 + a->e1 * b->r;
+          res->e2 = c->e2 + a->e2 * b->r;
+          break;
+        case 1:
+          // res order: 2
+          res->e12 = c->e12 + a->e1 * b->e2 + a->e2 * b->e1;
+          break;
+      }
+      break;
+    case 2:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 2
+          res->e12 = c->e12 + a->e12 * b->r;
+          break;
+      }
+      break;
+  }
+
+}
+
 mdnum2_t mdnum2_feval(coeff_t* feval_re, mdnum2_t* x){
 
   mdnum2_t res;

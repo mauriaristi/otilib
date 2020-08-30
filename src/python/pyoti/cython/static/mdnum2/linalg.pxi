@@ -273,6 +273,59 @@ cpdef dot(object lhs, object rhs, object out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
+cpdef trunc_dot(ord_t ord_lhs, object lhs, ord_t ord_rhs, object rhs, object out = None):
+  """
+  PURPOSE:  Matrix inner product (standard matrix multiplication).
+  """
+  #***************************************************************************************************
+
+  cdef mdmat2      Olhs, Orhs, Ores
+  cdef mdarr2_t   cOres
+  cdef dmat       Rlhs, Rrhs, Rres
+  cdef darr_t    cRres
+  cdef mdmatfe2    Flhs, Frhs, Fres
+  cdef femdarr2_t cFres
+
+  cdef csr_matrix  Slhs
+
+  cdef uint8_t res_flag = 1
+  cdef object res = None
+
+  tlhs = type(lhs)
+  trhs = type(rhs)
+
+  if out is None:
+    res_flag = 0
+  # end if 
+
+  # supported types:
+  #    -  mdmat2
+  #    -  csr_matrix
+  #    -  darr
+
+  if tlhs is csr_matrix:
+    # Slhs = lhs
+    if   trhs is mdmat2: # SO
+      if res_flag:
+        Ores = out
+        csrmatrix_trunc_matmul_SO_to( ord_lhs, lhs, ord_rhs, rhs, Ores)
+      else:
+        res = csrmatrix_trunc_matmul_SO( ord_lhs, lhs, ord_rhs, rhs)
+      # end if 
+    else:
+      raise TypeError("Unsupported types at trunc_dot operation.")      
+    # end if  
+  else:
+    raise TypeError("Unsupported types at trunc_dot operation.")
+  # end if 
+
+  if res_flag == 0:
+    return res
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
 cpdef transpose(object arr, object out = None):
   """
   PURPOSE:  Matrix transpose
@@ -834,6 +887,164 @@ cdef solve_sparse(csr_matrix K_in, mdmat2 b_in, mdmat2 out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
+def solve_sparse_tests(csr_matrix K_in, mdmat2 b_in, mdmat2 out = None):
+  """
+  PURPOSE:   Solve OTI linear system of equations for a dense K_in.
+  """
+  #***************************************************************************************************
+  
+
+  from scipy.sparse.linalg import splu
+
+  cdef mdmat2      O, Ores, Otmp
+  cdef uint64_t i,j,k,l
+  cdef ord_t ordi, ord_lhs, ord_rhs, Oord
+  cdef uint8_t res_flag = 1
+
+  if out is None:
+    res_flag = 0
+  # end if      
+  
+  if res_flag:
+    Ores = out
+  else:
+    Ores = zeros(b_in.shape)
+  # end if
+
+  lu = splu(K_in.real.tocsc())
+  rhs = b_in.real
+  # Solve the real system of equations, using LU solver:
+  rhs = lu.solve(rhs)
+
+  # Solve the real coefficient
+  for i in range(Ores.nrows):      
+    for j in range(Ores.ncols):
+
+      mdarr2_set_item_ij_r( rhs[i,j], i, j, &Ores.arr)
+
+    # end for
+  # end for
+  
+  Oord = max( K_in.order, b_in.order)
+
+  for ordi in range( 1, Oord + 1 ):
+        
+    tmp = b_in.get_order_im( ordi )
+
+    for ord_rhs in range( ordi ):
+
+      ord_lhs = ordi - ord_rhs
+
+      tmp -= trunc_dot( ord_lhs, K_in, ord_rhs, Ores )
+
+    # end for 
+    
+    # Convert tmp to array (for specific order)
+    rhs = get_order_im_array( ordi, tmp )
+    # print(rhs)
+    rhs = lu.solve( rhs )
+    # print(rhs)
+    set_order_im_from_array( ordi, rhs, Ores)
+
+  # end for 
+
+  if res_flag == 0:
+
+    return Ores
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
+def solve_sparse_out(csr_matrix K_in, mdmat2 b_in, mdmat2 out = None):
+  """
+  PURPOSE:   Solve OTI linear system of equations for a dense K_in.
+  """
+  #***************************************************************************************************
+  
+
+  from scipy.sparse.linalg import splu
+
+  cdef mdmat2      O, Ores, Otmp, tmp, tmp2, tmp3
+  cdef csr_matrix  Ktmp
+  cdef uint64_t i,j,k,l
+  cdef ord_t ordi, ord_lhs, ord_rhs, Oord
+  cdef uint8_t res_flag = 1  
+
+  if out is None:
+    res_flag = 0
+  # end if      
+  
+  if res_flag:
+    Ores = out
+  else:
+    Ores = zeros(b_in.shape)
+  # end if
+
+  lu = splu(K_in.real.tocsc())
+  rhs = b_in.real
+  # Solve the real system of equations, using LU solver:
+  rhs = lu.solve(rhs)
+
+  # Solve the real coefficient
+  for i in range(Ores.nrows):      
+    for j in range(Ores.ncols):
+
+      mdarr2_set_item_ij_r( rhs[i,j], i, j, &Ores.arr)
+
+    # end for
+  # end for
+  
+  Oord = max( K_in.order, b_in.order)
+  Ktmp = K_in.zeros_like()
+  tmp = zeros( b_in.shape )
+  tmp1 = zeros( b_in.shape )
+  tmp2 = zeros( b_in.shape )
+
+  for ordi in range( 1, Oord + 1 ):
+        
+    # tmp = b_in.get_order_im( ordi )
+    get_order_im( ordi, b_in,  out = tmp )
+
+    for ord_rhs in range( ordi ):
+      
+      Ktmp.set_all(0)
+
+      ord_lhs = ordi - ord_rhs
+
+      # tmp -= dot( K_in.get_order_im( ord_lhs ), Ores.get_order_im( ord_rhs ) )
+      get_order_im( ord_lhs, K_in, out = Ktmp )
+      get_order_im( ord_rhs, Ores, out = tmp2 )
+      dot(Ktmp,tmp2,out=tmp2)
+      sub( tmp,tmp2,out=tmp)
+
+    # end for 
+    
+    # Convert tmp to array (for specific order)
+    # maxidx = onumm1n10_get_ndir_order(ordi,&tmp.arr.p_data[0])
+    # rhs = np.zeros(( tmp.nrows, tmp.ncols*maxidx ), dtype = np.float64)
+    rhs = get_order_im_array( ordi, tmp )
+    # print(rhs)
+    rhs = lu.solve( rhs )
+    # print(rhs)
+    set_order_im_from_array( ordi, rhs, Ores)
+
+  # end for 
+
+  if res_flag == 0:
+    return Ores
+  # end if 
+
+  
+
+  
+  
+  
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
 cpdef get_order_im_array(ord_t ordi, mdmat2 tmp):
   """
   PURPOSE:   Get a specific order from .
@@ -903,6 +1114,87 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, mdmat2 tmp):
         idx = mdnum2_get_indx(k, ordi)
 
         mdnum2_set_item( val, idx, ordi, &otmp)
+
+      # end for
+
+      tmp[i,j] += mdnum2.create( &otmp)
+
+    # end for 
+  # end for
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
+cpdef get_order_im_array_2(ord_t ordi, mdmat2 tmp):
+  """
+  PURPOSE:   Get a specific order from .
+  """
+  #***************************************************************************************************
+  
+
+  cdef np.ndarray res
+  cdef mdnum2_t otmp
+  cdef coeff_t* coeff_list
+  cdef ord_t order
+  cdef imdir_t maxidx = 0, idx
+  cdef uint64_t i, j, k
+
+  maxidx = mdnum2_get_ndir_order(ordi,&tmp.arr.p_data[0])
+  order  = mdnum2_get_order( &tmp.arr.p_data[0] )
+  
+  res = np.zeros(( tmp.nrows, tmp.ncols*maxidx ), dtype = np.float64)
+
+  for i in range(tmp.nrows):
+    for j in range(tmp.ncols):
+
+      otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
+
+      if order >= ordi:
+        
+        coeff_list = mdnum2_get_order_address( ordi, &otmp)
+
+        for k in range( maxidx ): 
+          
+          res[ i, j + tmp.ncols * k ] = coeff_list[k]
+
+        # end for
+
+      # end if 
+
+    # end for 
+  # end for
+
+  return res
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
+cpdef set_order_im_from_array_2(ord_t ordi, np.ndarray arr, mdmat2 tmp):
+  """
+  PURPOSE:   Set a specific order from an array.
+  """
+  #***************************************************************************************************
+  
+  
+  cdef mdnum2_t otmp
+  cdef imdir_t nnz, idx
+  cdef coeff_t val
+  cdef uint64_t i,j,k
+
+  nnz = arr.shape[1]/tmp.ncols
+
+  for i in range(tmp.nrows):
+    
+    for j in range(tmp.ncols):
+
+      mdnum2_set_r(0.0, &otmp)
+
+      coeff_list = mdnum2_get_order_address(ordi,&otmp)
+        
+      for k in range( nnz ):          
+        
+        val = arr[ i, j + tmp.ncols * k ] 
+        coeff_list[k] = val
 
       # end for
 

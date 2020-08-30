@@ -114,6 +114,25 @@ ndir_t onumm1n2_get_ndir_total(onumm1n2_t* num){
 
 }
 
+coeff_t* onumm1n2_get_order_address(ord_t order, onumm1n2_t* num){
+
+  coeff_t* res;
+
+  switch(order){
+    case 0:
+      res = &num->r;
+      break;
+    case 1:
+      res = &num->e1;
+      break;
+    case 2:
+      res = &num->e11;
+      break;
+  }
+  return res;
+
+}
+
 onumm1n2_t onumm1n2_create_r(  coeff_t lhs){
 
   onumm1n2_t res;

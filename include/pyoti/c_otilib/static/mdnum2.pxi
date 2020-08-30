@@ -532,6 +532,7 @@ cdef extern from "oti/oti.h" nogil:
   void mdnum2_gem_oo_to(  mdnum2_t* a,  mdnum2_t* b,  mdnum2_t* c, mdnum2_t* res);
   mdnum2_t mdnum2_gem_ro(  coeff_t a,  mdnum2_t* b,  mdnum2_t* c);
   void mdnum2_gem_ro_to(  coeff_t a,  mdnum2_t* b,  mdnum2_t* c, mdnum2_t* res);
+  void mdnum2_trunc_gem_oo_to( ord_t ord_lhs,  mdnum2_t* a,  ord_t ord_rhs,  mdnum2_t* b,  mdnum2_t* c, mdnum2_t* res);
   mdnum2_t mdnum2_feval(coeff_t* feval_re, mdnum2_t* x);
   void mdnum2_feval_to(coeff_t* feval_re, mdnum2_t* x, mdnum2_t* res);
   
@@ -601,6 +602,7 @@ cdef extern from "oti/oti.h" nogil:
   mdnum2_t mdnum2_init();
   ndir_t mdnum2_get_ndir_order(ord_t order, mdnum2_t* num);
   ndir_t mdnum2_get_ndir_total(mdnum2_t* num);
+  coeff_t* mdnum2_get_order_address(ord_t order, mdnum2_t* num);
   mdnum2_t mdnum2_create_r(  coeff_t lhs);
   void mdnum2_set_r(  coeff_t lhs, mdnum2_t* res);
   void mdnum2_set_o(  mdnum2_t* lhs, mdnum2_t* res);

@@ -115,6 +115,25 @@ ndir_t mdnum2_get_ndir_total(mdnum2_t* num){
 
 }
 
+coeff_t* mdnum2_get_order_address(ord_t order, mdnum2_t* num){
+
+  coeff_t* res;
+
+  switch(order){
+    case 0:
+      res = &num->r;
+      break;
+    case 1:
+      res = &num->e1;
+      break;
+    case 2:
+      res = &num->e12;
+      break;
+  }
+  return res;
+
+}
+
 mdnum2_t mdnum2_create_r(  coeff_t lhs){
 
   mdnum2_t res;

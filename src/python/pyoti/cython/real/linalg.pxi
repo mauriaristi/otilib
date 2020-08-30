@@ -589,3 +589,48 @@ cdef solve_sparse(object K_in, dmat b_in, dmat out = None):
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+def solve_sparse_tests(object K_in, dmat b_in, np.ndarray out = None):
+  """
+  PURPOSE:   Solve real linear system of equations for a sparse K.
+  """
+  #***************************************************************************************************
+  
+  from scipy.sparse.linalg import splu
+  import scipy.sparse as spr
+
+  cdef dmat      R
+  cdef np.ndarray[double,ndim=2] Rres
+  cdef np.ndarray[double,ndim=2] rhs
+  cdef uint64_t i,j
+  cdef uint8_t res_flag = 1
+
+  if out is None:
+    res_flag = 0
+  # end if      
+  
+  if res_flag:
+    Rres = out
+  else:
+    Rres = np.zeros(b_in.shape)
+  # end if
+
+  lu = splu(K_in.tocsc())
+  rhs = b_in.real
+  # Solve the real system of equations, using LU solver:
+  Rres = lu.solve(rhs)
+
+  # # Solve the real coefficient
+  # for i in range(Rres.nrows):
+  #   for j in range(Rres.ncols):
+  #     darr_set_item_ij_r( rhs[i,j], i, j, &Rres.arr)
+  #   # end for
+  # # end for  
+
+  if res_flag == 0:
+    return rhs
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------

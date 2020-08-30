@@ -130,7 +130,7 @@ class writer:
     # append imaginary direction.
     self.name_imdir = []
     self.name_imdir.append([])
-    self.name_imdir[0].append('0')
+    self.name_imdir[0].append(self.real_str)
 
     self.idx_imdir = []
     self.idx_imdir.append([])
@@ -177,9 +177,11 @@ class writer:
       # end for 
     # end for 
 
-    # Precimpute multiplication
+    # Precompute multiplication
     self.mult_res = []
     self.mult_res.append([]) # Order 0.
+    self.mult_res_total = []
+    self.mult_res_total.append([[[[0,0,self.real_str],[0,0,self.real_str]]]]) # Order 0.
 
     for ordi in range(1,self.order+1):
 
@@ -188,9 +190,10 @@ class writer:
 
       self.mult_res.append([])
       mults = self.mult_res[-1]
+
       for j in range(len(dirs)):
         mults.append([]) 
-      # end for
+      # end for      
 
       for ordj in range(1, ordi // 2 + 1):
         
@@ -215,6 +218,69 @@ class writer:
               # end if 
 
             #end if 
+            
+          # end for
+        # end for 
+      # end for 
+    # end for 
+
+    for ordi in range(1,self.order+1):
+
+      dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
+
+      self.mult_res_total.append([])
+      mults_total = self.mult_res_total[-1]
+
+      for j in range(len(dirs)):
+        mults_total.append([]) 
+      # end for
+      
+      # Do here ordj = 0
+      ordj = 0; j=0;
+      ordk = ordi - ordj
+      dirsj = self.name_imdir[ordj]
+      dirsk = self.name_imdir[ordk]
+
+      idxj = self.idx_imdir[ordj]
+      idxk = self.idx_imdir[ordk]
+      for k in range(len(dirsk)):
+
+        i,iordi = (idxk[k],ordk)
+
+        if i in idxi:
+          ii = idxi.index(i)
+          mults_total[ii].append([ [0,ordj,dirsj[j]], [idxk[k],ordk,dirsk[k]] ])
+          if  ordj != ordk:
+            mults_total[ii].append([ [idxk[k],ordk,dirsk[k]], [idxj[j],ordj,dirsj[j]] ])
+          # end if 
+        #end if 
+        
+      # end for
+
+      for ordj in range(1, ordi // 2 + 1):
+        
+        ordk = ordi - ordj
+
+        dirsj = self.name_imdir[ordj]
+        dirsk = self.name_imdir[ordk]
+
+        idxj = self.idx_imdir[ordj]
+        idxk = self.idx_imdir[ordk]
+
+        for j in range(len(dirsj)):
+          for k in range(len(dirsk)):
+
+            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+
+            if i in idxi:
+              ii = idxi.index(i)
+              mults_total[ii].append([ [idxj[j],ordj,dirsj[j]], [idxk[k],ordk,dirsk[k]] ])
+              if  ordj != ordk:
+                mults_total[ii].append([ [idxk[k],ordk,dirsk[k]], [idxj[j],ordj,dirsj[j]] ])
+              # end if 
+
+            # #end if 
             
           # end for
         # end for 
@@ -832,6 +898,117 @@ class writer:
 
     # end for 
 
+    return str_out
+
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def truncgem_like_function_oo(self, level = "", f_name = "FUNCTION", a_name= "a", a_ptr=False,
+    b_name= "b", b_ptr=False, c_name= "c", c_ptr=False, res_name = "res", separator = ",", 
+    f_open = "(", f_close = ")",  addition = " + ", to=False, tab=" "  ):
+    """
+    PORPUSE:  Truncated General multiplication  like operation between OTI and OTI.
+    """
+    global h
+
+    
+    if to:
+      res_getter = self.get_ptr
+    else:
+      res_getter = self.get
+    # end if 
+
+    if a_ptr:
+      a_getter = self.get_ptr
+    else:
+      a_getter = self.get
+    # end if
+
+    if b_ptr:
+      b_getter = self.get_ptr
+    else:
+      b_getter = self.get
+    # end if
+
+    if c_ptr:
+      c_getter = self.get_ptr
+    else:
+      c_getter = self.get
+    # end if
+
+
+    str_out = ""
+
+
+    str_out += level + self.comment + " General multiplication like function \'"
+    str_out += f_name + f_open + a_name + separator + b_name + f_close
+    str_out += addition + c_name
+    str_out += "\'\n"
+
+
+    str_out += level + "switch( ord_lhs ){" + endl
+    leveli = level + tab
+
+    for ord_lhs in range(self.order+1):
+      leveli = level + tab
+      str_out += leveli + "case "+str(ord_lhs) + ":"+endl 
+      
+      leveli = level + 2*tab
+      str_out += leveli + "switch( ord_rhs ){"+endl       
+
+      for ord_rhs in range(self.order-ord_lhs+1):
+        
+        ord_res = ord_lhs + ord_rhs
+        
+        leveli = level + 3*tab
+        str_out += leveli + "case "+str(ord_rhs) + ":"+endl 
+        
+        leveli = level + 4*tab
+        str_out += leveli + self.comment + "res order: " + str(ord_res) + endl
+
+        for i in range(len(self.mult_res_total[ord_res])):
+          
+          mults   = self.mult_res_total[ord_res][i]
+          res_dir = self.name_imdir[ord_res][i]
+
+          str_out += leveli + res_name + res_getter + res_dir + ' = '
+          str_out += c_name + c_getter + res_dir
+          k=1
+          
+          for mult in mults:
+
+            lhs = mult[0]
+            rhs = mult[1]
+
+            if lhs[1]==ord_lhs and rhs[1]==ord_rhs:
+              
+              if ( (k+3)%3 == 0 ):
+                str_out += " " + self.new_line_mark + endl
+                str_out += leveli +' '*( len(res_name+res_getter+res_dir) )
+              # end if 
+
+              str_out += addition
+              str_out += f_name + f_open
+              str_out +=         a_name + a_getter + lhs[2] + separator
+              str_out +=         b_name + b_getter + rhs[2]
+              str_out += f_close 
+
+              k+=1
+
+            # end if 
+            
+          # end for
+          str_out += self.endl
+        # end for 
+        str_out += leveli + "break"+self.endl
+        
+      # end for 
+      # str_out += leveli + "break"+self.endl
+      leveli = level + 2*tab
+      str_out += leveli + "}"+endl 
+      str_out += leveli + "break"+self.endl 
+    # end for 
+    str_out += level + "}" + endl
     return str_out
 
   #--------------------------------------------------------------------------------------------------- 
@@ -1957,6 +2134,9 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
 
+
+
+
   #***************************************************************************************************
   def write_scalar_get_order_im(self, function_name = "get_order_im", is_elemental = True, level = 0, tab = " ", 
     f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False, f_open = "(", f_close = ")", 
@@ -2231,7 +2411,57 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
 
+  #***************************************************************************************************
+  def write_get_order_address(self, level = 0, tab = " ", header = 'base'):
 
+    str_out = ""
+    leveli = level
+    f_post = 'o'
+
+    
+    lhs = "num"
+    res = "res"
+    f_prev = self.func_name
+    lhs_t = self.type_names['o']
+    func_name = self.func_name + "_get_order_address" 
+
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = self.coeff_t+'* '    
+
+    func_header +=  func_name + "("
+    func_header += "ord_t order, "
+    func_header += lhs_t + "* "+ lhs 
+    func_header += ")"
+
+    self.function_list.append(func_header)
+    self.function_list_header[header].append(func_header)
+
+    str_out += func_header +"{"+endl+endl
+
+    str_out += leveli*tab + self.coeff_t + "* " + res + self.endl
+    str_out += endl
+    
+    str_out += leveli*tab + 'switch(order){'+ endl
+
+    for ordi in range(self.order+1):
+      str_out += (leveli+1)*tab + 'case '+str(ordi)+':'+ endl
+      ndir = len(self.name_imdir[ordi])
+      str_out += (leveli+2)*tab + res + ' = &' + lhs + self.get_ptr + self.name_imdir[ordi][0]+ self.endl
+      str_out += (leveli+2)*tab + 'break' + self.endl
+    # end for
+    str_out += leveli*tab + '}'+ endl
+  
+
+    str_out += leveli*tab + 'return ' + res + self.endl + endl
+    leveli -= 1
+    str_out += leveli*tab + '}' + endl
+
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
   def write_get_ndir(self, level = 0, tab = " ", header = 'base', total = False ):
@@ -2598,7 +2828,102 @@ class writer:
 
 
 
+  #***************************************************************************************************
+  def write_scalar_truncgem(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION", a_type= "o", a_ptr=False, b_type= "o", b_ptr=False, c_type= "o", c_ptr=False,
+    separator = ",", f_open = "(", f_close = ")", addition = " + ",generator = None, to=False,
+    overload = None, write_charact=True, header = 'base' ):
 
+    str_out = ""
+    leveli = level
+
+    a = "a"
+    b = "b"
+    c = "c"
+    res = "res"
+
+    f_prev = self.func_name
+    
+    a_t  = self.type_names[a_type]
+    f_post = a_type
+  
+    if a_ptr == True:
+      a_t += '*'
+    # end if
+
+    b_t  = self.type_names[b_type]
+    f_post += b_type
+  
+    if b_ptr == True:
+      b_t += '*'
+    # end if
+
+    c_t  = self.type_names[c_type]
+    # f_post += c_type
+  
+    if c_ptr == True:
+      c_t += '*'
+    # end if
+
+    func_name = f_prev + "_" + function_name 
+    
+    if write_charact:
+      func_name += "_"+ f_post
+    # end if 
+
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = ''
+
+    if to:
+      func_header += 'void '
+      func_name += '_to'
+    else:
+      func_header += self.type_name + " "
+    # end if 
+
+    func_header += func_name + "( ord_t ord_lhs,"
+    func_header += leveli*tab + a_t + " "+ a + ','
+    func_header += leveli*tab + 'ord_t ord_rhs,'
+    func_header += leveli*tab + b_t + " "+ b + ','
+    func_header += leveli*tab + c_t + " "+ c 
+
+    if to:
+      func_header += ", "
+      func_header += self.type_name+"* "+res
+    # end if 
+
+    func_header += ")"
+
+    self.function_list.append(func_header)
+    self.function_list_header[header].append(func_header)
+    
+    str_out += func_header +"{"+endl
+
+    if not to:
+      str_out += leveli*tab + self.type_name + " " + res + self.endl
+      str_out += endl
+    # end if 
+
+    str_out += generator(f_name = f_name, separator = separator,  tab=tab,
+               level = leveli*tab, f_open = f_open, f_close =f_close, res_name = res,
+               a_name = a, a_ptr=a_ptr, b_name=b, b_ptr=b_ptr, c_name=c, c_ptr=c_ptr, to=to)
+
+
+    str_out += endl
+    # Write function end.
+
+    if not to:  
+      str_out += leveli*tab + 'return ' + res + self.endl + endl
+    # end if
+
+    leveli -= 1
+    str_out += leveli*tab + '}' + endl
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
 
 
 
@@ -2733,6 +3058,11 @@ class writer:
 
     contents+=self.write_get_ndir(level = level, tab = tab, header = 'base', total = True )
     contents += endl
+
+    # get order address
+    contents+=self.write_get_order_address(level = level, tab = tab, header = 'base')
+    contents += endl
+    
 
     # Standard assignment
     contents += self.write_scalar_univar(function_name = "create", is_elemental = True, level = level, 
@@ -2984,6 +3314,14 @@ class writer:
       a_ptr = False, b_ptr = True, c_ptr = True, to=True, 
       separator = " * ", f_open = "",header = 'algebra', 
       f_close = "", generator = self.gem_like_function_ro, overload = "*", write_charact=True )
+    contents += endl
+
+    # Truncated GEM
+    contents += self.write_scalar_truncgem(function_name = "trunc_gem", is_elemental = True, level = level, 
+      tab = tab, f_name = "", a_type= "o", b_type= "o", c_type = "o", 
+      a_ptr = True, b_ptr = True, c_ptr = True, to=True, 
+      separator = " * ", f_open = "",header = 'algebra', 
+      f_close = "", generator = self.truncgem_like_function_oo, overload = "*", write_charact=True )
     contents += endl
   
     

@@ -976,3 +976,70 @@ cdef omatm1n2 csrmatrix_matmul_SO(csr_matrix lhs, omatm1n2 rhs):
   return res
 
 # ----------------------------------------------------------------------------------------------------
+
+# ****************************************************************************************************
+cdef void csrmatrix_trunc_matmul_SO_to(ord_t ord_lhs, csr_matrix lhs, ord_t ord_rhs, omatm1n2 rhs, omatm1n2 res):
+  """
+  PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
+
+  """
+
+  
+
+  cdef uint64_t i, j, k, l;
+  cdef ord_t order;
+  cdef onumm1n2_t tmp;
+  cdef onumm1n2 olhs;
+
+  # check for dimensions.
+  if (lhs.ncols != rhs.nrows) or (lhs.nrows != res.nrows) or (rhs.ncols != res.ncols):
+    raise ValueError("Shapes < {0}, {1} > = < {2} > not aligned.".format(lhs.shape,rhs.shape,res.shape))
+
+  # end if
+
+  # Extract temporal 5.
+
+  for i in range(lhs.nrows):
+      
+    for j in range(rhs.ncols):
+
+      # tmp = 0
+      onumm1n2_set_r( 0.0, &tmp)
+
+      for l in range( lhs.indptr[i], lhs.indptr[i+1] ):
+
+        # tmp = arr1[i,k] * arr2[k,j] + tmp
+        k = lhs.indices[l]
+        olhs = lhs.data[l]
+
+        onumm1n2_trunc_gem_oo_to( ord_lhs, &olhs.num, ord_rhs,
+                        &rhs.arr.p_data[ j + k * rhs.ncols ],
+                        &tmp, &tmp)
+
+      # end for
+
+      oarrm1n2_set_item_ij_o( &tmp, i, j, &res.arr)
+
+    # end for
+
+  # end for 
+
+# ----------------------------------------------------------------------------------------------------
+
+# ****************************************************************************************************
+cdef omatm1n2 csrmatrix_trunc_matmul_SO(ord_t ord_lhs, csr_matrix lhs, ord_t ord_rhs, omatm1n2 rhs):
+  """
+  PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
+
+  """
+  
+  
+  cdef omatm1n2 res
+  
+  res = zeros((lhs.nrows,rhs.ncols))
+
+  csrmatrix_trunc_matmul_SO_to(ord_lhs, lhs, ord_rhs, rhs, res)
+
+  return res
+
+# ----------------------------------------------------------------------------------------------------

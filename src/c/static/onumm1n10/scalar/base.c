@@ -154,6 +154,49 @@ ndir_t onumm1n10_get_ndir_total(onumm1n10_t* num){
 
 }
 
+coeff_t* onumm1n10_get_order_address(ord_t order, onumm1n10_t* num){
+
+  coeff_t* res;
+
+  switch(order){
+    case 0:
+      res = &num->r;
+      break;
+    case 1:
+      res = &num->e1;
+      break;
+    case 2:
+      res = &num->e11;
+      break;
+    case 3:
+      res = &num->e111;
+      break;
+    case 4:
+      res = &num->e1111;
+      break;
+    case 5:
+      res = &num->e11111;
+      break;
+    case 6:
+      res = &num->e111111;
+      break;
+    case 7:
+      res = &num->e1111111;
+      break;
+    case 8:
+      res = &num->e11111111;
+      break;
+    case 9:
+      res = &num->e111111111;
+      break;
+    case 10:
+      res = &num->e1111111111;
+      break;
+  }
+  return res;
+
+}
+
 onumm1n10_t onumm1n10_create_r(  coeff_t lhs){
 
   onumm1n10_t res;

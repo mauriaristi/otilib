@@ -62,3 +62,6 @@ cdef class csr_matrix:
 # # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # # :::::::::::::::::::::::::::::::::::: End of class spr_omat :::::::::::::::::::::::::::::::::::::::::
 # # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+cdef void  csrmatrix_trunc_matmul_SO_to(ord_t ord_lhs, csr_matrix lhs, ord_t ord_rhs, matso rhs, matso res)
+cdef matso csrmatrix_trunc_matmul_SO(   ord_t ord_lhs, csr_matrix lhs, ord_t ord_rhs, matso rhs)

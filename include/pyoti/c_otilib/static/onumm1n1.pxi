@@ -530,6 +530,7 @@ cdef extern from "oti/oti.h" nogil:
   void onumm1n1_gem_oo_to(  onumm1n1_t* a,  onumm1n1_t* b,  onumm1n1_t* c, onumm1n1_t* res);
   onumm1n1_t onumm1n1_gem_ro(  coeff_t a,  onumm1n1_t* b,  onumm1n1_t* c);
   void onumm1n1_gem_ro_to(  coeff_t a,  onumm1n1_t* b,  onumm1n1_t* c, onumm1n1_t* res);
+  void onumm1n1_trunc_gem_oo_to( ord_t ord_lhs,  onumm1n1_t* a,  ord_t ord_rhs,  onumm1n1_t* b,  onumm1n1_t* c, onumm1n1_t* res);
   onumm1n1_t onumm1n1_feval(coeff_t* feval_re, onumm1n1_t* x);
   void onumm1n1_feval_to(coeff_t* feval_re, onumm1n1_t* x, onumm1n1_t* res);
   
@@ -599,6 +600,7 @@ cdef extern from "oti/oti.h" nogil:
   onumm1n1_t onumm1n1_init();
   ndir_t onumm1n1_get_ndir_order(ord_t order, onumm1n1_t* num);
   ndir_t onumm1n1_get_ndir_total(onumm1n1_t* num);
+  coeff_t* onumm1n1_get_order_address(ord_t order, onumm1n1_t* num);
   onumm1n1_t onumm1n1_create_r(  coeff_t lhs);
   void onumm1n1_set_r(  coeff_t lhs, onumm1n1_t* res);
   void onumm1n1_set_o(  onumm1n1_t* lhs, onumm1n1_t* res);

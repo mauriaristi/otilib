@@ -758,6 +758,321 @@ void onumm1n10_gem_ro_to(  coeff_t a,  onumm1n10_t* b,  onumm1n10_t* c, onumm1n1
 
 }
 
+void onumm1n10_trunc_gem_oo_to( ord_t ord_lhs,  onumm1n10_t* a,  ord_t ord_rhs,  onumm1n10_t* b,  onumm1n10_t* c, onumm1n10_t* res){
+  //  General multiplication like function 'a * b + c'
+  switch( ord_lhs ){
+    case 0:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 0
+          res->r = c->r + a->r * b->r;
+          break;
+        case 1:
+          // res order: 1
+          res->e1 = c->e1 + a->r * b->e1;
+          break;
+        case 2:
+          // res order: 2
+          res->e11 = c->e11 + a->r * b->e11;
+          break;
+        case 3:
+          // res order: 3
+          res->e111 = c->e111 + a->r * b->e111;
+          break;
+        case 4:
+          // res order: 4
+          res->e1111 = c->e1111 + a->r * b->e1111;
+          break;
+        case 5:
+          // res order: 5
+          res->e11111 = c->e11111 + a->r * b->e11111;
+          break;
+        case 6:
+          // res order: 6
+          res->e111111 = c->e111111 + a->r * b->e111111;
+          break;
+        case 7:
+          // res order: 7
+          res->e1111111 = c->e1111111 + a->r * b->e1111111;
+          break;
+        case 8:
+          // res order: 8
+          res->e11111111 = c->e11111111 + a->r * b->e11111111;
+          break;
+        case 9:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->r * b->e111111111;
+          break;
+        case 10:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->r * b->e1111111111;
+          break;
+      }
+      break;
+    case 1:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 1
+          res->e1 = c->e1 + a->e1 * b->r;
+          break;
+        case 1:
+          // res order: 2
+          res->e11 = c->e11 + a->e1 * b->e1;
+          break;
+        case 2:
+          // res order: 3
+          res->e111 = c->e111 + a->e1 * b->e11;
+          break;
+        case 3:
+          // res order: 4
+          res->e1111 = c->e1111 + a->e1 * b->e111;
+          break;
+        case 4:
+          // res order: 5
+          res->e11111 = c->e11111 + a->e1 * b->e1111;
+          break;
+        case 5:
+          // res order: 6
+          res->e111111 = c->e111111 + a->e1 * b->e11111;
+          break;
+        case 6:
+          // res order: 7
+          res->e1111111 = c->e1111111 + a->e1 * b->e111111;
+          break;
+        case 7:
+          // res order: 8
+          res->e11111111 = c->e11111111 + a->e1 * b->e1111111;
+          break;
+        case 8:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->e1 * b->e11111111;
+          break;
+        case 9:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e1 * b->e111111111;
+          break;
+      }
+      break;
+    case 2:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 2
+          res->e11 = c->e11 + a->e11 * b->r;
+          break;
+        case 1:
+          // res order: 3
+          res->e111 = c->e111 + a->e11 * b->e1;
+          break;
+        case 2:
+          // res order: 4
+          res->e1111 = c->e1111 + a->e11 * b->e11;
+          break;
+        case 3:
+          // res order: 5
+          res->e11111 = c->e11111 + a->e11 * b->e111;
+          break;
+        case 4:
+          // res order: 6
+          res->e111111 = c->e111111 + a->e11 * b->e1111;
+          break;
+        case 5:
+          // res order: 7
+          res->e1111111 = c->e1111111 + a->e11 * b->e11111;
+          break;
+        case 6:
+          // res order: 8
+          res->e11111111 = c->e11111111 + a->e11 * b->e111111;
+          break;
+        case 7:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->e11 * b->e1111111;
+          break;
+        case 8:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e11 * b->e11111111;
+          break;
+      }
+      break;
+    case 3:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 3
+          res->e111 = c->e111 + a->e111 * b->r;
+          break;
+        case 1:
+          // res order: 4
+          res->e1111 = c->e1111 + a->e111 * b->e1;
+          break;
+        case 2:
+          // res order: 5
+          res->e11111 = c->e11111 + a->e111 * b->e11;
+          break;
+        case 3:
+          // res order: 6
+          res->e111111 = c->e111111 + a->e111 * b->e111;
+          break;
+        case 4:
+          // res order: 7
+          res->e1111111 = c->e1111111 + a->e111 * b->e1111;
+          break;
+        case 5:
+          // res order: 8
+          res->e11111111 = c->e11111111 + a->e111 * b->e11111;
+          break;
+        case 6:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->e111 * b->e111111;
+          break;
+        case 7:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e111 * b->e1111111;
+          break;
+      }
+      break;
+    case 4:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 4
+          res->e1111 = c->e1111 + a->e1111 * b->r;
+          break;
+        case 1:
+          // res order: 5
+          res->e11111 = c->e11111 + a->e1111 * b->e1;
+          break;
+        case 2:
+          // res order: 6
+          res->e111111 = c->e111111 + a->e1111 * b->e11;
+          break;
+        case 3:
+          // res order: 7
+          res->e1111111 = c->e1111111 + a->e1111 * b->e111;
+          break;
+        case 4:
+          // res order: 8
+          res->e11111111 = c->e11111111 + a->e1111 * b->e1111;
+          break;
+        case 5:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->e1111 * b->e11111;
+          break;
+        case 6:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e1111 * b->e111111;
+          break;
+      }
+      break;
+    case 5:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 5
+          res->e11111 = c->e11111 + a->e11111 * b->r;
+          break;
+        case 1:
+          // res order: 6
+          res->e111111 = c->e111111 + a->e11111 * b->e1;
+          break;
+        case 2:
+          // res order: 7
+          res->e1111111 = c->e1111111 + a->e11111 * b->e11;
+          break;
+        case 3:
+          // res order: 8
+          res->e11111111 = c->e11111111 + a->e11111 * b->e111;
+          break;
+        case 4:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->e11111 * b->e1111;
+          break;
+        case 5:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e11111 * b->e11111;
+          break;
+      }
+      break;
+    case 6:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 6
+          res->e111111 = c->e111111 + a->e111111 * b->r;
+          break;
+        case 1:
+          // res order: 7
+          res->e1111111 = c->e1111111 + a->e111111 * b->e1;
+          break;
+        case 2:
+          // res order: 8
+          res->e11111111 = c->e11111111 + a->e111111 * b->e11;
+          break;
+        case 3:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->e111111 * b->e111;
+          break;
+        case 4:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e111111 * b->e1111;
+          break;
+      }
+      break;
+    case 7:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 7
+          res->e1111111 = c->e1111111 + a->e1111111 * b->r;
+          break;
+        case 1:
+          // res order: 8
+          res->e11111111 = c->e11111111 + a->e1111111 * b->e1;
+          break;
+        case 2:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->e1111111 * b->e11;
+          break;
+        case 3:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e1111111 * b->e111;
+          break;
+      }
+      break;
+    case 8:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 8
+          res->e11111111 = c->e11111111 + a->e11111111 * b->r;
+          break;
+        case 1:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->e11111111 * b->e1;
+          break;
+        case 2:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e11111111 * b->e11;
+          break;
+      }
+      break;
+    case 9:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 9
+          res->e111111111 = c->e111111111 + a->e111111111 * b->r;
+          break;
+        case 1:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e111111111 * b->e1;
+          break;
+      }
+      break;
+    case 10:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 10
+          res->e1111111111 = c->e1111111111 + a->e1111111111 * b->r;
+          break;
+      }
+      break;
+  }
+
+}
+
 onumm1n10_t onumm1n10_feval(coeff_t* feval_re, onumm1n10_t* x){
 
   onumm1n10_t res;

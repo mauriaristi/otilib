@@ -895,7 +895,7 @@ cdef class csr_matrix:
     for i in range(size):
 
       if bases_list[i]==1:
-      
+       
         res.append(i+1)
 
       # end if 
@@ -946,7 +946,7 @@ cdef void csrmatrix_matmul_SO_to(csr_matrix lhs, omatm1n10 rhs, omatm1n10 res):
         olhs = lhs.data[l]
 
         onumm1n10_gem_oo_to( &olhs.num,
-                        &rhs.arr.p_data[ j + k * rhs.ncols ],
+                        &rhs.arr.p_data[ j + k * rhs.arr.ncols ],
                         &tmp, &tmp)
 
       # end for
@@ -972,6 +972,73 @@ cdef omatm1n10 csrmatrix_matmul_SO(csr_matrix lhs, omatm1n10 rhs):
   res = zeros((lhs.nrows,rhs.ncols))
 
   csrmatrix_matmul_SO_to( lhs, rhs, res)
+
+  return res
+
+# ----------------------------------------------------------------------------------------------------
+
+# ****************************************************************************************************
+cdef void csrmatrix_trunc_matmul_SO_to(ord_t ord_lhs, csr_matrix lhs, ord_t ord_rhs, omatm1n10 rhs, omatm1n10 res):
+  """
+  PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
+
+  """
+
+  
+
+  cdef uint64_t i, j, k, l;
+  cdef ord_t order;
+  cdef onumm1n10_t tmp;
+  cdef onumm1n10 olhs;
+
+  # check for dimensions.
+  if (lhs.ncols != rhs.nrows) or (lhs.nrows != res.nrows) or (rhs.ncols != res.ncols):
+    raise ValueError("Shapes < {0}, {1} > = < {2} > not aligned.".format(lhs.shape,rhs.shape,res.shape))
+
+  # end if
+
+  # Extract temporal 5.
+
+  for i in range(lhs.nrows):
+      
+    for j in range(rhs.ncols):
+
+      # tmp = 0
+      onumm1n10_set_r( 0.0, &tmp)
+
+      for l in range( lhs.indptr[i], lhs.indptr[i+1] ):
+
+        # tmp = arr1[i,k] * arr2[k,j] + tmp
+        k = lhs.indices[l]
+        olhs = lhs.data[l]
+
+        onumm1n10_trunc_gem_oo_to( ord_lhs, &olhs.num, ord_rhs,
+                        &rhs.arr.p_data[ j + k * rhs.ncols ],
+                        &tmp, &tmp)
+
+      # end for
+
+      oarrm1n10_set_item_ij_o( &tmp, i, j, &res.arr)
+
+    # end for
+
+  # end for 
+
+# ----------------------------------------------------------------------------------------------------
+
+# ****************************************************************************************************
+cdef omatm1n10 csrmatrix_trunc_matmul_SO(ord_t ord_lhs, csr_matrix lhs, ord_t ord_rhs, omatm1n10 rhs):
+  """
+  PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
+
+  """
+  
+  
+  cdef omatm1n10 res
+  
+  res = zeros((lhs.nrows,rhs.ncols))
+
+  csrmatrix_trunc_matmul_SO_to(ord_lhs, lhs, ord_rhs, rhs, res)
 
   return res
 

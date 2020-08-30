@@ -21,6 +21,7 @@ void onumm1n2_set_im_r(coeff_t num, imdir_t idx, ord_t order, onumm1n2_t* res);
 onumm1n2_t onumm1n2_init(void);
 ndir_t onumm1n2_get_ndir_order(ord_t order, onumm1n2_t* num);
 ndir_t onumm1n2_get_ndir_total(onumm1n2_t* num);
+coeff_t* onumm1n2_get_order_address(ord_t order, onumm1n2_t* num);
 onumm1n2_t onumm1n2_create_r(  coeff_t lhs);
 void onumm1n2_set_r(  coeff_t lhs, onumm1n2_t* res);
 void onumm1n2_set_o(  onumm1n2_t* lhs, onumm1n2_t* res);

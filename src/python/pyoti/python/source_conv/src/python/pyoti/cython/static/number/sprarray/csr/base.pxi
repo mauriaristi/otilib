@@ -976,3 +976,70 @@ cdef {arr_pytype} csrmatrix_matmul_SO(csr_matrix lhs, {arr_pytype} rhs):
   return res
 
 # ----------------------------------------------------------------------------------------------------
+
+# ****************************************************************************************************
+cdef void csrmatrix_trunc_matmul_SO_to(ord_t ord_lhs, csr_matrix lhs, ord_t ord_rhs, {arr_pytype} rhs, {arr_pytype} res):
+  """
+  PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
+
+  """
+
+  
+
+  cdef uint64_t i, j, k, l;
+  cdef ord_t order;
+  cdef {num_type} tmp;
+  cdef {num_pytype} olhs;
+
+  # check for dimensions.
+  if (lhs.ncols != rhs.nrows) or (lhs.nrows != res.nrows) or (rhs.ncols != res.ncols):
+    raise ValueError("Shapes < {{0}}, {{1}} > = < {{2}} > not aligned.".format(lhs.shape,rhs.shape,res.shape))
+
+  # end if
+
+  # Extract temporal 5.
+
+  for i in range(lhs.nrows):
+      
+    for j in range(rhs.ncols):
+
+      # tmp = 0
+      {num_func}_set_r( 0.0, &tmp)
+
+      for l in range( lhs.indptr[i], lhs.indptr[i+1] ):
+
+        # tmp = arr1[i,k] * arr2[k,j] + tmp
+        k = lhs.indices[l]
+        olhs = lhs.data[l]
+
+        {num_func}_trunc_gem_oo_to( ord_lhs, &olhs.num, ord_rhs,
+                        &rhs.arr.p_data[ j + k * rhs.ncols ],
+                        &tmp, &tmp)
+
+      # end for
+
+      {arr_func}_set_item_ij_o( &tmp, i, j, &res.arr)
+
+    # end for
+
+  # end for 
+
+# ----------------------------------------------------------------------------------------------------
+
+# ****************************************************************************************************
+cdef {arr_pytype} csrmatrix_trunc_matmul_SO(ord_t ord_lhs, csr_matrix lhs, ord_t ord_rhs, {arr_pytype} rhs):
+  """
+  PORPUSE:  Perform matrix-matrix multiplication between csr matrix and dense matrix.
+
+  """
+  
+  
+  cdef {arr_pytype} res
+  
+  res = zeros((lhs.nrows,rhs.ncols))
+
+  csrmatrix_trunc_matmul_SO_to(ord_lhs, lhs, ord_rhs, rhs, res)
+
+  return res
+
+# ----------------------------------------------------------------------------------------------------

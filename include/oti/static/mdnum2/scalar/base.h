@@ -21,6 +21,7 @@ void mdnum2_set_im_r(coeff_t num, imdir_t idx, ord_t order, mdnum2_t* res);
 mdnum2_t mdnum2_init(void);
 ndir_t mdnum2_get_ndir_order(ord_t order, mdnum2_t* num);
 ndir_t mdnum2_get_ndir_total(mdnum2_t* num);
+coeff_t* mdnum2_get_order_address(ord_t order, mdnum2_t* num);
 mdnum2_t mdnum2_create_r(  coeff_t lhs);
 void mdnum2_set_r(  coeff_t lhs, mdnum2_t* res);
 void mdnum2_set_o(  mdnum2_t* lhs, mdnum2_t* res);

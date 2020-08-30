@@ -328,6 +328,49 @@ void onumm1n2_gem_ro_to(  coeff_t a,  onumm1n2_t* b,  onumm1n2_t* c, onumm1n2_t*
 
 }
 
+void onumm1n2_trunc_gem_oo_to( ord_t ord_lhs,  onumm1n2_t* a,  ord_t ord_rhs,  onumm1n2_t* b,  onumm1n2_t* c, onumm1n2_t* res){
+  //  General multiplication like function 'a * b + c'
+  switch( ord_lhs ){
+    case 0:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 0
+          res->r = c->r + a->r * b->r;
+          break;
+        case 1:
+          // res order: 1
+          res->e1 = c->e1 + a->r * b->e1;
+          break;
+        case 2:
+          // res order: 2
+          res->e11 = c->e11 + a->r * b->e11;
+          break;
+      }
+      break;
+    case 1:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 1
+          res->e1 = c->e1 + a->e1 * b->r;
+          break;
+        case 1:
+          // res order: 2
+          res->e11 = c->e11 + a->e1 * b->e1;
+          break;
+      }
+      break;
+    case 2:
+      switch( ord_rhs ){
+        case 0:
+          // res order: 2
+          res->e11 = c->e11 + a->e11 * b->r;
+          break;
+      }
+      break;
+  }
+
+}
+
 onumm1n2_t onumm1n2_feval(coeff_t* feval_re, onumm1n2_t* x){
 
   onumm1n2_t res;

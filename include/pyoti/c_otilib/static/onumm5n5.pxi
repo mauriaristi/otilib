@@ -289,18 +289,303 @@ cdef extern from "oti/oti.h" nogil:
   # } feoarrm5n5_t;
   
   # =========================================================================================
-  # From ../../../include/oti/static/onumm5n5/array/utils.h
+  # From ../../../include/oti/static/onumm5n5/scalar/functions.h
   
-  void oarrm5n5_dimCheck_OO_elementwise(oarrm5n5_t* arr1, oarrm5n5_t* arr2, oarrm5n5_t* res);
-  void oarrm5n5_dimCheck_RO_elementwise(darr_t*  arr1, oarrm5n5_t* arr2, oarrm5n5_t* res);
-  void oarrm5n5_dimCheck_OO_matmul(oarrm5n5_t* arr1, oarrm5n5_t* arr2, oarrm5n5_t* res);
-  void oarrm5n5_dimCheck_RO_matmul(darr_t*  arr1, oarrm5n5_t* arr2, oarrm5n5_t* res);
-  void oarrm5n5_dimCheck_OR_matmul(oarrm5n5_t* arr1, darr_t*  arr2, oarrm5n5_t* res);
-  void oarrm5n5_dimCheck_O_squareness(oarrm5n5_t* arr1, oarrm5n5_t* res);
-  void oarrm5n5_dimCheck_OO_samesize(oarrm5n5_t* arr1, oarrm5n5_t* res);
-  void oarrm5n5_dimCheck_RO_samesize(darr_t* arr1, oarrm5n5_t* res);
-  ord_t oarrm5n5_get_order(oarrm5n5_t* arr);
-  void oarrm5n5_get_active_bases(oarrm5n5_t* arr, imdir_t* list_vals);
+  onumm5n5_t onumm5n5_atanh(onumm5n5_t* num);
+  void onumm5n5_atanh_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_asinh(onumm5n5_t* num);
+  void onumm5n5_asinh_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_acosh(onumm5n5_t* num);
+  void onumm5n5_acosh_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_tanh(onumm5n5_t* num);
+  void onumm5n5_tanh_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_sqrt(onumm5n5_t* num);
+  void onumm5n5_sqrt_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_cbrt(onumm5n5_t* num);
+  void onumm5n5_cbrt_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_cosh(onumm5n5_t* num);
+  void onumm5n5_cosh_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_sinh(onumm5n5_t* num);
+  void onumm5n5_sinh_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_asin(onumm5n5_t* num);
+  void onumm5n5_asin_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_acos(onumm5n5_t* num);
+  void onumm5n5_acos_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_atan(onumm5n5_t* num);
+  void onumm5n5_atan_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_tan(onumm5n5_t* num);
+  void onumm5n5_tan_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_cos(onumm5n5_t* num);
+  void onumm5n5_cos_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_sin(onumm5n5_t* num );
+  void onumm5n5_sin_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_logb(onumm5n5_t* num, double base);
+  void onumm5n5_logb_to(onumm5n5_t* num, double base, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_log10(onumm5n5_t* num);
+  void onumm5n5_log10_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_log(onumm5n5_t* num);
+  void onumm5n5_log_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_exp(onumm5n5_t* num);
+  void onumm5n5_exp_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_pow(onumm5n5_t* num, double e);
+  void onumm5n5_pow_to(onumm5n5_t* num, coeff_t e, onumm5n5_t* res);
+  
+  
+  # From ../../../include/oti/static/onumm5n5/scalar/base.h
+  
+  void onumm5n5_set_im_o(onumm5n5_t* num, imdir_t idx, ord_t order, onumm5n5_t* res);
+  void onumm5n5_set_deriv_r(coeff_t num, imdir_t idx, ord_t order, onumm5n5_t* res);
+  void onumm5n5_set_deriv_o(onumm5n5_t* num, imdir_t idx, ord_t order, onumm5n5_t* res);
+  void onumm5n5_extract_im_to( imdir_t idx, ord_t order, onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_extract_im(imdir_t idx, ord_t order, onumm5n5_t* num);
+  onumm5n5_t onumm5n5_extract_deriv(imdir_t idx, ord_t order, onumm5n5_t* num);
+  void onumm5n5_extract_deriv_to(imdir_t idx, ord_t order, onumm5n5_t* num, onumm5n5_t* res);
+  void onumm5n5_get_im_to_o(imdir_t idx, ord_t order, onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_get_im_o(imdir_t idx, ord_t order, onumm5n5_t* num);
+  void onumm5n5_get_im_to_r(imdir_t idx, ord_t order, onumm5n5_t* num, coeff_t* res);
+  ord_t onumm5n5_get_order(onumm5n5_t* lhs);
+  onumm5n5_t onumm5n5_get_deriv_o( imdir_t idx, ord_t order, onumm5n5_t* num);
+  void onumm5n5_get_deriv_to( imdir_t idx, ord_t order, onumm5n5_t* num, onumm5n5_t* res);
+  void onumm5n5_set_im_r(coeff_t num, imdir_t idx, ord_t order, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_init();
+  ndir_t onumm5n5_get_ndir_order(ord_t order, onumm5n5_t* num);
+  ndir_t onumm5n5_get_ndir_total(onumm5n5_t* num);
+  coeff_t* onumm5n5_get_order_address(ord_t order, onumm5n5_t* num);
+  onumm5n5_t onumm5n5_create_r(  coeff_t lhs);
+  void onumm5n5_set_r(  coeff_t lhs, onumm5n5_t* res);
+  void onumm5n5_set_o(  onumm5n5_t* lhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_get_order_im(ord_t order, onumm5n5_t* lhs);
+  void onumm5n5_get_order_im_to(ord_t order, onumm5n5_t* lhs, onumm5n5_t* res);
+  coeff_t onumm5n5_get_item(imdir_t idx, ord_t order, onumm5n5_t* lhs);
+  coeff_t onumm5n5_get_deriv(imdir_t idx, ord_t order, onumm5n5_t* lhs);
+  void onumm5n5_set_item(coeff_t val, imdir_t idx, ord_t order, onumm5n5_t* x);
+  onumm5n5_t onumm5n5_copy(  onumm5n5_t* lhs);
+  void onumm5n5_copy_to(  onumm5n5_t* lhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_taylor_integrate(coeff_t* deltas,onumm5n5_t* lhs);
+  void onumm5n5_taylor_integrate_to(coeff_t* deltas,onumm5n5_t* lhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_truncate_im(imdir_t idx, ord_t order, onumm5n5_t* lhs);
+  void onumm5n5_truncate_im_to(imdir_t idx, ord_t order, onumm5n5_t* lhs, onumm5n5_t* res);
+  void onumm5n5_print(  onumm5n5_t* lhs);
+  imdir_t onumm5n5_get_indx(imdir_t idx, ord_t order);
+  
+  
+  # From ../../../include/oti/static/onumm5n5/scalar/utils.h
+  
+  void onumm5n5_get_active_bases(onumm5n5_t* num, imdir_t* list);
+  
+  
+  # From ../../../include/oti/static/onumm5n5/scalar/algebra.h
+  
+  onumm5n5_t onumm5n5_abs(onumm5n5_t* num);
+  onumm5n5_t onumm5n5_div_ro(coeff_t num, onumm5n5_t* den);
+  onumm5n5_t onumm5n5_div_oo(onumm5n5_t* num, onumm5n5_t* den);
+  onumm5n5_t onumm5n5_div_or(onumm5n5_t* num, coeff_t val);
+  void onumm5n5_div_ro_to(coeff_t num, onumm5n5_t* den, onumm5n5_t* res);
+  void onumm5n5_div_oo_to(onumm5n5_t* num, onumm5n5_t* den, onumm5n5_t* res);
+  void onumm5n5_div_or_to(onumm5n5_t* num, coeff_t val, onumm5n5_t* res);
+  void onumm5n5_abs_to(onumm5n5_t* num, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_neg(  onumm5n5_t* lhs);
+  void onumm5n5_neg_to(  onumm5n5_t* lhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_sum_oo(  onumm5n5_t* lhs,  onumm5n5_t* rhs);
+  void onumm5n5_sum_oo_to(  onumm5n5_t* lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_sum_ro(  coeff_t lhs,  onumm5n5_t* rhs);
+  void onumm5n5_sum_ro_to(  coeff_t lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_sub_oo(  onumm5n5_t* lhs,  onumm5n5_t* rhs);
+  void onumm5n5_sub_oo_to(  onumm5n5_t* lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_sub_ro(  coeff_t lhs,  onumm5n5_t* rhs);
+  void onumm5n5_sub_ro_to(  coeff_t lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_sub_or(  onumm5n5_t* lhs,  coeff_t rhs);
+  void onumm5n5_sub_or_to(  onumm5n5_t* lhs,  coeff_t rhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_mul_oo(  onumm5n5_t* lhs,  onumm5n5_t* rhs);
+  void onumm5n5_mul_oo_to(  onumm5n5_t* lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_mul_ro(  coeff_t lhs,  onumm5n5_t* rhs);
+  void onumm5n5_mul_ro_to(  coeff_t lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_trunc_mul_oo(  onumm5n5_t* lhs,  onumm5n5_t* rhs);
+  void onumm5n5_trunc_mul_oo_to(  onumm5n5_t* lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_gem_oo(  onumm5n5_t* a,  onumm5n5_t* b,  onumm5n5_t* c);
+  void onumm5n5_gem_oo_to(  onumm5n5_t* a,  onumm5n5_t* b,  onumm5n5_t* c, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_gem_ro(  coeff_t a,  onumm5n5_t* b,  onumm5n5_t* c);
+  void onumm5n5_gem_ro_to(  coeff_t a,  onumm5n5_t* b,  onumm5n5_t* c, onumm5n5_t* res);
+  void onumm5n5_trunc_gem_oo_to( ord_t ord_lhs,  onumm5n5_t* a,  ord_t ord_rhs,  onumm5n5_t* b,  onumm5n5_t* c, onumm5n5_t* res);
+  onumm5n5_t onumm5n5_feval(coeff_t* feval_re, onumm5n5_t* x);
+  void onumm5n5_feval_to(coeff_t* feval_re, onumm5n5_t* x, onumm5n5_t* res);
+  
+  
+  # From ../../../include/oti/static/onumm5n5/scalar/gauss.h
+  
+  
+  
+  # From ../../../include/oti/static/onumm5n5/scalar/gauss/functions.h
+  
+  feonumm5n5_t feonumm5n5_atanh(    feonumm5n5_t* num);
+  void     feonumm5n5_atanh_to( feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_asinh(    feonumm5n5_t* num);
+  void     feonumm5n5_asinh_to( feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_acosh(    feonumm5n5_t* num);
+  void     feonumm5n5_acosh_to( feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_tanh(     feonumm5n5_t* num);
+  void     feonumm5n5_tanh_to(  feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_cosh(     feonumm5n5_t* num);
+  void     feonumm5n5_cosh_to(  feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sinh(     feonumm5n5_t* num);
+  void     feonumm5n5_sinh_to(  feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_asin(     feonumm5n5_t* num);
+  void     feonumm5n5_asin_to(  feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_acos(     feonumm5n5_t* num);
+  void     feonumm5n5_acos_to(  feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_atan(     feonumm5n5_t* num);
+  void     feonumm5n5_atan_to(  feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_tan(      feonumm5n5_t* num);
+  void     feonumm5n5_tan_to(   feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_cos(      feonumm5n5_t* num);
+  void     feonumm5n5_cos_to(   feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sin(      feonumm5n5_t* num);
+  void     feonumm5n5_sin_to(   feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_logb(     feonumm5n5_t* num, double base);
+  void     feonumm5n5_logb_to(  feonumm5n5_t* num, double base, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_log10(    feonumm5n5_t* num);
+  void     feonumm5n5_log10_to( feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_log(      feonumm5n5_t* num);
+  void     feonumm5n5_log_to(   feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_exp(      feonumm5n5_t* num);
+  void     feonumm5n5_exp_to(   feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_cbrt(     feonumm5n5_t* num);
+  void     feonumm5n5_cbrt_to(  feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sqrt(     feonumm5n5_t* num);
+  void     feonumm5n5_sqrt_to(  feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_pow(      feonumm5n5_t* num, double e);
+  void     feonumm5n5_pow_to(   feonumm5n5_t* num, double e, feonumm5n5_t* res);
+  onumm5n5_t feonumm5n5_integrate(       feonumm5n5_t* num, feonumm5n5_t* w);
+  void      feonumm5n5_integrate_to(    feonumm5n5_t* num, feonumm5n5_t* w, onumm5n5_t* res);
+  onumm5n5_t feonumm5n5_integrate_f(     feonumm5n5_t* num, feonumm5n5_t* w);
+  void      feonumm5n5_integrate_f_to(  feonumm5n5_t* num, feonumm5n5_t* w, onumm5n5_t* res);
+  onumm5n5_t feonumm5n5_integrate_r(       coeff_t num, feonumm5n5_t* w);
+  void      feonumm5n5_integrate_r_to(    coeff_t num, feonumm5n5_t* w, onumm5n5_t* res);
+  onumm5n5_t feonumm5n5_integrate_o(    onumm5n5_t* num, feonumm5n5_t* w);
+  void      feonumm5n5_integrate_o_to( onumm5n5_t* num, feonumm5n5_t* w, onumm5n5_t* res);
+  
+  
+  # From ../../../include/oti/static/onumm5n5/scalar/gauss/base.h
+  
+  void     feonumm5n5_get_order_im_to( ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_get_order_im(    ord_t order, feonumm5n5_t* num);
+  feonumm5n5_t feonumm5n5_get_im(    imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void     feonumm5n5_get_im_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_get_deriv(    imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void     feonumm5n5_get_deriv_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
+  void feonumm5n5_set_im_r(   coeff_t  val, imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void feonumm5n5_set_im_o( onumm5n5_t* val, imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void feonumm5n5_set_im_f(  feonumm5n5_t* val, imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void feonumm5n5_set_deriv_r(   coeff_t  val, imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void feonumm5n5_set_deriv_o( onumm5n5_t* val, imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void feonumm5n5_set_deriv_f(  feonumm5n5_t* val, imdir_t idx, ord_t order, feonumm5n5_t* num);
+  feonumm5n5_t feonumm5n5_extract_im(    imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void     feonumm5n5_extract_im_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_extract_deriv(    imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void     feonumm5n5_extract_deriv_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_truncate_im(    imdir_t idx, ord_t order, feonumm5n5_t* num);
+  void     feonumm5n5_truncate_im_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_copy(    feonumm5n5_t* src);
+  void     feonumm5n5_copy_to( feonumm5n5_t* src, feonumm5n5_t* dst);
+  void feonumm5n5_set_r(    coeff_t num, feonumm5n5_t* res);
+  void feonumm5n5_set_o( onumm5n5_t* num, feonumm5n5_t* res);
+  void feonumm5n5_set_f(  feonumm5n5_t* num, feonumm5n5_t* res);
+  void feonumm5n5_set_item_k_r(   coeff_t  num, uint64_t k, feonumm5n5_t* res);
+  void feonumm5n5_set_item_k_o( onumm5n5_t* num, uint64_t k, feonumm5n5_t* res);
+  onumm5n5_t feonumm5n5_get_item_k(   feonumm5n5_t* num, uint64_t k);
+  void      feonumm5n5_get_item_k_to(feonumm5n5_t* num, uint64_t k, onumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_zeros(uint64_t nIntPts);
+  feonumm5n5_t feonumm5n5_createEmpty(uint64_t nIntPts);
+  feonumm5n5_t feonumm5n5_empty_like(feonumm5n5_t* arr);
+  void feonumm5n5_free(feonumm5n5_t* num);
+  ord_t feonumm5n5_get_order( feonumm5n5_t* num );
+  feonumm5n5_t feonumm5n5_init();
+  
+  
+  # From ../../../include/oti/static/onumm5n5/scalar/gauss/utils.h
+  
+  void feonumm5n5_dimCheck(feonumm5n5_t* arr1,feonumm5n5_t* arr2);
+  void feonumm5n5_get_active_bases(feonumm5n5_t* num, imdir_t* list_vals);
+  
+  
+  # From ../../../include/oti/static/onumm5n5/scalar/gauss/algebra.h
+  
+  feonumm5n5_t feonumm5n5_neg(   feonumm5n5_t* num);
+  void     feonumm5n5_neg_to(feonumm5n5_t* num, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sum_ff(   feonumm5n5_t* lhs, feonumm5n5_t* rhs);
+  void     feonumm5n5_sum_ff_to(feonumm5n5_t* lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sum_of(   onumm5n5_t* lhs, feonumm5n5_t* rhs);
+  void     feonumm5n5_sum_of_to(onumm5n5_t* lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sum_rf(   coeff_t lhs, feonumm5n5_t* rhs);
+  void     feonumm5n5_sum_rf_to(coeff_t lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sub_ff(     feonumm5n5_t* lhs,  feonumm5n5_t* rhs);
+  void     feonumm5n5_sub_ff_to(  feonumm5n5_t* lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sub_of(    onumm5n5_t* lhs,  feonumm5n5_t* rhs);
+  void     feonumm5n5_sub_of_to( onumm5n5_t* lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sub_fo(     feonumm5n5_t* lhs, onumm5n5_t* rhs);
+  void     feonumm5n5_sub_fo_to(  feonumm5n5_t* lhs, onumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sub_rf(       coeff_t lhs,  feonumm5n5_t* rhs);
+  void     feonumm5n5_sub_rf_to(    coeff_t lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_sub_fr(     feonumm5n5_t* lhs,    coeff_t rhs);
+  void     feonumm5n5_sub_fr_to(  feonumm5n5_t* lhs,    coeff_t rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_mul_ff(   feonumm5n5_t* lhs, feonumm5n5_t* rhs);
+  void     feonumm5n5_mul_ff_to(feonumm5n5_t* lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_mul_of(   onumm5n5_t* lhs, feonumm5n5_t* rhs);
+  void     feonumm5n5_mul_of_to(onumm5n5_t* lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_mul_rf(   coeff_t lhs, feonumm5n5_t* rhs);
+  void     feonumm5n5_mul_rf_to(coeff_t lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_div_ff(     feonumm5n5_t* lhs,  feonumm5n5_t* rhs);
+  void     feonumm5n5_div_ff_to(  feonumm5n5_t* lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_div_of(    onumm5n5_t* lhs,  feonumm5n5_t* rhs);
+  void     feonumm5n5_div_of_to( onumm5n5_t* lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_div_fo(     feonumm5n5_t* lhs, onumm5n5_t* rhs);
+  void     feonumm5n5_div_fo_to(  feonumm5n5_t* lhs, onumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_div_rf(       coeff_t lhs,  feonumm5n5_t* rhs);
+  void     feonumm5n5_div_rf_to(    coeff_t lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feonumm5n5_div_fr(     feonumm5n5_t* lhs,    coeff_t rhs);
+  void     feonumm5n5_div_fr_to(  feonumm5n5_t* lhs,    coeff_t rhs, feonumm5n5_t* res);
+  
+  
+  # From ../../../include/oti/static/onumm5n5/array/functions.h
+  
+  oarrm5n5_t oarrm5n5_atanh(   oarrm5n5_t* arr);
+  void    oarrm5n5_atanh_to(oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_asinh(   oarrm5n5_t* arr);
+  void    oarrm5n5_asinh_to(oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_acosh(   oarrm5n5_t* arr);
+  void    oarrm5n5_acosh_to(oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_tanh(    oarrm5n5_t* arr);
+  void    oarrm5n5_tanh_to( oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_cbrt(    oarrm5n5_t* arr);
+  void    oarrm5n5_cbrt_to( oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_sqrt(    oarrm5n5_t* arr);
+  void    oarrm5n5_sqrt_to( oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_cosh(    oarrm5n5_t* arr);
+  void    oarrm5n5_cosh_to( oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_sinh(    oarrm5n5_t* arr);
+  void    oarrm5n5_sinh_to( oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_asin(    oarrm5n5_t* arr);
+  void    oarrm5n5_asin_to( oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_acos(    oarrm5n5_t* arr);
+  void    oarrm5n5_acos_to( oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_atan(    oarrm5n5_t* arr);
+  void    oarrm5n5_atan_to( oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_tan(     oarrm5n5_t* arr);
+  void    oarrm5n5_tan_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_cos(     oarrm5n5_t* arr);
+  void    oarrm5n5_cos_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_sin(     oarrm5n5_t* arr);
+  void    oarrm5n5_sin_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_logb(    oarrm5n5_t* arr, double base);
+  void    oarrm5n5_logb_to( oarrm5n5_t* arr, double base, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_log10(   oarrm5n5_t* arr);
+  void    oarrm5n5_log10_to(oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_log(     oarrm5n5_t* arr);
+  void    oarrm5n5_log_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_exp(     oarrm5n5_t* arr);
+  void    oarrm5n5_exp_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_pow(     oarrm5n5_t* arr, double e);
+  void    oarrm5n5_pow_to(  oarrm5n5_t* arr, double e, oarrm5n5_t* res);
   
   
   # From ../../../include/oti/static/onumm5n5/array/algebra_elementwise.h
@@ -353,76 +638,6 @@ cdef extern from "oti/oti.h" nogil:
   void oarrm5n5_div_Oo_to(oarrm5n5_t*   lhs, onumm5n5_t* rhs, oarrm5n5_t* res);
   void oarrm5n5_div_rO_to(coeff_t    lhs, oarrm5n5_t*   rhs, oarrm5n5_t* res);
   void oarrm5n5_div_Or_to(oarrm5n5_t*   lhs, coeff_t    rhs, oarrm5n5_t* res);
-  
-  
-  # From ../../../include/oti/static/onumm5n5/array/algebra_matops.h
-  
-  onumm5n5_t oarrm5n5_dotproduct_OO(    oarrm5n5_t* lhs, oarrm5n5_t* rhs);
-  void      oarrm5n5_dotproduct_OO_to( oarrm5n5_t* lhs, oarrm5n5_t* rhs, onumm5n5_t* res);
-  onumm5n5_t oarrm5n5_dotproduct_RO(     darr_t* lhs, oarrm5n5_t* rhs);
-  void      oarrm5n5_dotproduct_RO_to(  darr_t* lhs, oarrm5n5_t* rhs, onumm5n5_t* res);
-  oarrm5n5_t oarrm5n5_matmul_OO(    oarrm5n5_t* lhs, oarrm5n5_t* rhs);
-  oarrm5n5_t oarrm5n5_matmul_OR(    oarrm5n5_t* lhs,  darr_t* rhs);
-  oarrm5n5_t oarrm5n5_matmul_RO(     darr_t* lhs, oarrm5n5_t* rhs);
-  void    oarrm5n5_matmul_OO_to( oarrm5n5_t* lhs, oarrm5n5_t* rhs, oarrm5n5_t* res);
-  void    oarrm5n5_matmul_OR_to( oarrm5n5_t* lhs,  darr_t* rhs, oarrm5n5_t* res);
-  void    oarrm5n5_matmul_RO_to(  darr_t* lhs, oarrm5n5_t* rhs, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_transpose(    oarrm5n5_t* arr1);
-  void    oarrm5n5_transpose_to( oarrm5n5_t* arr1, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_invert(    oarrm5n5_t* arr1);
-  void    oarrm5n5_invert_to( oarrm5n5_t* arr1, oarrm5n5_t* res);
-  onumm5n5_t oarrm5n5_det(    oarrm5n5_t* arr1);
-  void      oarrm5n5_det_to( oarrm5n5_t* arr1, onumm5n5_t* res);
-  onumm5n5_t oarrm5n5_norm(    oarrm5n5_t* arr1);
-  void      oarrm5n5_norm_to( oarrm5n5_t* arr1,  onumm5n5_t* res);
-  onumm5n5_t oarrm5n5_pnorm(    oarrm5n5_t* arr1, coeff_t p);
-  void      oarrm5n5_pnorm_to( oarrm5n5_t* arr1, coeff_t p, onumm5n5_t* res);
-  
-  
-  # From ../../../include/oti/static/onumm5n5/array/gauss.h
-  
-  
-  
-  # From ../../../include/oti/static/onumm5n5/array/functions.h
-  
-  oarrm5n5_t oarrm5n5_atanh(   oarrm5n5_t* arr);
-  void    oarrm5n5_atanh_to(oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_asinh(   oarrm5n5_t* arr);
-  void    oarrm5n5_asinh_to(oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_acosh(   oarrm5n5_t* arr);
-  void    oarrm5n5_acosh_to(oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_tanh(    oarrm5n5_t* arr);
-  void    oarrm5n5_tanh_to( oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_cbrt(    oarrm5n5_t* arr);
-  void    oarrm5n5_cbrt_to( oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_sqrt(    oarrm5n5_t* arr);
-  void    oarrm5n5_sqrt_to( oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_cosh(    oarrm5n5_t* arr);
-  void    oarrm5n5_cosh_to( oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_sinh(    oarrm5n5_t* arr);
-  void    oarrm5n5_sinh_to( oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_asin(    oarrm5n5_t* arr);
-  void    oarrm5n5_asin_to( oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_acos(    oarrm5n5_t* arr);
-  void    oarrm5n5_acos_to( oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_atan(    oarrm5n5_t* arr);
-  void    oarrm5n5_atan_to( oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_tan(     oarrm5n5_t* arr);
-  void    oarrm5n5_tan_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_cos(     oarrm5n5_t* arr);
-  void    oarrm5n5_cos_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_sin(     oarrm5n5_t* arr);
-  void    oarrm5n5_sin_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_logb(    oarrm5n5_t* arr, double base);
-  void    oarrm5n5_logb_to( oarrm5n5_t* arr, double base, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_log10(   oarrm5n5_t* arr);
-  void    oarrm5n5_log10_to(oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_log(     oarrm5n5_t* arr);
-  void    oarrm5n5_log_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_exp(     oarrm5n5_t* arr);
-  void    oarrm5n5_exp_to(  oarrm5n5_t* arr, oarrm5n5_t* res);
-  oarrm5n5_t oarrm5n5_pow(     oarrm5n5_t* arr, double e);
-  void    oarrm5n5_pow_to(  oarrm5n5_t* arr, double e, oarrm5n5_t* res);
   
   
   # From ../../../include/oti/static/onumm5n5/array/base.h
@@ -486,127 +701,46 @@ cdef extern from "oti/oti.h" nogil:
   oarrm5n5_t oarrm5n5_createEmpty(uint64_t nrows, uint64_t ncols);
   
   
-  # From ../../../include/oti/static/onumm5n5/array/gauss/utils.h
+  # From ../../../include/oti/static/onumm5n5/array/utils.h
   
-  void feoarrm5n5_dimCheck_FF_samesize(feoarrm5n5_t* arr1, feoarrm5n5_t* arr2, feonumm5n5_t* res);
-  void feoarrm5n5_dimCheck_OF_samesize(  oarrm5n5_t* arr1, feoarrm5n5_t* arr2, feonumm5n5_t* res);
-  void feoarrm5n5_dimCheck_RF_samesize(   darr_t* arr1, feoarrm5n5_t* arr2, feonumm5n5_t* res);
-  void feoarrm5n5_dimCheck_FF_elementwise(feoarrm5n5_t* arr1, feoarrm5n5_t* arr2, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_OF_elementwise(  oarrm5n5_t* arr1, feoarrm5n5_t* arr2, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_RF_elementwise(   darr_t* arr1, feoarrm5n5_t* arr2, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_fF_elementwise( feonumm5n5_t* num1, feoarrm5n5_t* arr2, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_Ff_elementwise(feoarrm5n5_t* arr1,  feonumm5n5_t* num2, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_FF_matmul( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_OF_matmul(   oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_RF_matmul(    darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_FO_matmul( feoarrm5n5_t* lhs,   oarrm5n5_t* rhs, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_FR_matmul( feoarrm5n5_t* lhs,    darr_t* rhs, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_F_squareness( feoarrm5n5_t* arr1, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_F_transpose( feoarrm5n5_t* arr1, feoarrm5n5_t* res);
-  void feoarrm5n5_dimCheck_FfO_integrate(feoarrm5n5_t* arr, feonumm5n5_t* num,oarrm5n5_t* res);
-  void feoarrm5n5_get_active_bases(feoarrm5n5_t* arr, imdir_t* list_vals);
+  void oarrm5n5_dimCheck_OO_elementwise(oarrm5n5_t* arr1, oarrm5n5_t* arr2, oarrm5n5_t* res);
+  void oarrm5n5_dimCheck_RO_elementwise(darr_t*  arr1, oarrm5n5_t* arr2, oarrm5n5_t* res);
+  void oarrm5n5_dimCheck_OO_matmul(oarrm5n5_t* arr1, oarrm5n5_t* arr2, oarrm5n5_t* res);
+  void oarrm5n5_dimCheck_RO_matmul(darr_t*  arr1, oarrm5n5_t* arr2, oarrm5n5_t* res);
+  void oarrm5n5_dimCheck_OR_matmul(oarrm5n5_t* arr1, darr_t*  arr2, oarrm5n5_t* res);
+  void oarrm5n5_dimCheck_O_squareness(oarrm5n5_t* arr1, oarrm5n5_t* res);
+  void oarrm5n5_dimCheck_OO_samesize(oarrm5n5_t* arr1, oarrm5n5_t* res);
+  void oarrm5n5_dimCheck_RO_samesize(darr_t* arr1, oarrm5n5_t* res);
+  ord_t oarrm5n5_get_order(oarrm5n5_t* arr);
+  void oarrm5n5_get_active_bases(oarrm5n5_t* arr, imdir_t* list_vals);
   
   
-  # From ../../../include/oti/static/onumm5n5/array/gauss/algebra.h
+  # From ../../../include/oti/static/onumm5n5/array/algebra_matops.h
   
-  feoarrm5n5_t feoarrm5n5_neg(    feoarrm5n5_t* arr);
-  void      feoarrm5n5_neg_to( feoarrm5n5_t* arr, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sum_FF(   feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sum_FF_to(feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sum_fF(    feonumm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sum_fF_to( feonumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sum_OF(     oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sum_OF_to(  oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sum_RF(      darr_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sum_RF_to(   darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sum_oF(   onumm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sum_oF_to(onumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sum_rF(     coeff_t  lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sum_rF_to(  coeff_t  lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_FF(    feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sub_FF_to( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_fF(    feonumm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sub_fF_to( feonumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_Ff(    feoarrm5n5_t* lhs, feonumm5n5_t* rhs);
-  void      feoarrm5n5_sub_Ff_to( feoarrm5n5_t* lhs, feonumm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_OF(      oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sub_OF_to(   oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_FO(    feoarrm5n5_t* lhs,   oarrm5n5_t* rhs);
-  void      feoarrm5n5_sub_FO_to( feoarrm5n5_t* lhs,   oarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_RF(       darr_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sub_RF_to(    darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_FR(    feoarrm5n5_t* lhs,    darr_t* rhs);
-  void      feoarrm5n5_sub_FR_to( feoarrm5n5_t* lhs,    darr_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_oF(    onumm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sub_oF_to( onumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_Fo(    feoarrm5n5_t* lhs, onumm5n5_t* rhs);
-  void      feoarrm5n5_sub_Fo_to( feoarrm5n5_t* lhs, onumm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_rF(      coeff_t  lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_sub_rF_to(    coeff_t lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_sub_Fr(    feoarrm5n5_t* lhs,   coeff_t  rhs);
-  void      feoarrm5n5_sub_Fr_to( feoarrm5n5_t* lhs,   coeff_t  rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_mul_FF(   feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_mul_FF_to(feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_mul_fF(    feonumm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_mul_fF_to( feonumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_mul_OF(     oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_mul_OF_to(  oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_mul_RF(      darr_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_mul_RF_to(   darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_mul_oF(   onumm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_mul_oF_to(onumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_mul_rF(     coeff_t  lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_mul_rF_to(  coeff_t  lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_FF(    feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_div_FF_to( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_fF(     feonumm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_div_fF_to(  feonumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_Ff(    feoarrm5n5_t* lhs,  feonumm5n5_t* rhs);
-  void      feoarrm5n5_div_Ff_to( feoarrm5n5_t* lhs,  feonumm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_OF(      oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_div_OF_to(   oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_FO(    feoarrm5n5_t* lhs,   oarrm5n5_t* rhs);
-  void      feoarrm5n5_div_FO_to( feoarrm5n5_t* lhs,   oarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_RF(       darr_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_div_RF_to(    darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_FR(    feoarrm5n5_t* lhs,    darr_t* rhs);
-  void      feoarrm5n5_div_FR_to( feoarrm5n5_t* lhs,    darr_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_oF(    onumm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_div_oF_to( onumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_Fo(    feoarrm5n5_t* lhs, onumm5n5_t* rhs);
-  void      feoarrm5n5_div_Fo_to( feoarrm5n5_t* lhs, onumm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_rF(      coeff_t  lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_div_rF_to(    coeff_t lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_div_Fr(    feoarrm5n5_t* lhs,   coeff_t  rhs);
-  void      feoarrm5n5_div_Fr_to( feoarrm5n5_t* lhs,   coeff_t  rhs, feoarrm5n5_t* res);
-  oarrm5n5_t feoarrm5n5_integrate(    feoarrm5n5_t* arr, feonumm5n5_t* w);
-  void    feoarrm5n5_integrate_to( feoarrm5n5_t* arr, feonumm5n5_t* w, oarrm5n5_t* res);
-  feonumm5n5_t feoarrm5n5_dotproduct_FF(    feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void     feoarrm5n5_dotproduct_FF_to( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feoarrm5n5_dotproduct_OF(      oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void     feoarrm5n5_dotproduct_OF_to(   oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feoarrm5n5_dotproduct_RF(       darr_t* lhs, feoarrm5n5_t* rhs);
-  void     feoarrm5n5_dotproduct_RF_to(    darr_t* lhs, feoarrm5n5_t* rhs, feonumm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_matmul_FF(    feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_matmul_FF_to( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_matmul_OF(    oarrm5n5_t*   lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_matmul_OF_to( oarrm5n5_t*   lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_matmul_FO(    feoarrm5n5_t* lhs, oarrm5n5_t*   rhs);
-  void      feoarrm5n5_matmul_FO_to( feoarrm5n5_t* lhs, oarrm5n5_t*   rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_matmul_RF(    darr_t*    lhs, feoarrm5n5_t* rhs);
-  void      feoarrm5n5_matmul_RF_to( darr_t*    lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
-  feoarrm5n5_t feoarrm5n5_matmul_FR(    feoarrm5n5_t* lhs, darr_t*    rhs);
-  void      feoarrm5n5_matmul_FR_to( feoarrm5n5_t* lhs, darr_t*    rhs, feoarrm5n5_t* res);
-  feonumm5n5_t feoarrm5n5_det(   feoarrm5n5_t* arr);
-  void     feoarrm5n5_det_to(feoarrm5n5_t* arr, feonumm5n5_t* res);
-  feonumm5n5_t feoarrm5n5_norm(     feoarrm5n5_t* arr);
-  void     feoarrm5n5_norm_to(  feoarrm5n5_t* arr, feonumm5n5_t* res);
-  feonumm5n5_t feoarrm5n5_pnorm(    feoarrm5n5_t* arr, coeff_t p);
-  void     feoarrm5n5_pnorm_to( feoarrm5n5_t* arr, coeff_t p, feonumm5n5_t* res);
-  feoarrm5n5_t   feoarrm5n5_invert(    feoarrm5n5_t* arr);
-  void        feoarrm5n5_invert_to( feoarrm5n5_t* arr, feoarrm5n5_t* res);
-  feoarrm5n5_t   feoarrm5n5_transpose(   feoarrm5n5_t* arr);
-  void        feoarrm5n5_transpose_to(feoarrm5n5_t* arr, feoarrm5n5_t* res);
+  onumm5n5_t oarrm5n5_dotproduct_OO(    oarrm5n5_t* lhs, oarrm5n5_t* rhs);
+  void      oarrm5n5_dotproduct_OO_to( oarrm5n5_t* lhs, oarrm5n5_t* rhs, onumm5n5_t* res);
+  onumm5n5_t oarrm5n5_dotproduct_RO(     darr_t* lhs, oarrm5n5_t* rhs);
+  void      oarrm5n5_dotproduct_RO_to(  darr_t* lhs, oarrm5n5_t* rhs, onumm5n5_t* res);
+  oarrm5n5_t oarrm5n5_matmul_OO(    oarrm5n5_t* lhs, oarrm5n5_t* rhs);
+  oarrm5n5_t oarrm5n5_matmul_OR(    oarrm5n5_t* lhs,  darr_t* rhs);
+  oarrm5n5_t oarrm5n5_matmul_RO(     darr_t* lhs, oarrm5n5_t* rhs);
+  void    oarrm5n5_matmul_OO_to( oarrm5n5_t* lhs, oarrm5n5_t* rhs, oarrm5n5_t* res);
+  void    oarrm5n5_matmul_OR_to( oarrm5n5_t* lhs,  darr_t* rhs, oarrm5n5_t* res);
+  void    oarrm5n5_matmul_RO_to(  darr_t* lhs, oarrm5n5_t* rhs, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_transpose(    oarrm5n5_t* arr1);
+  void    oarrm5n5_transpose_to( oarrm5n5_t* arr1, oarrm5n5_t* res);
+  oarrm5n5_t oarrm5n5_invert(    oarrm5n5_t* arr1);
+  void    oarrm5n5_invert_to( oarrm5n5_t* arr1, oarrm5n5_t* res);
+  onumm5n5_t oarrm5n5_det(    oarrm5n5_t* arr1);
+  void      oarrm5n5_det_to( oarrm5n5_t* arr1, onumm5n5_t* res);
+  onumm5n5_t oarrm5n5_norm(    oarrm5n5_t* arr1);
+  void      oarrm5n5_norm_to( oarrm5n5_t* arr1,  onumm5n5_t* res);
+  onumm5n5_t oarrm5n5_pnorm(    oarrm5n5_t* arr1, coeff_t p);
+  void      oarrm5n5_pnorm_to( oarrm5n5_t* arr1, coeff_t p, onumm5n5_t* res);
+  
+  
+  # From ../../../include/oti/static/onumm5n5/array/gauss.h
+  
   
   
   # From ../../../include/oti/static/onumm5n5/array/gauss/functions.h
@@ -743,260 +877,126 @@ cdef extern from "oti/oti.h" nogil:
   ord_t feoarrm5n5_get_order(feoarrm5n5_t* arr);
   
   
-  # From ../../../include/oti/static/onumm5n5/scalar/utils.h
+  # From ../../../include/oti/static/onumm5n5/array/gauss/utils.h
   
-  void onumm5n5_get_active_bases(onumm5n5_t* num, imdir_t* list);
-  
-  
-  # From ../../../include/oti/static/onumm5n5/scalar/algebra.h
-  
-  onumm5n5_t onumm5n5_abs(onumm5n5_t* num);
-  onumm5n5_t onumm5n5_div_ro(coeff_t num, onumm5n5_t* den);
-  onumm5n5_t onumm5n5_div_oo(onumm5n5_t* num, onumm5n5_t* den);
-  onumm5n5_t onumm5n5_div_or(onumm5n5_t* num, coeff_t val);
-  void onumm5n5_div_ro_to(coeff_t num, onumm5n5_t* den, onumm5n5_t* res);
-  void onumm5n5_div_oo_to(onumm5n5_t* num, onumm5n5_t* den, onumm5n5_t* res);
-  void onumm5n5_div_or_to(onumm5n5_t* num, coeff_t val, onumm5n5_t* res);
-  void onumm5n5_abs_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_neg(  onumm5n5_t* lhs);
-  void onumm5n5_neg_to(  onumm5n5_t* lhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_sum_oo(  onumm5n5_t* lhs,  onumm5n5_t* rhs);
-  void onumm5n5_sum_oo_to(  onumm5n5_t* lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_sum_ro(  coeff_t lhs,  onumm5n5_t* rhs);
-  void onumm5n5_sum_ro_to(  coeff_t lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_sub_oo(  onumm5n5_t* lhs,  onumm5n5_t* rhs);
-  void onumm5n5_sub_oo_to(  onumm5n5_t* lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_sub_ro(  coeff_t lhs,  onumm5n5_t* rhs);
-  void onumm5n5_sub_ro_to(  coeff_t lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_sub_or(  onumm5n5_t* lhs,  coeff_t rhs);
-  void onumm5n5_sub_or_to(  onumm5n5_t* lhs,  coeff_t rhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_mul_oo(  onumm5n5_t* lhs,  onumm5n5_t* rhs);
-  void onumm5n5_mul_oo_to(  onumm5n5_t* lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_mul_ro(  coeff_t lhs,  onumm5n5_t* rhs);
-  void onumm5n5_mul_ro_to(  coeff_t lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_trunc_mul_oo(  onumm5n5_t* lhs,  onumm5n5_t* rhs);
-  void onumm5n5_trunc_mul_oo_to(  onumm5n5_t* lhs,  onumm5n5_t* rhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_gem_oo(  onumm5n5_t* a,  onumm5n5_t* b,  onumm5n5_t* c);
-  void onumm5n5_gem_oo_to(  onumm5n5_t* a,  onumm5n5_t* b,  onumm5n5_t* c, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_gem_ro(  coeff_t a,  onumm5n5_t* b,  onumm5n5_t* c);
-  void onumm5n5_gem_ro_to(  coeff_t a,  onumm5n5_t* b,  onumm5n5_t* c, onumm5n5_t* res);
-  void onumm5n5_trunc_gem_oo_to( ord_t ord_lhs,  onumm5n5_t* a,  ord_t ord_rhs,  onumm5n5_t* b,  onumm5n5_t* c, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_feval(coeff_t* feval_re, onumm5n5_t* x);
-  void onumm5n5_feval_to(coeff_t* feval_re, onumm5n5_t* x, onumm5n5_t* res);
+  void feoarrm5n5_dimCheck_FF_samesize(feoarrm5n5_t* arr1, feoarrm5n5_t* arr2, feonumm5n5_t* res);
+  void feoarrm5n5_dimCheck_OF_samesize(  oarrm5n5_t* arr1, feoarrm5n5_t* arr2, feonumm5n5_t* res);
+  void feoarrm5n5_dimCheck_RF_samesize(   darr_t* arr1, feoarrm5n5_t* arr2, feonumm5n5_t* res);
+  void feoarrm5n5_dimCheck_FF_elementwise(feoarrm5n5_t* arr1, feoarrm5n5_t* arr2, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_OF_elementwise(  oarrm5n5_t* arr1, feoarrm5n5_t* arr2, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_RF_elementwise(   darr_t* arr1, feoarrm5n5_t* arr2, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_fF_elementwise( feonumm5n5_t* num1, feoarrm5n5_t* arr2, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_Ff_elementwise(feoarrm5n5_t* arr1,  feonumm5n5_t* num2, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_FF_matmul( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_OF_matmul(   oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_RF_matmul(    darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_FO_matmul( feoarrm5n5_t* lhs,   oarrm5n5_t* rhs, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_FR_matmul( feoarrm5n5_t* lhs,    darr_t* rhs, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_F_squareness( feoarrm5n5_t* arr1, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_F_transpose( feoarrm5n5_t* arr1, feoarrm5n5_t* res);
+  void feoarrm5n5_dimCheck_FfO_integrate(feoarrm5n5_t* arr, feonumm5n5_t* num,oarrm5n5_t* res);
+  void feoarrm5n5_get_active_bases(feoarrm5n5_t* arr, imdir_t* list_vals);
   
   
-  # From ../../../include/oti/static/onumm5n5/scalar/gauss.h
+  # From ../../../include/oti/static/onumm5n5/array/gauss/algebra.h
   
-  
-  
-  # From ../../../include/oti/static/onumm5n5/scalar/functions.h
-  
-  onumm5n5_t onumm5n5_atanh(onumm5n5_t* num);
-  void onumm5n5_atanh_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_asinh(onumm5n5_t* num);
-  void onumm5n5_asinh_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_acosh(onumm5n5_t* num);
-  void onumm5n5_acosh_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_tanh(onumm5n5_t* num);
-  void onumm5n5_tanh_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_sqrt(onumm5n5_t* num);
-  void onumm5n5_sqrt_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_cbrt(onumm5n5_t* num);
-  void onumm5n5_cbrt_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_cosh(onumm5n5_t* num);
-  void onumm5n5_cosh_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_sinh(onumm5n5_t* num);
-  void onumm5n5_sinh_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_asin(onumm5n5_t* num);
-  void onumm5n5_asin_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_acos(onumm5n5_t* num);
-  void onumm5n5_acos_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_atan(onumm5n5_t* num);
-  void onumm5n5_atan_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_tan(onumm5n5_t* num);
-  void onumm5n5_tan_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_cos(onumm5n5_t* num);
-  void onumm5n5_cos_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_sin(onumm5n5_t* num );
-  void onumm5n5_sin_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_logb(onumm5n5_t* num, double base);
-  void onumm5n5_logb_to(onumm5n5_t* num, double base, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_log10(onumm5n5_t* num);
-  void onumm5n5_log10_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_log(onumm5n5_t* num);
-  void onumm5n5_log_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_exp(onumm5n5_t* num);
-  void onumm5n5_exp_to(onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_pow(onumm5n5_t* num, double e);
-  void onumm5n5_pow_to(onumm5n5_t* num, coeff_t e, onumm5n5_t* res);
-  
-  
-  # From ../../../include/oti/static/onumm5n5/scalar/base.h
-  
-  void onumm5n5_set_im_o(onumm5n5_t* num, imdir_t idx, ord_t order, onumm5n5_t* res);
-  void onumm5n5_set_deriv_r(coeff_t num, imdir_t idx, ord_t order, onumm5n5_t* res);
-  void onumm5n5_set_deriv_o(onumm5n5_t* num, imdir_t idx, ord_t order, onumm5n5_t* res);
-  void onumm5n5_extract_im_to( imdir_t idx, ord_t order, onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_extract_im(imdir_t idx, ord_t order, onumm5n5_t* num);
-  onumm5n5_t onumm5n5_extract_deriv(imdir_t idx, ord_t order, onumm5n5_t* num);
-  void onumm5n5_extract_deriv_to(imdir_t idx, ord_t order, onumm5n5_t* num, onumm5n5_t* res);
-  void onumm5n5_get_im_to_o(imdir_t idx, ord_t order, onumm5n5_t* num, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_get_im_o(imdir_t idx, ord_t order, onumm5n5_t* num);
-  void onumm5n5_get_im_to_r(imdir_t idx, ord_t order, onumm5n5_t* num, coeff_t* res);
-  ord_t onumm5n5_get_order(onumm5n5_t* lhs);
-  onumm5n5_t onumm5n5_get_deriv_o( imdir_t idx, ord_t order, onumm5n5_t* num);
-  void onumm5n5_get_deriv_to( imdir_t idx, ord_t order, onumm5n5_t* num, onumm5n5_t* res);
-  void onumm5n5_set_im_r(coeff_t num, imdir_t idx, ord_t order, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_init();
-  ndir_t onumm5n5_get_ndir_order(ord_t order, onumm5n5_t* num);
-  ndir_t onumm5n5_get_ndir_total(onumm5n5_t* num);
-  coeff_t* onumm5n5_get_order_address(ord_t order, onumm5n5_t* num);
-  onumm5n5_t onumm5n5_create_r(  coeff_t lhs);
-  void onumm5n5_set_r(  coeff_t lhs, onumm5n5_t* res);
-  void onumm5n5_set_o(  onumm5n5_t* lhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_get_order_im(ord_t order, onumm5n5_t* lhs);
-  void onumm5n5_get_order_im_to(ord_t order, onumm5n5_t* lhs, onumm5n5_t* res);
-  coeff_t onumm5n5_get_item(imdir_t idx, ord_t order, onumm5n5_t* lhs);
-  coeff_t onumm5n5_get_deriv(imdir_t idx, ord_t order, onumm5n5_t* lhs);
-  void onumm5n5_set_item(coeff_t val, imdir_t idx, ord_t order, onumm5n5_t* x);
-  onumm5n5_t onumm5n5_copy(  onumm5n5_t* lhs);
-  void onumm5n5_copy_to(  onumm5n5_t* lhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_taylor_integrate(coeff_t* deltas,onumm5n5_t* lhs);
-  void onumm5n5_taylor_integrate_to(coeff_t* deltas,onumm5n5_t* lhs, onumm5n5_t* res);
-  onumm5n5_t onumm5n5_truncate_im(imdir_t idx, ord_t order, onumm5n5_t* lhs);
-  void onumm5n5_truncate_im_to(imdir_t idx, ord_t order, onumm5n5_t* lhs, onumm5n5_t* res);
-  void onumm5n5_print(  onumm5n5_t* lhs);
-  imdir_t onumm5n5_get_indx(imdir_t idx, ord_t order);
-  
-  
-  # From ../../../include/oti/static/onumm5n5/scalar/gauss/utils.h
-  
-  void feonumm5n5_dimCheck(feonumm5n5_t* arr1,feonumm5n5_t* arr2);
-  void feonumm5n5_get_active_bases(feonumm5n5_t* num, imdir_t* list_vals);
-  
-  
-  # From ../../../include/oti/static/onumm5n5/scalar/gauss/algebra.h
-  
-  feonumm5n5_t feonumm5n5_neg(   feonumm5n5_t* num);
-  void     feonumm5n5_neg_to(feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sum_ff(   feonumm5n5_t* lhs, feonumm5n5_t* rhs);
-  void     feonumm5n5_sum_ff_to(feonumm5n5_t* lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sum_of(   onumm5n5_t* lhs, feonumm5n5_t* rhs);
-  void     feonumm5n5_sum_of_to(onumm5n5_t* lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sum_rf(   coeff_t lhs, feonumm5n5_t* rhs);
-  void     feonumm5n5_sum_rf_to(coeff_t lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sub_ff(     feonumm5n5_t* lhs,  feonumm5n5_t* rhs);
-  void     feonumm5n5_sub_ff_to(  feonumm5n5_t* lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sub_of(    onumm5n5_t* lhs,  feonumm5n5_t* rhs);
-  void     feonumm5n5_sub_of_to( onumm5n5_t* lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sub_fo(     feonumm5n5_t* lhs, onumm5n5_t* rhs);
-  void     feonumm5n5_sub_fo_to(  feonumm5n5_t* lhs, onumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sub_rf(       coeff_t lhs,  feonumm5n5_t* rhs);
-  void     feonumm5n5_sub_rf_to(    coeff_t lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sub_fr(     feonumm5n5_t* lhs,    coeff_t rhs);
-  void     feonumm5n5_sub_fr_to(  feonumm5n5_t* lhs,    coeff_t rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_mul_ff(   feonumm5n5_t* lhs, feonumm5n5_t* rhs);
-  void     feonumm5n5_mul_ff_to(feonumm5n5_t* lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_mul_of(   onumm5n5_t* lhs, feonumm5n5_t* rhs);
-  void     feonumm5n5_mul_of_to(onumm5n5_t* lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_mul_rf(   coeff_t lhs, feonumm5n5_t* rhs);
-  void     feonumm5n5_mul_rf_to(coeff_t lhs, feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_div_ff(     feonumm5n5_t* lhs,  feonumm5n5_t* rhs);
-  void     feonumm5n5_div_ff_to(  feonumm5n5_t* lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_div_of(    onumm5n5_t* lhs,  feonumm5n5_t* rhs);
-  void     feonumm5n5_div_of_to( onumm5n5_t* lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_div_fo(     feonumm5n5_t* lhs, onumm5n5_t* rhs);
-  void     feonumm5n5_div_fo_to(  feonumm5n5_t* lhs, onumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_div_rf(       coeff_t lhs,  feonumm5n5_t* rhs);
-  void     feonumm5n5_div_rf_to(    coeff_t lhs,  feonumm5n5_t* rhs, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_div_fr(     feonumm5n5_t* lhs,    coeff_t rhs);
-  void     feonumm5n5_div_fr_to(  feonumm5n5_t* lhs,    coeff_t rhs, feonumm5n5_t* res);
-  
-  
-  # From ../../../include/oti/static/onumm5n5/scalar/gauss/functions.h
-  
-  feonumm5n5_t feonumm5n5_atanh(    feonumm5n5_t* num);
-  void     feonumm5n5_atanh_to( feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_asinh(    feonumm5n5_t* num);
-  void     feonumm5n5_asinh_to( feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_acosh(    feonumm5n5_t* num);
-  void     feonumm5n5_acosh_to( feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_tanh(     feonumm5n5_t* num);
-  void     feonumm5n5_tanh_to(  feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_cosh(     feonumm5n5_t* num);
-  void     feonumm5n5_cosh_to(  feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sinh(     feonumm5n5_t* num);
-  void     feonumm5n5_sinh_to(  feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_asin(     feonumm5n5_t* num);
-  void     feonumm5n5_asin_to(  feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_acos(     feonumm5n5_t* num);
-  void     feonumm5n5_acos_to(  feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_atan(     feonumm5n5_t* num);
-  void     feonumm5n5_atan_to(  feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_tan(      feonumm5n5_t* num);
-  void     feonumm5n5_tan_to(   feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_cos(      feonumm5n5_t* num);
-  void     feonumm5n5_cos_to(   feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sin(      feonumm5n5_t* num);
-  void     feonumm5n5_sin_to(   feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_logb(     feonumm5n5_t* num, double base);
-  void     feonumm5n5_logb_to(  feonumm5n5_t* num, double base, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_log10(    feonumm5n5_t* num);
-  void     feonumm5n5_log10_to( feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_log(      feonumm5n5_t* num);
-  void     feonumm5n5_log_to(   feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_exp(      feonumm5n5_t* num);
-  void     feonumm5n5_exp_to(   feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_cbrt(     feonumm5n5_t* num);
-  void     feonumm5n5_cbrt_to(  feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_sqrt(     feonumm5n5_t* num);
-  void     feonumm5n5_sqrt_to(  feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_pow(      feonumm5n5_t* num, double e);
-  void     feonumm5n5_pow_to(   feonumm5n5_t* num, double e, feonumm5n5_t* res);
-  onumm5n5_t feonumm5n5_integrate(       feonumm5n5_t* num, feonumm5n5_t* w);
-  void      feonumm5n5_integrate_to(    feonumm5n5_t* num, feonumm5n5_t* w, onumm5n5_t* res);
-  onumm5n5_t feonumm5n5_integrate_f(     feonumm5n5_t* num, feonumm5n5_t* w);
-  void      feonumm5n5_integrate_f_to(  feonumm5n5_t* num, feonumm5n5_t* w, onumm5n5_t* res);
-  onumm5n5_t feonumm5n5_integrate_r(       coeff_t num, feonumm5n5_t* w);
-  void      feonumm5n5_integrate_r_to(    coeff_t num, feonumm5n5_t* w, onumm5n5_t* res);
-  onumm5n5_t feonumm5n5_integrate_o(    onumm5n5_t* num, feonumm5n5_t* w);
-  void      feonumm5n5_integrate_o_to( onumm5n5_t* num, feonumm5n5_t* w, onumm5n5_t* res);
-  
-  
-  # From ../../../include/oti/static/onumm5n5/scalar/gauss/base.h
-  
-  void     feonumm5n5_get_order_im_to( ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_get_order_im(    ord_t order, feonumm5n5_t* num);
-  feonumm5n5_t feonumm5n5_get_im(    imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void     feonumm5n5_get_im_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_get_deriv(    imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void     feonumm5n5_get_deriv_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
-  void feonumm5n5_set_im_r(   coeff_t  val, imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void feonumm5n5_set_im_o( onumm5n5_t* val, imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void feonumm5n5_set_im_f(  feonumm5n5_t* val, imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void feonumm5n5_set_deriv_r(   coeff_t  val, imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void feonumm5n5_set_deriv_o( onumm5n5_t* val, imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void feonumm5n5_set_deriv_f(  feonumm5n5_t* val, imdir_t idx, ord_t order, feonumm5n5_t* num);
-  feonumm5n5_t feonumm5n5_extract_im(    imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void     feonumm5n5_extract_im_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_extract_deriv(    imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void     feonumm5n5_extract_deriv_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_truncate_im(    imdir_t idx, ord_t order, feonumm5n5_t* num);
-  void     feonumm5n5_truncate_im_to( imdir_t idx, ord_t order, feonumm5n5_t* num, feonumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_copy(    feonumm5n5_t* src);
-  void     feonumm5n5_copy_to( feonumm5n5_t* src, feonumm5n5_t* dst);
-  void feonumm5n5_set_r(    coeff_t num, feonumm5n5_t* res);
-  void feonumm5n5_set_o( onumm5n5_t* num, feonumm5n5_t* res);
-  void feonumm5n5_set_f(  feonumm5n5_t* num, feonumm5n5_t* res);
-  void feonumm5n5_set_item_k_r(   coeff_t  num, uint64_t k, feonumm5n5_t* res);
-  void feonumm5n5_set_item_k_o( onumm5n5_t* num, uint64_t k, feonumm5n5_t* res);
-  onumm5n5_t feonumm5n5_get_item_k(   feonumm5n5_t* num, uint64_t k);
-  void      feonumm5n5_get_item_k_to(feonumm5n5_t* num, uint64_t k, onumm5n5_t* res);
-  feonumm5n5_t feonumm5n5_zeros(uint64_t nIntPts);
-  feonumm5n5_t feonumm5n5_createEmpty(uint64_t nIntPts);
-  feonumm5n5_t feonumm5n5_empty_like(feonumm5n5_t* arr);
-  void feonumm5n5_free(feonumm5n5_t* num);
-  ord_t feonumm5n5_get_order( feonumm5n5_t* num );
-  feonumm5n5_t feonumm5n5_init();
+  feoarrm5n5_t feoarrm5n5_neg(    feoarrm5n5_t* arr);
+  void      feoarrm5n5_neg_to( feoarrm5n5_t* arr, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sum_FF(   feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sum_FF_to(feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sum_fF(    feonumm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sum_fF_to( feonumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sum_OF(     oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sum_OF_to(  oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sum_RF(      darr_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sum_RF_to(   darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sum_oF(   onumm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sum_oF_to(onumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sum_rF(     coeff_t  lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sum_rF_to(  coeff_t  lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_FF(    feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sub_FF_to( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_fF(    feonumm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sub_fF_to( feonumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_Ff(    feoarrm5n5_t* lhs, feonumm5n5_t* rhs);
+  void      feoarrm5n5_sub_Ff_to( feoarrm5n5_t* lhs, feonumm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_OF(      oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sub_OF_to(   oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_FO(    feoarrm5n5_t* lhs,   oarrm5n5_t* rhs);
+  void      feoarrm5n5_sub_FO_to( feoarrm5n5_t* lhs,   oarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_RF(       darr_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sub_RF_to(    darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_FR(    feoarrm5n5_t* lhs,    darr_t* rhs);
+  void      feoarrm5n5_sub_FR_to( feoarrm5n5_t* lhs,    darr_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_oF(    onumm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sub_oF_to( onumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_Fo(    feoarrm5n5_t* lhs, onumm5n5_t* rhs);
+  void      feoarrm5n5_sub_Fo_to( feoarrm5n5_t* lhs, onumm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_rF(      coeff_t  lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_sub_rF_to(    coeff_t lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_sub_Fr(    feoarrm5n5_t* lhs,   coeff_t  rhs);
+  void      feoarrm5n5_sub_Fr_to( feoarrm5n5_t* lhs,   coeff_t  rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_mul_FF(   feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_mul_FF_to(feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_mul_fF(    feonumm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_mul_fF_to( feonumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_mul_OF(     oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_mul_OF_to(  oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_mul_RF(      darr_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_mul_RF_to(   darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_mul_oF(   onumm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_mul_oF_to(onumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_mul_rF(     coeff_t  lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_mul_rF_to(  coeff_t  lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_FF(    feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_div_FF_to( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_fF(     feonumm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_div_fF_to(  feonumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_Ff(    feoarrm5n5_t* lhs,  feonumm5n5_t* rhs);
+  void      feoarrm5n5_div_Ff_to( feoarrm5n5_t* lhs,  feonumm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_OF(      oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_div_OF_to(   oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_FO(    feoarrm5n5_t* lhs,   oarrm5n5_t* rhs);
+  void      feoarrm5n5_div_FO_to( feoarrm5n5_t* lhs,   oarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_RF(       darr_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_div_RF_to(    darr_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_FR(    feoarrm5n5_t* lhs,    darr_t* rhs);
+  void      feoarrm5n5_div_FR_to( feoarrm5n5_t* lhs,    darr_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_oF(    onumm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_div_oF_to( onumm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_Fo(    feoarrm5n5_t* lhs, onumm5n5_t* rhs);
+  void      feoarrm5n5_div_Fo_to( feoarrm5n5_t* lhs, onumm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_rF(      coeff_t  lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_div_rF_to(    coeff_t lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_div_Fr(    feoarrm5n5_t* lhs,   coeff_t  rhs);
+  void      feoarrm5n5_div_Fr_to( feoarrm5n5_t* lhs,   coeff_t  rhs, feoarrm5n5_t* res);
+  oarrm5n5_t feoarrm5n5_integrate(    feoarrm5n5_t* arr, feonumm5n5_t* w);
+  void    feoarrm5n5_integrate_to( feoarrm5n5_t* arr, feonumm5n5_t* w, oarrm5n5_t* res);
+  feonumm5n5_t feoarrm5n5_dotproduct_FF(    feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void     feoarrm5n5_dotproduct_FF_to( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feoarrm5n5_dotproduct_OF(      oarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void     feoarrm5n5_dotproduct_OF_to(   oarrm5n5_t* lhs, feoarrm5n5_t* rhs, feonumm5n5_t* res);
+  feonumm5n5_t feoarrm5n5_dotproduct_RF(       darr_t* lhs, feoarrm5n5_t* rhs);
+  void     feoarrm5n5_dotproduct_RF_to(    darr_t* lhs, feoarrm5n5_t* rhs, feonumm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_matmul_FF(    feoarrm5n5_t* lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_matmul_FF_to( feoarrm5n5_t* lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_matmul_OF(    oarrm5n5_t*   lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_matmul_OF_to( oarrm5n5_t*   lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_matmul_FO(    feoarrm5n5_t* lhs, oarrm5n5_t*   rhs);
+  void      feoarrm5n5_matmul_FO_to( feoarrm5n5_t* lhs, oarrm5n5_t*   rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_matmul_RF(    darr_t*    lhs, feoarrm5n5_t* rhs);
+  void      feoarrm5n5_matmul_RF_to( darr_t*    lhs, feoarrm5n5_t* rhs, feoarrm5n5_t* res);
+  feoarrm5n5_t feoarrm5n5_matmul_FR(    feoarrm5n5_t* lhs, darr_t*    rhs);
+  void      feoarrm5n5_matmul_FR_to( feoarrm5n5_t* lhs, darr_t*    rhs, feoarrm5n5_t* res);
+  feonumm5n5_t feoarrm5n5_det(   feoarrm5n5_t* arr);
+  void     feoarrm5n5_det_to(feoarrm5n5_t* arr, feonumm5n5_t* res);
+  feonumm5n5_t feoarrm5n5_norm(     feoarrm5n5_t* arr);
+  void     feoarrm5n5_norm_to(  feoarrm5n5_t* arr, feonumm5n5_t* res);
+  feonumm5n5_t feoarrm5n5_pnorm(    feoarrm5n5_t* arr, coeff_t p);
+  void     feoarrm5n5_pnorm_to( feoarrm5n5_t* arr, coeff_t p, feonumm5n5_t* res);
+  feoarrm5n5_t   feoarrm5n5_invert(    feoarrm5n5_t* arr);
+  void        feoarrm5n5_invert_to( feoarrm5n5_t* arr, feoarrm5n5_t* res);
+  feoarrm5n5_t   feoarrm5n5_transpose(   feoarrm5n5_t* arr);
+  void        feoarrm5n5_transpose_to(feoarrm5n5_t* arr, feoarrm5n5_t* res);
   
   

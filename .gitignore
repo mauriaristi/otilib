@@ -2,4 +2,5 @@
 data/
 build/
 .DS_Store
-pyoti/cython/*.c
+src/python/pyoti/cython/*.c
+sec/python/pyoti/cython/static/*.c

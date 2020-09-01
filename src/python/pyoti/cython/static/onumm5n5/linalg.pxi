@@ -817,7 +817,7 @@ cdef solve_dense(omatm5n5 K_in, omatm5n5 b_in, omatm5n5 out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef solve_sparse(csr_matrix K_in, omatm5n5 b_in, omatm5n5 out = None):
+cpdef solve_sparse_old(csr_matrix K_in, omatm5n5 b_in, omatm5n5 out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -887,7 +887,7 @@ cdef solve_sparse(csr_matrix K_in, omatm5n5 b_in, omatm5n5 out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-def solve_sparse_tests(csr_matrix K_in, omatm5n5 b_in, omatm5n5 out = None):
+cdef solve_sparse(csr_matrix K_in, omatm5n5 b_in, omatm5n5 out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """

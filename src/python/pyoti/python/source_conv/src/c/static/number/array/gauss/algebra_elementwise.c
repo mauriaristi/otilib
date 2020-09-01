@@ -1148,13 +1148,15 @@ void {fearr_func}_integrate_to({fearr_type}* arr, {fenum_type}* w, {arr_type}* r
     // Check dimensions.
     {fearr_func}_dimCheck_FfO_integrate( arr, w, res);
 
+    {arr_func}_set_r(0.0, res);
+
     // The loop for every element in arr.
     for (i = 0; i < arr->nip; i++){{
         
         {arr_func}_gem_oO_to( &w->p_data[i], &arr->p_data[i], res, res);
 
     }}
-
+    
 }}
 // ----------------------------------------------------------------------------------------------------
 

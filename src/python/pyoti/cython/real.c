@@ -1471,7 +1471,7 @@ typedef struct __pyx_ctuple_uint64_t__and_uint64_t __pyx_ctuple_uint64_t__and_ui
  *   @staticmethod
  *   cdef dmat create(darr_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
  *   cpdef copy(self)
- *   cpdef np.ndarray[double, ndim=2] to_numpy(self)
+ *   cpdef set(self, coeff_t val)
  */
 struct __pyx_opt_args_5pyoti_4real_4dmat_create {
   int __pyx_n;
@@ -2439,6 +2439,7 @@ struct __pyx_memoryviewslice_obj {
 struct __pyx_vtabstruct_5pyoti_4real_dmat {
   struct __pyx_obj_5pyoti_4real_dmat *(*create)(darr_t *, struct __pyx_opt_args_5pyoti_4real_4dmat_create *__pyx_optional_args);
   PyObject *(*copy)(struct __pyx_obj_5pyoti_4real_dmat *, int __pyx_skip_dispatch);
+  PyObject *(*set)(struct __pyx_obj_5pyoti_4real_dmat *, __pyx_t_5pyoti_8c_otilib_coeff_t, int __pyx_skip_dispatch);
   PyArrayObject *(*to_numpy)(struct __pyx_obj_5pyoti_4real_dmat *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_4real_dmat *__pyx_vtabptr_5pyoti_4real_dmat;
@@ -2826,13 +2827,13 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
 #define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
 #endif
 
+/* PyObjectCall2Args.proto */
+static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
+
 /* RaiseException.proto */
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause);
 
 #define __Pyx_BufPtrStrided1d(type, buf, i0, s0) (type)((char*)buf + i0 * s0)
-/* PyObjectCall2Args.proto */
-static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2);
-
 /* ArgTypeTest.proto */
 #define __Pyx_ArgTypeTest(obj, type, none_allowed, name, exact)\
     ((likely((Py_TYPE(obj) == type) | (none_allowed && (obj == Py_None)))) ? 1 :\
@@ -3366,6 +3367,7 @@ static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 static struct __pyx_obj_5pyoti_4real_dmat *__pyx_f_5pyoti_4real_4dmat_create(darr_t *__pyx_v_arr, struct __pyx_opt_args_5pyoti_4real_4dmat_create *__pyx_optional_args); /* proto*/
 static PyArrayObject *__pyx_f_5pyoti_4real_4dmat_to_numpy(struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
 static PyObject *__pyx_f_5pyoti_4real_4dmat_copy(struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
+static PyObject *__pyx_f_5pyoti_4real_4dmat_set(struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_val, int __pyx_skip_dispatch); /* proto*/
 static struct __pyx_obj_5pyoti_4real_dnumfe *__pyx_f_5pyoti_4real_6dnumfe_create(fednum_t *__pyx_v_num, struct __pyx_opt_args_5pyoti_4real_6dnumfe_create *__pyx_optional_args); /* proto*/
 static PyObject *__pyx_f_5pyoti_4real_6dnumfe_set(struct __pyx_obj_5pyoti_4real_dnumfe *__pyx_v_self, PyObject *__pyx_v_rhs, int __pyx_skip_dispatch); /* proto*/
 static struct __pyx_obj_5pyoti_4real_dmatfe *__pyx_f_5pyoti_4real_6dmatfe_create(fedarr_t *__pyx_v_arr, struct __pyx_opt_args_5pyoti_4real_6dmatfe_create *__pyx_optional_args); /* proto*/
@@ -4159,8 +4161,9 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_26__truediv__(PyObject *__pyx_v_sel
 static PyObject *__pyx_pf_5pyoti_4real_4dmat_28to_numpy(struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5pyoti_4real_4dmat_30__pow__(PyObject *__pyx_v_self, PyObject *__pyx_v_n, CYTHON_UNUSED PyObject *__pyx_v_z); /* proto */
 static PyObject *__pyx_pf_5pyoti_4real_4dmat_32copy(struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_4real_4dmat_34__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5pyoti_4real_4dmat_36__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_5pyoti_4real_4dmat_34set(struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_val); /* proto */
+static PyObject *__pyx_pf_5pyoti_4real_4dmat_36__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5pyoti_4real_4dmat_38__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_5pyoti_4real_6dnumfe___init__(struct __pyx_obj_5pyoti_4real_dnumfe *__pyx_v_self, PyObject *__pyx_v_real, uint64_t __pyx_v_nip); /* proto */
 static void __pyx_pf_5pyoti_4real_6dnumfe_2__dealloc__(struct __pyx_obj_5pyoti_4real_dnumfe *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5pyoti_4real_6dnumfe_3nip___get__(struct __pyx_obj_5pyoti_4real_dnumfe *__pyx_v_self); /* proto */
@@ -7359,6 +7362,155 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_32copy(struct __pyx_obj_5pyoti_4rea
   return __pyx_r;
 }
 
+/* "../../src/python/pyoti/cython/real/array/base.pxi":504
+ * 
+ *   #***************************************************************************************************
+ *   cpdef set(self, coeff_t val):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Set all elements to val.
+ */
+
+static PyObject *__pyx_pw_5pyoti_4real_4dmat_35set(PyObject *__pyx_v_self, PyObject *__pyx_arg_val); /*proto*/
+static PyObject *__pyx_f_5pyoti_4real_4dmat_set(struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_val, int __pyx_skip_dispatch) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  __Pyx_RefNannySetupContext("set", 0);
+  /* Check if called by wrapper */
+  if (unlikely(__pyx_skip_dispatch)) ;
+  /* Check if overridden in Python */
+  else if (unlikely((Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0) || (Py_TYPE(((PyObject *)__pyx_v_self))->tp_flags & (Py_TPFLAGS_IS_ABSTRACT | Py_TPFLAGS_HEAPTYPE)))) {
+    #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    static PY_UINT64_T __pyx_tp_dict_version = __PYX_DICT_VERSION_INIT, __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+    if (unlikely(!__Pyx_object_dict_version_matches(((PyObject *)__pyx_v_self), __pyx_tp_dict_version, __pyx_obj_dict_version))) {
+      PY_UINT64_T __pyx_type_dict_guard = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      #endif
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_set); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 504, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)(void*)__pyx_pw_5pyoti_4real_4dmat_35set)) {
+        __Pyx_XDECREF(__pyx_r);
+        __pyx_t_3 = PyFloat_FromDouble(__pyx_v_val); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 504, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __Pyx_INCREF(__pyx_t_1);
+        __pyx_t_4 = __pyx_t_1; __pyx_t_5 = NULL;
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
+          __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_4);
+          if (likely(__pyx_t_5)) {
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_4);
+            __Pyx_INCREF(__pyx_t_5);
+            __Pyx_INCREF(function);
+            __Pyx_DECREF_SET(__pyx_t_4, function);
+          }
+        }
+        __pyx_t_2 = (__pyx_t_5) ? __Pyx_PyObject_Call2Args(__pyx_t_4, __pyx_t_5, __pyx_t_3) : __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3);
+        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 504, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+        __pyx_r = __pyx_t_2;
+        __pyx_t_2 = 0;
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        goto __pyx_L0;
+      }
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+      __pyx_tp_dict_version = __Pyx_get_tp_dict_version(((PyObject *)__pyx_v_self));
+      __pyx_obj_dict_version = __Pyx_get_object_dict_version(((PyObject *)__pyx_v_self));
+      if (unlikely(__pyx_type_dict_guard != __pyx_tp_dict_version)) {
+        __pyx_tp_dict_version = __pyx_obj_dict_version = __PYX_DICT_VERSION_INIT;
+      }
+      #endif
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      #if CYTHON_USE_DICT_VERSIONS && CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
+    }
+    #endif
+  }
+
+  /* "../../src/python/pyoti/cython/real/array/base.pxi":510
+ *     #*************************************************************************************************
+ * 
+ *     darr_set_all_r(val,&self.arr)             # <<<<<<<<<<<<<<
+ * 
+ *   #---------------------------------------------------------------------------------------------------
+ */
+  darr_set_all_r(__pyx_v_val, (&__pyx_v_self->arr));
+
+  /* "../../src/python/pyoti/cython/real/array/base.pxi":504
+ * 
+ *   #***************************************************************************************************
+ *   cpdef set(self, coeff_t val):             # <<<<<<<<<<<<<<
+ *     """
+ *     PURPOSE: Set all elements to val.
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_AddTraceback("pyoti.real.dmat.set", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5pyoti_4real_4dmat_35set(PyObject *__pyx_v_self, PyObject *__pyx_arg_val); /*proto*/
+static char __pyx_doc_5pyoti_4real_4dmat_34set[] = "\n    PURPOSE: Set all elements to val.\n    ";
+static PyObject *__pyx_pw_5pyoti_4real_4dmat_35set(PyObject *__pyx_v_self, PyObject *__pyx_arg_val) {
+  __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_val;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set (wrapper)", 0);
+  assert(__pyx_arg_val); {
+    __pyx_v_val = __pyx_PyFloat_AsDouble(__pyx_arg_val); if (unlikely((__pyx_v_val == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 504, __pyx_L3_error)
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("pyoti.real.dmat.set", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_5pyoti_4real_4dmat_34set(((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_v_self), ((__pyx_t_5pyoti_8c_otilib_coeff_t)__pyx_v_val));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5pyoti_4real_4dmat_34set(struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, __pyx_t_5pyoti_8c_otilib_coeff_t __pyx_v_val) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("set", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __pyx_f_5pyoti_4real_4dmat_set(__pyx_v_self, __pyx_v_val, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 504, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("pyoti.real.dmat.set", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     raise TypeError("self.arr cannot be converted to a Python object for pickling")
@@ -7366,19 +7518,19 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_32copy(struct __pyx_obj_5pyoti_4rea
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_4real_4dmat_35__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_5pyoti_4real_4dmat_35__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5pyoti_4real_4dmat_37__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5pyoti_4real_4dmat_37__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_4real_4dmat_34__reduce_cython__(((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5pyoti_4real_4dmat_36__reduce_cython__(((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_4real_4dmat_34__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self) {
+static PyObject *__pyx_pf_5pyoti_4real_4dmat_36__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -7420,19 +7572,19 @@ static PyObject *__pyx_pf_5pyoti_4real_4dmat_34__reduce_cython__(CYTHON_UNUSED s
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5pyoti_4real_4dmat_37__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_5pyoti_4real_4dmat_37__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_5pyoti_4real_4dmat_39__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_5pyoti_4real_4dmat_39__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5pyoti_4real_4dmat_36__setstate_cython__(((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_5pyoti_4real_4dmat_38__setstate_cython__(((struct __pyx_obj_5pyoti_4real_dmat *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5pyoti_4real_4dmat_36__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_5pyoti_4real_4dmat_38__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5pyoti_4real_dmat *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -63830,23 +63982,8 @@ static PyObject *__pyx_f_5pyoti_4real_8elm_help_reset(struct __pyx_obj_5pyoti_4r
  *     self.y.set(0)
  *     self.z.set(0)
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self->x), __pyx_n_s_set); if (unlikely(!__pyx_t_2)) __PYX_ERR(16, 208, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_int_0) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_int_0);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(16, 208, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_5pyoti_4real_dmat *)__pyx_v_self->x->__pyx_vtab)->set(__pyx_v_self->x, 0.0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(16, 208, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../src/python/pyoti/cython/real/fem/base.pxi":209
@@ -63856,23 +63993,8 @@ static PyObject *__pyx_f_5pyoti_4real_8elm_help_reset(struct __pyx_obj_5pyoti_4r
  *     self.z.set(0)
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self->y), __pyx_n_s_set); if (unlikely(!__pyx_t_2)) __PYX_ERR(16, 209, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_int_0) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_int_0);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(16, 209, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_5pyoti_4real_dmat *)__pyx_v_self->y->__pyx_vtab)->set(__pyx_v_self->y, 0.0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(16, 209, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../src/python/pyoti/cython/real/fem/base.pxi":210
@@ -63882,23 +64004,8 @@ static PyObject *__pyx_f_5pyoti_4real_8elm_help_reset(struct __pyx_obj_5pyoti_4r
  * 
  *     self.detJ.set(0)
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self->z), __pyx_n_s_set); if (unlikely(!__pyx_t_2)) __PYX_ERR(16, 210, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = NULL;
-  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_3)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_3);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_2, function);
-    }
-  }
-  __pyx_t_1 = (__pyx_t_3) ? __Pyx_PyObject_Call2Args(__pyx_t_2, __pyx_t_3, __pyx_int_0) : __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_int_0);
-  __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (unlikely(!__pyx_t_1)) __PYX_ERR(16, 210, __pyx_L1_error)
+  __pyx_t_1 = ((struct __pyx_vtabstruct_5pyoti_4real_dmat *)__pyx_v_self->z->__pyx_vtab)->set(__pyx_v_self->z, 0.0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(16, 210, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "../../src/python/pyoti/cython/real/fem/base.pxi":212
@@ -87220,8 +87327,9 @@ static PyObject *__pyx_getprop_5pyoti_4real_4dmat_real(PyObject *o, CYTHON_UNUSE
 static PyMethodDef __pyx_methods_5pyoti_4real_dmat[] = {
   {"to_numpy", (PyCFunction)__pyx_pw_5pyoti_4real_4dmat_29to_numpy, METH_NOARGS, __pyx_doc_5pyoti_4real_4dmat_28to_numpy},
   {"copy", (PyCFunction)__pyx_pw_5pyoti_4real_4dmat_33copy, METH_NOARGS, __pyx_doc_5pyoti_4real_4dmat_32copy},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_5pyoti_4real_4dmat_35__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_5pyoti_4real_4dmat_37__setstate_cython__, METH_O, 0},
+  {"set", (PyCFunction)__pyx_pw_5pyoti_4real_4dmat_35set, METH_O, __pyx_doc_5pyoti_4real_4dmat_34set},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_5pyoti_4real_4dmat_37__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_5pyoti_4real_4dmat_39__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -90803,6 +90911,7 @@ static int __Pyx_modinit_type_init_code(void) {
   __pyx_vtabptr_5pyoti_4real_dmat = &__pyx_vtable_5pyoti_4real_dmat;
   __pyx_vtable_5pyoti_4real_dmat.create = (struct __pyx_obj_5pyoti_4real_dmat *(*)(darr_t *, struct __pyx_opt_args_5pyoti_4real_4dmat_create *__pyx_optional_args))__pyx_f_5pyoti_4real_4dmat_create;
   __pyx_vtable_5pyoti_4real_dmat.copy = (PyObject *(*)(struct __pyx_obj_5pyoti_4real_dmat *, int __pyx_skip_dispatch))__pyx_f_5pyoti_4real_4dmat_copy;
+  __pyx_vtable_5pyoti_4real_dmat.set = (PyObject *(*)(struct __pyx_obj_5pyoti_4real_dmat *, __pyx_t_5pyoti_8c_otilib_coeff_t, int __pyx_skip_dispatch))__pyx_f_5pyoti_4real_4dmat_set;
   __pyx_vtable_5pyoti_4real_dmat.to_numpy = (PyArrayObject *(*)(struct __pyx_obj_5pyoti_4real_dmat *, int __pyx_skip_dispatch))__pyx_f_5pyoti_4real_4dmat_to_numpy;
   if (PyType_Ready(&__pyx_type_5pyoti_4real_dmat) < 0) __PYX_ERR(0, 4, __pyx_L1_error)
   #if PY_VERSION_HEX < 0x030800B1
@@ -93124,6 +93233,35 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
 }
 #endif
 
+/* PyObjectCall2Args */
+  static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
+    PyObject *args, *result = NULL;
+    #if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyFunction_FastCall(function, args, 2);
+    }
+    #endif
+    #if CYTHON_FAST_PYCCALL
+    if (__Pyx_PyFastCFunction_Check(function)) {
+        PyObject *args[2] = {arg1, arg2};
+        return __Pyx_PyCFunction_FastCall(function, args, 2);
+    }
+    #endif
+    args = PyTuple_New(2);
+    if (unlikely(!args)) goto done;
+    Py_INCREF(arg1);
+    PyTuple_SET_ITEM(args, 0, arg1);
+    Py_INCREF(arg2);
+    PyTuple_SET_ITEM(args, 1, arg2);
+    Py_INCREF(function);
+    result = __Pyx_PyObject_Call(function, args, NULL);
+    Py_DECREF(args);
+    Py_DECREF(function);
+done:
+    return result;
+}
+
 /* RaiseException */
   #if PY_MAJOR_VERSION < 3
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb,
@@ -93282,35 +93420,6 @@ bad:
     return;
 }
 #endif
-
-/* PyObjectCall2Args */
-  static CYTHON_UNUSED PyObject* __Pyx_PyObject_Call2Args(PyObject* function, PyObject* arg1, PyObject* arg2) {
-    PyObject *args, *result = NULL;
-    #if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(function)) {
-        PyObject *args[2] = {arg1, arg2};
-        return __Pyx_PyFunction_FastCall(function, args, 2);
-    }
-    #endif
-    #if CYTHON_FAST_PYCCALL
-    if (__Pyx_PyFastCFunction_Check(function)) {
-        PyObject *args[2] = {arg1, arg2};
-        return __Pyx_PyCFunction_FastCall(function, args, 2);
-    }
-    #endif
-    args = PyTuple_New(2);
-    if (unlikely(!args)) goto done;
-    Py_INCREF(arg1);
-    PyTuple_SET_ITEM(args, 0, arg1);
-    Py_INCREF(arg2);
-    PyTuple_SET_ITEM(args, 1, arg2);
-    Py_INCREF(function);
-    result = __Pyx_PyObject_Call(function, args, NULL);
-    Py_DECREF(args);
-    Py_DECREF(function);
-done:
-    return result;
-}
 
 /* ArgTypeTest */
   static int __Pyx__ArgTypeTest(PyObject *obj, PyTypeObject *type, const char *name, int exact)

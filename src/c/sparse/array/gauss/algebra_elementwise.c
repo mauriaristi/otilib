@@ -1281,6 +1281,8 @@ void fearrso_integrate_to(fearrso_t* arr, fesoti_t* w, arrso_t* res, dhelpl_t dh
     // Check dimensions.
     fearrso_dimCheck_FfO_integrate( arr, w, res);
 
+    arrso_set_r(0., res, dhl);
+    
     // The loop for every element in arr.
     for (i = 0; i < arr->nip; i++){
         

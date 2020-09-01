@@ -883,6 +883,8 @@ void fedarr_integrate_to(fedarr_t* arr, fednum_t* w, darr_t* res){
     // Check dimensions.
     fedarr_dimCheck_FfR_integrate( arr, w, res);
 
+    darr_set_all_r(0.0, res);
+    
     // The loop for every element in arr.
     for (i = 0; i < arr->nip; i++){
         

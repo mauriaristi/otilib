@@ -871,7 +871,7 @@ cdef solve_dense(matso K_in, matso b_in, matso out = None):
 
 
 #*****************************************************************************************************
-cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None):
+cpdef solve_sparse_old(csr_matrix K_in, matso b_in, matso out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -941,7 +941,7 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-def solve_sparse_tests(csr_matrix K_in, matso b_in, matso out = None):
+cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """

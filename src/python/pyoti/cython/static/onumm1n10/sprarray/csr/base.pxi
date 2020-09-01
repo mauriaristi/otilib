@@ -895,7 +895,7 @@ cdef class csr_matrix:
     for i in range(size):
 
       if bases_list[i]==1:
-       
+      
         res.append(i+1)
 
       # end if 
@@ -946,7 +946,7 @@ cdef void csrmatrix_matmul_SO_to(csr_matrix lhs, omatm1n10 rhs, omatm1n10 res):
         olhs = lhs.data[l]
 
         onumm1n10_gem_oo_to( &olhs.num,
-                        &rhs.arr.p_data[ j + k * rhs.arr.ncols ],
+                        &rhs.arr.p_data[ j + k * rhs.ncols ],
                         &tmp, &tmp)
 
       # end for

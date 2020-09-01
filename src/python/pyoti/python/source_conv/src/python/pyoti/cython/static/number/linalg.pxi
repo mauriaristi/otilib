@@ -817,7 +817,7 @@ cdef solve_dense({arr_pytype} K_in, {arr_pytype} b_in, {arr_pytype} out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef solve_sparse(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = None):
+cpdef solve_sparse_old(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -887,7 +887,7 @@ cdef solve_sparse(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-def solve_sparse_tests(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = None):
+cdef solve_sparse(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -896,7 +896,7 @@ def solve_sparse_tests(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = No
 
   from scipy.sparse.linalg import splu
 
-  cdef {arr_pytype}      O, Ores, Otmp
+  cdef {arr_pytype}      O, Ores, Otmp, tmp, tmp2, tmp3
   cdef uint64_t i,j,k,l
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
   cdef uint8_t res_flag = 1
@@ -926,25 +926,27 @@ def solve_sparse_tests(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = No
   # end for
   
   Oord = max( K_in.order, b_in.order)
-
+  tmp = zeros( Ores.shape )
+  tmp2 = zeros( Ores.shape )
   for ordi in range( 1, Oord + 1 ):
         
-    tmp = b_in.get_order_im( ordi )
+    get_order_im( ordi, b_in, out=tmp )
 
     for ord_rhs in range( ordi ):
 
       ord_lhs = ordi - ord_rhs
 
-      tmp -= trunc_dot( ord_lhs, K_in, ord_rhs, Ores )
+      trunc_dot( ord_lhs, K_in, ord_rhs, Ores, out=tmp2 )
+      sub(tmp,tmp2,out=tmp)
 
     # end for 
     
     # Convert tmp to array (for specific order)
-    rhs = get_order_im_array( ordi, tmp )
+    rhs = get_order_im_array_2( ordi, tmp )
     # print(rhs)
     rhs = lu.solve( rhs )
     # print(rhs)
-    set_order_im_from_array( ordi, rhs, Ores)
+    set_order_im_from_array_2( ordi, rhs, Ores)
 
   # end for 
 

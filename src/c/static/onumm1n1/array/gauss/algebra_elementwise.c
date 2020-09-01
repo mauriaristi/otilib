@@ -1148,13 +1148,15 @@ void feoarrm1n1_integrate_to(feoarrm1n1_t* arr, feonumm1n1_t* w, oarrm1n1_t* res
     // Check dimensions.
     feoarrm1n1_dimCheck_FfO_integrate( arr, w, res);
 
+    oarrm1n1_set_r(0.0, res);
+
     // The loop for every element in arr.
     for (i = 0; i < arr->nip; i++){
         
         oarrm1n1_gem_oO_to( &w->p_data[i], &arr->p_data[i], res, res);
 
     }
-
+    
 }
 // ----------------------------------------------------------------------------------------------------
 

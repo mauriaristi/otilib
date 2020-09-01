@@ -1148,13 +1148,15 @@ void femdarr2_integrate_to(femdarr2_t* arr, femdnum2_t* w, mdarr2_t* res){
     // Check dimensions.
     femdarr2_dimCheck_FfO_integrate( arr, w, res);
 
+    mdarr2_set_r(0.0, res);
+
     // The loop for every element in arr.
     for (i = 0; i < arr->nip; i++){
         
         mdarr2_gem_oO_to( &w->p_data[i], &arr->p_data[i], res, res);
 
     }
-
+    
 }
 // ----------------------------------------------------------------------------------------------------
 

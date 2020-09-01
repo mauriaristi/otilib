@@ -817,7 +817,7 @@ cdef solve_dense(omatm1n10 K_in, omatm1n10 b_in, omatm1n10 out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef solve_sparse(csr_matrix K_in, omatm1n10 b_in, omatm1n10 out = None):
+cpdef solve_sparse_old(csr_matrix K_in, omatm1n10 b_in, omatm1n10 out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -887,7 +887,7 @@ cdef solve_sparse(csr_matrix K_in, omatm1n10 b_in, omatm1n10 out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-def solve_sparse_tests(csr_matrix K_in, omatm1n10 b_in, omatm1n10 out = None):
+cdef solve_sparse(csr_matrix K_in, omatm1n10 b_in, omatm1n10 out = None):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -898,7 +898,6 @@ def solve_sparse_tests(csr_matrix K_in, omatm1n10 b_in, omatm1n10 out = None):
 
   cdef omatm1n10      O, Ores, Otmp, tmp, tmp2, tmp3
   cdef uint64_t i,j,k,l
-  cdef np.ndarray[double, ndim=2] rhs
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
   cdef uint8_t res_flag = 1
 
@@ -927,21 +926,18 @@ def solve_sparse_tests(csr_matrix K_in, omatm1n10 b_in, omatm1n10 out = None):
   # end for
   
   Oord = max( K_in.order, b_in.order)
-  tmp  = zeros( Ores.shape )
+  tmp = zeros( Ores.shape )
   tmp2 = zeros( Ores.shape )
-
   for ordi in range( 1, Oord + 1 ):
         
     get_order_im( ordi, b_in, out=tmp )
-
-    tmp2.set(0)
 
     for ord_rhs in range( ordi ):
 
       ord_lhs = ordi - ord_rhs
 
       trunc_dot( ord_lhs, K_in, ord_rhs, Ores, out=tmp2 )
-      sub(tmp,tmp2, out=tmp)
+      sub(tmp,tmp2,out=tmp)
 
     # end for 
     

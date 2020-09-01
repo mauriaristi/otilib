@@ -1451,7 +1451,7 @@ struct __pyx_opt_args_5pyoti_4real_8elm_help_allocate_spatial;
  *   @staticmethod
  *   cdef dmat create(darr_t* num, uint8_t FLAGS = *)             # <<<<<<<<<<<<<<
  *   cpdef copy(self)
- *   cpdef np.ndarray[double, ndim=2] to_numpy(self)
+ *   cpdef set(self, coeff_t val)
  */
 struct __pyx_opt_args_5pyoti_4real_4dmat_create {
   int __pyx_n;
@@ -3863,6 +3863,7 @@ struct __pyx_memoryviewslice_obj {
 struct __pyx_vtabstruct_5pyoti_4real_dmat {
   struct __pyx_obj_5pyoti_4real_dmat *(*create)(darr_t *, struct __pyx_opt_args_5pyoti_4real_4dmat_create *__pyx_optional_args);
   PyObject *(*copy)(struct __pyx_obj_5pyoti_4real_dmat *, int __pyx_skip_dispatch);
+  PyObject *(*set)(struct __pyx_obj_5pyoti_4real_dmat *, __pyx_t_5pyoti_8c_otilib_coeff_t, int __pyx_skip_dispatch);
   PyArrayObject *(*to_numpy)(struct __pyx_obj_5pyoti_4real_dmat *, int __pyx_skip_dispatch);
 };
 static struct __pyx_vtabstruct_5pyoti_4real_dmat *__pyx_vtabptr_5pyoti_4real_dmat;

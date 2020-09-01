@@ -122,7 +122,7 @@ ord_t arrso_get_order( arrso_t* arr ){
     // Finds the maximum order in the array.
     for( i=0; i<arr->size; i++ ){
         
-        order = MAX(order,arr->p_data[0].order);
+        order = MAX(order,arr->p_data[i].order);
     
     }
 

@@ -586,8 +586,6 @@ cdef solve_sparse(object K_in, dmat b_in, dmat out = None, solver = 'SuperLU', s
   # end if
 
   Kr_csc = K_in.tocsc()
-  Kr_csc.indices = Kr_csc.indices.astype(np.int64)
-  Kr_csc.indptr  = Kr_csc.indptr.astype(np.int64)
   
   factorizer = None
 
@@ -609,9 +607,11 @@ cdef solve_sparse(object K_in, dmat b_in, dmat out = None, solver = 'SuperLU', s
 
   elif solver == 'UMFPACK' or solver == 'umfpack' or solver == 'luumf':
     
-    from scikits import umfpack
-    factorizer = umfpack.splu
-
+    from scikits.umfpack import splu
+    factorizer = splu
+    Kr_csc.indices = Kr_csc.indices.astype(np.int64)
+    Kr_csc.indptr  = Kr_csc.indptr.astype(np.int64)
+ 
   else:
     raise ValueError("Unsupported solver. Try solver = 'SuperLU', solver = 'cholesky' or solver = 'umfpack'" )
   # end if  

@@ -693,7 +693,7 @@ cpdef inv_block(object arr, object out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef solve(object K_in, omatm1n1 b_in, omatm1n1 out = None):
+cpdef solve(object K_in, omatm1n1 b_in, omatm1n1 out = None, solver = 'SuperLU',solver_args = {}):
   """
   PURPOSE:   Solve OTI linear system of equations.
   """
@@ -723,17 +723,17 @@ cpdef solve(object K_in, omatm1n1 b_in, omatm1n1 out = None):
   if   tK is omatm1n1:
     
     if res_flag:
-      solve_dense( K_in, b_in, out = out)
+      solve_dense( K_in, b_in, out = out, solver = solver, solver_args=solver_args)
     else:      
-      res = solve_dense(K_in, b_in)
+      res = solve_dense(K_in, b_in, out = None, solver = solver, solver_args=solver_args)
     # end if
 
   elif tK is csr_matrix:
 
     if res_flag:
-      solve_sparse( K_in, b_in, out = out)
+      solve_sparse( K_in, b_in, out = out, solver = solver, solver_args=solver_args)
     else:      
-      res = solve_sparse(K_in, b_in)
+      res = solve_sparse(K_in, b_in, out = None, solver = solver, solver_args=solver_args)
     # end if
 
   else:
@@ -747,7 +747,7 @@ cpdef solve(object K_in, omatm1n1 b_in, omatm1n1 out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef solve_dense(omatm1n1 K_in, omatm1n1 b_in, omatm1n1 out = None):
+cdef solve_dense(omatm1n1 K_in, omatm1n1 b_in, omatm1n1 out = None, solver = 'SuperLU',solver_args = {}):
   """
   PURPOSE:   Solve OTI linear system of equations for a dense K_in.
   """
@@ -887,17 +887,28 @@ cpdef solve_sparse_old(csr_matrix K_in, omatm1n1 b_in, omatm1n1 out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef solve_sparse(csr_matrix K_in, omatm1n1 b_in, omatm1n1 out = None):
+cdef solve_sparse(csr_matrix K_in, omatm1n1 b_in, omatm1n1 out = None, solver = 'SuperLU', solver_args = {}):
   """
-  PURPOSE:   Solve OTI linear system of equations for a dense K_in.
+  PURPOSE:   Solve an OTI sparse linear system of equations.
+
+  INPUTS: 
+
+        - K_in:    csr_matrix of OTI numbers.
+  
+        - b_in:    Right hand side of the equation 
+  
+        - out:     Result holder. Default None (returns newly allocated array)
+  
+        - solver:  Default 'SuperLU'
+  
+        - **kwargs Specific factorized solver.
+
   """
   #***************************************************************************************************
   
 
-  from scipy.sparse.linalg import splu
-
   cdef omatm1n1      O, Ores, Otmp, tmp, tmp2, tmp3
-  cdef uint64_t i,j,k,l
+  cdef uint64_t i,j,k,l, solver_id=1
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
   cdef uint8_t res_flag = 1
 
@@ -911,23 +922,67 @@ cdef solve_sparse(csr_matrix K_in, omatm1n1 b_in, omatm1n1 out = None):
     Ores = zeros(b_in.shape)
   # end if
 
-  lu = splu(K_in.real.tocsc())
+  Kr_csc = K_in.real.tocsc()
+  Kr_csc.indices = Kr_csc.indices.astype(np.int64) # Required for UMFPACK
+  Kr_csc.indptr  = Kr_csc.indptr.astype(np.int64)  # Required for UMFPACK
+  
+  factorizer = None
+
+  if solver == 'SuperLU' or solver == 'LU' or solver == 'lu' or solver == 'splu':
+    
+    from scipy.sparse.linalg import splu
+    factorizer = splu
+
+  elif solver == 'ILU' or solver == 'ilu' or solver == 'spilu':
+    
+    from scipy.sparse.linalg import spilu
+    factorizer = spilu
+
+  elif solver == 'cholesky' or solver == 'ch' or solver == 'CH':
+    
+    from sksparse.cholmod import cholesky
+    factorizer = cholesky
+    solver_id = 2
+
+  elif solver == 'UMFPACK' or solver == 'umfpack' or solver == 'luumf':
+    
+    from scikits import umfpack
+    factorizer = umfpack.splu
+
+  else:
+
+    raise ValueError("Unsupported solver. Try solver = 'SuperLU', solver = 'cholesky' or solver = 'umfpack'" )
+
+  # end if     
+
+  # Factorize matrix. This is usually the most demanding step in the block solver approach.
+  factor = factorizer(Kr_csc,**solver_args)
+
+  del(Kr_csc) # Real matrix not needed anymore.
+
+  # Get solve method.
+  if solver_id == 2:
+    # scikit-cholesky specific.
+    solve = factor
+  else:
+    solve = factor.solve
+  # end if 
+
   rhs = b_in.real
-  # Solve the real system of equations, using LU solver:
-  rhs = lu.solve(rhs)
+  # Solve the real system of equations:
+  rhs = solve(rhs)
 
   # Solve the real coefficient
   for i in range(Ores.nrows):      
     for j in range(Ores.ncols):
-
       oarrm1n1_set_item_ij_r( rhs[i,j], i, j, &Ores.arr)
-
     # end for
   # end for
   
   Oord = max( K_in.order, b_in.order)
-  tmp = zeros( Ores.shape )
+  tmp  = zeros( Ores.shape )
   tmp2 = zeros( Ores.shape )
+
   for ordi in range( 1, Oord + 1 ):
         
     get_order_im( ordi, b_in, out=tmp )
@@ -943,9 +998,9 @@ cdef solve_sparse(csr_matrix K_in, omatm1n1 b_in, omatm1n1 out = None):
     
     # Convert tmp to array (for specific order)
     rhs = get_order_im_array_2( ordi, tmp )
-    # print(rhs)
-    rhs = lu.solve( rhs )
-    # print(rhs)
+    
+    rhs = solve( rhs )
+    
     set_order_im_from_array_2( ordi, rhs, Ores)
 
   # end for 

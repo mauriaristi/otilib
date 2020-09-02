@@ -19,17 +19,39 @@ cdef class csr_matrix:
 
   #***************************************************************************************************
   
-  def __init__(self, arg1, shape=None, copy = True): 
+  def __init__(self, arg1, shape=None, copy = True, preserve_in = False): 
     """
     PURPOSE:      Python level constructor of the csr_matrix class.
 
-    DESCRIPTION:  Creates a new empty csr_matrix matrix.
+    DESCRIPTION:  Creates a new empty csr_matrix matrix. Note that this matrix does not support 
+                  slicing or item get or set operations.
+
+    INPUTS:
+          - arg1:        Given constructors:
+
+                          arg1 = lil_matrix. LIL matrix is converted to CSR type of sparse matrix.
+
+                          arg1 = (data, indices, indptr). Matrix is created from given arrays.
+
+                          arg1 = (data, ( rows, cols ) ). Coordinate creator. Currently not supported.
+
+                          arg1 = (nrows, ncols). Empty matrix creator.
+
+          - shape:       Default None. Defines the shape of the matrix. If not given, then it is inferred 
+                         from the data. 
+
+          - copy:        Default True. No use currently.
+
+          - preserve_in: Default False. If True, the input matrix from arg1 is slowly freed in memory
+                         with memory preservation in mind.
+
                  
     """
     #*************************************************************************************************
     
     cdef uint64_t i, j, k, ncols, nrows
     cdef lil_matrix lil
+    cdef list lilrowsi, lildatai
     
     targ1 = type(arg1)
 
@@ -50,14 +72,26 @@ cdef class csr_matrix:
 
         self.indptr[i+1] = self.indptr[i] + len(lil.rows[i])
         k = self.indptr[i]
-        
+
+        lilrowsi = lil.rows[i]
+        lildatai = lil.data[i]
+
         for j in range(len(lil.rows[i])):
 
-          self.indices[k] = lil.rows[i][j]
-          self.data[k]    = lil.data[i][j].copy()
+          self.indices[k] = lilrowsi[j]
+          self.data[k]    = lildatai[j].copy()
           k+=1
 
         # end for 
+        
+        # Remove data from source.
+        if not preserve_in:
+          lil.rows[i] = []
+          lil.data[i] = []
+        # end if 
+
+        lilrowsi = []
+        lildatai = []
 
       # end for 
 
@@ -104,6 +138,9 @@ cdef class csr_matrix:
         # end for
 
       elif len(arg1) == 2 and type(arg1[0]) == int and type(arg1[1]) == int:
+
+        self.nrows, self.ncols = arg1
+        self.size = self.nrows * self.ncols
 
         self.indices = np.zeros(0, dtype = np.uint64 )
         self.indptr  = np.zeros(0, dtype = np.uint64 )

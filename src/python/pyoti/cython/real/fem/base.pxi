@@ -478,6 +478,7 @@ cdef class elm_help:
             mul(tmp1,tmp2,out=tmp2)
             self.Jinv.get_item_ij(0,1,out=tmp1); self.Neta.get_item_ij(0,i,out=tmp3)
             mul(tmp1,tmp3,out=tmp3)
+            sum(tmp3,tmp2,out=tmp2)
             self.Jinv.get_item_ij(0,2,out=tmp1); self.Nzeta.get_item_ij(0,i,out=tmp3)
             mul(tmp1,tmp3,out=tmp3)
             sum(tmp3,tmp2,out=tmp2)
@@ -487,6 +488,7 @@ cdef class elm_help:
             mul(tmp1,tmp2,out=tmp2)
             self.Jinv.get_item_ij(1,1,out=tmp1); self.Neta.get_item_ij(0,i,out=tmp3)
             mul(tmp1,tmp3,out=tmp3)
+            sum(tmp3,tmp2,out=tmp2)
             self.Jinv.get_item_ij(1,2,out=tmp1); self.Nzeta.get_item_ij(0,i,out=tmp3)
             mul(tmp1,tmp3,out=tmp3)
             sum(tmp3,tmp2,out=tmp2)
@@ -496,6 +498,7 @@ cdef class elm_help:
             mul(tmp1,tmp2,out=tmp2)
             self.Jinv.get_item_ij(2,1,out=tmp1); self.Neta.get_item_ij(0,i,out=tmp3)
             mul(tmp1,tmp3,out=tmp3)
+            sum(tmp3,tmp2,out=tmp2)
             self.Jinv.get_item_ij(2,2,out=tmp1); self.Nzeta.get_item_ij(0,i,out=tmp3)
             mul(tmp1,tmp3,out=tmp3)
             sum(tmp3,tmp2,out=tmp2)
@@ -600,18 +603,18 @@ cdef class elm_help:
       
       if   self.ndim_an == 1:
         
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
+        self.J[0,0] = dot_product(self.Nxi,  self.x)
              
       elif self.ndim_an == 2:
       
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        self.J[0,0] = dot_product(self.Nxi,  self.x)
+        self.J[0,1] = dot_product(self.Nxi,  self.y)
               
       else:
       
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
-        self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+        self.J[0,0] = dot_product(self.Nxi,  self.x)
+        self.J[0,1] = dot_product(self.Nxi,  self.y)
+        self.J[0,2] = dot_product(self.Nxi,  self.z)
               
       # end if
 
@@ -619,37 +622,37 @@ cdef class elm_help:
       
       if self.ndim_an == 2:
         
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
+        self.J[0,0] = dot_product(self.Nxi,  self.x)
+        self.J[0,1] = dot_product(self.Nxi,  self.y)
         
-        self.J[1,0] = dot(self.Neta, self.x)[0,0]
-        self.J[1,1] = dot(self.Neta, self.y)[0,0]
+        self.J[1,0] = dot_product(self.Neta, self.x)
+        self.J[1,1] = dot_product(self.Neta, self.y)
 
       else:
 
-        self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-        self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
-        self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+        self.J[0,0] = dot_product(self.Nxi,  self.x)
+        self.J[0,1] = dot_product(self.Nxi,  self.y)
+        self.J[0,2] = dot_product(self.Nxi,  self.z)
 
-        self.J[1,0] = dot(self.Neta, self.x)[0,0]
-        self.J[1,1] = dot(self.Neta, self.y)[0,0]
-        self.J[1,2] = dot(self.Neta, self.z)[0,0]
+        self.J[1,0] = dot_product(self.Neta, self.x)
+        self.J[1,1] = dot_product(self.Neta, self.y)
+        self.J[1,2] = dot_product(self.Neta, self.z)
 
       # end if
 
     else:
 
-      self.J[0,0] = dot(self.Nxi,  self.x)[0,0]
-      self.J[0,1] = dot(self.Nxi,  self.y)[0,0]
-      self.J[0,2] = dot(self.Nxi,  self.z)[0,0]
+      self.J[0,0] = dot_product(self.Nxi,  self.x)
+      self.J[0,1] = dot_product(self.Nxi,  self.y)
+      self.J[0,2] = dot_product(self.Nxi,  self.z)
 
-      self.J[1,0] = dot(self.Neta, self.x)[0,0]
-      self.J[1,1] = dot(self.Neta, self.y)[0,0]
-      self.J[1,2] = dot(self.Neta, self.z)[0,0]
+      self.J[1,0] = dot_product(self.Neta, self.x)
+      self.J[1,1] = dot_product(self.Neta, self.y)
+      self.J[1,2] = dot_product(self.Neta, self.z)
 
-      self.J[2,0] = dot(self.Nzeta,self.x)[0,0]
-      self.J[2,1] = dot(self.Nzeta,self.y)[0,0]
-      self.J[2,2] = dot(self.Nzeta,self.z)[0,0]
+      self.J[2,0] = dot_product(self.Nzeta,self.x)
+      self.J[2,1] = dot_product(self.Nzeta,self.y)
+      self.J[2,2] = dot_product(self.Nzeta,self.z)
 
     # end if 
 

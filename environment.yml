@@ -9,6 +9,7 @@ dependencies:
   - matplotlib
   - pyvista
   - gmsh
+  - python-gmsh
   - jupyter
   - jupyterlab
   - ipython
@@ -19,6 +20,7 @@ dependencies:
   - pip
   - ipympl
   - nodejs
+  - scikit-umfpack
+  - scikit-sparse
   - pip:
     - partitionsets
-    - gmsh-sdk

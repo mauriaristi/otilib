@@ -50,6 +50,18 @@ cdef class dmat:
 
   #***************************************************************************************************
   @property
+  def order(self): 
+    """
+    PURPOSE:      Return the OTI imaginary order of the array.
+    """
+    #*************************************************************************************************
+
+    return 0
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
   def shape(self): 
     """
     PURPOSE:      Return the shape of the stored matrix. 
@@ -211,40 +223,337 @@ cdef class dmat:
     """
     #*************************************************************************************************
     
-    if (isinstance(val, int)):
+    cdef coeff_t rres
+    cdef darr_t  Rres
+    cdef object  res = None
+    cdef int64_t starti, stopi, stepi
+    cdef int64_t startj, stopj, stepj
+
+    tval = type(val)
     
-      return darr_get_item_i( &self.arr, val)
+    if tval == int:
+      
+      # This is a slice
+      if val < self.arr.nrows:
+        
+        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
+        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+        Ores = darr_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
+        res  = dmat.create(&Ores)
+
+      else:
+        raise IndexError("Index out of bounds.")
+      # end if 
+
+    elif tval == slice: #slice of multiple items
+      
+      # This is a slice
+      starti, stopi, stepi = val.indices( self.arr.nrows )
+      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+      Ores = darr_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
+      res  = dmat.create(&Ores)
     
+    elif tval == tuple:
+      
+      if len(val) == 2:
+
+        tval0 = type(val[0])
+        tval1 = type(val[1])
+
+        if   tval0 == int and tval1 == int:
+          
+          # print("Case 1")
+          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
+          
+            ores = darr_get_item_ij( &self.arr, val[0], val[1])
+            res = ores
+          
+          else:
+            raise IndexError("Index out of bounds.")
+          # end if 
+
+        elif tval0 == int and tval1 == slice:
+
+          # print("Case 2")
+          if val[0] < self.arr.nrows:
+
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+            Ores = darr_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
+            res  = dmat.create(&Ores)  
+
+          else:
+            raise IndexError("Index out of bounds.")
+          # end if 
+
+        elif tval0 == slice and tval1 == int:
+
+          # print("Case 3")
+          if val[1] < self.arr.ncols:
+
+            starti, stopi, stepi = val[0].indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            Ores = darr_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
+            res  = dmat.create(&Ores)  
+
+          else:
+            raise IndexError("Index out of bounds.")
+          # end if 
+
+
+        elif tval0 == slice and tval1 == slice:
+
+          # print("Case 3")
+          starti, stopi, stepi = val[0].indices( self.arr.nrows )
+          startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+          Ores = darr_get_slice( &self.arr, starti, stopi, stepi, startj, stopj, stepj)
+          res  = dmat.create(&Ores) 
+
+        else:
+          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
+        # end if 
+
+      else:
+        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
+      # end if 
+
     else:
-
-      return darr_get_item_ij( &self.arr, val[0], val[1])
-
+      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
     # end if
+
+    return res
 
   #---------------------------------------------------------------------------------------------------  
 
-
   #***************************************************************************************************
-  def __setitem__(self, val, coeff_t value):
+  def __setitem__(self, val, value):
     """
     PURPOSE: Set an element of the item to the specified value.
     """
     #*************************************************************************************************
     
-    
-    if (isinstance(val, int)):
+    tvalue = type(value)
 
-      darr_set_item_i( value, val, &self.arr)
+    if ( tvalue == dmat ):
+
+      self.__setitem__R( val, value )
+
+    elif ( tvalue in number_types ):
+
+      self.__setitem__r( val, value )
 
     else:
 
-      darr_set_item_ij( value , val[0], val[1], &self.arr)
+      raise IndexError("ERROR: Cant set item of type {0} in matso object.".format(tvalue))
 
-    # end if
+    # end if 
 
 
   #---------------------------------------------------------------------------------------------------  
 
+  #***************************************************************************************************
+  cdef __setitem__r(self, object val, coeff_t value):
+    """
+    PURPOSE: Set item from real value.
+    """
+    #*************************************************************************************************
+
+    tval = type(val)
+
+    if tval == int:
+      
+      # This is a slice
+      if val < self.arr.nrows:
+        
+        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
+        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+        darr_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+        
+      else:
+        raise IndexError("Index out of bounds.")
+      # end if 
+
+    elif tval == slice: #slice of multiple items
+      
+      # This is a slice
+      starti, stopi, stepi = val.indices( self.arr.nrows )
+      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+      darr_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+    
+    elif tval == tuple:
+      
+      if len(val) == 2:
+
+        tval0 = type(val[0])
+        tval1 = type(val[1])
+
+        if ( tval0 == int and tval1 == int ):
+          
+          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
+          
+            darr_set_item_ij_r( value, val[0], val[1], &self.arr)
+            
+          else:
+            raise IndexError("Index out of bounds.")
+          # end if 
+
+        elif (tval0 == int and tval1 == slice):
+
+          if val[0] < self.arr.nrows:
+
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+            darr_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+
+          else:
+            raise IndexError("Index out of bounds.")
+          # end if 
+
+        elif (tval0 == slice and tval1 == int):
+
+          if val[1] < self.arr.ncols:
+
+            starti, stopi, stepi = val[0].indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            darr_set_slice_r(value, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+
+          else:
+            raise IndexError("Index out of bounds.")
+          # end if 
+
+        elif (tval0 == slice and tval1 == slice):
+
+          starti, stopi, stepi = val[0].indices( self.arr.nrows )
+          startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+          darr_set_slice_r( value, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+
+        else:
+          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
+        # end if 
+
+      else:
+        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
+      # end if 
+
+    else:
+      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+    # end if
+
+  #---------------------------------------------------------------------------------------------------
+
+  
+
+  #***************************************************************************************************
+  cdef __setitem__R(self,  object val, dmat value):
+    """
+    PURPOSE: Set item from real array.
+    """
+    #*************************************************************************************************
+
+    tval = type(val)
+
+    if tval == int:
+      
+      # This is a slice
+      if val < self.arr.nrows:
+        
+        starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
+        startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+        darr_set_slice_R( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+        
+      else:
+
+        raise IndexError("Index out of bounds.")
+
+      # end if 
+
+    elif tval == slice: #slice of multiple items
+      
+      # This is a slice
+      starti, stopi, stepi = val.indices( self.arr.nrows )
+      startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
+
+      darr_set_slice_R( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+    
+    elif tval == tuple:
+      
+      if len(val) == 2:
+
+        tval0 = type(val[0])
+        tval1 = type(val[1])
+
+        if ( tval0 == int and tval1 == int ):
+          
+          if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
+          
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            darr_set_slice_R( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+            
+          else:
+
+            raise IndexError("Index out of bounds.")
+
+          # end if 
+
+        elif (tval0 == int and tval1 == slice):
+
+          if val[0] < self.arr.nrows:
+
+            starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
+            startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+            darr_set_slice_R( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+
+          else:
+            raise IndexError("Index out of bounds.")
+          # end if 
+
+        elif (tval0 == slice and tval1 == int):
+
+          if val[1] < self.arr.ncols:
+
+            starti, stopi, stepi = val[0].indices( self.arr.nrows )
+            startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
+
+            darr_set_slice_R( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+
+          else:
+            raise IndexError("Index out of bounds.")
+          # end if 
+
+        elif (tval0 == slice and tval1 == slice):
+
+          starti, stopi, stepi = val[0].indices( self.arr.nrows )
+          startj, stopj, stepj = val[1].indices( self.arr.ncols )
+
+          darr_set_slice_R( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr)
+
+        else:
+          raise IndexError("ERROR: double index ( , ) only integers, slices (`:`) are valid indices")
+        # end if 
+
+      else:
+        raise IndexError("ERROR: Getting integration points by index is not yet supported.")
+      # end if 
+
+    else:
+      raise IndexError("ERROR: only integers, slices (`:`) are valid indices")
+    # end if
+
+  #---------------------------------------------------------------------------------------------------
 
 
 

@@ -1658,6 +1658,7 @@ class writer:
     str_out += level + 2*tab + "return 0" + self.endl
     str_out += level + 2*tab + "break" + self.endl
     
+    levelj = level + 2*tab 
 
     for ordi in range(1,self.order+1):
       str_out += level + tab + "case "+str(ordi)+":"+endl
@@ -3532,6 +3533,42 @@ class writer:
       f.write(str_out_file)
       f.close()
     # end for 
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def clean_output_folder_files(self, base_dir = ''):
+    
+    import shutil
+
+    folders = ['include/oti/static/',
+    'include/pyoti/c_otilib/static/',
+    'include/pyoti/static/',
+    'src/c/static/',
+    'src/python/pyoti/cython/static/',
+    ]
+    tab = '  '
+    # r=>root, d=>directories, f=>files
+    for folder in folders:
+      src_path = os.path.join(base_dir,folder)
+      # print(src_path)
+      for r, d, f in os.walk(src_path):        
+        for item in f:
+          ext = item.split('.')[-1]
+          if '__init__' not in item:
+            os.remove( os.path.join(r,item) )
+          # end if 
+        # end for 
+        for item in d:
+          ext = item.split('.')[-1]          
+          shutil.rmtree(os.path.join(r,item)) 
+        # end for 
+        break
+      # end for
+    # end for
+    
+    self.process_headers_static( base_dir = base_dir, tab=tab)
+    self.process_static_include_files( base_dir = base_dir)
+
   #--------------------------------------------------------------------------------------------------- 
 
 

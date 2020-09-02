@@ -17,6 +17,8 @@ cdef class dmat:
   @staticmethod
   cdef dmat create(darr_t* num, uint8_t FLAGS = *)
   cpdef copy(self)
+  cdef __setitem__r(self, object val, coeff_t value)
+  cdef __setitem__R(self, object val, dmat    value)
   cpdef set(self, coeff_t val)
   cpdef np.ndarray[double, ndim=2] to_numpy(self)
   

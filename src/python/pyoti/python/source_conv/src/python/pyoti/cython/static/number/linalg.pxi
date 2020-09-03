@@ -923,8 +923,7 @@ cdef solve_sparse(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = None, s
   # end if
 
   Kr_csc = K_in.real.tocsc()
-  Kr_csc.indices = Kr_csc.indices.astype(np.int64) # Required for UMFPACK
-  Kr_csc.indptr  = Kr_csc.indptr.astype(np.int64)  # Required for UMFPACK
+  
   
   factorizer = None
 
@@ -946,8 +945,10 @@ cdef solve_sparse(csr_matrix K_in, {arr_pytype} b_in, {arr_pytype} out = None, s
 
   elif solver == 'UMFPACK' or solver == 'umfpack' or solver == 'luumf':
     
-    from scikits import umfpack
-    factorizer = umfpack.splu
+    from scikits.umfpack import splu
+    factorizer = splu
+    Kr_csc.indices = Kr_csc.indices.astype(np.int64) # Required for UMFPACK
+    Kr_csc.indptr  = Kr_csc.indptr.astype(np.int64)  # Required for UMFPACK
 
   else:
 

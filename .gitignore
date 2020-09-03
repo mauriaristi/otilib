@@ -4,3 +4,5 @@ build/
 .DS_Store
 src/python/pyoti/cython/*.c
 src/python/pyoti/cython/static/*.c
+src/python/pyoti/cython/*.h
+src/python/pyoti/cython/static/*.h

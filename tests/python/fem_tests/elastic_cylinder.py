@@ -517,10 +517,11 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
     
     u = alg.solve( K, f, solver=solver )
     # u = alg.solve( K, f, solver='cholesky')
-    end_cholesky_time = time()
+    # end_cholesky_time = time()
     # u = alg.solve( K, f, solver='SuperLU' )
-    end_SuperLU_time = time()
+    # end_SuperLU_time = time()
     # u = alg.solve( K, f, solver='umfpack' )
+    # end_umfpack_time = time()
 
     mem_aft_solve = psutil.virtual_memory()      
     
@@ -531,7 +532,7 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
         times['mem_aft_creation'].append( mem_aft_creation )
         times['mem_aft_assembly'].append( mem_aft_assembly )
         times['mem_aft_bc'].append(       mem_aft_bc       )
-        times['mem_aft_bc'].append(       mem_aft_solve    )
+        times['mem_aft_solve'].append(    mem_aft_solve    )
         times['assembly'].append(  end_assmbly_time - start_time       )
         times['boundary'].append(  end_bc_time      - end_assmbly_time )
         times['solution'].append(  end_solve_time   - end_bc_time      )

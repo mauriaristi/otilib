@@ -98,6 +98,15 @@ def run_analysis():
     times['assembly'] = []
     times['boundary'] = []
     times['solution'] = []
+    times['mem_bf_mesh']      = []
+    times['mem_aft_mesh']     = []
+    times['mem_bf_creation']  = []
+    times['mem_aft_creation'] = []
+    times['mem_aft_assembly'] = []
+    times['mem_aft_bc']       = []
+    times['mem_aft_solve']    = []
+    times['mem_aft_solve2d']  = []
+    times['mem_aft_del_K']    = []
 
     export_dir = 'results/'
     filename = export_dir + export+"_"+solver+"_"+str(hi)+".json"
@@ -106,11 +115,14 @@ def run_analysis():
 
         fem.set_global_algebra(algebra)
         alg = fem.get_global_algebra()
+        
+        times['mem_bf_mesh'].append( psutil.virtual_memory() )
 
         start_time = time()
         Th = cylinder( 1, 2, he=he, quads=False, save=False, structured=True )
         end_time = time()
 
+        times['mem_aft_mesh'].append( psutil.virtual_memory() )
 
         times_algebras[he]['mesh_DOFs'] = Th.nnodes
         times_algebras[he]['meshstats'] = repr(Th)
@@ -128,11 +140,20 @@ def run_analysis():
         Po = alg.number(1000)#+alg.e(4,order=1)
 
         u_res,K,f = solve_2d_linear_elasticity(Th,E,nu,ri,Pi,ro,Po,times=times, solver = solver)
+
+
+        times['mem_aft_solve2d'].append( psutil.virtual_memory() )
         
         times_algebras[he]['K_nnz']   = K.nnz
         times_algebras[he]['K_shape'] = K.shape[0]
 
         report_times_in_file(times_algebras, filename=filename)
+        del(u_res)
+        del(K)
+        del(f)
+
+        times['mem_aft_del_K'].append( psutil.virtual_memory() )
+        
 
     # end for
     

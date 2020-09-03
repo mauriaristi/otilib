@@ -183,6 +183,8 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
     
     from timeit import default_timer as time
     
+    mem_bf_creation = psutil.virtual_memory()
+
     start_time = time()
     
     alg = fem.get_global_algebra()
@@ -208,6 +210,7 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
     K[nNodes,nNodes] = 1.0 # Removes "center" node.
     K[0,0] = 1.0 # Removes "center" node.
     
+    mem_aft_creation = psutil.virtual_memory()
     # 
     for j in range(els['types'].size):
 
@@ -218,7 +221,7 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
             elem.end()
             elem.allocate(intorder=2)
             elem.allocate_spatial(ndim_analysis,compute_Jinv = True)
-
+            # print(elem)
             fh = alg.zeros( ( elem.nbasis, 1 ) )
             
             # Temps
@@ -321,8 +324,25 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
         # end for
 
     # end for
+    # Free all Temporals
+    del(fh)    
+    del(NxT)
+    del(NyT)
+    del(NxNx)
+    del(NxNy)
+    del(NyNx)
+    del(NyNy)
+    del(NN_tmp1)
+    del(NN_tmp2)
+    del(NN_tmp3)
+    del(tmp11)
+    del(tmp12)
+    del(tmp21)
+    del(tmp22)
 
-    fem.end_elements()   
+    fem.end_elements() 
+
+    mem_aft_assembly = psutil.virtual_memory()  
 
     end_assmbly_time = time()
     
@@ -487,14 +507,31 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
         # end for 
         
     # end for
+    mem_aft_bc = psutil.virtual_memory()  
+    
     end_bc_time = time()
-
+    
     K = K.tocsr()
-    u = alg.solve( K, f, solver=solver)
+
+    mem_aft_tocsr = psutil.virtual_memory()  
+    
+    u = alg.solve( K, f, solver=solver )
+    # u = alg.solve( K, f, solver='cholesky')
+    end_cholesky_time = time()
+    # u = alg.solve( K, f, solver='SuperLU' )
+    end_SuperLU_time = time()
+    # u = alg.solve( K, f, solver='umfpack' )
+
+    mem_aft_solve = psutil.virtual_memory()      
     
     end_solve_time = time()
     
     if stats:
+        times['mem_bf_creation'].append(  mem_bf_creation  )
+        times['mem_aft_creation'].append( mem_aft_creation )
+        times['mem_aft_assembly'].append( mem_aft_assembly )
+        times['mem_aft_bc'].append(       mem_aft_bc       )
+        times['mem_aft_bc'].append(       mem_aft_solve    )
         times['assembly'].append(  end_assmbly_time - start_time       )
         times['boundary'].append(  end_bc_time      - end_assmbly_time )
         times['solution'].append(  end_solve_time   - end_bc_time      )

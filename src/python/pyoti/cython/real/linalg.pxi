@@ -572,7 +572,7 @@ cdef solve_sparse(object K_in, dmat b_in, dmat out = None, solver = 'SuperLU', s
 
   cdef dmat      R, Rres
   cdef np.ndarray tmp1, tmp2
-  cdef uint64_t i,j
+  cdef uint64_t i,j,solver_id = 1
   cdef uint8_t res_flag = 1
 
   if out is None:
@@ -593,11 +593,13 @@ cdef solve_sparse(object K_in, dmat b_in, dmat out = None, solver = 'SuperLU', s
     
     from scipy.sparse.linalg import splu
     factorizer = splu
+    solver_id = 1
 
   elif solver == 'ILU' or solver == 'ilu' or solver == 'spilu':
     
     from scipy.sparse.linalg import spilu
     factorizer = spilu
+    solver_id = 1
 
   elif solver == 'cholesky' or solver == 'ch' or solver == 'CH':
     
@@ -611,6 +613,7 @@ cdef solve_sparse(object K_in, dmat b_in, dmat out = None, solver = 'SuperLU', s
     factorizer = splu
     Kr_csc.indices = Kr_csc.indices.astype(np.int64)
     Kr_csc.indptr  = Kr_csc.indptr.astype(np.int64)
+    solver_id = 1
  
   else:
     raise ValueError("Unsupported solver. Try solver = 'SuperLU', solver = 'cholesky' or solver = 'umfpack'" )

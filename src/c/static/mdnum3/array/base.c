@@ -1,13 +1,4 @@
 
-
-// typedef struct {
-//     mdnum3_t*    p_data; ///< Pointer to array of Sparse otinums.
-//     uint64_t       nrows; ///< Number of rows.
-//     uint64_t       ncols; ///< Number of cols.
-//     uint64_t        size; ///< Size of array.
-//     flag_t          flag; ///< Memory flag.
-// } mdarr3_t;                ///< Array of OTIs type.
-
 // ****************************************************************************************************
 void mdarr3_taylor_integrate_to( coeff_t* deltas, mdarr3_t* arr, mdarr3_t* res){
     
@@ -683,7 +674,6 @@ void mdarr3_get_slice_to( mdarr3_t* arr,
 // ----------------------------------------------------------------------------------------------------
 
 // Memory management.
-
 // ****************************************************************************************************
 mdarr3_t mdarr3_eye(uint64_t nrows){
 
@@ -772,10 +762,8 @@ inline mdarr3_t mdarr3_createEmpty(uint64_t nrows, uint64_t ncols){
 // ****************************************************************************************************
 void mdarr3_free(mdarr3_t* arr){
 
-    if ( (arr->flag != 0) && (arr->p_data!= NULL) ){
-        
+    if ( arr->p_data!= NULL ){
         free(arr->p_data);
-
     }
 
     (*arr) = mdarr3_init();
@@ -793,7 +781,6 @@ inline mdarr3_t mdarr3_init(void){
     res.nrows = 0;
     res.ncols = 0;
     res.size  = 0;
-    res.flag  = 0;
 
     return res;
 

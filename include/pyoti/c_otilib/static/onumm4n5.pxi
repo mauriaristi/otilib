@@ -140,7 +140,6 @@ cdef extern from "oti/oti.h" nogil:
       uint64_t       nrows;
       uint64_t       ncols;
       uint64_t        size;
-      flag_t          flag;
   # } oarrm4n5_t;
   
   

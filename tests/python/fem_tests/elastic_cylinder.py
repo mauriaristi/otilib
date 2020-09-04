@@ -183,7 +183,7 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
     
     from timeit import default_timer as time
     
-    mem_bf_creation = psutil.virtual_memory()
+    mem_bf_creation = psutil.virtual_memory().used
 
     start_time = time()
     
@@ -210,7 +210,7 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
     K[nNodes,nNodes] = 1.0 # Removes "center" node.
     K[0,0] = 1.0 # Removes "center" node.
     
-    mem_aft_creation = psutil.virtual_memory()
+    mem_aft_creation = psutil.virtual_memory().used
     # 
     for j in range(els['types'].size):
 
@@ -342,7 +342,7 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
 
     fem.end_elements() 
 
-    mem_aft_assembly = psutil.virtual_memory()  
+    mem_aft_assembly = psutil.virtual_memory().used
 
     end_assmbly_time = time()
     
@@ -507,24 +507,47 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
         # end for 
         
     # end for
-    mem_aft_bc = psutil.virtual_memory()  
+    mem_aft_bc = psutil.virtual_memory().used
     
     end_bc_time = time()
     
     K = K.tocsr()
 
-    mem_aft_tocsr = psutil.virtual_memory()  
-    
-    u = alg.solve( K, f, solver=solver )
-    # u = alg.solve( K, f, solver='cholesky')
-    # end_cholesky_time = time()
-    # u = alg.solve( K, f, solver='SuperLU' )
-    # end_SuperLU_time = time()
-    # u = alg.solve( K, f, solver='umfpack' )
-    # end_umfpack_time = time()
+    mem_aft_tocsr = psutil.virtual_memory().used 
 
-    mem_aft_solve = psutil.virtual_memory()      
+    # u = alg.solve( K, f, solver=solver)
+
+    # mem_aft_solve = psutil.virtual_memory().used
+    # end_solve_time = time()
     
+    times['mem_bf_cholesky'].append( psutil.virtual_memory().used )
+    start_cholesky_time = time()
+    u = alg.solve( K, f, solver='cholesky')
+    end_cholesky_time = time()
+    times['mem_aft_cholesky'].append( psutil.virtual_memory().used )
+
+    del(u)
+
+    times['mem_bf_superlu'].append( psutil.virtual_memory().used )
+    start_superlu_time = time()
+    u = alg.solve( K, f, solver='SuperLU' )
+    end_superlu_time = time()
+    times['mem_aft_superlu'].append( psutil.virtual_memory().used )
+
+    
+    del(u)
+
+
+    times['mem_bf_umfpack'].append( psutil.virtual_memory().used )
+    start_umfpack_time = time()
+    u = alg.solve( K, f, solver='umfpack' )
+    end_umfpack_time = time()
+    times['mem_aft_umfpack'].append( psutil.virtual_memory().used )
+
+    
+
+
+    mem_aft_solve = psutil.virtual_memory().used
     end_solve_time = time()
     
     if stats:
@@ -532,10 +555,13 @@ def solve_2d_linear_elasticity(Th, E, nu, ri, Pi, ro, Po, stats=True, times = No
         times['mem_aft_creation'].append( mem_aft_creation )
         times['mem_aft_assembly'].append( mem_aft_assembly )
         times['mem_aft_bc'].append(       mem_aft_bc       )
-        times['mem_aft_solve'].append(    mem_aft_solve    )
+        # times['mem_aft_solve'].append(    mem_aft_solve    )
         times['assembly'].append(  end_assmbly_time - start_time       )
         times['boundary'].append(  end_bc_time      - end_assmbly_time )
-        times['solution'].append(  end_solve_time   - end_bc_time      )
+        # times['solution'].append(  end_solve_time   - end_bc_time      )
+        times['sol_cholesky'].append(  end_cholesky_time- start_cholesky_time )
+        times['sol_superlu'].append(   end_superlu_time - start_superlu_time  )
+        times['sol_umfpack'].append(   end_umfpack_time - start_umfpack_time  )
     # end if 
 
     return u,K,f

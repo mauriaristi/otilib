@@ -55,15 +55,21 @@
 
 #include "static/onumm1n2.h"
 
+#include "static/onumm10n1.h"
+
 #include "static/onumm5n4.h"
 
 #include "static/onumm1n3.h"
+
+#include "static/onumm7n1.h"
 
 #include "static/onumm2n6.h"
 
 #include "static/onumm1n9.h"
 
 #include "static/mdnum5.h"
+
+#include "static/onumm9n1.h"
 
 #include "static/mdnum1.h"
 
@@ -80,6 +86,10 @@
 #include "static/onumm5n1.h"
 
 #include "static/onumm2n5.h"
+
+#include "static/onumm6n1.h"
+
+#include "static/onumm8n1.h"
 
 #include "static/onumm2n1.h"
 

@@ -1,7 +1,7 @@
 import sys, getopt
 from elastic_cylinder import *
 from utils import *
-
+import gc
 #=====================================================================================================
 #============  SETUP  ================================================================================
 #=====================================================================================================
@@ -24,8 +24,22 @@ algebras['oti']=[
             [om4n1,om4n2,om4n3,om4n4,om4n5,], 
             [om5n1,om5n2,om5n3,om5n4,om5n5]]
 
+algebras['oti']=[
+    [om0n0,],
+    [ dual,   om2n1,  om3n1,  om4n1, om5n1 ],
+    [ om1n2,  om2n2,  om3n2,  om4n2, om5n2 ],
+    [ om1n3,  om2n3,  om3n3,  om4n3, om5n3 ],
+    [ om1n4,  om2n4,  om3n4,  om4n4, om5n4 ],
+    [ om1n5,  om2n5,  om3n5,  om4n5, om5n5 ],
+    [ om1n6,  om2n6                        ],
+    [ om1n7,  om2n7                        ],
+    [ om1n8,  om2n8                        ],
+    [ om1n9,  om2n9                        ],
+    [ om1n10, om2n10                       ], 
+]
+
 # solvers = ['cholesky','umfpack']
-solver = 'umfpack'
+solver = 'SuperLU'
 
 hes = [0.01,]
 for i in range(10):
@@ -97,32 +111,42 @@ def run_analysis():
     times['mesh']     = []
     times['assembly'] = []
     times['boundary'] = []
-    times['solution'] = []
+    # times['solution'] = []
+    times['sol_cholesky'] = []
+    times['sol_superlu']  = []
+    times['sol_umfpack']  = []
     times['mem_bf_mesh']      = []
     times['mem_aft_mesh']     = []
     times['mem_bf_creation']  = []
     times['mem_aft_creation'] = []
     times['mem_aft_assembly'] = []
     times['mem_aft_bc']       = []
-    times['mem_aft_solve']    = []
+    times['mem_bf_cholesky']  = []
+    times['mem_aft_cholesky'] = []
+    times['mem_bf_superlu']   = []
+    times['mem_aft_superlu']  = []
+    times['mem_bf_umfpack']   = []
+    times['mem_aft_umfpack']  = []
+    # times['mem_aft_solve']    = []
     times['mem_aft_solve2d']  = []
     times['mem_aft_del_K']    = []
 
     export_dir = 'results/'
-    filename = export_dir + export+"_"+solver+"_"+str(hi)+".json"
+    # filename = export_dir + export+"_"+solver+"_"+str(hi)+".json"
+    filename = export_dir + export+"_"+str(hi)+".json"
 
     for i in range(nevals):
 
         fem.set_global_algebra(algebra)
         alg = fem.get_global_algebra()
         
-        times['mem_bf_mesh'].append( psutil.virtual_memory() )
+        times['mem_bf_mesh'].append( psutil.virtual_memory().used )
 
         start_time = time()
         Th = cylinder( 1, 2, he=he, quads=False, save=False, structured=True )
         end_time = time()
 
-        times['mem_aft_mesh'].append( psutil.virtual_memory() )
+        times['mem_aft_mesh'].append( psutil.virtual_memory().used )
 
         times_algebras[he]['mesh_DOFs'] = Th.nnodes
         times_algebras[he]['meshstats'] = repr(Th)
@@ -142,17 +166,22 @@ def run_analysis():
         u_res,K,f = solve_2d_linear_elasticity(Th,E,nu,ri,Pi,ro,Po,times=times, solver = solver)
 
 
-        times['mem_aft_solve2d'].append( psutil.virtual_memory() )
+        times['mem_aft_solve2d'].append( psutil.virtual_memory().used )
         
         times_algebras[he]['K_nnz']   = K.nnz
         times_algebras[he]['K_shape'] = K.shape[0]
-
-        report_times_in_file(times_algebras, filename=filename)
+        
         del(u_res)
         del(K)
         del(f)
+        del(Th)
+        
+        gc.collect()
 
-        times['mem_aft_del_K'].append( psutil.virtual_memory() )
+        times['mem_aft_del_K'].append( psutil.virtual_memory().used )
+
+
+        report_times_in_file(times_algebras, filename=filename)
         
 
     # end for

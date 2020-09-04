@@ -12,7 +12,6 @@ typedef struct {
     uint64_t       nrows; ///< Number of rows.
     uint64_t       ncols; ///< Number of cols.
     uint64_t        size; ///< Size of array.
-    flag_t          flag; ///< Memory flag.
 } oarrm1n8_t;                ///< Array of OTIs type.
 
 // ----------------------------------------------------------------------------------------------------

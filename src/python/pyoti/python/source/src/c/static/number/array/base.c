@@ -1,14 +1,4 @@
 
-
-// typedef struct {
-//     sotinum_t*    p_data; ///< Pointer to array of Sparse otinums.
-//     uint64_t       nrows; ///< Number of rows.
-//     uint64_t       ncols; ///< Number of cols.
-//     uint64_t        size; ///< Size of array.
-//     flag_t          flag; ///< Memory flag.
-// } arrso_t;                ///< Array of OTIs type.
-
-
 // ****************************************************************************************************
 void arrso_taylor_integrate_to( coeff_t* deltas, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
     
@@ -436,51 +426,6 @@ void arrso_set_O( arrso_t* arrin, arrso_t* arr, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
@@ -499,8 +444,6 @@ darr_t arrso_get_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
 }
 // ----------------------------------------------------------------------------------------------------
-
-
 
 // ****************************************************************************************************
 arrso_t arrso_extract_im(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
@@ -531,15 +474,6 @@ void arrso_extract_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, d
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 darr_t arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
@@ -559,14 +493,6 @@ darr_t arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 arrso_t arrso_get_im_o(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
@@ -578,7 +504,6 @@ arrso_t arrso_get_im_o(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 // ****************************************************************************************************
 void arrso_get_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
@@ -597,21 +522,6 @@ void arrso_get_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelp
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 arrso_t arrso_get_deriv_o(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
@@ -623,7 +533,6 @@ arrso_t arrso_get_deriv_o(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl){
     
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 // ****************************************************************************************************
 void arrso_get_deriv_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
@@ -671,24 +580,6 @@ void arrso_extract_deriv_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Getters.
 // ****************************************************************************************************
 inline sotinum_t arrso_get_item_i(arrso_t* arr, uint64_t i, dhelpl_t dhl){
@@ -724,7 +615,6 @@ sotinum_t arrso_get_item_ij(arrso_t* arr, uint64_t i, uint64_t j, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
 // ****************************************************************************************************
 void arrso_get_item_i_to(arrso_t* arr, uint64_t i, sotinum_t* res, dhelpl_t dhl){
     
@@ -750,9 +640,6 @@ void arrso_get_item_ij_to(arrso_t* arr, uint64_t i, uint64_t j, sotinum_t* res, 
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
 // ****************************************************************************************************
 arrso_t arrso_get_slice( arrso_t* arr, 
                         int64_t starti, int64_t stopi, int64_t stepi,
@@ -771,7 +658,6 @@ arrso_t arrso_get_slice( arrso_t* arr,
     return res;
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 // ****************************************************************************************************
 void arrso_get_slice_to( arrso_t* arr, 
@@ -821,32 +707,7 @@ void arrso_get_slice_to( arrso_t* arr,
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Memory management.
-
-
 // ****************************************************************************************************
 arrso_t arrso_eye_bases(uint64_t nrows, bases_t nbases, ord_t order, dhelpl_t dhl){
 
@@ -898,13 +759,6 @@ arrso_t arrso_zeros_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, ord_t 
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
 // ****************************************************************************************************
 inline arrso_t arrso_empty_like(arrso_t* arr, dhelpl_t dhl){
 
@@ -939,25 +793,17 @@ inline arrso_t arrso_createEmpty_bases(uint64_t nrows, uint64_t ncols, dhelpl_t 
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
 // ****************************************************************************************************
 void arrso_free(arrso_t* arr){
 
-    if ( (arr->flag != 0) && (arr->p_data!= NULL) ){
-        
+    if ( arr->p_data!= NULL ){
         free(arr->p_data);
-
     }
 
     (*arr) = arrso_init();
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
 
 // Initialization
 // ****************************************************************************************************
@@ -969,7 +815,6 @@ inline arrso_t arrso_init(void){
     res.nrows = 0;
     res.ncols = 0;
     res.size  = 0;
-    res.flag  = 0;
 
     return res;
 

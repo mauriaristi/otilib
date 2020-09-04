@@ -1,13 +1,4 @@
 
-
-// typedef struct {
-//     onumm3n3_t*    p_data; ///< Pointer to array of Sparse otinums.
-//     uint64_t       nrows; ///< Number of rows.
-//     uint64_t       ncols; ///< Number of cols.
-//     uint64_t        size; ///< Size of array.
-//     flag_t          flag; ///< Memory flag.
-// } oarrm3n3_t;                ///< Array of OTIs type.
-
 // ****************************************************************************************************
 void oarrm3n3_taylor_integrate_to( coeff_t* deltas, oarrm3n3_t* arr, oarrm3n3_t* res){
     
@@ -683,7 +674,6 @@ void oarrm3n3_get_slice_to( oarrm3n3_t* arr,
 // ----------------------------------------------------------------------------------------------------
 
 // Memory management.
-
 // ****************************************************************************************************
 oarrm3n3_t oarrm3n3_eye(uint64_t nrows){
 
@@ -772,10 +762,8 @@ inline oarrm3n3_t oarrm3n3_createEmpty(uint64_t nrows, uint64_t ncols){
 // ****************************************************************************************************
 void oarrm3n3_free(oarrm3n3_t* arr){
 
-    if ( (arr->flag != 0) && (arr->p_data!= NULL) ){
-        
+    if ( arr->p_data!= NULL ){
         free(arr->p_data);
-
     }
 
     (*arr) = oarrm3n3_init();
@@ -793,7 +781,6 @@ inline oarrm3n3_t oarrm3n3_init(void){
     res.nrows = 0;
     res.ncols = 0;
     res.size  = 0;
-    res.flag  = 0;
 
     return res;
 

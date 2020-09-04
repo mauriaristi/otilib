@@ -1,13 +1,4 @@
 
-
-// typedef struct {{
-//     {num_type}*    p_data; ///< Pointer to array of Sparse otinums.
-//     uint64_t       nrows; ///< Number of rows.
-//     uint64_t       ncols; ///< Number of cols.
-//     uint64_t        size; ///< Size of array.
-//     flag_t          flag; ///< Memory flag.
-// }} {arr_type};                ///< Array of OTIs type.
-
 // ****************************************************************************************************
 void {arr_func}_taylor_integrate_to( coeff_t* deltas, {arr_type}* arr, {arr_type}* res){{
     
@@ -683,7 +674,6 @@ void {arr_func}_get_slice_to( {arr_type}* arr,
 // ----------------------------------------------------------------------------------------------------
 
 // Memory management.
-
 // ****************************************************************************************************
 {arr_type} {arr_func}_eye(uint64_t nrows){{
 
@@ -772,10 +762,8 @@ inline {arr_type} {arr_func}_createEmpty(uint64_t nrows, uint64_t ncols){{
 // ****************************************************************************************************
 void {arr_func}_free({arr_type}* arr){{
 
-    if ( (arr->flag != 0) && (arr->p_data!= NULL) ){{
-        
+    if ( arr->p_data!= NULL ){{
         free(arr->p_data);
-
     }}
 
     (*arr) = {arr_func}_init();
@@ -793,7 +781,6 @@ inline {arr_type} {arr_func}_init(void){{
     res.nrows = 0;
     res.ncols = 0;
     res.size  = 0;
-    res.flag  = 0;
 
     return res;
 

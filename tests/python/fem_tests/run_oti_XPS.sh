@@ -10,10 +10,10 @@ SOLVER="cholesky"
 # for HIDX in 0 1 2 3 4 5 6 7 8 9 10
 for HIDX in 10
 do
-	for ORDER in 1
+	for ORDER in 6 7 8 9 10
 	do
 
-		for NVAR in 6 7 8 9 10
+		for NVAR in 2
 		do
 
 			JOBDIR=${THISDIR}

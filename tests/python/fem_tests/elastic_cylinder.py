@@ -61,6 +61,12 @@ import pyoti.static.onumm5n3    as om5n3
 import pyoti.static.onumm5n4    as om5n4
 import pyoti.static.onumm5n5    as om5n5
 
+import pyoti.static.onumm6n1    as om6n1
+import pyoti.static.onumm7n1    as om7n1
+import pyoti.static.onumm8n1    as om8n1
+import pyoti.static.onumm9n1    as om9n1
+import pyoti.static.onumm10n1   as om10n1
+
 e  = oti.e
 np = oti.np
 

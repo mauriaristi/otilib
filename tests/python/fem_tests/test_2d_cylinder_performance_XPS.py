@@ -16,26 +16,19 @@ algebras['mdual']=[
             [md3], 
             [md4], 
             [md5]]
-algebras['oti']=[
-            [om0n0,],
-            [dual,om1n2,om1n3,om1n4,om1n5,om1n6,om1n7,om1n8,om1n9,om1n10], 
-            [om2n1,om2n2,om2n3,om2n4,om2n5,om2n6,om2n7,om2n8,om2n9,om2n10,], 
-            [om3n1,om3n2,om3n3,om3n4,om3n5,], 
-            [om4n1,om4n2,om4n3,om4n4,om4n5,], 
-            [om5n1,om5n2,om5n3,om5n4,om5n5]]
 
 algebras['oti']=[
     [om0n0,],
-    [ dual,   om2n1,  om3n1,  om4n1, om5n1 ],
-    [ om1n2,  om2n2,  om3n2,  om4n2, om5n2 ],
-    [ om1n3,  om2n3,  om3n3,  om4n3, om5n3 ],
-    [ om1n4,  om2n4,  om3n4,  om4n4, om5n4 ],
-    [ om1n5,  om2n5,  om3n5,  om4n5, om5n5 ],
-    [ om1n6,  om2n6                        ],
-    [ om1n7,  om2n7                        ],
-    [ om1n8,  om2n8                        ],
-    [ om1n9,  om2n9                        ],
-    [ om1n10, om2n10                       ], 
+    [ dual,   om2n1,  om3n1,  om4n1, om5n1, om6n1, om7n1, om8n1, om9n1, om10n1],
+    [ om1n2,  om2n2,  om3n2,  om4n2, om5n2                                    ],
+    [ om1n3,  om2n3,  om3n3,  om4n3, om5n3                                    ],
+    [ om1n4,  om2n4,  om3n4,  om4n4, om5n4                                    ],
+    [ om1n5,  om2n5,  om3n5,  om4n5, om5n5                                    ],
+    [ om1n6,  om2n6                                                           ],
+    [ om1n7,  om2n7                                                           ],
+    [ om1n8,  om2n8                                                           ],
+    [ om1n9,  om2n9                                                           ],
+    [ om1n10, om2n10                                                          ], 
 ]
 
 # solvers = ['cholesky','umfpack']

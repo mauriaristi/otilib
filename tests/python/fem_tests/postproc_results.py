@@ -9,6 +9,45 @@ out_dir = "results/"
 
 results = {}
 
+
+
+def autolabel_top(rects):
+    """Attach a text label above each bar in *rects*, displaying its height."""
+    for rect in rects:
+        height = rect.get_height()
+        y = rect.get_y()
+        plt.annotate('{0:.2f}x'.format(y+height),
+                    xy=(rect.get_x() + rect.get_width() / 2, y+height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    ha='center', va='bottom')
+        
+def plot_bars(names, assembly, boundary, solution,total_r, special = ''):
+
+    
+    total    = solution+boundary+assembly
+
+    plt.figure()
+
+    assem_plt = plt.bar(names,(boundary+assembly)/total_r,                         width=0.5, label='Assembly')
+    block_plt = plt.bar(names,solution/total_r,bottom=(boundary+assembly)/total_r,width=0.5, label='Block Solver')
+
+    # autolabel(assem_plt)
+    # autolabel(block_plt)
+    autolabel_top(block_plt)
+
+    plt.legend(loc='lower right')
+
+
+    plt.title("Relative CPU time to real analysis for 1 Million DOFs " + special)
+    plt.ylabel("Total CPU time.")
+    plt.xticks(rotation=45)
+    # plt.show()
+
+
+
+
+
 def main():
 
     for r,d,f in os.walk(out_dir):
@@ -101,8 +140,8 @@ if __name__ == "__main__":
     main()
     
     h = 10
-    orders = 5
-    nvars = 5
+    orders = 10
+    nvars = 10
 
 
     mesh_time = results['real'][h]["mesh"]
@@ -132,22 +171,70 @@ if __name__ == "__main__":
     totals_su   = np.zeros((orders,nvars))
     totals_um   = np.zeros((orders,nvars))
 
+    names       = np.zeros((orders,nvars),dtype=object)
+
+
+    md_mesh_times = np.zeros(orders)
+    md_assm_times = np.zeros(orders)
+    md_bc_times   = np.zeros(orders)
+    md_ch_times   = np.zeros(orders)
+    md_su_times   = np.zeros(orders)
+    md_um_times   = np.zeros(orders)
+    md_totals_ch  = np.zeros(orders)
+    md_totals_su  = np.zeros(orders)
+    md_totals_um  = np.zeros(orders)
+
+    md_names      = np.zeros(orders,dtype=object)
+
 
     for n in range(1,orders+1):
+        # Add mdual
+        if n == 1:
+            key = 'onumm1n'+str(n)
+        else:
+            key = 'mdnum'+str(n)
+        #
+        if key in results.keys():
+            times = results[key][h]
+                
+            md_mesh_times[ n-1 ] = times["mesh"]
+            md_assm_times[ n-1 ] = times["assembly"]
+            md_bc_times[   n-1 ] = times["boundary"]
+            md_ch_times[   n-1 ] = times["cholesky"]
+            md_su_times[   n-1 ] = times["superlu"]
+            md_um_times[   n-1 ] = times["umfpack"]
+            md_names[      n-1 ] = 'mdual'+str(n) 
+        else:
+            md_mesh_times[ n-1 ] = np.nan
+            md_assm_times[ n-1 ] = np.nan
+            md_bc_times[   n-1 ] = np.nan
+            md_ch_times[   n-1 ] = np.nan
+            md_su_times[   n-1 ] = np.nan
+            md_um_times[   n-1 ] = np.nan
+            md_names[      n-1 ] = 'mdual'+str(n) 
+
         for m in range(1,nvars+1):
             key = 'onumm'+str(m)+'n'+str(n)
-            times = results[key][h]
-            
-            mesh_times[n-1,m-1] = times["mesh"]
-            assm_times[n-1,m-1] = times["assembly"]
-            bc_times[  n-1,m-1] = times["boundary"]
+            if key in results.keys():
+                times = results[key][h]
+                
+                mesh_times[n-1,m-1] = times["mesh"]
+                assm_times[n-1,m-1] = times["assembly"]
+                bc_times[  n-1,m-1] = times["boundary"]
 
-            ch_times[n-1,m-1] = times["cholesky"]
-            su_times[n-1,m-1] = times["superlu"]
-            um_times[n-1,m-1] = times["umfpack"]
+                ch_times[n-1,m-1] = times["cholesky"]
+                su_times[n-1,m-1] = times["superlu"]
+                um_times[n-1,m-1] = times["umfpack"]
 
-
-   
+                names[n-1,m-1] = 'om'+str(m)+'n'+str(n)
+            else:
+                mesh_times[n-1,m-1] = np.nan
+                assm_times[n-1,m-1] = np.nan
+                bc_times[  n-1,m-1] = np.nan
+                ch_times[n-1,m-1] = np.nan
+                su_times[n-1,m-1] = np.nan
+                um_times[n-1,m-1] = np.nan
+                names[n-1,m-1] = 'om'+str(m)+'n'+str(n)  
         # end for 
     # end for 
 
@@ -156,52 +243,121 @@ if __name__ == "__main__":
     totals_su = mesh_times+assm_times+bc_times+su_times
     totals_um = mesh_times+assm_times+bc_times+um_times
 
+    md_totals_ch = md_mesh_times+md_assm_times+md_bc_times+md_ch_times
+    md_totals_su = md_mesh_times+md_assm_times+md_bc_times+md_su_times
+    md_totals_um = md_mesh_times+md_assm_times+md_bc_times+md_um_times
+
     total_ch = mesh_time+assm_time+bc_time+ch_time
     total_su = mesh_time+assm_time+bc_time+su_time
     total_um = mesh_time+assm_time+bc_time+um_time
 
     
 
-    orders= 5
+    
     
 
-    plt.figure()
-    for n in range(1,orders+1):
+    # plt.figure()
+    # for n in range(1,orders+1):
 
-        plt.semilogy(range(1,m+1),totals_ch[n-1,:]/total_ch, label = 'Order '+str(n))
+    #     plt.semilogy(range(1,m+1),totals_ch[n-1,:]/total_ch, label = 'Order '+str(n))
 
-    # end for 
+    # # end for 
 
-    plt.xlabel("Number of basis")
-    plt.ylabel("Relative CPU time")
-    plt.title("Relative cpu times for Cholesky solver.")
-    plt.legend()
-    plt.grid()
+    # plt.xlabel("Number of basis")
+    # plt.ylabel("Relative CPU time")
+    # plt.title("Relative cpu times for Cholesky solver.")
+    # plt.legend()
+    # plt.grid()
+    # # plt.show()
+
+
+    # plt.figure()
+    # for n in range(1,orders+1):
+    #     plt.semilogy(range(1,m+1),totals_su[n-1,:]/total_su, label = 'Order '+str(n))
+    # # end for 
+
+    # plt.xlabel("Number of basis")
+    # plt.ylabel("Relative CPU time")
+    # plt.title("Relative cpu times for SuperLU solver.")
+    # plt.legend()
+    # plt.grid()
+    # # plt.show()
+
+    # plt.figure()
+    # for n in range(1,orders+1):
+    #     plt.semilogy(range(1,m+1),totals_um[n-1,:]/total_um, label = 'Order '+str(n))
+    # # end for 
+
+    # plt.xlabel("Number of basis")
+    # plt.ylabel("Relative CPU time")
+    # plt.title("Relative cpu times for UMFPACK solver.")
+    # plt.legend()
+    # plt.grid()
+    # # plt.show()
+
+
+    print(results.keys())
+
+    # Plot Order 1
+    n = 1
+    total_r = assm_time + bc_time + ch_time
+    # for n in range(1,orders+1):
+    for n in range(1,2+1):
+        plot_bars(names[n-1,:], assm_times[n-1,:], 
+            bc_times[n-1,:], ch_times[n-1,:], total_r, special = 'Cholesky')
+
+
+    # Plot Order 1
+    n = 1
+    total_r = assm_time + bc_time + su_time
+    # for n in range(1,orders+1):
+    for n in range(1,2+1):
+        plot_bars(names[n-1,:], assm_times[n-1,:], 
+            bc_times[n-1,:], su_times[n-1,:], total_r, special = 'SuperLU')
+
+
+
+
+
+    n = 1
+    total_r = assm_time + bc_time + ch_time
+    # for n in range(1,orders+1):
+    
+    plot_bars(md_names, md_assm_times, 
+        md_bc_times, md_ch_times, total_r, special = 'Cholesky')
+
+
+    # Plot Order 1
+    n = 1
+    total_r = assm_time + bc_time + su_time
+    # for n in range(1,orders+1):
+    
+    plot_bars(md_names, md_assm_times, 
+        md_bc_times, md_su_times, total_r, special = 'SuperLU')
+
+
+
+
+
+    # Plot Order 1
+    n = 1
+    total_r = assm_time + bc_time + ch_time
+    # for m in range(1,nvars+1):
+    for m in range(1,2+1):
+        plot_bars(names[:,m-1], assm_times[:,m-1], 
+            bc_times[:,m-1], ch_times[:,m-1], total_r, special = 'Cholesky')
+
+
+
+    # Plot Order 1
+    n = 1
+    total_r = assm_time + bc_time + su_time
+    # for m in range(1,nvars+1):
+    for m in range(1,2+1):
+        plot_bars(names[:,m-1], assm_times[:,m-1], 
+            bc_times[:,m-1], su_times[:,m-1], total_r, special = 'SuperLU')
+
+
+
     plt.show()
-
-
-    plt.figure()
-    for n in range(1,orders+1):
-        plt.semilogy(range(1,m+1),totals_su[n-1,:]/total_su, label = 'Order '+str(n))
-    # end for 
-
-    plt.xlabel("Number of basis")
-    plt.ylabel("Relative CPU time")
-    plt.title("Relative cpu times for SuperLU solver.")
-    plt.legend()
-    plt.grid()
-    plt.show()
-
-    plt.figure()
-    for n in range(1,orders+1):
-        plt.semilogy(range(1,m+1),totals_um[n-1,:]/total_um, label = 'Order '+str(n))
-    # end for 
-
-    plt.xlabel("Number of basis")
-    plt.ylabel("Relative CPU time")
-    plt.title("Relative cpu times for UMFPACK solver.")
-    plt.legend()
-    plt.grid()
-    plt.show()
-
 # end if 

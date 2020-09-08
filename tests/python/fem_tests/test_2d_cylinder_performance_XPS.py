@@ -85,7 +85,7 @@ def run_analysis():
     if isreal:
         algebra = algebras['real']
     elif ismdual:
-        algebra = algebras['mdual'][order]
+        algebra = algebras['mdual'][order][0]
     else:
         algebra = algebras['oti'][order][nbases-1]
     # end if 

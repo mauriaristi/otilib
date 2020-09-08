@@ -7,26 +7,23 @@ THISDIR=$(dirname "$(readlink -f "$0")")
 SOLVER="cholesky"
 
 # for HIDX in 1 2 3 4 5 6 7 8 9
-for HIDX in 0 1 2 3 4 5 6 7 8 9 10
+for HIDX in 10
 do
-	for ORDER in 1 
+	for ORDER in 0 1 2 3 4 5 
 	do
 
-		# for NVAR in 1 2 3 4
-		for NVAR in 1 2 3 4 5 6 7 8 9 10
-		do
 
-			JOBDIR=${THISDIR}
-			JOBOUT=result_xps_om${NVAR}n${ORDER}
+		JOBDIR=${THISDIR}
+		JOBOUT=result_xps_mdual${ORDER}
 
-			echo -e "\nSetting up and run at $JOBDIR."
+		echo -e "\nSetting up and run at $JOBDIR."
 
-			# Remove previous results with same name.
-			# rm $JOBNAME.*
-			# Run simulation.
-			python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER}
+		# Remove previous results with same name.
+		# rm $JOBNAME.*
+		# Run simulation.
+		python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER}  --export ${JOBOUT} --solver ${SOLVER} --mdual
 
-			# cd $THISDIR
+		# cd $THISDIR
 
 
 		done

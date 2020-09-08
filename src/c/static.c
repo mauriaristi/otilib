@@ -4,6 +4,10 @@
 
 #include "static/mdnum2.c"
 
+#include "static/onumm10n2.c"
+
+#include "static/onumm9n2.c"
+
 #include "static/onumm1n3.c"
 
 #include "static/onumm5n5.c"
@@ -66,6 +70,8 @@
 
 #include "static/onumm1n9.c"
 
+#include "static/onumm6n2.c"
+
 #include "static/onumm7n1.c"
 
 #include "static/onumm3n3.c"
@@ -88,5 +94,9 @@
 
 #include "static/onumm2n9.c"
 
+#include "static/onumm7n2.c"
+
 #include "static/onumm4n1.c"
+
+#include "static/onumm8n2.c"
 

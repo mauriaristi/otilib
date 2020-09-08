@@ -7,15 +7,15 @@ cdef uint64_t            binSearch_list( list a, uint64_t x )
 
 
 
-cpdef eye(   uint64_t   size, uint64_t nip = *)
-cpdef zeros( object shape_in, uint64_t nip = *)
-cpdef ones(  object shape_in, uint64_t nip = *)
-cpdef array( object      arr, uint64_t nip = *)
+cpdef eye(   uint64_t   size, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+cpdef zeros( object shape_in, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+cpdef ones(  object shape_in, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+cpdef array( object      arr, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
 
-cpdef e( object hum_dir , uint64_t nip = *)
-cpdef zero(               uint64_t nip = *)
-cpdef one(                uint64_t nip = *)
-cpdef number(coeff_t num, uint64_t nip = *)
+cpdef e( object hum_dir,  bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+cpdef zero(               bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+cpdef one(                bases_t nbases = *, ord_t order = *, uint64_t nip = *)
+cpdef number(coeff_t num, bases_t nbases = *, ord_t order = *, uint64_t nip = *)
 
 
 

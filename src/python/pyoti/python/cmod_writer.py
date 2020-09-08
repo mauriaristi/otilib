@@ -1150,6 +1150,83 @@ class writer:
 
   #---------------------------------------------------------------------------------------------------  
 
+  #***************************************************************************************************
+  def truncaddition_like_function_oo(self, level = "", f_name = "FUNCTION", lhs_name= "LHS", lhs_ptr=False,
+    rhs_name= "RHS", rhs_ptr=False, res_name = "RES", separator = ",", f_open = "(", f_close = ")", tab = " ",
+    addition = " + ", to=False  ):
+    """
+    PORPUSE:  Addition like function between two OTIs.
+    """
+    global h
+    str_out = ""
+
+    if to:
+      res_getter = self.get_ptr
+    else:
+      res_getter = self.get
+    # end if 
+
+    if lhs_ptr:
+      lhs_getter = self.get_ptr
+    else:
+      lhs_getter = self.get
+    # end if
+
+    if rhs_ptr:
+      rhs_getter = self.get_ptr
+    else:
+      rhs_getter = self.get
+    # end if
+    
+    str_out += level + self.comment + "Addition like function \'"
+    str_out += f_name + f_open + lhs_name + separator + rhs_name + f_close
+    str_out += "\'"+ endl
+
+
+    # Write real part.
+    str_out += level + "switch(order){" + endl
+    leveli = level + tab
+
+    str_out += leveli + "case(0):" + endl
+    
+    leveli = level + 2*tab
+
+    str_out += leveli + self.comment + " Real" + endl
+    str_out += leveli + res_name + res_getter + self.real_str + " = "
+    str_out += f_name + f_open
+    str_out +=         lhs_name + lhs_getter + self.real_str + separator
+    str_out +=         rhs_name + rhs_getter + self.real_str + f_close + self.endl
+    str_out += leveli +"break"+ self.endl
+
+    for ordi in range(1,self.order+1):
+      leveli = level + tab
+      
+      str_out += leveli + "case("+str(ordi)+"):"
+      str_out += leveli +self.comment + "Order " + str(ordi) + endl
+      
+      dirs = self.name_imdir[ordi]
+
+      leveli = level + 2*tab
+      
+      for j in range(len(dirs)):
+        
+        str_out += leveli + res_name + res_getter + dirs[j] + " = "
+        str_out += f_name + f_open
+        str_out +=         lhs_name + lhs_getter + dirs[j] + separator
+        str_out +=         rhs_name + rhs_getter + dirs[j] + f_close + self.endl
+        
+      # end for 
+
+      str_out += leveli +"break"+ self.endl
+
+    # end for 
+
+    str_out += level + "}"
+
+    return str_out
+
+  #---------------------------------------------------------------------------------------------------  
+
 
   #***************************************************************************************************
   def feval_function_o(self, level = "", lhs_name= "x", lhs_ptr=True,
@@ -2727,6 +2804,97 @@ class writer:
 
 
 
+  #***************************************************************************************************
+  def write_truncscalar_function(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION", lhs_type= "O", lhs_ptr=False, rhs_type= "O", rhs_ptr=False, separator = ",", 
+    f_open = "(", f_close = ")", addition = " + ",generator = None, to=False,
+    overload = None, write_charact=True, header = 'base' ):
+
+    str_out = ""
+    leveli = level
+
+    lhs = "lhs"
+    rhs = "rhs"
+    res = "res"
+
+    f_prev = self.func_name
+    
+    lhs_t  = self.type_names[lhs_type]
+    f_post = lhs_type
+  
+    if lhs_ptr == True:
+      lhs_t += '*'
+    # end if
+
+    rhs_t  = self.type_names[rhs_type]
+    f_post += rhs_type
+  
+    if rhs_ptr == True:
+      rhs_t += '*'
+    # end if
+
+    func_name = f_prev + "_" + function_name 
+    
+    if write_charact:
+      func_name += "_"+ f_post
+    # end if 
+
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = ''
+
+    if to:
+      func_header += 'void '
+      func_name += '_to'
+    else:
+      func_header += self.type_name + " "
+    # end if 
+
+    func_header += func_name + "(" + "ord_t order, "
+    func_header += lhs_t + " "+ lhs + ','
+    func_header += rhs_t + " "+ rhs 
+
+    if to:
+      func_header += ", "
+      func_header += self.type_name+"* "+res
+    # end if 
+
+    func_header += ")"
+
+    self.function_list.append(func_header)
+    self.function_list_header[header].append(func_header)
+    
+    str_out += func_header +"{"+endl
+
+    if not to:
+      str_out += leveli*tab + self.type_name + " " + res + self.endl
+      str_out += endl
+    # end if 
+
+    str_out += generator(f_name = f_name, separator = separator,  
+               level = leveli*tab, f_open = f_open, f_close =f_close, res_name = res, tab=tab,
+               lhs_name = lhs, lhs_ptr=lhs_ptr, rhs_name=rhs, rhs_ptr=rhs_ptr, to=to)
+
+
+    str_out += endl
+    # Write function end.
+
+    if not to:  
+      str_out += leveli*tab + 'return ' + res + self.endl + endl
+    # end if
+
+    leveli -= 1
+    str_out += leveli*tab + '}' + endl
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+
+
+
+
 
 
 
@@ -3323,6 +3491,20 @@ class writer:
       a_ptr = True, b_ptr = True, c_ptr = True, to=True, 
       separator = " * ", f_open = "",header = 'algebra', 
       f_close = "", generator = self.truncgem_like_function_oo, overload = "*", write_charact=True )
+    contents += endl
+
+    # Truncated addition
+    contents += self.write_truncscalar_function(function_name = "trunc_sum", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " + ", f_open = "", 
+      lhs_ptr=True, rhs_ptr= True, to=True,header = 'algebra',
+      f_close = "", generator = self.truncaddition_like_function_oo, overload = "+" )
+    contents += endl
+
+    # Truncated negation
+    contents += self.write_truncscalar_function(function_name = "trunc_sub", is_elemental = True, level = level, 
+      tab = tab, f_name = "", lhs_type= "o", rhs_type= "o", separator = " - ", f_open = "", 
+      lhs_ptr=True, rhs_ptr= True, to=True,header = 'algebra',
+      f_close = "", generator = self.truncaddition_like_function_oo, overload = "-" )
     contents += endl
   
     

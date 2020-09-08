@@ -3,6 +3,10 @@ include "static/mdnum3.pxi"
 
 include "static/onumm1n6.pxi"
 
+include "static/onumm9n2.pxi"
+
+include "static/onumm8n2.pxi"
+
 include "static/onumm4n2.pxi"
 
 include "static/onumm2n3.pxi"
@@ -39,6 +43,8 @@ include "static/onumm2n7.pxi"
 
 include "static/onumm4n4.pxi"
 
+include "static/onumm7n2.pxi"
+
 include "static/onumm4n3.pxi"
 
 include "static/onumm3n1.pxi"
@@ -46,6 +52,8 @@ include "static/onumm3n1.pxi"
 include "static/onumm8n1.pxi"
 
 include "static/onumm1n8.pxi"
+
+include "static/onumm10n2.pxi"
 
 include "static/onumm2n9.pxi"
 
@@ -84,6 +92,8 @@ include "static/onumm2n4.pxi"
 include "static/onumm2n2.pxi"
 
 include "static/onumm4n1.pxi"
+
+include "static/onumm6n2.pxi"
 
 include "static/onumm3n2.pxi"
 

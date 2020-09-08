@@ -1,6 +1,6 @@
 
 #*****************************************************************************************************
-cpdef e( object hum_dir, uint64_t nip = 0):
+cpdef e( object hum_dir, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
   PURPOSE:  To create a onumm4n5 with value 1 at the specified imaginary direction
             in a human friendly manner
@@ -43,7 +43,7 @@ cpdef e( object hum_dir, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef zero(  uint64_t nip = 0):
+cpdef zero(  bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
   PURPOSE:  To create a scalar with real value 0 and every imaginary coefficient as zeros.
 
@@ -75,7 +75,7 @@ cpdef zero(  uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef one( uint64_t nip = 0):
+cpdef one( bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
   PURPOSE:  To create a scalar with real value 1 and every imaginary coefficient as zeros.
 
@@ -107,7 +107,7 @@ cpdef one( uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef number( coeff_t num, uint64_t nip = 0):
+cpdef number( coeff_t num, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
   PURPOSE:  To create a onumm4n5 with value 1 at the specified imaginary direction
             in a human friendly manner
@@ -140,7 +140,7 @@ cpdef number( coeff_t num, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef eye(uint64_t size, uint64_t nip = 0):
+cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
   PURPOSE: Create identity matrix of shape: (size,size).
 
@@ -169,7 +169,7 @@ cpdef eye(uint64_t size, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef array( object arr,  uint64_t nip = 0):
+cpdef array( object arr,  bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
   PURPOSE: Create a matrix for OTI algebra, according to the given array values.
 
@@ -320,7 +320,7 @@ cpdef array( object arr,  uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef zeros( object shape_in, uint64_t nip = 0):
+cpdef zeros( object shape_in, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
   PURPOSE: Create matrix filled with zeroes of shape: (nrows,ncols).
 
@@ -351,7 +351,7 @@ cpdef zeros( object shape_in, uint64_t nip = 0):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cpdef ones( object shape_in,  uint64_t nip = 0):
+cpdef ones( object shape_in,  bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
   PURPOSE: Create matrix filled with ones of shape: (nrows,ncols).
 

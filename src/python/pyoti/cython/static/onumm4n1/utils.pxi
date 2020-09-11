@@ -135,23 +135,12 @@ cpdef truncate(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_truncate_im_to( indx, order, &o.num, &ores.num)
-      # end for 
+      oarrm4n1_truncate_im_to( indx, order, &S.arr, &Sres.arr)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_truncate_im_to( indx, order, &o.num, &ores.num)
-      # end for
-
+      oarrm4n1_truncate_im_to( indx, order, &S.arr, &Sres.arr)
       res = Sres 
 
     # end if 
@@ -264,23 +253,12 @@ cpdef extract_im(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_extract_im_to( indx, order, &o.num, &ores.num)
-      # end for 
+      oarrm4n1_extract_im_to( indx, order, &S.arr, &Sres.arr)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_extract_im_to( indx, order, &o.num, &ores.num)
-      # end for
-
+      oarrm4n1_extract_im_to( indx, order, &S.arr, &Sres.arr)
       res = Sres 
 
     # end if 
@@ -392,23 +370,12 @@ cpdef extract_deriv(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_extract_deriv_to( indx, order, &o.num, &ores.num)
-      # end for 
+      oarrm4n1_extract_deriv_to( indx, order, &S.arr, &Sres.arr)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_extract_deriv_to( indx, order, &o.num, &ores.num)
-      # end for
-
+      oarrm4n1_extract_deriv_to( indx, order, &S.arr, &Sres.arr)
       res = Sres 
 
     # end if 
@@ -520,23 +487,12 @@ cpdef get_im(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_get_im_to_o( indx, order, &o.num, &ores.num)
-      # end for 
+      oarrm4n1_get_im_to( indx, order, &S.arr, &Sres.arr)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_get_im_to_o( indx, order, &o.num, &ores.num)
-      # end for
-
+      oarrm4n1_get_im_to( indx, order, &S.arr, &Sres.arr)
       res = Sres 
 
     # end if 
@@ -648,23 +604,12 @@ cpdef get_deriv(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_get_deriv_to( indx, order, &o.num, &ores.num)
-      # end for 
+      oarrm4n1_get_deriv_to( indx, order, &S.arr, &Sres.arr)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_get_deriv_to( indx, order, &o.num, &ores.num)
-      # end for
-
+      oarrm4n1_get_deriv_to( indx, order, &S.arr, &Sres.arr)
       res = Sres 
 
     # end if 
@@ -772,23 +717,12 @@ cpdef get_order_im(ord_t order, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_get_order_im_to( order, &o.num, &ores.num)
-      # end for 
+      oarrm4n1_get_order_im_to( order, &S.arr, &Sres.arr)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        onumm4n1_get_order_im_to( order, &o.num, &ores.num)
-      # end for
-
+      oarrm4n1_get_order_im_to( order, &S.arr, &Sres.arr)
       res = Sres 
 
     # end if 

@@ -43,6 +43,7 @@ void {arr_func}_sum_OO_to({arr_type}*   lhs, {arr_type}* rhs, {arr_type}* res);
 void {arr_func}_sum_RO_to(darr_t*    lhs, {arr_type}* rhs, {arr_type}* res);
 void {arr_func}_sum_oO_to({num_type}* lhs, {arr_type}* rhs, {arr_type}* res);
 void {arr_func}_sum_rO_to(coeff_t    lhs, {arr_type}* rhs, {arr_type}* res);
+void {arr_func}_trunc_sum_OO_to(ord_t order, {arr_type}* arr1, {arr_type}* arr2, {arr_type}* res);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -79,6 +80,7 @@ void {arr_func}_sub_oO_to( {num_type}* lhs, {arr_type}*   rhs, {arr_type}* res);
 void {arr_func}_sub_Oo_to( {arr_type}*   lhs, {num_type}* rhs, {arr_type}* res);
 void {arr_func}_sub_rO_to( coeff_t    lhs, {arr_type}*   rhs, {arr_type}* res);
 void {arr_func}_sub_Or_to( {arr_type}*   lhs, coeff_t    rhs, {arr_type}* res);
+void {arr_func}_trunc_sub_OO_to(ord_t order, {arr_type}* arr1, {arr_type}* arr2, {arr_type}* res);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

@@ -33,6 +33,8 @@ void mdnum1_gem_oo_to(  mdnum1_t* a,  mdnum1_t* b,  mdnum1_t* c, mdnum1_t* res);
 mdnum1_t mdnum1_gem_ro(  coeff_t a,  mdnum1_t* b,  mdnum1_t* c);
 void mdnum1_gem_ro_to(  coeff_t a,  mdnum1_t* b,  mdnum1_t* c, mdnum1_t* res);
 void mdnum1_trunc_gem_oo_to( ord_t ord_lhs,  mdnum1_t* a,  ord_t ord_rhs,  mdnum1_t* b,  mdnum1_t* c, mdnum1_t* res);
+void mdnum1_trunc_sum_oo_to(ord_t order, mdnum1_t* lhs,mdnum1_t* rhs, mdnum1_t* res);
+void mdnum1_trunc_sub_oo_to(ord_t order, mdnum1_t* lhs,mdnum1_t* rhs, mdnum1_t* res);
 mdnum1_t mdnum1_feval(coeff_t* feval_re, mdnum1_t* x);
 void mdnum1_feval_to(coeff_t* feval_re, mdnum1_t* x, mdnum1_t* res);
 

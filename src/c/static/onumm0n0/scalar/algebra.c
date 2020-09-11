@@ -259,6 +259,26 @@ void onumm0n0_trunc_gem_oo_to( ord_t ord_lhs,  onumm0n0_t* a,  ord_t ord_rhs,  o
 
 }
 
+void onumm0n0_trunc_sum_oo_to(ord_t order, onumm0n0_t* lhs,onumm0n0_t* rhs, onumm0n0_t* res){
+  // Addition like function 'lhs + rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r + rhs->r;
+      break;
+  }
+}
+
+void onumm0n0_trunc_sub_oo_to(ord_t order, onumm0n0_t* lhs,onumm0n0_t* rhs, onumm0n0_t* res){
+  // Addition like function 'lhs - rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r - rhs->r;
+      break;
+  }
+}
+
 onumm0n0_t onumm0n0_feval(coeff_t* feval_re, onumm0n0_t* x){
 
   onumm0n0_t res;

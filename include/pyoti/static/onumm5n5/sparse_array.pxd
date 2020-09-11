@@ -36,13 +36,13 @@ cdef class csr_matrix:
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
 
-  cdef object[:]       data # Data array.
-  cdef uint64_t[:]  indices # Indices array.
-  cdef uint64_t[:]   indptr # Index pointer array.
+  cdef oarrm5n5_t          arr # Data array.
+  cdef uint64_t*  p_indices # Indices array.
+  cdef uint64_t*   p_indptr # Index pointer array.
 
   cdef public uint64_t nrows # Number of rows of the array.
   cdef public uint64_t ncols # Number of columns of every array.
-  cdef public uint64_t size  # Total number of elements in per array.
+  cdef public uint64_t size  # Total number of elements in the array.
 
   cpdef get_deriv(     self, object hum_dir )
   cpdef get_im(        self, object hum_dir )

@@ -177,12 +177,11 @@ cpdef trunc_sub(ord_t order, matso Olhs, matso Orhs, matso out = None):
   # end if 
 
 
-  Orhs = rhs
   if res_flag:    
     arrso_trunc_sub_OO_to( order, &Olhs.arr, &Orhs.arr, &out.arr, dhl )
-  else:
-    cOres = arrso_trunc_sub_OO( order, &Olhs.arr, &Orhs.arr, dhl )
-    res = matso.create( &cOres )
+  # else:
+  #   cOres = arrso_trunc_sub_OO( order, &Olhs.arr, &Orhs.arr, dhl )
+  #   res = matso.create( &cOres )
   # end if
 
   # if   tlhs is sotinum:

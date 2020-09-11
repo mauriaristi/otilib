@@ -33,7 +33,7 @@ line3 = elbaseso.createElement( 3,            # Number of basis
                                 elLine,       # Geometric type
                                 elkindIso,    # Kind of element 
                                 1,            # Number of dimensions
-                                line2_iso,    # Basis functions.
+                                line3_iso,    # Basis functions.
                                 [point1,])   
 
 

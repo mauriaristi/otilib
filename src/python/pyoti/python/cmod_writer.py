@@ -3748,6 +3748,21 @@ class writer:
       # end for
     # end for
     
+    # Remove builds
+    src_path = os.path.join(getpath(),"static/")
+    for r, d, f in os.walk(src_path):        
+      for item in f:
+        ext = item.split('.')[-1]
+        if '__init__' not in item:
+          os.remove( os.path.join(r,item) )
+        # end if 
+      # end for 
+      for item in d:      
+        shutil.rmtree(os.path.join(r,item)) 
+      # end for 
+      break
+    # end for
+
     self.process_headers_static( base_dir = base_dir, tab=tab)
     self.process_static_include_files( base_dir = base_dir)
 

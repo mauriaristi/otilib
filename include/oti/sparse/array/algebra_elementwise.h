@@ -80,6 +80,8 @@ void arrso_sub_oO_to( sotinum_t* lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl
 void arrso_sub_Oo_to( arrso_t*   lhs, sotinum_t* rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_sub_rO_to( coeff_t    lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_sub_Or_to( arrso_t*   lhs, coeff_t    rhs, arrso_t* res, dhelpl_t dhl);
+
+void arrso_trunc_sub_OO_to( ord_t ord, arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

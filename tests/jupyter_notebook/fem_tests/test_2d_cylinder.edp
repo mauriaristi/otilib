@@ -13,7 +13,7 @@ real perimi = 2*pi*ri/4.;
 real perimo = 2*pi*ro/4.;
 //
 // real h = 0.004;
-real h = 0.00227;
+real h = 0.002;
 int nr = (ro-ri)/h+1;
 int nro= perimo/h+1;
 int nri= perimi/h+1;
@@ -28,7 +28,7 @@ fespace Vh(Th,P1);
 
 
 
-Vh xx,yy,ux,vx,uy,vy, nx, ny, uxanal, uyanal, r, ur,error, u;
+Vh xx,yy,ux,vx,uy,vy, nx, ny, uxanal, uyanal, r, ur,uranal,error, u;
 
 //xx = x;//(ri+(ri-ro)*x)*cos(pi*y/2.)-x;
 //yy = y;//(ri+(ri-ro)*x)*sin(pi*y/2.)-y;
@@ -38,9 +38,9 @@ Vh xx,yy,ux,vx,uy,vy, nx, ny, uxanal, uyanal, r, ur,error, u;
 //xx = x;//(ri+(ri-ro)*x)*cos(pi*y/2.)-x;
 //yy = y;//(ri+(ri-ro)*x)*sin(pi*y/2.)-y;
 
-
-nx = x/(sqrt(x^2+y^2));
-ny = y/(sqrt(x^2+y^2));
+r = (sqrt(x^2+y^2));
+nx = x/r;
+ny = y/r;
 
 real E = 21e5, nu = 0.28, mu= E/(2*(1+nu)); 
 real c1 = E*nu/((1+nu)*(1-2*nu));
@@ -58,6 +58,8 @@ solve lame([ux,uy],[vx,vy], solver=Cholesky) =int2d(Th)( c1*dx(ux)*dx(vx) + c1*d
 
 
 
+ur = sqrt(ux^2+uy^2);
+
 real coef=100; 
 
 cout<<"Hello"<<endl;
@@ -71,21 +73,24 @@ cout<<"Hello"<<endl;
 ////plot([ux,uy],wait=1,ps="lamevect.eps",coef=coef);
 ////plot(u,wait=1);//
 
-//real A = ri^2*ro^2*(Po-Pi)/(ro^2-ri^2);
-//real B = (ri^2*Pi-ro^2*Po)/(ro^2-ri^2);//
+real A = ri^2*ro^2*(Po-Pi)/(ro^2-ri^2);
+real B = (ri^2*Pi-ro^2*Po)/(ro^2-ri^2);//
 
-//r =  sqrt(x^2+y^2);
-//    
-//ur = (1+nu)*r/E*((1-2*nu)*B-A/(r^2));
-//    
-//uxanal = ur*x/r;
-//uyanal = ur*y/r;
-//    //
+r =  sqrt(x^2+y^2);
+    
+uranal = (1+nu)*r/E*((1-2*nu)*B-A/(r^2));
+    
+uxanal = uranal*x/r;
+uyanal = uranal*y/r;
 
-//error = sqrt((uxanal-ux)^2+(uyanal-uy)^2);//
+
+uranal = sqrt(uxanal^2+uyanal^2);
+
+error = (uranal-ur)/uranal;
 
 //u = sqrt(uxanal^2+uyanal^2);
-////plot([uxanal,uyanal],wait=1);//
+plot(uranal,wait=1);//
+plot(error,wait=1);//
 //
 
 ////plot(u,wait=1);//

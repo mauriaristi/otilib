@@ -910,6 +910,76 @@ void onumm3n3_trunc_gem_oo_to( ord_t ord_lhs,  onumm3n3_t* a,  ord_t ord_rhs,  o
 
 }
 
+void onumm3n3_trunc_sum_oo_to(ord_t order, onumm3n3_t* lhs,onumm3n3_t* rhs, onumm3n3_t* res){
+  // Addition like function 'lhs + rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r + rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 + rhs->e1;
+      res->e2 = lhs->e2 + rhs->e2;
+      res->e3 = lhs->e3 + rhs->e3;
+      break;
+    case(2):    // Order 2
+      res->e11 = lhs->e11 + rhs->e11;
+      res->e12 = lhs->e12 + rhs->e12;
+      res->e22 = lhs->e22 + rhs->e22;
+      res->e13 = lhs->e13 + rhs->e13;
+      res->e23 = lhs->e23 + rhs->e23;
+      res->e33 = lhs->e33 + rhs->e33;
+      break;
+    case(3):    // Order 3
+      res->e111 = lhs->e111 + rhs->e111;
+      res->e112 = lhs->e112 + rhs->e112;
+      res->e122 = lhs->e122 + rhs->e122;
+      res->e222 = lhs->e222 + rhs->e222;
+      res->e113 = lhs->e113 + rhs->e113;
+      res->e123 = lhs->e123 + rhs->e123;
+      res->e223 = lhs->e223 + rhs->e223;
+      res->e133 = lhs->e133 + rhs->e133;
+      res->e233 = lhs->e233 + rhs->e233;
+      res->e333 = lhs->e333 + rhs->e333;
+      break;
+  }
+}
+
+void onumm3n3_trunc_sub_oo_to(ord_t order, onumm3n3_t* lhs,onumm3n3_t* rhs, onumm3n3_t* res){
+  // Addition like function 'lhs - rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r - rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 - rhs->e1;
+      res->e2 = lhs->e2 - rhs->e2;
+      res->e3 = lhs->e3 - rhs->e3;
+      break;
+    case(2):    // Order 2
+      res->e11 = lhs->e11 - rhs->e11;
+      res->e12 = lhs->e12 - rhs->e12;
+      res->e22 = lhs->e22 - rhs->e22;
+      res->e13 = lhs->e13 - rhs->e13;
+      res->e23 = lhs->e23 - rhs->e23;
+      res->e33 = lhs->e33 - rhs->e33;
+      break;
+    case(3):    // Order 3
+      res->e111 = lhs->e111 - rhs->e111;
+      res->e112 = lhs->e112 - rhs->e112;
+      res->e122 = lhs->e122 - rhs->e122;
+      res->e222 = lhs->e222 - rhs->e222;
+      res->e113 = lhs->e113 - rhs->e113;
+      res->e123 = lhs->e123 - rhs->e123;
+      res->e223 = lhs->e223 - rhs->e223;
+      res->e133 = lhs->e133 - rhs->e133;
+      res->e233 = lhs->e233 - rhs->e233;
+      res->e333 = lhs->e333 - rhs->e333;
+      break;
+  }
+}
+
 onumm3n3_t onumm3n3_feval(coeff_t* feval_re, onumm3n3_t* x){
 
   onumm3n3_t res;

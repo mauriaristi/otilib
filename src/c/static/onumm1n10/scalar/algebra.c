@@ -1073,6 +1073,86 @@ void onumm1n10_trunc_gem_oo_to( ord_t ord_lhs,  onumm1n10_t* a,  ord_t ord_rhs, 
 
 }
 
+void onumm1n10_trunc_sum_oo_to(ord_t order, onumm1n10_t* lhs,onumm1n10_t* rhs, onumm1n10_t* res){
+  // Addition like function 'lhs + rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r + rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 + rhs->e1;
+      break;
+    case(2):    // Order 2
+      res->e11 = lhs->e11 + rhs->e11;
+      break;
+    case(3):    // Order 3
+      res->e111 = lhs->e111 + rhs->e111;
+      break;
+    case(4):    // Order 4
+      res->e1111 = lhs->e1111 + rhs->e1111;
+      break;
+    case(5):    // Order 5
+      res->e11111 = lhs->e11111 + rhs->e11111;
+      break;
+    case(6):    // Order 6
+      res->e111111 = lhs->e111111 + rhs->e111111;
+      break;
+    case(7):    // Order 7
+      res->e1111111 = lhs->e1111111 + rhs->e1111111;
+      break;
+    case(8):    // Order 8
+      res->e11111111 = lhs->e11111111 + rhs->e11111111;
+      break;
+    case(9):    // Order 9
+      res->e111111111 = lhs->e111111111 + rhs->e111111111;
+      break;
+    case(10):    // Order 10
+      res->e1111111111 = lhs->e1111111111 + rhs->e1111111111;
+      break;
+  }
+}
+
+void onumm1n10_trunc_sub_oo_to(ord_t order, onumm1n10_t* lhs,onumm1n10_t* rhs, onumm1n10_t* res){
+  // Addition like function 'lhs - rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r - rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 - rhs->e1;
+      break;
+    case(2):    // Order 2
+      res->e11 = lhs->e11 - rhs->e11;
+      break;
+    case(3):    // Order 3
+      res->e111 = lhs->e111 - rhs->e111;
+      break;
+    case(4):    // Order 4
+      res->e1111 = lhs->e1111 - rhs->e1111;
+      break;
+    case(5):    // Order 5
+      res->e11111 = lhs->e11111 - rhs->e11111;
+      break;
+    case(6):    // Order 6
+      res->e111111 = lhs->e111111 - rhs->e111111;
+      break;
+    case(7):    // Order 7
+      res->e1111111 = lhs->e1111111 - rhs->e1111111;
+      break;
+    case(8):    // Order 8
+      res->e11111111 = lhs->e11111111 - rhs->e11111111;
+      break;
+    case(9):    // Order 9
+      res->e111111111 = lhs->e111111111 - rhs->e111111111;
+      break;
+    case(10):    // Order 10
+      res->e1111111111 = lhs->e1111111111 - rhs->e1111111111;
+      break;
+  }
+}
+
 onumm1n10_t onumm1n10_feval(coeff_t* feval_re, onumm1n10_t* x){
 
   onumm1n10_t res;

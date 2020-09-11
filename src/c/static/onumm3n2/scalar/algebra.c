@@ -552,6 +552,52 @@ void onumm3n2_trunc_gem_oo_to( ord_t ord_lhs,  onumm3n2_t* a,  ord_t ord_rhs,  o
 
 }
 
+void onumm3n2_trunc_sum_oo_to(ord_t order, onumm3n2_t* lhs,onumm3n2_t* rhs, onumm3n2_t* res){
+  // Addition like function 'lhs + rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r + rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 + rhs->e1;
+      res->e2 = lhs->e2 + rhs->e2;
+      res->e3 = lhs->e3 + rhs->e3;
+      break;
+    case(2):    // Order 2
+      res->e11 = lhs->e11 + rhs->e11;
+      res->e12 = lhs->e12 + rhs->e12;
+      res->e22 = lhs->e22 + rhs->e22;
+      res->e13 = lhs->e13 + rhs->e13;
+      res->e23 = lhs->e23 + rhs->e23;
+      res->e33 = lhs->e33 + rhs->e33;
+      break;
+  }
+}
+
+void onumm3n2_trunc_sub_oo_to(ord_t order, onumm3n2_t* lhs,onumm3n2_t* rhs, onumm3n2_t* res){
+  // Addition like function 'lhs - rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r - rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 - rhs->e1;
+      res->e2 = lhs->e2 - rhs->e2;
+      res->e3 = lhs->e3 - rhs->e3;
+      break;
+    case(2):    // Order 2
+      res->e11 = lhs->e11 - rhs->e11;
+      res->e12 = lhs->e12 - rhs->e12;
+      res->e22 = lhs->e22 - rhs->e22;
+      res->e13 = lhs->e13 - rhs->e13;
+      res->e23 = lhs->e23 - rhs->e23;
+      res->e33 = lhs->e33 - rhs->e33;
+      break;
+  }
+}
+
 onumm3n2_t onumm3n2_feval(coeff_t* feval_re, onumm3n2_t* x){
 
   onumm3n2_t res;

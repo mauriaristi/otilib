@@ -43,6 +43,7 @@ void mdarr2_sum_OO_to(mdarr2_t*   lhs, mdarr2_t* rhs, mdarr2_t* res);
 void mdarr2_sum_RO_to(darr_t*    lhs, mdarr2_t* rhs, mdarr2_t* res);
 void mdarr2_sum_oO_to(mdnum2_t* lhs, mdarr2_t* rhs, mdarr2_t* res);
 void mdarr2_sum_rO_to(coeff_t    lhs, mdarr2_t* rhs, mdarr2_t* res);
+void mdarr2_trunc_sum_OO_to(ord_t order, mdarr2_t* arr1, mdarr2_t* arr2, mdarr2_t* res);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -79,6 +80,7 @@ void mdarr2_sub_oO_to( mdnum2_t* lhs, mdarr2_t*   rhs, mdarr2_t* res);
 void mdarr2_sub_Oo_to( mdarr2_t*   lhs, mdnum2_t* rhs, mdarr2_t* res);
 void mdarr2_sub_rO_to( coeff_t    lhs, mdarr2_t*   rhs, mdarr2_t* res);
 void mdarr2_sub_Or_to( mdarr2_t*   lhs, coeff_t    rhs, mdarr2_t* res);
+void mdarr2_trunc_sub_OO_to(ord_t order, mdarr2_t* arr1, mdarr2_t* arr2, mdarr2_t* res);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

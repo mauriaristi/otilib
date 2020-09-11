@@ -162,6 +162,8 @@ cdef extern from "oti/oti.h" nogil:
   onumm7n1_t onumm7n1_gem_ro(  coeff_t a,  onumm7n1_t* b,  onumm7n1_t* c);
   void onumm7n1_gem_ro_to(  coeff_t a,  onumm7n1_t* b,  onumm7n1_t* c, onumm7n1_t* res);
   void onumm7n1_trunc_gem_oo_to( ord_t ord_lhs,  onumm7n1_t* a,  ord_t ord_rhs,  onumm7n1_t* b,  onumm7n1_t* c, onumm7n1_t* res);
+  void onumm7n1_trunc_sum_oo_to(ord_t order, onumm7n1_t* lhs,onumm7n1_t* rhs, onumm7n1_t* res);
+  void onumm7n1_trunc_sub_oo_to(ord_t order, onumm7n1_t* lhs,onumm7n1_t* rhs, onumm7n1_t* res);
   onumm7n1_t onumm7n1_feval(coeff_t* feval_re, onumm7n1_t* x);
   void onumm7n1_feval_to(coeff_t* feval_re, onumm7n1_t* x, onumm7n1_t* res);
   
@@ -355,6 +357,7 @@ cdef extern from "oti/oti.h" nogil:
   void oarrm7n1_sum_RO_to(darr_t*    lhs, oarrm7n1_t* rhs, oarrm7n1_t* res);
   void oarrm7n1_sum_oO_to(onumm7n1_t* lhs, oarrm7n1_t* rhs, oarrm7n1_t* res);
   void oarrm7n1_sum_rO_to(coeff_t    lhs, oarrm7n1_t* rhs, oarrm7n1_t* res);
+  void oarrm7n1_trunc_sum_OO_to(ord_t order, oarrm7n1_t* arr1, oarrm7n1_t* arr2, oarrm7n1_t* res);
   oarrm7n1_t oarrm7n1_sub_OO(oarrm7n1_t*   lhs, oarrm7n1_t*   rhs);
   oarrm7n1_t oarrm7n1_sub_RO(darr_t*    lhs, oarrm7n1_t*   rhs);
   oarrm7n1_t oarrm7n1_sub_OR(oarrm7n1_t*   lhs, darr_t*    rhs);
@@ -369,6 +372,7 @@ cdef extern from "oti/oti.h" nogil:
   void oarrm7n1_sub_Oo_to( oarrm7n1_t*   lhs, onumm7n1_t* rhs, oarrm7n1_t* res);
   void oarrm7n1_sub_rO_to( coeff_t    lhs, oarrm7n1_t*   rhs, oarrm7n1_t* res);
   void oarrm7n1_sub_Or_to( oarrm7n1_t*   lhs, coeff_t    rhs, oarrm7n1_t* res);
+  void oarrm7n1_trunc_sub_OO_to(ord_t order, oarrm7n1_t* arr1, oarrm7n1_t* arr2, oarrm7n1_t* res);
   oarrm7n1_t oarrm7n1_mul_OO(oarrm7n1_t*   lhs, oarrm7n1_t* rhs);
   oarrm7n1_t oarrm7n1_mul_RO(darr_t*    lhs, oarrm7n1_t* rhs);
   oarrm7n1_t oarrm7n1_mul_oO(onumm7n1_t* lhs, oarrm7n1_t* rhs);

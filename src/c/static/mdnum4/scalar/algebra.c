@@ -876,6 +876,72 @@ void mdnum4_trunc_gem_oo_to( ord_t ord_lhs,  mdnum4_t* a,  ord_t ord_rhs,  mdnum
 
 }
 
+void mdnum4_trunc_sum_oo_to(ord_t order, mdnum4_t* lhs,mdnum4_t* rhs, mdnum4_t* res){
+  // Addition like function 'lhs + rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r + rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 + rhs->e1;
+      res->e2 = lhs->e2 + rhs->e2;
+      res->e3 = lhs->e3 + rhs->e3;
+      res->e4 = lhs->e4 + rhs->e4;
+      break;
+    case(2):    // Order 2
+      res->e12 = lhs->e12 + rhs->e12;
+      res->e13 = lhs->e13 + rhs->e13;
+      res->e23 = lhs->e23 + rhs->e23;
+      res->e14 = lhs->e14 + rhs->e14;
+      res->e24 = lhs->e24 + rhs->e24;
+      res->e34 = lhs->e34 + rhs->e34;
+      break;
+    case(3):    // Order 3
+      res->e123 = lhs->e123 + rhs->e123;
+      res->e124 = lhs->e124 + rhs->e124;
+      res->e134 = lhs->e134 + rhs->e134;
+      res->e234 = lhs->e234 + rhs->e234;
+      break;
+    case(4):    // Order 4
+      res->e1234 = lhs->e1234 + rhs->e1234;
+      break;
+  }
+}
+
+void mdnum4_trunc_sub_oo_to(ord_t order, mdnum4_t* lhs,mdnum4_t* rhs, mdnum4_t* res){
+  // Addition like function 'lhs - rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r - rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 - rhs->e1;
+      res->e2 = lhs->e2 - rhs->e2;
+      res->e3 = lhs->e3 - rhs->e3;
+      res->e4 = lhs->e4 - rhs->e4;
+      break;
+    case(2):    // Order 2
+      res->e12 = lhs->e12 - rhs->e12;
+      res->e13 = lhs->e13 - rhs->e13;
+      res->e23 = lhs->e23 - rhs->e23;
+      res->e14 = lhs->e14 - rhs->e14;
+      res->e24 = lhs->e24 - rhs->e24;
+      res->e34 = lhs->e34 - rhs->e34;
+      break;
+    case(3):    // Order 3
+      res->e123 = lhs->e123 - rhs->e123;
+      res->e124 = lhs->e124 - rhs->e124;
+      res->e134 = lhs->e134 - rhs->e134;
+      res->e234 = lhs->e234 - rhs->e234;
+      break;
+    case(4):    // Order 4
+      res->e1234 = lhs->e1234 - rhs->e1234;
+      break;
+  }
+}
+
 mdnum4_t mdnum4_feval(coeff_t* feval_re, mdnum4_t* x){
 
   mdnum4_t res;

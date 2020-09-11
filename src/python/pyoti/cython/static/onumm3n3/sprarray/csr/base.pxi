@@ -1,8 +1,7 @@
-
-
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::     CLASS  lil_matrix    :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
 cdef class csr_matrix:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
@@ -44,8 +43,9 @@ cdef class csr_matrix:
     """
     #*************************************************************************************************
     
-    cdef uint64_t i, j, k, ncols, nrows
+    cdef uint64_t i, j, k, ncols, nrows, nnz
     cdef lil_matrix lil
+    cdef onumm3n3 onum
     cdef list lilrowsi, lildatai
     
     targ1 = type(arg1)
@@ -55,26 +55,33 @@ cdef class csr_matrix:
       lil = arg1
       self.nrows, self.ncols = lil.shape
       self.size = lil.size
-
+      nnz = lil.nnz
       # Generate arrays.
-      self.data    = np.empty( (lil.nnz,),     dtype = object    )
-      self.indices = np.empty( (lil.nnz,),     dtype = np.uint64 )
-      self.indptr  = np.empty( (lil.nrows+1,), dtype = np.uint64 )
+      self.arr       = oarrm3n3_zeros( nnz, 1)
+      self.p_indices = <uint64_t*>malloc(           nnz*sizeof( uint64_t ) )
+      self.p_indptr  = <uint64_t*>malloc( (lil.nrows+1)*sizeof( uint64_t ) )
+      
+      if (not self.p_indices) or (not self.p_indptr):
+        raise MemoryError("Could not allocate arrays for sparse matrix.")
+      # end if 
 
-      self.indptr[0] = 0
+      self.p_indptr[0] = 0
 
       for i in range(self.nrows):
 
-        self.indptr[i+1] = self.indptr[i] + len(lil.rows[i])
-        k = self.indptr[i]
+        self.p_indptr[i+1] = self.p_indptr[i] + len(lil.rows[i])
+        k = self.p_indptr[i]
 
         lilrowsi = lil.rows[i]
         lildatai = lil.data[i]
 
         for j in range(len(lil.rows[i])):
 
-          self.indices[k] = lilrowsi[j]
-          self.data[k]    = lildatai[j].copy()
+          self.p_indices[k] = lilrowsi[j]
+          onum = lildatai[j]
+          
+          onumm3n3_copy_to( &onum.num, &self.arr.p_data[k])
+          
           k+=1
 
         # end for 
@@ -111,22 +118,37 @@ cdef class csr_matrix:
         self.ncols = ncols
         
         self.size = nrows*ncols
+        # copy arrays
 
-        self.indices = np.array(indices, copy=copy, dtype = np.uint64 )
-        self.indptr  = np.array(indptr,  copy=copy, dtype = np.uint64 )
-        self.data    = np.zeros(data.shape, dtype = object    )
+        nnz = indices.size
 
+        # Generate arrays.
+        self.arr       = oarrm3n3_zeros( nnz, 1)
+        self.p_indices = <uint64_t*>malloc(       nnz*sizeof( uint64_t ) )
+        self.p_indptr  = <uint64_t*>malloc( (nrows+1)*sizeof( uint64_t ) )
         
+        if (not self.p_indices) or (not self.p_indptr):
+          raise MemoryError("Could not allocate arrays for sparse matrix.")
+        # end if 
 
-        for i in range(data.size):
+        # Copy indptr
+        for i in range(nrows+1):
+          self.p_indptr[i] = indptr[i]
+        # end for 
+
+        # Copy data and indices.
+        for i in range(nnz):
           
-          if type(data) == onumm3n3:
+          self.p_indices[i] = indices[i]
 
-            self.data[i] = data[i].copy()
+          if type(data[i]) == onumm3n3:
+
+            onum = data[i]
+            onumm3n3_copy_to( &onum.num, &self.arr.p_data[i])
 
           else:
             
-            self.data[i] = onumm3n3( data[i] )
+            self.arr.p_data[i] = onumm3n3_create_r( data[i] )
 
           # end if   
 
@@ -137,9 +159,9 @@ cdef class csr_matrix:
         self.nrows, self.ncols = arg1
         self.size = self.nrows * self.ncols
 
-        self.indices = np.zeros(0, dtype = np.uint64 )
-        self.indptr  = np.zeros(0, dtype = np.uint64 )
-        self.data    = np.zeros(0, dtype = object    )
+        self.p_indices = NULL
+        self.p_indptr  = NULL
+        self.arr    = oarrm3n3_init()
         
       elif len(arg1) == 2 and type(arg1[1]) == tuple:
         # COO creator
@@ -160,6 +182,25 @@ cdef class csr_matrix:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
+  def __dealloc__(self): 
+    """
+    PURPOSE:      Free memory in csr matrix. 
+    """
+    #************************************************************************************************* 
+
+    oarrm3n3_free(&self.arr)
+
+    if self.p_indices:
+      free(self.p_indices)
+    # end if
+
+    if self.p_indptr:
+      free(self.p_indptr)
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   @property
   def nnz(self): 
     """
@@ -167,7 +208,7 @@ cdef class csr_matrix:
     """
     #************************************************************************************************* 
 
-    return len(self.data)
+    return self.arr.nrows
 
   #---------------------------------------------------------------------------------------------------
 
@@ -191,7 +232,7 @@ cdef class csr_matrix:
     """
     #*************************************************************************************************
 
-    return np.array(self.data)
+    return omatm3n3.create(&self.arr, FLAGS=0)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -202,8 +243,14 @@ cdef class csr_matrix:
     PURPOSE:      Return the indices array the stored matrix. 
     """
     #*************************************************************************************************
+    cdef uint64_t[::1] indices = np.zeros(self.nnz,dtype=np.uint64)
+    cdef uint64_t i
+    
+    for i in range(self.nnz):
+      indices[i] = self.p_indices[i]
+    # end for 
 
-    return np.array(self.indices)
+    return np.asarray(indices)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -214,8 +261,14 @@ cdef class csr_matrix:
     PURPOSE:      Return the indptr array the stored matrix. 
     """
     #*************************************************************************************************
+    cdef uint64_t[::1] indptr = np.zeros(self.nrows+1,dtype=np.uint64)
+    cdef uint64_t i
+    
+    for i in range(self.nrows+1):
+      indptr[i] = self.p_indptr[i]
+    # end for 
 
-    return np.array(self.indptr)
+    return np.asarray(indptr)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -230,12 +283,8 @@ cdef class csr_matrix:
     cdef onumm3n3 onum
     cdef uint64_t i
 
-    for i in range(self.data.size):
-      
-      order = max( order, self.data[i].order )
-
-    # end for 
-
+    order = oarrm3n3_get_order(&self.arr)
+    
     return order
 
   #---------------------------------------------------------------------------------------------------
@@ -253,13 +302,13 @@ cdef class csr_matrix:
     cdef uint64_t i,j,k = 0
     data = np.empty( (self.nnz,), dtype=np.float64 )
 
-    for i in range( self.data.size ):
+    for i in range( self.arr.size ):
 
-      data[i] = self.data[i].real
+      data[i] = self.arr.p_data[i].r
 
     # end for
 
-    return sci_spr.csr_matrix((data, self.indices.copy(), self.indptr.copy() ), shape = self.shape)
+    return sci_spr.csr_matrix((data, self.indices, self.indptr ), shape = self.shape)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -286,16 +335,16 @@ cdef class csr_matrix:
     #*************************************************************************************************
     
   
-    cdef onumm3n3_t d_onumm3n3
-    cdef onumm3n3   onumm3n3
+    cdef onumm3n3   onum = onumm3n3(0.0)
     cdef uint64_t i, j, k
     out  = ""
 
-    for i in range( len(self.indptr)-1 ):
+    for i in range( self.nrows ):
 
-      for j in range(self.indptr[i], self.indptr[i+1] ):
+      for j in range(self.p_indptr[i], self.p_indptr[i+1] ):
+        onum.num = self.arr.p_data[j]
 
-        out += "({0:3d},{1:3d}) {2}\n".format( i, self.indices[j], self.data[j] )
+        out += "({0:3d},{1:3d}) {2}\n".format( i, self.p_indices[j], str(onum) )
         
       # end for
 
@@ -315,23 +364,24 @@ cdef class csr_matrix:
     
 
     cdef csr_matrix res = <csr_matrix> csr_matrix.__new__(csr_matrix)
-    cdef object[:]   data
-    cdef uint64_t[:] indices
-    cdef uint64_t[:] indptr
     cdef uint64_t i, k
+
+    res.arr       = oarrm3n3_zeros( self.nnz, 1)
+    res.p_indices = <uint64_t*>malloc(       self.nnz*sizeof( uint64_t ) )
+    res.p_indptr  = <uint64_t*>malloc( (self.nrows+1)*sizeof( uint64_t ) )
     
+    if (not self.p_indices) or (not self.p_indptr):
+      raise MemoryError("Could not allocate arrays for sparse matrix.")
+    # end if
+
     res.nrows   = self.nrows
     res.ncols   = self.ncols
     res.size    = self.size
-    res.data    = np.empty( (self.nnz,), dtype = object)
-    res.indices = self.indices.copy()
-    res.indptr  = self.indptr.copy()
-    
-    for i in range(self.data.size):
 
-      res.data[i] = self.data[i].copy()
+    memcpy(res.p_indices, self.p_indices, self.nnz*sizeof(uint64_t) )
+    memcpy(res.p_indptr, self.p_indptr,  (self.nrows+1)*sizeof(uint64_t) )
 
-    # end if 
+    oarrm3n3_copy_to( &self.arr, &res.arr)
 
     return res
 
@@ -345,363 +395,25 @@ cdef class csr_matrix:
     #*************************************************************************************************
     
     cdef csr_matrix res = <csr_matrix> csr_matrix.__new__(csr_matrix)
-    cdef object[:]   data
-    cdef uint64_t[:] indices
-    cdef uint64_t[:] indptr
     cdef uint64_t i, k
     
+    res.arr       = oarrm3n3_zeros( self.nnz, 1)
+    res.p_indices = <uint64_t*>malloc(       self.nnz*sizeof( uint64_t ) )
+    res.p_indptr  = <uint64_t*>malloc( (self.nrows+1)*sizeof( uint64_t ) )
+    
+    if (not self.p_indices) or (not self.p_indptr):
+      raise MemoryError("Could not allocate arrays for sparse matrix.")
+    # end if
+
     res.nrows   = self.nrows
     res.ncols   = self.ncols
     res.size    = self.size
-    res.data    = np.empty( (self.nnz,), dtype = object)
-    res.indices = self.indices.copy()
-    res.indptr  = self.indptr.copy()
-    
-    for i in range(self.data.size):
 
-      res.data[i] = onumm3n3(0.0)
-
-    # end if 
+    memcpy(res.p_indices, self.p_indices, self.nnz*sizeof(uint64_t) )
+    memcpy(res.p_indptr, self.p_indptr,  (self.nrows+1)*sizeof(uint64_t) )
 
     return res
   #---------------------------------------------------------------------------------------------------
-
-  # #***************************************************************************************************
-  # def __neg__(self):
-  #   """
-  #   PURPOSE: Negation overload.
-  #   """
-  #   #*************************************************************************************************
-    
-  #   
-    
-  #   cdef oarrm3n3_t res = oarrm3n3_neg(&self.arr)
-
-  #   return omatm3n3.create(&res)
-  # #---------------------------------------------------------------------------------------------------
-
-  # #***************************************************************************************************
-  # def __add__(self, other):
-  #   """
-  #   PURPOSE: Addition overload.
-  #   """
-  #   #*************************************************************************************************
-    
-  #   
-    
-  #   cdef oarrm3n3_t res 
-  #   cdef omatm3n3 lhs,rhs
-  #   cdef dmat dlhs,drhs
-  #   cdef onumm3n3 olhs,orhs
-    
-  #   tlhs = type(self)
-  #   trhs = type(other)
-    
-  #   if (tlhs == trhs):
-
-  #     lhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_sum_OO(&lhs.arr,&rhs.arr)
-
-  #   elif ( tlhs  == onumm3n3 ):
-
-  #     olhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_sum_oO(&olhs.num,&rhs.arr)
-
-  #   elif ( trhs  == onumm3n3 ):
-
-  #     lhs = self
-  #     orhs = other
-
-  #     res = oarrm3n3_sum_oO(&orhs.num,&lhs.arr)
-    
-  #   elif (tlhs in number_types):
-      
-  #     rhs = other
-  #     res = oarrm3n3_sum_rO(self, &rhs.arr)
-
-  #   elif (trhs in number_types):
-        
-  #     lhs = self
-  #     res = oarrm3n3_sum_rO(other, &lhs.arr)
-
-  #   elif ( tlhs  == dmat ):
-
-  #     dlhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_sum_RO(&dlhs.arr,&rhs.arr)
-
-  #   elif ( trhs  == dmat ):
-
-  #     lhs = self
-  #     drhs = other
-
-  #     res = oarrm3n3_sum_RO(&drhs.arr,&lhs.arr)
-
-  #   else:
-
-  #     return NotImplemented
-
-  #   # end if 
-      
-  #   return omatm3n3.create(&res)
-
-  # #---------------------------------------------------------------------------------------------------  
-
-  # #***************************************************************************************************
-  # def __iadd__(self, other):
-  #   """
-  #   PURPOSE: Inplace addition overload.
-  #   """
-  #   #*************************************************************************************************
-
-  #   return self + other
-
-  # #---------------------------------------------------------------------------------------------------  
-
-  # #***************************************************************************************************
-  # def __sub__(self, other):
-  #   """
-  #   PURPOSE: Subtraction overload.
-  #   """
-  # #************************************************************************
-    
-  #   
-    
-  #   cdef oarrm3n3_t res 
-  #   cdef omatm3n3 lhs,rhs
-  #   cdef dmat dlhs,drhs
-  #   cdef onumm3n3 olhs,orhs
-    
-  #   tlhs = type(self)
-  #   trhs = type(other)
-    
-  #   if (tlhs == trhs):
-
-  #     lhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_sub_OO(&lhs.arr,&rhs.arr)
-
-  #   elif ( tlhs  == onumm3n3 ):
-
-  #     olhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_sub_oO(&olhs.num,&rhs.arr)
-
-  #   elif ( trhs  == onumm3n3 ):
-
-  #     lhs = self
-  #     orhs = other
-
-  #     res = oarrm3n3_sub_Oo(&lhs.arr, &orhs.num)
-    
-  #   elif (tlhs in number_types):
-      
-  #     rhs = other
-  #     res = oarrm3n3_sub_rO(self, &rhs.arr)
-
-  #   elif (trhs in number_types):
-        
-  #     lhs = self
-  #     res = oarrm3n3_sub_Or(&lhs.arr, other)
-
-  #   elif ( tlhs  == dmat ):
-
-  #     dlhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_sub_RO(&dlhs.arr,&rhs.arr)
-
-  #   elif ( trhs  == dmat ):
-
-  #     lhs = self
-  #     drhs = other
-
-  #     res = oarrm3n3_sub_OR(&lhs.arr, &drhs.arr)
-
-  #   else:
-
-  #     return NotImplemented      
-
-  #   # end if 
-      
-  #   return omatm3n3.create(&res)
-
-  # #---------------------------------------------------------------------------------------------------  
-
-  # #***************************************************************************************************
-  # def __isub__(self, other_in):
-  #   """
-  #   PURPOSE: Inplace subtraction overload.
-  #   """
-  #   #*************************************************************************************************
-  
-  #   return self - other_in
-
-  # #---------------------------------------------------------------------------------------------------  
-
-  # #***************************************************************************************************
-  # def __mul__(self, other):
-  #   """ 
-  #   PURPOSE: Multiplication overload.
-  #   """
-  #   #*************************************************************************************************
-    
-  #   
-    
-  #   cdef oarrm3n3_t res 
-  #   cdef omatm3n3 lhs,rhs
-  #   cdef dmat dlhs,drhs
-  #   cdef onumm3n3 olhs,orhs
-    
-  #   tlhs = type(self)
-  #   trhs = type(other)
-    
-  #   if (tlhs == trhs):
-
-  #     lhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_mul_OO(&lhs.arr,&rhs.arr)
-
-  #   elif ( tlhs  == onumm3n3 ):
-
-  #     olhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_mul_oO(&olhs.num,&rhs.arr)
-
-  #   elif ( trhs  == onumm3n3 ):
-
-  #     lhs = self
-  #     orhs = other
-
-  #     res = oarrm3n3_mul_oO(&orhs.num,&lhs.arr)
-    
-  #   elif (tlhs in number_types):
-      
-  #     rhs = other
-  #     res = oarrm3n3_mul_rO(self, &rhs.arr)
-
-  #   elif (trhs in number_types):
-        
-  #     lhs = self
-  #     res = oarrm3n3_mul_rO(other, &lhs.arr)
-
-  #   elif ( tlhs  == dmat ):
-
-  #     dlhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_mul_RO(&dlhs.arr,&rhs.arr)
-
-  #   elif ( trhs  == dmat ):
-
-  #     lhs = self
-  #     drhs = other
-
-  #     res = oarrm3n3_mul_RO(&drhs.arr,&lhs.arr)
-
-  #   else:
-
-  #     return NotImplemented      
-
-  #   # end if 
-      
-  #   return omatm3n3.create(&res)
-
-    
-
-  # #---------------------------------------------------------------------------------------------------  
-
-  # #***************************************************************************************************
-  # def __imul__(self, other_in):
-  #   """
-  #   PURPOSE: Inplace multiplication overload.
-  #   """
-  #   #*************************************************************************************************
-
-  #   return self * other_in
-
-  # #---------------------------------------------------------------------------------------------------  
-
-  # #***************************************************************************************************
-  # def __truediv__(self, other):
-  #   """
-  #   PURPOSE: Division overload.
-  #   """
-  #   #*************************************************************************************************
-    
-  #   
-    
-  #   cdef oarrm3n3_t res 
-  #   cdef omatm3n3 lhs,rhs
-  #   cdef dmat dlhs,drhs
-  #   cdef onumm3n3 olhs,orhs
-    
-  #   tlhs = type(self)
-  #   trhs = type(other)
-    
-  #   if (tlhs == trhs):
-
-  #     lhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_div_OO(&lhs.arr,&rhs.arr)
-
-  #   elif ( tlhs  == onumm3n3 ):
-
-  #     olhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_div_oO(&olhs.num,&rhs.arr)
-
-  #   elif ( trhs  == onumm3n3 ):
-
-  #     lhs = self
-  #     orhs = other
-
-  #     res = oarrm3n3_div_Oo(&lhs.arr, &orhs.num)
-    
-  #   elif (tlhs in number_types):
-      
-  #     rhs = other
-  #     res = oarrm3n3_div_rO(self, &rhs.arr)
-
-  #   elif (trhs in number_types):
-        
-  #     lhs = self
-  #     res = oarrm3n3_div_Or(&lhs.arr, other)
-
-  #   elif ( tlhs  == dmat ):
-
-  #     dlhs = self
-  #     rhs = other
-
-  #     res = oarrm3n3_div_RO(&dlhs.arr,&rhs.arr)
-
-  #   elif ( trhs  == dmat ):
-
-  #     lhs = self
-  #     drhs = other
-
-  #     res = oarrm3n3_div_OR(&lhs.arr, &drhs.arr)
-
-  #   else:
-
-  #     return NotImplemented      
-
-  #   # end if 
-      
-  #   return omatm3n3.create(&res)
-
-  # #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
   def __pow__(self, n,z):
@@ -712,19 +424,12 @@ cdef class csr_matrix:
     
     
 
-    cdef onumm3n3 ores, oval
     cdef uint64_t i
-    cdef csr_matrix res
+    cdef csr_matrix S = self, res
 
-    res = self.zeros_like()
+    res = S.zeros_like()
 
-    for i in range(self.data.size):
-      
-      ores = res.data[i]
-      oval = self.data[i]
-      onumm3n3_pow_to( &oval.num, n, &ores.num)
-
-    # end for 
+    oarrm3n3_pow_to( &S.arr, n, &res.arr)
 
     return res 
 
@@ -740,20 +445,13 @@ cdef class csr_matrix:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef onumm3n3 ores, oval
     cdef uint64_t i
     cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
-
-    for i in range(self.data.size):
-        
-      ores = res.data[i]
-      oval = self.data[i]
-      onumm3n3_get_deriv_to( indx, order, &oval.num, &ores.num)
-
-    # end for 
+    
+    oarrm3n3_get_deriv_to( indx, order, &self.arr, &res.arr)
 
     return res 
 
@@ -769,20 +467,13 @@ cdef class csr_matrix:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef onumm3n3 ores, oval
     cdef uint64_t i, j, k
     cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
-
-    for i in range(self.data.size):
-        
-      ores = res.data[i]
-      oval = self.data[i]
-      onumm3n3_get_im_to_o( indx, order, &oval.num, &ores.num)
-
-    # end for 
+  
+    oarrm3n3_get_im_to( indx, order, &self.arr, &res.arr)
 
     return res 
 
@@ -798,20 +489,13 @@ cdef class csr_matrix:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef onumm3n3 ores, oval
     cdef uint64_t i, j, k
     cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
 
-    for i in range(self.data.size):
-        
-      ores = res.data[i]
-      oval = self.data[i]
-      onumm3n3_extract_im_to( indx, order, &oval.num, &ores.num)
-
-    # end for 
+    oarrm3n3_extract_im_to( indx, order, &self.arr, &res.arr)
 
     return res 
 
@@ -827,20 +511,13 @@ cdef class csr_matrix:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef onumm3n3 ores, oval
     cdef uint64_t i, j, k
     cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
 
-    for i in range(self.data.size):
-        
-      ores = res.data[i]
-      oval = self.data[i]
-      onumm3n3_extract_deriv_to( indx, order, &oval.num, &ores.num)
-
-    # end for 
+    oarrm3n3_extract_deriv_to( indx, order, &self.arr, &res.arr)
 
     return res 
 
@@ -854,19 +531,12 @@ cdef class csr_matrix:
     #*************************************************************************************************
     
     
-    cdef onumm3n3 ores, oval
     cdef uint64_t i, j, k
     cdef csr_matrix res
 
     res = self.zeros_like()
 
-    for i in range(self.data.size):
-        
-      ores = res.data[i]
-      oval = self.data[i]
-      onumm3n3_get_order_im_to( order, &oval.num, &ores.num)
-
-    # end for 
+    oarrm3n3_get_order_im_to( order, &self.arr, &res.arr)
 
     return res 
 
@@ -883,20 +553,13 @@ cdef class csr_matrix:
 
     cdef imdir_t indx
     cdef ord_t  order
-    cdef onumm3n3 ores, oval
     cdef uint64_t i, j, k
     cdef csr_matrix res
 
     indx, order = imdir(hum_dir)
     res = self.zeros_like()
 
-    for i in range(self.data.size):
-        
-      ores = res.data[i]
-      oval = self.data[i]
-      onumm3n3_truncate_im_to( indx, order, &oval.num, &ores.num)
-
-    # end for 
+    oarrm3n3_truncate_im_to( indx, order, &self.arr, &res.arr)
 
     return res 
 
@@ -909,37 +572,11 @@ cdef class csr_matrix:
     """
     
 
-    cdef bases_t  size       = dhl.p_dh[0].Nbasis
-    cdef imdir_t* bases_list = dhl.p_dh[0].p_idx[0]
-    cdef uint64_t i, j
-    cdef onumm3n3 oval
+    cdef omatm3n3 tmp
     
-    # Initialize all elements as zero (deactivated)
-    for i in range(size):
+    tmp = omatm3n3.create(&self.arr,FLAGS=0)
 
-      bases_list[i]=0
-
-    # end for 
-
-    for i in range(self.data.size):
-
-      oval = self.data[i]
-      onumm3n3_get_active_bases( &oval.num, bases_list)
-
-    # end if 
-
-    res = []
-    for i in range(size):
-
-      if bases_list[i]==1:
-      
-        res.append(i+1)
-
-      # end if 
-
-    # end for 
-
-    return res
+    return tmp.get_active_bases()
 
   #---------------------------------------------------------------------------------------------------
 
@@ -976,13 +613,13 @@ cdef void csrmatrix_matmul_SO_to(csr_matrix lhs, omatm3n3 rhs, omatm3n3 res):
       # tmp = 0
       onumm3n3_set_r( 0.0, &tmp)
 
-      for l in range( lhs.indptr[i], lhs.indptr[i+1] ):
+      for l in range( lhs.p_indptr[i], lhs.p_indptr[i+1] ):
 
         # tmp = arr1[i,k] * arr2[k,j] + tmp
-        k = lhs.indices[l]
-        olhs = lhs.data[l]
+        k = lhs.p_indices[l]
+        
 
-        onumm3n3_gem_oo_to( &olhs.num,
+        onumm3n3_gem_oo_to( &lhs.arr.p_data[l],
                         &rhs.arr.p_data[ j + k * rhs.ncols ],
                         &tmp, &tmp)
 
@@ -1043,15 +680,14 @@ cdef void csrmatrix_trunc_matmul_SO_to(ord_t ord_lhs, csr_matrix lhs, ord_t ord_
       # tmp = 0
       onumm3n3_set_r( 0.0, &tmp)
 
-      for l in range( lhs.indptr[i], lhs.indptr[i+1] ):
+      for l in range( lhs.p_indptr[i], lhs.p_indptr[i+1] ):
 
         # tmp = arr1[i,k] * arr2[k,j] + tmp
-        k = lhs.indices[l]
-        olhs = lhs.data[l]
+        k = lhs.p_indices[l]
 
-        onumm3n3_trunc_gem_oo_to( ord_lhs, &olhs.num, ord_rhs,
-                        &rhs.arr.p_data[ j + k * rhs.ncols ],
-                        &tmp, &tmp)
+        onumm3n3_trunc_gem_oo_to( ord_lhs, &lhs.arr.p_data[l], 
+                              ord_rhs, &rhs.arr.p_data[ j + k * rhs.ncols ],
+                              &tmp, &tmp)
 
       # end for
 

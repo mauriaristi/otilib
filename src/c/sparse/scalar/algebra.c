@@ -598,6 +598,215 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
 
 
+// ****************************************************************************************************
+inline sotinum_t soti_base_trunc_sum(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+
+    sotinum_t tmp;
+    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t ordi;
+
+    // Create a sotinum with no elements in imaginary directions.
+    tmp = soti_get_rtmp(7, res_ord, dhl);
+
+    soti_set_r(0.0, &tmp, dhl);
+
+    if (ord == 0){
+    
+        tmp.re = num1->re + num2->re; 
+    
+    } else {
+
+        ordi = ord - 1;
+
+        if ( ordi < num1->order && ordi < num2->order ){
+            
+            dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+
+        } else if ( ordi < num1->order ){
+
+            dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+                                  NULL, NULL, 0,
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+
+        } else if ( ordi < num2->order ){
+
+            dhelp_sparse_add_dirs(num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+                                  NULL, NULL, 0,
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
+
+        }
+
+    }
+    
+
+    return tmp;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+inline sotinum_t soti_base_trunc_sub(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
+
+    sotinum_t tmp;
+    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t ordi;
+
+    // Create a sotinum with no elements in imaginary directions.
+    tmp = soti_get_rtmp(7, res_ord, dhl);
+
+    soti_set_r(0.0, &tmp, dhl);
+
+    if (ord == 0){
+    
+        tmp.re = num1->re - num2->re; 
+    
+    } else {
+
+        ordi = ord - 1;
+
+        if ( ordi < num1->order && ordi < num2->order ){
+            
+            dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+
+        } else if ( ordi < num1->order ){
+
+            dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
+                                  NULL, NULL, 0,
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
+
+        } else if ( ordi < num2->order ){
+
+            dhelp_sparse_sub_dirs(NULL, NULL, 0,
+                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],                                  
+                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
+
+        }
+
+    }
+    
+
+    return tmp;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, sotinum_t* num2, dhelpl_t dhl){
+
+    sotinum_t tmp, tmp2, tmp3;
+
+    sotinum_t* tmpsrc  = &tmp ;
+    sotinum_t* tmpdest = &tmp3;
+    sotinum_t* tmpswap;
+    coeff_t*   p_im_swap;
+    imdir_t*  p_idx_swap;
+    ndir_t    p_nnz_swap;
+    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t ordlim1, ordlim2;
+    ord_t ordi1, ordi2, ordires;
+
+    // Retreive sotinum temporals.
+    // All tmps are created with no elements in imaginary directions (but fully allocated).
+    tmp = soti_get_rtmp(3,res_ord,dhl); // will hold the final result.
+    tmp2= soti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.
+
+    // Multiply real coefficients.
+    soti_set_r(0.0,  tmpsrc, dhl);
+    soti_set_r(0.0, tmpdest, dhl);
+
+    if (ord1 == 0 && ord2 == 0){
+        
+        tmpdest->re = num1->re * num2->re;
+
+    } else if (ord1 == 0) {
+
+        if (num1->re != 0.0 && num2->order >= ord2 ){
+        
+            // Swap pointers
+            tmpswap = tmpsrc; 
+            tmpsrc  = tmpdest; 
+            tmpdest = tmpswap;
+
+            ordi1 = ord2-1;
+            // Perform multiplication
+            dhelp_sparse_mult_real(num1->re,
+                               num2->p_im[ordi1], num2->p_idx[ordi1], num2->p_nnz[ordi1],
+                                tmp2.p_im[ordi1],  tmp2.p_idx[ordi1], &tmp2.p_nnz[ordi1],       
+                               dhl);              
+
+            dhelp_sparse_add_dirs(    tmp2.p_im[ordi1],     tmp2.p_idx[ordi1],      tmp2.p_nnz[ordi1],
+                                   tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
+                                  tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
+
+
+
+        }
+
+    } else if (ord2 == 0) {
+
+        if (num2->re != 0.0 && num1->order >= ord1 ){
+
+            // Swap pointers
+            tmpswap = tmpsrc; 
+            tmpsrc  = tmpdest; 
+            tmpdest = tmpswap;
+
+            ordi1 = ord1-1;
+        
+            dhelp_sparse_mult_real(num2->re,
+                                   num1->p_im[ordi1], num1->p_idx[ordi1],  num1->p_nnz[ordi1],
+                                   tmp2.p_im[ordi1],  tmp2.p_idx[ordi1],  &tmp2.p_nnz[ordi1],       
+                                   dhl);  
+
+            dhelp_sparse_add_dirs(    tmp2.p_im[ordi1],     tmp2.p_idx[ordi1],      tmp2.p_nnz[ordi1],
+                                   tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
+                                  tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
+            
+        }
+
+    } else {
+
+        if ( num1->order >= ord1 && num2->order >= ord2 ){
+        
+            ordlim1 = MIN( num1->order, res_ord - 1 );
+            ordi1 = ord1-1;
+            ordi2 = ord2-1;    
+
+            ordires = ordi1 + ordi2 + 1;
+
+            dhelp_sparse_mult( num1->p_im[ordi1],   num1->p_idx[ordi1],    num1->p_nnz[ordi1],  ordi1+1,
+                               num2->p_im[ordi2],   num2->p_idx[ordi2],    num2->p_nnz[ordi2],  ordi2+1,
+                                tmp2.p_im[ordires],  tmp2.p_idx[ordires],  &tmp2.p_nnz[ordires],         dhl);
+
+            dhelp_sparse_add_dirs(    tmp2.p_im[ordires],     tmp2.p_idx[ordires],      tmp2.p_nnz[ordires],
+                                   tmpsrc->p_im[ordires],  tmpsrc->p_idx[ordires],   tmpsrc->p_nnz[ordires],
+                                  tmpdest->p_im[ordires], tmpdest->p_idx[ordires], &tmpdest->p_nnz[ordires], dhl);
+
+        
+        }
+
+    }
+
+    // This returns whatever temporal is selected at this time.
+    return *tmpdest;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
 
 
 

@@ -287,6 +287,62 @@ cpdef dot(object lhs, object rhs, object out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
+cpdef trunc_dot(ord_t ordlhs, object lhs, ord_t ordrhs, object rhs, object out = None):
+  """
+  PURPOSE:  Matrix inner product (standard matrix multiplication).
+  """
+  #***************************************************************************************************
+
+  cdef matso      Olhs, Orhs, Ores
+  cdef arrso_t   cOres
+  cdef dmat       Rlhs, Rrhs, Rres
+  cdef darr_t    cRres
+  cdef matsofe    Flhs, Frhs, Fres
+  cdef fearrso_t cFres
+
+  cdef csr_matrix  Slhs
+
+  cdef uint8_t res_flag = 1
+  cdef object res = None
+
+  tlhs = type(lhs)
+  trhs = type(rhs)
+
+  if out is None:
+    res_flag = 0
+  # end if 
+
+  # supported types:
+  #    -  matso
+  #    -  matsofe
+  #    -  darr
+
+  if tlhs is csr_matrix:
+
+    # Slhs = lhs
+    if   trhs is matso: # SO
+      if res_flag:
+        Ores = out
+        csrmatrix_trunc_matmul_SO_to( ordlhs, lhs, ordrhs, rhs, Ores)
+      else:
+        res = csrmatrix_trunc_matmul_SO( ordlhs, lhs, ordrhs, rhs)
+      # end if 
+
+    else:
+      raise TypeError("Unsupported types at dot operation.")      
+    # end if 
+  else:
+    raise TypeError("Unsupported types at dot operation.")
+
+  # end if 
+
+  if res_flag == 0:
+    return res
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
 cpdef transpose(object arr, object out = None):
   """
   PURPOSE:  Matrix transpose
@@ -838,6 +894,144 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
   #***************************************************************************************************
   global dhl
 
+  cdef matso      O, Ores, Otmp, tmp, tmp2, tmp3
+  cdef uint64_t i,j,k,l
+  cdef ord_t ordi, ord_lhs, ord_rhs, Oord
+  cdef uint8_t res_flag = 1
+
+  if out is None:
+    res_flag = 0
+  # end if      
+  
+  if res_flag:
+    Ores = out
+  else:
+    Ores = zeros(b_in.shape)
+  # end if
+
+  Kr_csc = K_in.real.tocsc()
+  
+  
+  factorizer = None
+
+  if solver == 'SuperLU' or solver == 'LU' or solver == 'lu' or solver == 'splu':
+    
+    from scipy.sparse.linalg import splu
+    factorizer = splu
+    solver_id = 1
+
+  elif solver == 'ILU' or solver == 'ilu' or solver == 'spilu':
+    
+    from scipy.sparse.linalg import spilu
+    factorizer = spilu
+    solver_id = 1
+
+  elif solver == 'cholesky' or solver == 'ch' or solver == 'CH':
+    
+    from sksparse.cholmod import cholesky
+    factorizer = cholesky
+    solver_id = 2
+
+  elif solver == 'UMFPACK' or solver == 'umfpack' or solver == 'luumf':
+    
+    from scikits.umfpack import splu 
+    factorizer = splu
+    Kr_csc.indices = Kr_csc.indices.astype(np.int64)
+    Kr_csc.indptr  = Kr_csc.indptr.astype(np.int64)
+    solver_id = 1
+
+  else:
+
+    raise ValueError("Unsupported solver. Try solver = 'SuperLU', solver = 'cholesky' or solver = 'umfpack'" )
+
+  # end if     
+
+
+
+  # Factorize matrix. This is usually the most demanding step in the block solver approach.
+  factor = factorizer(Kr_csc,**solver_args)
+
+  del(Kr_csc) # Real matrix not needed anymore, freed to not use as much memory.
+
+  # Get solve method.
+  if solver_id == 2:
+    # scikit-cholesky specific.
+    solve = factor
+  else:
+    solve = factor.solve
+  # end if 
+
+  rhs = b_in.real
+  # Solve the real system of equations:
+  rhs = solve(rhs)
+
+
+  # Solve the real coefficient
+  for i in range(Ores.nrows):      
+    for j in range(Ores.ncols):
+
+      arrso_set_item_ij_r( rhs[i,j], i, j, &Ores.arr, dhl)
+
+    # end for
+  # end for
+  
+  Oord = max( K_in.order, b_in.order)
+  tmp  = zeros( Ores.shape )
+  tmp2 = zeros( Ores.shape )
+
+  for ordi in range( 1, Oord + 1 ):
+    
+    get_order_im( ordi, b_in, out=tmp )
+    
+    for ord_rhs in range( ordi ):
+
+      ord_lhs = ordi - ord_rhs
+
+      trunc_dot( ord_lhs, K_in, ord_rhs, Ores, out=tmp2 )
+      trunc_sub(ordi,tmp,tmp2,out=tmp)
+
+    # end for 
+    
+    # Convert tmp to array (for specific order)
+    rhs = get_order_im_array( ordi, tmp )
+    
+    rhs = solve( rhs )
+    
+    set_order_im_from_array( ordi, rhs, Ores)
+    
+  # end for 
+
+  if res_flag == 0:
+
+    return Ores
+
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
+#*****************************************************************************************************
+cdef solve_sparse_old(csr_matrix K_in, matso b_in, matso out = None, solver = 'SuperLU', solver_args = {}):
+  """
+  PURPOSE:   Solve an OTI sparse linear system of equations.
+
+  INPUTS: 
+
+        - K_in:    csr_matrix of OTI numbers.
+  
+        - b_in:    Right hand side of the equation 
+  
+        - out:     Result holder. Default None (returns newly allocated array)
+  
+        - solver:  Default 'SuperLU'
+  
+        - **kwargs Specific factorized solver.
+
+  """
+  #***************************************************************************************************
+  global dhl
+
   cdef matso      O, Ores, Otmp
   cdef uint64_t i,j,k,l
   cdef ord_t ordi, ord_lhs, ord_rhs, Oord
@@ -862,11 +1056,13 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
     
     from scipy.sparse.linalg import splu
     factorizer = splu
+    solver_id = 1
 
   elif solver == 'ILU' or solver == 'ilu' or solver == 'spilu':
     
     from scipy.sparse.linalg import spilu
     factorizer = spilu
+    solver_id = 1
 
   elif solver == 'cholesky' or solver == 'ch' or solver == 'CH':
     
@@ -876,10 +1072,11 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
 
   elif solver == 'UMFPACK' or solver == 'umfpack' or solver == 'luumf':
     
-    from scikits.umfpack import splu
+    from scikits.umfpack import splu 
     factorizer = splu
     Kr_csc.indices = Kr_csc.indices.astype(np.int64)
     Kr_csc.indptr  = Kr_csc.indptr.astype(np.int64)
+    solver_id = 1
 
   else:
 

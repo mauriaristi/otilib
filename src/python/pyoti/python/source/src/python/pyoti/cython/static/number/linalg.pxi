@@ -1259,7 +1259,7 @@ cpdef get_order_im_array_2(ord_t ordi, matso tmp):
   #***************************************************************************************************
   global dhl
 
-  cdef np.ndarray res
+  cdef np.ndarray[coeff_t, ndim=2] res
   cdef sotinum_t otmp
   cdef coeff_t* coeff_list
   cdef ord_t order

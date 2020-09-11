@@ -92,6 +92,22 @@ void oarrm8n2_sum_rO_to(coeff_t num, oarrm8n2_t* arr1, oarrm8n2_t* res){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void oarrm8n2_trunc_sum_OO_to(ord_t order, oarrm8n2_t* arr1, oarrm8n2_t* arr2, oarrm8n2_t* res){
+    // Perform O + O.
+    uint64_t i;
+
+    // Check inputs:
+    oarrm8n2_dimCheck_OO_elementwise(arr1,arr2,res);
+
+    // Loop for every element and add real to the oti number.
+    for ( i = 0; i < arr1->size; i++){
+        onumm8n2_trunc_sum_oo_to(order, &arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 // 1.3. Subtraction.
 // ****************************************************************************************************
 void oarrm8n2_sub_OO_to( oarrm8n2_t* arr1, oarrm8n2_t* arr2, oarrm8n2_t* res){
@@ -195,6 +211,22 @@ void oarrm8n2_sub_rO_to( coeff_t num, oarrm8n2_t* arr1, oarrm8n2_t* res){
     for ( i = 0; i < arr1->size; i++){
         onumm8n2_sub_ro_to( num, &arr1->p_data[i], &res->p_data[i]);
     }
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void oarrm8n2_trunc_sub_OO_to(ord_t order, oarrm8n2_t* arr1, oarrm8n2_t* arr2, oarrm8n2_t* res){
+    // Perform O + O.
+    uint64_t i;
+
+    // Check inputs:
+    oarrm8n2_dimCheck_OO_elementwise(arr1,arr2,res);
+
+    // Loop for every element and add real to the oti number.
+    for ( i = 0; i < arr1->size; i++){
+        onumm8n2_trunc_sub_oo_to(order, &arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
+    }
+
 }
 // ----------------------------------------------------------------------------------------------------
 

@@ -222,7 +222,20 @@ void arrso_sub_rO_to( coeff_t num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void arrso_trunc_sub_OO_to( ord_t ord, arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
+    // Perform O - O
+    uint64_t i;
 
+    // Check inputs:
+    arrso_dimCheck_OO_elementwise(arr1,arr2, res);
+
+    // Loop for every element and add real to the oti number.
+    for ( i = 0; i < arr1->size; i++){
+        soti_trunc_sub_oo_to( ord, &arr1->p_data[i], &arr2->p_data[i], &res->p_data[i], dhl);
+    }
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

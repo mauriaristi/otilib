@@ -43,6 +43,7 @@ void oarrm1n10_sum_OO_to(oarrm1n10_t*   lhs, oarrm1n10_t* rhs, oarrm1n10_t* res)
 void oarrm1n10_sum_RO_to(darr_t*    lhs, oarrm1n10_t* rhs, oarrm1n10_t* res);
 void oarrm1n10_sum_oO_to(onumm1n10_t* lhs, oarrm1n10_t* rhs, oarrm1n10_t* res);
 void oarrm1n10_sum_rO_to(coeff_t    lhs, oarrm1n10_t* rhs, oarrm1n10_t* res);
+void oarrm1n10_trunc_sum_OO_to(ord_t order, oarrm1n10_t* arr1, oarrm1n10_t* arr2, oarrm1n10_t* res);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -79,6 +80,7 @@ void oarrm1n10_sub_oO_to( onumm1n10_t* lhs, oarrm1n10_t*   rhs, oarrm1n10_t* res
 void oarrm1n10_sub_Oo_to( oarrm1n10_t*   lhs, onumm1n10_t* rhs, oarrm1n10_t* res);
 void oarrm1n10_sub_rO_to( coeff_t    lhs, oarrm1n10_t*   rhs, oarrm1n10_t* res);
 void oarrm1n10_sub_Or_to( oarrm1n10_t*   lhs, coeff_t    rhs, oarrm1n10_t* res);
+void oarrm1n10_trunc_sub_OO_to(ord_t order, oarrm1n10_t* arr1, oarrm1n10_t* arr2, oarrm1n10_t* res);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

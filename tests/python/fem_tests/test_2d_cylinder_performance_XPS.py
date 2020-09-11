@@ -2,6 +2,87 @@ import sys, getopt
 from elastic_cylinder import *
 from utils import *
 import gc
+
+import sys
+path2oti = '../../../build/'
+sys.path.append(path2oti) # Add path to OTI library.
+
+import pyoti.real   as r
+import pyoti.sparse as oti 
+import pyoti.core   as coti
+
+import pyoti.static.onumm1n1    as dual
+import pyoti.static.mdnum1      as md1
+import pyoti.static.mdnum2      as md2
+import pyoti.static.mdnum3      as md3
+import pyoti.static.mdnum4      as md4
+import pyoti.static.mdnum5      as md5
+
+import pyoti.static.onumm0n0    as om0n0
+
+import pyoti.static.onumm1n1    as om1n1
+import pyoti.static.onumm1n2    as om1n2
+import pyoti.static.onumm1n3    as om1n3
+import pyoti.static.onumm1n4    as om1n4
+import pyoti.static.onumm1n5    as om1n5
+import pyoti.static.onumm1n6    as om1n6
+import pyoti.static.onumm1n7    as om1n7
+import pyoti.static.onumm1n8    as om1n8
+import pyoti.static.onumm1n9    as om1n9
+import pyoti.static.onumm1n10   as om1n10
+
+import pyoti.static.onumm2n1    as om2n1
+import pyoti.static.onumm2n2    as om2n2
+import pyoti.static.onumm2n3    as om2n3
+import pyoti.static.onumm2n4    as om2n4
+import pyoti.static.onumm2n5    as om2n5
+import pyoti.static.onumm2n6    as om2n6
+import pyoti.static.onumm2n7    as om2n7
+import pyoti.static.onumm2n8    as om2n8
+import pyoti.static.onumm2n9    as om2n9
+import pyoti.static.onumm2n10   as om2n10
+
+import pyoti.static.onumm3n1    as om3n1
+import pyoti.static.onumm3n2    as om3n2
+import pyoti.static.onumm3n3    as om3n3
+import pyoti.static.onumm3n4    as om3n4
+import pyoti.static.onumm3n5    as om3n5
+
+import pyoti.static.onumm4n1    as om4n1
+import pyoti.static.onumm4n2    as om4n2
+import pyoti.static.onumm4n3    as om4n3
+import pyoti.static.onumm4n4    as om4n4
+import pyoti.static.onumm4n5    as om4n5
+
+import pyoti.static.onumm5n1    as om5n1
+import pyoti.static.onumm5n2    as om5n2
+import pyoti.static.onumm5n3    as om5n3
+import pyoti.static.onumm5n4    as om5n4
+import pyoti.static.onumm5n5    as om5n5
+
+import pyoti.static.onumm6n1    as om6n1
+import pyoti.static.onumm6n2    as om6n2
+
+import pyoti.static.onumm7n1    as om7n1
+import pyoti.static.onumm7n2    as om7n2
+
+import pyoti.static.onumm8n1    as om8n1
+import pyoti.static.onumm8n2    as om8n2
+
+import pyoti.static.onumm9n1    as om9n1
+import pyoti.static.onumm9n2    as om9n2
+
+import pyoti.static.onumm10n1   as om10n1
+import pyoti.static.onumm10n2   as om10n2
+
+e  = oti.e
+np = oti.np
+
+
+
+
+
+
 #=====================================================================================================
 #============  SETUP  ================================================================================
 #=====================================================================================================
@@ -52,6 +133,7 @@ setup['ismdual']= False
 setup['isreal'] = False
 setup['export'] = 'results_real'
 setup['nevals'] = 3
+setup['elorder'] = 1
 setup['solver'] = 'umfpack'
 
 times_algebras = {}
@@ -75,8 +157,9 @@ def run_analysis():
     export = setup['export'] 
     nevals = setup['nevals'] 
     solver = setup['solver'] 
+    elorder = setup['elorder']
 
-    he = hes[hi]
+    he = hes[hi] * elorder
 
     times_algebras[he] = {}
     
@@ -136,7 +219,7 @@ def run_analysis():
         times['mem_bf_mesh'].append( psutil.virtual_memory().used )
 
         start_time = time()
-        Th = cylinder( 1, 2, he=he, quads=False, save=False, structured=True )
+        Th = cylinder( 1, 2, he=he, quads=False, element_order=elorder, save=False, structured=True )
         end_time = time()
 
         times['mem_aft_mesh'].append( psutil.virtual_memory().used )
@@ -186,7 +269,7 @@ def run_analysis():
 #*****************************************************************************************************
 def main(argv):
     
-    opts, args = getopt.getopt(argv,"m:n:rh:",["order=","nbases=","real","mdual","export=","solver=","nevals="])
+    opts, args = getopt.getopt(argv,"m:n:rh:",["order=","nbases=","real","mdual","export=","solver=","nevals=", "elorder="])
     
     for opt, arg in opts:
     
@@ -206,6 +289,8 @@ def main(argv):
             setup['solver'] = arg
         elif opt in ["--nevals",]:
             setup['nevals'] = arg
+        elif opt in ["--elorder",]:
+            setup['elorder'] = int(arg)
         # end if 
 
     # end for 

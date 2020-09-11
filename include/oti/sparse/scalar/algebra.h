@@ -1,6 +1,11 @@
 #ifndef OTI_SPARSE_SCALAR_ALGEBRA_H
 #define OTI_SPARSE_SCALAR_ALGEBRA_H
 
+
+
+
+
+
 /**************************************************************************************************//**
 @brief Divide two sparse oti numbers.
 
@@ -33,6 +38,7 @@ sotinum_t soti_mul_ro(      coeff_t num1, sotinum_t* num2,                 dhelp
 sotinum_t soti_mul_or(   sotinum_t* num1,    coeff_t num2,                 dhelpl_t dhl);
 
 sotinum_t soti_base_mul( sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
+sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, sotinum_t* num2, dhelpl_t dhl);
 
 void      soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_mul_ro_to(   coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
@@ -51,6 +57,8 @@ This function uses temporals 0, 1, 2, 3, 4, 5.
 void soti_gem_oo_to( sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
 void soti_gem_or_to( sotinum_t* a,    coeff_t b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
 void soti_gem_ro_to(    coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
+
+void soti_trunc_gem_oo_to(ord_t orda, sotinum_t* a, ord_t ordb, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -69,6 +77,9 @@ sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 void      soti_sub_oo_to( sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_sub_ro_to(    coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_sub_or_to( sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
+
+sotinum_t soti_base_trunc_sub(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_trunc_sub_oo_to(ord_t ord, sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -89,6 +100,9 @@ sotinum_t soti_base_sum(  sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 void      soti_sum_oo_to( sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_sum_ro_to(    coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_sum_or_to( sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
+
+sotinum_t soti_base_trunc_sum(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_trunc_sum_oo_to(ord_t ord, sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

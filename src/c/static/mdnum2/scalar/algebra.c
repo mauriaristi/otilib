@@ -397,6 +397,40 @@ void mdnum2_trunc_gem_oo_to( ord_t ord_lhs,  mdnum2_t* a,  ord_t ord_rhs,  mdnum
 
 }
 
+void mdnum2_trunc_sum_oo_to(ord_t order, mdnum2_t* lhs,mdnum2_t* rhs, mdnum2_t* res){
+  // Addition like function 'lhs + rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r + rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 + rhs->e1;
+      res->e2 = lhs->e2 + rhs->e2;
+      break;
+    case(2):    // Order 2
+      res->e12 = lhs->e12 + rhs->e12;
+      break;
+  }
+}
+
+void mdnum2_trunc_sub_oo_to(ord_t order, mdnum2_t* lhs,mdnum2_t* rhs, mdnum2_t* res){
+  // Addition like function 'lhs - rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r - rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 - rhs->e1;
+      res->e2 = lhs->e2 - rhs->e2;
+      break;
+    case(2):    // Order 2
+      res->e12 = lhs->e12 - rhs->e12;
+      break;
+  }
+}
+
 mdnum2_t mdnum2_feval(coeff_t* feval_re, mdnum2_t* x){
 
   mdnum2_t res;

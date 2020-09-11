@@ -168,23 +168,12 @@ cpdef truncate(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_truncate_im_to( indx, order, &o.num, &ores.num, dhl)
-      # end for 
+      arrso_truncate_im_to( indx, order, &S.arr, &Sres.arr, dhl)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_truncate_im_to( indx, order, &o.num, &ores.num, dhl)
-      # end for
-
+      arrso_truncate_im_to( indx, order, &S.arr, &Sres.arr, dhl)
       res = Sres 
 
     # end if 
@@ -297,23 +286,12 @@ cpdef extract_im(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_extract_im_to( indx, order, &o.num, &ores.num, dhl)
-      # end for 
+      arrso_extract_im_to( indx, order, &S.arr, &Sres.arr, dhl)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_extract_im_to( indx, order, &o.num, &ores.num, dhl)
-      # end for
-
+      arrso_extract_im_to( indx, order, &S.arr, &Sres.arr, dhl)
       res = Sres 
 
     # end if 
@@ -425,23 +403,12 @@ cpdef extract_deriv(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_extract_deriv_to( indx, order, &o.num, &ores.num, dhl)
-      # end for 
+      arrso_extract_deriv_to( indx, order, &S.arr, &Sres.arr, dhl)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_extract_deriv_to( indx, order, &o.num, &ores.num, dhl)
-      # end for
-
+      arrso_extract_deriv_to( indx, order, &S.arr, &Sres.arr, dhl)
       res = Sres 
 
     # end if 
@@ -554,23 +521,12 @@ cpdef get_im(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_get_im_to_o( indx, order, &o.num, &ores.num, dhl)
-      # end for 
+      arrso_get_im_to( indx, order, &S.arr, &Sres.arr, dhl)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_get_im_to_o( indx, order, &o.num, &ores.num, dhl)
-      # end for
-
+      arrso_get_im_to( indx, order, &S.arr, &Sres.arr, dhl)
       res = Sres 
 
     # end if 
@@ -684,23 +640,12 @@ cpdef get_deriv(object humdir, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_get_deriv_to( indx, order, &o.num, &ores.num, dhl)
-      # end for 
+      arrso_get_deriv_to( indx, order, &S.arr, &Sres.arr, dhl)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_get_deriv_to( indx, order, &o.num, &ores.num, dhl)
-      # end for
-
+      arrso_get_deriv_to( indx, order, &S.arr, &Sres.arr, dhl)
       res = Sres 
 
     # end if 
@@ -808,23 +753,12 @@ cpdef get_order_im(ord_t order, object val, object out = None):
     if res_flag:
       
       Sres = out
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_get_order_im_to( order, &o.num, &ores.num, dhl)
-      # end for 
+      arrso_get_order_im_to( order, &S.arr, &Sres.arr, dhl)
 
     else:
 
       Sres = S.zeros_like()
-
-      for i in range(S.data.size):          
-        ores = Sres.data[i]
-        o    = S.data[i]
-        soti_get_order_im_to( order, &o.num, &ores.num, dhl)
-      # end for
-
+      arrso_get_order_im_to( order, &S.arr, &Sres.arr, dhl)
       res = Sres 
 
     # end if 

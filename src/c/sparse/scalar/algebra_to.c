@@ -56,7 +56,6 @@ void soti_sum_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t d
 }
 // ----------------------------------------------------------------------------------------------------
 
-
 // ****************************************************************************************************
 void soti_sum_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl){
     
@@ -75,10 +74,17 @@ void soti_sum_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void soti_trunc_sum_oo_to(ord_t ord, sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl){
 
+    sotinum_t tmp;
 
+    tmp = soti_base_trunc_sum( ord, num1, num2, dhl);
 
+    soti_copy_to(&tmp, res, dhl);
 
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -106,7 +112,6 @@ void soti_sub_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t d
 }
 // ----------------------------------------------------------------------------------------------------
 
-
 // ****************************************************************************************************
 void soti_sub_ro_to( coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 
@@ -122,6 +127,19 @@ void soti_sub_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl){
     soti_sum_ro_to(-val,num,res,dhl);
 }
 // ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_trunc_sub_oo_to(ord_t ord, sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl){
+
+    sotinum_t tmp;
+
+    tmp = soti_base_trunc_sub( ord, num1, num2, dhl);
+
+    soti_copy_to(&tmp, res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 
 
@@ -179,6 +197,12 @@ void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+
+
 // ****************************************************************************************************
 void soti_gem_oo_to(sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl){
     // This function does GEM (GEneral Multiplication): res = a*b + c
@@ -222,6 +246,21 @@ void soti_gem_ro_to(coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelp
 
 
 
+
+// ****************************************************************************************************
+void soti_trunc_gem_oo_to(ord_t orda, sotinum_t* a, ord_t ordb, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl){
+    // This function does GEM (GEneral Multiplication): res = a*b + c
+
+    sotinum_t  tmp1, tmp2;
+    ord_t ord_res = orda + ordb;
+
+    tmp1 = soti_base_trunc_mul(    orda, a, ordb, b, dhl);  // This is temporal 3, 4 or 5
+    tmp2 = soti_base_trunc_sum( ord_res, &tmp1, c,   dhl); // this is temporal 7.
+
+    soti_copy_to(&tmp2, res, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

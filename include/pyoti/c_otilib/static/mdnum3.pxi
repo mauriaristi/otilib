@@ -162,6 +162,8 @@ cdef extern from "oti/oti.h" nogil:
   mdnum3_t mdnum3_gem_ro(  coeff_t a,  mdnum3_t* b,  mdnum3_t* c);
   void mdnum3_gem_ro_to(  coeff_t a,  mdnum3_t* b,  mdnum3_t* c, mdnum3_t* res);
   void mdnum3_trunc_gem_oo_to( ord_t ord_lhs,  mdnum3_t* a,  ord_t ord_rhs,  mdnum3_t* b,  mdnum3_t* c, mdnum3_t* res);
+  void mdnum3_trunc_sum_oo_to(ord_t order, mdnum3_t* lhs,mdnum3_t* rhs, mdnum3_t* res);
+  void mdnum3_trunc_sub_oo_to(ord_t order, mdnum3_t* lhs,mdnum3_t* rhs, mdnum3_t* res);
   mdnum3_t mdnum3_feval(coeff_t* feval_re, mdnum3_t* x);
   void mdnum3_feval_to(coeff_t* feval_re, mdnum3_t* x, mdnum3_t* res);
   
@@ -355,6 +357,7 @@ cdef extern from "oti/oti.h" nogil:
   void mdarr3_sum_RO_to(darr_t*    lhs, mdarr3_t* rhs, mdarr3_t* res);
   void mdarr3_sum_oO_to(mdnum3_t* lhs, mdarr3_t* rhs, mdarr3_t* res);
   void mdarr3_sum_rO_to(coeff_t    lhs, mdarr3_t* rhs, mdarr3_t* res);
+  void mdarr3_trunc_sum_OO_to(ord_t order, mdarr3_t* arr1, mdarr3_t* arr2, mdarr3_t* res);
   mdarr3_t mdarr3_sub_OO(mdarr3_t*   lhs, mdarr3_t*   rhs);
   mdarr3_t mdarr3_sub_RO(darr_t*    lhs, mdarr3_t*   rhs);
   mdarr3_t mdarr3_sub_OR(mdarr3_t*   lhs, darr_t*    rhs);
@@ -369,6 +372,7 @@ cdef extern from "oti/oti.h" nogil:
   void mdarr3_sub_Oo_to( mdarr3_t*   lhs, mdnum3_t* rhs, mdarr3_t* res);
   void mdarr3_sub_rO_to( coeff_t    lhs, mdarr3_t*   rhs, mdarr3_t* res);
   void mdarr3_sub_Or_to( mdarr3_t*   lhs, coeff_t    rhs, mdarr3_t* res);
+  void mdarr3_trunc_sub_OO_to(ord_t order, mdarr3_t* arr1, mdarr3_t* arr2, mdarr3_t* res);
   mdarr3_t mdarr3_mul_OO(mdarr3_t*   lhs, mdarr3_t* rhs);
   mdarr3_t mdarr3_mul_RO(darr_t*    lhs, mdarr3_t* rhs);
   mdarr3_t mdarr3_mul_oO(mdnum3_t* lhs, mdarr3_t* rhs);

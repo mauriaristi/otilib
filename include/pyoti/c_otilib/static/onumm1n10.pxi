@@ -165,6 +165,8 @@ cdef extern from "oti/oti.h" nogil:
   onumm1n10_t onumm1n10_gem_ro(  coeff_t a,  onumm1n10_t* b,  onumm1n10_t* c);
   void onumm1n10_gem_ro_to(  coeff_t a,  onumm1n10_t* b,  onumm1n10_t* c, onumm1n10_t* res);
   void onumm1n10_trunc_gem_oo_to( ord_t ord_lhs,  onumm1n10_t* a,  ord_t ord_rhs,  onumm1n10_t* b,  onumm1n10_t* c, onumm1n10_t* res);
+  void onumm1n10_trunc_sum_oo_to(ord_t order, onumm1n10_t* lhs,onumm1n10_t* rhs, onumm1n10_t* res);
+  void onumm1n10_trunc_sub_oo_to(ord_t order, onumm1n10_t* lhs,onumm1n10_t* rhs, onumm1n10_t* res);
   onumm1n10_t onumm1n10_feval(coeff_t* feval_re, onumm1n10_t* x);
   void onumm1n10_feval_to(coeff_t* feval_re, onumm1n10_t* x, onumm1n10_t* res);
   
@@ -358,6 +360,7 @@ cdef extern from "oti/oti.h" nogil:
   void oarrm1n10_sum_RO_to(darr_t*    lhs, oarrm1n10_t* rhs, oarrm1n10_t* res);
   void oarrm1n10_sum_oO_to(onumm1n10_t* lhs, oarrm1n10_t* rhs, oarrm1n10_t* res);
   void oarrm1n10_sum_rO_to(coeff_t    lhs, oarrm1n10_t* rhs, oarrm1n10_t* res);
+  void oarrm1n10_trunc_sum_OO_to(ord_t order, oarrm1n10_t* arr1, oarrm1n10_t* arr2, oarrm1n10_t* res);
   oarrm1n10_t oarrm1n10_sub_OO(oarrm1n10_t*   lhs, oarrm1n10_t*   rhs);
   oarrm1n10_t oarrm1n10_sub_RO(darr_t*    lhs, oarrm1n10_t*   rhs);
   oarrm1n10_t oarrm1n10_sub_OR(oarrm1n10_t*   lhs, darr_t*    rhs);
@@ -372,6 +375,7 @@ cdef extern from "oti/oti.h" nogil:
   void oarrm1n10_sub_Oo_to( oarrm1n10_t*   lhs, onumm1n10_t* rhs, oarrm1n10_t* res);
   void oarrm1n10_sub_rO_to( coeff_t    lhs, oarrm1n10_t*   rhs, oarrm1n10_t* res);
   void oarrm1n10_sub_Or_to( oarrm1n10_t*   lhs, coeff_t    rhs, oarrm1n10_t* res);
+  void oarrm1n10_trunc_sub_OO_to(ord_t order, oarrm1n10_t* arr1, oarrm1n10_t* arr2, oarrm1n10_t* res);
   oarrm1n10_t oarrm1n10_mul_OO(oarrm1n10_t*   lhs, oarrm1n10_t* rhs);
   oarrm1n10_t oarrm1n10_mul_RO(darr_t*    lhs, oarrm1n10_t* rhs);
   oarrm1n10_t oarrm1n10_mul_oO(onumm1n10_t* lhs, oarrm1n10_t* rhs);

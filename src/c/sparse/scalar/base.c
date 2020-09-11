@@ -66,6 +66,10 @@ void soti_get_order_im_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t
         soti_set_r(0.0,res,dhl);
         res->re = num->re;
     
+    } else if (num->order < order ){
+        
+        soti_set_r(0.0,res,dhl);
+
     } else {
 
         // Check if reallocation is necessary

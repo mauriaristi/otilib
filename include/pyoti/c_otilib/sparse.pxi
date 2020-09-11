@@ -120,6 +120,7 @@ cdef extern from "oti/oti.h" nogil:
   void arrso_sub_Oo_to( arrso_t*   lhs, sotinum_t* rhs, arrso_t* res, dhelpl_t dhl);
   void arrso_sub_rO_to( coeff_t    lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
   void arrso_sub_Or_to( arrso_t*   lhs, coeff_t    rhs, arrso_t* res, dhelpl_t dhl);
+  void arrso_trunc_sub_OO_to( ord_t ord, arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_mul_OO(arrso_t*   lhs, arrso_t* rhs, dhelpl_t dhl);
   arrso_t arrso_mul_RO(darr_t*    lhs, arrso_t* rhs, dhelpl_t dhl);
   arrso_t arrso_mul_oO(sotinum_t* lhs, arrso_t* rhs, dhelpl_t dhl);
@@ -570,6 +571,13 @@ cdef extern from "oti/oti.h" nogil:
 
   # From oti/sparse/scalar/algebra.h
 
+  sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, sotinum_t* num2, dhelpl_t dhl);
+  void soti_trunc_gem_oo_to(ord_t orda, sotinum_t* a, ord_t ordb, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t soti_base_trunc_sub(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  void soti_trunc_sub_oo_to(ord_t ord, sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t soti_base_trunc_sum(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+  void soti_trunc_sum_oo_to(ord_t ord, sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
+  
   sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den, dhelpl_t dhl);
   sotinum_t soti_div_ro(coeff_t num, sotinum_t* den, dhelpl_t dhl);
   sotinum_t soti_div_or(sotinum_t* num, coeff_t val, dhelpl_t dhl);

@@ -156,3 +156,47 @@ cpdef div(object lhs, object rhs, object out = None):
   # end if 
 #-----------------------------------------------------------------------------------------------------
 
+#*****************************************************************************************************
+cpdef trunc_sub(ord_t order, omatm1n3 Olhs, omatm1n3 Orhs, omatm1n3 out = None):
+  """
+  PURPOSE:  Subtraction between two objects.
+  """
+  #***************************************************************************************************
+  
+  
+  cdef uint8_t res_flag = 1
+  cdef object res = None
+  cdef oarrm1n3_t   cOres
+  # tlhs = type(lhs)
+
+  if out is None:
+    res_flag = 0
+  # end if 
+
+  if res_flag:    
+    oarrm1n3_trunc_sub_OO_to( order, &Olhs.arr, &Orhs.arr, &out.arr )
+  # else:
+  #   cOres = oarrm1n3_trunc_sub_OO( order, &Olhs.arr, &Orhs.arr )
+  #   res = omatm1n3.create( &cOres )
+  # end if
+
+  # if   tlhs is onumm1n3:
+  #   res = __sub__oX__(lhs, rhs, out = out)
+  # elif tlhs is feonumm1n3:
+  #   res = __sub__fX__(lhs, rhs, out = out)
+  # elif tlhs is omatm1n3:
+  #   res = __sub__OX__(lhs, rhs, out = out)
+  # elif tlhs is feomatm1n3:
+  #   res = __sub__FX__(lhs, rhs, out = out)
+  # elif tlhs is dmat:
+  #   res = __sub__RX__(lhs, rhs, out = out)
+  # elif tlhs in number_types:
+  #   res = __sub__rX__(lhs, rhs, out = out)
+  # else:
+  #   raise TypeError("Unsupported sub operation between {0} and {1}.".format(tlhs,type(rhs)))
+  # # end if 
+
+  if res_flag == 0:
+    return res
+  # end if 
+#-----------------------------------------------------------------------------------------------------

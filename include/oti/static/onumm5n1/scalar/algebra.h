@@ -33,6 +33,8 @@ void onumm5n1_gem_oo_to(  onumm5n1_t* a,  onumm5n1_t* b,  onumm5n1_t* c, onumm5n
 onumm5n1_t onumm5n1_gem_ro(  coeff_t a,  onumm5n1_t* b,  onumm5n1_t* c);
 void onumm5n1_gem_ro_to(  coeff_t a,  onumm5n1_t* b,  onumm5n1_t* c, onumm5n1_t* res);
 void onumm5n1_trunc_gem_oo_to( ord_t ord_lhs,  onumm5n1_t* a,  ord_t ord_rhs,  onumm5n1_t* b,  onumm5n1_t* c, onumm5n1_t* res);
+void onumm5n1_trunc_sum_oo_to(ord_t order, onumm5n1_t* lhs,onumm5n1_t* rhs, onumm5n1_t* res);
+void onumm5n1_trunc_sub_oo_to(ord_t order, onumm5n1_t* lhs,onumm5n1_t* rhs, onumm5n1_t* res);
 onumm5n1_t onumm5n1_feval(coeff_t* feval_re, onumm5n1_t* x);
 void onumm5n1_feval_to(coeff_t* feval_re, onumm5n1_t* x, onumm5n1_t* res);
 

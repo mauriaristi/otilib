@@ -2594,6 +2594,156 @@ void onumm3n5_trunc_gem_oo_to( ord_t ord_lhs,  onumm3n5_t* a,  ord_t ord_rhs,  o
 
 }
 
+void onumm3n5_trunc_sum_oo_to(ord_t order, onumm3n5_t* lhs,onumm3n5_t* rhs, onumm3n5_t* res){
+  // Addition like function 'lhs + rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r + rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 + rhs->e1;
+      res->e2 = lhs->e2 + rhs->e2;
+      res->e3 = lhs->e3 + rhs->e3;
+      break;
+    case(2):    // Order 2
+      res->e11 = lhs->e11 + rhs->e11;
+      res->e12 = lhs->e12 + rhs->e12;
+      res->e22 = lhs->e22 + rhs->e22;
+      res->e13 = lhs->e13 + rhs->e13;
+      res->e23 = lhs->e23 + rhs->e23;
+      res->e33 = lhs->e33 + rhs->e33;
+      break;
+    case(3):    // Order 3
+      res->e111 = lhs->e111 + rhs->e111;
+      res->e112 = lhs->e112 + rhs->e112;
+      res->e122 = lhs->e122 + rhs->e122;
+      res->e222 = lhs->e222 + rhs->e222;
+      res->e113 = lhs->e113 + rhs->e113;
+      res->e123 = lhs->e123 + rhs->e123;
+      res->e223 = lhs->e223 + rhs->e223;
+      res->e133 = lhs->e133 + rhs->e133;
+      res->e233 = lhs->e233 + rhs->e233;
+      res->e333 = lhs->e333 + rhs->e333;
+      break;
+    case(4):    // Order 4
+      res->e1111 = lhs->e1111 + rhs->e1111;
+      res->e1112 = lhs->e1112 + rhs->e1112;
+      res->e1122 = lhs->e1122 + rhs->e1122;
+      res->e1222 = lhs->e1222 + rhs->e1222;
+      res->e2222 = lhs->e2222 + rhs->e2222;
+      res->e1113 = lhs->e1113 + rhs->e1113;
+      res->e1123 = lhs->e1123 + rhs->e1123;
+      res->e1223 = lhs->e1223 + rhs->e1223;
+      res->e2223 = lhs->e2223 + rhs->e2223;
+      res->e1133 = lhs->e1133 + rhs->e1133;
+      res->e1233 = lhs->e1233 + rhs->e1233;
+      res->e2233 = lhs->e2233 + rhs->e2233;
+      res->e1333 = lhs->e1333 + rhs->e1333;
+      res->e2333 = lhs->e2333 + rhs->e2333;
+      res->e3333 = lhs->e3333 + rhs->e3333;
+      break;
+    case(5):    // Order 5
+      res->e11111 = lhs->e11111 + rhs->e11111;
+      res->e11112 = lhs->e11112 + rhs->e11112;
+      res->e11122 = lhs->e11122 + rhs->e11122;
+      res->e11222 = lhs->e11222 + rhs->e11222;
+      res->e12222 = lhs->e12222 + rhs->e12222;
+      res->e22222 = lhs->e22222 + rhs->e22222;
+      res->e11113 = lhs->e11113 + rhs->e11113;
+      res->e11123 = lhs->e11123 + rhs->e11123;
+      res->e11223 = lhs->e11223 + rhs->e11223;
+      res->e12223 = lhs->e12223 + rhs->e12223;
+      res->e22223 = lhs->e22223 + rhs->e22223;
+      res->e11133 = lhs->e11133 + rhs->e11133;
+      res->e11233 = lhs->e11233 + rhs->e11233;
+      res->e12233 = lhs->e12233 + rhs->e12233;
+      res->e22233 = lhs->e22233 + rhs->e22233;
+      res->e11333 = lhs->e11333 + rhs->e11333;
+      res->e12333 = lhs->e12333 + rhs->e12333;
+      res->e22333 = lhs->e22333 + rhs->e22333;
+      res->e13333 = lhs->e13333 + rhs->e13333;
+      res->e23333 = lhs->e23333 + rhs->e23333;
+      res->e33333 = lhs->e33333 + rhs->e33333;
+      break;
+  }
+}
+
+void onumm3n5_trunc_sub_oo_to(ord_t order, onumm3n5_t* lhs,onumm3n5_t* rhs, onumm3n5_t* res){
+  // Addition like function 'lhs - rhs'
+  switch(order){
+    case(0):
+      //  Real
+      res->r = lhs->r - rhs->r;
+      break;
+    case(1):    // Order 1
+      res->e1 = lhs->e1 - rhs->e1;
+      res->e2 = lhs->e2 - rhs->e2;
+      res->e3 = lhs->e3 - rhs->e3;
+      break;
+    case(2):    // Order 2
+      res->e11 = lhs->e11 - rhs->e11;
+      res->e12 = lhs->e12 - rhs->e12;
+      res->e22 = lhs->e22 - rhs->e22;
+      res->e13 = lhs->e13 - rhs->e13;
+      res->e23 = lhs->e23 - rhs->e23;
+      res->e33 = lhs->e33 - rhs->e33;
+      break;
+    case(3):    // Order 3
+      res->e111 = lhs->e111 - rhs->e111;
+      res->e112 = lhs->e112 - rhs->e112;
+      res->e122 = lhs->e122 - rhs->e122;
+      res->e222 = lhs->e222 - rhs->e222;
+      res->e113 = lhs->e113 - rhs->e113;
+      res->e123 = lhs->e123 - rhs->e123;
+      res->e223 = lhs->e223 - rhs->e223;
+      res->e133 = lhs->e133 - rhs->e133;
+      res->e233 = lhs->e233 - rhs->e233;
+      res->e333 = lhs->e333 - rhs->e333;
+      break;
+    case(4):    // Order 4
+      res->e1111 = lhs->e1111 - rhs->e1111;
+      res->e1112 = lhs->e1112 - rhs->e1112;
+      res->e1122 = lhs->e1122 - rhs->e1122;
+      res->e1222 = lhs->e1222 - rhs->e1222;
+      res->e2222 = lhs->e2222 - rhs->e2222;
+      res->e1113 = lhs->e1113 - rhs->e1113;
+      res->e1123 = lhs->e1123 - rhs->e1123;
+      res->e1223 = lhs->e1223 - rhs->e1223;
+      res->e2223 = lhs->e2223 - rhs->e2223;
+      res->e1133 = lhs->e1133 - rhs->e1133;
+      res->e1233 = lhs->e1233 - rhs->e1233;
+      res->e2233 = lhs->e2233 - rhs->e2233;
+      res->e1333 = lhs->e1333 - rhs->e1333;
+      res->e2333 = lhs->e2333 - rhs->e2333;
+      res->e3333 = lhs->e3333 - rhs->e3333;
+      break;
+    case(5):    // Order 5
+      res->e11111 = lhs->e11111 - rhs->e11111;
+      res->e11112 = lhs->e11112 - rhs->e11112;
+      res->e11122 = lhs->e11122 - rhs->e11122;
+      res->e11222 = lhs->e11222 - rhs->e11222;
+      res->e12222 = lhs->e12222 - rhs->e12222;
+      res->e22222 = lhs->e22222 - rhs->e22222;
+      res->e11113 = lhs->e11113 - rhs->e11113;
+      res->e11123 = lhs->e11123 - rhs->e11123;
+      res->e11223 = lhs->e11223 - rhs->e11223;
+      res->e12223 = lhs->e12223 - rhs->e12223;
+      res->e22223 = lhs->e22223 - rhs->e22223;
+      res->e11133 = lhs->e11133 - rhs->e11133;
+      res->e11233 = lhs->e11233 - rhs->e11233;
+      res->e12233 = lhs->e12233 - rhs->e12233;
+      res->e22233 = lhs->e22233 - rhs->e22233;
+      res->e11333 = lhs->e11333 - rhs->e11333;
+      res->e12333 = lhs->e12333 - rhs->e12333;
+      res->e22333 = lhs->e22333 - rhs->e22333;
+      res->e13333 = lhs->e13333 - rhs->e13333;
+      res->e23333 = lhs->e23333 - rhs->e23333;
+      res->e33333 = lhs->e33333 - rhs->e33333;
+      break;
+  }
+}
+
 onumm3n5_t onumm3n5_feval(coeff_t* feval_re, onumm3n5_t* x){
 
   onumm3n5_t res;

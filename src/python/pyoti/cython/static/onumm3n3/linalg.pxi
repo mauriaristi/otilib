@@ -993,7 +993,7 @@ cdef solve_sparse(csr_matrix K_in, omatm3n3 b_in, omatm3n3 out = None, solver = 
       ord_lhs = ordi - ord_rhs
 
       trunc_dot( ord_lhs, K_in, ord_rhs, Ores, out=tmp2 )
-      sub(tmp,tmp2,out=tmp)
+      trunc_sub(ordi,tmp,tmp2,out=tmp)
 
     # end for 
     
@@ -1190,7 +1190,7 @@ cpdef get_order_im_array_2(ord_t ordi, omatm3n3 tmp):
   #***************************************************************************************************
   
 
-  cdef np.ndarray res
+  cdef np.ndarray[coeff_t, ndim=2] res
   cdef onumm3n3_t otmp
   cdef coeff_t* coeff_list
   cdef ord_t order

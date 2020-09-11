@@ -10,99 +10,195 @@ SOLVER="cholesky"
 # for HIDX in 0 1 2 3 4 5 6 7 8 9 10
 for HIDX in 10
 do
+	for ORDER in 0
+	do
+
+		for NVAR in 1
+		do
+
+			JOBDIR=${THISDIR}
+			JOBOUT=result_xps_tri3_om${NVAR}n${ORDER}
+
+			echo -e "\nSetting up and run at $JOBDIR."
+
+			# Remove previous results with same name.
+			# rm $JOBNAME.*
+			# Run simulation.
+			python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER} --elorder 1
+
+			# cd $THISDIR
 
 
-	# for ORDER in 1 2 3 4 5 
-	# do
+		done
 
-	# 	for NVAR in 1 2 3 4
-	# 	do
+	done
 
-	# 		JOBDIR=${THISDIR}
-	# 		JOBOUT=result_xps_om${NVAR}n${ORDER}
+	for ORDER in 0 
+	do
 
-	# 		echo -e "\nSetting up and run at $JOBDIR."
+		for NVAR in 1
+		do
 
-	# 		# Remove previous results with same name.
-	# 		# rm $JOBNAME.*
-	# 		# Run simulation.
-	# 		python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER}
+			JOBDIR=${THISDIR}
+			JOBOUT=result_xps_tri6_om${NVAR}n${ORDER}
 
-	# 		# cd $THISDIR
+			echo -e "\nSetting up and run at $JOBDIR."
 
+			# Remove previous results with same name.
+			# rm $JOBNAME.*
+			# Run simulation.
+			python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER} --elorder 2
 
-	# 	done
-
-	# done
-
-	# for ORDER in 1 2 3 4  
-	# do
-
-	# 	for NVAR in 5
-	# 	do
-
-	# 		JOBDIR=${THISDIR}
-	# 		JOBOUT=result_xps_om${NVAR}n${ORDER}
-
-	# 		echo -e "\nSetting up and run at $JOBDIR."
-
-	# 		# Remove previous results with same name.
-	# 		# rm $JOBNAME.*
-	# 		# Run simulation.
-	# 		python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER}
-
-	# 		# cd $THISDIR
+			# cd $THISDIR
 
 
-	# 	done
+		done
 
-	# done
+	done
 
-	# for ORDER in 6 7 8 9 10
-	# do
+	
 
-	# 	for NVAR in 1 2
-	# 	do
+	for ORDER in 1 2 3 4 5 
+	do
 
-	# 		JOBDIR=${THISDIR}
-	# 		JOBOUT=result_xps_om${NVAR}n${ORDER}
+		for NVAR in 1 2 3 4
+		do
 
-	# 		echo -e "\nSetting up and run at $JOBDIR."
+			JOBDIR=${THISDIR}
+			JOBOUT=result_xps_tri3_om${NVAR}n${ORDER}
 
-	# 		# Remove previous results with same name.
-	# 		# rm $JOBNAME.*
-	# 		# Run simulation.
-	# 		python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER}
+			echo -e "\nSetting up and run at $JOBDIR."
 
-	# 		# cd $THISDIR
+			# Remove previous results with same name.
+			# rm $JOBNAME.*
+			# Run simulation.
+			python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER} --elorder 1
 
-
-	# 	done
-
-	# done
-
-	# for ORDER in 1 2
-	# do
-
-	# 	for NVAR in 6 7 8 9 10
-	# 	do
-
-	# 		JOBDIR=${THISDIR}
-	# 		JOBOUT=result_xps_om${NVAR}n${ORDER}
-
-	# 		echo -e "\nSetting up and run at $JOBDIR."
-
-	# 		# Remove previous results with same name.
-	# 		# rm $JOBNAME.*
-	# 		# Run simulation.
-	# 		python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER}
-
-	# 		# cd $THISDIR
+			# cd $THISDIR
 
 
-	# 	done
+		done
 
-	# done
+	done
+
+	for ORDER in 1 2 3 4  
+	do
+
+		for NVAR in 5
+		do
+
+			JOBDIR=${THISDIR}
+			JOBOUT=result_xps_tri3_om${NVAR}n${ORDER}
+
+			echo -e "\nSetting up and run at $JOBDIR."
+
+			# Remove previous results with same name.
+			# rm $JOBNAME.*
+			# Run simulation.
+			python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER} --elorder 1
+
+			# cd $THISDIR
+
+
+		done
+
+	done
+
+	for ORDER in 6 7 8 9 10
+	do
+
+		for NVAR in 1 2
+		do
+
+			JOBDIR=${THISDIR}
+			JOBOUT=result_xps_tri3_om${NVAR}n${ORDER}
+
+			echo -e "\nSetting up and run at $JOBDIR."
+
+			# Remove previous results with same name.
+			# rm $JOBNAME.*
+			# Run simulation.
+			python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER} --elorder 1
+
+			# cd $THISDIR
+
+
+		done
+
+	done
+
+	for ORDER in 1 2
+	do
+
+		for NVAR in 6 7 8 9 10
+		do
+
+			JOBDIR=${THISDIR}
+			JOBOUT=result_xps_tri3_om${NVAR}n${ORDER}
+
+			echo -e "\nSetting up and run at $JOBDIR."
+
+			# Remove previous results with same name.
+			# rm $JOBNAME.*
+			# Run simulation.
+			python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER} --elorder 1
+
+			# cd $THISDIR
+
+
+		done
+
+	done
+
+
+	
+
+	for ORDER in 1 2 
+	do
+
+		for NVAR in 3 4 5 6 7 8 9 10
+		do
+
+			JOBDIR=${THISDIR}
+			JOBOUT=result_xps_tri6_om${NVAR}n${ORDER}
+
+			echo -e "\nSetting up and run at $JOBDIR."
+
+			# Remove previous results with same name.
+			# rm $JOBNAME.*
+			# Run simulation.
+			python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER} --elorder 2
+
+			# cd $THISDIR
+
+
+		done
+
+	done
+
+	for ORDER in 1 2 3 4 5 6 7 8 9 10
+	do
+
+		for NVAR in 1 2
+		do
+
+			JOBDIR=${THISDIR}
+			JOBOUT=result_xps_tri6_om${NVAR}n${ORDER}
+
+			echo -e "\nSetting up and run at $JOBDIR."
+
+			# Remove previous results with same name.
+			# rm $JOBNAME.*
+			# Run simulation.
+			python3.7 test_2d_cylinder_performance_XPS.py -h ${HIDX} -n ${ORDER} -m ${NVAR} --export ${JOBOUT} --solver ${SOLVER} --elorder 2
+
+			# cd $THISDIR
+
+
+		done
+
+	done
+
 
 done
 # for ATYPE in bs2

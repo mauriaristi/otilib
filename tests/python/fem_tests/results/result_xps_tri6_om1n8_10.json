@@ -1,0 +1,70 @@
+{
+  "0.00354": {
+    "onumm1n8": {
+      "mesh": [
+        1.6698508500121534
+      ],
+      "assembly": [
+        41.65601004101336
+      ],
+      "boundary": [
+        0.02804529306013137
+      ],
+      "sol_cholesky": [
+        73.29358825401869
+      ],
+      "sol_superlu": [
+        324.53014094999526
+      ],
+      "sol_umfpack": [
+        78.72094144800212
+      ],
+      "mem_bf_mesh": [
+        1992613888
+      ],
+      "mem_aft_mesh": [
+        2308300800
+      ],
+      "mem_bf_creation": [
+        2308300800
+      ],
+      "mem_aft_creation": [
+        2543443968
+      ],
+      "mem_aft_assembly": [
+        6427738112
+      ],
+      "mem_aft_bc": [
+        6427738112
+      ],
+      "mem_bf_cholesky": [
+        4226613248
+      ],
+      "mem_aft_cholesky": [
+        4329095168
+      ],
+      "mem_bf_superlu": [
+        4257034240
+      ],
+      "mem_aft_superlu": [
+        4331474944
+      ],
+      "mem_bf_umfpack": [
+        4258816000
+      ],
+      "mem_aft_umfpack": [
+        4337586176
+      ],
+      "mem_aft_solve2d": [
+        4337586176
+      ],
+      "mem_aft_del_K": [
+        2240045056
+      ]
+    },
+    "mesh_DOFs": 501156,
+    "meshstats": "< mesh (pyoti.static.onumm1n8) object with 501156 nodes, 251307 elements of types ( point1 (5), line3 (1450), tri6 (249852) ) >",
+    "K_nnz": 23009590,
+    "K_shape": 1002312
+  }
+}

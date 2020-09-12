@@ -12,7 +12,6 @@ for HIDX in 10
 do
 	for ORDER in 0
 	do
-
 		for NVAR in 1
 		do
 
@@ -30,12 +29,10 @@ do
 
 
 		done
-
 	done
 
 	for ORDER in 0 
 	do
-
 		for NVAR in 1
 		do
 
@@ -53,14 +50,12 @@ do
 
 
 		done
-
 	done
 
-	
+
 
 	for ORDER in 1 2 3 4 5 
 	do
-
 		for NVAR in 1 2 3 4
 		do
 
@@ -78,12 +73,10 @@ do
 
 
 		done
-
 	done
 
 	for ORDER in 1 2 3 4  
 	do
-
 		for NVAR in 5
 		do
 
@@ -101,12 +94,10 @@ do
 
 
 		done
-
 	done
 
 	for ORDER in 6 7 8 9 10
 	do
-
 		for NVAR in 1 2
 		do
 
@@ -122,9 +113,7 @@ do
 
 			# cd $THISDIR
 
-
 		done
-
 	done
 
 	for ORDER in 1 2
@@ -147,7 +136,6 @@ do
 
 
 		done
-
 	done
 
 
@@ -155,7 +143,6 @@ do
 
 	for ORDER in 1 2 
 	do
-
 		for NVAR in 3 4 5 6 7 8 9 10
 		do
 
@@ -173,12 +160,10 @@ do
 
 
 		done
-
 	done
 
 	for ORDER in 1 2 3 4 5 6 7 8 9 10
 	do
-
 		for NVAR in 1 2
 		do
 
@@ -196,7 +181,6 @@ do
 
 
 		done
-
 	done
 
 

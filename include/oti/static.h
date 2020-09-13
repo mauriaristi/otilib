@@ -13,6 +13,10 @@
 
 #include "static/onumm1n6.h"
 
+#include "static/mdnum7.h"
+
+#include "static/mdnum6.h"
+
 #include "static/onumm4n4.h"
 
 #include "static/onumm1n10.h"
@@ -22,6 +26,8 @@
 #include "static/mdnum3.h"
 
 #include "static/onumm2n3.h"
+
+#include "static/mdnum10.h"
 
 #include "static/onumm6n2.h"
 
@@ -99,7 +105,11 @@
 
 #include "static/onumm6n1.h"
 
+#include "static/mdnum8.h"
+
 #include "static/onumm8n1.h"
+
+#include "static/mdnum9.h"
 
 #include "static/onumm2n1.h"
 

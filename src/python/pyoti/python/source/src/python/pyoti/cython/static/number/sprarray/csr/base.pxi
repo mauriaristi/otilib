@@ -36,8 +36,8 @@ cdef class csr_matrix:
 
           - copy:        Default True. No use currently.
 
-          - preserve_in: Default False. If True, the input matrix from arg1 is slowly freed in memory
-                         with memory preservation in mind.
+          - preserve_in: Default False. Flag to indicate that the input matrix from arg1 is slowly freed 
+                         in memory with memory preservation in mind.
 
                  
     """
@@ -52,10 +52,14 @@ cdef class csr_matrix:
 
     if targ1 == lil_matrix :
       # Create CSR matrix from lil matrix type
+      
       lil = arg1
+      
       self.nrows, self.ncols = lil.shape
       self.size = lil.size
+      
       nnz = lil.nnz
+
       # Generate arrays.
       self.arr       = arrso_zeros_bases( nnz, 1, dhl)
       self.p_indices = <uint64_t*>malloc(           nnz*sizeof( uint64_t ) )

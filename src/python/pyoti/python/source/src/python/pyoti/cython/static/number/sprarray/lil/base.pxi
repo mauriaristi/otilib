@@ -998,11 +998,11 @@ cdef class lil_matrix:
 
 
   #***************************************************************************************************
-  def tocsr(self):
+  def tocsr(self, preserve_in = False):
     """
     PORPUSE:  Convert the matrix to CSR format.
     """
-    return csr_matrix(self,shape=self.shape)
+    return csr_matrix(self,shape=self.shape, preserve_in = preserve_in)
 
   #---------------------------------------------------------------------------------------------------
 

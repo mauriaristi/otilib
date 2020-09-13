@@ -7,7 +7,7 @@ SOLVER="cholesky"
 
 for HIDX in 10
 do
-	for ORDER in 0 1 2 3 4 5 
+	for ORDER in 6 7 8
 	do
 
 		JOBDIR=${THISDIR}
@@ -28,7 +28,7 @@ done
 
 for HIDX in 10
 do
-	for ORDER in 0 1 2 3 4 5 
+	for ORDER in 6 
 	do
 
 		JOBDIR=${THISDIR}

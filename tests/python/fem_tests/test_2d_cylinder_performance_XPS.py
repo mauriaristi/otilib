@@ -17,6 +17,11 @@ import pyoti.static.mdnum2      as md2
 import pyoti.static.mdnum3      as md3
 import pyoti.static.mdnum4      as md4
 import pyoti.static.mdnum5      as md5
+import pyoti.static.mdnum6      as md6
+import pyoti.static.mdnum7      as md7
+import pyoti.static.mdnum8      as md8
+import pyoti.static.mdnum9      as md9
+import pyoti.static.mdnum10     as md10
 
 import pyoti.static.onumm0n0    as om0n0
 
@@ -96,7 +101,13 @@ algebras['mdual']=[
             [md2], 
             [md3], 
             [md4], 
-            [md5]]
+            [md5],
+            [md6],
+            [md7],
+            [md8],
+            [md9],
+            [md10],
+        ]
 
 algebras['oti']=[
     [om0n0,],

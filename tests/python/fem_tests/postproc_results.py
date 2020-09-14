@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 out_dir = "results/"
 
-results = {}
+results_full = {}
 
 
 
@@ -57,7 +57,8 @@ def main():
             sections = name.split('_')
             h      = int(sections[-1])
             alg    = sections[-2]
-            system = sections[-3]
+            eltype = sections[-3]
+            system = sections[-4]
             if system == 'yarumal' and alg == 'real' and h==10:
                 continue
             # end if 
@@ -85,7 +86,11 @@ def main():
                 dof_fem    = msh_nnodes*2
                 msh_stats  = val['meshstats']
                 
-
+                if eltype not in results_full.keys():
+                    results_full[eltype]={}
+                # end if 
+                
+                results = results_full[eltype]
 
                 if alg_key not in results.keys():
                     results[alg_key]={}
@@ -137,12 +142,14 @@ def main():
 #
 
 if __name__ == "__main__":
+
     main()
     
     h = 10
     orders = 10
     nvars = 10
 
+    results = results_full['tri6']
 
     mesh_time = results['real'][h]["mesh"]
     assm_time = results['real'][h]["assembly"]

@@ -1,1 +1,7 @@
-< mesh (pyoti.sparse) object with 63316 nodes, 31919 elements of types ( point1 (5), line3 (514), tri6 (31400) ) >
+Times:<class 'pyoti.sparse.matso'>
+- Avg Assembly time:  369.919442 s 
+- Avg Boundary time:  0.290458 s 
+- Avg Solution time:  665.536108 s 
+- Avg Total run time: 1035.746008 s 
+
+< mesh (pyoti.sparse) object with 40000 nodes, 20203 elements of types ( point1 (5), line3 (398), tri6 (19800) ) >

@@ -1,0 +1,9 @@
+Times:<class 'pyoti.sparse.matso'>
+- Avg Assembly time:  27.543281 s 
+- Avg Boundary time:  0.006789 s 
+- Avg Solution time:  596.066311 s 
+- Avg Total run time: 623.616382 s 
+
+# Perturbing only E in e(1,order=30)
+
+< mesh (pyoti.sparse) object with 40000 nodes, 20203 elements of types ( point1 (5), line3 (398), tri6 (19800) ) >

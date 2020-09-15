@@ -25,9 +25,9 @@ os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@"
 
 libraries          = ['oti']
 include_dirs       = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]
-extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3",'-fopenmp']
+extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"]#,'-fopenmp']
 # extra_link_args    = ['-fopenmp']
-extra_link_args    = ['-fopenmp']
+# extra_link_args    = ['-fopenmp']
 macros             = [("CYTHON_TRACE_NOGIL","1")]
 language           = "c"
 dependencies       = ["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
@@ -40,7 +40,7 @@ Extension("pyoti.core",
   libraries = libraries,
   # language = language,
   extra_compile_args = extra_compile_args,
-  extra_link_args = extra_link_args,
+  # extra_link_args = extra_link_args,
   depends=dependencies
   ),
 #
@@ -51,7 +51,7 @@ Extension("pyoti.real",
   libraries = libraries,
   # language = language,
   extra_compile_args = extra_compile_args,
-  extra_link_args = extra_link_args,
+  # extra_link_args = extra_link_args,
   depends=dependencies
   ),
 #
@@ -62,7 +62,7 @@ Extension("pyoti.dense",
   libraries = libraries,
   # language = language,
   extra_compile_args = extra_compile_args,
-  extra_link_args = extra_link_args,
+  # extra_link_args = extra_link_args,
   depends=dependencies
   ),
 #
@@ -73,7 +73,7 @@ Extension("pyoti.sparse",
   libraries = libraries,
   # language = language,
   extra_compile_args = extra_compile_args,
-  extra_link_args = extra_link_args,
+  # extra_link_args = extra_link_args,
   depends=dependencies
   ),
 #
@@ -84,7 +84,7 @@ Extension("pyoti.fem",
   libraries = libraries,
   # language = language,
   extra_compile_args = extra_compile_args,
-  extra_link_args = extra_link_args,
+  # extra_link_args = extra_link_args,
   depends=dependencies
   ),
 ]

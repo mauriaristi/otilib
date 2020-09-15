@@ -1,0 +1,1 @@
+< mesh (pyoti.sparse) object with 63316 nodes, 31919 elements of types ( point1 (5), line3 (514), tri6 (31400) ) >

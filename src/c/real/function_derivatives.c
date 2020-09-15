@@ -299,37 +299,7 @@ void der_r_tanh(coeff_t x0, ord_t order, coeff_t* derivs){
 // ****************************************************************************************************
 void der_r_sqrt(coeff_t x, ord_t order, coeff_t* derivs){
     
-    coeff_t sqx = sqrt(x);
-    uint8_t i;
-
-    for( i=0; i<(order+1); i++){
-    
-        switch(i){
-            case 0:
-                derivs[0]  =  sqx;
-            case 1:
-                derivs[1]  =  (0.5)/sqx;
-            case 2:
-                derivs[2]  =  -0.25/pow(sqx, 3.0);                
-            case 3:
-                derivs[3]  =  (0.375)/pow(sqx, 5.0);                
-            case 4:
-                derivs[4]  =  -0.9375/pow(sqx, 7.0);                
-            case 5:
-                derivs[5]  =  (3.28125)/pow(sqx, 9.0);                
-            case 6:
-                derivs[6]  =  -14.765625/pow(sqx, 11.0);                            
-            case 7:
-                derivs[7]  =  (81.2109375)/pow(sqx, 13.0);                
-            case 8:
-                derivs[8]  =  -527.87109375/pow(sqx, 15.0);                
-            case 9:
-                derivs[9]  =  (3959.033203125L)/pow(sqx, 17.0);                
-            case 10:
-                derivs[10] =  (-33651.7822265625L)/pow(sqx, 19.0);                
-        }
-     
-    }
+    der_r_pow( x, 0.5, order, derivs);
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -341,32 +311,12 @@ void der_r_cosh(coeff_t x0, ord_t order, coeff_t* derivs){
     coeff_t sh = sinh(x0);
     uint8_t i;
 
-    for( i=0; i<(order+1); i++){
-    
-        switch(i){
-            case 0:
-                derivs[0]  =  ch;
-            case 1:
-                derivs[1]  =  sh;
-            case 2:
-                derivs[2]  =  ch;                
-            case 3:
-                derivs[3]  =  sh;                
-            case 4:
-                derivs[4]  =  ch;                
-            case 5:
-                derivs[5]  =  sh;                
-            case 6:
-                derivs[6]  =  ch;                            
-            case 7:
-                derivs[7]  =  sh;                
-            case 8:
-                derivs[8]  =  ch;                
-            case 9:
-                derivs[9]  =  sh;                
-            case 10:
-                derivs[10] =  ch;                
-        }
+    for( i=0; i<(order+1); i+=2){
+        derivs[i] = ch;
+    }
+
+    for( i=1; i<(order+1); i+=2){
+        derivs[i] = sh;
     }
 
 }
@@ -379,31 +329,12 @@ void der_r_sinh(coeff_t x0, ord_t order, coeff_t* derivs){
     coeff_t sh = sinh(x0);
     uint8_t i;
 
-    for( i=0; i<(order+1); i++){
-        switch(i){
-            case 0:
-                derivs[0]  =  sh;
-            case 1:
-                derivs[1]  =  ch;
-            case 2:
-                derivs[2]  =  sh;                
-            case 3:
-                derivs[3]  =  ch;                
-            case 4:
-                derivs[4]  =  sh;                
-            case 5:
-                derivs[5]  =  ch;                
-            case 6:
-                derivs[6]  =  sh;                            
-            case 7:
-                derivs[7]  =  ch;                
-            case 8:
-                derivs[8]  =  sh;                
-            case 9:
-                derivs[9]  =  ch;                
-            case 10:
-                derivs[10] =  sh;                
-        }
+    for( i=0; i<(order+1); i+=2){
+        derivs[i] = sh;
+    }
+
+    for( i=1; i<(order+1); i+=2){
+        derivs[i] = ch;
     }
 
 }

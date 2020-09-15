@@ -432,7 +432,7 @@ if __name__ == "__main__":
     # for n in range(1,orders+1):
     
     plot_bars(md_names[1:], md_assm_times[1:], 
-        md_bc_times[1:], md_ch_times[1:], total_r, special = 'SuperLU', filepre = filename, save=True)
+        md_bc_times[1:], md_su_times[1:], total_r, special = 'SuperLU', filepre = filename, save=True)
 
 
 
@@ -466,6 +466,11 @@ if __name__ == "__main__":
 
 
 
+    
+    total_r = assm_time + bc_time 
+    filename = 'figs/figure_'+eltype+'_assm_real'
+    plot_bars(real_cmp_names, real_cmp_assm, 
+        real_cmp_bc, real_cmp_ch, total_r, assembly_only=True,figsize=(5,5), filepre = filename, save=True)
 
 
 
@@ -511,7 +516,14 @@ if __name__ == "__main__":
 
 
 
+    total_r = assm_time + bc_time + ch_time
+    filename = 'figs/figure_'+eltype+'_sol_real'
+    plot_bars(real_cmp_names, real_cmp_assm, 
+        real_cmp_bc, real_cmp_ch, total_r, solution_only=True,figsize=(5,5),special = 'Cholesky', filepre = filename, save=True)
 
+    total_r = assm_time + bc_time + su_time
+    plot_bars(real_cmp_names, real_cmp_assm, 
+        real_cmp_bc, real_cmp_su, total_r, solution_only=True,figsize=(5,5),special = 'SuperLU', filepre = filename, save=True)
 
 
     # Plot Order 1

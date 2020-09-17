@@ -8,7 +8,7 @@
 //               |                 |
 //               +-----------------+
 //
-load "iovtk" 
+// load "iovtk" 
 
 
 
@@ -17,10 +17,10 @@ real Q   = 5.0;
 real Bi1 = 0.1;
 real Bi2 = 1.0;
 
-mesh Th = square(20,10,[1.0+(rho-1.0)*x,y]);
+mesh Th = square(200,10,[1.0+(rho-1.0)*x,y]);
 
 
-fespace Vh(Th,P1);
+fespace Vh(Th,P2);
 
 Vh Theta,w,ThetaAnalytic,diff;
 
@@ -32,20 +32,31 @@ real K2 = (2.0*Q*rho^2-4.0*Bi2*rho+Bi2*Q*rho^3-2.0*Bi2*Q*rho*log(rho)+
 
 ThetaAnalytic = -0.25*Q*x^2 + 0.25*rho*log(x)*K1/KDiv + 0.25*K2/KDiv;
 
+// problem heat(Theta,w)=
+//    -int2d(Th)(    x * dx(Theta) * dx(w) )
+//    -int2d(Th)(    x * dy(Theta) * dy(w) )
+//    +int2d(Th)(    x * Q * w             )
+//    -int1d(Th,4)(  x * w * Bi1 * Theta   )
+//    -int1d(Th,2)(  x * w * Bi2 * Theta   )
+//    -int1d(Th,2)(  x * w * Bi2           );
+
 problem heat(Theta,w)=
-   -int2d(Th)(    x * dx(Theta) * dx(w) )
-   -int2d(Th)(    x * dy(Theta) * dy(w) )
-   +int2d(Th)(    x * Q * w             )
-   -int1d(Th,4)(  x * w * Bi1 * Theta   )
-   -int1d(Th,2)(  x * w * Bi2 * Theta   )
-   -int1d(Th,2)(  x * w * Bi2           );
+   -int2d(Th)(    x * dx(Theta) * dx(w) ) // -- Goes in K
+   -int2d(Th)(    x * dy(Theta) * dy(w) ) // -- Goes in K
+   +int2d(Th)(    x * Q * w             ) // -- RHS only
+   -int1d(Th,4)(  x * w * Bi1 * Theta   ) // -- Goes in K
+   -int1d(Th,2)(  x * w * Bi2 * Theta   ) // -- Goes in K
+   -int1d(Th,2)(  x * w * Bi2           );// -- RHS only
 
 
 heat;
 cout<<"Sol left: "<<Theta(1.0,0.0)<<endl;
 cout<<"Sol right: "<<Theta(1.5,0.0)<<endl;
 
-diff = ThetaAnalytic-Theta;
+cout<<"Analytic Sol left: "<<ThetaAnalytic(1.0,0.0)<<endl;
+cout<<"Analytic Sol right: "<<ThetaAnalytic(1.5,0.0)<<endl;
+
+diff = sqrt((ThetaAnalytic-Theta)^2);
 // savevtk("heat_freefem.vtk",Th,T,dataname="T");
 
 //{
@@ -102,6 +113,8 @@ diff = ThetaAnalytic-Theta;
 //
 //}
 
-plot(Th,diff);
-plot(Th,Theta,wait=1,cmm="Hello");
+plot(Theta,wait=1,cmm="Theta FEM");
+plot(ThetaAnalytic,wait=1,cmm="ThetaAnalytic");
+plot(diff,wait=1,cmm="Difference");
+
 

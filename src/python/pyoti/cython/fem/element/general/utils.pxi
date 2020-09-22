@@ -319,10 +319,30 @@ elements['serendipity'].append(quad8) # Order 2
 elements['tetra']=[]
 elements['tetra'].append(tet1 ) # Order 0
 elements['tetra'].append(tet4 ) # Order 1
-# elements['tetra'].append(tet10) # Order 2
+elements['tetra'].append(tet10) # Order 2
 
 elements['brick']=[]
 elements['brick'].append(hex1 ) # Order 0
 elements['brick'].append(hex8 ) # Order 1
 elements['brick'].append(hex20) # Order 2
 
+# Supported
+element_list = {}
+
+element_list[15] = elements['point']
+
+element_list[1 ] = elements['line']
+element_list[8 ] = elements['line']
+
+element_list[2 ] = elements['triangle']
+element_list[9 ] = elements['triangle']
+
+element_list[3 ] = elements['serendipity']
+element_list[16] = elements['serendipity']
+element_list[10] = elements['quad']
+
+element_list[4 ] = elements['tetra']
+element_list[11] = elements['tetra']
+
+element_list[5 ] = elements['brick']
+element_list[17] = elements['brick']

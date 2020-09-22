@@ -1,6 +1,6 @@
 
 
-int n=100;
+int n=30;
 
 mesh Th=square(n,n);
 //savemesh(Th, "squareFreeFem.mesh");
@@ -41,16 +41,16 @@ varf mat(p,q) = //int2d(Th)( dx(ux)*dx(vx) + dy(ux)*dy(vx)  ) ;//+
 //cout << "A = " << A << endl;
 
 
-solve stokes([ux,uy,p],[vx,vy,q]) = 
+solve stokes([ux,uy,p],[vx,vy,q],solver=UMFPACK) = 
     int2d(Th)( dx(ux)*dx(vx) + dy(ux)*dy(vx)  ) + 
     int2d(Th)( dx(uy)*dx(vy) + dy(uy)*dy(vy)  ) + 
     int2d(Th)( dx(p)*vx      + dy(p)*vy       ) + 
     int2d(Th)( q*dx(ux)      + q*dy(uy)       ) + 
     int2d(Th)( (-1e-10)*p*q                   ) + 
-    on(3,ux =  1) + on(3,uy = 0) +
     on(4,ux =  0) + on(4,uy = 0) +
     on(1,ux =  0) + on(1,uy = 0) +
-    on(2,ux =  0) + on(2,uy = 0) ;
+    on(2,ux =  0) + on(2,uy = 0) +
+    on(3,ux =  1) + on(3,uy = 0) ;
 
 
 //   int2d(Th)( dx(u)*dx(uu) + dy(u)*dy(uu) ) +
@@ -62,4 +62,5 @@ solve stokes([ux,uy,p],[vx,vy,q]) =
 
 //plot(Th,wait=1);
 
-plot([ux,uy],ux,wait=1);
+plot(p,wait=1);
+plot([ux,uy],p,wait=1);

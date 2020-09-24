@@ -2,7 +2,8 @@
 
 int n=100, i;
 
-mesh Th=square(n,n);
+mesh Th=square(n,n,[1*x,1.7*y]);
+
 //savemesh(Th, "squareFreeFem.mesh");
 
 fespace Uh(Th,P2); 

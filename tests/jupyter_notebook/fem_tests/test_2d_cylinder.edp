@@ -13,7 +13,7 @@ real perimi = 2*pi*ri/4.;
 real perimo = 2*pi*ro/4.;
 //
 // real h = 0.004;
-real h = 0.002;
+real h = 0.02;
 int nr = (ro-ri)/h+1;
 int nro= perimo/h+1;
 int nri= perimi/h+1;

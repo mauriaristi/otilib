@@ -39,15 +39,15 @@ mesh Th = buildmesh(C0(nr)+C1(nri)+C2(nr)+C3(nro));
 
 fespace Vh(Th,P2);
 
-Vh Theta,w,ThetaAnalytic,diff;
+Vh Theta,w,ThetaAnalytic,diff, r;
 
 real K1 = (2.0*Bi2*Q-Bi1*Bi2*Q+2.0*Bi1*Q*rho-4.0*Bi1*Bi2+Bi1*Bi2*Q*rho^2);
 real KDiv = (Bi1*Bi2*rho*log(rho)+Bi1+Bi2*rho);
 real K2 = (2.0*Q*rho^2-4.0*Bi2*rho+Bi2*Q*rho^3-2.0*Bi2*Q*rho*log(rho)+
 	       Bi1*Bi2*Q*rho*log(rho)-2.0*Q+Bi1*Q);
 
-
-ThetaAnalytic = -0.25*Q*x^2 + 0.25*rho*log(x)*K1/KDiv + 0.25*K2/KDiv;
+r = (x^2 + y^2)^0.5;
+ThetaAnalytic = -0.25*Q*r^2 + 0.25*rho*log(r)*K1/KDiv + 0.25*K2/KDiv;
 
 // problem heat(Theta,w)=
 //    -int2d(Th)(    x * dx(Theta) * dx(w) )

@@ -42,14 +42,23 @@ ThetaAnalytic = -0.25*Q*x^2 + 0.25*rho*log(x)*K1/KDiv + 0.25*K2/KDiv;
 //    -int1d(Th,2)(  x * w * Bi2 * Theta   )
 //    -int1d(Th,2)(  x * w * Bi2           );
 
+//problem heat(Theta,w)=
+//   -int2d(Th)( dx(Theta) * dx(w)    ) // -- Goes in K
+//   -int2d(Th)( dy(Theta) * dy(w)    ) // -- Goes in K
+//   +int2d(Th)( dx(Theta) * w / x    ) // -- Goes in K
+//   +int2d(Th)( Q * w                ) // -- RHS only
+//   -int1d(Th,4)(  w * Bi1 * Theta   ) // -- Goes in K
+//   -int1d(Th,2)(  w * Bi2 * Theta   ) // -- Goes in K
+//   -int1d(Th,2)(  w * Bi2           );// -- RHS only
+
 problem heat(Theta,w)=
-   -int2d(Th)( dx(Theta) * dx(w)    ) // -- Goes in K
-   -int2d(Th)( dy(Theta) * dy(w)    ) // -- Goes in K
-   +int2d(Th)( dx(Theta) * w / x    ) // -- Goes in K
-   +int2d(Th)( Q * w                ) // -- RHS only
-   -int1d(Th,4)(  w * Bi1 * Theta   ) // -- Goes in K
-   -int1d(Th,2)(  w * Bi2 * Theta   ) // -- Goes in K
-   -int1d(Th,2)(  w * Bi2           );// -- RHS only
+   -int2d(Th)( x * dx(Theta) * dx(w)    ) // -- Goes in K
+   -int2d(Th)( x * dy(Theta) * dy(w)    ) // -- Goes in K
+   //+int2d(Th)( dx(Theta) * w     ) // -- Goes in K
+   +int2d(Th)( x * Q * w                ) // -- RHS only
+   -int1d(Th,4)(  x * w * Bi1 * Theta   ) // -- Goes in K
+   -int1d(Th,2)(  x * w * Bi2 * Theta   ) // -- Goes in K
+   -int1d(Th,2)(  x * w * Bi2           );// -- RHS only
 
 
 heat;

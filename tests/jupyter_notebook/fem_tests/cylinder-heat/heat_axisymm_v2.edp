@@ -12,7 +12,7 @@
 
 
 
-real rho = 1.5;
+real rho = 30.0;
 real Q   = 5.0;
 real Bi1 = 0.1;
 real Bi2 = 1.0;

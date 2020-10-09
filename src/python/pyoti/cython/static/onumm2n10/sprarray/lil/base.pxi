@@ -13,7 +13,8 @@ cdef class lil_matrix:
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
-  def __init__(self, shape):  
+  
+  def __init__(self, shape): 
     """
     PURPOSE:      Python level constructor of the lil_matrix class.
 
@@ -46,26 +47,6 @@ cdef class lil_matrix:
       raise ValueError("Wrong shape format. Only 2x2 matrix are supported.")
 
     # end if 
-
-  #---------------------------------------------------------------------------------------------------
-
-  #***************************************************************************************************
-  def __dealloc__(self):  
-    """
-    PURPOSE:      Python level constructor of the lil_matrix class.
-
-    DESCRIPTION:  Creates a new empty lil_matrix matrix.
-                 
-    """
-    #*************************************************************************************************
-    
-    self.nrows = 0
-    self.ncols = 0
-
-    self.size  = 0
-    
-    self.rows = None
-    self.data = None
 
   #---------------------------------------------------------------------------------------------------
 

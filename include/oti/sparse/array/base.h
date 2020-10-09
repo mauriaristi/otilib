@@ -305,4 +305,8 @@ void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, ndir_t* 
     flag_t flag, arrso_t* res);
 // ----------------------------------------------------------------------------------------------------
 
+
+void arrso_save(char* filename, arrso_t* arr, dhelpl_t dhl);
+arrso_t arrso_read(char* filename, dhelpl_t dhl);
+
 #endif

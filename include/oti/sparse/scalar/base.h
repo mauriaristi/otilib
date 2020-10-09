@@ -65,6 +65,17 @@ sotinum_t soti_extract_im(   imdir_t idx, ord_t ord, sotinum_t* num,            
 void      soti_extract_im_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
+/**************************************************************************************************//**
+@brief Function utilities to read and save OTI numbers.
+
+******************************************************************************************************/
+void*     soti_read_from_mem_to( void* mem,       sotinum_t* dst, dhelpl_t dhl);
+void      soti_save_to_mem(      sotinum_t* num,  void* mem,      dhelpl_t dhl);
+uint64_t  soti_get_memsize_save( sotinum_t* num,                  dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+
 /**************************************************************************************************//**
 @brief Function that distribute memory along the different components of an OTI number.
 

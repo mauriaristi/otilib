@@ -92,8 +92,8 @@ cdef class csr_matrix:
           lil.data[i] = []
         # end if 
 
-        lilrowsi = None
-        lildatai = None
+        lilrowsi = []
+        lildatai = []
 
       # end for 
 

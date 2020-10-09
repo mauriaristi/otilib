@@ -966,6 +966,120 @@ void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* 
 // ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+void* soti_read_from_mem_to(void* mem, sotinum_t* dst, dhelpl_t dhl){
+
+    // Mem must come allocated.
+    ord_t i;
+    void* read_mem = mem;
+    coeff_t re = 0.;
+    ord_t trunc_order = 0;
+    ord_t narrays = 0;
+    sotinum_t res, tmp;
+
+
+    // read real coefficient:
+    memcpy( &re, read_mem, sizeof(coeff_t) );
+    read_mem += sizeof(coeff_t);
+
+    // read truncation order:
+    memcpy( &trunc_order, read_mem, sizeof(ord_t) );
+    read_mem += sizeof(ord_t);
+
+    // read number of arrays order:
+    memcpy( &narrays, read_mem, sizeof(ord_t) );
+    read_mem += sizeof(ord_t);
+
+
+    tmp = soti_get_tmp( 0, trunc_order, dhl);
+    soti_set_r( 0.0, &tmp, dhl);
+    tmp.re = re;
+
+    // Add the standard allocation sizes:
+    for ( i =0; i < tmp.order ; i++){
+
+        // read number of arrays order:
+        memcpy( &tmp.p_nnz[i], read_mem, sizeof(ndir_t) );
+        read_mem += sizeof(ndir_t);
+
+        // read array of coefficients:
+        memcpy( tmp.p_im[i], read_mem, tmp.p_nnz[i]*sizeof(coeff_t) );
+        read_mem += tmp.p_nnz[i]*sizeof(coeff_t);
+
+        // read array of im dirs:
+        memcpy( tmp.p_idx[i], read_mem, tmp.p_nnz[i]*sizeof(imdir_t) );
+        read_mem += tmp.p_nnz[i]*sizeof(imdir_t);
+
+    }
+
+    // Copy to result.
+    soti_copy_to( &tmp, dst, dhl);
+    return read_mem;
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+void soti_save_to_mem(sotinum_t* num, void* mem, dhelpl_t dhl){
+
+    // Mem must come allocated.
+    ord_t i;
+    void* write_mem = mem;
+
+    // Write real coefficient:
+    memcpy( write_mem, &num->re, sizeof(coeff_t) );
+    write_mem += sizeof(coeff_t);
+
+    // Write truncation order:
+    memcpy( write_mem, &num->order, sizeof(ord_t) );
+    write_mem += sizeof(ord_t);
+
+    // Write number of arrays order:
+    memcpy( write_mem, &num->order, sizeof(ord_t) );
+    write_mem += sizeof(ord_t);
+
+    // Add the standard allocation sizes:
+    for ( i =0; i < num->order ; i++){
+
+        // Write number of arrays order:
+        memcpy( write_mem, &num->p_nnz[i], sizeof(ndir_t) );
+        write_mem += sizeof(ndir_t);
+
+        // Write array of coefficients:
+        memcpy( write_mem, num->p_im[i], num->p_nnz[i]*sizeof(coeff_t) );
+        write_mem += num->p_nnz[i]*sizeof(coeff_t);
+
+        // Write array of im dirs:
+        memcpy( write_mem, num->p_idx[i], num->p_nnz[i]*sizeof(imdir_t) );
+        write_mem += num->p_nnz[i]*sizeof(imdir_t);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+uint64_t soti_get_memsize_save(sotinum_t* num, dhelpl_t dhl){
+
+    uint64_t mem_size = 0;
+    ord_t i;
+    
+    // Get the size of    re  coeff           trunc ord        n arrays              :
+    mem_size =         sizeof(coeff_t)  +  sizeof(ord_t)  +  sizeof(ord_t);
+
+    // Add the standard allocation sizes:
+    for ( i =0; i < num->order ; i++){
+        
+        mem_size += sizeof(ndir_t) + num->p_nnz[i]*(sizeof(coeff_t)+sizeof(imdir_t)) ;
+
+    }
+
+    return mem_size;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 // ****************************************************************************************************
 uint64_t soti_get_min_memsize(sotinum_t* num, dhelpl_t dhl){

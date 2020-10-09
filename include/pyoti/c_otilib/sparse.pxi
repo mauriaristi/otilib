@@ -283,6 +283,8 @@ cdef extern from "oti/oti.h" nogil:
   size_t arrso_memory_size( uint64_t size, ndir_t* p_nnz, ord_t order);
   void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order,
       flag_t flag, arrso_t* res);
+  void arrso_save(char* filename, arrso_t* arr, dhelpl_t dhl);
+  arrso_t arrso_read(char* filename, dhelpl_t dhl);
 
 
   # From oti/sparse/array/oti_of_array/base.h

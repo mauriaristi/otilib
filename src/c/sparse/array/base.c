@@ -952,10 +952,170 @@ arrso_t arrso_zeros(uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order, 
 // ----------------------------------------------------------------------------------------------------
 
 
+// ****************************************************************************************************
+void arrso_save(char* filename, arrso_t* arr, dhelpl_t dhl){
+    
+    uint64_t i;
+    uint64_t mem_size=0;
+    void *data = NULL;
+    void *data_write;
+    char *data_header;
+    char magic[4] = {'\x93','O','T','I'}; 
+    uint8_t major=1, minor = 0;
+    uint8_t format=21;
+
+    FILE* file_ptr = NULL;
+
+    // check the memory required to store the array:
+    for ( i=0; i < arr->size; i++ ){
+        mem_size += soti_get_memsize_save( &arr->p_data[i], dhl);
+    }
+
+    // Header specifics for array
+    // \x93OTI = 4 bytes
+    //  Major version = 1 byte = 1
+    //  Minor version = 1 byte = 0
+    // format  1 byte == SOTI_SCALAR (20), SOTI_ARRAY(21), etc.
+    // size of data (8 bytes) - uint64_t
+    // if array, then
+    // nrows = 8 bytes (uint64_t)
+    // ncols = 8 bytes (uint64_t)
+
+    
+
+    // Allocate memory to be exported
+    data = malloc(mem_size+64); // Add 64 byte header.
+    if (data == NULL){
+        printf("Memory error: Not enough memory to export array\n");
+        exit(OTI_OutOfMemory);
+    }
+
+    
+    data_header = (char*) data;
 
 
+    
+
+    // write header
+    memcpy(data_header, magic, 4);
+    data_header += 4;
+
+    data_header[0] = major;
+    data_header[1] = minor;
+    data_header[2] = format;
+    data_header[3] = 0;
+
+    data_header+=4;
+
+    // set memory size
+    memcpy(data_header, &mem_size, sizeof(uint64_t));
+    data_header += sizeof(uint64_t);
+    
+    // set array nrows
+    memcpy(data_header, &arr->nrows, sizeof(uint64_t));
+    data_header += sizeof(uint64_t);
+    
+    // set array ncols
+    memcpy(data_header, &arr->ncols, sizeof(uint64_t));
+    data_header += sizeof(uint64_t);
+
+    
+    data_write = data+64;
+    for ( i=0; i < arr->size; i++ ){
+        soti_save_to_mem( &arr->p_data[i],  data_write, dhl);
+        data_write += soti_get_memsize_save( &arr->p_data[i], dhl);
+    }
 
 
+    file_ptr = fopen(filename, "wb");
+
+    if (! file_ptr){
+        printf("ERROR CREATING FILE\n");
+        exit(OTI_undetErr);
+    }
+
+    fwrite(data,1,mem_size+64,file_ptr);
+
+    fclose(file_ptr);
+
+    free(data);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
+arrso_t arrso_read(char* filename, dhelpl_t dhl){
+    
+    uint64_t i;
+    uint64_t mem_size=0;
+    uint64_t nrows=0,ncols=0;
+    void *data = NULL;
+    void *data_read;
+    char data_header[64];
+    char magic[4] = {'\x93','O','T','I'}; 
+    uint8_t major=1, minor = 0;
+    uint8_t format=21;
+    // sotinum_t tmp2;
+    arrso_t arr;
+
+    FILE* file_ptr = NULL;
+
+    file_ptr = fopen(filename, "rb");
+    if (!file_ptr){
+        printf("ERROR: Not such file or directory\n");
+        exit(OTI_undetErr);
+    }
+
+    fread(data_header,1,64,file_ptr);
+
+    for( i=0; i<4; i++){
+        if (data_header[i]!=magic[i]){
+            printf("ERROR: unrecognized file format\n");
+            exit(OTI_undetErr);
+        }
+    }
+
+    if (data_header[6]!= format){
+        printf("ERROR: unrecognized data format\n");
+        exit(OTI_undetErr);
+    }
+
+    
+    memcpy(&mem_size, &data_header[8],sizeof(uint64_t));
+    memcpy( &nrows,   &data_header[8+8], sizeof(uint64_t));
+    memcpy( &ncols,   &data_header[8+16], sizeof(uint64_t));
+    
+    // printf("Read: mem_size %d, nrows = %d, ncols = %d\n",mem_size,nrows,ncols);
+    arr = arrso_zeros_bases(nrows,ncols,0,0,dhl);
+    
+    // Allocate memory to be exported
+    data = malloc(mem_size); 
+    if (data == NULL){
+        printf("Memory error: Not enough memory to read array\n");
+        exit(OTI_OutOfMemory);
+    }
+
+    fread(data,1,mem_size,file_ptr);
+    data_read = data;
+
+    for ( i=0; i < arr.size; i++ ){
+        // printf("iter %d\n",i);
+        // tmp2 = soti_init();
+        data_read = soti_read_from_mem_to( data_read, &arr.p_data[i], dhl);
+        // data_read = soti_read_from_mem_to( data_read, &tmp2, dhl);
+        // soti_print(&tmp2,dhl);
+        // soti_free(&tmp2);
+    }
+
+    fclose(file_ptr);
+
+    free(data);
+
+    return arr;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************

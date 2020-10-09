@@ -73,4 +73,57 @@ def get_active_bases(obj_in):
 
   return res
 
-  #---------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------
+
+
+
+#***************************************************************************************************
+def save( matso arr, filename ): 
+  """
+  PURPOSE: export array.
+  """
+  global dhl
+  
+  cdef char * filename_c 
+  cdef int64_t i, nchars
+
+  nchars = len(filename)+1
+
+  filename_c=<char *>malloc(nchars*sizeof(char))
+  
+  for i in range(len(filename)):
+    filename_c[i] = ord(filename[i])
+  # end for
+  
+  filename_c[i+1] = ord('\0')
+  
+  arrso_save( filename_c, &arr.arr, dhl )
+
+  free(filename_c)
+
+#---------------------------------------------------------------------------------------------------
+
+#***************************************************************************************************
+def read( filename ): 
+  """
+  PURPOSE: read array.
+  """
+  global dhl
+  
+  cdef char * filename_c 
+  cdef int64_t i
+  cdef arrso_t res
+
+  filename_c=<char *>malloc(len(filename)*sizeof(char))
+
+  for i in range(len(filename)):
+    filename_c[i] = ord(filename[i])
+  # end for
+
+  filename_c[i+1] = ord('\0')
+
+  res = arrso_read( filename_c, dhl)
+
+  return matso.create(&res)
+
+#---------------------------------------------------------------------------------------------------

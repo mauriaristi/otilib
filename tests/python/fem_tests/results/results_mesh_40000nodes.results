@@ -1,0 +1,154 @@
+Times:<class 'pyoti.real.dmat'>   # Real only
+- Avg Assembly time:  1.830869 s 
+- Avg Boundary time:  0.003889 s 
+- Avg Solution time:  0.409455 s 
+- Avg Total run time: 2.244212 s 
+    
+Times:<class 'pyoti.sparse.matso'> # OTI real
+- Avg Assembly time:  5.453789 s 
+- Avg Boundary time:  0.006502 s 
+- Avg Solution time:  0.425886 s 
+- Avg Total run time: 5.886176 s 
+    
+    
+Times:<class 'pyoti.sparse.matso'> # 200 im dirs (ro radialy)
+- Avg Assembly time:  7.434091 s 
+- Avg Boundary time:  0.008126 s 
+- Avg Solution time:  5.061139 s 
+- Avg Total run time: 12.503357 s 
+    
+Times:<class 'pyoti.sparse.matso'> # 399 (both ri and ro radialy)
+- Avg Assembly time:  7.464737 s 
+- Avg Boundary time:  0.008511 s 
+- Avg Solution time:  9.663398 s 
+- Avg Total run time: 17.136646 s 
+
+Times:<class 'pyoti.sparse.matso'> # 797 (both ri and ro edges perturbed in x and y)
+- Avg Assembly time:  7.555492 s 
+- Avg Boundary time:  0.008591 s 
+- Avg Solution time:  20.886164 s 
+- Avg Total run time: 28.450247 s 
+    
+Times:<class 'pyoti.sparse.matso'> # 1 im dir in the 
+- Avg Assembly time:  7.318751 s 
+- Avg Boundary time:  0.006577 s 
+- Avg Solution time:  1.145594 s 
+- Avg Total run time: 8.470922 s 
+    
+Times:<class 'pyoti.sparse.matso'> # 100 imdirs to all domain
+- Avg Assembly time:  20.487140 s 
+- Avg Boundary time:  0.011905 s 
+- Avg Solution time:  5.518313 s 
+- Avg Total run time: 26.017358 s 
+    
+Times:<class 'pyoti.sparse.matso'>  # 500 imdirs to all domain
+- Avg Assembly time:  102.023589 s 
+- Avg Boundary time:  0.031371 s 
+- Avg Solution time:  24.316130 s 
+- Avg Total run time: 126.371090 s 
+    
+# ====================== n = 30
+Times:<class 'pyoti.sparse.matso'> # Perturb E
+- Avg Assembly time:  27.478071 s 
+- Avg Boundary time:  0.006670 s 
+- Avg Solution time:  634.640363 s 
+- Avg Total run time: 662.125104 s 
+    
+    
+Times:<class 'pyoti.sparse.matso'> # Perturb all nodal coordinates, n=30
+- Avg Assembly time:  558.004728 s 
+- Avg Boundary time:  0.188810 s 
+- Avg Solution time:  691.286825 s 
+- Avg Total run time: 1249.480363 s 
+    
+Times:<class 'pyoti.sparse.matso'> # both
+- Avg Assembly time:  576.750808 s 
+- Avg Boundary time:  0.189949 s 
+- Avg Solution time:  801.753105 s 
+- Avg Total run time: 1378.693862 s 
+    
+    
+# ====================== n = 20
+Times:<class 'pyoti.sparse.matso'> # Perturb E
+- Avg Assembly time:  20.419495 s 
+- Avg Boundary time:  0.006663 s 
+- Avg Solution time:  231.090552 s 
+- Avg Total run time: 251.516710 s
+    
+Times:<class 'pyoti.sparse.matso'> # Perturb all nodal coordinates, n=30
+- Avg Assembly time:  175.446859 s 
+- Avg Boundary time:  0.077721 s 
+- Avg Solution time:  256.923188 s 
+- Avg Total run time: 432.447768 s 
+
+    
+Times:<class 'pyoti.sparse.matso'> # both
+- Avg Assembly time:  268.477870 s 
+- Avg Boundary time:  0.076880 s 
+- Avg Solution time:  295.240097 s 
+- Avg Total run time: 563.794847 s 
+    
+    
+    
+
+# ====================== n = 10
+Times:<class 'pyoti.sparse.matso'> # Perturb E
+- Avg Assembly time:  12.735094 s 
+- Avg Boundary time:  0.006555 s 
+- Avg Solution time:  49.582303 s 
+- Avg Total run time: 62.323953 s 
+
+Times:<class 'pyoti.sparse.matso'> # Perturb all nodal coordinates, n=30
+- Avg Assembly time:  60.119893 s 
+- Avg Boundary time:  0.024212 s 
+- Avg Solution time:  53.817413 s 
+- Avg Total run time: 113.961518 s 
+    
+Times:<class 'pyoti.sparse.matso'> # both
+- Avg Assembly time:  88.468906 s 
+- Avg Boundary time:  0.024742 s 
+- Avg Solution time:  61.034826 s 
+- Avg Total run time: 149.528474 s 
+    
+    
+# ====================== n = 5
+Times:<class 'pyoti.sparse.matso'> # Perturb E
+- Avg Assembly time:  9.498818 s 
+- Avg Boundary time:  0.006741 s 
+- Avg Solution time:  12.305837 s 
+- Avg Total run time: 21.811395 s 
+    
+Times:<class 'pyoti.sparse.matso'> # Perturb all nodal coordinates, n=30
+- Avg Assembly time:  25.235131 s 
+- Avg Boundary time:  0.012710 s 
+- Avg Solution time:  13.406114 s 
+- Avg Total run time: 38.653955 s 
+    
+Times:<class 'pyoti.sparse.matso'> # both
+- Avg Assembly time:  34.662999 s 
+- Avg Boundary time:  0.012597 s 
+- Avg Solution time:  14.826674 s 
+- Avg Total run time: 49.502270 s 
+    
+    
+    
+    
+# ====================== n = 1
+Times:<class 'pyoti.sparse.matso'> # Perturb E
+- Avg Assembly time:  6.799733 s 
+- Avg Boundary time:  0.006581 s 
+- Avg Solution time:  1.170038 s 
+- Avg Total run time: 7.976352 s 
+
+Times:<class 'pyoti.sparse.matso'> # Perturb all nodal coordinates, n=30
+- Avg Assembly time:  7.612629 s 
+- Avg Boundary time:  0.007827 s 
+- Avg Solution time:  1.134468 s 
+- Avg Total run time: 8.754923 s 
+    
+    
+Times:<class 'pyoti.sparse.matso'> # both
+- Avg Assembly time:  8.306492 s 
+- Avg Boundary time:  0.007659 s 
+- Avg Solution time:  1.224320 s 
+- Avg Total run time: 9.538471 s 

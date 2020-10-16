@@ -184,9 +184,10 @@ do
 	# 	done
 	# done
 
-	for ORDER in 9 10
+
+	for ORDER in 2
 	do
-		for NVAR in 1 
+		for NVAR in 10 
 		do
 
 			JOBDIR=${THISDIR}
@@ -205,9 +206,9 @@ do
 		done
 	done
 
-	for ORDER in 1  
+	for ORDER in 10 
 	do
-		for NVAR in 9 10
+		for NVAR in 2
 		do
 
 			JOBDIR=${THISDIR}
@@ -225,6 +226,8 @@ do
 
 		done
 	done
+
+	
 
 
 done

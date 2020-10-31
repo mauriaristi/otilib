@@ -3,9 +3,61 @@
 
 
 # #*****************************************************************************************************
-# cpdef intOmega(fefunction func1, region = -1):
+# cpdef int3d(fefunction func1, region = -1):
 #   """ 
-#   PURPOSE: Domain integral
+#   PURPOSE: Integral of 3D elements
+
+#   """
+
+#   cdef fefunction res 
+#   cdef fefunction func2 =  <fefunction> fefunction.__new__(fefunction)
+#   cdef int64_t regionIdNum
+
+#   res   = fefunction.newFromOperation(opInt3d,func1,func2)
+
+#   type1 = type(region)
+
+#   if type1 == str:
+#     regionIdNum = res.baseSpace.mesh.nameIds[region]
+#   else:
+#     regionIdNum = region
+#   # end if 
+
+#   res.data = region
+
+#   return res
+# #-----------------------------------------------------------------------------------------------------
+
+# #*****************************************************************************************************
+# cpdef int2d(fefunction func1, region = -1):
+#   """ 
+#   PURPOSE: Integral of 2D elements.
+
+#   """
+
+#   cdef fefunction res 
+#   cdef fefunction func2 =  <fefunction> fefunction.__new__(fefunction)
+#   cdef int64_t regionIdNum
+
+#   res   = fefunction.newFromOperation(opInt3d,func1,func2)
+
+#   type1 = type(region)
+
+#   if type1 == str:
+#     regionIdNum = res.baseSpace.mesh.nameIds[region]
+#   else:
+#     regionIdNum = region
+#   # end if 
+
+#   res.data = region
+
+#   return res
+# #-----------------------------------------------------------------------------------------------------
+
+# #*****************************************************************************************************
+# cpdef int1d(fefunction func1, region = -1):
+#   """ 
+#   PURPOSE: Integral of 1D elements.
 
 #   """
 

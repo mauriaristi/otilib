@@ -1,0 +1,17 @@
+{
+  "sparse":{
+    "nbases": 1,
+    "order":  30,
+    "variable": "E",
+    "nnodes_perturbed": 0,
+    "assembly": 27.478071,
+    "boundary": 0.006670,
+    "solution": 634.640363,
+    "total":    662.125104,
+    "mesh_DOFs": 40000,
+    "meshstats": "< mesh (pyoti.sparse) object with 40000 nodes, 20203 elements of types ( point1 (5), line3 (398), tri6 (19800) ) >",
+    "K_nnz": 1827974,
+    "K_shape": 80000,
+    "solver": "cholesky"
+  }
+}

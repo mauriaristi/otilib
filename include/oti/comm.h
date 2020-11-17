@@ -64,6 +64,8 @@ typedef uint8_t      ord_t; ///< Order type.
 typedef uint8_t      ndh_t; ///< Number of direction helpers type.
 typedef uint8_t     flag_t; ///< Flag type.
 
+// typedef double complex zcoeff_t; ///< Complex Coefficient type.
+
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------------     END TYPEDEFS       --------------------------------------
 // ----------------------------------------------------------------------------------------------------

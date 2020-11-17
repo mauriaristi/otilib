@@ -86,11 +86,27 @@ Use of multiduals alternate form to compute multiple high order derivatives
 \end_layout
 
 \begin_layout Standard
-Assume a three variable function 
+The goal of this document is to show an alternate manner to compute all
+ second order derivatives of a multivariable function.
+ The alternate solution requires less number of evaluations compared with
+ traditional multidual perturbation schemes.
+ In contrast to traditional multidual evaluations, a small step size 
+\begin_inset Formula $h$
+\end_inset
+
+ is required.
+\end_layout
+
+\begin_layout Section
+Case study: Three variable function.
+\end_layout
+
+\begin_layout Standard
+Consider the three variable function 
 \begin_inset Formula $f:\mathbb{R}^{3}\rightarrow\mathbb{R}$
 \end_inset
 
-, such as 
+:
 \end_layout
 
 \begin_layout Standard
@@ -101,25 +117,61 @@ f(x,y,z)=\sin(xyz)\label{eq:function}
 
 \end_inset
 
+the goal is to compute all second order derivatives of the function with
+ respect to 
+\begin_inset Formula $x$
+\end_inset
 
+, 
+\begin_inset Formula $y$
+\end_inset
+
+ and 
+\series bold
+
+\begin_inset Formula $z$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection
+Traditional multidual evaluation.
 \end_layout
 
 \begin_layout Standard
-To compute all second order derivatives we need to perform six multidual
- anlayses, namely
+To compute all second order derivatives, 6 bidual evaluations are required;
+ namely
 \end_layout
 
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray*}
-f(x+h\epsilon_{1}+h\epsilon_{2},y,z) & , & f(x+h\epsilon_{1},y,z+h\epsilon_{2})\\
-f(x+h\epsilon_{1},y+h\epsilon_{2},z) & , & f(x,y+h\epsilon_{1},z+h\epsilon_{2})\\
-f(x,y+h\epsilon_{1}+h\epsilon_{2},z) & , & f(x,y,z+h\epsilon_{1}+h\epsilon_{2})
+f(x+h\epsilon_{1}+h\epsilon_{2},y\phantom{+h\epsilon_{3}}\phantom{+h\epsilon_{3}},z) & , & f(x+h\epsilon_{1},y\phantom{+h\epsilon_{3}},z+h\epsilon_{2}\phantom{+h\epsilon_{3}})\\
+f(x+h\epsilon_{1}\phantom{+h\epsilon_{3}},y+h\epsilon_{2}\phantom{+h\epsilon_{3}},z) & , & f(x\phantom{+h\epsilon_{3}},y+h\epsilon_{1},z+h\epsilon_{2}\phantom{+h\epsilon_{3}})\\
+f(x\phantom{+h\epsilon_{3}}\phantom{+h\epsilon_{3}},y+h\epsilon_{1}+h\epsilon_{2},z) & , & f(x\phantom{+h\epsilon_{3}},y\phantom{+h\epsilon_{3}},z+h\epsilon_{1}+h\epsilon_{2})
+\end{eqnarray*}
+
+\end_inset
+
+alternatively, 3 tridual evaluations can be performed to obtain all second
+ order derivatives,
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\begin{eqnarray*}
+f(x+h\epsilon_{1}+h\epsilon_{2},y+h\epsilon_{3}\phantom{+h\epsilon_{3}},z\phantom{+h\epsilon_{1}}) & , & f(x+h\epsilon_{1},y,z+h\epsilon_{2}+h\epsilon_{3})\\
+f(x\phantom{+h\epsilon_{1}}\phantom{+h\epsilon_{3}},y+h\epsilon_{1}+h\epsilon_{2},z+h\epsilon_{3})
 \end{eqnarray*}
 
 \end_inset
 
 
+\end_layout
+
+\begin_layout Subsection
+Alternate multidual evaluation.
 \end_layout
 
 \begin_layout Standard
@@ -131,9 +183,9 @@ If we follow the following pertubration using triduals, we can obtain all
 \begin_layout Standard
 \begin_inset Formula 
 \begin{eqnarray}
- & f(x+\underline{h\epsilon_{1}+h\epsilon_{3}},y+h\epsilon_{2},z+\underline{h\epsilon_{12}})\label{eq:eval1}\\
- & f(x+h\epsilon_{1},y+\underline{h\epsilon_{2}+h\epsilon_{3}},z+\underline{h\epsilon_{12}})\label{eq:eval2}\\
- & f(x+h\epsilon_{1},y+h\epsilon_{2},z+\underline{h\epsilon_{12}+h\epsilon_{3}})\label{eq:eval3}
+ & f(x+\underline{h\epsilon_{1}+h\epsilon_{3}},y+h\epsilon_{2}\phantom{+h\epsilon_{3}},z+\underline{h\epsilon_{12}}\phantom{+h\epsilon_{3}})\label{eq:eval1}\\
+ & f(x+h\epsilon_{1}\phantom{+h\epsilon_{3}},y+\underline{h\epsilon_{2}+h\epsilon_{3}},z+\underline{h\epsilon_{12}}\phantom{+h\epsilon_{3}})\label{eq:eval2}\\
+ & f(x+h\epsilon_{1}\phantom{+h\epsilon_{3}},y+h\epsilon_{2}\phantom{+h\epsilon_{3}},z+\underline{h\epsilon_{12}+h\epsilon_{3}})\label{eq:eval3}
 \end{eqnarray}
 
 \end_inset

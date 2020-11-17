@@ -1442,7 +1442,7 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def taylor_integrate(self, object bases, object deltas):
+  def rom_eval(self, object bases, object deltas):
     """
     PURPOSE:     Perform a Taylor series integration.
     """

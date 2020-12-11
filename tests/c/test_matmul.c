@@ -3,6 +3,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<omp.h>
 
 const int size = 10000;
 

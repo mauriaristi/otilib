@@ -2,15 +2,15 @@
 
 **OTILIB** 
 
-This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages. OTI algebra is the extension of Dual numbers such that they can compute higher order derivatives of multiple variables. They provide a concise extension of the Dual numbers ( a + b eps, eps^2 = 0 ) and are applicable to computing high order derivatives computer programmed functions.
+This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages. OTI algebra is the extension of Dual numbers such that they can compute higher order derivatives of multiple variables. They provide a concise extension of the Dual numbers ( a + b eps, eps^2 = 0 ) and are applicable to computing high order derivatives of computer functions at execution time.
 
 ***
 
 ## Current Programming languages: 
-* **C** (C99)
-* **Python** (Version 3 or newer. We are currently using [Cython](http://cython.org)
+* **C** (C99) Core routines.
+* **Python** (Version 3 or newer. This library requires [Cython](http://cython.org)
 
-The following programming languages are to be implemented in a very near future:
+The following programming languages will be implemented in a very near future:
 
 * **Fortran** (F95 or newer, only dense implementation so far)
 * **C++** (C++11)
@@ -21,17 +21,18 @@ Far-future implementation we are looking forward are:
 * **Java** / **Javascript**
 * **Julia**
 
-## Quick set up.
+## Installation instructions:
 
-First you need [Anaconda 3](https://www.anaconda.com/distribution/). After installing, go to the Terminal and go to the directory where you donwloaded this repository.
+First you need [Anaconda 3](https://www.anaconda.com/distribution/) with Python 3. After installing and cloning OTILIB, go to the Terminal and go to the directory where you donwloaded this repository.
 ```
 cd /PATH/TO/OTILIB-MASTER/
 ```
 
-The recomended thing to do is to create an environment with the required dependencies. Then you will need to install the environment.yml file by runing:
+It is recomended to create an environment with the required dependencies. For this, it is easier to install the environment.yml file by runing:
 ```
 conda env create -f environment.yml
 ```
+NOTE: If you had a previous version of OTILIB, 
 
 After runing the previous command, you should have installed a conda environment that will allow you to use the python library. To activate this environment, run the following command:
 ```

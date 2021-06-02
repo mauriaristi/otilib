@@ -1,4 +1,10 @@
 
+// ====================================================================================================
+// ====================================================================================================
+// =============================        TAYLOR INTEGRATOR FUNCTIONS       =============================
+// ====================================================================================================
+// ====================================================================================================
+
 // ****************************************************************************************************
 sotinum_t soti_taylor_integrate(coeff_t* deltas, sotinum_t* num, dhelpl_t dhl){
     
@@ -39,6 +45,11 @@ void soti_taylor_integrate_to(coeff_t* deltas, sotinum_t* num, sotinum_t* res, d
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 
 
@@ -127,87 +138,6 @@ void soti_get_order_im_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t
 
 
 
-// Temporal number extractors.
-
-// ****************************************************************************************************
-sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
-    
-    sotinum_t res;
-    ord_t i=0;
-
-    if (order == 0){
-        // In case order==0, no allocated array exists.
-        res = soti_createEmpty(0,dhl);
-        return res;
-    }
-    if (order > dhl.ndh){
-        printf("ERROR: Maximum order not allowed in soti_get_rtmp.\n");
-        exit(OTI_undetErr);
-    }
-    if (ntmp >= dhl.p_dh[order-1].Ntmps){
-        printf("ERROR: Trying to get a temporal that does not exist.\n");
-        exit(OTI_undetErr);   
-    }
-
-    res.p_im   = dhl.p_dh[order-1].p_ims[ntmp]; 
-    res.p_idx  = dhl.p_dh[order-1].p_ids[ntmp]; 
-    res.p_nnz  = dhl.p_dh[order-1].p_nnz[ntmp]; 
-    res.p_size = dhl.p_dh[order-1].p_size[ntmp]; 
-    res.order  = order; 
-    res.flag   = 0; 
-
-    for (i=0; i<order; i++){
-
-        res.p_im[i]  = dhl.p_dh[i].p_im[ntmp];
-        res.p_idx[i] = dhl.p_dh[i].p_idx[ntmp];
-        res.p_nnz[i] = 0; // Initialize to zero elements.
-        res.p_size[i]= dhl.p_dh[i].Ndir;
-
-    }
-
-    return res;
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
-    
-    sotinum_t res;
-    ord_t i=0;
-
-    if (order == 0){
-        // In case order==0, no allocated array exists.
-        res = soti_createEmpty(0,dhl);
-        return res;
-    }
-    if (order > dhl.ndh){
-        printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
-        exit(OTI_undetErr);
-    }
-    if (ntmp >= (dhl.p_dh[order-1].Ntmps - 10) ){
-        printf("ERROR: Trying to get a temporal that does not exist.\n");
-        exit(OTI_undetErr);   
-    }
-
-    res.p_im   = dhl.p_dh[order-1].p_ims[ ntmp+10]; 
-    res.p_idx  = dhl.p_dh[order-1].p_ids[ ntmp+10]; 
-    res.p_nnz  = dhl.p_dh[order-1].p_nnz[ ntmp+10]; 
-    res.p_size = dhl.p_dh[order-1].p_size[ntmp+10]; 
-    res.order  = order; 
-    res.flag   = 0; 
-
-    for (i=0; i<order; i++){
-
-        res.p_im[i]  = dhl.p_dh[i].p_im[ntmp+10];
-        res.p_idx[i] = dhl.p_dh[i].p_idx[ntmp+10];
-        res.p_nnz[i] = 0; // Initialize to zero elements.
-        res.p_size[i]= dhl.p_dh[i].Ndir;
-
-    }
-
-    return res;
-}
-// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -235,8 +165,6 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t order, dhelpl_t dhl){
 void soti_insert_item( ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, 
     dhelpl_t dhl){
     
-    
-
     coeff_t* p_tmpim  = NULL;
     imdir_t* p_tmpidx = NULL;
 
@@ -283,20 +211,12 @@ void soti_insert_item( ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinu
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     
     flag_t flag;
     imdir_t pos;
+    uint64_t i;
     
     if (order == 0){
         
@@ -320,8 +240,35 @@ void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
 
             }
 
-        } // what happens if the order is greater than the number?
-        // Change order and add one element to the specified order.
+        } else {
+
+            if ( order <= num->torder ){
+
+                // Be sure that the other nnz are zero. 
+                // TODO: Maybe overkill.
+                for (i=order+1; i<= num->torder; i++){
+                    num->p_nnz[i-1] = 0;
+                }
+
+                num->order = order;
+
+                pos = binSearchUI64(idx, num->p_idx[order-1], num->p_nnz[order-1], &flag );
+
+                if ( flag != 0 ){
+
+                    // pos exists within num and already contains a value.
+                    num->p_im[order-1][pos] = val;
+
+                } else {
+
+                    // pos is not contained within num, thus has to be inserted.
+                    soti_insert_item( pos, val, idx, order, num, dhl);
+
+                }
+
+            } // what happens if the order is greater than the truncation order of the number?
+            // Change order? and add one element to the specified order.
+        } 
 
     }
 
@@ -486,14 +433,15 @@ void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhe
 }
 // ----------------------------------------------------------------------------------------------------
 
-
 // ****************************************************************************************************
 void soti_set_r( coeff_t a, sotinum_t* num, dhelpl_t dhl){
     
     ord_t i;
+    
     num->re = a;
+    num->order = 0;
 
-    for ( i = 0; i<num->order; i++){
+    for ( i = 0; i < num->torder; i++){
         // Set number of non-zero and allocated size to 0.
         num->p_nnz[i] = 0;
     }
@@ -533,6 +481,7 @@ void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 
     // Copy real coefficient
     dest->re = src->re;
+    dest->order = src->order;
 
     // Copy imaginary coefficients
     for ( i = 0; i < src->order; i++){
@@ -551,36 +500,12 @@ void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ====================================================================================================
+// ====================================================================================================
+// =====================        IMAGINARY DIR. EXTRACTOR FUNCTIONS         ============================
+// ====================================================================================================
+// ====================================================================================================
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Getters.
-// Coefficient extractors.
 // ****************************************************************************************************
 coeff_t soti_get_item(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     
@@ -741,6 +666,12 @@ void soti_extract_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ====================================================================================================
+// ====================================================================================================
+// ===================================      TRUNCATOR FUNCTIONS      ==================================
+// ====================================================================================================
+// ====================================================================================================
+
 // ****************************************************************************************************
 sotinum_t soti_truncate_im(imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     
@@ -825,9 +756,11 @@ void soti_truncate_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* re
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-// Derivative extractors
-
+// ====================================================================================================
+// ====================================================================================================
+// ============================        DERIVATIVE EXTRACTOR FUNCTIONS       ===========================
+// ====================================================================================================
+// ====================================================================================================
 
 // ****************************************************************************************************
 void soti_set_deriv_r( coeff_t coef, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
@@ -874,21 +807,6 @@ void soti_get_deriv_to( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 sotinum_t soti_extract_deriv(imdir_t idx, ord_t order, sotinum_t* num,  dhelpl_t dhl){
 
@@ -925,7 +843,7 @@ void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* 
     } else {
 
         // use temporal 0.
-        tmp = soti_get_tmp(0, num->order-order, dhl);
+        tmp = soti_get_tmp(0, num->order - order, dhl);
         
         // Get real part.
         tmp.re = soti_get_item(idx, order, num, dhl) * dhelp_get_deriv_factor(idx, order, dhl);
@@ -957,6 +875,7 @@ void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* 
             }
 
         }
+
         soti_copy_to(&tmp,res,dhl);
     }
 
@@ -965,6 +884,140 @@ void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* 
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ====================================================================================================
+// ====================================================================================================
+// ===================================        HELPER FUNCTIONS       ==================================
+// ====================================================================================================
+// ====================================================================================================
+
+// ****************************************************************************************************
+void soti_print(sotinum_t* num, dhelpl_t dhl){
+
+    ndir_t nnz_total = 1, dir;
+    ord_t ordi,ord;
+    bases_t* imdir_bases;
+    
+    for( ordi = 0; ordi<num->order; ordi++){
+        nnz_total += num->p_nnz[ordi];
+    }
+
+    printf("  Order: "_PORDT", non_zero: "_PNDIRT", re: %11.4e\n",
+        num->order, nnz_total, num->re);
+    // printf("  ORD ,    IMDIR  ,   VALUE   \n");
+    printf("      VALUE   ,    IMDIR  \n");
+
+    // printf("    0 ,         0 , "_PCOEFFT"\n",num->re);
+    printf("  " _PCOEFFT " , [0]\n",num->re);
+
+    for( ord = 1; ord <= num->order; ord++){
+
+        ndir_t ndir_i = num->p_nnz[ord-1];
+
+        for ( dir=0; dir< ndir_i; dir++){
+            
+            // printf(" " _PORDT " , " _PNDIRT " ," _PCOEFFT "\n",
+            printf("  " _PCOEFFT " , ",  num->p_im[ord-1][dir]);
+
+            imdir_bases = dhelp_get_imdir( num->p_idx[ord-1][dir], ord, dhl);
+            
+            printArrayUI16( imdir_bases, ord);
+
+            printf("\n");
+
+        }
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t torder, dhelpl_t dhl){
+    
+    sotinum_t res;
+    ord_t i=0;
+
+    if (torder == 0){
+        // In case order==0, no allocated array exists.
+        res = soti_createEmpty(0,dhl);
+        return res;
+    }
+    if (torder > dhl.ndh){
+        printf("ERROR: Maximum order not allowed in soti_get_rtmp.\n");
+        exit(OTI_undetErr);
+    }
+    if (ntmp >= dhl.p_dh[torder-1].Ntmps){
+        printf("ERROR: Trying to get a temporal that does not exist.\n");
+        exit(OTI_undetErr);   
+    }
+
+    res.p_im   = dhl.p_dh[torder-1].p_ims[ntmp]; 
+    res.p_idx  = dhl.p_dh[torder-1].p_ids[ntmp]; 
+    res.p_nnz  = dhl.p_dh[torder-1].p_nnz[ntmp]; 
+    res.p_size = dhl.p_dh[torder-1].p_size[ntmp]; 
+    res.order  = 0;
+    res.torder = torder; 
+    res.flag   = 0; 
+
+    for (i=0; i<torder; i++){
+
+        res.p_im[i]  = dhl.p_dh[i].p_im[ntmp];
+        res.p_idx[i] = dhl.p_dh[i].p_idx[ntmp];
+        res.p_nnz[i] = 0; // Initialize to zero elements.
+        res.p_size[i]= dhl.p_dh[i].Ndir;
+
+    }
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_get_tmp(ndir_t ntmp, ord_t torder, dhelpl_t dhl){
+    
+    sotinum_t res;
+    ord_t i=0;
+
+    if (torder == 0){
+        // In case order==0, no allocated array exists.
+        res = soti_createEmpty(0,dhl);
+        return res;
+    }
+    if (torder > dhl.ndh){
+        printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
+        exit(OTI_undetErr);
+    }
+    if (ntmp >= (dhl.p_dh[torder-1].Ntmps - 10) ){
+        printf("ERROR: Trying to get a temporal that does not exist.\n");
+        exit(OTI_undetErr);   
+    }
+
+    res.p_im   = dhl.p_dh[torder-1].p_ims[ ntmp+10]; 
+    res.p_idx  = dhl.p_dh[torder-1].p_ids[ ntmp+10]; 
+    res.p_nnz  = dhl.p_dh[torder-1].p_nnz[ ntmp+10]; 
+    res.p_size = dhl.p_dh[torder-1].p_size[ntmp+10]; 
+    res.order  = 0; 
+    res.torder = torder; 
+    res.flag   = 0; 
+
+    for (i=0; i<torder; i++){
+
+        res.p_im[i]  = dhl.p_dh[i].p_im[ntmp+10];
+        res.p_idx[i] = dhl.p_dh[i].p_idx[ntmp+10];
+        res.p_nnz[i] = 0; // Initialize to zero elements.
+        res.p_size[i]= dhl.p_dh[i].Ndir;
+
+    }
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ====================================================================================================
+// ====================================================================================================
+// ===================================        MEMORY MANAGEMENT      ==================================
+// ====================================================================================================
+// ====================================================================================================
 
 // ****************************************************************************************************
 void* soti_read_from_mem_to(void* mem, sotinum_t* dst, dhelpl_t dhl){
@@ -976,7 +1029,6 @@ void* soti_read_from_mem_to(void* mem, sotinum_t* dst, dhelpl_t dhl){
     ord_t trunc_order = 0;
     ord_t narrays = 0;
     sotinum_t res, tmp;
-
 
     // read real coefficient:
     memcpy( &re, read_mem, sizeof(coeff_t) );
@@ -990,23 +1042,22 @@ void* soti_read_from_mem_to(void* mem, sotinum_t* dst, dhelpl_t dhl){
     memcpy( &narrays, read_mem, sizeof(ord_t) );
     read_mem += sizeof(ord_t);
 
-
     tmp = soti_get_tmp( 0, trunc_order, dhl);
-    soti_set_r( 0.0, &tmp, dhl);
-    tmp.re = re;
+    soti_set_r( re, &tmp, dhl);
+    tmp.order = narrays;
 
     // Add the standard allocation sizes:
-    for ( i =0; i < tmp.order ; i++){
+    for ( i = 0; i < tmp.order; i++){
 
-        // read number of arrays order:
+        // read number of non zeros for this order:
         memcpy( &tmp.p_nnz[i], read_mem, sizeof(ndir_t) );
         read_mem += sizeof(ndir_t);
 
-        // read array of coefficients:
+        // read array of coefficients (if any):
         memcpy( tmp.p_im[i], read_mem, tmp.p_nnz[i]*sizeof(coeff_t) );
         read_mem += tmp.p_nnz[i]*sizeof(coeff_t);
 
-        // read array of im dirs:
+        // read array of im dirs (if any):
         memcpy( tmp.p_idx[i], read_mem, tmp.p_nnz[i]*sizeof(imdir_t) );
         read_mem += tmp.p_nnz[i]*sizeof(imdir_t);
 
@@ -1031,10 +1082,10 @@ void soti_save_to_mem(sotinum_t* num, void* mem, dhelpl_t dhl){
     write_mem += sizeof(coeff_t);
 
     // Write truncation order:
-    memcpy( write_mem, &num->order, sizeof(ord_t) );
+    memcpy( write_mem, &num->torder, sizeof(ord_t) );
     write_mem += sizeof(ord_t);
 
-    // Write number of arrays order:
+    // Write number of arrays:
     memcpy( write_mem, &num->order, sizeof(ord_t) );
     write_mem += sizeof(ord_t);
 
@@ -1058,7 +1109,6 @@ void soti_save_to_mem(sotinum_t* num, void* mem, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
 // ****************************************************************************************************
 uint64_t soti_get_memsize_save(sotinum_t* num, dhelpl_t dhl){
 
@@ -1071,15 +1121,14 @@ uint64_t soti_get_memsize_save(sotinum_t* num, dhelpl_t dhl){
     // Add the standard allocation sizes:
     for ( i =0; i < num->order ; i++){
         
-        mem_size += sizeof(ndir_t) + num->p_nnz[i]*(sizeof(coeff_t)+sizeof(imdir_t)) ;
+        mem_size += sizeof(ndir_t) + num->p_nnz[i]*( sizeof(coeff_t) + sizeof(imdir_t) ) ;
 
     }
-
+    
     return mem_size;
 
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 // ****************************************************************************************************
 uint64_t soti_get_min_memsize(sotinum_t* num, dhelpl_t dhl){
@@ -1088,7 +1137,7 @@ uint64_t soti_get_min_memsize(sotinum_t* num, dhelpl_t dhl){
     ord_t i;
     
     // Get the allocation size of the OTI number:
-    allocation_size = num->order*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
+    allocation_size = num->torder*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
 
     // Add the standard allocation sizes:
     for ( i =0; i < num->order ; i++){
@@ -1102,8 +1151,6 @@ uint64_t soti_get_min_memsize(sotinum_t* num, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
 // ****************************************************************************************************
 uint64_t soti_get_total_memsize(sotinum_t* num, dhelpl_t dhl){
 
@@ -1111,12 +1158,12 @@ uint64_t soti_get_total_memsize(sotinum_t* num, dhelpl_t dhl){
     ord_t i;
 
     // Get the allocation size of the OTI number:
-    allocation_size = num->order*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
+    allocation_size = num->torder*( sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
 
     // Add the standard allocation sizes:
-    for ( i = 0; i<num->order; i++){
+    for ( i = 0; i<num->torder; i++){
         
-        allocation_size += num->p_size[i]*(sizeof(coeff_t)+sizeof(imdir_t));
+        allocation_size += num->p_size[i]*( sizeof(coeff_t) + sizeof(imdir_t) );
 
     }
 
@@ -1125,9 +1172,6 @@ uint64_t soti_get_total_memsize(sotinum_t* num, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
 // ****************************************************************************************************
 uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest){
     
@@ -1135,7 +1179,7 @@ uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest){
     ord_t i;
 
     // Check if reallocation is necessary
-    if (src->order > dest->order ){
+    if (src->torder != dest->torder ){
 
         reallocate = 0xFF; // True
 
@@ -1158,9 +1202,6 @@ uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest){
     return reallocate;
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-// Copy operations.
 
 // ****************************************************************************************************
 void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
@@ -1189,11 +1230,13 @@ void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
 
     }
 
-    // Is it required to copy the order?
-    // dest->order = src->order;
+    // At this point, both inputs must have same torder.
 
     // Copy real coefficient
     dest->re = src->re;
+
+    // Set the same number order
+    dest->order = src->order;
 
     // Copy imaginary coefficients
     for ( i = 0; i < src->order; i++){
@@ -1207,13 +1250,15 @@ void soti_copy_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     }  
 
     // Set all other elements in the imaginary directions to zero.
-    for (; i<dest->order;i++){
+    // TODO: With 'order' is this still necessary?
+    for (; i<dest->torder;i++){
+
         dest->p_nnz[i] = 0;
+
     }
 
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 // ****************************************************************************************************
 inline void soti_copy_nomemchk_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
@@ -1236,16 +1281,14 @@ inline void soti_copy_nomemchk_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl)
     }  
 
     // Set all other elements in the imaginary directions to zero.
-    for (; i<dest->order;i++){
+    for (; i<dest->torder;i++){
+
         dest->p_nnz[i] = 0;
+
     }
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
 
 // ****************************************************************************************************
 sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl){
@@ -1254,8 +1297,9 @@ sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl){
     sotinum_t res = soti_createEmpty_like( num, dhl);
 
     res.re    = num->re;
+    res.order = num->order;
 
-    for ( i = 0; i < res.order; i++){
+    for ( i = 0; i < res.torder; i++){
         
         // Set number of non-zero and allocated size to 0.
         res.p_nnz[i]  = num->p_nnz[i]; // Just use nnz.
@@ -1274,74 +1318,6 @@ sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
-// Helpers
-
-// ****************************************************************************************************
-void soti_print(sotinum_t* num, dhelpl_t dhl){
-
-    ndir_t nnz_total = 1, dir;
-    ord_t ordi,ord;
-    bases_t* imdir_bases;
-    
-    for( ordi = 0; ordi<num->order; ordi++){
-        nnz_total += num->p_nnz[ordi];
-    }
-
-    printf("  Order: "_PORDT", non_zero: "_PNDIRT", re: %11.4e\n",
-        num->order, nnz_total, num->re);
-    // printf("  ORD ,    IMDIR  ,   VALUE   \n");
-    printf("      VALUE   ,    IMDIR  \n");
-
-    // printf("    0 ,         0 , "_PCOEFFT"\n",num->re);
-    printf("  " _PCOEFFT " , [0]\n",num->re);
-
-    for( ord = 1; ord<=num->order; ord++){
-
-        ndir_t ndir_i = num->p_nnz[ord-1];
-
-        for ( dir=0; dir< ndir_i; dir++){
-            
-            // printf(" " _PORDT " , " _PNDIRT " ," _PCOEFFT "\n",
-            printf("  " _PCOEFFT " , ",  num->p_im[ord-1][dir]);
-
-            imdir_bases = dhelp_get_imdir( num->p_idx[ord-1][dir], ord, dhl);
-            
-            printArrayUI16( imdir_bases, ord);
-
-            printf("\n");
-
-        }
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Memory management.
 
 // ****************************************************************************************************
 inline sotinum_t soti_init(void){
@@ -1374,12 +1350,10 @@ void soti_free(sotinum_t* num){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
 // ****************************************************************************************************
-sotinum_t soti_createReal_bases(coeff_t num, bases_t nbases, ord_t order, dhelpl_t dhl){
+sotinum_t soti_createReal_bases(coeff_t num, bases_t nbases, ord_t torder, dhelpl_t dhl){
     
-    sotinum_t res = soti_createEmpty_bases(nbases,order,dhl);
+    sotinum_t res = soti_createEmpty_bases(nbases,torder,dhl);
 
     res.re = num;
 
@@ -1388,7 +1362,7 @@ sotinum_t soti_createReal_bases(coeff_t num, bases_t nbases, ord_t order, dhelpl
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_createEmpty_bases( bases_t nbases, ord_t order, dhelpl_t dhl){
+sotinum_t soti_createEmpty_bases( bases_t nbases, ord_t torder, dhelpl_t dhl){
     
     sotinum_t res;
     
@@ -1396,24 +1370,23 @@ sotinum_t soti_createEmpty_bases( bases_t nbases, ord_t order, dhelpl_t dhl){
     ord_t i;
     
     // Define allocation sizes.
-    for ( i = 0; i < order; i++){
+    for ( i = 0; i < torder; i++){
+
         p_nnz[i] = dhelp_ndirOrder( nbases, i + 1 );
+
     }
     
-    res = soti_createEmpty_predef(p_nnz, order, dhl);
+    res = soti_createEmpty_predef(p_nnz, torder, dhl);
 
     return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
-
 // ****************************************************************************************************
-sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl){
+sotinum_t soti_createReal(coeff_t num, ord_t torder, dhelpl_t dhl){
     
-    sotinum_t res = soti_createEmpty(order,dhl);
+    sotinum_t res = soti_createEmpty(torder,dhl);
 
     res.re = num;
 
@@ -1422,7 +1395,7 @@ sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
  
 // ****************************************************************************************************
-sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
+sotinum_t soti_createEmpty( ord_t torder, dhelpl_t dhl){
     
     sotinum_t res;
     
@@ -1431,26 +1404,23 @@ sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl){
     ord_t i;
     
     // Define allocation sizes.
-    for ( i = 0; i < order; i++){
+    for ( i = 0; i < torder; i++){
         p_nnz[i] = dhl.p_dh[i].allocSize; // Get standard allocation sizes.
     }
     
-    res = soti_createEmpty_predef(p_nnz, order, dhl);
+    res = soti_createEmpty_predef(p_nnz, torder, dhl);
 
     return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
 
 // ****************************************************************************************************
 sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
     
     // This function assumes that 'other' is correctly allocated.
     // Defines a new memory space from the p_nnz (not p_size) of the input sparse number.
-    sotinum_t res = soti_createEmpty_predef(other->p_nnz, other->order, dhl);
+    sotinum_t res = soti_createEmpty_predef(other->p_nnz, other->torder, dhl);
 
     return res;
 
@@ -1458,7 +1428,7 @@ sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl){
+inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t torder, dhelpl_t dhl){
     
     sotinum_t res = soti_init(); // Initialize pointer values.
 
@@ -1466,15 +1436,15 @@ inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dh
     uint64_t allocation_size = 0;
     ord_t i;
 
-    res.order = order;
+    res.torder = torder;
     
-    if (res.order != 0){
+    if (res.torder != 0){
 
         // Get the allocation size of the OTI number:
-        allocation_size = res.order*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
+        allocation_size = res.torder*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
 
         // Add the standard allocation sizes:
-        for ( i = 0; i<res.order; i++){
+        for ( i = 0; i<res.torder; i++){
             
             allocation_size += p_nnz[i]*(sizeof(coeff_t)+sizeof(imdir_t));
 
@@ -1489,18 +1459,18 @@ inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dh
 
         // Distribute memory among the different pointers.
         res.p_im  = (coeff_t**)memory;
-        memory    += res.order * sizeof(coeff_t*);
+        memory    += res.torder * sizeof(coeff_t*);
 
         res.p_idx = (imdir_t**)memory;
-        memory    += res.order * sizeof(imdir_t*);
+        memory    += res.torder * sizeof(imdir_t*);
 
         res.p_nnz = (ndir_t*  )memory;
-        memory    += res.order * sizeof(ndir_t);
+        memory    += res.torder * sizeof(ndir_t);
 
         res.p_size= (ndir_t*  )memory;
-        memory    += res.order * sizeof(ndir_t);
+        memory    += res.torder * sizeof(ndir_t);
         
-        for ( i = 0; i < res.order; i++){
+        for ( i = 0; i < res.torder; i++){
             
             // Distribute memory.
             res.p_im[i] = (coeff_t*)memory;
@@ -1515,11 +1485,8 @@ inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dh
 
         }
 
-        // Raise flag for OTI number.
-        res.flag = 1;
-
     } 
-    // Raise flag for OTI number.
+    // Raise memory ownership flag for OTI number.
     res.flag = 1;
 
     return res;
@@ -1552,27 +1519,27 @@ size_t soti_memory_size( const ndir_t* p_nnz, ord_t order){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_t flag, sotinum_t* res){
+void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t torder, flag_t flag, sotinum_t* res){
 
     ord_t i;
     void* memory = mem;
 
-    res->order = order;
+    res->torder = torder;
 
     // Distribute memory among the different pointers.
     res->p_im  = (coeff_t**)memory;
-    memory    += res->order * sizeof(coeff_t*);
+    memory    += res->torder * sizeof(coeff_t*);
 
     res->p_idx = (imdir_t**)memory;
-    memory    += res->order * sizeof(imdir_t*);
+    memory    += res->torder * sizeof(imdir_t*);
 
     res->p_nnz = (ndir_t*  )memory;
-    memory    += res->order * sizeof(ndir_t);
+    memory    += res->torder * sizeof(ndir_t);
 
     res->p_size= (ndir_t*  )memory;
-    memory    += res->order * sizeof(ndir_t);
+    memory    += res->torder * sizeof(ndir_t);
     
-    for ( i = 0; i < res->order; i++){
+    for ( i = 0; i < res->torder; i++){
         
         // Distribute memory.
         res->p_im[i] = (coeff_t*)memory;

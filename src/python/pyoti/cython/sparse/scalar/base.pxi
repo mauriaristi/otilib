@@ -185,8 +185,9 @@ cdef class sotinum:
     otin.num.p_idx  = num[ZERO].p_idx 
     otin.num.p_nnz  = num[ZERO].p_nnz 
     otin.num.p_size = num[ZERO].p_size
+    otin.num.torder = num[ZERO].torder
     otin.num.order  = num[ZERO].order 
-    otin.num.flag   = num[ZERO].flag 
+    otin.num.flag   = num[ZERO].flag  
 
     otin.FLAGS      = FLAGS
     
@@ -305,11 +306,13 @@ cdef class sotinum:
 
     head = 'sotinum('
     body = str(self.num.re) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max) 
-    body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"
+    body += ', order: ' + str(self.num.order) 
+    body += ', truncation order: ' + str(self.num.torder) 
+    body += ', flag: ' + str(self.num.flag) + "\n"
 
     for i in range(0, self.num.order):
 
-      body += "Order {0}->   nnz: {1}  size: {2} \n".format(i+1, self.num.p_nnz[i],self.num.p_size[i])
+      body += "  - Order {0}->   nnz: {1}  size: {2} \n".format(i+1, self.num.p_nnz[i],self.num.p_size[i])
 
     # end for 
 

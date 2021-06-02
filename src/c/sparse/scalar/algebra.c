@@ -77,13 +77,16 @@ sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl){
 inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->torder,num2->torder);
     ord_t ordi;
 
     // Create a sotinum with no elements in imaginary directions.
     tmp = soti_get_rtmp(7, res_ord, dhl);
 
-    tmp.re = num1->re + num2->re; 
+    soti_set_r( num1->re + num2->re, &tmp, dhl);
+    // tmp.re = num1->re + num2->re; 
+    res_ord = MAX(num1->order,num2->order);
+    tmp.order = res_ord;
 
     // TODO: divide in three for loops
     // ord_t min_ord = MIN(num1->order,num2->order);
@@ -183,12 +186,14 @@ sotinum_t soti_sub_or(sotinum_t* num, coeff_t val, dhelpl_t dhl){
 inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->torder,num2->torder);
     ord_t ordi;
 
     tmp = soti_get_rtmp(7,res_ord,dhl); // creates a sotinum with no elements in imaginary directions.
 
-    tmp.re = num1->re - num2->re;
+    soti_set_r( num1->re - num2->re, &tmp, dhl);
+    res_ord = MAX(num1->order,num2->order);
+    tmp.order = res_ord;
 
     for(ordi=0; ordi<res_ord; ordi++){
 
@@ -291,7 +296,7 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     coeff_t*   p_im_swap;
     imdir_t*  p_idx_swap;
     ndir_t    p_nnz_swap;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->torder,num2->torder);
     ord_t ordlim1, ordlim2;
     ord_t ordi1, ordi2,ordires;
 
@@ -306,6 +311,13 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     // Set source with the same real value.
     tmpsrc->re  = tmpdest->re;
+
+    // Estimate the resulting order (Maximum order from operations)
+    res_ord = MIN(tmp.torder,num1->order+num2->order);
+
+    tmp.order =res_ord;
+    tmp2.order=res_ord;
+    tmp3.order=res_ord;
 
     // printf("Multiplying lhs(ord:%hhu) by rhs(ord:%hhu)\n",num1->order,num2->order);
     // printf("Multiply lhs.re:%g x im of rhs ========= \n", num1->re);
@@ -602,13 +614,15 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 inline sotinum_t soti_base_trunc_sum(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->torder,num2->torder);
     ord_t ordi;
 
     // Create a sotinum with no elements in imaginary directions.
     tmp = soti_get_rtmp(7, res_ord, dhl);
 
     soti_set_r(0.0, &tmp, dhl);
+    res_ord = MAX(num1->order,num2->order);
+    tmp.order = res_ord;
 
     if (ord == 0){
     
@@ -650,13 +664,15 @@ inline sotinum_t soti_base_trunc_sum(ord_t ord, sotinum_t* num1, sotinum_t* num2
 inline sotinum_t soti_base_trunc_sub(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->torder,num2->torder);
     ord_t ordi;
 
     // Create a sotinum with no elements in imaginary directions.
     tmp = soti_get_rtmp(7, res_ord, dhl);
 
     soti_set_r(0.0, &tmp, dhl);
+    res_ord = MAX(num1->order,num2->order);
+    tmp.order = res_ord;
 
     if (ord == 0){
     
@@ -706,7 +722,7 @@ inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, so
     coeff_t*   p_im_swap;
     imdir_t*  p_idx_swap;
     ndir_t    p_nnz_swap;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->torder,num2->torder);
     ord_t ordlim1, ordlim2;
     ord_t ordi1, ordi2, ordires;
 
@@ -719,6 +735,11 @@ inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, so
     // Multiply real coefficients.
     soti_set_r(0.0,  tmpsrc, dhl);
     soti_set_r(0.0, tmpdest, dhl);
+
+    res_ord = MIN(res_ord,ord1+ord2);
+    tmp.order =res_ord;
+    tmp2.order=res_ord;
+    tmp3.order=res_ord;
 
     if (ord1 == 0 && ord2 == 0){
         

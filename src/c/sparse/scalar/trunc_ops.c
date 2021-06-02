@@ -41,15 +41,13 @@ void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
 // ****************************************************************************************************
 void soti_trunc_ssum(sotinum_t* num1, ord_t ord, sotinum_t* res, dhelpl_t dhl ){
     
     // Initialize
     ord_t ordi;
 
-    sotinum_t tmpres = soti_get_rtmp(6,res->order,dhl); 
+    sotinum_t tmpres = soti_get_rtmp(6,res->torder,dhl); 
     
     soti_set_o(res, &tmpres, dhl);
 
@@ -75,7 +73,7 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
     sotinum_t* tmpsrc= &tmp ;
     sotinum_t* tmpdest=&tmp3;
     sotinum_t* tmpswap;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->torder,num2->torder);
     ord_t ordlim1, ordlim2;
     ord_t ordi1, ordi2, ordires;
 
@@ -84,7 +82,9 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
     tmp = soti_get_rtmp(3,res_ord,dhl); // will hold the final result.
     tmp2= soti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
     tmp3= soti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.    
-        
+    
+    res_ord = MIN(num1->order+num2->order, res_ord - 1);
+
     ordlim1 = MIN(num1->order, res_ord - 1);
     
     for(ordi1=ord1-1; ordi1<ordlim1; ordi1++){

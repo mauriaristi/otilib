@@ -493,7 +493,7 @@ void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     }
 
     // Set all other elements in the imaginary directions to zero.
-    for (; i<dest->order;i++){
+    for (; i<dest->torder;i++){
         dest->p_nnz[i] = 0;
     }
 
@@ -1179,7 +1179,7 @@ uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest){
     ord_t i;
 
     // Check if reallocation is necessary
-    if (src->torder != dest->torder ){
+    if (src->torder > dest->torder ){
 
         reallocate = 0xFF; // True
 

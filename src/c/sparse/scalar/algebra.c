@@ -941,9 +941,9 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num , dhelpl_t dh
 
     coeff_t factor = 1.0, val = 0.0;
 
-    sotinum_t tmp1 = soti_get_rtmp( 7,num->order,dhl);
-    sotinum_t tmp2 = soti_get_rtmp( 8,num->order,dhl);
-    sotinum_t tmp3 = soti_get_rtmp( 9,num->order,dhl);
+    sotinum_t tmp1 = soti_get_rtmp( 7,num->torder,dhl);
+    sotinum_t tmp2 = soti_get_rtmp( 8,num->torder,dhl);
+    sotinum_t tmp3 = soti_get_rtmp( 9,num->torder,dhl);
 
     soti_set_o( num, &tmp2, dhl);
 
@@ -963,7 +963,7 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num , dhelpl_t dh
 
     }
 
-    for (; i<=num->order; i++){
+    for (; i <= num->order; i++){
         
         factor *= i;
         val = feval_re[i]/factor;        

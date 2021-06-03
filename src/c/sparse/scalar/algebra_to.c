@@ -264,33 +264,7 @@ void soti_trunc_gem_oo_to(ord_t orda, sotinum_t* a, ord_t ordb, sotinum_t* b, so
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Division.
-
 // ****************************************************************************************************
 void soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl){
 
@@ -324,33 +298,7 @@ void soti_div_or_to(sotinum_t* num, coeff_t val, sotinum_t* res, dhelpl_t dhl){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Function evaluation.
-
 // ****************************************************************************************************
 void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t dhl ){
     
@@ -360,14 +308,3 @@ void soti_feval_to(coeff_t* feval_re, sotinum_t* num, sotinum_t* res, dhelpl_t d
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-

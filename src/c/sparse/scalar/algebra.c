@@ -945,31 +945,64 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num , dhelpl_t dh
     sotinum_t tmp2 = soti_get_rtmp( 8,num->torder,dhl);
     sotinum_t tmp3 = soti_get_rtmp( 9,num->torder,dhl);
 
+    // soti_set_r( 0.0, &tmp1, dhl);
+    // soti_set_r( 0.0, &tmp3, dhl);
     soti_set_o( num, &tmp2, dhl);
+    printf("\n\n\nnum->order : "_PORDT"\n",num->order);
+    printf(" tmp2.order (before loop): "_PORDT"\n",tmp2.order);
 
-    for ( i = 1; i < num->order; i++){
+    for ( i = 1; i < num->torder; i++){
         
         factor *= i;
 
         val = feval_re[i]/factor;
+        printf("\n\n ITERATION "_PORDT"\n",i);
         
+        // tmp2 = tmp1
         soti_set_o(&tmp2 , &tmp1, dhl);
+        
+        printf(" tmp1.order: "_PORDT"\n",tmp2.order);
+        
+        // tmp2 = tmp2 * val
         soti_trunc_smul_real( val, i, &tmp2, dhl);
+
+        printf(" tmp2.order: "_PORDT"\n",tmp2.order);
+
         soti_trunc_ssum( &tmp2, i, &tmp3, dhl );
+
+        printf(" tmp3.order: "_PORDT"\n",tmp3.order);
         
         // update
         soti_set_r( 0.0, &tmp2, dhl);
+        
+        printf(" tmp2.order: "_PORDT"\n",tmp2.order);
+        
         soti_trunc_mul(&tmp1, i, num, 1, &tmp2, dhl );
+        
+        printf(" tmp2.order: "_PORDT"\n",tmp2.order);
+
 
     }
 
-    for (; i <= num->order; i++){
+    for (; i <= num->torder; i++){
         
         factor *= i;
         val = feval_re[i]/factor;        
+
+        printf("\n\n ITERATION "_PORDT"\n",i);
+
+        
         soti_set_o(&tmp2 , &tmp1, dhl);
+
+        printf(" tmp1.order: "_PORDT"\n",tmp2.order);
+        
         soti_trunc_smul_real( val, i, &tmp2, dhl);
+
+        printf(" tmp2.order: "_PORDT"\n",tmp2.order);
+
         soti_trunc_ssum( &tmp2, i, &tmp3, dhl );
+
+        printf(" tmp3.order: "_PORDT"\n",tmp3.order);
 
     }
 

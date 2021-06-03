@@ -1,15 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl){
     
@@ -47,11 +36,14 @@ void soti_trunc_ssum(sotinum_t* num1, ord_t ord, sotinum_t* res, dhelpl_t dhl ){
     // Initialize
     ord_t ordi;
 
+    // TODO: Add check to the resulting value.
     sotinum_t tmpres = soti_get_rtmp(6,res->torder,dhl); 
     
     soti_set_o(res, &tmpres, dhl);
 
-    for (  ordi = ord-1; ordi < res->order; ordi++){
+    tmpres.order = MAX(tmpres.order, num1->order);
+    
+    for (  ordi = ord-1; ordi < num1->order; ordi++){
 
         dhelp_sparse_add_dirs(num1->p_im[ordi],  num1->p_idx[ordi],   num1->p_nnz[ordi],
                                res->p_im[ordi],   res->p_idx[ordi],    res->p_nnz[ordi],
@@ -70,8 +62,8 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
                     sotinum_t* dest, dhelpl_t dhl ){
 
     sotinum_t tmp, tmp2, tmp3;
-    sotinum_t* tmpsrc= &tmp ;
-    sotinum_t* tmpdest=&tmp3;
+    sotinum_t* tmpsrc=  &tmp ;
+    sotinum_t* tmpdest= &tmp3;
     sotinum_t* tmpswap;
     ord_t res_ord = MAX(num1->torder,num2->torder);
     ord_t ordlim1, ordlim2;
@@ -83,7 +75,11 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
     tmp2= soti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
     tmp3= soti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.    
     
-    res_ord = MIN(num1->order+num2->order, res_ord - 1);
+    res_ord = MIN(num1->order + num2->order, res_ord );
+    tmp.order = res_ord;
+    tmp2.order= res_ord;
+    tmp3.order= res_ord;
+
 
     ordlim1 = MIN(num1->order, res_ord - 1);
     
@@ -122,12 +118,13 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
 }
 // ----------------------------------------------------------------------------------------------------
 
-
 // ****************************************************************************************************
 void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl){
     
     // Assumes both have the space allocated and both have the same truncation order
     ord_t i;
+    
+    dest->order = MAX(src->order,dest->order);
 
     for ( i = ord-1; i<src->order; i++){
         

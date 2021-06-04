@@ -65,27 +65,28 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
     sotinum_t* tmpsrc=  &tmp ;
     sotinum_t* tmpdest= &tmp3;
     sotinum_t* tmpswap;
-    ord_t res_ord = MAX(num1->torder,num2->torder);
+    ord_t max_ord = MAX(num1->torder,num2->torder);
+    ord_t res_ord;
     ord_t ordlim1, ordlim2;
     ord_t ordi1, ordi2, ordires;
 
     // Retreive sotinum temporals.
     // All tmps are created with no elements in imaginary directions (but allocated).
-    tmp = soti_get_rtmp(3,res_ord,dhl); // will hold the final result.
-    tmp2= soti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
-    tmp3= soti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.    
+    tmp = soti_get_rtmp(3,max_ord,dhl); // will hold the final result.
+    tmp2= soti_get_rtmp(4,max_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_rtmp(5,max_ord,dhl); // Will hold the temporary result.    
     
-    res_ord = MIN(num1->order + num2->order, res_ord );
+    res_ord = MIN(num1->order + num2->order, max_ord );
     tmp.order = res_ord;
     tmp2.order= res_ord;
     tmp3.order= res_ord;
 
 
-    ordlim1 = MIN(num1->order, res_ord - 1);
+    ordlim1 = MIN(num1->order, max_ord - 1);
     
     for(ordi1=ord1-1; ordi1<ordlim1; ordi1++){
 
-        ordlim2 = MIN(num2->order, res_ord - (ordi1+1) );
+        ordlim2 = MIN(num2->order, max_ord - (ordi1+1) );
 
         tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
 

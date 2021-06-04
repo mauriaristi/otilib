@@ -168,6 +168,7 @@ void soti_insert_item( ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinu
     coeff_t* p_tmpim  = NULL;
     imdir_t* p_tmpidx = NULL;
 
+
     if ( num->p_nnz[order-1] == num->p_size[order-1] ){
         // Reallocation in memory is necessary.
 
@@ -206,8 +207,10 @@ void soti_insert_item( ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinu
     num->p_im[order-1][pos] = val;
     num->p_idx[order-1][pos] = idx;
     num->p_nnz[order-1] += 1;
-    
 
+    // Reset the new order.
+    num->order = MAX(num->order,order);
+    
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -279,6 +282,7 @@ void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
 void soti_set_im_r(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     
     flag_t flag;
+    ord_t ordi;
     imdir_t pos;
     
     if (order == 0){
@@ -303,14 +307,21 @@ void soti_set_im_r(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
 
             }
 
-        } // what happens if the order is greater than the number?
+        } else if (order <= num->torder){
+        
+            // Be sure that the nnz for all orders up to the new order are zero. 
+            // TODO: Overkill? Necesary?
+            soti_reset_orders(num->order+1, order, num, dhl);
+            
+            soti_insert_item( 0, val, idx, order, num, dhl);
+
+        }// TODO: what happens if the order is greater than the number?
         // Change order and add one element to the specified order.
 
-    }
+    } 
 
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 // ****************************************************************************************************
 void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
@@ -327,15 +338,19 @@ void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, 
 
     }else{
 
-        res_order = MIN( dhl.ndh, MAX(num->order, order + val->order) );
+        res_order = MIN( dhl.ndh, MAX(num->torder, order + val->torder) );
         
         tmp = soti_get_tmp(0, res_order, dhl);
 
-        // Copy to number. (TODO: Try to avoid this directly.)
+        soti_set_r(0.0, &tmp, dhl);
 
+        // Copy to number. (TODO: Try to avoid this directly.)
         // soti_set_o(num, &tmp, dhl);
         ord_iter = MIN(num->order,res_order);
         
+        tmp.re = num->re;
+        tmp.order = ord_iter;
+
         for ( ordi = 0; ordi < ord_iter; ordi++){
             
             // Copy memory to dest number. Only copy non zeros.
@@ -350,13 +365,19 @@ void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, 
         
         soti_set_im_r(val->re/factorden, idx, order, &tmp, dhl);
 
-        ord_iter = MIN(val->order,res_order-val->order);
+        ord_iter = MIN( val->order, res_order - val->order);
+
 
         for ( ordi = 0; ordi < ord_iter; ordi++){
 
             for (i = 0; i < val->p_nnz[ordi]; i++){
 
                 dhelp_multDir( idx, order, val->p_idx[ordi][i], ordi+1, &idxr, &ordr, dhl);
+
+                if (ordr > tmp.order){
+                    // re-check that all nnz are zero.
+                    tmp.order = ordr;
+                } 
 
                 factorden = dhelp_get_deriv_factor(idxr, ordr, dhl);
                 factornum = dhelp_get_deriv_factor(val->p_idx[ordi][i], ordi+1, dhl);
@@ -398,6 +419,7 @@ void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhe
         tmp = soti_get_tmp(0, res_order, dhl);
 
         // soti_set_o(num, &tmp, dhl);
+        tmp.re = num->re;
         ord_iter = MIN(num->order,res_order);
         
         for ( ordi = 0; ordi < ord_iter; ordi++){
@@ -893,6 +915,20 @@ void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* 
 // ===================================        HELPER FUNCTIONS       ==================================
 // ====================================================================================================
 // ====================================================================================================
+
+inline void soti_reset_orders(ord_t ord_start, ord_t ord_end, sotinum_t* num, dhelpl_t dhl){
+    
+    ord_t ordi = 0;
+    ord_t o_start = MIN(num->torder,ord_start);
+    ord_t o_end = MIN(num->torder,ord_end);
+
+    // Loop among all orders in num to be reset.
+    for (ordi = o_start-1; ordi < o_end; ordi++){
+        num->p_nnz[ordi] = 0;    
+    }
+
+}
+
 
 // ****************************************************************************************************
 void soti_print(sotinum_t* num, dhelpl_t dhl){

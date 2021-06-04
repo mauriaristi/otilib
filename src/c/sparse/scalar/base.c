@@ -629,10 +629,13 @@ void soti_extract_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res
     } else {
 
         // use temporal 0.
-        tmp = soti_get_tmp(0, num->order-order, dhl);
+        tmp = soti_get_tmp(0, num->torder-order, dhl);
         
         // Get real part.
         tmp.re = soti_get_item(idx, order, num, dhl);
+
+        // Set new order
+        tmp.order = num->order - order;
 
         // loop for the remaining orders:
         for(i = order; i<num->order; i++){
@@ -710,13 +713,13 @@ void soti_truncate_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* re
     } else {
 
         // use temporal 0.
-        tmp = soti_get_tmp( 0, num->order, dhl);
+        tmp = soti_get_tmp( 0, num->torder, dhl);
         
         // Set real part.
         tmp.re = num->re;
+        tmp.order = num->order;
 
         // First, copy all elements up to order - 1 .
-
         for(i = 0; i<order-1; i++){
             
             memcpy(tmp.p_im[i], num->p_im[i], num->p_nnz[i]*sizeof(coeff_t) );
@@ -843,10 +846,13 @@ void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* 
     } else {
 
         // use temporal 0.
-        tmp = soti_get_tmp(0, num->order - order, dhl);
+        tmp = soti_get_tmp(0, num->torder - order, dhl);
         
         // Get real part.
         tmp.re = soti_get_item(idx, order, num, dhl) * dhelp_get_deriv_factor(idx, order, dhl);
+
+        // Set new order
+        tmp.order = num->order - order;
 
         // loop for the remaining orders:
         for(i = order; i<num->order; i++){
@@ -877,9 +883,7 @@ void soti_extract_deriv_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* 
         }
 
         soti_copy_to(&tmp,res,dhl);
-    }
-
-    
+    }    
 
 }
 // ----------------------------------------------------------------------------------------------------

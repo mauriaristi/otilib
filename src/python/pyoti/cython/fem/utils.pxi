@@ -458,8 +458,108 @@ cdef object enum2string(int64_t enumId):
 #-----------------------------------------------------------------------------------------------------
 
 
+#*****************************************************************************************************
+def get_enum2str():
+  """
+  PURPOSE:    Returns a dictionary with names of every enum from the FEM module.
+
+  """
+  #***************************************************************************************************
+
+  return enum2str
+  
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
+def enum2string_2(int64_t enumId):
+  """
+  PURPOSE:    Returns a string with the name of the corresponding enum value given.
+
+  """
+  #***************************************************************************************************
+
+  try:
+    return enum2str[enumId]
+  except:
+    return 'Undefined_enumId'
+
+#-----------------------------------------------------------------------------------------------------
 
 
+
+cdef dict enum2str = {
+  opAdd        : "opAdd        ",
+  opSub        : "opSub        ",
+  opMul        : "opMul        ",
+  opTruediv    : "opTruediv    ",
+  opPowr       : "opPowr       ",
+  opInt1d      : "opInt1d      ",
+  opInt2d      : "opInt2d      ",
+  opInt3d      : "opInt3d      ",
+  opDx         : "opDx         ",
+  opDxx        : "opDxx        ",
+  opDy         : "opDy         ",
+  opDxy        : "opDxy        ",
+  opDyy        : "opDyy        ",
+  opDz         : "opDz         ",
+  opDxz        : "opDxz        ",
+  opDyz        : "opDyz        ",
+  opDzz        : "opDzz        ",
+  opDef        : "opDef        ",
+  opDefData    : "opDefData    ",
+  opOn         : "opOn         ",
+  opNeg        : "opNeg        ",
+  subOpDefBasis: "subOpDefBasis",
+  subOpDefKnown: "subOpDefKnown",
+  subOpInt     : "subOpInt     ",
+  subOpNeg     : "subOpNeg     ",
+  subOpMulRes  : "subOpMulRes  ",
+  subOpMulKnown: "subOpMulKnown",
+  subOpOn      : "subOpOn      ",
+  basisN       : "basisN       ",
+  basisNx      : "basisNx      ",
+  basisNxx     : "basisNxx     ",
+  basisNy      : "basisNy      ",
+  basisNxy     : "basisNxy     ",
+  basisNyy     : "basisNyy     ",
+  basisNz      : "basisNz      ",
+  basisNxz     : "basisNxz     ",
+  basisNyz     : "basisNyz     ",
+  basisNzz     : "basisNzz     ",
+  kindOtiArr   : "kindOtiArr   ",
+  kindOtiNum   : "kindOtiNum   ",
+  kindReal     : "kindReal     ",
+  kindScalar   : "kindScalar   ",
+  kindFunc     : "kindFunc     ",
+  feConstant   : "feConstant   ",
+  feVariable   : "feVariable   ",
+  elNode       : "elNode       ",
+  elLine       : "elLine       ",
+  elTriangle   : "elTriangle   ",
+  elQuadrangle : "elQuadrangle ",
+  elTetrahedra : "elTetrahedra ",
+  elHexahedra  : "elHexahedra  ",
+  elkindIso    : "elkindIso    ",
+  elkindAff    : "elkindAff    ",
+  derN         : "derN         ",
+  derNa        : "derNa        ",
+  derNaa       : "derNaa       ",
+  derNb        : "derNb        ",
+  derNab       : "derNab       ",
+  derNbb       : "derNbb       ",
+  derNc        : "derNc        ",
+  derNac       : "derNac       ",
+  derNbc       : "derNbc       ",
+  derNcc       : "derNcc       ",
+  feNatTest    : "feNatTest    ",
+  feNatUndef   : "feNatUndef   ",
+  feNatDef     : "feNatDef     ",
+  feNatDefConst: "feNatDefConst",
+  feNatOperRes : "feNatOperRes ",
+  feNatPostIntK: "feNatPostIntK",
+  feNatPostIntF: "feNatPostIntF",
+  feNatBoundary: "feNatBoundary",
+}
 
 
 # #*****************************************************************************************************

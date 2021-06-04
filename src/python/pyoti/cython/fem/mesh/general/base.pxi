@@ -82,6 +82,8 @@ cdef class mesh:
 
     """
     #*************************************************************************************************
+    global alg
+    
     cdef str out = ''
     cdef int64_t i
     out = "< mesh ("+alg.__name__+") object with "

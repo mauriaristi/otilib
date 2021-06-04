@@ -287,6 +287,9 @@ hex20 = elbase.createElement( 20,           # Number of basis
 
 
 
+
+
+
 elements = {}
 elements['point']=[]
 elements['point'].append(point1)
@@ -325,6 +328,9 @@ elements['brick']=[]
 elements['brick'].append(hex1 ) # Order 0
 elements['brick'].append(hex8 ) # Order 1
 elements['brick'].append(hex20) # Order 2
+
+
+
 
 # Supported
 element_list = {}

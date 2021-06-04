@@ -3,7 +3,10 @@
 
 
 cdef uint64_t __varid_counter = 1
-cdef uint64_t __opid_counter = 1
+cdef uint64_t __opid_counter  = 1
+
+
+
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::     CLASS  elemental_operation    ::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -54,70 +57,31 @@ cdef class elemental_operation:
     
     self.data       = None
 
-    self.op_graph   = np.zeros((0,3),dtype = object)
-    # if self.nature == feNatDef:
-
-    #   self.position = [0]
-    #   self.data = data
-
-    # else:
-
-    #   self.position = [self.funcid]
-    #   self.data = None
-
-    # # end if 
-
-    # self.baseFunc = [ self ] 
-
-    # if self.nature == feNatTest:
-    #   # shape = ( DOF,   1 )
-    #   self.shape = [baseSpace.elType.nbasis,1]
-
-    # elif self.nature == feNatUndef:
-    #   # shape = (   1, DOF )
-    #   self.shape = [1,baseSpace.elType.nbasis]
-
-    # else:
-
-    #   self.shape = [1,1]
-
-    # # end if 
-    #                   # 0D, 1D, 2D
-    # # self.shapeBounds = [[], [], []]
-
-    # # cdef int64_t i
-
-    # # for i in range(len(baseSpace.elType.boundEls)):
-
-    # #   if self.nature == feNatTest:
-
-    # #     self.shapeBounds[i] = [baseSpace.elType.boundEls[i].nbasis,1]
-
-    # #   elif self.nature == feNatUndef:
-
-    # #     self.shapeBounds[i] = [1,baseSpace.elType.boundEls[i].nbasis]
-
-    # #   else:
-
-    # #     self.shapeBounds[i] = [1,1]
-
-    # #   # end if 
-    # # # end for 
+    self.op_graph   = np.zeros((0,4),dtype = object)
     
-    # # self.operation_graph = 
-    # # self.Koper        = np.array([[opDef, self.funcid, self.funcid, 0]],dtype = np.int64) # definitions goes only in the matrix. 
+  #---------------------------------------------------------------------------------------------------
 
-    # # self.foper        = np.array([[opDef, self.funcid, self.funcid, 0]],dtype = np.int64) #
+  #***************************************************************************************************
+  def short_repr(self):
+    """
+    PURPOSE:      Return a short representation of the elemental_operations.
+    """
+    #*************************************************************************************************
+    
+    cdef str out = ""
 
-    # # self.essentialOper= np.array([[opDef, self.funcid, self.funcid, 0]],dtype = np.int64) # 
-
-
+    out += "op_id({0})".format(self.op_id)
+    
+    return out
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def tostr(self):
     """
+    PURPOSE:      Return a human readable version of the elemental_operations.
+
     """
+    #*************************************************************************************************
     
     cdef int i, noper = self.op_graph.shape[0]
     cdef str out = ""
@@ -126,14 +90,186 @@ cdef class elemental_operation:
     out += " with {0} operations: \n".format(noper)
 
     for i in range(noper):    
-      out += "{0:8^},".format(enum2string(self.op_graph[i,0]))
-      out += str(self.op_graph[i,1])+','
-      out += str(self.op_graph[i,2])+''
+      out += "{0:8^}, ".format(enum2string_2(self.op_graph[i,0]))
+      
+      lhs = self.op_graph[i,1]
+      if lhs is not None:
+        out += lhs.short_repr()+', '
+
+      rhs = self.op_graph[i,2]
+      if rhs is not None:
+        out += rhs.short_repr()+', '
+      # end if 
+
+      res = self.op_graph[i,3]
+      out +="result_op: {0}".format( res.short_repr() )
+
       out += "\n"
+
     # end for 
 
     out += ">"
     return out
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __str__(self):
+    """
+    PURPOSE:      Return a human readable string of the class.
+
+    """
+    #*************************************************************************************************
+
+    return self.tostr()
+
+  #---------------------------------------------------------------------------------------------------
+
+   #***************************************************************************************************      
+  def __repr__(self):
+    """
+    PURPOSE:      Return a human readable string of the class.
+
+    """
+    #*************************************************************************************************
+    
+    return self.tostr()
+  #---------------------------------------------------------------------------------------------------
+
+
+  
+
+
+  #***************************************************************************************************
+  def __neg__(self):
+    """
+    PURPOSE:      Negation overload.
+
+    """
+    #*************************************************************************************************
+    
+    cdef elemental_operation res = __create_opNeg__(opNeg, self )
+    
+    return res
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __add__(self,other):
+    """
+    PURPOSE:      Addition overload.
+
+    """
+    #*************************************************************************************************
+    cdef elemental_operation res 
+    cdef elemental_operation func1
+    cdef elemental_operation func2
+    
+    type1 = type(self)
+    type2 = type(other)
+    
+    if type1 == type2:   # Case both are of class elemental_operation
+      
+      func1 = self
+      func2 = other
+      res   = __create_opElementwise__( opAdd, func1, func2)
+
+    else:
+
+      raise TypeError('Cannot operate {0} with {1}'.format(type1,type2))
+
+    # end if 
+            
+
+    return res
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __sub__(self,other):
+    """
+    PURPOSE:      Subtraction overload.
+
+    """
+    #*************************************************************************************************
+    cdef elemental_operation res 
+    cdef elemental_operation func1
+    cdef elemental_operation func2
+    
+    type1 = type(self)
+    type2 = type(other)
+    
+    if type1 == type2:   # Case both are of class elemental_operation
+      
+      func1 = self
+      func2 = other
+      res   = __create_opElementwise__( opSub, func1, func2)
+
+    else:
+
+      raise TypeError('Cannot operate {0} with {1}'.format(type1,type2))
+
+    # end if 
+            
+
+    return res
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __mul__(self,other):
+    """
+    PURPOSE:      Multiplication overload.
+
+    """
+    #*************************************************************************************************
+    cdef elemental_operation res 
+    cdef elemental_operation func1
+    cdef elemental_operation func2
+    
+    type1 = type(self)
+    type2 = type(other)
+    
+    if type1 == type2:   # Case both are of class elemental_operation
+      
+      func1 = self
+      func2 = other
+      res   = __create_opElementwise__( opMul, func1, func2)
+
+    else:
+
+      raise TypeError('Cannot operate {0} with {1}'.format(type1,type2))
+
+    # end if 
+            
+
+    return res
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __truediv__(self,other):
+    """
+    PURPOSE:      Division overload.
+
+    """
+    #*************************************************************************************************
+    cdef elemental_operation res 
+    cdef elemental_operation func1
+    cdef elemental_operation func2
+    
+    type1 = type(self)
+    type2 = type(other)
+    
+    if type1 == type2:   # Case both are of class elemental_operation
+      
+      func1 = self
+      func2 = other
+      res   = __create_opElementwise__( opTruediv, func1, func2)
+
+    else:
+
+      raise TypeError('Cannot operate {0} with {1}'.format(type1,type2))
+
+    # end if 
+            
+
+    return res
   #---------------------------------------------------------------------------------------------------
 
   # #***************************************************************************************************
@@ -868,170 +1004,6 @@ cdef class elemental_operation:
 
 
 
-  # #***************************************************************************************************      
-  # def __repr__(self):
-    
-  #   if self.nature == feNatDef:
-    
-  #     out = "<FE function"
-  #     out += " id "+str(self.funcid)
-  #     out += ", Nature "+ str(self.nature)
-  #     out += ", iord "+ str(self.intorder)
-  #     out += ", data:\n"
-  #     out += repr(self.data)
-  #     out += "\n>"
-    
-  #   else:
-    
-  #     out = "<FE function"
-  #     out += " id "+str(self.funcid)
-  #     out += ", Nature "+ str(self.nature)
-  #     out += ", iord "+ str(self.intorder)
-  #     out += ">"
-    
-  #   # end if 
-
-  #   return out
-  # #---------------------------------------------------------------------------------------------------
-
-
-  # #***************************************************************************************************
-  # def __str__(self):
-    
-  #   # if self.nature == feNatDef:
-  #   #   out = "<FE function"
-  #   #   out += " id "+str(self.funcid)
-  #   #   out += ", Nature "+ str(self.nature)
-  #   #   out += ", iord "+ str(self.intorder)
-  #   #   out += ", data:\n"
-  #   #   out += str(self.data)
-  #   #   out += "\n>"
-    
-  #   # else:
-    
-  #   out = "<FE function"
-  #   out += " id "+str(self.funcid)
-  #   out += ", Nature "+ str(self.nature)
-  #   out += ", iord "+ str(self.intorder)
-  #   out += ">"
-    
-  #   # end if 
-
-  #   return out
-  # #---------------------------------------------------------------------------------------------------
-
-
-  # #***************************************************************************************************
-  # def __neg__(self):
-    
-  #   cdef elemental_operation res 
-  #   res   = elemental_operation.newFromOperation(opNeg,self,None)            
-
-  #   return res
-  # #---------------------------------------------------------------------------------------------------
-
-  # #***************************************************************************************************
-  # def __add__(self,other):
-    
-  #   cdef elemental_operation res 
-  #   cdef elemental_operation func1
-  #   cdef elemental_operation func2
-    
-  #   type1 = type(self)
-  #   type2 = type(other)
-    
-  #   if type1 == type2:   # Case both are of class elemental_operation
-      
-  #     func1 = self
-  #     func2 = other
-  #     res   = elemental_operation.newFromOperation(opAdd,func1,func2)
-
-  #   # end if 
-            
-
-  #   return res
-  # #---------------------------------------------------------------------------------------------------
-
-  # #***************************************************************************************************
-  # def __sub__(self,other):
-    
-  #   return self + (-other)
-  # #---------------------------------------------------------------------------------------------------
-
-
-  # #***************************************************************************************************
-  # def __mul__(self,other):
-    
-  #   cdef elemental_operation res 
-  #   cdef elemental_operation func1
-  #   cdef elemental_operation func2
-    
-  #   type1 = type(self)    
-  #   type2 = type(other)
-    
-  #   if type1 == type2:   # Case both are of class elemental_operation
-      
-  #     func1 = self
-  #     func2 = other
-  #     res   = elemental_operation.newFromOperation(opMul,func1,func2)
-
-  #   elif type2 == elemental_operation:
-      
-  #     func2 = other
-  #     func1 = func2.baseSpace.newFunction(self)
-
-  #     res = func1*func2 
-
-  #   elif type1 == elemental_operation:
-
-  #     func1 = self
-  #     func2 = func1.baseSpace.newFunction(other)
-      
-  #     res = func1*func2
-
-  #   else:
-
-  #     return NotImplemented
-
-  #   # end if 
-
-
-
-  #   return res
-  # #---------------------------------------------------------------------------------------------------
-
-
-  # #***************************************************************************************************
-  # def __truediv__(self,other):
-    
-  #   cdef fevar res 
-  #   cdef fevar S
-    
-  #   type1 = type(self)
-  #   type2 = type(other)
-    
-  #   if type1 == type2: # invalid operation ?
-      
-  #     S = self
-  #     res = fevar(S.base)
-  #     res.kind = fem_checkFevarKind(opTruediv,(S.kind,other.kind) )
-  #     res.intorder= S.intorder+other.intorder # Check this! ... Is this really possible?
-
-  #     res.pos = S.base.msh.addNewVariable(res.kind)
-
-  #     # S.base.msh.addOper('/', S, other, res)
-  #     S.base.msh.addOperNp([opTruediv,    \
-  #           S.num,     S.kind,     S.pos, \
-  #       other.num, other.kind, other.pos, \
-  #         res.num,   res.kind,   res.pos     ])
-
-  #     # Add vars
-  #     res.baseVars = list(set(S.baseVars+other.baseVars))
-
-  #   # end if 
-
-  #   return res
-  # #---------------------------------------------------------------------------------------------------
 
   # #***************************************************************************************************
   # def set(self,expr):

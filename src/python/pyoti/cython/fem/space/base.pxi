@@ -17,7 +17,7 @@ cdef class space:
   def __init__(self,  uint8_t order, special = 'std', reduced_integration = False):
     """
     PURPOSE:      Constructor of the finite element space class. Its main purpose is to define 
-                  a class to relate the triangulation with interpolation functions defined by the
+                  a class to relate the mesh with interpolation functions defined by the
                   element type.
 
     INPUTS:
@@ -54,16 +54,19 @@ cdef class space:
     PURPOSE:  This is the call of a finite element space already created. 
 
     Possible calls:
-
     
+    >>> Vh = pyoti.fem.space(2) # Creates an space with polynomial interpolation functions of order 2.
 
     >>> var = Vh()    # This creates an undefined variable that will become: test function or 
                       # solution of fem problem.
 
-    >>> var = Vh(3.5) # This creates a defined variable. You can use this variable in a FE problem, 
-                      # and change its value later without the need to re-define a problem.
+    >>> var = Vh(3.5) # This creates a defined constant function. This is useful in a FE analysis, 
+                      # as you define it with a constant scalar value and then you change its value 
+                      # without the need to re-define the problem.
 
-    >>> var = Vh( sin(Th.x) ) # Creates a defined variable. You can use this variable in a FE problem.
+    >>> var = Vh( sin(Th.x) ) # Creates a defined function. This is useful in a FE analysis, 
+                              # as you can specify the appropriate interpolation functions and update
+                              # the values of the function without the need to re-define the problem.
 
     """
     
@@ -73,32 +76,33 @@ cdef class space:
     
     if len_args == 0:
 
-      print("Creating undefined function.")
-      return __create_opDef__(opDef, baseSpace = self, basis = basisN, data = None)
+      # print("Creating undefined function.")
+      return __create_opDef__( baseSpace = self, basis = basisN, data = None)
+
+    elif len_args == 1:
+
+      # print("Creating defined function from space.")
+      data = args[0]
+      tdata = type(data)
+
+      # if tdata in number_types:
+      #   data_conv = alg.number(data)
+      # elif tdata == sotinum or tdata == matso or tdata == dmat:
+      #   data_conv = data
+      # elif tdata == np.ndarray:
+      #   data_conv = array( data )
+      # else:
+      #   raise ValueError("Unsupported type {0} in FE space call.".format(tdata))
+      # # end if
+
+      # Define a new function with the given data.
+      return __create_opDef__( baseSpace =  self, basis = basisN, data = data)
 
     else:
 
-      if len_args == 1:
+      raise ValueError("Unsupported number of inputs in FE space call.")
 
-        print("Creating defined function from space.")
-        data = args[0]
-        tdata = type(data)
-
-        if tdata in number_types:
-          data_conv = number(data)
-        elif tdata == sotinum or tdata == matso or tdata == dmat:
-          data_conv = data
-        elif tdata == np.ndarray:
-          data_conv = array( data )
-        else:
-          raise ValueError("Unsupported type {0}  in FE space call.".format(tdata))
-        # end if
-
-      else:
-
-        raise ValueError("Unsupported number of inputs in FE space call.")
-
-      # end if
+    # end if
     
   #---------------------------------------------------------------------------------------------------
 

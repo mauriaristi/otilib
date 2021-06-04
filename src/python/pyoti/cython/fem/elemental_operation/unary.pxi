@@ -1,22 +1,23 @@
 #********************************************************************************************************
-cdef __create_opDef__(int64_t operId, space baseSpace = None, basis = basisN, data = None):
+cdef __create_opDef__( space baseSpace = None, basis = basisN, data = None):
   """
   PURPOSE: Create elemental operation from derivative call.
 
-  This function creates an UNARY operation from derivative call.
+  This function creates a UNARY operation from derivative call.
 
   INPUTS:
 
-    - operId: Operation id, expecting only opDx, opDy, opDz.
-    - lhs:    Source operation from which to interpolate the solution. 
-              Can come from feUndef or feDef functions
+    - space baseSpace = None, 
+    - basis = basisN 
+    - data = None
   """
   #******************************************************************************************************
   
-  global __varid_counter
+  global __varid_counter, __opid_counter
   # For now: Not supported dx( dx(...) )
   cdef elemental_operation res = <elemental_operation> elemental_operation.__new__(elemental_operation)
   cdef np.ndarray newOperation 
+  cdef int op_type
   
 
 
@@ -29,18 +30,21 @@ cdef __create_opDef__(int64_t operId, space baseSpace = None, basis = basisN, da
   # end if       
   
   if data is None:
-    res.op_id = opDef
+    op_type = opDef
   else:
-    res.op_id = opDefData
+    op_type = opDefData
   # end if 
 
   res.var_id   = __varid_counter 
   __varid_counter += 1
 
+  res.op_id   = __opid_counter 
+  __opid_counter += 1
+
 
   res.data = data
 
-  res.op_graph = np.array( [[res.op_id,res,None]] , dtype = object)
+  res.op_graph = np.array( [[op_type, res, None, res ]] , dtype = object)
 
   return res
 
@@ -49,11 +53,11 @@ cdef __create_opDef__(int64_t operId, space baseSpace = None, basis = basisN, da
 
 
 #********************************************************************************************************
-cdef __create_opDxx__(int64_t operId, elemental_operation lhs ):
+cdef __create_opDxx__(int64_t operType, elemental_operation lhs ):
   """
   PURPOSE: Create elemental operation from derivative call.
 
-  This function creates an UNARY operation from derivative call.
+  This function creates a UNARY operation from derivative call.
 
   INPUTS:
 
@@ -62,259 +66,170 @@ cdef __create_opDxx__(int64_t operId, elemental_operation lhs ):
               Can come from feUndef or feDef functions
   """
   #******************************************************************************************************
-  global __varid_counter
+  
+  global __varid_counter,__opid_counter
+  
   # For now: Not supported dx( dx(...) )
   cdef elemental_operation res = <elemental_operation> elemental_operation.__new__(elemental_operation)
   cdef np.ndarray newOperation 
+  cdef int op_type
   
   res.baseSpace  = lhs.baseSpace
   res.intorder   = lhs.intorder-1
+  
+  res.op_id   = __opid_counter 
+  __opid_counter += 1
 
-  if lhs.var_id == 0:
-    raise ValueError("multiple concatenation of derivative operations is "+
-                     "currently not supported")
-  # end if 
-
-  if   operId == opDx:
-    res.op_id= opDx 
-  elif operId == opDy:
-    res.op_id= opDy 
-  elif operId == opDz:
-    res.op_id= opDz  
+  if   operType == opDx:
+    op_type = opDx 
+  elif operType == opDy:
+    op_type = opDy 
+  elif operType == opDz:
+    op_type = opDz  
   else:
     raise ValueError("Wrong operation Id for Dxx operation")
   # end if 
 
-  res.var_id   = lhs.var_id
-
+  res.var_id   = -1
   res.data     = lhs.data
-
-  res.op_graph = np.array( [[res.op_id,res,None]] , dtype = object)
+  newOperation = np.array( [[ op_type, lhs, None, res]] , dtype = object)  
+  res.op_graph = np.concatenate( ( lhs.op_graph, newOperation ), axis=0)
 
   return res
 
 #--------------------------------------------------------------------------------------------------------
 
-# #********************************************************************************************************
-# cdef __create_opNeg__(int64_t operId, elemental_operation lhs ):
-#   """
-#   PURPOSE: Create elemental operation from negation operation.
+#********************************************************************************************************
+cdef __create_opNeg__(int64_t operType, elemental_operation lhs ):
+  """
+  PURPOSE: Create elemental operation from negation operation.
 
-#   This function creates an UNARY operation from derivative call.
+  This function creates a UNARY indicative operation from negation call.
 
-#   INPUTS:
+  INPUTS:
 
-#     - operId: Operation id, expecting only opDx, opDy, opDz.
-#     - lhs:    Source operation from which to interpolate the solution. 
-#               Can come from feUndef or feDef functions
-#   """
-#   #******************************************************************************************************
+    - operId: Operation id, expecting only opNeg.
+    - lhs:    Source operation to be negated. 
 
-#   # For now: Not supported dx( dx(...) )
-#   cdef elemental_operation res = <elemental_operation> elemental_operation.__new__(elemental_operation)
-#   cdef np.ndarray newOperation 
+  """
+  #******************************************************************************************************
+
+  global __varid_counter,__opid_counter
   
-#   res.interpDer  = basisN
-
-#   if func1.nature == feNatDef :
+  cdef elemental_operation res = <elemental_operation> elemental_operation.__new__(elemental_operation)
+  cdef np.ndarray newOperation 
+  cdef int op_type
   
-#   # TODO: Operation between two defined functions that have
-#   #       different spaces should be performed as an operation
-#   #       to be done later rather than an operation inplace.
+  res.baseSpace  = lhs.baseSpace
+  res.intorder   = lhs.intorder
 
-#   # Perform the operation
-#   res = func1.baseSpace.newFunction(-func1.data)
-
-#   return res
-
-# # end if 
-
-# res.baseSpace = func1.baseSpace
-
-# res.intorder = func1.intorder
-# res.funcid   = res.baseSpace.addNewOperation()
-
-# res.baseFunc = func1.baseFunc.copy()
-
-# # Add itself to the list of baseFunctions
-# res.baseFunc.append(res)
-
-# # append both foper matrices
-# res.foper = func1.foper.copy()
-
-# if res.foper.ndim != 1:
-#   res.foper = np.append(res.foper,\
-#                      [[operId,res.funcid,func1.funcid,0]],\
-#                       axis = 0)
-# # end if 
-
-# res.Koper = func1.Koper.copy()
-# if res.Koper.ndim != 1:
-#   res.Koper = np.append(res.Koper,\
-#                      [[operId,res.funcid,func1.funcid,0]],\
-#                       axis = 0)
-# # end if 
-
-# res.essentialOper = func1.essentialOper.copy()
-# if res.essentialOper.ndim != 1:
-#   res.essentialOper = np.append(res.essentialOper,\
-#                      [[operId,res.funcid,func1.funcid,0]],\
-#                       axis = 0)
-# # end if 
-
-
-# # TODO: ADD INDICATION TO THE INTEGRATION REGION!
-# res.nature = func1.nature
-# res.shape = func1.shape.copy()
-# res.shapeBounds = func1.shapeBounds.copy()
-# res.position = func1.position.copy()
-
-#   return res
-
-# #--------------------------------------------------------------------------------------------------------
-
-# #********************************************************************************************************
-# cdef __create_opIntXd__(int64_t operId, elemental_operation lhs ):
-#   """
-#   PURPOSE: Create elemental operation from integral call.
-
-#   This function creates an UNARY operation from derivative call.
-
-#   INPUTS:
-
-#     - operId: Operation id, expecting only opDx, opDy, opDz.
-#     - lhs:    Source operation from which to interpolate the solution. 
-#               Can come from feUndef or feDef functions
-#   """
-#   #******************************************************************************************************
   
-#   # For now: Not supported dx( dx(...) )
-#   cdef elemental_operation res = <elemental_operation> elemental_operation.__new__(elemental_operation)
-#   cdef np.ndarray newOperation 
+  res.op_id   = __opid_counter 
+  __opid_counter += 1
+
+  if   operType == opNeg:
+    op_type = opNeg
+  else:
+    raise ValueError("Wrong operation Id for negation operation")
+  # end if 
+
+  res.var_id   = -1
+  res.data     = lhs.data
+  newOperation = np.array( [[ op_type, lhs, None, res]] , dtype = object)  
+  res.op_graph = np.concatenate( ( lhs.op_graph, newOperation ), axis=0)
+
+  return res
+
+#--------------------------------------------------------------------------------------------------------
+
+#********************************************************************************************************
+cdef __create_opIntXd__(int64_t operType, elemental_operation lhs, mesh Th, region ):
+  """
+  PURPOSE: Create elemental operation from integral call.
+
+  This function creates a UNARY operation from integration call.
+
+  INPUTS:
+
+    - operId: Operation id, expecting only opInt0D, opInt1D, opInt2D, opInt3D.
+    - lhs:    Source operation from which to interpolate the solution. 
+              Can come from feUndef or feDef functions
+  """
+  #******************************************************************************************************
   
-#   res.interpDer  = basisN
-
-
-
-
-#   # INT 2D
-
-#   res.baseSpace = func1.baseSpace
-        
-#   res.intorder = func1.intorder
-#   res.funcid   = res.baseSpace.addNewOperation()
-
-#   res.baseFunc = func1.baseFunc.copy()
+  global __varid_counter,__opid_counter
   
-#   # Add itself to the list of baseFunctions
-#   res.baseFunc.append(res)
-
-#   if func1.nature == feNatTest:
-
-#     # append both foper matrices
-#     res.foper = func1.foper.copy()
-
-#     # append both Koper matrices
-#     res.Koper = np.array([],dtype=np.int64)
-
-#     # add new operation to the operation matrix
-#     res.foper = np.append(res.foper,\
-#                          [[operId,res.funcid,func1.funcid,0]],\
-#                           axis = 0)
-
-#     # initialize the other two operation matrices as void.
-#     res.essentialOper = np.array([],dtype=np.int64)
-
-#   elif func1.nature == feNatOperRes:
-
-#     # append both foper matrices
-#     res.foper = np.array([],dtype=np.int64)
-
-#     # append both Koper matrices
-#     res.Koper = func1.Koper.copy()
-
-#     # add new operation to the operation matrix
-#     res.Koper = np.append(res.Koper,\
-#                          [[operId,res.funcid,func1.funcid,0]],\
-#                           axis = 0)
-
-#     # initialize the other two operation matrices as void.
-#     res.essentialOper = np.array([],dtype=np.int64)
-
-#   else:
-
-#     raise ValueError("Domain integral only supports natures "+\
-#       str(feNatTest)+" or "+str(feNatOperRes)+".")
-
-#   # end if 
-#   # TODO: ADD INDICATION TO THE INTEGRATION REGION!
-#   res.nature   = feNatPostIntK 
-#   res.shape    = []
-#   res.shapeBounds = [[],[],[]]
-#   res.position = [0]
-
-#   return res
-
-# #--------------------------------------------------------------------------------------------------------
-
-
-
-# #********************************************************************************************************
-# cdef __create_opOn__(int64_t operId, elemental_operation lhs ):
-#   """
-#   PURPOSE: Create elemental operation from integral call.
-
-#   This function creates an UNARY operation from derivative call.
-
-#   INPUTS:
-
-#     - operId: Operation id, expecting only opDx, opDy, opDz.
-#     - lhs:    Source operation from which to interpolate the solution. 
-#               Can come from feUndef or feDef functions
-#   """
-#   #******************************************************************************************************
+  cdef elemental_operation res = <elemental_operation> elemental_operation.__new__(elemental_operation)
+  cdef np.ndarray newOperation 
+  cdef int op_type
   
-#   # For now: Not supported dx( dx(...) )
-#   cdef elemental_operation res = <elemental_operation> elemental_operation.__new__(elemental_operation)
-#   cdef np.ndarray newOperation 
+  res.baseSpace  = None
+  res.intorder   = lhs.intorder
   
-#   res.interpDer  = basisN
+  res.op_id   = __opid_counter 
+  __opid_counter += 1
 
-#   res.baseSpace = func1.baseSpace
+  if   operType == opInt0d:
+    op_type = opInt0d 
+  elif operType == opInt1d:
+    op_type = opInt1d 
+  elif operType == opInt2d:
+    op_type = opInt2d 
+  elif operType == opInt3d:
+    op_type = opInt3d 
+  else:
+    raise ValueError("Wrong operation Id for IntXd operation")
+  # end if 
+
+  res.var_id   = -1
+  res.data     = { 'mesh':Th, 'region':region }
+
+  newOperation = np.array( [[ op_type, lhs, None, res]] , dtype = object)  
+  res.op_graph = np.concatenate( ( lhs.op_graph, newOperation ), axis=0)
+
+  return res
+
+#--------------------------------------------------------------------------------------------------------
+
+#********************************************************************************************************
+cdef __create_opOn__(int64_t operType, elemental_operation lhs, mesh Th, region ):
+  """
+  PURPOSE: Create elemental operation from on call.
+
+  This function creates a UNARY operation from essential boundary condition call.
+
+  INPUTS:
+
+    - operId: Operation id, expecting only opDx, opDy, opDz.
+    - lhs:    Source operation from which to interpolate the solution. 
+              Can come from feUndef or feDef functions
+  """
+  #******************************************************************************************************
   
-#   res.intorder = func1.intorder
-#   res.funcid   = res.baseSpace.addNewOperation()
-
-#   res.baseFunc = func1.baseFunc.copy()
+  global __varid_counter,__opid_counter
   
-#   # Add itself to the list of baseFunctions
-#   res.baseFunc.append(res)
+  cdef elemental_operation res = <elemental_operation> elemental_operation.__new__(elemental_operation)
+  cdef np.ndarray newOperation 
+  cdef int op_type
+  
+  res.baseSpace  = None
+  res.intorder   = -1
+  
+  res.op_id   = __opid_counter 
+  __opid_counter += 1
 
-#   # append both foper matrices
-#   res.foper = func1.foper.copy()
+  if   operType == opOn:
+    op_type = opOn 
+  else:
+    raise ValueError("Wrong operation Id for IntXd operation")
+  # end if 
 
-#   # append both Koper matrices
-#   res.Koper = np.array([],dtype=np.int64)
+  res.var_id   = -1
+  res.data     = { 'mesh':Th, 'region':region }
 
-#   # add new operation to the operation matrix
-#   if func1.essentialOper.ndim != 1:
-#     res.essentialOper = np.append(func1.essentialOper,\
-#                        [[operId,res.funcid,func1.funcid,func2.funcid]],\
-#                         axis = 0)
-#   else:
-#     res.essentialOper = np.array([[operId,res.funcid,func1.funcid,func2.funcid]],dtype=np.int64)
-#   # end if 
+  newOperation = np.array( [[ op_type, lhs, None, res]] , dtype = object)  
+  res.op_graph = np.concatenate( ( lhs.op_graph, newOperation ), axis=0)
 
-#   # initialize the other two operation matrices as void.
-#   res.foper = np.array([],dtype=np.int64)
+  return res
 
-
-#   # TODO: ADD INDICATION TO THE INTEGRATION REGION!
-#   res.nature = feNatPostIntK
-#   res.shape =[]
-#   res.shapeBounds = [[],[],[]]
-#   res.position = [0] #  Add here the position of the variable that is being defined.
-
-#   return res
-
-# #--------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------

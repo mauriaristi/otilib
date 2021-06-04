@@ -36,3 +36,8 @@ cdef class elemental_operation:
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
+cdef __create_opElementwise__(int64_t operType, elemental_operation lhs, elemental_operation rhs )
+cdef __create_opDxx__(int64_t operType, elemental_operation lhs )
+cdef __create_opDef__(space baseSpace = *, basis = *, data = *)
+cdef __create_opIntXd__(int64_t operType, elemental_operation lhs, mesh Th, region )
+cdef __create_opOn__(int64_t operType, elemental_operation lhs, mesh Th, region )

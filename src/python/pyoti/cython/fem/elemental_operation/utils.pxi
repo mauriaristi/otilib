@@ -164,8 +164,8 @@ cpdef dx(object func1):
 
   if tfunc1 == elemental_operation:
     res = __create_opDxx__(opDx,func1)
-  elif tfunc1 == matso:
-    tmp = __create_opDef__(opDefData, baseSpace = None, basis = basisNx, data = func1)
+  else:
+    tmp = __create_opDef__(baseSpace = None, basis = basisNx, data = func1)
     res = __create_opDxx__(opDx,tmp)
     # raise ValueError("Derivative of defined function is not yet supported.")
   # end if
@@ -191,8 +191,8 @@ cpdef dy(object func1):
 
   if tfunc1 == elemental_operation:
     res = __create_opDxx__(opDy,func1)
-  elif tfunc1 == matso:
-    tmp = __create_opDef__(opDefData, baseSpace = None, basis = basisNy, data = func1)
+  else:
+    tmp = __create_opDef__(baseSpace = None, basis = basisNy, data = func1)
     res = __create_opDxx__(opDy,tmp)
     # raise ValueError("Derivative of defined function is not yet supported.")
   # end if
@@ -218,8 +218,8 @@ cpdef dz(object func1):
 
   if tfunc1 == elemental_operation:
     res = __create_opDxx__(opDz,func1)
-  elif tfunc1 == matso:
-    tmp = __create_opDef__(opDefData, baseSpace = None, basis = basisNz, data = func1)
+  else:
+    tmp = __create_opDef__(baseSpace = None, basis = basisNz, data = func1)
     res = __create_opDxx__(opDz,tmp)
     # raise ValueError("Derivative of defined function is not yet supported.")
   # end if
@@ -227,40 +227,4 @@ cpdef dz(object func1):
   return res
 
 #-----------------------------------------------------------------------------------------------------
-
-# #*****************************************************************************************************
-# cpdef dy(fefunction func1):
-#   """
-#   PURPOSE: Define derivative of a Finite Element function.
-
-#   INPUTS: 
-
-#     -> func1:   Finite element function that will be derived.
-
-#   """ 
-
-#   cdef fefunction res 
-
-#   res   = fefunction.newFromOperation(opDy,func1,None)
-
-#   return res
-# #-----------------------------------------------------------------------------------------------------
-
-# #*****************************************************************************************************
-# cpdef dz(fefunction func1):
-#   """
-#   PURPOSE: Define derivative of a Finite Element function.
-
-#   INPUTS: 
-
-#     -> func1:   Finite element function that will be derived.
-
-#   """ 
-
-#   cdef fefunction res 
-
-#   res   = fefunction.newFromOperation(opDz,func1,None)
-
-#   return res
-# #-----------------------------------------------------------------------------------------------------
 

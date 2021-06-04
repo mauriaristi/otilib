@@ -5,18 +5,18 @@ cdef extern from "oti/oti.h" nogil:
   # From oti/fem/enums.h
 
   cdef enum operEnum : # {  
-    opAdd         =   1 ,
-    opSub         =   2 ,
-    opMul         =   3 ,
-    opTruediv     =   4 ,
-    opPowr        =   5 ,
+    opAdd         =    1,
+    opSub         =    2,
+    opMul         =    3,
+    opTruediv     =    4,
+    opPowr        =    5,
     
-    opInt0d       =  60 ,
-    opInt1d       =   6 ,
-    opInt2d       =   7 ,
-    opInt3d       =   8 ,
+    opInt0d       =   60,
+    opInt1d       =    6,
+    opInt2d       =    7,
+    opInt3d       =    8,
 
-    opDx          =   9 ,
+    opDx          =    9,
     opDy          =   10,
     opDz          =   11,
     opDxx         =   12,

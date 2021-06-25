@@ -992,9 +992,7 @@ void arrso_save(char* filename, arrso_t* arr, dhelpl_t dhl){
 
     
     data_header = (char*) data;
-
-
-    
+    memset(data_header, 0, 64); // Set all 64 bytes of header as zero.
 
     // write header
     memcpy(data_header, magic, 4);
@@ -1019,13 +1017,13 @@ void arrso_save(char* filename, arrso_t* arr, dhelpl_t dhl){
     memcpy(data_header, &arr->ncols, sizeof(uint64_t));
     data_header += sizeof(uint64_t);
 
-    
-    data_write = data+64;
+    // Jump 64 bytes of header to write data.
+    data_write = data + 64;
     for ( i=0; i < arr->size; i++ ){
         soti_save_to_mem( &arr->p_data[i],  data_write, dhl);
+        // recompute OTI number size to jump to new storage point.
         data_write += soti_get_memsize_save( &arr->p_data[i], dhl);
     }
-
 
     file_ptr = fopen(filename, "wb");
 
@@ -1087,7 +1085,7 @@ arrso_t arrso_read(char* filename, dhelpl_t dhl){
     memcpy( &ncols,   &data_header[8+16], sizeof(uint64_t));
     
     // printf("Read: mem_size %d, nrows = %d, ncols = %d\n",mem_size,nrows,ncols);
-    arr = arrso_zeros_bases(nrows,ncols,0,0,dhl);
+    arr = arrso_zeros_bases( nrows, ncols, 0, 0, dhl);
     
     // Allocate memory to be exported
     data = malloc(mem_size); 

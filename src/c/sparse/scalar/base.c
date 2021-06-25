@@ -928,7 +928,7 @@ inline void soti_reset_orders(ord_t ord_start, ord_t ord_end, sotinum_t* num, dh
     }
 
 }
-
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 void soti_print(sotinum_t* num, dhelpl_t dhl){
@@ -937,7 +937,7 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
     ord_t ordi,ord;
     bases_t* imdir_bases;
     
-    for( ordi = 0; ordi<num->order; ordi++){
+    for( ordi = 0; ordi<num->torder; ordi++){
         nnz_total += num->p_nnz[ordi];
     }
 
@@ -949,7 +949,7 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
     // printf("    0 ,         0 , "_PCOEFFT"\n",num->re);
     printf("  " _PCOEFFT " , [0]\n",num->re);
 
-    for( ord = 1; ord <= num->order; ord++){
+    for( ord = 1; ord <= num->torder; ord++){
 
         ndir_t ndir_i = num->p_nnz[ord-1];
 
@@ -990,14 +990,14 @@ sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t torder, dhelpl_t dhl){
         printf("ERROR: Trying to get a temporal that does not exist.\n");
         exit(OTI_undetErr);   
     }
-
+    res.re     = 0.0; // Set real value to zero.
     res.p_im   = dhl.p_dh[torder-1].p_ims[ntmp]; 
     res.p_idx  = dhl.p_dh[torder-1].p_ids[ntmp]; 
     res.p_nnz  = dhl.p_dh[torder-1].p_nnz[ntmp]; 
     res.p_size = dhl.p_dh[torder-1].p_size[ntmp]; 
     res.order  = 0;
     res.torder = torder; 
-    res.flag   = 0; 
+    res.flag   = 0; // Memory is not owned by this number.
 
     for (i=0; i<torder; i++){
 
@@ -1066,8 +1066,8 @@ void* soti_read_from_mem_to(void* mem, sotinum_t* dst, dhelpl_t dhl){
     ord_t i;
     void* read_mem = mem;
     coeff_t re = 0.;
-    ord_t trunc_order = 0;
-    ord_t narrays = 0;
+    ord_t order = 0;
+    ord_t torder = 0;
     sotinum_t res, tmp;
 
     // read real coefficient:
@@ -1075,11 +1075,11 @@ void* soti_read_from_mem_to(void* mem, sotinum_t* dst, dhelpl_t dhl){
     read_mem += sizeof(coeff_t);
 
     // read truncation order:
-    memcpy( &trunc_order, read_mem, sizeof(ord_t) );
+    memcpy( &order, read_mem, sizeof(ord_t) );
     read_mem += sizeof(ord_t);
 
     // read number of arrays order:
-    memcpy( &narrays, read_mem, sizeof(ord_t) );
+    memcpy( &torder, read_mem, sizeof(ord_t) );
     read_mem += sizeof(ord_t);
 
     tmp = soti_get_tmp( 0, trunc_order, dhl);
@@ -1122,15 +1122,15 @@ void soti_save_to_mem(sotinum_t* num, void* mem, dhelpl_t dhl){
     write_mem += sizeof(coeff_t);
 
     // Write truncation order:
-    memcpy( write_mem, &num->torder, sizeof(ord_t) );
-    write_mem += sizeof(ord_t);
-
-    // Write number of arrays:
     memcpy( write_mem, &num->order, sizeof(ord_t) );
     write_mem += sizeof(ord_t);
 
+    // Write number of arrays:
+    memcpy( write_mem, &num->torder, sizeof(ord_t) );
+    write_mem += sizeof(ord_t);
+
     // Add the standard allocation sizes:
-    for ( i =0; i < num->order ; i++){
+    for ( i =0; i < num->torder ; i++){
 
         // Write number of arrays order:
         memcpy( write_mem, &num->p_nnz[i], sizeof(ndir_t) );
@@ -1155,11 +1155,11 @@ uint64_t soti_get_memsize_save(sotinum_t* num, dhelpl_t dhl){
     uint64_t mem_size = 0;
     ord_t i;
     
-    // Get the size of    re  coeff           trunc ord        n arrays              :
+    // Get the size of    re  coeff           order            torder     :
     mem_size =         sizeof(coeff_t)  +  sizeof(ord_t)  +  sizeof(ord_t);
 
     // Add the standard allocation sizes:
-    for ( i =0; i < num->order ; i++){
+    for ( i =0; i < num->torder ; i++){
         
         mem_size += sizeof(ndir_t) + num->p_nnz[i]*( sizeof(coeff_t) + sizeof(imdir_t) ) ;
 

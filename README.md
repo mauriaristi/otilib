@@ -13,13 +13,14 @@ This is the repository for the implementation of Order Truncated Imaginary numbe
 The following programming languages will be implemented in a very near future:
 
 * **Fortran** (F95 or newer, only dense implementation so far)
-* **C++** (C++11)
+* **Swift**
+* **Julia**
 
 Far-future implementation we are looking forward are:
 
+* **C++** (C++11)
 * **Matlab**
 * **Java** / **Javascript**
-* **Julia**
 
 ## Installation instructions:
 

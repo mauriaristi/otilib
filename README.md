@@ -57,13 +57,7 @@ NOTE: If this is your first time compiling the library, you should run the follo
 make gendata
 ```
 
-This will pre-compute the data required for 
-
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+This will pre-compute the data required for standard operation of OTI library.
 
 
 
@@ -82,9 +76,20 @@ The current version depends on ```stdlib.h``` and ```math.h```
 #### Python version 3:
 
 Requirements:
-- Numpy
-- Scipy
-- partitionsets
+
+* Numpy
+* Scipy
+* scikit-umfpack
+* scikit-sparse
+* Cython (For compilation only)
+
+For the full Finite Element Module support, the following libraries may be useful to find.
+
+* PyVista
+* GMSH (and Python-GMSH)
+* vtk
+
+  
 
 ***
 
@@ -98,8 +103,10 @@ Requirements:
 * Direct comments to the library should be addressed to Mauricio Aristizabal to [this e-mail](mailto:mauriaristi@gmail.com) with the subject: "[OTILIB]:*concern*: your subject "
 
 The word *concern* may be replaced by one of the following (choose accordingly):
+
 * *bugc*: C code bugs
 * *bugpy*: Python code bugs
+* *bugswift*: Swift code bugs
 * *doc*: Documentation bugs
 * *example*: Trouble in one of the examples.
 * *wrapper*: Questions related with wrappers to other languages.

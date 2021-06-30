@@ -719,11 +719,8 @@ inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, so
     sotinum_t* tmpsrc  = &tmp ;
     sotinum_t* tmpdest = &tmp3;
     sotinum_t* tmpswap;
-    coeff_t*   p_im_swap;
-    imdir_t*  p_idx_swap;
-    ndir_t    p_nnz_swap;
     ord_t res_ord = MAX(num1->torder,num2->torder);
-    ord_t ordlim1, ordlim2;
+    ord_t ordlim1;
     ord_t ordi1, ordi2, ordires;
 
     // Retreive sotinum temporals.

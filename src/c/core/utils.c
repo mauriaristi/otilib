@@ -433,7 +433,7 @@ void set_python_error_function(void (*error_function)(int64_t)){
 
 void print_python_error_def(void ){
 
-    printf("This is is_python_error_def: %d \n",is_python_error_def);
+    printf("This is is_python_error_def: %" PRIu64 "\n",is_python_error_def);
 }
 
 // ****************************************************************************************************

@@ -282,7 +282,6 @@ void soti_set_item(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl
 void soti_set_im_r(coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl){
     
     flag_t flag;
-    ord_t ordi;
     imdir_t pos;
     
     if (order == 0){
@@ -1068,26 +1067,26 @@ void* soti_read_from_mem_to(void* mem, sotinum_t* dst, dhelpl_t dhl){
     coeff_t re = 0.;
     ord_t order = 0;
     ord_t torder = 0;
-    sotinum_t res, tmp;
+    sotinum_t tmp;
 
     // read real coefficient:
     memcpy( &re, read_mem, sizeof(coeff_t) );
     read_mem += sizeof(coeff_t);
 
     // read truncation order:
-    memcpy( &order, read_mem, sizeof(ord_t) );
-    read_mem += sizeof(ord_t);
-
-    // read number of arrays order:
     memcpy( &torder, read_mem, sizeof(ord_t) );
     read_mem += sizeof(ord_t);
 
-    tmp = soti_get_tmp( 0, trunc_order, dhl);
+    // read number of arrays order:
+    memcpy( &order, read_mem, sizeof(ord_t) );
+    read_mem += sizeof(ord_t);
+
+    tmp = soti_get_tmp( 0, torder, dhl);
     soti_set_r( re, &tmp, dhl);
-    tmp.order = narrays;
+    tmp.order = order;
 
     // Add the standard allocation sizes:
-    for ( i = 0; i < tmp.order; i++){
+    for ( i = 0; i < tmp.torder; i++){
 
         // read number of non zeros for this order:
         memcpy( &tmp.p_nnz[i], read_mem, sizeof(ndir_t) );
@@ -1122,15 +1121,15 @@ void soti_save_to_mem(sotinum_t* num, void* mem, dhelpl_t dhl){
     write_mem += sizeof(coeff_t);
 
     // Write truncation order:
-    memcpy( write_mem, &num->order, sizeof(ord_t) );
-    write_mem += sizeof(ord_t);
-
-    // Write number of arrays:
     memcpy( write_mem, &num->torder, sizeof(ord_t) );
     write_mem += sizeof(ord_t);
 
+    // Write number of arrays:
+    memcpy( write_mem, &num->order, sizeof(ord_t) );
+    write_mem += sizeof(ord_t);
+
     // Add the standard allocation sizes:
-    for ( i =0; i < num->torder ; i++){
+    for ( i =0; i < num->order ; i++){
 
         // Write number of arrays order:
         memcpy( write_mem, &num->p_nnz[i], sizeof(ndir_t) );
@@ -1159,7 +1158,7 @@ uint64_t soti_get_memsize_save(sotinum_t* num, dhelpl_t dhl){
     mem_size =         sizeof(coeff_t)  +  sizeof(ord_t)  +  sizeof(ord_t);
 
     // Add the standard allocation sizes:
-    for ( i =0; i < num->torder ; i++){
+    for ( i =0; i < num->order ; i++){
         
         mem_size += sizeof(ndir_t) + num->p_nnz[i]*( sizeof(coeff_t) + sizeof(imdir_t) ) ;
 

@@ -1052,7 +1052,7 @@ arrso_t arrso_read(char* filename, dhelpl_t dhl){
     void *data_read;
     char data_header[64];
     char magic[4] = {'\x93','O','T','I'}; 
-    uint8_t major=1, minor = 0;
+    // uint8_t major=1, minor = 0; // Version check.
     uint8_t format=21;
     // sotinum_t tmp2;
     arrso_t arr;
@@ -1073,6 +1073,8 @@ arrso_t arrso_read(char* filename, dhelpl_t dhl){
             exit(OTI_undetErr);
         }
     }
+
+    // TODO: Add version check.
 
     if (data_header[6]!= format){
         printf("ERROR: unrecognized data format\n");

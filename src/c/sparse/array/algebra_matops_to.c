@@ -81,6 +81,7 @@ void arrso_matmul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl
 
     // Extract temporal 5.
     order = MAX(arrso_get_order( arr1 ), arrso_get_order( arr2 ));
+    
     tmp = soti_get_tmp( 5, order ,dhl);
 
     for ( i = 0; i < arr1->nrows; i++){
@@ -123,8 +124,9 @@ void arrso_matmul_OR_to(arrso_t* arr1, darr_t* arr2, arrso_t* res, dhelpl_t dhl)
     arrso_dimCheck_OR_matmul(arr1, arr2, res);
 
     order = arrso_get_order( arr1 );
+    
     // Extract temporal 5.
-    tmp = soti_get_tmp( 5,arr1->p_data[0].order ,dhl);
+    tmp = soti_get_tmp( 5, order, dhl);
 
     for ( i = 0; i < arr1->nrows; i++){
         

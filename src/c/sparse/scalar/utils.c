@@ -5,7 +5,7 @@ void soti_get_active_bases(sotinum_t* num, imdir_t* list, dhelpl_t dhl){
     bases_t* imdir;
     uint64_t i;
 
-    for( ordi = 0; ordi < num->order; ordi++){
+    for( ordi = 0; ordi < num->act_order; ordi++){
 
         for ( i = 0; i< num->p_nnz[ordi]; i++){
 

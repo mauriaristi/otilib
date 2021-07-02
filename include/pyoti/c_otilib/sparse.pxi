@@ -9,8 +9,8 @@ cdef extern from "oti/oti.h" nogil:
       imdir_t**     p_idx;
       ndir_t*       p_nnz;
       ndir_t*      p_size;
-      ord_t         order;
-      ord_t        torder;
+      ord_t     act_order;
+      ord_t     trc_order;
       flag_t         flag;
   # } sotinum_t;
   ctypedef struct somin_t: # {
@@ -19,7 +19,6 @@ cdef extern from "oti/oti.h" nogil:
       imdir_t**     p_idx;
       ndir_t*       p_nnz;
   # } somin_t;
-
 
   # From oti/sparse/array/structures.h
 

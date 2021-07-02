@@ -1164,7 +1164,7 @@ cpdef get_order_im_array(ord_t ordi, matso tmp):
   for i in range(tmp.size):    
     otmp = tmp.arr.p_data[i]
 
-    if otmp.order >= ordi:
+    if otmp.act_order >= ordi:
       nnz = otmp.p_nnz[ordi-1]
       
       if nnz > 0:
@@ -1186,7 +1186,7 @@ cpdef get_order_im_array(ord_t ordi, matso tmp):
 
       otmp = tmp.arr.p_data[ j + i * tmp.ncols ]
 
-      if otmp.order >= ordi:
+      if otmp.act_order >= ordi:
         
         nnz = otmp.p_nnz[ordi-1]
         

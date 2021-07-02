@@ -1125,7 +1125,7 @@ inline arrso_t arrso_empty_like(arrso_t* arr, dhelpl_t dhl){
     if (arr->size!=0){
         
         res = arrso_createEmpty_predef(arr->nrows, arr->ncols, arr->p_data[0].p_size, 
-            arr->p_data[0].order, dhl);    
+            arr->p_data[0].trc_order, dhl);    
 
     }else{
 

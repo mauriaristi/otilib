@@ -184,7 +184,7 @@ void soti_mul_ro_to(coeff_t val, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 
     res->re *= val;
 
-    for ( i=0; i<res->order; i++){
+    for ( i=0; i<res->act_order; i++){
         
         for ( j = 0; j<res->p_nnz[i]; j++){
 
@@ -230,7 +230,7 @@ void soti_gem_or_to( sotinum_t* b, coeff_t a, sotinum_t* c, sotinum_t* res, dhel
 void soti_gem_ro_to(coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl){
     // This function does GEM (GEneral Multiplication): res = a*b + c
 
-    sotinum_t tmp1 = soti_get_tmp( 0, b->order, dhl);
+    sotinum_t tmp1 = soti_get_tmp( 0, b->act_order, dhl);
     sotinum_t tmp2;
 
     soti_mul_ro_to( a, b, &tmp1, dhl); // This is temporal 10
@@ -248,7 +248,8 @@ void soti_gem_ro_to(coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelp
 
 
 // ****************************************************************************************************
-void soti_trunc_gem_oo_to(ord_t orda, sotinum_t* a, ord_t ordb, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl){
+void soti_trunc_gem_oo_to(ord_t orda, sotinum_t* a, ord_t ordb, sotinum_t* b, sotinum_t* c,
+                          sotinum_t* res, dhelpl_t dhl){
     // This function does GEM (GEneral Multiplication): res = a*b + c
 
     sotinum_t  tmp1, tmp2;
@@ -269,7 +270,7 @@ void soti_trunc_gem_oo_to(ord_t orda, sotinum_t* a, ord_t ordb, sotinum_t* b, so
 void soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl){
 
     
-    sotinum_t inv = soti_get_rtmp(6, den->order, dhl);
+    sotinum_t inv = soti_get_rtmp(6, den->trc_order, dhl);
     soti_pow_to( den, -1, &inv, dhl);
     soti_mul_ro_to(num,&inv,res,dhl);
 
@@ -279,9 +280,9 @@ void soti_div_ro_to(coeff_t num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 void soti_div_oo_to(sotinum_t* num, sotinum_t* den, sotinum_t* res, dhelpl_t dhl){
 
-    sotinum_t inv = soti_get_rtmp(6, den->order, dhl);
+    sotinum_t inv = soti_get_rtmp(6, den->trc_order, dhl);
     
-    soti_pow_to( den, -1, &inv, dhl);
+    soti_pow_to( den, -1.0, &inv, dhl);
     
     soti_mul_oo_to( num, &inv, res, dhl);
 

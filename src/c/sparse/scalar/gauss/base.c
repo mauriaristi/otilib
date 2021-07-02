@@ -19,7 +19,7 @@ ord_t fesoti_get_order( fesoti_t* num ){
     // Finds the maximum order in the array.
     for( i = 0; i<num->nip; i++ ){
         
-        order = MAX(order,num->p_data[0].order);
+        order = MAX(order,num->p_data[0].trc_order);
     
     }
 

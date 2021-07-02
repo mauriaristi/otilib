@@ -8,7 +8,6 @@
 // ****************************************************************************************************
 sotinum_t soti_taylor_integrate(coeff_t* deltas, sotinum_t* num, dhelpl_t dhl){
     
-    
     sotinum_t res = soti_createEmpty( 0, dhl); 
     
     soti_taylor_integrate_to( deltas, num, &res, dhl);
@@ -1423,9 +1422,9 @@ sotinum_t soti_createEmpty_bases( bases_t nbases, ord_t torder, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-sotinum_t soti_createReal(coeff_t num, ord_t torder, dhelpl_t dhl){
+sotinum_t soti_createReal(coeff_t num, ord_t trc_order, dhelpl_t dhl){
     
-    sotinum_t res = soti_createEmpty(torder,dhl);
+    sotinum_t res = soti_createEmpty(trc_order,dhl);
 
     res.re = num;
 
@@ -1434,7 +1433,7 @@ sotinum_t soti_createReal(coeff_t num, ord_t torder, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
  
 // ****************************************************************************************************
-sotinum_t soti_createEmpty( ord_t torder, dhelpl_t dhl){
+sotinum_t soti_createEmpty( ord_t trc_order, dhelpl_t dhl){
     
     sotinum_t res;
     
@@ -1443,11 +1442,11 @@ sotinum_t soti_createEmpty( ord_t torder, dhelpl_t dhl){
     ord_t i;
     
     // Define allocation sizes.
-    for ( i = 0; i < torder; i++){
+    for ( i = 0; i < trc_order; i++){
         p_nnz[i] = dhl.p_dh[i].allocSize; // Get standard allocation sizes.
     }
     
-    res = soti_createEmpty_predef(p_nnz, torder, dhl);
+    res = soti_createEmpty_predef(p_nnz, trc_order, dhl);
 
     return res;
 
@@ -1459,7 +1458,7 @@ sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
     
     // This function assumes that 'other' is correctly allocated.
     // Defines a new memory space from the p_nnz (not p_size) of the input sparse number.
-    sotinum_t res = soti_createEmpty_predef(other->p_nnz, other->torder, dhl);
+    sotinum_t res = soti_createEmpty_predef(other->p_nnz, other->trc_order, dhl);
 
     return res;
 
@@ -1467,7 +1466,7 @@ sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t torder, dhelpl_t dhl){
+inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t trc_order, dhelpl_t dhl){
     
     sotinum_t res = soti_init(); // Initialize pointer values.
 
@@ -1475,12 +1474,12 @@ inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t torder, dhelpl_t d
     uint64_t allocation_size = 0;
     ord_t i;
 
-    res.torder = torder;
+    res.trc_order = trc_order;
     
-    if (res.torder != 0){
+    if (res.trc_order != 0){
 
         // Get the allocation size of the OTI number:
-        allocation_size = res.torder*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
+        allocation_size = res.trc_order*(sizeof(coeff_t*)+sizeof(imdir_t*)+sizeof(ndir_t)+sizeof(ndir_t));
 
         // Add the standard allocation sizes:
         for ( i = 0; i<res.torder; i++){
@@ -1498,18 +1497,18 @@ inline sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t torder, dhelpl_t d
 
         // Distribute memory among the different pointers.
         res.p_im  = (coeff_t**)memory;
-        memory    += res.torder * sizeof(coeff_t*);
+        memory    += res.trc_order * sizeof(coeff_t*);
 
         res.p_idx = (imdir_t**)memory;
-        memory    += res.torder * sizeof(imdir_t*);
+        memory    += res.trc_order * sizeof(imdir_t*);
 
         res.p_nnz = (ndir_t*  )memory;
-        memory    += res.torder * sizeof(ndir_t);
+        memory    += res.trc_order * sizeof(ndir_t);
 
         res.p_size= (ndir_t*  )memory;
-        memory    += res.torder * sizeof(ndir_t);
+        memory    += res.trc_order * sizeof(ndir_t);
         
-        for ( i = 0; i < res.torder; i++){
+        for ( i = 0; i < res.trc_order; i++){
             
             // Distribute memory.
             res.p_im[i] = (coeff_t*)memory;
@@ -1558,27 +1557,27 @@ size_t soti_memory_size( const ndir_t* p_nnz, ord_t order){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t torder, flag_t flag, sotinum_t* res){
+void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t trc_order, flag_t flag, sotinum_t* res){
 
     ord_t i;
     void* memory = mem;
 
-    res->torder = torder;
+    res->trc_order = torder;
 
     // Distribute memory among the different pointers.
     res->p_im  = (coeff_t**)memory;
-    memory    += res->torder * sizeof(coeff_t*);
+    memory    += res->trc_order * sizeof(coeff_t*);
 
     res->p_idx = (imdir_t**)memory;
-    memory    += res->torder * sizeof(imdir_t*);
+    memory    += res->trc_order * sizeof(imdir_t*);
 
     res->p_nnz = (ndir_t*  )memory;
-    memory    += res->torder * sizeof(ndir_t);
+    memory    += res->trc_order * sizeof(ndir_t);
 
     res->p_size= (ndir_t*  )memory;
-    memory    += res->torder * sizeof(ndir_t);
+    memory    += res->trc_order * sizeof(ndir_t);
     
-    for ( i = 0; i < res->torder; i++){
+    for ( i = 0; i < res->trc_order; i++){
         
         // Distribute memory.
         res->p_im[i] = (coeff_t*)memory;

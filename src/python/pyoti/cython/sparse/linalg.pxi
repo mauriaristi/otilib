@@ -886,7 +886,7 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
   
         - out:     Result holder. Default None (returns newly allocated array)
   
-        - solver:  Default 'SuperLU'
+        - solver:  Default 'SuperLU'. Other options include: 'cholesky', 'spilu' and 'umfpack'
   
         - **kwargs Specific factorized solver.
 

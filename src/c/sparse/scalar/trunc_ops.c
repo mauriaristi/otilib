@@ -1,15 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
-
 // ****************************************************************************************************
 void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl){
     
@@ -18,15 +7,17 @@ void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl){
 
     if (a == 0.0){
         
-        for (  ordi = ord-1; ordi < res->order; ordi++){
+        for (  ordi = ord-1; ordi < res->trc_order; ordi++){
 
             res->p_nnz[ordi]=0.0;
 
         }
 
+        res->act_order = MIN(res->act_order,ord); // Update actual order
+
     } else {
 
-        for (  ordi = ord-1; ordi < res->order; ordi++){
+        for (  ordi = ord-1; ordi < res->act_order; ordi++){
 
             for ( i=0; i<res->p_nnz[ordi]; i++){
                 
@@ -41,19 +32,21 @@ void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
-
-
 // ****************************************************************************************************
 void soti_trunc_ssum(sotinum_t* num1, ord_t ord, sotinum_t* res, dhelpl_t dhl ){
     
     // Initialize
     ord_t ordi;
 
-    sotinum_t tmpres = soti_get_rtmp(6,res->order,dhl); 
+    // TODO: Add check to the resulting value.
+    sotinum_t tmpres = soti_get_rtmp(6,res->trc_order,dhl); 
     
     soti_set_o(res, &tmpres, dhl);
 
-    for (  ordi = ord-1; ordi < res->order; ordi++){
+    // Check this. What happens if one or the other is greater?
+    tmpres.act_order = MAX(tmpres.act_order, num1->act_order);
+    
+    for (  ordi = ord-1; ordi < num1->act_order; ordi++){
 
         dhelp_sparse_add_dirs(num1->p_im[ordi],  num1->p_idx[ordi],   num1->p_nnz[ordi],
                                res->p_im[ordi],   res->p_idx[ordi],    res->p_nnz[ordi],
@@ -72,24 +65,31 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
                     sotinum_t* dest, dhelpl_t dhl ){
 
     sotinum_t tmp, tmp2, tmp3;
-    sotinum_t* tmpsrc= &tmp ;
-    sotinum_t* tmpdest=&tmp3;
+    sotinum_t* tmpsrc=  &tmp ;
+    sotinum_t* tmpdest= &tmp3;
     sotinum_t* tmpswap;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t max_ord = MAX(num1->trc_order,num2->trc_order);
+    ord_t res_ord;
     ord_t ordlim1, ordlim2;
     ord_t ordi1, ordi2, ordires;
 
     // Retreive sotinum temporals.
     // All tmps are created with no elements in imaginary directions (but allocated).
-    tmp = soti_get_rtmp(3,res_ord,dhl); // will hold the final result.
-    tmp2= soti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
-    tmp3= soti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.    
-        
-    ordlim1 = MIN(num1->order, res_ord - 1);
+    tmp = soti_get_rtmp(3,max_ord,dhl); // will hold the final result.
+    tmp2= soti_get_rtmp(4,max_ord,dhl); // Will hold the temporary result.
+    tmp3= soti_get_rtmp(5,max_ord,dhl); // Will hold the temporary result.    
+    
+    res_ord = MIN(num1->act_order + num2->act_order, max_ord );
+    tmp.act_order = res_ord;
+    tmp2.act_order= res_ord;
+    tmp3.act_order= res_ord;
+
+
+    ordlim1 = MIN(num1->act_order, max_ord - 1);
     
     for(ordi1=ord1-1; ordi1<ordlim1; ordi1++){
 
-        ordlim2 = MIN(num2->order, res_ord - (ordi1+1) );
+        ordlim2 = MIN(num2->act_order, max_ord - (ordi1+1) );
 
         tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
 
@@ -122,14 +122,15 @@ void soti_trunc_mul(sotinum_t* num1, ord_t ord1,
 }
 // ----------------------------------------------------------------------------------------------------
 
-
 // ****************************************************************************************************
 void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl){
     
     // Assumes both have the space allocated and both have the same truncation order
     ord_t i;
+    
+    dest->act_order = MAX(src->act_order,dest->act_order);
 
-    for ( i = ord-1; i<src->order; i++){
+    for ( i = ord-1; i<src->act_order; i++){
         
         // Set number of non-zero and allocated size to 0.
         dest->p_nnz[i]  = src->p_nnz[i];

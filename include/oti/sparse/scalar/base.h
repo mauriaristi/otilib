@@ -301,4 +301,16 @@ sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl);
 sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Removes all imaginary directions with orders ranging from ord_start up to ord_end. This function
+checks that the orders are within the bounds of the OTI number order
+
+@param[in] ord_start Starting order of im. directions to be removed from the number.
+@param[in] ord_end Ending order of im. directions to be removed from the number.
+@param[in] num OTI number to be operated.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+void soti_reset_orders(ord_t ord_start, ord_t ord_end, sotinum_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 #endif

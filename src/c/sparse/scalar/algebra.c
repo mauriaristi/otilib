@@ -77,13 +77,16 @@ sotinum_t soti_sum_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl){
 inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
     ord_t ordi;
 
     // Create a sotinum with no elements in imaginary directions.
     tmp = soti_get_rtmp(7, res_ord, dhl);
 
     tmp.re = num1->re + num2->re; 
+
+    res_ord = MAX(num1->act_order,num2->act_order);
+    tmp.act_order = res_ord;
 
     // TODO: divide in three for loops
     // ord_t min_ord = MIN(num1->order,num2->order);
@@ -107,13 +110,13 @@ inline sotinum_t soti_base_sum(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     
     for(ordi=0; ordi<res_ord; ordi++){
         
-        if (ordi < num1->order && ordi < num2->order){
+        if (ordi < num1->act_order && ordi < num2->act_order){
             
             dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else if (ordi < num1->order){
+        } else if (ordi < num1->act_order){
 
             dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   NULL, NULL, 0,
@@ -183,23 +186,26 @@ sotinum_t soti_sub_or(sotinum_t* num, coeff_t val, dhelpl_t dhl){
 inline sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
     ord_t ordi;
 
     tmp = soti_get_rtmp(7,res_ord,dhl); // creates a sotinum with no elements in imaginary directions.
 
     tmp.re = num1->re - num2->re;
 
-    for(ordi=0; ordi<res_ord; ordi++){
+    res_ord = MAX(num1->act_order,num2->act_order);
+    tmp.act_order = res_ord;
+
+    for(ordi = 0; ordi < res_ord; ordi++){
 
         
-        if (ordi < num1->order && ordi < num2->order){
+        if (ordi < num1->act_order && ordi < num2->act_order){
             
             dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else if (ordi < num1->order){
+        } else if (ordi < num1->act_order){
 
             dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   NULL, NULL, 0,
@@ -265,7 +271,7 @@ sotinum_t soti_mul_ro(coeff_t val, sotinum_t* num, dhelpl_t dhl){
 
     res.re *= val;
 
-    for ( i=0; i<res.order; i++){
+    for ( i=0; i<res.act_order; i++){
         
         for ( j = 0; j<res.p_nnz[i]; j++){
 
@@ -291,7 +297,7 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     coeff_t*   p_im_swap;
     imdir_t*  p_idx_swap;
     ndir_t    p_nnz_swap;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
     ord_t ordlim1, ordlim2;
     ord_t ordi1, ordi2,ordires;
 
@@ -307,18 +313,25 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     // Set source with the same real value.
     tmpsrc->re  = tmpdest->re;
 
+    // Estimate the resulting order (Maximum order from operations)
+    res_ord = MIN(tmp.trc_order,num1->act_order+num2->act_order);
+
+    tmp.act_order =res_ord;
+    tmp2.act_order=res_ord;
+    tmp3.act_order=res_ord;
+
     // printf("Multiplying lhs(ord:%hhu) by rhs(ord:%hhu)\n",num1->order,num2->order);
     // printf("Multiply lhs.re:%g x im of rhs ========= \n", num1->re);
     // soti_print(num2,dhl);
 
-    if (num1->re != 0.0 && num2->order > 0 ){
+    if (num1->re != 0.0 && num2->act_order > 0 ){
         
         // Swap pointers
         tmpswap = tmpsrc; 
         tmpsrc  = tmpdest; 
         tmpdest = tmpswap;
 
-        for (ordi1 = 0; ordi1<num2->order; ordi1++){
+        for (ordi1 = 0; ordi1<num2->act_order; ordi1++){
 
             // Perform multiplication
             dhelp_sparse_mult_real(num1->re,
@@ -342,14 +355,14 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     // soti_print(num1,dhl);
 
 
-    if (num2->re != 0.0 && num1->order > 0 ){
+    if (num2->re != 0.0 && num1->act_order > 0 ){
 
         // Swap pointers
         tmpswap = tmpsrc; 
         tmpsrc  = tmpdest; 
         tmpdest = tmpswap;
 
-        for (ordi1 = 0; ordi1<num1->order; ordi1++){
+        for (ordi1 = 0; ordi1<num1->act_order; ordi1++){
 
             // Perform multiplication
             dhelp_sparse_mult_real(num2->re,
@@ -390,7 +403,7 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     }
     
-    if ( num1->order > 0 && num2->order > 0 ){
+    if ( num1->act_order > 0 && num2->act_order > 0 ){
         
 
         // Start with both temporals with the same values.
@@ -403,11 +416,11 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
         
         
 
-        ordlim1 = MIN( num1->order, res_ord - 1 );
+        ordlim1 = MIN( num1->act_order, res_ord - 1 );
         
         for(ordi1=0; ordi1<ordlim1; ordi1++){
 
-            ordlim2 = MIN( num2->order, res_ord - (ordi1+1) );
+            ordlim2 = MIN( num2->act_order, res_ord - (ordi1+1) );
 
             tmpswap = tmpsrc; 
             tmpsrc  = tmpdest; 
@@ -464,11 +477,17 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 // ****************************************************************************************************
 sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
+    // WARNING: This function was implemented before the order_split conversion.
+    // Therefore, this function does not comply to this specification.
+    // If you want to use it again, please you will have to adapt it to the 
+    // trc_order / act_order convention
+    
+
     sotinum_t res, tmp, tmp2, tmp3;
     sotinum_t* tmpsrc= &tmp ;
     sotinum_t* tmpdest=&tmp3;
     sotinum_t* tmpswap;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
     ord_t ordi, order;
     ord_t ord_mul1;
 
@@ -490,7 +509,7 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
         ordi = order - 1;
 
         // First multiply  re x ordi         
-        if ( order <= num2->order && num1->re != 0.0){
+        if ( order <= num2->act_order && num1->re != 0.0){
             
             // Perform multiplication
             dhelp_sparse_mult_real(num1->re,
@@ -510,7 +529,7 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
 
         // Then multiply   ordi x re
-        if ( order <= num1->order && num2->re != 0.0){
+        if ( order <= num1->act_order && num2->re != 0.0){
             
             // Perform multiplication
             dhelp_sparse_mult_real(num2->re,
@@ -533,7 +552,7 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
             ord_t ord_mul2 = order - ord_mul1;
             // printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
 
-            if ( ord_mul1 <= num1->order && ord_mul2 <= num2->order){
+            if ( ord_mul1 <= num1->act_order && ord_mul2 <= num2->act_order){
                 
                 dhelp_sparse_mult(num1->p_im[ord_mul1-1], num1->p_idx[ord_mul1-1], num1->p_nnz[ord_mul1-1],ord_mul1,
                                   num2->p_im[ord_mul2-1], num2->p_idx[ord_mul2-1], num2->p_nnz[ord_mul2-1],ord_mul2,
@@ -551,7 +570,7 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
             if (ord_mul1 != ord_mul2){
                 
-                if ( ord_mul2 <= num1->order && ord_mul1 <= num2->order){
+                if ( ord_mul2 <= num1->act_order && ord_mul1 <= num2->act_order){
                     dhelp_sparse_mult(num1->p_im[ord_mul2-1], num1->p_idx[ord_mul2-1], num1->p_nnz[ord_mul2-1],ord_mul2,
                                       num2->p_im[ord_mul1-1], num2->p_idx[ord_mul1-1], num2->p_nnz[ord_mul1-1],ord_mul1,
                                       tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
@@ -602,13 +621,15 @@ sotinum_t soti_mul_old(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 inline sotinum_t soti_base_trunc_sum(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
     ord_t ordi;
 
     // Create a sotinum with no elements in imaginary directions.
     tmp = soti_get_rtmp(7, res_ord, dhl);
 
     soti_set_r(0.0, &tmp, dhl);
+    res_ord = MAX(num1->act_order,num2->act_order);
+    tmp.act_order = res_ord;
 
     if (ord == 0){
     
@@ -618,19 +639,19 @@ inline sotinum_t soti_base_trunc_sum(ord_t ord, sotinum_t* num1, sotinum_t* num2
 
         ordi = ord - 1;
 
-        if ( ordi < num1->order && ordi < num2->order ){
+        if ( ordi < num1->act_order && ordi < num2->act_order ){
             
             dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else if ( ordi < num1->order ){
+        } else if ( ordi < num1->act_order ){
 
             dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   NULL, NULL, 0,
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else if ( ordi < num2->order ){
+        } else if ( ordi < num2->act_order ){
 
             dhelp_sparse_add_dirs(num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
                                   NULL, NULL, 0,
@@ -650,13 +671,15 @@ inline sotinum_t soti_base_trunc_sum(ord_t ord, sotinum_t* num1, sotinum_t* num2
 inline sotinum_t soti_base_trunc_sub(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
 
     sotinum_t tmp;
-    ord_t res_ord = MAX(num1->order,num2->order);
+    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
     ord_t ordi;
 
     // Create a sotinum with no elements in imaginary directions.
     tmp = soti_get_rtmp(7, res_ord, dhl);
 
     soti_set_r(0.0, &tmp, dhl);
+    res_ord = MAX(num1->act_order,num2->act_order);
+    tmp.act_order = res_ord;
 
     if (ord == 0){
     
@@ -666,19 +689,19 @@ inline sotinum_t soti_base_trunc_sub(ord_t ord, sotinum_t* num1, sotinum_t* num2
 
         ordi = ord - 1;
 
-        if ( ordi < num1->order && ordi < num2->order ){
+        if ( ordi < num1->act_order && ordi < num2->act_order ){
             
             dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else if ( ordi < num1->order ){
+        } else if ( ordi < num1->act_order ){
 
             dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
                                   NULL, NULL, 0,
                                   tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
 
-        } else if ( ordi < num2->order ){
+        } else if ( ordi < num2->act_order ){
 
             dhelp_sparse_sub_dirs(NULL, NULL, 0,
                                   num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],                                  
@@ -703,11 +726,8 @@ inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, so
     sotinum_t* tmpsrc  = &tmp ;
     sotinum_t* tmpdest = &tmp3;
     sotinum_t* tmpswap;
-    coeff_t*   p_im_swap;
-    imdir_t*  p_idx_swap;
-    ndir_t    p_nnz_swap;
-    ord_t res_ord = MAX(num1->order,num2->order);
-    ord_t ordlim1, ordlim2;
+    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
+    
     ord_t ordi1, ordi2, ordires;
 
     // Retreive sotinum temporals.
@@ -720,13 +740,18 @@ inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, so
     soti_set_r(0.0,  tmpsrc, dhl);
     soti_set_r(0.0, tmpdest, dhl);
 
+    res_ord = MIN(res_ord,ord1+ord2);
+    tmp.act_order =res_ord;
+    tmp2.act_order=res_ord;
+    tmp3.act_order=res_ord;
+
     if (ord1 == 0 && ord2 == 0){
         
         tmpdest->re = num1->re * num2->re;
 
     } else if (ord1 == 0) {
 
-        if (num1->re != 0.0 && num2->order >= ord2 ){
+        if (num1->re != 0.0 && num2->act_order >= ord2 ){
         
             // Swap pointers
             tmpswap = tmpsrc; 
@@ -750,7 +775,7 @@ inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, so
 
     } else if (ord2 == 0) {
 
-        if (num2->re != 0.0 && num1->order >= ord1 ){
+        if (num2->re != 0.0 && num1->act_order >= ord1 ){
 
             // Swap pointers
             tmpswap = tmpsrc; 
@@ -772,9 +797,9 @@ inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, so
 
     } else {
 
-        if ( num1->order >= ord1 && num2->order >= ord2 ){
+        if ( num1->act_order >= ord1 && num2->act_order >= ord2 ){
         
-            ordlim1 = MIN( num1->order, res_ord - 1 );
+            // ord_t ordlim1 = MIN( num1->act_order, res_ord - 1 );
             ordi1 = ord1-1;
             ordi2 = ord2-1;    
 
@@ -851,8 +876,8 @@ sotinum_t soti_div_ro(coeff_t num, sotinum_t* den, dhelpl_t dhl){
 sotinum_t soti_div_oo(sotinum_t* num, sotinum_t* den, dhelpl_t dhl){
 
     
-    sotinum_t inv = soti_get_rtmp(7,den->order,dhl);
-    soti_pow_to(den,-1,&inv,dhl);
+    sotinum_t inv = soti_get_rtmp(7,den->trc_order,dhl);
+    soti_pow_to(den,-1.0, &inv,dhl);
     sotinum_t res = soti_mul_oo(num,&inv,dhl);
     
     return res;
@@ -920,21 +945,27 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num , dhelpl_t dh
 
     coeff_t factor = 1.0, val = 0.0;
 
-    sotinum_t tmp1 = soti_get_rtmp( 7,num->order,dhl);
-    sotinum_t tmp2 = soti_get_rtmp( 8,num->order,dhl);
-    sotinum_t tmp3 = soti_get_rtmp( 9,num->order,dhl);
+    sotinum_t tmp1 = soti_get_rtmp( 7,num->trc_order,dhl);
+    sotinum_t tmp2 = soti_get_rtmp( 8,num->trc_order,dhl);
+    sotinum_t tmp3 = soti_get_rtmp( 9,num->trc_order,dhl);
 
     soti_set_o( num, &tmp2, dhl);
-
-    for ( i = 1; i < num->order; i++){
+    
+    for ( i = 1; i < num->trc_order; i++){
         
         factor *= i;
 
         val = feval_re[i]/factor;
-        
+
+        // tmp2 = tmp1
         soti_set_o(&tmp2 , &tmp1, dhl);
+        
+        // tmp2 = tmp2 * val
         soti_trunc_smul_real( val, i, &tmp2, dhl);
+        
+        // tmp3 += tmp2;
         soti_trunc_ssum( &tmp2, i, &tmp3, dhl );
+
         
         // update
         soti_set_r( 0.0, &tmp2, dhl);
@@ -942,12 +973,18 @@ inline sotinum_t soti_base_feval(coeff_t* feval_re, sotinum_t* num , dhelpl_t dh
 
     }
 
-    for (; i<=num->order; i++){
+    for (; i <= num->trc_order; i++){
         
         factor *= i;
         val = feval_re[i]/factor;        
+
+        // tmp1 = tmp2;
         soti_set_o(&tmp2 , &tmp1, dhl);
+
+        // tmp2 = tmp2 * val;
         soti_trunc_smul_real( val, i, &tmp2, dhl);
+
+        // tmp3 += tmp2;
         soti_trunc_ssum( &tmp2, i, &tmp3, dhl );
 
     }

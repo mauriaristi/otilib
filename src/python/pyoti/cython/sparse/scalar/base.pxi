@@ -106,7 +106,7 @@ cdef class sotinum:
     """
     #*************************************************************************************************
 
-    return self.num.order
+    return self.num.trc_order
 
   #---------------------------------------------------------------------------------------------------
 
@@ -180,15 +180,16 @@ cdef class sotinum:
     cdef sotinum otin = <sotinum> sotinum.__new__(sotinum)
 
 
-    otin.num.re     = num[ZERO].re    
-    otin.num.p_im   = num[ZERO].p_im  
-    otin.num.p_idx  = num[ZERO].p_idx 
-    otin.num.p_nnz  = num[ZERO].p_nnz 
-    otin.num.p_size = num[ZERO].p_size
-    otin.num.order  = num[ZERO].order 
-    otin.num.flag   = num[ZERO].flag 
+    otin.num.re        = num[ZERO].re    
+    otin.num.p_im      = num[ZERO].p_im  
+    otin.num.p_idx     = num[ZERO].p_idx 
+    otin.num.p_nnz     = num[ZERO].p_nnz 
+    otin.num.p_size    = num[ZERO].p_size
+    otin.num.act_order = num[ZERO].act_order
+    otin.num.trc_order = num[ZERO].trc_order
+    otin.num.flag      = num[ZERO].flag  
 
-    otin.FLAGS      = FLAGS
+    otin.FLAGS         = FLAGS
     
     return otin
 
@@ -239,7 +240,7 @@ cdef class sotinum:
     
     body += '%.4f'%self.num.re
 
-    for ordi in range(0,self.num.order):
+    for ordi in range(0,self.num.act_order):
 
       for i in range(self.num.p_nnz[ordi]):
         
@@ -271,14 +272,14 @@ cdef class sotinum:
 
     cdef ndir_t ndir_total = 1, i;
 
-    for i in range(0, self.num.order):
+    for i in range(0, self.num.act_order):
 
       ndir_total += self.num.p_nnz[i]
 
     # end for
 
     head = 'sotinum('
-    body = str(self.num.re) + ", nnz: " + str(ndir_total) + ', order: ' + str(self.num.order)
+    body = str(self.num.re) + ", nnz: " + str(ndir_total) + ', order: ' + str(self.num.act_order)
     tail = ')'
 
     return (head + body + tail)
@@ -296,7 +297,7 @@ cdef class sotinum:
 
     cdef ndir_t ndir_total = 1, ndir_max = 1, i;
 
-    for i in range(0, self.num.order):
+    for i in range(0, self.num.trc_order):
 
       ndir_total += self.num.p_nnz[i]
       ndir_max   += self.num.p_size[i]
@@ -305,11 +306,13 @@ cdef class sotinum:
 
     head = 'sotinum('
     body = str(self.num.re) + ", nnz: " + str(ndir_total)+", alloc: " + str(ndir_max) 
-    body += ', order: ' + str(self.num.order) + ', flag: ' + str(self.num.flag) + "\n"
+    body += ', actual order: ' + str(self.num.act_order) 
+    body += ', truncation order: ' + str(self.num.trc_order) 
+    body += ', flag: ' + str(self.num.flag) + "\n"
 
-    for i in range(0, self.num.order):
+    for i in range(0, self.num.trc_order):
 
-      body += "Order {0}->   nnz: {1}  size: {2} \n".format(i+1, self.num.p_nnz[i],self.num.p_size[i])
+      body += "  - Order {0}->   nnz: {1}  size: {2} \n".format(i+1, self.num.p_nnz[i],self.num.p_size[i])
 
     # end for 
 
@@ -342,7 +345,7 @@ cdef class sotinum:
     
     body += '%g'%self.num.re
 
-    for ordi in range(0,self.num.order):
+    for ordi in range(0,self.num.act_order):
 
       for i in range(self.num.p_nnz[ordi]):
         

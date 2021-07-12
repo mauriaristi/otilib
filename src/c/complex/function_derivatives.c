@@ -3,9 +3,9 @@
 
 
 // ****************************************************************************************************
-void der_c_atan2(coeff_t x, coeff_t y, ord_t order, coeff_t* derivs){
+void der_c_atan2(zcoeff_t x, zcoeff_t y, ord_t order, zcoeff_t* derivs){
     
-    coeff_t x0;
+    zcoeff_t x0;
     uint8_t i;
     
     x0 = x/y;
@@ -52,10 +52,10 @@ void der_c_atan2(coeff_t x, coeff_t y, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_logb(coeff_t x0, coeff_t base, ord_t order, coeff_t* derivs){
+void der_c_logb(zcoeff_t x0, zcoeff_t base, ord_t order, zcoeff_t* derivs){
     
     uint8_t i;
-    coeff_t lbase = log(base);
+    zcoeff_t lbase = log(base);
 
     for( i=0; i<(order+1); i++){    
         switch(i){
@@ -88,7 +88,7 @@ void der_c_logb(coeff_t x0, coeff_t base, ord_t order, coeff_t* derivs){
 
 
 // ****************************************************************************************************
-void der_c_log10(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_log10(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
     uint8_t i;
     for( i=0; i<(order+1); i++){
@@ -122,7 +122,7 @@ void der_c_log10(coeff_t x0, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_atanh(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_atanh(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
     uint8_t i;
 
@@ -172,7 +172,7 @@ void der_c_atanh(coeff_t x0, ord_t order, coeff_t* derivs){
 
 
 // ****************************************************************************************************
-void der_c_asinh(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_asinh(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
     uint8_t i;
 
@@ -216,10 +216,10 @@ void der_c_asinh(coeff_t x0, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_acosh(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_acosh(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
-    coeff_t x2m1 = pow(x0, 2.) - 1.;
-    coeff_t sqx2m1 = pow(x2m1, 0.5);
+    zcoeff_t x2m1 = pow(x0, 2.) - 1.;
+    zcoeff_t sqx2m1 = pow(x2m1, 0.5);
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -255,11 +255,11 @@ void der_c_acosh(coeff_t x0, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_tanh(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_tanh(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
-    coeff_t tanhx0 = tanh(x0);
-    coeff_t tanh2  = pow(tanhx0, 2); 
-    coeff_t tanh2m1 = tanh2 - 1;
+    zcoeff_t tanhx0 = tanh(x0);
+    zcoeff_t tanh2  = pow(tanhx0, 2); 
+    zcoeff_t tanh2m1 = tanh2 - 1;
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -297,7 +297,7 @@ void der_c_tanh(coeff_t x0, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_sqrt(coeff_t x, ord_t order, coeff_t* derivs){
+void der_c_sqrt(zcoeff_t x, ord_t order, zcoeff_t* derivs){
     
     der_c_pow( x, 0.5, order, derivs);
 
@@ -305,10 +305,10 @@ void der_c_sqrt(coeff_t x, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_cosh(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_cosh(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
-    coeff_t ch = cosh(x0);
-    coeff_t sh = sinh(x0);
+    zcoeff_t ch = cosh(x0);
+    zcoeff_t sh = sinh(x0);
     uint8_t i;
 
     for( i=0; i<(order+1); i+=2){
@@ -323,10 +323,10 @@ void der_c_cosh(coeff_t x0, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_sinh(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_sinh(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
-    coeff_t ch = cosh(x0);
-    coeff_t sh = sinh(x0);
+    zcoeff_t ch = cosh(x0);
+    zcoeff_t sh = sinh(x0);
     uint8_t i;
 
     for( i=0; i<(order+1); i+=2){
@@ -342,7 +342,7 @@ void der_c_sinh(coeff_t x0, ord_t order, coeff_t* derivs){
 
 
 // ****************************************************************************************************
-void der_c_asin(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_asin(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
     uint8_t i;
 
@@ -403,7 +403,7 @@ void der_c_asin(coeff_t x0, ord_t order, coeff_t* derivs){
 
 
 // ****************************************************************************************************
-void der_c_acos(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_acos(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
     uint8_t i;
 
@@ -467,10 +467,10 @@ void der_c_acos(coeff_t x0, ord_t order, coeff_t* derivs){
 
 
 // ****************************************************************************************************
-void der_c_atan(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_atan(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
-    coeff_t x02   = pow(x0,2.0);
-    coeff_t x02p1 = x02+1.0;
+    zcoeff_t x02   = pow(x0,2.0);
+    zcoeff_t x02p1 = x02+1.0;
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -517,10 +517,10 @@ void der_c_atan(coeff_t x0, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_tan(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_tan(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
-    coeff_t tanx0 = tan(x0);
-    coeff_t tanx02p1 = pow(tanx0,2.0) + 1.0 ;
+    zcoeff_t tanx0 = tan(x0);
+    zcoeff_t tanx02p1 = pow(tanx0,2.0) + 1.0 ;
     uint8_t i;
 
     for( i=0; i<(order+1); i++){
@@ -605,11 +605,11 @@ void der_c_tan(coeff_t x0, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_cos(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_cos(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
     uint8_t i;
     uint8_t s = 0;
-    coeff_t sign = 1.;
+    zcoeff_t sign = 1.;
     
     for( i=0; i<(order+1); i++){
     
@@ -632,11 +632,11 @@ void der_c_cos(coeff_t x0, ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_sin(coeff_t x0, ord_t order, coeff_t* derivs){
+void der_c_sin(zcoeff_t x0, ord_t order, zcoeff_t* derivs){
     
     uint8_t i;
     uint8_t s = 1;
-    coeff_t sign = -1.;
+    zcoeff_t sign = -1.;
     
     for( i=0; i<(order+1); i++){
     
@@ -661,10 +661,10 @@ void der_c_sin(coeff_t x0, ord_t order, coeff_t* derivs){
 
 
 // ****************************************************************************************************
-void der_c_log(coeff_t x , ord_t order, coeff_t* derivs){
+void der_c_log(zcoeff_t x , ord_t order, zcoeff_t* derivs){
       
-    coeff_t sign = -1.;
-    coeff_t factor = 1.;
+    zcoeff_t sign = -1.;
+    zcoeff_t factor = 1.;
     uint8_t i;    
 
     derivs[0]=log(x); 
@@ -679,9 +679,9 @@ void der_c_log(coeff_t x , ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_exp(coeff_t x,ord_t order, coeff_t* derivs){
+void der_c_exp(zcoeff_t x,ord_t order, zcoeff_t* derivs){
     
-    coeff_t value = exp(x);
+    zcoeff_t value = exp(x);
     uint8_t i;    
 
     for (i=0; i<(order+1); i++){
@@ -692,12 +692,12 @@ void der_c_exp(coeff_t x,ord_t order, coeff_t* derivs){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void der_c_pow(coeff_t x, coeff_t e, ord_t order, coeff_t* derivs){
+void der_c_pow(zcoeff_t x, zcoeff_t e, ord_t order, zcoeff_t* derivs){
     
-    coeff_t power_i = e;
-    coeff_t x0 = x;
+    zcoeff_t power_i = e;
+    zcoeff_t x0 = x;
     uint8_t flag = 0;
-    coeff_t factor = 1.;
+    zcoeff_t factor = 1.;
     uint8_t i;
     
     for (i=0; i<(order+1); i++){

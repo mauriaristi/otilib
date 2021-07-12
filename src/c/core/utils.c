@@ -91,7 +91,7 @@ void printArrayUI64(uint64_t* ptr_,uint64_t n){
 
     for (uint64_t i = 0; i<n ; i++){
 
-        printf(" %llu,",ptr_[i]);
+        printf(" "_PUINT64T",",ptr_[i]);
     }
 
     printf("]");
@@ -116,7 +116,7 @@ void printArrayUI16(uint16_t* ptr_,uint8_t n){
 
     for (i = 0; i<n ; i++){
 
-        printf("%hu,",ptr_[i]);
+        printf(_PUINT16T",",ptr_[i]);
     }
     if (i>0){
         
@@ -433,7 +433,7 @@ void set_python_error_function(void (*error_function)(int64_t)){
 
 void print_python_error_def(void ){
 
-    printf("This is is_python_error_def: %d \n",is_python_error_def);
+    printf("This is is_python_error_def: %" PRIu64 "\n",is_python_error_def);
 }
 
 // ****************************************************************************************************
@@ -451,7 +451,8 @@ void usage_python_error_function(void (*error_function)(int64_t), int64_t error_
     } else if (status == 1){
         
         // Use __PY_ERROR_OTI_EXIT
-        
+        __PY_ERROR = NULL;
+        // is_python = 0;
         // printf("in usage_python_error_function\nis_python_error_def %llu\n",is_python);
 
         // if (__PY_ERROR != NULL && is_python != 0){

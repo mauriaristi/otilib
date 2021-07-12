@@ -992,9 +992,7 @@ void arrso_save(char* filename, arrso_t* arr, dhelpl_t dhl){
 
     
     data_header = (char*) data;
-
-
-    
+    memset(data_header, 0, 64); // Set all 64 bytes of header as zero.
 
     // write header
     memcpy(data_header, magic, 4);
@@ -1019,13 +1017,13 @@ void arrso_save(char* filename, arrso_t* arr, dhelpl_t dhl){
     memcpy(data_header, &arr->ncols, sizeof(uint64_t));
     data_header += sizeof(uint64_t);
 
-    
-    data_write = data+64;
+    // Jump 64 bytes of header to write data.
+    data_write = data + 64;
     for ( i=0; i < arr->size; i++ ){
         soti_save_to_mem( &arr->p_data[i],  data_write, dhl);
+        // recompute OTI number size to jump to new storage point.
         data_write += soti_get_memsize_save( &arr->p_data[i], dhl);
     }
-
 
     file_ptr = fopen(filename, "wb");
 
@@ -1054,7 +1052,7 @@ arrso_t arrso_read(char* filename, dhelpl_t dhl){
     void *data_read;
     char data_header[64];
     char magic[4] = {'\x93','O','T','I'}; 
-    uint8_t major=1, minor = 0;
+    // uint8_t major=1, minor = 0; // Version check.
     uint8_t format=21;
     // sotinum_t tmp2;
     arrso_t arr;
@@ -1076,6 +1074,8 @@ arrso_t arrso_read(char* filename, dhelpl_t dhl){
         }
     }
 
+    // TODO: Add version check.
+
     if (data_header[6]!= format){
         printf("ERROR: unrecognized data format\n");
         exit(OTI_undetErr);
@@ -1087,7 +1087,7 @@ arrso_t arrso_read(char* filename, dhelpl_t dhl){
     memcpy( &ncols,   &data_header[8+16], sizeof(uint64_t));
     
     // printf("Read: mem_size %d, nrows = %d, ncols = %d\n",mem_size,nrows,ncols);
-    arr = arrso_zeros_bases(nrows,ncols,0,0,dhl);
+    arr = arrso_zeros_bases( nrows, ncols, 0, 0, dhl);
     
     // Allocate memory to be exported
     data = malloc(mem_size); 
@@ -1125,7 +1125,7 @@ inline arrso_t arrso_empty_like(arrso_t* arr, dhelpl_t dhl){
     if (arr->size!=0){
         
         res = arrso_createEmpty_predef(arr->nrows, arr->ncols, arr->p_data[0].p_size, 
-            arr->p_data[0].order, dhl);    
+            arr->p_data[0].trc_order, dhl);    
 
     }else{
 

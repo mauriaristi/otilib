@@ -1,5 +1,5 @@
-#ifndef OTI_COMPLEX_DERIVATIVES_H
-#define OTI_COMPLEX_DERIVATIVES_H
+#ifndef OTI_REAL_DERIVATIVES_H
+#define OTI_REAL_DERIVATIVES_H
 
 
 /**************************************************************************************************//**
@@ -10,7 +10,7 @@
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_atan2(coeff_t x, coeff_t y, ord_t order, coeff_t* derivs);
+void der_c_atan2(coeff_t x, coeff_t y, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -21,7 +21,7 @@ void der_r_atan2(coeff_t x, coeff_t y, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_logb(coeff_t x, coeff_t base, ord_t order, coeff_t* derivs);
+void der_c_logb(coeff_t x, coeff_t base, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -31,7 +31,7 @@ void der_r_logb(coeff_t x, coeff_t base, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_log10(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_log10(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -41,7 +41,7 @@ void der_r_log10(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_atanh(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_atanh(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -51,7 +51,7 @@ void der_r_atanh(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_asinh(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_asinh(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -61,7 +61,7 @@ void der_r_asinh(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_acosh(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_acosh(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -71,7 +71,7 @@ void der_r_acosh(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_tanh(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_tanh(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -81,7 +81,7 @@ void der_r_tanh(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_sqrt(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_sqrt(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -91,7 +91,7 @@ void der_r_sqrt(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_cosh(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_cosh(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -101,7 +101,7 @@ void der_r_cosh(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_sinh(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_sinh(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -111,7 +111,7 @@ void der_r_sinh(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_asin(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_asin(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -121,7 +121,7 @@ void der_r_asin(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_acos(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_acos(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -131,7 +131,7 @@ void der_r_acos(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_atan(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_atan(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -141,7 +141,7 @@ void der_r_atan(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_tan(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_tan(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -151,7 +151,7 @@ void der_r_tan(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_cos(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_cos(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -161,7 +161,7 @@ void der_r_cos(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/
-void der_r_sin(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_sin(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -171,7 +171,7 @@ void der_r_sin(coeff_t x, ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative requested.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/ 
-void der_r_log(coeff_t x , ord_t order, coeff_t* derivs);
+void der_c_log(coeff_t x , ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -182,7 +182,7 @@ void der_r_log(coeff_t x , ord_t order, coeff_t* derivs);
 @param order Maximum order of derivative to be computed.
 @param[out] derivs Array with the derivatives information. It must come allocated.
 ******************************************************************************************************/ 
-void der_r_exp(coeff_t x, ord_t order, coeff_t* derivs);
+void der_c_exp(coeff_t x, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -196,7 +196,7 @@ Evaluating    \f$    x^e    \f$
 @param order Maximum order of derivative to be retreived.
 @param[out] derivs Array with the derivative information. It must come allocated.
 ******************************************************************************************************/ 
-void der_r_pow(coeff_t x, coeff_t e, ord_t order, coeff_t* derivs);
+void der_c_pow(coeff_t x, coeff_t e, ord_t order, coeff_t* derivs);
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------

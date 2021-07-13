@@ -2,8 +2,18 @@
 
 **OTILIB** 
 
-This is the repository for the implementation of Order Truncated Imaginary numbers (OTI numbers) in different programming languages. OTI algebra is the extension of Dual numbers such that they can compute higher order derivatives of multiple variables. They provide a concise extension of the Dual numbers ( a + b eps, eps^2 = 0 ) and are applicable to computing high order derivatives of computer functions at execution time.
+This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers is the extension of Dual numbers such that they can compute high order derivatives with respect to multiple variables. OTIs provide a concise extension of the Dual numbers ( a + b eps, eps^2 = 0 ) and are applicable to computing high order derivatives of computer functions at execution time.
 
+OTI numbers are hereby implemented in multiple programming languages. The core implementation is in C and supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, etc.
+
+Ongoing research is currently being developed in order to determine the best implementation version of OTIs. 
+
+Currently three implementations are supported: 
+* Dynamic-Dense, 
+* Static-Dense and 
+* Dynamic-Sparse 
+
+All implementations so far are serial. It is expected in the near future to support parallel excecution using OpenMP, OpenMPI and OpenCL/CUDA/Metal (TBD).
 ***
 
 ## Current Programming languages: 
@@ -35,17 +45,25 @@ conda env create -f environment.yml
 ```
 NOTE: If you had a previous version of OTILIB, 
 
-After runing the previous command, you should have installed a conda environment that will allow you to use the python library. To activate this environment, run the following command:
+After runing the previous command, you should have installed a conda environment that will allow you to use the python version of the library. To activate this environment, run the following command:
 ```
 conda activate pyoti
 ```
 
-Finally, to install the library, run:
+Finally, to build the library, run the following commands:
 ```
 cd path/to/src/otilib
+```
+```
 mkdir build
+```
+```
 cd build
+```
+```
 cmake ..
+```
+```
 make
 ```
  

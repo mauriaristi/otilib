@@ -240,8 +240,7 @@ public:
     @param nrows: Number of rows.
     @param ncols: Number of columns.
     **************************************************************************************************/
-    template<class U>
-    friend array2d<U> zeros(uint64_t nrows, uint64_t ncols);
+    static array2d<scalar_t> zeros(uint64_t nrows, uint64_t ncols);
     // ------------------------------------------------------------------------------------------------
     
     /**************************************************************************************************
@@ -250,8 +249,7 @@ public:
     @param nrows: Number of rows.
     @param ncols: Number of columns.
     **************************************************************************************************/
-    template<class U>
-    friend array2d<U> ones(uint64_t nrows, uint64_t ncols);
+    static array2d<scalar_t>& ones(uint64_t nrows, uint64_t ncols);
     // ------------------------------------------------------------------------------------------------
     
     /**************************************************************************************************
@@ -259,8 +257,7 @@ public:
 
     @param nrows: Number of rows.
     **************************************************************************************************/
-    template<class U>
-    friend array2d<U> eye(uint64_t nrows);
+    static array2d<scalar_t> eye(uint64_t nrows);
     // ------------------------------------------------------------------------------------------------
 
     //%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%--%
@@ -334,7 +331,7 @@ template<class T> inline uint64_t array2d<T>::size(){
 
 
 // ----------------------------------------------------------------------------------------------------
-template<class T> T& array2d<T>::operator()( uint64_t i, uint64_t j){
+template<class T> T& array2d<T>::operator()(uint64_t i, uint64_t j){
     
     if (i >= this->nrows || j >= this->ncols){
 
@@ -496,7 +493,8 @@ template<class T> array2d<T> operator+(const T& lhs, const array2d<T>& rhs){
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
-template<class T> array2d<T> operator*(const array2d<T>& lhs, const array2d<T>& rhs){
+template<class T> 
+array2d<T> operator*(const array2d<T>& lhs, const array2d<T>& rhs){
 
     array2d<T> res(lhs.nrows,rhs.ncols);
 
@@ -515,7 +513,8 @@ template<class T> array2d<T> operator*(const array2d<T>& lhs, const array2d<T>& 
 
     return res;
 }
-template<class T> array2d<T> operator*(const array2d<T>& lhs, const T& rhs){
+template<class T> 
+array2d<T> operator*(const array2d<T>& lhs, const T& rhs){
 
     array2d<T> res(lhs.nrows,lhs.ncols);
 
@@ -525,7 +524,8 @@ template<class T> array2d<T> operator*(const array2d<T>& lhs, const T& rhs){
 
     return res;
 }
-template<class T> array2d<T> operator*(const T& lhs, const array2d<T>& rhs){
+template<class T> 
+array2d<T> operator*(const T& lhs, const array2d<T>& rhs){
 
     array2d<T> res(rhs.nrows,rhs.ncols);
 
@@ -540,7 +540,8 @@ template<class T> array2d<T> operator*(const T& lhs, const array2d<T>& rhs){
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
-template<class T> array2d<T> operator-(const array2d<T>& lhs, const array2d<T>& rhs){
+template<class T> 
+array2d<T> operator-(const array2d<T>& lhs, const array2d<T>& rhs){
 
     array2d<T> res(lhs.nrows,rhs.ncols);
 
@@ -559,7 +560,8 @@ template<class T> array2d<T> operator-(const array2d<T>& lhs, const array2d<T>& 
 
     return res;
 }
-template<class T> array2d<T> operator-(const T& lhs, const array2d<T>& rhs){
+template<class T> 
+array2d<T> operator-(const T& lhs, const array2d<T>& rhs){
 
     array2d<T> res(rhs.nrows,rhs.ncols);
 
@@ -569,7 +571,8 @@ template<class T> array2d<T> operator-(const T& lhs, const array2d<T>& rhs){
 
     return res;
 }
-template<class T> array2d<T> operator-(const array2d<T>& lhs, const T& rhs){
+template<class T> 
+array2d<T> operator-(const array2d<T>& lhs, const T& rhs){
 
     array2d<T> res(lhs.nrows,lhs.ncols);
 
@@ -582,7 +585,8 @@ template<class T> array2d<T> operator-(const array2d<T>& lhs, const T& rhs){
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
-template<class T> array2d<T> operator/(const array2d<T>& lhs, const array2d<T>& rhs){
+template<class T> 
+array2d<T> operator/(const array2d<T>& lhs, const array2d<T>& rhs){
 
     array2d<T> res(lhs.nrows,rhs.ncols);
 
@@ -664,7 +668,8 @@ template<class T> array2d<T> dot(const array2d<T>& lhs, const array2d<T>& rhs){
 // ----------------------------------------------------------------------------------------------------
 
 // ----------------------------------------------------------------------------------------------------
-template<class T> array2d<T> ones(uint64_t nrows, uint64_t ncols){
+template<class T> 
+array2d<T>& array2d<T>::ones(uint64_t nrows, uint64_t ncols){
 
     array2d<T> res(nrows,ncols);
 
@@ -673,12 +678,12 @@ template<class T> array2d<T> ones(uint64_t nrows, uint64_t ncols){
     for (i=0; i<nrows*ncols; i++){
         cout << i;
         res.data[i] = 1.;
-        cout << " " << res.data[i] << endl;
+        //cout << " " << res.data[i] << endl;
     }   
 
     res.pointer();
     
-    return res;
+    return &res;
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -705,8 +710,8 @@ int main(){
     b = 3.5;
 
     c.print();
-    c = (ones(3,3));
-    c.print();
+    c = array2d<double>::ones(3,3);
+    // c.print();
     // // c.pointer();
 
     // cout << c << endl;

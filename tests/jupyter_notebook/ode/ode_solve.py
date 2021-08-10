@@ -37,7 +37,7 @@ def ode_step(F,x0,t0,eps=1e-3,order = 5, dt_tol = 1e-11):
 
     # end for 
     t = t0 + oti.e(1, nbases=1, order = order)
-    for i in range(order+1):
+    for _ in range(order+1):
         
         x_t = F(t,x)
         

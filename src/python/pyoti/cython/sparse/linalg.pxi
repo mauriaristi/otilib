@@ -976,27 +976,31 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
   # end for
   
   Oord = max( K_in.order, b_in.order)
-  tmp  = zeros( Ores.shape )
-  tmp2 = zeros( Ores.shape )
+  tmp  = zeros( Ores.shape, order = Oord )
+  tmp2 = zeros( Ores.shape, order = Oord )
 
   for ordi in range( 1, Oord + 1 ):
     
     get_order_im( ordi, b_in, out=tmp )
-    
+    # print("temp before:",tmp)
     for ord_rhs in range( ordi ):
 
       ord_lhs = ordi - ord_rhs
 
       trunc_dot( ord_lhs, K_in, ord_rhs, Ores, out=tmp2 )
-      trunc_sub(ordi,tmp,tmp2,out=tmp)
+      trunc_sub(ordi, tmp, tmp2,out=tmp)
 
     # end for 
-    
+
+    # print("temp after:",tmp)
+
     # Convert tmp to array (for specific order)
     rhs = get_order_im_array( ordi, tmp )
+    # print("rhs before solution:\n",rhs)
     
     rhs = solve( rhs )
     
+    # print("rhs after solution:\n",rhs)
     set_order_im_from_array( ordi, rhs, Ores)
     
   # end for 
@@ -1243,6 +1247,7 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
           otmp.p_im[ordi-1][nnz_set] = val
           nnz_set += 1
           otmp.p_nnz[ordi-1] += 1
+          otmp.act_order = ordi
 
         # end if
 

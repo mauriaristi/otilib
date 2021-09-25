@@ -96,21 +96,24 @@ void soti_get_order_im_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t
                 (*res) = soti_createEmpty_like( num, dhl);
             } else {
                 // TODO: What happens if this is a tmp value?
-                printf("ERROR: Cant change memory of the given number (function soti_copy_to(...) ) \n");
+                printf("ERROR: Cant change memory of the given number (in function soti_get_order_im_to(...) ) \n");
                 exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
             }
         }
 
-        // Set as zero, as well as all non-zero counters
+        // Set as zero, as well as all non-zero counters. Sets res->act_order to 0.
         soti_set_r(0.0,res,dhl);
 
-    
+        
         // Only copy in the case num->act_order <= order
         // Copy only order.
         memcpy(res->p_im[order-1], num->p_im[order-1],  num->p_nnz[order-1]*sizeof(coeff_t) );
         memcpy(res->p_idx[order-1],num->p_idx[order-1], num->p_nnz[order-1]*sizeof(imdir_t) );
 
         res->p_nnz[order-1] = num->p_nnz[order-1]; 
+
+        // The actual order must be the actual order being set.
+        res->act_order = order;
 
     }
 

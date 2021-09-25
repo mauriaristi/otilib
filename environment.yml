@@ -8,6 +8,7 @@ dependencies:
   - scipy
   - matplotlib
   - pyvista
+  - imageio-ffmpeg
   - gmsh
   - python-gmsh
   - ipykernel

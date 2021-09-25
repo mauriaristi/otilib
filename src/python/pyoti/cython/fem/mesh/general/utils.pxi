@@ -270,6 +270,18 @@ def square(double width, double hight, double he = 1.0, element_order = 1, quads
            quad_incomplete = 1, quad_linear = 1, structured = False, save=False, real= False):
   """
   PORPUSE: Define a square mesh.
+
+  @param[in] width <float>: Width of the square.
+  @param[in] hight <float>: Height of the square.
+  @param[in] he <float>: Size of elements in the mesh. Default 1.0. 
+  @param[in] element_order <int>: Order of element to be implemented. Default 1
+  @param[in] quads <bool>: Bool to define if qued elements are to be generated. Defaluts to False. 
+  @param[in] quad_incomplete <int>: Indicates if quads are serendipity or not. Defaults to 1.
+  @param[in] quad_linear <int>: Defaults to 1.
+  @param[in] structured <Bool>: Bool to set structured mesh. Defaults to False.
+  @param[in] save <Bool>: Bool to save mesh. Defaults False.
+  @param[in] real <Bool>: Not used. Defaults False.
+
   """
   #***************************************************************************************************
   import gmsh

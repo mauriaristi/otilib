@@ -133,7 +133,7 @@ cpdef dot(object lhs, object rhs, object out = None):
         res = dmatfe.create(&cFres)
       # end if 
 
-    elif tlhs is dmat:    # FR
+    elif trhs is dmat:    # FR
 
       Rrhs = rhs
       if res_flag:

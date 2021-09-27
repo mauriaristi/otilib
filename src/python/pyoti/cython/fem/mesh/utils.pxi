@@ -303,7 +303,7 @@ def line(double a, double b, double he = 1.0, element_order = 1, save=False, rea
 
 
 #*****************************************************************************************************
-def square(double width, double hight, double he = 1.0, element_order = 1, quads = False, 
+def square(double width, double hight, double he = 1.0, ndivs=None,element_order = 1, quads = False, 
            quad_incomplete = 1, quad_linear = 1, structured = False, save=False, real= False):
   """
   PORPUSE: Define a square mesh.
@@ -380,7 +380,16 @@ def square(double width, double hight, double he = 1.0, element_order = 1, quads
     option.setNumber('Mesh.RecombineAll',         0)
 
   # end if 
+  if ndivs is not None:
+    # Set horizontal divisions
+    model.mesh.setTransfiniteCurve(L2, ndiv[0] )
+    model.mesh.setTransfiniteCurve(L4, ndiv[0] )
 
+    # Set vertical divisions
+    model.mesh.setTransfiniteCurve(L1, ndiv[0] )
+    model.mesh.setTransfiniteCurve(L3, ndiv[0] )
+  # end if 
+  
   if structured:
     model.mesh.setTransfiniteSurface(surface)
   # end if 

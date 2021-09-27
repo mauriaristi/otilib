@@ -266,14 +266,15 @@ def line(double a, double b, double he = 1.0, element_order = 1, save=False, rea
 
 
 #*****************************************************************************************************
-def square(double width, double hight, double he = 1.0, element_order = 1, quads = False, 
+def square(double width, double hight, double he = 1e30, ndivs = None, element_order = 1, quads = False, 
            quad_incomplete = 1, quad_linear = 1, structured = False, save=False, real= False):
   """
   PORPUSE: Define a square mesh.
 
   @param[in] width <float>: Width of the square.
   @param[in] hight <float>: Height of the square.
-  @param[in] he <float>: Size of elements in the mesh. Default 1.0. 
+  @param[in] he <float>: Size of elements in the mesh. Defaults to 1e30. 
+  @param[in] ndivs <list>: Number of element divisions. [ndivx,ndivy]. If integer, sets both. 
   @param[in] element_order <int>: Order of element to be implemented. Default 1
   @param[in] quads <bool>: Bool to define if qued elements are to be generated. Defaluts to False. 
   @param[in] quad_incomplete <int>: Indicates if quads are serendipity or not. Defaults to 1.
@@ -354,6 +355,25 @@ def square(double width, double hight, double he = 1.0, element_order = 1, quads
     option.setNumber('Mesh.SecondOrderLinear',    quad_linear    )
     option.setNumber('Mesh.RecombineAll',         0)
 
+  # end if 
+
+
+  if ndivs is not None:
+
+    if type(ndivs) == list:
+      ndivx,ndivy = ndivs
+    else:
+      ndivx = ndivs
+      ndivy = ndivs
+    # end if
+    
+    # Set horizontal divisions
+    model.mesh.setTransfiniteCurve(L2, ndivx+1 )
+    model.mesh.setTransfiniteCurve(L4, ndivx+1 )
+
+    # Set vertical divisions
+    model.mesh.setTransfiniteCurve(L1, ndivy+1 )
+    model.mesh.setTransfiniteCurve(L3, ndivy+1 )
   # end if 
 
   if structured:

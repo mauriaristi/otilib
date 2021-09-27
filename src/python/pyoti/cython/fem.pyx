@@ -15,7 +15,7 @@ include "fem/elbase.pxi"
 include "fem/gauss_array.pxi"
 
 # Include Mesh.
-include "fem/mesh.pxi"
+include "fem/mesh.pxi" 
 
 # # FE functions.
 include "fem/space.pxi"

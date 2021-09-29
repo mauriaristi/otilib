@@ -820,6 +820,8 @@ void ssoti_extract_deriv_to(imdir_t idx, ord_t order, semiotin_t* num, semiotin_
         ssoti_set_r(0.0, res, dhl);
         return;
 
+    // Add another check to see if the number of bases is greater than the act_nbases from the number. 
+
     } else {
 
         // use temporal 0.
@@ -887,7 +889,10 @@ inline void ssoti_reset_orders(ord_t ord_start, ord_t ord_end, semiotin_t* num, 
     // Loop among all orders in num to be reset.
     for (ordi = o_start-1; ordi < o_end; ordi++){
         
-        num->p_nnz[ordi] = 0;
+        ndir = dhl.p_dh[ordi].p_ndirs[num->act_nbases];
+        
+        memset( num->p_im[ordi], 0, ndir*sizeof(coeff_t) );
+        
 
     }
 
@@ -897,15 +902,12 @@ inline void ssoti_reset_orders(ord_t ord_start, ord_t ord_end, semiotin_t* num, 
 // ****************************************************************************************************
 void ssoti_print(semiotin_t* num, dhelpl_t dhl){
 
-    ndir_t nnz_total = 1, dir;
+    imdir_t imdir;
+    ndir_t ndir;
     ord_t ordi;
     bases_t* imdir_bases;
-    
-    for( ordi = 0; ordi<num->act_order; ordi++){
-        nnz_total += num->p_nnz[ordi];
-    }
 
-    printf("  Order: "_PORDT", non_zero: "_PNDIRT", re: %11.4e\n",
+    printf("  Order: "_PORDT", re: %11.4e\n",
         num->trc_order, nnz_total, num->re);
     
     printf("      VALUE   ,    IMDIR  \n");
@@ -916,12 +918,14 @@ void ssoti_print(semiotin_t* num, dhelpl_t dhl){
     // loop over active orders:
     for( ordi = 0; ordi < num->act_order; ordi++){
 
+        ndir = dhl.p_dh[ordi].p_ndirs[num->act_nbases];
+        
         // loop over active imaginary directions:
-        for ( dir = 0; dir< num->p_nnz[ordi]; dir++){
+        for ( imdir = 0; imdir< ndir; imdir++){
             
-            printf("  " _PCOEFFT " , ",  num->p_im[ordi][dir]);
+            printf("  " _PCOEFFT " , ",  num->p_im[ordi][imdir]);
 
-            imdir_bases = dhelp_get_imdir( num->p_idx[ordi][dir], ordi, dhl);
+            imdir_bases = dhelp_get_imdir( num->p_idx[ordi][imdir], ordi, dhl);
             
             printArrayUI16( imdir_bases, ordi);
 
@@ -935,39 +939,34 @@ void ssoti_print(semiotin_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline semiotin_t ssoti_get_rtmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl){
+inline semiotin_t ssoti_get_rtmp(ndir_t ntmp, bases_t act_nbases, ord_t trc_order, dhelpl_t dhl){
     
-    semiotin_t res;
+    semiotin_t res=ssoti_init();
     ord_t ordi = 0;
 
-    if (trc_order == 0){
-        // In case order==0, no allocated array exists.
-        res = ssoti_createEmpty(0,dhl);
-        return res;
-    }
-    if (trc_order > dhl.ndh){
-        printf("ERROR: Maximum order not allowed in ssoti_get_rtmp.\n");
-        exit(OTI_undetErr);
-    }
-    if (ntmp >= dhl.p_dh[trc_order-1].Ntmps){
-        printf("ERROR: Trying to get a temporal that does not exist.\n");
-        exit(OTI_undetErr);   
-    }
-    res.re     = 0.0; // Set real value to zero.
-    res.p_im   = dhl.p_dh[trc_order-1].p_ims[ntmp]; 
-    res.p_idx  = dhl.p_dh[trc_order-1].p_ids[ntmp]; 
-    res.p_nnz  = dhl.p_dh[trc_order-1].p_nnz[ntmp]; 
-    res.p_size = dhl.p_dh[trc_order-1].p_size[ntmp]; 
-    res.act_order = 0;
-    res.trc_order = trc_order; 
-    res.flag      = 0; // Memory is not owned by this number.
+    if (trc_order != 0){
+        
+        if (trc_order > dhl.ndh){
+            printf("ERROR: Maximum order not allowed in ssoti_get_rtmp.\n");
+            exit(OTI_undetErr);
+        }
+        if (ntmp >= dhl.p_dh[trc_order-1].Ntmps){
+            printf("ERROR: Trying to get a temporal that does not exist.\n");
+            exit(OTI_undetErr);   
+        }
+        res.re     = 0.0; // Set real value to zero.
+        res.p_im   = dhl.p_dh[trc_order-1].p_ims[ntmp]; 
+        res.act_nbases = act_nbases;
+        res.tot_nbases = dhl.p_dh[trc_order-1].Nbasis;
+        res.act_order = 0;
+        res.trc_order = trc_order; 
+        res.flag      = 0; // Memory is not owned by this number.
 
-    for ( ordi = 0; ordi<trc_order; ordi++ ){
+        for ( ordi = 0; ordi<trc_order; ordi++ ){
 
-        res.p_im[ordi]  = dhl.p_dh[ordi].p_im[ntmp];
-        res.p_idx[ordi] = dhl.p_dh[ordi].p_idx[ntmp];
-        res.p_nnz[ordi] = 0                  ; // Initialize to zero elements.
-        res.p_size[ordi]= dhl.p_dh[ordi].Ndir;
+            res.p_im[ordi]  = dhl.p_dh[ordi].p_im[ntmp];
+
+        }
 
     }
 
@@ -993,10 +992,12 @@ void* ssoti_read_from_mem_to(void* mem, semiotin_t* dst, dhelpl_t dhl){
 
     // Mem must come allocated.
     ord_t ordi;
+    ndir_t ndir;
     void* read_mem = mem;
     coeff_t re = 0.0;
     ord_t act_order = 0;
     ord_t trc_order = 0;
+    bases_t act_nbases=0;
     semiotin_t tmp;
 
     // read real coefficient:
@@ -1011,24 +1012,22 @@ void* ssoti_read_from_mem_to(void* mem, semiotin_t* dst, dhelpl_t dhl){
     memcpy( &act_order, read_mem, sizeof(ord_t) );
     read_mem += sizeof(ord_t);
 
-    tmp = ssoti_get_tmp( 0, trc_order, dhl);
+    // read number of bases
+    memcpy( &act_nbases, read_mem, sizeof(bases_t) );
+    read_mem += sizeof(bases_t);
+
+    tmp = ssoti_createEmpty( act_nbases, trc_order, dhl);
     tmp.re = re; // Set real coefficient.
     tmp.act_order = act_order;
 
     // Add the standard allocation sizes:
     for ( ordi = 0; ordi < tmp.act_order; ordi++){
 
-        // read number of non zeros for this order:
-        memcpy( &tmp.p_nnz[ordi], read_mem, sizeof(ndir_t) );
-        read_mem += sizeof(ndir_t);
+        ndir = dhl.p_dh[ordi].p_ndirs[num->act_nbases];
 
         // read array of coefficients (if any):
-        memcpy( tmp.p_im[ordi], read_mem, tmp.p_nnz[ordi]*sizeof(coeff_t) );
-        read_mem += tmp.p_nnz[ordi]*sizeof(coeff_t);
-
-        // read array of im dirs (if any):
-        memcpy( tmp.p_idx[ordi], read_mem, tmp.p_nnz[ordi]*sizeof(imdir_t) );
-        read_mem += tmp.p_nnz[ordi]*sizeof(imdir_t);
+        memcpy( tmp.p_im[ordi], read_mem, ndir*sizeof(coeff_t) );
+        read_mem += ndir*sizeof(coeff_t);
 
     }
 
@@ -1044,6 +1043,7 @@ void ssoti_save_to_mem(semiotin_t* num, void* mem, dhelpl_t dhl){
 
     // Mem must come allocated.
     ord_t ordi;
+    ndir_t ndir;
     void* write_mem = mem;
 
     // Write real coefficient:
@@ -1058,20 +1058,22 @@ void ssoti_save_to_mem(semiotin_t* num, void* mem, dhelpl_t dhl){
     memcpy( write_mem, &num->act_order, sizeof(ord_t) );
     write_mem += sizeof(ord_t);
 
+    // Write number of bases:
+    memcpy( write_mem, &num->act_nbases, sizeof(bases_t) );
+    write_mem += sizeof(bases_t);
+
     // Add the standard allocation sizes:
-    for ( ordi =0; ordi < num->act_order ; ordi++){
+    for ( ordi = 0; ordi < num->act_order ; ordi++){
+
+        ndir = dhl.p_dh[i].p_ndirs[num->act_nbases];
 
         // Write number of arrays order:
-        memcpy( write_mem, &num->p_nnz[ordi], sizeof(ndir_t) );
+        memcpy( write_mem, &ndir, sizeof(ndir_t) );
         write_mem += sizeof(ndir_t);
 
         // Write array of coefficients:
         memcpy( write_mem, num->p_im[ordi], num->p_nnz[ordi]*sizeof(coeff_t) );
-        write_mem += num->p_nnz[ordi]*sizeof(coeff_t);
-
-        // Write array of im dirs:
-        memcpy( write_mem, num->p_idx[ordi], num->p_nnz[ordi]*sizeof(imdir_t) );
-        write_mem += num->p_nnz[ordi]*sizeof(imdir_t);
+        write_mem += ndir*sizeof(coeff_t);
 
     }
 
@@ -1083,16 +1085,20 @@ uint64_t ssoti_get_memsize_save(semiotin_t* num, dhelpl_t dhl){
 
     uint64_t mem_size = 0;
     ord_t i;
+    ndir_t ndir;
     
-    // Get the size of    real coeff         act_order        trc_order       act_nbases
-    mem_size =         sizeof(coeff_t)  +  sizeof(ord_t)  +  sizeof(ord_t) +  sizeof(bases_t);
+    mem_size = sizeof(coeff_t) + // Real coefficient  
+               sizeof(ord_t) +   // Actual order
+               sizeof(ord_t) +   // Truncation order
+               sizeof(bases_t);  // Actual number of bases.
+                       
 
     // Add the standard allocation sizes:
     for ( i = 0 ; i < num->act_order ; i++){
 
-        //              nnz                 Coefficients and indices for this order.
+        ndir = dhl.p_dh[i].p_ndirs[arc->act_nbases];
 
-        mem_size += sizeof(ndir_t) + num->p_nnz[i]*( sizeof(coeff_t) + sizeof(imdir_t) ) ;
+        mem_size += sizeof(ndir_t) + ndir*( sizeof(coeff_t) ) ;
 
     }
     
@@ -1106,19 +1112,19 @@ uint64_t ssoti_get_min_memsize(semiotin_t* num, dhelpl_t dhl){
 
     uint64_t allocation_size = 0;
     ord_t ordi;
+    ndir_t ndir;
     
     // Get the allocation size of the OTI number:
     allocation_size = num->trc_order * ( 
-        sizeof(coeff_t*)  + // imaginary coefficients.
-        sizeof(imdir_t*)  + // Imaginary indices.
-        sizeof(ndir_t)    + // number of non zeros.
-        sizeof(ndir_t)      // Allocated number.
+        sizeof(coeff_t*)   // imaginary coefficients.
     );
 
     // Add only number of non zero.:
-    for ( ordi =0; ordi < num->act_order ; ordi++){
+    for ( ordi = 0; ordi < num->act_order ; ordi++){
         
-        allocation_size += num->p_nnz[ordi]*(sizeof(coeff_t)+sizeof(imdir_t));
+        ndir = dhl.p_dh[ordi].p_ndirs[arc->act_nbases];
+
+        allocation_size += ndir * ( sizeof(coeff_t) );
 
     }
 
@@ -1132,19 +1138,19 @@ uint64_t ssoti_get_total_memsize(semiotin_t* num, dhelpl_t dhl){
 
     uint64_t allocation_size = 0;
     ord_t ordi;
+    ndir_t ndir;
 
     // Get the allocation size of the OTI number:
     allocation_size = num->trc_order * (
-        sizeof(coeff_t*) + // imaginary coefficients.
-        sizeof(imdir_t*) + // Imaginary indices.
-        sizeof(ndir_t)   + // number of non zeros.
-        sizeof(ndir_t)     // Allocated number.
+        sizeof(coeff_t*) // imaginary coefficients.
     );
 
     // Add total allocation per order:
     for ( ordi = 0; ordi < num->trc_order; ordi++){
         
-        allocation_size += num->p_size[ordi]*( sizeof(coeff_t) + sizeof(imdir_t) );
+        ndir = dhl.p_dh[ordi].p_ndirs[arc->tot_nbases];
+
+        allocation_size += ndir * ( sizeof(coeff_t) );
 
     }
 
@@ -1204,32 +1210,9 @@ void ssoti_copy_to(semiotin_t* src, semiotin_t* dest, dhelpl_t dhl){
 
     }
 
-    // At this point, both inputs must have same torder.
+    // At this point, both inputs must have same trc_order.
+    ssoti_copy_nomemchk_to( src, dest, dhl);
 
-    // Copy real coefficient
-    dest->re = src->re;
-
-    // Set the same actual order
-    dest->act_order  = src->act_order;
-    dest->act_nbases = src->act_nbases;
-
-    // Copy imaginary coefficients up_to the actual order of the src number.
-    for ( i = 0; i < src->act_order; i++){
-        
-        ndir = dhl.p_dh[ordi].p_ndirs[src->act_nbases];
-
-        // Copy memory to dest number. Only copy non zeros.
-        memcpy(dest->p_im[i], src->p_im[i], ndir*sizeof(coeff_t) );
-
-    }  
-
-    // Set all other elements in the imaginary directions to zero.
-    // TODO: With 'order' is this still necessary?
-    for (; i<dest->trc_order;i++){
-
-        dest->p_nnz[i] = 0;
-
-    }
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -1252,6 +1235,7 @@ inline void ssoti_copy_nomemchk_to(semiotin_t* src, semiotin_t* dest, dhelpl_t d
     for ( ordi = 0; ordi < src->act_order; ordi++){
         
         ndir = dhl.p_dh[ordi].p_ndirs[arc->act_nbases];
+
         // Copy memory to dest number. Only copy non zeros.
         memcpy(dest->p_im[ordi], src->p_im[ordi], ndir*sizeof(coeff_t) );
 

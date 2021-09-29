@@ -7,3 +7,4 @@ src/python/pyoti/cython/*.c
 src/python/pyoti/cython/static/*.c
 src/python/pyoti/cython/*.h
 src/python/pyoti/cython/static/*.h
+tests/jupyter_notebook/*

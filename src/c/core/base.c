@@ -205,11 +205,29 @@ ndir_t dhelp_extract_ndirTotal(bases_t nbases, ord_t order, dhelpl_t dhl){
 
     ndir_t ndir_total = 1;
     ord_t ord;
+    ndir_t* p_ndirs; 
+
+    // check validity of input data first.
+    if( order > (dhl.ndh + 1) ){
+
+        printf("ERROR: Order greater than the available orders in the precomputed data.\n");
+        exit(OTI_NonPreComp);
+
+    } else if ( nbases <= dhl.p_dh[order-1].Nbasis ){
+
+        printf("ERROR: nbases greater than the available precomputed data.\n");
+        exit(OTI_NonPreComp);
+
+    }
+
+    p_ndirs = dhl.p_dh[order-1].p_ndirs;
     for( ord = 1; ord <= order; ord++){
         //extract each order
-        ndir_total += dhelp_extract_ndirOrder( nbases, ord, dhl );
+        ndir_total += p_ndirs[nbases];
     }
+
     return ndir_total;
+
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -253,7 +271,6 @@ ndir_t dhelp_extract_ndirOrder(bases_t nbases,ord_t order,dhelpl_t dhl){
     }
 } 
 // ----------------------------------------------------------------------------------------------------
-
 
 
 

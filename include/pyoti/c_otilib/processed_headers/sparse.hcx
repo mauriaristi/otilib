@@ -55,8 +55,8 @@ ctypedef struct : # {
     imdir_t**     p_idx;
     ndir_t*       p_nnz;
     ndir_t*      p_size;
-    ord_t         order;
-    ord_t        torder;
+    ord_t     act_order;
+    ord_t     trc_order;
     flag_t         flag;
 # } sotinum_t;
 ctypedef struct : # {
@@ -117,6 +117,7 @@ void arrso_sub_oO_to( sotinum_t* lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl
 void arrso_sub_Oo_to( arrso_t*   lhs, sotinum_t* rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_sub_rO_to( coeff_t    lhs, arrso_t*   rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_sub_Or_to( arrso_t*   lhs, coeff_t    rhs, arrso_t* res, dhelpl_t dhl);
+void arrso_trunc_sub_OO_to( ord_t ord, arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl);
 arrso_t arrso_mul_OO(arrso_t*   lhs, arrso_t* rhs, dhelpl_t dhl);
 arrso_t arrso_mul_RO(darr_t*    lhs, arrso_t* rhs, dhelpl_t dhl);
 arrso_t arrso_mul_oO(sotinum_t* lhs, arrso_t* rhs, dhelpl_t dhl);
@@ -280,6 +281,8 @@ arrso_t arrso_createEmpty_bases(uint64_t nrows, uint64_t ncols, bases_t nbases, 
 size_t arrso_memory_size( uint64_t size, ndir_t* p_nnz, ord_t order);
 void arrso_distribute_memory(void* mem, uint64_t nrows, uint64_t ncols, ndir_t* p_nnz, ord_t order,
     flag_t flag, arrso_t* res);
+void arrso_save(char* filename, arrso_t* arr, dhelpl_t dhl);
+arrso_t arrso_read(char* filename, dhelpl_t dhl);
 
 
 # From oti/sparse/array/oti_of_array/base.h
@@ -573,12 +576,14 @@ sotinum_t soti_mul_oo(   sotinum_t* num1, sotinum_t* num2,                 dhelp
 sotinum_t soti_mul_ro(      coeff_t num1, sotinum_t* num2,                 dhelpl_t dhl);
 sotinum_t soti_mul_or(   sotinum_t* num1,    coeff_t num2,                 dhelpl_t dhl);
 sotinum_t soti_base_mul( sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
+sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, sotinum_t* num2, dhelpl_t dhl);
 void      soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_mul_ro_to(   coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_mul_or_to(sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
 void soti_gem_oo_to( sotinum_t* a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
 void soti_gem_or_to( sotinum_t* a,    coeff_t b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
 void soti_gem_ro_to(    coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
+void soti_trunc_gem_oo_to(ord_t orda, sotinum_t* a, ord_t ordb, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl);
 sotinum_t soti_sub_oo(    sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
 sotinum_t soti_sub_ro(       coeff_t num1, sotinum_t* num2,                 dhelpl_t dhl);
 sotinum_t soti_sub_or(    sotinum_t* num1,    coeff_t num2,                 dhelpl_t dhl);
@@ -586,6 +591,8 @@ sotinum_t soti_base_sub(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 void      soti_sub_oo_to( sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_sub_ro_to(    coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_sub_or_to( sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
+sotinum_t soti_base_trunc_sub(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_trunc_sub_oo_to(ord_t ord, sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 sotinum_t soti_sum_oo(    sotinum_t* num1, sotinum_t* num2,                 dhelpl_t dhl);
 sotinum_t soti_sum_ro(       coeff_t num1, sotinum_t* num2,                 dhelpl_t dhl);
 sotinum_t soti_sum_or(    sotinum_t* num1,    coeff_t num2,                 dhelpl_t dhl);
@@ -593,6 +600,8 @@ sotinum_t soti_base_sum(  sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
 void      soti_sum_oo_to( sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_sum_ro_to(    coeff_t num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 void      soti_sum_or_to( sotinum_t* num1,    coeff_t num2, sotinum_t* res, dhelpl_t dhl);
+sotinum_t soti_base_trunc_sum(ord_t ord, sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl);
+void soti_trunc_sum_oo_to(ord_t ord, sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t dhl);
 sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl);
 void      soti_neg_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 sotinum_t soti_abs(   sotinum_t* num,                 dhelpl_t dhl);
@@ -660,6 +669,9 @@ sotinum_t soti_extract_deriv(   imdir_t idx, ord_t ord, sotinum_t* num,         
 void      soti_extract_deriv_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 sotinum_t soti_extract_im(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
 void      soti_extract_im_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+void*     soti_read_from_mem_to( void* mem,       sotinum_t* dst, dhelpl_t dhl);
+void      soti_save_to_mem(      sotinum_t* num,  void* mem,      dhelpl_t dhl);
+uint64_t  soti_get_memsize_save( sotinum_t* num,                  dhelpl_t dhl);
 void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_t flag, sotinum_t* res);
 size_t soti_memory_size( const ndir_t* p_nnz, ord_t order);
 uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest);
@@ -694,6 +706,7 @@ sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl);
 sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl);
 sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl);
 sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl);
+void soti_reset_orders(ord_t ord_start, ord_t ord_end, sotinum_t* num, dhelpl_t dhl);
 
 
 # From oti/sparse/scalar/gauss/utils.h

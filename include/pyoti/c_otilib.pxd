@@ -9,6 +9,7 @@ include "c_otilib/core.pxi"
 include "c_otilib/real.pxi"
 include "c_otilib/dense.pxi"
 include "c_otilib/sparse.pxi"
+# include "c_otilib/semisparse.pxi"
 
 # Static algebras.
 include "c_otilib/static.pxi"

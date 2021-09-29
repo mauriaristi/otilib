@@ -54,6 +54,7 @@ folders['dense']=[]
 folders['fem']=[]
 folders['real']=[]
 folders['sparse']=[]
+folders['semisparse']=[]
 
 # Add here Static codes added.
 folders['mdnum2']=[]

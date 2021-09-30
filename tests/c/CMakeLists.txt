@@ -64,6 +64,9 @@ target_link_libraries (test_imdir_mult oti)
 add_executable(test_gen_data test_gen_data.c)
 target_link_libraries (test_gen_data oti)
 
+add_executable(test_semiotin test_semiotin.c)
+target_link_libraries (test_semiotin oti)
+
 
 
 

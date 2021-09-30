@@ -54,7 +54,7 @@ add_library (oti    c/core.c
 					c/real.c
 	                c/dense.c
 	                c/sparse.c
-                    #c/semisparse.c
+                    c/semisparse.c
                     c/static.c
                     c/fem.c
                     )

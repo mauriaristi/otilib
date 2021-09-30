@@ -213,7 +213,7 @@ ndir_t dhelp_extract_ndirTotal(bases_t nbases, ord_t order, dhelpl_t dhl){
         printf("ERROR: Order greater than the available orders in the precomputed data.\n");
         exit(OTI_NonPreComp);
 
-    } else if ( nbases <= dhl.p_dh[order-1].Nbasis ){
+    } else if ( nbases > dhl.p_dh[order-1].Nbasis ){
 
         printf("ERROR: nbases greater than the available precomputed data.\n");
         exit(OTI_NonPreComp);

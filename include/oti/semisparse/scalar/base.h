@@ -90,15 +90,6 @@ void* ssoti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Function that returns the size of memory to be allocated and distributed into a sparse OTI type.
-
-@param[in] p_nnz List of number of non zeros for each order.
-@param[in] order Truncation order of the oti number.
-******************************************************************************************************/
-size_t ssoti_memory_size( const ndir_t* p_nnz, ord_t order);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
 @brief Function that compares memory from two oti numbers and determines weather if memory reallocation 
        is necessary if src is will be copied to dest.
 
@@ -176,8 +167,8 @@ void      ssoti_get_deriv_to( imdir_t idx, ord_t order, semiotin_t* num, semioti
 @param[in] order Truncation order.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-semiotin_t ssoti_get_tmp( ndir_t ntmp, ord_t order, dhelpl_t dhl);
-semiotin_t ssoti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
+semiotin_t ssoti_get_tmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl);
+semiotin_t ssoti_get_rtmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -268,26 +259,29 @@ semiotin_t ssoti_createEmpty_bases(              bases_t nbases, ord_t order, dh
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Create a new oti number with a real coefficient given by the input parameter and 
+@brief Create a new oti number with a real coefficient given by the input parameter as well as 
+the truncation order.  
 
 @param[in] num Real coefficient of the OTI number.
+@param[in] nbases Truncation order.
 @param[in] order Truncation order.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-semiotin_t ssoti_createReal(coeff_t num, ord_t order, dhelpl_t dhl);
+semiotin_t ssoti_createReal(coeff_t num, bases_t tot_nbases, ord_t trc_order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Allocate a new sparse oti number in memory. Creation follows the standard memory sizes as 
 indicated in dhl.
 
-The number is created with a non-zero real coefficient (which is not initialized) and the creation in 
-memory of the other elements correspond to zero value coefficients in the imaginary directions.
+The number is created with a non-zero real coefficient (which is initialized to zero) and memory is 
+allocated according to the pair tot_nbases and trc_order.
 
-@param[in] order Truncation order.
+@param[in] tot_nbases Total number of bases to allocate.
+@param[in] trc_order Truncation order.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-semiotin_t ssoti_createEmpty( ord_t order, dhelpl_t dhl); 
+semiotin_t ssoti_createEmpty( bases_t tot_nbases, ord_t trc_order, dhelpl_t dhl); 
 semiotin_t ssoti_createEmpty_like( semiotin_t* other, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -298,7 +292,7 @@ semiotin_t ssoti_createEmpty_like( semiotin_t* other, dhelpl_t dhl);
 @param[in] order Truncation order.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-semiotin_t ssoti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 
+semiotin_t ssoti_createEmpty_predef( bases_t nbases, ord_t trc_order, dhelpl_t dhl); 
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

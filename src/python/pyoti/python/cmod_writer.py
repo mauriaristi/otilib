@@ -3198,7 +3198,7 @@ class writer:
   #***************************************************************************************************
   def check_file_and_dirs(self, filename):
     dir_name = os.path.dirname(filename)
-    if dir_name is not '':
+    if dir_name != '':
       if not os.path.exists(dir_name):
         try:
           os.makedirs(dir_name)

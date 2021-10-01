@@ -207,83 +207,70 @@
 // }
 // // ----------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-void ssoti_set_item(coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
+// // ****************************************************************************************************
+// void ssoti_set_item(coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
     
-    ssoti_set_im_r( val, idx, order, num, dhl);
+//     ssoti_set_im_r( val, idx, order, num, dhl);
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
+// // ----------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-void ssoti_set_im_r(coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
+// // ****************************************************************************************************
+// void ssoti_set_im_r(coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
     
-    flag_t flag;
-    imdir_t pos;
-    bases_t* imdir_bases;
-    bases_t max_idx_base;
-    semiotin_t tmp;
+//     flag_t flag;
+//     imdir_t pos;
+//     bases_t* imdir_bases;
+//     bases_t max_idx_base;
+//     semiotin_t tmp;
 
-    if (order == 0){
+//     if (order == 0){
         
-        num->re = val;
+//         num->re = val;
 
-    }else{
+//     } else {
 
-        if ( order <= num->act_order ){
+//         if ( order <= num->act_order ){
             
-            // TODO: Check if (idx,order) is within precomputed-data.
-            imdir_bases = dhelp_get_imdir( idx, order, dhl);
-            max_idx_base = imdir_bases[order-1];
+//             // TODO: Check if (idx,order) is within precomputed-data.
+//             imdir_bases = dhelp_get_imdir( idx, order, dhl);
+//             max_idx_base = imdir_bases[order-1];
 
 
-            if (max_idx_base <= num->tot_nbases){
+//             if (max_idx_base <= num->act_nbases){
                 
-                if (max_idx_base <= num->act_nbases){
+//                 num->p_im[order-1][idx] = val;
+
+//             } else if (max_idx_base <= num->tot_nbases){
+
+//                 // Set all new bases directions to 0.
+//                 ssoti_reset_nbases(num->act_nbases, max_idx_base, num, dhl);
+//                 num->act_nbases = max_idx_base; // change the number of bases.
+//                 num->p_im[order-1][idx] = val;
+
+
+//             } else { 
                 
-                    num->p_im[order-1][idx] = val;
-                
-                } else {
-                
-                    // Set all new bases directions to 0.
-                    ssoti_reset_nbases(num->act_nbases, max_idx_base, num, dhl);
-                    num->act_nbases = max_idx_base; // change the number of bases.
+//                 // Reallocation is required.
+//                 tmp = ssoti_createEmpty_like(,dhl);
+//             }
 
-                }
-
-            } else {
-                //TODO; What to do if this is not true?
-                tmp = ssoti_createEmpty_like(,dhl);
-            }
-
-            if ( flag != 0 ){
-
-                // pos exists within num and already contains a value.
-                num->p_im[order-1][pos] = val;
-
-            } else {
-
-                // pos is not contained within num, thus has to be inserted.
-                ssoti_insert_item( pos, val, idx, order, num, dhl);
-
-            }
-
-        } else if (order <= num->trc_order){
+//         } else if (order <= num->trc_order){
         
-            // Be sure that the nnz for all orders up to the new order are zero. 
-            // TODO: Overkill? Necesary?
-            ssoti_reset_orders(num->act_order+1, order, num, dhl);
+//             // Be sure that the nnz for all orders up to the new order are zero. 
+//             // TODO: Overkill? Necesary?
+//             ssoti_reset_orders(num->act_order+1, order, num, dhl);
             
-            // Insert the given coefficient. This function updates the number's order.            
-            ssoti_insert_item( 0, val, idx, order, num, dhl);
+//             // Insert the given coefficient. This function updates the number's order.            
+//             ssoti_insert_item( 0, val, idx, order, num, dhl);
             
-        }// TODO: what happens if the order is greater than the number?
-        // Change order and add one element to the specified order.
+//         }// TODO: what happens if the order is greater than the number?
+//         // Change order and add one element to the specified order.
 
-    } 
+//     } 
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
+// // ----------------------------------------------------------------------------------------------------
 
 // // ****************************************************************************************************
 // void ssoti_set_deriv_o(semiotin_t* val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
@@ -535,34 +522,34 @@ void ssoti_set_im_r(coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhel
 // }
 // // ----------------------------------------------------------------------------------------------------
 
-// // ****************************************************************************************************
-// coeff_t ssoti_get_im(imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
+// ****************************************************************************************************
+coeff_t ssoti_get_im(imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
     
-//     coeff_t res = 0.0; // Default answer.
-//     flag_t flag;
-//     imdir_t pos;
-    
-//     if (order == 0){
+    coeff_t res = 0.0; // Default answer.
+    bases_t* imdir_bases;
+    bases_t max_idx_base;
+
+    if (order == 0){
         
-//         res = num->re;
+        res = num->re;
 
-//     } else {
+    } else {
 
-//         if ( order<=num->act_order ){            
-//             if(num->p_nnz[order-1] != 0){
-//                 pos = binSearchUI64(idx, num->p_idx[order-1], num->p_nnz[order-1], &flag );
-//                 if (flag != 0){
-//                     res = num->p_im[order-1][pos];
-//                 }
-//             }
-//         }
+        imdir_bases = dhelp_get_imdir( idx, order, dhl);
+        max_idx_base = imdir_bases[order-1];
+        
+        if ( order <= num->act_order || order <= num->act_nbases ){ 
+                
+            res = num->p_im[order-1][idx];
+                
+        }
 
-//     }
+    }
 
-//     return res;
+    return res;
 
-// }
-// // ----------------------------------------------------------------------------------------------------
+}
+// ----------------------------------------------------------------------------------------------------
 
 // // ****************************************************************************************************
 // semiotin_t ssoti_get_im_o(imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
@@ -919,7 +906,6 @@ inline void ssoti_reset_orders(ord_t ord_start, ord_t ord_end, semiotin_t* num, 
         ndir = dhl.p_dh[ordi].p_ndirs[num->act_nbases];
         
         memset( num->p_im[ordi], 0, ndir*sizeof(coeff_t) );
-        
 
     }
 
@@ -930,16 +916,9 @@ inline void ssoti_reset_orders(ord_t ord_start, ord_t ord_end, semiotin_t* num, 
 inline void ssoti_reset_nbases(bases_t base_start, bases_t base_end, semiotin_t* num, dhelpl_t dhl){
     
     ord_t ordi = 0;
-    bases_t b_start = MIN(num->tot_bases,base_start);
-    bases_t b_end   = MIN(num->tot_bases,base_end  );
+    bases_t b_start = MIN(num->tot_nbases,base_start);
+    bases_t b_end   = MIN(num->tot_nbases,base_end  );
     ndir_t ndirs,ndire;
-
-    if ( b_start == 0 ) {
-
-        num->re = 0.0;
-        b_start = 1;
-
-    }
 
     // Loop among all orders in num.
     for (ordi = 0; ordi < num->act_order; ordi++){
@@ -949,7 +928,6 @@ inline void ssoti_reset_nbases(bases_t base_start, bases_t base_end, semiotin_t*
         
         memset( &num->p_im[ordi][ndirs], 0, (ndire-ndirs)*sizeof(coeff_t) );
         
-
     }
 
 }

@@ -80,6 +80,7 @@ typedef uint8_t     flag_t; ///< Flag type.
 #define MIN(a,b) ((a) < (b) ? a : b)
 
 #define _PCOEFFT "%11.4e"   // Print format of coeff_t
+#define _PSCOEFFT "%+11.4e" // Print format of coeff_t with sign
 #define _PIMDIRT "%"PRIu64  // Print format of imdir_t
 #define _PNDIRT  "%"PRIu64  // Print format of ndir_t
 #define _PBASEST "%"PRIu16  // Print format of bases_t

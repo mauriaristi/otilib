@@ -66,6 +66,15 @@ def ode_step(F,x0,t0,eps=1e-3,order = 5, dt_tol = 1e-11):
     # end for  
 
     norm_np1 = np.linalg.norm(Err,2)
+
+    x_max = 1e-30
+    for xi in x0:
+        xk = abs( xi[ [ 0, 0 ] ] )
+        if xk > x_max:
+            x_max = xk
+        # end if 
+    # end for
+     
     
     # if norm_np1 <= dt_tol:
 

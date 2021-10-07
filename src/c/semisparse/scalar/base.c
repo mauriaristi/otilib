@@ -153,124 +153,82 @@
 
 
 // // Setter.
-
-// // ****************************************************************************************************
-// void ssoti_insert_item( ndir_t pos, coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, 
-//     dhelpl_t dhl){
+// ****************************************************************************************************
+void ssoti_set_im_r(coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
     
-//     coeff_t* p_tmpim  = NULL;
-//     imdir_t* p_tmpidx = NULL;
+    flag_t flag;
+    bases_t* imdir_bases;
+    bases_t max_idx_base;
+    semiotin_t tmp = ssoti_init();
 
-
-//     if ( num->p_nnz[order-1] == num->p_size[order-1] ){
-//         // Reallocation in memory is necessary.
-
-//         num->p_nnz[order-1] += _REALLOC_SIZE;
-
-//         semiotin_t tmp = ssoti_createEmpty_like(num,dhl);
-
-//         num->p_nnz[order-1] -= _REALLOC_SIZE;
+    if ( order == 0 ){
         
-//         ssoti_copy_to( num, &tmp, dhl);
-        
-//         ssoti_free(num);
-        
-//         *num = tmp;
+        num->re = val;
 
-//     }
-
-//     if (pos < num->p_nnz[order-1]){
-//         // Memory copy is necesary
-
-//         //get temporal pointers
-//         p_tmpim = dhl.p_dh[order-1].p_im[0];
-//         p_tmpidx= dhl.p_dh[order-1].p_idx[0];
-
-//         // copy to pointer:
-//         memcpy(p_tmpim ,&num->p_im[order-1][pos] ,(num->p_nnz[order-1]-pos)*sizeof(coeff_t));
-//         memcpy(p_tmpidx,&num->p_idx[order-1][pos],(num->p_nnz[order-1]-pos)*sizeof(imdir_t));
-
-//         // copy back to new position
-//         memcpy(&num->p_im[order-1][pos+1] ,p_tmpim ,(num->p_nnz[order-1]-pos)*sizeof(coeff_t));
-//         memcpy(&num->p_idx[order-1][pos+1],p_tmpidx,(num->p_nnz[order-1]-pos)*sizeof(imdir_t));        
-        
-//     }
-
-//     // Set the new position.
-//     num->p_im[order-1][pos] = val;
-//     num->p_idx[order-1][pos] = idx;
-//     num->p_nnz[order-1] += 1;
-
-//     // Reset the new order.
-//     num->act_order = MAX(num->act_order, order);
-    
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_set_item(coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-//     ssoti_set_im_r( val, idx, order, num, dhl);
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_set_im_r(coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-//     flag_t flag;
-//     imdir_t pos;
-//     bases_t* imdir_bases;
-//     bases_t max_idx_base;
-//     semiotin_t tmp;
-
-//     if (order == 0){
-        
-//         num->re = val;
-
-//     } else {
-
-//         if ( order <= num->act_order ){
+    } else if ( order <= num->act_order ){
             
-//             // TODO: Check if (idx,order) is within precomputed-data.
-//             imdir_bases = dhelp_get_imdir( idx, order, dhl);
-//             max_idx_base = imdir_bases[order-1];
+        // TODO: Check if (idx,order) is within precomputed-data.
+        imdir_bases = dhelp_get_imdir( idx, order, dhl);
+        max_idx_base = imdir_bases[order-1];
 
 
-//             if (max_idx_base <= num->act_nbases){
-                
-//                 num->p_im[order-1][idx] = val;
+        if (max_idx_base <= num->act_nbases){
+            
+            num->p_im[order-1][idx] = val;
 
-//             } else if (max_idx_base <= num->tot_nbases){
+        } else if (max_idx_base <= num->tot_nbases){
 
-//                 // Set all new bases directions to 0.
-//                 ssoti_reset_nbases(num->act_nbases, max_idx_base, num, dhl);
-//                 num->act_nbases = max_idx_base; // change the number of bases.
-//                 num->p_im[order-1][idx] = val;
+            // Set all new bases directions to 0.
+            ssoti_reset_nbases( num->act_nbases + 1, max_idx_base, num, dhl);
+            num->act_nbases = max_idx_base; // change the number of bases.
+            num->p_im[order-1][idx] = val;
 
 
-//             } else { 
-                
-//                 // Reallocation is required.
-//                 tmp = ssoti_createEmpty_like(,dhl);
-//             }
+        } else { 
+            
+            // Reallocation is required.
+            tmp = ssoti_createEmpty(max_idx_base,num->trc_order,dhl);
+            ssoti_copy_to(num, &tmp, dhl);
+            ssoti_free(num);
+            (*num)=tmp;
 
-//         } else if (order <= num->trc_order){
+            // Recursive call to re pass through this function.
+            ssoti_set_im_r( val, idx, order, num, dhl);
+        }
+
+    } else if (order <= num->trc_order){
         
-//             // Be sure that the nnz for all orders up to the new order are zero. 
-//             // TODO: Overkill? Necesary?
-//             ssoti_reset_orders(num->act_order+1, order, num, dhl);
-            
-//             // Insert the given coefficient. This function updates the number's order.            
-//             ssoti_insert_item( 0, val, idx, order, num, dhl);
-            
-//         }// TODO: what happens if the order is greater than the number?
-//         // Change order and add one element to the specified order.
+        // Be sure that the nnz for all orders up to the new order are zero. 
+        // TODO: Overkill? Necesary?
+        
+        ssoti_reset_orders(num->act_order+1, order, num, dhl);
+        num->act_order = order;
+        
+        // Recursive call to re pass through this function.
+        ssoti_set_im_r( val, idx, order, num, dhl);
+        
+    } else {
 
-//     } 
+	    // TODO: what happens if the order is greater than the number?
+	    // Change order and add one element to the specified order.
+	    // Memory needs to be reallocated .? or since the truncation order is larger then
+	    // no need to reallocate or do anything.
+        
+        tmp = ssoti_createEmpty(num->tot_nbases,order,dhl);
+        ssoti_copy_to(num, &tmp, dhl);
+        ssoti_free(num);
+        (*num)=tmp;
+        ssoti_print_full(num,dhl);
 
-// }
-// // ----------------------------------------------------------------------------------------------------
+        printf("Before setim_r function\n");
+        // Recursive call to re pass through this function.
+        ssoti_set_im_r( val, idx, order, num, dhl); 
+
+    }
+    
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 // // ****************************************************************************************************
 // void ssoti_set_deriv_o(semiotin_t* val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
@@ -416,21 +374,17 @@
 // }
 // // ----------------------------------------------------------------------------------------------------
 
-// // ****************************************************************************************************
-// void ssoti_set_r( coeff_t a, semiotin_t* num, dhelpl_t dhl){
+// ****************************************************************************************************
+void ssoti_set_r( coeff_t a, semiotin_t* num, dhelpl_t dhl){
+    // Do "num = a"
+    ord_t i;
     
-//     ord_t i;
-    
-//     num->re = a;
-//     num->act_order = 0;
+    num->re         = a;
+    num->act_order  = 0;
+    num->act_nbases = 0;
 
-//     for ( i = 0; i < num->trc_order; i++){
-//         // Set number of non-zero and allocated size to 0.
-//         num->p_nnz[i] = 0;
-//     }
-
-// }
-// // ----------------------------------------------------------------------------------------------------
+}
+// ----------------------------------------------------------------------------------------------------
 
 // // ****************************************************************************************************
 // void ssoti_set_o( semiotin_t* src, semiotin_t* dest, dhelpl_t dhl){
@@ -886,6 +840,33 @@ coeff_t ssoti_get_im(imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
 // ====================================================================================================
 
 // ****************************************************************************************************
+void ssoti_help_set_all_coeffs( coeff_t a, semiotin_t* num, dhelpl_t dhl){
+
+    imdir_t imdir;
+    ndir_t ndir=0;
+    ord_t ordi;
+    bases_t* imdir_bases;
+
+    num->re = a;
+
+    // loop over active orders:
+    for( ordi = 0; ordi < num->trc_order; ordi++){
+
+        ndir = dhl.p_dh[ordi].p_ndirs[num->tot_nbases];
+
+        // loop over active imaginary directions:
+        for ( imdir = 0; imdir < ndir; imdir++){
+            
+            num->p_im[ordi][imdir] = a ;
+
+        }
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 inline void ssoti_reset_orders(ord_t ord_start, ord_t ord_end, semiotin_t* num, dhelpl_t dhl){
     
     ord_t ordi = 0;
@@ -919,12 +900,14 @@ inline void ssoti_reset_nbases(bases_t base_start, bases_t base_end, semiotin_t*
     bases_t b_start = MIN(num->tot_nbases,base_start);
     bases_t b_end   = MIN(num->tot_nbases,base_end  );
     ndir_t ndirs,ndire;
-
+    if ( b_start == 0 ){
+    	b_start = 1;
+    }
     // Loop among all orders in num.
     for (ordi = 0; ordi < num->act_order; ordi++){
         
-        ndirs = dhl.p_dh[ordi].p_ndirs[base_start];
-        ndire = dhl.p_dh[ordi].p_ndirs[base_end];
+        ndirs = dhl.p_dh[ordi].p_ndirs[b_start-1];
+        ndire = dhl.p_dh[ordi].p_ndirs[b_end];
         
         memset( &num->p_im[ordi][ndirs], 0, (ndire-ndirs)*sizeof(coeff_t) );
         
@@ -933,11 +916,55 @@ inline void ssoti_reset_nbases(bases_t base_start, bases_t base_end, semiotin_t*
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+
+// ****************************************************************************************************
+void ssoti_print_full(semiotin_t* num, dhelpl_t dhl){
+
+    imdir_t imdir;
+    ndir_t ndir=0;
+    ord_t ordi;
+    bases_t* imdir_bases;
+
+    printf("<semiotin, ");
+    printf("act_nbases: "_PBASEST", ",num->act_nbases);
+    printf("act_order: "_PORDT", ",num->act_order); 
+    printf("tot_nbases: "_PBASEST", ",num->tot_nbases); 
+    printf("trc_order: "_PORDT",\n",num->trc_order); 
+    
+    // Print real direction:
+    printf("    "_PCOEFFT" \n", num->re);
+
+    // loop over active orders:
+    for( ordi = 0; ordi < num->trc_order; ordi++){
+
+        ndir = dhl.p_dh[ordi].p_ndirs[num->tot_nbases];
+
+        // loop over active imaginary directions:
+        for ( imdir = 0; imdir < ndir; imdir++){
+            
+            printf("    " _PSCOEFFT " * e(",  num->p_im[ordi][imdir]);
+
+            imdir_bases = dhelp_get_imdir( imdir, ordi+1, dhl);
+            
+            printArrayUI16( imdir_bases, ordi+1 );
+
+            printf(")\n");
+
+        }
+
+    }
+    printf(">\n");
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
 // ****************************************************************************************************
 void ssoti_print(semiotin_t* num, dhelpl_t dhl){
 
     imdir_t imdir;
-    ndir_t ndirp,ndir=0;
+    ndir_t ndir=0;
     ord_t ordi;
     bases_t* imdir_bases;
 
@@ -952,15 +979,13 @@ void ssoti_print(semiotin_t* num, dhelpl_t dhl){
 
     // loop over active orders:
     for( ordi = 0; ordi < num->act_order; ordi++){
-        ndirp = ndir;
+        
         ndir = dhl.p_dh[ordi].p_ndirs[num->act_nbases];
-        // printf("TOTAL NDIR: "_PNDIRT"\n", ndir );
-        // printf("ADDRESS: %p and previous %p\n", num->p_im[ordi], num->p_im[ordi] - ndirp*sizeof(coeff_t) );
-
+        
         // loop over active imaginary directions:
         for ( imdir = 0; imdir < ndir; imdir++){
             
-            printf("  + " _PCOEFFT " * e(",  num->p_im[ordi][imdir]);
+            printf("   " _PSCOEFFT " * e(",  num->p_im[ordi][imdir]);
 
             imdir_bases = dhelp_get_imdir( imdir, ordi+1, dhl);
             

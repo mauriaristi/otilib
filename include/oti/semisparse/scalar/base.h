@@ -235,7 +235,20 @@ void      ssoti_copy_nomemchk_to( semiotin_t* src, semiotin_t* dest, dhelpl_t dh
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 void ssoti_print(semiotin_t* num, dhelpl_t dhl);
+void ssoti_print_full(semiotin_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
+
+
+/**************************************************************************************************//**
+@brief Sets all coefficients to the given parameter.
+
+@param[in] a Real coefficient.
+@param[out] num OTI number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+void ssoti_help_set_all_coeffs( coeff_t a, semiotin_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 
 /**************************************************************************************************//**
 @brief Free memory allocated for the given OTI number.
@@ -296,8 +309,7 @@ semiotin_t ssoti_createEmpty_predef( bases_t nbases, ord_t trc_order, dhelpl_t d
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Removes all imaginary directions with orders ranging from ord_start up to ord_end. This function
-checks that the orders are within the bounds of the OTI number order
+@brief Sets all coefficients to zero if they have imagianry orders from ord_start to ord_end.
 
 @param[in] ord_start Starting order of im. directions to be removed from the number.
 @param[in] ord_end Ending order of im. directions to be removed from the number.
@@ -307,4 +319,15 @@ checks that the orders are within the bounds of the OTI number order
 void ssoti_reset_orders(ord_t ord_start, ord_t ord_end, semiotin_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+
+/**************************************************************************************************//**
+@brief Sets all coefficients to zero if they have imagianry basis from base_start to base_end.
+
+@param[in] base_start Starting bases of im. directions to be reset from the number.
+@param[in] base_end Ending bases of im. directions to be reset from the number.
+@param[in] num OTI number to be operated.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+void ssoti_reset_nbases(bases_t base_start, bases_t base_end, semiotin_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 #endif

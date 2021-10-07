@@ -6,6 +6,7 @@ int main(int argc, char *argv[]){
 	// Declarations
 	char data_folder[] = "../../data"; // Useful for linux and macos distributions.
 	dhelpl_t dhl; // Direction helper.
+	uint64_t i;
 
 
 	// 
@@ -22,13 +23,34 @@ int main(int argc, char *argv[]){
 	semiotin_t num1, num2, num3;
 	bases_t nbases = 3;
 	coeff_t a = 0.5, b=3.78, c = 4.66;
-	ord_t order  = 5;
+	ord_t order  = 4;
 
 	// Allocate memory first.
 	num1 = ssoti_createReal(4.8,nbases, order, dhl);
 	
 	printf("Result after creating from empty.\n");
-	ssoti_print(&num1, dhl);	
+	ssoti_print(&num1, dhl);
+
+	// Set all coefficients to 1.5 (including real coefficient).
+	ssoti_help_set_all_coeffs( 1.5, &num1,dhl);
+	ssoti_print_full(&num1, dhl);	
+	
+	for(i=0;i<64;i++) printf("=");printf("\n");
+	
+	// Test the reset order function.
+	// num1.act_order = 3;
+	num1.act_nbases = 2;
+	ssoti_reset_orders(3, 5, &num1,  dhl);
+	ssoti_print_full(&num1, dhl);
+
+	ssoti_help_set_all_coeffs( 4.5, &num1,dhl);
+	for(i=0;i<64;i++) printf("=");printf("\n");
+	num1.act_order = 3;
+	// ssoti_reset_nbases(1, 3, &num1,  dhl);
+	ssoti_print_full(&num1, dhl);
+
+	ssoti_set_im_r(1.11, 29, 6, &num1, dhl);
+	ssoti_print_full(&num1, dhl);
 
 	// soti_set_item(a,0,0,&num1,dhl); // Set real coefficient
 	// soti_set_item(b,0,1,&num1,dhl); // Set Imaginary coefficient e(1)

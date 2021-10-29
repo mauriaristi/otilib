@@ -1,4 +1,20 @@
+#*****************************************************************************************************
+cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
+  """
+  PURPOSE:  To create a sotinum with value 1 at the specified imaginary direction
+            in a human friendly manner
 
+  """
+  #***************************************************************************************************
+  
+  cdef object res
+  
+  # TODO: Support case for when hum_dir is 0, or its imaginary direction is 0.  
+  res = number(0.0,nip=nip) 
+
+  return res
+
+#-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
 cpdef zero( uint64_t nip = 0):

@@ -386,8 +386,8 @@ def square(double width, double hight, double he = 1.0, ndivs=None,element_order
     model.mesh.setTransfiniteCurve(L4, ndiv[0] )
 
     # Set vertical divisions
-    model.mesh.setTransfiniteCurve(L1, ndiv[0] )
-    model.mesh.setTransfiniteCurve(L3, ndiv[0] )
+    model.mesh.setTransfiniteCurve(L1, ndiv[1] )
+    model.mesh.setTransfiniteCurve(L3, ndiv[1] )
   # end if 
   
   if structured:

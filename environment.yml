@@ -1,6 +1,7 @@
 name: pyoti
 channels:
   - conda-forge
+  - anaconda
   - default
 dependencies:
   - python=3.8
@@ -21,5 +22,8 @@ dependencies:
   - nodejs
   - scikit-umfpack
   - scikit-sparse
+  - ipygany
+  - ipywidgets
+  - panel
   - pip:
     - partitionsets

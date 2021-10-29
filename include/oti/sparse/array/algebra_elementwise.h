@@ -44,6 +44,8 @@ void arrso_sum_OO_to(arrso_t*   lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_sum_RO_to(darr_t*    lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_sum_oO_to(sotinum_t* lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
 void arrso_sum_rO_to(coeff_t    lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+
+void arrso_trunc_sum_OO_to( ord_t ord, arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

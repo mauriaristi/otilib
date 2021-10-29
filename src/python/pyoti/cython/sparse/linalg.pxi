@@ -987,8 +987,8 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
 
       ord_lhs = ordi - ord_rhs
 
-      trunc_dot( ord_lhs, K_in, ord_rhs, Ores, out=tmp2 )
-      trunc_sub(ordi, tmp, tmp2,out=tmp)
+      trunc_dot( ord_lhs, K_in, ord_rhs, Ores, out = tmp2 )
+      trunc_sub(ordi, tmp, tmp2, out = tmp)
 
     # end for 
 

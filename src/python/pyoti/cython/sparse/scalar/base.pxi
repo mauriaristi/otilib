@@ -976,7 +976,10 @@ cdef class sotinum:
   #***************************************************************************************************
   def rom_eval(self, object bases, object deltas):
     """
-    PURPOSE:     Perform a Taylor series integration.
+    PURPOSE:     Evaluate the Taylor series from the coefficients with in the OTI number.
+
+    INPUTS: 
+      - bases: List of Imagiary bases whose 
     """
     #*************************************************************************************************
     global dhl

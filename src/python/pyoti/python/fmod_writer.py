@@ -44,7 +44,7 @@ class writer:
     if self.lang is 'fortran':
       self.get = "%"
       self.comment = "! "
-      self.endl = self.endl
+      self.endl = "\n"
       imdir_base_name = 'E'
       self.new_line_mark = '&'
       self.real_str = 'R'

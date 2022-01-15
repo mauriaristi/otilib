@@ -34,18 +34,23 @@ Far-future implementation we are looking forward are:
 
 ## Installation instructions:
 
-First you need [Anaconda 3](https://www.anaconda.com/distribution/) with Python 3. After installing and cloning OTILIB, go to the Terminal and go to the directory where you donwloaded this repository.
+First you need [Anaconda 3](https://www.anaconda.com/distribution/) with Python 3. After cloning OTILIB, go to a terminal instance and go to the directory where you donwloaded this repository.
 ```
 cd /PATH/TO/OTILIB-MASTER/
 ```
 
-It is recomended to create an environment with the required dependencies. For this, it is easier to install the environment.yml file by runing:
+It is recomended to create a conda environment with the required dependencies. For this, it is easier to install the environment.yml file by runing:
 ```
 conda env create -f environment.yml
 ```
-NOTE: If you had a previous version of OTILIB, 
+**NOTE**: If you had a previous version of OTILIB, you may avoid this step. However, it is recommended that you update your current environment. For this, run the following command (see [this](https://stackoverflow.com/questions/42352841/how-to-update-an-existing-conda-environment-with-a-yml-file) for more details):
 
-After runing the previous command, you should have installed a conda environment that will allow you to use the python version of the library. To activate this environment, run the following command:
+```
+conda activate myenv
+conda env update --file environment.yml --prune
+```
+
+After runing the previous command, you should have installed/updated the  conda environment that will allow you to use the python version of the library. To activate this environment, run the following command:
 ```
 conda activate pyoti
 ```
@@ -69,7 +74,7 @@ make
  
 This will compile the library and link to the required dependencies.
 
-NOTE: If this is your first time compiling the library, you should run the following command after the library is compiled:
+**NOTE**: If this is your first time compiling the library, you should run the following command after the library is compiled:
 
 ```
 make gendata
@@ -77,7 +82,21 @@ make gendata
 
 This will pre-compute the data required for standard operation of OTI library.
 
+The current version of the library is in a developmental stage, and because of that you require to add the library to the conda path in order for the user to be able to import the library in your projects. For this, please run the following command or head to [this](https://stackoverflow.com/questions/49474575/how-to-install-my-own-python-module-package-via-conda-and-watch-its-changes) link in order to add the build directory to the path:
 
+```
+cd /PATH/TO/OTILIB-MASTER/build/
+conda activate pyoti
+conda develop .
+```
+
+In order to remove this folder to the path, run:
+
+```
+cd /PATH/TO/OTILIB-MASTER/build/
+conda activate pyoti
+conda develop -u .
+```
 
 ## What is this repository for? 
 

@@ -27,9 +27,9 @@ class writer:
 
   #***************************************************************************************************
   def __init__(self, nbases, order, language = 'fortran', tab = "  ", coeff_type = "REAL(DP)", 
-    base_name = None, mdual = False, order_bound=False ):
+    base_name = None, mdual = False, order_bound=False, order_check = False ):
     """
-    PORPUSE:  The porpuse of this class is to create a Fortran Module that allow static dense
+    PORPUSE:  The purpose of this class is to create a Fortran Module that allows static dense
               implementations of OTI and Multidual algebras.
 
     INPUTS:
@@ -46,6 +46,7 @@ class writer:
     global imdir_base_name
     
     self.mdual = mdual
+    self.order_check = order_check
     
     if self.mdual:
       self.nbases = max(order,nbases)
@@ -92,15 +93,24 @@ class writer:
       self.nimdir = 2**order
     # end if     
     
-
     # append imaginary direction.
     self.name_imdir = []
-    self.name_imdir.append([])
-    self.name_imdir[0].append('0')
+    self.name_imdir.append( [] )
+    self.name_imdir[0].append( self.real_str )
+
+    self.idx_imdir = []
+    self.idx_imdir.append( [] )
+    self.idx_imdir[0].append( 0 )
+    
+    self.use_imdir = []
+    self.use_imdir.append( [] )
+    self.use_imdir[0].append( True )
 
     for ordi in range(1,self.order+1):
 
-      self.name_imdir.append([])
+      self.name_imdir.append( [] )
+      self.use_imdir.append( [] )
+      self.idx_imdir.append( [] )
       
       nimdir_i = h.get_ndir_order(self.nbases, ordi)
 
@@ -116,10 +126,139 @@ class writer:
 
         # end for 
 
-        self.name_imdir[ordi].append(str_out)  
+        if not self.mdual:
+          
+          self.name_imdir[ordi].append(str_out)  
+          self.use_imdir[ordi].append(True)
+          self.idx_imdir[ordi].append(j)
+
+        else:
+          
+          # Check if it is a valid multidual direction.
+          str_test = "".join(dict.fromkeys(str_out))
+          
+          if str_test == str_out:
+          
+            self.name_imdir[ordi].append(str_out)
+            self.use_imdir[ordi].append(True)
+            self.idx_imdir[ordi].append(j)
+          
+          # end if 
+
+        # end if
 
       # end for 
 
+    # end for 
+
+    # Precompute multiplication
+    self.mult_res = []
+    self.mult_res.append([]) # Order 0.
+    self.mult_res_total = []
+    self.mult_res_total.append([[[[0,0,self.real_str],[0,0,self.real_str]]]]) # Order 0.
+
+    for ordi in range(1,self.order+1):
+
+      dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
+
+      self.mult_res.append([])
+      mults = self.mult_res[-1]
+
+      for j in range(len(dirs)):
+        mults.append([]) 
+      # end for      
+
+      for ordj in range(1, ordi // 2 + 1):
+        
+        ordk = ordi - ordj
+
+        dirsj = self.name_imdir[ordj]
+        dirsk = self.name_imdir[ordk]
+
+        idxj = self.idx_imdir[ordj]
+        idxk = self.idx_imdir[ordk]
+
+        for j in range(len(dirsj)):
+          for k in range(len(dirsk)):
+
+            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+
+            if i in idxi:
+              ii = idxi.index(i)
+              mults[ii].append([ dirsj[j], dirsk[k] ])
+              if  ordj != ordk:
+                mults[ii].append([ dirsk[k],dirsj[j] ])
+              # end if 
+
+            #end if 
+            
+          # end for
+        # end for 
+      # end for 
+    # end for 
+
+    for ordi in range(1,self.order+1):
+
+      dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
+
+      self.mult_res_total.append([])
+      mults_total = self.mult_res_total[-1]
+
+      for j in range(len(dirs)):
+        mults_total.append([]) 
+      # end for
+      
+      # Do here ordj = 0
+      ordj = 0; j=0;
+      ordk = ordi - ordj
+      dirsj = self.name_imdir[ordj]
+      dirsk = self.name_imdir[ordk]
+
+      idxj = self.idx_imdir[ordj]
+      idxk = self.idx_imdir[ordk]
+      for k in range(len(dirsk)):
+
+        i,iordi = (idxk[k],ordk)
+
+        if i in idxi:
+          ii = idxi.index(i)
+          mults_total[ii].append([ [0,ordj,dirsj[j]], [idxk[k],ordk,dirsk[k]] ])
+          if  ordj != ordk:
+            mults_total[ii].append([ [idxk[k],ordk,dirsk[k]], [idxj[j],ordj,dirsj[j]] ])
+          # end if 
+        #end if 
+        
+      # end for
+
+      for ordj in range(1, ordi // 2 + 1):
+        
+        ordk = ordi - ordj
+
+        dirsj = self.name_imdir[ordj]
+        dirsk = self.name_imdir[ordk]
+
+        idxj = self.idx_imdir[ordj]
+        idxk = self.idx_imdir[ordk]
+
+        for j in range(len(dirsj)):
+          for k in range(len(dirsk)):
+
+            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+
+            if i in idxi:
+              ii = idxi.index(i)
+              mults_total[ii].append([ [idxj[j],ordj,dirsj[j]], [idxk[k],ordk,dirsk[k]] ])
+              if  ordj != ordk:
+                mults_total[ii].append([ [idxk[k],ordk,dirsk[k]], [idxj[j],ordj,dirsj[j]] ])
+              # end if 
+
+            # end if 
+            
+          # end for
+        # end for 
+      # end for 
     # end for 
     
     self.function_list = []
@@ -198,6 +337,11 @@ class writer:
       # end for 
 
     # end for 
+
+    # Order: May improve performance
+    if self.order_check:
+      str_out += level + self.tab + "INTEGER :: ORDER" + self.endl
+
 
     str_out += level + "END TYPE "+self.type_name+self.endl
 
@@ -468,100 +612,79 @@ class writer:
 
   #---------------------------------------------------------------------------------------------------  
 
-  #***************************************************************************************************
-  def multiplication_like_function_oo(self, level = "", f_name = "FUNCTION", lhs_name= "LHS",
+  # ***************************************************************************************************
+  def multiplication_like_function_oo(self, level = "", f_name = "FUNCTION", lhs_name= "LHS", 
     rhs_name= "RHS", res_name = "RES", separator = ",", f_open = "(", f_close = ")", 
-    addition = " + ", order_bound = False ):
+    addition = " + " ):
     """
     PORPUSE:  Multiplication like operation between OTI and OTI.
     """
     global h
     
+    res_getter = self.get  
+    lhs_getter = self.get
+    rhs_getter = self.get
+
     str_out = ""
 
     str_out += level + self.comment + " Multiplication like function \'"
     str_out += f_name + f_open + lhs_name + separator + rhs_name + f_close
     str_out += "\'\n"
 
-    # Write real part.
-    str_out += level + self.comment + "Real" + self.endl
-    str_out += level + res_name + self.get + self.real_str + " = "
-    str_out += f_name + f_open
-    str_out +=         lhs_name + self.get + self.real_str + separator
-    str_out +=         rhs_name + self.get + self.real_str + f_close + self.endl
+
+    # # Write real part.
+    # str_out += level + self.comment + "Real" + self.endl
+    # str_out += level + res_name + res_getter + self.real_str + " = "
+    # str_out += f_name + f_open
+    # str_out +=         lhs_name + lhs_getter + self.real_str + separator
+    # str_out +=         rhs_name + rhs_getter + self.real_str + f_close + self.endl
 
     # res = []
 
-    for ordi in range(1,self.order+1):
+    for ordi in range(0,self.order+1):
 
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
 
-      mults = []
-      for j in range(len(dirs)):
-        mults.append([]) 
+      mult_res_alldirs = self.mult_res_total[ordi]
 
-      # Multiply the different imaginary directions all togeather such thata resulting order is 
+      # Multiply the different imaginary directions all togeather such that resulting order is 
       # ordi.
       # print("Order "+str(ordi))
 
-      for ordj in range(1, ordi // 2 + 1):
-        ordk = ordi-ordj
-        # print("  Multiplying order "+str(ordj)+" x order " + str(ordk) )
-        dirsj = self.name_imdir[ordj]
-        dirsk = self.name_imdir[ordk]
-        
-        for j in range(len(dirsj)):
-          for k in range(len(dirsk)):
-            
-            i,iordi = h.mult_dir(j,ordj,k,ordk)
-
-            mults[i].append([ dirsj[j], dirsk[k] ])
-
-            if  ordj != ordk:
-              mults[i].append([ dirsk[k],dirsj[j] ])
-            # end if 
-
-          # end for
-        # end for 
-      # end for 
-
-      # res.append(mults)
 
       for j in range(len(dirs)):
-        # R X IM
-        str_out += level + res_name + self.get + dirs[j] + " = " 
-        str_out += f_name + f_open
-        str_out +=         lhs_name + self.get + self.real_str + separator
-        str_out +=         rhs_name + self.get + dirs[j] 
-        str_out += f_close 
+        mult_res = mult_res_alldirs[j]
 
-        # IM X R
-        # Addition
-        str_out += addition
-        str_out += f_name + f_open
-        str_out +=         lhs_name + self.get + dirs[j] + separator
-        str_out +=         rhs_name + self.get + self.real_str 
-        str_out += f_close 
-
-        mult = mults[j]
-        nterms = len(mult)
+        # Write result variable.
+        str_out += level + res_name + res_getter + dirs[j] + " = " 
+        
+        nterms = len(mult_res)
         for k in range(nterms):
 
-          str_out += addition
+          if k != 0:
+            str_out += addition
+          # end if 
+          
+          mult = mult_res[k] # Get current direction two term result.
+
           str_out += f_name + f_open
-          str_out +=         lhs_name + self.get + mult[k][0] + separator
-          str_out +=         rhs_name + self.get + mult[k][1]
+          str_out +=         lhs_name + lhs_getter + mult[0][2] + separator
+          str_out +=         rhs_name + rhs_getter + mult[1][2]
           str_out += f_close 
 
-          if ( (k+3)%3 == 0 ) and ( k != ( nterms-1 ) ) :
+          if ( (k+1)%3 == 0 ) and ( k != ( nterms-1 ) ) :
             str_out += " " + self.new_line_mark + endl
             str_out += level +' '*(len(res_name)+len(dirs[j])+1)
           # end if 
 
+
         # end for 
         str_out += self.endl
 
+
+        
       # end for 
 
     # end for 
@@ -900,6 +1023,225 @@ class writer:
 
 
   #--------------------------------------------------------------------------------------------------- 
+
+
+  #***************************************************************************************************
+  def gem_like_function_oo(self, level = "", f_name = "FUNCTION", a_name= "A",
+    b_name= "B", c_name= "C", res_name = "RES", separator = ",", 
+    f_open = "(", f_close = ")",  addition = " + " ):
+    """
+    PORPUSE:  Multiplication like operation between OTI and OTI.
+    """
+    global h
+
+    
+    if to:
+      res_getter = self.get_ptr
+    else:
+      res_getter = self.get
+    # end if 
+
+    if a_ptr:
+      a_getter = self.get_ptr
+    else:
+      a_getter = self.get
+    # end if
+
+    if b_ptr:
+      b_getter = self.get_ptr
+    else:
+      b_getter = self.get
+    # end if
+
+    if c_ptr:
+      c_getter = self.get_ptr
+    else:
+      c_getter = self.get
+    # end if
+
+
+    str_out = ""
+
+    str_out += level + self.comment + " General multiplication like function \'"
+    str_out += f_name + f_open + a_name + separator + b_name + f_close
+    str_out += addition + c_name
+    str_out += "\'\n"
+
+
+    # Write real part.
+    str_out += level + self.comment + "Real" + self.endl
+    str_out += level + res_name + res_getter + self.real_str + " = "
+    str_out +=         c_name + c_getter + self.real_str + addition
+    str_out += f_name + f_open
+    str_out +=         a_name + a_getter + self.real_str + separator
+    str_out +=         b_name + b_getter + self.real_str + f_close + self.endl
+
+    # res = []
+
+    for ordi in range(1,self.order+1):
+
+      str_out += level +self.comment + "Order " + str(ordi) + self.endl
+      dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
+
+      mults = []
+      for j in range(len(dirs)):
+        mults.append([]) 
+
+      # Multiply the different imaginary directions all togeather such that resulting order is 
+      # ordi.
+      # print("Order "+str(ordi))
+
+      for ordj in range(1, ordi // 2 + 1):
+        ordk = ordi - ordj
+        # print("  Multiplying order "+str(ordj)+" x order " + str(ordk) )
+        dirsj = self.name_imdir[ordj]
+        dirsk = self.name_imdir[ordk]
+
+        idxj = self.idx_imdir[ordj]
+        idxk = self.idx_imdir[ordk]
+        
+        for j in range(len(dirsj)):
+          for k in range(len(dirsk)):
+
+            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+
+            if i in idxi:
+              ii = idxi.index(i)
+              mults[ii].append([ dirsj[j], dirsk[k] ])
+              if  ordj != ordk:
+                mults[ii].append([ dirsk[k],dirsj[j] ])
+              # end if 
+            #end if 
+          # end for
+        # end for 
+      # end for 
+
+      # res.append(mults)
+
+      for j in range(len(dirs)):
+        # R X IM
+        str_out += level + res_name + res_getter + dirs[j] + " = " 
+        str_out +=         c_name + c_getter + dirs[j] + addition
+        str_out += f_name + f_open
+        str_out +=         a_name + a_getter + self.real_str + separator
+        str_out +=         b_name + b_getter + dirs[j] 
+        str_out += f_close 
+
+        # IM X R
+        # Addition
+        str_out += addition
+        str_out += f_name + f_open
+        str_out +=         a_name + a_getter + dirs[j] + separator
+        str_out +=         b_name + b_getter + self.real_str 
+        str_out += f_close 
+
+        mult = mults[j]
+        nterms = len(mult)
+        for k in range(nterms):
+
+          str_out += addition
+          str_out += f_name + f_open
+          str_out +=         a_name + a_getter + mult[k][0] + separator
+          str_out +=         b_name + b_getter + mult[k][1]
+          str_out += f_close 
+
+          if ( (k+3)%3 == 0 ) and ( k != ( nterms-1 ) ) :
+            str_out += " " + self.new_line_mark + endl
+            str_out += level +' '*(len(res_name)+len(dirs[j])+1)
+          # end if 
+
+
+        # end for 
+        str_out += self.endl
+
+
+        
+      # end for 
+
+    # end for 
+
+    return str_out
+
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def gem_like_function_ro(self, level = "", f_name = "FUNCTION", a_name= "A",
+    b_name= "B", c_name= "C" res_name = "res", separator = ",", 
+    f_open = "(", f_close = ")",  addition = " + "):
+    """
+    PORPUSE:  Multiplication like operation between OTI and OTI.
+    """
+    global h
+
+    
+    if to:
+      res_getter = self.get_ptr
+    else:
+      res_getter = self.get
+    # end if 
+
+    if a_ptr:
+      a_getter = self.get_ptr
+    else:
+      a_getter = self.get
+    # end if
+
+    if b_ptr:
+      b_getter = self.get_ptr
+    else:
+      b_getter = self.get
+    # end if
+
+    if c_ptr:
+      c_getter = self.get_ptr
+    else:
+      c_getter = self.get
+    # end if
+
+
+    str_out = ""
+
+    str_out += level + self.comment + " General multiplication like function \'"
+    str_out += f_name + f_open + a_name + separator + b_name + f_close
+    str_out += addition + c_name
+    str_out += "\'\n"
+
+
+    # Write real part.
+    str_out += level + self.comment + "Real" + self.endl
+    str_out += level + res_name + res_getter + self.real_str + " = "
+    str_out +=         c_name + c_getter + self.real_str + addition
+    str_out += f_name + f_open
+    str_out +=         a_name + separator
+    str_out +=         b_name + b_getter + self.real_str + f_close + self.endl
+
+    # res = []
+
+    for ordi in range(1,self.order+1):
+
+      str_out += level +self.comment + "Order " + str(ordi) + self.endl
+      dirs = self.name_imdir[ordi]
+
+      for j in range(len(dirs)):
+
+        str_out += level + res_name + res_getter + dirs[j] + " = "
+        str_out +=         c_name + c_getter + dirs[j] + addition
+        str_out += f_name + f_open
+        str_out +=         a_name + separator
+        str_out +=         b_name + b_getter + dirs[j] + f_close + self.endl
+        
+      # end for 
+
+    # end for 
+
+    return str_out
+
+  #---------------------------------------------------------------------------------------------------
+
+
+
+
 
   #***************************************************************************************************
   def write_overloads(self, level = "", tab=" "):

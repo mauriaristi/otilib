@@ -18,7 +18,7 @@ for i in range(65,91):
 # end for 
 
 endl = "\n"
-imdir_base_name = 'e'
+imdir_base_name = 'E'
 operators = ['*','-','+','/','**']
 
 class writer:
@@ -338,9 +338,14 @@ class writer:
 
     # end for 
 
-    # Order: May improve performance
+    # Order check: May improve performance by only performing required operations.
+    # this new member of the Type (order) traces the order and only performs operations
+    # that are required by the  
     if self.order_check:
+    
       str_out += level + self.tab + "INTEGER :: ORDER" + self.endl
+
+    # end if 
 
 
     str_out += level + "END TYPE "+self.type_name+self.endl
@@ -1167,7 +1172,7 @@ class writer:
 
   #***************************************************************************************************
   def gem_like_function_ro(self, level = "", f_name = "FUNCTION", a_name= "A",
-    b_name= "B", c_name= "C" res_name = "res", separator = ",", 
+    b_name= "B", c_name= "C", res_name = "res", separator = ",", 
     f_open = "(", f_close = ")",  addition = " + "):
     """
     PORPUSE:  Multiplication like operation between OTI and OTI.

@@ -1,0 +1,489 @@
+MODULE MDUAL3_MATMUL
+
+  IMPLICIT NONE
+
+  INTEGER, PARAMETER :: DP         = 8
+  INTEGER, PARAMETER :: NUM_IM_DIR = 8
+  INTEGER, PARAMETER :: TORDER     = 3
+
+  TYPE MDNUMM3N3
+    ! Real
+    REAL(DP) :: R
+    ! Order 1
+    REAL(DP) :: E1
+    REAL(DP) :: E2
+    REAL(DP) :: E3
+    ! Order 2
+    REAL(DP) :: E12
+    REAL(DP) :: E13
+    REAL(DP) :: E23
+    ! Order 3
+    REAL(DP) :: E123
+  END TYPE MDNUMM3N3
+
+  INTERFACE OPERATOR(*)
+    MODULE PROCEDURE MDNUMM3N3_MUL_OO,MDNUMM3N3_MUL_RO,MDNUMM3N3_MUL_OR
+  END INTERFACE
+
+  INTERFACE OPERATOR(+)
+    MODULE PROCEDURE MDNUMM3N3_ADD_OO,MDNUMM3N3_ADD_RO,MDNUMM3N3_ADD_OR
+  END INTERFACE
+
+  INTERFACE OPERATOR(-)
+    MODULE PROCEDURE MDNUMM3N3_NEG,MDNUMM3N3_SUB_OO,MDNUMM3N3_SUB_RO,MDNUMM3N3_SUB_OR
+  END INTERFACE
+
+  INTERFACE ASSIGNMENT(=)
+    MODULE PROCEDURE MDNUMM3N3_ASSIGN_R
+  END INTERFACE
+
+  INTERFACE TRANSPOSE
+    MODULE PROCEDURE MDNUMM3N3_TRANSPOSE
+  END INTERFACE
+
+  INTERFACE MATMUL
+    MODULE PROCEDURE MDNUMM3N3_MATMUL_MDNUMM3N3,R_MATMUL_MDNUMM3N3,MDNUMM3N3_MATMUL_R
+  END INTERFACE
+
+  INTERFACE GEM
+    MODULE PROCEDURE MDNUMM3N3_GEM_OO,MDNUMM3N3_GEM_RO
+  END INTERFACE
+
+  CONTAINS
+
+  ELEMENTAL SUBROUTINE MDNUMM3N3_ASSIGN_R(RES,LHS)
+    
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(MDNUMM3N3), INTENT(OUT) :: RES 
+
+    ! Assign like function 'LHS'
+    ! Real
+    RES%R = LHS
+
+    ! Order 1
+    RES%E1 = 0.0_dp
+    RES%E2 = 0.0_dp
+    RES%E3 = 0.0_dp
+
+    ! Order 2
+    RES%E12 = 0.0_dp
+    RES%E13 = 0.0_dp
+    RES%E23 = 0.0_dp
+
+    ! Order 3
+    RES%E123 = 0.0_dp
+
+  END SUBROUTINE MDNUMM3N3_ASSIGN_R
+
+  ELEMENTAL FUNCTION MDNUMM3N3_ADD_OO(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS 
+    TYPE(MDNUMM3N3), INTENT(IN) :: RHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    ! Addition like function 'LHS + RHS'
+    !  Real
+    RES%R = LHS%R + RHS%R
+
+    ! Order 1
+    RES%E1 = LHS%E1 + RHS%E1
+    RES%E2 = LHS%E2 + RHS%E2
+    RES%E3 = LHS%E3 + RHS%E3
+
+    ! Order 2
+    RES%E12 = LHS%E12 + RHS%E12
+    RES%E13 = LHS%E13 + RHS%E13
+    RES%E23 = LHS%E23 + RHS%E23
+
+    ! Order 3
+    RES%E123 = LHS%E123 + RHS%E123
+
+  END FUNCTION MDNUMM3N3_ADD_OO
+
+  ELEMENTAL FUNCTION MDNUMM3N3_ADD_RO(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(MDNUMM3N3), INTENT(IN) :: RHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    ! Addition like function 'LHS + RHS'
+    ! Real
+    RES%R = LHS + RHS%R
+
+    ! Order 1
+    RES%E1 =  + RHS%E1
+    RES%E2 =  + RHS%E2
+    RES%E3 =  + RHS%E3
+
+    ! Order 2
+    RES%E12 =  + RHS%E12
+    RES%E13 =  + RHS%E13
+    RES%E23 =  + RHS%E23
+
+    ! Order 3
+    RES%E123 =  + RHS%E123
+
+  END FUNCTION MDNUMM3N3_ADD_RO
+
+  ELEMENTAL FUNCTION MDNUMM3N3_ADD_OR(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS 
+    REAL(DP), INTENT(IN) :: RHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    ! Addition like function 'LHS + RHS'
+    ! Real
+    RES%R = LHS%R + RHS
+
+    ! Order 1
+    RES%E1 = LHS%E1
+    RES%E2 = LHS%E2
+    RES%E3 = LHS%E3
+
+    ! Order 2
+    RES%E12 = LHS%E12
+    RES%E13 = LHS%E13
+    RES%E23 = LHS%E23
+
+    ! Order 3
+    RES%E123 = LHS%E123
+
+  END FUNCTION MDNUMM3N3_ADD_OR
+
+  ELEMENTAL FUNCTION MDNUMM3N3_NEG(LHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    ! Negation like function '-LHS'
+    ! Real
+    RES%R = -LHS%R
+    ! Order 1
+    RES%E1 = -LHS%E1
+    RES%E2 = -LHS%E2
+    RES%E3 = -LHS%E3
+    ! Order 2
+    RES%E12 = -LHS%E12
+    RES%E13 = -LHS%E13
+    RES%E23 = -LHS%E23
+    ! Order 3
+    RES%E123 = -LHS%E123
+
+  END FUNCTION MDNUMM3N3_NEG
+
+  ELEMENTAL FUNCTION MDNUMM3N3_SUB_OO(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS 
+    TYPE(MDNUMM3N3), INTENT(IN) :: RHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    ! Addition like function 'LHS - RHS'
+    !  Real
+    RES%R = LHS%R - RHS%R
+
+    ! Order 1
+    RES%E1 = LHS%E1 - RHS%E1
+    RES%E2 = LHS%E2 - RHS%E2
+    RES%E3 = LHS%E3 - RHS%E3
+
+    ! Order 2
+    RES%E12 = LHS%E12 - RHS%E12
+    RES%E13 = LHS%E13 - RHS%E13
+    RES%E23 = LHS%E23 - RHS%E23
+
+    ! Order 3
+    RES%E123 = LHS%E123 - RHS%E123
+
+  END FUNCTION MDNUMM3N3_SUB_OO
+
+  ELEMENTAL FUNCTION MDNUMM3N3_SUB_RO(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(MDNUMM3N3), INTENT(IN) :: RHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    ! Addition like function 'LHS - RHS'
+    ! Real
+    RES%R = LHS - RHS%R
+
+    ! Order 1
+    RES%E1 =  - RHS%E1
+    RES%E2 =  - RHS%E2
+    RES%E3 =  - RHS%E3
+
+    ! Order 2
+    RES%E12 =  - RHS%E12
+    RES%E13 =  - RHS%E13
+    RES%E23 =  - RHS%E23
+
+    ! Order 3
+    RES%E123 =  - RHS%E123
+
+  END FUNCTION MDNUMM3N3_SUB_RO
+
+  ELEMENTAL FUNCTION MDNUMM3N3_SUB_OR(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS 
+    REAL(DP), INTENT(IN) :: RHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    ! Addition like function 'LHS - RHS'
+    ! Real
+    RES%R = LHS%R - RHS
+
+    ! Order 1
+    RES%E1 = LHS%E1
+    RES%E2 = LHS%E2
+    RES%E3 = LHS%E3
+
+    ! Order 2
+    RES%E12 = LHS%E12
+    RES%E13 = LHS%E13
+    RES%E23 = LHS%E23
+
+    ! Order 3
+    RES%E123 = LHS%E123
+
+  END FUNCTION MDNUMM3N3_SUB_OR
+
+  ELEMENTAL FUNCTION MDNUMM3N3_MUL_OO(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS 
+    TYPE(MDNUMM3N3), INTENT(IN) :: RHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    !  Multiplication like function 'LHS*RHS'
+
+    ! Order 0
+    RES%R = LHS%R*RHS%R
+
+    ! Order 1
+    RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+    RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
+    RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
+
+    ! Order 2
+    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R + LHS%E1*RHS%E2 &
+            + LHS%E2*RHS%E1
+    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R + LHS%E1*RHS%E3 &
+            + LHS%E3*RHS%E1
+    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R + LHS%E2*RHS%E3 &
+            + LHS%E3*RHS%E2
+
+    ! Order 3
+    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R + LHS%E1*RHS%E23 &
+             + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 + LHS%E13*RHS%E2 &
+             + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+
+  END FUNCTION MDNUMM3N3_MUL_OO
+
+  ELEMENTAL FUNCTION MDNUMM3N3_MUL_RO(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS 
+    TYPE(MDNUMM3N3), INTENT(IN) :: RHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    ! Multiplication like function 'LHS*RHS'
+    !  Real
+    RES%R = LHS*RHS%R
+    ! Order 1
+    RES%E1 = LHS*RHS%E1
+    RES%E2 = LHS*RHS%E2
+    RES%E3 = LHS*RHS%E3
+    ! Order 2
+    RES%E12 = LHS*RHS%E12
+    RES%E13 = LHS*RHS%E13
+    RES%E23 = LHS*RHS%E23
+    ! Order 3
+    RES%E123 = LHS*RHS%E123
+
+  END FUNCTION MDNUMM3N3_MUL_RO
+
+  ELEMENTAL FUNCTION MDNUMM3N3_MUL_OR(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS 
+    REAL(DP), INTENT(IN) :: RHS 
+    TYPE(MDNUMM3N3) :: RES 
+
+    ! Multiplication like function 'LHS*RHS'
+    !  Real
+    RES%R = LHS%R*RHS
+    ! Order 1
+    RES%E1 = LHS%E1*RHS
+    RES%E2 = LHS%E2*RHS
+    RES%E3 = LHS%E3*RHS
+    ! Order 2
+    RES%E12 = LHS%E12*RHS
+    RES%E13 = LHS%E13*RHS
+    RES%E23 = LHS%E23*RHS
+    ! Order 3
+    RES%E123 = LHS%E123*RHS
+
+  END FUNCTION MDNUMM3N3_MUL_OR
+
+ELEMENTAL   FUNCTION MDNUMM3N3_GEM_OO(A,B,C)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: A 
+    TYPE(MDNUMM3N3), INTENT(IN) :: B 
+    TYPE(MDNUMM3N3), INTENT(IN) :: C 
+    TYPE(MDNUMM3N3) :: RES 
+
+    !  General multiplication like function 'A*B + C'
+
+    ! Order 0
+    RES%R = C%R + A%R*B%R
+
+    ! Order 1
+    RES%E1 = C%E1 + A%R*B%E1 + A%E1*B%R
+    RES%E2 = C%E2 + A%R*B%E2 + A%E2*B%R
+    RES%E3 = C%E3 + A%R*B%E3 + A%E3*B%R
+
+    ! Order 2
+    RES%E12 = C%E12 + A%R*B%E12 + A%E12*B%R + A%E1*B%E2 &
+            + A%E2*B%E1
+    RES%E13 = C%E13 + A%R*B%E13 + A%E13*B%R + A%E1*B%E3 &
+            + A%E3*B%E1
+    RES%E23 = C%E23 + A%R*B%E23 + A%E23*B%R + A%E2*B%E3 &
+            + A%E3*B%E2
+
+    ! Order 3
+    RES%E123 = C%E123 + A%R*B%E123 + A%E123*B%R + A%E1*B%E23 &
+             + A%E23*B%E1 + A%E2*B%E13 + A%E13*B%E2 &
+             + A%E3*B%E12 + A%E12*B%E3
+
+  END FUNCTION MDNUMM3N3_GEM_OO
+
+ELEMENTAL   FUNCTION MDNUMM3N3_GEM_RO(A,B,C)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: A 
+    TYPE(MDNUMM3N3), INTENT(IN) :: B 
+    TYPE(MDNUMM3N3), INTENT(IN) :: C 
+    TYPE(MDNUMM3N3) :: RES 
+
+    !  General multiplication like function 'A*B + C'
+
+    ! Order 0
+    RES%R = C%R + A*B%R
+
+    ! Order 1
+    RES%E1 = C%E1 + A*B%E1
+    RES%E2 = C%E2 + A*B%E2
+    RES%E3 = C%E3 + A*B%E3
+
+    ! Order 2
+    RES%E12 = C%E12 + A*B%E12
+    RES%E13 = C%E13 + A*B%E13
+    RES%E23 = C%E23 + A*B%E23
+
+    ! Order 3
+    RES%E123 = C%E123 + A*B%E123
+
+  END FUNCTION MDNUMM3N3_GEM_RO
+
+  FUNCTION MDNUMM3N3_MATMUL_MDNUMM3N3(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS(:,:) 
+    TYPE(MDNUMM3N3), INTENT(IN) :: RHS(:,:) 
+    TYPE(MDNUMM3N3) :: TMP 
+    TYPE(MDNUMM3N3) :: RES(SIZE(LHS,1),SIZE(RHS,2)) 
+    INTEGER :: I,J,K 
+
+    ! Dimension check
+    IF (SIZE(LHS,2) /= SIZE(RHS,1)) THEN
+      STOP "Runtime error: " // &
+           "Dimension mismatch in MATMUL."
+    END IF
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(RHS,2)
+        TMP = 0.0_DP
+        DO K = 1, SIZE(LHS,2)
+          TMP = TMP + LHS( I, K )*RHS( K, J )
+        END DO
+        RES( I, J ) = TMP
+      END DO
+    END DO
+
+  END FUNCTION MDNUMM3N3_MATMUL_MDNUMM3N3
+
+  FUNCTION R_MATMUL_MDNUMM3N3(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    REAL(DP), INTENT(IN) :: LHS(:,:) 
+    TYPE(MDNUMM3N3), INTENT(IN) :: RHS(:,:) 
+    TYPE(MDNUMM3N3) :: TMP 
+    TYPE(MDNUMM3N3) :: RES(SIZE(LHS,1),SIZE(RHS,2)) 
+    INTEGER :: I,J,K 
+
+    ! Dimension check
+    IF (SIZE(LHS,2) /= SIZE(RHS,1)) THEN
+      STOP "Runtime error: " // &
+           "Dimension mismatch in MATMUL."
+    END IF
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(RHS,2)
+        TMP = 0.0_DP
+        DO K = 1, SIZE(LHS,2)
+          TMP = TMP + LHS( I, K )*RHS( K, J )
+        END DO
+        RES( I, J ) = TMP
+      END DO
+    END DO
+
+  END FUNCTION R_MATMUL_MDNUMM3N3
+
+  FUNCTION MDNUMM3N3_MATMUL_R(LHS,RHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS(:,:) 
+    REAL(DP), INTENT(IN) :: RHS(:,:) 
+    TYPE(MDNUMM3N3) :: TMP 
+    TYPE(MDNUMM3N3) :: RES(SIZE(LHS,1),SIZE(RHS,2)) 
+    INTEGER :: I,J,K 
+
+    ! Dimension check
+    IF (SIZE(LHS,2) /= SIZE(RHS,1)) THEN
+      STOP "Runtime error: " // &
+           "Dimension mismatch in MATMUL."
+    END IF
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(RHS,2)
+        TMP = 0.0_DP
+        DO K = 1, SIZE(LHS,2)
+          TMP = TMP + LHS( I, K )*RHS( K, J )
+        END DO
+        RES( I, J ) = TMP
+      END DO
+    END DO
+
+  END FUNCTION MDNUMM3N3_MATMUL_R
+
+  FUNCTION MDNUMM3N3_TRANSPOSE(LHS)&
+    RESULT(RES)
+    IMPLICIT NONE
+    TYPE(MDNUMM3N3), INTENT(IN) :: LHS(:,:) 
+    TYPE(MDNUMM3N3) :: RES(SIZE(LHS,2),SIZE(LHS,1)) 
+    INTEGER :: I,J 
+
+    DO I = 1, SIZE(LHS,1)
+      DO J = 1, SIZE(LHS,2)
+        RES( J, I ) = LHS( I, J )
+      END DO
+    END DO
+
+  END FUNCTION MDNUMM3N3_TRANSPOSE
+
+END MODULE MDUAL3_MATMUL

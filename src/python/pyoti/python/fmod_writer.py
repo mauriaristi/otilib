@@ -72,7 +72,9 @@ class writer:
     self.basename = "O"
 
     if self.mdual :
+
       self.basename = "MD"
+
     # end if 
 
     if base_name is None:
@@ -88,12 +90,17 @@ class writer:
     # end if 
 
     if self.mdual == False:
+
       self.nimdir = h.get_ndir_total(self.nbases, self.order)
+
     else:
+
       self.nimdir = 2**order
-    # end if     
+
+    # end if
     
     # append imaginary direction.
+
     self.name_imdir = []
     self.name_imdir.append( [] )
     self.name_imdir[0].append( self.real_str )
@@ -288,6 +295,7 @@ class writer:
     self.overloads['LOG'] = []
     self.overloads['EXP'] = []
     self.overloads['LOG10'] = []
+    self.overloads['GEM'] = []
     
 
   #---------------------------------------------------------------------------------------------------  
@@ -556,6 +564,7 @@ class writer:
 
     for ordi in range(1,self.order+1):
 
+      str_out += self.endl
       str_out += level + self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
 
@@ -599,6 +608,7 @@ class writer:
 
     for ordi in range(1,self.order+1):
 
+      str_out += self.endl
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
 
@@ -636,18 +646,8 @@ class writer:
     str_out += f_name + f_open + lhs_name + separator + rhs_name + f_close
     str_out += "\'\n"
 
-
-    # # Write real part.
-    # str_out += level + self.comment + "Real" + self.endl
-    # str_out += level + res_name + res_getter + self.real_str + " = "
-    # str_out += f_name + f_open
-    # str_out +=         lhs_name + lhs_getter + self.real_str + separator
-    # str_out +=         rhs_name + rhs_getter + self.real_str + f_close + self.endl
-
-    # res = []
-
     for ordi in range(0,self.order+1):
-
+      str_out += self.endl
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
       idxi = self.idx_imdir[ordi]
@@ -725,7 +725,7 @@ class writer:
 
 
     for ordi in range(1,self.order+1):
-      
+      str_out += self.endl
       str_out += level +self.comment + "Order " + str(ordi) + endl
       dirs = self.name_imdir[ordi]
 
@@ -769,7 +769,7 @@ class writer:
 
 
     for ordi in range(1,self.order+1):
-      
+      str_out += self.endl
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
 
@@ -811,7 +811,7 @@ class writer:
 
 
     for ordi in range(1,self.order+1):
-      
+      str_out += self.endl
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
 
@@ -852,7 +852,7 @@ class writer:
 
 
     for ordi in range(1,self.order+1):
-      
+      str_out += self.endl
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
 
@@ -890,7 +890,7 @@ class writer:
 
 
     for ordi in range(1,self.order+1):
-      
+      str_out += self.endl
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
 
@@ -1039,31 +1039,10 @@ class writer:
     """
     global h
 
-    
-    if to:
-      res_getter = self.get_ptr
-    else:
-      res_getter = self.get
-    # end if 
-
-    if a_ptr:
-      a_getter = self.get_ptr
-    else:
-      a_getter = self.get
-    # end if
-
-    if b_ptr:
-      b_getter = self.get_ptr
-    else:
-      b_getter = self.get
-    # end if
-
-    if c_ptr:
-      c_getter = self.get_ptr
-    else:
-      c_getter = self.get
-    # end if
-
+    res_getter = self.get
+    a_getter   = self.get
+    b_getter   = self.get
+    c_getter   = self.get
 
     str_out = ""
 
@@ -1072,96 +1051,47 @@ class writer:
     str_out += addition + c_name
     str_out += "\'\n"
 
-
-    # Write real part.
-    str_out += level + self.comment + "Real" + self.endl
-    str_out += level + res_name + res_getter + self.real_str + " = "
-    str_out +=         c_name + c_getter + self.real_str + addition
-    str_out += f_name + f_open
-    str_out +=         a_name + a_getter + self.real_str + separator
-    str_out +=         b_name + b_getter + self.real_str + f_close + self.endl
-
-    # res = []
-
-    for ordi in range(1,self.order+1):
-
+    for ordi in range(0,self.order+1):
+      str_out += self.endl
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
       idxi = self.idx_imdir[ordi]
 
-      mults = []
-      for j in range(len(dirs)):
-        mults.append([]) 
+      mult_res_alldirs = self.mult_res_total[ordi]
 
       # Multiply the different imaginary directions all togeather such that resulting order is 
       # ordi.
-      # print("Order "+str(ordi))
-
-      for ordj in range(1, ordi // 2 + 1):
-        ordk = ordi - ordj
-        # print("  Multiplying order "+str(ordj)+" x order " + str(ordk) )
-        dirsj = self.name_imdir[ordj]
-        dirsk = self.name_imdir[ordk]
-
-        idxj = self.idx_imdir[ordj]
-        idxk = self.idx_imdir[ordk]
-        
-        for j in range(len(dirsj)):
-          for k in range(len(dirsk)):
-
-            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
-
-            if i in idxi:
-              ii = idxi.index(i)
-              mults[ii].append([ dirsj[j], dirsk[k] ])
-              if  ordj != ordk:
-                mults[ii].append([ dirsk[k],dirsj[j] ])
-              # end if 
-            #end if 
-          # end for
-        # end for 
-      # end for 
-
-      # res.append(mults)
-
+      
       for j in range(len(dirs)):
-        # R X IM
+        mult_res = mult_res_alldirs[j]
+
+        # Write result variable.
         str_out += level + res_name + res_getter + dirs[j] + " = " 
-        str_out +=         c_name + c_getter + dirs[j] + addition
-        str_out += f_name + f_open
-        str_out +=         a_name + a_getter + self.real_str + separator
-        str_out +=         b_name + b_getter + dirs[j] 
-        str_out += f_close 
+        str_out += c_name + c_getter + dirs[j] + addition
+        
+        nterms = len(mult_res)
 
-        # IM X R
-        # Addition
-        str_out += addition
-        str_out += f_name + f_open
-        str_out +=         a_name + a_getter + dirs[j] + separator
-        str_out +=         b_name + b_getter + self.real_str 
-        str_out += f_close 
-
-        mult = mults[j]
-        nterms = len(mult)
         for k in range(nterms):
 
-          str_out += addition
+          if k != 0:
+            str_out += addition
+          # end if 
+          
+          mult = mult_res[k] # Get current direction two term result.
+
           str_out += f_name + f_open
-          str_out +=         a_name + a_getter + mult[k][0] + separator
-          str_out +=         b_name + b_getter + mult[k][1]
+          str_out +=         a_name + a_getter + mult[0][2] + separator
+          str_out +=         b_name + b_getter + mult[1][2]
           str_out += f_close 
 
-          if ( (k+3)%3 == 0 ) and ( k != ( nterms-1 ) ) :
+          if ( (k+1)%3 == 0 ) and ( k != ( nterms-1 ) ) :
             str_out += " " + self.new_line_mark + endl
             str_out += level +' '*(len(res_name)+len(dirs[j])+1)
           # end if 
 
-
         # end for 
         str_out += self.endl
 
-
-        
       # end for 
 
     # end for 
@@ -1170,40 +1100,21 @@ class writer:
 
   #--------------------------------------------------------------------------------------------------- 
 
-  #***************************************************************************************************
+
+
+#***************************************************************************************************
   def gem_like_function_ro(self, level = "", f_name = "FUNCTION", a_name= "A",
-    b_name= "B", c_name= "C", res_name = "res", separator = ",", 
-    f_open = "(", f_close = ")",  addition = " + "):
+    b_name= "B", c_name= "C", res_name = "RES", separator = ",", 
+    f_open = "(", f_close = ")",  addition = " + " ):
     """
     PORPUSE:  Multiplication like operation between OTI and OTI.
     """
     global h
 
-    
-    if to:
-      res_getter = self.get_ptr
-    else:
-      res_getter = self.get
-    # end if 
-
-    if a_ptr:
-      a_getter = self.get_ptr
-    else:
-      a_getter = self.get
-    # end if
-
-    if b_ptr:
-      b_getter = self.get_ptr
-    else:
-      b_getter = self.get
-    # end if
-
-    if c_ptr:
-      c_getter = self.get_ptr
-    else:
-      c_getter = self.get
-    # end if
-
+    res_getter = self.get
+    a_getter   = self.get
+    b_getter   = self.get
+    c_getter   = self.get
 
     str_out = ""
 
@@ -1212,40 +1123,38 @@ class writer:
     str_out += addition + c_name
     str_out += "\'\n"
 
-
-    # Write real part.
-    str_out += level + self.comment + "Real" + self.endl
-    str_out += level + res_name + res_getter + self.real_str + " = "
-    str_out +=         c_name + c_getter + self.real_str + addition
-    str_out += f_name + f_open
-    str_out +=         a_name + separator
-    str_out +=         b_name + b_getter + self.real_str + f_close + self.endl
-
-    # res = []
-
-    for ordi in range(1,self.order+1):
-
+    for ordi in range(0,self.order+1):
+      str_out += self.endl
       str_out += level +self.comment + "Order " + str(ordi) + self.endl
       dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
 
+      mult_res_alldirs = self.mult_res_total[ordi]
+
+      # Multiply the different imaginary directions all togeather such that resulting order is 
+      # ordi.
+      
       for j in range(len(dirs)):
+        mult_res = mult_res_alldirs[j]
 
-        str_out += level + res_name + res_getter + dirs[j] + " = "
-        str_out +=         c_name + c_getter + dirs[j] + addition
+        # Write result variable.
+        str_out += level + res_name + res_getter + dirs[j] + " = " 
+        str_out += c_name + c_getter + dirs[j] + addition
+
         str_out += f_name + f_open
         str_out +=         a_name + separator
-        str_out +=         b_name + b_getter + dirs[j] + f_close + self.endl
-        
+        str_out +=         b_name + b_getter + dirs[j]
+        str_out += f_close 
+
+        str_out += self.endl
+
       # end for 
 
     # end for 
 
     return str_out
 
-  #---------------------------------------------------------------------------------------------------
-
-
-
+  #--------------------------------------------------------------------------------------------------- 
 
 
   #***************************************************************************************************
@@ -1489,7 +1398,7 @@ class writer:
     else:
       
       f_prev = self.func_name
-      f_post = 'o'
+      f_post = 'O'
       
       lhs_t = "TYPE("+self.type_name+")"
       
@@ -1501,7 +1410,7 @@ class writer:
       rhs_t = self.coeff_t
 
     else:
-      f_post += 'o'
+      f_post += 'O'
 
       rhs_t = "TYPE("+self.type_name+")"
 
@@ -1543,6 +1452,85 @@ class writer:
     
     return str_out
   #--------------------------------------------------------------------------------------------------- 
+
+
+  #***************************************************************************************************
+  def write_scalar_trivar(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION", a_type= "O",  b_type= "O", c_type= "O", 
+    separator = ",", f_open = "(", f_close = ")", addition = " + ",generator = None, 
+    overload = None, write_charact=True ):
+
+    str_out = ""
+    leveli = level
+
+    a = "A"
+    b = "B"
+    c = "C"
+    res = "RES"
+
+    f_prev = self.func_name
+    
+    if a_type == self.real_str:
+    
+      a_t = self.coeff_t
+      f_post = self.real_str
+    
+    else:
+      
+      f_post = 'O'
+      
+      a_t = "TYPE("+self.type_name+")"
+      
+    # end if 
+
+    f_post += b_type
+    b_t = "TYPE("+self.type_name+")"
+    c_t = "TYPE("+self.type_name+")"
+    
+    if is_elemental:
+      str_out += 'ELEMENTAL '
+    # end if
+
+    func_name = f_prev + "_" + function_name 
+    
+    if write_charact:
+      func_name += "_"+ f_post
+    # end if 
+
+    if overload is not None:
+      self.overloads[overload].append(func_name)
+    # end if 
+    
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    str_out += "FUNCTION " + func_name + "("+a+","+b+","+c+")"+self.new_line_mark+endl
+    str_out += leveli*tab + "RESULT(RES)"+ endl
+    str_out += leveli*tab + "IMPLICIT NONE" + endl      
+    str_out += leveli*tab + a_t + ", INTENT(IN) :: "+a+" " + endl
+    str_out += leveli*tab + b_t + ", INTENT(IN) :: "+b+" " + endl
+    str_out += leveli*tab + c_t + ", INTENT(IN) :: "+c+" " + endl
+    str_out += leveli*tab + "TYPE("+self.type_name+") :: "+res+" " + endl
+    str_out += endl
+    
+
+    str_out += generator(f_name = f_name, separator = separator,  
+               level = leveli*tab, f_open = f_open, f_close =f_close, res_name = res,
+               a_name = a, b_name=b, c_name=c )
+
+    str_out += endl
+    # Write function end.
+
+    leveli -= 1
+    str_out += leveli*tab + "END FUNCTION "+ func_name + endl
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+
+
+
 
   #***************************************************************************************************
   def write_matrix_function(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
@@ -1622,7 +1610,7 @@ class writer:
   def write_matmul_function(self, function_name = "FUNCTION", level = 0, tab = " ", 
     f_name = "FUNCTION", lhs_type= "O", rhs_type= "O", separator = ",", 
     f_open = "(", f_close = ")", addition = " + ",generator = None,
-    overload = None ):
+    overload = None, use_gem = True ):
 
     str_out = ""
     leveli = level
@@ -1651,15 +1639,11 @@ class writer:
       
     # end if 
 
-
     func_name = f_prev + "_" + function_name + "_"+ f_post
-
-
 
     # Write function start.
     str_out += leveli*tab
     leveli += 1
-
 
     if overload is not None:
       self.overloads[overload].append(func_name)
@@ -1688,7 +1672,11 @@ class writer:
     str_out += (leveli+1)*tab +"DO J = 1, SIZE(RHS,2)"+endl
     str_out += (leveli+2)*tab +"TMP = 0.0_DP"+endl
     str_out += (leveli+2)*tab +"DO K = 1, SIZE(LHS,2)"+endl
-    str_out += (leveli+3)*tab +"TMP = TMP + LHS( I, K )*RHS( K, J )"+endl
+    if use_gem:
+      str_out += (leveli+3)*tab +"TMP = GEM( LHS( I, K ), RHS( K, J ), TMP)"+endl
+    else:
+      str_out += (leveli+3)*tab +"TMP = TMP + LHS( I, K )*RHS( K, J )"+endl
+    # end if 
     str_out += (leveli+2)*tab +"END DO"+endl
     str_out += (leveli+2)*tab +"RES( I, J ) = TMP"+endl
     str_out += (leveli+1)*tab +"END DO"+endl
@@ -1985,6 +1973,17 @@ class writer:
       tab = tab, f_name = "", lhs_type= "O", rhs_type= self.real_str, separator = "*", f_open = "", 
       f_close = "", generator = self.multiplication_like_function_or, overload = "*" )
     contents += endl
+
+    contents += self.write_scalar_trivar(function_name = "GEM", is_elemental = True, level = level, 
+      tab = tab, f_name = "", a_type= "O",  b_type= "O", c_type= "O", separator = "*", f_open = "", 
+      f_close = "", generator = self.gem_like_function_oo, overload = 'GEM')
+    contents += endl
+
+    contents += self.write_scalar_trivar(function_name = "GEM", is_elemental = True, level = level, 
+      tab = tab, f_name = "", a_type= "R",  b_type= "O", c_type= "O", separator = "*", f_open = "", 
+      f_close = "", generator = self.gem_like_function_ro, overload = 'GEM')
+    contents += endl
+
 
 
     # ARRAY:

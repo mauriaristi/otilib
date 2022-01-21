@@ -167,6 +167,18 @@
 
   END FUNCTION {type_name}_EXP
 
+  FUNCTION {type_name}_SQRT(X) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE({type_name}), INTENT(IN) :: X
+      TYPE({type_name}) :: RES
+
+      DERIVS = DER_R_SIN( X%R )
+
+      RES = FEVAL(X,DERIVS)
+
+  END FUNCTION {type_name}_SQRT
+
   FUNCTION {type_name}_POW(X,E) RESULT(RES)
       IMPLICIT NONE
       REAL(DP) :: DERIVS(TORDER + 1) 

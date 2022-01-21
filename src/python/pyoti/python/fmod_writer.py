@@ -377,7 +377,7 @@ class writer:
     str_out = ""
     str_out += level + self.comment + "Constant imaginary directions." + self.endl
 
-    type_definition = "TYPE("+ self.type_name + ")"
+    type_definition = "TYPE("+ self.type_name + "), PARAMETER"
     
     for ordi in range(1,self.order+1):
     
@@ -1341,8 +1341,8 @@ class writer:
     func_header += leveli*tab + "TYPE("+self.type_name + ") :: DX, DX_P" + self.endl*2
     func_header += leveli*tab + 'FACTOR = 1.0_DP' + self.endl
     func_header += leveli*tab + 'COEF   = 0.0_DP' + self.endl
-    func_header += leveli*tab + 'DX     = DX' + self.endl
-    func_header += leveli*tab + 'DX_P   = DX_P' + self.endl*2
+    func_header += leveli*tab + 'DX     = ' + lhs + self.endl
+    func_header += leveli*tab + 'DX_P   = ' + lhs + self.endl*2
     func_header += leveli*tab + self.comment + " Set real part of deltas zero." + self.endl
     func_header += leveli*tab +"DX"+self.get+self.real_str+" = " + self.zero + self.endl
     func_header += leveli*tab +"DX_P"+self.get+self.real_str+" = " + self.zero + self.endl
@@ -1623,7 +1623,7 @@ class writer:
 
   #***************************************************************************************************
   def write_scalar_function(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
-    f_name = "FUNCTION", lhs_type= "O", rhs_type= "O", separator = ",", 
+    f_name = "FUNCTION", lhs_type= "O",lhs_shape= "S", rhs_type= "O", rhs_shape= "S", separator = ",", 
     f_open = "(", f_close = ")", addition = " + ",generator = None,
     overload = None ):
 
@@ -1634,40 +1634,54 @@ class writer:
     rhs = "RHS"
     res = "RES"
 
-    if lhs_type == self.real_str:
-    
+    lhs_comp = ""
+    rhs_comp = ""
+    res_comp = ""
+
+    shape_test = ""
+
+    if lhs_type == self.real_str:    
       f_prev = self.func_name
       lhs_t = self.coeff_t
-      f_post = self.real_str
-    
-    else:
-      
+      f_post = self.real_str    
+    else:      
       f_prev = self.func_name
-      f_post = 'O'
-      
-      lhs_t = "TYPE("+self.type_name+")"
-      
+      f_post = 'O'      
+      lhs_t = "TYPE("+self.type_name+")"      
     # end if 
 
     if rhs_type is self.real_str:
-
       f_post += self.real_str
       rhs_t = self.coeff_t
-
     else:
       f_post += 'O'
-
       rhs_t = "TYPE("+self.type_name+")"
-
     # end if 
 
-    func_name = f_prev + "_" + function_name + "_"+ f_post
+    # Check shape
+    if lhs_shape == "V":
+      lhs_comp = "(:)"
+      res_comp = "(SIZE("+lhs+",1))"
+    elif lhs_shape == "M":
+      lhs_comp = "(:,:)"
+      res_comp = "(SIZE("+lhs+",1),SIZE("+lhs+",2))"
+    # end if 
+
+    if rhs_shape == "V":
+      rhs_comp = "(:)"
+      res_comp = "(SIZE("+rhs+",1))"
+    elif rhs_shape == "M":
+      rhs_comp = "(:,:)"
+      res_comp = "(SIZE("+rhs+",1),SIZE("+rhs+",2))"
+    # end if 
+
+    func_name = f_prev + "_" + function_name + "_"+ f_post + "_" + lhs_shape + rhs_shape
 
     # Write function start.
     str_out += leveli*tab
     leveli += 1
 
-    if is_elemental:
+    if is_elemental and lhs_shape == 'S' and rhs_shape == 'S':
       str_out += 'ELEMENTAL '
     # end if
 
@@ -1679,10 +1693,24 @@ class writer:
     str_out += "FUNCTION " + func_name + "("+lhs+","+rhs+")"+self.new_line_mark+endl
     str_out += leveli*tab + "RESULT(RES)"+ endl
     str_out += leveli*tab + "IMPLICIT NONE" + endl      
-    str_out += leveli*tab + lhs_t + ", INTENT(IN) :: "+lhs+" " + endl
-    str_out += leveli*tab + rhs_t + ", INTENT(IN) :: "+rhs+" " + endl
-    str_out += leveli*tab + "TYPE("+self.type_name+") :: "+res+" " + endl
+    str_out += leveli*tab + lhs_t + ", INTENT(IN) :: "+lhs+lhs_comp + endl
+    str_out += leveli*tab + rhs_t + ", INTENT(IN) :: "+rhs+rhs_comp + endl
+    str_out += leveli*tab + "TYPE("+self.type_name+") :: "+res+res_comp+" " + endl
     str_out += endl
+    
+    if lhs_shape == 'V' and rhs_shape == 'V':
+      shape_test +=leveli*tab + "IF ( SIZE("+lhs+",1) /= SIZE("+rhs+",1) ) THEN"+ self.endl
+      shape_test +=(leveli+1)*tab + 'STOP "Dimension error in vector-vector '+function_name+' operation. Exiting."'
+      shape_test += self.endl
+      shape_test +=(leveli)*tab + "END IF"+ self.endl*2
+    elif lhs_shape == 'M' and rhs_shape == 'M':
+      shape_test +=leveli*tab + "IF (SIZE("+lhs+",1)/=SIZE("+rhs+",1)) THEN"+ self.endl
+      shape_test +=(leveli+1)*tab + 'STOP "Dimension error in matrix-matrix '+function_name+' operation. Exiting."'
+      shape_test += self.endl
+      shape_test +=(leveli)*tab + "END IF" + self.endl*2
+    # end if 
+
+    str_out += shape_test
 
     str_out += generator(f_name = f_name, separator = separator,  
                level = leveli*tab, f_open = f_open, f_close =f_close, res_name = res,
@@ -2184,63 +2212,79 @@ class writer:
       f_close = "", overload = "=",generator = self.assignr_like_function)
     contents += endl
 
-    # Standard Addition
-    contents += self.write_scalar_function(function_name = "ADD", is_elemental = True, level = level, 
-      tab = tab, f_name = "", lhs_type= "O", rhs_type= "O", separator = " + ", f_open = "", 
-      f_close = "", generator = self.addition_like_function_oo, overload = "+")
-    contents += endl
-
-    contents += self.write_scalar_function(function_name = "ADD", is_elemental = True, level = level, 
-      tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "O", separator = " + ", f_open = "", 
-      f_close = "", generator = self.addition_like_function_ro, overload = "+" )
-    contents += endl
-
-    contents += self.write_scalar_function(function_name = "ADD", is_elemental = True, level = level, 
-      tab = tab, f_name = "", lhs_type= "O", rhs_type= self.real_str, separator = " + ", f_open = "", 
-      f_close = "", generator = self.addition_like_function_or, overload = "+" )
-    contents += endl
-
-
     # Standard NEGATION
     contents += self.write_scalar_function_neg(function_name = "NEG", is_elemental = True, level = level, 
       tab = tab, f_name = "",   f_open = "-", 
       f_close = "", overload = "-",generator = self.negation_like_function)
     contents += endl
 
-    # PPRINT (*Pretty printing.)
+    shapes = [ ['S','S'],
+               ['V','S'],
+               ['M','S'],
+               ['S','V'],
+               ['S','M'] ] 
+    
+    for shape in shapes:
 
-    # Standard Subtraction
-    contents += self.write_scalar_function(function_name = "SUB", is_elemental = True, level = level, 
-      tab = tab, f_name = "", lhs_type= "O", rhs_type= "O", separator = " - ", f_open = "", 
-      f_close = "", generator = self.addition_like_function_oo, overload = "-" )
-    contents += endl
+      # Standard Addition
+      contents += self.write_scalar_function(function_name = "ADD", is_elemental = True, level = level, 
+        tab = tab, f_name = "", lhs_type= "O", rhs_type= "O", separator = " + ", f_open = "", 
+        lhs_shape = shape[0], rhs_shape = shape[1], 
+        f_close = "", generator = self.addition_like_function_oo, overload = "+")
+      contents += endl 
 
-    contents += self.write_scalar_function(function_name = "SUB", is_elemental = True, level = level, 
-      tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "O", separator = " - ", f_open = "", 
-      f_close = "", generator = self.addition_like_function_ro, overload = "-" )
-    contents += endl
+      contents += self.write_scalar_function(function_name = "ADD", is_elemental = True, level = level, 
+        tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "O", separator = " + ", f_open = "", 
+        lhs_shape = shape[0], rhs_shape = shape[1], 
+        f_close = "", generator = self.addition_like_function_ro, overload = "+" )
+      contents += endl
 
-    contents += self.write_scalar_function(function_name = "SUB", is_elemental = True, level = level, 
-      tab = tab, f_name = "", lhs_type= "O", rhs_type= self.real_str, separator = " - ", f_open = "", 
-      f_close = "", generator = self.addition_like_function_or, overload = "-" )
-    contents += endl
+      contents += self.write_scalar_function(function_name = "ADD", is_elemental = True, level = level, 
+        tab = tab, f_name = "", lhs_type= "O", rhs_type= self.real_str, separator = " + ", f_open = "", 
+        lhs_shape = shape[0], rhs_shape = shape[1], 
+        f_close = "", generator = self.addition_like_function_or, overload = "+" )
+      contents += endl
 
-    # Standard Multiplication
-    contents += self.write_scalar_function(function_name = "MUL", is_elemental = True, level = level, 
-      tab = tab, f_name = "", lhs_type= "O", rhs_type= "O", separator = "*", f_open = "", 
-      f_close = "", generator = self.multiplication_like_function_oo, overload = "*" )
-    contents += endl
+      # Standard Subtraction
+      contents += self.write_scalar_function(function_name = "SUB", is_elemental = True, level = level, 
+        tab = tab, f_name = "", lhs_type= "O", rhs_type= "O", separator = " - ", f_open = "", 
+        lhs_shape = shape[0], rhs_shape = shape[1], 
+        f_close = "", generator = self.addition_like_function_oo, overload = "-" )
+      contents += endl
 
-    contents += self.write_scalar_function(function_name = "MUL", is_elemental = True, level = level, 
-      tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "O", separator = "*", f_open = "", 
-      f_close = "", generator = self.multiplication_like_function_ro, overload = "*" )
-    contents += endl
+      contents += self.write_scalar_function(function_name = "SUB", is_elemental = True, level = level, 
+        tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "O", separator = " - ", f_open = "", 
+        lhs_shape = shape[0], rhs_shape = shape[1], 
+        f_close = "", generator = self.addition_like_function_ro, overload = "-" )
+      contents += endl
 
-    contents += self.write_scalar_function(function_name = "MUL", is_elemental = True, level = level, 
-      tab = tab, f_name = "", lhs_type= "O", rhs_type= self.real_str, separator = "*", f_open = "", 
-      f_close = "", generator = self.multiplication_like_function_or, overload = "*" )
-    contents += endl
+      contents += self.write_scalar_function(function_name = "SUB", is_elemental = True, level = level, 
+        tab = tab, f_name = "", lhs_type= "O", rhs_type= self.real_str, separator = " - ", f_open = "", 
+        lhs_shape = shape[0], rhs_shape = shape[1], 
+        f_close = "", generator = self.addition_like_function_or, overload = "-" )
+      contents += endl
 
+      # Standard Multiplication
+      contents += self.write_scalar_function(function_name = "MUL", is_elemental = True, level = level, 
+        tab = tab, f_name = "", lhs_type= "O", rhs_type= "O", separator = "*", f_open = "", 
+        lhs_shape = shape[0], rhs_shape = shape[1], 
+        f_close = "", generator = self.multiplication_like_function_oo, overload = "*" )
+      contents += endl
+
+      contents += self.write_scalar_function(function_name = "MUL", is_elemental = True, level = level, 
+        tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "O", separator = "*", f_open = "", 
+        lhs_shape = shape[0], rhs_shape = shape[1], 
+        f_close = "", generator = self.multiplication_like_function_ro, overload = "*" )
+      contents += endl
+
+      contents += self.write_scalar_function(function_name = "MUL", is_elemental = True, level = level, 
+        tab = tab, f_name = "", lhs_type= "O", rhs_type= self.real_str, separator = "*", f_open = "", 
+        lhs_shape = shape[0], rhs_shape = shape[1], 
+        f_close = "", generator = self.multiplication_like_function_or, overload = "*" )
+      contents += endl
+
+    # end for 
+    
     # GEM
     contents += self.write_scalar_trivar(function_name = "GEM", is_elemental = True, level = level, 
       tab = tab, f_name = "", a_type= "O",  b_type= "O", c_type= "O", separator = "*", f_open = "", 

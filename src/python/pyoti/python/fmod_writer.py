@@ -1,5 +1,5 @@
 
-from pyoti.core import get_dHelp
+from pyoti.core import get_dHelp, whereotilib
 
 h = get_dHelp()
 
@@ -68,7 +68,7 @@ class writer:
 
     self.new_line_mark = '&'
     self.real_str = 'R'
-    self.zero = '0.0_dp'
+    self.zero = '0.0_DP'
     self.basename = "O"
 
     if self.mdual :
@@ -269,6 +269,8 @@ class writer:
     # end for 
     
     self.function_list = []
+    self.private_members = ['DP','TORDER','DER_R_COS','DER_R_SIN',
+                      'DER_R_LOG','DER_R_EXP','DER_R_POW']
     self.overloads = {}
 
     self.overloads['*'] = []
@@ -296,6 +298,7 @@ class writer:
     self.overloads['EXP'] = []
     self.overloads['LOG10'] = []
     self.overloads['GEM'] = []
+    self.overloads['FEVAL'] = []
     
 
   #---------------------------------------------------------------------------------------------------  
@@ -362,6 +365,59 @@ class writer:
 
   #---------------------------------------------------------------------------------------------------  
   
+
+  #***************************************************************************************************
+  def set_type_constants(self, level = ""):
+    """
+    PORPUSE:  The porpuse of this class is to create Modules that allow dense OTI structures
+              to be manipulated in languages like Fortran and Cython. 
+    """
+    global h
+
+    str_out = ""
+    str_out += level + self.comment + "Constant imaginary directions." + self.endl
+
+    type_definition = "TYPE("+ self.type_name + ")"
+    
+    for ordi in range(1,self.order+1):
+    
+      str_out += level + self.comment + "Order " + str(ordi) + self.endl
+      dirs = self.name_imdir[ordi]
+
+      for j in range(len(dirs)):
+        active_dir = dirs[j]
+        str_out += level + type_definition + " :: " + dirs[j] + ' = '
+        str_out += self.type_name + "("+self.zero+","
+        
+        for ordj in range(1,self.order+1):
+          
+          dirsj = self.name_imdir[ordj]
+
+          for i in range(len(dirsj)):
+            
+            if dirsj[i] == active_dir:
+              str_out += "1.0_DP,"
+            else:
+              str_out += "0.0_DP,"
+            # end if 
+
+          # end for
+
+        # end for 
+
+        str_out = str_out[:-1]
+        str_out += ")" + self.endl
+
+      # end for 
+
+    # end for 
+
+    return str_out
+
+  #---------------------------------------------------------------------------------------------------  
+  
+
+
   #***************************************************************************************************
   def addition_like_oo(self, level = "", operator = " + ", lhs_name= "LHS",rhs_name= "RHS", res_name = "RES"):
     """
@@ -1100,9 +1156,7 @@ class writer:
 
   #--------------------------------------------------------------------------------------------------- 
 
-
-
-#***************************************************************************************************
+  #***************************************************************************************************
   def gem_like_function_ro(self, level = "", f_name = "FUNCTION", a_name= "A",
     b_name= "B", c_name= "C", res_name = "RES", separator = ",", 
     f_open = "(", f_close = ")",  addition = " + " ):
@@ -1154,8 +1208,198 @@ class writer:
 
     return str_out
 
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def gem_like_function_or(self, level = "", f_name = "FUNCTION", a_name= "A",
+    b_name= "B", c_name= "C", res_name = "RES", separator = ",", 
+    f_open = "(", f_close = ")",  addition = " + " ):
+    """
+    PORPUSE:  Multiplication like operation between OTI and OTI.
+    """
+    global h
+
+    res_getter = self.get
+    a_getter   = self.get
+    b_getter   = self.get
+    c_getter   = self.get
+
+    str_out = ""
+
+    str_out += level + self.comment + " General multiplication like function \'"
+    str_out += f_name + f_open + a_name + separator + b_name + f_close
+    str_out += addition + c_name
+    str_out += "\'\n"
+
+    for ordi in range(0,self.order+1):
+      str_out += self.endl
+      str_out += level +self.comment + "Order " + str(ordi) + self.endl
+      dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
+
+      mult_res_alldirs = self.mult_res_total[ordi]
+
+      # Multiply the different imaginary directions all togeather such that resulting order is 
+      # ordi.
+      
+      for j in range(len(dirs)):
+        mult_res = mult_res_alldirs[j]
+
+        # Write result variable.
+        str_out += level + res_name + res_getter + dirs[j] + " = " 
+        str_out += c_name + c_getter + dirs[j] + addition
+
+        str_out += f_name + f_open
+        str_out +=         a_name + a_getter + dirs[j] + separator
+        str_out +=         b_name 
+        str_out += f_close 
+
+        str_out += self.endl
+
+      # end for 
+
+    # end for 
+
+    return str_out
+
+  #--------------------------------------------------------------------------------------------------- 
+  #***************************************************************************************************
+  def feval_function_o(self, level = "", lhs_name= "X", deriv_name= "DERIVS", res_name = "RES"  ):
+    """
+    PORPUSE:  Generic function evaluation of OTI number.
+    """
+    global h
+
+    str_out = ""    
+    res_getter = self.get
+    lhs_getter = self.get
+    
+    str_out += level + self.comment + "Sets real part" +  endl
+    str_out += level + res_name + " = "
+    str_out += deriv_name+"(1)" + self.endl
+    
+    for ordi in range(1,self.order+1):
+      
+      str_out += self.endl
+      str_out += level + self.comment + "Sets order " + str(ordi) + endl
+      dirs = self.name_imdir[ordi]
+
+      str_out += level + "FACTOR = FACTOR * " + str(ordi) + self.endl
+      str_out += level + "COEF = "+deriv_name+"("+str(ordi+1)+") / FACTOR" + self.endl
+      str_out += level + res_name + " = GEM(COEF,DX_P,"+res_name+")" + self.endl
+      
+      if ordi != self.order:
+        str_out += level + "DX_P = DX_P*DX" + self.endl
+      # end if 
+      
+      str_out += level + ""
+      
+    # end for 
+
+    return str_out
+
+  #---------------------------------------------------------------------------------------------------  
+
+  #***************************************************************************************************
+  def write_scalar_feval(self, function_name = "FEVAL", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False,
+    f_open = "(", f_close = ")", addition = " + ", to = False,
+    overload = None, write_charact=True ):
+    """
+    Write Univariate function evaluation.
+
+    This module writes the definition of the function, its inputs and output. The generator defines the
+    operations within the function block.
+
+    """
+
+    str_out = ""
+    leveli = level
+
+    res = "RES"
+    lhs = "X"
+    derivs = "DERIVS"
+
+    lhs_t = self.type_name
+    f_post = lhs_type
+   
+    f_prev = self.func_name
+    
+    func_name = f_prev + "_" + function_name 
+    
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = ''
+
+    func_header += leveli*tab + self.comment + " Definitions" + endl
+    func_header += leveli*tab + self.coeff_t + " :: FACTOR, COEF"+self.endl
+    func_header += leveli*tab + "TYPE("+self.type_name + "), INTENT(IN)  :: "+lhs+self.endl
+    func_header += leveli*tab + self.coeff_t  + ", INTENT(IN)  :: "+derivs+"("+str(self.order+1)+")"+self.endl
+    func_header += leveli*tab + "TYPE("+self.type_name + ") :: "+res+self.endl
+    func_header += leveli*tab + "TYPE("+self.type_name + ") :: DX, DX_P" + self.endl*2
+    func_header += leveli*tab + 'FACTOR = 1.0_DP' + self.endl
+    func_header += leveli*tab + 'COEF   = 0.0_DP' + self.endl
+    func_header += leveli*tab + 'DX     = DX' + self.endl
+    func_header += leveli*tab + 'DX_P   = DX_P' + self.endl*2
+    func_header += leveli*tab + self.comment + " Set real part of deltas zero." + self.endl
+    func_header += leveli*tab +"DX"+self.get+self.real_str+" = " + self.zero + self.endl
+    func_header += leveli*tab +"DX_P"+self.get+self.real_str+" = " + self.zero + self.endl
+    
+
+    if is_elemental:
+      str_out += 'ELEMENTAL '
+    # end if
+
+    if overload is not None:
+      self.overloads[overload].append(func_name)
+    # end if 
+    
+    str_out += "FUNCTION " + func_name + "(" +lhs+","+derivs+")"+self.new_line_mark+endl
+    str_out += leveli*tab + "RESULT("+res+")"+ endl
+
+    str_out += leveli*tab + "IMPLICIT NONE" + endl
+
+    str_out += func_header +endl
+
+    str_out += self.feval_function_o(level = leveli*tab, res_name = res, deriv_name = derivs,lhs_name=lhs )
+    
+
+    str_out += endl
+
+    # Write function end.    
+    leveli -= 1
+    str_out += leveli*tab + 'END FUNCTION ' +func_name+ self.endl + endl
+    
+    return str_out
   #--------------------------------------------------------------------------------------------------- 
 
+  #***************************************************************************************************
+  def write_private(self, level = "", tab=" "):
+    """
+    This function writes the private members of the fortran module being created.
+
+    """
+    str_out = ""
+    
+    private_name = "PRIVATE :: "
+    
+    str_out += level + private_name
+
+    nterms = len(self.private_members)
+
+    for k in range(nterms):
+      if ( (k+1)%4 == 0 ) and ( k != ( nterms-1 ) ) :
+        str_out += " " + self.new_line_mark + endl
+        str_out += level +' '*(len(private_name))
+      # end if
+      str_out += self.private_members[k] + ','
+    # end for 
+    str_out = str_out[:-1] + endl
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
   def write_overloads(self, level = "", tab=" "):
@@ -1201,6 +1445,7 @@ class writer:
     # FUnction overloads:
 
     return str_out
+  #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
   def write_scalar_function_print(self, level = 0, tab = " "):
@@ -1469,23 +1714,42 @@ class writer:
     res = "RES"
 
     f_prev = self.func_name
-    
+    f_post = ""
     if a_type == self.real_str:
     
       a_t = self.coeff_t
-      f_post = self.real_str
+      f_post += self.real_str
     
     else:
       
-      f_post = 'O'
-      
+      f_post += 'O'
       a_t = "TYPE("+self.type_name+")"
       
     # end if 
+    
+    if b_type == self.real_str:
+    
+      b_t = self.coeff_t
+      f_post += self.real_str
+    
+    else:
+      
+      f_post += 'O'      
+      b_t = "TYPE("+self.type_name+")"
+      
+    # end if 
 
-    f_post += b_type
-    b_t = "TYPE("+self.type_name+")"
-    c_t = "TYPE("+self.type_name+")"
+    if c_type == self.real_str:
+    
+      c_t = self.coeff_t
+      f_post += self.real_str
+    
+    else:
+      
+      f_post += 'O'      
+      c_t = "TYPE("+self.type_name+")"
+      
+    # end if 
     
     if is_elemental:
       str_out += 'ELEMENTAL '
@@ -1904,6 +2168,9 @@ class writer:
 
     # Define type
     str_out += self.set_type_fortran( level = level*tab ) + endl
+
+    # Define type
+    str_out += self.set_type_constants( level = level*tab ) + endl
     
     # contents
     contents = level*tab + "CONTAINS" + endl + endl
@@ -1974,6 +2241,7 @@ class writer:
       f_close = "", generator = self.multiplication_like_function_or, overload = "*" )
     contents += endl
 
+    # GEM
     contents += self.write_scalar_trivar(function_name = "GEM", is_elemental = True, level = level, 
       tab = tab, f_name = "", a_type= "O",  b_type= "O", c_type= "O", separator = "*", f_open = "", 
       f_close = "", generator = self.gem_like_function_oo, overload = 'GEM')
@@ -1984,6 +2252,14 @@ class writer:
       f_close = "", generator = self.gem_like_function_ro, overload = 'GEM')
     contents += endl
 
+    contents += self.write_scalar_trivar(function_name = "GEM", is_elemental = True, level = level, 
+      tab = tab, f_name = "", a_type= "O",  b_type= "R", c_type= "O", separator = "*", f_open = "", 
+      f_close = "", generator = self.gem_like_function_or, overload = 'GEM')
+    contents += endl
+
+    # FEVAL
+    contents += self.write_scalar_feval(function_name = "FEVAL", is_elemental = False, level = level, 
+      tab = tab,  lhs_type= "O", overload = 'FEVAL' )
 
 
     # ARRAY:
@@ -2031,6 +2307,23 @@ class writer:
       contents += endl
 
     # end if 
+
+    # Add derivative computation
+    file = open(whereotilib.getpath()+'base_derivs_fortran.f90') 
+    contents += file.read().format(type_name = self.type_name)
+    file.close()
+
+    self.overloads['**'].append(self.type_name+"_POW")
+    self.overloads['SIN'].append(self.type_name+"_SIN")
+    self.overloads['COS'].append(self.type_name+"_SIN")
+    self.overloads['LOG'].append(self.type_name+"_SIN")
+    self.overloads['EXP'].append(self.type_name+"_SIN")
+    # Add overloads of function evaluations.
+
+
+    
+    # Write private members.
+    str_out += self.write_private(level = tab*level, tab = tab) + self.endl
 
     # Define Overloads
     str_out += self.write_overloads(level = tab*level, tab = tab)

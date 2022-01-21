@@ -706,10 +706,7 @@ void der_r_pow(coeff_t x, coeff_t e, ord_t order, coeff_t* derivs){
             factor = factor*power_i;
             power_i -= 1.;
         }else{
-            if (i==0){
-                derivs[i] = x0; // not sure if 1.0 or if coefs[0]
-                flag = 1;
-            } else if (flag == 0 ){
+            if (flag == 0 ){
                 derivs[i]=factor;
                 flag = 1;
             }else{ 

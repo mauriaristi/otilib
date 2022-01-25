@@ -191,3 +191,36 @@
       RES = FEVAL(X,DERIVS)
 
   END FUNCTION {type_name}_POW
+
+  FUNCTION {type_name}_DIVISION_OO(X,Y) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE({type_name}), INTENT(IN) :: X
+      TYPE({type_name}), INTENT(IN) :: Y
+      TYPE({type_name}) :: RES
+
+      RES = X*(Y**(-1.d0))
+
+  END FUNCTION {type_name}_DIVISION_OO
+
+  FUNCTION {type_name}_DIVISION_OR(X,Y) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE({type_name}), INTENT(IN) :: X
+      REAL(DP), INTENT(IN) :: Y
+      TYPE({type_name}) :: RES
+
+      RES = X*(Y**(-1.d0))
+
+  END FUNCTION {type_name}_DIVISION_OR
+
+  FUNCTION {type_name}_DIVISION_RO(X,Y) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      REAL(DP), INTENT(IN) :: X
+      TYPE({type_name}), INTENT(IN) :: Y
+      TYPE({type_name}) :: RES
+
+      RES = X*(Y**(-1.d0))
+
+  END FUNCTION {type_name}_DIVISION_RO

@@ -78,9 +78,18 @@ class writer:
     # end if 
 
     if base_name is None:
-      
-      self.type_name = self.basename + 'NUMM'+ str(self.nbases) + "N" + str(self.order)
-      self.func_name = self.basename + 'NUMM'+ str(self.nbases) + "N" + str(self.order)
+
+      if not self.mdual:
+
+        self.type_name = self.basename + 'NUMM'+ str(self.nbases) + "N" + str(self.order)
+        self.func_name = self.basename + 'NUMM'+ str(self.nbases) + "N" + str(self.order)
+
+      else:
+
+        self.type_name = self.basename + 'NUM'+ str(self.nbases)
+        self.func_name = self.basename + 'NUM'+ str(self.nbases)
+
+      #end if 
     
     else:
 
@@ -282,6 +291,8 @@ class writer:
     self.overloads['PPRINT'] = []
     self.overloads['TRANSPOSE'] = []
     self.overloads['MATMUL'] = []
+    self.overloads['UNFOLD'] = []
+    self.overloads['TO_CR'] = []
     self.overloads['SIN'] = []
     self.overloads['COS'] = []
     self.overloads['TAN'] = []
@@ -1620,6 +1631,97 @@ class writer:
 
     return str_out
   #--------------------------------------------------------------------------------------------------- 
+  
+  #***************************************************************************************************
+  def write_cr_matrix_form(self, val_shape='S', tab=" ", level = 0):
+
+    str_out = ""
+    leveli = level+1
+    val = "VAL"
+    res = "RES"
+    val_comp = ""
+    res_comp = "(NUM_IM_DIR{row_cmp},NUM_IM_DIR{col_cmp})"
+
+    if val_shape == "V":
+      val_comp += "(:)"
+      res_comp = res_comp.format(row_cmp="*SIZE("+val+",1)",col_cmp="")
+    elif val_shape == "M":
+      val_comp += "(:,:)"
+      res_comp = res_comp.format(row_cmp="*SIZE("+val+",1)",col_cmp="*SIZE("+val+",2)")
+    else:
+      res_comp = res_comp.format(row_cmp="",col_cmp="")
+    # end if 
+
+
+    func_name = self.type_name+"_TO_CR_MAT_" + val_shape
+    str_out += "FUNCTION " + func_name + "("+val+") RESULT(RES)"+ endl
+    str_out += leveli*tab + "IMPLICIT NONE" + endl
+    str_out += leveli*tab + "TYPE("+self.type_name+"), INTENT(IN) :: "+val+val_comp + endl
+    
+    str_out += leveli*tab + "REAL(DP) :: "+res+res_comp+" " + endl
+    
+    str_out += leveli*tab + "INTEGER :: NCOLS=1, NROWS=1" + endl
+    
+    str_out += self.endl
+    res_fmt = "(1+NROWS*{0}:NROWS*{1},1+NCOLS*{2}:NCOLS*{3})"
+    if val_shape == 'V':
+      str_out += leveli*tab + "NROWS = SIZE(" + val +",1)"+ endl
+      res_fmt = "(1+NROWS*{0}:NROWS*{1},{3})"
+    elif val_shape == 'M':
+      str_out += leveli*tab + "NCOLS = SIZE(" + val +",1)"+ endl
+      str_out += leveli*tab + "NROWS = SIZE(" + val +",2)"+ endl
+    # end if 
+
+    str_out += endl
+
+    imdir_list = []
+    
+    for imdir in self.name_imdir:
+      imdir_list+=imdir
+    
+    imdir_cr_loc = dict(zip(imdir_list,range(self.nimdir)))
+
+    self.overloads['UNFOLD'].append(func_name)
+    self.overloads['TO_CR'].append(func_name)
+
+    for ordi in range(self.order+1):
+
+      dirs = self.name_imdir[ordi]
+      
+      mult_res_alldirs = self.mult_res_total[ordi]
+
+      for j in range(len(dirs)):
+        
+        mult_res = mult_res_alldirs[j]
+        rowdir = dirs[j]
+        row = imdir_cr_loc[rowdir]
+        
+        nterms = len(mult_res)
+
+        for k in range(nterms):
+
+          mult = mult_res[k] # Get current direction two term result.
+          coldir = mult[1][2]
+          col  = imdir_cr_loc[coldir]
+          im   = mult[0][2]
+          str_out += leveli*tab + self.comment +im+" x "+coldir + ' -> ' + rowdir + " "
+          str_out += "({0}, {1})".format(row+1,col+1)+ self.endl
+          res_get_range =  res_fmt.format(row,row+1,col,col+1)
+          str_out += leveli*tab +res+res_get_range+ " = " + val + self.get + im + self.endl
+
+        # end for
+
+      # end for
+
+    # end for 
+
+
+
+    leveli -= 1
+    str_out += leveli*tab + "END FUNCTION "+ func_name + endl
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
   def write_scalar_function(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
@@ -2167,7 +2269,7 @@ class writer:
     str_out = ""
 
     if self.mdual:
-      module_name = "MDUALM"+str(self.nbases)+"N"+str(self.order)  
+      module_name = "MDUAL"+str(self.nbases)
     else:
       module_name = "OTIM"+str(self.nbases)+"N"+str(self.order)
     # end if 
@@ -2352,16 +2454,28 @@ class writer:
 
     # end if 
 
+    contents += self.write_cr_matrix_form(val_shape='S', tab=tab, level = level)
+    contents += endl
+
+    contents += self.write_cr_matrix_form(val_shape='V', tab=tab, level = level)
+    contents += endl
+
+    contents += self.write_cr_matrix_form(val_shape='M', tab=tab, level = level)
+    contents += endl
+
     # Add derivative computation
     file = open(whereotilib.getpath()+'base_derivs_fortran.f90') 
     contents += file.read().format(type_name = self.type_name)
     file.close()
 
+    self.overloads['/'].append(self.type_name+"_DIVISION_OO")
+    self.overloads['/'].append(self.type_name+"_DIVISION_OR")
+    self.overloads['/'].append(self.type_name+"_DIVISION_RO")
     self.overloads['**'].append(self.type_name+"_POW")
     self.overloads['SIN'].append(self.type_name+"_SIN")
-    self.overloads['COS'].append(self.type_name+"_SIN")
-    self.overloads['LOG'].append(self.type_name+"_SIN")
-    self.overloads['EXP'].append(self.type_name+"_SIN")
+    self.overloads['COS'].append(self.type_name+"_COS")
+    self.overloads['LOG'].append(self.type_name+"_LOG")
+    self.overloads['EXP'].append(self.type_name+"_EXP")
     # Add overloads of function evaluations.
 
 
@@ -2384,4 +2498,26 @@ class writer:
 
     
   #--------------------------------------------------------------------------------------------------- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

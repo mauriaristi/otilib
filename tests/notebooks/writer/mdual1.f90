@@ -53,6 +53,10 @@ MODULE MDUAL1
     MODULE PROCEDURE MDNUM1_POW
   END INTERFACE
 
+  INTERFACE PPRINT
+    MODULE PROCEDURE MDNUM1_PPRINT_M_R
+  END INTERFACE
+
   INTERFACE TRANSPOSE
     MODULE PROCEDURE MDNUM1_TRANSPOSE
   END INTERFACE
@@ -77,6 +81,10 @@ MODULE MDUAL1
     MODULE PROCEDURE MDNUM1_COS
   END INTERFACE
 
+  INTERFACE SQRT
+    MODULE PROCEDURE MDNUM1_SQRT
+  END INTERFACE
+
   INTERFACE LOG
     MODULE PROCEDURE MDNUM1_LOG
   END INTERFACE
@@ -91,6 +99,10 @@ MODULE MDUAL1
 
   INTERFACE FEVAL
     MODULE PROCEDURE MDNUM1_FEVAL
+  END INTERFACE
+
+  INTERFACE REAL
+    MODULE PROCEDURE MDNUM1_REAL
   END INTERFACE
 
   CONTAINS
@@ -1214,13 +1226,10 @@ FUNCTION MDNUM1_TO_CR_MAT_M(VAL) RESULT(RES)
 
   FUNCTION MDNUM1_SQRT(X) RESULT(RES)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
       TYPE(MDNUM1), INTENT(IN) :: X
       TYPE(MDNUM1) :: RES
 
-      DERIVS = DER_R_SIN( X%R )
-
-      RES = FEVAL(X,DERIVS)
+      RES = X**0.5_DP
 
   END FUNCTION MDNUM1_SQRT
 
@@ -1269,4 +1278,51 @@ FUNCTION MDNUM1_TO_CR_MAT_M(VAL) RESULT(RES)
       RES = X*(Y**(-1.d0))
 
   END FUNCTION MDNUM1_DIVISION_RO
+
+  ELEMENTAL FUNCTION MDNUM1_REAL(X) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(MDNUM1), INTENT(IN) :: X
+      REAL(DP) :: RES
+
+      RES = X%R
+
+  END FUNCTION MDNUM1_REAL
+
+  SUBROUTINE MDNUM1_PPRINT_M_R(X, FMT)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: X(:,:)
+      INTEGER :: I, J
+      CHARACTER(*), INTENT(IN), OPTIONAL :: FMT
+      CHARACTER(:),ALLOCATABLE :: out_fmt
+      
+      IF (PRESENT(fmt)) THEN
+        out_fmt = ' '//fmt
+      ELSE
+        out_fmt = 'F8.3'
+      END IF
+      
+      write(*,'(A)',advance='no') "["
+      
+      DO I=1,SIZE(X,1)
+        
+        IF (I == 1) THEN
+          write(*,'(A)',advance='no') "["
+        ELSE
+          write(*,'(A)',advance='no') " ["
+        END IF 
+
+        DO J=1,SIZE(X,2)
+          
+          write(*,'('//trim(out_fmt)//')',advance='no') X(I,J)
+
+        END DO
+        
+        write(*,'(A)') "]"
+      
+      END DO
+
+      write(*,'(A)') "]"
+      
+
+  END SUBROUTINE MDNUM1_PPRINT_M_R
 END MODULE MDUAL1

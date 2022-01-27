@@ -305,11 +305,13 @@ class writer:
     self.overloads['ASINH'] = []
     self.overloads['ACOSH'] = []
     self.overloads['ATANH'] = []
+    self.overloads['SQRT'] = []
     self.overloads['LOG'] = []
     self.overloads['EXP'] = []
     self.overloads['LOG10'] = []
     self.overloads['GEM'] = []
     self.overloads['FEVAL'] = []
+    self.overloads['REAL'] = []
     
 
   #---------------------------------------------------------------------------------------------------  
@@ -2468,6 +2470,7 @@ class writer:
     contents += file.read().format(type_name = self.type_name)
     file.close()
 
+    self.overloads['PPRINT'].append(self.type_name+"_PPRINT_M_R")
     self.overloads['/'].append(self.type_name+"_DIVISION_OO")
     self.overloads['/'].append(self.type_name+"_DIVISION_OR")
     self.overloads['/'].append(self.type_name+"_DIVISION_RO")
@@ -2476,6 +2479,8 @@ class writer:
     self.overloads['COS'].append(self.type_name+"_COS")
     self.overloads['LOG'].append(self.type_name+"_LOG")
     self.overloads['EXP'].append(self.type_name+"_EXP")
+    self.overloads['SQRT'].append(self.type_name+"_SQRT")
+    self.overloads['REAL'].append(self.type_name+"_REAL")
     # Add overloads of function evaluations.
 
 

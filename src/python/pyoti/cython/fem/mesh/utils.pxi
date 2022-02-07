@@ -244,9 +244,21 @@ def map_indices(idxSrc,idxMap):
 
 
 #*****************************************************************************************************
-def line(double a, double b, double he = 1.0, element_order = 1, save=False, real= False):
+def line(double a, double b, double he = 1.0, ndiv=None, element_order = 1, save=False, real= False):
   """
-  PORPUSE: Define a line mesh.
+  PORPUSE: Define a 1D line mesh in the domain [a,b] with an element size he. The order of the element
+  can be specified. 
+
+  INPUTS:
+    a: Starting point (real).
+    b: Ending point (real).
+    he: Element size (real, default he=1.0).
+    element_order: Order of polynomial basis functions of the elements in the mesh 
+                   (int, default element_order = 1).
+    save: Bool to save mesh into file (bool, default save = False).
+    real: Bool to create a mesh with intrinsic double arrays, otherwise use oti arrays.
+          (bool, default real = False).
+
   """
   #***************************************************************************************************
   import gmsh
@@ -257,9 +269,9 @@ def line(double a, double b, double he = 1.0, element_order = 1, save=False, rea
   # gmsh.fltk.initialize()
 
   # Lets create a simple square element:
-  model = gmsh.model
-  geo   = model.geo
-  option= gmsh.option
+  model  = gmsh.model
+  geo    = model.geo
+  option = gmsh.option
 
   P1 = geo.addPoint( a,  0, 0, he, 1)
   P2 = geo.addPoint( b,  0, 0, he, 2)
@@ -276,11 +288,14 @@ def line(double a, double b, double he = 1.0, element_order = 1, save=False, rea
 
   model.setPhysicalName( 1, 201, "domain"   )
 
-
   geo.synchronize()
   
   option.setNumber('Mesh.ElementOrder',element_order)
-  
+
+  if ndivs is not None:
+    # Set number of divisions
+    model.mesh.setTransfiniteCurve(L1, ndiv )
+  # end if 
 
   model.mesh.generate(1)
 
@@ -293,6 +308,7 @@ def line(double a, double b, double he = 1.0, element_order = 1, save=False, rea
   else:
     res = mesh.from_gmsh(gmsh)
   # end if
+
   gmsh.finalize()
 
   return res

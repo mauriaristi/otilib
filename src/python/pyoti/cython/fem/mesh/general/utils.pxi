@@ -210,9 +210,26 @@ def map_indices(idxSrc,idxMap):
 
 
 #*****************************************************************************************************
-def line(double a, double b, double he = 1.0, element_order = 1, save=False, real= False):
+def line(double a, double b, double he = 1.0, ndivs = None, element_order = 1, save=False, real= False):
   """
-  PORPUSE: Define a line mesh.
+  PORPUSE: Define a 1D line mesh in the domain [a,b] with an element size he. The order of the element
+  can be specified. 
+
+  The output contains the physical groups named as follows:
+
+    [left]                                  [right]
+      |               [domain]                 |
+      |                  v                     |
+      [----------------------------------------]
+
+  @param[in] a <float> Starting point.
+  @param[in] b <float> Ending point. 
+  @param[in] he <float> Element size. (default he = 1.0)
+  @param[in] element_order: Order of polynomial basis functions of the elements in the mesh 
+                            (int, default element_order = 1).
+  @param[in] save: Bool to save mesh into file (bool, default save = False).
+  @param[in] real: Bool to create a mesh with intrinsic double arrays, otherwise use oti arrays.
+          (bool, default real = False).
   """
   #***************************************************************************************************
   import gmsh
@@ -242,11 +259,14 @@ def line(double a, double b, double he = 1.0, element_order = 1, save=False, rea
 
   model.setPhysicalName( 1, 201, "domain"   )
 
-
   geo.synchronize()
   
   option.setNumber('Mesh.ElementOrder',element_order)
   
+  if ndivs is not None:
+    # Set number of divisions
+    model.mesh.setTransfiniteCurve(L1, ndivs)
+  # end if 
 
   model.mesh.generate(1)
 

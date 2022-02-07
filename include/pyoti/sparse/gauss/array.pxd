@@ -19,6 +19,7 @@ cdef class matsofe:
   cdef matsofe create(fearrso_t* num, uint8_t FLAGS = *)
 
   cpdef truncate(      self, object humdir)
+  cpdef truncate_order(self, ord_t order)
   
   cpdef extract_im(    self, object humdir)
   cpdef extract_deriv( self, object humdir)

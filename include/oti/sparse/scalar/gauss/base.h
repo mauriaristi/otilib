@@ -103,6 +103,17 @@ fesoti_t fesoti_truncate_im(    imdir_t idx, ord_t order, fesoti_t* num,        
 void     fesoti_truncate_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Truncate all imaginary directions with order greater than ord.
+
+@param[in] num   Number.
+@param[in] ord   Order of imaginary direction.
+@param[in] res   Result
+@param[in] dhl   Direction helper list
+******************************************************************************************************/
+void     fesoti_truncate_order_to( ord_t ord, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+fesoti_t fesoti_truncate_order(    ord_t ord, fesoti_t* num,               dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Copy functions.

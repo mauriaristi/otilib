@@ -33,8 +33,7 @@ MODULE MDUAL3
   ! Order 3
   TYPE(MDNUM3), PARAMETER :: E123 = MDNUM3(0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP)
 
-  PRIVATE :: DP,TORDER,DER_R_COS, &
-             DER_R_SIN,DER_R_LOG,DER_R_EXP,DER_R_POW
+  PRIVATE :: DP,TORDER,NUM_IM_DIR
 
   INTERFACE OPERATOR(*)
     MODULE PROCEDURE MDNUM3_MUL_OO_SS,MDNUM3_MUL_RO_SS,MDNUM3_MUL_OR_SS,MDNUM3_MUL_OO_VS,&
@@ -70,7 +69,7 @@ MODULE MDUAL3
   END INTERFACE
 
   INTERFACE PPRINT
-    MODULE PROCEDURE MDNUM3_PPRINT_M_R
+    MODULE PROCEDURE MDNUM3_PPRINT_M_R,MDNUM3_PPRINT_V_R
   END INTERFACE
 
   INTERFACE TRANSPOSE
@@ -95,6 +94,34 @@ MODULE MDUAL3
 
   INTERFACE COS
     MODULE PROCEDURE MDNUM3_COS
+  END INTERFACE
+
+  INTERFACE TAN
+    MODULE PROCEDURE MDNUM3_TAN
+  END INTERFACE
+
+  INTERFACE ASIN
+    MODULE PROCEDURE MDNUM3_ASIN
+  END INTERFACE
+
+  INTERFACE ACOS
+    MODULE PROCEDURE MDNUM3_ACOS
+  END INTERFACE
+
+  INTERFACE ATAN
+    MODULE PROCEDURE MDNUM3_ATAN
+  END INTERFACE
+
+  INTERFACE SINH
+    MODULE PROCEDURE MDNUM3_SINH
+  END INTERFACE
+
+  INTERFACE COSH
+    MODULE PROCEDURE MDNUM3_COSH
+  END INTERFACE
+
+  INTERFACE TANH
+    MODULE PROCEDURE MDNUM3_TANH
   END INTERFACE
 
   INTERFACE SQRT
@@ -334,27 +361,23 @@ MODULE MDUAL3
     TYPE(MDNUM3) :: RES 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
+    ! Order 3
+    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R +  &
+            LHS%E1*RHS%E23 + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 +  &
+            LHS%E13*RHS%E2 + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 2
+    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R +  &
+           LHS%E1*RHS%E2 + LHS%E2*RHS%E1
+    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R +  &
+           LHS%E1*RHS%E3 + LHS%E3*RHS%E1
+    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R +  &
+           LHS%E2*RHS%E3 + LHS%E3*RHS%E2
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
     RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
     RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
-
-    ! Order 2
-    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R + LHS%E1*RHS%E2 &
-            + LHS%E2*RHS%E1
-    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R + LHS%E1*RHS%E3 &
-            + LHS%E3*RHS%E1
-    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R + LHS%E2*RHS%E3 &
-            + LHS%E3*RHS%E2
-
-    ! Order 3
-    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R + LHS%E1*RHS%E23 &
-             + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 + LHS%E13*RHS%E2 &
-             + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM3_MUL_OO_SS
 
@@ -574,27 +597,23 @@ MODULE MDUAL3
     TYPE(MDNUM3) :: RES(SIZE(LHS,1)) 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
+    ! Order 3
+    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R +  &
+            LHS%E1*RHS%E23 + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 +  &
+            LHS%E13*RHS%E2 + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 2
+    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R +  &
+           LHS%E1*RHS%E2 + LHS%E2*RHS%E1
+    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R +  &
+           LHS%E1*RHS%E3 + LHS%E3*RHS%E1
+    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R +  &
+           LHS%E2*RHS%E3 + LHS%E3*RHS%E2
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
     RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
     RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
-
-    ! Order 2
-    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R + LHS%E1*RHS%E2 &
-            + LHS%E2*RHS%E1
-    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R + LHS%E1*RHS%E3 &
-            + LHS%E3*RHS%E1
-    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R + LHS%E2*RHS%E3 &
-            + LHS%E3*RHS%E2
-
-    ! Order 3
-    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R + LHS%E1*RHS%E23 &
-             + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 + LHS%E13*RHS%E2 &
-             + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM3_MUL_OO_VS
 
@@ -814,27 +833,23 @@ MODULE MDUAL3
     TYPE(MDNUM3) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
+    ! Order 3
+    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R +  &
+            LHS%E1*RHS%E23 + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 +  &
+            LHS%E13*RHS%E2 + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 2
+    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R +  &
+           LHS%E1*RHS%E2 + LHS%E2*RHS%E1
+    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R +  &
+           LHS%E1*RHS%E3 + LHS%E3*RHS%E1
+    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R +  &
+           LHS%E2*RHS%E3 + LHS%E3*RHS%E2
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
     RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
     RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
-
-    ! Order 2
-    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R + LHS%E1*RHS%E2 &
-            + LHS%E2*RHS%E1
-    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R + LHS%E1*RHS%E3 &
-            + LHS%E3*RHS%E1
-    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R + LHS%E2*RHS%E3 &
-            + LHS%E3*RHS%E2
-
-    ! Order 3
-    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R + LHS%E1*RHS%E23 &
-             + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 + LHS%E13*RHS%E2 &
-             + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM3_MUL_OO_MS
 
@@ -1054,27 +1069,23 @@ MODULE MDUAL3
     TYPE(MDNUM3) :: RES(SIZE(RHS,1)) 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
+    ! Order 3
+    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R +  &
+            LHS%E1*RHS%E23 + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 +  &
+            LHS%E13*RHS%E2 + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 2
+    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R +  &
+           LHS%E1*RHS%E2 + LHS%E2*RHS%E1
+    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R +  &
+           LHS%E1*RHS%E3 + LHS%E3*RHS%E1
+    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R +  &
+           LHS%E2*RHS%E3 + LHS%E3*RHS%E2
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
     RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
     RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
-
-    ! Order 2
-    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R + LHS%E1*RHS%E2 &
-            + LHS%E2*RHS%E1
-    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R + LHS%E1*RHS%E3 &
-            + LHS%E3*RHS%E1
-    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R + LHS%E2*RHS%E3 &
-            + LHS%E3*RHS%E2
-
-    ! Order 3
-    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R + LHS%E1*RHS%E23 &
-             + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 + LHS%E13*RHS%E2 &
-             + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM3_MUL_OO_SV
 
@@ -1294,27 +1305,23 @@ MODULE MDUAL3
     TYPE(MDNUM3) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
+    ! Order 3
+    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R +  &
+            LHS%E1*RHS%E23 + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 +  &
+            LHS%E13*RHS%E2 + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 2
+    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R +  &
+           LHS%E1*RHS%E2 + LHS%E2*RHS%E1
+    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R +  &
+           LHS%E1*RHS%E3 + LHS%E3*RHS%E1
+    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R +  &
+           LHS%E2*RHS%E3 + LHS%E3*RHS%E2
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
     RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
     RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
-
-    ! Order 2
-    RES%E12 = LHS%R*RHS%E12 + LHS%E12*RHS%R + LHS%E1*RHS%E2 &
-            + LHS%E2*RHS%E1
-    RES%E13 = LHS%R*RHS%E13 + LHS%E13*RHS%R + LHS%E1*RHS%E3 &
-            + LHS%E3*RHS%E1
-    RES%E23 = LHS%R*RHS%E23 + LHS%E23*RHS%R + LHS%E2*RHS%E3 &
-            + LHS%E3*RHS%E2
-
-    ! Order 3
-    RES%E123 = LHS%R*RHS%E123 + LHS%E123*RHS%R + LHS%E1*RHS%E23 &
-             + LHS%E23*RHS%E1 + LHS%E2*RHS%E13 + LHS%E13*RHS%E2 &
-             + LHS%E3*RHS%E12 + LHS%E12*RHS%E3
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM3_MUL_OO_SM
 
@@ -1412,22 +1419,18 @@ ELEMENTAL   FUNCTION MDNUM3_GEM_ROO(A,B,C)&
     TYPE(MDNUM3) :: RES 
 
     !  General multiplication like function 'A*B + C'
-
-    ! Order 0
-    RES%R = C%R + A*B%R
-
-    ! Order 1
-    RES%E1 = C%E1 + A*B%E1
-    RES%E2 = C%E2 + A*B%E2
-    RES%E3 = C%E3 + A*B%E3
-
+    ! Order 3
+    RES%E123 = C%E123 + A*B%E123
     ! Order 2
     RES%E12 = C%E12 + A*B%E12
     RES%E13 = C%E13 + A*B%E13
     RES%E23 = C%E23 + A*B%E23
-
-    ! Order 3
-    RES%E123 = C%E123 + A*B%E123
+    ! Order 1
+    RES%E1 = C%E1 + A*B%E1
+    RES%E2 = C%E2 + A*B%E2
+    RES%E3 = C%E3 + A*B%E3
+    ! Order 0
+    RES%R = C%R + A*B%R
 
   END FUNCTION MDNUM3_GEM_ROO
 
@@ -1459,47 +1462,6 @@ ELEMENTAL   FUNCTION MDNUM3_GEM_ORO(A,B,C)&
 
   END FUNCTION MDNUM3_GEM_ORO
 
-  FUNCTION MDNUM3_FEVAL(X,DERIVS)&
-    RESULT(RES)
-    IMPLICIT NONE
-    !  Definitions
-    REAL(DP) :: FACTOR, COEF
-    TYPE(MDNUM3), INTENT(IN)  :: X
-    REAL(DP), INTENT(IN)  :: DERIVS(4)
-    TYPE(MDNUM3) :: RES
-    TYPE(MDNUM3) :: DX, DX_P
-
-    FACTOR = 1.0_DP
-    COEF   = 0.0_DP
-    DX     = X
-    DX_P   = X
-
-    !  Set real part of deltas zero.
-    DX%R = 0.0_DP
-    DX_P%R = 0.0_DP
-
-    ! Sets real part
-    RES = DERIVS(1)
-
-    ! Sets order 1
-    FACTOR = FACTOR * 1
-    COEF = DERIVS(2) / FACTOR
-    RES = GEM(COEF,DX_P,RES)
-    DX_P = DX_P*DX
-    
-    ! Sets order 2
-    FACTOR = FACTOR * 2
-    COEF = DERIVS(3) / FACTOR
-    RES = GEM(COEF,DX_P,RES)
-    DX_P = DX_P*DX
-    
-    ! Sets order 3
-    FACTOR = FACTOR * 3
-    COEF = DERIVS(4) / FACTOR
-    RES = GEM(COEF,DX_P,RES)
-    
-  END FUNCTION MDNUM3_FEVAL
-
   FUNCTION MDNUM3_MATMUL_MDNUM3(LHS,RHS)&
     RESULT(RES)
     IMPLICIT NONE
@@ -1508,27 +1470,23 @@ ELEMENTAL   FUNCTION MDNUM3_GEM_ORO(A,B,C)&
     TYPE(MDNUM3) :: RES(SIZE(LHS,1),SIZE(RHS,2))
 
     !  Multiplication like function 'MATMUL(LHS,RHS)'
-
-    ! Order 0
-    RES%R = MATMUL(LHS%R,RHS%R)
-
+    ! Order 3
+    RES%E123 = MATMUL(LHS%R,RHS%E123) + MATMUL(LHS%E123,RHS%R) +  &
+            MATMUL(LHS%E1,RHS%E23) + MATMUL(LHS%E23,RHS%E1) + MATMUL(LHS%E2,RHS%E13) +  &
+            MATMUL(LHS%E13,RHS%E2) + MATMUL(LHS%E3,RHS%E12) + MATMUL(LHS%E12,RHS%E3)
+    ! Order 2
+    RES%E12 = MATMUL(LHS%R,RHS%E12) + MATMUL(LHS%E12,RHS%R) +  &
+           MATMUL(LHS%E1,RHS%E2) + MATMUL(LHS%E2,RHS%E1)
+    RES%E13 = MATMUL(LHS%R,RHS%E13) + MATMUL(LHS%E13,RHS%R) +  &
+           MATMUL(LHS%E1,RHS%E3) + MATMUL(LHS%E3,RHS%E1)
+    RES%E23 = MATMUL(LHS%R,RHS%E23) + MATMUL(LHS%E23,RHS%R) +  &
+           MATMUL(LHS%E2,RHS%E3) + MATMUL(LHS%E3,RHS%E2)
     ! Order 1
     RES%E1 = MATMUL(LHS%R,RHS%E1) + MATMUL(LHS%E1,RHS%R)
     RES%E2 = MATMUL(LHS%R,RHS%E2) + MATMUL(LHS%E2,RHS%R)
     RES%E3 = MATMUL(LHS%R,RHS%E3) + MATMUL(LHS%E3,RHS%R)
-
-    ! Order 2
-    RES%E12 = MATMUL(LHS%R,RHS%E12) + MATMUL(LHS%E12,RHS%R) + MATMUL(LHS%E1,RHS%E2) &
-            + MATMUL(LHS%E2,RHS%E1)
-    RES%E13 = MATMUL(LHS%R,RHS%E13) + MATMUL(LHS%E13,RHS%R) + MATMUL(LHS%E1,RHS%E3) &
-            + MATMUL(LHS%E3,RHS%E1)
-    RES%E23 = MATMUL(LHS%R,RHS%E23) + MATMUL(LHS%E23,RHS%R) + MATMUL(LHS%E2,RHS%E3) &
-            + MATMUL(LHS%E3,RHS%E2)
-
-    ! Order 3
-    RES%E123 = MATMUL(LHS%R,RHS%E123) + MATMUL(LHS%E123,RHS%R) + MATMUL(LHS%E1,RHS%E23) &
-             + MATMUL(LHS%E23,RHS%E1) + MATMUL(LHS%E2,RHS%E13) + MATMUL(LHS%E13,RHS%E2) &
-             + MATMUL(LHS%E3,RHS%E12) + MATMUL(LHS%E12,RHS%E3)
+    ! Order 0
+    RES%R = MATMUL(LHS%R,RHS%R)
 
   END FUNCTION MDNUM3_MATMUL_MDNUM3
 
@@ -1798,196 +1756,138 @@ FUNCTION MDNUM3_TO_CR_MAT_M(VAL) RESULT(RES)
     RES(1+NROWS*7:NROWS*8,1+NCOLS*3:NCOLS*4) = VAL%E12
   END FUNCTION MDNUM3_TO_CR_MAT_M
 
-  PURE FUNCTION DER_R_COS( X ) RESULT(DERIVS)
+  ELEMENTAL FUNCTION MDNUM3_FEVAL(X,DER0,DER1,DER2,DER3)&
+    RESULT(RES)
+    IMPLICIT NONE
+    !  Definitions
+    REAL(DP) :: FACTOR, COEF
+    TYPE(MDNUM3), INTENT(IN)  :: X
+    REAL(DP), INTENT(IN)  :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    TYPE(MDNUM3) :: DX, DX_P
+
+    FACTOR = 1.0_DP
+    COEF   = 0.0_DP
+    DX     = X
+    DX_P   = X
+
+    !  Set real part of deltas zero.
+    DX%R = 0.0_DP
+    DX_P%R = 0.0_DP
+
+    ! Sets real part
+    RES = DER0
+
+    ! Sets order 1
+    FACTOR = FACTOR * 1
+    COEF = DER1 / FACTOR
+    ! RES = RES COEF * DX_P
+    ! Order 3
+    RES%E123 = RES%E123+COEF*DX_P%E123
+    ! Order 2
+    RES%E12 = RES%E12+COEF*DX_P%E12
+    RES%E13 = RES%E13+COEF*DX_P%E13
+    RES%E23 = RES%E23+COEF*DX_P%E23
+    ! Order 1
+    RES%E1 = RES%E1+COEF*DX_P%E1
+    RES%E2 = RES%E2+COEF*DX_P%E2
+    RES%E3 = RES%E3+COEF*DX_P%E3
+    ! DX_P = DX_P * DX
+    ! Order 3
+    DX_P%E123 = DX_P%E1*DX%E23+DX_P%E23*DX%E1+ &
+             DX_P%E2*DX%E13+DX_P%E13*DX%E2+DX_P%E3*DX%E12+ &
+             DX_P%E12*DX%E3
+    ! Order 2
+    DX_P%E12 = DX_P%E1*DX%E2+DX_P%E2*DX%E1
+    DX_P%E13 = DX_P%E1*DX%E3+DX_P%E3*DX%E1
+    DX_P%E23 = DX_P%E2*DX%E3+DX_P%E3*DX%E2
+    
+    ! Sets order 2
+    FACTOR = FACTOR * 2
+    COEF = DER2 / FACTOR
+    ! RES = RES COEF * DX_P
+    ! Order 3
+    RES%E123 = RES%E123+COEF*DX_P%E123
+    ! Order 2
+    RES%E12 = RES%E12+COEF*DX_P%E12
+    RES%E13 = RES%E13+COEF*DX_P%E13
+    RES%E23 = RES%E23+COEF*DX_P%E23
+    ! DX_P = DX_P * DX
+    ! Order 3
+    DX_P%E123 = DX_P%E23*DX%E1+DX_P%E13*DX%E2+ &
+             DX_P%E12*DX%E3
+    
+    ! Sets order 3
+    FACTOR = FACTOR * 3
+    COEF = DER3 / FACTOR
+    ! RES = RES COEF * DX_P
+    ! Order 3
+    RES%E123 = RES%E123+COEF*DX_P%E123
+    
+  END FUNCTION MDNUM3_FEVAL
+
+
+  SUBROUTINE MDNUM3_PPRINT_M_R(X, FMT)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP), INTENT(IN) :: X
-      INTEGER :: I
-      INTEGER :: S
-      INTEGER :: SIGN
+      REAL(DP),INTENT(IN) :: X(:,:)
+      INTEGER :: I, J
+      CHARACTER(*),INTENT(IN),OPTIONAL :: FMT
+      CHARACTER(:),ALLOCATABLE :: out_fmt
       
-      SIGN = 1
-      S = 0
-
-      DO I = 1,TORDER+1
+      IF (PRESENT(fmt)) THEN
+        out_fmt = fmt
+      ELSE
+        out_fmt = 'F10.4'
+      END IF
       
-          IF (S == 0) THEN
-              DERIVS(I) = SIGN * COS(X)
-          ELSE
-              SIGN = SIGN * (-1);
-              DERIVS(I) = SIGN * SIN(X)
-          END IF 
+      write(*,'(A)',advance='no') "["
       
-          S = MOD((S+1),2)
-       
-      END DO
+      DO I=1,SIZE(X,1)
+        
+        IF (I == 1) THEN
+          write(*,'(A)',advance='no') "["
+        ELSE
+          write(*,'(A)',advance='no') " ["
+        END IF 
 
-  END FUNCTION DER_R_COS
-
-  PURE FUNCTION DER_R_SIN( X ) RESULT(DERIVS)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP), INTENT(IN) :: X
-      INTEGER :: I
-      INTEGER :: S 
-      INTEGER :: SIGN 
-      
-      SIGN = -1
-      S = 1
-      DO I = 1,TORDER+1
-      
-          IF (S == 0) THEN
-              DERIVS(I) = SIGN * COS(X)
-          ELSE
-              SIGN = SIGN * (-1)
-              DERIVS(I) = SIGN * SIN(X)
-          END IF 
-      
-          S = MOD((S+1),2)
-       
-      END DO
-
-  END FUNCTION DER_R_SIN
-
-  PURE FUNCTION DER_R_LOG( X ) RESULT (DERIVS)
-      IMPLICIT NONE  
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP), INTENT(IN) :: X
-
-      INTEGER :: SIGN 
-      REAL(DP):: FACTOR 
-      INTEGER :: I    
-
-      SIGN = -1
-      FACTOR = 1.0_DP
-
-      DERIVS(1) = LOG(X)
-
-      DO I = 2,TORDER +1
-                   
-          DERIVS(I) = FACTOR * SIGN**(I+1) / (X**I)
-          FACTOR    = FACTOR * I
+        DO J=1,SIZE(X,2)
           
-      END DO
+          write(*,'('//trim(out_fmt)//')',advance='no') X(I,J)
 
-  END FUNCTION DER_R_LOG
-
-  PURE FUNCTION DER_R_EXP( X ) RESULT (DERIVS)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP), INTENT(IN) :: X
-      REAL(DP) :: VAL 
-      INTEGER I
-
-      VAL = EXP(X)
-
-      DO I=1,TORDER+1
-          DERIVS(I) = VAL
-      END DO
-
-  END FUNCTION DER_R_EXP
-
-  PURE FUNCTION DER_R_POW( X, E ) RESULT (DERIVS)
-      IMPLICIT NONE
-      REAL(DP), INTENT(IN) :: X ! Value
-      REAL(DP), INTENT(IN) :: E ! Exponent
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP) :: POWER_I 
-      REAL(DP) :: X0 
-      INTEGER  :: FLAG 
-      REAL(DP) :: FACTOR
-      INTEGER  ::  I
+        END DO
+        
+        write(*,'(A)') "]"
       
-      POWER_I = E
-      X0 = X
-      FLAG = 0
-      FACTOR = 1.0_DP
-
-      DO I=1, TORDER+1
-          IF( POWER_I /= 0.0_DP) THEN
-              DERIVS(I) = FACTOR * ( X0 ** POWER_I )
-              FACTOR = FACTOR*POWER_I
-              POWER_I = POWER_I - 1
-          ELSE
-              IF (FLAG == 0 ) THEN
-                  DERIVS(I) = FACTOR
-                  FLAG = 1
-              ELSE
-                  DERIVS(I) = 0.0_DP
-              END IF 
-          END IF 
       END DO
-  END FUNCTION DER_R_POW
 
-  FUNCTION MDNUM3_SIN(X) RESULT(RES)
+      write(*,'(A)') "]"
+
+  END SUBROUTINE MDNUM3_PPRINT_M_R
+
+  SUBROUTINE MDNUM3_PPRINT_V_R(X, FMT)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM3), INTENT(IN) :: X
-      TYPE(MDNUM3) :: RES
+      REAL(DP),INTENT(IN) :: X(:)
+      INTEGER :: I
+      CHARACTER(*),INTENT(IN),OPTIONAL :: FMT
+      CHARACTER(:),ALLOCATABLE :: out_fmt
+      
+      IF (PRESENT(fmt)) THEN
+        out_fmt = fmt
+      ELSE
+        out_fmt = 'F10.4'
+      END IF
+      
+      write(*,'(A)',advance='no') "["
+      
+      DO I=1,SIZE(X,1)
 
-      DERIVS = DER_R_SIN( X%R )
+        write(*,'('//trim(out_fmt)//')',advance='no') X(I)
 
-      RES = FEVAL(X,DERIVS)
+      END DO
 
-  END FUNCTION MDNUM3_SIN
+      write(*,'(A)') "]"
 
-  FUNCTION MDNUM3_COS(X) RESULT(RES)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM3), INTENT(IN) :: X
-      TYPE(MDNUM3) :: RES
-
-      DERIVS = DER_R_COS( X%R )
-
-      RES = FEVAL(X,DERIVS)
-
-  END FUNCTION MDNUM3_COS
-
-  FUNCTION MDNUM3_LOG(X) RESULT(RES)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM3), INTENT(IN) :: X
-      TYPE(MDNUM3) :: RES
-
-      DERIVS = DER_R_LOG( X%R )
-
-      RES = FEVAL(X,DERIVS)
-
-  END FUNCTION MDNUM3_LOG
-
-  FUNCTION MDNUM3_EXP(X) RESULT(RES)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM3), INTENT(IN) :: X
-      TYPE(MDNUM3) :: RES
-
-      DERIVS = DER_R_EXP( X%R )
-
-      RES = FEVAL(X,DERIVS)
-
-  END FUNCTION MDNUM3_EXP
-
-  FUNCTION MDNUM3_SQRT(X) RESULT(RES)
-      IMPLICIT NONE
-      TYPE(MDNUM3), INTENT(IN) :: X
-      TYPE(MDNUM3) :: RES
-
-      RES = X**0.5_DP
-
-  END FUNCTION MDNUM3_SQRT
-
-  FUNCTION MDNUM3_POW(X,E) RESULT(RES)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM3), INTENT(IN) :: X
-      REAL(DP), INTENT(IN) :: E
-      TYPE(MDNUM3) :: RES
-
-      DERIVS = DER_R_POW( X%R, E )
-
-      RES = FEVAL(X,DERIVS)
-
-  END FUNCTION MDNUM3_POW
+  END SUBROUTINE MDNUM3_PPRINT_V_R
 
   FUNCTION MDNUM3_DIVISION_OO(X,Y) RESULT(RES)
       IMPLICIT NONE
@@ -2031,41 +1931,205 @@ FUNCTION MDNUM3_TO_CR_MAT_M(VAL) RESULT(RES)
 
   END FUNCTION MDNUM3_REAL
 
-  SUBROUTINE MDNUM3_PPRINT_M_R(X, FMT)
+  FUNCTION MDNUM3_SQRT(X) RESULT(RES)
       IMPLICIT NONE
-      REAL(DP), INTENT(IN) :: X(:,:)
-      INTEGER :: I, J
-      CHARACTER(*), INTENT(IN), OPTIONAL :: FMT
-      CHARACTER(:),ALLOCATABLE :: out_fmt
-      
-      IF (PRESENT(fmt)) THEN
-        out_fmt = trim(fmt)
-      ELSE
-        out_fmt = 'F8.3'
+      TYPE(MDNUM3), INTENT(IN) :: X
+      TYPE(MDNUM3) :: RES
+
+      RES = X**0.5_DP
+
+  END FUNCTION MDNUM3_SQRT
+
+  ELEMENTAL FUNCTION MDNUM3_TAN(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = TAN(X%R)
+    DER1 = TAN(X%R)**2 + 1
+    DER2 = 2*(TAN(X%R)**2 + 1)*TAN(X%R)
+    DER3 = 2*(TAN(X%R)**2 + 1)*(3*TAN(X%R)**2 + 1)
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_TAN
+
+  ELEMENTAL FUNCTION MDNUM3_COS(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = COS(X%R)
+    DER1 = -SIN(X%R)
+    DER2 = -COS(X%R)
+    DER3 = SIN(X%R)
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_COS
+
+  ELEMENTAL FUNCTION MDNUM3_SIN(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = SIN(X%R)
+    DER1 = COS(X%R)
+    DER2 = -SIN(X%R)
+    DER3 = -COS(X%R)
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_SIN
+
+  ELEMENTAL FUNCTION MDNUM3_ATAN(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = ATAN(X%R)
+    DER1 = 1D0/(X%R**2 + 1)
+    DER2 = -2*X%R/(X%R**2 + 1)**2
+    DER3 = 2*(4*X%R**2/(X%R**2 + 1) - 1)/(X%R**2 + 1)**2
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_ATAN
+
+  ELEMENTAL FUNCTION MDNUM3_ACOS(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = ACOS(X%R)
+    DER1 = -1/SQRT(1 - X%R**2)
+    DER2 = -X%R/(1 - X%R**2)**(3.0D0/2.0D0)
+    DER3 = -(3*X%R**2/(1 - X%R**2) + 1)/(1 - X%R**2)**(3.0D0/2.0D0)
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_ACOS
+
+  ELEMENTAL FUNCTION MDNUM3_ASIN(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = ASIN(X%R)
+    DER1 = 1/SQRT(1 - X%R**2)
+    DER2 = X%R/(1 - X%R**2)**(3.0D0/2.0D0)
+    DER3 = (3*X%R**2/(1 - X%R**2) + 1)/(1 - X%R**2)**(3.0D0/2.0D0)
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_ASIN
+
+  ELEMENTAL FUNCTION MDNUM3_TANH(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = TANH(X%R)
+    DER1 = 1 - TANH(X%R)**2
+    DER2 = 2*(TANH(X%R)**2 - 1)*TANH(X%R)
+    DER3 = -2*(TANH(X%R)**2 - 1)*(3*TANH(X%R)**2 - 1)
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_TANH
+
+  ELEMENTAL FUNCTION MDNUM3_COSH(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = COSH(X%R)
+    DER1 = SINH(X%R)
+    DER2 = COSH(X%R)
+    DER3 = SINH(X%R)
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_COSH
+
+  ELEMENTAL FUNCTION MDNUM3_SINH(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = SINH(X%R)
+    DER1 = COSH(X%R)
+    DER2 = SINH(X%R)
+    DER3 = COSH(X%R)
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_SINH
+
+  ELEMENTAL FUNCTION MDNUM3_EXP(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = EXP(X%R)
+    DER1 = EXP(X%R)
+    DER2 = EXP(X%R)
+    DER3 = EXP(X%R)
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_EXP
+
+  ELEMENTAL FUNCTION MDNUM3_LOG(X) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0 = LOG(X%R)
+    DER1 = 1D0/X%R
+    DER2 = -1/X%R**2
+    DER3 = 2/X%R**3
+
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
+
+  END FUNCTION MDNUM3_LOG
+
+  ELEMENTAL FUNCTION MDNUM3_POW(X,E) RESULT(RES)
+
+    TYPE(MDNUM3), INTENT(IN) :: X
+    REAL(DP), INTENT(IN) :: E
+    REAL(DP) :: DER0,DER1,DER2,DER3
+    TYPE(MDNUM3) :: RES
+    
+    DER0=0.0d0
+    DER1=0.0d0
+    DER2=0.0d0
+    DER3=0.0d0
+    
+    DER0 = X%R**E
+    IF ((E-0)/=0.0d0) THEN
+      DER1 = E*X%R**(E - 1)
+      IF ((E-1)/=0.0d0) THEN
+        DER2 = E*X%R**(E - 2)*(E - 1)
+        IF ((E-2)/=0.0d0) THEN
+          DER3 = E*X%R**(E - 3)*(E**2 - 3*E + 2)
+        END IF
       END IF
-      
-      write(*,'(A)',advance='no') "["
-      
-      DO I=1,SIZE(X,1)
-        
-        IF (I == 1) THEN
-          write(*,'(A)',advance='no') "["
-        ELSE
-          write(*,'(A)',advance='no') " ["
-        END IF 
+    END IF
 
-        DO J=1,SIZE(X,2)
-          
-          write(*,'('//trim(out_fmt)//')',advance='no') X(I,J)
+    RES = FEVAL(X,DER0,DER1,DER2,DER3)
 
-        END DO
-        
-        write(*,'(A)') "]"
-      
-      END DO
+  END FUNCTION MDNUM3_POW
 
-      write(*,'(A)') "]"
-      
-
-  END SUBROUTINE MDNUM3_PPRINT_M_R
 END MODULE MDUAL3

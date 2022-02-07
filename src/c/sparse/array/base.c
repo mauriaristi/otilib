@@ -110,6 +110,38 @@ arrso_t arrso_truncate_im( imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl)
 
 
 
+// ****************************************************************************************************
+void arrso_truncate_order_to( ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl){
+    
+    uint64_t i;
+
+    arrso_dimCheck_OO_elementwise(arr,res,res);
+
+    for (i = 0; i<arr->size; i++ ){
+        
+        soti_truncate_order_to( order, &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+arrso_t arrso_truncate_order( ord_t order, arrso_t* arr, dhelpl_t dhl){
+    
+    arrso_t res;
+
+    res = arrso_zeros_bases( arr->nrows, arr->ncols, 0, 0, dhl);
+
+    arrso_truncate_order_to( order, arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
 
 
 // Copy operations.

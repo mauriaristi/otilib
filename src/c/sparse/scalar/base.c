@@ -736,6 +736,61 @@ void soti_truncate_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* re
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
+
+// ****************************************************************************************************
+sotinum_t soti_truncate_order( ord_t order, sotinum_t* num, dhelpl_t dhl){
+    
+    sotinum_t res = soti_init();
+
+    soti_truncate_order_to( order, num, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+
+// ****************************************************************************************************
+void soti_truncate_order_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+    
+    int  success;
+    ord_t   resord, ordi;
+    imdir_t residx;
+    ndir_t ndir_ordi, diri;
+    sotinum_t tmp;
+    // bases_t* imdir_bases;
+    
+    
+    if (order == 0){
+        
+        // All the number is truncated zero.
+        soti_set_r( 0.0, res, dhl);
+        return;
+
+    } else if (order > num->act_order){
+        
+        // no need to truncate anything
+        soti_set_o(num,res,dhl);
+        return;
+
+    } else {
+
+        // Unsafe
+        resord = num->act_order;
+        num->act_order = order;
+        
+        soti_copy_to( num, res, dhl );
+        num->act_order = resord;
+
+    }  
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 // ====================================================================================================
 // ====================================================================================================
 // ============================        DERIVATIVE EXTRACTOR FUNCTIONS       ===========================

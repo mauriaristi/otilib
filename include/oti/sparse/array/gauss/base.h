@@ -19,6 +19,10 @@ fearrso_t fearrso_truncate_im(   imdir_t idx, ord_t order, fearrso_t* arr,      
 void      fearrso_truncate_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+fearrso_t fearrso_truncate_order(   ord_t ord, fearrso_t* arr,                 dhelpl_t dhl);
+void      fearrso_truncate_order_to(ord_t ord, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 
 
 /**************************************************************************************************//**

@@ -813,6 +813,9 @@ cdef class sotinum:
     """
     PURPOSE:      to set a specific imaginary direction as given.
 
+    INPUTS:
+      humdir:    Imaginary direction given by the basis and exponents. Example [1,2,2]
+
     """
     #*************************************************************************************************
     global dhl
@@ -826,13 +829,33 @@ cdef class sotinum:
     res = soti_truncate_im( indx, order, &self.num, dhl) 
 
     return sotinum.create(&res)
+  #---------------------------------------------------------------------------------------------------
+  
+  #***************************************************************************************************
+  cpdef  truncate_order( self, ord_t order):
+    """
+    PURPOSE:    Truncate all imaginary directions with order larger than the one specified.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef imdir_t indx
+    cdef sotinum_t res
+    
+    res = soti_truncate_order( order, &self.num, dhl) 
+
+    return sotinum.create(&res)
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   cpdef get_deriv( self, object humdir):
     """
-    PURPOSE:      to retrieve the derivative contained in the oti number.
+    PURPOSE:  Retrieves the derivatives contained in the oti number.
+
+    INPUTS:
+      humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
 
     """
     #*************************************************************************************************

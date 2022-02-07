@@ -90,6 +90,18 @@ void    arrso_truncate_im_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* r
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
+@brief Truncate imaginary directions with orders greater or equal than ord.
+
+@param[in]    ord  Order of the imaignary direction.
+@param[in]    arr  Address of array from which to get data.
+@param[inout] res  Address of the result holder
+@param[in]    dhl  Direction helper list object.
+******************************************************************************************************/ 
+void    arrso_truncate_order_to( ord_t ord, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+arrso_t arrso_truncate_order(    ord_t ord, arrso_t* arr,               dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
 @brief Imaignary direction extractor from arrso object..
 
 @param[in]    idx    Imaginary index.

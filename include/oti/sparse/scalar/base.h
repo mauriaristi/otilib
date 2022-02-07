@@ -40,6 +40,18 @@ void      soti_truncate_im_to( imdir_t idx, ord_t order, sotinum_t* num, sotinum
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
+@brief Truncate all imaginary directions with ord o or larger.
+
+@param[in]  num   OTI number to truncate direction
+@param[in]  ord   Order of imaginary direction to extract.
+@param[in]  res   Addres of the resulting OTI number that will hold result.
+@param[in]  dhl   Direction helper list.
+******************************************************************************************************/
+sotinum_t soti_truncate_order(    ord_t ord, sotinum_t* num,                 dhelpl_t dhl );
+void      soti_truncate_order_to( ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
 @brief Extract derivative from an OTI number as an oti number.
 
 @param[in]  idx   Index of imaginary direction to extract.

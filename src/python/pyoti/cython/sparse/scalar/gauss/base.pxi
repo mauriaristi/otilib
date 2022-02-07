@@ -781,6 +781,23 @@ cdef class sotife:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
+  cpdef  truncate_order( self, ord_t order):
+    """
+    PURPOSE:     Truncate all imaginary directions with order greater than the specified value.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef fesoti_t res
+    
+    res = fesoti_truncate_order( order, &self.num, dhl) 
+
+    return sotife.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   cpdef  extract_deriv( self, object humdir):
     """
     PURPOSE:      to set a specific imaginary direction as given.

@@ -17,8 +17,7 @@ MODULE MDUAL1
   ! Order 1
   TYPE(MDNUM1), PARAMETER :: E1 = MDNUM1(0.0_DP,1.0_DP)
 
-  PRIVATE :: DP,TORDER,DER_R_COS, &
-             DER_R_SIN,DER_R_LOG,DER_R_EXP,DER_R_POW
+  PRIVATE :: DP,TORDER,NUM_IM_DIR
 
   INTERFACE OPERATOR(*)
     MODULE PROCEDURE MDNUM1_MUL_OO_SS,MDNUM1_MUL_RO_SS,MDNUM1_MUL_OR_SS,MDNUM1_MUL_OO_VS,&
@@ -54,7 +53,7 @@ MODULE MDUAL1
   END INTERFACE
 
   INTERFACE PPRINT
-    MODULE PROCEDURE MDNUM1_PPRINT_M_R
+    MODULE PROCEDURE MDNUM1_PPRINT_M_R,MDNUM1_PPRINT_V_R
   END INTERFACE
 
   INTERFACE TRANSPOSE
@@ -79,6 +78,34 @@ MODULE MDUAL1
 
   INTERFACE COS
     MODULE PROCEDURE MDNUM1_COS
+  END INTERFACE
+
+  INTERFACE TAN
+    MODULE PROCEDURE MDNUM1_TAN
+  END INTERFACE
+
+  INTERFACE ASIN
+    MODULE PROCEDURE MDNUM1_ASIN
+  END INTERFACE
+
+  INTERFACE ACOS
+    MODULE PROCEDURE MDNUM1_ACOS
+  END INTERFACE
+
+  INTERFACE ATAN
+    MODULE PROCEDURE MDNUM1_ATAN
+  END INTERFACE
+
+  INTERFACE SINH
+    MODULE PROCEDURE MDNUM1_SINH
+  END INTERFACE
+
+  INTERFACE COSH
+    MODULE PROCEDURE MDNUM1_COSH
+  END INTERFACE
+
+  INTERFACE TANH
+    MODULE PROCEDURE MDNUM1_TANH
   END INTERFACE
 
   INTERFACE SQRT
@@ -240,12 +267,10 @@ MODULE MDUAL1
     TYPE(MDNUM1) :: RES 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM1_MUL_OO_SS
 
@@ -385,12 +410,10 @@ MODULE MDUAL1
     TYPE(MDNUM1) :: RES(SIZE(LHS,1)) 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM1_MUL_OO_VS
 
@@ -530,12 +553,10 @@ MODULE MDUAL1
     TYPE(MDNUM1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM1_MUL_OO_MS
 
@@ -675,12 +696,10 @@ MODULE MDUAL1
     TYPE(MDNUM1) :: RES(SIZE(RHS,1)) 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM1_MUL_OO_SV
 
@@ -820,12 +839,10 @@ MODULE MDUAL1
     TYPE(MDNUM1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
 
     !  Multiplication like function 'LHS*RHS'
-
-    ! Order 0
-    RES%R = LHS%R*RHS%R
-
     ! Order 1
     RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+    ! Order 0
+    RES%R = LHS%R*RHS%R
 
   END FUNCTION MDNUM1_MUL_OO_SM
 
@@ -888,12 +905,10 @@ ELEMENTAL   FUNCTION MDNUM1_GEM_ROO(A,B,C)&
     TYPE(MDNUM1) :: RES 
 
     !  General multiplication like function 'A*B + C'
-
-    ! Order 0
-    RES%R = C%R + A*B%R
-
     ! Order 1
     RES%E1 = C%E1 + A*B%E1
+    ! Order 0
+    RES%R = C%R + A*B%R
 
   END FUNCTION MDNUM1_GEM_ROO
 
@@ -915,35 +930,6 @@ ELEMENTAL   FUNCTION MDNUM1_GEM_ORO(A,B,C)&
 
   END FUNCTION MDNUM1_GEM_ORO
 
-  FUNCTION MDNUM1_FEVAL(X,DERIVS)&
-    RESULT(RES)
-    IMPLICIT NONE
-    !  Definitions
-    REAL(DP) :: FACTOR, COEF
-    TYPE(MDNUM1), INTENT(IN)  :: X
-    REAL(DP), INTENT(IN)  :: DERIVS(2)
-    TYPE(MDNUM1) :: RES
-    TYPE(MDNUM1) :: DX, DX_P
-
-    FACTOR = 1.0_DP
-    COEF   = 0.0_DP
-    DX     = X
-    DX_P   = X
-
-    !  Set real part of deltas zero.
-    DX%R = 0.0_DP
-    DX_P%R = 0.0_DP
-
-    ! Sets real part
-    RES = DERIVS(1)
-
-    ! Sets order 1
-    FACTOR = FACTOR * 1
-    COEF = DERIVS(2) / FACTOR
-    RES = GEM(COEF,DX_P,RES)
-    
-  END FUNCTION MDNUM1_FEVAL
-
   FUNCTION MDNUM1_MATMUL_MDNUM1(LHS,RHS)&
     RESULT(RES)
     IMPLICIT NONE
@@ -952,12 +938,10 @@ ELEMENTAL   FUNCTION MDNUM1_GEM_ORO(A,B,C)&
     TYPE(MDNUM1) :: RES(SIZE(LHS,1),SIZE(RHS,2))
 
     !  Multiplication like function 'MATMUL(LHS,RHS)'
-
-    ! Order 0
-    RES%R = MATMUL(LHS%R,RHS%R)
-
     ! Order 1
     RES%E1 = MATMUL(LHS%R,RHS%E1) + MATMUL(LHS%E1,RHS%R)
+    ! Order 0
+    RES%R = MATMUL(LHS%R,RHS%R)
 
   END FUNCTION MDNUM1_MATMUL_MDNUM1
 
@@ -1055,196 +1039,99 @@ FUNCTION MDNUM1_TO_CR_MAT_M(VAL) RESULT(RES)
     RES(1+NROWS*1:NROWS*2,1+NCOLS*0:NCOLS*1) = VAL%E1
   END FUNCTION MDNUM1_TO_CR_MAT_M
 
-  PURE FUNCTION DER_R_COS( X ) RESULT(DERIVS)
+  ELEMENTAL FUNCTION MDNUM1_FEVAL(X,DER0,DER1)&
+    RESULT(RES)
+    IMPLICIT NONE
+    !  Definitions
+    REAL(DP) :: FACTOR, COEF
+    TYPE(MDNUM1), INTENT(IN)  :: X
+    REAL(DP), INTENT(IN)  :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    TYPE(MDNUM1) :: DX, DX_P
+
+    FACTOR = 1.0_DP
+    COEF   = 0.0_DP
+    DX     = X
+    DX_P   = X
+
+    !  Set real part of deltas zero.
+    DX%R = 0.0_DP
+    DX_P%R = 0.0_DP
+
+    ! Sets real part
+    RES = DER0
+
+    ! Sets order 1
+    FACTOR = FACTOR * 1
+    COEF = DER1 / FACTOR
+    ! RES = RES COEF * DX_P
+    ! Order 1
+    RES%E1 = RES%E1+COEF*DX_P%E1
+    
+  END FUNCTION MDNUM1_FEVAL
+
+
+  SUBROUTINE MDNUM1_PPRINT_M_R(X, FMT)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP), INTENT(IN) :: X
-      INTEGER :: I
-      INTEGER :: S
-      INTEGER :: SIGN
+      REAL(DP),INTENT(IN) :: X(:,:)
+      INTEGER :: I, J
+      CHARACTER(*),INTENT(IN),OPTIONAL :: FMT
+      CHARACTER(:),ALLOCATABLE :: out_fmt
       
-      SIGN = 1
-      S = 0
-
-      DO I = 1,TORDER+1
+      IF (PRESENT(fmt)) THEN
+        out_fmt = fmt
+      ELSE
+        out_fmt = 'F10.4'
+      END IF
       
-          IF (S == 0) THEN
-              DERIVS(I) = SIGN * COS(X)
-          ELSE
-              SIGN = SIGN * (-1);
-              DERIVS(I) = SIGN * SIN(X)
-          END IF 
+      write(*,'(A)',advance='no') "["
       
-          S = MOD((S+1),2)
-       
-      END DO
+      DO I=1,SIZE(X,1)
+        
+        IF (I == 1) THEN
+          write(*,'(A)',advance='no') "["
+        ELSE
+          write(*,'(A)',advance='no') " ["
+        END IF 
 
-  END FUNCTION DER_R_COS
-
-  PURE FUNCTION DER_R_SIN( X ) RESULT(DERIVS)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP), INTENT(IN) :: X
-      INTEGER :: I
-      INTEGER :: S 
-      INTEGER :: SIGN 
-      
-      SIGN = -1
-      S = 1
-      DO I = 1,TORDER+1
-      
-          IF (S == 0) THEN
-              DERIVS(I) = SIGN * COS(X)
-          ELSE
-              SIGN = SIGN * (-1)
-              DERIVS(I) = SIGN * SIN(X)
-          END IF 
-      
-          S = MOD((S+1),2)
-       
-      END DO
-
-  END FUNCTION DER_R_SIN
-
-  PURE FUNCTION DER_R_LOG( X ) RESULT (DERIVS)
-      IMPLICIT NONE  
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP), INTENT(IN) :: X
-
-      INTEGER :: SIGN 
-      REAL(DP):: FACTOR 
-      INTEGER :: I    
-
-      SIGN = -1
-      FACTOR = 1.0_DP
-
-      DERIVS(1) = LOG(X)
-
-      DO I = 2,TORDER +1
-                   
-          DERIVS(I) = FACTOR * SIGN**(I+1) / (X**I)
-          FACTOR    = FACTOR * I
+        DO J=1,SIZE(X,2)
           
-      END DO
+          write(*,'('//trim(out_fmt)//')',advance='no') X(I,J)
 
-  END FUNCTION DER_R_LOG
-
-  PURE FUNCTION DER_R_EXP( X ) RESULT (DERIVS)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP), INTENT(IN) :: X
-      REAL(DP) :: VAL 
-      INTEGER I
-
-      VAL = EXP(X)
-
-      DO I=1,TORDER+1
-          DERIVS(I) = VAL
-      END DO
-
-  END FUNCTION DER_R_EXP
-
-  PURE FUNCTION DER_R_POW( X, E ) RESULT (DERIVS)
-      IMPLICIT NONE
-      REAL(DP), INTENT(IN) :: X ! Value
-      REAL(DP), INTENT(IN) :: E ! Exponent
-      REAL(DP) :: DERIVS(TORDER+1)
-      REAL(DP) :: POWER_I 
-      REAL(DP) :: X0 
-      INTEGER  :: FLAG 
-      REAL(DP) :: FACTOR
-      INTEGER  ::  I
+        END DO
+        
+        write(*,'(A)') "]"
       
-      POWER_I = E
-      X0 = X
-      FLAG = 0
-      FACTOR = 1.0_DP
-
-      DO I=1, TORDER+1
-          IF( POWER_I /= 0.0_DP) THEN
-              DERIVS(I) = FACTOR * ( X0 ** POWER_I )
-              FACTOR = FACTOR*POWER_I
-              POWER_I = POWER_I - 1
-          ELSE
-              IF (FLAG == 0 ) THEN
-                  DERIVS(I) = FACTOR
-                  FLAG = 1
-              ELSE
-                  DERIVS(I) = 0.0_DP
-              END IF 
-          END IF 
       END DO
-  END FUNCTION DER_R_POW
 
-  FUNCTION MDNUM1_SIN(X) RESULT(RES)
+      write(*,'(A)') "]"
+
+  END SUBROUTINE MDNUM1_PPRINT_M_R
+
+  SUBROUTINE MDNUM1_PPRINT_V_R(X, FMT)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM1), INTENT(IN) :: X
-      TYPE(MDNUM1) :: RES
+      REAL(DP),INTENT(IN) :: X(:)
+      INTEGER :: I
+      CHARACTER(*),INTENT(IN),OPTIONAL :: FMT
+      CHARACTER(:),ALLOCATABLE :: out_fmt
+      
+      IF (PRESENT(fmt)) THEN
+        out_fmt = fmt
+      ELSE
+        out_fmt = 'F10.4'
+      END IF
+      
+      write(*,'(A)',advance='no') "["
+      
+      DO I=1,SIZE(X,1)
 
-      DERIVS = DER_R_SIN( X%R )
+        write(*,'('//trim(out_fmt)//')',advance='no') X(I)
 
-      RES = FEVAL(X,DERIVS)
+      END DO
 
-  END FUNCTION MDNUM1_SIN
+      write(*,'(A)') "]"
 
-  FUNCTION MDNUM1_COS(X) RESULT(RES)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM1), INTENT(IN) :: X
-      TYPE(MDNUM1) :: RES
-
-      DERIVS = DER_R_COS( X%R )
-
-      RES = FEVAL(X,DERIVS)
-
-  END FUNCTION MDNUM1_COS
-
-  FUNCTION MDNUM1_LOG(X) RESULT(RES)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM1), INTENT(IN) :: X
-      TYPE(MDNUM1) :: RES
-
-      DERIVS = DER_R_LOG( X%R )
-
-      RES = FEVAL(X,DERIVS)
-
-  END FUNCTION MDNUM1_LOG
-
-  FUNCTION MDNUM1_EXP(X) RESULT(RES)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM1), INTENT(IN) :: X
-      TYPE(MDNUM1) :: RES
-
-      DERIVS = DER_R_EXP( X%R )
-
-      RES = FEVAL(X,DERIVS)
-
-  END FUNCTION MDNUM1_EXP
-
-  FUNCTION MDNUM1_SQRT(X) RESULT(RES)
-      IMPLICIT NONE
-      TYPE(MDNUM1), INTENT(IN) :: X
-      TYPE(MDNUM1) :: RES
-
-      RES = X**0.5_DP
-
-  END FUNCTION MDNUM1_SQRT
-
-  FUNCTION MDNUM1_POW(X,E) RESULT(RES)
-      IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
-      TYPE(MDNUM1), INTENT(IN) :: X
-      REAL(DP), INTENT(IN) :: E
-      TYPE(MDNUM1) :: RES
-
-      DERIVS = DER_R_POW( X%R, E )
-
-      RES = FEVAL(X,DERIVS)
-
-  END FUNCTION MDNUM1_POW
+  END SUBROUTINE MDNUM1_PPRINT_V_R
 
   FUNCTION MDNUM1_DIVISION_OO(X,Y) RESULT(RES)
       IMPLICIT NONE
@@ -1288,41 +1175,175 @@ FUNCTION MDNUM1_TO_CR_MAT_M(VAL) RESULT(RES)
 
   END FUNCTION MDNUM1_REAL
 
-  SUBROUTINE MDNUM1_PPRINT_M_R(X, FMT)
+  FUNCTION MDNUM1_SQRT(X) RESULT(RES)
       IMPLICIT NONE
-      REAL(DP), INTENT(IN) :: X(:,:)
-      INTEGER :: I, J
-      CHARACTER(*), INTENT(IN), OPTIONAL :: FMT
-      CHARACTER(:),ALLOCATABLE :: out_fmt
-      
-      IF (PRESENT(fmt)) THEN
-        out_fmt = ' '//fmt
-      ELSE
-        out_fmt = 'F8.3'
-      END IF
-      
-      write(*,'(A)',advance='no') "["
-      
-      DO I=1,SIZE(X,1)
-        
-        IF (I == 1) THEN
-          write(*,'(A)',advance='no') "["
-        ELSE
-          write(*,'(A)',advance='no') " ["
-        END IF 
+      TYPE(MDNUM1), INTENT(IN) :: X
+      TYPE(MDNUM1) :: RES
 
-        DO J=1,SIZE(X,2)
-          
-          write(*,'('//trim(out_fmt)//')',advance='no') X(I,J)
+      RES = X**0.5_DP
 
-        END DO
-        
-        write(*,'(A)') "]"
-      
-      END DO
+  END FUNCTION MDNUM1_SQRT
 
-      write(*,'(A)') "]"
-      
+  ELEMENTAL FUNCTION MDNUM1_TAN(X) RESULT(RES)
 
-  END SUBROUTINE MDNUM1_PPRINT_M_R
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = TAN(X%R)
+    DER1 = TAN(X%R)**2 + 1
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_TAN
+
+  ELEMENTAL FUNCTION MDNUM1_COS(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = COS(X%R)
+    DER1 = -SIN(X%R)
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_COS
+
+  ELEMENTAL FUNCTION MDNUM1_SIN(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = SIN(X%R)
+    DER1 = COS(X%R)
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_SIN
+
+  ELEMENTAL FUNCTION MDNUM1_ATAN(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = ATAN(X%R)
+    DER1 = 1D0/(X%R**2 + 1)
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_ATAN
+
+  ELEMENTAL FUNCTION MDNUM1_ACOS(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = ACOS(X%R)
+    DER1 = -1/SQRT(1 - X%R**2)
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_ACOS
+
+  ELEMENTAL FUNCTION MDNUM1_ASIN(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = ASIN(X%R)
+    DER1 = 1/SQRT(1 - X%R**2)
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_ASIN
+
+  ELEMENTAL FUNCTION MDNUM1_TANH(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = TANH(X%R)
+    DER1 = 1 - TANH(X%R)**2
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_TANH
+
+  ELEMENTAL FUNCTION MDNUM1_COSH(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = COSH(X%R)
+    DER1 = SINH(X%R)
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_COSH
+
+  ELEMENTAL FUNCTION MDNUM1_SINH(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = SINH(X%R)
+    DER1 = COSH(X%R)
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_SINH
+
+  ELEMENTAL FUNCTION MDNUM1_EXP(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = EXP(X%R)
+    DER1 = EXP(X%R)
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_EXP
+
+  ELEMENTAL FUNCTION MDNUM1_LOG(X) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0 = LOG(X%R)
+    DER1 = 1D0/X%R
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_LOG
+
+  ELEMENTAL FUNCTION MDNUM1_POW(X,E) RESULT(RES)
+
+    TYPE(MDNUM1), INTENT(IN) :: X
+    REAL(DP), INTENT(IN) :: E
+    REAL(DP) :: DER0,DER1
+    TYPE(MDNUM1) :: RES
+    
+    DER0=0.0d0
+    DER1=0.0d0
+    
+    DER0 = X%R**E
+    IF ((E-0)/=0.0d0) THEN
+      DER1 = E*X%R**(E - 1)
+    END IF
+
+    RES = FEVAL(X,DER0,DER1)
+
+  END FUNCTION MDNUM1_POW
+
 END MODULE MDUAL1

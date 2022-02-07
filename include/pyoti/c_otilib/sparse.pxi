@@ -236,6 +236,8 @@ cdef extern from "oti/oti.h" nogil:
   void    arrso_get_im_to(imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_truncate_im(    imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
   void    arrso_truncate_im_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+  arrso_t arrso_truncate_order(    ord_t order, arrso_t* arr,               dhelpl_t dhl);
+  void    arrso_truncate_order_to( ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   darr_t  arrso_get_deriv(imdir_t idx, ord_t order, arrso_t* arr, dhelpl_t dhl);
   arrso_t arrso_get_deriv_o(  imdir_t idx, ord_t order, arrso_t* arr,               dhelpl_t dhl);
   void    arrso_get_deriv_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
@@ -462,6 +464,8 @@ cdef extern from "oti/oti.h" nogil:
   void      fearrso_get_im_to(   imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
   fearrso_t fearrso_truncate_im(   imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
   void      fearrso_truncate_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_truncate_order(    ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_truncate_order_to( ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
   fearrso_t fearrso_copy(   fearrso_t* src,                 dhelpl_t dhl);
   void      fearrso_copy_to(fearrso_t* src, fearrso_t* res, dhelpl_t dhl);
   fearrso_t fearrso_get_im(    imdir_t idx, ord_t order, fearrso_t* arr,
@@ -671,6 +675,8 @@ cdef extern from "oti/oti.h" nogil:
   void      soti_get_order_im_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_truncate_im(   imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
   void      soti_truncate_im_to(imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t soti_truncate_order(    ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+  void      soti_truncate_order_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_extract_deriv(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
   void      soti_extract_deriv_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_extract_im(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
@@ -824,6 +830,8 @@ cdef extern from "oti/oti.h" nogil:
   void     fesoti_extract_deriv_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
   fesoti_t fesoti_truncate_im(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
   void     fesoti_truncate_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_truncate_order(    ord_t order, fesoti_t* num,                dhelpl_t dhl);
+  void     fesoti_truncate_order_to( ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
   fesoti_t fesoti_copy(    fesoti_t* src,                dhelpl_t dhl);
   void     fesoti_copy_to( fesoti_t* src, fesoti_t* dst, dhelpl_t dhl);
   void fesoti_set_r(    coeff_t num, fesoti_t* res, dhelpl_t dhl);

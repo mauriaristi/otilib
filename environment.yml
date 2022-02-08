@@ -19,6 +19,7 @@ dependencies:
   - sympy
   - pip
   - ipympl
+  - pandas
   - nodejs
   - scikit-umfpack
   - scikit-sparse

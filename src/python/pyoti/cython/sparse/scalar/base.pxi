@@ -1002,7 +1002,9 @@ cdef class sotinum:
     PURPOSE:     Evaluate the Taylor series from the coefficients with in the OTI number.
 
     INPUTS: 
-      - bases: List of Imagiary bases whose 
+      - bases:  Python list of Imagiary bases to evaluate the ROM
+      - deltas: Python list float coefficients to evaluate the ROM.
+
     """
     #*************************************************************************************************
     global dhl
@@ -1011,6 +1013,8 @@ cdef class sotinum:
     cdef coeff_t* c_deltas = dhl.p_dh[0].p_im[0]
     cdef int64_t i
     cdef sotinum_t res
+
+
     
     # Initialize all elements as zero
     memset( c_deltas, 0, size*sizeof(coeff_t))
@@ -1042,6 +1046,74 @@ cdef class sotinum:
     res = soti_taylor_integrate( c_deltas, &self.num, dhl)
 
     return sotinum.create(&res)
+
+  #---------------------------------------------------------------------------------------------------
+
+
+
+  #***************************************************************************************************
+  def rom_eval_object(self, object bases, object deltas):
+    """
+    PURPOSE:     Evaluate the Taylor series from the coefficients with in the OTI number.
+
+    INPUTS: 
+      - bases:  Python list of Imagiary bases to evaluate the ROM
+      - deltas: Python list object coefficients with multiple deltas to evaluate the ROM.
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef bases_t  size = dhl.p_dh[0].Nbasis
+    cdef int64_t ordi, j, i
+    cdef imdir_t idx, idxi
+    cdef coeff_t coeff
+    cdef object res, accum
+    cdef np.ndarray fulldir
+    
+    if len(bases) != len(deltas):
+    
+      raise ValueError("Both bases and deltas must have the same dimension")
+
+    # end if 
+
+    deltas_eval = np.zeros(size,dtype=object)
+
+    for i in range(len(bases)):
+
+      deltas_eval[ bases[i] - 1 ] = deltas[i]
+
+    # end for 
+
+    # Evaluate the ROM:
+
+    res = self.num.re
+
+    # order 1 and up.
+    for ordi in range(self.num.act_order):
+      
+      for idxi in range(self.num.p_nnz[ordi]):
+        
+        # Get index and coefficient for current im. direction.
+        idx   = self.num.p_idx[ordi][idxi]
+        coeff = self.num.p_im[ordi][idxi]
+
+        # Get the imag direction full coefficient
+        fulldir = h.get_fulldir( idx, ordi+1)
+
+        # Multiply all deltas for this term:
+        prod = 1
+        for j in range(ordi+1):
+          i = fulldir[j]-1
+          prod = prod*deltas_eval[i]
+        # end for
+
+        res = res + prod * coeff
+
+      # end for
+
+    # end for 
+
+    return res
 
   #---------------------------------------------------------------------------------------------------
 

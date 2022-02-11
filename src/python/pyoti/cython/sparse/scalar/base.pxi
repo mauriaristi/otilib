@@ -20,6 +20,14 @@ cdef class sotinum:
     object nnz = None):
     """
     DESCRIPTION: Constructor of a sparse OTI number.
+
+    INPUTS:
+     - re_coeff : Real coefficient, which must be real scalar. (coeff_t re_coeff)
+     - nbases   : Integer which defines number of bases to allocate the number. (bases_t nbases = 0)
+     - order    : Integer (ord_t order = 0 )
+     - FLAGS    : Flags. Unused in this moment. (uint8_t FLAGS = 1)
+     - nnz      : Number of non zeros. List with (object nnz = None)
+
     """
     #*************************************************************************************************
     global dhl, ONE, ZERO
@@ -1059,6 +1067,10 @@ cdef class sotinum:
     INPUTS: 
       - bases:  Python list of Imagiary bases to evaluate the ROM
       - deltas: Python list object coefficients with multiple deltas to evaluate the ROM.
+
+    EXAMPLE:
+      >>> 
+
     """
     #*************************************************************************************************
     global dhl

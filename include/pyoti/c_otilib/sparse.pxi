@@ -572,6 +572,7 @@ cdef extern from "oti/oti.h" nogil:
                       sotinum_t* dest, dhelpl_t dhl );
   void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl);
   void soti_get_active_bases(sotinum_t* num, imdir_t* list, dhelpl_t dhl);
+  bases_t soti_get_max_basis(sotinum_t* num, dhelpl_t dhl);
 
 
   # From oti/sparse/scalar/algebra.h

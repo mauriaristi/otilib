@@ -1011,41 +1011,30 @@ cdef class sotinum:
 
     INPUTS: 
       - bases:  Python list of Imagiary bases to evaluate the ROM
-      - deltas: Python list float coefficients to evaluate the ROM.
+      - deltas: Python list float coefficients to evaluate the ROM (can be a 1D numpy array).
 
     """
     #*************************************************************************************************
     global dhl
 
-    cdef bases_t  size = dhl.p_dh[0].Nbasis
+    cdef bases_t  size 
     cdef coeff_t* c_deltas = dhl.p_dh[0].p_im[0]
     cdef int64_t i
-    cdef sotinum_t res
-
-
+    cdef sotinum_t res #= soti_init()
     
+    if len(bases) != len(deltas):
+    
+      raise ValueError("Both bases and deltas must have the same dimension")
+
+    # end if 
+
+    # Get the maximum active basis in the number.
+    size = soti_get_max_basis(&self.num, dhl)
+
     # Initialize all elements as zero
-    memset( c_deltas, 0, size*sizeof(coeff_t))
+    memset( c_deltas, 0, size*sizeof(coeff_t) )
 
-    try:
-      
-      bases_eval  = bases
-      deltas_eval = deltas
-
-      if len(bases_eval) != len(deltas_eval):
-      
-        raise ValueError("Both bases and deltas must have the same dimension")
-
-      # end if 
-
-    except:
-
-      bases_eval = np.array(self.get_active_bases(),dtype=np.uint16)
-      deltas_eval= np.ones(len(bases_eval),dtype=np.float64) * deltas
-
-    # end
-
-    for i in range(len(bases_eval)):
+    for i in range( min( len(bases) , size ) ):
 
       c_deltas[ bases[i] - 1 ] = deltas[i]
 
@@ -1057,7 +1046,82 @@ cdef class sotinum:
 
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
+  def rom_eval_array(self, object bases, object deltas):
+    """
+    PURPOSE:     Evaluate the Taylor series from the coefficients with in the OTI number.
 
+    INPUTS: 
+      - bases:  Python list of Imagiary bases to evaluate the ROM
+      - deltas: Python list with arrays of coefficients of the deltas to evaluate the ROM.
+                Arrays must be numpy arrays, and be of the same shape.
+
+    EXAMPLE:
+      >>> 
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    cdef bases_t  size = dhl.p_dh[0].Nbasis
+    cdef int64_t ordi, j, i
+    cdef imdir_t idx, idxi
+    cdef coeff_t coeff
+    cdef np.ndarray res, accum
+    cdef np.ndarray fulldir
+    
+    if len(bases) != len(deltas):
+    
+      raise ValueError("Both bases and deltas must have the same dimension")
+
+    # end if 
+
+    # Get the maximum active basis in the number.
+    size = soti_get_max_basis(&self.num, dhl)
+
+    deltas_eval = np.zeros()
+
+    for i in range( min( len(bases) , size ) ):
+
+      deltas_eval[ bases[i] - 1 ] = deltas[i]
+
+    # end for 
+
+    # Evaluate the ROM:
+    res = np.zeros_like(deltas[0])
+    res += self.num.re
+
+    prod = np.zeros_like(deltas[0])
+    
+    # order 1 and up.
+    for ordi in range(self.num.act_order):
+      
+      for idxi in range(self.num.p_nnz[ordi]):
+        
+        # Get index and coefficient for current im. direction.
+        idx   = self.num.p_idx[ordi][idxi]
+        coeff = self.num.p_im[ordi][idxi]
+
+        # Get the imag direction full coefficient
+        fulldir = h.get_fulldir( idx, ordi+1)
+
+        # Multiply all deltas for this term:
+        prod[:] = 0
+        prod += coeff
+        for j in range(ordi+1):
+          i = fulldir[j]-1
+          prod *= deltas_eval[i]
+        # end for
+
+        res += prod 
+
+      # end for
+
+    # end for 
+
+    return res
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def rom_eval_object(self, object bases, object deltas):
@@ -1075,7 +1139,7 @@ cdef class sotinum:
     #*************************************************************************************************
     global dhl
 
-    cdef bases_t  size = dhl.p_dh[0].Nbasis
+    cdef bases_t  size 
     cdef int64_t ordi, j, i
     cdef imdir_t idx, idxi
     cdef coeff_t coeff
@@ -1088,11 +1152,16 @@ cdef class sotinum:
 
     # end if 
 
+    # Get the maximum active basis in the number.
+    size = soti_get_max_basis(&self.num, dhl)
+
     deltas_eval = np.zeros(size,dtype=object)
 
+    # Create zeros with the total number of elements in the number.
     for i in range(len(bases)):
-
-      deltas_eval[ bases[i] - 1 ] = deltas[i]
+      
+      j = bases[i] - 1
+      deltas_eval[ j ] = deltas[i]
 
     # end for 
 

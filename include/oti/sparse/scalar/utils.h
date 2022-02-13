@@ -46,9 +46,25 @@ void soti_trunc_smul_real(coeff_t a, ord_t ord, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
+/**************************************************************************************************//**
+@brief Returns a list of the active bases in an OTI number.
 
+@param[in] num OTI number to be analyzed.
+@param[in] list Imaginary direction list where to set 
+@param[in] res Oti number.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/
 void soti_get_active_bases(sotinum_t* num, imdir_t* list, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Returns the maximum imaginary basis being used in the number.
+
+@param[in] num OTI number to be analyzed.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/
+bases_t soti_max_active_basis(sotinum_t* num, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 
 #endif

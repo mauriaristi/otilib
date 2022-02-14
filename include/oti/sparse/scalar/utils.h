@@ -63,7 +63,7 @@ void soti_get_active_bases(sotinum_t* num, imdir_t* list, dhelpl_t dhl);
 @param[in] num OTI number to be analyzed.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/
-bases_t soti_max_active_basis(sotinum_t* num, dhelpl_t dhl);
+bases_t soti_get_max_basis(sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 

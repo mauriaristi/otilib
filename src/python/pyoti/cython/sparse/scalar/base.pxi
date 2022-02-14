@@ -1063,12 +1063,13 @@ cdef class sotinum:
     #*************************************************************************************************
     global dhl
 
-    cdef bases_t  size = dhl.p_dh[0].Nbasis
+    cdef bases_t  size #= dhl.p_dh[0].Nbasis
     cdef int64_t ordi, j, i
     cdef imdir_t idx, idxi
     cdef coeff_t coeff
-    cdef np.ndarray res, accum
-    cdef np.ndarray fulldir
+    cdef np.ndarray res, prod, base, exp
+    cdef bases_t* fulldir
+    
     
     if len(bases) != len(deltas):
     
@@ -1079,7 +1080,8 @@ cdef class sotinum:
     # Get the maximum active basis in the number.
     size = soti_get_max_basis(&self.num, dhl)
 
-    deltas_eval = np.zeros()
+    shape = (size,)+deltas[0].shape
+    deltas_eval = np.zeros( shape )
 
     for i in range( min( len(bases) , size ) ):
 
@@ -1092,7 +1094,7 @@ cdef class sotinum:
     res += self.num.re
 
     prod = np.zeros_like(deltas[0])
-    
+
     # order 1 and up.
     for ordi in range(self.num.act_order):
       
@@ -1102,22 +1104,26 @@ cdef class sotinum:
         idx   = self.num.p_idx[ordi][idxi]
         coeff = self.num.p_im[ordi][idxi]
 
+        # Method 1: 182 ms
         # Get the imag direction full coefficient
-        fulldir = h.get_fulldir( idx, ordi+1)
-
+        fulldir = dhelp_get_imdir( idx, ordi+1, dhl);
+        
         # Multiply all deltas for this term:
-        prod[:] = 0
-        prod += coeff
+        prod[:] = coeff
         for j in range(ordi+1):
           i = fulldir[j]-1
           prod *= deltas_eval[i]
         # end for
+
+        # base,exp = h.get_base_exp(idx, ordi+1)
+
 
         res += prod 
 
       # end for
 
     # end for 
+
 
     return res
 
@@ -1144,7 +1150,7 @@ cdef class sotinum:
     cdef imdir_t idx, idxi
     cdef coeff_t coeff
     cdef object res, accum
-    cdef np.ndarray fulldir
+    cdef bases_t* fulldir
     
     if len(bases) != len(deltas):
     
@@ -1179,7 +1185,7 @@ cdef class sotinum:
         coeff = self.num.p_im[ordi][idxi]
 
         # Get the imag direction full coefficient
-        fulldir = h.get_fulldir( idx, ordi+1)
+        fulldir = dhelp_get_imdir( idx, ordi+1, dhl);
 
         # Multiply all deltas for this term:
         prod = 1

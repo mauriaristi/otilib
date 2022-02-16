@@ -80,7 +80,15 @@ def get_active_bases(obj_in):
 #***************************************************************************************************
 def save( matso arr, filename ): 
   """
-  PURPOSE: export array.
+  PURPOSE: Export array into a binary proprietary format.
+
+  USAGE:
+  >>> save( arr, filename )
+
+  INPUTS:
+  - arr: matso array to be saved.
+  - filename: String object with the name of file to be used. 
+
   """
   global dhl
   
@@ -106,7 +114,18 @@ def save( matso arr, filename ):
 #***************************************************************************************************
 def read( filename ): 
   """
-  PURPOSE: read array.
+  PURPOSE: Load array from a binary format (See documentation of binary format).
+
+  USAGE:
+  >>> load( filename )
+
+  INPUTS:
+  
+  - filename: String object with the name of file to be used. 
+
+  OUTPUTS:
+  - arr: matso array loaded from memory.
+
   """
   global dhl
   

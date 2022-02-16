@@ -1,7 +1,11 @@
 *~
+
+*.pdf
+
 data/
 build/
 build*/
+
 .DS_Store
 src/python/pyoti/cython/*.c
 src/python/pyoti/cython/static/*.c

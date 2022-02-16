@@ -1095,6 +1095,81 @@ void* soti_read_from_mem_to(void* mem, sotinum_t* dst, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
+void soti_save(char* filename, sotinum_t* num, dhelpl_t dhl){
+    
+    uint64_t i;
+    uint64_t mem_size=0;
+    void *data = NULL;
+    void *data_write;
+    char *data_header;
+    char magic[4] = {'\x93','O','T','I'}; 
+    uint8_t major=1, minor = 0;
+    uint8_t format=20;
+
+    FILE* file_ptr = NULL;
+
+    // check the memory required to store the array: arr
+    mem_size += soti_get_memsize_save( num, dhl);
+
+    // Header specifics for array
+    // \x93OTI = 4 bytes
+    //  Major version = 1 byte = 1
+    //  Minor version = 1 byte = 0
+    // format  (1 byte) ->
+    //     - sotinum_t:11, 
+    //     - fesoti_t: 12,
+    //     - darr_t :  20,
+    //     - arrso_t:  21,
+    //     - fearrso_t:22
+    // size of data (8 bytes) : 8 bytes(uint64_t)
+
+    // Allocate memory to be exported
+    data = malloc(mem_size+64); // Add 64 byte header.
+    if (data == NULL){
+        printf("Memory error: Not enough memory to export array\n");
+        exit(OTI_OutOfMemory);
+    }
+    
+    data_header = (char*) data;
+    memset(data_header, 0, 64); // Set all 64 bytes of header as zero.
+
+    // write header
+    memcpy(data_header, magic, 4);
+    data_header += 4;
+
+    data_header[0] = major;
+    data_header[1] = minor;
+    data_header[2] = format;
+    data_header[3] = 0;
+
+    data_header+=4;
+
+    // set memory size
+    memcpy(data_header, &mem_size, sizeof(uint64_t));
+    data_header += sizeof(uint64_t);
+    // Other slots in data_header not used for this case.
+
+    // Jump 64 bytes of header to write data.
+    data_write = data + 64;
+    soti_save_to_mem( num,  data_write, dhl);
+
+    file_ptr = fopen(filename, "wb");
+
+    if (! file_ptr){
+        printf("ERROR CREATING FILE\n");
+        exit(OTI_undetErr);
+    }
+
+    fwrite(data,1,mem_size+64,file_ptr);
+
+    fclose(file_ptr);
+
+    free(data);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 void soti_save_to_mem(sotinum_t* num, void* mem, dhelpl_t dhl){
 
     // Mem must come allocated.

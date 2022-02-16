@@ -159,7 +159,7 @@ quad1 = elbase.createElement( 1,            # Number of basis
                               [point1, line1])   
 # ----------------------------------------------------------------------------------------------------
 
-# *****************************************************************************************************
+# ****************************************************************************************************
 # 4 node Quad
 quad4 = elbase.createElement( 4,            # Number of basis 
                               1,            # Characteristic order of the polynomials
@@ -182,7 +182,7 @@ quad8 = elbase.createElement( 8,            # Number of basis
 # ----------------------------------------------------------------------------------------------------
 
 # ****************************************************************************************************
-# 8 node Quad (serendipity)
+# 9 node Quad
 quad9 = elbase.createElement( 9,            # Number of basis 
                               2,            # Characteristic order of the polynomials
                               elQuadrangle, # Geometric type
@@ -335,7 +335,7 @@ elements['brick'].append(hex20) # Order 2
 # Supported
 element_list = {}
 
-element_list[15] = elements['point']
+element_list[15] = elements['point'][0]
 
 element_list[1 ] = elements['line']
 element_list[8 ] = elements['line']

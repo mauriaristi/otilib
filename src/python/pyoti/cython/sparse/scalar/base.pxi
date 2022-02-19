@@ -1117,7 +1117,6 @@ cdef class sotinum:
 
         # base,exp = h.get_base_exp(idx, ordi+1)
 
-
         res += prod 
 
       # end for

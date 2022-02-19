@@ -141,5 +141,7 @@ cdef extern from "oti/oti.h" nogil:
   void dhelp_printList( const dhelpl_t dhl);
 
   bases_t* dhelp_get_imdir( imdir_t idx, ord_t order, dhelpl_t dhl);
+
+  uint8_t is_openmp_compiled();
   #---------------------------------------------------------------------------------------------------
 

@@ -72,7 +72,7 @@ elseif(UNIX)
 endif(APPLE)    
 
 # Link to math libraries
-target_link_libraries(oti m)
+target_link_libraries(oti m ${LINK_TARGET_OMP})
 
 # -------------------------------------------------------------------
 # --------------------------- BUILD OTI -----------------------------
@@ -95,7 +95,7 @@ SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 add_executable(otigen datagen/oti_gen_data.c)
 
-target_link_libraries (otigen oti)
+target_link_libraries (otigen oti ${LINK_TARGET_OMP})
 
 # -d Sets directory
 # -o Sets global order

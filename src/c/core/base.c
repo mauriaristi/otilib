@@ -37,8 +37,15 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
       exit(OTI_OutOfMemory);
     }
 
-    ndir_t  ntmps =  30; // Number of arrays for temporal variables.
-    
+
+    uint64_t nThrds;
+    #ifdef _OPENMP
+    nThrds = omp_get_max_threads();
+    #else
+    nThrds = 1;
+    #endif
+
+    ndir_t  ntmps = 20*nThrds ; // Number of arrays for temporal variables.
     for( i = 1; i<=dhl->ndh; i++){
 
         // dhelp_load_singl(strLocation, i, ntmps,allocSzs_ord[i-1], &(dhl->p_dh[i-1]));

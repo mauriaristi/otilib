@@ -29,6 +29,11 @@ typedef struct {
     ndir_t*       p_nnz; ///< Number of non zero coefficients per order.
 } somin_t;               ///< Minimal sparse OTI number type. 
 
+typedef struct {
+    sotinum_t*   p_data; ///< Temporal list.
+    ndir_t        nTmps; ///< Number of temporals.
+} sotmpl_t;               ///< Direction helper specific for Sparse OTI type.
+
 
 // ----------------------------------------------------------------------------------------------------
 // -------------------------------------    END STRUCTURES      ---------------------------------------

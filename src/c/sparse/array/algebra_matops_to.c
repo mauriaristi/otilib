@@ -7,27 +7,68 @@
 // ****************************************************************************************************
 void arrso_dotproduct_OO_to(arrso_t* arr1, arrso_t* arr2, sotinum_t* res, dhelpl_t dhl){
 
-    uint64_t i;
     ord_t order;
-    sotinum_t tmp;
+    sotinum_t* tmpl;
+    int maxThrds;
 
     // check for dimensions.
     arrso_dimCheck_OO_samesize( arr1, arr2 );
 
     // Extract temporal 5.
     order = MAX(arrso_get_order( arr1 ), arrso_get_order( arr2 ));
-    tmp = soti_get_tmp( 5, order ,dhl);
+    
+    // Allocate List of temporals for the total number of values there are.  
+    maxThrds = omp_get_max_threads();
+    tmpl=(sotinum_t*)malloc(maxThrds*sizeof(sotinum_t));
+    if(tmpl==NULL){
+        printf("MEMORY ERROR: Not enough memory get list of temporals in dotproduct_OO\n");
+        exit(OTI_OutOfMemory);
+    }
 
+    // Loop for every element and add real to the oti number.
+    #ifdef _OPENMP
+    #pragma omp parallel
+    #endif
+    {
+    
+    #ifdef _OPENMP
+    int id = omp_get_thread_num();
+    int nThrds = omp_get_num_threads();
+    #else
+    int id = 0;
+    int nThrds = 1;
+    #endif
+    
+    uint64_t i;
+    sotinum_t tmp;
+
+    if (id==0){
+        maxThrds = nThrds;
+    }
+
+    tmp = soti_get_tmp( 5, order ,dhl);
     soti_set_r( 0.0, &tmp, dhl);
 
-    for ( i = 0; i < arr1->size; i++){
+    for ( i = id; i < arr1->size; i+=nThrds){
 
         soti_gem_oo_to( &arr1->p_data[ i ], &arr2->p_data[ i ], &tmp, &tmp, dhl);
                    
     }
 
-    soti_set_o(&tmp, res, dhl);
+    tmpl[id] = tmp;
 
+    }
+
+    // Loop to add up all temporals.
+    sotinum_t tmp;
+    uint64_t i;
+    tmp = soti_get_tmp( 6, order ,dhl);
+    soti_set_r( 0.0, &tmp, dhl);
+    for (i=0;i<maxThrds;i++){
+        soti_sum_oo_to( &tmp, &tmpl[i], &tmp, dhl);
+    }
+    soti_set_o(&tmp, res, dhl);
+    free(tmpl);
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -72,38 +113,56 @@ void arrso_dotproduct_RO_to(darr_t* arr1, arrso_t* arr2, sotinum_t* res, dhelpl_
 // ****************************************************************************************************
 void arrso_matmul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 
-    uint64_t i, j, k;
+    uint64_t size;
     ord_t order;
-    sotinum_t tmp;
 
     // check for dimensions.
     arrso_dimCheck_OO_matmul(arr1, arr2, res);
 
     // Extract temporal 5.
     order = MAX(arrso_get_order( arr1 ), arrso_get_order( arr2 ));
+    size = arr1->nrows*arr2->ncols;
+
+    // Loop for every element and add real to the oti number.
+    #ifdef _OPENMP
+    #pragma omp parallel
+    #endif
+    {
     
+    #ifdef _OPENMP
+    int id = omp_get_thread_num();
+    int nThrds = omp_get_num_threads();
+    #else
+    int id = 0;
+    int nThrds = 1;
+    #endif
+
+    uint64_t ii, i, j, k;
+    sotinum_t tmp;
+
     tmp = soti_get_tmp( 5, order ,dhl);
 
-    for ( i = 0; i < arr1->nrows; i++){
+    for ( ii = id; ii < size; ii+=nThrds){
         
-        for( j = 0; j < arr2->ncols; j++){
+        j = ii % arr1->nrows;
+        i = ii / arr1->nrows;
 
-            // tmp = 0
-            soti_set_r( 0.0, &tmp, dhl);
+        // tmp = 0
+        soti_set_r( 0.0, &tmp, dhl);
 
-            for( k = 0; k < arr1->ncols; k++){
+        for( k = 0; k < arr1->ncols; k++){
 
-                // tmp = arr1[i,k] * arr2[k,j] + tmp
+            // tmp = arr1[i,k] * arr2[k,j] + tmp
 
-                soti_gem_oo_to( &arr1->p_data[ k + i * arr1->ncols ],
-                                &arr2->p_data[ j + k * arr2->ncols ],
-                                &tmp, &tmp, dhl);
-                   
-            }
-
-            arrso_set_item_ij_o( &tmp, i, j, res, dhl);
-
+            soti_gem_oo_to( &arr1->p_data[ k + i * arr1->ncols ],
+                            &arr2->p_data[ j + k * arr2->ncols ],
+                            &tmp, &tmp, dhl);
+               
         }
+
+        arrso_set_item_ij_o( &tmp, i, j, res, dhl);
+
+    }
 
     }
     

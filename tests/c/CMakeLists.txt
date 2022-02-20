@@ -30,42 +30,51 @@
 # To compile with macOs uncomment the following line 
 #SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
 
+if(APPLE)
+	# This is for the case of apple macOS
+    # SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
+    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -g -fwrapv -O3 -Wall -Wstrict-prototypes -arch x86_64 ${OpenMP_EXTRA_INLCUDE_FLAGS}")
+    SET(GCC_COVERAGE_LINK_FLAGS "${OpenMP_EXTRA_LINK_FLAGS} ")
+  
+elseif(UNIX)
+    # This is for the case of Unix (Linux systems.)
+    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall -Wstrict-prototypes")
+    SET(GCC_COVERAGE_LINK_FLAGS "")
+    # SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -Ofast -Wall -Wstrict-prototypes")
+endif(APPLE)
 
+
+add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+SET(CMAKE_OSX_DEPLOYMENT_TARGET 12.1)
 
 
 if (GENERATE_C_TESTS)
-  
-
-
-
-# To compile with linux uncomment the following line
-SET(GCC_COVERAGE_COMPILE_FLAGS "-g -fwrapv -O3 -Wall -Wstrict-prototypes ")
-SET(GCC_COVERAGE_LINK_FLAGS "")
 
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
-SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
-
-SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
+# SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 
+
+message(STATUS "Current flags: ${GCC_COVERAGE_LINK_FLAGS}")
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 add_executable(test_import test_import.c)
 
-target_link_libraries (test_import oti)
+target_link_libraries (test_import oti ${LINK_TARGET_OMP})
 
 add_executable(test_otinum test_otinum.c)
-target_link_libraries (test_otinum oti)
+target_link_libraries (test_otinum oti ${LINK_TARGET_OMP})
 
 add_executable(test_imdir_mult test_imdir_mult.c)
-target_link_libraries (test_imdir_mult oti)
+target_link_libraries (test_imdir_mult oti ${LINK_TARGET_OMP})
 
 
 add_executable(test_gen_data test_gen_data.c)
-target_link_libraries (test_gen_data oti)
+target_link_libraries (test_gen_data oti ${LINK_TARGET_OMP})
 
 add_executable(test_semiotin test_semiotin.c)
-target_link_libraries (test_semiotin oti)
+target_link_libraries (test_semiotin oti ${LINK_TARGET_OMP})
 
 
 

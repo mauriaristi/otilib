@@ -13,11 +13,9 @@
 #include <inttypes.h>
 #include <math.h>
 
-// #ifdef _OPENMP
-// #include <omp.h>
-// #else
-// #include "omp_dummy.h"
-// #endif
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
 // ----------------------------------------------------------------------------------------------------
 // --------------------------------    END EXTERNAL LIBRARIES     -------------------------------------

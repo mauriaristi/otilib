@@ -990,10 +990,17 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl){
+inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
     
     sotinum_t res;
     ord_t ordi = 0;
+
+    // Get only temporal list available to the thread id.
+    #ifdef _OPENMP
+    ndir_t ntmp = omp_get_thread_num() * 20 + pntmp;
+    #else
+    ndir_t ntmp = pntmp;
+    #endif
 
     if (trc_order == 0){
         // In case order==0, no allocated array exists.
@@ -1036,6 +1043,8 @@ sotinum_t soti_get_tmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl){
     return soti_get_rtmp( ntmp + 10, trc_order, dhl );
 }
 // ----------------------------------------------------------------------------------------------------
+
+
 
 // ====================================================================================================
 // ====================================================================================================

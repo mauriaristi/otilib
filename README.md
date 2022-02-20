@@ -46,7 +46,7 @@ conda env create -f environment.yml
 **NOTE**: If you had a previous version of OTILIB, you may avoid this step. However, it is recommended that you update your current environment. For this, run the following command (see [this](https://stackoverflow.com/questions/42352841/how-to-update-an-existing-conda-environment-with-a-yml-file) for more details):
 
 ```
-conda activate myenv
+conda activate pyoti
 conda env update --file environment.yml --prune
 ```
 
@@ -55,7 +55,26 @@ After runing the previous command, you should have installed/updated the  conda 
 conda activate pyoti
 ```
 
+### Adding the local environment to the global jupyter notebook server.
+
+You need to install ```ipykernel``` within your environment. To do so, activate your environment if not activated and run the following command.
+
+```
+conda install -c anaconda ipykernel
+```
+
+After this, and still within your environment, run the following to add pyoti to your ipython kernel options.
+
+```
+python -m ipykernel install --user --name=pyoti
+```
+
+
+
+### Compiling the library.
+
 Finally, to build the library, run the following commands:
+
 ```
 cd path/to/src/otilib
 ```

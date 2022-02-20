@@ -2,7 +2,7 @@
 # ****************************************************************************************************
 cpdef hex8_iso( xi, eta, zeta):
   """
-  Definition of basis functions for the 4-node quad 2D element (1st order). 
+  Definition of basis functions for the 8-node brick 3D element (1st order). 
   Basis functions taken from Smith, I. "Programming the Finite Element Method" 5th ed. Wiley.
 
   NODE NUMBERING:                                                

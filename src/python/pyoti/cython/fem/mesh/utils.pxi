@@ -428,6 +428,240 @@ def square(double width, double hight, double he = 1.0, ndivs=None,element_order
 #-----------------------------------------------------------------------------------------------------
 
 
+# *****************************************************************************************************
+def cube( hx, hy, hz,  he = 1.0, ndivs=None,element_order = 1, hex = False, 
+           hex_incomplete = 1, hex_linear = 1, structured = False, save=False, real= False):
+    """
+    PORPUSE: Define a Cube mesh.
+    
+                                                                  4
+                                                             /
+                                           ^ z              /  y
+                                           |               /
+                                           |              /
+                                           |             /                    
+                                           |            /
+                                 NPP       |           /     PPP
+                                 (7)* * * *|* * * * * * * * *(6) 
+                                 *         |                 **
+                                * |        |        /       * *
+                               *           |               *  *
+                              *   |        |      /       *   *
+                             *             x             *    *
+                            *     |             /       *     *
+                           *                   x       *      * Lz
+                          *       |Lz                 *       *
+                         *                           *        *
+                    NNP *         |             PNP *         *
+                      (4)* * * * * * * * * * * * *(5)         *
+                       *          |                *      x -------------> x    
+                       *                           *          *
+                       *          |                *          *
+                       *         (1)---------------*---------(3)
+                       *         /NPN              *        *PPN
+                 LzNN  *        /             LzPN *       *
+                       *       /                   *      *
+                       *      /                    *     *
+                       *     /                     *    * LyPN
+                       *    /                      *   *
+                       *   /                       *  *
+                       *  /                        * *
+                       * /                         **   
+                      (2)* * * * * * * * * * * * *(4) 
+                      NNN         LxNN            PNN
+
+    INPUTS:
+
+      - hx : x dimension.
+      - hy : y dimension.
+      - hz : z dimension.
+      - he = 1.0 : Element size for every node.
+      - ndivs=None: Number of divisions. if not None, elements are sized only by this parameter, 
+                    deprecating anuy value defined in he. Must define number of divisions per axes.
+                    ndivs=[nx,ny,nz]. Must all be non-negative integers.
+      - element_order = 1:  Order of the element to be generated.
+      - hex = False, : Generate quad elements.
+      - hex_incomplete = 1: Generate serendipity elements (only nodes at the boundaries of element).
+      - hex_linear = 1: -Not in use-
+      - structured = False: Use structured mesh. Defaults to false.
+      - save=False: Save mesh. A file named "cube.msh" will be created. 
+      - real= False: 
+
+    """
+    #***************************************************************************************************
+    import gmsh
+    
+    if ndivs is not None:
+        nx,ny,nz = ndivs
+        nx += 1; ny += 1
+    else:
+        nz = max(1,int(hz/he))
+    # end if 
+    
+    
+    gmsh.initialize()
+
+    # Lets create a simple cube element:
+    model = gmsh.model
+    geo   = model.geo
+    option= gmsh.option
+
+    P1 = geo.addPoint( -hx/2.0,  hy/2.0, -hz/2.0, he)
+    P2 = geo.addPoint( -hx/2.0, -hy/2.0, -hz/2.0, he)
+    P3 = geo.addPoint(  hx/2.0,  hy/2.0, -hz/2.0, he)
+    P4 = geo.addPoint(  hx/2.0, -hy/2.0, -hz/2.0, he)
+
+    L1 = geo.addLine(P1,P2)
+    L2 = geo.addLine(P2,P4)
+    L3 = geo.addLine(P4,P3)
+    L4 = geo.addLine(P3,P1)
+    
+    loop1 = geo.addCurveLoop([L1,L2,L3,L4])
+    
+    # Define zb surface.
+    surface = geo.addPlaneSurface([loop1])
+    
+    # Create the volume (Cube)
+    volumeIdentities = geo.extrude([(2,surface)],0,0,hz,[nz],[1],recombine=hex)
+    # Get the volume id.
+    volume = volumeIdentities[1][1]
+    
+    geo.synchronize()
+    
+    # Add points
+    # Get the points:
+    ptList = model.getEntities( 0 )
+    idStart = 100
+    
+    for pt in ptList:
+        xyz = model.getValue(0,pt[1],[])
+        name = ""
+        for i in range(3):
+            if xyz[i]>0:
+                name += 'P'
+            else:
+                name += 'N'
+            # end if 
+        # end for 
+        model.addPhysicalGroup( 0,[pt[1]],idStart)
+        model.setPhysicalName(  0, idStart, name )
+        idStart += 1
+    # end for 
+    
+    
+    # Get the lines:
+    lnList = model.getEntities( 1 )
+    idStart = 200
+    
+    for ln in lnList:
+        
+        xyz = model.getValue(1,ln[1],[0,1])
+        
+        L = np.abs(xyz[3:]-xyz[:3])
+        i,  = np.where(L==np.max(L))
+        i = i[0]
+        n = ['x','y','z']
+        # print(L,i)
+        
+        name = "L"+n[i]
+        
+        for ii in range(3):
+            if i != ii:
+                if xyz[ii]>0:
+                    name += 'P'
+                else:
+                    name += 'N'
+                # end if 
+            # end if 
+        # end for 
+        model.addPhysicalGroup( 1,[ln[1]],idStart)
+        model.setPhysicalName(  1, idStart, name )
+        idStart += 1
+    # end for 
+    
+    # Get the surfaces:
+    sfList = model.getEntities( 2 )
+    idStart = 300
+    
+    for sf in sfList:
+        
+        nl = model.getNormal(sf[1],[0,0])
+        n = np.abs(nl)
+        
+        dr = np.dot(n,nl)
+        
+        i,  = np.where(n==np.max(n))
+        i = i[0]
+        ns = ['x','y','z']
+        print(n,i)
+        
+        name = ns[i]
+        
+        if dr>0:
+            name += 'f'
+        else:
+            name += 'b'
+        # end if 
+
+        model.addPhysicalGroup( 2,[sf[1]],idStart)
+        model.setPhysicalName(  2, idStart, name )
+        idStart += 1
+    # end for 
+    
+    
+    model.addPhysicalGroup( 3, [volume],   401 )
+    model.setPhysicalName( 3, 401, "domain"      )
+
+    option.setNumber('Mesh.ElementOrder',element_order)
+  
+
+    # Recombine if quads are wanted.
+    if hex:
+
+        # Set body to recombine into quads.
+        option.setNumber('Mesh.SecondOrderIncomplete',hex_incomplete)
+        option.setNumber('Mesh.SecondOrderLinear',    hex_linear    )
+        option.setNumber('Mesh.RecombineAll',         1)
+
+    else:
+
+        option.setNumber('Mesh.SecondOrderIncomplete',hex_incomplete)
+        option.setNumber('Mesh.SecondOrderLinear',    hex_linear    )
+        option.setNumber('Mesh.RecombineAll',         0)
+
+    # end if 
+    
+    if ndivs is not None:
+        # Set horizontal divisions
+        model.mesh.setTransfiniteCurve(L2, nx )
+        model.mesh.setTransfiniteCurve(L4, nx )
+
+        # Set vertical divisions
+        model.mesh.setTransfiniteCurve(L1, ny )
+        model.mesh.setTransfiniteCurve(L3, ny )
+    # end if 
+
+    if structured:
+        model.mesh.setTransfiniteSurface(surface)
+    # end if 
+
+    model.mesh.generate(3)
+
+    if save:
+        gmsh.write("cube.msh")
+    # end if 
+
+    if real == True:
+        res = dmesh.from_gmsh(gmsh)
+    else:
+        res = mesh.from_gmsh(gmsh)
+    # end if
+
+    gmsh.finalize()
+
+    return res
+
+#-----------------------------------------------------------------------------------------------------
 
 
 #*****************************************************************************************************

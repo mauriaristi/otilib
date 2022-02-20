@@ -38,14 +38,31 @@ void arrso_neg_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 void arrso_sum_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     // Perform O + O.
-    uint64_t i;
+    
 
     // Check inputs:
     arrso_dimCheck_OO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){
+    #ifdef _OPENMP
+    #pragma omp parallel
+    #endif
+    {
+    uint64_t i;
+    
+    #ifdef _OPENMP
+    int id = omp_get_thread_num();
+    int nThrds = omp_get_num_threads();
+    #else
+    int id = 0;
+    int nThrds = 1;
+    #endif
+    
+
+    for ( i = id; i < arr1->size; i += nThrds){
         soti_sum_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i], dhl);
+    }
+
     }
 
 }
@@ -56,14 +73,28 @@ void arrso_sum_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     
     // Perform R + O.
 
-    uint64_t i;
-
     // Check inputs:
     arrso_dimCheck_RO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){
+    #ifdef _OPENMP
+    #pragma omp parallel
+    #endif
+    {
+    uint64_t i;
+    
+    #ifdef _OPENMP
+    int id = omp_get_thread_num();
+    int nThrds = omp_get_num_threads();
+    #else
+    int id = 0;
+    int nThrds = 1;
+    #endif
+
+    // Loop for every element and add real to the oti number.
+    for ( i = id; i < arr1->size; i+=nThrds){
         soti_sum_ro_to(arr1->p_data[i], &arr2->p_data[i], &res->p_data[i],dhl);        
+    }
     }
 
 }
@@ -72,14 +103,30 @@ void arrso_sum_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 void arrso_sum_oO_to(sotinum_t* num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     // Perform o + O.
-    uint64_t i;
+    
 
     // Check inputs:
     arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){
+    #ifdef _OPENMP
+    #pragma omp parallel
+    #endif
+    {
+    uint64_t i;
+    
+    #ifdef _OPENMP
+    int id = omp_get_thread_num();
+    int nThrds = omp_get_num_threads();
+    #else
+    int id = 0;
+    int nThrds = 1;
+    #endif
+
+    // Loop for every element and add real to the oti number.
+    for ( i = id; i < arr1->size; i+=nThrds){
         soti_sum_oo_to( num, &arr1->p_data[i], &res->p_data[i], dhl);
+    }
     }
 
 }
@@ -89,14 +136,29 @@ void arrso_sum_oO_to(sotinum_t* num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 void arrso_sum_rO_to(coeff_t num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 
     // Perform r + O.
-    uint64_t i;
-
+    
     // Check inputs:
     arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){
+    #ifdef _OPENMP
+    #pragma omp parallel
+    #endif
+    {
+    uint64_t i;
+    
+    #ifdef _OPENMP
+    int id = omp_get_thread_num();
+    int nThrds = omp_get_num_threads();
+    #else
+    int id = 0;
+    int nThrds = 1;
+    #endif
+    // Loop for every element and add real to the oti number.
+    for ( i = id; i < arr1->size; i+=nThrds){
         soti_sum_ro_to(num, &arr1->p_data[i], &res->p_data[i],dhl);        
+    }
+
     }
 
 }
@@ -120,14 +182,29 @@ void arrso_sum_rO_to(coeff_t num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 // ****************************************************************************************************
 void arrso_sub_OO_to( arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     // Perform O - O
-    uint64_t i;
-
+    
     // Check inputs:
     arrso_dimCheck_OO_elementwise(arr1,arr2, res);
 
     // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){
+    #ifdef _OPENMP
+    #pragma omp parallel
+    #endif
+    {
+    uint64_t i;
+    
+    #ifdef _OPENMP
+    int id = omp_get_thread_num();
+    int nThrds = omp_get_num_threads();
+    #else
+    int id = 0;
+    int nThrds = 1;
+    #endif
+    
+    for ( i = id; i < arr1->size; i+=nThrds){
         soti_sub_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i], dhl);
+    }
+    
     }
 }
 // ----------------------------------------------------------------------------------------------------

@@ -23,10 +23,10 @@ os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@"
 os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@"
 
 
-libraries          = ['oti']
+libraries          = ['oti','omp']
 include_dirs       = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]
-extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3",'-fopenmp']
-extra_link_args    = ['-fopenmp']
+extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3","@OpenMP_C_FLAGS@","@OpenMP_EXTRA_INCLUDE_FLAGS@"]
+extra_link_args    = ['@OpenMP_C_FLAGS@',"@OpenMP_EXTRA_LINK_FLAGS@"]
 # extra_link_args    = ['-fopenmp']
 macros             = [("CYTHON_TRACE_NOGIL","1")]
 language           = "c"
@@ -38,7 +38,6 @@ Extension("pyoti.core",
 	include_dirs = include_dirs,
   define_macros = macros,
   libraries = libraries,
-  # language = language,
   extra_compile_args = extra_compile_args,
   extra_link_args = extra_link_args,
   depends=dependencies
@@ -49,7 +48,6 @@ Extension("pyoti.real",
   include_dirs = include_dirs,
   define_macros = macros,
   libraries = libraries,
-  # language = language,
   extra_compile_args = extra_compile_args,
   extra_link_args = extra_link_args,
   depends=dependencies
@@ -60,7 +58,6 @@ Extension("pyoti.dense",
 	include_dirs = include_dirs,
   define_macros = macros,
   libraries = libraries,
-  # language = language,
   extra_compile_args = extra_compile_args,
   extra_link_args = extra_link_args,
   depends=dependencies
@@ -71,7 +68,6 @@ Extension("pyoti.sparse",
   include_dirs = include_dirs,
   define_macros = macros,
   libraries = libraries,
-  # language = language,
   extra_compile_args = extra_compile_args,
   extra_link_args = extra_link_args,
   depends=dependencies
@@ -82,7 +78,6 @@ Extension("pyoti.fem",
   include_dirs = include_dirs,
   define_macros = macros,
   libraries = libraries,
-  # language = language,
   extra_compile_args = extra_compile_args,
   extra_link_args = extra_link_args,
   depends=dependencies
@@ -91,7 +86,7 @@ Extension("pyoti.fem",
 
 
 
-
+# Uncomment  lines 91 - 114 to enable compilation of static libraries.
 
 # # Search for files to compile within the static module.
 # files=[]

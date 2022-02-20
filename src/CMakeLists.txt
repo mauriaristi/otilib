@@ -30,8 +30,8 @@
 if(APPLE)
 	# This is for the case of apple macOS
     # SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
-    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -g -fwrapv -O3 -Wall -Wstrict-prototypes -arch x86_64")
-    SET(GCC_COVERAGE_LINK_FLAGS "")
+    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -g -fwrapv -O3 -Wall -Wstrict-prototypes -arch x86_64 ${OpenMP_EXTRA_INLCUDE_FLAGS}")
+    SET(GCC_COVERAGE_LINK_FLAGS "${OpenMP_EXTRA_LINK_FLAGS} ")
   
 elseif(UNIX)
     # This is for the case of Unix (Linux systems.)
@@ -83,14 +83,14 @@ target_link_libraries(oti m ${LINK_TARGET_OMP})
 # BUILD DATAGEN.
 
 # To compile with linux uncomment the following line
-SET(GCC_COVERAGE_COMPILE_FLAGS "-g -fwrapv -O3 -Wall -Wstrict-prototypes ")
-SET(GCC_COVERAGE_LINK_FLAGS "")
+# SET(GCC_COVERAGE_COMPILE_FLAGS "-g -fwrapv -O3 -Wall -Wstrict-prototypes ")
+# SET(GCC_COVERAGE_LINK_FLAGS "")
 
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
-SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.6)
+SET(CMAKE_OSX_DEPLOYMENT_TARGET 12.1)
 
 include_directories ("${PROJECT_SOURCE_DIR}/include")
 add_executable(otigen datagen/oti_gen_data.c)

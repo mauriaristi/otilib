@@ -19,25 +19,38 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake )
 
 # Include the CMake script copyfiles.cmake. 
 include( copyfiles )
-# include( UseCython )
 
-
+option (USE_OPENMP "Use OpenMP to enamble <omp.h>" ON)
+set(OpenMP_EXTRA_INLCUDE_FLAGS "")
+set(OpenMP_EXTRA_LINK_FLAGS "")
 # Uncomment this for macOS
 if(APPLE)
 	# This is for the case of apple macOS
 	set(CMAKE_C_COMPILER "/usr/bin/clang")
   set(CYTHON_CMD_CALL_PREC "CC=gcc")
-  # set(CMAKE_C_COMPILER "gcc-8")
-  # set(CYTHON_CMD_CALL_PREC "CC=gcc-8")
-  # set(CMAKE_C_COMPILER "icc")
-  # set(CYTHON_CMD_CALL_PREC "CC=icc")
+
+
+  # Openmp.
+  if(USE_OPENMP)
+    set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp")
+    set(OpenMP_C_LIB_NAMES "omp")
+    set(OpenMP_omp_LIBRARY omp)
+    set(OpenMP_EXTRA_INLCUDE_FLAGS "-I/opt/homebrew/Cellar/libomp/12.0.1/include/")
+    set(OpenMP_EXTRA_LINK_FLAGS "-L/opt/homebrew/Cellar/libomp/12.0.1/lib/")
+  else(USE_OPENMP)
+    set(OpenMP_C_FLAGS "")
+  endif(USE_OPENMP)
+
+
 elseif(UNIX)
+
   # This is for the case of unix OS
   set(CMAKE_C_COMPILER "gcc")
   set(CYTHON_CMD_CALL_PREC "CC=gcc")
   # set(CMAKE_C_COMPILER "icc")
   # set(CMAKE_C_COMPILER "gcc")
   # set(CYTHON_CMD_CALL_PREC "CC=icc")
+
 endif(APPLE)
 
 
@@ -50,13 +63,14 @@ find_package(OpenMP)
 
 if (OpenMP_C_FOUND)
   set(LINK_TARGET_OMP OpenMP::OpenMP_C)
+
 else(OpenMP_C_FOUND)
   set(LINK_TARGET_OMP "")
 endif(OpenMP_C_FOUND)
 
 # -------------------------------------------------------------------------------------------------
 
-
+ message(WARNING ${LINK_TARGET_OMP})
  
 set(CMAKE_MACOSX_RPATH 1)
 

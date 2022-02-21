@@ -31,31 +31,38 @@ void arrso_dotproduct_OO_to(arrso_t* arr1, arrso_t* arr2, sotinum_t* res, dhelpl
     #endif
     {
     
-    #ifdef _OPENMP
-    int id = omp_get_thread_num();
-    int nThrds = omp_get_num_threads();
-    #else
-    int id = 0;
-    int nThrds = 1;
-    #endif
-    
-    uint64_t i;
-    sotinum_t tmp;
+        #ifdef _OPENMP
+        int id = omp_get_thread_num();
+        int nThrds = omp_get_num_threads();
+        #else
+        int id = 0;
+        int nThrds = 1;
+        #endif
 
-    if (id==0){
-        maxThrds = nThrds;
-    }
+        int N = arr1->size;
+        int istart = id*N/nThrds;
+        int iend = (id+1)*N/nThrds;
+        if (iend>N) iend=N;
 
-    tmp = soti_get_tmp( 5, order ,dhl);
-    soti_set_r( 0.0, &tmp, dhl);
+            
+        uint64_t i;
+        sotinum_t tmp;
 
-    for ( i = id; i < arr1->size; i+=nThrds){
+        if (id==0){
+            maxThrds = nThrds;
+        }
 
-        soti_gem_oo_to( &arr1->p_data[ i ], &arr2->p_data[ i ], &tmp, &tmp, dhl);
-                   
-    }
+        tmp = soti_get_tmp( 5, order ,dhl);
+        soti_set_r( 0.0, &tmp, dhl);
 
-    tmpl[id] = tmp;
+        for ( i = id; i < arr1->size; i+=nThrds){
+        // for( i = istart; i<iend; i++){        
+
+            soti_gem_oo_to( &arr1->p_data[ i ], &arr2->p_data[ i ], &tmp, &tmp, dhl);
+                       
+        }
+
+        tmpl[id] = tmp;
 
     }
 

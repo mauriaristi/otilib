@@ -142,17 +142,37 @@ fearrso_t fearrso_sum_rF(coeff_t lhs, fearrso_t* rhs, dhelpl_t dhl){
 // ****************************************************************************************************
 void fearrso_sum_FF_to(fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl){
 
-    uint64_t i;
-
     // Check first dimensions.
     fearrso_dimCheck_FF_elementwise(lhs, rhs, res);
 
-    // The loop for every element in arr.
-    for (i = 0; i < res->nip; i++){
+    // // Loop for every element and add real to the oti number.
+    // #ifdef _OPENMP
+    // #pragma omp parallel
+    // #endif
+    // {
+        uint64_t i;
+    
+        // #ifdef _OPENMP
+        // int id = omp_get_thread_num();
+        // int nThrds = omp_get_num_threads();        
+        // #else
+        int id = 0;
+        int nThrds = 1;
+        // #endif
 
-        arrso_sum_OO_to( &lhs->p_data[i], &rhs->p_data[i], &res->p_data[i], dhl);
+        int N = res->nip;
+        int istart = id*N/nThrds;
+        int iend = (id+1)*N/nThrds;
+        if (iend>N) iend=N;
 
-    }
+        // The loop for every element in arr.
+        for( i = istart; i<iend; i++){        
+
+            arrso_sum_OO_to( &lhs->p_data[i], &rhs->p_data[i], &res->p_data[i], dhl);
+
+        }
+
+    // }
 
 }
 // ----------------------------------------------------------------------------------------------------

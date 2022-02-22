@@ -132,44 +132,45 @@ void arrso_matmul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl
 
     // Loop for every element and add real to the oti number.
     #ifdef _OPENMP
-    #pragma omp parallel
+        #pragma omp parallel
     #endif
     {
     
-    #ifdef _OPENMP
-    int id = omp_get_thread_num();
-    int nThrds = omp_get_num_threads();
-    #else
-    int id = 0;
-    int nThrds = 1;
-    #endif
+        #ifdef _OPENMP
+            int id = omp_get_thread_num();
+            int nThrds = omp_get_num_threads();
+        #else
+            int id = 0;
+            int nThrds = 1;
+        #endif
 
-    uint64_t ii, i, j, k;
-    sotinum_t tmp;
+        uint64_t ii, i, j, k;
+        sotinum_t tmp;
 
-    tmp = soti_get_tmp( 5, order ,dhl);
+        tmp = soti_get_tmp( 5, order ,dhl);
 
-    for ( ii = id; ii < size; ii+=nThrds){
-        
-        j = ii % arr1->nrows;
-        i = ii / arr1->nrows;
+        for ( ii = id; ii < size; ii+=nThrds){
+            
+            j = ii % arr2->ncols;
+            i = ii / arr2->ncols;
+            
+            
+            // tmp = 0
+            soti_set_r( 0.0, &tmp, dhl);
 
-        // tmp = 0
-        soti_set_r( 0.0, &tmp, dhl);
+            for( k = 0; k < arr1->ncols; k++){
 
-        for( k = 0; k < arr1->ncols; k++){
+                // tmp = arr1[i,k] * arr2[k,j] + tmp
 
-            // tmp = arr1[i,k] * arr2[k,j] + tmp
+                soti_gem_oo_to( &arr1->p_data[ k + i * arr1->ncols ],
+                                &arr2->p_data[ j + k * arr2->ncols ],
+                                &tmp, &tmp, dhl);
+                   
+            }
+            
+            arrso_set_item_ij_o( &tmp, i, j, res, dhl);            
 
-            soti_gem_oo_to( &arr1->p_data[ k + i * arr1->ncols ],
-                            &arr2->p_data[ j + k * arr2->ncols ],
-                            &tmp, &tmp, dhl);
-               
         }
-
-        arrso_set_item_ij_o( &tmp, i, j, res, dhl);
-
-    }
 
     }
     

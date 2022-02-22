@@ -154,7 +154,7 @@ void fearrso_matmul_FF_to(fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl
     fearrso_dimCheck_FF_matmul(lhs, rhs, res);
 
     for (i = 0; i<res->nip; i++){
-
+        
         arrso_matmul_OO_to( &lhs->p_data[i], &rhs->p_data[i], &res->p_data[i], dhl );
 
     }

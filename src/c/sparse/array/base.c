@@ -274,7 +274,7 @@ inline void arrso_set_item_i_o( sotinum_t* src, uint64_t i, arrso_t* arr, dhelpl
 
     }  else {
         
-        printf("ERROR: Index out of bounds in arrso_get_item_i(...)\n Exiting...\n");
+        printf("ERROR: Index out of bounds in arrso_set_item_i_o(...)\n Exiting...\n");
         exit(OTI_BadIndx);
 
     }
@@ -290,7 +290,7 @@ inline void arrso_set_item_ij_o( sotinum_t* num, uint64_t i, uint64_t j, arrso_t
 
     } else {
 
-        printf("ERROR: Index out of bounds in arrso_get_item_ij(...)\n Exiting...\n");
+        printf("ERROR: Index out of bounds in arrso_set_item_ij_o(...)\n Exiting...\n");
         exit(OTI_BadIndx);
 
     }

@@ -1,5 +1,6 @@
 
 import sys, os
+import platform
 from distutils.core import setup
 from distutils.extension import Extension
 import numpy 
@@ -22,15 +23,25 @@ except:
 os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@"
 os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@"
 
-
-libraries          = ['oti','omp']
+openmp_compile_flag = @CYTHON_OPENMP_COMPILE_FLAG@
+libraries          = ['oti'] 
 include_dirs       = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]
-extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3","@OpenMP_C_FLAGS@","@OpenMP_EXTRA_INCLUDE_FLAGS@"]
-extra_link_args    = ['@OpenMP_C_FLAGS@',"@OpenMP_EXTRA_LINK_FLAGS@"]
-# extra_link_args    = ['-fopenmp']
+extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"]
+extra_link_args    = ["-O3"]
 macros             = [("CYTHON_TRACE_NOGIL","1")]
 language           = "c"
 dependencies       = ["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]
+
+if openmp_compile_flag:
+  extra_compile_args += ['@OpenMP_C_FLAGS@']
+  extra_link_args    += ['@OpenMP_C_FLAGS@']
+# end if 
+
+if platform.system() == 'Darwin': # macOS specific.
+  libraries          += ['omp']
+  extra_compile_args += ["@OpenMP_EXTRA_INCLUDE_FLAGS@" ]
+  extra_link_args    += ["@OpenMP_EXTRA_LINK_FLAGS@" ]
+# end if 
 
 extensions = [ \
 Extension("pyoti.core",

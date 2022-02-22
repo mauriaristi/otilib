@@ -59,15 +59,27 @@ endif(APPLE)
 # This allows to track if OpenMP exsists in the system and if it can be used to compile with the
 #  compiler selected;.
 
-find_package(OpenMP)
 
-if (OpenMP_C_FOUND)
-  set(LINK_TARGET_OMP OpenMP::OpenMP_C)
+if (USE_OPENMP)
 
-else(OpenMP_C_FOUND)
-  set(LINK_TARGET_OMP "")
-endif(OpenMP_C_FOUND)
+  find_package(OpenMP)
+  set(CYTHON_OPENMP_COMPILE_FLAG "True")
 
+  if (OpenMP_C_FOUND)
+  
+    set(LINK_TARGET_OMP OpenMP::OpenMP_C)
+
+  else(OpenMP_C_FOUND)
+
+    set(LINK_TARGET_OMP "")
+
+  endif(OpenMP_C_FOUND)
+
+else(USE_OPENMP)
+
+  set(CYTHON_OPENMP_COMPILE_FLAG "False")
+
+endif(USE_OPENMP)
 # -------------------------------------------------------------------------------------------------
 
  message(WARNING ${LINK_TARGET_OMP})

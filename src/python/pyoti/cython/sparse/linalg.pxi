@@ -966,6 +966,7 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
   rhs = solve(rhs)
 
 
+
   # Solve the real coefficient
   for i in range(Ores.nrows):      
     for j in range(Ores.ncols):
@@ -980,12 +981,13 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
   tmp2 = zeros( Ores.shape, order = Oord )
 
   for ordi in range( 1, Oord + 1 ):
+    print("Block-Solver, solving :",ordi)
     
     get_order_im( ordi, b_in, out=tmp )
     # print("temp before:",tmp)
     for ord_rhs in range( ordi ):
-
       ord_lhs = ordi - ord_rhs
+      print("orders ( {0}x{1} ) :".format(ord_lhs,ord_rhs))
 
       trunc_dot( ord_lhs, K_in, ord_rhs, Ores, out = tmp2 )
       trunc_sub(ordi, tmp, tmp2, out = tmp)
@@ -996,13 +998,13 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
 
     # Convert tmp to array (for specific order)
     rhs = get_order_im_array( ordi, tmp )
-    # print("rhs before solution:\n",rhs)
+    print("rhs before solution:\n",rhs)
     
     rhs = solve( rhs )
     
-    # print("rhs after solution:\n",rhs)
+    print("rhs after solution:\n",rhs)
     set_order_im_from_array( ordi, rhs, Ores)
-    
+    input()
   # end for 
 
   if res_flag == 0:
@@ -1253,7 +1255,7 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
 
       # end for
 
-      tmp[i,j] += sotinum.create( &otmp, FLAGS = 0)
+      tmp[i,j] = tmp[i,j] + sotinum.create( &otmp, FLAGS = 0)
 
     # end for 
   # end for

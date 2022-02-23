@@ -739,11 +739,24 @@ inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, so
     // Multiply real coefficients.
     soti_set_r(0.0,  tmpsrc, dhl);
     soti_set_r(0.0, tmpdest, dhl);
+    soti_set_r(0.0,   &tmp2, dhl);
 
     res_ord = MIN(res_ord,ord1+ord2);
     tmp.act_order =res_ord;
     tmp2.act_order=res_ord;
     tmp3.act_order=res_ord;
+
+
+
+
+    printf("In soti_base_trunc_mul lhs:"_PORDT",rhs"_PORDT"\n", ord1, ord2);
+    printf("\n");
+    soti_print(num1,dhl);
+    printf("\n");
+    soti_print(num2,dhl);
+
+    printf("TMP2 previously:\n");
+    soti_print(&tmp2,dhl);
 
     if (ord1 == 0 && ord2 == 0){
         
@@ -804,16 +817,18 @@ inline sotinum_t soti_base_trunc_mul(ord_t ord1, sotinum_t* num1, ord_t ord2, so
             ordi2 = ord2-1;    
 
             ordires = ordi1 + ordi2 + 1;
-
+            printf("Here!1\n");
             dhelp_sparse_mult( num1->p_im[ordi1],   num1->p_idx[ordi1],    num1->p_nnz[ordi1],  ordi1+1,
                                num2->p_im[ordi2],   num2->p_idx[ordi2],    num2->p_nnz[ordi2],  ordi2+1,
                                 tmp2.p_im[ordires],  tmp2.p_idx[ordires],  &tmp2.p_nnz[ordires],         dhl);
 
+            printf("Here!2\n");
+            soti_print(&tmp2,dhl);
             dhelp_sparse_add_dirs(    tmp2.p_im[ordires],     tmp2.p_idx[ordires],      tmp2.p_nnz[ordires],
                                    tmpsrc->p_im[ordires],  tmpsrc->p_idx[ordires],   tmpsrc->p_nnz[ordires],
                                   tmpdest->p_im[ordires], tmpdest->p_idx[ordires], &tmpdest->p_nnz[ordires], dhl);
 
-        
+            printf("Here!3\n");
         }
 
     }

@@ -960,8 +960,8 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
         nnz_total += num->p_nnz[ordi];
     }
 
-    printf("  Order: "_PORDT", non_zero: "_PNDIRT", re: %11.4e\n",
-        num->trc_order, nnz_total, num->re);
+    printf("  act_ord: "_PORDT", trc_ord: "_PORDT", non_zero: "_PNDIRT", re: %11.4e\n",
+        num->act_order, num->trc_order, nnz_total, num->re);
     
     printf("      VALUE   ,    IMDIR  \n");
 
@@ -976,9 +976,9 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
             
             printf("  " _PCOEFFT " , ",  num->p_im[ordi][dir]);
 
-            imdir_bases = dhelp_get_imdir( num->p_idx[ordi][dir], ordi, dhl);
+            imdir_bases = dhelp_get_imdir( num->p_idx[ordi][dir], ordi+1, dhl);
             
-            printArrayUI16( imdir_bases, ordi);
+            printArrayUI16( imdir_bases, ordi+1);
 
             printf("\n");
 
@@ -997,9 +997,11 @@ inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
 
     // Get only temporal list available to the thread id.
     #ifdef _OPENMP
-    ndir_t ntmp = omp_get_thread_num() * 20 + pntmp;
+        int thrdId = omp_get_thread_num();
+        ndir_t ntmp = thrdId * 20 + pntmp;
+        // printf("rtmp call thrdId: %d\n",thrdId);
     #else
-    ndir_t ntmp = pntmp;
+        ndir_t ntmp = pntmp;
     #endif
 
     if (trc_order == 0){

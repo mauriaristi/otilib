@@ -254,12 +254,12 @@ void soti_trunc_gem_oo_to(ord_t orda, sotinum_t* a, ord_t ordb, sotinum_t* b, so
 
     sotinum_t  tmp1, tmp2;
     ord_t ord_res = orda + ordb;
-    printf("Before base_trunc_mul\n");
+    // printf("Before base_trunc_mul\n");
     tmp1 = soti_base_trunc_mul(    orda, a, ordb, b, dhl);  // This is temporal 3, 4 or 5
-    printf("-----> base_trunc_mul Ok\n");
-    printf("Before base_trunc_sum\n");
+    // printf("-----> base_trunc_mul Ok\n");
+    // printf("Before base_trunc_sum\n");
     tmp2 = soti_base_trunc_sum( ord_res, &tmp1, c,   dhl); // this is temporal 7.
-    printf("-----> base_trunc_mul Ok\n");
+    // printf("-----> base_trunc_sum Ok\n");
     soti_copy_to(&tmp2, res, dhl);
 
 }

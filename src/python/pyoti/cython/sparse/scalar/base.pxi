@@ -246,13 +246,13 @@ cdef class sotinum:
     head      = ''
     body      = ''
     
-    body += '%.4f'%self.num.re
+    body += ('%'+floatFormat)%self.num.re
 
     for ordi in range(0,self.num.act_order):
 
       for i in range(self.num.p_nnz[ordi]):
         
-        num = '%+.4f'%self.num.p_im[ordi][i] 
+        num = ('%+'+floatFormat)%self.num.p_im[ordi][i] 
         body += ' '+num[0]+" "+num[1:]
         body += ' * e(' 
         
@@ -351,13 +351,13 @@ cdef class sotinum:
     head      = ''
     body      = ''
     
-    body += '%g'%self.num.re
+    body += ('%'+floatFormat)%self.num.re
 
     for ordi in range(0,self.num.act_order):
 
       for i in range(self.num.p_nnz[ordi]):
         
-        num = '%+g'%self.num.p_im[ordi][i] 
+        num = ('%+'+floatFormat)%self.num.p_im[ordi][i] 
         body += ' '+num[0]+" "+num[1:]
         body += ' * e(' 
         

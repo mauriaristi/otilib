@@ -696,7 +696,7 @@ cdef void csrmatrix_trunc_matmul_SO_to(ord_t ordlhs, csr_matrix lhs, ord_t ordrh
 
   # Extract temporal 5.
   order = max(lhs.order, rhs.order )
-  print('-->> In csrmatrix_trunc_matmul multiplying ',lhs.order, rhs.order, order,"(-)",ordlhs,ordrhs)
+  # print('-->> In csrmatrix_trunc_matmul multiplying ',lhs.order, rhs.order, order,"(-)",ordlhs,ordrhs)
 
   tmp = soti_get_tmp( 5, order ,dhl)
   
@@ -707,16 +707,16 @@ cdef void csrmatrix_trunc_matmul_SO_to(ord_t ordlhs, csr_matrix lhs, ord_t ordrh
       # tmp = 0
       soti_set_r( 0.0, &tmp, dhl)
 
-      print("Obtaining ",i,'-',j)
+      # print("Obtaining ",i,'-',j)
       
 
       for l in range( lhs.p_indptr[i], lhs.p_indptr[i+1] ):
 
         # tmp = arr1[i,k] * arr2[k,j] + tmp
-        # k = lhs.p_indices[l]
-        soti_print(&lhs.arr.p_data[ l ], dhl)
-        soti_print(&rhs.arr.p_data[ j + k * rhs.ncols ], dhl)
-        print(" ++++ +++ lhs.act_ord",lhs.arr.p_data[ l ].act_order, " ----- rhs.act_ord",rhs.arr.p_data[ j + k * rhs.ncols ].act_order)
+        k = lhs.p_indices[l]
+        # soti_print(&lhs.arr.p_data[ l ], dhl)
+        # soti_print(&rhs.arr.p_data[ j + k * rhs.ncols ], dhl)
+        # print(" ++++ +++ lhs.act_ord",lhs.arr.p_data[ l ].act_order, " ----- rhs.act_ord",rhs.arr.p_data[ j + k * rhs.ncols ].act_order)
         # input()
         soti_trunc_gem_oo_to( ordlhs, &lhs.arr.p_data[ l ],
                               ordrhs, &rhs.arr.p_data[ j + k * rhs.ncols ],

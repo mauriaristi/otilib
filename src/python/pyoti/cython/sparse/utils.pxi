@@ -888,3 +888,11 @@ cdef inline uint64_t binSearch_list(list a, uint64_t x):
 
 
 
+def set_printoptions(float_format="10g", terms_print = 4):
+  global floatFormat, termsPrint
+  floatFormat = float_format
+  termsPrint  = terms_print
+
+
+floatFormat= "10g"
+termsPrint = 4

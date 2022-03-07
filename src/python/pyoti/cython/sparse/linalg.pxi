@@ -979,7 +979,7 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
   Oord = max( K_in.order, b_in.order)
   tmp  = zeros( Ores.shape, order = Oord )
   tmp2 = zeros( Ores.shape, order = Oord )
-  print("Maximum order found -----  :",Oord)
+  # print("Maximum order found -----  :",Oord)
   for ordi in range( 1, Oord + 1 ):
     #print("Block-Solver, solving :",ordi)
     #input()
@@ -990,9 +990,9 @@ cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'Super
     # print("temp before:",tmp)
     for ord_rhs in range( ordi ):
       ord_lhs = ordi - ord_rhs
-      print("orders ( {0}x{1} ) :".format(ord_lhs,ord_rhs))
+      # print("orders ( {0}x{1} ) :".format(ord_lhs,ord_rhs))
       
-      print(" -- before trunc_dot")
+      # print(" -- before trunc_dot")
       # input()
       trunc_dot( ord_lhs, K_in, ord_rhs, Ores, out = tmp2 )
       # print(" -- trunc_dot run successfully")
@@ -1268,7 +1268,7 @@ cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
       # end for
       
       
-      soti_print(&otmp,dhl);
+      # soti_print(&otmp,dhl);
 
       tmp[i,j] = tmp[i,j] + sotinum.create( &otmp, FLAGS = 0)
 

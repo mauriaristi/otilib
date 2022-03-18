@@ -29,7 +29,7 @@ def param_adim(l,h,L0,A0,E,w,cargas):
 def calc_gi_fi(order,nbases,gamma,delta,beta,Psi,Sigmas,gi_0,fi_0):
     x0 = oti.zeros(2,nbases=nbases,order=order)
     x0[0], x0[1] =  gi_0, fi_0
-    tol = 1e-14
+    tol = 1e-15
     root = newton_otisis(func, j_oti, x0, tol, args=(gamma,delta,beta,Psi,Sigmas))
     return root
 
@@ -43,7 +43,9 @@ def newton_otisis(func, jaco, x, tol, maxiter=50, args=()):
             print("No converge.", maxiter, "it.")
             break
         dx = oti.dot(oti.inv(-jaco(x,*args)),func(x,*args))
-        error = oti.norm(dx).get_deriv(0)
+        error = oti.norm(dx).real/oti.norm(x).real
+        print("Error for iter {0} - {1:.6e}".format(n,error))
+        print("Current solution:\n",x.real)
         x+= dx
         n+= 1
     #print("niter: ",n)
@@ -188,21 +190,15 @@ def plot_curva(x,y,T,u,x_0,x_2,y_0,y_2):
         xf[i] = x[j]
         yf[i]= y[j]
     print("Conf. " + str(u) + ": x = "+str(xf[1])+" , y = "+str(yf[1]))
-    fig1 = plt.figure(1,figsize=(12,6))
-    mpl.rc('font', **{'family': 'serif', 'serif': ['Computer Modern']}) 
-    mpl.rc('text', usetex=True) 
     plt.gca().invert_yaxis()
-    plt.rcParams.update({'font.size': 16})
     plt.plot(x,y, ls='-', lw=3, label="Load case "+str(u))
     if x_0.any() != None:
         plt.plot(x_0,y_0, ':', lw=2.5, color="orange" ,label="ROM Load case 0")
         plt.plot(x_2,y_2, ':', lw=2.5, color="r" ,label="ROM Load case 2")
-    plt.legend(loc="upper center")
-    plt.plot(xf,yf, 'oC5', markersize="8", zorder=1000)
-    plt.xlabel(r'$x$', fontsize=22)
-    plt.ylabel(r'$y$', fontsize=22)
-    plt.grid()
-    plt.axis('equal')
+    
+    plt.plot(xf,yf, 'oC5', markersize=5, zorder=1000)
+    
+    
    
     
 

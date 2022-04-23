@@ -996,13 +996,13 @@ inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
     ord_t ordi = 0;
 
     // Get only temporal list available to the thread id.
-    #ifdef _OPENMP
-        int thrdId = omp_get_thread_num();
-        ndir_t ntmp = thrdId * 20 + pntmp;
-        // printf("rtmp call thrdId: %d\n",thrdId);
-    #else
+    // #ifdef _OPENMP
+    //     int thrdId = omp_get_thread_num();
+    //     ndir_t ntmp = thrdId * 20 + pntmp;
+    //     // printf("rtmp call thrdId: %d\n",thrdId);
+    // #else
         ndir_t ntmp = pntmp;
-    #endif
+    // #endif
 
     if (trc_order == 0){
         // In case order==0, no allocated array exists.

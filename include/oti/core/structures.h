@@ -51,6 +51,12 @@ typedef struct {
    ord_t*  order; ///< Global truncation order.
 } dhelpl_t;       ///< Direction Helper list type.
 
+
+typedef struct lil_node {
+   uint64_t data; ///< Data of the linked list.
+   struct lil_node* next; ///< Number of direction helpers.
+} lil_node_t;     ///< Linked list node type.
+
 // ----------------------------------------------------------------------------------------------------
 // -------------------------------------    END STRUCTURES      ---------------------------------------
 // ----------------------------------------------------------------------------------------------------

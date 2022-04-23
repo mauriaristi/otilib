@@ -32,27 +32,27 @@ void arrso_neg_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
 
 
 // Parallel implementation
-#define _SOTI_CHUNCK_SIZE 8
-int nthrds_global;
+// #define _SOTI_CHUNCK_SIZE 8
+// int nthrds_global;
 
-void setup_global_omp_dist(void){
+// void setup_global_omp_dist(void){
     
-    nthrds_global=omp_get_max_threads();
-    omp_set_num_threads(nthrds_global/2);
+//     nthrds_global=omp_get_max_threads();
+//     omp_set_num_threads(nthrds_global/2);
 
-}
+// }
 
-int setup_omp_parallel_elementwise( int totalnIter ){
+// int setup_omp_parallel_elementwise( int totalnIter ){
 
-    int nthrds_prev=omp_get_max_threads();
-    int N = totalnIter, nthrds_toset;
-    int estThrds_performance = (N/_SOTI_CHUNCK_SIZE)+1;
+//     int nthrds_prev=omp_get_max_threads();
+//     int N = totalnIter, nthrds_toset;
+//     int estThrds_performance = (N/_SOTI_CHUNCK_SIZE)+1;
     
 
-    nthrds_toset = MIN(nthrds_prev,estThrds_performance);
-    omp_set_num_threads(nthrds_toset);
-    return nthrds_prev;
-}
+//     nthrds_toset = MIN(nthrds_prev,estThrds_performance);
+//     omp_set_num_threads(nthrds_toset);
+//     return nthrds_prev;
+// }
 
 // 1.2. Addition.
 // ****************************************************************************************************
@@ -64,7 +64,7 @@ void arrso_sum_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     arrso_dimCheck_OO_elementwise(arr1,arr2,res);
 
     
-    int nthrds_prev = setup_omp_parallel_elementwise(arr1->size);
+    // int nthrds_prev = setup_omp_parallel_elementwise(arr1->size);
 
     // printf("Received size: %d\n",N);
     // printf("Nthrds: %d\n",nthrds_prev);
@@ -73,24 +73,24 @@ void arrso_sum_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 
 
     // Loop for every element and add real to the oti number.
-    #ifdef _OPENMP
-    #pragma omp parallel
-    #endif
-    {
+    // #ifdef _OPENMP
+    // #pragma omp parallel
+    // #endif
+    // {
     uint64_t i;
     
-    #ifdef _OPENMP
-    int id = omp_get_thread_num();
-    int nThrds = omp_get_num_threads();
-    int istart = id*arr1->size/nThrds;
-    int iend = (id+1)*arr1->size/nThrds;
-    if (iend>arr1->size) iend=arr1->size;
-    #else
+    // #ifdef _OPENMP
+    // int id = omp_get_thread_num();
+    // int nThrds = omp_get_num_threads();
+    // int istart = id*arr1->size/nThrds;
+    // int iend = (id+1)*arr1->size/nThrds;
+    // if (iend>arr1->size) iend=arr1->size;
+    // #else
     int id = 0;
     int nThrds = 1;
     int istart = 0;
     int iend = arr1->size;
-    #endif
+    // #endif
     
     // #pragma omp critical 
     // {
@@ -101,9 +101,9 @@ void arrso_sum_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
         soti_sum_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i], dhl);
     }
 
-    }
+    // }
 
-    omp_set_num_threads(nthrds_prev);
+    // omp_set_num_threads(nthrds_prev);
     // nthrds_toset = omp_get_max_threads();
 
     // printf("Reset nthreads to: %d\n",nthrds_toset);
@@ -120,25 +120,25 @@ void arrso_sum_RO_to(darr_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     arrso_dimCheck_RO_elementwise(arr1,arr2,res);
 
     // Loop for every element and add real to the oti number.
-    #ifdef _OPENMP
-    #pragma omp parallel
-    #endif
-    {
+    // #ifdef _OPENMP
+    // #pragma omp parallel
+    // #endif
+    // {
     uint64_t i;
     
-    #ifdef _OPENMP
-    int id = omp_get_thread_num();
-    int nThrds = omp_get_num_threads();
-    #else
+    // #ifdef _OPENMP
+    // int id = omp_get_thread_num();
+    // int nThrds = omp_get_num_threads();
+    // #else
     int id = 0;
     int nThrds = 1;
-    #endif
+    // #endif
 
     // Loop for every element and add real to the oti number.
     for ( i = id; i < arr1->size; i+=nThrds){
         soti_sum_ro_to(arr1->p_data[i], &arr2->p_data[i], &res->p_data[i],dhl);        
     }
-    }
+    // }
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -152,25 +152,25 @@ void arrso_sum_oO_to(sotinum_t* num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
-    #ifdef _OPENMP
-    #pragma omp parallel
-    #endif
-    {
+    // #ifdef _OPENMP
+    // #pragma omp parallel
+    // #endif
+    // {
     uint64_t i;
     
-    #ifdef _OPENMP
-    int id = omp_get_thread_num();
-    int nThrds = omp_get_num_threads();
-    #else
+    // #ifdef _OPENMP
+    // int id = omp_get_thread_num();
+    // int nThrds = omp_get_num_threads();
+    // #else
     int id = 0;
     int nThrds = 1;
-    #endif
+    // #endif
 
     // Loop for every element and add real to the oti number.
     for ( i = id; i < arr1->size; i+=nThrds){
         soti_sum_oo_to( num, &arr1->p_data[i], &res->p_data[i], dhl);
     }
-    }
+    // }
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -184,25 +184,25 @@ void arrso_sum_rO_to(coeff_t num, arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     arrso_dimCheck_OO_elementwise(arr1,arr1,res);
 
     // Loop for every element and add real to the oti number.
-    #ifdef _OPENMP
-    #pragma omp parallel
-    #endif
-    {
+    // #ifdef _OPENMP
+    // #pragma omp parallel
+    // #endif
+    // {
     uint64_t i;
     
-    #ifdef _OPENMP
-    int id = omp_get_thread_num();
-    int nThrds = omp_get_num_threads();
-    #else
+    // #ifdef _OPENMP
+    // int id = omp_get_thread_num();
+    // int nThrds = omp_get_num_threads();
+    // #else
     int id = 0;
     int nThrds = 1;
-    #endif
+    // #endif
     // Loop for every element and add real to the oti number.
     for ( i = id; i < arr1->size; i+=nThrds){
         soti_sum_ro_to(num, &arr1->p_data[i], &res->p_data[i],dhl);        
     }
 
-    }
+    // }
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -230,25 +230,25 @@ void arrso_sub_OO_to( arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     arrso_dimCheck_OO_elementwise(arr1,arr2, res);
 
     // Loop for every element and add real to the oti number.
-    #ifdef _OPENMP
-    #pragma omp parallel
-    #endif
-    {
+    // #ifdef _OPENMP
+    // #pragma omp parallel
+    // #endif
+    // {
     uint64_t i;
     
-    #ifdef _OPENMP
-    int id = omp_get_thread_num();
-    int nThrds = omp_get_num_threads();
-    #else
+    // #ifdef _OPENMP
+    // int id = omp_get_thread_num();
+    // int nThrds = omp_get_num_threads();
+    // #else
     int id = 0;
     int nThrds = 1;
-    #endif
+    // #endif
     
     for ( i = id; i < arr1->size; i+=nThrds){
         soti_sub_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i], dhl);
     }
     
-    }
+    // }
 }
 // ----------------------------------------------------------------------------------------------------
 

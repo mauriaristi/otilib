@@ -1159,7 +1159,7 @@ cdef class sotinum:
 
     # Get the maximum active basis in the number.
     size = soti_get_max_basis(&self.num, dhl)
-
+    size = max(size,max(bases))
     deltas_eval = np.zeros(size,dtype=object)
 
     # Create zeros with the total number of elements in the number.

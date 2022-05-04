@@ -434,7 +434,7 @@ cdef class mesh:
   #***************************************************************************************************
   def to_vtk(self, dims = None, pd = None, pd_names= None, linearize = False):
     """
-    PORPUSE: Export mesh as vtk object. Requires VTK.
+    PORPUSE: Export mesh as vtk object. (Requires VTK).
 
     INPUTS:
 

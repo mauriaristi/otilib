@@ -272,6 +272,46 @@ cdef class elm_help:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
+  def get(self, matso a, np.ndarray elem_indices, out=None):
+    """
+    DESCRIPTION: Get the elemental array from a global array. That is, extract the nodal values from
+                 an array containing information for all the nodes in a domain.
+
+    INPUTS:
+      
+      -> a:              Global vector.
+      -> elem_indices:   Array with the indices of the corresponding degrees of freedom of the element.
+
+    OUTPUTS:
+
+      -> Vector with the corresponding dimension with elemental values.
+      
+    """
+     
+    cdef uint64_t i, j
+    cdef uint8_t res_flag = 1
+    cdef matso res
+
+    if out is None:
+      res_flag = 0
+      res = out
+    else:
+      res = zeros( (self.nbasis,1) ) 
+    # end if 
+
+    # Get element nodal values
+    for i in range(self.nbasis):      
+      j = elem_indices[i]
+      res[ i, 0 ] = a[ j, 0 ]
+    # end for
+
+    if res_flag:
+      return res
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   def set_coordinates(self, matso x, matso y, matso z, np.ndarray elem_indices):
     """
     DESCRIPTION: Set the coordinates of an OTI number from the global vertices coordinates and the given

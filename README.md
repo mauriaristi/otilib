@@ -50,6 +50,8 @@ conda activate pyoti
 conda env update --file environment.yml --prune
 ```
 
+Note: Use ```env_basic.yml``` to use ```pyoti``` in its most basic form.
+
 After runing the previous command, you should have installed/updated the  conda environment that will allow you to use the python version of the library. To activate this environment, run the following command:
 ```
 conda activate pyoti

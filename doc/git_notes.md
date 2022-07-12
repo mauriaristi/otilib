@@ -66,3 +66,17 @@ git config --global user.email "Your@email.com"
 ```
 git config --global user.name "Your Name"
 ```
+
+## Delete a branch locally and remotelly
+To delete  a localbranc
+
+```
+git branch -d local-branch
+```
+
+To delete a remote branch
+
+```
+git push origin --delete remote-branch
+```
+

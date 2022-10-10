@@ -12,7 +12,9 @@ cdef class elbase:
   cdef        elemd_t  elem         # C-level memory structure of element class.
 
   cdef public uint8_t  elorder      # Element type order.
+  cdef public np.ndarray  elem_indices # Element global indices.
   cdef public list     boundEls     # List of boundary element types.
+  cdef public list     faceIndx     # Face inidices of the element. Only for the next dimension down.
   cdef public object   basis        # Function that calculates the basis functions of the element.
   cdef public object   elh          # Element helper object. It must come defined in the algebra.
 
@@ -23,6 +25,7 @@ cdef class elbase:
   cpdef is_initialized( self )
   cpdef end( self )
   cpdef allocate_spatial( self, uint64_t ndim_an, uint8_t compute_Jinv = * )
+  cpdef get_boundary_elem(self, uint64_t dim, uint64_t idx )
   cpdef reset( self )
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS ELBASE   :::::::::::::::::::::::::::::::::::::::::

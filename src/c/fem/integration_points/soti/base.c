@@ -330,7 +330,237 @@ int64_t fem_intPts_soti( uint64_t order, int64_t elementType,
             i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
 
         }
+    }  else if (elementType == elLineL){ // LOBATTO QUADRATURE LINE ELEMENT.
+        
+        // According to --> 
+        // uint64_t nIntPts = (order + 1)/2;
+        uint64_t nIntPts = order ;
 
+        // Line element.
+        ndim = 1;
+        if (nIntPts <= 1){ // Accepts 0 or 1.
+            
+            npoints = 1;
+            
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0;
+            a = 0.000000000000000;
+            w = 2.000000000000000;
+            i =  fem_addLineIntPts_soti(1, i, a, w, xi, eta, zeta, weights, dhl);
+
+
+        } else if (nIntPts == 2) {
+
+            npoints = 2;
+
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0;
+            a = 1.000000000000000;
+            w = 1.000000000000000;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+            
+
+        } else if (nIntPts == 3) {
+
+            npoints = 3;
+
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0;
+            a = 0.000000000000000; w = 1.3333333333333333;
+            i =  fem_addLineIntPts_soti(1, i, a, w, xi, eta, zeta, weights, dhl); 
+
+            a = 1.000000000000000; w = 0.3333333333333333;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+
+        } else if (nIntPts == 4) {
+
+            npoints = 4;
+
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0; 
+
+            a = 0.447213595499958; w = 0.8333333333333334;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 1.000000000000000; w = 0.16666666666666666;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            
+
+        } else if (nIntPts == 5) {
+
+            npoints = 5;
+
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0;
+            a = 0.0000000000000000; w = 0.7111111111111111;
+            i =  fem_addLineIntPts_soti(1, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.6546536707079771; w = 0.5444444444444444;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 1.0000000000000000; w = 0.100000000000000;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+        } else if (nIntPts == 6) {
+
+            npoints = 6;
+
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0;
+
+            a = 0.2852315164806450; w = 0.5548583770354863;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.7650553239294646; w = 0.378474956297847;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 1.0000000000000000; w = 0.06666666666666667;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+        } else if (nIntPts == 7) {
+
+            npoints = 7;
+
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0;
+            a = 0.0000000000; w = 0.4876190476;
+            i =  fem_addLineIntPts_soti(1, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.4688487934; w = 0.4317453812;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.8302238962; w = 0.2768260473;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 1.0000000000; w = 0.0476190476;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+        } else if (nIntPts == 8) {
+
+            npoints = 8;
+
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0; 
+
+            a = 0.2092992179; w = 0.4124587946;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.5917001814; w = 0.3411226924;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.8717401485; w = 0.2107042271;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 1.0000000000; w = 0.0357142857;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+        } else if (nIntPts == 9) {
+
+            npoints = 9;
+
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0; 
+
+            a = 0.0000000000; w = 0.3715192743;
+            i =  fem_addLineIntPts_soti(1, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.3631174638; w = 0.3464285109;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.6771862795; w = 0.2745387125;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.8997579954; w = 0.1654953615;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 1.0000000000; w = 0.0277777777;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+        } else {    // Order >= 10  
+
+            npoints = 10;
+
+            // Create as reals
+            *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+            *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+            // Point 0
+            i = 0; 
+
+            a = 0.1652789576; w = 0.3275397611;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.4779249498; w = 0.2920426836;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.7387738651; w = 0.2248893420;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 0.9195339081; w = 0.1333059908;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+            a = 1.0000000000; w = 0.02222222222;
+            i =  fem_addLineIntPts_soti(2, i, a, w, xi, eta, zeta, weights, dhl);
+
+        }
     } else if (elementType == elTriangle){
         
         // printf("Initializing elTriangle.\n");
@@ -762,7 +992,58 @@ int64_t fem_intPts_soti( uint64_t order, int64_t elementType,
         fesoti_free(    &zeta_tmp );
         fesoti_free( &weights_tmp );
 
-        
+    }  else if (elementType == elQuadrangleL){
+
+        fesoti_t      xi_tmp;
+        fesoti_t     eta_tmp;
+        fesoti_t    zeta_tmp;
+        fesoti_t weights_tmp;
+
+        sotinum_t val_tmp = soti_init();
+
+        double w_tmp1 = 0.0;
+        double w_tmp2 = 0.0;
+
+        ndim = 2;
+
+        // Call the solution for the corresponding 1D line element.
+        fem_intPts_soti(order, elLineL, &xi_tmp, &eta_tmp, &zeta_tmp, &weights_tmp, dhl);
+
+        npoints = xi_tmp.nip * xi_tmp.nip;
+
+        // Create as reals
+        *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+        *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+        *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+        *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+        for ( i = 0; i < xi_tmp.nip; i++ ){
+
+            // Get the first weight.
+            fesoti_get_item_k_to(     &xi_tmp, i, &val_tmp, dhl); a      = val_tmp.re;
+            fesoti_get_item_k_to(&weights_tmp, i, &val_tmp, dhl); w_tmp1 = val_tmp.re;
+
+            for ( j = 0; j < xi_tmp.nip; j++ ){
+
+                // Get the second weight.
+                fesoti_get_item_k_to(     &xi_tmp, j, &val_tmp, dhl); b      = val_tmp.re;
+                fesoti_get_item_k_to(&weights_tmp, j, &val_tmp, dhl); w_tmp2 = val_tmp.re;
+
+                w = w_tmp1 * w_tmp2;
+                
+                fesoti_set_item_k_r( a, xi_tmp.nip * i + j, xi,      dhl);
+                fesoti_set_item_k_r( b, xi_tmp.nip * i + j, eta,     dhl);
+                fesoti_set_item_k_r( w, xi_tmp.nip * i + j, weights, dhl);
+
+            }
+
+        }
+
+        fesoti_free(      &xi_tmp );
+        fesoti_free(     &eta_tmp );
+        fesoti_free(    &zeta_tmp );
+        fesoti_free( &weights_tmp );
+
         
     } else if (elementType == elHexahedra){
 
@@ -785,6 +1066,74 @@ int64_t fem_intPts_soti( uint64_t order, int64_t elementType,
         
         // Call the solution for the corresponding 1D line element.
         fem_intPts_soti(order, elLine, &xi_tmp, &eta_tmp, &zeta_tmp, &weights_tmp, dhl);
+
+        // Go for all possible combinations for 
+        npoints = xi_tmp.nip * xi_tmp.nip * xi_tmp.nip;
+
+        // Create as reals
+        *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
+        *eta     = fesoti_zeros_bases( npoints, 0, 0, dhl);
+        *zeta    = fesoti_zeros_bases( npoints, 0, 0, dhl);
+        *weights = fesoti_zeros_bases( npoints, 0, 0, dhl);
+
+        for ( i = 0; i < xi_tmp.nip; i++ ){
+
+            // Get the first weight.
+            fesoti_get_item_k_to(     &xi_tmp, i, &val_tmp, dhl); a      = val_tmp.re;
+            fesoti_get_item_k_to(&weights_tmp, i, &val_tmp, dhl); w_tmp1 = val_tmp.re;
+
+            for ( j = 0; j < xi_tmp.nip; j++ ){
+
+                // Get the second weight.
+                fesoti_get_item_k_to(     &xi_tmp, j, &val_tmp, dhl); b      = val_tmp.re;
+                fesoti_get_item_k_to(&weights_tmp, j, &val_tmp, dhl); w_tmp2 = val_tmp.re;
+
+                for ( k = 0; k < xi_tmp.nip; k++ ){
+
+                    // Get the second weight.
+                    fesoti_get_item_k_to(     &xi_tmp, k, &val_tmp, dhl); c      = val_tmp.re;
+                    fesoti_get_item_k_to(&weights_tmp, k, &val_tmp, dhl); w_tmp3 = val_tmp.re;
+
+                    w = w_tmp1 * w_tmp2 * w_tmp3;
+
+                    fesoti_set_item_k_r( a, currentIndex, xi,      dhl);
+                    fesoti_set_item_k_r( b, currentIndex, eta,     dhl);
+                    fesoti_set_item_k_r( c, currentIndex, zeta,    dhl);
+                    fesoti_set_item_k_r( w, currentIndex, weights, dhl);
+
+                    currentIndex += 1;
+                }
+
+            }
+
+        }
+
+        fesoti_free(      &xi_tmp );
+        fesoti_free(     &eta_tmp );
+        fesoti_free(    &zeta_tmp );
+        fesoti_free( &weights_tmp );
+    
+    } else if (elementType == elHexahedraL){
+
+        // printf("Initializing elHexahedra.\n");
+
+        fesoti_t      xi_tmp;
+        fesoti_t     eta_tmp;
+        fesoti_t    zeta_tmp;
+        fesoti_t weights_tmp;
+
+        sotinum_t val_tmp = soti_init();
+
+        uint64_t k = 0, currentIndex = 0 ;
+
+        double w_tmp1 = 0.0;
+        double w_tmp2 = 0.0;
+        double w_tmp3 = 0.0;
+
+        ndim = 3;
+        
+        // Call the solution for the corresponding 1D line element.
+        fem_intPts_soti(order, elLineL, &xi_tmp, &eta_tmp, &zeta_tmp, &weights_tmp, dhl);
 
         // Go for all possible combinations for 
         npoints = xi_tmp.nip * xi_tmp.nip * xi_tmp.nip;

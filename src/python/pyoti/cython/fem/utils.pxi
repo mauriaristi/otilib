@@ -398,22 +398,28 @@ cdef object enum2string(int64_t enumId):
     return "kindScalar   "
   elif enumId == kindFunc     :
     return "kindFunc     "
-  elif enumId == feConstant     :
+  elif enumId == feConstant   :
     return "feConstant   "
-  elif enumId == feVariable     :
+  elif enumId == feVariable   :
     return "feVariable   "
   elif enumId == elNode       :
     return "elNode       "
   elif enumId == elLine       :
     return "elLine       "
+  elif enumId == elLineL      :
+    return "elLineL      "
   elif enumId == elTriangle   :
     return "elTriangle   "
   elif enumId == elQuadrangle :
     return "elQuadrangle "
+  elif enumId == elQuadrangleL:
+    return "elQuadrangleL"
   elif enumId == elTetrahedra :
     return "elTetrahedra "
   elif enumId == elHexahedra  :
     return "elHexahedra  "
+  elif enumId == elHexahedraL :
+    return "elHexahedraL "
   elif enumId == elkindIso    :
     return "elkindIso    "
   elif enumId == elkindAff    :
@@ -539,6 +545,9 @@ cdef dict enum2str = {
   elQuadrangle : "elQuadrangle ",
   elTetrahedra : "elTetrahedra ",
   elHexahedra  : "elHexahedra  ",
+  elLineL      : "elLineL      ",
+  elQuadrangleL: "elQuadrangleL",
+  elHexahedraL : "elHexahedraL ",
   elkindIso    : "elkindIso    ",
   elkindAff    : "elkindAff    ",
   derN         : "derN         ",

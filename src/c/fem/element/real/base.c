@@ -118,7 +118,6 @@ int64_t elemd_start(elemd_t* elemd, uint64_t nbasis, int64_t geomBase,
 // ----------------------------------------------------------------------------------------------------
 
 
-
 // ****************************************************************************************************
 int64_t elemd_end(elemd_t* elemd) {
 
@@ -161,17 +160,19 @@ int64_t elemd_allocate(elemd_t* elemd, uint64_t intorder){
     int64_t  derIdx;
     // uint64_t basisId;
 
+
     // Check first if the elemdent is already Initialized.
     if( elemd_is_started(elemd) ) {
    
         elemd->order    = intorder;
-        
+
         // Define the Gaussian integration point coordinates and weights.
         fem_intPts_real( elemd->order, elemd->geomBase, 
             &elemd->xi, &elemd->eta, &elemd->zeta, &elemd->w );
         
+
         elemd->nip = elemd->xi.nip;
-        
+
         // Evaluate all basis functions at the integration points.
         // Loop through all derivatives
         for(derIdx = 0; derIdx<elemd->nder; derIdx++){

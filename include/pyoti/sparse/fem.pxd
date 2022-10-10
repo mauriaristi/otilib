@@ -52,6 +52,8 @@ cdef class elm_help:
   cpdef allocate_spatial( self, uint64_t ndim_an, uint8_t compute_Jinv = * )
   cpdef reset( self )
   cpdef end( self )
+  cpdef integrate( self, object val, object out = * )
+  cpdef get_local(self, matso arr, np.ndarray elem_indices, matso out = *)
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS elm_help :::::::::::::::::::::::::::::::::::::::::

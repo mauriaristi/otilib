@@ -339,6 +339,37 @@ cdef class elm_help:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
+  cpdef get_local(self, matso arr, np.ndarray elem_indices, matso out=None):
+    """
+    DESCRIPTION: get the local items from an array.
+
+    INPUTS:
+      
+      -> arr:            Global array. 
+      -> elem_indices:   Array with the element nodal indices.
+
+    """
+    
+    cdef uint64_t i, j
+    cdef matso res
+
+    if out is None:
+      res = zeros((self.nbasis,1))
+    else:
+      res = out # weak reference
+    # end if
+
+    for i in range(self.nbasis):
+      
+      j = elem_indices[i]
+
+      res[ i, 0 ] = arr[ j, 0 ]
+
+    # end for
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   def compute_jacobian(self):
     """
     DESCRIPTION: Compute jacobian and derived functions.
@@ -815,7 +846,27 @@ cdef class elm_help:
 
   #---------------------------------------------------------------------------------------------------
 
- 
+  #***************************************************************************************************
+  cpdef integrate(self, object val, object out = None ):
+    """
+    DESCRIPTION: Domain integral over the element.
+
+    INPUTS:
+      
+      -> val:  Function that will be integrated.
+      -> out(optional): Preallocated array to receive the result.
+
+    OUTPUTS: 
+
+      If out is None, then an ouput is returned with the correct result.
+
+    """
+
+    return gauss_integrate(val,self.dV, out=out)
+
+  #---------------------------------------------------------------------------------------------------
+
+
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS ELM_HELP :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

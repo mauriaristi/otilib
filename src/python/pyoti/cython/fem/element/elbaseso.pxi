@@ -60,14 +60,43 @@ cdef class elbaseso:
   #***************************************************************************************************
   def __dealloc__(self):
     """
-
     PURPOSE:      Destructor of the base element class. 
-
 
     """
     if self.FLAGS != 0:
       elemso_free(&self.elem)
     # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def copy(self):
+    """
+    PURPOSE:      Create a copy of the element class.
+
+    """
+    
+    global dhl
+
+    # create new empty object:
+    cdef elbaseso newEl = <elbaseso> elbaseso.__new__(elbaseso)
+
+    newEl.elem = elemso_init()
+    
+    # elemso_start( &newEl.elem, nbasis, geomBase, kind, ndim, basis_f)
+    elemso_start( &newEl.elem, self.elem.nbasis, self.elem.geomBase, self.elem.kind, self.elem.ndim, dhl)
+    newEl.basis    = self.basis
+    newEl.FLAGS     = 1 
+    # Copy bound elements.
+    newEl.boundEls = []
+
+    for bd_el in self.boundEls:
+    
+      newEl.boundEls.append(bd_el.copy())
+
+    # end for 
+
+    return newElement
 
   #---------------------------------------------------------------------------------------------------
   
@@ -323,6 +352,8 @@ cdef class elbaseso:
       
       # end if 
 
+      # TODO: Allocate the spatial for the face elements.
+      # TODO: Add copy method.
     else:
 
       raise ValueError("Element must be allocated first. "+
@@ -387,6 +418,7 @@ cdef class elbaseso:
       
       elemso_end(&self.elem)
 
+      # TODO: End also face elements.
     # end if 
 
   #---------------------------------------------------------------------------------------------------

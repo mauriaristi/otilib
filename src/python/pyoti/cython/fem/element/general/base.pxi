@@ -21,36 +21,74 @@ cdef class elbase:
 
     """
 
-    self.elem      = elemd_init()
+    self.elem         = elemd_init()
 
-    self.FLAGS     = 0
-    self.elorder   = 0
+    self.FLAGS        = 0
+    self.elorder      = 0
 
-    self.boundEls  = None
-    self.basis     = None
+    self.boundEls     = None
+    self.faceIndx     = None
+    self.elem_indices = None
+    self.basis        = None
 
-    self.elh  = None
+    self.elh          = None
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def __dealloc__(self):
     """
-
     PURPOSE:      Destructor of the base element class. 
-
 
     """
     if self.FLAGS != 0:
       elemd_free(&self.elem)
+      self.boundEls  = None
     # end if 
 
   #---------------------------------------------------------------------------------------------------
   
   #***************************************************************************************************
+  def copy(self):
+    """
+    PURPOSE:      Create a copy of the element class.
+
+    """
+    
+    global dhl
+
+    # create new empty object:
+    cdef elbase newEl = <elbase> elbase.__new__(elbase)
+
+    newEl.elem = elemd_init()
+    
+    # elemso_start( &newEl.elem, nbasis, geomBase, kind, ndim, basis_f)
+    elemd_start( &newEl.elem, self.elem.nbasis, self.elem.geomBase, self.elem.kind, self.elem.ndim)
+    newEl.basis    = self.basis
+    newEl.FLAGS     = 1 
+    
+    # Copy bound elements.
+    newEl.faceIndx = []
+
+    for indx in self.faceIndx:    
+      newEl.faceIndx.append( indx.copy() )
+    # end for
+
+    newEl.boundEls = []
+
+    for bd_el in self.boundEls:
+      newEl.boundEls.append( bd_el.copy() )
+    # end for 
+
+    return newEl
+
+  #---------------------------------------------------------------------------------------------------
+  
+
+  #***************************************************************************************************
   @staticmethod
   def createElement(uint64_t nbasis, uint8_t order, int64_t geomBase, int64_t  kind,   \
-     uint8_t  ndim, object basis, list boundEls ):
+     uint8_t  ndim, object basis, list boundEls, list faceIndx ):
     """
     PURPOSE:      Constructor of the Element class. Use this when adding new element types.
 
@@ -71,23 +109,39 @@ cdef class elbase:
       -> boundEls: List of the already defined interpolation functions that define the boundary 
                    interpolation, in the following order.  --> [0D, 1D, 2D]
 
+      -> faceIndx: Indices of the face to be used in the element.
+
     RESULT:       
             A new elbase object is created.
 
     EXAMPLE:
 
-            tri3 = elbase.createNewElement(3,           \ # Number of basis 
-                                             1,           \ # Characteristic order of the polynomials
-                                             elTriangle,  \ # Geometric type
-                                             elkindiso,   \ # Kind of element 
-                                             2,           \ # Number of dimensions
-                                             &tri3_iso)     # Basis functions.
+      # 3 node triangle: 
+              
+              (2)
+               * *
+               *   * 
+              (0)* *(1)
+
+      >>> lineIndx1 = np.array([[ 0, 1 ],     # Define the indices of the 1D (edges)
+                                [ 1, 2 ],     # in the triangle.
+                                [ 2, 0 ]],dtype=np.uint64)
+
+      >>> tri3 = elbase.createElement(3,              # Number of basis 
+                                      1,              # Characteristic order of the polynomials
+                                      elTriangle,     # Geometric type
+                                      elkindIso,      # Kind of element 
+                                      2,              # Number of dimensions
+                                      tri3_iso,       # Basis functions.
+                                      [point1, line2],# Face interpolation functions.
+                                      np.array([[0,1],
+                                       [1,2],         # Face indices
+                                       [2,0]],dtype=
+                                      )   
 
                   
     """
     #*************************************************************************************************
-
-    
 
     # create new empty object:
     cdef elbase newElement = <elbase> elbase.__new__(elbase)
@@ -98,7 +152,17 @@ cdef class elbase:
     elemd_start( &newElement.elem, nbasis, geomBase, kind, ndim)
     newElement.basis    = basis
     newElement.FLAGS     = 1 
-    newElement.boundEls = boundEls
+
+    newElement.faceIndx = faceIndx
+    # Copy boundary elements.
+    # newElement.boundEls = boundEls
+    newElement.boundEls = []
+
+    for bd_el in boundEls:
+    
+      newElement.boundEls.append( bd_el.copy() )
+
+    # end for 
 
     return newElement
   #---------------------------------------------------------------------------------------------------
@@ -106,7 +170,7 @@ cdef class elbase:
   #***************************************************************************************************
   def __repr__(self):
     """
-    PURPOSE: Get representation of the structure.
+    PURPOSE: Get representation of the element elbase.
 
     """
 
@@ -115,26 +179,30 @@ cdef class elbase:
     head = ""
     body = ""
     tail = ""
+    level= " "*2
 
     head += "< elbase object: \n"
     tail += "end elbase object >"
 
     if (elemd_is_started( &self.elem )):
 
-      body += " - Object status: ---------------- " + "Started"+"\n"
-      body += " - Geometric type: --------------- " + enum2string(self.elem.geomBase)+"\n"
-      body += " - Kind of evaluation: ----------- " + enum2string(self.elem.kind)+"\n"
+      body += level+"- Object status: ---------------- " + "Started"+"\n"
+      body += level+"- Geometric type: --------------- " + enum2string(self.elem.geomBase)+"\n"
+      body += level+"- Kind of evaluation: ----------- " + enum2string(self.elem.kind)+"\n"
+      body += level+"- Number of derivatives: -------- " + str(self.elem.nder)+"\n"
+      body += level+"- Number of dimensions: --------- " + str(self.elem.ndim)+"\n"
+      body += level+"- Number of basis: -------------- " + str(self.elem.nbasis)+"\n"
+      body += level+"- Integration Order: ------------ " + str(self.elem.order)+"\n"
+      body += level+"- Number of integration Points: - " + str(self.elem.nip)+"\n"
       
-      body += " - Number of derivatives: -------- " + str(self.elem.nder)+"\n"
-      body += " - Number of dimensions: --------- " + str(self.elem.ndim)+"\n"
-      body += " - Number of basis: -------------- " + str(self.elem.nbasis)+"\n"
-      body += " - Integration Order: ------------ " + str(self.elem.order)+"\n"
-      
-      body += str(self.elh) + "\n"
-
+      body += level+str(self.elh).replace('\n','\n'+level) + "\n"
+      body += level+"- Boundary elements: \n"
+      for bd_el in self.boundEls :
+        body += 2*level+bd_el.__shortRepr__() + '\n'
+      # end for 
     else:
 
-      body += " - Object status: ---------------- " + "Not started"+"\n"
+      body += level+"- Object status: ---------------- " + "Not started"+"\n"
 
     # end if 
 
@@ -144,6 +212,41 @@ cdef class elbase:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
+  def __shortRepr__(self):
+    """
+    PURPOSE: Get short representation of the element elbase.
+
+    """
+
+    cdef uint64_t i
+
+    head = ""
+    body = ""
+    tail = ""
+
+    head += "< elbase "
+    tail += " >"
+
+    if (elemd_is_started( &self.elem )):
+
+      body += "Started, "
+      body += enum2string(self.elem.geomBase).replace(" ","") + ", "
+      body += str(self.elem.nbasis)+" basis, "
+      body += str(self.elem.order)+" intPts "
+
+    else:
+
+      body += "Not started"
+
+    # end if 
+
+    return head + body + tail
+
+
+  #---------------------------------------------------------------------------------------------------
+
+
+  #***************************************************************************************************
   def allocate(self, uint64_t intorder,**kwargs):
     """
     DESCRIPTION: Allocate all items as integrat ion points.
@@ -151,8 +254,6 @@ cdef class elbase:
     INPUTS:
       
       -> intorder: Integration order of the element (helps define the number of integration points).
-      -> nbases:   Number of OTI imaginary bases to allocate.
-      -> order:    Truncation order of the OTI members of the number.
 
     OUTPUTS: 
 
@@ -227,6 +328,10 @@ cdef class elbase:
 
     # ======================== THIS PART USES SPARSE OTI NUMBERS ====================================
 
+    # Allocate also boundary elements.
+    for bd_el in self.boundEls:
+      bd_el.allocate( intorder, **kwargs)
+    # end for
   #---------------------------------------------------------------------------------------------------
 
 
@@ -245,14 +350,48 @@ cdef class elbase:
       None. Things occur internally.
 
     """
-
-    
-
     self.elh.allocate_spatial(ndim_an, compute_Jinv=compute_Jinv)
+
+    # Allocate also boundary elements.
+    for bd_el in self.boundEls:
+      
+      # Boundary elements do not require jacobian computation.
+      bd_el.allocate_spatial( ndim_an, compute_Jinv=False)
+
+    # end for
+
     # try:
     # except:
     #   raise ValueError("Algebra must provide element helper.")
     # # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  cpdef get_boundary_elem(self, uint64_t dim, uint64_t idx ):
+    """
+    DESCRIPTION: Get the boundary of dimension dim and index idx. For this function to work properly,
+                 requires the parent element to be fully allocated (with spatial allocation too) and
+                 spatial coordinates have to had been already computed.
+
+    INPUTS:
+      
+      -> dim: Dimension of the boundary to be extracted.
+      -> idx: Index of the boundary element to be extracted.
+
+    OUTPUTS: 
+
+      Returns the elem object of the boundary element already setup for 
+
+    """
+    bd_el = self.boundEls[dim]
+    
+    el_idx_local = self.faceIndx[dim][idx]
+    
+    bd_el.set_coordinates(self.elh.x,self.elh.y,self.elh.z, el_idx_local )
+    bd_el.set_indices(self.elem_indices[el_idx_local])
+
+    return bd_el
 
   #---------------------------------------------------------------------------------------------------
 
@@ -291,11 +430,32 @@ cdef class elbase:
     if (self.FLAGS & 1):      
       elemd_end(&self.elem)
     # end if 
+    for el_bd in self.boundEls:
+      el_bd.end()
+    # end for
 
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
-  def set_coordinates(self, object x, object y, object z, np.ndarray elem_indices):
+  def set_indices(self, np.ndarray elem_indices):
+    """
+    DESCRIPTION: Set the coordinates of an OTI number from the global vertices coordinates and the given
+                 elemental indices
+
+    INPUTS:
+      -> elem_indices:   Array with the indices of the corresponding elements in the .
+
+    OUTPUTS: 
+
+      None. Things occur internally.
+
+    """
+    self.elem_indices=elem_indices
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def set_coordinates(self, object x, object y, object z, np.ndarray elem_indices=None):
     """
     DESCRIPTION: Set the coordinates of an OTI number from the global vertices coordinates and the given
                  elemental indices
@@ -303,14 +463,17 @@ cdef class elbase:
     INPUTS:
       
       -> x, y, z:        Global vertices coordinates.
-      -> elem_indices:   Array with the indices of the corresponding elements in the .
+      -> elem_indices:   (optional) Resets the element nodal index array with the given one.
 
     OUTPUTS: 
 
       None. Things occur internally.
     """
-    
-    self.elh.set_coordinates( x, y, z, elem_indices)
+    if elem_indices is not None:
+      self.elem_indices = elem_indices # Reset
+    # end if
+
+    self.elh.set_coordinates( x, y, z, self.elem_indices)
 
   #---------------------------------------------------------------------------------------------------
 
@@ -325,6 +488,41 @@ cdef class elbase:
 
   #---------------------------------------------------------------------------------------------------
 
+  #***************************************************************************************************
+  def integrate(self, val, out = None):
+    """
+    DESCRIPTION: Domain integral over the element.
+
+    INPUTS:
+      
+      -> val:  Function that will be integrated.
+      -> out(optional): Preallocated array to receive the result.
+
+    OUTPUTS: 
+
+      If out is None, then an ouput is returned with the correct result.
+
+    """
+    
+    return self.elh.integrate(val)
+
+  #---------------------------------------------------------------------------------------------------
+  
+  #***************************************************************************************************
+  def get_local(self, arr, out = None):
+    """
+    DESCRIPTION: get the local items from an array.
+
+    INPUTS:
+      
+      -> arr:            Global array. 
+      -> elem_indices:   Array with the element nodal indices.
+
+    """
+
+    return self.elh.get_local(arr,self.elem_indices,out=out)
+
+  #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
   def compute_jacobian_bruteforce(self):

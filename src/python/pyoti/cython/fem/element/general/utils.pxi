@@ -486,7 +486,7 @@ hex1 = elbase.createElement(  1,            # Number of basis
 # ----------------------------------------------------------------------------------------------------
 
 # ****************************************************************************************************
-# 4 node hexahedra
+# 8 node hexahedra
 vertexIndx = np.array([[ 0 ],       # Define the vertex indices of the hexahedra.
                        [ 1 ],    
                        [ 2 ],
@@ -529,7 +529,7 @@ hex8 = elbase.createElement(  8,            # Number of basis
 # ----------------------------------------------------------------------------------------------------
 
 # ****************************************************************************************************
-# 10 node hexahedra
+# 20 node hexahedra
 edgeIndx = np.array([[ 0, 1,  8 ],   # Define the edge indices of the hexahedra.
                      [ 1, 2, 11 ],
                      [ 2, 3, 13 ],
@@ -588,7 +588,7 @@ hex1L = elbase.createElement(  1,           # Number of basis
 # ----------------------------------------------------------------------------------------------------
 
 # ****************************************************************************************************
-# 4 node hexahedra
+# 8 node hexahedra
 vertexIndx = np.array([[ 0 ],       # Define the vertex indices of the hexahedra.
                        [ 1 ],    
                        [ 2 ],
@@ -631,7 +631,7 @@ hex8L = elbase.createElement(  8,           # Number of basis
 # ----------------------------------------------------------------------------------------------------
 
 # ****************************************************************************************************
-# 10 node hexahedra
+# 20 node hexahedra
 edgeIndx = np.array([[ 0, 1,  8 ],   # Define the edge indices of the hexahedra.
                      [ 1, 2, 11 ],
                      [ 2, 3, 13 ],

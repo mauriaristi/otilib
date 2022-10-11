@@ -381,6 +381,58 @@ cdef class elm_help:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
+  cpdef get_local(self, matso arr, np.ndarray elem_indices, matso out=None):
+    """
+    DESCRIPTION: get the local items from an array.
+
+    INPUTS:
+      
+      -> arr:            Global array. 
+      -> elem_indices:   Array with the element nodal indices.
+
+    """
+    
+    """
+    DESCRIPTION: Set the elements of an array from global to local indices.
+
+    INPUTS:
+      
+      -> arr: Array in global numbering.
+      -> elem_indices:   Array with the indices of the corresponding elements in the mesh.
+
+    """
+    
+    cdef uint64_t i, j, ii, ncols
+    cdef matso res 
+
+    ncols = arr.shape[1]
+
+    if out is not None:
+      res = out
+    else:
+      res = zeros(( self.nbasis , ncols ))
+    # end if 
+
+
+    for i in range(self.nbasis):
+      
+      for j in range(ncols):
+      
+        ii = elem_indices[i]
+
+        res[ i, j ] = arr[ ii, j ]
+      
+      # end for 
+
+    # end for
+
+    if out is None:
+      return res
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   def compute_jacobian(self):
     """
     DESCRIPTION: Compute jacobian and derived functions.
@@ -857,7 +909,27 @@ cdef class elm_help:
 
   #---------------------------------------------------------------------------------------------------
 
- 
+  #***************************************************************************************************
+  cpdef integrate(self, object val, object out = None ):
+    """
+    DESCRIPTION: Domain integral over the element.
+
+    INPUTS:
+      
+      -> val:  Function that will be integrated.
+      -> out(optional): Preallocated array to receive the result.
+
+    OUTPUTS: 
+
+      If out is None, then an ouput is returned with the correct result.
+
+    """
+
+    return gauss_integrate(val,self.dV, out=out)
+
+  #---------------------------------------------------------------------------------------------------
+
+
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS ELM_HELP :::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

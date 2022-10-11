@@ -167,6 +167,92 @@ hex20 = elbaseso.createElement( 20,           # Number of basis
 
 
 
+# Lobatto Elements
+# Line elements
+# 1 node line
+line1L = elbaseso.createElement( 1,           # Number of basis 
+                                0,            # Characteristic order of the polynomials
+                                elLineL,      # Geometric type
+                                elkindIso,    # Kind of element 
+                                1,            # Number of dimensions
+                                line1_iso,    # Basis functions.
+                                [point1,])   
+# 2 node line
+line2L = elbaseso.createElement( 2,           # Number of basis 
+                                1,            # Characteristic order of the polynomials
+                                elLineL,      # Geometric type
+                                elkindIso,    # Kind of element 
+                                1,            # Number of dimensions
+                                line2_iso,    # Basis functions.
+                                [point1,])   
+# 3 node line
+line3L = elbaseso.createElement( 3,           # Number of basis 
+                                2,            # Characteristic order of the polynomials
+                                elLineL,      # Geometric type
+                                elkindIso,    # Kind of element 
+                                1,            # Number of dimensions
+                                line3_iso,    # Basis functions.
+                                [point1,])   
+# Quadrangle elements.
+# 1 node Quad
+quad1L = elbaseso.createElement( 1,           # Number of basis 
+                                0,            # Characteristic order of the polynomials
+                                elQuadrangleL,# Geometric type
+                                elkindIso,    # Kind of element 
+                                2,            # Number of dimensions
+                                quad1_iso,    # Basis functions.
+                                [point1, line1L])   
+# 4 node Quad
+quad4L = elbaseso.createElement( 4,           # Number of basis 
+                                1,            # Characteristic order of the polynomials
+                                elQuadrangleL,# Geometric type
+                                elkindIso,    # Kind of element 
+                                2,            # Number of dimensions
+                                quad4_iso,    # Basis functions.
+                                [point1, line2L])   
+# 8 node Quad (serendipity)
+quad8L = elbaseso.createElement( 8,           # Number of basis 
+                                2,            # Characteristic order of the polynomials
+                                elQuadrangleL,# Geometric type
+                                elkindIso,    # Kind of element 
+                                2,            # Number of dimensions
+                                quad8_iso,    # Basis functions.
+                                [point1, line3L])   
+# 8 node Quad (serendipity)
+quad9L = elbaseso.createElement( 9,           # Number of basis 
+                                2,            # Characteristic order of the polynomials
+                                elQuadrangleL,# Geometric type
+                                elkindIso,    # Kind of element 
+                                2,            # Number of dimensions
+                                quad9_iso,    # Basis functions.
+                                [point1, line3L])
+# Hexahedra elements.
+# 1 node hexahedra
+hex1L = elbaseso.createElement(  1,           # Number of basis 
+                                0,            # Characteristic order of the polynomials
+                                elHexahedraL, # Geometric type
+                                elkindIso,    # Kind of element 
+                                3,            # Number of dimensions
+                                hex1_iso,     # Basis functions.
+                                [point1, line1L, quad1L])
+# 4 node hexahedra
+hex8L = elbaseso.createElement(  8,           # Number of basis 
+                                1,            # Characteristic order of the polynomials
+                                elHexahedraL, # Geometric type
+                                elkindIso,    # Kind of element 
+                                3,            # Number of dimensions
+                                hex8_iso,     # Basis functions.
+                                [point1, line2L, quad4L])
+# 10 node hexahedra
+hex20L = elbaseso.createElement( 20,          # Number of basis 
+                                2,            # Characteristic order of the polynomials
+                                elHexahedraL, # Geometric type
+                                elkindIso,    # Kind of element 
+                                3,            # Number of dimensions
+                                hex20_iso,    # Basis functions.
+                                [point1, line3L, quad8L])
+
+
 
 
 

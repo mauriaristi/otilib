@@ -76,11 +76,16 @@ enum operEnum {
 
   // Element geometric types 
   elNode        =  400,    ///< Point.
-  elLine        =  401,    ///< Line.
+  elLine        =  401,    ///< Line - Gauss.
   elTriangle    =  402,    ///< Triangle.
-  elQuadrangle  =  403,    ///< Quad.
+  elQuadrangle  =  403,    ///< Quad - Gauss.
   elTetrahedra  =  404,    ///< Tetra (4 triangle faces).
-  elHexahedra   =  405,    ///< Brick.
+  elHexahedra   =  405,    ///< Brick - Gauss.
+  
+  // Element Geometric type with Lobatto integration points.
+  elLineL        =  411,    ///< Line  - Lobatto.
+  elQuadrangleL  =  413,    ///< Quad  - Lobatto.
+  elHexahedraL   =  415,    ///< Brick - Lobatto.
 
   // Element kind : Iso-parametric or Affine
   elkindIso     =  501,    ///< Isoparametric element. 

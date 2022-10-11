@@ -53,6 +53,8 @@ cdef class elm_help:
   cpdef set_array(self, matso arr, np.ndarray elem_indices, matso out = *)
   cpdef reset( self )
   cpdef end( self )
+  cpdef integrate( self, object val, object out = * )
+  cpdef get_local(self, matso arr, np.ndarray elem_indices, matso out = *)
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # :::::::::::::::::::::::::::::::::::: END OF CLASS elm_help :::::::::::::::::::::::::::::::::::::::::

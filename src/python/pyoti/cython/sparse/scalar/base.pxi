@@ -245,8 +245,18 @@ cdef class sotinum:
 
     head      = ''
     body      = ''
+
+    append_ldots = False
+    break_bool   = False
     
-    body += ('%'+floatFormat)%self.num.re
+    termsPrtd = 0 # Count the number of terms printed. 
+    
+    # Print real part
+    if self.num.re != 0:
+      body += ('%'+floatFormat)%self.num.re
+      termsPrtd += 1
+    # end if 
+
 
     for ordi in range(0,self.num.act_order):
 
@@ -258,10 +268,44 @@ cdef class sotinum:
         
         body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
         body += ")"
-      
+        
+        termsPrtd += 1
+        
+        if termsPrtd == termsPrint:
+          
+          if (i < (self.num.p_nnz[ordi]-1)):
+            append_ldots = True 
+          # end if
+
+          break_bool = True
+
+          break
+
+        # end if
+
       # end for
+      
+      if break_bool: # TODO: Find cleaner way to break from the two loops
+        
+        if ( ordi < ( self.num.act_order - 1 ) ):
+          append_ldots = True
+        # end if 
+
+        break
+      
+      # end if
 
     # end for 
+
+    if append_ldots:    
+      body += " + ... "
+    # end if 
+
+    # Final, check if anything was printed at all
+    if termsPrtd == 0:
+      body += ('%'+floatFormat)%self.num.re
+      termsPrtd += 1
+    # end if 
       
     tail = ''
     
@@ -350,8 +394,18 @@ cdef class sotinum:
 
     head      = ''
     body      = ''
+
+    append_ldots = False
+    break_bool   = False
     
-    body += ('%'+floatFormat)%self.num.re
+    termsPrtd = 0 # Count the number of terms printed. 
+    
+    # Print real part
+    if self.num.re != 0:
+      body += ('%'+floatFormat)%self.num.re
+      termsPrtd += 1
+    # end if 
+
 
     for ordi in range(0,self.num.act_order):
 
@@ -363,10 +417,44 @@ cdef class sotinum:
         
         body += str(h.get_compact_fulldir(self.num.p_idx[ordi][i],ordi+1)).replace(' ','')
         body += ")"
-      
+        
+        termsPrtd += 1
+        
+        if termsPrtd == termsPrint:
+          
+          if (i < (self.num.p_nnz[ordi]-1)):
+            append_ldots = True 
+          # end if
+
+          break_bool = True
+
+          break
+
+        # end if
+
       # end for
+      
+      if break_bool: # TODO: Find cleaner way to break from the two loops
+        
+        if ( ordi < ( self.num.act_order - 1 ) ):
+          append_ldots = True
+        # end if 
+
+        break
+      
+      # end if
 
     # end for 
+
+    if append_ldots:    
+      body += " + ... "
+    # end if 
+
+    # Final, check if anything was printed at all
+    if termsPrtd == 0:
+      body += ('%'+floatFormat)%self.num.re
+      termsPrtd += 1
+    # end if 
       
     tail = ''
     
@@ -1162,11 +1250,14 @@ cdef class sotinum:
     size = max(size,max(bases))
     deltas_eval = np.zeros(size,dtype=object)
 
+    res = 0
     # Create zeros with the total number of elements in the number.
     for i in range(len(bases)):
       
       j = bases[i] - 1
       deltas_eval[ j ] = deltas[i]
+
+      res += 0*deltas[i]
 
     # end for 
 

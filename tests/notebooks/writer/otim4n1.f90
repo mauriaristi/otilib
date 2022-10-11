@@ -1,0 +1,1623 @@
+MODULE OTIM4N1
+
+   IMPLICIT NONE
+
+   INTEGER, PARAMETER :: DP         = 8
+   INTEGER, PARAMETER :: NUM_IM_DIR = 5
+   INTEGER, PARAMETER :: TORDER     = 1
+
+   TYPE ONUMM4N1
+     ! Real
+     REAL(DP) :: R
+     ! Order 1
+     REAL(DP) :: E1
+     REAL(DP) :: E2
+     REAL(DP) :: E3
+     REAL(DP) :: E4
+   END TYPE ONUMM4N1
+
+   ! Constant imaginary directions.
+   ! Order 1
+   TYPE(ONUMM4N1), PARAMETER :: E1 = ONUMM4N1(0.0_DP,1.0_DP,0.0_DP,0.0_DP,0.0_DP)
+   TYPE(ONUMM4N1), PARAMETER :: E2 = ONUMM4N1(0.0_DP,0.0_DP,1.0_DP,0.0_DP,0.0_DP)
+   TYPE(ONUMM4N1), PARAMETER :: E3 = ONUMM4N1(0.0_DP,0.0_DP,0.0_DP,1.0_DP,0.0_DP)
+   TYPE(ONUMM4N1), PARAMETER :: E4 = ONUMM4N1(0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP)
+
+   PRIVATE :: DP,TORDER,NUM_IM_DIR
+
+   INTERFACE OPERATOR(*)
+      MODULE PROCEDURE ONUMM4N1_MUL_OO_SS,ONUMM4N1_MUL_RO_SS,ONUMM4N1_MUL_OR_SS,ONUMM4N1_MUL_OO_VS,&
+                       ONUMM4N1_MUL_RO_VS,ONUMM4N1_MUL_OR_VS,ONUMM4N1_MUL_OO_MS,ONUMM4N1_MUL_RO_MS,&
+                       ONUMM4N1_MUL_OR_MS,ONUMM4N1_MUL_OO_SV,ONUMM4N1_MUL_RO_SV,ONUMM4N1_MUL_OR_SV,&
+                       ONUMM4N1_MUL_OO_SM,ONUMM4N1_MUL_RO_SM,ONUMM4N1_MUL_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(+)
+      MODULE PROCEDURE ONUMM4N1_ADD_OO_SS,ONUMM4N1_ADD_RO_SS,ONUMM4N1_ADD_OR_SS,ONUMM4N1_ADD_OO_VS,&
+                       ONUMM4N1_ADD_RO_VS,ONUMM4N1_ADD_OR_VS,ONUMM4N1_ADD_OO_MS,ONUMM4N1_ADD_RO_MS,&
+                       ONUMM4N1_ADD_OR_MS,ONUMM4N1_ADD_OO_SV,ONUMM4N1_ADD_RO_SV,ONUMM4N1_ADD_OR_SV,&
+                       ONUMM4N1_ADD_OO_SM,ONUMM4N1_ADD_RO_SM,ONUMM4N1_ADD_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(-)
+      MODULE PROCEDURE ONUMM4N1_NEG,ONUMM4N1_SUB_OO_SS,ONUMM4N1_SUB_RO_SS,ONUMM4N1_SUB_OR_SS,&
+                       ONUMM4N1_SUB_OO_VS,ONUMM4N1_SUB_RO_VS,ONUMM4N1_SUB_OR_VS,ONUMM4N1_SUB_OO_MS,&
+                       ONUMM4N1_SUB_RO_MS,ONUMM4N1_SUB_OR_MS,ONUMM4N1_SUB_OO_SV,ONUMM4N1_SUB_RO_SV,&
+                       ONUMM4N1_SUB_OR_SV,ONUMM4N1_SUB_OO_SM,ONUMM4N1_SUB_RO_SM,ONUMM4N1_SUB_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(/)
+      MODULE PROCEDURE ONUMM4N1_DIVISION_OO,ONUMM4N1_DIVISION_OR,ONUMM4N1_DIVISION_RO
+   END INTERFACE
+
+   INTERFACE ASSIGNMENT(=)
+      MODULE PROCEDURE ONUMM4N1_ASSIGN_R
+   END INTERFACE
+
+   INTERFACE OPERATOR(**)
+      MODULE PROCEDURE ONUMM4N1_POW_OR,ONUMM4N1_POW_RO,ONUMM4N1_POW_OO
+   END INTERFACE
+
+   INTERFACE PPRINT
+      MODULE PROCEDURE ONUMM4N1_PPRINT_M_R,ONUMM4N1_PPRINT_V_R
+   END INTERFACE
+
+   INTERFACE TRANSPOSE
+      MODULE PROCEDURE ONUMM4N1_TRANSPOSE
+   END INTERFACE
+
+   INTERFACE MATMUL
+      MODULE PROCEDURE ONUMM4N1_MATMUL_ONUMM4N1,R_MATMUL_ONUMM4N1,ONUMM4N1_MATMUL_R
+   END INTERFACE
+
+   INTERFACE UNFOLD
+      MODULE PROCEDURE ONUMM4N1_TO_CR_MAT_S,ONUMM4N1_TO_CR_MAT_V,ONUMM4N1_TO_CR_MAT_M
+   END INTERFACE
+
+   INTERFACE TO_CR
+      MODULE PROCEDURE ONUMM4N1_TO_CR_MAT_S,ONUMM4N1_TO_CR_MAT_V,ONUMM4N1_TO_CR_MAT_M
+   END INTERFACE
+
+   INTERFACE SIN
+      MODULE PROCEDURE ONUMM4N1_SIN
+   END INTERFACE
+
+   INTERFACE COS
+      MODULE PROCEDURE ONUMM4N1_COS
+   END INTERFACE
+
+   INTERFACE TAN
+      MODULE PROCEDURE ONUMM4N1_TAN
+   END INTERFACE
+
+   INTERFACE ASIN
+      MODULE PROCEDURE ONUMM4N1_ASIN
+   END INTERFACE
+
+   INTERFACE ACOS
+      MODULE PROCEDURE ONUMM4N1_ACOS
+   END INTERFACE
+
+   INTERFACE ATAN
+      MODULE PROCEDURE ONUMM4N1_ATAN
+   END INTERFACE
+
+   INTERFACE SINH
+      MODULE PROCEDURE ONUMM4N1_SINH
+   END INTERFACE
+
+   INTERFACE COSH
+      MODULE PROCEDURE ONUMM4N1_COSH
+   END INTERFACE
+
+   INTERFACE TANH
+      MODULE PROCEDURE ONUMM4N1_TANH
+   END INTERFACE
+
+   INTERFACE SQRT
+      MODULE PROCEDURE ONUMM4N1_SQRT
+   END INTERFACE
+
+   INTERFACE LOG
+      MODULE PROCEDURE ONUMM4N1_LOG
+   END INTERFACE
+
+   INTERFACE EXP
+      MODULE PROCEDURE ONUMM4N1_EXP
+   END INTERFACE
+
+   INTERFACE GEM
+      MODULE PROCEDURE ONUMM4N1_GEM_OOO,ONUMM4N1_GEM_ROO,ONUMM4N1_GEM_ORO
+   END INTERFACE
+
+   INTERFACE FEVAL
+      MODULE PROCEDURE ONUMM4N1_FEVAL
+   END INTERFACE
+
+   INTERFACE F2EVAL
+      MODULE PROCEDURE ONUMM4N1_F2EVAL
+   END INTERFACE
+
+   INTERFACE REAL
+      MODULE PROCEDURE ONUMM4N1_REAL
+   END INTERFACE
+
+   CONTAINS
+
+   ELEMENTAL SUBROUTINE ONUMM4N1_ASSIGN_R(RES,LHS)
+      
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS 
+      TYPE(ONUMM4N1), INTENT(OUT) :: RES 
+
+      ! Assign like function 'LHS'
+      ! Real
+      RES%R = LHS
+
+      ! Order 1
+      RES%E1 = 0.0_DP
+      RES%E2 = 0.0_DP
+      RES%E3 = 0.0_DP
+      RES%E4 = 0.0_DP
+
+   END SUBROUTINE ONUMM4N1_ASSIGN_R
+
+   ELEMENTAL FUNCTION ONUMM4N1_NEG(LHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS 
+      TYPE(ONUMM4N1) :: RES 
+
+      ! Negation like function '-LHS'
+      ! Real
+      RES%R = -LHS%R
+      ! Order 1
+      RES%E1 = -LHS%E1
+      RES%E2 = -LHS%E2
+      RES%E3 = -LHS%E3
+      RES%E4 = -LHS%E4
+
+   END FUNCTION ONUMM4N1_NEG
+
+   ELEMENTAL FUNCTION ONUMM4N1_ADD_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+      RES%E2 = LHS%E2 + RHS%E2
+      RES%E3 = LHS%E3 + RHS%E3
+      RES%E4 = LHS%E4 + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM4N1_ADD_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+      RES%E2 =  + RHS%E2
+      RES%E3 =  + RHS%E3
+      RES%E4 =  + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM4N1_ADD_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OR_SS
+
+   ELEMENTAL FUNCTION ONUMM4N1_SUB_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+      RES%E2 = LHS%E2 - RHS%E2
+      RES%E3 = LHS%E3 - RHS%E3
+      RES%E4 = LHS%E4 - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM4N1_SUB_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+      RES%E2 =  - RHS%E2
+      RES%E3 =  - RHS%E3
+      RES%E4 =  - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM4N1_SUB_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OR_SS
+
+   ELEMENTAL FUNCTION ONUMM4N1_MUL_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
+      RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
+      RES%E4 = LHS%R*RHS%E4 + LHS%E4*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM4N1_MUL_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM4N1_MUL_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+      RES%E2 = LHS*RHS%E2
+      RES%E3 = LHS*RHS%E3
+      RES%E4 = LHS*RHS%E4
+
+   END FUNCTION ONUMM4N1_MUL_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM4N1_MUL_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+      RES%E2 = LHS%E2*RHS
+      RES%E3 = LHS%E3*RHS
+      RES%E4 = LHS%E4*RHS
+
+   END FUNCTION ONUMM4N1_MUL_OR_SS
+
+   FUNCTION ONUMM4N1_ADD_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+      RES%E2 = LHS%E2 + RHS%E2
+      RES%E3 = LHS%E3 + RHS%E3
+      RES%E4 = LHS%E4 + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OO_VS
+
+   FUNCTION ONUMM4N1_ADD_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+      RES%E2 =  + RHS%E2
+      RES%E3 =  + RHS%E3
+      RES%E4 =  + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_RO_VS
+
+   FUNCTION ONUMM4N1_ADD_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OR_VS
+
+   FUNCTION ONUMM4N1_SUB_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+      RES%E2 = LHS%E2 - RHS%E2
+      RES%E3 = LHS%E3 - RHS%E3
+      RES%E4 = LHS%E4 - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OO_VS
+
+   FUNCTION ONUMM4N1_SUB_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+      RES%E2 =  - RHS%E2
+      RES%E3 =  - RHS%E3
+      RES%E4 =  - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_RO_VS
+
+   FUNCTION ONUMM4N1_SUB_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OR_VS
+
+   FUNCTION ONUMM4N1_MUL_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1)) 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
+      RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
+      RES%E4 = LHS%R*RHS%E4 + LHS%E4*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM4N1_MUL_OO_VS
+
+   FUNCTION ONUMM4N1_MUL_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+      RES%E2 = LHS*RHS%E2
+      RES%E3 = LHS*RHS%E3
+      RES%E4 = LHS*RHS%E4
+
+   END FUNCTION ONUMM4N1_MUL_RO_VS
+
+   FUNCTION ONUMM4N1_MUL_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+      RES%E2 = LHS%E2*RHS
+      RES%E3 = LHS%E3*RHS
+      RES%E4 = LHS%E4*RHS
+
+   END FUNCTION ONUMM4N1_MUL_OR_VS
+
+   FUNCTION ONUMM4N1_ADD_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+      RES%E2 = LHS%E2 + RHS%E2
+      RES%E3 = LHS%E3 + RHS%E3
+      RES%E4 = LHS%E4 + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OO_MS
+
+   FUNCTION ONUMM4N1_ADD_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+      RES%E2 =  + RHS%E2
+      RES%E3 =  + RHS%E3
+      RES%E4 =  + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_RO_MS
+
+   FUNCTION ONUMM4N1_ADD_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OR_MS
+
+   FUNCTION ONUMM4N1_SUB_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+      RES%E2 = LHS%E2 - RHS%E2
+      RES%E3 = LHS%E3 - RHS%E3
+      RES%E4 = LHS%E4 - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OO_MS
+
+   FUNCTION ONUMM4N1_SUB_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+      RES%E2 =  - RHS%E2
+      RES%E3 =  - RHS%E3
+      RES%E4 =  - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_RO_MS
+
+   FUNCTION ONUMM4N1_SUB_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OR_MS
+
+   FUNCTION ONUMM4N1_MUL_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
+      RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
+      RES%E4 = LHS%R*RHS%E4 + LHS%E4*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM4N1_MUL_OO_MS
+
+   FUNCTION ONUMM4N1_MUL_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+      RES%E2 = LHS*RHS%E2
+      RES%E3 = LHS*RHS%E3
+      RES%E4 = LHS*RHS%E4
+
+   END FUNCTION ONUMM4N1_MUL_RO_MS
+
+   FUNCTION ONUMM4N1_MUL_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+      RES%E2 = LHS%E2*RHS
+      RES%E3 = LHS%E3*RHS
+      RES%E4 = LHS%E4*RHS
+
+   END FUNCTION ONUMM4N1_MUL_OR_MS
+
+   FUNCTION ONUMM4N1_ADD_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+      RES%E2 = LHS%E2 + RHS%E2
+      RES%E3 = LHS%E3 + RHS%E3
+      RES%E4 = LHS%E4 + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OO_SV
+
+   FUNCTION ONUMM4N1_ADD_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+      RES%E2 =  + RHS%E2
+      RES%E3 =  + RHS%E3
+      RES%E4 =  + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_RO_SV
+
+   FUNCTION ONUMM4N1_ADD_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OR_SV
+
+   FUNCTION ONUMM4N1_SUB_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+      RES%E2 = LHS%E2 - RHS%E2
+      RES%E3 = LHS%E3 - RHS%E3
+      RES%E4 = LHS%E4 - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OO_SV
+
+   FUNCTION ONUMM4N1_SUB_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+      RES%E2 =  - RHS%E2
+      RES%E3 =  - RHS%E3
+      RES%E4 =  - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_RO_SV
+
+   FUNCTION ONUMM4N1_SUB_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OR_SV
+
+   FUNCTION ONUMM4N1_MUL_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1)) 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
+      RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
+      RES%E4 = LHS%R*RHS%E4 + LHS%E4*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM4N1_MUL_OO_SV
+
+   FUNCTION ONUMM4N1_MUL_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+      RES%E2 = LHS*RHS%E2
+      RES%E3 = LHS*RHS%E3
+      RES%E4 = LHS*RHS%E4
+
+   END FUNCTION ONUMM4N1_MUL_RO_SV
+
+   FUNCTION ONUMM4N1_MUL_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+      RES%E2 = LHS%E2*RHS
+      RES%E3 = LHS%E3*RHS
+      RES%E4 = LHS%E4*RHS
+
+   END FUNCTION ONUMM4N1_MUL_OR_SV
+
+   FUNCTION ONUMM4N1_ADD_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+      RES%E2 = LHS%E2 + RHS%E2
+      RES%E3 = LHS%E3 + RHS%E3
+      RES%E4 = LHS%E4 + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OO_SM
+
+   FUNCTION ONUMM4N1_ADD_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+      RES%E2 =  + RHS%E2
+      RES%E3 =  + RHS%E3
+      RES%E4 =  + RHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_RO_SM
+
+   FUNCTION ONUMM4N1_ADD_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_ADD_OR_SM
+
+   FUNCTION ONUMM4N1_SUB_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+      RES%E2 = LHS%E2 - RHS%E2
+      RES%E3 = LHS%E3 - RHS%E3
+      RES%E4 = LHS%E4 - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OO_SM
+
+   FUNCTION ONUMM4N1_SUB_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+      RES%E2 =  - RHS%E2
+      RES%E3 =  - RHS%E3
+      RES%E4 =  - RHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_RO_SM
+
+   FUNCTION ONUMM4N1_SUB_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+      RES%E2 = LHS%E2
+      RES%E3 = LHS%E3
+      RES%E4 = LHS%E4
+
+   END FUNCTION ONUMM4N1_SUB_OR_SM
+
+   FUNCTION ONUMM4N1_MUL_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      RES%E2 = LHS%R*RHS%E2 + LHS%E2*RHS%R
+      RES%E3 = LHS%R*RHS%E3 + LHS%E3*RHS%R
+      RES%E4 = LHS%R*RHS%E4 + LHS%E4*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM4N1_MUL_OO_SM
+
+   FUNCTION ONUMM4N1_MUL_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+      RES%E2 = LHS*RHS%E2
+      RES%E3 = LHS*RHS%E3
+      RES%E4 = LHS*RHS%E4
+
+   END FUNCTION ONUMM4N1_MUL_RO_SM
+
+   FUNCTION ONUMM4N1_MUL_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+      RES%E2 = LHS%E2*RHS
+      RES%E3 = LHS%E3*RHS
+      RES%E4 = LHS%E4*RHS
+
+   END FUNCTION ONUMM4N1_MUL_OR_SM
+
+ELEMENTAL    FUNCTION ONUMM4N1_GEM_OOO(A,B,C)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: A 
+      TYPE(ONUMM4N1), INTENT(IN) :: B 
+      TYPE(ONUMM4N1), INTENT(IN) :: C 
+      TYPE(ONUMM4N1) :: RES 
+
+      !  General multiplication like function 'A*B + C'
+
+      ! Order 0
+      RES%R = C%R + A%R*B%R
+
+      ! Order 1
+      RES%E1 = C%E1 + A%R*B%E1 + A%E1*B%R
+      RES%E2 = C%E2 + A%R*B%E2 + A%E2*B%R
+      RES%E3 = C%E3 + A%R*B%E3 + A%E3*B%R
+      RES%E4 = C%E4 + A%R*B%E4 + A%E4*B%R
+
+   END FUNCTION ONUMM4N1_GEM_OOO
+
+ELEMENTAL    FUNCTION ONUMM4N1_GEM_ROO(A,B,C)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: A 
+      TYPE(ONUMM4N1), INTENT(IN) :: B 
+      TYPE(ONUMM4N1), INTENT(IN) :: C 
+      TYPE(ONUMM4N1) :: RES 
+
+      !  General multiplication like function 'A*B + C'
+      ! Order 1
+      RES%E1 = C%E1 + A*B%E1
+      RES%E2 = C%E2 + A*B%E2
+      RES%E3 = C%E3 + A*B%E3
+      RES%E4 = C%E4 + A*B%E4
+      ! Order 0
+      RES%R = C%R + A*B%R
+
+   END FUNCTION ONUMM4N1_GEM_ROO
+
+ELEMENTAL    FUNCTION ONUMM4N1_GEM_ORO(A,B,C)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: A 
+      REAL(DP), INTENT(IN) :: B 
+      TYPE(ONUMM4N1), INTENT(IN) :: C 
+      TYPE(ONUMM4N1) :: RES 
+
+      !  General multiplication like function 'A*B + C'
+
+      ! Order 0
+      RES%R = C%R + A%R*B
+
+      ! Order 1
+      RES%E1 = C%E1 + A%E1*B
+      RES%E2 = C%E2 + A%E2*B
+      RES%E3 = C%E3 + A%E3*B
+      RES%E4 = C%E4 + A%E4*B
+
+   END FUNCTION ONUMM4N1_GEM_ORO
+
+   FUNCTION ONUMM4N1_MATMUL_ONUMM4N1(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(RHS,2))
+
+      !  Multiplication like function 'MATMUL(LHS,RHS)'
+      ! Order 1
+      RES%E1 = MATMUL(LHS%R,RHS%E1) + MATMUL(LHS%E1,RHS%R)
+      RES%E2 = MATMUL(LHS%R,RHS%E2) + MATMUL(LHS%E2,RHS%R)
+      RES%E3 = MATMUL(LHS%R,RHS%E3) + MATMUL(LHS%E3,RHS%R)
+      RES%E4 = MATMUL(LHS%R,RHS%E4) + MATMUL(LHS%E4,RHS%R)
+      ! Order 0
+      RES%R = MATMUL(LHS%R,RHS%R)
+
+   END FUNCTION ONUMM4N1_MATMUL_ONUMM4N1
+
+   FUNCTION R_MATMUL_ONUMM4N1(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM4N1), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(RHS,2))
+
+      ! Multiplication like function 'MATMUL(LHS,RHS)'
+      !  Real
+      RES%R = MATMUL(LHS,RHS%R)
+
+      ! Order 1
+      RES%E1 = MATMUL(LHS,RHS%E1)
+      RES%E2 = MATMUL(LHS,RHS%E2)
+      RES%E3 = MATMUL(LHS,RHS%E3)
+      RES%E4 = MATMUL(LHS,RHS%E4)
+
+   END FUNCTION R_MATMUL_ONUMM4N1
+
+   FUNCTION ONUMM4N1_MATMUL_R(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM4N1) :: RES(SIZE(LHS,1),SIZE(RHS,2))
+
+      ! Multiplication like function 'MATMUL(LHS,RHS)'
+      !  Real
+      RES%R = MATMUL(LHS%R,RHS)
+
+      ! Order 1
+      RES%E1 = MATMUL(LHS%E1,RHS)
+      RES%E2 = MATMUL(LHS%E2,RHS)
+      RES%E3 = MATMUL(LHS%E3,RHS)
+      RES%E4 = MATMUL(LHS%E4,RHS)
+
+   END FUNCTION ONUMM4N1_MATMUL_R
+
+   FUNCTION ONUMM4N1_TRANSPOSE(LHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM4N1) :: RES (SIZE(LHS,2),SIZE(LHS,1))
+
+      ! Negation like function 'TRANSPOSE(LHS)'
+      ! Real
+      RES%R = TRANSPOSE(LHS%R)
+      ! Order 1
+      RES%E1 = TRANSPOSE(LHS%E1)
+      RES%E2 = TRANSPOSE(LHS%E2)
+      RES%E3 = TRANSPOSE(LHS%E3)
+      RES%E4 = TRANSPOSE(LHS%E4)
+
+   END FUNCTION ONUMM4N1_TRANSPOSE
+
+FUNCTION ONUMM4N1_TO_CR_MAT_S(VAL) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: VAL
+      REAL(DP) :: RES(NUM_IM_DIR,NUM_IM_DIR) 
+      INTEGER :: NCOLS=1, NROWS=1
+
+
+      ! R x R -> R (1, 1)
+      RES(1+NROWS*0:NROWS*1,1+NCOLS*0:NCOLS*1) = VAL%R
+      ! R x E1 -> E1 (2, 2)
+      RES(1+NROWS*1:NROWS*2,1+NCOLS*1:NCOLS*2) = VAL%R
+      ! E1 x R -> E1 (2, 1)
+      RES(1+NROWS*1:NROWS*2,1+NCOLS*0:NCOLS*1) = VAL%E1
+      ! R x E2 -> E2 (3, 3)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*2:NCOLS*3) = VAL%R
+      ! E2 x R -> E2 (3, 1)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*0:NCOLS*1) = VAL%E2
+      ! R x E3 -> E3 (4, 4)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*3:NCOLS*4) = VAL%R
+      ! E3 x R -> E3 (4, 1)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*0:NCOLS*1) = VAL%E3
+      ! R x E4 -> E4 (5, 5)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*4:NCOLS*5) = VAL%R
+      ! E4 x R -> E4 (5, 1)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*0:NCOLS*1) = VAL%E4
+   END FUNCTION ONUMM4N1_TO_CR_MAT_S
+
+FUNCTION ONUMM4N1_TO_CR_MAT_V(VAL) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: VAL(:)
+      REAL(DP) :: RES(NUM_IM_DIR*SIZE(VAL,1),NUM_IM_DIR) 
+      INTEGER :: NCOLS=1, NROWS=1
+
+      NROWS = SIZE(VAL,1)
+
+      ! R x R -> R (1, 1)
+      RES(1+NROWS*0:NROWS*1,1) = VAL%R
+      ! R x E1 -> E1 (2, 2)
+      RES(1+NROWS*1:NROWS*2,2) = VAL%R
+      ! E1 x R -> E1 (2, 1)
+      RES(1+NROWS*1:NROWS*2,1) = VAL%E1
+      ! R x E2 -> E2 (3, 3)
+      RES(1+NROWS*2:NROWS*3,3) = VAL%R
+      ! E2 x R -> E2 (3, 1)
+      RES(1+NROWS*2:NROWS*3,1) = VAL%E2
+      ! R x E3 -> E3 (4, 4)
+      RES(1+NROWS*3:NROWS*4,4) = VAL%R
+      ! E3 x R -> E3 (4, 1)
+      RES(1+NROWS*3:NROWS*4,1) = VAL%E3
+      ! R x E4 -> E4 (5, 5)
+      RES(1+NROWS*4:NROWS*5,5) = VAL%R
+      ! E4 x R -> E4 (5, 1)
+      RES(1+NROWS*4:NROWS*5,1) = VAL%E4
+   END FUNCTION ONUMM4N1_TO_CR_MAT_V
+
+FUNCTION ONUMM4N1_TO_CR_MAT_M(VAL) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: VAL(:,:)
+      REAL(DP) :: RES(NUM_IM_DIR*SIZE(VAL,1),NUM_IM_DIR*SIZE(VAL,2)) 
+      INTEGER :: NCOLS=1, NROWS=1
+
+      NCOLS = SIZE(VAL,1)
+      NROWS = SIZE(VAL,2)
+
+      ! R x R -> R (1, 1)
+      RES(1+NROWS*0:NROWS*1,1+NCOLS*0:NCOLS*1) = VAL%R
+      ! R x E1 -> E1 (2, 2)
+      RES(1+NROWS*1:NROWS*2,1+NCOLS*1:NCOLS*2) = VAL%R
+      ! E1 x R -> E1 (2, 1)
+      RES(1+NROWS*1:NROWS*2,1+NCOLS*0:NCOLS*1) = VAL%E1
+      ! R x E2 -> E2 (3, 3)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*2:NCOLS*3) = VAL%R
+      ! E2 x R -> E2 (3, 1)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*0:NCOLS*1) = VAL%E2
+      ! R x E3 -> E3 (4, 4)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*3:NCOLS*4) = VAL%R
+      ! E3 x R -> E3 (4, 1)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*0:NCOLS*1) = VAL%E3
+      ! R x E4 -> E4 (5, 5)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*4:NCOLS*5) = VAL%R
+      ! E4 x R -> E4 (5, 1)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*0:NCOLS*1) = VAL%E4
+   END FUNCTION ONUMM4N1_TO_CR_MAT_M
+
+   ELEMENTAL FUNCTION ONUMM4N1_FEVAL(X,DER0,DER1)&
+      RESULT(RES)
+      IMPLICIT NONE
+      !  Definitions
+      REAL(DP) :: FACTOR, COEF
+      TYPE(ONUMM4N1), INTENT(IN)  :: X
+      REAL(DP), INTENT(IN)  :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      TYPE(ONUMM4N1) :: DX, DX_P
+
+      FACTOR = 1.0_DP
+      COEF   = 0.0_DP
+      DX     = X
+      DX_P   = X
+
+      !  Set real part of deltas zero.
+      DX%R = 0.0_DP
+      DX_P%R = 0.0_DP
+
+      ! Sets real part
+      RES = DER0
+
+      ! Sets order 1
+      FACTOR = FACTOR * 1
+      COEF = DER1 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 1
+      RES%E1 = RES%E1+COEF*DX_P%E1
+      RES%E2 = RES%E2+COEF*DX_P%E2
+      RES%E3 = RES%E3+COEF*DX_P%E3
+      RES%E4 = RES%E4+COEF*DX_P%E4
+      
+   END FUNCTION ONUMM4N1_FEVAL
+
+
+  SUBROUTINE ONUMM4N1_PPRINT_M_R(X, FMT)
+      IMPLICIT NONE
+      REAL(DP),INTENT(IN) :: X(:,:)
+      INTEGER :: I, J
+      CHARACTER(*),INTENT(IN),OPTIONAL :: FMT
+      CHARACTER(:),ALLOCATABLE :: out_fmt
+      
+      IF (PRESENT(fmt)) THEN
+        out_fmt = fmt
+      ELSE
+        out_fmt = 'F10.4'
+      END IF
+      
+      write(*,'(A)',advance='no') "["
+      
+      DO I=1,SIZE(X,1)
+        
+        IF (I == 1) THEN
+          write(*,'(A)',advance='no') "["
+        ELSE
+          write(*,'(A)',advance='no') " ["
+        END IF 
+
+        DO J=1,SIZE(X,2)
+          
+          write(*,'('//trim(out_fmt)//')',advance='no') X(I,J)
+
+        END DO
+        
+        write(*,'(A)') "]"
+      
+      END DO
+
+      write(*,'(A)') "]"
+
+  END SUBROUTINE ONUMM4N1_PPRINT_M_R
+
+  SUBROUTINE ONUMM4N1_PPRINT_V_R(X, FMT)
+      IMPLICIT NONE
+      REAL(DP),INTENT(IN) :: X(:)
+      INTEGER :: I
+      CHARACTER(*),INTENT(IN),OPTIONAL :: FMT
+      CHARACTER(:),ALLOCATABLE :: out_fmt
+      
+      IF (PRESENT(fmt)) THEN
+        out_fmt = fmt
+      ELSE
+        out_fmt = 'F10.4'
+      END IF
+      
+      write(*,'(A)',advance='no') "["
+      
+      DO I=1,SIZE(X,1)
+
+        write(*,'('//trim(out_fmt)//')',advance='no') X(I)
+
+      END DO
+
+      write(*,'(A)') "]"
+
+  END SUBROUTINE ONUMM4N1_PPRINT_V_R
+
+  FUNCTION ONUMM4N1_DIVISION_OO(X,Y) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      TYPE(ONUMM4N1), INTENT(IN) :: Y
+      TYPE(ONUMM4N1) :: RES
+
+      RES = X*(Y**(-1.d0))
+
+  END FUNCTION ONUMM4N1_DIVISION_OO
+
+  FUNCTION ONUMM4N1_DIVISION_OR(X,Y) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP), INTENT(IN) :: Y
+      TYPE(ONUMM4N1) :: RES
+
+      RES = X*(Y**(-1.d0))
+
+  END FUNCTION ONUMM4N1_DIVISION_OR
+
+  FUNCTION ONUMM4N1_DIVISION_RO(X,Y) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      REAL(DP), INTENT(IN) :: X
+      TYPE(ONUMM4N1), INTENT(IN) :: Y
+      TYPE(ONUMM4N1) :: RES
+
+      RES = X*(Y**(-1.d0))
+
+  END FUNCTION ONUMM4N1_DIVISION_RO
+
+  ELEMENTAL FUNCTION ONUMM4N1_REAL(X) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: RES
+
+      RES = X%R
+
+  END FUNCTION ONUMM4N1_REAL
+
+  FUNCTION ONUMM4N1_SQRT(X) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      TYPE(ONUMM4N1) :: RES
+
+      RES = X**0.5_DP
+
+  END FUNCTION ONUMM4N1_SQRT
+
+   ELEMENTAL FUNCTION ONUMM4N1_TAN(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = TAN(X%R)
+      DER1 = TAN(X%R)**2 + 1
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_TAN
+
+   ELEMENTAL FUNCTION ONUMM4N1_COS(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = COS(X%R)
+      DER1 = -SIN(X%R)
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_COS
+
+   ELEMENTAL FUNCTION ONUMM4N1_SIN(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = SIN(X%R)
+      DER1 = COS(X%R)
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_SIN
+
+   ELEMENTAL FUNCTION ONUMM4N1_ATAN(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = ATAN(X%R)
+      DER1 = 1D0/(X%R**2 + 1)
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_ATAN
+
+   ELEMENTAL FUNCTION ONUMM4N1_ACOS(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = ACOS(X%R)
+      DER1 = -1/SQRT(1 - X%R**2)
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_ACOS
+
+   ELEMENTAL FUNCTION ONUMM4N1_ASIN(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = ASIN(X%R)
+      DER1 = 1/SQRT(1 - X%R**2)
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_ASIN
+
+   ELEMENTAL FUNCTION ONUMM4N1_TANH(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = TANH(X%R)
+      DER1 = 1 - TANH(X%R)**2
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_TANH
+
+   ELEMENTAL FUNCTION ONUMM4N1_COSH(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = COSH(X%R)
+      DER1 = SINH(X%R)
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_COSH
+
+   ELEMENTAL FUNCTION ONUMM4N1_SINH(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = SINH(X%R)
+      DER1 = COSH(X%R)
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_SINH
+
+   ELEMENTAL FUNCTION ONUMM4N1_EXP(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = EXP(X%R)
+      DER1 = EXP(X%R)
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_EXP
+
+   ELEMENTAL FUNCTION ONUMM4N1_LOG(X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0 = LOG(X%R)
+      DER1 = 1D0/X%R
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_LOG
+
+   ELEMENTAL FUNCTION ONUMM4N1_POW_OR(X,E) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP), INTENT(IN) :: E
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0=0.0d0
+      DER1=0.0d0
+      
+      DER0 = X%R**E
+      IF ((E-0)/=0.0d0) THEN
+         DER1 = E*X%R**(E - 1)
+      END IF
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_POW_OR
+
+   ELEMENTAL FUNCTION ONUMM4N1_POW_RO(E,X) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X
+      REAL(DP), INTENT(IN) :: E
+      REAL(DP) :: DER0,DER1
+      TYPE(ONUMM4N1) :: RES
+      
+      
+      DER0 = E**X%R
+      DER1 = E**X%R*LOG(E)
+
+      RES = FEVAL(X,DER0,DER1)
+
+   END FUNCTION ONUMM4N1_POW_RO
+
+   ELEMENTAL FUNCTION ONUMM4N1_F2EVAL(X,Y,DER0_0,DER1_0,DER1_1)&
+      RESULT(RES)
+      IMPLICIT NONE
+      !  Definitions
+      REAL(DP) :: COEF, DELTA
+      TYPE(ONUMM4N1), INTENT(IN)  :: X,Y
+      REAL(DP), INTENT(IN)  :: DER0_0,DER1_0,DER1_1
+      TYPE(ONUMM4N1) :: RES
+      TYPE(ONUMM4N1) :: DX, DY
+
+      COEF   = 0.0_DP
+      DX     = X
+      DY     = Y
+
+      !  Set real part of deltas zero.
+      DX%R = 0.0_DP
+      DY%R = 0.0_DP
+
+      ! Set real part
+      RES = DER0_0
+
+      ! Set order 1
+      COEF = DER1_0 / 1.0_DP
+      RES = RES + COEF*DX
+
+      COEF = DER1_1 / 1.0_DP
+      RES = RES + COEF*DY
+
+      
+
+   END FUNCTION ONUMM4N1_F2EVAL
+
+
+   ELEMENTAL FUNCTION ONUMM4N1_POW_OO(X,Y) RESULT(RES)
+
+      TYPE(ONUMM4N1), INTENT(IN) :: X, Y
+      REAL(DP) :: DER0_0,DER1_0,DER1_1
+      TYPE(ONUMM4N1) :: RES
+      
+      DER0_0 = X%R**Y%R
+      DER1_0 = X%R**Y%R*Y%R/X%R
+      DER1_1 = X%R**Y%R*LOG(X%R)
+
+      RES = F2EVAL(X,Y,DER0_0,DER1_0,DER1_1)
+
+   END FUNCTION ONUMM4N1_POW_OO
+
+
+END MODULE OTIM4N1

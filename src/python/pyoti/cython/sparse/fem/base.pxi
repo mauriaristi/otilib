@@ -339,6 +339,48 @@ cdef class elm_help:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
+  cpdef set_array(self, matso arr, np.ndarray elem_indices, matso out = None):
+    """
+    DESCRIPTION: Set the elements of an array from global to local indices.
+
+    INPUTS:
+      
+      -> arr: Array in global numbering.
+      -> elem_indices:   Array with the indices of the corresponding elements in the mesh.
+
+    """
+    
+    cdef uint64_t i, j, ii, ncols
+    cdef matso res 
+
+    ncols = arr.shape[1]
+
+    if out is not None:
+      res = out
+    else:
+      res = zeros(( self.nbasis , ncols ))
+    # end if 
+
+
+    for i in range(self.nbasis):
+      
+      for j in range(ncols):
+      
+        ii = elem_indices[i]
+
+        res[ i, j ] = arr[ ii, j ]
+      
+      # end for 
+
+    # end for
+
+    if out is None:
+      return res
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   def compute_jacobian(self):
     """
     DESCRIPTION: Compute jacobian and derived functions.

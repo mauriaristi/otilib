@@ -1,5 +1,5 @@
 
-from pyoti.core import get_dHelp, whereotilib
+from pyoti.core import get_dHelp, whereotilib, get_deriv_factor, np
 
 h = get_dHelp()
 
@@ -33,7 +33,7 @@ class writer:
               implementations of OTI and Multidual algebras.
 
     INPUTS:
-      nbases: Number of bases in of the current implementation.
+      nbases: Number of bases of the current implementation.
       order: Truncation order of the algebra.
       tab: Tab space. Default tab = "  "
       coeff_type; Default coefficient type. Default coeff_type = "REAL(DP)"
@@ -310,6 +310,7 @@ class writer:
     self.overloads['LOG10'] = []
     self.overloads['GEM'] = []
     self.overloads['FEVAL'] = []
+    self.overloads['F2EVAL'] = []
     self.overloads['REAL'] = []
     
 
@@ -1560,6 +1561,266 @@ class writer:
     return str_out
   #--------------------------------------------------------------------------------------------------- 
 
+
+  #***************************************************************************************************
+  def f2eval_function_o(self, level = "", lhs_name= "X", deriv_name= "DERIVS", res_name = "RES"  ):
+    """
+    PORPUSE:  Generic function evaluation of OTI number.
+    """
+    global h
+
+    str_out = ""    
+    res_getter = self.get
+    lhs_getter = self.get
+    
+    str_out += level + self.comment + "Sets real part" +  endl
+    str_out += level + res_name + " = "
+    str_out += deriv_name+"(1)" + self.endl
+    
+    for ordi in range(1,self.order+1):
+      
+      str_out += self.endl
+      str_out += level + self.comment + "Sets order " + str(ordi) + endl
+      dirs = self.name_imdir[ordi]
+
+      str_out += level + "FACTOR = FACTOR * " + str(ordi) + self.endl
+      str_out += level + "COEF = "+deriv_name+"("+str(ordi+1)+") / FACTOR" + self.endl
+      str_out += level + res_name + " = GEM(COEF,DX_P,"+res_name+")" + self.endl
+      
+      if ordi != self.order:
+        str_out += level + "DX_P = DX_P*DX" + self.endl
+      # end if 
+      
+      str_out += level + ""
+      
+    # end for 
+
+    return str_out
+
+  #---------------------------------------------------------------------------------------------------  
+
+  #***************************************************************************************************
+  def f2eval_function_o_elemental(self, level = "", varx_name= "X",vary_name= "Y", deriv_name= [], 
+        res_name = "RES"  ):
+    """
+    PORPUSE:  Generic function evaluation of OTI number.
+    """
+    global h
+
+    str_out = ""    
+    res_getter = self.get
+    lhs_getter = self.get
+    
+    str_out += level + self.comment + "Set real part" +  endl
+    str_out += level + res_name + " = "
+    str_out += deriv_name[0]+ self.endl
+    kk = 1
+    varsl = ["","DX","DY"]
+    for ordi in range(1,self.order+1):
+
+      str_out += self.endl
+      str_out += level + self.comment + "Set order " + str(ordi) + endl
+
+      for idx in range(h.get_ndir_order(2,ordi)):
+      
+        diri = h.get_fulldir(idx,ordi)
+        str_out += level + "COEF = "+deriv_name[kk]+" / " + str(get_deriv_factor(diri)) + '_DP' + self.endl
+        kk+=1
+        str_out += level + res_name + " = "+res_name+" + COEF" #+ self.endl
+
+        for k in diri:
+          str_out += '*'+varsl[k]
+        # end for 
+        str_out += self.endl*2
+
+      # end for 
+      
+      str_out += level + self.endl
+      
+    # end for 
+
+    return str_out
+
+  #---------------------------------------------------------------------------------------------------  
+
+
+  #***************************************************************************************************
+  def write_scalar_f2eval(self, function_name = "F2EVAL", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False,
+    f_open = "(", f_close = ")", addition = " + ", to = False,
+    overload = None, write_charact=True ):
+    """
+    Write Univariate function evaluation.
+
+    This module writes the definition of the function, its inputs and output. The generator defines the
+    operations within the function block.
+
+    """
+
+    str_out = ""
+    leveli = level
+
+    res = "RES"
+    lhs = "X"
+    derivs = "DERIVS"
+
+    lhs_t = self.type_name
+    f_post = lhs_type
+   
+    f_prev = self.func_name
+    
+    func_name = f_prev + "_" + function_name 
+    
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = ''
+
+    func_header += leveli*tab + self.comment + " Definitions" + endl
+    func_header += leveli*tab + self.coeff_t + " :: FACTOR, COEF"+self.endl
+    func_header += leveli*tab + "TYPE("+self.type_name + "), INTENT(IN)  :: "+lhs+self.endl
+    func_header += leveli*tab + self.coeff_t  + ", INTENT(IN)  :: "+derivs+"("+str(self.order+1)+")"+self.endl
+    func_header += leveli*tab + "TYPE("+self.type_name + ") :: "+res+self.endl
+    func_header += leveli*tab + "TYPE("+self.type_name + ") :: DX, DX_P" + self.endl*2
+    func_header += leveli*tab + 'FACTOR = 1.0_DP' + self.endl
+    func_header += leveli*tab + 'COEF   = 0.0_DP' + self.endl
+    func_header += leveli*tab + 'DX     = ' + lhs + self.endl
+    func_header += leveli*tab + 'DX_P   = ' + lhs + self.endl*2
+    func_header += leveli*tab + self.comment + " Set real part of deltas zero." + self.endl
+    func_header += leveli*tab +"DX"+self.get+self.real_str+" = " + self.zero + self.endl
+    func_header += leveli*tab +"DX_P"+self.get+self.real_str+" = " + self.zero + self.endl
+    
+
+    if is_elemental:
+      str_out += 'ELEMENTAL '
+    # end if
+
+    if overload is not None:
+      self.overloads[overload].append(func_name)
+    # end if 
+    
+    str_out += "FUNCTION " + func_name + "(" +lhs+","+derivs+")"+self.new_line_mark+endl
+    str_out += leveli*tab + "RESULT("+res+")"+ endl
+
+    str_out += leveli*tab + "IMPLICIT NONE" + endl
+
+    str_out += func_header +endl
+
+    str_out += self.feval_function_o(level = leveli*tab, res_name = res, deriv_name = derivs,lhs_name=lhs )
+    
+
+    str_out += endl
+
+    # Write function end.    
+    leveli -= 1
+    str_out += leveli*tab + 'END FUNCTION ' +func_name+ self.endl + endl
+    
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def write_scalar_f2eval_elemental(self, function_name = "F2EVAL", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION",  separator = ",", lhs_type= "O", lhs_ptr = False,
+    f_open = "(", f_close = ")", addition = " + ", to = False,
+    overload = None, write_charact=True ):
+    """
+    Write Bivariate function evaluation.
+
+    This module writes the definition of the function, its inputs and output. The generator defines the
+    operations within the function block.
+
+    """
+
+    str_out = ""
+    leveli = level
+
+    res = "RES"
+    varx = "X"
+    vary = "Y"
+
+    derivs = []
+
+    for ordi in range(self.order+1):
+      for idx in range(h.get_ndir_order(2, ordi)):
+        derivs.append('DER'+str(ordi)+"_"+str(idx))
+      # end for 
+    # end for 
+
+    lhs_t = self.type_name
+    f_post = lhs_type
+   
+    f_prev = self.func_name
+    
+    func_name = f_prev + "_" + function_name 
+    
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    
+    func_header = ''
+
+    func_header += leveli*tab + self.comment + " Definitions" + endl
+    func_header += leveli*tab + self.coeff_t + " :: COEF, DELTA"+self.endl
+    func_header += leveli*tab + "TYPE("+self.type_name + "), INTENT(IN)  :: "+varx+','+vary+self.endl
+    func_header += leveli*tab + self.coeff_t  + ", INTENT(IN)  :: "
+    
+    for ordi in range(len(derivs)):
+      if ( (ordi+1)%4 == 0 ) and ( ordi != ( len(derivs)-1 ) ) :
+        func_header += " " + self.new_line_mark + endl
+        func_header += (leveli)*tab + len(self.coeff_t  + ", INTENT(IN)  :: ")*' '
+      # end if
+      func_header += derivs[ordi] + ','
+    # end for 
+    func_header=func_header[:-1]
+    func_header += self.endl
+
+    func_header += leveli*tab + "TYPE("+self.type_name + ") :: "+res+self.endl
+    func_header += leveli*tab + "TYPE("+self.type_name + ") :: DX, DY" + self.endl*2
+    func_header += leveli*tab + 'COEF   = 0.0_DP' + self.endl
+    func_header += leveli*tab + 'DX     = ' + varx + self.endl
+    func_header += leveli*tab + 'DY     = ' + vary + self.endl*2
+    func_header += leveli*tab + self.comment + " Set real part of deltas zero." + self.endl
+    func_header += leveli*tab +"DX"+self.get+self.real_str+" = " + self.zero + self.endl
+    func_header += leveli*tab +"DY"+self.get+self.real_str+" = " + self.zero + self.endl
+    
+
+    if is_elemental:
+      str_out += 'ELEMENTAL '
+    # end if
+
+    if overload is not None:
+      self.overloads[overload].append(func_name)
+    # end if 
+    
+    str_out += "FUNCTION " + func_name + "(" +varx+","+vary+","
+    for ordi in range(len(derivs)):
+      if ( (ordi+1)%4 == 0 ) and ( ordi != ( len(derivs)-1 ) ) :
+        str_out += " " + self.new_line_mark + endl
+        str_out += (leveli+1)*tab + len("FUNCTION " + func_name + "(")*' '
+      # end if
+      str_out += derivs[ordi] + ','
+    # end for 
+    str_out = str_out[:-1]
+    str_out += ")"+self.new_line_mark+endl
+    str_out += leveli*tab + "RESULT("+res+")"+ endl
+
+    str_out += leveli*tab + "IMPLICIT NONE" + endl
+
+    str_out += func_header +endl
+
+    str_out += self.f2eval_function_o_elemental(level = leveli*tab, res_name = res, deriv_name = derivs,
+      varx_name=varx,vary_name=vary )
+    
+
+    str_out += endl
+
+    # Write function end.    
+    leveli -= 1
+    str_out += leveli*tab + 'END FUNCTION ' +func_name+ self.endl + endl
+    
+    return str_out
+  #---------------------------------------------------------------------------------------------------
   #***************************************************************************************************
   def write_private(self, level = "", tab=" "):
     """
@@ -2508,7 +2769,7 @@ class writer:
     
     # end for 
 
-    #  ============== WRITE POWER FUNCTION.
+    #  ============== WRITE POWER FUNCTION (OTI to the real power).
 
     leveli = level
     # Write power function.
@@ -2519,7 +2780,7 @@ class writer:
 
     
 
-    power_core_function += "FUNCTION "+self.type_name+"_POW(X,E) RESULT(RES)"+ endl*2 # 0: function name.
+    power_core_function += "FUNCTION "+self.type_name+"_POW_OR(X,E) RESULT(RES)"+ endl*2 # 0: function name.
     leveli+=1
     power_core_function += leveli*tab + "TYPE("+self.type_name+"), INTENT(IN) :: X"+ endl
     power_core_function += leveli*tab + "REAL(DP), INTENT(IN) :: E"+ endl # 1: Derivatives
@@ -2536,7 +2797,7 @@ class writer:
     power_core_function += leveli*tab + "RES = FEVAL(X,{0})"+ endl*2 # 2: Derivative definition.
 
     leveli -= 1
-    power_core_function += leveli*tab + "END FUNCTION "+self.type_name+"_POW"+ endl # 0: function name.
+    power_core_function += leveli*tab + "END FUNCTION "+self.type_name+"_POW_OR"+ endl # 0: function name.
     f = x**exponent
     deriv_define = ''
     leveli+=1
@@ -2562,7 +2823,140 @@ class writer:
     leveli-=1
     str_out += power_core_function.format(deriv_txt,deriv_define) + endl
     if overload:
-      self.overloads['**'].append(self.type_name+"_POW")
+      self.overloads['**'].append(self.type_name+"_POW_OR")
+    # end if 
+
+
+
+
+    #  ============== WRITE POWER FUNCTION (Real to the power OTI).
+
+    leveli = level
+    # Write power function.
+    power_core_function = leveli*tab 
+    if elemental:
+      power_core_function += 'ELEMENTAL '
+    # end if 
+
+    
+
+    power_core_function += "FUNCTION "+self.type_name+"_POW_RO(E,X) RESULT(RES)"+ endl*2 # 0: function name.
+    leveli+=1
+    power_core_function += leveli*tab + "TYPE("+self.type_name+"), INTENT(IN) :: X"+ endl
+    power_core_function += leveli*tab + "REAL(DP), INTENT(IN) :: E"+ endl # 1: Derivatives
+    power_core_function += leveli*tab + "REAL(DP) :: {0}"+ endl # 1: Derivatives
+    power_core_function += leveli*tab + "TYPE("+self.type_name+") :: RES"+ endl
+    power_core_function += leveli*tab + endl
+    
+    # for ordi in range(self.order+1):
+    #   power_core_function += leveli*tab + derivs[ordi] + '=0.0d0' + endl
+    # # end for 
+
+    power_core_function += leveli*tab + endl
+
+    power_core_function += "{1}"+ endl # 2: Derivative definition.
+    power_core_function += leveli*tab + "RES = FEVAL(X,{0})"+ endl*2 # 2: Derivative definition.
+
+    leveli -= 1
+    power_core_function += leveli*tab + "END FUNCTION "+self.type_name+"_POW_RO"+ endl # 0: function name.
+    f = exponent**x
+    deriv_define = ''
+    leveli+=1
+    # txt = fcode(f,human = True,standard=90,source_format='free', assign_to=derivs[ordi]).upper()
+    # deriv_define += leveli*tab + txt + endl
+    
+
+    for ordi in range(0,self.order + 1):
+      der = f.diff(x,ordi).simplify()
+      txt = fcode(der,human = True,standard=90,source_format='free', assign_to=derivs[ordi]).upper()
+      deriv_define += leveli*tab + txt + endl
+      # if ordi != self.order:
+      #   deriv_define += leveli*tab + "IF ((E-"+str(ordi)+")/=0.0d0) THEN" + endl
+      #   leveli+=1
+      # # end if 
+    # end for
+    
+    # for ordi in range(1,self.order + 1):
+    #   leveli-=1
+    #   deriv_define += leveli*tab + "END IF" + endl
+    # # end for
+
+    leveli-=1
+    str_out += power_core_function.format(deriv_txt,deriv_define) + endl
+    if overload:
+      self.overloads['**'].append(self.type_name+"_POW_RO")
+    # end if 
+
+    return str_out
+
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def write_bivariate_functions(self,level = 0, tab = " ", overload = True, elemental = True ):
+    
+    str_out = ""
+    leveli = level
+    
+    # Setup core text
+    single_core_function = ""
+    single_core_function += leveli*tab 
+    
+    if elemental:
+      single_core_function += 'ELEMENTAL '
+    # end if 
+
+    single_core_function += "FUNCTION "+self.type_name+"_{0}(X,Y) RESULT(RES)"+ endl*2 # 0: function name.
+    
+    leveli+=1
+    single_core_function += leveli*tab + "TYPE("+self.type_name+"), INTENT(IN) :: X, Y"+ endl
+    single_core_function += leveli*tab + "REAL(DP) :: {1}"+ endl # 1: Derivatives
+    single_core_function += leveli*tab + "TYPE("+self.type_name+") :: RES"+ endl
+    single_core_function += leveli*tab + endl
+    single_core_function += "{2}"+ endl # 2: Derivative definition.
+    single_core_function += leveli*tab + "RES = F2EVAL(X,Y,{1})"+ endl*2 # 2: Derivative definition.
+    leveli -= 1
+    single_core_function += leveli*tab + "END FUNCTION "+self.type_name+"_{0}"+ endl # 0: function name.
+
+    derivs = []
+    for ordi in range(self.order+1):
+      for idx in range(h.get_ndir_order(2, ordi)):
+        derivs.append('DER'+str(ordi)+"_"+str(idx))
+      # end for 
+    # end for 
+    deriv_txt = ''
+    for ordi in range(len(derivs)):
+      deriv_txt += derivs[ordi] + ','
+    # end for 
+    deriv_txt = deriv_txt[:-1]
+    
+    # Single variable:
+    import sympy as sym
+    from sympy.printing import fcode
+    
+    x, y, exponent, xs, ys  = sym.symbols('X%R Y%R E x y')
+
+    functions = {}
+
+    leveli += 1
+    
+      
+    f = x**y
+    deriv_define = ''
+    kk = 0
+    key = 'POW_OO'
+    for ordi in range(self.order + 1):
+      for idx in range(h.get_ndir_order(2, ordi)):
+        diri = h.get_fulldir(idx,ordi)
+        ordx = np.count_nonzero(diri==1)
+        ordy = np.count_nonzero(diri==2)
+        der = f.diff(x,ordx,y,ordy)
+        txt = fcode(der,human = True,standard=90,source_format='free', assign_to=derivs[kk]).upper()
+        kk+=1
+        deriv_define += leveli*tab + txt + endl
+    # end for
+    str_out += single_core_function.format(key,deriv_txt,deriv_define) + endl
+    if overload:
+      self.overloads['**'].append(self.type_name+"_"+key)
     # end if 
 
     return str_out
@@ -2787,6 +3181,14 @@ class writer:
       self.overloads['REAL'].append(self.type_name+"_REAL")
       self.overloads['PPRINT'].append(self.type_name+"_PPRINT_M_R")
       self.overloads['PPRINT'].append(self.type_name+"_PPRINT_V_R")
+
+      contents += self.write_scalar_f2eval_elemental(function_name = "F2EVAL", is_elemental = True, level = level, 
+          tab = tab, lhs_type= "O", overload = "F2EVAL", write_charact=True )
+      contents += endl 
+
+      contents += self.write_bivariate_functions(level = level, tab = tab, overload=True )
+      contents += endl 
+
     else:
 
       # FEVAL
@@ -2811,6 +3213,8 @@ class writer:
       self.overloads['REAL'].append(self.type_name+"_REAL")
       # Add overloads of function evaluations.
       self.private_members += ['DER_R_COS','DER_R_SIN','DER_R_LOG','DER_R_EXP','DER_R_POW']
+
+
     # 
 
     

@@ -50,6 +50,7 @@ cdef class elm_help:
   cpdef is_allocated( self )
   cpdef allocate(self, uint8_t ndim, uint64_t nbasis, uint64_t nip, bases_t nbases = * , ord_t order = * )
   cpdef allocate_spatial( self, uint64_t ndim_an, uint8_t compute_Jinv = * )
+  cpdef set_array(self, matso arr, np.ndarray elem_indices, matso out = *)
   cpdef reset( self )
   cpdef end( self )
 

@@ -1,6 +1,59 @@
 
 include "algebra_utils/dot_product.pxi"
+include "algebra_utils/interp1d.pxi"
 # include "algebra_utils/cross_product.pxi"
+
+#*****************************************************************************************************
+cpdef interp1d(object x, matso xvals, matso yvals, object out = None):
+  """
+  PURPOSE:  Linear 1D interpolation.
+
+  INPUTS:
+    - xvals: Values of x for interpolation. THis array must come in ascending order with no 
+             repetitions. Must be matso array
+    - yvals: Values of y for the interpolation. Must be matso array.
+    - x
+
+  """
+  #***************************************************************************************************
+  
+  cdef uint8_t res_flag = 1
+  cdef object res = None
+
+  tx = type(x)
+
+  if out is None:
+    res_flag = 0
+  # end if 
+
+  # supported types for xvals, yvals:
+  #    - matso
+  # supported types for val:
+  #    - sotinum
+  #    - sotife
+  # Supported output types:
+  #    - sotinum
+  #    - sotife
+
+  if   tx is sotinum:
+
+    res = __interp1d_OOo( xvals, yvals, x, out = out)
+
+  elif tx is sotife:
+
+    res = __interp1d_OOf( xvals, yvals, x, out = out)
+
+  else:
+
+    raise TypeError("Unsupported type {0} in inter1d operation.".format(tx))
+
+  # end if 
+
+  if res_flag == 0:
+    return res
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
 cpdef dot_product(object lhs, object rhs, object out = None):

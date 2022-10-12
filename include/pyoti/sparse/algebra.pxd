@@ -39,7 +39,10 @@ cdef object __div__oX__(sotinum lhs, object rhs, object out = *)
 cdef object __div__rX__(coeff_t lhs, object rhs, object out = *)
 
 
+cdef sotinum __interp1d_OOo(matso xvals, matso yvals, sotinum x, sotinum out=* )
+cdef sotife  __interp1d_OOf(matso xvals, matso yvals,  sotife x,  sotife out=* )
 
+cpdef interp1d( object x, matso xvals, matso yvals, object out=* )
 
 cpdef dot_product(object lhs,  object rhs,    object out = *)
 cpdef dot(        object lhs,  object rhs,    object out = *)

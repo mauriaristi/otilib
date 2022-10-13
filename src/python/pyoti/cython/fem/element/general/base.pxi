@@ -520,7 +520,7 @@ cdef class elbase:
 
     """
 
-    return self.elh.get_local(arr,self.elem_indices,out=out)
+    return self.elh.get_local( arr, self.elem_indices, out=out)
 
   #---------------------------------------------------------------------------------------------------
 

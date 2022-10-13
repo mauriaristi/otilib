@@ -781,7 +781,7 @@ void soti_truncate_order_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl
 
         // Unsafe
         resord = num->act_order;
-        num->act_order = order;
+        num->act_order = order-1;
         
         soti_copy_to( num, res, dhl );
         num->act_order = resord;

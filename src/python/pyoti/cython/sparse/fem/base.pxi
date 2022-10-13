@@ -339,6 +339,48 @@ cdef class elm_help:
   #---------------------------------------------------------------------------------------------------
 
   #***************************************************************************************************
+  cpdef set_array(self, matso arr, np.ndarray elem_indices, matso out = None):
+    """
+    DESCRIPTION: Set the elements of an array from global to local indices.
+
+    INPUTS:
+      
+      -> arr: Array in global numbering.
+      -> elem_indices:   Array with the indices of the corresponding elements in the mesh.
+
+    """
+    
+    cdef uint64_t i, j, ii, ncols
+    cdef matso res 
+
+    ncols = arr.shape[1]
+
+    if out is not None:
+      res = out
+    else:
+      res = zeros(( self.nbasis , ncols ))
+    # end if 
+
+
+    for i in range(self.nbasis):
+      
+      for j in range(ncols):
+      
+        ii = elem_indices[i]
+
+        res[ i, j ] = arr[ ii, j ]
+      
+      # end for 
+
+    # end for
+
+    if out is None:
+      return res
+    # end if 
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
   cpdef get_local(self, matso arr, np.ndarray elem_indices, matso out=None):
     """
     DESCRIPTION: get the local items from an array.
@@ -350,22 +392,43 @@ cdef class elm_help:
 
     """
     
-    cdef uint64_t i, j
-    cdef matso res
+    """
+    DESCRIPTION: Set the elements of an array from global to local indices.
 
-    if out is None:
-      res = zeros((self.nbasis,1))
+    INPUTS:
+      
+      -> arr: Array in global numbering.
+      -> elem_indices:   Array with the indices of the corresponding elements in the mesh.
+
+    """
+    
+    cdef uint64_t i, j, ii, ncols
+    cdef matso res 
+
+    ncols = arr.shape[1]
+
+    if out is not None:
+      res = out
     else:
-      res = out # weak reference
-    # end if
+      res = zeros(( self.nbasis , ncols ))
+    # end if 
+
 
     for i in range(self.nbasis):
       
-      j = elem_indices[i]
+      for j in range(ncols):
+      
+        ii = elem_indices[i]
 
-      res[ i, 0 ] = arr[ j, 0 ]
+        res[ i, j ] = arr[ ii, j ]
+      
+      # end for 
 
     # end for
+
+    if out is None:
+      return res
+    # end if 
 
   #---------------------------------------------------------------------------------------------------
 

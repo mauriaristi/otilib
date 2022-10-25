@@ -278,7 +278,7 @@ class writer:
     # end for 
     
     self.function_list = []
-    self.private_members = ['DP','TORDER','NUM_IM_DIR']
+    self.private_members = []
     self.overloads = {}
 
     self.overloads['*'] = []
@@ -290,6 +290,7 @@ class writer:
     self.overloads['PPRINT'] = []
     self.overloads['TRANSPOSE'] = []
     self.overloads['MATMUL'] = []
+    self.overloads['DOT_PRODUCT'] = []
     self.overloads['UNFOLD'] = []
     self.overloads['TO_CR'] = []
     self.overloads['SIN'] = []
@@ -312,7 +313,14 @@ class writer:
     self.overloads['FEVAL'] = []
     self.overloads['F2EVAL'] = []
     self.overloads['REAL'] = []
-    
+    self.overloads['DET2X2'] = []
+    self.overloads['DET3X3'] = []
+    self.overloads['DET4X4'] = []
+    self.overloads['INV2X2'] = []
+    self.overloads['INV3X3'] = []
+    self.overloads['INV4X4'] = []
+    self.overloads['GETIM'] = []
+    self.overloads['SETIM'] = []
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -324,9 +332,19 @@ class writer:
     
     str_out = ""
 
-    str_out += level + "INTEGER, PARAMETER :: DP         = 8\n"
+    # str_out += level + "INTEGER, PARAMETER :: DP         = 8\n"
     str_out += level + "INTEGER, PARAMETER :: NUM_IM_DIR = " + str(self.nimdir) + self.endl
     str_out += level + "INTEGER, PARAMETER :: TORDER     = " + str(self.order) + self.endl
+    str_out += level + "INTEGER, PARAMETER :: N_IMDIR_ORDER("+str(self.order+1)+") = [" 
+    
+    l=0
+    
+    for ordi in range(self.order+1):
+      ndir_ord = len(self.name_imdir[ordi])
+      str_out += str(ndir_ord)+','
+    # end for
+
+    str_out = str_out[:-1] + "]" + self.endl
 
     return str_out
 
@@ -1039,7 +1057,7 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
-  def pprint_scalar_function(self, level = "", lhs_name= "lhs", fmt = "%.8g",tab = "  "):
+  def pprint_scalar_function(self, level = "", lhs_name= "VAR", fmt = "%.8g",tab = "  ", advance='NO'):
     """
     PORPUSE:  getim like function between two OTIs.
     """
@@ -1047,30 +1065,31 @@ class writer:
     str_out = ""
 
 
-    str_out += level + self.comment + "Print function." + endl
+    str_out += level + self.comment + "Pretty print function." + endl
 
     # Write real part.
     str_out += level + self.comment + " Real" + self.endl
-    str_out += level + 'printf(\"'+fmt+'\",'
+    str_out += level + "CALL PPRINT(" 
     str_out += lhs_name + self.get + self.real_str
-    str_out += ')'+self.endl
-    
+    str_out += ',unit=unt,fmt=output_format)'+self.endl
+    str_out += level + "WRITE(unt,'(A)',advance='"+advance+"') ' '" + endl*2
     
     for ordi in range(1,self.order+1):
+      
       str_out += level + self.comment + " Order " + str(ordi)+ self.endl
       dirs = self.name_imdir[ordi]
             
       for j in range(len(dirs)):
         
-        
-        str_out += level + 'printf(\" + '+fmt+' * ' + dirs[j] +'\",'
-        str_out += lhs_name + self.get + dirs[j] 
-        str_out += ')'+self.endl
+        str_out += level + "WRITE(unt,'(A)',advance='"+advance+"') '+ '" + endl
+        str_out += level + "WRITE(unt,'(A)',advance='"+advance+"') '"+dirs[j]+" * '" + endl
+        str_out += level + "CALL PPRINT(" + lhs_name + self.get + dirs[j] + ",unit=unt,fmt=output_format)"+endl
           
-      # end for 
-    # end for 
+      # end for
 
-    str_out += level + 'printf(\"\\n\")'+self.endl
+      str_out += endl
+
+    # end for 
 
     return str_out
 
@@ -1830,20 +1849,22 @@ class writer:
     str_out = ""
     
     private_name = "PRIVATE :: "
-    
-    str_out += level + private_name
-
     nterms = len(self.private_members)
+    if nterms>0:
+      str_out += level + private_name
 
-    for k in range(nterms):
-      if ( (k+1)%4 == 0 ) and ( k != ( nterms-1 ) ) :
-        str_out += " " + self.new_line_mark + endl
-        str_out += level +' '*(len(private_name))
-      # end if
-      str_out += self.private_members[k] + ','
-    # end for 
-    str_out = str_out[:-1] + endl
+      
 
+      for k in range(nterms):
+        if ( (k+1)%4 == 0 ) and ( k != ( nterms-1 ) ) :
+          str_out += " " + self.new_line_mark + endl
+          str_out += level +' '*(len(private_name))
+        # end if
+        str_out += self.private_members[k] + ','
+      # end for 
+      str_out = str_out[:-1] + endl
+    #end for 
+    
     return str_out
   #--------------------------------------------------------------------------------------------------- 
 
@@ -1894,41 +1915,67 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
-  def write_scalar_function_print(self, level = 0, tab = " "):
+  def write_scalar_function_print(self, level = 0, tab = " ",overload=None, mode='S'):
 
     str_out = ""
     leveli = level
 
-    lhs = "LHS"
+    lhs = "VAR"
+    var_dim = ''
     
-    
+    advance='NO'
+
+    if mode == 'V':
+      var_dim="(:)"
+      advance='YES'
+    elif mode == 'M':
+      var_dim="(:,:)"
+      advance='YES'
+    # end if 
+
     f_prev = self.func_name
     lhs_t = "TYPE("+self.type_name+")"
     
-    func_name = f_prev + "_print" 
+    func_name = f_prev + "_PPRINT_"+mode 
 
+
+    if overload is not None:
+      self.overloads[overload].append(func_name)
     # Write function start.
     str_out += leveli*tab
     leveli += 1
     
     
-    str_out += "FUNCTION " + func_name + "(LHS)"+self.new_line_mark+endl
-    str_out += leveli*tab + "RESULT(RES)"+ endl
+    str_out += "SUBROUTINE " + func_name + "("+lhs+",FMT,UNIT)"+endl
 
     str_out += leveli*tab + "IMPLICIT NONE" + endl
     
-    str_out += leveli*tab + lhs_t + ", INTENT(IN) :: LHS " + endl
-    str_out += leveli*tab + "TYPE("+self.type_name+") :: RES " + endl
-    str_out += endl
+    str_out += leveli*tab + lhs_t + ", INTENT(IN) :: VAR"+var_dim + endl
+    str_out += leveli*tab + "CHARACTER(len=*), INTENT(IN), OPTIONAL :: fmt" + endl
+    str_out += leveli*tab + "INTEGER, INTENT(IN), OPTIONAL :: unit" + endl
+    str_out += leveli*tab + "CHARACTER(len=:),ALLOCATABLE :: output_format" + endl
+    str_out += leveli*tab + "INTEGER :: unt" + endl*2
 
-    str_out += self.pprint_scalar_function( tab = tab,level = leveli*tab,  lhs_name = lhs)
+    str_out += leveli*tab + "IF ( PRESENT(unit) ) THEN" + endl
+    str_out += (leveli+1)*tab + "unt = unit" + endl
+    str_out += leveli*tab + "ELSE" + endl
+    str_out += (leveli+1)*tab + "unt = 6" + endl
+    str_out += leveli*tab + "END IF" + endl*2
+
+    str_out += leveli*tab + "IF ( PRESENT(fmt) ) THEN" + endl
+    str_out += (leveli+1)*tab + "output_format = '('//trim(fmt)//')'" + endl
+    str_out += leveli*tab + "ELSE" + endl
+    str_out += (leveli+1)*tab + "output_format = '(F10.4)'" + endl
+    str_out += leveli*tab + "END IF" + endl*2
+
+    str_out += self.pprint_scalar_function( tab = tab,level = leveli*tab,  lhs_name = lhs,advance=advance)
 
     str_out += endl
 
     # Write function end.
 
     leveli -= 1
-    str_out += leveli*tab + "END FUNCTION "+ func_name + endl
+    str_out += leveli*tab + "END SUBROUTINE "+ func_name + endl
 
     return str_out
   #--------------------------------------------------------------------------------------------------- 
@@ -2158,6 +2205,113 @@ class writer:
     return str_out
   #--------------------------------------------------------------------------------------------------- 
 
+
+  #***************************************************************************************************
+  def write_setIm(self, val_shape='S', idx_glob = True, tab=" ", level = 0, overload=None):
+
+    str_out = ""
+    leveli = level+1
+    val = "VAL"
+    res = "RES"
+
+    val_comp = ""
+    res_comp = ""
+
+    if val_shape == "V":
+      val_comp += "(:)"
+      res_comp = "(SIZE("+val+"))"
+    elif val_shape == "M":
+      val_comp += "(:,:)"
+      res_comp = "(SIZE("+val+",1),SIZE("+val+",2))"
+    # end if 
+
+    
+
+    func_name = self.type_name+"_SETIM_" + val_shape
+    str_out += leveli*tab + "SUBROUTINE " + func_name + "("+val+",IDX,RES)"+ endl
+    str_out += leveli*tab + "IMPLICIT NONE" + endl
+    str_out += leveli*tab + "TYPE("+self.type_name+"), INTENT(INOUT) :: "+val+val_comp + endl
+    str_out += leveli*tab + "REAL(DP),INTENT(IN) :: "+res+res_comp+" " + endl
+    str_out += leveli*tab + "INTEGER, INTENT(IN) :: IDX" + endl*2
+    
+    
+    str_out += leveli*tab + "SELECT CASE(IDX)" +endl
+    
+    i = 0
+    for ordi in range(self.order+1):
+      names = self.name_imdir[ordi]
+      str_out += leveli*tab + self.comment + 'Order '+str(ordi)+endl
+      for im in names:
+        str_out += leveli*tab + "CASE("+str(i)+")" + endl 
+        str_out += (leveli+1)*tab + val+self.get + im + "=RES"+endl 
+        i+=1
+      str_out += endl
+    str_out += leveli*tab + "END SELECT" +endl
+    imdir_list = []
+
+    leveli -= 1
+    str_out += leveli*tab + "END SUBROUTINE "+ func_name + endl
+
+    if overload is not None:
+      self.overloads[overload].append(func_name)
+    # end if
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def write_getIm(self, val_shape='S', idx_glob = True, tab=" ", level = 0, overload=None):
+
+    str_out = ""
+    leveli = level+1
+    val = "VAL"
+    res = "RES"
+
+    val_comp = ""
+    res_comp = ""
+
+    if val_shape == "V":
+      val_comp += "(:)"
+      res_comp = "(SIZE("+val+"))"
+    elif val_shape == "M":
+      val_comp += "(:,:)"
+      res_comp = "(SIZE("+val+",1),SIZE("+val+",2))"
+    # end if 
+
+    
+
+    func_name = self.type_name+"_GETIM_" + val_shape
+    str_out += "FUNCTION " + func_name + "("+val+",IDX) RESULT(RES)"+ endl
+    str_out += leveli*tab + "IMPLICIT NONE" + endl
+    str_out += leveli*tab + "TYPE("+self.type_name+"), INTENT(IN) :: "+val+val_comp + endl
+    str_out += leveli*tab + "REAL(DP) :: "+res+res_comp+" " + endl
+    str_out += leveli*tab + "INTEGER, INTENT(IN) :: IDX" + endl*2
+    
+    
+    str_out += leveli*tab + "SELECT CASE(IDX)" +endl
+    
+    i = 0
+    for ordi in range(self.order+1):
+      names = self.name_imdir[ordi]
+      str_out += leveli*tab + self.comment + 'Order '+str(ordi)+endl
+      for im in names:
+        str_out += leveli*tab + "CASE("+str(i)+")" + endl 
+        str_out += (leveli+1)*tab + "RES="+val+self.get + im + endl 
+        i+=1
+      str_out += endl
+    str_out += leveli*tab + "END SELECT" +endl
+    imdir_list = []
+
+    leveli -= 1
+    str_out += leveli*tab + "END FUNCTION "+ func_name + endl
+
+    if overload is not None:
+      self.overloads[overload].append(func_name)
+    # end if
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
   #***************************************************************************************************
   def write_scalar_function(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
     f_name = "FUNCTION", lhs_type= "O",lhs_shape= "S", rhs_type= "O", rhs_shape= "S", separator = ",", 
@@ -2357,7 +2511,113 @@ class writer:
     return str_out
   #--------------------------------------------------------------------------------------------------- 
 
+  #***************************************************************************************************
+  def write_blocksolver_function(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
+    f_name = "FUNCTION", var_type= "O", res_type= "O", separator = ",", matSize = '2',
+    f_open = "(", f_close = ")", addition = "+",generator = None,
+    overload = None ):
 
+    str_out = ""
+    leveli = level
+
+    func_name = self.type_name + "_" + function_name 
+
+    res_getter = self.get
+    res_name = 'RES'  
+    var_getter = self.get
+    var_name = 'A'
+
+    # Write function start.
+    str_out += leveli*tab
+    leveli += 1
+    if is_elemental:
+      str_out += 'ELEMENTAL '
+    # end if
+
+    if overload is not None:
+      self.overloads[overload].append(func_name)
+    # end if 
+
+    str_out += "FUNCTION " + func_name + "(A,det)"+self.new_line_mark+endl
+    str_out += leveli*tab + "RESULT(RES)"+ endl
+
+    str_out += leveli*tab + "IMPLICIT NONE" + endl
+
+    
+    str_out += leveli*tab + "TYPE("+self.type_name+") , INTENT(IN) :: A("+str(matSize)+","+str(matSize)+") " + endl
+    str_out += leveli*tab + "TYPE("+self.type_name+") , INTENT(IN), OPTIONAL :: det" + endl
+    str_out += leveli*tab + self.coeff_t + " :: detCalc" + endl
+    str_out += leveli*tab + "TYPE("+self.type_name+") :: RES(SIZE(A,1),SIZE(A,2)) " + endl
+    str_out += endl
+
+    res_inv = res_name + res_getter + 'R'
+    
+    str_out += leveli*tab  +'IF (PRESENT(det)) THEN' + endl
+    str_out += (leveli+1)*tab  +'detCalc=det%R' + endl
+    str_out += leveli*tab  +'ELSE' + endl
+    str_out += (leveli+1)*tab  +'detCalc=det'+str(matSize)+'x'+str(matSize)+"(A%R)"+ endl
+    str_out += leveli*tab  +'END IF' + endl*2
+
+    str_out += leveli*tab  +self.comment + "Get real part " + self.endl
+    str_out += leveli*tab + res_inv + '='+function_name+'('+var_name+var_getter+'R,detCalc)' + 2*endl
+
+
+    for ordi in range(1,self.order+1):
+      # str_out += self.endl
+      str_out += leveli*tab +self.comment + "Order " + str(ordi) + self.endl
+      dirs = self.name_imdir[ordi]
+      idxi = self.idx_imdir[ordi]
+
+      mult_res_alldirs = self.mult_res_total[ordi]
+
+      # Multiply the different imaginary directions all togeather such that resulting order is 
+      # ordi.
+      # print("Order "+str(ordi))
+
+
+      for j in range(len(dirs)):
+        mult_res = mult_res_alldirs[j]
+
+        # Write result variable.
+        str_out += leveli*tab + res_name + res_getter + dirs[j] + "=-MATMUL(" + res_inv + ",("
+
+        nterms = len(mult_res)
+        l = 0
+        for k in range(1,nterms):
+
+          mult = mult_res[k] # Get current direction two term result.
+          
+          if l != 0:
+            str_out += addition
+          # end if 
+            
+          if ( (l+1)%3 == 0 ) and ( l != ( nterms-1 ) ) :
+            str_out += "" + self.new_line_mark + endl
+            str_out += leveli*tab +' '*(len(res_name)+len(dirs[j])+1)
+          # end if 
+
+          str_out += "MATMUL("
+          str_out += var_name + var_getter + mult[0][2] + ','
+          str_out += res_name + res_getter + mult[1][2]
+          str_out += ")"
+          l += 1
+
+        # end for 
+
+        str_out += "))" + self.endl
+
+      # end for 
+      str_out += self.endl
+
+    # end for 
+
+    # str_out += endl
+    # Write function end.
+    leveli -= 1
+    str_out += leveli*tab + "END FUNCTION "+ func_name + endl
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
 
 
 
@@ -2437,7 +2697,7 @@ class writer:
 
   #***************************************************************************************************
   def write_matmul_function(self, function_name = "FUNCTION", level = 0, tab = " ", 
-    f_name = "FUNCTION", lhs_type= "O", rhs_type= "O", separator = ",", 
+    f_name = "FUNCTION", lhs_type= "O", rhs_type= "O", separator = ",", is_dot = False, 
     f_open = "(", f_close = ")", addition = " + ",generator = None,
     overload = None, use_gem = True ):
 
@@ -2523,7 +2783,7 @@ class writer:
   #***************************************************************************************************
   def write_transpose_function(self, function_name = "FUNCTION", level = 0, tab = " ", 
     f_name = "FUNCTION", lhs_type= "O", separator = ",", 
-    f_open = "(", f_close = ")", addition = " + ",generator = None,
+    f_open = "(", f_close = ")", addition = " + ",generator = None,inp_shape='M',
     overload = None ):
 
     str_out = ""
@@ -2555,9 +2815,12 @@ class writer:
 
     str_out += leveli*tab + "IMPLICIT NONE" + endl
 
+  
     
     str_out += leveli*tab + lhs_t + ", INTENT(IN) :: LHS(:,:) " + endl
     str_out += leveli*tab + "TYPE("+self.type_name+") :: RES(SIZE(LHS,2),SIZE(LHS,1)) " + endl
+    
+
     str_out += leveli*tab + "INTEGER :: I,J " + endl
     str_out += endl
 
@@ -2964,7 +3227,8 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
-  def write_file(self, filename = None, tab = '  ', is_std_matmul=True, elemental_feval = True):
+  def write_file(self, filename = None, tab = '  ', is_std_matmul=True, elemental_feval = True,
+    real_utils=True):
     """
     PORPUSE:  Write file of module containing OTI operations.
     """
@@ -2988,12 +3252,15 @@ class writer:
     # 1. Write module name if in fortran ...
     level = 0
 
-    str_out += "MODULE "+module_name + endl
+    str_out += "MODULE "+module_name + endl + endl
 
 
     level   += 1
 
-    str_out += endl + level*tab + "IMPLICIT NONE" + endl + endl
+    str_out += level*tab + "USE master_parameters" + endl
+    str_out += level*tab + "USE real_utils" + endl + endl
+
+    str_out += level*tab + "IMPLICIT NONE" + endl + endl
 
     # Define parameters
     str_out += self.set_constant_parameters( level = level*tab ) + endl
@@ -3008,6 +3275,9 @@ class writer:
     # contents
     contents = level*tab + "CONTAINS" + endl + endl
     
+
+    
+
     # Start writing functions
     # SCALAR:
 
@@ -3124,6 +3394,24 @@ class writer:
         f_close = ")", generator = self.multiplication_like_function_or, overload = "MATMUL" )
       contents += endl
 
+      contents += self.write_matrix_function(function_name = "DOT_PRODUCT", level = level, 
+        tab = tab, f_name = "DOT_PRODUCT", lhs_type= "O", rhs_type= "O", separator = ",", f_open = "(", 
+        f_close = ")", generator = self.multiplication_like_function_oo, overload = "DOT_PRODUCT" ,
+        lhs_dim="(:)", rhs_dim="(SIZE(LHS))", res_dim = "")
+      contents += endl
+
+      contents += self.write_matrix_function(function_name = "DOT_PRODUCT", level = level, 
+        tab = tab, f_name = "DOT_PRODUCT", lhs_type= self.real_str, rhs_type= "O", separator = ",", f_open = "(", 
+        f_close = ")", generator = self.multiplication_like_function_ro, overload = "DOT_PRODUCT" , 
+        lhs_dim="(:)", rhs_dim="(SIZE(LHS))", res_dim = "")
+      contents += endl
+
+      contents += self.write_matrix_function(function_name = "DOT_PRODUCT", level = level, 
+        tab = tab, f_name = "DOT_PRODUCT", lhs_type= "O", rhs_type= self.real_str, separator = ",", f_open = "(", 
+        f_close = ")", generator = self.multiplication_like_function_or, overload = "DOT_PRODUCT" ,
+        lhs_dim="(:)", rhs_dim="(SIZE(LHS))", res_dim = "")
+      contents += endl
+
       # NEGATION
       contents += self.write_matrix_function_neg(function_name = "TRANSPOSE", level = level, 
         tab = tab, f_name = "TRANSPOSE", lhs_type= "O", separator = ",", f_open = "(", 
@@ -3146,6 +3434,24 @@ class writer:
         f_close = ")", generator = self.multiplication_like_function_or, overload = "MATMUL" )
       contents += endl
 
+      contents += self.write_matmul_function(function_name = "DOT_PRODUCT", level = level, 
+        tab = tab, f_name = "DOT_PRODUCT", lhs_type= "O", rhs_type= "O", separator = ",", f_open = "(", 
+        f_close = ")", generator = self.multiplication_like_function_oo, overload = "DOT_PRODUCT" , 
+        lhs_dim="(:)", rhs_dim="(SIZE(LHS))", res_dim = "")
+      contents += endl
+
+      contents += self.write_matmul_function(function_name = "DOT_PRODUCT", level = level, 
+        tab = tab, f_name = "DOT_PRODUCT", lhs_type= self.real_str, rhs_type= "O", separator = ",", f_open = "(", 
+        f_close = ")", generator = self.multiplication_like_function_ro, overload = "DOT_PRODUCT" , 
+        lhs_dim="(:)", rhs_dim="(SIZE(LHS))", res_dim = "")
+      contents += endl
+
+      contents += self.write_matmul_function(function_name = "DOT_PRODUCT", level = level, 
+        tab = tab, f_name = "DOT_PRODUCT", lhs_type= "O", rhs_type= self.real_str, separator = ",", f_open = "(", 
+        f_close = ")", generator = self.multiplication_like_function_or, overload = "DOT_PRODUCT" , 
+        lhs_dim="(:)", rhs_dim="(SIZE(LHS))", res_dim = "")
+      contents += endl
+
       contents += self.write_transpose_function(function_name = "TRANSPOSE", level = level, 
         tab = tab, f_name = "TRANSPOSE", lhs_type= "O", separator = ",", f_open = "(", 
         f_close = ")", generator = self.multiplication_like_function_or, overload = "TRANSPOSE" )
@@ -3161,6 +3467,30 @@ class writer:
 
     contents += self.write_cr_matrix_form(val_shape='M', tab=tab, level = level)
     contents += endl
+
+    # Setter and getters:
+    contents += self.write_setIm( val_shape='S', idx_glob = True, tab=tab, level = level,overload='SETIM')
+    contents += endl
+    contents += self.write_setIm( val_shape='V', idx_glob = True, tab=tab, level = level,overload='SETIM')
+    contents += endl
+    contents += self.write_setIm( val_shape='M', idx_glob = True, tab=tab, level = level,overload='SETIM')
+    contents += endl
+
+    contents += self.write_getIm( val_shape='S', idx_glob = True, tab=tab, level = level,overload='GETIM')
+    contents += endl
+    contents += self.write_getIm( val_shape='V', idx_glob = True, tab=tab, level = level,overload='GETIM')
+    contents += endl
+    contents += self.write_getIm( val_shape='M', idx_glob = True, tab=tab, level = level,overload='GETIM')
+    contents += endl
+
+    print(level)
+    contents += self.write_scalar_function_print( level = level, tab = tab,overload='PPRINT', mode='S')
+    contents += endl
+    contents += self.write_scalar_function_print( level = level, tab = tab,overload='PPRINT', mode='V')
+    contents += endl
+    contents += self.write_scalar_function_print( level = level, tab = tab,overload='PPRINT', mode='M')
+    contents += endl
+
 
     if elemental_feval:
 
@@ -3179,8 +3509,13 @@ class writer:
       self.overloads['/'].append(self.type_name+"_DIVISION_RO")
       self.overloads['SQRT'].append(self.type_name+"_SQRT")
       self.overloads['REAL'].append(self.type_name+"_REAL")
-      self.overloads['PPRINT'].append(self.type_name+"_PPRINT_M_R")
-      self.overloads['PPRINT'].append(self.type_name+"_PPRINT_V_R")
+      self.overloads['DET2X2'].append(self.type_name+"_det2x2")
+      self.overloads['DET3X3'].append(self.type_name+"_det3x3")
+      self.overloads['DET4X4'].append(self.type_name+"_det4x4")
+
+      # These were removed because they belong to the real_utils module.
+      # self.overloads['PPRINT'].append(self.type_name+"_PPRINT_M_R")
+      # self.overloads['PPRINT'].append(self.type_name+"_PPRINT_V_R")
 
       contents += self.write_scalar_f2eval_elemental(function_name = "F2EVAL", is_elemental = True, level = level, 
           tab = tab, lhs_type= "O", overload = "F2EVAL", write_charact=True )
@@ -3218,6 +3553,29 @@ class writer:
     # 
 
     
+    if real_utils:
+
+      # Write functions with real utils real utils
+      contents += self.write_blocksolver_function(function_name = "INV2X2", is_elemental = False, level = level, tab = tab, 
+        f_name = "INV2X2", var_type= "O", res_type= "O", separator = ",", matSize = '2',
+        f_open = "(", f_close = ")", addition = "+",generator = None,
+        overload = "INV2X2" )
+      contents += endl 
+
+      contents += self.write_blocksolver_function(function_name = "INV3X3", is_elemental = False, level = level, tab = tab, 
+        f_name = "INV3X3", var_type= "O", res_type= "O", separator = ",", matSize = '3',
+        f_open = "(", f_close = ")", addition = "+",generator = None,
+        overload = "INV3X3" )
+      contents += endl 
+
+      contents += self.write_blocksolver_function(function_name = "INV4X4", is_elemental = False, level = level, tab = tab, 
+        f_name = "INV4X4", var_type= "O", res_type= "O", separator = ",", matSize = '4',
+        f_open = "(", f_close = ")", addition = "+",generator = None,
+        overload = "INV4X4" )
+      contents += endl 
+
+
+
     # Write private members.
     str_out += self.write_private(level = tab*level, tab = tab) + self.endl
 

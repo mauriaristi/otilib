@@ -25,6 +25,8 @@ cdef class csr_matrix:
 
                           arg1 = lil_matrix. LIL matrix is converted to CSR type of sparse matrix.
 
+                          arg1 = scipy.sparse.csr_matrix. Scipy's CSR matrix converted to OTI sparse type.
+
                           arg1 = (data, indices, indptr). Matrix is created from given arrays.
 
                           arg1 = (data, ( rows, cols ) ). Coordinate creator. Currently not supported.
@@ -47,6 +49,7 @@ cdef class csr_matrix:
     cdef uint64_t i, j, k, ncols, nrows, nnz
     cdef lil_matrix lil
     cdef sotinum onum
+    cdef matso otiarr
     cdef list lilrowsi, lildatai
     
     targ1 = type(arg1)
@@ -138,22 +141,39 @@ cdef class csr_matrix:
         # end for 
 
         # Copy data and indices.
-        for i in range(nnz):
-          
-          self.p_indices[i] = indices[i]
+        tdata = type(data)
+        
+        if tdata == matso:
 
-          if type(data[i]) == sotinum:
+          for i in range(nnz):
+            
+            self.p_indices[i] = indices[i]
 
-            onum = data[i]
+            onum = data[i,0]
             soti_copy_to( &onum.num, &self.arr.p_data[i], dhl)
 
-          else:
+          # end for
+
+        else:
+
+          for i in range(nnz):
             
-            self.arr.p_data[i] = soti_createReal( data[i], 0, dhl )
+            self.p_indices[i] = indices[i]
 
-          # end if   
+            if type(data[i]) == sotinum:
 
-        # end for
+              onum = data[i]
+              soti_copy_to( &onum.num, &self.arr.p_data[i], dhl)
+
+            else:
+              
+              self.arr.p_data[i] = soti_createReal( data[i], 0, dhl )
+
+            # end if   
+
+          # end for
+        
+        # end if 
 
       elif len(arg1) == 2 and type(arg1[0]) == int and type(arg1[1]) == int:
 
@@ -164,6 +184,8 @@ cdef class csr_matrix:
         self.p_indptr  = NULL
         self.arr    = arrso_init()
         
+
+
       elif len(arg1) == 2 and type(arg1[1]) == tuple:
         # COO creator
         raise ValueError(" ( data, (rows, cols) ) input format not currently implemented for CSR matrix.")
@@ -173,6 +195,32 @@ cdef class csr_matrix:
         raise ValueError("Wrong imput format to create CSR matrix.")
 
       #end if       
+    elif targ1 == sci_spr.csr_matrix:
+      
+      nnz = arg1.nnz
+      
+      self.nrows = arg1.shape[0]
+      self.ncols = arg1.shape[1]
+      
+      self.size = self.nrows*self.ncols
+      otiarr = array(arg1.data)
+      self.arr = otiarr.arr
+      otiarr.FLAGS=0 # Remove ownership of memory.
+
+      self.p_indices = <uint64_t*>malloc(       nnz*sizeof( uint64_t ) )
+      self.p_indptr  = <uint64_t*>malloc( (self.nrows+1)*sizeof( uint64_t ) )
+
+      if (not self.p_indices) or (not self.p_indptr):
+        raise MemoryError("Could not allocate arrays for sparse matrix.")
+      # end if 
+
+      for i in range(nnz):
+        self.p_indices[i] = arg1.indices[i]
+      # end for
+
+      for i in range(self.nrows+1):
+        self.p_indptr[i] = arg1.indptr[i]
+      # end for
 
     else:
 
@@ -357,6 +405,34 @@ cdef class csr_matrix:
 
   #---------------------------------------------------------------------------------------------------  
 
+
+  #***************************************************************************************************
+  def toarray(self):
+    """
+    PURPOSE:      Create a dense array out of the sparse representation.
+    """
+    #*************************************************************************************************
+    
+    global dhl
+    cdef matso out
+    cdef uint64_t i, col, k
+    
+    out = zeros(self.shape)
+
+    for i in range( self.nrows ):
+
+      for j in range(self.p_indptr[i], self.p_indptr[i+1] ):
+        
+        arrso_set_item_ij_o( &self.arr.p_data[j], i, self.p_indices[j], &out.arr, dhl)
+        
+      # end for
+
+    # end for
+
+    return out
+
+  #---------------------------------------------------------------------------------------------------  
+
   #***************************************************************************************************
   def copy(self):
     """
@@ -388,6 +464,310 @@ cdef class csr_matrix:
     return res
 
   #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __neg__(self):
+    """
+    PURPOSE: Negation overload.
+    """
+    #*************************************************************************************************
+    
+    global dhl
+
+    cdef csr_matrix res = self.zeros_like()
+    
+    arrso_neg_to(&self.arr, &res.arr, dhl)
+
+    return res
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __add__(self, other):
+    """
+    PURPOSE: Addition overload.
+    """
+    #*************************************************************************************************
+    
+    global dhl
+    
+    cdef csr_matrix res = <csr_matrix> csr_matrix.__new__(csr_matrix)
+    cdef csr_matrix lhs,rhs
+    cdef uint64_t ilhs, irhs, nTermL, nTermR
+    cdef uint64_t i, j, counter
+    
+    
+    
+    tlhs = type(self)
+    trhs = type(other)
+    
+    if (tlhs == csr_matrix and trhs == csr_matrix):
+
+      lhs = self
+      rhs = other
+
+      # Find first common parameters
+      
+      if (lhs.nrows != rhs.nrows) or (lhs.ncols != rhs.ncols):
+        raise ValueError("Matrices must have the same dimensions in addition operation: {0} x {1}".format(lhs.shape,rhs.shape) )
+      # end if 
+      
+      res.nrows = lhs.nrows
+      res.ncols = lhs.ncols
+      res.size = res.nrows*res.ncols
+
+      res.p_indptr = <uint64_t*>malloc( (lhs.nrows+1)*sizeof( uint64_t ) )
+
+      if (not res.p_indptr):
+        raise MemoryError("Could not allocate arrays for sparse matrix.")
+      # end if
+
+      res.p_indptr[0] = 0
+      
+      nnz = 0
+
+      for i in range(lhs.nrows):
+        
+        counter = 0
+        
+        ilhs = 0
+        irhs = 0
+        
+        nTermL = lhs.p_indptr[i+1] - lhs.p_indptr[i]
+        nTermR = rhs.p_indptr[i+1] - rhs.p_indptr[i]
+
+        while True:
+
+          if ilhs<nTermL or irhs<nTermR:
+            
+            counter += 1
+
+            if ilhs<nTermL and irhs<nTermR:
+
+              if lhs.p_indices[ilhs+lhs.p_indptr[i]] == rhs.p_indices[irhs+rhs.p_indptr[i]]:
+              
+                ilhs+=1
+                irhs+=1
+              
+              elif lhs.p_indices[ilhs+lhs.p_indptr[i]] < rhs.p_indices[irhs+rhs.p_indptr[i]]:
+              
+                ilhs+=1
+              
+              else:
+              
+                irhs+=1
+              
+              # end if 
+
+            elif ilhs<nTermL:
+              
+              ilhs+=1
+
+            else:
+              
+              irhs+=1
+
+            # end if 
+          else:
+            break
+          # end if 
+
+        # end while
+
+        nnz += counter
+        res.p_indptr[i+1] = nnz
+      
+      # end for 
+      
+      res.p_indices = <uint64_t*>malloc( nnz*sizeof( uint64_t ) )
+
+      if (not res.p_indices):
+        raise MemoryError("Could not allocate arrays for sparse matrix.")
+      # end if
+
+      res.arr = arrso_zeros_bases( nnz, 1, 0, 0, dhl )
+      
+      nnz=0
+      
+      for i in range(res.nrows):
+        
+        counter = 0
+        
+        ilhs = 0
+        irhs = 0
+        
+        nTermL = lhs.p_indptr[i+1] - lhs.p_indptr[i]
+        nTermR = rhs.p_indptr[i+1] - rhs.p_indptr[i]
+
+        while True:
+
+          if ilhs<nTermL or irhs<nTermR:
+            
+            if ilhs<nTermL and irhs<nTermR:
+
+              if lhs.p_indices[ilhs+lhs.p_indptr[i]] == rhs.p_indices[irhs+rhs.p_indptr[i]]:
+
+                res.p_indices[nnz+counter]=lhs.p_indices[ilhs+lhs.p_indptr[i]]
+                soti_sum_oo_to(&lhs.arr.p_data[ilhs+lhs.p_indptr[i]],&rhs.arr.p_data[irhs+rhs.p_indptr[i]],&res.arr.p_data[nnz+counter],dhl)
+                
+                ilhs+=1
+                irhs+=1
+              
+              elif lhs.p_indices[ilhs+lhs.p_indptr[i]] < rhs.p_indices[irhs+rhs.p_indptr[i]]:
+                
+                res.p_indices[nnz+counter]=lhs.p_indices[ilhs+lhs.p_indptr[i]]
+                soti_copy_to(&lhs.arr.p_data[ilhs+lhs.p_indptr[i]],&res.arr.p_data[nnz+counter],dhl)
+
+                ilhs+=1
+              
+              else:
+
+                res.p_indices[nnz+counter]=rhs.p_indices[irhs+rhs.p_indptr[i]]
+                soti_copy_to(&rhs.arr.p_data[irhs+rhs.p_indptr[i]],&res.arr.p_data[nnz+counter],dhl)
+              
+                irhs+=1
+              
+              # end if 
+
+            elif ilhs<nTermL:
+
+              res.p_indices[nnz+counter]=lhs.p_indices[ilhs+lhs.p_indptr[i]]
+              soti_copy_to(&lhs.arr.p_data[ilhs+lhs.p_indptr[i]],&res.arr.p_data[nnz+counter],dhl)
+              
+              ilhs+=1
+
+            else:
+              
+              res.p_indices[nnz+counter]=rhs.p_indices[irhs+rhs.p_indptr[i]]
+              soti_copy_to(&rhs.arr.p_data[irhs+rhs.p_indptr[i]],&res.arr.p_data[nnz+counter],dhl)
+
+              irhs+=1
+
+            # end if 
+            
+            counter += 1
+
+          else:
+            break
+          # end if 
+
+        # end while 
+
+        nnz += counter
+
+      # end for 
+
+    else:
+
+      return NotImplemented
+
+    # end if 
+      
+    return res
+
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def __iadd__(self, other):
+    """
+    PURPOSE: Inplace addition overload.
+    """
+    #*************************************************************************************************
+
+    return self + other
+
+  #---------------------------------------------------------------------------------------------------  
+
+  #***************************************************************************************************
+  def __sub__(self, other):
+    """
+    PURPOSE: Subtraction overload.
+    """
+    #*************************************************************************************************
+
+    return self + ( - other)
+
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def __isub__(self, other):
+    """
+    PURPOSE: Inplace subtraction overload.
+    """
+    #*************************************************************************************************
+
+    return self - other
+
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  def __mul__(self, other):
+    """ 
+    PURPOSE: Multiplication overload.
+    """
+    #*************************************************************************************************
+    
+    global dhl
+    
+    cdef csr_matrix res = <csr_matrix> csr_matrix.__new__(csr_matrix)
+    cdef csr_matrix csrMat
+    cdef sotinum otiNum
+    
+    tlhs = type(self)
+    trhs = type(other)
+    
+    if ( tlhs == sotinum ):
+     
+      otiNum = self
+      csrMat = other 
+      res = csrMat.zeros_like()
+
+      for i in range(csrMat.nnz):
+
+        soti_mul_oo_to(&otiNum.num, &csrMat.arr.p_data[i], &res.arr.p_data[i], dhl)
+
+      # end for 
+
+    elif ( trhs == sotinum ):
+     
+      otiNum = other
+      csrMat = self
+      res = csrMat.zeros_like()
+
+      for i in range(csrMat.nnz):
+
+        soti_mul_oo_to(&otiNum.num, &csrMat.arr.p_data[i], &res.arr.p_data[i], dhl)
+
+      # end for 
+
+    elif ( tlhs in number_types ):
+      
+      csrMat = other      
+      res = csrMat.zeros_like()
+
+      for i in range(csrMat.nnz):
+
+        soti_mul_ro_to(self, &csrMat.arr.p_data[i], &res.arr.p_data[i], dhl)
+
+      # end for 
+
+    elif ( trhs in number_types ) :
+
+      csrMat = self      
+      res = csrMat.zeros_like()
+
+      for i in range(csrMat.nnz):
+
+        soti_mul_ro_to(other, &csrMat.arr.p_data[i], &res.arr.p_data[i], dhl)
+
+      # end for 
+
+    else:
+
+      return NotImplemented      
+
+    # end if 
+      
+    return res
 
   #***************************************************************************************************
   def zeros_like(self):

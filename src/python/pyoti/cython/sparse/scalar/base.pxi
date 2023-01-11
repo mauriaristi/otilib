@@ -107,7 +107,7 @@ cdef class sotinum:
   @property
   def  order(self): 
     """
-    PURPOSE:      return the maximum order of the number.
+    PURPOSE:      returns the maximum truncation order of the number.
 
     DESCRIPTION:  Reads the value in num.
                   
@@ -118,26 +118,49 @@ cdef class sotinum:
 
   #---------------------------------------------------------------------------------------------------
 
-  # #***************************************************************************************************
-  # @order.setter
-  # def  order(self): 
-  #   """
-  #   PURPOSE:      Set the truncation order of the number.
+  #***************************************************************************************************
+  @property
+  def  actual_order(self): 
+    """
+    PURPOSE:      returns the actual order of the number (may not coincide with the truncation order).
 
-  #   DESCRIPTION:  Reads the value in num.
+    DESCRIPTION:  Reads the value in num.
                   
-  #   """
-  #   #*************************************************************************************************
+    """
+    #*************************************************************************************************
 
-  #   return self.num.order
+    return self.num.act_order
 
-  # #---------------------------------------------------------------------------------------------------
+  #---------------------------------------------------------------------------------------------------
+
+  #***************************************************************************************************
+  @property
+  def  nnz(self): 
+    """
+    PURPOSE:      returns the number of non-zero elements in the number. Only accounts for the 
+
+    DESCRIPTION:  Reads the value in num.
+                  
+    """
+    #*************************************************************************************************
+    cdef int ndir_total = 1
+
+    for i in range(0, self.num.trc_order):
+
+      ndir_total += self.num.p_nnz[i]
+
+    # end for
+
+    return ndir_total
+
+  #---------------------------------------------------------------------------------------------------
+  
 
   #***************************************************************************************************
   @property
   def  real(self): 
     """
-    PURPOSE:      return the real coefficient of the OTI number.
+    PURPOSE:      returns the real coefficient of the OTI number.
 
     DESCRIPTION:  Reads the value in num.
                   
@@ -337,6 +360,42 @@ cdef class sotinum:
     return (head + body + tail)
 
   #---------------------------------------------------------------------------------------------------  
+
+  #*************************************************************************************************** 
+  def get_nnz_full(self):
+    """
+    PURPOSE:  Get the number of non zeros (nnz) in the number, with the following format:
+            
+             [ total_nnz,        # actual nnz active in the number.
+               max_nnz_storable, # related with reserved memory.
+               [nnz_1,nnz_2,...],# array with the nnz for each order of derivative.
+               [size_1,size_2,...],# array with the size for each order of derivative.
+               ] 
+    """
+    #*************************************************************************************************
+    global h
+    global p_dH
+
+    cdef ndir_t nnz_i, size_i, total_nnz = 1, max_nnz_storable = 1, i;
+    cdef np.ndarray nnz = np.zeros(self.num.trc_order,dtype=int)
+    cdef np.ndarray size= np.zeros(self.num.trc_order,dtype=int)
+
+    for i in range(0, self.num.trc_order):
+      
+      nnz_i  = self.num.p_nnz[i]
+      size_i = self.num.p_size[i]
+      
+      total_nnz += nnz_i
+      max_nnz_storable   += size_i
+
+      nnz[i]  = nnz_i
+      size[i] = size_i
+
+    # end for
+
+    return [total_nnz,max_nnz_storable,nnz,size]
+
+  #--------------------------------------------------------------------------------------------------- 
 
   #*************************************************************************************************** 
   def long_repr(self):

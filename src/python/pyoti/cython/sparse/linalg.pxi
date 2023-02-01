@@ -1217,7 +1217,14 @@ cdef solve_sparse_old(csr_matrix K_in, matso b_in, matso out = None, solver = 'S
 #*****************************************************************************************************
 cpdef get_order_im_array(ord_t ordi, matso tmp):
   """
-  PURPOSE:   Get a specific order from .
+  PURPOSE:   Get a specific order array from a matso array.
+
+  INPUTS:
+    - ordi: Order to set the array.
+    - tmp: matso array that receives the imaginary directions.
+
+  OUTPUTS:
+    Exports a numpy array of real coefficients that contains the coefficients of order ordi from tmp.
   """
   #***************************************************************************************************
   global dhl
@@ -1280,6 +1287,11 @@ cpdef get_order_im_array(ord_t ordi, matso tmp):
 cpdef set_order_im_from_array(ord_t ordi, np.ndarray arr, matso tmp):
   """
   PURPOSE:   Set a specific order from an array.
+
+  INPUTS:
+    - ordi: Order to set the array.
+    - arr: Array to be set.
+    - tmp: matso array that receives the imaginary directions.
   """
   #***************************************************************************************************
   global dhl

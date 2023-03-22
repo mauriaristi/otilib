@@ -888,17 +888,22 @@ cdef inline uint64_t binSearch_list(list a, uint64_t x):
 
 
 
+#*****************************************************************************************************
 def set_printoptions(float_format="g", terms_print = 4):
   """
   PURPOSE:   Set the print options for OTI numbers.
 
   INPUTS:
       - float_format: (Default "g") Define the print format for t
-      - terms_print: Number of terms to print 
+      - terms_print: (Default 4) Number of terms to print.
+
+  In order to reset the values to defaults, just call set_printoptions() with no arguments.
 
   """
   #***************************************************************************************************
+
   global floatFormat, termsPrint
+
   floatFormat = float_format
   termsPrint  = terms_print
 #-----------------------------------------------------------------------------------------------------

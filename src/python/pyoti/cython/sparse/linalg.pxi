@@ -9,11 +9,11 @@ cpdef interp1d(object x, matso xvals, matso yvals, object out = None):
   PURPOSE:  Linear 1D interpolation.
 
   INPUTS:
+    - x
     - xvals: Values of x for interpolation. THis array must come in ascending order with no 
              repetitions. Must be matso array
     - yvals: Values of y for the interpolation. Must be matso array.
-    - x
-
+    - out (optional, default=None): Output object to hold the interpolation result.
   """
   #***************************************************************************************************
   
@@ -52,6 +52,51 @@ cpdef interp1d(object x, matso xvals, matso yvals, object out = None):
   if res_flag == 0:
     return res
   # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+
+
+#*****************************************************************************************************
+cpdef moving_average(matso data, int size):
+  """
+  PURPOSE:  Perform a moving average filter in a 1-D vector by a given window size.
+  
+  INPUTS:
+    - data: (matso array). Filter is performed in the flattened version of the array.
+    - size: Integer that defines the window size.
+
+  """
+  #***************************************************************************************************
+  cdef matso new_data
+  cdef int npts
+  cdef double factor
+  cdef sotinum value
+  cdef int k, j, startj, endj, starti, lefti, righti
+  
+  factor = 1.0/float(size)
+  npts = data.size
+  new_data = zeros(npts)
+
+  starti = size//2 # mid point
+  lefti = size - starti - 1
+  righti = size-lefti
+  
+  for k in range(npts):
+
+    startj = max(0,k-lefti)
+    endj   = min(npts,k+righti)
+    
+    value  = zero()
+
+    for j in range(startj,endj):
+      value += data[j,0]*factor
+    # end for 
+
+    new_data[k,0] = value
+
+  # end for
+  return new_data
 
 #-----------------------------------------------------------------------------------------------------
 

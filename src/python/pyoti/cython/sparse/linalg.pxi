@@ -77,6 +77,7 @@ cpdef moving_average(matso data, int size):
   cdef double factor
   cdef sotinum value
   cdef int k, j, startj, endj, starti, lefti, righti
+  cdef int miss_strtj, miss_endj
   
   factor = 1.0/float(size)
   npts = data.size
@@ -90,8 +91,23 @@ cpdef moving_average(matso data, int size):
 
     startj = max(0,k-lefti)
     endj   = min(npts,k+righti)
+
+    nmisstrtj = -min(0,k-lefti)
+    nmisendj  =  max(npts,k+righti)-npts
     
-    value  = zero()
+    if (nmisstrtj>0):
+
+      value  = factor * ( data[ startj, 0 ] * nmisstrtj )
+
+    elif (nmisendj>0):
+      j = endj-1
+      value  = factor * ( data[      j, 0 ] * nmisendj )
+
+    else:
+      
+      value = zero()
+
+    # end if 
 
     for j in range(startj,endj):
       value += data[j,0]*factor

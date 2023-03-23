@@ -95,17 +95,18 @@ cpdef moving_average(matso data, int size):
     nmisstrtj = -min(0,k-lefti)
     nmisendj  =  max(npts,k+righti)-npts
     
+    value = zero()
+
     if (nmisstrtj>0):
 
       value  = factor * ( data[ startj, 0 ] * nmisstrtj )
 
-    elif (nmisendj>0):
-      j = endj-1
-      value  = factor * ( data[      j, 0 ] * nmisendj )
+    # end if 
 
-    else:
-      
-      value = zero()
+    if (nmisendj>0):
+
+      j = endj-1
+      value  = value + factor * ( data[      j, 0 ] * nmisendj )
 
     # end if 
 

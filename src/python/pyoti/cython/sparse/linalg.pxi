@@ -43,6 +43,10 @@ cpdef interp1d(object x, matso xvals, matso yvals, object out = None):
 
     res = __interp1d_OOf( xvals, yvals, x, out = out)
 
+  elif tx is matso:
+
+    res = __interp1d_OOO( xvals, yvals, x, out = out)
+
   else:
 
     raise TypeError("Unsupported type {0} in inter1d operation.".format(tx))

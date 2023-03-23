@@ -76,6 +76,50 @@ cdef sotinum __interp1d_OOo(matso xvals, matso yvals, sotinum x , sotinum out = 
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
+cdef matso __interp1d_OOO(matso xvals, matso yvals, matso x , matso out = None):
+  """
+  PURPOSE:  Interpolation in 1D. xData MUST be in ascending order with no repeated entries.
+
+  INPUTS:
+    - xvals: x-values of data.
+    - yvals: y-values of data.
+    - x:     Values to interpolate.
+    - out: (optional) Output element to hold the data.
+
+  OUTPUTS:
+
+    If out is not given, the function returns the interpolated number.
+
+  """
+  #***************************************************************************************************
+  cdef matso y
+  cdef uint8_t res_flag = 1
+  cdef uint64_t i, j, 
+  
+  
+  if out is None:
+    res_flag = 0
+    y = zeros(x.shape)
+  else:
+    if x.shape[0] != out.shape[0] and x.shape[1] != out.shape[1]:
+      raise IndexError('"out" array must have the same shape as the interpolated matrix "x"')
+    # end if
+    y = out
+  # end if 
+  
+  for i in range(y.shape[0]):
+    for j in range(y.shape[1]):
+      y[i,j] = __interp1d_OOo( xvals, yvals, x[i,j] )
+    # end for 
+  # end for 
+
+  if res_flag == 0:
+    return y
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
 cdef sotife __interp1d_OOf(matso xvals, matso yvals, sotife xfe , sotife out = None):
   """
   PURPOSE:  Interpolation in 1D. xData MUST be in ascending order with no repeated entries.

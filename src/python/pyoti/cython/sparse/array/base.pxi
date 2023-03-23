@@ -421,7 +421,7 @@ cdef class matso:
           if val[0] < self.arr.nrows and val[1] < self.arr.ncols:
           
             ores = arrso_get_item_ij( &self.arr, val[0], val[1], dhl)
-            res = sotinum.create(&ores, FLAGS = 0)        
+            res = sotinum.create(&ores, FLAGS = 0).copy() # Create copy of data.
           
           else:
 

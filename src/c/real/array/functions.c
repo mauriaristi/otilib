@@ -1,6 +1,32 @@
 
 
+darr_t darr_erf(darr_t* arr){
 
+	darr_t res = darr_createEmpty(arr->nrows,arr->ncols);
+	uint64_t i;
+
+	for (i=0; i<arr->size; i++ ){
+
+		res.p_data[i] = erf(arr->p_data[i]);
+
+	}
+
+	return res;
+    
+}
+
+
+void darr_erf_to(darr_t* arr, darr_t* res){
+    
+    uint64_t i;
+
+	for (i=0; i<arr->size; i++ ){
+
+		res->p_data[i] = erf(arr->p_data[i]);
+
+	}
+
+}
 
 
 darr_t darr_atanh(darr_t* arr){

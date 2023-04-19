@@ -1,4 +1,4 @@
-
+cpdef erf(            object val,            object out = * )
 cpdef cos(            object val,            object out = * )
 cpdef sin(            object val,            object out = * )
 cpdef tan(            object val,            object out = * )

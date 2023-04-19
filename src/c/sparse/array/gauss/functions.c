@@ -1,6 +1,19 @@
 
 
 
+// ****************************************************************************************************
+fearrso_t fearrso_erf(fearrso_t* arr, dhelpl_t dhl){
+
+    fearrso_t res = fearrso_init();
+
+    res = fearrso_zeros_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
+
+    fearrso_erf_to(arr, &res, dhl);
+    
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 // ****************************************************************************************************
@@ -319,6 +332,21 @@ fearrso_t fearrso_pow(fearrso_t* arr, double e, dhelpl_t dhl){
 
 
 
+// ****************************************************************************************************
+void fearrso_erf_to(fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    fearrso_dimCheck_FF_elementwise(arr, arr, res);
+
+    for( i = 0; i<arr->nip; i++){
+        
+        arrso_erf_to(&arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 void fearrso_atanh_to(fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){

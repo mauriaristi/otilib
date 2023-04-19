@@ -1,4 +1,126 @@
 #*****************************************************************************************************
+cpdef erf(object val, object out = None):
+  """
+  PURPOSE:  Matrix determinant.
+  
+  Supported types:
+
+      -  matso
+      -  matsofe
+      -  darr
+      -  sotinum
+      -  sotife
+      -  real
+  """
+  #***************************************************************************************************
+
+  cdef matso      O, Ores
+  cdef dmat       R, Rres
+  cdef matsofe    F, Fres
+  cdef sotinum    o, ores
+  cdef coeff_t    r, rres
+  cdef sotife     f, fres
+  cdef coeff_t   crres
+  cdef sotinum_t cores
+  cdef fesoti_t  cfres
+  cdef darr_t    cRres
+  cdef arrso_t   cOres
+  cdef fearrso_t cFres
+  cdef uint8_t res_flag = 1
+  cdef object res
+
+  tval = type(val)
+
+  if out is None:
+    res_flag = 0
+  # end if 
+  #
+  if   tval is sotinum:
+    o = val
+    if res_flag:
+      
+      ores = out
+      soti_erf_to( &o.num, &ores.num, dhl)
+
+    else:
+
+      cores = soti_erf( &o.num,  dhl)
+      res   = sotinum.create(&cores)
+
+    # end if 
+  elif tval is sotife:
+    f = val
+    if res_flag:
+      
+      fres = out
+      fesoti_erf_to( &f.num, &fres.num, dhl)
+
+    else:
+
+      cfres = fesoti_erf( &f.num,  dhl)
+      res   = sotife.create(&cfres)
+
+    # end if         
+  elif tval is matsofe:    
+    F = val
+    if res_flag:
+
+      Fres = out
+      fearrso_erf_to( &F.arr, &Fres.arr, dhl)
+
+    else:
+
+      cFres = fearrso_erf( &F.arr, dhl)
+      res   = matsofe.create(&cFres)
+
+    # end if 
+  elif tval is matso:
+    O = val
+    if res_flag:
+      
+      Ores = out
+      arrso_erf_to( &O.arr, &Ores.arr, dhl)
+
+    else:
+
+      cOres = arrso_erf( &O.arr,  dhl)
+      res   = matso.create(&cOres)
+
+    # end if    
+  elif tval is dmat:
+    R = val
+    if res_flag:
+      
+      Rres = out
+      darr_erf_to( &R.arr, &Rres.arr)
+
+    else:
+
+      cRres = darr_cos( &R.arr )
+      res = dmat.create( &cRres )
+
+    # end if 
+  elif tval in number_types:
+    import math    
+    r    = val
+    rres = math.erf(r)
+    if res_flag:      
+      out = rres
+    else:
+      res = rres
+    # end if   
+  else:
+    raise TypeError("Unsupported types at cos operation.")    
+  # end if 
+
+  if res_flag == 0:
+    return res
+  # end if 
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
 cpdef cos(object val, object out = None):
   """
   PURPOSE:  Matrix determinant.

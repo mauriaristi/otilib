@@ -1,6 +1,18 @@
 
 
 // ****************************************************************************************************
+sotinum_t soti_erf(sotinum_t* num, dhelpl_t dhl){
+
+    coeff_t derivs[_MAXORDER_OTI+1];
+
+    der_r_erf(num->re, num->trc_order, derivs);
+
+    return soti_feval(derivs, num, dhl);
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl){
 
     coeff_t derivs[_MAXORDER_OTI+1];

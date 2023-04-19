@@ -3,6 +3,9 @@
 
 // Math functions.
 
+darr_t darr_erf(darr_t* arr);
+void   darr_erf_to(darr_t* arr, darr_t* res);
+
 darr_t darr_atanh(darr_t* arr);
 void   darr_atanh_to(darr_t* arr, darr_t* res);
 

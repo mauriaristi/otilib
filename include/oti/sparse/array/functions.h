@@ -2,6 +2,9 @@
 #define OTI_SPARSE_ARRAY_FUNCTIONS_H
 
 
+arrso_t arrso_erf(   arrso_t* arr,               dhelpl_t dhl);
+void    arrso_erf_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+
 arrso_t arrso_atanh(   arrso_t* arr,               dhelpl_t dhl);
 void    arrso_atanh_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 

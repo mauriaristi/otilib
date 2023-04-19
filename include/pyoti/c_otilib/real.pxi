@@ -33,6 +33,7 @@ cdef extern from "oti/oti.h" nogil:
 
   # From oti/real/derivatives.h
 
+  void der_r_erf(coeff_t x,  ord_t order, coeff_t* derivs);
   void der_r_atan2(coeff_t x, coeff_t y, ord_t order, coeff_t* derivs);
   void der_r_logb(coeff_t x, coeff_t base, ord_t order, coeff_t* derivs);
   void der_r_log10(coeff_t x, ord_t order, coeff_t* derivs);
@@ -130,6 +131,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # From oti/real/array/functions.h
 
+  darr_t darr_erf(darr_t* arr);
+  void   darr_erf_to(darr_t* arr, darr_t* res);
   darr_t darr_atanh(darr_t* arr);
   void   darr_atanh_to(darr_t* arr, darr_t* res);
   darr_t darr_asinh(darr_t* arr);
@@ -290,6 +293,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # From oti/real/array/gauss/functions.h
 
+  fedarr_t  fedarr_erf(    fedarr_t* arr               );
+  void      fedarr_erf_to( fedarr_t* arr, fedarr_t* res);
   fedarr_t  fedarr_atanh(    fedarr_t* arr               );
   void      fedarr_atanh_to( fedarr_t* arr, fedarr_t* res);
   fedarr_t  fedarr_asinh(    fedarr_t* arr               );
@@ -415,6 +420,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # From oti/real/scalar/gauss/functions.h
 
+  fednum_t fednum_erf(    fednum_t* num                );
+  void     fednum_erf_to( fednum_t* num, fednum_t* res );
   fednum_t fednum_atanh(    fednum_t* num                );
   void     fednum_atanh_to( fednum_t* num, fednum_t* res );
   fednum_t fednum_asinh(    fednum_t* num                );

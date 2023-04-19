@@ -1,6 +1,15 @@
 #ifndef OTI_COMPLEX_DERIVATIVES_H
 #define OTI_COMPLEX_DERIVATIVES_H
 
+/**************************************************************************************************//**
+@brief Derivatives of the error function
+
+@param x0 Evaluation point.
+@param order Maximum order of derivative requested.
+@param[out] derivs Array with the derivatives information. It must come allocated.
+******************************************************************************************************/
+void der_r_erf(coeff_t x0, ord_t order, coeff_t* derivs);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Derivatives of the two argument inverse tangent function. 

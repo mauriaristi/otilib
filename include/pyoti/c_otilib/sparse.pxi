@@ -175,6 +175,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # From oti/sparse/array/functions.h
 
+  arrso_t arrso_erf(   arrso_t* arr,               dhelpl_t dhl);
+  void    arrso_erf_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_atanh(   arrso_t* arr,               dhelpl_t dhl);
   void    arrso_atanh_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_asinh(   arrso_t* arr,               dhelpl_t dhl);
@@ -414,7 +416,8 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/array/gauss/functions.h
-
+  fearrso_t fearrso_erf(    fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_erf_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
   fearrso_t fearrso_atanh(    fearrso_t* arr,                 dhelpl_t dhl);
   void      fearrso_atanh_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
   fearrso_t fearrso_asinh(    fearrso_t* arr,                 dhelpl_t dhl);
@@ -625,7 +628,8 @@ cdef extern from "oti/oti.h" nogil:
 
 
   # From oti/sparse/scalar/functions.h
-
+  sotinum_t soti_erf(sotinum_t* num, dhelpl_t dhl);
+  void soti_erf_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_atanh(sotinum_t* num, dhelpl_t dhl);
   void soti_atanh_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_asinh(sotinum_t* num, dhelpl_t dhl);
@@ -764,6 +768,8 @@ cdef extern from "oti/oti.h" nogil:
 
   # From oti/sparse/scalar/gauss/functions.h
 
+  fesoti_t fesoti_erf(    fesoti_t* num,                             dhelpl_t dhl);
+  void     fesoti_erf_to( fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
   fesoti_t fesoti_atanh(    fesoti_t* num,                             dhelpl_t dhl);
   void     fesoti_atanh_to( fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
   fesoti_t fesoti_asinh(    fesoti_t* num,                             dhelpl_t dhl);

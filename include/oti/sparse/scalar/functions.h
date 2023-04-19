@@ -1,6 +1,17 @@
 #ifndef OTI_SPARSE_SCALAR_FUNCTIONS_H
 #define OTI_SPARSE_SCALAR_FUNCTIONS_H
 
+
+/**************************************************************************************************//**
+@brief Evaluation of error function at (num).
+
+@param[in] num: Oti number.
+@param[in] dhl: Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_erf(sotinum_t* num, dhelpl_t dhl);
+void soti_erf_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 /**************************************************************************************************//**
 @brief Evaluation of inverse hyperbolic tangent function at (num).
 

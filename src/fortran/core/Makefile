@@ -3,20 +3,24 @@
 FC = ifort # Default compiler
 
 # Flags:
-#   -O3: Optimization level 3 for best performance.
+#   -O2: Optimization level 2.
 #   -fPIC: For shared library.
 #   -fopenmp: For compatibility with parallel calls from Abaqus and others.
-FCFLAGS = -O3 -fPIC -fopenmp
-LCFLAGS = -I../core/ -L../core/ -lmaster_parameters -lreal_utils
+FCFLAGS = -O2 -fPIC -fopenmp
 
 
-SOURCES = sparse_oti.f90 
+SOURCES = master_parameters.f90 real_utils.f90 
 
 all: $(subst .f90,.mod, $(SOURCES))
 
-sparse_oti.mod: sparse_oti.f90
-	$(FC) -c $*.f90 $(FCFLAGS) $(LCFLAGS)
+master_parameters.mod: master_parameters.f90
+	$(FC) -c $*.f90 $(FCFLAGS) 
 	ar rc lib$*.a $*.o
+	ranlib lib$*.a
+
+real_utils.mod: real_utils.f90 master_parameters.mod 
+	$(FC) -c $*.f90 $(FCFLAGS) -L. -lmaster_parameters
+	ar rc lib$*.a $*.o master_parameters.o
 	ranlib lib$*.a
 
 changegfortran:

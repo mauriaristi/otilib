@@ -511,12 +511,12 @@ cdef class elbase:
   #***************************************************************************************************
   def get_local(self, arr, out = None):
     """
-    DESCRIPTION: get the local items from an array.
+    DESCRIPTION: get the local items from an array. To call this function, elem_indices must 
+                 have been defined.
 
     INPUTS:
       
       -> arr:            Global array. 
-      -> elem_indices:   Array with the element nodal indices.
 
     """
 

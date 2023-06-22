@@ -416,10 +416,10 @@ cdef class elm_help:
 
     for i in range(self.nbasis):
       
+      ii = elem_indices[i]
+
       for j in range(ncols):
       
-        ii = elem_indices[i]
-
         res[ i, j ] = arr[ ii, j ]
       
       # end for 

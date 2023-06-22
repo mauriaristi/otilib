@@ -882,6 +882,10 @@ cdef class sotinum:
   cpdef set(self, object rhs):
     """
     PURPOSE:  Sets from another value.
+
+    INPUTS:
+    - val: Value to be set. Can be either real or an oti number.
+
     """
     #*************************************************************************************************
     global dhl
@@ -907,6 +911,10 @@ cdef class sotinum:
   cpdef  set_im( self,  object val, object humdir):
     """
     PURPOSE:      to set a specific imaginary direction as given.
+
+    INPUTS:
+    - val:    Value to be set. Can be OTI in nature or real only.
+    - humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
 
     """
     #*************************************************************************************************
@@ -938,6 +946,10 @@ cdef class sotinum:
     """
     PURPOSE:      to set a specific derivative as given.
 
+    INPUTS:
+    - val:    Value to be set. Can be OTI in nature or real only.
+    - humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
+    
     """
     #*************************************************************************************************
     global dhl

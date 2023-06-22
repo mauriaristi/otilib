@@ -276,14 +276,17 @@ void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, 
     }else{
 
         // TODO: Determine what is the required order: Actual or Truncation...
-        res_order = MIN( dhl.ndh, MAX(num->trc_order, order + val->trc_order) );
+        //       Should we still propagate only the maximum truncation order?
+        //       Should we instead accumulate the order of derivatives?
+        // res_order = MIN( dhl.ndh, MAX(num->trc_order, order + val->trc_order) );
+        res_order = MIN( dhl.ndh, MAX(num->trc_order, val->trc_order) );
         
         tmp = soti_get_tmp(0, res_order, dhl);
 
         
         tmp.re = num->re; //  Set real coefficient.
         
-        // Initiall, copy all data from num to the result.
+        // Initially, copy all data from num to the result.
         ord_iter = MIN( num->act_order, res_order);
         tmp.act_order = ord_iter;
         
@@ -298,14 +301,17 @@ void soti_set_deriv_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, 
         }            
 
 
-        if (order <= dhl.ndh){
+        if (order <= dhl.ndh && order <= res_order){
 
+            // TODO: If val has zero coefficients within the derivative tree, 
+            //       those will need to be removed from the result within the tree.
 
             factorden = dhelp_get_deriv_factor(idx, order, dhl);            
             soti_set_im_r(val->re/factorden, idx, order, &tmp, dhl);
 
-            ord_iter = MIN( val->act_order, res_order - val->act_order);
-            tmp.act_order = MAX( ord_iter + order, tmp.act_order );
+            // ord_iter = MIN( val->act_order, res_order - val->act_order);
+            ord_iter = MIN( val->act_order, res_order - order);
+            tmp.act_order = MIN(res_order,MAX( val->act_order + order, tmp.act_order ));
 
             for ( ordi = 0; ordi < ord_iter; ordi++){
 

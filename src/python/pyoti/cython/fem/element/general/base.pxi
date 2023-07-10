@@ -271,15 +271,15 @@ cdef class elbase:
 
     elemd_allocate(&self.elem, intorder)
 
-    rN     = r.dmatfe.create(&self.elem.p_evalBasis[0],FLAGS=0)
-    rNxi   = r.dmatfe.create(&self.elem.p_evalBasis[1],FLAGS=0)
-    rNeta  = r.dmatfe.create(&self.elem.p_evalBasis[2],FLAGS=0)
-    rNzeta = r.dmatfe.create(&self.elem.p_evalBasis[3],FLAGS=0)
+    rN      = r.dmatfe.create(&self.elem.p_evalBasis[0], FLAGS = 0 )
+    rNxi    = r.dmatfe.create(&self.elem.p_evalBasis[1], FLAGS = 0 )
+    rNeta   = r.dmatfe.create(&self.elem.p_evalBasis[2], FLAGS = 0 )
+    rNzeta  = r.dmatfe.create(&self.elem.p_evalBasis[3], FLAGS = 0 )
 
-    rw    = r.dnumfe.create(&self.elem.w    ,FLAGS=0)
-    rxi   = r.dnumfe.create(&self.elem.xi   ,FLAGS=0)
-    reta  = r.dnumfe.create(&self.elem.eta  ,FLAGS=0)
-    rzeta = r.dnumfe.create(&self.elem.zeta ,FLAGS=0)
+    rw      = r.dnumfe.create(&self.elem.w    ,          FLAGS = 0 )
+    rxi     = r.dnumfe.create(&self.elem.xi   ,          FLAGS = 0 )
+    reta    = r.dnumfe.create(&self.elem.eta  ,          FLAGS = 0 )
+    rzeta   = r.dnumfe.create(&self.elem.zeta ,          FLAGS = 0 )
 
     # Create a new element helper from the selected algebra.
     self.elh = alg.elm_help()

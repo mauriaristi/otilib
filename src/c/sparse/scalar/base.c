@@ -45,6 +45,35 @@ void soti_taylor_integrate_to(coeff_t* deltas, sotinum_t* num, sotinum_t* res, d
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+// // ****************************************************************************************************
+// void soti_eval_o_to(sotinum_t* deltas, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
+    
+//     ord_t   ordi;
+//     ndir_t  ndir_ordi, diri;
+//     coeff_t val = 0.0, delta;
+    
+//     val = num->re;
+    
+//     for(ordi = 0; ordi < num->act_order ; ordi++ ){
+
+//         // 
+//         ndir_ordi = num->p_nnz[ordi];
+
+//         for ( diri = 0; diri< ndir_ordi; diri++){ 
+            
+//             delta  = dhelp_compute_delta( num->p_idx[ordi][diri], ordi + 1, deltas, dhl);
+//             val   += num->p_im[ordi][diri] * delta;
+
+//         }
+
+//     }
+    
+//     soti_set_r(val,res,dhl);
+
+// }
+// // ----------------------------------------------------------------------------------------------------
+
 // ****************************************************************************************************
 sotinum_t soti_get_order_im( ord_t order, sotinum_t* num, dhelpl_t dhl){
 
@@ -1002,13 +1031,13 @@ inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
     ord_t ordi = 0;
 
     // Get only temporal list available to the thread id.
-    // #ifdef _OPENMP
-    //     int thrdId = omp_get_thread_num();
-    //     ndir_t ntmp = thrdId * 20 + pntmp;
-    //     // printf("rtmp call thrdId: %d\n",thrdId);
-    // #else
+    #ifdef _OPENMP
+        int thrdId = omp_get_thread_num();
+        ndir_t ntmp = thrdId * 20 + pntmp;
+        // printf("rtmp call thrdId: %d\n",thrdId);
+    #else
         ndir_t ntmp = pntmp;
-    // #endif
+    #endif
 
     if (trc_order == 0){
         // In case order==0, no allocated array exists.

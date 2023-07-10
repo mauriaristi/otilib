@@ -20,7 +20,9 @@ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake )
 # Include the CMake script copyfiles.cmake. 
 include( copyfiles )
 
-option (USE_OPENMP "Use OpenMP to enamble <omp.h>" OFF)
+option (USE_OPENMP "Use OpenMP to enamble <omp.h>" YES)
+message( "USE_OPENMP flag is set to: ${USE_OPENMP}" )
+
 set(OpenMP_EXTRA_INLCUDE_FLAGS "")
 set(OpenMP_EXTRA_LINK_FLAGS "")
 # Uncomment this for macOS
@@ -62,6 +64,8 @@ endif(APPLE)
 
 if (USE_OPENMP)
 
+  message("OPENMP compilation - Enabled")
+
   find_package(OpenMP)
   set(CYTHON_OPENMP_COMPILE_FLAG "True")
 
@@ -77,6 +81,7 @@ if (USE_OPENMP)
 
 else(USE_OPENMP)
 
+  message("OPENMP compilation - Disabled")
   set(CYTHON_OPENMP_COMPILE_FLAG "False")
 
 endif(USE_OPENMP)

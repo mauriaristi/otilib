@@ -577,15 +577,15 @@ cdef class elm_help:
             # self.dV = self.w * self.detJ
 
       if self.compute_Jinv:
-
+        
         inv( self.J , out = self.Jinv)
-
+        
         tmp2 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
         tmp3 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
         # tmp4 = zero(nip=self.nip, nbases = self.otinbases, order=self.otiorder)
         
         if self.ndim_an == 1:
-
+          
           dot( self.Jinv, self.Nxi, out = self.Nx )
 
         elif self.ndim_an == 2:
@@ -650,7 +650,7 @@ cdef class elm_help:
             self.Nz[0,i]= tmp2
 
           # end for
-
+          
         # end if 
 
       # end if

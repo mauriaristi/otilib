@@ -1,0 +1,5384 @@
+MODULE OTIM1N10
+
+   USE master_parameters
+   USE real_utils
+
+   IMPLICIT NONE
+
+   INTEGER, PARAMETER :: NUM_IM_DIR = 11
+   INTEGER, PARAMETER :: TORDER     = 10
+   INTEGER, PARAMETER :: N_IMDIR_ORDER(11) = [1,1,1,1,1,1,1,1,1,1,1]
+
+   TYPE ONUMM1N10
+     ! Real
+     REAL(DP) :: R
+     ! Order 1
+     REAL(DP) :: E1
+     ! Order 2
+     REAL(DP) :: E11
+     ! Order 3
+     REAL(DP) :: E111
+     ! Order 4
+     REAL(DP) :: E1111
+     ! Order 5
+     REAL(DP) :: E11111
+     ! Order 6
+     REAL(DP) :: E111111
+     ! Order 7
+     REAL(DP) :: E1111111
+     ! Order 8
+     REAL(DP) :: E11111111
+     ! Order 9
+     REAL(DP) :: E111111111
+     ! Order 10
+     REAL(DP) :: E1111111111
+   END TYPE ONUMM1N10
+
+   ! Constant imaginary directions.
+   ! Order 1
+   TYPE(ONUMM1N10), PARAMETER :: E1 = ONUMM1N10(0.0_DP,1.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP)
+   ! Order 2
+   TYPE(ONUMM1N10), PARAMETER :: E11 = ONUMM1N10(0.0_DP,0.0_DP,1.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP)
+   ! Order 3
+   TYPE(ONUMM1N10), PARAMETER :: E111 = ONUMM1N10(0.0_DP,0.0_DP,0.0_DP,1.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP)
+   ! Order 4
+   TYPE(ONUMM1N10), PARAMETER :: E1111 = ONUMM1N10(0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP)
+   ! Order 5
+   TYPE(ONUMM1N10), PARAMETER :: E11111 = ONUMM1N10(0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP)
+   ! Order 6
+   TYPE(ONUMM1N10), PARAMETER :: E111111 = ONUMM1N10(0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP)
+   ! Order 7
+   TYPE(ONUMM1N10), PARAMETER :: E1111111 = ONUMM1N10(0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP,0.0_DP,0.0_DP,0.0_DP)
+   ! Order 8
+   TYPE(ONUMM1N10), PARAMETER :: E11111111 = ONUMM1N10(0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP,0.0_DP,0.0_DP)
+   ! Order 9
+   TYPE(ONUMM1N10), PARAMETER :: E111111111 = ONUMM1N10(0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP,0.0_DP)
+   ! Order 10
+   TYPE(ONUMM1N10), PARAMETER :: E1111111111 = ONUMM1N10(0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP)
+
+
+   INTERFACE OPERATOR(*)
+      MODULE PROCEDURE ONUMM1N10_MUL_OO_SS,ONUMM1N10_MUL_RO_SS,ONUMM1N10_MUL_OR_SS,ONUMM1N10_MUL_OO_VS,&
+                       ONUMM1N10_MUL_RO_VS,ONUMM1N10_MUL_OR_VS,ONUMM1N10_MUL_OO_MS,ONUMM1N10_MUL_RO_MS,&
+                       ONUMM1N10_MUL_OR_MS,ONUMM1N10_MUL_OO_SV,ONUMM1N10_MUL_RO_SV,ONUMM1N10_MUL_OR_SV,&
+                       ONUMM1N10_MUL_OO_SM,ONUMM1N10_MUL_RO_SM,ONUMM1N10_MUL_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(+)
+      MODULE PROCEDURE ONUMM1N10_ADD_OO_SS,ONUMM1N10_ADD_RO_SS,ONUMM1N10_ADD_OR_SS,ONUMM1N10_ADD_OO_VS,&
+                       ONUMM1N10_ADD_RO_VS,ONUMM1N10_ADD_OR_VS,ONUMM1N10_ADD_OO_MS,ONUMM1N10_ADD_RO_MS,&
+                       ONUMM1N10_ADD_OR_MS,ONUMM1N10_ADD_OO_SV,ONUMM1N10_ADD_RO_SV,ONUMM1N10_ADD_OR_SV,&
+                       ONUMM1N10_ADD_OO_SM,ONUMM1N10_ADD_RO_SM,ONUMM1N10_ADD_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(-)
+      MODULE PROCEDURE ONUMM1N10_NEG,ONUMM1N10_SUB_OO_SS,ONUMM1N10_SUB_RO_SS,ONUMM1N10_SUB_OR_SS,&
+                       ONUMM1N10_SUB_OO_VS,ONUMM1N10_SUB_RO_VS,ONUMM1N10_SUB_OR_VS,ONUMM1N10_SUB_OO_MS,&
+                       ONUMM1N10_SUB_RO_MS,ONUMM1N10_SUB_OR_MS,ONUMM1N10_SUB_OO_SV,ONUMM1N10_SUB_RO_SV,&
+                       ONUMM1N10_SUB_OR_SV,ONUMM1N10_SUB_OO_SM,ONUMM1N10_SUB_RO_SM,ONUMM1N10_SUB_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(/)
+      MODULE PROCEDURE ONUMM1N10_DIVISION_OO,ONUMM1N10_DIVISION_OR,ONUMM1N10_DIVISION_RO
+   END INTERFACE
+
+   INTERFACE ASSIGNMENT(=)
+      MODULE PROCEDURE ONUMM1N10_ASSIGN_R
+   END INTERFACE
+
+   INTERFACE OPERATOR(**)
+      MODULE PROCEDURE ONUMM1N10_POW_OR,ONUMM1N10_POW_RO,ONUMM1N10_POW_OO
+   END INTERFACE
+
+   INTERFACE PPRINT
+      MODULE PROCEDURE ONUMM1N10_PPRINT_S,ONUMM1N10_PPRINT_V,ONUMM1N10_PPRINT_M
+   END INTERFACE
+
+   INTERFACE TRANSPOSE
+      MODULE PROCEDURE ONUMM1N10_TRANSPOSE
+   END INTERFACE
+
+   INTERFACE MATMUL
+      MODULE PROCEDURE ONUMM1N10_MATMUL_ONUMM1N10,R_MATMUL_ONUMM1N10,ONUMM1N10_MATMUL_R
+   END INTERFACE
+
+   INTERFACE DOT_PRODUCT
+      MODULE PROCEDURE ONUMM1N10_DOT_PRODUCT_ONUMM1N10,R_DOT_PRODUCT_ONUMM1N10,ONUMM1N10_DOT_PRODUCT_R
+   END INTERFACE
+
+   INTERFACE UNFOLD
+      MODULE PROCEDURE ONUMM1N10_TO_CR_MAT_S,ONUMM1N10_TO_CR_MAT_V,ONUMM1N10_TO_CR_MAT_M
+   END INTERFACE
+
+   INTERFACE TO_CR
+      MODULE PROCEDURE ONUMM1N10_TO_CR_MAT_S,ONUMM1N10_TO_CR_MAT_V,ONUMM1N10_TO_CR_MAT_M
+   END INTERFACE
+
+   INTERFACE SIN
+      MODULE PROCEDURE ONUMM1N10_SIN
+   END INTERFACE
+
+   INTERFACE COS
+      MODULE PROCEDURE ONUMM1N10_COS
+   END INTERFACE
+
+   INTERFACE TAN
+      MODULE PROCEDURE ONUMM1N10_TAN
+   END INTERFACE
+
+   INTERFACE ASIN
+      MODULE PROCEDURE ONUMM1N10_ASIN
+   END INTERFACE
+
+   INTERFACE ACOS
+      MODULE PROCEDURE ONUMM1N10_ACOS
+   END INTERFACE
+
+   INTERFACE ATAN
+      MODULE PROCEDURE ONUMM1N10_ATAN
+   END INTERFACE
+
+   INTERFACE SINH
+      MODULE PROCEDURE ONUMM1N10_SINH
+   END INTERFACE
+
+   INTERFACE COSH
+      MODULE PROCEDURE ONUMM1N10_COSH
+   END INTERFACE
+
+   INTERFACE TANH
+      MODULE PROCEDURE ONUMM1N10_TANH
+   END INTERFACE
+
+   INTERFACE SQRT
+      MODULE PROCEDURE ONUMM1N10_SQRT
+   END INTERFACE
+
+   INTERFACE LOG
+      MODULE PROCEDURE ONUMM1N10_LOG
+   END INTERFACE
+
+   INTERFACE EXP
+      MODULE PROCEDURE ONUMM1N10_EXP
+   END INTERFACE
+
+   INTERFACE GEM
+      MODULE PROCEDURE ONUMM1N10_GEM_OOO,ONUMM1N10_GEM_ROO,ONUMM1N10_GEM_ORO
+   END INTERFACE
+
+   INTERFACE FEVAL
+      MODULE PROCEDURE ONUMM1N10_FEVAL
+   END INTERFACE
+
+   INTERFACE F2EVAL
+      MODULE PROCEDURE ONUMM1N10_F2EVAL
+   END INTERFACE
+
+   INTERFACE REAL
+      MODULE PROCEDURE ONUMM1N10_REAL
+   END INTERFACE
+
+   INTERFACE DET2X2
+      MODULE PROCEDURE ONUMM1N10_det2x2
+   END INTERFACE
+
+   INTERFACE DET3X3
+      MODULE PROCEDURE ONUMM1N10_det3x3
+   END INTERFACE
+
+   INTERFACE DET4X4
+      MODULE PROCEDURE ONUMM1N10_det4x4
+   END INTERFACE
+
+   INTERFACE INV2X2
+      MODULE PROCEDURE ONUMM1N10_INV2X2
+   END INTERFACE
+
+   INTERFACE INV3X3
+      MODULE PROCEDURE ONUMM1N10_INV3X3
+   END INTERFACE
+
+   INTERFACE INV4X4
+      MODULE PROCEDURE ONUMM1N10_INV4X4
+   END INTERFACE
+
+   INTERFACE GETIM
+      MODULE PROCEDURE ONUMM1N10_GETIM_S,ONUMM1N10_GETIM_V,ONUMM1N10_GETIM_M
+   END INTERFACE
+
+   INTERFACE SETIM
+      MODULE PROCEDURE ONUMM1N10_SETIM_S,ONUMM1N10_SETIM_V,ONUMM1N10_SETIM_M
+   END INTERFACE
+
+   CONTAINS
+
+   ELEMENTAL SUBROUTINE ONUMM1N10_ASSIGN_R(RES,LHS)
+      
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS 
+      TYPE(ONUMM1N10), INTENT(OUT) :: RES 
+
+      ! Assign like function 'LHS'
+      ! Real
+      RES%R = LHS
+
+      ! Order 1
+      RES%E1 = 0.0_DP
+
+      ! Order 2
+      RES%E11 = 0.0_DP
+
+      ! Order 3
+      RES%E111 = 0.0_DP
+
+      ! Order 4
+      RES%E1111 = 0.0_DP
+
+      ! Order 5
+      RES%E11111 = 0.0_DP
+
+      ! Order 6
+      RES%E111111 = 0.0_DP
+
+      ! Order 7
+      RES%E1111111 = 0.0_DP
+
+      ! Order 8
+      RES%E11111111 = 0.0_DP
+
+      ! Order 9
+      RES%E111111111 = 0.0_DP
+
+      ! Order 10
+      RES%E1111111111 = 0.0_DP
+
+   END SUBROUTINE ONUMM1N10_ASSIGN_R
+
+   ELEMENTAL FUNCTION ONUMM1N10_NEG(LHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS 
+      TYPE(ONUMM1N10) :: RES 
+
+      ! Negation like function '-LHS'
+      ! Real
+      RES%R = -LHS%R
+      ! Order 1
+      RES%E1 = -LHS%E1
+      ! Order 2
+      RES%E11 = -LHS%E11
+      ! Order 3
+      RES%E111 = -LHS%E111
+      ! Order 4
+      RES%E1111 = -LHS%E1111
+      ! Order 5
+      RES%E11111 = -LHS%E11111
+      ! Order 6
+      RES%E111111 = -LHS%E111111
+      ! Order 7
+      RES%E1111111 = -LHS%E1111111
+      ! Order 8
+      RES%E11111111 = -LHS%E11111111
+      ! Order 9
+      RES%E111111111 = -LHS%E111111111
+      ! Order 10
+      RES%E1111111111 = -LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_NEG
+
+   ELEMENTAL FUNCTION ONUMM1N10_ADD_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 + RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 + RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 + RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 + RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N10_ADD_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+
+      ! Order 2
+      RES%E11 =  + RHS%E11
+
+      ! Order 3
+      RES%E111 =  + RHS%E111
+
+      ! Order 4
+      RES%E1111 =  + RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  + RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N10_ADD_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OR_SS
+
+   ELEMENTAL FUNCTION ONUMM1N10_SUB_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 - RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 - RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 - RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 - RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N10_SUB_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+
+      ! Order 2
+      RES%E11 =  - RHS%E11
+
+      ! Order 3
+      RES%E111 =  - RHS%E111
+
+      ! Order 4
+      RES%E1111 =  - RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  - RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N10_SUB_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OR_SS
+
+   ELEMENTAL FUNCTION ONUMM1N10_MUL_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 10
+      RES%E1111111111 = LHS%R*RHS%E1111111111 + LHS%E1111111111*RHS%R +  &
+                     LHS%E1*RHS%E111111111 + LHS%E111111111*RHS%E1 + LHS%E11*RHS%E11111111 +  &
+                     LHS%E11111111*RHS%E11 + LHS%E111*RHS%E1111111 + LHS%E1111111*RHS%E111 +  &
+                     LHS%E1111*RHS%E111111 + LHS%E111111*RHS%E1111 + LHS%E11111*RHS%E11111
+      ! Order 9
+      RES%E111111111 = LHS%R*RHS%E111111111 + LHS%E111111111*RHS%R +  &
+                    LHS%E1*RHS%E11111111 + LHS%E11111111*RHS%E1 + LHS%E11*RHS%E1111111 +  &
+                    LHS%E1111111*RHS%E11 + LHS%E111*RHS%E111111 + LHS%E111111*RHS%E111 +  &
+                    LHS%E1111*RHS%E11111 + LHS%E11111*RHS%E1111
+      ! Order 8
+      RES%E11111111 = LHS%R*RHS%E11111111 + LHS%E11111111*RHS%R +  &
+                   LHS%E1*RHS%E1111111 + LHS%E1111111*RHS%E1 + LHS%E11*RHS%E111111 +  &
+                   LHS%E111111*RHS%E11 + LHS%E111*RHS%E11111 + LHS%E11111*RHS%E111 + LHS%E1111*RHS%E1111
+      ! Order 7
+      RES%E1111111 = LHS%R*RHS%E1111111 + LHS%E1111111*RHS%R +  &
+                  LHS%E1*RHS%E111111 + LHS%E111111*RHS%E1 + LHS%E11*RHS%E11111 +  &
+                  LHS%E11111*RHS%E11 + LHS%E111*RHS%E1111 + LHS%E1111*RHS%E111
+      ! Order 6
+      RES%E111111 = LHS%R*RHS%E111111 + LHS%E111111*RHS%R +  &
+                 LHS%E1*RHS%E11111 + LHS%E11111*RHS%E1 + LHS%E11*RHS%E1111 +  &
+                 LHS%E1111*RHS%E11 + LHS%E111*RHS%E111
+      ! Order 5
+      RES%E11111 = LHS%R*RHS%E11111 + LHS%E11111*RHS%R +  &
+                LHS%E1*RHS%E1111 + LHS%E1111*RHS%E1 + LHS%E11*RHS%E111 + LHS%E111*RHS%E11
+      ! Order 4
+      RES%E1111 = LHS%R*RHS%E1111 + LHS%E1111*RHS%R +  &
+               LHS%E1*RHS%E111 + LHS%E111*RHS%E1 + LHS%E11*RHS%E11
+      ! Order 3
+      RES%E111 = LHS%R*RHS%E111 + LHS%E111*RHS%R +  &
+              LHS%E1*RHS%E11 + LHS%E11*RHS%E1
+      ! Order 2
+      RES%E11 = LHS%R*RHS%E11 + LHS%E11*RHS%R + LHS%E1*RHS%E1
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM1N10_MUL_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N10_MUL_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS*RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS*RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS*RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS*RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS*RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS*RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS*RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS*RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS*RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_MUL_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N10_MUL_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+
+      ! Order 2
+      RES%E11 = LHS%E11*RHS
+
+      ! Order 3
+      RES%E111 = LHS%E111*RHS
+
+      ! Order 4
+      RES%E1111 = LHS%E1111*RHS
+
+      ! Order 5
+      RES%E11111 = LHS%E11111*RHS
+
+      ! Order 6
+      RES%E111111 = LHS%E111111*RHS
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111*RHS
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111*RHS
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111*RHS
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111*RHS
+
+   END FUNCTION ONUMM1N10_MUL_OR_SS
+
+   FUNCTION ONUMM1N10_ADD_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 + RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 + RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 + RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 + RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OO_VS
+
+   FUNCTION ONUMM1N10_ADD_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+
+      ! Order 2
+      RES%E11 =  + RHS%E11
+
+      ! Order 3
+      RES%E111 =  + RHS%E111
+
+      ! Order 4
+      RES%E1111 =  + RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  + RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_RO_VS
+
+   FUNCTION ONUMM1N10_ADD_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OR_VS
+
+   FUNCTION ONUMM1N10_SUB_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 - RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 - RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 - RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 - RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OO_VS
+
+   FUNCTION ONUMM1N10_SUB_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+
+      ! Order 2
+      RES%E11 =  - RHS%E11
+
+      ! Order 3
+      RES%E111 =  - RHS%E111
+
+      ! Order 4
+      RES%E1111 =  - RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  - RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_RO_VS
+
+   FUNCTION ONUMM1N10_SUB_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OR_VS
+
+   FUNCTION ONUMM1N10_MUL_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1)) 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 10
+      RES%E1111111111 = LHS%R*RHS%E1111111111 + LHS%E1111111111*RHS%R +  &
+                     LHS%E1*RHS%E111111111 + LHS%E111111111*RHS%E1 + LHS%E11*RHS%E11111111 +  &
+                     LHS%E11111111*RHS%E11 + LHS%E111*RHS%E1111111 + LHS%E1111111*RHS%E111 +  &
+                     LHS%E1111*RHS%E111111 + LHS%E111111*RHS%E1111 + LHS%E11111*RHS%E11111
+      ! Order 9
+      RES%E111111111 = LHS%R*RHS%E111111111 + LHS%E111111111*RHS%R +  &
+                    LHS%E1*RHS%E11111111 + LHS%E11111111*RHS%E1 + LHS%E11*RHS%E1111111 +  &
+                    LHS%E1111111*RHS%E11 + LHS%E111*RHS%E111111 + LHS%E111111*RHS%E111 +  &
+                    LHS%E1111*RHS%E11111 + LHS%E11111*RHS%E1111
+      ! Order 8
+      RES%E11111111 = LHS%R*RHS%E11111111 + LHS%E11111111*RHS%R +  &
+                   LHS%E1*RHS%E1111111 + LHS%E1111111*RHS%E1 + LHS%E11*RHS%E111111 +  &
+                   LHS%E111111*RHS%E11 + LHS%E111*RHS%E11111 + LHS%E11111*RHS%E111 + LHS%E1111*RHS%E1111
+      ! Order 7
+      RES%E1111111 = LHS%R*RHS%E1111111 + LHS%E1111111*RHS%R +  &
+                  LHS%E1*RHS%E111111 + LHS%E111111*RHS%E1 + LHS%E11*RHS%E11111 +  &
+                  LHS%E11111*RHS%E11 + LHS%E111*RHS%E1111 + LHS%E1111*RHS%E111
+      ! Order 6
+      RES%E111111 = LHS%R*RHS%E111111 + LHS%E111111*RHS%R +  &
+                 LHS%E1*RHS%E11111 + LHS%E11111*RHS%E1 + LHS%E11*RHS%E1111 +  &
+                 LHS%E1111*RHS%E11 + LHS%E111*RHS%E111
+      ! Order 5
+      RES%E11111 = LHS%R*RHS%E11111 + LHS%E11111*RHS%R +  &
+                LHS%E1*RHS%E1111 + LHS%E1111*RHS%E1 + LHS%E11*RHS%E111 + LHS%E111*RHS%E11
+      ! Order 4
+      RES%E1111 = LHS%R*RHS%E1111 + LHS%E1111*RHS%R +  &
+               LHS%E1*RHS%E111 + LHS%E111*RHS%E1 + LHS%E11*RHS%E11
+      ! Order 3
+      RES%E111 = LHS%R*RHS%E111 + LHS%E111*RHS%R +  &
+              LHS%E1*RHS%E11 + LHS%E11*RHS%E1
+      ! Order 2
+      RES%E11 = LHS%R*RHS%E11 + LHS%E11*RHS%R + LHS%E1*RHS%E1
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM1N10_MUL_OO_VS
+
+   FUNCTION ONUMM1N10_MUL_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS*RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS*RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS*RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS*RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS*RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS*RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS*RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS*RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS*RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_MUL_RO_VS
+
+   FUNCTION ONUMM1N10_MUL_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+
+      ! Order 2
+      RES%E11 = LHS%E11*RHS
+
+      ! Order 3
+      RES%E111 = LHS%E111*RHS
+
+      ! Order 4
+      RES%E1111 = LHS%E1111*RHS
+
+      ! Order 5
+      RES%E11111 = LHS%E11111*RHS
+
+      ! Order 6
+      RES%E111111 = LHS%E111111*RHS
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111*RHS
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111*RHS
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111*RHS
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111*RHS
+
+   END FUNCTION ONUMM1N10_MUL_OR_VS
+
+   FUNCTION ONUMM1N10_ADD_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 + RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 + RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 + RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 + RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OO_MS
+
+   FUNCTION ONUMM1N10_ADD_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+
+      ! Order 2
+      RES%E11 =  + RHS%E11
+
+      ! Order 3
+      RES%E111 =  + RHS%E111
+
+      ! Order 4
+      RES%E1111 =  + RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  + RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_RO_MS
+
+   FUNCTION ONUMM1N10_ADD_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OR_MS
+
+   FUNCTION ONUMM1N10_SUB_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 - RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 - RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 - RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 - RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OO_MS
+
+   FUNCTION ONUMM1N10_SUB_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+
+      ! Order 2
+      RES%E11 =  - RHS%E11
+
+      ! Order 3
+      RES%E111 =  - RHS%E111
+
+      ! Order 4
+      RES%E1111 =  - RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  - RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_RO_MS
+
+   FUNCTION ONUMM1N10_SUB_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OR_MS
+
+   FUNCTION ONUMM1N10_MUL_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 10
+      RES%E1111111111 = LHS%R*RHS%E1111111111 + LHS%E1111111111*RHS%R +  &
+                     LHS%E1*RHS%E111111111 + LHS%E111111111*RHS%E1 + LHS%E11*RHS%E11111111 +  &
+                     LHS%E11111111*RHS%E11 + LHS%E111*RHS%E1111111 + LHS%E1111111*RHS%E111 +  &
+                     LHS%E1111*RHS%E111111 + LHS%E111111*RHS%E1111 + LHS%E11111*RHS%E11111
+      ! Order 9
+      RES%E111111111 = LHS%R*RHS%E111111111 + LHS%E111111111*RHS%R +  &
+                    LHS%E1*RHS%E11111111 + LHS%E11111111*RHS%E1 + LHS%E11*RHS%E1111111 +  &
+                    LHS%E1111111*RHS%E11 + LHS%E111*RHS%E111111 + LHS%E111111*RHS%E111 +  &
+                    LHS%E1111*RHS%E11111 + LHS%E11111*RHS%E1111
+      ! Order 8
+      RES%E11111111 = LHS%R*RHS%E11111111 + LHS%E11111111*RHS%R +  &
+                   LHS%E1*RHS%E1111111 + LHS%E1111111*RHS%E1 + LHS%E11*RHS%E111111 +  &
+                   LHS%E111111*RHS%E11 + LHS%E111*RHS%E11111 + LHS%E11111*RHS%E111 + LHS%E1111*RHS%E1111
+      ! Order 7
+      RES%E1111111 = LHS%R*RHS%E1111111 + LHS%E1111111*RHS%R +  &
+                  LHS%E1*RHS%E111111 + LHS%E111111*RHS%E1 + LHS%E11*RHS%E11111 +  &
+                  LHS%E11111*RHS%E11 + LHS%E111*RHS%E1111 + LHS%E1111*RHS%E111
+      ! Order 6
+      RES%E111111 = LHS%R*RHS%E111111 + LHS%E111111*RHS%R +  &
+                 LHS%E1*RHS%E11111 + LHS%E11111*RHS%E1 + LHS%E11*RHS%E1111 +  &
+                 LHS%E1111*RHS%E11 + LHS%E111*RHS%E111
+      ! Order 5
+      RES%E11111 = LHS%R*RHS%E11111 + LHS%E11111*RHS%R +  &
+                LHS%E1*RHS%E1111 + LHS%E1111*RHS%E1 + LHS%E11*RHS%E111 + LHS%E111*RHS%E11
+      ! Order 4
+      RES%E1111 = LHS%R*RHS%E1111 + LHS%E1111*RHS%R +  &
+               LHS%E1*RHS%E111 + LHS%E111*RHS%E1 + LHS%E11*RHS%E11
+      ! Order 3
+      RES%E111 = LHS%R*RHS%E111 + LHS%E111*RHS%R +  &
+              LHS%E1*RHS%E11 + LHS%E11*RHS%E1
+      ! Order 2
+      RES%E11 = LHS%R*RHS%E11 + LHS%E11*RHS%R + LHS%E1*RHS%E1
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM1N10_MUL_OO_MS
+
+   FUNCTION ONUMM1N10_MUL_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS*RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS*RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS*RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS*RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS*RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS*RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS*RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS*RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS*RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_MUL_RO_MS
+
+   FUNCTION ONUMM1N10_MUL_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+
+      ! Order 2
+      RES%E11 = LHS%E11*RHS
+
+      ! Order 3
+      RES%E111 = LHS%E111*RHS
+
+      ! Order 4
+      RES%E1111 = LHS%E1111*RHS
+
+      ! Order 5
+      RES%E11111 = LHS%E11111*RHS
+
+      ! Order 6
+      RES%E111111 = LHS%E111111*RHS
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111*RHS
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111*RHS
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111*RHS
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111*RHS
+
+   END FUNCTION ONUMM1N10_MUL_OR_MS
+
+   FUNCTION ONUMM1N10_ADD_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 + RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 + RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 + RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 + RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OO_SV
+
+   FUNCTION ONUMM1N10_ADD_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+
+      ! Order 2
+      RES%E11 =  + RHS%E11
+
+      ! Order 3
+      RES%E111 =  + RHS%E111
+
+      ! Order 4
+      RES%E1111 =  + RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  + RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_RO_SV
+
+   FUNCTION ONUMM1N10_ADD_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OR_SV
+
+   FUNCTION ONUMM1N10_SUB_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 - RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 - RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 - RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 - RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OO_SV
+
+   FUNCTION ONUMM1N10_SUB_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+
+      ! Order 2
+      RES%E11 =  - RHS%E11
+
+      ! Order 3
+      RES%E111 =  - RHS%E111
+
+      ! Order 4
+      RES%E1111 =  - RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  - RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_RO_SV
+
+   FUNCTION ONUMM1N10_SUB_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OR_SV
+
+   FUNCTION ONUMM1N10_MUL_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1)) 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 10
+      RES%E1111111111 = LHS%R*RHS%E1111111111 + LHS%E1111111111*RHS%R +  &
+                     LHS%E1*RHS%E111111111 + LHS%E111111111*RHS%E1 + LHS%E11*RHS%E11111111 +  &
+                     LHS%E11111111*RHS%E11 + LHS%E111*RHS%E1111111 + LHS%E1111111*RHS%E111 +  &
+                     LHS%E1111*RHS%E111111 + LHS%E111111*RHS%E1111 + LHS%E11111*RHS%E11111
+      ! Order 9
+      RES%E111111111 = LHS%R*RHS%E111111111 + LHS%E111111111*RHS%R +  &
+                    LHS%E1*RHS%E11111111 + LHS%E11111111*RHS%E1 + LHS%E11*RHS%E1111111 +  &
+                    LHS%E1111111*RHS%E11 + LHS%E111*RHS%E111111 + LHS%E111111*RHS%E111 +  &
+                    LHS%E1111*RHS%E11111 + LHS%E11111*RHS%E1111
+      ! Order 8
+      RES%E11111111 = LHS%R*RHS%E11111111 + LHS%E11111111*RHS%R +  &
+                   LHS%E1*RHS%E1111111 + LHS%E1111111*RHS%E1 + LHS%E11*RHS%E111111 +  &
+                   LHS%E111111*RHS%E11 + LHS%E111*RHS%E11111 + LHS%E11111*RHS%E111 + LHS%E1111*RHS%E1111
+      ! Order 7
+      RES%E1111111 = LHS%R*RHS%E1111111 + LHS%E1111111*RHS%R +  &
+                  LHS%E1*RHS%E111111 + LHS%E111111*RHS%E1 + LHS%E11*RHS%E11111 +  &
+                  LHS%E11111*RHS%E11 + LHS%E111*RHS%E1111 + LHS%E1111*RHS%E111
+      ! Order 6
+      RES%E111111 = LHS%R*RHS%E111111 + LHS%E111111*RHS%R +  &
+                 LHS%E1*RHS%E11111 + LHS%E11111*RHS%E1 + LHS%E11*RHS%E1111 +  &
+                 LHS%E1111*RHS%E11 + LHS%E111*RHS%E111
+      ! Order 5
+      RES%E11111 = LHS%R*RHS%E11111 + LHS%E11111*RHS%R +  &
+                LHS%E1*RHS%E1111 + LHS%E1111*RHS%E1 + LHS%E11*RHS%E111 + LHS%E111*RHS%E11
+      ! Order 4
+      RES%E1111 = LHS%R*RHS%E1111 + LHS%E1111*RHS%R +  &
+               LHS%E1*RHS%E111 + LHS%E111*RHS%E1 + LHS%E11*RHS%E11
+      ! Order 3
+      RES%E111 = LHS%R*RHS%E111 + LHS%E111*RHS%R +  &
+              LHS%E1*RHS%E11 + LHS%E11*RHS%E1
+      ! Order 2
+      RES%E11 = LHS%R*RHS%E11 + LHS%E11*RHS%R + LHS%E1*RHS%E1
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM1N10_MUL_OO_SV
+
+   FUNCTION ONUMM1N10_MUL_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS*RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS*RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS*RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS*RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS*RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS*RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS*RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS*RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS*RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_MUL_RO_SV
+
+   FUNCTION ONUMM1N10_MUL_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+
+      ! Order 2
+      RES%E11 = LHS%E11*RHS
+
+      ! Order 3
+      RES%E111 = LHS%E111*RHS
+
+      ! Order 4
+      RES%E1111 = LHS%E1111*RHS
+
+      ! Order 5
+      RES%E11111 = LHS%E11111*RHS
+
+      ! Order 6
+      RES%E111111 = LHS%E111111*RHS
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111*RHS
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111*RHS
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111*RHS
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111*RHS
+
+   END FUNCTION ONUMM1N10_MUL_OR_SV
+
+   FUNCTION ONUMM1N10_ADD_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      !  Real
+      RES%R = LHS%R + RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 + RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 + RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 + RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 + RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 + RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OO_SM
+
+   FUNCTION ONUMM1N10_ADD_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS + RHS%R
+
+      ! Order 1
+      RES%E1 =  + RHS%E1
+
+      ! Order 2
+      RES%E11 =  + RHS%E11
+
+      ! Order 3
+      RES%E111 =  + RHS%E111
+
+      ! Order 4
+      RES%E1111 =  + RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  + RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  + RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  + RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  + RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  + RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  + RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_RO_SM
+
+   FUNCTION ONUMM1N10_ADD_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS + RHS'
+      ! Real
+      RES%R = LHS%R + RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_ADD_OR_SM
+
+   FUNCTION ONUMM1N10_SUB_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      !  Real
+      RES%R = LHS%R - RHS%R
+
+      ! Order 1
+      RES%E1 = LHS%E1 - RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11 - RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111 - RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111 - RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111 - RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111 - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111 - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111 - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111 - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111 - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OO_SM
+
+   FUNCTION ONUMM1N10_SUB_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS - RHS%R
+
+      ! Order 1
+      RES%E1 =  - RHS%E1
+
+      ! Order 2
+      RES%E11 =  - RHS%E11
+
+      ! Order 3
+      RES%E111 =  - RHS%E111
+
+      ! Order 4
+      RES%E1111 =  - RHS%E1111
+
+      ! Order 5
+      RES%E11111 =  - RHS%E11111
+
+      ! Order 6
+      RES%E111111 =  - RHS%E111111
+
+      ! Order 7
+      RES%E1111111 =  - RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 =  - RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 =  - RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 =  - RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_RO_SM
+
+   FUNCTION ONUMM1N10_SUB_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Addition like function 'LHS - RHS'
+      ! Real
+      RES%R = LHS%R - RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1
+
+      ! Order 2
+      RES%E11 = LHS%E11
+
+      ! Order 3
+      RES%E111 = LHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111
+
+   END FUNCTION ONUMM1N10_SUB_OR_SM
+
+   FUNCTION ONUMM1N10_MUL_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      !  Multiplication like function 'LHS*RHS'
+      ! Order 10
+      RES%E1111111111 = LHS%R*RHS%E1111111111 + LHS%E1111111111*RHS%R +  &
+                     LHS%E1*RHS%E111111111 + LHS%E111111111*RHS%E1 + LHS%E11*RHS%E11111111 +  &
+                     LHS%E11111111*RHS%E11 + LHS%E111*RHS%E1111111 + LHS%E1111111*RHS%E111 +  &
+                     LHS%E1111*RHS%E111111 + LHS%E111111*RHS%E1111 + LHS%E11111*RHS%E11111
+      ! Order 9
+      RES%E111111111 = LHS%R*RHS%E111111111 + LHS%E111111111*RHS%R +  &
+                    LHS%E1*RHS%E11111111 + LHS%E11111111*RHS%E1 + LHS%E11*RHS%E1111111 +  &
+                    LHS%E1111111*RHS%E11 + LHS%E111*RHS%E111111 + LHS%E111111*RHS%E111 +  &
+                    LHS%E1111*RHS%E11111 + LHS%E11111*RHS%E1111
+      ! Order 8
+      RES%E11111111 = LHS%R*RHS%E11111111 + LHS%E11111111*RHS%R +  &
+                   LHS%E1*RHS%E1111111 + LHS%E1111111*RHS%E1 + LHS%E11*RHS%E111111 +  &
+                   LHS%E111111*RHS%E11 + LHS%E111*RHS%E11111 + LHS%E11111*RHS%E111 + LHS%E1111*RHS%E1111
+      ! Order 7
+      RES%E1111111 = LHS%R*RHS%E1111111 + LHS%E1111111*RHS%R +  &
+                  LHS%E1*RHS%E111111 + LHS%E111111*RHS%E1 + LHS%E11*RHS%E11111 +  &
+                  LHS%E11111*RHS%E11 + LHS%E111*RHS%E1111 + LHS%E1111*RHS%E111
+      ! Order 6
+      RES%E111111 = LHS%R*RHS%E111111 + LHS%E111111*RHS%R +  &
+                 LHS%E1*RHS%E11111 + LHS%E11111*RHS%E1 + LHS%E11*RHS%E1111 +  &
+                 LHS%E1111*RHS%E11 + LHS%E111*RHS%E111
+      ! Order 5
+      RES%E11111 = LHS%R*RHS%E11111 + LHS%E11111*RHS%R +  &
+                LHS%E1*RHS%E1111 + LHS%E1111*RHS%E1 + LHS%E11*RHS%E111 + LHS%E111*RHS%E11
+      ! Order 4
+      RES%E1111 = LHS%R*RHS%E1111 + LHS%E1111*RHS%R +  &
+               LHS%E1*RHS%E111 + LHS%E111*RHS%E1 + LHS%E11*RHS%E11
+      ! Order 3
+      RES%E111 = LHS%R*RHS%E111 + LHS%E111*RHS%R +  &
+              LHS%E1*RHS%E11 + LHS%E11*RHS%E1
+      ! Order 2
+      RES%E11 = LHS%R*RHS%E11 + LHS%E11*RHS%R + LHS%E1*RHS%E1
+      ! Order 1
+      RES%E1 = LHS%R*RHS%E1 + LHS%E1*RHS%R
+      ! Order 0
+      RES%R = LHS%R*RHS%R
+
+   END FUNCTION ONUMM1N10_MUL_OO_SM
+
+   FUNCTION ONUMM1N10_MUL_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS*RHS%R
+
+      ! Order 1
+      RES%E1 = LHS*RHS%E1
+
+      ! Order 2
+      RES%E11 = LHS*RHS%E11
+
+      ! Order 3
+      RES%E111 = LHS*RHS%E111
+
+      ! Order 4
+      RES%E1111 = LHS*RHS%E1111
+
+      ! Order 5
+      RES%E11111 = LHS*RHS%E11111
+
+      ! Order 6
+      RES%E111111 = LHS*RHS%E111111
+
+      ! Order 7
+      RES%E1111111 = LHS*RHS%E1111111
+
+      ! Order 8
+      RES%E11111111 = LHS*RHS%E11111111
+
+      ! Order 9
+      RES%E111111111 = LHS*RHS%E111111111
+
+      ! Order 10
+      RES%E1111111111 = LHS*RHS%E1111111111
+
+   END FUNCTION ONUMM1N10_MUL_RO_SM
+
+   FUNCTION ONUMM1N10_MUL_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Multiplication like function 'LHS*RHS'
+      !  Real
+      RES%R = LHS%R*RHS
+
+      ! Order 1
+      RES%E1 = LHS%E1*RHS
+
+      ! Order 2
+      RES%E11 = LHS%E11*RHS
+
+      ! Order 3
+      RES%E111 = LHS%E111*RHS
+
+      ! Order 4
+      RES%E1111 = LHS%E1111*RHS
+
+      ! Order 5
+      RES%E11111 = LHS%E11111*RHS
+
+      ! Order 6
+      RES%E111111 = LHS%E111111*RHS
+
+      ! Order 7
+      RES%E1111111 = LHS%E1111111*RHS
+
+      ! Order 8
+      RES%E11111111 = LHS%E11111111*RHS
+
+      ! Order 9
+      RES%E111111111 = LHS%E111111111*RHS
+
+      ! Order 10
+      RES%E1111111111 = LHS%E1111111111*RHS
+
+   END FUNCTION ONUMM1N10_MUL_OR_SM
+
+ELEMENTAL    FUNCTION ONUMM1N10_GEM_OOO(A,B,C)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: A 
+      TYPE(ONUMM1N10), INTENT(IN) :: B 
+      TYPE(ONUMM1N10), INTENT(IN) :: C 
+      TYPE(ONUMM1N10) :: RES 
+
+      !  General multiplication like function 'A*B + C'
+
+      ! Order 0
+      RES%R = C%R + A%R*B%R
+
+      ! Order 1
+      RES%E1 = C%E1 + A%R*B%E1 + A%E1*B%R
+
+      ! Order 2
+      RES%E11 = C%E11 + A%R*B%E11 + A%E11*B%R + A%E1*B%E1
+
+      ! Order 3
+      RES%E111 = C%E111 + A%R*B%E111 + A%E111*B%R + A%E1*B%E11 &
+               + A%E11*B%E1
+
+      ! Order 4
+      RES%E1111 = C%E1111 + A%R*B%E1111 + A%E1111*B%R + A%E1*B%E111 &
+                + A%E111*B%E1 + A%E11*B%E11
+
+      ! Order 5
+      RES%E11111 = C%E11111 + A%R*B%E11111 + A%E11111*B%R + A%E1*B%E1111 &
+                 + A%E1111*B%E1 + A%E11*B%E111 + A%E111*B%E11
+
+      ! Order 6
+      RES%E111111 = C%E111111 + A%R*B%E111111 + A%E111111*B%R + A%E1*B%E11111 &
+                  + A%E11111*B%E1 + A%E11*B%E1111 + A%E1111*B%E11 &
+                  + A%E111*B%E111
+
+      ! Order 7
+      RES%E1111111 = C%E1111111 + A%R*B%E1111111 + A%E1111111*B%R + A%E1*B%E111111 &
+                   + A%E111111*B%E1 + A%E11*B%E11111 + A%E11111*B%E11 &
+                   + A%E111*B%E1111 + A%E1111*B%E111
+
+      ! Order 8
+      RES%E11111111 = C%E11111111 + A%R*B%E11111111 + A%E11111111*B%R + A%E1*B%E1111111 &
+                    + A%E1111111*B%E1 + A%E11*B%E111111 + A%E111111*B%E11 &
+                    + A%E111*B%E11111 + A%E11111*B%E111 + A%E1111*B%E1111
+
+      ! Order 9
+      RES%E111111111 = C%E111111111 + A%R*B%E111111111 + A%E111111111*B%R + A%E1*B%E11111111 &
+                     + A%E11111111*B%E1 + A%E11*B%E1111111 + A%E1111111*B%E11 &
+                     + A%E111*B%E111111 + A%E111111*B%E111 + A%E1111*B%E11111 &
+                     + A%E11111*B%E1111
+
+      ! Order 10
+      RES%E1111111111 = C%E1111111111 + A%R*B%E1111111111 + A%E1111111111*B%R + A%E1*B%E111111111 &
+                      + A%E111111111*B%E1 + A%E11*B%E11111111 + A%E11111111*B%E11 &
+                      + A%E111*B%E1111111 + A%E1111111*B%E111 + A%E1111*B%E111111 &
+                      + A%E111111*B%E1111 + A%E11111*B%E11111
+
+   END FUNCTION ONUMM1N10_GEM_OOO
+
+ELEMENTAL    FUNCTION ONUMM1N10_GEM_ROO(A,B,C)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: A 
+      TYPE(ONUMM1N10), INTENT(IN) :: B 
+      TYPE(ONUMM1N10), INTENT(IN) :: C 
+      TYPE(ONUMM1N10) :: RES 
+
+      !  General multiplication like function 'A*B + C'
+      ! Order 10
+      RES%E1111111111 = C%E1111111111 + A*B%E1111111111
+      ! Order 9
+      RES%E111111111 = C%E111111111 + A*B%E111111111
+      ! Order 8
+      RES%E11111111 = C%E11111111 + A*B%E11111111
+      ! Order 7
+      RES%E1111111 = C%E1111111 + A*B%E1111111
+      ! Order 6
+      RES%E111111 = C%E111111 + A*B%E111111
+      ! Order 5
+      RES%E11111 = C%E11111 + A*B%E11111
+      ! Order 4
+      RES%E1111 = C%E1111 + A*B%E1111
+      ! Order 3
+      RES%E111 = C%E111 + A*B%E111
+      ! Order 2
+      RES%E11 = C%E11 + A*B%E11
+      ! Order 1
+      RES%E1 = C%E1 + A*B%E1
+      ! Order 0
+      RES%R = C%R + A*B%R
+
+   END FUNCTION ONUMM1N10_GEM_ROO
+
+ELEMENTAL    FUNCTION ONUMM1N10_GEM_ORO(A,B,C)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: A 
+      REAL(DP), INTENT(IN) :: B 
+      TYPE(ONUMM1N10), INTENT(IN) :: C 
+      TYPE(ONUMM1N10) :: RES 
+
+      !  General multiplication like function 'A*B + C'
+
+      ! Order 0
+      RES%R = C%R + A%R*B
+
+      ! Order 1
+      RES%E1 = C%E1 + A%E1*B
+
+      ! Order 2
+      RES%E11 = C%E11 + A%E11*B
+
+      ! Order 3
+      RES%E111 = C%E111 + A%E111*B
+
+      ! Order 4
+      RES%E1111 = C%E1111 + A%E1111*B
+
+      ! Order 5
+      RES%E11111 = C%E11111 + A%E11111*B
+
+      ! Order 6
+      RES%E111111 = C%E111111 + A%E111111*B
+
+      ! Order 7
+      RES%E1111111 = C%E1111111 + A%E1111111*B
+
+      ! Order 8
+      RES%E11111111 = C%E11111111 + A%E11111111*B
+
+      ! Order 9
+      RES%E111111111 = C%E111111111 + A%E111111111*B
+
+      ! Order 10
+      RES%E1111111111 = C%E1111111111 + A%E1111111111*B
+
+   END FUNCTION ONUMM1N10_GEM_ORO
+
+   FUNCTION ONUMM1N10_MATMUL_ONUMM1N10(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(RHS,2))
+
+      !  Multiplication like function 'MATMUL(LHS,RHS)'
+      ! Order 10
+      RES%E1111111111 = MATMUL(LHS%R,RHS%E1111111111) + MATMUL(LHS%E1111111111,RHS%R) +  &
+                     MATMUL(LHS%E1,RHS%E111111111) + MATMUL(LHS%E111111111,RHS%E1) + MATMUL(LHS%E11,RHS%E11111111) +  &
+                     MATMUL(LHS%E11111111,RHS%E11) + MATMUL(LHS%E111,RHS%E1111111) + MATMUL(LHS%E1111111,RHS%E111) +  &
+                     MATMUL(LHS%E1111,RHS%E111111) + MATMUL(LHS%E111111,RHS%E1111) + MATMUL(LHS%E11111,RHS%E11111)
+      ! Order 9
+      RES%E111111111 = MATMUL(LHS%R,RHS%E111111111) + MATMUL(LHS%E111111111,RHS%R) +  &
+                    MATMUL(LHS%E1,RHS%E11111111) + MATMUL(LHS%E11111111,RHS%E1) + MATMUL(LHS%E11,RHS%E1111111) +  &
+                    MATMUL(LHS%E1111111,RHS%E11) + MATMUL(LHS%E111,RHS%E111111) + MATMUL(LHS%E111111,RHS%E111) +  &
+                    MATMUL(LHS%E1111,RHS%E11111) + MATMUL(LHS%E11111,RHS%E1111)
+      ! Order 8
+      RES%E11111111 = MATMUL(LHS%R,RHS%E11111111) + MATMUL(LHS%E11111111,RHS%R) +  &
+                   MATMUL(LHS%E1,RHS%E1111111) + MATMUL(LHS%E1111111,RHS%E1) + MATMUL(LHS%E11,RHS%E111111) +  &
+                   MATMUL(LHS%E111111,RHS%E11) + MATMUL(LHS%E111,RHS%E11111) + MATMUL(LHS%E11111,RHS%E111) + MATMUL(LHS%E1111,RHS%E1111)
+      ! Order 7
+      RES%E1111111 = MATMUL(LHS%R,RHS%E1111111) + MATMUL(LHS%E1111111,RHS%R) +  &
+                  MATMUL(LHS%E1,RHS%E111111) + MATMUL(LHS%E111111,RHS%E1) + MATMUL(LHS%E11,RHS%E11111) +  &
+                  MATMUL(LHS%E11111,RHS%E11) + MATMUL(LHS%E111,RHS%E1111) + MATMUL(LHS%E1111,RHS%E111)
+      ! Order 6
+      RES%E111111 = MATMUL(LHS%R,RHS%E111111) + MATMUL(LHS%E111111,RHS%R) +  &
+                 MATMUL(LHS%E1,RHS%E11111) + MATMUL(LHS%E11111,RHS%E1) + MATMUL(LHS%E11,RHS%E1111) +  &
+                 MATMUL(LHS%E1111,RHS%E11) + MATMUL(LHS%E111,RHS%E111)
+      ! Order 5
+      RES%E11111 = MATMUL(LHS%R,RHS%E11111) + MATMUL(LHS%E11111,RHS%R) +  &
+                MATMUL(LHS%E1,RHS%E1111) + MATMUL(LHS%E1111,RHS%E1) + MATMUL(LHS%E11,RHS%E111) + MATMUL(LHS%E111,RHS%E11)
+      ! Order 4
+      RES%E1111 = MATMUL(LHS%R,RHS%E1111) + MATMUL(LHS%E1111,RHS%R) +  &
+               MATMUL(LHS%E1,RHS%E111) + MATMUL(LHS%E111,RHS%E1) + MATMUL(LHS%E11,RHS%E11)
+      ! Order 3
+      RES%E111 = MATMUL(LHS%R,RHS%E111) + MATMUL(LHS%E111,RHS%R) +  &
+              MATMUL(LHS%E1,RHS%E11) + MATMUL(LHS%E11,RHS%E1)
+      ! Order 2
+      RES%E11 = MATMUL(LHS%R,RHS%E11) + MATMUL(LHS%E11,RHS%R) + MATMUL(LHS%E1,RHS%E1)
+      ! Order 1
+      RES%E1 = MATMUL(LHS%R,RHS%E1) + MATMUL(LHS%E1,RHS%R)
+      ! Order 0
+      RES%R = MATMUL(LHS%R,RHS%R)
+
+   END FUNCTION ONUMM1N10_MATMUL_ONUMM1N10
+
+   FUNCTION R_MATMUL_ONUMM1N10(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(RHS,2))
+
+      ! Multiplication like function 'MATMUL(LHS,RHS)'
+      !  Real
+      RES%R = MATMUL(LHS,RHS%R)
+
+      ! Order 1
+      RES%E1 = MATMUL(LHS,RHS%E1)
+
+      ! Order 2
+      RES%E11 = MATMUL(LHS,RHS%E11)
+
+      ! Order 3
+      RES%E111 = MATMUL(LHS,RHS%E111)
+
+      ! Order 4
+      RES%E1111 = MATMUL(LHS,RHS%E1111)
+
+      ! Order 5
+      RES%E11111 = MATMUL(LHS,RHS%E11111)
+
+      ! Order 6
+      RES%E111111 = MATMUL(LHS,RHS%E111111)
+
+      ! Order 7
+      RES%E1111111 = MATMUL(LHS,RHS%E1111111)
+
+      ! Order 8
+      RES%E11111111 = MATMUL(LHS,RHS%E11111111)
+
+      ! Order 9
+      RES%E111111111 = MATMUL(LHS,RHS%E111111111)
+
+      ! Order 10
+      RES%E1111111111 = MATMUL(LHS,RHS%E1111111111)
+
+   END FUNCTION R_MATMUL_ONUMM1N10
+
+   FUNCTION ONUMM1N10_MATMUL_R(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      TYPE(ONUMM1N10) :: RES(SIZE(LHS,1),SIZE(RHS,2))
+
+      ! Multiplication like function 'MATMUL(LHS,RHS)'
+      !  Real
+      RES%R = MATMUL(LHS%R,RHS)
+
+      ! Order 1
+      RES%E1 = MATMUL(LHS%E1,RHS)
+
+      ! Order 2
+      RES%E11 = MATMUL(LHS%E11,RHS)
+
+      ! Order 3
+      RES%E111 = MATMUL(LHS%E111,RHS)
+
+      ! Order 4
+      RES%E1111 = MATMUL(LHS%E1111,RHS)
+
+      ! Order 5
+      RES%E11111 = MATMUL(LHS%E11111,RHS)
+
+      ! Order 6
+      RES%E111111 = MATMUL(LHS%E111111,RHS)
+
+      ! Order 7
+      RES%E1111111 = MATMUL(LHS%E1111111,RHS)
+
+      ! Order 8
+      RES%E11111111 = MATMUL(LHS%E11111111,RHS)
+
+      ! Order 9
+      RES%E111111111 = MATMUL(LHS%E111111111,RHS)
+
+      ! Order 10
+      RES%E1111111111 = MATMUL(LHS%E1111111111,RHS)
+
+   END FUNCTION ONUMM1N10_MATMUL_R
+
+   FUNCTION ONUMM1N10_DOT_PRODUCT_ONUMM1N10(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(SIZE(LHS))
+      TYPE(ONUMM1N10) :: RES
+
+      !  Multiplication like function 'DOT_PRODUCT(LHS,RHS)'
+      ! Order 10
+      RES%E1111111111 = DOT_PRODUCT(LHS%R,RHS%E1111111111) + DOT_PRODUCT(LHS%E1111111111,RHS%R) +  &
+                     DOT_PRODUCT(LHS%E1,RHS%E111111111) + DOT_PRODUCT(LHS%E111111111,RHS%E1) + DOT_PRODUCT(LHS%E11,RHS%E11111111) +  &
+                     DOT_PRODUCT(LHS%E11111111,RHS%E11) + DOT_PRODUCT(LHS%E111,RHS%E1111111) + DOT_PRODUCT(LHS%E1111111,RHS%E111) +  &
+                     DOT_PRODUCT(LHS%E1111,RHS%E111111) + DOT_PRODUCT(LHS%E111111,RHS%E1111) + DOT_PRODUCT(LHS%E11111,RHS%E11111)
+      ! Order 9
+      RES%E111111111 = DOT_PRODUCT(LHS%R,RHS%E111111111) + DOT_PRODUCT(LHS%E111111111,RHS%R) +  &
+                    DOT_PRODUCT(LHS%E1,RHS%E11111111) + DOT_PRODUCT(LHS%E11111111,RHS%E1) + DOT_PRODUCT(LHS%E11,RHS%E1111111) +  &
+                    DOT_PRODUCT(LHS%E1111111,RHS%E11) + DOT_PRODUCT(LHS%E111,RHS%E111111) + DOT_PRODUCT(LHS%E111111,RHS%E111) +  &
+                    DOT_PRODUCT(LHS%E1111,RHS%E11111) + DOT_PRODUCT(LHS%E11111,RHS%E1111)
+      ! Order 8
+      RES%E11111111 = DOT_PRODUCT(LHS%R,RHS%E11111111) + DOT_PRODUCT(LHS%E11111111,RHS%R) +  &
+                   DOT_PRODUCT(LHS%E1,RHS%E1111111) + DOT_PRODUCT(LHS%E1111111,RHS%E1) + DOT_PRODUCT(LHS%E11,RHS%E111111) +  &
+                   DOT_PRODUCT(LHS%E111111,RHS%E11) + DOT_PRODUCT(LHS%E111,RHS%E11111) + DOT_PRODUCT(LHS%E11111,RHS%E111) + DOT_PRODUCT(LHS%E1111,RHS%E1111)
+      ! Order 7
+      RES%E1111111 = DOT_PRODUCT(LHS%R,RHS%E1111111) + DOT_PRODUCT(LHS%E1111111,RHS%R) +  &
+                  DOT_PRODUCT(LHS%E1,RHS%E111111) + DOT_PRODUCT(LHS%E111111,RHS%E1) + DOT_PRODUCT(LHS%E11,RHS%E11111) +  &
+                  DOT_PRODUCT(LHS%E11111,RHS%E11) + DOT_PRODUCT(LHS%E111,RHS%E1111) + DOT_PRODUCT(LHS%E1111,RHS%E111)
+      ! Order 6
+      RES%E111111 = DOT_PRODUCT(LHS%R,RHS%E111111) + DOT_PRODUCT(LHS%E111111,RHS%R) +  &
+                 DOT_PRODUCT(LHS%E1,RHS%E11111) + DOT_PRODUCT(LHS%E11111,RHS%E1) + DOT_PRODUCT(LHS%E11,RHS%E1111) +  &
+                 DOT_PRODUCT(LHS%E1111,RHS%E11) + DOT_PRODUCT(LHS%E111,RHS%E111)
+      ! Order 5
+      RES%E11111 = DOT_PRODUCT(LHS%R,RHS%E11111) + DOT_PRODUCT(LHS%E11111,RHS%R) +  &
+                DOT_PRODUCT(LHS%E1,RHS%E1111) + DOT_PRODUCT(LHS%E1111,RHS%E1) + DOT_PRODUCT(LHS%E11,RHS%E111) + DOT_PRODUCT(LHS%E111,RHS%E11)
+      ! Order 4
+      RES%E1111 = DOT_PRODUCT(LHS%R,RHS%E1111) + DOT_PRODUCT(LHS%E1111,RHS%R) +  &
+               DOT_PRODUCT(LHS%E1,RHS%E111) + DOT_PRODUCT(LHS%E111,RHS%E1) + DOT_PRODUCT(LHS%E11,RHS%E11)
+      ! Order 3
+      RES%E111 = DOT_PRODUCT(LHS%R,RHS%E111) + DOT_PRODUCT(LHS%E111,RHS%R) +  &
+              DOT_PRODUCT(LHS%E1,RHS%E11) + DOT_PRODUCT(LHS%E11,RHS%E1)
+      ! Order 2
+      RES%E11 = DOT_PRODUCT(LHS%R,RHS%E11) + DOT_PRODUCT(LHS%E11,RHS%R) + DOT_PRODUCT(LHS%E1,RHS%E1)
+      ! Order 1
+      RES%E1 = DOT_PRODUCT(LHS%R,RHS%E1) + DOT_PRODUCT(LHS%E1,RHS%R)
+      ! Order 0
+      RES%R = DOT_PRODUCT(LHS%R,RHS%R)
+
+   END FUNCTION ONUMM1N10_DOT_PRODUCT_ONUMM1N10
+
+   FUNCTION R_DOT_PRODUCT_ONUMM1N10(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N10), INTENT(IN) :: RHS(SIZE(LHS))
+      TYPE(ONUMM1N10) :: RES
+
+      ! Multiplication like function 'DOT_PRODUCT(LHS,RHS)'
+      !  Real
+      RES%R = DOT_PRODUCT(LHS,RHS%R)
+
+      ! Order 1
+      RES%E1 = DOT_PRODUCT(LHS,RHS%E1)
+
+      ! Order 2
+      RES%E11 = DOT_PRODUCT(LHS,RHS%E11)
+
+      ! Order 3
+      RES%E111 = DOT_PRODUCT(LHS,RHS%E111)
+
+      ! Order 4
+      RES%E1111 = DOT_PRODUCT(LHS,RHS%E1111)
+
+      ! Order 5
+      RES%E11111 = DOT_PRODUCT(LHS,RHS%E11111)
+
+      ! Order 6
+      RES%E111111 = DOT_PRODUCT(LHS,RHS%E111111)
+
+      ! Order 7
+      RES%E1111111 = DOT_PRODUCT(LHS,RHS%E1111111)
+
+      ! Order 8
+      RES%E11111111 = DOT_PRODUCT(LHS,RHS%E11111111)
+
+      ! Order 9
+      RES%E111111111 = DOT_PRODUCT(LHS,RHS%E111111111)
+
+      ! Order 10
+      RES%E1111111111 = DOT_PRODUCT(LHS,RHS%E1111111111)
+
+   END FUNCTION R_DOT_PRODUCT_ONUMM1N10
+
+   FUNCTION ONUMM1N10_DOT_PRODUCT_R(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS(SIZE(LHS))
+      TYPE(ONUMM1N10) :: RES
+
+      ! Multiplication like function 'DOT_PRODUCT(LHS,RHS)'
+      !  Real
+      RES%R = DOT_PRODUCT(LHS%R,RHS)
+
+      ! Order 1
+      RES%E1 = DOT_PRODUCT(LHS%E1,RHS)
+
+      ! Order 2
+      RES%E11 = DOT_PRODUCT(LHS%E11,RHS)
+
+      ! Order 3
+      RES%E111 = DOT_PRODUCT(LHS%E111,RHS)
+
+      ! Order 4
+      RES%E1111 = DOT_PRODUCT(LHS%E1111,RHS)
+
+      ! Order 5
+      RES%E11111 = DOT_PRODUCT(LHS%E11111,RHS)
+
+      ! Order 6
+      RES%E111111 = DOT_PRODUCT(LHS%E111111,RHS)
+
+      ! Order 7
+      RES%E1111111 = DOT_PRODUCT(LHS%E1111111,RHS)
+
+      ! Order 8
+      RES%E11111111 = DOT_PRODUCT(LHS%E11111111,RHS)
+
+      ! Order 9
+      RES%E111111111 = DOT_PRODUCT(LHS%E111111111,RHS)
+
+      ! Order 10
+      RES%E1111111111 = DOT_PRODUCT(LHS%E1111111111,RHS)
+
+   END FUNCTION ONUMM1N10_DOT_PRODUCT_R
+
+   FUNCTION ONUMM1N10_TRANSPOSE(LHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N10) :: RES (SIZE(LHS,2),SIZE(LHS,1))
+
+      ! Negation like function 'TRANSPOSE(LHS)'
+      ! Real
+      RES%R = TRANSPOSE(LHS%R)
+      ! Order 1
+      RES%E1 = TRANSPOSE(LHS%E1)
+      ! Order 2
+      RES%E11 = TRANSPOSE(LHS%E11)
+      ! Order 3
+      RES%E111 = TRANSPOSE(LHS%E111)
+      ! Order 4
+      RES%E1111 = TRANSPOSE(LHS%E1111)
+      ! Order 5
+      RES%E11111 = TRANSPOSE(LHS%E11111)
+      ! Order 6
+      RES%E111111 = TRANSPOSE(LHS%E111111)
+      ! Order 7
+      RES%E1111111 = TRANSPOSE(LHS%E1111111)
+      ! Order 8
+      RES%E11111111 = TRANSPOSE(LHS%E11111111)
+      ! Order 9
+      RES%E111111111 = TRANSPOSE(LHS%E111111111)
+      ! Order 10
+      RES%E1111111111 = TRANSPOSE(LHS%E1111111111)
+
+   END FUNCTION ONUMM1N10_TRANSPOSE
+
+FUNCTION ONUMM1N10_TO_CR_MAT_S(VAL) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: VAL
+      REAL(DP) :: RES(NUM_IM_DIR,NUM_IM_DIR) 
+      INTEGER :: NCOLS=1, NROWS=1
+
+
+      ! R x R -> R (1, 1)
+      RES(1+NROWS*0:NROWS*1,1+NCOLS*0:NCOLS*1) = VAL%R
+      ! R x E1 -> E1 (2, 2)
+      RES(1+NROWS*1:NROWS*2,1+NCOLS*1:NCOLS*2) = VAL%R
+      ! E1 x R -> E1 (2, 1)
+      RES(1+NROWS*1:NROWS*2,1+NCOLS*0:NCOLS*1) = VAL%E1
+      ! R x E11 -> E11 (3, 3)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*2:NCOLS*3) = VAL%R
+      ! E11 x R -> E11 (3, 1)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*0:NCOLS*1) = VAL%E11
+      ! E1 x E1 -> E11 (3, 2)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*1:NCOLS*2) = VAL%E1
+      ! R x E111 -> E111 (4, 4)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*3:NCOLS*4) = VAL%R
+      ! E111 x R -> E111 (4, 1)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*0:NCOLS*1) = VAL%E111
+      ! E1 x E11 -> E111 (4, 3)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*2:NCOLS*3) = VAL%E1
+      ! E11 x E1 -> E111 (4, 2)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*1:NCOLS*2) = VAL%E11
+      ! R x E1111 -> E1111 (5, 5)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*4:NCOLS*5) = VAL%R
+      ! E1111 x R -> E1111 (5, 1)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*0:NCOLS*1) = VAL%E1111
+      ! E1 x E111 -> E1111 (5, 4)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*3:NCOLS*4) = VAL%E1
+      ! E111 x E1 -> E1111 (5, 2)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*1:NCOLS*2) = VAL%E111
+      ! E11 x E11 -> E1111 (5, 3)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*2:NCOLS*3) = VAL%E11
+      ! R x E11111 -> E11111 (6, 6)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*5:NCOLS*6) = VAL%R
+      ! E11111 x R -> E11111 (6, 1)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*0:NCOLS*1) = VAL%E11111
+      ! E1 x E1111 -> E11111 (6, 5)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*4:NCOLS*5) = VAL%E1
+      ! E1111 x E1 -> E11111 (6, 2)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*1:NCOLS*2) = VAL%E1111
+      ! E11 x E111 -> E11111 (6, 4)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*3:NCOLS*4) = VAL%E11
+      ! E111 x E11 -> E11111 (6, 3)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*2:NCOLS*3) = VAL%E111
+      ! R x E111111 -> E111111 (7, 7)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*6:NCOLS*7) = VAL%R
+      ! E111111 x R -> E111111 (7, 1)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*0:NCOLS*1) = VAL%E111111
+      ! E1 x E11111 -> E111111 (7, 6)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*5:NCOLS*6) = VAL%E1
+      ! E11111 x E1 -> E111111 (7, 2)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*1:NCOLS*2) = VAL%E11111
+      ! E11 x E1111 -> E111111 (7, 5)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*4:NCOLS*5) = VAL%E11
+      ! E1111 x E11 -> E111111 (7, 3)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*2:NCOLS*3) = VAL%E1111
+      ! E111 x E111 -> E111111 (7, 4)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*3:NCOLS*4) = VAL%E111
+      ! R x E1111111 -> E1111111 (8, 8)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*7:NCOLS*8) = VAL%R
+      ! E1111111 x R -> E1111111 (8, 1)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*0:NCOLS*1) = VAL%E1111111
+      ! E1 x E111111 -> E1111111 (8, 7)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*6:NCOLS*7) = VAL%E1
+      ! E111111 x E1 -> E1111111 (8, 2)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*1:NCOLS*2) = VAL%E111111
+      ! E11 x E11111 -> E1111111 (8, 6)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*5:NCOLS*6) = VAL%E11
+      ! E11111 x E11 -> E1111111 (8, 3)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*2:NCOLS*3) = VAL%E11111
+      ! E111 x E1111 -> E1111111 (8, 5)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*4:NCOLS*5) = VAL%E111
+      ! E1111 x E111 -> E1111111 (8, 4)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*3:NCOLS*4) = VAL%E1111
+      ! R x E11111111 -> E11111111 (9, 9)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*8:NCOLS*9) = VAL%R
+      ! E11111111 x R -> E11111111 (9, 1)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*0:NCOLS*1) = VAL%E11111111
+      ! E1 x E1111111 -> E11111111 (9, 8)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*7:NCOLS*8) = VAL%E1
+      ! E1111111 x E1 -> E11111111 (9, 2)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*1:NCOLS*2) = VAL%E1111111
+      ! E11 x E111111 -> E11111111 (9, 7)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*6:NCOLS*7) = VAL%E11
+      ! E111111 x E11 -> E11111111 (9, 3)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*2:NCOLS*3) = VAL%E111111
+      ! E111 x E11111 -> E11111111 (9, 6)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*5:NCOLS*6) = VAL%E111
+      ! E11111 x E111 -> E11111111 (9, 4)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*3:NCOLS*4) = VAL%E11111
+      ! E1111 x E1111 -> E11111111 (9, 5)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*4:NCOLS*5) = VAL%E1111
+      ! R x E111111111 -> E111111111 (10, 10)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*9:NCOLS*10) = VAL%R
+      ! E111111111 x R -> E111111111 (10, 1)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*0:NCOLS*1) = VAL%E111111111
+      ! E1 x E11111111 -> E111111111 (10, 9)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*8:NCOLS*9) = VAL%E1
+      ! E11111111 x E1 -> E111111111 (10, 2)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*1:NCOLS*2) = VAL%E11111111
+      ! E11 x E1111111 -> E111111111 (10, 8)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*7:NCOLS*8) = VAL%E11
+      ! E1111111 x E11 -> E111111111 (10, 3)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*2:NCOLS*3) = VAL%E1111111
+      ! E111 x E111111 -> E111111111 (10, 7)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*6:NCOLS*7) = VAL%E111
+      ! E111111 x E111 -> E111111111 (10, 4)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*3:NCOLS*4) = VAL%E111111
+      ! E1111 x E11111 -> E111111111 (10, 6)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*5:NCOLS*6) = VAL%E1111
+      ! E11111 x E1111 -> E111111111 (10, 5)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*4:NCOLS*5) = VAL%E11111
+      ! R x E1111111111 -> E1111111111 (11, 11)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*10:NCOLS*11) = VAL%R
+      ! E1111111111 x R -> E1111111111 (11, 1)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*0:NCOLS*1) = VAL%E1111111111
+      ! E1 x E111111111 -> E1111111111 (11, 10)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*9:NCOLS*10) = VAL%E1
+      ! E111111111 x E1 -> E1111111111 (11, 2)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*1:NCOLS*2) = VAL%E111111111
+      ! E11 x E11111111 -> E1111111111 (11, 9)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*8:NCOLS*9) = VAL%E11
+      ! E11111111 x E11 -> E1111111111 (11, 3)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*2:NCOLS*3) = VAL%E11111111
+      ! E111 x E1111111 -> E1111111111 (11, 8)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*7:NCOLS*8) = VAL%E111
+      ! E1111111 x E111 -> E1111111111 (11, 4)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*3:NCOLS*4) = VAL%E1111111
+      ! E1111 x E111111 -> E1111111111 (11, 7)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*6:NCOLS*7) = VAL%E1111
+      ! E111111 x E1111 -> E1111111111 (11, 5)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*4:NCOLS*5) = VAL%E111111
+      ! E11111 x E11111 -> E1111111111 (11, 6)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*5:NCOLS*6) = VAL%E11111
+   END FUNCTION ONUMM1N10_TO_CR_MAT_S
+
+FUNCTION ONUMM1N10_TO_CR_MAT_V(VAL) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: VAL(:)
+      REAL(DP) :: RES(NUM_IM_DIR*SIZE(VAL,1),NUM_IM_DIR) 
+      INTEGER :: NCOLS=1, NROWS=1
+
+      NROWS = SIZE(VAL,1)
+
+      ! R x R -> R (1, 1)
+      RES(1+NROWS*0:NROWS*1,1) = VAL%R
+      ! R x E1 -> E1 (2, 2)
+      RES(1+NROWS*1:NROWS*2,2) = VAL%R
+      ! E1 x R -> E1 (2, 1)
+      RES(1+NROWS*1:NROWS*2,1) = VAL%E1
+      ! R x E11 -> E11 (3, 3)
+      RES(1+NROWS*2:NROWS*3,3) = VAL%R
+      ! E11 x R -> E11 (3, 1)
+      RES(1+NROWS*2:NROWS*3,1) = VAL%E11
+      ! E1 x E1 -> E11 (3, 2)
+      RES(1+NROWS*2:NROWS*3,2) = VAL%E1
+      ! R x E111 -> E111 (4, 4)
+      RES(1+NROWS*3:NROWS*4,4) = VAL%R
+      ! E111 x R -> E111 (4, 1)
+      RES(1+NROWS*3:NROWS*4,1) = VAL%E111
+      ! E1 x E11 -> E111 (4, 3)
+      RES(1+NROWS*3:NROWS*4,3) = VAL%E1
+      ! E11 x E1 -> E111 (4, 2)
+      RES(1+NROWS*3:NROWS*4,2) = VAL%E11
+      ! R x E1111 -> E1111 (5, 5)
+      RES(1+NROWS*4:NROWS*5,5) = VAL%R
+      ! E1111 x R -> E1111 (5, 1)
+      RES(1+NROWS*4:NROWS*5,1) = VAL%E1111
+      ! E1 x E111 -> E1111 (5, 4)
+      RES(1+NROWS*4:NROWS*5,4) = VAL%E1
+      ! E111 x E1 -> E1111 (5, 2)
+      RES(1+NROWS*4:NROWS*5,2) = VAL%E111
+      ! E11 x E11 -> E1111 (5, 3)
+      RES(1+NROWS*4:NROWS*5,3) = VAL%E11
+      ! R x E11111 -> E11111 (6, 6)
+      RES(1+NROWS*5:NROWS*6,6) = VAL%R
+      ! E11111 x R -> E11111 (6, 1)
+      RES(1+NROWS*5:NROWS*6,1) = VAL%E11111
+      ! E1 x E1111 -> E11111 (6, 5)
+      RES(1+NROWS*5:NROWS*6,5) = VAL%E1
+      ! E1111 x E1 -> E11111 (6, 2)
+      RES(1+NROWS*5:NROWS*6,2) = VAL%E1111
+      ! E11 x E111 -> E11111 (6, 4)
+      RES(1+NROWS*5:NROWS*6,4) = VAL%E11
+      ! E111 x E11 -> E11111 (6, 3)
+      RES(1+NROWS*5:NROWS*6,3) = VAL%E111
+      ! R x E111111 -> E111111 (7, 7)
+      RES(1+NROWS*6:NROWS*7,7) = VAL%R
+      ! E111111 x R -> E111111 (7, 1)
+      RES(1+NROWS*6:NROWS*7,1) = VAL%E111111
+      ! E1 x E11111 -> E111111 (7, 6)
+      RES(1+NROWS*6:NROWS*7,6) = VAL%E1
+      ! E11111 x E1 -> E111111 (7, 2)
+      RES(1+NROWS*6:NROWS*7,2) = VAL%E11111
+      ! E11 x E1111 -> E111111 (7, 5)
+      RES(1+NROWS*6:NROWS*7,5) = VAL%E11
+      ! E1111 x E11 -> E111111 (7, 3)
+      RES(1+NROWS*6:NROWS*7,3) = VAL%E1111
+      ! E111 x E111 -> E111111 (7, 4)
+      RES(1+NROWS*6:NROWS*7,4) = VAL%E111
+      ! R x E1111111 -> E1111111 (8, 8)
+      RES(1+NROWS*7:NROWS*8,8) = VAL%R
+      ! E1111111 x R -> E1111111 (8, 1)
+      RES(1+NROWS*7:NROWS*8,1) = VAL%E1111111
+      ! E1 x E111111 -> E1111111 (8, 7)
+      RES(1+NROWS*7:NROWS*8,7) = VAL%E1
+      ! E111111 x E1 -> E1111111 (8, 2)
+      RES(1+NROWS*7:NROWS*8,2) = VAL%E111111
+      ! E11 x E11111 -> E1111111 (8, 6)
+      RES(1+NROWS*7:NROWS*8,6) = VAL%E11
+      ! E11111 x E11 -> E1111111 (8, 3)
+      RES(1+NROWS*7:NROWS*8,3) = VAL%E11111
+      ! E111 x E1111 -> E1111111 (8, 5)
+      RES(1+NROWS*7:NROWS*8,5) = VAL%E111
+      ! E1111 x E111 -> E1111111 (8, 4)
+      RES(1+NROWS*7:NROWS*8,4) = VAL%E1111
+      ! R x E11111111 -> E11111111 (9, 9)
+      RES(1+NROWS*8:NROWS*9,9) = VAL%R
+      ! E11111111 x R -> E11111111 (9, 1)
+      RES(1+NROWS*8:NROWS*9,1) = VAL%E11111111
+      ! E1 x E1111111 -> E11111111 (9, 8)
+      RES(1+NROWS*8:NROWS*9,8) = VAL%E1
+      ! E1111111 x E1 -> E11111111 (9, 2)
+      RES(1+NROWS*8:NROWS*9,2) = VAL%E1111111
+      ! E11 x E111111 -> E11111111 (9, 7)
+      RES(1+NROWS*8:NROWS*9,7) = VAL%E11
+      ! E111111 x E11 -> E11111111 (9, 3)
+      RES(1+NROWS*8:NROWS*9,3) = VAL%E111111
+      ! E111 x E11111 -> E11111111 (9, 6)
+      RES(1+NROWS*8:NROWS*9,6) = VAL%E111
+      ! E11111 x E111 -> E11111111 (9, 4)
+      RES(1+NROWS*8:NROWS*9,4) = VAL%E11111
+      ! E1111 x E1111 -> E11111111 (9, 5)
+      RES(1+NROWS*8:NROWS*9,5) = VAL%E1111
+      ! R x E111111111 -> E111111111 (10, 10)
+      RES(1+NROWS*9:NROWS*10,10) = VAL%R
+      ! E111111111 x R -> E111111111 (10, 1)
+      RES(1+NROWS*9:NROWS*10,1) = VAL%E111111111
+      ! E1 x E11111111 -> E111111111 (10, 9)
+      RES(1+NROWS*9:NROWS*10,9) = VAL%E1
+      ! E11111111 x E1 -> E111111111 (10, 2)
+      RES(1+NROWS*9:NROWS*10,2) = VAL%E11111111
+      ! E11 x E1111111 -> E111111111 (10, 8)
+      RES(1+NROWS*9:NROWS*10,8) = VAL%E11
+      ! E1111111 x E11 -> E111111111 (10, 3)
+      RES(1+NROWS*9:NROWS*10,3) = VAL%E1111111
+      ! E111 x E111111 -> E111111111 (10, 7)
+      RES(1+NROWS*9:NROWS*10,7) = VAL%E111
+      ! E111111 x E111 -> E111111111 (10, 4)
+      RES(1+NROWS*9:NROWS*10,4) = VAL%E111111
+      ! E1111 x E11111 -> E111111111 (10, 6)
+      RES(1+NROWS*9:NROWS*10,6) = VAL%E1111
+      ! E11111 x E1111 -> E111111111 (10, 5)
+      RES(1+NROWS*9:NROWS*10,5) = VAL%E11111
+      ! R x E1111111111 -> E1111111111 (11, 11)
+      RES(1+NROWS*10:NROWS*11,11) = VAL%R
+      ! E1111111111 x R -> E1111111111 (11, 1)
+      RES(1+NROWS*10:NROWS*11,1) = VAL%E1111111111
+      ! E1 x E111111111 -> E1111111111 (11, 10)
+      RES(1+NROWS*10:NROWS*11,10) = VAL%E1
+      ! E111111111 x E1 -> E1111111111 (11, 2)
+      RES(1+NROWS*10:NROWS*11,2) = VAL%E111111111
+      ! E11 x E11111111 -> E1111111111 (11, 9)
+      RES(1+NROWS*10:NROWS*11,9) = VAL%E11
+      ! E11111111 x E11 -> E1111111111 (11, 3)
+      RES(1+NROWS*10:NROWS*11,3) = VAL%E11111111
+      ! E111 x E1111111 -> E1111111111 (11, 8)
+      RES(1+NROWS*10:NROWS*11,8) = VAL%E111
+      ! E1111111 x E111 -> E1111111111 (11, 4)
+      RES(1+NROWS*10:NROWS*11,4) = VAL%E1111111
+      ! E1111 x E111111 -> E1111111111 (11, 7)
+      RES(1+NROWS*10:NROWS*11,7) = VAL%E1111
+      ! E111111 x E1111 -> E1111111111 (11, 5)
+      RES(1+NROWS*10:NROWS*11,5) = VAL%E111111
+      ! E11111 x E11111 -> E1111111111 (11, 6)
+      RES(1+NROWS*10:NROWS*11,6) = VAL%E11111
+   END FUNCTION ONUMM1N10_TO_CR_MAT_V
+
+FUNCTION ONUMM1N10_TO_CR_MAT_M(VAL) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: VAL(:,:)
+      REAL(DP) :: RES(NUM_IM_DIR*SIZE(VAL,1),NUM_IM_DIR*SIZE(VAL,2)) 
+      INTEGER :: NCOLS=1, NROWS=1
+
+      NCOLS = SIZE(VAL,1)
+      NROWS = SIZE(VAL,2)
+
+      ! R x R -> R (1, 1)
+      RES(1+NROWS*0:NROWS*1,1+NCOLS*0:NCOLS*1) = VAL%R
+      ! R x E1 -> E1 (2, 2)
+      RES(1+NROWS*1:NROWS*2,1+NCOLS*1:NCOLS*2) = VAL%R
+      ! E1 x R -> E1 (2, 1)
+      RES(1+NROWS*1:NROWS*2,1+NCOLS*0:NCOLS*1) = VAL%E1
+      ! R x E11 -> E11 (3, 3)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*2:NCOLS*3) = VAL%R
+      ! E11 x R -> E11 (3, 1)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*0:NCOLS*1) = VAL%E11
+      ! E1 x E1 -> E11 (3, 2)
+      RES(1+NROWS*2:NROWS*3,1+NCOLS*1:NCOLS*2) = VAL%E1
+      ! R x E111 -> E111 (4, 4)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*3:NCOLS*4) = VAL%R
+      ! E111 x R -> E111 (4, 1)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*0:NCOLS*1) = VAL%E111
+      ! E1 x E11 -> E111 (4, 3)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*2:NCOLS*3) = VAL%E1
+      ! E11 x E1 -> E111 (4, 2)
+      RES(1+NROWS*3:NROWS*4,1+NCOLS*1:NCOLS*2) = VAL%E11
+      ! R x E1111 -> E1111 (5, 5)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*4:NCOLS*5) = VAL%R
+      ! E1111 x R -> E1111 (5, 1)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*0:NCOLS*1) = VAL%E1111
+      ! E1 x E111 -> E1111 (5, 4)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*3:NCOLS*4) = VAL%E1
+      ! E111 x E1 -> E1111 (5, 2)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*1:NCOLS*2) = VAL%E111
+      ! E11 x E11 -> E1111 (5, 3)
+      RES(1+NROWS*4:NROWS*5,1+NCOLS*2:NCOLS*3) = VAL%E11
+      ! R x E11111 -> E11111 (6, 6)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*5:NCOLS*6) = VAL%R
+      ! E11111 x R -> E11111 (6, 1)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*0:NCOLS*1) = VAL%E11111
+      ! E1 x E1111 -> E11111 (6, 5)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*4:NCOLS*5) = VAL%E1
+      ! E1111 x E1 -> E11111 (6, 2)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*1:NCOLS*2) = VAL%E1111
+      ! E11 x E111 -> E11111 (6, 4)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*3:NCOLS*4) = VAL%E11
+      ! E111 x E11 -> E11111 (6, 3)
+      RES(1+NROWS*5:NROWS*6,1+NCOLS*2:NCOLS*3) = VAL%E111
+      ! R x E111111 -> E111111 (7, 7)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*6:NCOLS*7) = VAL%R
+      ! E111111 x R -> E111111 (7, 1)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*0:NCOLS*1) = VAL%E111111
+      ! E1 x E11111 -> E111111 (7, 6)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*5:NCOLS*6) = VAL%E1
+      ! E11111 x E1 -> E111111 (7, 2)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*1:NCOLS*2) = VAL%E11111
+      ! E11 x E1111 -> E111111 (7, 5)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*4:NCOLS*5) = VAL%E11
+      ! E1111 x E11 -> E111111 (7, 3)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*2:NCOLS*3) = VAL%E1111
+      ! E111 x E111 -> E111111 (7, 4)
+      RES(1+NROWS*6:NROWS*7,1+NCOLS*3:NCOLS*4) = VAL%E111
+      ! R x E1111111 -> E1111111 (8, 8)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*7:NCOLS*8) = VAL%R
+      ! E1111111 x R -> E1111111 (8, 1)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*0:NCOLS*1) = VAL%E1111111
+      ! E1 x E111111 -> E1111111 (8, 7)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*6:NCOLS*7) = VAL%E1
+      ! E111111 x E1 -> E1111111 (8, 2)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*1:NCOLS*2) = VAL%E111111
+      ! E11 x E11111 -> E1111111 (8, 6)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*5:NCOLS*6) = VAL%E11
+      ! E11111 x E11 -> E1111111 (8, 3)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*2:NCOLS*3) = VAL%E11111
+      ! E111 x E1111 -> E1111111 (8, 5)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*4:NCOLS*5) = VAL%E111
+      ! E1111 x E111 -> E1111111 (8, 4)
+      RES(1+NROWS*7:NROWS*8,1+NCOLS*3:NCOLS*4) = VAL%E1111
+      ! R x E11111111 -> E11111111 (9, 9)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*8:NCOLS*9) = VAL%R
+      ! E11111111 x R -> E11111111 (9, 1)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*0:NCOLS*1) = VAL%E11111111
+      ! E1 x E1111111 -> E11111111 (9, 8)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*7:NCOLS*8) = VAL%E1
+      ! E1111111 x E1 -> E11111111 (9, 2)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*1:NCOLS*2) = VAL%E1111111
+      ! E11 x E111111 -> E11111111 (9, 7)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*6:NCOLS*7) = VAL%E11
+      ! E111111 x E11 -> E11111111 (9, 3)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*2:NCOLS*3) = VAL%E111111
+      ! E111 x E11111 -> E11111111 (9, 6)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*5:NCOLS*6) = VAL%E111
+      ! E11111 x E111 -> E11111111 (9, 4)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*3:NCOLS*4) = VAL%E11111
+      ! E1111 x E1111 -> E11111111 (9, 5)
+      RES(1+NROWS*8:NROWS*9,1+NCOLS*4:NCOLS*5) = VAL%E1111
+      ! R x E111111111 -> E111111111 (10, 10)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*9:NCOLS*10) = VAL%R
+      ! E111111111 x R -> E111111111 (10, 1)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*0:NCOLS*1) = VAL%E111111111
+      ! E1 x E11111111 -> E111111111 (10, 9)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*8:NCOLS*9) = VAL%E1
+      ! E11111111 x E1 -> E111111111 (10, 2)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*1:NCOLS*2) = VAL%E11111111
+      ! E11 x E1111111 -> E111111111 (10, 8)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*7:NCOLS*8) = VAL%E11
+      ! E1111111 x E11 -> E111111111 (10, 3)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*2:NCOLS*3) = VAL%E1111111
+      ! E111 x E111111 -> E111111111 (10, 7)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*6:NCOLS*7) = VAL%E111
+      ! E111111 x E111 -> E111111111 (10, 4)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*3:NCOLS*4) = VAL%E111111
+      ! E1111 x E11111 -> E111111111 (10, 6)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*5:NCOLS*6) = VAL%E1111
+      ! E11111 x E1111 -> E111111111 (10, 5)
+      RES(1+NROWS*9:NROWS*10,1+NCOLS*4:NCOLS*5) = VAL%E11111
+      ! R x E1111111111 -> E1111111111 (11, 11)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*10:NCOLS*11) = VAL%R
+      ! E1111111111 x R -> E1111111111 (11, 1)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*0:NCOLS*1) = VAL%E1111111111
+      ! E1 x E111111111 -> E1111111111 (11, 10)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*9:NCOLS*10) = VAL%E1
+      ! E111111111 x E1 -> E1111111111 (11, 2)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*1:NCOLS*2) = VAL%E111111111
+      ! E11 x E11111111 -> E1111111111 (11, 9)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*8:NCOLS*9) = VAL%E11
+      ! E11111111 x E11 -> E1111111111 (11, 3)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*2:NCOLS*3) = VAL%E11111111
+      ! E111 x E1111111 -> E1111111111 (11, 8)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*7:NCOLS*8) = VAL%E111
+      ! E1111111 x E111 -> E1111111111 (11, 4)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*3:NCOLS*4) = VAL%E1111111
+      ! E1111 x E111111 -> E1111111111 (11, 7)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*6:NCOLS*7) = VAL%E1111
+      ! E111111 x E1111 -> E1111111111 (11, 5)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*4:NCOLS*5) = VAL%E111111
+      ! E11111 x E11111 -> E1111111111 (11, 6)
+      RES(1+NROWS*10:NROWS*11,1+NCOLS*5:NCOLS*6) = VAL%E11111
+   END FUNCTION ONUMM1N10_TO_CR_MAT_M
+
+      SUBROUTINE ONUMM1N10_SETIM_S(VAL,IDX,RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(INOUT) :: VAL
+      REAL(DP),INTENT(IN) :: RES 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         VAL%R=RES
+
+      ! Order 1
+      CASE(1)
+         VAL%E1=RES
+
+      ! Order 2
+      CASE(2)
+         VAL%E11=RES
+
+      ! Order 3
+      CASE(3)
+         VAL%E111=RES
+
+      ! Order 4
+      CASE(4)
+         VAL%E1111=RES
+
+      ! Order 5
+      CASE(5)
+         VAL%E11111=RES
+
+      ! Order 6
+      CASE(6)
+         VAL%E111111=RES
+
+      ! Order 7
+      CASE(7)
+         VAL%E1111111=RES
+
+      ! Order 8
+      CASE(8)
+         VAL%E11111111=RES
+
+      ! Order 9
+      CASE(9)
+         VAL%E111111111=RES
+
+      ! Order 10
+      CASE(10)
+         VAL%E1111111111=RES
+
+      END SELECT
+   END SUBROUTINE ONUMM1N10_SETIM_S
+
+      SUBROUTINE ONUMM1N10_SETIM_V(VAL,IDX,RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(INOUT) :: VAL(:)
+      REAL(DP),INTENT(IN) :: RES(SIZE(VAL)) 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         VAL%R=RES
+
+      ! Order 1
+      CASE(1)
+         VAL%E1=RES
+
+      ! Order 2
+      CASE(2)
+         VAL%E11=RES
+
+      ! Order 3
+      CASE(3)
+         VAL%E111=RES
+
+      ! Order 4
+      CASE(4)
+         VAL%E1111=RES
+
+      ! Order 5
+      CASE(5)
+         VAL%E11111=RES
+
+      ! Order 6
+      CASE(6)
+         VAL%E111111=RES
+
+      ! Order 7
+      CASE(7)
+         VAL%E1111111=RES
+
+      ! Order 8
+      CASE(8)
+         VAL%E11111111=RES
+
+      ! Order 9
+      CASE(9)
+         VAL%E111111111=RES
+
+      ! Order 10
+      CASE(10)
+         VAL%E1111111111=RES
+
+      END SELECT
+   END SUBROUTINE ONUMM1N10_SETIM_V
+
+      SUBROUTINE ONUMM1N10_SETIM_M(VAL,IDX,RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(INOUT) :: VAL(:,:)
+      REAL(DP),INTENT(IN) :: RES(SIZE(VAL,1),SIZE(VAL,2)) 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         VAL%R=RES
+
+      ! Order 1
+      CASE(1)
+         VAL%E1=RES
+
+      ! Order 2
+      CASE(2)
+         VAL%E11=RES
+
+      ! Order 3
+      CASE(3)
+         VAL%E111=RES
+
+      ! Order 4
+      CASE(4)
+         VAL%E1111=RES
+
+      ! Order 5
+      CASE(5)
+         VAL%E11111=RES
+
+      ! Order 6
+      CASE(6)
+         VAL%E111111=RES
+
+      ! Order 7
+      CASE(7)
+         VAL%E1111111=RES
+
+      ! Order 8
+      CASE(8)
+         VAL%E11111111=RES
+
+      ! Order 9
+      CASE(9)
+         VAL%E111111111=RES
+
+      ! Order 10
+      CASE(10)
+         VAL%E1111111111=RES
+
+      END SELECT
+   END SUBROUTINE ONUMM1N10_SETIM_M
+
+FUNCTION ONUMM1N10_GETIM_S(VAL,IDX) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: VAL
+      REAL(DP) :: RES 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         RES=VAL%R
+
+      ! Order 1
+      CASE(1)
+         RES=VAL%E1
+
+      ! Order 2
+      CASE(2)
+         RES=VAL%E11
+
+      ! Order 3
+      CASE(3)
+         RES=VAL%E111
+
+      ! Order 4
+      CASE(4)
+         RES=VAL%E1111
+
+      ! Order 5
+      CASE(5)
+         RES=VAL%E11111
+
+      ! Order 6
+      CASE(6)
+         RES=VAL%E111111
+
+      ! Order 7
+      CASE(7)
+         RES=VAL%E1111111
+
+      ! Order 8
+      CASE(8)
+         RES=VAL%E11111111
+
+      ! Order 9
+      CASE(9)
+         RES=VAL%E111111111
+
+      ! Order 10
+      CASE(10)
+         RES=VAL%E1111111111
+
+      END SELECT
+   END FUNCTION ONUMM1N10_GETIM_S
+
+FUNCTION ONUMM1N10_GETIM_V(VAL,IDX) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: VAL(:)
+      REAL(DP) :: RES(SIZE(VAL)) 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         RES=VAL%R
+
+      ! Order 1
+      CASE(1)
+         RES=VAL%E1
+
+      ! Order 2
+      CASE(2)
+         RES=VAL%E11
+
+      ! Order 3
+      CASE(3)
+         RES=VAL%E111
+
+      ! Order 4
+      CASE(4)
+         RES=VAL%E1111
+
+      ! Order 5
+      CASE(5)
+         RES=VAL%E11111
+
+      ! Order 6
+      CASE(6)
+         RES=VAL%E111111
+
+      ! Order 7
+      CASE(7)
+         RES=VAL%E1111111
+
+      ! Order 8
+      CASE(8)
+         RES=VAL%E11111111
+
+      ! Order 9
+      CASE(9)
+         RES=VAL%E111111111
+
+      ! Order 10
+      CASE(10)
+         RES=VAL%E1111111111
+
+      END SELECT
+   END FUNCTION ONUMM1N10_GETIM_V
+
+FUNCTION ONUMM1N10_GETIM_M(VAL,IDX) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: VAL(:,:)
+      REAL(DP) :: RES(SIZE(VAL,1),SIZE(VAL,2)) 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         RES=VAL%R
+
+      ! Order 1
+      CASE(1)
+         RES=VAL%E1
+
+      ! Order 2
+      CASE(2)
+         RES=VAL%E11
+
+      ! Order 3
+      CASE(3)
+         RES=VAL%E111
+
+      ! Order 4
+      CASE(4)
+         RES=VAL%E1111
+
+      ! Order 5
+      CASE(5)
+         RES=VAL%E11111
+
+      ! Order 6
+      CASE(6)
+         RES=VAL%E111111
+
+      ! Order 7
+      CASE(7)
+         RES=VAL%E1111111
+
+      ! Order 8
+      CASE(8)
+         RES=VAL%E11111111
+
+      ! Order 9
+      CASE(9)
+         RES=VAL%E111111111
+
+      ! Order 10
+      CASE(10)
+         RES=VAL%E1111111111
+
+      END SELECT
+   END FUNCTION ONUMM1N10_GETIM_M
+
+   SUBROUTINE ONUMM1N10_PPRINT_S(VAR,FMT,UNIT)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: VAR
+      CHARACTER(len=*), INTENT(IN), OPTIONAL :: fmt
+      INTEGER, INTENT(IN), OPTIONAL :: unit
+      CHARACTER(len=:),ALLOCATABLE :: output_format
+      INTEGER :: unt
+
+      IF ( PRESENT(unit) ) THEN
+         unt = unit
+      ELSE
+         unt = 6
+      END IF
+
+      IF ( PRESENT(fmt) ) THEN
+         output_format = '('//trim(fmt)//')'
+      ELSE
+         output_format = '(F10.4)'
+      END IF
+
+      ! Pretty print function.
+      !  Real
+      CALL PPRINT(VAR%R,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='NO') ' '
+
+      !  Order 1
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E1 * '
+      CALL PPRINT(VAR%E1,unit=unt,fmt=output_format)
+
+      !  Order 2
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E11 * '
+      CALL PPRINT(VAR%E11,unit=unt,fmt=output_format)
+
+      !  Order 3
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E111 * '
+      CALL PPRINT(VAR%E111,unit=unt,fmt=output_format)
+
+      !  Order 4
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E1111 * '
+      CALL PPRINT(VAR%E1111,unit=unt,fmt=output_format)
+
+      !  Order 5
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E11111 * '
+      CALL PPRINT(VAR%E11111,unit=unt,fmt=output_format)
+
+      !  Order 6
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E111111 * '
+      CALL PPRINT(VAR%E111111,unit=unt,fmt=output_format)
+
+      !  Order 7
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E1111111 * '
+      CALL PPRINT(VAR%E1111111,unit=unt,fmt=output_format)
+
+      !  Order 8
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E11111111 * '
+      CALL PPRINT(VAR%E11111111,unit=unt,fmt=output_format)
+
+      !  Order 9
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E111111111 * '
+      CALL PPRINT(VAR%E111111111,unit=unt,fmt=output_format)
+
+      !  Order 10
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E1111111111 * '
+      CALL PPRINT(VAR%E1111111111,unit=unt,fmt=output_format)
+
+
+   END SUBROUTINE ONUMM1N10_PPRINT_S
+
+   SUBROUTINE ONUMM1N10_PPRINT_V(VAR,FMT,UNIT)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: VAR(:)
+      CHARACTER(len=*), INTENT(IN), OPTIONAL :: fmt
+      INTEGER, INTENT(IN), OPTIONAL :: unit
+      CHARACTER(len=:),ALLOCATABLE :: output_format
+      INTEGER :: unt
+
+      IF ( PRESENT(unit) ) THEN
+         unt = unit
+      ELSE
+         unt = 6
+      END IF
+
+      IF ( PRESENT(fmt) ) THEN
+         output_format = '('//trim(fmt)//')'
+      ELSE
+         output_format = '(F10.4)'
+      END IF
+
+      ! Pretty print function.
+      !  Real
+      CALL PPRINT(VAR%R,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') ' '
+
+      !  Order 1
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1 * '
+      CALL PPRINT(VAR%E1,unit=unt,fmt=output_format)
+
+      !  Order 2
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E11 * '
+      CALL PPRINT(VAR%E11,unit=unt,fmt=output_format)
+
+      !  Order 3
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E111 * '
+      CALL PPRINT(VAR%E111,unit=unt,fmt=output_format)
+
+      !  Order 4
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1111 * '
+      CALL PPRINT(VAR%E1111,unit=unt,fmt=output_format)
+
+      !  Order 5
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E11111 * '
+      CALL PPRINT(VAR%E11111,unit=unt,fmt=output_format)
+
+      !  Order 6
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E111111 * '
+      CALL PPRINT(VAR%E111111,unit=unt,fmt=output_format)
+
+      !  Order 7
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1111111 * '
+      CALL PPRINT(VAR%E1111111,unit=unt,fmt=output_format)
+
+      !  Order 8
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E11111111 * '
+      CALL PPRINT(VAR%E11111111,unit=unt,fmt=output_format)
+
+      !  Order 9
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E111111111 * '
+      CALL PPRINT(VAR%E111111111,unit=unt,fmt=output_format)
+
+      !  Order 10
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1111111111 * '
+      CALL PPRINT(VAR%E1111111111,unit=unt,fmt=output_format)
+
+
+   END SUBROUTINE ONUMM1N10_PPRINT_V
+
+   SUBROUTINE ONUMM1N10_PPRINT_M(VAR,FMT,UNIT)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: VAR(:,:)
+      CHARACTER(len=*), INTENT(IN), OPTIONAL :: fmt
+      INTEGER, INTENT(IN), OPTIONAL :: unit
+      CHARACTER(len=:),ALLOCATABLE :: output_format
+      INTEGER :: unt
+
+      IF ( PRESENT(unit) ) THEN
+         unt = unit
+      ELSE
+         unt = 6
+      END IF
+
+      IF ( PRESENT(fmt) ) THEN
+         output_format = '('//trim(fmt)//')'
+      ELSE
+         output_format = '(F10.4)'
+      END IF
+
+      ! Pretty print function.
+      !  Real
+      CALL PPRINT(VAR%R,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') ' '
+
+      !  Order 1
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1 * '
+      CALL PPRINT(VAR%E1,unit=unt,fmt=output_format)
+
+      !  Order 2
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E11 * '
+      CALL PPRINT(VAR%E11,unit=unt,fmt=output_format)
+
+      !  Order 3
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E111 * '
+      CALL PPRINT(VAR%E111,unit=unt,fmt=output_format)
+
+      !  Order 4
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1111 * '
+      CALL PPRINT(VAR%E1111,unit=unt,fmt=output_format)
+
+      !  Order 5
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E11111 * '
+      CALL PPRINT(VAR%E11111,unit=unt,fmt=output_format)
+
+      !  Order 6
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E111111 * '
+      CALL PPRINT(VAR%E111111,unit=unt,fmt=output_format)
+
+      !  Order 7
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1111111 * '
+      CALL PPRINT(VAR%E1111111,unit=unt,fmt=output_format)
+
+      !  Order 8
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E11111111 * '
+      CALL PPRINT(VAR%E11111111,unit=unt,fmt=output_format)
+
+      !  Order 9
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E111111111 * '
+      CALL PPRINT(VAR%E111111111,unit=unt,fmt=output_format)
+
+      !  Order 10
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1111111111 * '
+      CALL PPRINT(VAR%E1111111111,unit=unt,fmt=output_format)
+
+
+   END SUBROUTINE ONUMM1N10_PPRINT_M
+
+   ELEMENTAL FUNCTION ONUMM1N10_FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)&
+      RESULT(RES)
+      IMPLICIT NONE
+      !  Definitions
+      REAL(DP) :: FACTOR, COEF
+      TYPE(ONUMM1N10), INTENT(IN)  :: X
+      REAL(DP), INTENT(IN)  :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      TYPE(ONUMM1N10) :: DX, DX_P
+
+      FACTOR = 1.0_DP
+      COEF   = 0.0_DP
+      DX     = X
+      DX_P   = X
+
+      !  Set real part of deltas zero.
+      DX%R = 0.0_DP
+      DX_P%R = 0.0_DP
+
+      ! Sets real part
+      RES = DER0
+
+      ! Sets order 1
+      FACTOR = FACTOR * 1
+      COEF = DER1 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      ! Order 9
+      RES%E111111111 = RES%E111111111+COEF*DX_P%E111111111
+      ! Order 8
+      RES%E11111111 = RES%E11111111+COEF*DX_P%E11111111
+      ! Order 7
+      RES%E1111111 = RES%E1111111+COEF*DX_P%E1111111
+      ! Order 6
+      RES%E111111 = RES%E111111+COEF*DX_P%E111111
+      ! Order 5
+      RES%E11111 = RES%E11111+COEF*DX_P%E11111
+      ! Order 4
+      RES%E1111 = RES%E1111+COEF*DX_P%E1111
+      ! Order 3
+      RES%E111 = RES%E111+COEF*DX_P%E111
+      ! Order 2
+      RES%E11 = RES%E11+COEF*DX_P%E11
+      ! Order 1
+      RES%E1 = RES%E1+COEF*DX_P%E1
+      ! DX_P = DX_P * DX
+      ! Order 10
+      DX_P%E1111111111 = DX_P%E1*DX%E111111111+DX_P%E111111111*DX%E1+ &
+                      DX_P%E11*DX%E11111111+DX_P%E11111111*DX%E11+DX_P%E111*DX%E1111111+ &
+                      DX_P%E1111111*DX%E111+DX_P%E1111*DX%E111111+DX_P%E111111*DX%E1111+ &
+                      DX_P%E11111*DX%E11111
+      ! Order 9
+      DX_P%E111111111 = DX_P%E1*DX%E11111111+DX_P%E11111111*DX%E1+ &
+                     DX_P%E11*DX%E1111111+DX_P%E1111111*DX%E11+DX_P%E111*DX%E111111+ &
+                     DX_P%E111111*DX%E111+DX_P%E1111*DX%E11111+DX_P%E11111*DX%E1111
+      ! Order 8
+      DX_P%E11111111 = DX_P%E1*DX%E1111111+DX_P%E1111111*DX%E1+ &
+                    DX_P%E11*DX%E111111+DX_P%E111111*DX%E11+DX_P%E111*DX%E11111+ &
+                    DX_P%E11111*DX%E111+DX_P%E1111*DX%E1111
+      ! Order 7
+      DX_P%E1111111 = DX_P%E1*DX%E111111+DX_P%E111111*DX%E1+ &
+                   DX_P%E11*DX%E11111+DX_P%E11111*DX%E11+DX_P%E111*DX%E1111+ &
+                   DX_P%E1111*DX%E111
+      ! Order 6
+      DX_P%E111111 = DX_P%E1*DX%E11111+DX_P%E11111*DX%E1+ &
+                  DX_P%E11*DX%E1111+DX_P%E1111*DX%E11+DX_P%E111*DX%E111
+      ! Order 5
+      DX_P%E11111 = DX_P%E1*DX%E1111+DX_P%E1111*DX%E1+ &
+                 DX_P%E11*DX%E111+DX_P%E111*DX%E11
+      ! Order 4
+      DX_P%E1111 = DX_P%E1*DX%E111+DX_P%E111*DX%E1+ &
+                DX_P%E11*DX%E11
+      ! Order 3
+      DX_P%E111 = DX_P%E1*DX%E11+DX_P%E11*DX%E1
+      ! Order 2
+      DX_P%E11 = DX_P%E1*DX%E1
+      
+      ! Sets order 2
+      FACTOR = FACTOR * 2
+      COEF = DER2 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      ! Order 9
+      RES%E111111111 = RES%E111111111+COEF*DX_P%E111111111
+      ! Order 8
+      RES%E11111111 = RES%E11111111+COEF*DX_P%E11111111
+      ! Order 7
+      RES%E1111111 = RES%E1111111+COEF*DX_P%E1111111
+      ! Order 6
+      RES%E111111 = RES%E111111+COEF*DX_P%E111111
+      ! Order 5
+      RES%E11111 = RES%E11111+COEF*DX_P%E11111
+      ! Order 4
+      RES%E1111 = RES%E1111+COEF*DX_P%E1111
+      ! Order 3
+      RES%E111 = RES%E111+COEF*DX_P%E111
+      ! Order 2
+      RES%E11 = RES%E11+COEF*DX_P%E11
+      ! DX_P = DX_P * DX
+      ! Order 10
+      DX_P%E1111111111 = DX_P%E111111111*DX%E1+DX_P%E11*DX%E11111111+ &
+                      DX_P%E11111111*DX%E11+DX_P%E111*DX%E1111111+DX_P%E1111111*DX%E111+ &
+                      DX_P%E1111*DX%E111111+DX_P%E111111*DX%E1111+DX_P%E11111*DX%E11111
+      ! Order 9
+      DX_P%E111111111 = DX_P%E11111111*DX%E1+DX_P%E11*DX%E1111111+ &
+                     DX_P%E1111111*DX%E11+DX_P%E111*DX%E111111+DX_P%E111111*DX%E111+ &
+                     DX_P%E1111*DX%E11111+DX_P%E11111*DX%E1111
+      ! Order 8
+      DX_P%E11111111 = DX_P%E1111111*DX%E1+DX_P%E11*DX%E111111+ &
+                    DX_P%E111111*DX%E11+DX_P%E111*DX%E11111+DX_P%E11111*DX%E111+ &
+                    DX_P%E1111*DX%E1111
+      ! Order 7
+      DX_P%E1111111 = DX_P%E111111*DX%E1+DX_P%E11*DX%E11111+ &
+                   DX_P%E11111*DX%E11+DX_P%E111*DX%E1111+DX_P%E1111*DX%E111
+      ! Order 6
+      DX_P%E111111 = DX_P%E11111*DX%E1+DX_P%E11*DX%E1111+ &
+                  DX_P%E1111*DX%E11+DX_P%E111*DX%E111
+      ! Order 5
+      DX_P%E11111 = DX_P%E1111*DX%E1+DX_P%E11*DX%E111+ &
+                 DX_P%E111*DX%E11
+      ! Order 4
+      DX_P%E1111 = DX_P%E111*DX%E1+DX_P%E11*DX%E11
+      ! Order 3
+      DX_P%E111 = DX_P%E11*DX%E1
+      
+      ! Sets order 3
+      FACTOR = FACTOR * 3
+      COEF = DER3 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      ! Order 9
+      RES%E111111111 = RES%E111111111+COEF*DX_P%E111111111
+      ! Order 8
+      RES%E11111111 = RES%E11111111+COEF*DX_P%E11111111
+      ! Order 7
+      RES%E1111111 = RES%E1111111+COEF*DX_P%E1111111
+      ! Order 6
+      RES%E111111 = RES%E111111+COEF*DX_P%E111111
+      ! Order 5
+      RES%E11111 = RES%E11111+COEF*DX_P%E11111
+      ! Order 4
+      RES%E1111 = RES%E1111+COEF*DX_P%E1111
+      ! Order 3
+      RES%E111 = RES%E111+COEF*DX_P%E111
+      ! DX_P = DX_P * DX
+      ! Order 10
+      DX_P%E1111111111 = DX_P%E111111111*DX%E1+DX_P%E11111111*DX%E11+ &
+                      DX_P%E111*DX%E1111111+DX_P%E1111111*DX%E111+DX_P%E1111*DX%E111111+ &
+                      DX_P%E111111*DX%E1111+DX_P%E11111*DX%E11111
+      ! Order 9
+      DX_P%E111111111 = DX_P%E11111111*DX%E1+DX_P%E1111111*DX%E11+ &
+                     DX_P%E111*DX%E111111+DX_P%E111111*DX%E111+DX_P%E1111*DX%E11111+ &
+                     DX_P%E11111*DX%E1111
+      ! Order 8
+      DX_P%E11111111 = DX_P%E1111111*DX%E1+DX_P%E111111*DX%E11+ &
+                    DX_P%E111*DX%E11111+DX_P%E11111*DX%E111+DX_P%E1111*DX%E1111
+      ! Order 7
+      DX_P%E1111111 = DX_P%E111111*DX%E1+DX_P%E11111*DX%E11+ &
+                   DX_P%E111*DX%E1111+DX_P%E1111*DX%E111
+      ! Order 6
+      DX_P%E111111 = DX_P%E11111*DX%E1+DX_P%E1111*DX%E11+ &
+                  DX_P%E111*DX%E111
+      ! Order 5
+      DX_P%E11111 = DX_P%E1111*DX%E1+DX_P%E111*DX%E11
+      ! Order 4
+      DX_P%E1111 = DX_P%E111*DX%E1
+      
+      ! Sets order 4
+      FACTOR = FACTOR * 4
+      COEF = DER4 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      ! Order 9
+      RES%E111111111 = RES%E111111111+COEF*DX_P%E111111111
+      ! Order 8
+      RES%E11111111 = RES%E11111111+COEF*DX_P%E11111111
+      ! Order 7
+      RES%E1111111 = RES%E1111111+COEF*DX_P%E1111111
+      ! Order 6
+      RES%E111111 = RES%E111111+COEF*DX_P%E111111
+      ! Order 5
+      RES%E11111 = RES%E11111+COEF*DX_P%E11111
+      ! Order 4
+      RES%E1111 = RES%E1111+COEF*DX_P%E1111
+      ! DX_P = DX_P * DX
+      ! Order 10
+      DX_P%E1111111111 = DX_P%E111111111*DX%E1+DX_P%E11111111*DX%E11+ &
+                      DX_P%E1111111*DX%E111+DX_P%E1111*DX%E111111+DX_P%E111111*DX%E1111+ &
+                      DX_P%E11111*DX%E11111
+      ! Order 9
+      DX_P%E111111111 = DX_P%E11111111*DX%E1+DX_P%E1111111*DX%E11+ &
+                     DX_P%E111111*DX%E111+DX_P%E1111*DX%E11111+DX_P%E11111*DX%E1111
+      ! Order 8
+      DX_P%E11111111 = DX_P%E1111111*DX%E1+DX_P%E111111*DX%E11+ &
+                    DX_P%E11111*DX%E111+DX_P%E1111*DX%E1111
+      ! Order 7
+      DX_P%E1111111 = DX_P%E111111*DX%E1+DX_P%E11111*DX%E11+ &
+                   DX_P%E1111*DX%E111
+      ! Order 6
+      DX_P%E111111 = DX_P%E11111*DX%E1+DX_P%E1111*DX%E11
+      ! Order 5
+      DX_P%E11111 = DX_P%E1111*DX%E1
+      
+      ! Sets order 5
+      FACTOR = FACTOR * 5
+      COEF = DER5 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      ! Order 9
+      RES%E111111111 = RES%E111111111+COEF*DX_P%E111111111
+      ! Order 8
+      RES%E11111111 = RES%E11111111+COEF*DX_P%E11111111
+      ! Order 7
+      RES%E1111111 = RES%E1111111+COEF*DX_P%E1111111
+      ! Order 6
+      RES%E111111 = RES%E111111+COEF*DX_P%E111111
+      ! Order 5
+      RES%E11111 = RES%E11111+COEF*DX_P%E11111
+      ! DX_P = DX_P * DX
+      ! Order 10
+      DX_P%E1111111111 = DX_P%E111111111*DX%E1+DX_P%E11111111*DX%E11+ &
+                      DX_P%E1111111*DX%E111+DX_P%E111111*DX%E1111+DX_P%E11111*DX%E11111
+      ! Order 9
+      DX_P%E111111111 = DX_P%E11111111*DX%E1+DX_P%E1111111*DX%E11+ &
+                     DX_P%E111111*DX%E111+DX_P%E11111*DX%E1111
+      ! Order 8
+      DX_P%E11111111 = DX_P%E1111111*DX%E1+DX_P%E111111*DX%E11+ &
+                    DX_P%E11111*DX%E111
+      ! Order 7
+      DX_P%E1111111 = DX_P%E111111*DX%E1+DX_P%E11111*DX%E11
+      ! Order 6
+      DX_P%E111111 = DX_P%E11111*DX%E1
+      
+      ! Sets order 6
+      FACTOR = FACTOR * 6
+      COEF = DER6 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      ! Order 9
+      RES%E111111111 = RES%E111111111+COEF*DX_P%E111111111
+      ! Order 8
+      RES%E11111111 = RES%E11111111+COEF*DX_P%E11111111
+      ! Order 7
+      RES%E1111111 = RES%E1111111+COEF*DX_P%E1111111
+      ! Order 6
+      RES%E111111 = RES%E111111+COEF*DX_P%E111111
+      ! DX_P = DX_P * DX
+      ! Order 10
+      DX_P%E1111111111 = DX_P%E111111111*DX%E1+DX_P%E11111111*DX%E11+ &
+                      DX_P%E1111111*DX%E111+DX_P%E111111*DX%E1111
+      ! Order 9
+      DX_P%E111111111 = DX_P%E11111111*DX%E1+DX_P%E1111111*DX%E11+ &
+                     DX_P%E111111*DX%E111
+      ! Order 8
+      DX_P%E11111111 = DX_P%E1111111*DX%E1+DX_P%E111111*DX%E11
+      ! Order 7
+      DX_P%E1111111 = DX_P%E111111*DX%E1
+      
+      ! Sets order 7
+      FACTOR = FACTOR * 7
+      COEF = DER7 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      ! Order 9
+      RES%E111111111 = RES%E111111111+COEF*DX_P%E111111111
+      ! Order 8
+      RES%E11111111 = RES%E11111111+COEF*DX_P%E11111111
+      ! Order 7
+      RES%E1111111 = RES%E1111111+COEF*DX_P%E1111111
+      ! DX_P = DX_P * DX
+      ! Order 10
+      DX_P%E1111111111 = DX_P%E111111111*DX%E1+DX_P%E11111111*DX%E11+ &
+                      DX_P%E1111111*DX%E111
+      ! Order 9
+      DX_P%E111111111 = DX_P%E11111111*DX%E1+DX_P%E1111111*DX%E11
+      ! Order 8
+      DX_P%E11111111 = DX_P%E1111111*DX%E1
+      
+      ! Sets order 8
+      FACTOR = FACTOR * 8
+      COEF = DER8 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      ! Order 9
+      RES%E111111111 = RES%E111111111+COEF*DX_P%E111111111
+      ! Order 8
+      RES%E11111111 = RES%E11111111+COEF*DX_P%E11111111
+      ! DX_P = DX_P * DX
+      ! Order 10
+      DX_P%E1111111111 = DX_P%E111111111*DX%E1+DX_P%E11111111*DX%E11
+      ! Order 9
+      DX_P%E111111111 = DX_P%E11111111*DX%E1
+      
+      ! Sets order 9
+      FACTOR = FACTOR * 9
+      COEF = DER9 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      ! Order 9
+      RES%E111111111 = RES%E111111111+COEF*DX_P%E111111111
+      ! DX_P = DX_P * DX
+      ! Order 10
+      DX_P%E1111111111 = DX_P%E111111111*DX%E1
+      
+      ! Sets order 10
+      FACTOR = FACTOR * 10
+      COEF = DER10 / FACTOR
+      ! RES = RES COEF * DX_P
+      ! Order 10
+      RES%E1111111111 = RES%E1111111111+COEF*DX_P%E1111111111
+      
+   END FUNCTION ONUMM1N10_FEVAL
+
+
+  ! SUBROUTINE ONUMM1N10_PPRINT_M_R(X, FMT)
+  !     IMPLICIT NONE
+  !     REAL(DP),INTENT(IN) :: X(:,:)
+  !     INTEGER :: I, J
+  !     CHARACTER(*),INTENT(IN),OPTIONAL :: FMT
+  !     CHARACTER(:),ALLOCATABLE :: out_fmt
+      
+  !     IF (PRESENT(fmt)) THEN
+  !       out_fmt = fmt
+  !     ELSE
+  !       out_fmt = 'F10.4'
+  !     END IF
+      
+  !     write(*,'(A)',advance='no') "["
+      
+  !     DO I=1,SIZE(X,1)
+        
+  !       IF (I == 1) THEN
+  !         write(*,'(A)',advance='no') "["
+  !       ELSE
+  !         write(*,'(A)',advance='no') " ["
+  !       END IF 
+
+  !       DO J=1,SIZE(X,2)
+          
+  !         write(*,'('//trim(out_fmt)//')',advance='no') X(I,J)
+
+  !       END DO
+        
+  !       write(*,'(A)') "]"
+      
+  !     END DO
+
+  !     write(*,'(A)') "]"
+
+  ! END SUBROUTINE ONUMM1N10_PPRINT_M_R
+
+  ! SUBROUTINE ONUMM1N10_PPRINT_V_R(X, FMT)
+  !     IMPLICIT NONE
+  !     REAL(DP),INTENT(IN) :: X(:)
+  !     INTEGER :: I
+  !     CHARACTER(*),INTENT(IN),OPTIONAL :: FMT
+  !     CHARACTER(:),ALLOCATABLE :: out_fmt
+      
+  !     IF (PRESENT(fmt)) THEN
+  !       out_fmt = fmt
+  !     ELSE
+  !       out_fmt = 'F10.4'
+  !     END IF
+      
+  !     write(*,'(A)',advance='no') "["
+      
+  !     DO I=1,SIZE(X,1)
+
+  !       write(*,'('//trim(out_fmt)//')',advance='no') X(I)
+
+  !     END DO
+
+  !     write(*,'(A)') "]"
+
+  ! END SUBROUTINE ONUMM1N10_PPRINT_V_R
+
+  ! !***************************************************************************************************! 
+  ! !> @brief 2 x 2  matrix inversion.
+  ! !!
+  ! !! Taken from https://fortranwiki.org/fortran/show/Matrix+inversion
+  ! !!
+  ! !! @param[in] A: Matrix to be printed.
+  ! !! @param[out] B: inverse of A.
+  ! !!
+  ! !***************************************************************************************************!
+  ! PURE FUNCTION Rmatinv2x2(A,det) RESULT(B)
+
+  !   IMPLICIT NONE
+
+  !   REAL(dp), INTENT(IN) :: A(2,2)   !! Matrix
+  !   REAL(dp), INTENT(IN), OPTIONAL :: det
+  !   REAL(dp)             :: B(2,2)   !! Inverse matrix
+  !   REAL(dp)             :: detinv
+
+  !   IF ( PRESENT(det) ) THEN
+  !     detinv = 1.0d0 / det
+  !   ELSE
+  !     ! Calculate the inverse determinant of the matrix
+  !     detinv = 1.0d0 / det2x2(A)
+  !   END IF
+
+  !   ! Calculate the inverse of the matrix
+  !   B(1,1) =  detinv * A(2,2)
+  !   B(2,1) = -detinv * A(2,1)
+  !   B(1,2) = -detinv * A(1,2)
+  !   B(2,2) =  detinv * A(1,1)
+  ! END FUNCTION
+  ! !===================================================================================================! 
+  
+  ! !***************************************************************************************************! 
+  ! !> @brief 3 x 3  matrix inversion.
+  ! !!
+  ! !! Taken from https://fortranwiki.org/fortran/show/Matrix+inversion
+  ! !!
+  ! !! @param[in]  A: Matrix to be printed.
+  ! !! @param[out] B: inverse of A.
+  ! !!
+  ! !***************************************************************************************************!
+  ! PURE FUNCTION Rmatinv3x3(A,det) RESULT(B)
+      
+  !     IMPLICIT NONE
+
+  !     REAL(dp), INTENT(IN) :: A(3,3)   !! Matrix
+  !     REAL(dp), INTENT(IN), OPTIONAL :: det
+  !     REAL(dp)             :: B(3,3)   !! Inverse matrix
+  !     REAL(dp)             :: detinv
+
+  !     IF ( PRESENT(det) ) THEN
+  !        detinv = 1.0d0/det
+  !     ELSE
+  !        ! Calculate the inverse determinant of the matrix
+  !        detinv = 1.0d0/det3x3(A)
+  !     END IF 
+
+  !     ! Calculate the inverse of the matrix
+  !     B(1,1) = + detinv * (A(2,2)*A(3,3) - A(2,3)*A(3,2))
+  !     B(2,1) = - detinv * (A(2,1)*A(3,3) - A(2,3)*A(3,1))
+  !     B(3,1) = + detinv * (A(2,1)*A(3,2) - A(2,2)*A(3,1))
+  !     B(1,2) = - detinv * (A(1,2)*A(3,3) - A(1,3)*A(3,2))
+  !     B(2,2) = + detinv * (A(1,1)*A(3,3) - A(1,3)*A(3,1))
+  !     B(3,2) = - detinv * (A(1,1)*A(3,2) - A(1,2)*A(3,1))
+  !     B(1,3) = + detinv * (A(1,2)*A(2,3) - A(1,3)*A(2,2))
+  !     B(2,3) = - detinv * (A(1,1)*A(2,3) - A(1,3)*A(2,1))
+  !     B(3,3) = + detinv * (A(1,1)*A(2,2) - A(1,2)*A(2,1))
+
+  !  END FUNCTION
+  !  !===================================================================================================! 
+
+  !  !***************************************************************************************************! 
+  !  !> @brief 4 x 4  matrix inversion.
+  !  !!
+  !  !! Taken from https://fortranwiki.org/fortran/show/Matrix+inversion
+  !  !!
+  !  !! @param[in]  A: Matrix to be printed.
+  !  !! @param[in]  det: (optional) Determinant of A.
+  !  !! @param[out] B: inverse of A.
+  !  !!
+  !  !***************************************************************************************************!
+  !  PURE FUNCTION Rmatinv4x4(A,det) RESULT(B)
+      
+  !     IMPLICIT NONE
+
+  !     REAL(dp), INTENT(IN) :: A(4,4)   !! Matrix
+  !     REAL(dp), INTENT(IN), OPTIONAL :: det
+  !     REAL(dp)             :: B(4,4)   !! Inverse matrix
+  !     REAL(dp)             :: di  !! Determinant inverse
+
+  !     ! Calculate the inverse determinant of the matrix
+  !     IF ( PRESENT(det) ) THEN
+  !        di = 1.0d0/det
+  !     ELSE
+  !        di = 1.0d0/det4x4(A)
+  !     END IF 
+      
+  !     ! Calculate the inverse of the matrix
+  !     B(1,1) = di*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))
+  !     B(2,1) = di*(A(2,1)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(2,3)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(2,4)*(A(3,3)*A(4,1)-A(3,1)*A(4,3)))
+  !     B(3,1) = di*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
+  !     B(4,1) = di*(A(2,1)*(A(3,3)*A(4,2)-A(3,2)*A(4,3))+A(2,2)*(A(3,1)*A(4,3)-A(3,3)*A(4,1))+A(2,3)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
+  !     B(1,2) = di*(A(1,2)*(A(3,4)*A(4,3)-A(3,3)*A(4,4))+A(1,3)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(1,4)*(A(3,3)*A(4,2)-A(3,2)*A(4,3)))
+  !     B(2,2) = di*(A(1,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(1,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(1,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))
+  !     B(3,2) = di*(A(1,1)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(1,2)*(A(3,1)*A(4,4)-A(3,4)*A(4,1))+A(1,4)*(A(3,2)*A(4,1)-A(3,1)*A(4,2)))
+  !     B(4,2) = di*(A(1,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(1,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(1,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))
+  !     B(1,3) = di*(A(1,2)*(A(2,3)*A(4,4)-A(2,4)*A(4,3))+A(1,3)*(A(2,4)*A(4,2)-A(2,2)*A(4,4))+A(1,4)*(A(2,2)*A(4,3)-A(2,3)*A(4,2)))
+  !     B(2,3) = di*(A(1,1)*(A(2,4)*A(4,3)-A(2,3)*A(4,4))+A(1,3)*(A(2,1)*A(4,4)-A(2,4)*A(4,1))+A(1,4)*(A(2,3)*A(4,1)-A(2,1)*A(4,3)))
+  !     B(3,3) = di*(A(1,1)*(A(2,2)*A(4,4)-A(2,4)*A(4,2))+A(1,2)*(A(2,4)*A(4,1)-A(2,1)*A(4,4))+A(1,4)*(A(2,1)*A(4,2)-A(2,2)*A(4,1)))
+  !     B(4,3) = di*(A(1,1)*(A(2,3)*A(4,2)-A(2,2)*A(4,3))+A(1,2)*(A(2,1)*A(4,3)-A(2,3)*A(4,1))+A(1,3)*(A(2,2)*A(4,1)-A(2,1)*A(4,2)))
+  !     B(1,4) = di*(A(1,2)*(A(2,4)*A(3,3)-A(2,3)*A(3,4))+A(1,3)*(A(2,2)*A(3,4)-A(2,4)*A(3,2))+A(1,4)*(A(2,3)*A(3,2)-A(2,2)*A(3,3)))
+  !     B(2,4) = di*(A(1,1)*(A(2,3)*A(3,4)-A(2,4)*A(3,3))+A(1,3)*(A(2,4)*A(3,1)-A(2,1)*A(3,4))+A(1,4)*(A(2,1)*A(3,3)-A(2,3)*A(3,1)))
+  !     B(3,4) = di*(A(1,1)*(A(2,4)*A(3,2)-A(2,2)*A(3,4))+A(1,2)*(A(2,1)*A(3,4)-A(2,4)*A(3,1))+A(1,4)*(A(2,2)*A(3,1)-A(2,1)*A(3,2)))
+  !     B(4,4) = di*(A(1,1)*(A(2,2)*A(3,3)-A(2,3)*A(3,2))+A(1,2)*(A(2,3)*A(3,1)-A(2,1)*A(3,3))+A(1,3)*(A(2,1)*A(3,2)-A(2,2)*A(3,1)))
+  !  END FUNCTION
+  !  !===================================================================================================! 
+
+  !***************************************************************************************************! 
+  !> @brief 2 x 2  matrix determinant.
+  !!
+  !!
+  !! @param[in] A: Matrix to be printed.
+  !! @param[out] B: inverse of A.
+  !!
+  !***************************************************************************************************!
+  PURE FUNCTION ONUMM1N10_det2x2(A) RESULT(det)
+
+    IMPLICIT NONE
+
+    TYPE(ONUMM1N10), INTENT(IN) :: A(2,2)   !! Matrix
+    TYPE(ONUMM1N10)             :: det
+
+    ! Calculate the determinant of the matrix
+    det = (A(1,1)*A(2,2) - A(1,2)*A(2,1))
+
+  END FUNCTION
+  !===================================================================================================! 
+  
+  !***************************************************************************************************! 
+  !> @brief 3 x 3  matrix determinant.
+  !!
+  !!
+  !! @param[in]  A: Matrix to be printed.
+  !! @param[out] B: inverse of A.
+  !!
+  !***************************************************************************************************!
+  PURE FUNCTION ONUMM1N10_det3x3(A) RESULT(det)
+      
+    IMPLICIT NONE
+
+    TYPE(ONUMM1N10), INTENT(IN) :: A(3,3)   !! Matrix
+    TYPE(ONUMM1N10)             :: det
+
+    ! Calculate the inverse determinant of the matrix
+    det = (A(1,1)*A(2,2)*A(3,3) - A(1,1)*A(2,3)*A(3,2)&
+         - A(1,2)*A(2,1)*A(3,3) + A(1,2)*A(2,3)*A(3,1)&
+         + A(1,3)*A(2,1)*A(3,2) - A(1,3)*A(2,2)*A(3,1))
+
+  END FUNCTION
+  !===================================================================================================! 
+
+  !***************************************************************************************************! 
+  !> @brief 4 x 4  matrix determinant.
+  !!
+  !!
+  !! @param[in]  A: Matrix to be printed.
+  !! @param[out] B: inverse of A.
+  !!
+  !***************************************************************************************************!
+  PURE FUNCTION ONUMM1N10_det4x4(A) RESULT(det)
+      
+    IMPLICIT NONE
+
+    TYPE(ONUMM1N10), INTENT(IN) :: A(4,4)   !! Matrix
+    TYPE(ONUMM1N10)             :: det
+
+    ! Calculate the determinant of the matrix
+    det = &
+    (A(1,1)*(A(2,2)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,2)-A(3,2)*A(4,4))+A(2,4)*(A(3,2)*A(4,3)-A(3,3)*A(4,2)))&
+   - A(1,2)*(A(2,1)*(A(3,3)*A(4,4)-A(3,4)*A(4,3))+A(2,3)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,3)-A(3,3)*A(4,1)))&
+   + A(1,3)*(A(2,1)*(A(3,2)*A(4,4)-A(3,4)*A(4,2))+A(2,2)*(A(3,4)*A(4,1)-A(3,1)*A(4,4))+A(2,4)*(A(3,1)*A(4,2)-A(3,2)*A(4,1)))&
+   - A(1,4)*(A(2,1)*(A(3,2)*A(4,3)-A(3,3)*A(4,2))+A(2,2)*(A(3,3)*A(4,1)-A(3,1)*A(4,3))+A(2,3)*(A(3,1)*A(4,2)-A(3,2)*A(4,1))))
+
+  END FUNCTION
+  !===================================================================================================! 
+   
+  !***************************************************************************************************! 
+  !> @brief Cross product between two vectors.
+  !!
+  !! @param[in] a: Vector of 3 reals (rank 1).
+  !! @param[in] b: Vector of 3 reals (rank 1).
+  !!
+  !***************************************************************************************************!
+  PURE FUNCTION ONUMM1N10_cross3(a,b) RESULT(v)
+      
+    IMPLICIT NONE 
+
+    TYPE(ONUMM1N10), DIMENSION (3),INTENT(IN) :: a,b
+    TYPE(ONUMM1N10), DIMENSION (3) :: v
+    
+    v(1) = a(2) * b(3) - a(3) * b(2)
+    v(2) = a(3) * b(1) - a(1) * b(3)
+    v(3) = a(1) * b(2) - a(2) * b(1)
+
+  END FUNCTION ONUMM1N10_cross3
+  !===================================================================================================! 
+
+  !***************************************************************************************************! 
+  !> @brief Norm of a 3 element vector. # There is an intrinsic function named norm2.
+  !!
+  !! @param[in] a: Vector of 3 reals (rank 1).
+  !! @param[in] b: Vector of 3 reals (rank 1).
+  !!
+  !***************************************************************************************************!
+  FUNCTION ONUMM1N10_norm2_3(v) RESULT(n)
+     
+    IMPLICIT NONE 
+
+    TYPE(ONUMM1N10), INTENT(IN) :: v(3)
+    TYPE(ONUMM1N10) :: n
+     
+    n = SQRT( v(1)*v(1) + v(2)*v(2) + v(3)*v(3) )
+
+  END FUNCTION ONUMM1N10_norm2_3
+  !===================================================================================================! 
+
+  FUNCTION ONUMM1N10_DIVISION_OO(X,Y) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      TYPE(ONUMM1N10), INTENT(IN) :: Y
+      TYPE(ONUMM1N10) :: RES
+
+      RES = X*(Y**(-1.d0))
+
+  END FUNCTION ONUMM1N10_DIVISION_OO
+
+  FUNCTION ONUMM1N10_DIVISION_OR(X,Y) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP), INTENT(IN) :: Y
+      TYPE(ONUMM1N10) :: RES
+
+      RES = X*(Y**(-1.d0))
+
+  END FUNCTION ONUMM1N10_DIVISION_OR
+
+  FUNCTION ONUMM1N10_DIVISION_RO(X,Y) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      REAL(DP), INTENT(IN) :: X
+      TYPE(ONUMM1N10), INTENT(IN) :: Y
+      TYPE(ONUMM1N10) :: RES
+
+      RES = X*(Y**(-1.d0))
+
+  END FUNCTION ONUMM1N10_DIVISION_RO
+
+  ELEMENTAL FUNCTION ONUMM1N10_REAL(X) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: RES
+
+      RES = X%R
+
+  END FUNCTION ONUMM1N10_REAL
+
+  FUNCTION ONUMM1N10_SQRT(X) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      TYPE(ONUMM1N10) :: RES
+
+      RES = X**0.5_DP
+
+  END FUNCTION ONUMM1N10_SQRT
+
+   ELEMENTAL FUNCTION ONUMM1N10_TAN(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = TAN(X%R)
+      DER1 = TAN(X%R)**2 + 1
+      DER2 = 2*(TAN(X%R)**2 + 1)*TAN(X%R)
+      DER3 = 2*(TAN(X%R)**2 + 1)*(3*TAN(X%R)**2 + 1)
+      DER4 = 8*(TAN(X%R)**2 + 1)*(3*TAN(X%R)**2 + 2)*TAN(X%R)
+      DER5 = 8*(TAN(X%R)**2 + 1)*(2*(TAN(X%R)**2 + 1)**2 + 11*(TAN(X%R)**2 + 1 &
+      )*TAN(X%R)**2 + 2*TAN(X%R)**4)
+      DER6 = 16*(TAN(X%R)**2 + 1)*(17*(TAN(X%R)**2 + 1)**2 + 26*(TAN(X%R)**2 + &
+      1)*TAN(X%R)**2 + 2*TAN(X%R)**4)*TAN(X%R)
+      DER7 = 16*(TAN(X%R)**2 + 1)*(17*(TAN(X%R)**2 + 1)**3 + 180*(TAN(X%R)**2 &
+      + 1)**2*TAN(X%R)**2 + 114*(TAN(X%R)**2 + 1)*TAN(X%R)**4 + 4*TAN(X &
+      %R)**6)
+      DER8 = 128*(TAN(X%R)**2 + 1)*(62*(TAN(X%R)**2 + 1)**3 + 192*(TAN(X%R)**2 &
+      + 1)**2*TAN(X%R)**2 + 60*(TAN(X%R)**2 + 1)*TAN(X%R)**4 + TAN(X%R) &
+      **6)*TAN(X%R)
+      DER9 = 128*(TAN(X%R)**2 + 1)*(62*(TAN(X%R)**2 + 1)**4 + 1072*(TAN(X%R)** &
+      2 + 1)**3*TAN(X%R)**2 + 1452*(TAN(X%R)**2 + 1)**2*TAN(X%R)**4 + &
+      247*(TAN(X%R)**2 + 1)*TAN(X%R)**6 + 2*TAN(X%R)**8)
+      DER10 = 256*(TAN(X%R)**2 + 1)*(1382*(TAN(X%R)**2 + 1)**4 + 7192*(TAN(X%R &
+      )**2 + 1)**3*TAN(X%R)**2 + 5097*(TAN(X%R)**2 + 1)**2*TAN(X%R)**4 &
+      + 502*(TAN(X%R)**2 + 1)*TAN(X%R)**6 + 2*TAN(X%R)**8)*TAN(X%R)
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_TAN
+
+   ELEMENTAL FUNCTION ONUMM1N10_COS(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = COS(X%R)
+      DER1 = -SIN(X%R)
+      DER2 = -COS(X%R)
+      DER3 = SIN(X%R)
+      DER4 = COS(X%R)
+      DER5 = -SIN(X%R)
+      DER6 = -COS(X%R)
+      DER7 = SIN(X%R)
+      DER8 = COS(X%R)
+      DER9 = -SIN(X%R)
+      DER10 = -COS(X%R)
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_COS
+
+   ELEMENTAL FUNCTION ONUMM1N10_SIN(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = SIN(X%R)
+      DER1 = COS(X%R)
+      DER2 = -SIN(X%R)
+      DER3 = -COS(X%R)
+      DER4 = SIN(X%R)
+      DER5 = COS(X%R)
+      DER6 = -SIN(X%R)
+      DER7 = -COS(X%R)
+      DER8 = SIN(X%R)
+      DER9 = COS(X%R)
+      DER10 = -SIN(X%R)
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_SIN
+
+   ELEMENTAL FUNCTION ONUMM1N10_ATAN(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = ATAN(X%R)
+      DER1 = 1D0/(X%R**2 + 1)
+      DER2 = -2*X%R/(X%R**2 + 1)**2
+      DER3 = 2*(4*X%R**2/(X%R**2 + 1) - 1)/(X%R**2 + 1)**2
+      DER4 = 24*X%R*(-2*X%R**2/(X%R**2 + 1) + 1)/(X%R**2 + 1)**3
+      DER5 = 24*(16*X%R**4/(X%R**2 + 1)**2 - 12*X%R**2/(X%R**2 + 1) + 1)/(X%R &
+      **2 + 1)**3
+      DER6 = 240*X%R*(-16*X%R**4/(X%R**2 + 1)**2 + 16*X%R**2/(X%R**2 + 1) - 3) &
+      /(X%R**2 + 1)**4
+      DER7 = 720*(64*X%R**6/(X%R**2 + 1)**3 - 80*X%R**4/(X%R**2 + 1)**2 + 24*X &
+      %R**2/(X%R**2 + 1) - 1)/(X%R**2 + 1)**4
+      DER8 = 40320*X%R*(-16*X%R**6/(X%R**2 + 1)**3 + 24*X%R**4/(X%R**2 + 1)**2 &
+      - 10*X%R**2/(X%R**2 + 1) + 1)/(X%R**2 + 1)**5
+      DER9 = 40320*(256*X%R**8/(X%R**2 + 1)**4 - 448*X%R**6/(X%R**2 + 1)**3 + &
+      240*X%R**4/(X%R**2 + 1)**2 - 40*X%R**2/(X%R**2 + 1) + 1)/(X%R**2 &
+      + 1)**5
+      DER10 = 725760*X%R*(-256*X%R**8/(X%R**2 + 1)**4 + 512*X%R**6/(X%R**2 + 1 &
+      )**3 - 336*X%R**4/(X%R**2 + 1)**2 + 80*X%R**2/(X%R**2 + 1) - 5)/( &
+      X%R**2 + 1)**6
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_ATAN
+
+   ELEMENTAL FUNCTION ONUMM1N10_ACOS(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = ACOS(X%R)
+      DER1 = -1/SQRT(1 - X%R**2)
+      DER2 = -X%R/(1 - X%R**2)**(3.0D0/2.0D0)
+      DER3 = -(3*X%R**2/(1 - X%R**2) + 1)/(1 - X%R**2)**(3.0D0/2.0D0)
+      DER4 = -3*X%R*(5*X%R**2/(1 - X%R**2) + 3)/(1 - X%R**2)**(5.0D0/2.0D0)
+      DER5 = -3*(35*X%R**4/(1 - X%R**2)**2 + 30*X%R**2/(1 - X%R**2) + 3)/(1 - &
+      X%R**2)**(5.0D0/2.0D0)
+      DER6 = -15*X%R*(63*X%R**4/(1 - X%R**2)**2 + 70*X%R**2/(1 - X%R**2) + 15) &
+      /(1 - X%R**2)**(7.0D0/2.0D0)
+      DER7 = -45*(231*X%R**6/(1 - X%R**2)**3 + 315*X%R**4/(1 - X%R**2)**2 + &
+      105*X%R**2/(1 - X%R**2) + 5)/(1 - X%R**2)**(7.0D0/2.0D0)
+      DER8 = -315*X%R*(429*X%R**6/(1 - X%R**2)**3 + 693*X%R**4/(1 - X%R**2)**2 &
+      + 315*X%R**2/(1 - X%R**2) + 35)/(1 - X%R**2)**(9.0D0/2.0D0)
+      DER9 = -315*(6435*X%R**8/(1 - X%R**2)**4 + 12012*X%R**6/(1 - X%R**2)**3 &
+      + 6930*X%R**4/(1 - X%R**2)**2 + 1260*X%R**2/(1 - X%R**2) + 35)/(1 &
+      - X%R**2)**(9.0D0/2.0D0)
+      DER10 = -2835*X%R*(12155*X%R**8/(1 - X%R**2)**4 + 25740*X%R**6/(1 - X%R &
+      **2)**3 + 18018*X%R**4/(1 - X%R**2)**2 + 4620*X%R**2/(1 - X%R**2 &
+      ) + 315)/(1 - X%R**2)**(11.0D0/2.0D0)
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_ACOS
+
+   ELEMENTAL FUNCTION ONUMM1N10_ASIN(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = ASIN(X%R)
+      DER1 = 1/SQRT(1 - X%R**2)
+      DER2 = X%R/(1 - X%R**2)**(3.0D0/2.0D0)
+      DER3 = (3*X%R**2/(1 - X%R**2) + 1)/(1 - X%R**2)**(3.0D0/2.0D0)
+      DER4 = 3*X%R*(5*X%R**2/(1 - X%R**2) + 3)/(1 - X%R**2)**(5.0D0/2.0D0)
+      DER5 = 3*(35*X%R**4/(1 - X%R**2)**2 + 30*X%R**2/(1 - X%R**2) + 3)/(1 - X &
+      %R**2)**(5.0D0/2.0D0)
+      DER6 = 15*X%R*(63*X%R**4/(1 - X%R**2)**2 + 70*X%R**2/(1 - X%R**2) + 15)/ &
+      (1 - X%R**2)**(7.0D0/2.0D0)
+      DER7 = 45*(231*X%R**6/(1 - X%R**2)**3 + 315*X%R**4/(1 - X%R**2)**2 + 105 &
+      *X%R**2/(1 - X%R**2) + 5)/(1 - X%R**2)**(7.0D0/2.0D0)
+      DER8 = 315*X%R*(429*X%R**6/(1 - X%R**2)**3 + 693*X%R**4/(1 - X%R**2)**2 &
+      + 315*X%R**2/(1 - X%R**2) + 35)/(1 - X%R**2)**(9.0D0/2.0D0)
+      DER9 = 315*(6435*X%R**8/(1 - X%R**2)**4 + 12012*X%R**6/(1 - X%R**2)**3 + &
+      6930*X%R**4/(1 - X%R**2)**2 + 1260*X%R**2/(1 - X%R**2) + 35)/(1 - &
+      X%R**2)**(9.0D0/2.0D0)
+      DER10 = 2835*X%R*(12155*X%R**8/(1 - X%R**2)**4 + 25740*X%R**6/(1 - X%R** &
+      2)**3 + 18018*X%R**4/(1 - X%R**2)**2 + 4620*X%R**2/(1 - X%R**2) + &
+      315)/(1 - X%R**2)**(11.0D0/2.0D0)
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_ASIN
+
+   ELEMENTAL FUNCTION ONUMM1N10_TANH(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = TANH(X%R)
+      DER1 = 1 - TANH(X%R)**2
+      DER2 = 2*(TANH(X%R)**2 - 1)*TANH(X%R)
+      DER3 = -2*(TANH(X%R)**2 - 1)*(3*TANH(X%R)**2 - 1)
+      DER4 = 8*(TANH(X%R)**2 - 1)*(3*TANH(X%R)**2 - 2)*TANH(X%R)
+      DER5 = -8*(TANH(X%R)**2 - 1)*(2*(TANH(X%R)**2 - 1)**2 + 11*(TANH(X%R)**2 &
+      - 1)*TANH(X%R)**2 + 2*TANH(X%R)**4)
+      DER6 = 16*(TANH(X%R)**2 - 1)*(17*(TANH(X%R)**2 - 1)**2 + 26*(TANH(X%R)** &
+      2 - 1)*TANH(X%R)**2 + 2*TANH(X%R)**4)*TANH(X%R)
+      DER7 = -16*(TANH(X%R)**2 - 1)*(17*(TANH(X%R)**2 - 1)**3 + 180*(TANH(X%R) &
+      **2 - 1)**2*TANH(X%R)**2 + 114*(TANH(X%R)**2 - 1)*TANH(X%R)**4 + &
+      4*TANH(X%R)**6)
+      DER8 = 128*(TANH(X%R)**2 - 1)*(62*(TANH(X%R)**2 - 1)**3 + 192*(TANH(X%R) &
+      **2 - 1)**2*TANH(X%R)**2 + 60*(TANH(X%R)**2 - 1)*TANH(X%R)**4 + &
+      TANH(X%R)**6)*TANH(X%R)
+      DER9 = -128*(TANH(X%R)**2 - 1)*(62*(TANH(X%R)**2 - 1)**4 + 1072*(TANH(X% &
+      R)**2 - 1)**3*TANH(X%R)**2 + 1452*(TANH(X%R)**2 - 1)**2*TANH(X%R) &
+      **4 + 247*(TANH(X%R)**2 - 1)*TANH(X%R)**6 + 2*TANH(X%R)**8)
+      DER10 = 256*(TANH(X%R)**2 - 1)*(1382*(TANH(X%R)**2 - 1)**4 + 7192*(TANH( &
+      X%R)**2 - 1)**3*TANH(X%R)**2 + 5097*(TANH(X%R)**2 - 1)**2*TANH(X% &
+      R)**4 + 502*(TANH(X%R)**2 - 1)*TANH(X%R)**6 + 2*TANH(X%R)**8)* &
+      TANH(X%R)
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_TANH
+
+   ELEMENTAL FUNCTION ONUMM1N10_COSH(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = COSH(X%R)
+      DER1 = SINH(X%R)
+      DER2 = COSH(X%R)
+      DER3 = SINH(X%R)
+      DER4 = COSH(X%R)
+      DER5 = SINH(X%R)
+      DER6 = COSH(X%R)
+      DER7 = SINH(X%R)
+      DER8 = COSH(X%R)
+      DER9 = SINH(X%R)
+      DER10 = COSH(X%R)
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_COSH
+
+   ELEMENTAL FUNCTION ONUMM1N10_SINH(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = SINH(X%R)
+      DER1 = COSH(X%R)
+      DER2 = SINH(X%R)
+      DER3 = COSH(X%R)
+      DER4 = SINH(X%R)
+      DER5 = COSH(X%R)
+      DER6 = SINH(X%R)
+      DER7 = COSH(X%R)
+      DER8 = SINH(X%R)
+      DER9 = COSH(X%R)
+      DER10 = SINH(X%R)
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_SINH
+
+   ELEMENTAL FUNCTION ONUMM1N10_EXP(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = EXP(X%R)
+      DER1 = EXP(X%R)
+      DER2 = EXP(X%R)
+      DER3 = EXP(X%R)
+      DER4 = EXP(X%R)
+      DER5 = EXP(X%R)
+      DER6 = EXP(X%R)
+      DER7 = EXP(X%R)
+      DER8 = EXP(X%R)
+      DER9 = EXP(X%R)
+      DER10 = EXP(X%R)
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_EXP
+
+   ELEMENTAL FUNCTION ONUMM1N10_LOG(X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0 = LOG(X%R)
+      DER1 = 1D0/X%R
+      DER2 = -1/X%R**2
+      DER3 = 2/X%R**3
+      DER4 = -6/X%R**4
+      DER5 = 24/X%R**5
+      DER6 = -120/X%R**6
+      DER7 = 720/X%R**7
+      DER8 = -5040/X%R**8
+      DER9 = 40320/X%R**9
+      DER10 = -362880/X%R**10
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_LOG
+
+   ELEMENTAL FUNCTION ONUMM1N10_POW_OR(X,E) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP), INTENT(IN) :: E
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0=0.0d0
+      DER1=0.0d0
+      DER2=0.0d0
+      DER3=0.0d0
+      DER4=0.0d0
+      DER5=0.0d0
+      DER6=0.0d0
+      DER7=0.0d0
+      DER8=0.0d0
+      DER9=0.0d0
+      DER10=0.0d0
+      
+      DER0 = X%R**E
+      IF ((E-0)/=0.0d0) THEN
+         DER1 = E*X%R**(E - 1)
+         IF ((E-1)/=0.0d0) THEN
+            DER2 = E*X%R**(E - 2)*(E - 1)
+            IF ((E-2)/=0.0d0) THEN
+               DER3 = E*X%R**(E - 3)*(E**2 - 3*E + 2)
+               IF ((E-3)/=0.0d0) THEN
+                  DER4 = E*X%R**(E - 4)*(E**3 - 6*E**2 + 11*E - 6)
+                  IF ((E-4)/=0.0d0) THEN
+                     DER5 = E*X%R**(E - 5)*(E**4 - 10*E**3 + 35*E**2 - 50*E + 24)
+                     IF ((E-5)/=0.0d0) THEN
+                        DER6 = E*X%R**(E - 6)*(E**5 - 15*E**4 + 85*E**3 - 225*E**2 + 274*E - 120 &
+      )
+                        IF ((E-6)/=0.0d0) THEN
+                           DER7 = E*X%R**(E - 7)*(E**6 - 21*E**5 + 175*E**4 - 735*E**3 + 1624*E**2 &
+      - 1764*E + 720)
+                           IF ((E-7)/=0.0d0) THEN
+                              DER8 = E*X%R**(E - 8)*(E**7 - 28*E**6 + 322*E**5 - 1960*E**4 + 6769*E**3 &
+      - 13132*E**2 + 13068*E - 5040)
+                              IF ((E-8)/=0.0d0) THEN
+                                 DER9 = E*X%R**(E - 9)*(E**8 - 36*E**7 + 546*E**6 - 4536*E**5 + 22449*E** &
+      4 - 67284*E**3 + 118124*E**2 - 109584*E + 40320)
+                                 IF ((E-9)/=0.0d0) THEN
+                                    DER10 = E*X%R**(E - 10)*(E**9 - 45*E**8 + 870*E**7 - 9450*E**6 + 63273*E &
+      **5 - 269325*E**4 + 723680*E**3 - 1172700*E**2 + 1026576*E - &
+      362880)
+                                 END IF
+                              END IF
+                           END IF
+                        END IF
+                     END IF
+                  END IF
+               END IF
+            END IF
+         END IF
+      END IF
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_POW_OR
+
+   ELEMENTAL FUNCTION ONUMM1N10_POW_RO(E,X) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X
+      REAL(DP), INTENT(IN) :: E
+      REAL(DP) :: DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10
+      TYPE(ONUMM1N10) :: RES
+      
+      
+      DER0 = E**X%R
+      DER1 = E**X%R*LOG(E)
+      DER2 = E**X%R*LOG(E)**2
+      DER3 = E**X%R*LOG(E)**3
+      DER4 = E**X%R*LOG(E)**4
+      DER5 = E**X%R*LOG(E)**5
+      DER6 = E**X%R*LOG(E)**6
+      DER7 = E**X%R*LOG(E)**7
+      DER8 = E**X%R*LOG(E)**8
+      DER9 = E**X%R*LOG(E)**9
+      DER10 = E**X%R*LOG(E)**10
+
+      RES = FEVAL(X,DER0,DER1,DER2,DER3,DER4,DER5,DER6,DER7,DER8,DER9,DER10)
+
+   END FUNCTION ONUMM1N10_POW_RO
+
+   ELEMENTAL FUNCTION ONUMM1N10_F2EVAL(X,Y,DER0_0,DER1_0,DER1_1, &
+                                   DER2_0,DER2_1,DER2_2,DER3_0, &
+                                   DER3_1,DER3_2,DER3_3,DER4_0, &
+                                   DER4_1,DER4_2,DER4_3,DER4_4, &
+                                   DER5_0,DER5_1,DER5_2,DER5_3, &
+                                   DER5_4,DER5_5,DER6_0,DER6_1, &
+                                   DER6_2,DER6_3,DER6_4,DER6_5, &
+                                   DER6_6,DER7_0,DER7_1,DER7_2, &
+                                   DER7_3,DER7_4,DER7_5,DER7_6, &
+                                   DER7_7,DER8_0,DER8_1,DER8_2, &
+                                   DER8_3,DER8_4,DER8_5,DER8_6, &
+                                   DER8_7,DER8_8,DER9_0,DER9_1, &
+                                   DER9_2,DER9_3,DER9_4,DER9_5, &
+                                   DER9_6,DER9_7,DER9_8,DER9_9, &
+                                   DER10_0,DER10_1,DER10_2,DER10_3, &
+                                   DER10_4,DER10_5,DER10_6,DER10_7, &
+                                   DER10_8,DER10_9,DER10_10)&
+      RESULT(RES)
+      IMPLICIT NONE
+      !  Definitions
+      REAL(DP) :: COEF, DELTA
+      TYPE(ONUMM1N10), INTENT(IN)  :: X,Y
+      REAL(DP), INTENT(IN)  :: DER0_0,DER1_0,DER1_1, &
+                               DER2_0,DER2_1,DER2_2,DER3_0, &
+                               DER3_1,DER3_2,DER3_3,DER4_0, &
+                               DER4_1,DER4_2,DER4_3,DER4_4, &
+                               DER5_0,DER5_1,DER5_2,DER5_3, &
+                               DER5_4,DER5_5,DER6_0,DER6_1, &
+                               DER6_2,DER6_3,DER6_4,DER6_5, &
+                               DER6_6,DER7_0,DER7_1,DER7_2, &
+                               DER7_3,DER7_4,DER7_5,DER7_6, &
+                               DER7_7,DER8_0,DER8_1,DER8_2, &
+                               DER8_3,DER8_4,DER8_5,DER8_6, &
+                               DER8_7,DER8_8,DER9_0,DER9_1, &
+                               DER9_2,DER9_3,DER9_4,DER9_5, &
+                               DER9_6,DER9_7,DER9_8,DER9_9, &
+                               DER10_0,DER10_1,DER10_2,DER10_3, &
+                               DER10_4,DER10_5,DER10_6,DER10_7, &
+                               DER10_8,DER10_9,DER10_10
+      TYPE(ONUMM1N10) :: RES
+      TYPE(ONUMM1N10) :: DX, DY
+
+      COEF   = 0.0_DP
+      DX     = X
+      DY     = Y
+
+      !  Set real part of deltas zero.
+      DX%R = 0.0_DP
+      DY%R = 0.0_DP
+
+      ! Set real part
+      RES = DER0_0
+
+      ! Set order 1
+      COEF = DER1_0 / 1.0_DP
+      RES = RES + COEF*DX
+
+      COEF = DER1_1 / 1.0_DP
+      RES = RES + COEF*DY
+
+      
+
+      ! Set order 2
+      COEF = DER2_0 / 2.0_DP
+      RES = RES + COEF*DX*DX
+
+      COEF = DER2_1 / 1.0_DP
+      RES = RES + COEF*DX*DY
+
+      COEF = DER2_2 / 2.0_DP
+      RES = RES + COEF*DY*DY
+
+      
+
+      ! Set order 3
+      COEF = DER3_0 / 6.0_DP
+      RES = RES + COEF*DX*DX*DX
+
+      COEF = DER3_1 / 2.0_DP
+      RES = RES + COEF*DX*DX*DY
+
+      COEF = DER3_2 / 2.0_DP
+      RES = RES + COEF*DX*DY*DY
+
+      COEF = DER3_3 / 6.0_DP
+      RES = RES + COEF*DY*DY*DY
+
+      
+
+      ! Set order 4
+      COEF = DER4_0 / 24.0_DP
+      RES = RES + COEF*DX*DX*DX*DX
+
+      COEF = DER4_1 / 6.0_DP
+      RES = RES + COEF*DX*DX*DX*DY
+
+      COEF = DER4_2 / 4.0_DP
+      RES = RES + COEF*DX*DX*DY*DY
+
+      COEF = DER4_3 / 6.0_DP
+      RES = RES + COEF*DX*DY*DY*DY
+
+      COEF = DER4_4 / 24.0_DP
+      RES = RES + COEF*DY*DY*DY*DY
+
+      
+
+      ! Set order 5
+      COEF = DER5_0 / 120.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX
+
+      COEF = DER5_1 / 24.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DY
+
+      COEF = DER5_2 / 12.0_DP
+      RES = RES + COEF*DX*DX*DX*DY*DY
+
+      COEF = DER5_3 / 12.0_DP
+      RES = RES + COEF*DX*DX*DY*DY*DY
+
+      COEF = DER5_4 / 24.0_DP
+      RES = RES + COEF*DX*DY*DY*DY*DY
+
+      COEF = DER5_5 / 120.0_DP
+      RES = RES + COEF*DY*DY*DY*DY*DY
+
+      
+
+      ! Set order 6
+      COEF = DER6_0 / 720.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX
+
+      COEF = DER6_1 / 120.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DY
+
+      COEF = DER6_2 / 48.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DY*DY
+
+      COEF = DER6_3 / 36.0_DP
+      RES = RES + COEF*DX*DX*DX*DY*DY*DY
+
+      COEF = DER6_4 / 48.0_DP
+      RES = RES + COEF*DX*DX*DY*DY*DY*DY
+
+      COEF = DER6_5 / 120.0_DP
+      RES = RES + COEF*DX*DY*DY*DY*DY*DY
+
+      COEF = DER6_6 / 720.0_DP
+      RES = RES + COEF*DY*DY*DY*DY*DY*DY
+
+      
+
+      ! Set order 7
+      COEF = DER7_0 / 5040.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX
+
+      COEF = DER7_1 / 720.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DY
+
+      COEF = DER7_2 / 240.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DY*DY
+
+      COEF = DER7_3 / 144.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DY*DY*DY
+
+      COEF = DER7_4 / 144.0_DP
+      RES = RES + COEF*DX*DX*DX*DY*DY*DY*DY
+
+      COEF = DER7_5 / 240.0_DP
+      RES = RES + COEF*DX*DX*DY*DY*DY*DY*DY
+
+      COEF = DER7_6 / 720.0_DP
+      RES = RES + COEF*DX*DY*DY*DY*DY*DY*DY
+
+      COEF = DER7_7 / 5040.0_DP
+      RES = RES + COEF*DY*DY*DY*DY*DY*DY*DY
+
+      
+
+      ! Set order 8
+      COEF = DER8_0 / 40320.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX*DX
+
+      COEF = DER8_1 / 5040.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX*DY
+
+      COEF = DER8_2 / 1440.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DY*DY
+
+      COEF = DER8_3 / 720.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DY*DY*DY
+
+      COEF = DER8_4 / 576.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DY*DY*DY*DY
+
+      COEF = DER8_5 / 720.0_DP
+      RES = RES + COEF*DX*DX*DX*DY*DY*DY*DY*DY
+
+      COEF = DER8_6 / 1440.0_DP
+      RES = RES + COEF*DX*DX*DY*DY*DY*DY*DY*DY
+
+      COEF = DER8_7 / 5040.0_DP
+      RES = RES + COEF*DX*DY*DY*DY*DY*DY*DY*DY
+
+      COEF = DER8_8 / 40320.0_DP
+      RES = RES + COEF*DY*DY*DY*DY*DY*DY*DY*DY
+
+      
+
+      ! Set order 9
+      COEF = DER9_0 / 362880.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX*DX*DX
+
+      COEF = DER9_1 / 40320.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX*DX*DY
+
+      COEF = DER9_2 / 10080.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX*DY*DY
+
+      COEF = DER9_3 / 4320.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DY*DY*DY
+
+      COEF = DER9_4 / 2880.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DY*DY*DY*DY
+
+      COEF = DER9_5 / 2880.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DY*DY*DY*DY*DY
+
+      COEF = DER9_6 / 4320.0_DP
+      RES = RES + COEF*DX*DX*DX*DY*DY*DY*DY*DY*DY
+
+      COEF = DER9_7 / 10080.0_DP
+      RES = RES + COEF*DX*DX*DY*DY*DY*DY*DY*DY*DY
+
+      COEF = DER9_8 / 40320.0_DP
+      RES = RES + COEF*DX*DY*DY*DY*DY*DY*DY*DY*DY
+
+      COEF = DER9_9 / 362880.0_DP
+      RES = RES + COEF*DY*DY*DY*DY*DY*DY*DY*DY*DY
+
+      
+
+      ! Set order 10
+      COEF = DER10_0 / 3628800.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX*DX*DX*DX
+
+      COEF = DER10_1 / 362880.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX*DX*DX*DY
+
+      COEF = DER10_2 / 80640.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX*DX*DY*DY
+
+      COEF = DER10_3 / 30240.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DX*DY*DY*DY
+
+      COEF = DER10_4 / 17280.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DX*DY*DY*DY*DY
+
+      COEF = DER10_5 / 14400.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DX*DY*DY*DY*DY*DY
+
+      COEF = DER10_6 / 17280.0_DP
+      RES = RES + COEF*DX*DX*DX*DX*DY*DY*DY*DY*DY*DY
+
+      COEF = DER10_7 / 30240.0_DP
+      RES = RES + COEF*DX*DX*DX*DY*DY*DY*DY*DY*DY*DY
+
+      COEF = DER10_8 / 80640.0_DP
+      RES = RES + COEF*DX*DX*DY*DY*DY*DY*DY*DY*DY*DY
+
+      COEF = DER10_9 / 362880.0_DP
+      RES = RES + COEF*DX*DY*DY*DY*DY*DY*DY*DY*DY*DY
+
+      COEF = DER10_10 / 3628800.0_DP
+      RES = RES + COEF*DY*DY*DY*DY*DY*DY*DY*DY*DY*DY
+
+      
+
+   END FUNCTION ONUMM1N10_F2EVAL
+
+
+   ELEMENTAL FUNCTION ONUMM1N10_POW_OO(X,Y) RESULT(RES)
+
+      TYPE(ONUMM1N10), INTENT(IN) :: X, Y
+      REAL(DP) :: DER0_0,DER1_0,DER1_1,DER2_0,DER2_1,DER2_2,DER3_0,DER3_1,DER3_2,DER3_3,DER4_0,DER4_1,DER4_2,DER4_3,DER4_4,DER5_0,DER5_1,DER5_2,DER5_3,DER5_4,DER5_5,DER6_0,DER6_1,DER6_2,DER6_3,DER6_4,DER6_5,DER6_6,DER7_0,DER7_1,DER7_2,DER7_3,DER7_4,DER7_5,DER7_6,DER7_7,DER8_0,DER8_1,DER8_2,DER8_3,DER8_4,DER8_5,DER8_6,DER8_7,DER8_8,DER9_0,DER9_1,DER9_2,DER9_3,DER9_4,DER9_5,DER9_6,DER9_7,DER9_8,DER9_9,DER10_0,DER10_1,DER10_2,DER10_3,DER10_4,DER10_5,DER10_6,DER10_7,DER10_8,DER10_9,DER10_10
+      TYPE(ONUMM1N10) :: RES
+      
+      DER0_0 = X%R**Y%R
+      DER1_0 = X%R**Y%R*Y%R/X%R
+      DER1_1 = X%R**Y%R*LOG(X%R)
+      DER2_0 = X%R**Y%R*Y%R*(Y%R - 1)/X%R**2
+      DER2_1 = X%R**Y%R*(Y%R*LOG(X%R) + 1)/X%R
+      DER2_2 = X%R**Y%R*LOG(X%R)**2
+      DER3_0 = X%R**Y%R*Y%R*(Y%R**2 - 3*Y%R + 2)/X%R**3
+      DER3_1 = X%R**Y%R*(Y%R**2*LOG(X%R) - Y%R*LOG(X%R) + 2*Y%R - 1)/X%R**2
+      DER3_2 = X%R**Y%R*(Y%R*LOG(X%R) + 2)*LOG(X%R)/X%R
+      DER3_3 = X%R**Y%R*LOG(X%R)**3
+      DER4_0 = X%R**Y%R*Y%R*(Y%R**3 - 6*Y%R**2 + 11*Y%R - 6)/X%R**4
+      DER4_1 = X%R**Y%R*(Y%R**3*LOG(X%R) - 3*Y%R**2*LOG(X%R) + 3*Y%R**2 + 2*Y% &
+      R*LOG(X%R) - 6*Y%R + 2)/X%R**3
+      DER4_2 = X%R**Y%R*(Y%R**2*LOG(X%R)**2 - Y%R*LOG(X%R)**2 + 4*Y%R*LOG(X%R &
+      ) - 2*LOG(X%R) + 2)/X%R**2
+      DER4_3 = X%R**Y%R*(Y%R*LOG(X%R) + 3)*LOG(X%R)**2/X%R
+      DER4_4 = X%R**Y%R*LOG(X%R)**4
+      DER5_0 = X%R**Y%R*Y%R*(Y%R**4 - 10*Y%R**3 + 35*Y%R**2 - 50*Y%R + 24)/X%R &
+      **5
+      DER5_1 = X%R**Y%R*(Y%R**4*LOG(X%R) - 6*Y%R**3*LOG(X%R) + 4*Y%R**3 + 11*Y &
+      %R**2*LOG(X%R) - 18*Y%R**2 - 6*Y%R*LOG(X%R) + 22*Y%R - 6)/X%R**4
+      DER5_2 = X%R**Y%R*(Y%R**3*LOG(X%R)**2 - 3*Y%R**2*LOG(X%R)**2 + 6*Y%R**2* &
+      LOG(X%R) + 2*Y%R*LOG(X%R)**2 - 12*Y%R*LOG(X%R) + 6*Y%R + 4*LOG(X% &
+      R) - 6)/X%R**3
+      DER5_3 = X%R**Y%R*(Y%R**2*LOG(X%R)**2 - Y%R*LOG(X%R)**2 + 6*Y%R*LOG(X%R &
+      ) - 3*LOG(X%R) + 6)*LOG(X%R)/X%R**2
+      DER5_4 = X%R**Y%R*(Y%R*LOG(X%R) + 4)*LOG(X%R)**3/X%R
+      DER5_5 = X%R**Y%R*LOG(X%R)**5
+      DER6_0 = X%R**Y%R*Y%R*(Y%R**5 - 15*Y%R**4 + 85*Y%R**3 - 225*Y%R**2 + 274 &
+      *Y%R - 120)/X%R**6
+      DER6_1 = X%R**Y%R*(Y%R**5*LOG(X%R) - 10*Y%R**4*LOG(X%R) + 5*Y%R**4 + 35* &
+      Y%R**3*LOG(X%R) - 40*Y%R**3 - 50*Y%R**2*LOG(X%R) + 105*Y%R**2 + &
+      24*Y%R*LOG(X%R) - 100*Y%R + 24)/X%R**5
+      DER6_2 = X%R**Y%R*(Y%R**4*LOG(X%R)**2 - 6*Y%R**3*LOG(X%R)**2 + 8*Y%R**3* &
+      LOG(X%R) + 11*Y%R**2*LOG(X%R)**2 - 36*Y%R**2*LOG(X%R) + 12*Y%R**2 &
+      - 6*Y%R*LOG(X%R)**2 + 44*Y%R*LOG(X%R) - 36*Y%R - 12*LOG(X%R) + 22 &
+      )/X%R**4
+      DER6_3 = X%R**Y%R*(Y%R**3*LOG(X%R)**3 - 3*Y%R**2*LOG(X%R)**3 + 9*Y%R**2* &
+      LOG(X%R)**2 + 2*Y%R*LOG(X%R)**3 - 18*Y%R*LOG(X%R)**2 + 18*Y%R*LOG &
+      (X%R) + 6*LOG(X%R)**2 - 18*LOG(X%R) + 6)/X%R**3
+      DER6_4 = X%R**Y%R*(Y%R**2*LOG(X%R)**2 - Y%R*LOG(X%R)**2 + 8*Y%R*LOG(X%R &
+      ) - 4*LOG(X%R) + 12)*LOG(X%R)**2/X%R**2
+      DER6_5 = X%R**Y%R*(Y%R*LOG(X%R) + 5)*LOG(X%R)**4/X%R
+      DER6_6 = X%R**Y%R*LOG(X%R)**6
+      DER7_0 = X%R**Y%R*Y%R*(Y%R**6 - 21*Y%R**5 + 175*Y%R**4 - 735*Y%R**3 + &
+      1624*Y%R**2 - 1764*Y%R + 720)/X%R**7
+      DER7_1 = X%R**Y%R*(Y%R**6*LOG(X%R) - 15*Y%R**5*LOG(X%R) + 6*Y%R**5 + 85* &
+      Y%R**4*LOG(X%R) - 75*Y%R**4 - 225*Y%R**3*LOG(X%R) + 340*Y%R**3 + &
+      274*Y%R**2*LOG(X%R) - 675*Y%R**2 - 120*Y%R*LOG(X%R) + 548*Y%R - &
+      120)/X%R**6
+      DER7_2 = X%R**Y%R*(Y%R**5*LOG(X%R)**2 - 10*Y%R**4*LOG(X%R)**2 + 10*Y%R** &
+      4*LOG(X%R) + 35*Y%R**3*LOG(X%R)**2 - 80*Y%R**3*LOG(X%R) + 20*Y%R &
+      **3 - 50*Y%R**2*LOG(X%R)**2 + 210*Y%R**2*LOG(X%R) - 120*Y%R**2 + &
+      24*Y%R*LOG(X%R)**2 - 200*Y%R*LOG(X%R) + 210*Y%R + 48*LOG(X%R) - &
+      100)/X%R**5
+      DER7_3 = X%R**Y%R*(Y%R**4*LOG(X%R)**3 - 6*Y%R**3*LOG(X%R)**3 + 12*Y%R**3 &
+      *LOG(X%R)**2 + 11*Y%R**2*LOG(X%R)**3 - 54*Y%R**2*LOG(X%R)**2 + 36 &
+      *Y%R**2*LOG(X%R) - 6*Y%R*LOG(X%R)**3 + 66*Y%R*LOG(X%R)**2 - 108*Y &
+      %R*LOG(X%R) + 24*Y%R - 18*LOG(X%R)**2 + 66*LOG(X%R) - 36)/X%R**4
+      DER7_4 = X%R**Y%R*(Y%R**3*LOG(X%R)**3 - 3*Y%R**2*LOG(X%R)**3 + 12*Y%R**2 &
+      *LOG(X%R)**2 + 2*Y%R*LOG(X%R)**3 - 24*Y%R*LOG(X%R)**2 + 36*Y%R* &
+      LOG(X%R) + 8*LOG(X%R)**2 - 36*LOG(X%R) + 24)*LOG(X%R)/X%R**3
+      DER7_5 = X%R**Y%R*(Y%R**2*LOG(X%R)**2 - Y%R*LOG(X%R)**2 + 10*Y%R*LOG(X%R &
+      ) - 5*LOG(X%R) + 20)*LOG(X%R)**3/X%R**2
+      DER7_6 = X%R**Y%R*(Y%R*LOG(X%R) + 6)*LOG(X%R)**5/X%R
+      DER7_7 = X%R**Y%R*LOG(X%R)**7
+      DER8_0 = X%R**Y%R*Y%R*(Y%R**7 - 28*Y%R**6 + 322*Y%R**5 - 1960*Y%R**4 + &
+      6769*Y%R**3 - 13132*Y%R**2 + 13068*Y%R - 5040)/X%R**8
+      DER8_1 = X%R**Y%R*(Y%R**7*LOG(X%R) - 21*Y%R**6*LOG(X%R) + 7*Y%R**6 + 175 &
+      *Y%R**5*LOG(X%R) - 126*Y%R**5 - 735*Y%R**4*LOG(X%R) + 875*Y%R**4 &
+      + 1624*Y%R**3*LOG(X%R) - 2940*Y%R**3 - 1764*Y%R**2*LOG(X%R) + &
+      4872*Y%R**2 + 720*Y%R*LOG(X%R) - 3528*Y%R + 720)/X%R**7
+      DER8_2 = X%R**Y%R*(Y%R**6*LOG(X%R)**2 - 15*Y%R**5*LOG(X%R)**2 + 12*Y%R** &
+      5*LOG(X%R) + 85*Y%R**4*LOG(X%R)**2 - 150*Y%R**4*LOG(X%R) + 30*Y%R &
+      **4 - 225*Y%R**3*LOG(X%R)**2 + 680*Y%R**3*LOG(X%R) - 300*Y%R**3 + &
+      274*Y%R**2*LOG(X%R)**2 - 1350*Y%R**2*LOG(X%R) + 1020*Y%R**2 - 120 &
+      *Y%R*LOG(X%R)**2 + 1096*Y%R*LOG(X%R) - 1350*Y%R - 240*LOG(X%R) + &
+      548)/X%R**6
+      DER8_3 = X%R**Y%R*(Y%R**5*LOG(X%R)**3 - 10*Y%R**4*LOG(X%R)**3 + 15*Y%R** &
+      4*LOG(X%R)**2 + 35*Y%R**3*LOG(X%R)**3 - 120*Y%R**3*LOG(X%R)**2 + &
+      60*Y%R**3*LOG(X%R) - 50*Y%R**2*LOG(X%R)**3 + 315*Y%R**2*LOG(X%R) &
+      **2 - 360*Y%R**2*LOG(X%R) + 60*Y%R**2 + 24*Y%R*LOG(X%R)**3 - 300* &
+      Y%R*LOG(X%R)**2 + 630*Y%R*LOG(X%R) - 240*Y%R + 72*LOG(X%R)**2 - &
+      300*LOG(X%R) + 210)/X%R**5
+      DER8_4 = X%R**Y%R*(Y%R**4*LOG(X%R)**4 - 6*Y%R**3*LOG(X%R)**4 + 16*Y%R**3 &
+      *LOG(X%R)**3 + 11*Y%R**2*LOG(X%R)**4 - 72*Y%R**2*LOG(X%R)**3 + 72 &
+      *Y%R**2*LOG(X%R)**2 - 6*Y%R*LOG(X%R)**4 + 88*Y%R*LOG(X%R)**3 - &
+      216*Y%R*LOG(X%R)**2 + 96*Y%R*LOG(X%R) - 24*LOG(X%R)**3 + 132*LOG( &
+      X%R)**2 - 144*LOG(X%R) + 24)/X%R**4
+      DER8_5 = X%R**Y%R*(Y%R**3*LOG(X%R)**3 - 3*Y%R**2*LOG(X%R)**3 + 15*Y%R**2 &
+      *LOG(X%R)**2 + 2*Y%R*LOG(X%R)**3 - 30*Y%R*LOG(X%R)**2 + 60*Y%R* &
+      LOG(X%R) + 10*LOG(X%R)**2 - 60*LOG(X%R) + 60)*LOG(X%R)**2/X%R**3
+      DER8_6 = X%R**Y%R*(Y%R**2*LOG(X%R)**2 - Y%R*LOG(X%R)**2 + 12*Y%R*LOG(X%R &
+      ) - 6*LOG(X%R) + 30)*LOG(X%R)**4/X%R**2
+      DER8_7 = X%R**Y%R*(Y%R*LOG(X%R) + 7)*LOG(X%R)**6/X%R
+      DER8_8 = X%R**Y%R*LOG(X%R)**8
+      DER9_0 = X%R**Y%R*Y%R*(Y%R**8 - 36*Y%R**7 + 546*Y%R**6 - 4536*Y%R**5 + &
+      22449*Y%R**4 - 67284*Y%R**3 + 118124*Y%R**2 - 109584*Y%R + 40320) &
+      /X%R**9
+      DER9_1 = X%R**Y%R*(Y%R**8*LOG(X%R) - 28*Y%R**7*LOG(X%R) + 8*Y%R**7 + 322 &
+      *Y%R**6*LOG(X%R) - 196*Y%R**6 - 1960*Y%R**5*LOG(X%R) + 1932*Y%R** &
+      5 + 6769*Y%R**4*LOG(X%R) - 9800*Y%R**4 - 13132*Y%R**3*LOG(X%R) + &
+      27076*Y%R**3 + 13068*Y%R**2*LOG(X%R) - 39396*Y%R**2 - 5040*Y%R* &
+      LOG(X%R) + 26136*Y%R - 5040)/X%R**8
+      DER9_2 = X%R**Y%R*(Y%R**7*LOG(X%R)**2 - 21*Y%R**6*LOG(X%R)**2 + 14*Y%R** &
+      6*LOG(X%R) + 175*Y%R**5*LOG(X%R)**2 - 252*Y%R**5*LOG(X%R) + 42*Y% &
+      R**5 - 735*Y%R**4*LOG(X%R)**2 + 1750*Y%R**4*LOG(X%R) - 630*Y%R**4 &
+      + 1624*Y%R**3*LOG(X%R)**2 - 5880*Y%R**3*LOG(X%R) + 3500*Y%R**3 - &
+      1764*Y%R**2*LOG(X%R)**2 + 9744*Y%R**2*LOG(X%R) - 8820*Y%R**2 + &
+      720*Y%R*LOG(X%R)**2 - 7056*Y%R*LOG(X%R) + 9744*Y%R + 1440*LOG(X%R &
+      ) - 3528)/X%R**7
+      DER9_3 = X%R**Y%R*(Y%R**6*LOG(X%R)**3 - 15*Y%R**5*LOG(X%R)**3 + 18*Y%R** &
+      5*LOG(X%R)**2 + 85*Y%R**4*LOG(X%R)**3 - 225*Y%R**4*LOG(X%R)**2 + &
+      90*Y%R**4*LOG(X%R) - 225*Y%R**3*LOG(X%R)**3 + 1020*Y%R**3*LOG(X%R &
+      )**2 - 900*Y%R**3*LOG(X%R) + 120*Y%R**3 + 274*Y%R**2*LOG(X%R)**3 &
+      - 2025*Y%R**2*LOG(X%R)**2 + 3060*Y%R**2*LOG(X%R) - 900*Y%R**2 - &
+      120*Y%R*LOG(X%R)**3 + 1644*Y%R*LOG(X%R)**2 - 4050*Y%R*LOG(X%R) + &
+      2040*Y%R - 360*LOG(X%R)**2 + 1644*LOG(X%R) - 1350)/X%R**6
+      DER9_4 = X%R**Y%R*(Y%R**5*LOG(X%R)**4 - 10*Y%R**4*LOG(X%R)**4 + 20*Y%R** &
+      4*LOG(X%R)**3 + 35*Y%R**3*LOG(X%R)**4 - 160*Y%R**3*LOG(X%R)**3 + &
+      120*Y%R**3*LOG(X%R)**2 - 50*Y%R**2*LOG(X%R)**4 + 420*Y%R**2*LOG(X &
+      %R)**3 - 720*Y%R**2*LOG(X%R)**2 + 240*Y%R**2*LOG(X%R) + 24*Y%R* &
+      LOG(X%R)**4 - 400*Y%R*LOG(X%R)**3 + 1260*Y%R*LOG(X%R)**2 - 960*Y% &
+      R*LOG(X%R) + 120*Y%R + 96*LOG(X%R)**3 - 600*LOG(X%R)**2 + 840*LOG &
+      (X%R) - 240)/X%R**5
+      DER9_5 = X%R**Y%R*(Y%R**4*LOG(X%R)**4 - 6*Y%R**3*LOG(X%R)**4 + 20*Y%R**3 &
+      *LOG(X%R)**3 + 11*Y%R**2*LOG(X%R)**4 - 90*Y%R**2*LOG(X%R)**3 + &
+      120*Y%R**2*LOG(X%R)**2 - 6*Y%R*LOG(X%R)**4 + 110*Y%R*LOG(X%R)**3 &
+      - 360*Y%R*LOG(X%R)**2 + 240*Y%R*LOG(X%R) - 30*LOG(X%R)**3 + 220* &
+      LOG(X%R)**2 - 360*LOG(X%R) + 120)*LOG(X%R)/X%R**4
+      DER9_6 = X%R**Y%R*(Y%R**3*LOG(X%R)**3 - 3*Y%R**2*LOG(X%R)**3 + 18*Y%R**2 &
+      *LOG(X%R)**2 + 2*Y%R*LOG(X%R)**3 - 36*Y%R*LOG(X%R)**2 + 90*Y%R* &
+      LOG(X%R) + 12*LOG(X%R)**2 - 90*LOG(X%R) + 120)*LOG(X%R)**3/X%R**3
+      DER9_7 = X%R**Y%R*(Y%R**2*LOG(X%R)**2 - Y%R*LOG(X%R)**2 + 14*Y%R*LOG(X%R &
+      ) - 7*LOG(X%R) + 42)*LOG(X%R)**5/X%R**2
+      DER9_8 = X%R**Y%R*(Y%R*LOG(X%R) + 8)*LOG(X%R)**7/X%R
+      DER9_9 = X%R**Y%R*LOG(X%R)**9
+      DER10_0 = X%R**Y%R*Y%R*(Y%R**9 - 45*Y%R**8 + 870*Y%R**7 - 9450*Y%R**6 + &
+      63273*Y%R**5 - 269325*Y%R**4 + 723680*Y%R**3 - 1172700*Y%R**2 + &
+      1026576*Y%R - 362880)/X%R**10
+      DER10_1 = X%R**Y%R*(Y%R**9*LOG(X%R) - 36*Y%R**8*LOG(X%R) + 9*Y%R**8 + &
+      546*Y%R**7*LOG(X%R) - 288*Y%R**7 - 4536*Y%R**6*LOG(X%R) + 3822*Y% &
+      R**6 + 22449*Y%R**5*LOG(X%R) - 27216*Y%R**5 - 67284*Y%R**4*LOG(X% &
+      R) + 112245*Y%R**4 + 118124*Y%R**3*LOG(X%R) - 269136*Y%R**3 - &
+      109584*Y%R**2*LOG(X%R) + 354372*Y%R**2 + 40320*Y%R*LOG(X%R) - &
+      219168*Y%R + 40320)/X%R**9
+      DER10_2 = X%R**Y%R*(Y%R**8*LOG(X%R)**2 - 28*Y%R**7*LOG(X%R)**2 + 16*Y%R &
+      **7*LOG(X%R) + 322*Y%R**6*LOG(X%R)**2 - 392*Y%R**6*LOG(X%R) + 56* &
+      Y%R**6 - 1960*Y%R**5*LOG(X%R)**2 + 3864*Y%R**5*LOG(X%R) - 1176*Y% &
+      R**5 + 6769*Y%R**4*LOG(X%R)**2 - 19600*Y%R**4*LOG(X%R) + 9660*Y%R &
+      **4 - 13132*Y%R**3*LOG(X%R)**2 + 54152*Y%R**3*LOG(X%R) - 39200*Y% &
+      R**3 + 13068*Y%R**2*LOG(X%R)**2 - 78792*Y%R**2*LOG(X%R) + 81228*Y &
+      %R**2 - 5040*Y%R*LOG(X%R)**2 + 52272*Y%R*LOG(X%R) - 78792*Y%R - &
+      10080*LOG(X%R) + 26136)/X%R**8
+      DER10_3 = X%R**Y%R*(Y%R**7*LOG(X%R)**3 - 21*Y%R**6*LOG(X%R)**3 + 21*Y%R &
+      **6*LOG(X%R)**2 + 175*Y%R**5*LOG(X%R)**3 - 378*Y%R**5*LOG(X%R)**2 &
+      + 126*Y%R**5*LOG(X%R) - 735*Y%R**4*LOG(X%R)**3 + 2625*Y%R**4*LOG( &
+      X%R)**2 - 1890*Y%R**4*LOG(X%R) + 210*Y%R**4 + 1624*Y%R**3*LOG(X%R &
+      )**3 - 8820*Y%R**3*LOG(X%R)**2 + 10500*Y%R**3*LOG(X%R) - 2520*Y%R &
+      **3 - 1764*Y%R**2*LOG(X%R)**3 + 14616*Y%R**2*LOG(X%R)**2 - 26460* &
+      Y%R**2*LOG(X%R) + 10500*Y%R**2 + 720*Y%R*LOG(X%R)**3 - 10584*Y%R* &
+      LOG(X%R)**2 + 29232*Y%R*LOG(X%R) - 17640*Y%R + 2160*LOG(X%R)**2 - &
+      10584*LOG(X%R) + 9744)/X%R**7
+      DER10_4 = X%R**Y%R*(Y%R**6*LOG(X%R)**4 - 15*Y%R**5*LOG(X%R)**4 + 24*Y%R &
+      **5*LOG(X%R)**3 + 85*Y%R**4*LOG(X%R)**4 - 300*Y%R**4*LOG(X%R)**3 &
+      + 180*Y%R**4*LOG(X%R)**2 - 225*Y%R**3*LOG(X%R)**4 + 1360*Y%R**3* &
+      LOG(X%R)**3 - 1800*Y%R**3*LOG(X%R)**2 + 480*Y%R**3*LOG(X%R) + 274 &
+      *Y%R**2*LOG(X%R)**4 - 2700*Y%R**2*LOG(X%R)**3 + 6120*Y%R**2*LOG(X &
+      %R)**2 - 3600*Y%R**2*LOG(X%R) + 360*Y%R**2 - 120*Y%R*LOG(X%R)**4 &
+      + 2192*Y%R*LOG(X%R)**3 - 8100*Y%R*LOG(X%R)**2 + 8160*Y%R*LOG(X%R &
+      ) - 1800*Y%R - 480*LOG(X%R)**3 + 3288*LOG(X%R)**2 - 5400*LOG(X%R &
+      ) + 2040)/X%R**6
+      DER10_5 = X%R**Y%R*(Y%R**5*LOG(X%R)**5 - 10*Y%R**4*LOG(X%R)**5 + 25*Y%R &
+      **4*LOG(X%R)**4 + 35*Y%R**3*LOG(X%R)**5 - 200*Y%R**3*LOG(X%R)**4 &
+      + 200*Y%R**3*LOG(X%R)**3 - 50*Y%R**2*LOG(X%R)**5 + 525*Y%R**2*LOG &
+      (X%R)**4 - 1200*Y%R**2*LOG(X%R)**3 + 600*Y%R**2*LOG(X%R)**2 + 24* &
+      Y%R*LOG(X%R)**5 - 500*Y%R*LOG(X%R)**4 + 2100*Y%R*LOG(X%R)**3 - &
+      2400*Y%R*LOG(X%R)**2 + 600*Y%R*LOG(X%R) + 120*LOG(X%R)**4 - 1000* &
+      LOG(X%R)**3 + 2100*LOG(X%R)**2 - 1200*LOG(X%R) + 120)/X%R**5
+      DER10_6 = X%R**Y%R*(Y%R**4*LOG(X%R)**4 - 6*Y%R**3*LOG(X%R)**4 + 24*Y%R** &
+      3*LOG(X%R)**3 + 11*Y%R**2*LOG(X%R)**4 - 108*Y%R**2*LOG(X%R)**3 + &
+      180*Y%R**2*LOG(X%R)**2 - 6*Y%R*LOG(X%R)**4 + 132*Y%R*LOG(X%R)**3 &
+      - 540*Y%R*LOG(X%R)**2 + 480*Y%R*LOG(X%R) - 36*LOG(X%R)**3 + 330* &
+      LOG(X%R)**2 - 720*LOG(X%R) + 360)*LOG(X%R)**2/X%R**4
+      DER10_7 = X%R**Y%R*(Y%R**3*LOG(X%R)**3 - 3*Y%R**2*LOG(X%R)**3 + 21*Y%R** &
+      2*LOG(X%R)**2 + 2*Y%R*LOG(X%R)**3 - 42*Y%R*LOG(X%R)**2 + 126*Y%R* &
+      LOG(X%R) + 14*LOG(X%R)**2 - 126*LOG(X%R) + 210)*LOG(X%R)**4/X%R** &
+      3
+      DER10_8 = X%R**Y%R*(Y%R**2*LOG(X%R)**2 - Y%R*LOG(X%R)**2 + 16*Y%R*LOG(X% &
+      R) - 8*LOG(X%R) + 56)*LOG(X%R)**6/X%R**2
+      DER10_9 = X%R**Y%R*(Y%R*LOG(X%R) + 9)*LOG(X%R)**8/X%R
+      DER10_10 = X%R**Y%R*LOG(X%R)**10
+
+      RES = F2EVAL(X,Y,DER0_0,DER1_0,DER1_1,DER2_0,DER2_1,DER2_2,DER3_0,DER3_1,DER3_2,DER3_3,DER4_0,DER4_1,DER4_2,DER4_3,DER4_4,DER5_0,DER5_1,DER5_2,DER5_3,DER5_4,DER5_5,DER6_0,DER6_1,DER6_2,DER6_3,DER6_4,DER6_5,DER6_6,DER7_0,DER7_1,DER7_2,DER7_3,DER7_4,DER7_5,DER7_6,DER7_7,DER8_0,DER8_1,DER8_2,DER8_3,DER8_4,DER8_5,DER8_6,DER8_7,DER8_8,DER9_0,DER9_1,DER9_2,DER9_3,DER9_4,DER9_5,DER9_6,DER9_7,DER9_8,DER9_9,DER10_0,DER10_1,DER10_2,DER10_3,DER10_4,DER10_5,DER10_6,DER10_7,DER10_8,DER10_9,DER10_10)
+
+   END FUNCTION ONUMM1N10_POW_OO
+
+
+   FUNCTION ONUMM1N10_INV2X2(A,det)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10) , INTENT(IN) :: A(2,2) 
+      TYPE(ONUMM1N10) , INTENT(IN), OPTIONAL :: det
+      REAL(DP) :: detCalc
+      TYPE(ONUMM1N10) :: RES(SIZE(A,1),SIZE(A,2)) 
+
+      IF (PRESENT(det)) THEN
+         detCalc=det%R
+      ELSE
+         detCalc=det2x2(A%R)
+      END IF
+
+      ! Get real part 
+      RES%R=INV2X2(A%R,detCalc)
+
+      ! Order 1
+      RES%E1=-MATMUL(RES%R,(MATMUL(A%E1,RES%R)))
+
+      ! Order 2
+      RES%E11=-MATMUL(RES%R,(MATMUL(A%E11,RES%R)+MATMUL(A%E1,RES%E1)))
+
+      ! Order 3
+      RES%E111=-MATMUL(RES%R,(MATMUL(A%E111,RES%R)+MATMUL(A%E1,RES%E11)+&
+              MATMUL(A%E11,RES%E1)))
+
+      ! Order 4
+      RES%E1111=-MATMUL(RES%R,(MATMUL(A%E1111,RES%R)+MATMUL(A%E1,RES%E111)+&
+               MATMUL(A%E111,RES%E1)+MATMUL(A%E11,RES%E11)))
+
+      ! Order 5
+      RES%E11111=-MATMUL(RES%R,(MATMUL(A%E11111,RES%R)+MATMUL(A%E1,RES%E1111)+&
+                MATMUL(A%E1111,RES%E1)+MATMUL(A%E11,RES%E111)+MATMUL(A%E111,RES%E11)))
+
+      ! Order 6
+      RES%E111111=-MATMUL(RES%R,(MATMUL(A%E111111,RES%R)+MATMUL(A%E1,RES%E11111)+&
+                 MATMUL(A%E11111,RES%E1)+MATMUL(A%E11,RES%E1111)+MATMUL(A%E1111,RES%E11)+&
+                 MATMUL(A%E111,RES%E111)))
+
+      ! Order 7
+      RES%E1111111=-MATMUL(RES%R,(MATMUL(A%E1111111,RES%R)+MATMUL(A%E1,RES%E111111)+&
+                  MATMUL(A%E111111,RES%E1)+MATMUL(A%E11,RES%E11111)+MATMUL(A%E11111,RES%E11)+&
+                  MATMUL(A%E111,RES%E1111)+MATMUL(A%E1111,RES%E111)))
+
+      ! Order 8
+      RES%E11111111=-MATMUL(RES%R,(MATMUL(A%E11111111,RES%R)+MATMUL(A%E1,RES%E1111111)+&
+                   MATMUL(A%E1111111,RES%E1)+MATMUL(A%E11,RES%E111111)+MATMUL(A%E111111,RES%E11)+&
+                   MATMUL(A%E111,RES%E11111)+MATMUL(A%E11111,RES%E111)+MATMUL(A%E1111,RES%E1111)))
+
+      ! Order 9
+      RES%E111111111=-MATMUL(RES%R,(MATMUL(A%E111111111,RES%R)+MATMUL(A%E1,RES%E11111111)+&
+                    MATMUL(A%E11111111,RES%E1)+MATMUL(A%E11,RES%E1111111)+MATMUL(A%E1111111,RES%E11)+&
+                    MATMUL(A%E111,RES%E111111)+MATMUL(A%E111111,RES%E111)+MATMUL(A%E1111,RES%E11111)+&
+                    MATMUL(A%E11111,RES%E1111)))
+
+      ! Order 10
+      RES%E1111111111=-MATMUL(RES%R,(MATMUL(A%E1111111111,RES%R)+MATMUL(A%E1,RES%E111111111)+&
+                     MATMUL(A%E111111111,RES%E1)+MATMUL(A%E11,RES%E11111111)+MATMUL(A%E11111111,RES%E11)+&
+                     MATMUL(A%E111,RES%E1111111)+MATMUL(A%E1111111,RES%E111)+MATMUL(A%E1111,RES%E111111)+&
+                     MATMUL(A%E111111,RES%E1111)+MATMUL(A%E11111,RES%E11111)))
+
+   END FUNCTION ONUMM1N10_INV2X2
+
+   FUNCTION ONUMM1N10_INV3X3(A,det)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10) , INTENT(IN) :: A(3,3) 
+      TYPE(ONUMM1N10) , INTENT(IN), OPTIONAL :: det
+      REAL(DP) :: detCalc
+      TYPE(ONUMM1N10) :: RES(SIZE(A,1),SIZE(A,2)) 
+
+      IF (PRESENT(det)) THEN
+         detCalc=det%R
+      ELSE
+         detCalc=det3x3(A%R)
+      END IF
+
+      ! Get real part 
+      RES%R=INV3X3(A%R,detCalc)
+
+      ! Order 1
+      RES%E1=-MATMUL(RES%R,(MATMUL(A%E1,RES%R)))
+
+      ! Order 2
+      RES%E11=-MATMUL(RES%R,(MATMUL(A%E11,RES%R)+MATMUL(A%E1,RES%E1)))
+
+      ! Order 3
+      RES%E111=-MATMUL(RES%R,(MATMUL(A%E111,RES%R)+MATMUL(A%E1,RES%E11)+&
+              MATMUL(A%E11,RES%E1)))
+
+      ! Order 4
+      RES%E1111=-MATMUL(RES%R,(MATMUL(A%E1111,RES%R)+MATMUL(A%E1,RES%E111)+&
+               MATMUL(A%E111,RES%E1)+MATMUL(A%E11,RES%E11)))
+
+      ! Order 5
+      RES%E11111=-MATMUL(RES%R,(MATMUL(A%E11111,RES%R)+MATMUL(A%E1,RES%E1111)+&
+                MATMUL(A%E1111,RES%E1)+MATMUL(A%E11,RES%E111)+MATMUL(A%E111,RES%E11)))
+
+      ! Order 6
+      RES%E111111=-MATMUL(RES%R,(MATMUL(A%E111111,RES%R)+MATMUL(A%E1,RES%E11111)+&
+                 MATMUL(A%E11111,RES%E1)+MATMUL(A%E11,RES%E1111)+MATMUL(A%E1111,RES%E11)+&
+                 MATMUL(A%E111,RES%E111)))
+
+      ! Order 7
+      RES%E1111111=-MATMUL(RES%R,(MATMUL(A%E1111111,RES%R)+MATMUL(A%E1,RES%E111111)+&
+                  MATMUL(A%E111111,RES%E1)+MATMUL(A%E11,RES%E11111)+MATMUL(A%E11111,RES%E11)+&
+                  MATMUL(A%E111,RES%E1111)+MATMUL(A%E1111,RES%E111)))
+
+      ! Order 8
+      RES%E11111111=-MATMUL(RES%R,(MATMUL(A%E11111111,RES%R)+MATMUL(A%E1,RES%E1111111)+&
+                   MATMUL(A%E1111111,RES%E1)+MATMUL(A%E11,RES%E111111)+MATMUL(A%E111111,RES%E11)+&
+                   MATMUL(A%E111,RES%E11111)+MATMUL(A%E11111,RES%E111)+MATMUL(A%E1111,RES%E1111)))
+
+      ! Order 9
+      RES%E111111111=-MATMUL(RES%R,(MATMUL(A%E111111111,RES%R)+MATMUL(A%E1,RES%E11111111)+&
+                    MATMUL(A%E11111111,RES%E1)+MATMUL(A%E11,RES%E1111111)+MATMUL(A%E1111111,RES%E11)+&
+                    MATMUL(A%E111,RES%E111111)+MATMUL(A%E111111,RES%E111)+MATMUL(A%E1111,RES%E11111)+&
+                    MATMUL(A%E11111,RES%E1111)))
+
+      ! Order 10
+      RES%E1111111111=-MATMUL(RES%R,(MATMUL(A%E1111111111,RES%R)+MATMUL(A%E1,RES%E111111111)+&
+                     MATMUL(A%E111111111,RES%E1)+MATMUL(A%E11,RES%E11111111)+MATMUL(A%E11111111,RES%E11)+&
+                     MATMUL(A%E111,RES%E1111111)+MATMUL(A%E1111111,RES%E111)+MATMUL(A%E1111,RES%E111111)+&
+                     MATMUL(A%E111111,RES%E1111)+MATMUL(A%E11111,RES%E11111)))
+
+   END FUNCTION ONUMM1N10_INV3X3
+
+   FUNCTION ONUMM1N10_INV4X4(A,det)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N10) , INTENT(IN) :: A(4,4) 
+      TYPE(ONUMM1N10) , INTENT(IN), OPTIONAL :: det
+      REAL(DP) :: detCalc
+      TYPE(ONUMM1N10) :: RES(SIZE(A,1),SIZE(A,2)) 
+
+      IF (PRESENT(det)) THEN
+         detCalc=det%R
+      ELSE
+         detCalc=det4x4(A%R)
+      END IF
+
+      ! Get real part 
+      RES%R=INV4X4(A%R,detCalc)
+
+      ! Order 1
+      RES%E1=-MATMUL(RES%R,(MATMUL(A%E1,RES%R)))
+
+      ! Order 2
+      RES%E11=-MATMUL(RES%R,(MATMUL(A%E11,RES%R)+MATMUL(A%E1,RES%E1)))
+
+      ! Order 3
+      RES%E111=-MATMUL(RES%R,(MATMUL(A%E111,RES%R)+MATMUL(A%E1,RES%E11)+&
+              MATMUL(A%E11,RES%E1)))
+
+      ! Order 4
+      RES%E1111=-MATMUL(RES%R,(MATMUL(A%E1111,RES%R)+MATMUL(A%E1,RES%E111)+&
+               MATMUL(A%E111,RES%E1)+MATMUL(A%E11,RES%E11)))
+
+      ! Order 5
+      RES%E11111=-MATMUL(RES%R,(MATMUL(A%E11111,RES%R)+MATMUL(A%E1,RES%E1111)+&
+                MATMUL(A%E1111,RES%E1)+MATMUL(A%E11,RES%E111)+MATMUL(A%E111,RES%E11)))
+
+      ! Order 6
+      RES%E111111=-MATMUL(RES%R,(MATMUL(A%E111111,RES%R)+MATMUL(A%E1,RES%E11111)+&
+                 MATMUL(A%E11111,RES%E1)+MATMUL(A%E11,RES%E1111)+MATMUL(A%E1111,RES%E11)+&
+                 MATMUL(A%E111,RES%E111)))
+
+      ! Order 7
+      RES%E1111111=-MATMUL(RES%R,(MATMUL(A%E1111111,RES%R)+MATMUL(A%E1,RES%E111111)+&
+                  MATMUL(A%E111111,RES%E1)+MATMUL(A%E11,RES%E11111)+MATMUL(A%E11111,RES%E11)+&
+                  MATMUL(A%E111,RES%E1111)+MATMUL(A%E1111,RES%E111)))
+
+      ! Order 8
+      RES%E11111111=-MATMUL(RES%R,(MATMUL(A%E11111111,RES%R)+MATMUL(A%E1,RES%E1111111)+&
+                   MATMUL(A%E1111111,RES%E1)+MATMUL(A%E11,RES%E111111)+MATMUL(A%E111111,RES%E11)+&
+                   MATMUL(A%E111,RES%E11111)+MATMUL(A%E11111,RES%E111)+MATMUL(A%E1111,RES%E1111)))
+
+      ! Order 9
+      RES%E111111111=-MATMUL(RES%R,(MATMUL(A%E111111111,RES%R)+MATMUL(A%E1,RES%E11111111)+&
+                    MATMUL(A%E11111111,RES%E1)+MATMUL(A%E11,RES%E1111111)+MATMUL(A%E1111111,RES%E11)+&
+                    MATMUL(A%E111,RES%E111111)+MATMUL(A%E111111,RES%E111)+MATMUL(A%E1111,RES%E11111)+&
+                    MATMUL(A%E11111,RES%E1111)))
+
+      ! Order 10
+      RES%E1111111111=-MATMUL(RES%R,(MATMUL(A%E1111111111,RES%R)+MATMUL(A%E1,RES%E111111111)+&
+                     MATMUL(A%E111111111,RES%E1)+MATMUL(A%E11,RES%E11111111)+MATMUL(A%E11111111,RES%E11)+&
+                     MATMUL(A%E111,RES%E1111111)+MATMUL(A%E1111111,RES%E111)+MATMUL(A%E1111,RES%E111111)+&
+                     MATMUL(A%E111111,RES%E1111)+MATMUL(A%E11111,RES%E11111)))
+
+   END FUNCTION ONUMM1N10_INV4X4
+
+END MODULE OTIM1N10

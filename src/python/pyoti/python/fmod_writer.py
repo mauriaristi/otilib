@@ -3483,7 +3483,7 @@ class writer:
     contents += self.write_getIm( val_shape='M', idx_glob = True, tab=tab, level = level,overload='GETIM')
     contents += endl
 
-    print(level)
+    # print(level)
     contents += self.write_scalar_function_print( level = level, tab = tab,overload='PPRINT', mode='S')
     contents += endl
     contents += self.write_scalar_function_print( level = level, tab = tab,overload='PPRINT', mode='V')

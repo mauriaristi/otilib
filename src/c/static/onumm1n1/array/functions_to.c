@@ -183,6 +183,18 @@ void oarrm1n1_cos_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+void oti_blas_coeff_axpy(int64_t n, coeff_t* a,int64_t inca, coeff_t *x, int64_t incx, coeff_t *y, int64_t incy){
+    int64_t i;
+
+    for (i = 0; i<n; i++){
+        y[i*incy] = a[i*inca] * x[i*incx] + y[i*incy];
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+
+// ****************************************************************************************************
 void oarrm1n1_sin_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
     uint64_t i;
@@ -193,8 +205,40 @@ void oarrm1n1_sin_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
     }
 
-}
+} 
 // ----------------------------------------------------------------------------------------------------
+ 
+// extern void oarrm1n1_sin_f(oarrm1n1_t*,oarrm1n1_t*);
+
+// // ****************************************************************************************************
+// void oarrm1n1_sin_to(oarrm1n1_t* arr, oarrm1n1_t* res){
+
+//     uint64_t i;
+//     coeff_t* derivs;
+
+//     derivs = (coeff_t*)malloc(arr->size * 2 * sizeof(coeff_t) );
+
+
+//     for( i = 0; i<arr->size; i++){
+//         der_r_sin( arr->p_data[i].r, 1, &derivs[i*2]);
+//         res->p_data[i].r = derivs[i*2];
+//         // onumm1n1_sin_to(&arr->p_data[i], &res->p_data[i]);
+
+//     }
+
+//     // FEVAL part
+
+//     oti_blas_coeff_axpy( arr->size, &derivs[1],2,&arr->p_data[0].e1,2,&res->p_data[0].e1,2);
+//     // oti_blas_coeff_axpy
+
+//     free(derivs);
+ 
+//     // oarrm1n1_sin_f(arr,res);
+ 
+// }
+// // ----------------------------------------------------------------------------------------------------
+
+
 
 // ****************************************************************************************************
 void oarrm1n1_logb_to(oarrm1n1_t* arr, double base, oarrm1n1_t* res){

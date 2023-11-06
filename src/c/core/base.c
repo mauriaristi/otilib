@@ -45,7 +45,10 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
     nThrds = 1;
     #endif
 
-    ndir_t  ntmps = 20*nThrds ; // Number of arrays for temporal variables.
+    ndir_t  ntmps = 30*nThrds ; // Number of arrays for temporal variables.
+                                // 2023.oct.25 Changed from 20 to 40 temporals due to large 
+                                //             use of temporals in sparse matrix inverse function.
+
     for( i = 1; i<=dhl->ndh; i++){
 
         // dhelp_load_singl(strLocation, i, ntmps,allocSzs_ord[i-1], &(dhl->p_dh[i-1]));

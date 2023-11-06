@@ -1,11 +1,13 @@
 ! ============================================================================================!
 !> This module includes a sparse implementation of the Order truncated
-!! imaginary numebers
+!! imaginary numbers for FORTRAN.
 !!
-!! 
+!! Author: Mauricio Aristizabal Cano, PhD.
+!! Initial date:   Oct-19-2023
+!! Last modified:  Nov-02-2023
 !!
 ! ============================================================================================!
-MODULE sparse_oti
+MODULE static_oti
    ! -----------------------------------------------------------------------------------------!
    USE real_utils
    USE master_parameters
@@ -13,11 +15,13 @@ MODULE sparse_oti
    ! -----------------------------------------------------------------------------------------!
    IMPLICIT NONE
    ! -----------------------------------------------------------------------------------------!
+   PRIVATE
+   ! -----------------------------------------------------------------------------------------!
    INTEGER, PARAMETER, PRIVATE :: ord_t   = 1  ! TODO This should go in a core Module.
    INTEGER, PARAMETER, PRIVATE :: imdir_t = 8
    INTEGER, PARAMETER, PRIVATE :: bases_t = 8
    INTEGER, PARAMETER, PRIVATE :: nnz_t   = 8
-
+   !
    INTEGER(ord_t),   PARAMETER, PRIVATE ::  max_n = 3  !< Max. Imag. order supported.
    INTEGER(bases_t), PARAMETER, PRIVATE ::  max_m = 4  !< Max. num. basis supported.
    INTEGER(imdir_t), PARAMETER, DIMENSION(max_n)   ::  ndir_order = [ 4, 10, 20 ]
@@ -33,27 +37,31 @@ MODULE sparse_oti
      INTEGER(ord_t)   :: order           !<- Truncation order of the number.
    END TYPE sotinum
    ! -----------------------------------------------------------------------------------------!
-   INTERFACE PPRINT
+   INTERFACE pprint
       MODULE PROCEDURE sotinum_pprint_s!, sotinum_pprint_v, sotinum_pprint_m
    END INTERFACE
+   PUBLIC pprint
 
    INTERFACE ASSIGNMENT(=)
       MODULE PROCEDURE sotinum_assign_r ! Real, elemental
-      ! MODULE PROCEDURE sotinum_assign_i ! Integer
+      ! sotinum_assign_i ! Integer
    END INTERFACE
+   PUBLIC ASSIGNMENT(=)
 
    INTERFACE OPERATOR(+)
       MODULE PROCEDURE sotinum_add_oo_ss ! Scalar addition OTI - OTI
       MODULE PROCEDURE sotinum_add_ro_ss ! Scalar addition R   - OTI
       MODULE PROCEDURE sotinum_add_or_ss ! Scalar addition OTI - R  
    END INTERFACE
+   PUBLIC OPERATOR(+)
 
-   INTERFACE EPS
+   INTERFACE eps
       MODULE PROCEDURE sotinum_epsilon_i     ! Create sotinum from integer 
       ! MODULE PROCEDURE sotinum_epsilon_2i     ! Create sotinum from two integers
       ! MODULE PROCEDURE sotinum_epsilon_imdir ! Create sotinum from imdir
       ! MODULE PROCEDURE sotinum_epsilon_list  ! Create sotinum from list representing IMDIR
    END INTERFACE
+   PUBLIC eps
    ! -----------------------------------------------------------------------------------------!
 
    CONTAINS
@@ -302,4 +310,4 @@ MODULE sparse_oti
       
 
 
-END MODULE sparse_oti
+END MODULE static_oti

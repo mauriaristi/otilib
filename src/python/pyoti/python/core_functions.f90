@@ -287,9 +287,9 @@
   END FUNCTION {type_name}_norm2_3
   !===================================================================================================! 
 
-  FUNCTION {type_name}_DIVISION_OO(X,Y) RESULT(RES)
+  ELEMENTAL FUNCTION {type_name}_DIVISION_OO(X,Y) RESULT(RES)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
+      ! REAL(DP) :: DERIVS(TORDER + 1) 
       TYPE({type_name}), INTENT(IN) :: X
       TYPE({type_name}), INTENT(IN) :: Y
       TYPE({type_name}) :: RES
@@ -298,9 +298,9 @@
 
   END FUNCTION {type_name}_DIVISION_OO
 
-  FUNCTION {type_name}_DIVISION_OR(X,Y) RESULT(RES)
+  ELEMENTAL FUNCTION {type_name}_DIVISION_OR(X,Y) RESULT(RES)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
+      ! REAL(DP) :: DERIVS(TORDER + 1) 
       TYPE({type_name}), INTENT(IN) :: X
       REAL(DP), INTENT(IN) :: Y
       TYPE({type_name}) :: RES
@@ -309,9 +309,9 @@
 
   END FUNCTION {type_name}_DIVISION_OR
 
-  FUNCTION {type_name}_DIVISION_RO(X,Y) RESULT(RES)
+  ELEMENTAL FUNCTION {type_name}_DIVISION_RO(X,Y) RESULT(RES)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
+      ! REAL(DP) :: DERIVS(TORDER + 1) 
       REAL(DP), INTENT(IN) :: X
       TYPE({type_name}), INTENT(IN) :: Y
       TYPE({type_name}) :: RES

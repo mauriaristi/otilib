@@ -49,6 +49,9 @@ SET(CMAKE_OSX_DEPLOYMENT_TARGET 12.1)
 include_directories (	"${PROJECT_SOURCE_DIR}/include"
 						"${PROJECT_SOURCE_DIR}/src/c"
 						)
+link_directories (    
+    "${PROJECT_SOURCE_DIR}/src/fortran/static/"
+                                                )
 
 add_library (oti    c/core.c 
 					c/real.c
@@ -72,7 +75,7 @@ elseif(UNIX)
 endif(APPLE)    
 
 # Link to math libraries
-target_link_libraries(oti m ${LINK_TARGET_OMP})
+target_link_libraries(oti m ifcore cwrapm1n1 ${LINK_TARGET_OMP})
 
 # -------------------------------------------------------------------
 # --------------------------- BUILD OTI -----------------------------

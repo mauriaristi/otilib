@@ -15,7 +15,7 @@ void onumm1n1_atanh_to(onumm1n1_t* num, onumm1n1_t* res){
 // ****************************************************************************************************
 void onumm1n1_asinh_to(onumm1n1_t* num, onumm1n1_t* res){
 
-    coeff_t derivs[_MAXORDER_OTI+1];
+    coeff_t derivs[_MAXORDER_OTI+1]; 
 
     der_r_asinh(num->r, 1, derivs);
 
@@ -137,7 +137,7 @@ void onumm1n1_tan_to(onumm1n1_t* num, onumm1n1_t* res){
 
     onumm1n1_feval_to(derivs, num, res);
 
-}
+} 
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
@@ -145,7 +145,9 @@ void onumm1n1_cos_to(onumm1n1_t* num, onumm1n1_t* res){
 
     coeff_t derivs[_MAXORDER_OTI+1];
 
-    der_r_cos(num->r, 1, derivs);
+    // der_r_cos(num->r, 1, derivs);
+    derivs[0] = cos(num->r);
+    derivs[1] = sin(num->r);
 
     onumm1n1_feval_to(derivs, num, res);
 

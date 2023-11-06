@@ -1,10 +1,13 @@
 MODULE OTIM2N2
 
+   USE master_parameters
+   USE real_utils
+
    IMPLICIT NONE
 
-   INTEGER, PARAMETER :: DP         = 8
    INTEGER, PARAMETER :: NUM_IM_DIR = 6
    INTEGER, PARAMETER :: TORDER     = 2
+   INTEGER, PARAMETER :: N_IMDIR_ORDER(3) = [1,2,3]
 
    TYPE ONUMM2N2
      ! Real
@@ -27,7 +30,6 @@ MODULE OTIM2N2
    TYPE(ONUMM2N2), PARAMETER :: E12 = ONUMM2N2(0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP,0.0_DP)
    TYPE(ONUMM2N2), PARAMETER :: E22 = ONUMM2N2(0.0_DP,0.0_DP,0.0_DP,0.0_DP,0.0_DP,1.0_DP)
 
-   PRIVATE :: DP,TORDER,NUM_IM_DIR
 
    INTERFACE OPERATOR(*)
       MODULE PROCEDURE ONUMM2N2_MUL_OO_SS,ONUMM2N2_MUL_RO_SS,ONUMM2N2_MUL_OR_SS,ONUMM2N2_MUL_OO_VS,&
@@ -60,6 +62,10 @@ MODULE OTIM2N2
 
    INTERFACE OPERATOR(**)
       MODULE PROCEDURE ONUMM2N2_POW_OR,ONUMM2N2_POW_RO,ONUMM2N2_POW_OO
+   END INTERFACE
+
+   INTERFACE PPRINT
+      MODULE PROCEDURE ONUMM2N2_PPRINT_S,ONUMM2N2_PPRINT_V,ONUMM2N2_PPRINT_M
    END INTERFACE
 
    INTERFACE TRANSPOSE
@@ -168,6 +174,14 @@ MODULE OTIM2N2
 
    INTERFACE INV4X4
       MODULE PROCEDURE ONUMM2N2_INV4X4
+   END INTERFACE
+
+   INTERFACE GETIM
+      MODULE PROCEDURE ONUMM2N2_GETIM_S,ONUMM2N2_GETIM_V,ONUMM2N2_GETIM_M
+   END INTERFACE
+
+   INTERFACE SETIM
+      MODULE PROCEDURE ONUMM2N2_SETIM_S,ONUMM2N2_SETIM_V,ONUMM2N2_SETIM_M
    END INTERFACE
 
    CONTAINS
@@ -1335,9 +1349,9 @@ ELEMENTAL    FUNCTION ONUMM2N2_GEM_ORO(A,B,C)&
    FUNCTION ONUMM2N2_DOT_PRODUCT_ONUMM2N2(LHS,RHS)&
       RESULT(RES)
       IMPLICIT NONE
-      TYPE(ONUMM2N2), INTENT(IN) :: LHS(:,:)
-      TYPE(ONUMM2N2), INTENT(IN) :: RHS(:,:)
-      TYPE(ONUMM2N2) :: RES(SIZE(LHS,1),SIZE(RHS,2))
+      TYPE(ONUMM2N2), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM2N2), INTENT(IN) :: RHS(SIZE(LHS))
+      TYPE(ONUMM2N2) :: RES
 
       !  Multiplication like function 'DOT_PRODUCT(LHS,RHS)'
       ! Order 2
@@ -1356,9 +1370,9 @@ ELEMENTAL    FUNCTION ONUMM2N2_GEM_ORO(A,B,C)&
    FUNCTION R_DOT_PRODUCT_ONUMM2N2(LHS,RHS)&
       RESULT(RES)
       IMPLICIT NONE
-      REAL(DP), INTENT(IN) :: LHS(:,:)
-      TYPE(ONUMM2N2), INTENT(IN) :: RHS(:,:)
-      TYPE(ONUMM2N2) :: RES(SIZE(LHS,1),SIZE(RHS,2))
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM2N2), INTENT(IN) :: RHS(SIZE(LHS))
+      TYPE(ONUMM2N2) :: RES
 
       ! Multiplication like function 'DOT_PRODUCT(LHS,RHS)'
       !  Real
@@ -1378,9 +1392,9 @@ ELEMENTAL    FUNCTION ONUMM2N2_GEM_ORO(A,B,C)&
    FUNCTION ONUMM2N2_DOT_PRODUCT_R(LHS,RHS)&
       RESULT(RES)
       IMPLICIT NONE
-      TYPE(ONUMM2N2), INTENT(IN) :: LHS(:,:)
-      REAL(DP), INTENT(IN) :: RHS(:,:)
-      TYPE(ONUMM2N2) :: RES(SIZE(LHS,1),SIZE(RHS,2))
+      TYPE(ONUMM2N2), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS(SIZE(LHS))
+      TYPE(ONUMM2N2) :: RES
 
       ! Multiplication like function 'DOT_PRODUCT(LHS,RHS)'
       !  Real
@@ -1535,6 +1549,315 @@ FUNCTION ONUMM2N2_TO_CR_MAT_M(VAL) RESULT(RES)
       ! E2 x E2 -> E22 (6, 3)
       RES(1+NROWS*5:NROWS*6,1+NCOLS*2:NCOLS*3) = VAL%E2
    END FUNCTION ONUMM2N2_TO_CR_MAT_M
+
+      SUBROUTINE ONUMM2N2_SETIM_S(VAL,IDX,RES)
+      IMPLICIT NONE
+      TYPE(ONUMM2N2), INTENT(INOUT) :: VAL
+      REAL(DP),INTENT(IN) :: RES 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         VAL%R=RES
+
+      ! Order 1
+      CASE(1)
+         VAL%E1=RES
+      CASE(2)
+         VAL%E2=RES
+
+      ! Order 2
+      CASE(3)
+         VAL%E11=RES
+      CASE(4)
+         VAL%E12=RES
+      CASE(5)
+         VAL%E22=RES
+
+      END SELECT
+   END SUBROUTINE ONUMM2N2_SETIM_S
+
+      SUBROUTINE ONUMM2N2_SETIM_V(VAL,IDX,RES)
+      IMPLICIT NONE
+      TYPE(ONUMM2N2), INTENT(INOUT) :: VAL(:)
+      REAL(DP),INTENT(IN) :: RES(SIZE(VAL)) 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         VAL%R=RES
+
+      ! Order 1
+      CASE(1)
+         VAL%E1=RES
+      CASE(2)
+         VAL%E2=RES
+
+      ! Order 2
+      CASE(3)
+         VAL%E11=RES
+      CASE(4)
+         VAL%E12=RES
+      CASE(5)
+         VAL%E22=RES
+
+      END SELECT
+   END SUBROUTINE ONUMM2N2_SETIM_V
+
+      SUBROUTINE ONUMM2N2_SETIM_M(VAL,IDX,RES)
+      IMPLICIT NONE
+      TYPE(ONUMM2N2), INTENT(INOUT) :: VAL(:,:)
+      REAL(DP),INTENT(IN) :: RES(SIZE(VAL,1),SIZE(VAL,2)) 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         VAL%R=RES
+
+      ! Order 1
+      CASE(1)
+         VAL%E1=RES
+      CASE(2)
+         VAL%E2=RES
+
+      ! Order 2
+      CASE(3)
+         VAL%E11=RES
+      CASE(4)
+         VAL%E12=RES
+      CASE(5)
+         VAL%E22=RES
+
+      END SELECT
+   END SUBROUTINE ONUMM2N2_SETIM_M
+
+FUNCTION ONUMM2N2_GETIM_S(VAL,IDX) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM2N2), INTENT(IN) :: VAL
+      REAL(DP) :: RES 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         RES=VAL%R
+
+      ! Order 1
+      CASE(1)
+         RES=VAL%E1
+      CASE(2)
+         RES=VAL%E2
+
+      ! Order 2
+      CASE(3)
+         RES=VAL%E11
+      CASE(4)
+         RES=VAL%E12
+      CASE(5)
+         RES=VAL%E22
+
+      END SELECT
+   END FUNCTION ONUMM2N2_GETIM_S
+
+FUNCTION ONUMM2N2_GETIM_V(VAL,IDX) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM2N2), INTENT(IN) :: VAL(:)
+      REAL(DP) :: RES(SIZE(VAL)) 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         RES=VAL%R
+
+      ! Order 1
+      CASE(1)
+         RES=VAL%E1
+      CASE(2)
+         RES=VAL%E2
+
+      ! Order 2
+      CASE(3)
+         RES=VAL%E11
+      CASE(4)
+         RES=VAL%E12
+      CASE(5)
+         RES=VAL%E22
+
+      END SELECT
+   END FUNCTION ONUMM2N2_GETIM_V
+
+FUNCTION ONUMM2N2_GETIM_M(VAL,IDX) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM2N2), INTENT(IN) :: VAL(:,:)
+      REAL(DP) :: RES(SIZE(VAL,1),SIZE(VAL,2)) 
+      INTEGER, INTENT(IN) :: IDX
+
+      SELECT CASE(IDX)
+      ! Order 0
+      CASE(0)
+         RES=VAL%R
+
+      ! Order 1
+      CASE(1)
+         RES=VAL%E1
+      CASE(2)
+         RES=VAL%E2
+
+      ! Order 2
+      CASE(3)
+         RES=VAL%E11
+      CASE(4)
+         RES=VAL%E12
+      CASE(5)
+         RES=VAL%E22
+
+      END SELECT
+   END FUNCTION ONUMM2N2_GETIM_M
+
+   SUBROUTINE ONUMM2N2_PPRINT_S(VAR,FMT,UNIT)
+      IMPLICIT NONE
+      TYPE(ONUMM2N2), INTENT(IN) :: VAR
+      CHARACTER(len=*), INTENT(IN), OPTIONAL :: fmt
+      INTEGER, INTENT(IN), OPTIONAL :: unit
+      CHARACTER(len=:),ALLOCATABLE :: output_format
+      INTEGER :: unt
+
+      IF ( PRESENT(unit) ) THEN
+         unt = unit
+      ELSE
+         unt = 6
+      END IF
+
+      IF ( PRESENT(fmt) ) THEN
+         output_format = '('//trim(fmt)//')'
+      ELSE
+         output_format = '(F10.4)'
+      END IF
+
+      ! Pretty print function.
+      !  Real
+      CALL PPRINT(VAR%R,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='NO') ' '
+
+      !  Order 1
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E1 * '
+      CALL PPRINT(VAR%E1,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E2 * '
+      CALL PPRINT(VAR%E2,unit=unt,fmt=output_format)
+
+      !  Order 2
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E11 * '
+      CALL PPRINT(VAR%E11,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E12 * '
+      CALL PPRINT(VAR%E12,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='NO') '+ '
+      WRITE(unt,'(A)',advance='NO') 'E22 * '
+      CALL PPRINT(VAR%E22,unit=unt,fmt=output_format)
+
+
+   END SUBROUTINE ONUMM2N2_PPRINT_S
+
+   SUBROUTINE ONUMM2N2_PPRINT_V(VAR,FMT,UNIT)
+      IMPLICIT NONE
+      TYPE(ONUMM2N2), INTENT(IN) :: VAR(:)
+      CHARACTER(len=*), INTENT(IN), OPTIONAL :: fmt
+      INTEGER, INTENT(IN), OPTIONAL :: unit
+      CHARACTER(len=:),ALLOCATABLE :: output_format
+      INTEGER :: unt
+
+      IF ( PRESENT(unit) ) THEN
+         unt = unit
+      ELSE
+         unt = 6
+      END IF
+
+      IF ( PRESENT(fmt) ) THEN
+         output_format = '('//trim(fmt)//')'
+      ELSE
+         output_format = '(F10.4)'
+      END IF
+
+      ! Pretty print function.
+      !  Real
+      CALL PPRINT(VAR%R,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') ' '
+
+      !  Order 1
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1 * '
+      CALL PPRINT(VAR%E1,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E2 * '
+      CALL PPRINT(VAR%E2,unit=unt,fmt=output_format)
+
+      !  Order 2
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E11 * '
+      CALL PPRINT(VAR%E11,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E12 * '
+      CALL PPRINT(VAR%E12,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E22 * '
+      CALL PPRINT(VAR%E22,unit=unt,fmt=output_format)
+
+
+   END SUBROUTINE ONUMM2N2_PPRINT_V
+
+   SUBROUTINE ONUMM2N2_PPRINT_M(VAR,FMT,UNIT)
+      IMPLICIT NONE
+      TYPE(ONUMM2N2), INTENT(IN) :: VAR(:,:)
+      CHARACTER(len=*), INTENT(IN), OPTIONAL :: fmt
+      INTEGER, INTENT(IN), OPTIONAL :: unit
+      CHARACTER(len=:),ALLOCATABLE :: output_format
+      INTEGER :: unt
+
+      IF ( PRESENT(unit) ) THEN
+         unt = unit
+      ELSE
+         unt = 6
+      END IF
+
+      IF ( PRESENT(fmt) ) THEN
+         output_format = '('//trim(fmt)//')'
+      ELSE
+         output_format = '(F10.4)'
+      END IF
+
+      ! Pretty print function.
+      !  Real
+      CALL PPRINT(VAR%R,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') ' '
+
+      !  Order 1
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E1 * '
+      CALL PPRINT(VAR%E1,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E2 * '
+      CALL PPRINT(VAR%E2,unit=unt,fmt=output_format)
+
+      !  Order 2
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E11 * '
+      CALL PPRINT(VAR%E11,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E12 * '
+      CALL PPRINT(VAR%E12,unit=unt,fmt=output_format)
+      WRITE(unt,'(A)',advance='YES') '+ '
+      WRITE(unt,'(A)',advance='YES') 'E22 * '
+      CALL PPRINT(VAR%E22,unit=unt,fmt=output_format)
+
+
+   END SUBROUTINE ONUMM2N2_PPRINT_M
 
    ELEMENTAL FUNCTION ONUMM2N2_FEVAL(X,DER0,DER1,DER2)&
       RESULT(RES)
@@ -1823,8 +2146,8 @@ FUNCTION ONUMM2N2_TO_CR_MAT_M(VAL) RESULT(RES)
       
     IMPLICIT NONE
 
-    TYPE(ONUMM2N2)TYPE(ONUMM2N2)TYPE(ONUMM2N2) INTENT(IN) :: A(4,4)   !! Matrix
-    TYPE(ONUMM2N2)TYPE(ONUMM2N2)TYPE(ONUMM2N2)            :: det
+    TYPE(ONUMM2N2), INTENT(IN) :: A(4,4)   !! Matrix
+    TYPE(ONUMM2N2)             :: det
 
     ! Calculate the determinant of the matrix
     det = &
@@ -1847,8 +2170,8 @@ FUNCTION ONUMM2N2_TO_CR_MAT_M(VAL) RESULT(RES)
       
     IMPLICIT NONE 
 
-    TYPE(ONUMM2N2)TYPE(ONUMM2N2), DIMENSION (3),INTENT(IN) :: a,b
-    TYPE(ONUMM2N2)TYPE(ONUMM2N2), DIMENSION (3) :: v
+    TYPE(ONUMM2N2), DIMENSION (3),INTENT(IN) :: a,b
+    TYPE(ONUMM2N2), DIMENSION (3) :: v
     
     v(1) = a(2) * b(3) - a(3) * b(2)
     v(2) = a(3) * b(1) - a(1) * b(3)
@@ -1864,7 +2187,7 @@ FUNCTION ONUMM2N2_TO_CR_MAT_M(VAL) RESULT(RES)
   !! @param[in] b: Vector of 3 reals (rank 1).
   !!
   !***************************************************************************************************!
-  PURE FUNCTION ONUMM2N2_norm2_3(v) RESULT(n)
+  FUNCTION ONUMM2N2_norm2_3(v) RESULT(n)
      
     IMPLICIT NONE 
 
@@ -2185,66 +2508,90 @@ FUNCTION ONUMM2N2_TO_CR_MAT_M(VAL) RESULT(RES)
    END FUNCTION ONUMM2N2_POW_OO
 
 
-   FUNCTION ONUMM2N2_INV2X2(A)&
+   FUNCTION ONUMM2N2_INV2X2(A,det)&
       RESULT(RES)
       IMPLICIT NONE
       TYPE(ONUMM2N2) , INTENT(IN) :: A(2,2) 
+      TYPE(ONUMM2N2) , INTENT(IN), OPTIONAL :: det
+      REAL(DP) :: detCalc
       TYPE(ONUMM2N2) :: RES(SIZE(A,1),SIZE(A,2)) 
 
+      IF (PRESENT(det)) THEN
+         detCalc=det%R
+      ELSE
+         detCalc=det2x2(A%R)
+      END IF
+
       ! Get real part 
-      RES%R=INV2X2(A%R)
+      RES%R=INV2X2(A%R,detCalc)
 
       ! Order 1
-      RES%E1=-MATMUL(RES%R,(MATMUL(RES%E1,A%R)))
-      RES%E2=-MATMUL(RES%R,(MATMUL(RES%E2,A%R)))
+      RES%E1=-MATMUL(RES%R,(MATMUL(A%E1,RES%R)))
+      RES%E2=-MATMUL(RES%R,(MATMUL(A%E2,RES%R)))
 
       ! Order 2
-      RES%E11=-MATMUL(RES%R,(MATMUL(RES%E11,A%R)+MATMUL(RES%E1,A%E1)))
-      RES%E12=-MATMUL(RES%R,(MATMUL(RES%E12,A%R)+MATMUL(RES%E1,A%E2)+&
-             MATMUL(RES%E2,A%E1)))
-      RES%E22=-MATMUL(RES%R,(MATMUL(RES%E22,A%R)+MATMUL(RES%E2,A%E2)))
+      RES%E11=-MATMUL(RES%R,(MATMUL(A%E11,RES%R)+MATMUL(A%E1,RES%E1)))
+      RES%E12=-MATMUL(RES%R,(MATMUL(A%E12,RES%R)+MATMUL(A%E1,RES%E2)+&
+             MATMUL(A%E2,RES%E1)))
+      RES%E22=-MATMUL(RES%R,(MATMUL(A%E22,RES%R)+MATMUL(A%E2,RES%E2)))
 
    END FUNCTION ONUMM2N2_INV2X2
 
-   FUNCTION ONUMM2N2_INV3X3(A)&
+   FUNCTION ONUMM2N2_INV3X3(A,det)&
       RESULT(RES)
       IMPLICIT NONE
       TYPE(ONUMM2N2) , INTENT(IN) :: A(3,3) 
+      TYPE(ONUMM2N2) , INTENT(IN), OPTIONAL :: det
+      REAL(DP) :: detCalc
       TYPE(ONUMM2N2) :: RES(SIZE(A,1),SIZE(A,2)) 
 
+      IF (PRESENT(det)) THEN
+         detCalc=det%R
+      ELSE
+         detCalc=det3x3(A%R)
+      END IF
+
       ! Get real part 
-      RES%R=INV3X3(A%R)
+      RES%R=INV3X3(A%R,detCalc)
 
       ! Order 1
-      RES%E1=-MATMUL(RES%R,(MATMUL(RES%E1,A%R)))
-      RES%E2=-MATMUL(RES%R,(MATMUL(RES%E2,A%R)))
+      RES%E1=-MATMUL(RES%R,(MATMUL(A%E1,RES%R)))
+      RES%E2=-MATMUL(RES%R,(MATMUL(A%E2,RES%R)))
 
       ! Order 2
-      RES%E11=-MATMUL(RES%R,(MATMUL(RES%E11,A%R)+MATMUL(RES%E1,A%E1)))
-      RES%E12=-MATMUL(RES%R,(MATMUL(RES%E12,A%R)+MATMUL(RES%E1,A%E2)+&
-             MATMUL(RES%E2,A%E1)))
-      RES%E22=-MATMUL(RES%R,(MATMUL(RES%E22,A%R)+MATMUL(RES%E2,A%E2)))
+      RES%E11=-MATMUL(RES%R,(MATMUL(A%E11,RES%R)+MATMUL(A%E1,RES%E1)))
+      RES%E12=-MATMUL(RES%R,(MATMUL(A%E12,RES%R)+MATMUL(A%E1,RES%E2)+&
+             MATMUL(A%E2,RES%E1)))
+      RES%E22=-MATMUL(RES%R,(MATMUL(A%E22,RES%R)+MATMUL(A%E2,RES%E2)))
 
    END FUNCTION ONUMM2N2_INV3X3
 
-   FUNCTION ONUMM2N2_INV4X4(A)&
+   FUNCTION ONUMM2N2_INV4X4(A,det)&
       RESULT(RES)
       IMPLICIT NONE
       TYPE(ONUMM2N2) , INTENT(IN) :: A(4,4) 
+      TYPE(ONUMM2N2) , INTENT(IN), OPTIONAL :: det
+      REAL(DP) :: detCalc
       TYPE(ONUMM2N2) :: RES(SIZE(A,1),SIZE(A,2)) 
 
+      IF (PRESENT(det)) THEN
+         detCalc=det%R
+      ELSE
+         detCalc=det4x4(A%R)
+      END IF
+
       ! Get real part 
-      RES%R=INV4X4(A%R)
+      RES%R=INV4X4(A%R,detCalc)
 
       ! Order 1
-      RES%E1=-MATMUL(RES%R,(MATMUL(RES%E1,A%R)))
-      RES%E2=-MATMUL(RES%R,(MATMUL(RES%E2,A%R)))
+      RES%E1=-MATMUL(RES%R,(MATMUL(A%E1,RES%R)))
+      RES%E2=-MATMUL(RES%R,(MATMUL(A%E2,RES%R)))
 
       ! Order 2
-      RES%E11=-MATMUL(RES%R,(MATMUL(RES%E11,A%R)+MATMUL(RES%E1,A%E1)))
-      RES%E12=-MATMUL(RES%R,(MATMUL(RES%E12,A%R)+MATMUL(RES%E1,A%E2)+&
-             MATMUL(RES%E2,A%E1)))
-      RES%E22=-MATMUL(RES%R,(MATMUL(RES%E22,A%R)+MATMUL(RES%E2,A%E2)))
+      RES%E11=-MATMUL(RES%R,(MATMUL(A%E11,RES%R)+MATMUL(A%E1,RES%E1)))
+      RES%E12=-MATMUL(RES%R,(MATMUL(A%E12,RES%R)+MATMUL(A%E1,RES%E2)+&
+             MATMUL(A%E2,RES%E1)))
+      RES%E22=-MATMUL(RES%R,(MATMUL(A%E22,RES%R)+MATMUL(A%E2,RES%E2)))
 
    END FUNCTION ONUMM2N2_INV4X4
 

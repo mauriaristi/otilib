@@ -30,6 +30,7 @@ void arrso_neg_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
 
 
 
+#ifdef _OPENMP
 
 // Parallel implementation
 #define _SOTI_CHUNCK_SIZE 8
@@ -53,6 +54,7 @@ int setup_omp_parallel_elementwise( int totalnIter ){
     omp_set_num_threads(nthrds_toset);
     return nthrds_prev;
 }
+#endif
 
 // 1.2. Addition.
 // ****************************************************************************************************

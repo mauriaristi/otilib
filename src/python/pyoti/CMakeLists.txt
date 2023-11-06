@@ -67,7 +67,7 @@ ADD_CUSTOM_COMMAND (
 	TARGET  oticython
 	# COMMAND python3 ${CYTHON_SETUP_DIR}/setup.py build_ext -b${PROJECT_BINARY_DIR} 
 	# COMMAND CC=icc python3 ${CYTHON_SETUP_DIR}/setup.py build_ext -b${PROJECT_BINARY_DIR} 
-	COMMAND ${CYTHON_CMD_CALL_PREC} python3 ${CYTHON_SETUP_DIR}/setup.py -q build_ext -b${PROJECT_BINARY_DIR} 
+	COMMAND ${CYTHON_CMD_CALL_PREC} python3 ${CYTHON_SETUP_DIR}/setup.py -q build_ext -b${PROJECT_BINARY_DIR} -j 8
 )
 # TODO: This may not work in Windows.... Check this, maybe change to FILE(COPY ...)
 #  ---- 

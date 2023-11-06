@@ -1034,7 +1034,7 @@ inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
     #ifdef _OPENMP
         int thrdId = omp_get_thread_num();
         ndir_t ntmp = thrdId * 20 + pntmp;
-        // printf("rtmp call thrdId: %d\n",thrdId);
+        //if (thrdId != 0) printf("rtmp call thrdId: %d\n",thrdId);
     #else
         ndir_t ntmp = pntmp;
     #endif
@@ -1050,6 +1050,7 @@ inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
     }
     if (ntmp >= dhl.p_dh[trc_order-1].Ntmps){
         printf("ERROR: Trying to get a temporal that does not exist.\n");
+        printf("-----  requesting " _PNDIRT "  but got " _PNDIRT ".\n", ntmp, dhl.p_dh[trc_order-1].Ntmps );
         exit(OTI_undetErr);   
     }
     res.re     = 0.0; // Set real value to zero.

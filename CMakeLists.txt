@@ -47,11 +47,10 @@ if(APPLE)
 elseif(UNIX)
 
   # This is for the case of unix OS
-  set(CMAKE_C_COMPILER "gcc")
-  set(CYTHON_CMD_CALL_PREC "CC=gcc")
-  # set(CMAKE_C_COMPILER "icc")
   # set(CMAKE_C_COMPILER "gcc")
-  # set(CYTHON_CMD_CALL_PREC "CC=icc")
+  # set(CYTHON_CMD_CALL_PREC "CC=gcc")
+  set(CMAKE_C_COMPILER "icx")
+  set(CYTHON_CMD_CALL_PREC "CC=icx")
 
 endif(APPLE)
 

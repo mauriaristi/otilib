@@ -166,6 +166,28 @@ hex20 = elbaseso.createElement( 20,           # Number of basis
 
 
 
+# 6-node wedge (prism)
+# wedge6 = elbaseso.createElement(  6,           # Number of basis 
+#                                   1,            # Characteristic order of the polynomials
+#                                   elWedge,      # Geometric type
+#                                   elkindIso,    # Kind of element 
+#                                   3,            # Number of dimensions
+#                                   wedge6_iso,  # Basis functions.
+#                                   [point1, line2, tri3])
+
+# 15-node wedge (prism)
+wedge15 = elbaseso.createElement( 15,           # Number of basis 
+                                  2,            # Characteristic order of the polynomials
+                                  elWedge,      # Geometric type
+                                  elkindIso,    # Kind of element 
+                                  3,            # Number of dimensions
+                                  wedge15_iso,  # Basis functions.
+                                  [point1, line3, tri6])
+
+
+
+
+
 
 # Lobatto Elements
 # Line elements
@@ -298,7 +320,10 @@ elements['brick'].append(hex20) # Order 2
 
 
 
-
+elements['wedge']=[]
+elements['wedge'].append(tet1) # Order 0
+# elements['wedge'].append(wedge6 ) # Order 1
+elements['wedge'].append(wedge15) # Order 2
 
 
 
@@ -349,7 +374,7 @@ dline3 = elbased.createElement( 3,            # Number of basis
                                 elLine,       # Geometric type
                                 elkindIso,    # Kind of element 
                                 1,            # Number of dimensions
-                                line2_iso,    # Basis functions.
+                                line3_iso,    # Basis functions.
                                 [dpoint1,])   
 
 

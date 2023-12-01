@@ -3,21 +3,23 @@
 !!    OTISTAMOD: Module to support OTI numbers in Fortran.
 !!
 !! @brief This module enables Hypercomplex Automatic Differentiation in Fortran  
-!! For a specified number of variables and order of derivatives. 
-!! The modality of this implementation is a dense memory operation with a 
-!! semi-sparse execution.
+!! for a maximum number of variables and order of derivatives. 
+!! The modality of this implementation is a dense and static memory operation 
+!! with a semi-sparse execution.
 !!
 !! @author Mauricio Aristizabal, PhD
 !! date:----:2023-oct-25
 !! lastmod:-:2023-oct-25
 !!
 !******************************************************************************!
-MODULE OTISTAMOD
+MODULE otistamod
   !============================================================================!
   USE master_parameters
   USE real_utils
   !============================================================================!
   IMPLICIT NONE
+  !============================================================================!
+  !PRIVATE ! all elements declared private by default, unless specficied.
   !============================================================================!
   !    PARAMETER DEFINITIONS
   !----------------------------------------------------------------------------!
@@ -31,55 +33,58 @@ MODULE OTISTAMOD
   !****************************************************************************!
 
   !============================================================================
-  !> Definition of the OTI number type. This number is static in memory (no 
-  !! allocation calls are done).
-  !!
+  !> Definition of the OTI number type. This number is static in memory        
+  !! (no allocation calls are done by the user).                               
+  !!                                                                           
   !----------------------------------------------------------------------------
-  TYPE oti_t
-   real(dp)   :: r               !> Real coefficient.
-   real(dp)   :: im(max_nimdir)  !> Imaginary coefficients.
-   integer(2) :: act_ord         !> Actual order of the number.
-   integer(2) :: trc_ord         !> Truncation number of the number.
-   integer(4) :: act_m           !> Number of active im basis.
-  END TYPE oti_t
+  TYPE, PUBLIC :: oti_t                                                        
+   real(dp)   :: r              !> Real coefficient.                           
+   real(dp)   :: im(max_nimdir) !> Imaginary coefficients.                     
+   integer(2) :: act_n          !> Actual order of the number.                 
+   integer(2) :: order          !> Truncation number of the number.            
+   integer(4) :: act_m          !> Number of active im basis.                  
+  END TYPE oti_t                                                               
   ! ===========================================================================
 
   ! ===========================================================================  
-  !    FUNCTION AND OPERATOR OVERLOADING DEFINITIONS.
+  !    FUNCTION AND OPERATOR OVERLOADING DEFINITIONS.                          
   ! ---------------------------------------------------------------------------
   INTERFACE ASSIGNMENT(=)
   MODULE PROCEDURE oti_assign_r
   END INTERFACE
   ! --------------------------------------------------------------------------
-  INTERFACE PPRINT
-  MODULE PROCEDURE oti_pprint_s,oti_pprint_v!,oti_pprint_m
+  INTERFACE pprint
+  MODULE PROCEDURE oti_pprint_s, oti_pprint_v!,oti_pprint_m
+  END INTERFACE  
+  ! --------------------------------------------------------------------------
+  INTERFACE eps
+  MODULE PROCEDURE oti_eps_int!, oti_eps_list
   END INTERFACE
   ! --------------------------------------------------------------------------
-  INTERFACE EPS
-  MODULE PROCEDURE oti_eps_int
+  INTERFACE OPERATOR(+)
+  MODULE PROCEDURE oti_add_oo_ss,oti_add_ro_ss,oti_add_or_ss!,oti_add_oo_vs,&
+    ! oti_add_ro_vs,oti_add_or_vs,oti_add_oo_ms,oti_add_ro_ms,oti_add_or_ms,&
+    ! oti_add_oo_sv,oti_add_ro_sv,oti_add_or_sv,oti_add_oo_sm,oti_add_ro_sm,&
+    ! oti_add_or_sm
   END INTERFACE
-  ! ! --------------------------------------------------------------------------
-  ! INTERFACE OPERATOR(*)
-  ! MODULE PROCEDURE oti_mul_oo_ss,oti_mul_ro_ss,oti_mul_or_ss,oti_mul_oo_vs,&
-  !   oti_mul_ro_vs,oti_mul_or_vs,oti_mul_oo_ms,oti_mul_ro_ms,oti_mul_or_ms,&
-  !   oti_mul_oo_sv,oti_mul_ro_sv,oti_mul_or_sv,oti_mul_oo_sm,oti_mul_ro_sm,&
-  !   oti_mul_or_sm
-  ! END INTERFACE
-  ! ! --------------------------------------------------------------------------
-  ! INTERFACE OPERATOR(+)
-  ! MODULE PROCEDURE oti_add_oo_ss,oti_add_ro_ss,oti_add_or_ss,oti_add_oo_vs,&
-  !   oti_add_ro_vs,oti_add_or_vs,oti_add_oo_ms,oti_add_ro_ms,oti_add_or_ms,&
-  !   oti_add_oo_sv,oti_add_ro_sv,oti_add_or_sv,oti_add_oo_sm,oti_add_ro_sm,&
-  !   oti_add_or_sm
-  ! END INTERFACE
-  ! ! --------------------------------------------------------------------------
-  ! INTERFACE OPERATOR(-)
-  ! MODULE PROCEDURE oti_neg,oti_sub_oo_ss,oti_sub_ro_ss,oti_sub_or_ss,&
-  !   oti_sub_oo_vs,oti_sub_ro_vs,oti_sub_or_vs,oti_sub_oo_ms,oti_sub_ro_ms,&
-  !   oti_sub_or_ms,oti_sub_oo_sv,oti_sub_ro_sv,oti_sub_or_sv,oti_sub_oo_sm,&
-  !   oti_sub_ro_sm,oti_sub_or_sm
-  ! END INTERFACE
-  ! ! --------------------------------------------------------------------------
+  
+  ! --------------------------------------------------------------------------
+  INTERFACE OPERATOR(*)
+  MODULE PROCEDURE oti_mul_ro_ss, oti_mul_or_ss
+    ! oti_mul_oo_ss,oti_mul_ro_ss,oti_mul_or_ss,oti_mul_oo_vs,&
+    ! oti_mul_ro_vs,oti_mul_or_vs,oti_mul_oo_ms,oti_mul_ro_ms,oti_mul_or_ms,&
+    ! oti_mul_oo_sv,oti_mul_ro_sv,oti_mul_or_sv,oti_mul_oo_sm,oti_mul_ro_sm,&
+    ! oti_mul_or_sm
+  END INTERFACE
+  ! --------------------------------------------------------------------------
+  INTERFACE OPERATOR(-)
+  MODULE PROCEDURE oti_neg,oti_sub_oo_ss,oti_sub_ro_ss,oti_sub_or_ss!,&
+    ! oti_sub_oo_vs,oti_sub_ro_vs,oti_sub_or_vs,oti_sub_oo_ms,oti_sub_ro_ms,&
+    ! oti_sub_or_ms,oti_sub_oo_sv,oti_sub_ro_sv,oti_sub_or_sv,oti_sub_oo_sm,&
+    ! oti_sub_ro_sm,oti_sub_or_sm
+  END INTERFACE
+  ! --------------------------------------------------------------------------
+
   ! INTERFACE OPERATOR(/)
   ! MODULE PROCEDURE oti_division_oo,oti_division_or,oti_division_ro
   ! END INTERFACE
@@ -204,6 +209,7 @@ MODULE OTISTAMOD
   ! MODULE PROCEDURE oti_setim_s,oti_setim_v,oti_setim_m
   ! END INTERFACE
   ! ! --------------------------------------------------------------------------
+  PUBLIC :: pprint, eps, ASSIGNMENT(=), OPERATOR(*)
 CONTAINS
 ! =============================================================================
 ELEMENTAL SUBROUTINE oti_assign_r(res,rhs)
@@ -220,12 +226,12 @@ ELEMENTAL SUBROUTINE oti_assign_r(res,rhs)
   res%r = rhs
 
   ! Set all imaginary directions to zero.
-  ! * This step can be *
+  ! * This step can be avoided by because the act_n and act_m are 0*
   res%im = 0.0_dp
   
   ! Set truncation, actual orders to zero
-  res%act_ord      = 0
-  res%trc_ord      = 0
+  res%act_n      = 0
+  res%order      = 0
 
   ! Set active bases to zero.
   res%act_m = 0
@@ -266,13 +272,13 @@ PURE FUNCTION oti_eps_int(base, order) RESULT(res)
 
   IF( ord>n_max .or. base>m_max ) THEN
     
-    ! Should we instead terminate execution and rise error that recompilation
-    ! is needed? 
+    ! Should we instead terminate execution and rise error/warning that 
+    ! adjustment is needed? 
 
     ! No need to initialize imcoeffs.
     ! Set truncation and actual orders to zero
-    res%act_ord = 0  
-    res%trc_ord = MIN( ord, n_max )
+    res%act_n = 0  
+    res%order = MIN( ord, n_max )
 
     ! Set active base to zero.
     IF (base>m_max) THEN
@@ -289,8 +295,8 @@ PURE FUNCTION oti_eps_int(base, order) RESULT(res)
     
     ! Set actual order to one (a pure im dir of a base has order 1) and 
     ! truncation order to the given order.
-    res%act_ord = 1  
-    res%trc_ord = ord
+    res%act_n = 1  
+    res%order = ord
 
     ! Set active bases to the given number of basis.
     res%act_m = base
@@ -298,6 +304,93 @@ PURE FUNCTION oti_eps_int(base, order) RESULT(res)
   END IF
 
 END FUNCTION oti_eps_int
+!==============================================================================!
+
+!==============================================================================!
+PURE FUNCTION oti_eps_list(dirs, order) RESULT(res)
+  !>
+  !! @brief This function defines an OTI number with coefficient 1 along the  
+  !!        imaginary direction defined by a given list of basis. 
+  !!        An optional parameter defines the truncation order of the number.
+  !!
+  !! @param[in] dirs: rank1 array of integers
+  !! @param[in] order: (optional)
+  !!
+  !!---------------------------------------------------------------------------!
+  ! use IFPORT       ! To get QSORT
+  ! ---------------------------------------------------------------------------!
+  IMPLICIT NONE
+  ! ---------------------------------------------------------------------------!
+  INTEGER, INTENT(IN) :: dirs(:)
+  INTEGER, INTENT(IN), OPTIONAL :: order 
+  INTEGER(4)   :: dirs_sort(SIZE(dirs,1))
+  INTEGER(2)   :: ord, sug_ord, dir_ord, i_ord
+  INTEGER(4)   :: max_base, base
+  TYPE(oti_t)  :: res 
+  ! ---------------------------------------------------------------------------!
+  
+  ! Define the suggested order.
+  IF ( PRESENT(order) ) THEN
+    sug_ord = MIN(order, n_max) ! Bound by the maximum order of derivative
+                                ! order of derivative supported by this 
+                                ! library implementation.
+
+  ELSE
+    sug_ord = 1
+  END IF
+
+  ! Need to sort dirs.
+  dirs_sort = sort(dirs)
+  ! dirs_sort = dirs
+  ! Select the maximum between sug_ord and the size of the dirs.
+  ! Also bound by maximum order.
+  dir_ord = SIZE(dirs,1)
+  max_base = dirs(SIZE(dirs,1))
+  
+  ! Assign the value to the real part
+  res%r = 0.0_dp
+  
+  ! Set all imaginary directions to zero. This is to guarantee that
+  ! slicing im arrays will result in corresponding zeros.
+  res%im = 0.0_dp
+
+  res%order = MIN( MAX( sug_ord, dir_ord ), n_max )
+
+  IF( dir_ord>n_max ) THEN
+    
+    ! Case where the im direction has an order greater than the maximum order
+    
+    ! Should we instead terminate execution and rise error/warning that 
+    ! adjustment is needed? 
+
+    ! No need to initialize imcoeffs.
+    ! Set truncation and actual orders to zero
+    res%act_n = 0  
+
+    ! Set active base to zero.
+    IF (base>m_max) THEN
+      res%act_m = 0
+    ELSE 
+      res%act_m = base
+    END IF
+
+  ELSE
+
+    ! Here it is safe to operate the internal arrays.
+    ! Define coefficient for given number.
+    res%im(base) = 1.0_dp
+    
+    ! Set actual order to one (a pure im dir of a base has order 1) and 
+    ! truncation order to the given order.
+    res%act_n = 1  
+    res%order = ord
+
+    ! Set active bases to the given number of basis.
+    res%act_m = base
+
+  END IF
+
+END FUNCTION oti_eps_list
 !==============================================================================!
 
 !==============================================================================!
@@ -345,23 +438,25 @@ SUBROUTINE oti_pprint_s(var,fmt,unit,advance)
   END IF
 
   ! Check if there are imagianry directions in the number.
-  IF ( var%act_ord /= 0 .and. var%act_m /= 0) THEN
+  IF ( var%act_n /= 0 .and. var%act_m /= 0) THEN
     
     ! If so, print real plus imaginary directions.
     CALL pprint(var%r,unit=unt,fmt=output_format, advance='NO')  
     nim_s = 1 ! Start
     
     ! Loop through the orders of derivatives.
-    DO iord = 1, var%act_ord
+    DO iord = 1, var%act_n
+      
       ! Get corresponding number of directions for the current order and 
       ! the active number of basis
       nim_f = n_imdir_mat(iord, var%act_m)
       
       DO iim = nim_s, nim_f
-        WRITE(unt,'(A,I3,A,I3,A)',advance='NO') ' + eps(', iim-nim_s+1,',', & 
-                         iord, ')*('
+        WRITE(unt,'(A)',advance='NO') ' + ('
         CALL pprint(var%im(iim),unit=unt,fmt=output_format, advance='NO')
         WRITE(unt,'(A)',advance='NO') ')'
+        WRITE(unt,'(A,I3,A,I3,A)',advance='NO') ' * eps(', iim-nim_s+1,',', & 
+                         iord, ')'
       END DO
       
       nim_s = nim_f+1 ! Update starting location
@@ -425,15 +520,266 @@ SUBROUTINE oti_pprint_v(var,fmt,unit,advance)
     adv = 'YES'
   END IF
 
-  ! Loop through the elements of the array./
+  WRITE(unt,'(A)',advance='NO' ) '['
+
+  ! Loop through the elements of the array.
   DO i = 1,SIZE(var,1)
+
     CALL PPRINT(var(i),unit=unt,fmt=output_format, advance='NO')
     WRITE(unt,'(A)',advance='NO' ) ', '
+
   END DO
   
-  WRITE(unt,'(A)',advance=adv) ' '
+  WRITE(unt,'(A)',advance=adv) ']'
   
 END SUBROUTINE oti_pprint_v
+!==============================================================================!
+
+!==============================================================================!
+ELEMENTAL FUNCTION oti_add_oo_ss(lhs,rhs) RESULT(res)
+  !****************************************************************************!
+  !>
+  !! @brief Scalar addition. This is an elemental function.
+  !!
+  !!  res = lhs + rhs
+  !!
+  !! @param[in] lhs left-hand-side OTI object.
+  !! @param[in] rhs right-hand-side OTI object.
+  !!
+  !! @param[out] res result of the operation.
+  !! 
+  !****************************************************************************!
+  IMPLICIT NONE
+  !----------------------------------------------------------------------------!
+  TYPE(oti_t), INTENT(IN) :: lhs
+  TYPE(oti_t), INTENT(IN) :: rhs
+  TYPE(oti_t) :: res 
+  INTEGER :: iord, iim, nim_s, nim_f
+  !----------------------------------------------------------------------------!
+
+  ! Real part.
+  res%r = lhs%r + rhs%r
+
+  ! Actual order and truncation order correspond to the maximum between 
+  ! lhs and rhs.
+  res%act_n = max( lhs%act_n, rhs%act_n )
+  res%order = max( lhs%order, rhs%order )
+  res%act_m = max( lhs%act_m, rhs%act_m )
+
+  ! Set all imaginary directions to zero.
+  res%im = 0.0_dp
+  
+  ! Check if there are imagianry directions in the number.
+  IF ( res%act_n /= 0 .and. res%act_m /= 0) THEN
+    
+    nim_s = 1 ! Starting imaginary direction.
+    
+    ! Loop through the orders of derivatives.
+    DO iord = 1, res%act_n
+      
+      ! Set the lhs part.
+      IF (lhs%act_n <= iord .and. lhs%act_m /= 0 ) THEN
+        ! Get number of directions for the current order and active num. basis.
+        nim_f = n_imdir_mat(iord, lhs%act_m)
+        
+        DO iim = nim_s, nim_f
+          res%im(iim) = lhs%im(iim)
+        END DO
+
+      END IF 
+
+      ! Add the rhs part.
+      IF (rhs%act_n <= iord .and. rhs%act_m /= 0) THEN
+        ! Get number of directions for the current order and active num. basis.
+        nim_f = n_imdir_mat(iord, rhs%act_m)
+        
+        DO iim = nim_s, nim_f
+          res%im(iim) = res%im(iim) + rhs%im(iim)
+        END DO
+
+      END IF 
+      
+      nim_s = nim_f + 1 ! Update starting location
+    
+    END DO
+  
+  END IF
+
+ END FUNCTION oti_add_oo_ss
+!==============================================================================!
+
+!==============================================================================!
+ELEMENTAL FUNCTION oti_add_ro_ss(lhs,rhs) RESULT(res)
+  !****************************************************************************!
+  !>
+  !! @brief Scalar addition. This is an elemental function.
+  !!
+  !!  res = lhs + rhs
+  !!
+  !! @param[in] lhs left-hand-side real.
+  !! @param[in] rhs right-hand-side OTI object.
+  !!
+  !! @param[out] res result of the operation.
+  !! 
+  !****************************************************************************!
+  IMPLICIT NONE
+  !----------------------------------------------------------------------------!
+  REAL(dp), INTENT(IN) :: lhs
+  TYPE(oti_t), INTENT(IN) :: rhs
+  TYPE(oti_t) :: res 
+  INTEGER :: iord, iim, nim_s, nim_f
+  !----------------------------------------------------------------------------!
+
+  ! Real part.
+  res%r = lhs + rhs%r
+
+  ! Actual order and truncation order correspond to the maximum between 
+  ! lhs and rhs.
+  res%act_n = rhs%act_n
+  res%order = rhs%order
+  res%act_m = rhs%act_m
+
+  ! Set all imaginary directions to zero.
+  res%im = 0.0_dp
+  
+  ! Check if there are imagianry directions in the number.
+  IF ( res%act_n /= 0 .and. res%act_m /= 0) THEN
+    
+    nim_s = 1 ! Starting imaginary direction.
+    
+    ! Loop through the orders of derivatives.
+    DO iord = 1, res%act_n
+      
+      ! Add the rhs part.
+      ! Get number of directions for the current order and active num. basis.
+      nim_f = n_imdir_mat(iord, rhs%act_m)
+      
+      DO iim = nim_s, nim_f
+        res%im(iim) = rhs%im(iim)
+      END DO
+
+      nim_s = nim_f + 1 ! Update starting location
+    
+    END DO
+  
+  END IF
+
+ END FUNCTION oti_add_ro_ss
+!==============================================================================!
+
+!==============================================================================!
+ELEMENTAL FUNCTION oti_add_or_ss(lhs,rhs) RESULT(res)
+  !****************************************************************************!
+  !>
+  !! @brief Scalar addition. This is an elemental function.
+  !!
+  !!  res = lhs + rhs
+  !!
+  !! @param[in] lhs left-hand-side OTI object.
+  !! @param[in] rhs right-hand-side real.
+  !!
+  !! @param[out] res result of the operation.
+  !! 
+  !****************************************************************************!
+  IMPLICIT NONE
+  !----------------------------------------------------------------------------!
+  TYPE(oti_t), INTENT(IN) :: lhs
+  REAL(dp), INTENT(IN) :: rhs
+  TYPE(oti_t) :: res 
+  !----------------------------------------------------------------------------!
+
+  ! Adition is commutative:
+  res = rhs + lhs
+
+ END FUNCTION oti_add_or_ss
+!==============================================================================!
+
+!==============================================================================!
+ELEMENTAL FUNCTION oti_mul_ro_ss(lhs,rhs) RESULT(res)
+  !****************************************************************************!
+  !>
+  !! @brief Scalar multiplication. This is an elemental function.
+  !!
+  !!  res = lhs * rhs
+  !!
+  !! @param[in] lhs left-hand-side OTI object.
+  !! @param[in] rhs right-hand-side OTI object.
+  !!
+  !! @param[out] res result of the operation.
+  !! 
+  !****************************************************************************!
+  IMPLICIT NONE
+  !----------------------------------------------------------------------------!
+  REAL(dp), INTENT(IN) :: lhs
+  TYPE(oti_t), INTENT(IN) :: rhs
+  TYPE(oti_t) :: res 
+  INTEGER :: iord, iim, nim_s, nim_f
+  !----------------------------------------------------------------------------!
+
+  ! Real part.
+  res%r = lhs * rhs%r
+
+  ! Copy OTI values from rhs.
+  res%act_n = rhs%act_n
+  res%order = rhs%order
+  res%act_m = rhs%act_m
+
+  ! Set all imaginary directions to zero.
+  ! res%im(:) = rhs%im(:)
+  
+  ! Check if there are imagianry directions in the number.
+  IF ( res%act_n /= 0 .and. res%act_m /= 0) THEN
+    
+    nim_s = 1 ! Starting imaginary direction.
+    
+    ! Loop through the orders of derivatives.
+    DO iord = 1, res%act_n
+      
+      ! Set the lhs part.
+    
+      ! Get number of directions for the current order and active num. basis.
+      nim_f = n_imdir_mat(iord, rhs%act_m)
+      
+      DO iim = nim_s, nim_f
+      
+        res%im(iim) = lhs*rhs%im(iim)
+      
+      END DO
+
+      nim_s = nim_f + 1 ! Update starting location
+    
+    END DO
+  
+  END IF
+
+ END FUNCTION oti_mul_ro_ss
+!==============================================================================!
+
+!==============================================================================!
+ELEMENTAL FUNCTION oti_mul_or_ss(lhs,rhs) RESULT(res)
+  !****************************************************************************!
+  !>
+  !! @brief Scalar multiplication. This is an elemental function.
+  !!
+  !!  res = lhs * rhs
+  !!
+  !! @param[in] lhs left-hand-side OTI object.
+  !! @param[in] rhs right-hand-side OTI object.
+  !!
+  !! @param[out] res result of the operation.
+  !! 
+  !****************************************************************************!
+  IMPLICIT NONE
+  !----------------------------------------------------------------------------!
+  TYPE(oti_t), INTENT(IN) :: lhs
+  REAL(dp), INTENT(IN) :: rhs
+  TYPE(oti_t) :: res 
+  !----------------------------------------------------------------------------!
+
+  ! Multiplication is commutative.
+  res = rhs*lhs  
+
+ END FUNCTION oti_mul_or_ss
 !==============================================================================!
 
 !==============================================================================!
@@ -515,27 +861,7 @@ END SUBROUTINE oti_pprint_v
 
 !    END FUNCTION oti_neg
 
-!    ELEMENTAL FUNCTION oti_add_oo_ss(LHS,RHS)&
-!       RESULT(RES)
-!       IMPLICIT NONE
-!       TYPE(oti), INTENT(IN) :: LHS
-!       TYPE(oti), INTENT(IN) :: RHS
-!       TYPE(oti) :: RES 
-
-!       ! Addition like function 'LHS + RHS'
-!       !  Real
-!       RES%R = LHS%R + RHS%R
-
-!       ! Order 1
-!       RES%E1 = LHS%E1 + RHS%E1
-!       RES%E2 = LHS%E2 + RHS%E2
-
-!       ! Order 2
-!       RES%E11 = LHS%E11 + RHS%E11
-!       RES%E12 = LHS%E12 + RHS%E12
-!       RES%E22 = LHS%E22 + RHS%E22
-
-!    END FUNCTION oti_ADD_OO_SS
+   
 
 !    ELEMENTAL FUNCTION oti_ADD_RO_SS(LHS,RHS)&
 !       RESULT(RES)

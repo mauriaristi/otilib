@@ -418,6 +418,8 @@ cdef object enum2string(int64_t enumId):
     return "elTetrahedra "
   elif enumId == elHexahedra  :
     return "elHexahedra  "
+  elif enumId == elWedge      :
+    return "elWedge  "
   elif enumId == elHexahedraL :
     return "elHexahedraL "
   elif enumId == elkindIso    :

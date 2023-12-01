@@ -28,3 +28,8 @@ include "basis_functions_gen/tet10_iso.pxi"
 include "basis_functions_gen/hex1_iso.pxi"
 include "basis_functions_gen/hex8_iso.pxi"
 include "basis_functions_gen/hex20_iso.pxi"
+
+# Wedge elements (prisms)
+include "basis_functions_gen/wedge1_iso.pxi"
+include "basis_functions_gen/wedge6_iso.pxi"
+include "basis_functions_gen/wedge15_iso.pxi"

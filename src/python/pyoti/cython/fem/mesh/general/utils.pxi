@@ -23,14 +23,16 @@ element_type_name[11] = "tet10"
 element_type_name[5 ] = "hex8"
 element_type_name[17] = "hex20"
 
+# Wedge elements
+element_type_name[6 ] = "wedge6"#"PRI_6"
+element_type_name[18] = "wedge15"#"PRI_15"
+
 
 # Unsupported
-element_type_name[6 ] = "PRI_6"
 element_type_name[7 ] = "PYR_5"
 element_type_name[12] = "hex27"
 element_type_name[13] = "PRI_18"
 element_type_name[14] = "PYR_14"
-element_type_name[18] = "PRI_15"
 element_type_name[19] = "PYR_13"
 element_type_name[20] = "tri9"
 element_type_name[21] = "tri10"
@@ -91,6 +93,9 @@ element_type_map_vtk[11] = 24  # "tet10"
 element_type_map_vtk[5 ] = 12  # "hex8"
 element_type_map_vtk[17] = 25  # "hex20"
 
+element_type_map_vtk[6 ] = 13  # "wedge6"
+element_type_map_vtk[18] = 26  # "wedge15"
+
 
 
 
@@ -113,6 +118,9 @@ element_geom_type[11] = elTetrahedra
 
 element_geom_type[5 ] = elHexahedra
 element_geom_type[17] = elHexahedra
+
+element_geom_type[6 ] = elWedge
+element_geom_type[18] = elWedge
 
 
 
@@ -137,6 +145,10 @@ element[11] = tet10
 # Serendipity elements.
 element[16] = quad8
 element[17] = hex20
+
+# Wedge elements.
+element[6 ] = wedge6
+element[18] = wedge15
 
 
 

@@ -81,6 +81,7 @@ enum operEnum {
   elQuadrangle  =  403,    ///< Quad - Gauss.
   elTetrahedra  =  404,    ///< Tetra (4 triangle faces).
   elHexahedra   =  405,    ///< Brick - Gauss.
+  elWedge       =  406,    ///< Wedge, triangular face.
   
   // Element Geometric type with Lobatto integration points.
   elLineL        =  411,    ///< Line  - Lobatto.

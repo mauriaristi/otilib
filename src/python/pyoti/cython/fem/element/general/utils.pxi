@@ -671,6 +671,113 @@ hex20L = elbase.createElement( 20,          # Number of basis
 
 
 
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::::   WEDGE ELEMENTS   :::::::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+# ****************************************************************************************************
+# 1 node wedge
+vertexIndx = np.array([[ 0, ],] ,dtype=np.uint64) # Define the vertex indices of the wedge.
+edgeIndx   = np.array([[ 0, ],] ,dtype=np.uint64) # Define the edge indices of the wedge.
+faceIndx   = np.array([[ 0, ],] ,dtype=np.uint64) # Define the face indices of the wedge.
+
+wedge1 = elbase.createElement(  1,            # Number of basis 
+                                0,            # Characteristic order of the polynomials
+                                elWedge,      # Geometric type
+                                elkindIso,    # Kind of element 
+                                3,            # Number of dimensions
+                                wedge1_iso,     # Basis functions.
+                                [point1, line1, quad1],
+                                [ vertexIndx, edgeIndx, faceIndx])
+# ----------------------------------------------------------------------------------------------------
+
+# ****************************************************************************************************
+# 6 node wedge
+vertexIndx = np.array([[ 0 ],       # Define the vertex indices of the wedge.
+                       [ 1 ],    
+                       [ 2 ],
+                       [ 3 ],
+                       [ 4 ],
+                       [ 5 ],],dtype=np.uint64)
+
+edgeIndx = np.array([[ 0, 2 ],   # Define the edge indices of the wedge.
+                     [ 2, 1 ],
+                     [ 1, 0 ],
+                     [ 3, 5 ],
+                     [ 5, 4 ],
+                     [ 4, 3 ],
+                     [ 1, 4 ],
+                     [ 0, 3 ],
+                     [ 2, 5 ],
+                     ],dtype=np.uint64)
+
+faceIndx = np.array([[ 0, 2, 1, 0 ],   # Define the face indices of the wedge.
+                     [ 3, 4, 5, 3 ],
+                     [ 0, 1, 4, 3 ],
+                     [ 1, 2, 5, 4 ],
+                     [ 0, 3, 5, 2 ],
+                     ],dtype=np.uint64)
+
+wedge6 = elbase.createElement(6,            # Number of basis 
+                              1,            # Characteristic order of the polynomials
+                              elWedge,  # Geometric type
+                              elkindIso,    # Kind of element 
+                              3,            # Number of dimensions
+                              wedge6_iso,     # Basis functions.
+                              [point1, line2, quad4],
+                              [ vertexIndx, edgeIndx, faceIndx])
+# ----------------------------------------------------------------------------------------------------
+
+# ****************************************************************************************************
+# 15 node wedge
+vertexIndx = np.array([[ 0 ],       # Define the vertex indices of the wedge.
+                       [ 1 ],    
+                       [ 2 ],
+                       [ 3 ],
+                       [ 4 ],
+                       [ 5 ],
+                       [ 6 ],
+                       [ 7 ],
+                       [ 8 ],
+                       [ 9 ],
+                       [10 ],
+                       [11 ],
+                       [12 ],
+                       [13 ],
+                       [14 ],
+                       ],dtype=np.uint64)
+
+edgeIndx = np.array([[ 0,  2,  8 ],   # Define the edge indices of the wedge.
+                     [ 2,  1,  7 ],
+                     [ 1,  0,  6 ],
+                     [ 3,  5, 11 ],
+                     [ 5,  4, 10 ],
+                     [ 4,  3,  9 ],
+                     [ 1,  4, 13 ],
+                     [ 0,  3, 12 ],
+                     [ 2,  5, 14 ],
+                     ],dtype=np.uint64)
+
+faceIndx = np.array([[ 0, 2, 1, 0,  8,  7,  6,  0 ],   # Define the face indices of the wedge.
+                     [ 3, 4, 5, 3, 11, 10,  9,  3 ],
+                     [ 0, 1, 4, 3,  6, 13,  9, 12 ],
+                     [ 1, 2, 5, 4,  7, 14, 10, 13 ],
+                     [ 0, 3, 5, 2, 12, 11, 14,  8 ],
+                     ],dtype=np.uint64)
+
+wedge15 = elbase.createElement( 15,             # Number of basis 
+                                2,              # Characteristic order of the polynomials
+                                elWedge,        # Geometric type
+                                elkindIso,      # Kind of element 
+                                3,              # Number of dimensions
+                                wedge15_iso,    # Basis functions.
+                                [point1, line3, quad8],
+                                [ vertexIndx, edgeIndx, faceIndx])
+# ----------------------------------------------------------------------------------------------------
+
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::: END WEDGE ELEMENTS :::::::::::::::::::::::::::::::::::::::::::::::
+# ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
 
@@ -716,6 +823,11 @@ elements['brick'].append(hex1 ) # Order 0
 elements['brick'].append(hex8 ) # Order 1
 elements['brick'].append(hex20) # Order 2
 
+elements['wedge']=[]
+elements['wedge'].append(wedge1 ) # Order 0
+elements['wedge'].append(wedge6 ) # Order 1
+elements['wedge'].append(wedge15) # Order 2
+
 
 
 
@@ -739,3 +851,6 @@ element_list[11] = elements['tetra']
 
 element_list[5 ] = elements['brick']
 element_list[17] = elements['brick']
+
+element_list[6 ] = elements['wedge']
+element_list[18] = elements['wedge']

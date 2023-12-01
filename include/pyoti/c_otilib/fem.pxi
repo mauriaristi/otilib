@@ -76,6 +76,7 @@ cdef extern from "oti/oti.h" nogil:
     elQuadrangle  =  403,
     elTetrahedra  =  404,
     elHexahedra   =  405,
+    elWedge       =  406,
 
     elLineL       =  411,
     elQuadrangleL =  413,

@@ -62,7 +62,7 @@ int64_t fem_intPts_real( uint64_t order, int64_t elementType,
         
         // According to --> 
         // uint64_t nIntPts = (order + 1)/2;
-        uint64_t nIntPts = order ;
+        uint64_t nIntPts = order + 1 ;
 
         // Line element.
         ndim = 1;
@@ -296,7 +296,7 @@ int64_t fem_intPts_real( uint64_t order, int64_t elementType,
         
         // According to --> 
         // uint64_t nIntPts = (order + 1)/2;
-        uint64_t nIntPts = order ;
+        uint64_t nIntPts = order + 1;
 
         // Line element.
         ndim = 1;
@@ -1142,6 +1142,78 @@ int64_t fem_intPts_real( uint64_t order, int64_t elementType,
         fednum_free(     &eta_tmp );
         fednum_free(    &zeta_tmp );
         fednum_free( &weights_tmp );
+    
+    } else if (elementType == elWedge){
+
+        // printf("Initializing elWedge.\n");
+
+        fednum_t      xi_tri_tmp;
+        fednum_t     eta_tri_tmp;
+        fednum_t    zeta_tri_tmp;
+        fednum_t weights_tri_tmp;
+
+        fednum_t      xi_line_tmp;
+        fednum_t     eta_line_tmp;
+        fednum_t    zeta_line_tmp;
+        fednum_t weights_line_tmp;
+
+        sotinum_t val_tmp = soti_init();
+
+        uint64_t currentIndex = 0 ;
+
+        double w_tmp1 = 0.0;
+        double w_tmp2 = 0.0;
+
+        ndim = 3;
+        
+        // Call the solution for the corresponding 1D line element.
+        fem_intPts_real(order, elTriangle, &xi_tri_tmp, &eta_tri_tmp, &zeta_tri_tmp, &weights_tri_tmp);
+        fem_intPts_real(order, elLine, &xi_line_tmp, &eta_line_tmp, &zeta_line_tmp, &weights_line_tmp);
+
+        // Go for all possible combinations for 
+        npoints = xi_tri_tmp.nip * xi_line_tmp.nip;
+
+        // Create as reals
+        *xi      = fednum_zeros( npoints );
+        *eta     = fednum_zeros( npoints );
+        *zeta    = fednum_zeros( npoints );
+        *weights = fednum_zeros( npoints );
+
+        for ( i = 0; i < xi_tri_tmp.nip; i++ ){
+
+            // Get the first weight.
+            fednum_get_item_k_to(     &xi_tri_tmp, i, &val_tmp );  a      = val_tmp.re;
+            fednum_get_item_k_to(    &eta_tri_tmp, i, &val_tmp );  b      = val_tmp.re;
+            fednum_get_item_k_to(&weights_tri_tmp, i, &val_tmp );  w_tmp1 = val_tmp.re;
+
+            for ( j = 0; j < xi_line_tmp.nip; j++ ){
+
+                // Get the second weight.
+                fednum_get_item_k_to(     &xi_line_tmp, j, &val_tmp ); c      = val_tmp.re;
+                fednum_get_item_k_to(&weights_line_tmp, j, &val_tmp ); w_tmp2 = val_tmp.re;
+
+                w = w_tmp1 * w_tmp2;
+
+                fednum_set_item_k_r( a, currentIndex, xi      );
+                fednum_set_item_k_r( b, currentIndex, eta     );
+                fednum_set_item_k_r( c, currentIndex, zeta    );
+                fednum_set_item_k_r( w, currentIndex, weights );
+
+                currentIndex += 1;
+                
+            }
+
+        }
+
+        fednum_free(      &xi_tri_tmp );
+        fednum_free(     &eta_tri_tmp );
+        fednum_free(    &zeta_tri_tmp );
+        fednum_free( &weights_tri_tmp );
+
+        fednum_free(      &xi_line_tmp );
+        fednum_free(     &eta_line_tmp );
+        fednum_free(    &zeta_line_tmp );
+        fednum_free( &weights_line_tmp );
     
     } else {
 

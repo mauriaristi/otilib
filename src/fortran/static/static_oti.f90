@@ -1,6 +1,12 @@
 ! ============================================================================================!
-!> This module includes a sparse implementation of the Order truncated
-!! imaginary numbers for FORTRAN.
+!> This module defines a static implementation of the Order truncated imaginary numbers in 
+!! FORTRAN. Static in the sense that each scalar operation does not require a memory allocation 
+!! request by the program to execute. (at least not explicitly done so by the user). 
+!!
+!! This provides a significant speedup in the final program that uses this module. One specific
+!! note is: do not change manually the first number of integer parameters defined in this 
+!! document, unless you know what you are doing, as these parameters work in conjunction to 
+!! define the properties that will be used by the . 
 !!
 !! Author: Mauricio Aristizabal Cano, PhD.
 !! Initial date:   Oct-19-2023
@@ -56,8 +62,8 @@ MODULE static_oti
    PUBLIC OPERATOR(+)
 
    INTERFACE eps
-      MODULE PROCEDURE sotinum_epsilon_i     ! Create sotinum from integer 
-      ! MODULE PROCEDURE sotinum_epsilon_2i     ! Create sotinum from two integers
+      MODULE PROCEDURE sotinum_epsilon_i       ! Create sotinum from integer 
+      ! MODULE PROCEDURE sotinum_epsilon_2i    ! Create sotinum from two integers
       ! MODULE PROCEDURE sotinum_epsilon_imdir ! Create sotinum from imdir
       ! MODULE PROCEDURE sotinum_epsilon_list  ! Create sotinum from list representing IMDIR
    END INTERFACE
@@ -83,19 +89,30 @@ MODULE static_oti
       TYPE(sotinum), INTENT(OUT) :: res
       ! --------------------------------------------------------------------------------------!
       ! Real
-      res%r = rhs
-      ! No need to initialize imaginary directions. These are controlled by the 
-      res%nnz = 0
+      res%r       = rhs
+      !! Do we need to initialize imaginary directions? 
+      ! res%im = zero
+      ! res%imdir = 0
+      
+      ! Initialization may be controlled only by the following parameters, however this does
+      ! not guarantee that the arrays are initialized to zero or some initial value.
+      res%nnz     = 0
       res%act_ord = 0
-      res%order  = 0
+      res%order   = 0
       !
+      
+
    END SUBROUTINE sotinum_assign_r
    !==========================================================================================!
 
    !==========================================================================================!
-   !>
+   !> @brief Addition between two oti scalars.
+   !! 
+   !!                res = lhs + rhs
    !!
-   !!
+   !! @param[in] lhs Left element of the operation.
+   !! @param[in] rhs righ element of the operation
+   !! 
    !******************************************************************************************!
    FUNCTION sotinum_add_oo_ss(lhs,rhs) RESULT (res)
       ! --------------------------------------------------------------------------------------!
@@ -143,15 +160,21 @@ MODULE static_oti
    !==========================================================================================!
 
    !==========================================================================================!
-   !>
+   !> @brief This function creates an OTI imaginary number with a coefficient 1 along the i'th
+   !! imaginary basis direction. That is, the eps_i direction.
+   !! 
+   !! eps(i) => 0 + 0 *eps([1]) + ... + 1 * eps([i]) + ... + 0 * eps([1,1,1,1]) + ...
    !!
-   !!
+   !! The truncation order of the specified number is controlled by the optional 
+   !! parameter 'order'. 
+   !! 
+   !! @param[in] i
    !******************************************************************************************!
-   FUNCTION sotinum_epsilon_i(base,order) RESULT (res)
+   FUNCTION sotinum_epsilon_i(i,order) RESULT (res)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
-      INTEGER, INTENT(IN) :: base
+      INTEGER, INTENT(IN) :: i
       INTEGER, INTENT(IN),OPTIONAL :: order
       INTEGER(ord_t)      :: i_ord
       TYPE(sotinum)       :: res

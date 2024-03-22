@@ -24,13 +24,14 @@ os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@"
 os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@ -L/home/zkj327/coding/otilib-master/src/fortran/static"
 
 openmp_compile_flag = @CYTHON_OPENMP_COMPILE_FLAG@
-libraries          = ['oti','cwrapm1n1','ifcore','ifcoremt','svml','intlc'] 
+libraries          = ['oti','ifcore','ifcoremt','svml','intlc'] 
+# libraries          = ['oti','cwrapm1n1','ifcore','ifcoremt','svml','intlc'] 
 include_dirs       = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]
 extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"]
 extra_link_args    = ["-O3"]
 macros             = [("CYTHON_TRACE_NOGIL","1")]
 language           = "c"
-dependencies       = ["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a","@CYTHONIZE_BUILD_DIR@/../../src/fortran/static/libcwrapm1n1.a"]
+dependencies       = ["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a",]#,"@CYTHONIZE_BUILD_DIR@/../../src/fortran/static/libcwrapm1n1.a"]
 
 if openmp_compile_flag:
   extra_compile_args += ['@OpenMP_C_FLAGS@']
@@ -99,30 +100,30 @@ Extension("pyoti.fem",
 
 # Uncomment  lines 91 - 114 to enable compilation of static libraries.
 
-# Search for files to compile within the static module.
-files=[]
-src_path = "@CYTHON_SOUCE_DIR@/static/"
-# r=>root, d=>directories, f=>files
-for r, d, f in os.walk(src_path):
-  for item in f:
-    ext = item.split('.')[-1]
-    if ext == 'pyx':
-      files.append(os.path.join(r, item))
-    # end if 
-  # end for 
-  break
-# end for
+# # Search for files to compile within the static module.
+# files=[]
+# src_path = "@CYTHON_SOUCE_DIR@/static/"
+# # r=>root, d=>directories, f=>files
+# for r, d, f in os.walk(src_path):
+#   for item in f:
+#     ext = item.split('.')[-1]
+#     if ext == 'pyx':
+#       files.append(os.path.join(r, item))
+#     # end if 
+#   # end for 
+#   break
+# # end for
 
-# Add all found files to the extensions.
-for f in files:
-  fname = f.replace(src_path,"")
-  name = fname.split(".")[0]
-  extensions.append( Extension("pyoti.static."+name,
-   sources = [f],                             include_dirs = include_dirs,
-   define_macros = macros,                    libraries = libraries,
-   extra_compile_args = extra_compile_args,   depends=dependencies,
-   extra_link_args = extra_link_args        ) )
-# end for 
+# # Add all found files to the extensions.
+# for f in files:
+#   fname = f.replace(src_path,"")
+#   name = fname.split(".")[0]
+#   extensions.append( Extension("pyoti.static."+name,
+#    sources = [f],                             include_dirs = include_dirs,
+#    define_macros = macros,                    libraries = libraries,
+#    extra_compile_args = extra_compile_args,   depends=dependencies,
+#    extra_link_args = extra_link_args        ) )
+# # end for 
 
 
 

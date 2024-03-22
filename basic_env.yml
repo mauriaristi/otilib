@@ -1,6 +1,7 @@
 name: pyoti
 channels:
   - anaconda
+  - conda-forge
   - default
 dependencies:
   - python=3.9.*
@@ -9,10 +10,3 @@ dependencies:
   - cython=0.29.*
   - make
   - pip
-  - ipykernel
-  - pyvista
-  - gmsh
-  - python-gmsh
-  - vtk
-  - scikit-umfpack
-  - scikit-sparse

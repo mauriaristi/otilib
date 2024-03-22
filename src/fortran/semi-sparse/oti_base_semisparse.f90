@@ -1,14 +1,15 @@
 ! ============================================================================================!
-!> This module defines a semi-sparse implementation of the Order truncated
+!> This module defines the sparse implementation of the Order truncated
 !! imaginary numebers in Fortran.
 !!
-!! Author: Mauricio Aristizabal, PhD
-!! Last mod date: 3/21/2024
+!! Author: Mauricio Aristizabal
+!! 
 ! ============================================================================================!
-MODULE oti_semisparse
+MODULE sparse_oti
    ! -----------------------------------------------------------------------------------------!
    USE real_utils
    USE master_parameters
+   ! USE otilib_core
    ! -----------------------------------------------------------------------------------------!
    IMPLICIT NONE
    ! -----------------------------------------------------------------------------------------!
@@ -23,48 +24,50 @@ MODULE oti_semisparse
    INTEGER(imdir_t), PARAMETER, PRIVATE            ::  max_ndir = 34 !< Max. im. dirs supportd.
    INTEGER(imdir_t), PARAMETER, DIMENSION(max_n+1) ::  ndir_order_cum = [ 1, 5, 15, 35 ]
    ! -----------------------------------------------------------------------------------------!
-   TYPE ssoti
-      REAL(dp)                       :: r                  !<- Real coefficient.
-      REAL(dp),                      :: im(max_m,max_n)    !<- Imaginary coefficients. (data)
-      INTEGER(ord_t)                 :: act_ord=0          !<- Actual order of the number. 
-      INTEGER(ord_t)                 :: order=0            !<- Truncation order of the number
+   TYPE sotinum
+      REAL(dp)                       :: r        !<- Real coefficient.
+      REAL(dp), ALLOCATABLE          :: imcoef(:)!<- Imaginary coefficients. (data)
+      INTEGER(imdir_t), ALLOCATABLE  :: imdir(:) !<- Imaginary direction indices. (indices)
+      INTEGER(nnz_t), ALLOCATABLE    :: nnz(:)   !<- Actual number of non-zero coefficients per order. (indptr)
+      INTEGER(ord_t)                 :: act_ord=0!<- Actual order of the number. This is related to the memory allocated.
+      INTEGER(ord_t)                 :: order=0  !<- Truncation order of the number.
    CONTAINS
-      final :: ssoti_destructor
-   END TYPE ssoti
+      final :: sotinum_destructor
+   END TYPE sotinum
    ! -----------------------------------------------------------------------------------------!
    INTERFACE PPRINT
-      MODULE PROCEDURE ssoti_pprint_s!, ssoti_pprint_v, ssoti_pprint_m
+      MODULE PROCEDURE sotinum_pprint_s!, sotinum_pprint_v, sotinum_pprint_m
    END INTERFACE
 
-   INTERFACE PPRINT
-      MODULE PROCEDURE ssoti_pfullprint_s
+   INTERFACE PFULLPRINT
+      MODULE PROCEDURE sotinum_pfullprint_s
    END INTERFACE
 
    INTERFACE ASSIGNMENT(=)
-      MODULE PROCEDURE ssoti_assign_r, ssoti_assign_i
+      MODULE PROCEDURE sotinum_assign_r, sotinum_assign_i
    END INTERFACE
 
    INTERFACE OPERATOR(+)
-      MODULE PROCEDURE ssoti_add_ro_ss, ssoti_add_or_ss
-   !    ssoti_add_oo_ss ! Scalar addition OTI - OTI
+      MODULE PROCEDURE sotinum_add_ro_ss, sotinum_add_or_ss
+   !    sotinum_add_oo_ss ! Scalar addition OTI - OTI
    END INTERFACE
 
    INTERFACE OPERATOR(*)
-      MODULE PROCEDURE ssoti_mul_ro_ss, ssoti_mul_or_ss
+      MODULE PROCEDURE sotinum_mul_ro_ss, sotinum_mul_or_ss
    END INTERFACE
 
    INTERFACE EPS
-      MODULE PROCEDURE ssoti_epsilon_i     ! Create ssoti from integer 
-      ! MODULE PROCEDURE ssoti_epsilon_2i    ! Create ssoti from two integers
-      ! MODULE PROCEDURE ssoti_epsilon_imdir ! Create ssoti from imdir
-      ! MODULE PROCEDURE ssoti_epsilon_list  ! Create ssoti from list representing IMDIR
+      MODULE PROCEDURE sotinum_epsilon_i     ! Create sotinum from integer 
+      ! MODULE PROCEDURE sotinum_epsilon_2i    ! Create sotinum from two integers
+      ! MODULE PROCEDURE sotinum_epsilon_imdir ! Create sotinum from imdir
+      ! MODULE PROCEDURE sotinum_epsilon_list  ! Create sotinum from list representing IMDIR
    END INTERFACE
    ! -----------------------------------------------------------------------------------------!
 
    CONTAINS
 
    !==========================================================================================!
-   !> @brief This function assigns a real scalar to an OTI number object.
+   !> @brief This function assigns a real number to an OTI number object.
    !! 
    !! res = rhs
    !!
@@ -72,25 +75,30 @@ MODULE oti_semisparse
    !! @param[in] rhs: (real) Real number to be assigned.
    !!
    !******************************************************************************************!
-   SUBROUTINE ssoti_assign_r(res,rhs)
+   SUBROUTINE sotinum_assign_r(res,rhs)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
       REAL(dp), INTENT(IN) :: rhs
-      TYPE(ssoti), INTENT(OUT) :: res
+      TYPE(sotinum), INTENT(OUT) :: res
       ! --------------------------------------------------------------------------------------!
       
       ! Real
       res%r = rhs
-      res%im(:) = 0.0 ! Initialized for safety.
-            
-      ! Actual order and order should be initialized to zero, but hereinitialized for safety.
+
+      ! Deallocate memory in case it already was allocated.
+      IF (ALLOCATED(res%imcoef)) DEALLOCATE(res%imcoef)
+      IF (ALLOCATED(res%imdir )) DEALLOCATE(res%imdir )
+      IF (ALLOCATED(res%nnz   )) DEALLOCATE(res%nnz   )
+      
+      ! No need to initialize imaginary directions. These are controlled by the actual order,
+      ! in this case, 0.
       res%act_ord = 0
 
       ! Truncation order is zero for real numbers
       res%order  = 0
       
-   END SUBROUTINE ssoti_assign_r
+   END SUBROUTINE sotinum_assign_r
    !==========================================================================================!
 
    !==========================================================================================!
@@ -102,35 +110,59 @@ MODULE oti_semisparse
    !! @param[in] rhs: (integer) Real number to be assigned.
    !!
    !******************************************************************************************!
-   SUBROUTINE ssoti_assign_i(res,rhs)
+   SUBROUTINE sotinum_assign_i(res,rhs)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
       INTEGER, INTENT(IN) :: rhs
-      TYPE(ssoti), INTENT(OUT) :: res
+      TYPE(sotinum), INTENT(OUT) :: res
       ! --------------------------------------------------------------------------------------!
       
       ! Real
       res = REAL(rhs, DP)
       
-   END SUBROUTINE ssoti_assign_i
+   END SUBROUTINE sotinum_assign_i
+   !==========================================================================================!
+
+
+   !==========================================================================================!
+   !> @brief This function implements the destructor of a type num.
+   !! 
+   !! @param[inout] num: otinum object.
+   !******************************************************************************************!
+   SUBROUTINE sotinum_destructor(num) 
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotinum), INTENT(INOUT) :: num
+      ! --------------------------------------------------------------------------------------!
+      
+      ! Reset value of act_order.
+      num%act_ord = 0
+      
+      ! Deallocate memory.
+      IF (ALLOCATED(num%imcoef)) DEALLOCATE(num%imcoef)
+      IF (ALLOCATED(num%imdir) ) DEALLOCATE(num%imdir )
+      IF (ALLOCATED(num%nnz)   ) DEALLOCATE(num%nnz   )
+
+   END SUBROUTINE sotinum_destructor
    !==========================================================================================!
 
    !==========================================================================================!
-   !> @brief Add real and ssoti 
+   !> @brief Add real and sotinum 
    !! 
    !! lhs + rhs
    !! 
    !! @param[in] lhs: (real) left hand side operation.
-   !! @param[in] rhs: (ssoti) right hand side operation.
+   !! @param[in] rhs: (sotinum) right hand side operation.
    !******************************************************************************************!
-   FUNCTION ssoti_add_ro_ss(lhs,rhs) RESULT (res)
+   FUNCTION sotinum_add_ro_ss(lhs,rhs) RESULT (res)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
       REAL(dp), INTENT(IN)      :: lhs
-      TYPE(ssoti), INTENT(IN) :: rhs
-      TYPE(ssoti)             :: res
+      TYPE(sotinum), INTENT(IN) :: rhs
+      TYPE(sotinum)             :: res
       INTEGER(ord_t) ::i_ord
       INTEGER(nnz_t) ::i_im
 
@@ -166,24 +198,24 @@ MODULE oti_semisparse
 
       END IF 
 
-   END FUNCTION ssoti_add_ro_ss
+   END FUNCTION sotinum_add_ro_ss
    !==========================================================================================!
 
    !==========================================================================================!
-   !> @brief Add  ssoti and real
+   !> @brief Add  sotinum and real
    !! 
    !! lhs + rhs
    !! 
-   !! @param[in] lhs: (ssoti) left hand side operation.
+   !! @param[in] lhs: (sotinum) left hand side operation.
    !! @param[in] rhs: (real) right hand side operation.
    !******************************************************************************************!
-   FUNCTION ssoti_add_or_ss(lhs,rhs) RESULT (res)
+   FUNCTION sotinum_add_or_ss(lhs,rhs) RESULT (res)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
-      TYPE(ssoti), INTENT(IN) :: lhs
+      TYPE(sotinum), INTENT(IN) :: lhs
       REAL(dp), INTENT(IN)      :: rhs
-      TYPE(ssoti)             :: res
+      TYPE(sotinum)             :: res
       INTEGER(ord_t) ::i_ord
       INTEGER(nnz_t) ::i_im
 
@@ -219,24 +251,24 @@ MODULE oti_semisparse
 
       END IF 
 
-   END FUNCTION ssoti_add_or_ss
+   END FUNCTION sotinum_add_or_ss
    !==========================================================================================!
 
    !==========================================================================================!
-   !> @brief Multiply real and ssoti 
+   !> @brief Multiply real and sotinum 
    !! 
    !! lhs * rhs
    !! 
    !! @param[in] lhs: (real) left hand side operation.
-   !! @param[in] rhs: (ssoti) right hand side operation.
+   !! @param[in] rhs: (sotinum) right hand side operation.
    !******************************************************************************************!
-   FUNCTION ssoti_mul_ro_ss(lhs,rhs) RESULT (res)
+   FUNCTION sotinum_mul_ro_ss(lhs,rhs) RESULT (res)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
       REAL(dp), INTENT(IN)      :: lhs
-      TYPE(ssoti), INTENT(IN) :: rhs
-      TYPE(ssoti)             :: res
+      TYPE(sotinum), INTENT(IN) :: rhs
+      TYPE(sotinum)             :: res
       INTEGER(ord_t) :: i_ord
       INTEGER(nnz_t) :: i_im
 
@@ -272,24 +304,24 @@ MODULE oti_semisparse
 
       END IF 
 
-   END FUNCTION ssoti_mul_ro_ss
+   END FUNCTION sotinum_mul_ro_ss
    !==========================================================================================!
 
    !==========================================================================================!
-   !> @brief Multiply  ssoti and real
+   !> @brief Multiply  sotinum and real
    !! 
    !! lhs * rhs
    !! 
-   !! @param[in] lhs: (ssoti) left hand side operation.
+   !! @param[in] lhs: (sotinum) left hand side operation.
    !! @param[in] rhs: (real) right hand side operation.
    !******************************************************************************************!
-   FUNCTION ssoti_mul_or_ss(lhs,rhs) RESULT (res)
+   FUNCTION sotinum_mul_or_ss(lhs,rhs) RESULT (res)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
-      TYPE(ssoti), INTENT(IN) :: lhs
+      TYPE(sotinum), INTENT(IN) :: lhs
       REAL(dp), INTENT(IN)      :: rhs
-      TYPE(ssoti)             :: res
+      TYPE(sotinum)             :: res
       INTEGER(ord_t) ::i_ord
       INTEGER(nnz_t) ::i_im
       ! --------------------------------------------------------------------------------------!
@@ -324,7 +356,7 @@ MODULE oti_semisparse
 
       END IF 
 
-   END FUNCTION ssoti_mul_or_ss
+   END FUNCTION sotinum_mul_or_ss
    !==========================================================================================!
 
    !==========================================================================================!
@@ -335,14 +367,14 @@ MODULE oti_semisparse
    !! @param[in] order(optional): Truncation order to be set to the number. Default 1.
    !!
    !******************************************************************************************!
-   FUNCTION ssoti_epsilon_i(base,order) RESULT (res)
+   FUNCTION sotinum_epsilon_i(base,order) RESULT (res)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
       INTEGER, INTENT(IN) :: base
       INTEGER, INTENT(IN),OPTIONAL :: order
       INTEGER(ord_t)      :: i_ord
-      TYPE(ssoti)       :: res
+      TYPE(sotinum)       :: res
       ! --------------------------------------------------------------------------------------!
 
       ! Create number as a zero. It also Deallocates memory.
@@ -377,7 +409,7 @@ MODULE oti_semisparse
 
       END IF
 
-   END FUNCTION ssoti_epsilon_i
+   END FUNCTION sotinum_epsilon_i
    !==========================================================================================!
 
    ! !==========================================================================================!
@@ -385,7 +417,7 @@ MODULE oti_semisparse
    ! !!
    ! !!
    ! !******************************************************************************************!
-   ! FUNCTION ssoti_epsilon_2i(idx,ordin,order) RESULT (res)
+   ! FUNCTION sotinum_epsilon_2i(idx,ordin,order) RESULT (res)
    !    ! --------------------------------------------------------------------------------------!
    !    IMPLICIT NONE
    !    ! --------------------------------------------------------------------------------------!
@@ -394,7 +426,7 @@ MODULE oti_semisparse
    !    INTEGER, INTENT(IN),OPTIONAL :: order
    !    INTEGER(ord_t)      :: i_ord
    !    INTEGER(imdir_t)    :: i_idx
-   !    TYPE(ssoti)       :: res
+   !    TYPE(sotinum)       :: res
    !    ! --------------------------------------------------------------------------------------!
 
    !    res = zero
@@ -417,27 +449,27 @@ MODULE oti_semisparse
    !    END IF
 
 
-   ! END FUNCTION ssoti_epsilon_2i
+   ! END FUNCTION sotinum_epsilon_2i
    ! !==========================================================================================!
 
 
 
-   ! ssoti_pfullprint_s
+   ! sotinum_pfullprint_s
    !==========================================================================================!
-   !> @ brief This function prints in a human friendly manner a ssoti object.
+   !> @ brief This function prints in a human friendly manner a sotinum object.
    !! 
-   !! @param[in] num: ssoti object to be printed.
+   !! @param[in] num: sotinum object to be printed.
    !! @param[in] fmt(optional): Format of the real coefficients to be printed. Default: 'F10.4'
    !! @param[in] unit(optional): Unit to print. Default 6.
    !! @param[in] advance(optional): if 'YES', advance to next line, otherwise sets . Default 'YES'.
    !!
    !******************************************************************************************!
-   SUBROUTINE ssoti_pfullprint_s(num, fmt, unit, advance)
+   SUBROUTINE sotinum_pfullprint_s(num, fmt, unit, advance)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
       ! Inputs
-      TYPE(ssoti), INTENT(IN), TARGET      :: num
+      TYPE(sotinum), INTENT(IN), TARGET      :: num
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: fmt
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: advance
       INTEGER, INTENT(IN), OPTIONAL          :: unit
@@ -493,25 +525,25 @@ MODULE oti_semisparse
 
       WRITE(unt,'(A)',advance=advance_option) ''
       !
-   END SUBROUTINE ssoti_pfullprint_s
+   END SUBROUTINE sotinum_pfullprint_s
    !==========================================================================================!
 
 
    !==========================================================================================!
-   !> @ brief This function prints in a human friendly manner a ssoti object.
+   !> @ brief This function prints in a human friendly manner a sotinum object.
    !! 
-   !! @param[in] num: ssoti object to be printed.
+   !! @param[in] num: sotinum object to be printed.
    !! @param[in] fmt(optional): Format of the real coefficients to be printed. Default: 'F10.4'
    !! @param[in] unit(optional): Unit to print. Default 6.
    !! @param[in] advance(optional): if 'YES', advance to next line, otherwise sets . Default 'YES'.
    !!
    !******************************************************************************************!
-   SUBROUTINE ssoti_pprint_s(num, fmt, unit, advance)
+   SUBROUTINE sotinum_pprint_s(num, fmt, unit, advance)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
       ! Inputs
-      TYPE(ssoti), INTENT(IN), TARGET      :: num
+      TYPE(sotinum), INTENT(IN), TARGET      :: num
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: fmt
       CHARACTER(len=*), INTENT(IN), OPTIONAL :: advance
       INTEGER, INTENT(IN), OPTIONAL          :: unit
@@ -570,7 +602,7 @@ MODULE oti_semisparse
 
       WRITE(unt,'(A)',advance=advance_option) ''
       !
-   END SUBROUTINE ssoti_pprint_s
+   END SUBROUTINE sotinum_pprint_s
    !==========================================================================================!
       
 

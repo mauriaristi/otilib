@@ -316,6 +316,25 @@ MODULE OTIM1N1
 
    END FUNCTION ONUMM1N1_MUL_OO_SS
 
+   FUNCTION ONUMM1N1_MUL_OO_VV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N1), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N1), INTENT(IN) :: RHS(:)
+      TYPE(ONUMM1N1) :: RES(SIZE(LHS,1))
+
+      INTEGER::i
+
+      !  Multiplication like function 'LHS*RHS'
+      DO i=1,SIZE(LHS,1)
+         ! Order 1
+         RES(i)%E1 = LHS(i)%R*RHS(i)%E1 + LHS(i)%E1*RHS(i)%R
+         ! Order 0
+         RES(i)%R = LHS(i)%R*RHS(i)%R    
+      end do
+
+   END FUNCTION ONUMM1N1_MUL_OO_VV
+
    ELEMENTAL FUNCTION ONUMM1N1_MUL_RO_SS(LHS,RHS)&
       RESULT(RES)
       IMPLICIT NONE

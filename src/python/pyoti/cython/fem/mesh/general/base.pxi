@@ -532,7 +532,7 @@ cdef class mesh:
           vtk_array.SetName(pd_names[i])
 
           vtk_grid.GetPointData().SetScalars(vtk_array)
-
+          
         elif pdi.shape[1] == 1:
 
           # Setting 1D data
@@ -540,14 +540,16 @@ cdef class mesh:
           vtk_array.SetName(pd_names[i])
 
           vtk_grid.GetPointData().SetScalars(vtk_array)
-
+          
         else:
           
           vtk_array = np_support.numpy_to_vtk(pdi,deep=1)
           vtk_array.SetName(pd_names[i])
-
+          vtk_obj = vtk_grid.GetPointData().GetVectors()
           vtk_grid.GetPointData().SetVectors(vtk_array)
-
+          if vtk_obj is not None:
+            vtk_grid.GetPointData().AddArray(vtk_obj)
+          # end if
         # end if
       # end for 
     # end if 

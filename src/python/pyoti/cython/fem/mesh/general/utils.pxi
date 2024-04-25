@@ -202,7 +202,7 @@ def get_elements_from_gmsh( mesh, dim=-1, tag=-1 ):
 #*****************************************************************************************************
 def map_indices(idxSrc,idxMap):
   """
-  PORPUSE: 
+  PURPOSE: 
   """
   #***************************************************************************************************
   srcShape = idxSrc.shape
@@ -224,7 +224,7 @@ def map_indices(idxSrc,idxMap):
 #*****************************************************************************************************
 def line(double a, double b, double he = 1.0, ndivs = None, element_order = 1, save=False, real= False):
   """
-  PORPUSE: Define a 1D line mesh in the domain [a,b] with an element size he. The order of the element
+  PURPOSE: Define a 1D line mesh in the domain [a,b] with an element size he. The order of the element
   can be specified. 
 
   The output contains the physical groups named as follows:
@@ -237,6 +237,7 @@ def line(double a, double b, double he = 1.0, ndivs = None, element_order = 1, s
   @param[in] a <float> Starting point.
   @param[in] b <float> Ending point. 
   @param[in] he <float> Element size. (default he = 1.0)
+  @param[in] ndivs<int> Number of subdivisions of the line.(default None)
   @param[in] element_order: Order of polynomial basis functions of the elements in the mesh 
                             (int, default element_order = 1).
   @param[in] save: Bool to save mesh into file (bool, default save = False).
@@ -276,8 +277,10 @@ def line(double a, double b, double he = 1.0, ndivs = None, element_order = 1, s
   option.setNumber('Mesh.ElementOrder',element_order)
   
   if ndivs is not None:
+  
     # Set number of divisions
-    model.mesh.setTransfiniteCurve(L1, ndivs)
+    model.mesh.setTransfiniteCurve(L1, ndivs + 1 )
+  
   # end if 
 
   model.mesh.generate(1)
@@ -301,7 +304,7 @@ def line(double a, double b, double he = 1.0, ndivs = None, element_order = 1, s
 def square(double width, double hight, double he = 1e30, ndivs = None, element_order = 1, quads = False, 
            quad_incomplete = 1, quad_linear = 1, structured = False, save=False, real= False):
   """
-  PORPUSE: Define a square mesh.
+  PURPOSE: Define a square mesh.
 
   @param[in] width <float>: Width of the square.
   @param[in] hight <float>: Height of the square.
@@ -432,7 +435,7 @@ def square(double width, double hight, double he = 1e30, ndivs = None, element_o
 #*****************************************************************************************************
 cpdef op_int2d(mesh Th, matso f, intorder = None, region = None ):
   """
-  PORPUSE: Integrate over 2D elements.
+  PURPOSE: Integrate over 2D elements.
   """
   #***************************************************************************************************
   

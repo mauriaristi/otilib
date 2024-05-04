@@ -1,22 +1,13 @@
-# Include required libraries:
-
-# 1. SET GLOBAL PATH TO INCLUDE REQUIRED LIBRARIES 
-import sys
-path2oti = '../../../build'
-sys.path.append(path2oti) # Add path to OTI library.
-
-
-
-# 2. IMPORT OTI LIBRARY.
+# 1. IMPORT OTI LIBRARY.
 from pyoti.core import imdir
 import pyoti.sparse as oti
 
-# 3. IMPORT NUMPY.
+# 2. IMPORT NUMPY.
 import numpy as np
 
 
 # ****************************************************************************************************
-def ode_step(F,y0,t0,eps=1e-3,order = 5, dt_tol = 1e-11):
+def ode_step(F,x0,t0,eps=1e-3,order = 5, dt_tol = 1e-11):
     """
     PURPOSE: This function performs an integration step of function F given the input values, 
              using OTI numbers

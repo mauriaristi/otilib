@@ -1,12 +1,14 @@
+# OTILIB: An opensource library for arbitrary-order automatic differentiation using Order Truncated Imaginary (OTI) Numbers.
+
 # OVERVIEW #
 
 **OTILIB** 
 
-This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers is the extension of Dual numbers such that they can compute high order derivatives with respect to multiple variables. OTIs provide a concise extension of the Dual numbers ( a + b eps, eps^2 = 0 ) and are applicable to computing high order derivatives of computer functions at execution time.
+This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers is the extension of Dual numbers to compute high-order derivatives with respect to multiple variables. OTIs provide a concise extension of the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ) and are applicable to computing high order derivatives of computer functions at execution time.
 
-OTI numbers are hereby implemented in multiple programming languages. The core implementation is in C and supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, etc.
+OTI numbers are herein implemented in multiple programming languages. The core implementation is in C and supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, etc.
 
-Ongoing research is currently being developed in order to determine the best implementation version of OTIs. 
+Ongoing research is currently towards efficient implementation of a Fortran version to determine the best implementation version of OTIs. 
 
 Currently three implementations are supported: 
 * Dynamic-Dense, 
@@ -19,10 +21,10 @@ All implementations so far are serial. It is expected in the near future to supp
 ## Current Programming languages: 
 * **C** (C99) Core routines.
 * **Python** (Version 3 or newer. This library requires [Cython](http://cython.org)
+* **Fortran** (F95 or newer, only dense implementation so far)
 
 The following programming languages will be implemented in a very near future:
 
-* **Fortran** (F95 or newer, only dense implementation so far)
 * **Swift**
 * **Julia**
 

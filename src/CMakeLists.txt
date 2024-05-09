@@ -75,7 +75,8 @@ elseif(UNIX)
 endif(APPLE)    
 
 # Link to math libraries
-target_link_libraries(oti m ifcore cwrapm1n1 ${LINK_TARGET_OMP})
+# target_link_libraries(oti m ifcore cwrapm1n1 ${LINK_TARGET_OMP})
+target_link_libraries(oti m cwrapm1n1 ${LINK_TARGET_OMP})
 
 # -------------------------------------------------------------------
 # --------------------------- BUILD OTI -----------------------------

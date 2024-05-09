@@ -2,7 +2,7 @@
 # Set gfortran or ifort to compile
 # FC = ifort
 FC = ifx # Default compiler
-
+FC = gfortran
 # Flags:
 #   -O3: Optimization level 3 for best performance. O2 for great perf. with more robustness.
 #   -fPIC: For shared library.

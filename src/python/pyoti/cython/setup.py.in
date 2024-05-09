@@ -24,7 +24,7 @@ os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@"
 os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@ -L/home/zkj327/coding/otilib-master/src/fortran/static"
 
 openmp_compile_flag = @CYTHON_OPENMP_COMPILE_FLAG@
-libraries          = ['oti','ifcore','ifcoremt','svml','intlc'] 
+libraries          = ['oti']#,'ifcore','ifcoremt','svml','intlc'] 
 # libraries          = ['oti','cwrapm1n1','ifcore','ifcoremt','svml','intlc'] 
 include_dirs       = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]
 extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"]
@@ -40,7 +40,7 @@ if openmp_compile_flag:
 
 if platform.system() == 'Darwin': # macOS specific.
   libraries          += ['omp']
-  extra_compile_args += ["@OpenMP_EXTRA_INCLUDE_FLAGS@" ]
+  extra_compile_args += ["@OpenMP_EXTRA_INCLUDE_FLAGS@"]
   extra_link_args    += ["@OpenMP_EXTRA_LINK_FLAGS@" ]
 # end if 
 

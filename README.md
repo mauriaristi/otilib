@@ -83,17 +83,9 @@ Finally, to build the library, run the following commands:
 
 ```
 cd path/to/src/otilib
-```
-```
 mkdir build
-```
-```
 cd build
-```
-```
 cmake ..
-```
-```
 make
 ```
  

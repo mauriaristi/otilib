@@ -1,4 +1,6 @@
-# OTILIB: An opensource library for arbitrary-order automatic differentiation using Order Truncated Imaginary (OTI) Numbers.
+# OTIlib: 
+
+An open source library for Order Truncated Imaginary (OTI) Numbers. An algebra for efficient arbitrary-order, multivariate differentiation.
 
 # OVERVIEW #
 

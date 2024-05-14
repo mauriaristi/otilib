@@ -1,6 +1,6 @@
 ! ============================================================================================!
 !> This module defines a semi-sparse implementation of the Order truncated
-!! imaginary numebers in Fortran.
+!! imaginary numbers in Fortran.
 !!
 !! Author: Mauricio Aristizabal, PhD
 !! Last mod date: 3/21/2024

@@ -1,5 +1,6 @@
 
 from pyoti.core import get_dHelp, whereotilib, get_deriv_factor, np
+from pyoti.core import ndir_total, ndir_order
 
 h = get_dHelp()
 
@@ -27,7 +28,7 @@ class writer:
 
   #***************************************************************************************************
   def __init__(self, nbases, order, language = 'fortran', tab = "  ", coeff_type = "REAL(DP)", 
-    base_name = None, mdual = False, order_bound=False, order_check = False ):
+    base_name = None, mdual = False, diagonal=False, order_bound=False, order_check = False ):
     """
     PORPUSE:  The purpose of this class is to create a Fortran Module that allows static dense
               implementations of OTI and Multidual algebras.
@@ -39,13 +40,16 @@ class writer:
       coeff_type; Default coefficient type. Default coeff_type = "REAL(DP)"
       base_name: Name of the type to be generated. If None, it will be set automatically. 
                  Default type_name = None
-      mdual: Flag to generate MultiDual algebra instead of OTI. Default mdual = False
-
+      mdual: Flag to generate MultiDual algebra instead of OTI. Default mdual=False
+      diagonal: Flago to generate diagonal OTI numbers instead. Default diaonal=False
+      order_bound: Default order_bound=False
+      order_check: Default order_check=False
     """
 
     global imdir_base_name
     
     self.mdual = mdual
+    self.diagonal = diagonal
     self.order_check = order_check
     
     if self.mdual:
@@ -68,12 +72,16 @@ class writer:
 
     self.new_line_mark = '&'
     self.real_str = 'R'
-    self.zero = '0.0_DP'
+    self.zero = '0.0_dp'
     self.basename = "O"
 
     if self.mdual :
 
       self.basename = "MD"
+
+    elif self.diagonal :
+
+      self.basename = "DO"
 
     # end if 
 
@@ -102,6 +110,10 @@ class writer:
 
       self.nimdir = h.get_ndir_total(self.nbases, self.order)
 
+    elif self.diagonal:
+      
+      self.nimdir = (self.order*self.nbases) + 1 
+
     else:
 
       self.nimdir = 2**order
@@ -127,43 +139,61 @@ class writer:
       self.name_imdir.append( [] )
       self.use_imdir.append( [] )
       self.idx_imdir.append( [] )
-      
-      nimdir_i = h.get_ndir_order(self.nbases, ordi)
 
-      for j in range(nimdir_i):
+      if self.diagonal:
         
-        str_out = imdir_base_name
+        nimdir_i = self.nbases
 
-        list_bases = h.get_fulldir(j,ordi)
-        
-        for i in range(list_bases.size):
-
-          str_out += valid_chars[list_bases[i]]
-
-        # end for 
-
-        if not self.mdual:
+        for j in range(nimdir_i):
           
-          self.name_imdir[ordi].append(str_out)  
+          str_out = imdir_base_name + ordi*valid_chars[j+1]
+          self.name_imdir[ordi].append(str_out)
           self.use_imdir[ordi].append(True)
           self.idx_imdir[ordi].append(j)
 
-        else:
+        # end for 
+
+      else:
+      
+        nimdir_i = h.get_ndir_order(self.nbases, ordi)
+
+        for j in range(nimdir_i):
           
-          # Check if it is a valid multidual direction.
-          str_test = "".join(dict.fromkeys(str_out))
+          str_out = imdir_base_name
+
+          list_bases = h.get_fulldir(j,ordi)
           
-          if str_test == str_out:
-          
-            self.name_imdir[ordi].append(str_out)
+          for i in range(list_bases.size):
+
+            str_out += valid_chars[list_bases[i]]
+
+          # end for 
+
+          if self.mdual:
+            
+            # Check if it is a valid multidual direction.
+            str_test = "".join(dict.fromkeys(str_out))
+            
+            if str_test == str_out:
+            
+              self.name_imdir[ordi].append(str_out)
+              self.use_imdir[ordi].append(True)
+              self.idx_imdir[ordi].append(j)
+            
+            # end if 
+
+          else:
+
+            self.name_imdir[ordi].append(str_out)  
             self.use_imdir[ordi].append(True)
             self.idx_imdir[ordi].append(j)
-          
-          # end if 
+            
+            
+          # end if
 
-        # end if
+        # end for 
 
-      # end for 
+      # end if 
 
     # end for 
 
@@ -198,11 +228,26 @@ class writer:
         for j in range(len(dirsj)):
           for k in range(len(dirsk)):
 
-            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+            if self.diagonal:
+
+              if j == k :
+                i = j
+              else:
+                i = -1
+              # end if
+
+            else:
+
+              i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+
+            # end if
 
             if i in idxi:
+
               ii = idxi.index(i)
+
               mults[ii].append([ dirsj[j], dirsk[k] ])
+
               if  ordj != ordk:
                 mults[ii].append([ dirsk[k],dirsj[j] ])
               # end if 
@@ -260,8 +305,15 @@ class writer:
 
         for j in range(len(dirsj)):
           for k in range(len(dirsk)):
-
-            i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+            if self.diagonal:
+              if j == k :
+                i = j
+              else:
+                i = -1
+              # end if
+            else:
+              i,iordi = h.mult_dir(idxj[j],ordj,idxk[k],ordk)
+            # end if 
 
             if i in idxi:
               ii = idxi.index(i)
@@ -333,9 +385,9 @@ class writer:
     str_out = ""
 
     # str_out += level + "INTEGER, PARAMETER :: DP         = 8\n"
-    str_out += level + "INTEGER, PARAMETER :: NUM_IM_DIR = " + str(self.nimdir) + self.endl
-    str_out += level + "INTEGER, PARAMETER :: TORDER     = " + str(self.order) + self.endl
-    str_out += level + "INTEGER, PARAMETER :: N_IMDIR_ORDER("+str(self.order+1)+") = [" 
+    str_out += level + "INTEGER, PARAMETER :: num_im_dir = " + str(self.nimdir) + self.endl
+    str_out += level + "INTEGER, PARAMETER :: torder     = " + str(self.order) + self.endl
+    str_out += level + "INTEGER, PARAMETER :: n_imdir_order("+str(self.order+1)+") = [" 
     
     l=0
     
@@ -427,9 +479,9 @@ class writer:
           for i in range(len(dirsj)):
             
             if dirsj[i] == active_dir:
-              str_out += "1.0_DP,"
+              str_out += "1.0_dp,"
             else:
-              str_out += "0.0_DP,"
+              str_out += "0.0_dp,"
             # end if 
 
           # end for
@@ -450,7 +502,7 @@ class writer:
 
 
   #***************************************************************************************************
-  def addition_like_oo(self, level = "", operator = " + ", lhs_name= "LHS",rhs_name= "RHS", res_name = "RES"):
+  def addition_like_oo(self, level = "", operator = " + ", lhs_name= "lhs",rhs_name= "rhs", res_name = "res"):
     """
     PORPUSE:  Addition like operation between two OTIs.
     """
@@ -485,7 +537,7 @@ class writer:
 
   
   #***************************************************************************************************
-  def addition_like_ro(self, level = "", operator = " + ", lhs_name= "LHS",rhs_name= "RHS", res_name = "RES"):
+  def addition_like_ro(self, level = "", operator = " + ", lhs_name= "lhs",rhs_name= "rhs", res_name = "res"):
     """
     PORPUSE:  Addition like operation between real and OTIs. (LHS is REAL and RHS is OTI)
     """
@@ -520,7 +572,7 @@ class writer:
 
 
   #***************************************************************************************************
-  def addition_like_or(self, level = "", operator = " + ", lhs_name= "LHS",rhs_name= "RHS", res_name = "RES"):
+  def addition_like_or(self, level = "", operator = " + ", lhs_name= "lhs",rhs_name= "rhs", res_name = "res"):
     """
     PORPUSE:  Addition like operation between real and OTIs.  (LHS is OTI and RHS is REAL)
     """
@@ -559,7 +611,7 @@ class writer:
 
 
   #***************************************************************************************************
-  def multiplication_like_ro(self, level = "", operator = " * ", lhs_name= "LHS",rhs_name= "RHS", res_name = "RES"):
+  def multiplication_like_ro(self, level = "", operator = " * ", lhs_name= "lhs",rhs_name= "rhs", res_name = "res"):
     """
     PORPUSE:  multiplication like operation between real and OTIs. (LHS is REAL and RHS is OTI)
     """
@@ -593,8 +645,8 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
-  def multiplication_like_or(self, level = "", operator = " * ", lhs_name= "LHS",rhs_name= "RHS", 
-    res_name = "RES"):
+  def multiplication_like_or(self, level = "", operator = " * ", lhs_name= "lhs",rhs_name= "rhs", 
+    res_name = "res"):
     """
     PORPUSE:  multiplication like operation between real and OTIs. (LHS is REAL and RHS is OTI)
     """
@@ -628,8 +680,8 @@ class writer:
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
-  def multiplication_like_function_ro(self, level = "", f_name = "FUNCTION", lhs_name= "LHS",
-    rhs_name= "RHS", res_name = "RES", separator = ",",f_open = "(", f_close = ")"):
+  def multiplication_like_function_ro(self, level = "", f_name = "FUNCTION", lhs_name= "lhs",
+    rhs_name= "rhs", res_name = "res", separator = ",",f_open = "(", f_close = ")"):
     """
     PORPUSE:  multiplication like operation between real and OTIs. (LHS is REAL and RHS is OTI)
     """
@@ -672,8 +724,8 @@ class writer:
   #--------------------------------------------------------------------------------------------------- 
 
   #***************************************************************************************************
-  def multiplication_like_function_or(self, level = "", f_name = "FUNCTION", lhs_name= "LHS",
-    rhs_name= "RHS", res_name = "RES", separator = ",", f_open = "(", f_close = ")"):
+  def multiplication_like_function_or(self, level = "", f_name = "FUNCTION", lhs_name= "lhs",
+    rhs_name= "rhs", res_name = "res", separator = ",", f_open = "(", f_close = ")"):
     """
     PORPUSE:  multiplication like operation between real and OTIs. (LHS is REAL and RHS is OTI)
     """
@@ -715,8 +767,8 @@ class writer:
   #---------------------------------------------------------------------------------------------------  
 
   # ***************************************************************************************************
-  def multiplication_like_function_oo(self, level = "", f_name = "FUNCTION", lhs_name= "LHS", 
-    rhs_name= "RHS", res_name = "RES", separator = ",", f_open = "(", f_close = ")", 
+  def multiplication_like_function_oo(self, level = "", f_name = "FUNCTION", lhs_name= "lhs", 
+    rhs_name= "rhs", res_name = "res", separator = ",", f_open = "(", f_close = ")", 
     addition = " + ", lhs_order = 0, rhs_order =0, comment = True, inverted = True ):
     """
     PORPUSE:  Multiplication like operation between OTI and OTI.
@@ -809,8 +861,8 @@ class writer:
 
 
   #***************************************************************************************************
-  def addition_like_function_oo(self, level = "", f_name = "FUNCTION", lhs_name= "LHS",
-    rhs_name= "RHS", res_name = "RES", separator = ",", f_open = "(", f_close = ")", 
+  def addition_like_function_oo(self, level = "", f_name = "FUNCTION", lhs_name= "lhs",
+    rhs_name= "rhs", res_name = "res", separator = ",", f_open = "(", f_close = ")", 
     addition = " + "  ):
     """
     PORPUSE:  Addition like function between two OTIs.
@@ -3236,9 +3288,11 @@ class writer:
     str_out = ""
 
     if self.mdual:
-      module_name = "MDUAL"+str(self.nbases)
+      module_name = "mdual"+str(self.nbases)
+    elif self.diagonal:
+      module_name = "diagotim"+str(self.nbases)+"n"+str(self.order)
     else:
-      module_name = "OTIM"+str(self.nbases)+"N"+str(self.order)
+      module_name = "otim"+str(self.nbases)+"n"+str(self.order)
     # end if 
 
     fname = module_name.lower()+'.f90'    

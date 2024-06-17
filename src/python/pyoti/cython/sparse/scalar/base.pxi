@@ -5,6 +5,100 @@
 # ::::::::::::::::::::::::::::::::     CLASS  SPR_OTINUM   :::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 cdef class sotinum:
+  """
+  This is the base class that supports sparse OTI numbers (scalars). 
+  This class provides operator overloads to must arithmetic operations and elementary functions
+  to seamlessly support OTI-algebra within python functions.
+
+  The constructor of the sotinum class contains the following elements:
+
+  :param re_coeff: Real coefficient of the imaginary number.
+  :type re_coeff: float
+  :param nbases: Number of bases to allocate memory.
+  :type nbases: int, optional
+  :param order: Truncation order of the number.
+  :type order: int, optional
+  :param FLAGS: Integer with flags associated to this object. The first bit active (FLAGS & 1) 
+                indicates that the memory is owned by this instance of the object.
+  :type FLAGS: int, optional
+  :param nnz: Integer list with number of non-zeroes per order to allocate memory.
+  :type nnz: list, optional
+
+
+  The attributes of a sotinum object are the following:
+
+  :attr real: Real coefficient of the sotinum object (float)
+
+  :cvar order: Truncation order of the number (int).
+  :cvar actual_order: Actual order of the number (int). Typically actual_order <= order
+  :cvar nnz: Number of non zero coefficients in the number.
+  :cvar FLAGS: Flags of the object (int).
+
+  This class provides overloads to the following operators (a and b are sotinum objects):
+
+  .. list-table:: Overloaded operations
+    :widths: 50 25 25
+    :header-rows: 1
+
+    * - Operator 
+      - Symbol
+      - Notes 
+    * - Negation
+      - ``-x``
+      - 
+    * - Addition
+      - ``x+y``
+      - 
+    * - Subtraction
+      - ``x-y``
+      - 
+    * - Multiplication
+      - ``x*y``
+      - 
+    * - Division
+      - ``x/y``
+      - 
+    * - Power
+      - ``x**y``
+      - 
+    * - Sine
+      - ``sin(x)``
+      - 
+    * - Cosine
+      - ``cos(x)``
+      - 
+    * - Tangent
+      - ``tan(x)``
+      - 
+    * - Hyperbolic Sine
+      - ``sinh(x)``
+      - 
+    * - Hyperbolic Cosine
+      - ``cosh(x)``
+      - 
+    
+  Example:
+  
+  .. code-block:: python
+    :linenos:
+
+    import pyoti.sparse as oti
+
+    x = oti.sotinum(1.5,nbases=3,order=1)
+    print(x)
+    
+    # Set the first order imaginary directions to 1.
+    x[[0,1]] = 1
+    x[[1,1]] = 2
+    x[[2,1]] = 3
+
+    print(x)
+
+  .. code-block:: python
+    
+    >>> 1.5 + 1 * e([1]) + 2 * e([2]) + 3 * e([3])
+
+  """
   
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
@@ -881,10 +975,11 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef set(self, object rhs):
     """
-    PURPOSE:  Sets from another value.
-
-    INPUTS:
-    - val: Value to be set. Can be either real or an oti number.
+    Set the sotinum's object coefficients from the given value. This can be useful to avoid 
+    unnecessary memory allocations.
+    
+    :param val: Value to be set. 
+    :type val: float, int or sotinum. 
 
     """
     #*************************************************************************************************
@@ -910,11 +1005,13 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef  set_im( self,  object val, object humdir):
     """
-    PURPOSE:      to set a specific imaginary direction as given.
+    Set a specific imaginary direction with the given coefficient.
 
     INPUTS:
-    - val:    Value to be set. Can be OTI in nature or real only.
-    - humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
+    :param val:  Value to be set.
+    :type val: float, int
+    :param humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
+    :type val: int or list.
 
     """
     #*************************************************************************************************

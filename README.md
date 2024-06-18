@@ -1,6 +1,14 @@
-# OTIlib: 
+# OTIlib and pyoti 
 
+<p align="center">
 An open source library for Order Truncated Imaginary (OTI) Numbers. An algebra for efficient arbitrary-order, multivariate differentiation.
+</p>
+
+Useful links:
+
+* [Documentation](https://mauriaristi.github.io/otilib/) (work in progress)
+* Theory, references, lecture notes and other information on Hypercomplex-based Automatic Differentiation [HYPAD](https://ceid.utsa.edu/HYPAD/).
+
 
 # OVERVIEW #
 

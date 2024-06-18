@@ -1,7 +1,8 @@
 # OTIlib and pyoti 
 
 <p align="center">
-An open source library for Order Truncated Imaginary (OTI) Numbers. An algebra for efficient arbitrary-order, multivariate differentiation.
+An open source library for Order Truncated Imaginary (OTI) Numbers. 
+An algebra for efficient arbitrary-order, multivariate differentiation.
 </p>
 
 Useful links:

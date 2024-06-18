@@ -1,6 +1,0 @@
-#ifndef OTI_ONUMM4N4_SCALAR_UTILS_H
-#define OTI_ONUMM4N4_SCALAR_UTILS_H
-
-
-
-#endif

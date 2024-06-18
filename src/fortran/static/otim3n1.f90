@@ -1842,7 +1842,7 @@ FUNCTION ONUMM3N1_GETIM_M(VAL,IDX) RESULT(RES)
   END FUNCTION ONUMM3N1_norm2_3
   !===================================================================================================! 
 
-  FUNCTION ONUMM3N1_DIVISION_OO(X,Y) RESULT(RES)
+  ELEMENTAL FUNCTION ONUMM3N1_DIVISION_OO(X,Y) RESULT(RES)
       IMPLICIT NONE
       REAL(DP) :: DERIVS(TORDER + 1) 
       TYPE(ONUMM3N1), INTENT(IN) :: X

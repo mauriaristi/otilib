@@ -24,15 +24,50 @@ SUBROUTINE oarrm1n1_sin_f(lhs,res) BIND(C)
    ! Associate the c-pointers of the C-structure to an array-like structure in fortran.
    CALL c_f_pointer( lhs%p_data, lhsarray, [lhs%size])
    CALL c_f_pointer( res%p_data, resarray, [res%size])
+   
    resarray = sin(lhsarray)
-   ! !$OMP PARALLEL DO
-   ! DO i=1,lhs%size
-   !    resarray(i) = sin(lhsarray(i))
-   ! END DO
-   ! !$OMP END PARALLEL DO
 
 END SUBROUTINE oarrm1n1_sin_f
 
+SUBROUTINE oarrm1n1_div_aa_f(lhs,rhs,res) BIND(C)
+
+   IMPLICIT NONE
+
+   TYPE(oarrm1n1_t), INTENT(IN)  :: lhs 
+   TYPE(oarrm1n1_t), INTENT(IN)  :: rhs
+   TYPE(oarrm1n1_t), INTENT(INOUT) :: res 
+   TYPE(onumm1n1), POINTER :: lhsarray(:), resarray(:), rhsarray(:)
+   INTEGER :: i
+
+   ! Associate the c-pointers of the C-structure to an array-like structure in fortran.
+   CALL c_f_pointer( lhs%p_data, lhsarray, [lhs%size])
+   CALL c_f_pointer( rhs%p_data, rhsarray, [rhs%size])
+   CALL c_f_pointer( res%p_data, resarray, [res%size])
+   
+   resarray = lhsarray/rhsarray
+
+
+END SUBROUTINE oarrm1n1_div_aa_f
+
+SUBROUTINE oarrm1n1_mul_aa_f(lhs,rhs,res) BIND(C)
+
+   IMPLICIT NONE
+
+   TYPE(oarrm1n1_t), INTENT(IN)  :: lhs 
+   TYPE(oarrm1n1_t), INTENT(IN)  :: rhs
+   TYPE(oarrm1n1_t), INTENT(INOUT) :: res 
+   TYPE(onumm1n1), POINTER :: lhsarray(:), resarray(:), rhsarray(:)
+   INTEGER :: i
+
+   ! Associate the c-pointers of the C-structure to an array-like structure in fortran.
+   CALL c_f_pointer( lhs%p_data, lhsarray, [lhs%size])
+   CALL c_f_pointer( rhs%p_data, rhsarray, [rhs%size])
+   CALL c_f_pointer( res%p_data, resarray, [res%size])
+   
+   resarray = lhsarray*rhsarray
+
+
+END SUBROUTINE oarrm1n1_mul_aa_f
 
 SUBROUTINE oarrm1n1_cos_f(lhs,res) BIND(C)
 
@@ -270,6 +305,22 @@ SUBROUTINE oarrm1n1_pow_f(lhs,exponent,res) BIND(C)
    resarray = lhsarray**exponent
 
 END SUBROUTINE oarrm1n1_pow_f
+
+SUBROUTINE oarrm1n1_sqrt_f(lhs,res) BIND(C)
+ 
+   IMPLICIT NONE
+ 
+   TYPE(oarrm1n1_t), INTENT(IN)    :: lhs 
+   TYPE(oarrm1n1_t), INTENT(INOUT) :: res 
+   TYPE(onumm1n1), POINTER :: lhsarray(:), resarray(:)
+ 
+   ! Associate the c-pointers of the C-structure to an array-like structure in fortran.
+   CALL c_f_pointer( lhs%p_data, lhsarray, [lhs%size])
+   CALL c_f_pointer( res%p_data, resarray, [res%size])
+ 
+   resarray = lhsarray**(0.5d0)
+ 
+END SUBROUTINE oarrm1n1_sqrt_f
 
 
 

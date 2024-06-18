@@ -140,25 +140,14 @@ onumm1n1_t onumm1n1_tan(onumm1n1_t* num){
 }
 // ----------------------------------------------------------------------------------------------------
 
-// // ****************************************************************************************************
-// onumm1n1_t onumm1n1_cos(onumm1n1_t* num){
-
-//     coeff_t derivs[_MAXORDER_OTI+1];
-
-//     der_r_cos(num->r, 1, derivs);
-
-//     return onumm1n1_feval(derivs, num);
-
-// }
-// // ----------------------------------------------------------------------------------------------------
 // ****************************************************************************************************
 onumm1n1_t onumm1n1_cos(onumm1n1_t* num){
 
     coeff_t derivs[_MAXORDER_OTI+1];
 
-    // der_r_cos(num->r, 1, derivs);
+    //der_r_cos(num->r, 1, derivs);
     derivs[0] = cos(num->r);
-    derivs[1] =-sin(num->r);
+    derivs[1] = -sin(num->r);
 
     return onumm1n1_feval(derivs, num);
 
@@ -170,13 +159,14 @@ onumm1n1_t onumm1n1_sin(onumm1n1_t* num){
 
     coeff_t derivs[_MAXORDER_OTI+1];
 
-    der_r_sin(num->r, 1, derivs);
+    //der_r_sin(num->r, 1, derivs);
+    derivs[0] = sin(num->r);
+    derivs[1] = cos(num->r);
 
     return onumm1n1_feval(derivs, num);
 
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 // ****************************************************************************************************
 onumm1n1_t onumm1n1_logb(onumm1n1_t* num, double base){

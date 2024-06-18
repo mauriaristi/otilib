@@ -1,4 +1,5 @@
-
+def size_of_onum():
+    return sizeof(onumm1n2_t)
 
 #*****************************************************************************************************
 cdef (uint64_t,uint64_t) process_shape(object shape_in):

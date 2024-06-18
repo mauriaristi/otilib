@@ -70,18 +70,20 @@ void oarrm1n1_cbrt_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 }
 // ----------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
+extern void oarrm1n1_sqrt_f(oarrm1n1_t* arr, oarrm1n1_t* res);
+// // ****************************************************************************************************
 void oarrm1n1_sqrt_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
-    uint64_t i;
+    // uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_sqrt_to(&arr->p_data[i], &res->p_data[i]);
+    //     onumm1n1_sqrt_to(&arr->p_data[i], &res->p_data[i]);
 
-    }
+    // }
+    oarrm1n1_sqrt_f(arr,  res);
 
-}
+ }
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
@@ -111,134 +113,91 @@ void oarrm1n1_sinh_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
 }
 // ----------------------------------------------------------------------------------------------------
-
+extern void oarrm1n1_asin_f(oarrm1n1_t* arr, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_asin_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
-    uint64_t i;
+    //uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_asin_to(&arr->p_data[i], &res->p_data[i]);
+    //     onumm1n1_asin_to(&arr->p_data[i], &res->p_data[i]);
 
-    }
-
+    // }
+    oarrm1n1_asin_f(arr,  res);
 }
 // ----------------------------------------------------------------------------------------------------
-
+extern void oarrm1n1_acos_f(oarrm1n1_t* arr, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_acos_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
-    uint64_t i;
+    // uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_acos_to(&arr->p_data[i], &res->p_data[i]);
+    //     onumm1n1_acos_to(&arr->p_data[i], &res->p_data[i]);
 
-    }
-
+    // }
+    oarrm1n1_acos_f(arr, res);
 }
 // ----------------------------------------------------------------------------------------------------
-
+extern void oarrm1n1_atan_f(oarrm1n1_t* arr, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_atan_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
-    uint64_t i;
+    // uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_atan_to(&arr->p_data[i], &res->p_data[i]);
+    //     onumm1n1_atan_to(&arr->p_data[i], &res->p_data[i]);
 
-    }
+    // }
+    oarrm1n1_atan_f( arr,  res);
 
 }
 // ----------------------------------------------------------------------------------------------------
-
+extern void oarrm1n1_tan_f(oarrm1n1_t* arr, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_tan_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
-    uint64_t i;
+    // uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_tan_to(&arr->p_data[i], &res->p_data[i]);
+    //     onumm1n1_tan_to(&arr->p_data[i], &res->p_data[i]);
 
-    }
-
+    // }
+    oarrm1n1_tan_f( arr,  res);
 }
 // ----------------------------------------------------------------------------------------------------
-
+extern void oarrm1n1_cos_f(oarrm1n1_t* arr, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_cos_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
-    uint64_t i;
+    // uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_cos_to(&arr->p_data[i], &res->p_data[i]);
+    //     onumm1n1_cos_to(&arr->p_data[i], &res->p_data[i]);
 
-    }
-
+    // }
+    oarrm1n1_cos_f( arr,  res);
 }
 // ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void oti_blas_coeff_axpy(int64_t n, coeff_t* a,int64_t inca, coeff_t *x, int64_t incx, coeff_t *y, int64_t incy){
-    int64_t i;
-
-    for (i = 0; i<n; i++){
-        y[i*incy] = a[i*inca] * x[i*incx] + y[i*incy];
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
+extern void oarrm1n1_sin_f(oarrm1n1_t* arr, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_sin_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
-    uint64_t i;
+    // uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_sin_to(&arr->p_data[i], &res->p_data[i]);
+    //     onumm1n1_sin_to(&arr->p_data[i], &res->p_data[i]);
 
-    }
-
-} 
+    // }
+    oarrm1n1_sin_f( arr,  res);
+}
 // ----------------------------------------------------------------------------------------------------
- 
-// extern void oarrm1n1_sin_f(oarrm1n1_t*,oarrm1n1_t*);
-
-// // ****************************************************************************************************
-// void oarrm1n1_sin_to(oarrm1n1_t* arr, oarrm1n1_t* res){
-
-//     uint64_t i;
-//     coeff_t* derivs;
-
-//     derivs = (coeff_t*)malloc(arr->size * 2 * sizeof(coeff_t) );
-
-
-//     for( i = 0; i<arr->size; i++){
-//         der_r_sin( arr->p_data[i].r, 1, &derivs[i*2]);
-//         res->p_data[i].r = derivs[i*2];
-//         // onumm1n1_sin_to(&arr->p_data[i], &res->p_data[i]);
-
-//     }
-
-//     // FEVAL part
-
-//     oti_blas_coeff_axpy( arr->size, &derivs[1],2,&arr->p_data[0].e1,2,&res->p_data[0].e1,2);
-//     // oti_blas_coeff_axpy
-
-//     free(derivs);
- 
-//     // oarrm1n1_sin_f(arr,res);
- 
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-
 
 // ****************************************************************************************************
 void oarrm1n1_logb_to(oarrm1n1_t* arr, double base, oarrm1n1_t* res){
@@ -267,45 +226,54 @@ void oarrm1n1_log10_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
 }
 // ----------------------------------------------------------------------------------------------------
-
+extern void oarrm1n1_log_f(oarrm1n1_t* arr, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_log_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
-    uint64_t i;
+    // uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_log_to(&arr->p_data[i], &res->p_data[i]);
+    //     onumm1n1_log_to(&arr->p_data[i], &res->p_data[i]);
 
-    } 
+    // }
+
+    oarrm1n1_log_f( arr,  res); 
 
 }
 // ----------------------------------------------------------------------------------------------------
 
+extern void oarrm1n1_exp_f(oarrm1n1_t* arr, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_exp_to(oarrm1n1_t* arr, oarrm1n1_t* res){
 
-    uint64_t i;
+    // uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_exp_to(&arr->p_data[i], &res->p_data[i]);
+    //     onumm1n1_exp_to(&arr->p_data[i], &res->p_data[i]);
 
-    }
+    // }
+
+    oarrm1n1_exp_f( arr,  res); 
 
 }
 // ----------------------------------------------------------------------------------------------------
 
+extern void oarrm1n1_pow_f(oarrm1n1_t* arr, double* e, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_pow_to(oarrm1n1_t* arr, double e, oarrm1n1_t* res){
 
-    uint64_t i;
+    // uint64_t i;
 
-    for( i = 0; i<arr->size; i++){
+    // for( i = 0; i<arr->size; i++){
         
-        onumm1n1_pow_to(&arr->p_data[i], e, &res->p_data[i]);
+    //     onumm2n2_pow_to(&arr->p_data[i], e, &res->p_data[i]);
 
-    }
+    // }
+
+    oarrm1n1_pow_f( arr, &e, res);
+
 
 }
 // ----------------------------------------------------------------------------------------------------

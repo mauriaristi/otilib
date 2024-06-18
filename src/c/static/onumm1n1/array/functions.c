@@ -140,7 +140,6 @@ oarrm1n1_t oarrm1n1_acos(oarrm1n1_t* arr){
 }
 // ----------------------------------------------------------------------------------------------------
 
-extern void oarrm1n1_atan_f(oarrm1n1_t*,oarrm1n1_t*);
 // ****************************************************************************************************
 oarrm1n1_t oarrm1n1_atan(oarrm1n1_t* arr){
 
@@ -148,15 +147,13 @@ oarrm1n1_t oarrm1n1_atan(oarrm1n1_t* arr){
 
     res = oarrm1n1_zeros(arr->nrows, arr->ncols);
     
-    // oarrm1n1_atan_to(arr, &res);
-    oarrm1n1_atan_f(arr, &res);
+    oarrm1n1_atan_to(arr, &res);
     
     return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
 
-extern void oarrm1n1_tan_f(oarrm1n1_t*,oarrm1n1_t*);
 // ****************************************************************************************************
 oarrm1n1_t oarrm1n1_tan(oarrm1n1_t* arr){
 
@@ -164,15 +161,13 @@ oarrm1n1_t oarrm1n1_tan(oarrm1n1_t* arr){
 
     res = oarrm1n1_zeros(arr->nrows, arr->ncols);
     
-    // oarrm1n1_tan_to(arr, &res);
-    oarrm1n1_tan_f(arr, &res);
+    oarrm1n1_tan_to(arr, &res);
     
     return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
 
-extern void oarrm1n1_cos_f(oarrm1n1_t*,oarrm1n1_t*);
 // ****************************************************************************************************
 oarrm1n1_t oarrm1n1_cos(oarrm1n1_t* arr){
 
@@ -181,27 +176,11 @@ oarrm1n1_t oarrm1n1_cos(oarrm1n1_t* arr){
     res = oarrm1n1_zeros(arr->nrows, arr->ncols);
     
     oarrm1n1_cos_to(arr, &res);
-    // oarrm1n1_cos_f(arr, &res);
     
     return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// oarrm1n1_t oarrm1n1_sin(oarrm1n1_t* arr){
-
-//     oarrm1n1_t res = oarrm1n1_init();
-
-//     res = oarrm1n1_zeros(arr->nrows, arr->ncols);
-    
-//     oarrm1n1_sin_to(arr, &res);
-    
-//     return res;
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-extern void oarrm1n1_sin_f(oarrm1n1_t*,oarrm1n1_t*);
 
 // ****************************************************************************************************
 oarrm1n1_t oarrm1n1_sin(oarrm1n1_t* arr){
@@ -210,14 +189,12 @@ oarrm1n1_t oarrm1n1_sin(oarrm1n1_t* arr){
 
     res = oarrm1n1_zeros(arr->nrows, arr->ncols);
     
-    // oarrm1n1_sin_to(arr, &res);
-    oarrm1n1_sin_f(arr, &res);
+    oarrm1n1_sin_to(arr, &res);
     
     return res;
 
 }
 // ----------------------------------------------------------------------------------------------------
-
 
 // ****************************************************************************************************
 oarrm1n1_t oarrm1n1_logb(oarrm1n1_t* arr, double base){

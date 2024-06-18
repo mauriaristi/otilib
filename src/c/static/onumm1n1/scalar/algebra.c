@@ -353,8 +353,8 @@ onumm1n1_t onumm1n1_feval(coeff_t* feval_re, onumm1n1_t* x){
   // Order 1
   factor *=1;
   coef    = feval_re[1]/ factor;;
-  onumm1n1_gem_ro_to( coef, &deltax_power, &res, &res);
-
+  // onumm1n1_gem_ro_to( coef, &deltax_power, &res, &res);
+  res.e1 = coef*deltax_power.e1 + res.e1;
   return res;
 
 }
@@ -373,49 +373,8 @@ void onumm1n1_feval_to(coeff_t* feval_re, onumm1n1_t* x, onumm1n1_t* res){
   // Order 1
   factor *=1;
   coef    = feval_re[1]/ factor;;
-  onumm1n1_gem_ro_to( coef, &deltax_power, res, res);
+  //onumm1n1_gem_ro_to( coef, &deltax_power, res, res);
+  res->e1 = coef*deltax_power.e1 + res->e1;
 
 }
-
-
-// onumm1n1_t onumm1n1_feval(coeff_t* feval_re, onumm1n1_t* x){
-
-//   onumm1n1_t res;
-
-//   // feval function
-//   //  Definitions
-//   coeff_t factor=1, coef = 0;
-//   onumm1n1_t deltax = (*x), deltax_power = (*x);
-//   deltax.r = 0.0;
-//   deltax_power.r = 0.0;
-//   onumm1n1_set_r(0.0, &res);
-//   //  Real
-//   res.r = feval_re[0];
-//   // Order 1
-//   factor *=1;
-//   coef    = feval_re[1]/ factor;;
-//   res.e1 = coef*deltax_power.e1 + res.e1;
-
-//   return res;
-
-// }
-
-// void onumm1n1_feval_to(coeff_t* feval_re, onumm1n1_t* x, onumm1n1_t* res){
-
-//   // feval function
-//   //  Definitions
-//   coeff_t factor=1, coef = 0;
-//   onumm1n1_t deltax = (*x), deltax_power = (*x);
-//   deltax.r = 0.0;
-//   deltax_power.r = 0.0;
-//   onumm1n1_set_r(0.0, res);
-//   //  Real
-//   res->r = feval_re[0];
-//   // Order 1
-//   factor *=1;
-//   coef    = feval_re[1]/ factor;;
-//   // onumm1n1_gem_ro_to( coef, &deltax_power, res, res);
-//   res->e1 = coef*deltax_power.e1 + res->e1;
-
-// }
 

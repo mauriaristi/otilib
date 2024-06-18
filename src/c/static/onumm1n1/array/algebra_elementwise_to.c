@@ -329,6 +329,7 @@ void oarrm1n1_gem_oO_to(onumm1n1_t* arr1, oarrm1n1_t* arr2, oarrm1n1_t* arr3, oa
 // ----------------------------------------------------------------------------------------------------
 
 // 1.5. Division
+extern void oarrm1n1_div_aa_f(oarrm1n1_t* arr1, oarrm1n1_t* arr2, oarrm1n1_t* res);
 // ****************************************************************************************************
 void oarrm1n1_div_OO_to(oarrm1n1_t* arr1, oarrm1n1_t* arr2, oarrm1n1_t* res){
     // Perform O/O
@@ -336,11 +337,11 @@ void oarrm1n1_div_OO_to(oarrm1n1_t* arr1, oarrm1n1_t* arr2, oarrm1n1_t* res){
 
     // Check inputs:
     oarrm1n1_dimCheck_OO_elementwise(arr1,arr2,res);
-
-    // Loop for every element and add real to the oti number.
-    for ( i = 0; i < arr1->size; i++){
-        onumm1n1_div_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
-    }
+    oarrm1n1_div_aa_f(arr1,arr2,res);
+    // // Loop for every element and add real to the oti number.
+    // for ( i = 0; i < arr1->size; i++){
+    //     onumm1n1_div_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
+    // }
 }
 // ----------------------------------------------------------------------------------------------------
 

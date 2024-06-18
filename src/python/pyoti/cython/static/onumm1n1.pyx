@@ -3,7 +3,7 @@
 # Append directives
 include "../common/directives.pxi"
 
-# Append included libraries 
+# Append included libraries
 include "onumm1n1/include.pxi"
 
 #      SCALAR.

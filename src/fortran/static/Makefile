@@ -10,10 +10,10 @@ FC = ifx # Default compiler
 FCFLAGS = -O3 -fPIC -fopenmp
 
 # Define the sources that will be compiled
-SOURCES =  otim1n1.f90
-# SOURCES =  otim1n1.f90 otim1n2.f90 otim1n3.f90 otim1n4.f90
-# SOURCES += otim2n1.f90 otim2n2.f90 otim2n3.f90 otim2n4.f90
-# SOURCES += otim3n1.f90 otim3n2.f90 otim3n3.f90 otim3n4.f90
+# SOURCES =  otim1n1.f90
+SOURCES =  otim1n1.f90 otim1n2.f90 otim1n3.f90 otim1n4.f90
+SOURCES += otim2n1.f90 otim2n2.f90 otim2n3.f90 otim2n4.f90
+SOURCES += otim3n1.f90 otim3n2.f90 otim3n3.f90 otim3n4.f90
 # SOURCES += otim4n1.f90 otim4n2.f90 otim4n3.f90 otim4n4.f90
 
 

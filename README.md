@@ -6,50 +6,47 @@ An open source library for Order Truncated Imaginary (OTI) Numbers. An algebra f
 
 **OTILIB** 
 
-This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers is the extension of Dual numbers to compute high-order derivatives with respect to multiple variables. OTIs provide a concise extension of the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ) and are applicable to computing high order derivatives of computer functions at execution time.
+This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers, initially developed in [this thesis]<https://www.proquest.com/docview/2749270507/> is an extension of Dual numbers to compute high-order derivatives with respect to multiple variables. OTIs provide a concise extension of the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ) and are applicable to computing high order derivatives of computer functions at execution time.
 
-OTI numbers are herein implemented in multiple programming languages. The core implementation is in C and supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, etc.
+OTI numbers are herein implemented in multiple programming languages. The core implementation is in C and supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, vector array operations, etc.
 
-Ongoing research is currently towards efficient implementation of a Fortran version to determine the best implementation version of OTIs. 
+Ongoing research is currently towards efficient implementation of a Fortran version seeking the best implementation of OTIs. 
 
 Currently three implementations are supported: 
 * Dynamic-Dense, 
-* Static-Dense and 
-* Dynamic-Sparse 
+* Static-Dense (fastest) and 
+* Dynamic-Sparse  (most versatile and robust)
 
-All implementations so far are serial. It is expected in the near future to support parallel excecution using OpenMP, OpenMPI and OpenCL/CUDA/Metal (TBD).
+Most operations implemented so far are serial, and some support OpenMP parallelization. It is expected in the near future to fully support parallel excecution using OpenMP, MPI and GPU parallelization (OpenCL/CUDA/Metal, TBD).
 ***
 
 ## Current Programming languages: 
 * **C** (C99) Core routines.
 * **Python** (Version 3 or newer. This library requires [Cython](http://cython.org)
-* **Fortran** (F95 or newer, only dense implementation so far)
+* **Fortran** (F95 or newer, static dense implementation)
 
-The following programming languages will be implemented in a very near future:
+The following programming languages will be added in due time:
 
-* **Swift**
-* **Julia**
-
-Far-future implementation we are looking forward are:
-
-* **C++** (C++11)
 * **Matlab**
+* **C++** (C++11)
+* **Julia**
+* **Swift**
 * **Java** / **Javascript**
 
 ## Installation instructions:
 
 First you need [Anaconda 3](https://www.anaconda.com/distribution/) with Python 3. After cloning OTILIB, go to a terminal instance and go to the directory where you donwloaded this repository.
-```
+``` bash
 cd /PATH/TO/OTILIB-MASTER/
 ```
 
 It is recomended to create a conda environment with the required dependencies. For this, it is easier to install the environment.yml file by runing:
-```
+``` bash
 conda env create -f environment.yml
 ```
 **NOTE**: If you had a previous version of OTILIB, you may avoid this step. However, it is recommended that you update your current environment. For this, run the following command (see [this](https://stackoverflow.com/questions/42352841/how-to-update-an-existing-conda-environment-with-a-yml-file) for more details):
 
-```
+``` bash
 conda activate pyoti
 conda env update --file environment.yml --prune
 ```
@@ -57,7 +54,7 @@ conda env update --file environment.yml --prune
 Note: Use ```env_basic.yml``` to use ```pyoti``` in its most basic form.
 
 After runing the previous command, you should have installed/updated the  conda environment that will allow you to use the python version of the library. To activate this environment, run the following command:
-```
+``` bash
 conda activate pyoti
 ```
 
@@ -65,13 +62,13 @@ conda activate pyoti
 
 You need to install ```ipykernel``` within your environment. To do so, activate your environment if not activated and run the following command.
 
-```
+``` bash
 conda install -c anaconda ipykernel
 ```
 
 After this, and still within your environment, run the following to add pyoti to your ipython kernel options.
 
-```
+``` bash
 python -m ipykernel install --user --name=pyoti
 ```
 
@@ -81,7 +78,7 @@ python -m ipykernel install --user --name=pyoti
 
 Finally, to build the library, run the following commands:
 
-```
+``` bash
 cd path/to/src/otilib
 mkdir build
 cd build
@@ -93,7 +90,7 @@ This will compile the library and link to the required dependencies.
 
 **NOTE**: If this is your first time compiling the library, you should run the following command after the library is compiled:
 
-```
+``` bash
 make gendata
 ```
 
@@ -101,7 +98,7 @@ This will pre-compute the data required for standard operation of OTI library.
 
 The current version of the library is in a developmental stage, and because of that you require to add the library to the conda path in order for the user to be able to import the library in your projects. For this, please run the following command or head to [this](https://stackoverflow.com/questions/49474575/how-to-install-my-own-python-module-package-via-conda-and-watch-its-changes) link in order to add the build directory to the path:
 
-```
+``` bash
 cd /PATH/TO/OTILIB-MASTER/build/
 conda activate pyoti
 conda develop .
@@ -109,7 +106,7 @@ conda develop .
 
 In order to remove this folder to the path, run:
 
-```
+``` bash
 cd /PATH/TO/OTILIB-MASTER/build/
 conda activate pyoti
 conda develop -u .
@@ -118,7 +115,7 @@ conda develop -u .
 ## What is this repository for? 
 
 * Quick summary
-* Version: 1.0
+* Version: 0.1
 
 
 ### Requirements
@@ -137,14 +134,13 @@ Requirements:
 * scikit-sparse
 * Cython (For compilation only)
 
-For the full Finite Element Module support, the following libraries may be useful to find.
+For the full Finite Element support, the following libraries are required.
 
 * PyVista
 * GMSH (and Python-GMSH)
 * vtk
 
   
-
 ***
 
 ## Contribution guidelines ###
@@ -152,21 +148,6 @@ For the full Finite Element Module support, the following libraries may be usefu
 * To be defined
 
 
-## Who do I talk to? ###
+## Bugs and problems with the library? New features required? ###
 
-* Direct comments to the library should be addressed to Mauricio Aristizabal to [this e-mail](mailto:mauriaristi@gmail.com) with the subject: "[OTILIB]:*concern*: your subject "
-
-The word *concern* may be replaced by one of the following (choose accordingly):
-
-* *bugc*: C code bugs
-* *bugpy*: Python code bugs
-* *bugswift*: Swift code bugs
-* *doc*: Documentation bugs
-* *example*: Trouble in one of the examples.
-* *wrapper*: Questions related with wrappers to other languages.
-
-***
-
-## Other things 
-
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* Report an issue using the Github interface, and this will be addressed in an orderly fashion. 

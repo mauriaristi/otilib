@@ -11,7 +11,7 @@ MODULE OTIM3N4
 
    TYPE ONUMM3N4
      ! Real
-     REAL(DP) :: R
+     REAL(DP) :: R 
      ! Order 1
      REAL(DP) :: E1
      REAL(DP) :: E2

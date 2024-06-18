@@ -29,7 +29,7 @@ SUBROUTINE oarrm3n4_sin_f(lhs,res) BIND(C)
 
 END SUBROUTINE oarrm3n4_sin_f
 
-SUBROUTINE oarrm3n4_div_aa_f(lhs,rhs,res) BIND(C)
+SUBROUTINE oarrm3n4_div_aa_f(lhs,rhs,res) BIND(C) 
 
    IMPLICIT NONE
 
@@ -44,7 +44,7 @@ SUBROUTINE oarrm3n4_div_aa_f(lhs,rhs,res) BIND(C)
    CALL c_f_pointer( rhs%p_data, rhsarray, [rhs%size])
    CALL c_f_pointer( res%p_data, resarray, [res%size])
    
-   resarray = lhsarray/rhsarray
+   resarray = lhsarray*(rhsarray**-1.d0)
 
 
 END SUBROUTINE oarrm3n4_div_aa_f

@@ -33,6 +33,35 @@ SET(CYTHON_INCLUDE_DIR   "${PROJECT_SOURCE_DIR}/include"                 )
 SET(CYTHON_SETUP_DIR     "${PROJECT_BINARY_DIR}/tmp_src"                 )
 SET(CYTHON_LINK_DIR      "${PROJECT_BINARY_DIR}/lib"                     )
 
+
+SET(CYTHON_COMPILE_INTEL_FLAG "False")
+SET(CYTHON_COMPILE_GNU_FLAG "False")
+
+# Compiler dependent flags:
+if (CMAKE_C_COMPILER_ID STREQUAL "Intel")
+  # using Intel icc.
+  SET(CYTHON_COMPILE_INTEL_FLAG  "True") 	
+endif()
+if (CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
+  # using Intel icx.
+	SET(CYTHON_COMPILE_INTEL_FLAG  "True") 	
+endif()
+# elseif (CMAKE_C_COMPILER_ID STREQUAL "Clang")
+#   # using Clang
+# elseif (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+#   # using Visual Studio C++
+if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+  # using GCC
+  SET(CYTHON_COMPILE_GNU_FLAG  "True") 	
+endif()
+
+
+
+# TODO: Add option to selectively compile static libraries.
+SET(CYTHON_COMPILE_STATIC_FLAG "True")
+
+
+
 SET(CYTHON_SOURCES_NAMES dense.pyx core.pyx)
 
 SET(CYTHONIZE_BUILD_DIR   "${PROJECT_BINARY_DIR}/tmp_src"                )
@@ -58,7 +87,9 @@ configure_file (
   )
 
 
-
+SET(CYTHON_CMD_CALL_PREC "CC=${CMAKE_C_COMPILER}")
+# message(STATUS "CYTHON_CMD_CALL_PREC: ${CYTHON_CMD_CALL_PREC}")
+# CMAKE
 ADD_CUSTOM_TARGET(oticython ALL
 	DEPENDS oti)
 

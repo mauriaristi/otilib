@@ -4,21 +4,62 @@
 # Mauricio Aristizabal Cano
 #
 # Date created: June 12 2018
-# Last modified: September 26 2018
+# Last modified: June 18 2024
 #
 # This file sets up CMake to run the appropriate commands to 
 # compile the OTI number library project
 
-cmake_minimum_required (VERSION 3.9)
+# cmake_minimum_required (VERSION 3.20)
+cmake_minimum_required (VERSION 3.20)
+
+# Include the CMake script copyfiles.cmake. 
+include(CheckLanguage)
+
+
+check_language(Fortran)
+
+if(CMAKE_Fortran_COMPILER)
+  enable_language(Fortran)
+else()
+  message(STATUS "No Fortran support")
+endif()
+
+# Enable fortran compilation.
+enable_language(Fortran)
+
 
 # Name of the global project.
-project(oti)
+project(oti 
+  VERSION 0.1
+  LANGUAGES Fortran C) 
+
+message(STATUS "SETTING UP COMPILATION FOR OTIlib ${PROJECT_VERSION}")
+
+message(STATUS "Compiler IDs")
+message(STATUS "      C: ${CMAKE_C_COMPILER_ID}")
+message(STATUS "    CXX: ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "Fortran: ${CMAKE_Fortran_COMPILER_ID}")
 
 # Make the scripts available in the 'cmake' directory.
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_LIST_DIR}/cmake )
 
-# Include the CMake script copyfiles.cmake. 
-include( copyfiles )
+
+# Detect compiler
+if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
+  # using Clang
+elseif (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+  # using GCC
+elseif (CMAKE_C_COMPILER_ID STREQUAL "Intel")
+  # using Intel C++
+elseif (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+  # using Visual Studio C++
+endif()
+
+
+
+
+
+
 
 option (USE_OPENMP "Use OpenMP to enamble <omp.h>" YES)
 message( "USE_OPENMP flag is set to: ${USE_OPENMP}" )
@@ -28,8 +69,8 @@ set(OpenMP_EXTRA_LINK_FLAGS "")
 # Uncomment this for macOS
 if(APPLE)
 	# This is for the case of apple macOS
-	set(CMAKE_C_COMPILER "/usr/bin/clang")
-  set(CYTHON_CMD_CALL_PREC "CC=gcc")
+	#set(CMAKE_C_COMPILER "/usr/bin/clang")
+  #set(CYTHON_CMD_CALL_PREC "CC=gcc")
 
 
   # Openmp.
@@ -49,8 +90,8 @@ elseif(UNIX)
   # This is for the case of unix OS
   # set(CMAKE_C_COMPILER "gcc")
   # set(CYTHON_CMD_CALL_PREC "CC=gcc")
-  set(CMAKE_C_COMPILER "icx")
-  set(CYTHON_CMD_CALL_PREC "CC=icx")
+  #set(CMAKE_C_COMPILER "icx")
+  #set(CYTHON_CMD_CALL_PREC "CC=icx")
 
 endif(APPLE)
 
@@ -86,7 +127,9 @@ else(USE_OPENMP)
 endif(USE_OPENMP)
 # -------------------------------------------------------------------------------------------------
 
- message(WARNING ${LINK_TARGET_OMP})
+message(STATUS ${LINK_TARGET_OMP})
+
+include( copyfiles )
  
 set(CMAKE_MACOSX_RPATH 1)
 
@@ -115,17 +158,20 @@ endif (GENERATE_CYTHON_OTI)
 #   add_subdirectory (pyotifem)  
 # endif (GENERATE_CYTHON_OTIFEM)
 
-# should we do the Cython part too?
-option (GENERATE_C_TESTS
-        "Generate C tests files" OFF) 
+# # should we do the Cython part too?
+# option (GENERATE_C_TESTS
+#         "Generate C tests files" OFF) 
 
-if (GENERATE_C_TESTS)
-  add_subdirectory (tests/c)
-endif (GENERATE_C_TESTS)
+# if (GENERATE_C_TESTS)
+#   add_subdirectory (tests/c)
+# endif (GENERATE_C_TESTS)
 
 
 # should we do the Fortran part too?
 option (GENERATE_FORTRAN
         "Generate the Fortran library wrapper" OFF) 
 
+# add_subdirectory (src/fortran/ "${PROJECT_BINARY_DIR}/lib/fortran/")
 add_subdirectory (src "${PROJECT_BINARY_DIR}/lib")
+
+add_subdirectory (examples "${PROJECT_BINARY_DIR}/examples")

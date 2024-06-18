@@ -1,9 +1,10 @@
-# OTI numbers in C -> CMakeLists.txt file
+# OTI numbers in C and Fortran -> CMakeLists.txt file
 #
 # Created by:
 # Mauricio Aristizabal Cano
 # Date: June 12 2018
-# #
+# Last Modified: June 18 2024
+#
 
 
 
@@ -14,7 +15,7 @@
 # --------------------------- BUILD OTI -----------------------------
 # -------------------------------------------------------------------
 
-
+# add_subdirectory (fortran "${PROJECT_BINARY_DIR}/lib/fortran/")
 
 # set (CMAKE_C_COMPILER "/usr/bin/clang")
 # set(CMAKE_MACOSX_RPATH 1)
@@ -28,7 +29,7 @@
 # set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall")
 
 if(APPLE)
-	# This is for the case of apple macOS
+    # This is for the case of apple macOS
     # SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
     SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -g -fwrapv -O3 -Wall -Wstrict-prototypes -arch x86_64 ${OpenMP_EXTRA_INLCUDE_FLAGS}")
     SET(GCC_COVERAGE_LINK_FLAGS "${OpenMP_EXTRA_LINK_FLAGS} ")
@@ -41,22 +42,110 @@ elseif(UNIX)
 endif(APPLE)
 
 
+
+
+
+
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 12.1)
 
 
-include_directories (	"${PROJECT_SOURCE_DIR}/include"
-						"${PROJECT_SOURCE_DIR}/src/c"
-						)
+include_directories (   "${PROJECT_SOURCE_DIR}/include"
+                        "${PROJECT_SOURCE_DIR}/src/c"
+                        )
+
+# Add directories to link.
 link_directories (    
-    "${PROJECT_SOURCE_DIR}/src/fortran/static/"
-                                                )
+    "${PROJECT_BINARY_DIR}/lib"
+    )
+
+# =========================================================================
+#                Setup Fortran compilation
+# =========================================================================
+
+add_library (master_parameters STATIC 
+    fortran/static/master_parameters.f90
+)
+
+add_library (real_utils STATIC 
+    fortran/static/real_utils.f90
+)
+
+target_link_libraries(master_parameters 
+    OpenMP::OpenMP_Fortran
+)
+
+target_link_libraries(real_utils master_parameters 
+    OpenMP::OpenMP_Fortran
+)
+
+
+file(GLOB static_f90 
+    fortran/static/oti*.f90
+    fortran/static/real_utils.f90
+    fortran/static/master_parameters.f90 
+)
+file(GLOB cwrap_f90 
+    fortran/static/cwrap*.f90
+    )
+
+add_library (otistatic STATIC 
+    ${static_f90}
+)
+
+
+add_library (oticwrap STATIC 
+    ${cwrap_f90}
+)
+
+target_link_libraries(otistatic 
+    OpenMP::OpenMP_Fortran)
+
+target_link_libraries(oticwrap 
+    otistatic
+    OpenMP::OpenMP_Fortran)
+
+
+if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+    # Add free length of lines to compile fortran with gfortran.
+    target_compile_options(otistatic 
+        PRIVATE
+        -ffree-line-length-0
+        )
+
+    # Declare additional link libraries for C-Fortran interface
+    SET(ISOCBIND_Fortran_LFLAG gfortran) 
+
+elseif (CMAKE_C_COMPILER_ID STREQUAL "Intel")
+    # Declare additional link libraries for C-Fortran interface
+    SET(ISOCBIND_Fortran_LFLAG ifcore)
+
+elseif (CMAKE_C_COMPILER_ID STREQUAL "IntelLLVM")
+    # Declare additional link libraries for C-Fortran interface
+    SET(ISOCBIND_Fortran_LFLAG ifcore)
+
+else()
+
+    
+endif()
+
+
+
+
+
+
+
+
+
+# =========================================================================
+#                Setup C library compilation
+# =========================================================================
 
 add_library (oti    c/core.c 
-					c/real.c
-	                c/dense.c
-	                c/sparse.c
+                    c/real.c
+                    c/dense.c
+                    c/sparse.c
                     c/semisparse.c
                     c/static.c
                     c/fem.c
@@ -75,7 +164,9 @@ elseif(UNIX)
 endif(APPLE)    
 
 # Link to math libraries
-target_link_libraries(oti m ifcore cwrapm1n1 ${LINK_TARGET_OMP})
+target_link_libraries(oti 
+    m  oticwrap otistatic ${ISOCBIND_Fortran_LFLAG}
+    OpenMP::OpenMP_C)
 
 # -------------------------------------------------------------------
 # --------------------------- BUILD OTI -----------------------------
@@ -136,6 +227,13 @@ FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
     
 #     )
 
+
+
+
+# BUILD EXAMPLES:
+
+
+
 # # -------------------------------------------------------------------
 # # ------------------------- BUILD OTIFEM ----------------------------
 # # -------------------------------------------------------------------
@@ -159,7 +257,7 @@ FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
 
 # include_directories ("${PROJECT_SOURCE_DIR}/include")
 # add_library (otifem        c/otifem.c 
-# 	                       c/otifem_array.c)
+#                          c/otifem_array.c)
 
 # # To compile with macOs uncomment the following line  
 # #SET_TARGET_PROPERTIES(otifem PROPERTIES LINK_FLAGS "-arch i386 -arch x86_64")
@@ -198,12 +296,12 @@ FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
 
 # # Copy the pure python files of the library to the library folder.
 # FILE(COPY  python/whereotilib.py  python/auxFunctions.py
-# 	DESTINATION "${PROJECT_BINARY_DIR}/lib/" )
+#   DESTINATION "${PROJECT_BINARY_DIR}/lib/" )
 
 # FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/lib/oti)
 
 # FILE(COPY  python/__init__.py
-# 	DESTINATION "${PROJECT_BINARY_DIR}/lib/oti" )
+#   DESTINATION "${PROJECT_BINARY_DIR}/lib/oti" )
 
 # configure_file (
 #   "${PROJECT_SOURCE_DIR}/src/cython/setup.py.in"
@@ -214,28 +312,28 @@ FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
 # # cython_add_module( otilib cython/otilib.pyx)
 
 # ADD_CUSTOM_TARGET(otipython-core ALL
-# 	DEPENDS oti)
+#   DEPENDS oti)
 
 # # # 2. Execute Cython setup call 
 # ADD_CUSTOM_COMMAND (
-# 	TARGET     otipython-core
-# 	# POST_BUILD
-# 	# COMMAND    CFLAGS="-I${PROJECT_SOURCE_DIR}/include" 
-# 	#            LDFLAGS="-L${PROJECT_BINARY_DIR}/lib"   
-# 	COMMAND python3 ${PROJECT_BINARY_DIR}/tmp_src/setup.py build_ext -b${PROJECT_BINARY_DIR}/lib 
+#   TARGET     otipython-core
+#   # POST_BUILD
+#   # COMMAND    CFLAGS="-I${PROJECT_SOURCE_DIR}/include" 
+#   #            LDFLAGS="-L${PROJECT_BINARY_DIR}/lib"   
+#   COMMAND python3 ${PROJECT_BINARY_DIR}/tmp_src/setup.py build_ext -b${PROJECT_BINARY_DIR}/lib 
 # )
 # # # CFLAGS="-I../../include" LDFLAGS="-L../../build/lib" python3 setup.py build_ext -b../../build/lib
 # SET(filesToRemove 
-# 	${PROJECT_BINARY_DIR}/lib/oti/*.so 
-# 	${PROJECT_BINARY_DIR}/lib/whereotilib.py
-# 	${PROJECT_BINARY_DIR}/lib/auxFunctions.py
-# 	${PROJECT_BINARY_DIR}/tmp_src/setup.py)
+#   ${PROJECT_BINARY_DIR}/lib/oti/*.so 
+#   ${PROJECT_BINARY_DIR}/lib/whereotilib.py
+#   ${PROJECT_BINARY_DIR}/lib/auxFunctions.py
+#   ${PROJECT_BINARY_DIR}/tmp_src/setup.py)
 # set_directory_properties( PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "whereotilib.py;auxFunctions.py"  )
 
 # # set_property(DIRECTORY "${PROJECT_BINARY_DIR}/tmp_src"
-# # 	APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "setup.py")
+# #     APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "setup.py")
 # # set_property(DIRECTORY "${PROJECT_BINARY_DIR}/lib/oti"
-# # 	APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "*.so")
+# #     APPEND PROPERTY ADDITIONAL_MAKE_CLEAN_FILES "*.so")
 
 # # -------------------------------------------------------------------
 # # --------------------- BUILD OTILIB - PYTHON -----------------------

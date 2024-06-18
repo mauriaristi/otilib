@@ -6,18 +6,18 @@ An open source library for Order Truncated Imaginary (OTI) Numbers. An algebra f
 
 **OTILIB** 
 
-This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers, initially developed in [this thesis]<https://www.proquest.com/docview/2749270507/> is an extension of Dual numbers to compute high-order derivatives with respect to multiple variables. OTIs provide a concise extension of the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ) and are applicable to computing high order derivatives of computer functions at execution time.
+This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers, initially developed in [this thesis](https://www.proquest.com/docview/2749270507/), are an extension of Dual numbers to compute high-order derivatives with respect to multiple variables. In contrast to the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ), OTI numbers set a truncation condition other than $\epsilon^2 = 0$, and considers multiple imaginary basis, for instance $\epsilon_1,\epsilon_2,\ldots,\epsilon_m$.
 
-OTI numbers are herein implemented in multiple programming languages. The core implementation is in C and supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, vector array operations, etc.
+This library provides multiple implementations of OTI numbers. A core implementation is provided in C that supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, vector array operations, etc.
 
-Ongoing research is currently towards efficient implementation of a Fortran version seeking the best implementation of OTIs. 
+Ongoing research and updates is currently focused towards the efficient implementation of a Fortran version of OTIs. 
 
 Currently three implementations are supported: 
-* Dynamic-Dense, 
-* Static-Dense (fastest) and 
-* Dynamic-Sparse  (most versatile and robust)
+* Dynamic-Dense (outdated), 
+* Static-Dense (modern, fastest) and 
+* Dynamic-Sparse  (Slower, but the most versatile and robust)
 
-Most operations implemented so far are serial, and some support OpenMP parallelization. It is expected in the near future to fully support parallel excecution using OpenMP, MPI and GPU parallelization (OpenCL/CUDA/Metal, TBD).
+Most operations implemented so far are serial, and some support OpenMP parallelization. It is expected in the near future to fully support parallel excecution using OpenMP, MPI and GPU parallelization (OpenCL/CUDA/Metal, to be defined).
 ***
 
 ## Current Programming languages: 

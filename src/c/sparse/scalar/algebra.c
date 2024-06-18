@@ -6,7 +6,7 @@
 // Algebraic operations:
 
 
-// Negation
+// Negation  
 
 // ****************************************************************************************************
 sotinum_t soti_neg(sotinum_t* num, dhelpl_t dhl){

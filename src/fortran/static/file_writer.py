@@ -1,4 +1,4 @@
-f = open('cwrapmtemplate.f90','r')
+f = open('templates/cwrapmtemplate.f90','r')
 fstr = f.read()
 f.close()
 

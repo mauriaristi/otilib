@@ -5,7 +5,7 @@ from distutils.core import setup
 from distutils.extension import Extension
 import numpy 
 
-# we'd better have Cython installed, or it's a no-go
+# Check Cython is installed, Otherwise exit.
 try:
     from Cython.Distutils import build_ext 
     from Cython.Build import cythonize
@@ -14,29 +14,57 @@ except:
     print("copy from www.cython.org and install it")
     sys.exit(1) 
 
-# Hello There
-
 # Set new environment flags.
 # os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@ -O3"
 # os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@ -O3 -Wl,-O3"
 
-os.environ['CFLAGS'] = "-I@CYTHON_INCLUDE_DIR@"
-os.environ['LDFLAGS']= "-L@CYTHON_LINK_DIR@ -L/home/zkj327/coding/otilib-master/src/fortran/static"
+CFlags = "-I@CYTHON_INCLUDE_DIR@"
+if 'CFLAGS' in os.environ.keys():
+  os.environ['CFLAGS'] += " "+CFlags
+else:
+  os.environ['CFLAGS'] = CFlags
+# end if 
+
+LDFlags = "-L@CYTHON_LINK_DIR@"
+if 'LDFLAGS' in os.environ.keys():
+  os.environ['LDFLAGS'] += " "+LDFlags
+else:
+  os.environ['LDFLAGS'] = LDFlags
+# end if 
+
+
+compile_static = @CYTHON_COMPILE_STATIC_FLAG@
+compile_intel  = @CYTHON_COMPILE_INTEL_FLAG@
+compile_gnu    = @CYTHON_COMPILE_GNU_FLAG@
 
 openmp_compile_flag = @CYTHON_OPENMP_COMPILE_FLAG@
-# libraries          = ['oti','ifcore','ifcoremt','svml','intlc'] 
-# libraries          = ['oti','cwrapm1n1','ifcore','ifcoremt','svml','intlc'] 
-libraries          = ['oti','cwrapm1n1','cwrapm1n2','cwrapm1n3','cwrapm1n4','cwrapm2n1','cwrapm2n2','cwrapm2n3','cwrapm2n4','cwrapm3n1','cwrapm3n2','cwrapm3n3','cwrapm3n4','ifcore','ifcoremt','svml','intlc'] 
+
+libraries          = ['oti'] 
 include_dirs       = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]
 extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"]
 extra_link_args    = ["-O3"]
 macros             = [("CYTHON_TRACE_NOGIL","1")]
 language           = "c"
-dependencies       = ["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a",]#,"@CYTHONIZE_BUILD_DIR@/../../src/fortran/static/libcwrapm1n1.a"]
+dependencies       = ["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]  #,"@CYTHONIZE_BUILD_DIR@/../../src/fortran/static/libcwrapm1n1.a"]
 
 if openmp_compile_flag:
   extra_compile_args += ['@OpenMP_C_FLAGS@']
   extra_link_args    += ['@OpenMP_C_FLAGS@']
+# end if 
+
+
+if compile_static:
+  dependencies += ["@CYTHONIZE_BUILD_DIR@/../lib/liboticwrap.a"]
+  dependencies += ["@CYTHONIZE_BUILD_DIR@/../lib/libotistatic.a"]
+  include_dirs += ["@CYTHONIZE_BUILD_DIR@/../lib/"] 
+  os.environ['LDFLAGS'] += " "+"-L@CYTHONIZE_BUILD_DIR@/../lib/"
+  libraries    += ['oticwrap','otistatic']
+# end if 
+
+if compile_intel:
+  libraries += ['ifcore','ifcoremt','svml','intlc']
+elif compile_gnu:
+  libraries += ['gfortran']
 # end if 
 
 if platform.system() == 'Darwin': # macOS specific.
@@ -44,6 +72,12 @@ if platform.system() == 'Darwin': # macOS specific.
   extra_compile_args += ["@OpenMP_EXTRA_INCLUDE_FLAGS@" ]
   extra_link_args    += ["@OpenMP_EXTRA_LINK_FLAGS@" ]
 # end if 
+
+
+# print(' ----------------------------------------------------- ')
+# print(libraries)
+# print(dependencies)
+# print(' ----------------------------------------------------- ')
 
 extensions = [ \
 Extension("pyoti.core",
@@ -100,31 +134,35 @@ Extension("pyoti.fem",
 
 
 # Uncomment  lines 91 - 114 to enable compilation of static libraries.
+if compile_static == True:
+  
+  # Search for files to compile within the static module.
+  files=[]
+  src_path = "@CYTHON_SOUCE_DIR@/static/"
 
-# Search for files to compile within the static module.
-files=[]
-src_path = "@CYTHON_SOUCE_DIR@/static/"
-# r=>root, d=>directories, f=>files
-for r, d, f in os.walk(src_path):
-  for item in f:
-    ext = item.split('.')[-1]
-    if ext == 'pyx':
-      files.append(os.path.join(r, item))
-    # end if 
+  # r=>root, d=>directories, f=>files
+  for r, d, f in os.walk(src_path):
+    for item in f:
+      ext = item.split('.')[-1]
+      if ext == 'pyx':
+        files.append(os.path.join(r, item))
+      # end if 
+    # end for 
+    break
+  # end for
+
+  # Add all found files to the extensions.
+  for f in files:
+    fname = f.replace(src_path,"")
+    name = fname.split(".")[0]
+    extensions.append( Extension("pyoti.static."+name,
+     sources = [f],                             include_dirs = include_dirs,
+     define_macros = macros,                    libraries = libraries,
+     extra_compile_args = extra_compile_args,   depends=dependencies,
+     extra_link_args = extra_link_args        ) )
   # end for 
-  break
-# end for
 
-# Add all found files to the extensions.
-for f in files:
-  fname = f.replace(src_path,"")
-  name = fname.split(".")[0]
-  extensions.append( Extension("pyoti.static."+name,
-   sources = [f],                             include_dirs = include_dirs,
-   define_macros = macros,                    libraries = libraries,
-   extra_compile_args = extra_compile_args,   depends=dependencies,
-   extra_link_args = extra_link_args        ) )
-# end for 
+# end if 
 
 
 

@@ -6,7 +6,7 @@ An open source library for Order Truncated Imaginary (OTI) Numbers. An algebra f
 
 **OTILIB** 
 
-This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers, initially developed in [this thesis](https://www.proquest.com/docview/2749270507/), are an extension of Dual numbers to compute high-order derivatives with respect to multiple variables. In contrast to the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ), OTI numbers set a truncation condition other than $\epsilon^2 = 0$, and considers multiple imaginary basis, for instance $\epsilon_1,\epsilon_2,\ldots,\epsilon_m$.
+This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers, initially developed in [the Ph.D. thesis "Order Truncated Imaginary Algebra for Computation of Multivariable High-Order Derivatives in Finite Element Analysis"](https://www.proquest.com/docview/2749270507/). OTI numbers are an extension of Dual numbers, which can be used to compute high-order derivatives with respect to multiple variables. In contrast to the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ), OTI numbers set a truncation condition other than $\epsilon^2 = 0$, and considers multiple imaginary basis. For instance $\epsilon_1^5,\epsilon_1^2\epsilon_2,\ldots,\epsilon_m$ can be non-truncated imaginary directions.
 
 This library provides multiple implementations of OTI numbers. A core implementation is provided in C that supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, vector array operations, etc.
 

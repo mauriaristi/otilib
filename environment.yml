@@ -8,6 +8,7 @@ dependencies:
   - scipy
   - cython=0.29.*
   - make
+  - cmake
   - pip
   - ipykernel
   - pyvista

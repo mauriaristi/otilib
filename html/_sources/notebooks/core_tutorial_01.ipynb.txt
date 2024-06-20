@@ -1,0 +1,745 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## `core` Tutorial 01: Core module utilities\n",
+    "\n",
+    "``` \n",
+    "Author:\n",
+    "    Mauricio Aristizabal Cano\n",
+    "        University of Texas at San Antonio\n",
+    "        Universidad EAFIT\n",
+    "\n",
+    "Date of creation:  Jun 19 2024\n",
+    "Last modification: Jun 19 2024\n",
+    "```\n",
+    "\n",
+    "### Introduction\n",
+    "\n",
+    "This document showcases and describes some of the capabilities of the core module in the `pyoti` library.\n",
+    "\n",
+    "The reasoning behind the core module is to provide a unique module that contains the core functionality and classes that that are common to the different implementations of the OTI numbers (sparse, dense, etc), centralizing some of the calculations. Some of the capabilities are:\n",
+    "\n",
+    "* Manipulation of imaginary direcitions (definition, multiplication/division between directions, etc)\n",
+    "* Translation layer between precomputed data and the OTI number implementation\n",
+    "* Utility functions, e.g. getting total number of directions for m basis and n order, translating human-readable notation to faster imaginary direction indexing, etc. \n",
+    "* Inquiring the capabilities of the implementation.\n",
+    "* many others\n",
+    "\n",
+    "In this document some of these capabilities will be shown.\n",
+    "\n",
+    "Start by importing the module using the following code:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import pyoti.core as coti  # Import the core library module. "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Basics: inquiring library capabilities.\n",
+    "\n",
+    "An important information is to know what is the maximum number of bases and maximum truncation order supported by the precomputed data. This information is accessed via the function `print_capabilities()`. This function returns a string with the maximum number of basis that can be operated for a given order.\n",
+    " \n",
+    "The default version of the library can compute derivatives of up-to 150th order, which are limited as follows:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " Order  Nbases    Ndir\n",
+      "     1   65000   65000\n",
+      "     2    1000  500500\n",
+      "     3     100  171700\n",
+      "     4     100 4421275\n",
+      "     5      10    2002\n",
+      "     6      10    5005\n",
+      "     7      10   11440\n",
+      "     8      10   24310\n",
+      "     9      10   48620\n",
+      "    10      10   92378\n",
+      "    11       5    1365\n",
+      "    12       5    1820\n",
+      "    13       5    2380\n",
+      "    14       5    3060\n",
+      "    15       5    3876\n",
+      "    16       5    4845\n",
+      "    17       5    5985\n",
+      "    18       5    7315\n",
+      "    19       5    8855\n",
+      "    20       5   10626\n",
+      "    21       3     253\n",
+      "    22       3     276\n",
+      "    23       3     300\n",
+      "    24       3     325\n",
+      "    25       3     351\n",
+      "    26       3     378\n",
+      "    27       3     406\n",
+      "    28       3     435\n",
+      "    29       3     465\n",
+      "    30       3     496\n",
+      "    31       3     528\n",
+      "    32       3     561\n",
+      "    33       3     595\n",
+      "    34       3     630\n",
+      "    35       3     666\n",
+      "    36       3     703\n",
+      "    37       3     741\n",
+      "    38       3     780\n",
+      "    39       3     820\n",
+      "    40       3     861\n",
+      "    41       3     903\n",
+      "    42       3     946\n",
+      "    43       3     990\n",
+      "    44       3    1035\n",
+      "    45       3    1081\n",
+      "    46       3    1128\n",
+      "    47       3    1176\n",
+      "    48       3    1225\n",
+      "    49       3    1275\n",
+      "    50       3    1326\n",
+      "    51       2      52\n",
+      "    52       2      53\n",
+      "    53       2      54\n",
+      "    54       2      55\n",
+      "    55       2      56\n",
+      "    56       2      57\n",
+      "    57       2      58\n",
+      "    58       2      59\n",
+      "    59       2      60\n",
+      "    60       2      61\n",
+      "    61       2      62\n",
+      "    62       2      63\n",
+      "    63       2      64\n",
+      "    64       2      65\n",
+      "    65       2      66\n",
+      "    66       2      67\n",
+      "    67       2      68\n",
+      "    68       2      69\n",
+      "    69       2      70\n",
+      "    70       2      71\n",
+      "    71       2      72\n",
+      "    72       2      73\n",
+      "    73       2      74\n",
+      "    74       2      75\n",
+      "    75       2      76\n",
+      "    76       2      77\n",
+      "    77       2      78\n",
+      "    78       2      79\n",
+      "    79       2      80\n",
+      "    80       2      81\n",
+      "    81       2      82\n",
+      "    82       2      83\n",
+      "    83       2      84\n",
+      "    84       2      85\n",
+      "    85       2      86\n",
+      "    86       2      87\n",
+      "    87       2      88\n",
+      "    88       2      89\n",
+      "    89       2      90\n",
+      "    90       2      91\n",
+      "    91       2      92\n",
+      "    92       2      93\n",
+      "    93       2      94\n",
+      "    94       2      95\n",
+      "    95       2      96\n",
+      "    96       2      97\n",
+      "    97       2      98\n",
+      "    98       2      99\n",
+      "    99       2     100\n",
+      "   100       2     101\n",
+      "   101       2     102\n",
+      "   102       2     103\n",
+      "   103       2     104\n",
+      "   104       2     105\n",
+      "   105       2     106\n",
+      "   106       2     107\n",
+      "   107       2     108\n",
+      "   108       2     109\n",
+      "   109       2     110\n",
+      "   110       2     111\n",
+      "   111       2     112\n",
+      "   112       2     113\n",
+      "   113       2     114\n",
+      "   114       2     115\n",
+      "   115       2     116\n",
+      "   116       2     117\n",
+      "   117       2     118\n",
+      "   118       2     119\n",
+      "   119       2     120\n",
+      "   120       2     121\n",
+      "   121       2     122\n",
+      "   122       2     123\n",
+      "   123       2     124\n",
+      "   124       2     125\n",
+      "   125       2     126\n",
+      "   126       2     127\n",
+      "   127       2     128\n",
+      "   128       2     129\n",
+      "   129       2     130\n",
+      "   130       2     131\n",
+      "   131       2     132\n",
+      "   132       2     133\n",
+      "   133       2     134\n",
+      "   134       2     135\n",
+      "   135       2     136\n",
+      "   136       2     137\n",
+      "   137       2     138\n",
+      "   138       2     139\n",
+      "   139       2     140\n",
+      "   140       2     141\n",
+      "   141       2     142\n",
+      "   142       2     143\n",
+      "   143       2     144\n",
+      "   144       2     145\n",
+      "   145       2     146\n",
+      "   146       2     147\n",
+      "   147       2     148\n",
+      "   148       2     149\n",
+      "   149       2     150\n",
+      "   150       2     151\n"
+     ]
+    }
+   ],
+   "source": [
+    "coti.print_capabilities()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "From this output, notice that for first order directions, upto 65000 independent basis can be used. In contrast, for third order this number is reduced to 100. This number depends on the pre-computed data information, which can be re-generated using the otigen executable (see compilation instructions).\n",
+    "\n",
+    "Another inquiry utility is the `get_trunc_order()` function, which returns the maximum truncation order of the implementation that is currently running."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "150"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "coti.get_trunc_order()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Getting number of imaginary directions.\n",
+    "\n",
+    "A fully dense OTI number with truncation order $n$ and a number of basis $m$ will have a total of $n_{\\mbox{total}}$ imaginary directions (including the real direction). This number is given by:\n",
+    "\n",
+    "$$\n",
+    "n_{\\mbox{total}} = {n+m\\choose m} = \\frac{(n+m)!}{n!m!}\n",
+    "$$\n",
+    "\n",
+    "This number can be efficiently evaluated using the function `ndir_total( nbasis, order )`. For instance, for a total of $m=2$ basis and truncation order $n=3$, the number of imaginary directions is 10. For an OTI number $a^*$, with $a^*\\in \\mathbb{OTI}^{n=2}_{m=3}$, it is as follows:\n",
+    "\n",
+    "$$\n",
+    "a^*=a_r +\n",
+    "\\underbrace{\n",
+    "    a_{\\epsilon_1}\\epsilon_1+\n",
+    "    a_{\\epsilon_2}\\epsilon_2\n",
+    "}_{\\mbox{Order 1}} + \n",
+    "\\underbrace{\n",
+    "    a_{\\epsilon_1^2}\\epsilon_1^2+\n",
+    "    a_{\\epsilon_1\\epsilon_2}\\epsilon_1\\epsilon_2+\n",
+    "    a_{\\epsilon_2^2}\\epsilon_2^2\n",
+    "}_{\\mbox{Order 2}}+\n",
+    "\\underbrace{\n",
+    "    a_{\\epsilon_1^3}\\epsilon_1^3+\n",
+    "    a_{\\epsilon_1^2\\epsilon_2}\\epsilon_1^2\\epsilon_2+\n",
+    "    a_{\\epsilon_1\\epsilon_2^2}\\epsilon_1\\epsilon_2^2+\n",
+    "    a_{\\epsilon_2^3}\\epsilon_2^3\n",
+    "}_{\\mbox{Order 3}}\n",
+    "$$"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "10"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "n_total = coti.ndir_total(2,3)\n",
+    "n_total"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The total number of directions with a **specific order** $p$, $n_{p}$ for a number of basis $m$ is given by \n",
+    "\n",
+    "$$\n",
+    "n_{p} = {p+m-1\\choose m-1} = \\frac{(p+m-1)!}{p!(m-1)!}\n",
+    "$$\n",
+    "\n",
+    "This number can be efficiently evaluated using the function `ndir_order( nbasis, order_p )`. For the prevous case, we have that \n",
+    "$$\n",
+    "a^*=a_r +\n",
+    "\\underbrace{\n",
+    "    a_{\\epsilon_1}\\epsilon_1+\n",
+    "    a_{\\epsilon_2}\\epsilon_2\n",
+    "}_{n_1 = 2} + \n",
+    "\\underbrace{\n",
+    "    a_{\\epsilon_1^2}\\epsilon_1^2+\n",
+    "    a_{\\epsilon_1\\epsilon_2}\\epsilon_1\\epsilon_2+\n",
+    "    a_{\\epsilon_2^2}\\epsilon_2^2\n",
+    "}_{n_2 = 3}+\n",
+    "\\underbrace{\n",
+    "    a_{\\epsilon_1^3}\\epsilon_1^3+\n",
+    "    a_{\\epsilon_1^2\\epsilon_2}\\epsilon_1^2\\epsilon_2+\n",
+    "    a_{\\epsilon_1\\epsilon_2^2}\\epsilon_1\\epsilon_2^2+\n",
+    "    a_{\\epsilon_2^3}\\epsilon_2^3\n",
+    "}_{n_3 = 4}\n",
+    "$$"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "n_1 = 2, n_2 = 3, n_3 = 4 \n"
+     ]
+    }
+   ],
+   "source": [
+    "n_1 = coti.ndir_order(2,1)\n",
+    "n_2 = coti.ndir_order(2,2)\n",
+    "n_3 = coti.ndir_order(2,3)\n",
+    "print(f\"n_1 = {n_1}, n_2 = {n_2}, n_3 = {n_3} \")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Direction helper\n",
+    "\n",
+    "The direction helper is an object of class dHelp, that loads and manipulates the precomputed data to speedup calculations. This object loads a particular set of precomputed data helper for each order of imaignary directions. Therefore, if the maximum truncation order is 150, the number of interal helpers in dHelp will be 150.\n",
+    "\n",
+    "Here are described some uses of the direction helper.\n",
+    "\n",
+    "#### Getting the direction helper\n",
+    "\n",
+    "Use the function `get_dHelp()` to get the direction helper object."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<dhelp with 150 helpers loaded>"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "dh = coti.get_dHelp()\n",
+    "dh"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Direction Helper object with 150 helpers:\n",
+      "\n",
+      "Helper 1:\n",
+      "  - Truncation order: 1\n",
+      "  - Number of imaginary bases: 65000\n",
+      "  - Total number of imaginary directions: 65000\n",
+      "  - Total number of multiplication tables: 0\n",
+      "\n",
+      "Helper 2:\n",
+      "  - Truncation order: 2\n",
+      "  - Number of imaginary bases: 1000\n",
+      "  - Total number of imaginary directions: 500500\n",
+      "  - Total number of multiplication tables: 1\n",
+      "\n",
+      "Helper 3:\n",
+      "  - Truncation order: 3\n",
+      "  - Number of imaginary bases: 100\n",
+      "  - Total number of imaginary directions: 171700\n"
+     ]
+    }
+   ],
+   "source": [
+    "# You can also use print(dh). Here, only a portion of the output is displayed.\n",
+    "print(str(dh)[:490])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Extracting the full directions given a index-order pair:\n",
+    "\n",
+    "The full direction of a \"index,order\" pair can be obtained from the precomputed data. For this, give the index, order pair and the direction helper will return the corresponding \n",
+    "\n",
+    "| Order $\\downarrow$ / Index $\\rightarrow$ |  $0$                  | $1$                            | $2$                                | $3$                                | $4$                                | $5$                                      | $6$                                        | $7$                                        | $8$                                            | $9$                                            | $\\cdots$ |\n",
+    "| :--------: | :-------------------: | :-----------------------------: | :---------------------------------: | :---------------------------------: | :---------------------------------: | :---------------------------------------: | :-----------------------------------------: | :-----------------------------------------: | :---------------------------------------------: | :--------------------------------------------: | :------ |\n",
+    "| $1$ | $\\epsilon_{1}$ | $\\epsilon_{2}$                 | $\\epsilon_{3}$                     | $\\epsilon_{4}$                     | $\\epsilon_{5}$                     | $\\epsilon_{6}$                           | $\\epsilon_{7}$                             | $\\epsilon_{8}$                             | $\\epsilon_{9}$                                 | $\\epsilon_{10}$                                | $\\cdots$ |\n",
+    "| $2$ | $\\epsilon_{1}^{2}$ | $\\epsilon_{1}\\epsilon_{2}$     | $\\epsilon_{2}^{2}$                 | $\\epsilon_{1}\\epsilon_{3}$         | $\\epsilon_{2}\\epsilon_{3}$         | $\\epsilon_{3}^{2}$                       | $\\epsilon_{1}\\epsilon_{4}$                 | $\\epsilon_{2}\\epsilon_{4}$                 | $\\epsilon_{3}\\epsilon_{4}$                     | $\\epsilon_{4}^{2}$                             | $\\cdots$ |\n",
+    "|    $3$     | $\\epsilon_{1}^{3}$ | $\\epsilon_{1}^{2}\\epsilon_{2}$ | $\\epsilon_{1}\\epsilon_{2}^{2}$     | $\\epsilon_{2}^{3}$                 | $\\epsilon_{1}^{2}\\epsilon_{3}$     | $\\epsilon_{1}\\epsilon_{2}\\epsilon_{3}$   | $\\epsilon_{2}^{2}\\epsilon_{3}$             | $\\epsilon_{1}\\epsilon_{3}^{2}$             | $\\epsilon_{2}\\epsilon_{3}^{2}$                 | $\\epsilon_{3}^{3}$                             | $\\cdots$ |\n",
+    "|    $4$     | $\\epsilon_{1}^{4}$ | $\\epsilon_{1}^{3}\\epsilon_{2}$ | $\\epsilon_{1}^{2}\\epsilon_{2}^{2}$ | $\\epsilon_{1}\\epsilon_{2}^{3}$     | $\\epsilon_{2}^{4}$                 | $\\epsilon_{1}^{3}\\epsilon_{3}$           | $\\epsilon_{1}^{2}\\epsilon_{2}\\epsilon_{3}$ | $\\epsilon_{1}\\epsilon_{2}^{2}\\epsilon_{3}$ | $\\epsilon_{2}^{3}\\epsilon_{3}$                 | $\\epsilon_{1}^{2}\\epsilon_{3}^{2}$             | $\\cdots$ |\n",
+    "|    $5$     | $\\epsilon_{1}^{5}$ | $\\epsilon_{1}^{4}\\epsilon_{2}$ | $\\epsilon_{1}^{3}\\epsilon_{2}^{2}$ | $\\epsilon_{1}^{2}\\epsilon_{2}^{3}$ | $\\epsilon_{1}\\epsilon_{2}^{4}$     | $\\epsilon_{2}^{5}$                       | $\\epsilon_{1}^{4}\\epsilon_{3}$             | $\\epsilon_{1}^{3}\\epsilon_{2}\\epsilon_{3}$ | $\\epsilon_{1}^{2}\\epsilon_{2}^{2}\\epsilon_{3}$ | $\\epsilon_{1}\\epsilon_{2}^{3}\\epsilon_{3}$     | $\\cdots$ |\n",
+    "|    $6$     | $\\epsilon_{1}^{6}$ | $\\epsilon_{1}^{5}\\epsilon_{2}$ | $\\epsilon_{1}^{4}\\epsilon_{2}^{2}$ | $\\epsilon_{1}^{3}\\epsilon_{2}^{3}$ | $\\epsilon_{1}^{2}\\epsilon_{2}^{4}$ | $\\epsilon_{1}\\epsilon_{2}^{5}$           | $\\epsilon_{2}^{6}$                         | $\\epsilon_{1}^{5}\\epsilon_{3}$             | $\\epsilon_{1}^{4}\\epsilon_{2}\\epsilon_{3}$     | $\\epsilon_{1}^{3}\\epsilon_{2}^{2}\\epsilon_{3}$ | $\\cdots$ |\n",
+    "|    $7$     | $\\epsilon_{1}^{7}$ | $\\epsilon_{1}^{6}\\epsilon_{2}$ | $\\epsilon_{1}^{5}\\epsilon_{2}^{2}$ | $\\epsilon_{1}^{4}\\epsilon_{2}^{3}$ | $\\epsilon_{1}^{3}\\epsilon_{2}^{4}$ | $\\epsilon_{1}^{2}\\epsilon_{2}^{5}$       | $\\epsilon_{1}\\epsilon_{2}^{6}$             | $\\epsilon_{2}^{7}$                         | $\\epsilon_{1}^{6}\\epsilon_{3}$                 | $\\epsilon_{1}^{5}\\epsilon_{2}\\epsilon_{3}$     | $\\cdots$ |\n",
+    "|    $8$     | $\\epsilon_{1}^{8}$ | $\\epsilon_{1}^{7}\\epsilon_{2}$ | $\\epsilon_{1}^{6}\\epsilon_{2}^{2}$ | $\\epsilon_{1}^{5}\\epsilon_{2}^{3}$ | $\\epsilon_{1}^{4}\\epsilon_{2}^{4}$ | $\\epsilon_{1}^{3}\\epsilon_{2}^{5}$       | $\\epsilon_{1}^{2}\\epsilon_{2}^{6}$         | $\\epsilon_{1}\\epsilon_{2}^{7}$             | $\\epsilon_{2}^{8}$                             | $\\epsilon_{1}^{7}\\epsilon_{3}$                 | $\\cdots$ |\n",
+    "|    $9$     | $\\epsilon_{1}^{9}$ | $\\epsilon_{1}^{8}\\epsilon_{2}$ | $\\epsilon_{1}^{7}\\epsilon_{2}^{2}$ | $\\epsilon_{1}^{6}\\epsilon_{2}^{3}$ | $\\epsilon_{1}^{5}\\epsilon_{2}^{4}$ | $\\epsilon_{1}^{4}\\epsilon_{2}^{5}$       | $\\epsilon_{1}^{3}\\epsilon_{2}^{6}$         | $\\epsilon_{1}^{2}\\epsilon_{2}^{7}$         | $\\epsilon_{1}\\epsilon_{2}^{8}$                 | $\\epsilon_{2}^{9}$                             | $\\cdots$ |\n",
+    "|    $10$    | $\\epsilon_{1}^{10}$ | $\\epsilon_{1}^{9}\\epsilon_{2}$ | $\\epsilon_{1}^{8}\\epsilon_{2}^{2}$ | $\\epsilon_{1}^{7}\\epsilon_{2}^{3}$ | $\\epsilon_{1}^{6}\\epsilon_{2}^{4}$ | $\\epsilon_{1}^{5}\\epsilon_{2}^{5}$       | $\\epsilon_{1}^{4}\\epsilon_{2}^{6}$         | $\\epsilon_{1}^{3}\\epsilon_{2}^{7}$         | $\\epsilon_{1}^{2}\\epsilon_{2}^{8}$             | $\\epsilon_{1}\\epsilon_{2}^{9}$                 | $\\cdots$ |\n",
+    "  \n",
+    "  \n",
+    " From the Table above, the index-order pair <9, 5> (index 9, order 5) corresponds to the direction $\\epsilon_{1}\\epsilon_{2}^{3}\\epsilon_{3}$. Therefore, its compact `dirArray` representation is `[1,[2,3],3]`. This can be easily retrieved from the direction helper object using the `get_compact_fulldir(indx,order)` method:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[1, [2, 3], 3]"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "indx  = 9\n",
+    "order = 5\n",
+    "dh.get_compact_fulldir(indx, order)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The expanded full dir can be obtained using the `get_fulldir(indx,order)` method"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "array([1, 2, 2, 2, 3], dtype=uint16)"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "dh.get_fulldir(indx, order)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Imaginary directions can become extensive. An ideal representation is by defining its bases and exponents. This information is also efficiently provided by the direction helper. Use `dh.get_base(indx, order)`"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Bases [1 2 3], exponents [1 3 1]\n"
+     ]
+    }
+   ],
+   "source": [
+    "bases,exponents = dh.get_base_exp(indx,order)\n",
+    "print(f'Bases {bases}, exponents {exponents}')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Converting imaginary direction notations\n",
+    "\n",
+    "The direction helper provides an easy way to converting from index-order pairs to human readable compact and full direction expressions. However, the inverse operation is not trivial.\n",
+    "\n",
+    "#### Converting from index-order to human readable dirArray\n",
+    "\n",
+    "Use the direction helper's `get_compact_fulldir(indx, order)` or `get_fulldir(indx, order)` methods:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[1, [2, 3], 3]"
+      ]
+     },
+     "execution_count": 11,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "indx  = 9\n",
+    "order = 5\n",
+    "dh.get_compact_fulldir(indx, order)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Converting from human readable dirArray to index-order\n",
+    "\n",
+    "Use the function `imdir(dirArray)` in the core module (this is not a method in the direction helper). This function uses the `dirArray` input and returns a 2-element list with the corresponding index-order pair of this direction."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[9, 5]"
+      ]
+     },
+     "execution_count": 12,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "coti.imdir([1,[2,3],3])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Operating Imaginary directions\n",
+    "\n",
+    "Imagianry directions can be multiplied and divided. Here are some functions in the core pyoti module that can provide this functionality.\n",
+    "\n",
+    "#### Multiplying imaginary directions\n",
+    "\n",
+    "Imaginary directions can be multiplied using the direction helper and the method `mult_dir(idx1,ord1,idx2,ord2)`. The first two inputs corrspond to the index order pairs  of the first imatginary direction, and the last two inputs correspond to the second imaginary direction. The result is the index-order pair of the resulting imaginary direction.\n",
+    "\n",
+    "For example multiplying $\\epsilon_{1}^{3}  \\times \\left( \\epsilon_{2}^2\\epsilon_{3}\\right)$ is $ (0,3) \\times (6,3) $ is the direction  $\\epsilon_{1}^{3}\\epsilon_{2}^{2}\\epsilon_{3}$ which corresponds to the $(9,6)$ direction."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Result index: 9 order 6 -->  [[1, 3], [2, 2], 3]\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Multipying two\n",
+    "\n",
+    "ridx,rord = dh.mult_dir( 0,3, 6,3 )\n",
+    "\n",
+    "print(f'Result index: {ridx} order {rord} -->  {dh.get_compact_fulldir(ridx, rord)}')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "#### Dividing imaginary directions\n",
+    "\n",
+    "At first glance, the user might think that this is a useless operation. However, division of two imaginary directions is necessary to determine whether a direction is multiple of another direction. \n",
+    "\n",
+    "Let's consider the following example: Divide the direction $\\epsilon_{1}^{3}\\epsilon_{2}^{2}\\epsilon_{3}$ (9,6) by $\\epsilon_{1}^{2}\\epsilon_{2}$ (1,3). The result is $\\epsilon_{1}\\epsilon_{2}\\epsilon_{3}$.\n",
+    "\n",
+    "This operation can be performed using the functions `div_imdir_idxord(num_idx,num_ord, den_idx,den_ord)` where `num_idx,num_ord` are the index-order pairs of the numerator direction, and  `den_idx,den_ord` are index-order pair of the denominator direction. The result is a 2-element list with the index-order pair of the resulting direction."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[5, 3]"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "coti.div_imdir_idxord(9,6, 1,3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The same operation can be achieved but in human readable form using the function `div_imdir(numDirArr,denDirArr)` where `numDirArr` is the dirArray of the numerator direction, and  `denDirArr` is the dirArray of the denominator direction. For the same example, the result is the dirArray of the resulting direction."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[1, 2, 3]"
+      ]
+     },
+     "execution_count": 15,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "coti.div_imdir([[1,3],[2,2],3], [[1,2],2])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "In the case the division of the imaginary directions is not possible, both functions return an integer -1. For example, dividing $\\epsilon_{1}^{3}$ by $\\epsilon_{2}$ is not possible, and therefore the result is"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "-1"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "coti.div_imdir([[1,3]], [2])"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "pyoti",
+   "language": "python",
+   "name": "pyoti"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.13"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

@@ -1,0 +1,571 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## `sparse` Tutorial 02: Computing arbitrary-order derivatives.\n",
+    "\n",
+    "```\n",
+    "Contributors:\n",
+    "    Mauricio Aristizabal\n",
+    "        University of Texas at San Antonio\n",
+    "        Universidad EAFIT, Colombia.\n",
+    "\n",
+    "Date of creation:  Jun 19 2024\n",
+    "Last modification: Jun 19 2024\n",
+    "```\n",
+    "\n",
+    "### Introduction\n",
+    "\n",
+    "The main purpose of this document is to show how to compute derivatives of functions in python using the sparse 'Order truncated Imaginary' (OTI) module in ```pyoti```. Multiple examples are given in order to show and understand the capabilities of the library, as well as its basic advantages.\n",
+    "\n",
+    "For this, first import the libraries required."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import pyoti.sparse as oti  # Import the library.\n",
+    "import numpy as np\n",
+    "\n",
+    "# Set to print all components\n",
+    "oti.set_printoptions(terms_print=-1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Derivatives of single-variable functions.\n",
+    "\n",
+    "In general, OTI numbers have a strong application in finding derivatives of functions. In this sense let's see some applications to obtain derivatives.\n",
+    "\n",
+    "Consider a $C^n$ function $f: \\mathbb{R} \\rightarrow \\mathbb{R}$, and it's Taylor series:\n",
+    "\n",
+    "$$\n",
+    "f(z) = \\sum_{p=0}^{\\infty}    \\frac{1}{p!}\\frac{\\partial^p f}{\\partial x^p}(a)\\;(z-a)^p\n",
+    "$$\n",
+    "\n",
+    "Let´s take, for convenience, $z=x_0+\\epsilon_1$ and $a=x_0$. Then what we get is the following:\n",
+    "\n",
+    "$$\n",
+    "f(x_0+\\epsilon_1 ) = f(x_0) + \n",
+    "\\displaystyle            \\frac{\\partial   f}{\\partial x  }(x_0)\\;{\\epsilon_1  } +\n",
+    "\\displaystyle\\frac{1}{2!}\\frac{\\partial^2 f}{\\partial x^2}(x_0)\\;{\\epsilon_1^2} +\n",
+    "\\displaystyle\\frac{1}{3!}\\frac{\\partial^3 f}{\\partial x^3}(x_0)\\;{\\epsilon_1^3} + ...\n",
+    "$$\n",
+    "\n",
+    "Therefore, the result of evaluating a function at an OTI number in the form $x_0+\\epsilon_1$, is an OTI number that contains the derivatives of the function along its imaginary directions. Also note that the previous expansion will go until the truncation order set to the number $x_0+\\epsilon_1$. Therefore, the truncation order $n$ is set to the maximum order of derivative required to be computed. Also, typically, the notation for a perturbed variable is $x^* = x_0+\\epsilon_1$ \n",
+    "\n",
+    "Notice two things: (i) that the coefficient along the real part contains the function evaluated at $x_0$; and (ii) that one gets the $p$'th order derivative evaluated at $x_0$ multiplied by the factor $p!$ in the coefficient along the $p$'th order $\\epsilon_1$ direction. \n",
+    "\n",
+    "Therefore, to retrieve a derivative, one must extract the imaginary coefficient along the $\\epsilon_1^p$ direction and multiply (remove) the multiplication factor, i.e.\n",
+    "\n",
+    "$$\n",
+    "\\begin{array}{c}\n",
+    "    \\displaystyle\\frac{\\partial f}{\\partial x}(x_0) = \\mbox{Im}_{\\epsilon_1}\\left[f(x_0+\\epsilon_1)\\right]          \\\\\n",
+    "    \\displaystyle\\frac{\\partial^2 f}{\\partial x^2}(x_0) = 2! \\mbox{Im}_{\\epsilon_1^2}\\left[f(x_0+\\epsilon_1)\\right] \\\\\n",
+    "    \\displaystyle\\frac{\\partial^3 f}{\\partial x^3}(x_0) = 3! \\mbox{Im}_{\\epsilon_1^3}\\left[f(x_0+\\epsilon_1)\\right] \\\\\n",
+    "\\end{array}\n",
+    "$$\n",
+    "\n",
+    "and in general\n",
+    "$$\n",
+    "\\displaystyle\\frac{\\partial^p f}{\\partial x^p}(x_0) = p! \\mbox{Im}_{\\epsilon_1^p}\\left[f(x_0+\\epsilon_1)\\right]\n",
+    "$$\n",
+    "\n",
+    "To apply this in a real example let's consider the following function:\n",
+    "\n",
+    "\n",
+    "#### Example: Polynomial function\n",
+    "\n",
+    "Consider the following function:\n",
+    "\n",
+    "$$\n",
+    "f(x)= 10x^5-3x^3+2x-10\n",
+    "$$\n",
+    "\n",
+    "We will compute derivatives up to 5th order."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": true
+    }
+   },
+   "outputs": [],
+   "source": [
+    "def funct_1(x):\n",
+    "    return 10.0*x**5 -3.0*x**3+2.0*x-10.0"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The analytical defivatives of the funciton are:\n",
+    "$$\n",
+    "\\begin{array}{rcl}\n",
+    "    \\displaystyle\\frac{\\partial   f}{\\partial x  }(x) &=& 50x^4-9x^2+2, \\\\ \n",
+    "    \\displaystyle\\frac{\\partial^2 f}{\\partial x^2}(x) &=& 200x^3-18x,   \\\\ \n",
+    "    \\displaystyle\\frac{\\partial^3 f}{\\partial x^3}(x) &=& 600x^2-18,    \\\\ \n",
+    "    \\displaystyle\\frac{\\partial^4 f}{\\partial x^4}(x) &=& 1200x,        \\\\ \n",
+    "    \\displaystyle\\frac{\\partial^5 f}{\\partial x^5}(x) &=& 1200,\n",
+    "\\end{array}\n",
+    "$$\n",
+    "\n",
+    "\n",
+    "Let's use this simple exampel and use OTIs to compute up-to 5th order derivatives of this polynomial. \n",
+    "\n",
+    "First, apply the perturbation to the variable $x$ along $\\epsilon_1$, $x^* = 2.5+\\epsilon_1$. Since want to obtain higher order terms, we need to redefine the order of the number. Therefore we will redefine it to order 5 (because we want to get  up to the fifth derivative)."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Variable x:       2.5 + 1 * e([1])\n",
+      "Truncation order: 5\n"
+     ]
+    }
+   ],
+   "source": [
+    "x = 2.5\n",
+    "x_star=x+oti.e([1],order=5)\n",
+    "\n",
+    "print(f'Variable x:       {x_star}')\n",
+    "print(f'Truncation order: {x_star.order}')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now let's evaluate the function at $x^*$"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "924.688 + 1898.88 * e([1]) + 1540 * e([[1,2]]) + 622 * e([[1,3]]) + 125 * e([[1,4]]) + 10 * e([[1,5]])\n"
+     ]
+    }
+   ],
+   "source": [
+    "result_1 = funct_1(x_star)\n",
+    "print(result_1)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Observe that the first two values correspond explicitly to the function and first derivative evaluated at $x_0=2.5$. In order to retreive the values of the other derivatives, the solution must take into account the following:\n",
+    "\n",
+    "if our number results in something like\n",
+    "$$\n",
+    "\\mbox{result} = a_0 + a_1\\epsilon_1 + a_2\\epsilon_1^2 + a_3\\epsilon_1^3 + a_4\\epsilon_1^4 + a_5\\epsilon_1^5 \n",
+    "$$\n",
+    "\n",
+    "and considering that \n",
+    "$$\n",
+    "f(x_0+\\epsilon) = f(x_0) + \n",
+    "\\displaystyle            \\frac{\\partial   f}{\\partial x  }(x_0){\\epsilon_1  } +\n",
+    "\\displaystyle\\frac{1}{2!}\\frac{\\partial^2 f}{\\partial x^2}(x_0){\\epsilon_1^2} +\n",
+    "\\displaystyle\\frac{1}{3!}\\frac{\\partial^3 f}{\\partial x^3}(x_0){\\epsilon_1^3} + ...\n",
+    "$$\n",
+    "\n",
+    "then to retreive the derivatives, we most do the following:\n",
+    "\n",
+    "$$\n",
+    "\\begin{array}{rcl}\n",
+    "f(x_0) &=& a_0 \\\\\n",
+    "\\displaystyle \\frac{\\partial   f}{\\partial x  }(x_0) &=& a_1 \\\\\n",
+    "\\displaystyle\\frac{\\partial^2 f}{\\partial x^2}(x_0)&=&a_2*2! \\\\\n",
+    "\\displaystyle\\frac{\\partial^3 f}{\\partial x^3}(x_0)&=&a_3*3! \\\\ \n",
+    "\\displaystyle\\frac{\\partial^4 f}{\\partial x^4}(x_0)&=&a_4*4! \\\\ \n",
+    "\\displaystyle\\frac{\\partial^5 f}{\\partial x^5}(x_0)&=&a_5*5! \\\\ \n",
+    "\\end{array}\n",
+    "$$\n",
+    "\n",
+    "As a result, in order to evaluate the result, consider the following:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 56,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "f       = result_1.real\n",
+    "f_x     = result_1.get_im([1])\n",
+    "f_xx    = result_1.get_im([[1,2]]) * 2*1\n",
+    "f_xxx   = result_1.get_im([[1,3]]) * 3*2*1"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "An easier way to do this is to use the method ```get_deriv(dirArray)```. This automatically applies the factorial factor to obtain the derivative."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "f_xxx:\n",
+      "3732.0 3732.0\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(\"f_xxx:\")\n",
+    "print(result_1.get_im([[1,3]]) * 3*2*1, # Using get_im and the factorial\n",
+    "      result_1.get_deriv([[1,3]])       # Using just get_deriv.\n",
+    "     )"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 58,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Derivative |   pyoti  | analytical|\n",
+      "-----------|----------|-----------|\n",
+      "f          |  924.688 |   924.688 |\n",
+      "f_x        |  1898.88 |   1898.88 |\n",
+      "f_xx       |     3080 |      3080 |\n",
+      "f_xxx      |     3732 |      3732 |\n",
+      "f_xxxx     |     3000 |      3000 |\n",
+      "f_xxxxx    |     1200 |      1200 |\n"
+     ]
+    }
+   ],
+   "source": [
+    "# Getting the other derivatives\n",
+    "f_xxxx  = result_1.get_deriv([[1,4]])\n",
+    "f_xxxxx = result_1.get_deriv([[1,5]])\n",
+    "\n",
+    "# Print results:\n",
+    "print(f\"Derivative |   pyoti  | analytical|\")\n",
+    "print(f\"-----------|----------|-----------|\")\n",
+    "print(f\"f          | {f:8g} | {(10*x**5-3*x**3+2*x-10):9g} |\")\n",
+    "print(f\"f_x        | {f_x:8g} | {(50*x**4-9*x**2+2):9g} |\")\n",
+    "print(f\"f_xx       | {f_xx:8g} | {(200*x**3-18*x):9g} |\")    # \")#\n",
+    "print(f\"f_xxx      | {f_xxx:8g} | {(600*x**2-18):9g} |\")\n",
+    "print(f\"f_xxxx     | {f_xxxx:8g} | {(1200*x):9g} |\")\n",
+    "print(f\"f_xxxxx    | {f_xxxxx:8g} | {1200:9g} |\")\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "###  Derivatives of multi variable functions\n",
+    "\n",
+    "A similar approach as in the single variable case applies to multivariable functions. If one considers a function $f: \\mathbb{R}^m \\rightarrow \\mathbb{R}$, then all its derivatives can be obtained by perturbing the input parameters along *independent* imaginary directions, as follows:\n",
+    "\n",
+    "$$\n",
+    "\\begin{array}{rcl}\n",
+    "    x_1^* &=& x_1 + \\epsilon_1\\\\\n",
+    "    x_2^* &=& x_2 + \\epsilon_2\\\\\n",
+    "    &\\vdots& \\\\\n",
+    "    x_m^* &=& x_m + \\epsilon_m\\\\\n",
+    "\\end{array}\n",
+    "$$\n",
+    "\n",
+    "\n",
+    "Then, the function is evaluated using the OTI function $f(x_1^*,x_2^*,...,x_m^*)$. The derivatives are obtained as follows \n",
+    "\n",
+    "$$\n",
+    "\\frac{ \\partial^{p}f }{ \\partial x_1^{p_1} \\partial x_2^{p_2} ... \\partial x_m^{p_m} } = \n",
+    "p_1!p_2! \\cdots p_m! \\; \\mbox{Im}_{\\epsilon_1^{p_1}\\epsilon_2^{p_2}\\cdots\\epsilon_m^{p_m}}\\left[f(x_1^*,x_2^*,...,x_m^*)\\right]\n",
+    "$$\n",
+    "\n",
+    "where $p=\\sum_{i=1}^m p_i$\n",
+    "\n",
+    "For example, a two variable function up to order 2 derivatives gives:\n",
+    "\n",
+    "$$\n",
+    "f(x_{1_0}+\\epsilon_1,x_{2_0}+\\epsilon_2) = \n",
+    "f(x_{1_0},x_{2_0}) + \n",
+    "\\frac{\\partial f }{ \\partial x_1}(x_{1_0},x_{2_0}) \\ \\epsilon_1 + \n",
+    "\\frac{\\partial f }{ \\partial x_2}(x_{1_0},x_{2_0}) \\ \\epsilon_2 + \\\\\n",
+    "\\frac{1}{2!}\\frac{\\partial^2 f }{ \\partial x_1^2}(x_{1_0},x_{2_0})  \\ \\epsilon_1^2 +\n",
+    "\\frac{\\partial^2 f }{ \\partial x_1\\partial x_2}(x_{1_0},x_{2_0})  \\ \\epsilon_2\\epsilon_1 +\n",
+    "\\frac{1}{2!}\\frac{\\partial^2 f }{ \\partial x_2^2}(x_{1_0},x_{2_0}) \\  \\epsilon_2^2 + \\cdots\n",
+    "$$\n",
+    "\n",
+    "\n",
+    "\n",
+    "#### Example\n",
+    "To apply this to a simple example, let's consider the function \n",
+    "\n",
+    "$$\n",
+    "f(x,y) = 4x^5y^4\n",
+    "$$\n",
+    "\n",
+    "Let's define the function in the python environment:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 59,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": true
+    }
+   },
+   "outputs": [],
+   "source": [
+    "def funct_2(x,y):\n",
+    "    return 4*x**5*y**4"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Analitically, let's define the derivatives of the function:\n",
+    "$$\n",
+    "f_x(x,y) = 20x^4y^4, \\ \\ f_y(x,y) = 16x^5y^3\n",
+    "$$\n",
+    "\n",
+    "Now, how do we retreive the function's first derivatives by just evaluating the function with dual numbers? It's easy! \n",
+    "\n",
+    "According to the taylor series expansion of the function, we can retreive the function derivatives by evaluating the function at the point we want, say $(x_0,y_0)$ with a perturbation on the dual direction. In this case, the perturbation will occur as follows: $(x_0+\\epsilon_1,y_0+\\epsilon_2)$\n",
+    "\n",
+    "To get first derivatives we most only evaluate the function into dual numbers of order one. In this way, we define the point $(x_0=2,y_0=3)$ and we get:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": true
+    }
+   },
+   "outputs": [],
+   "source": [
+    "x=2.0 + oti.e(1, order=2 )\n",
+    "y=3.0 + oti.e(2, order=2 )"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 61,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "10368 + 25920 * e([1]) + 13824 * e([2]) + 25920 * e([[1,2]]) + 34560 * e([1,2]) + 6912 * e([[2,2]])\n"
+     ]
+    }
+   ],
+   "source": [
+    "result_2 = funct_2(x,y)\n",
+    "print(result_2)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Analitically, the results of evaluating all function and its derivatives are:\n",
+    "$$\n",
+    "f(2,3) = 10368\n",
+    "$$\n",
+    "$$\n",
+    "f_x(2,3) = 25920\n",
+    "$$\n",
+    "$$\n",
+    "f_y(2,3) = 13824\n",
+    "$$"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Now, interestingly, the coefficients that we obtain are the following:\n",
+    "``` 2048.0 ``` on the real part, wich represents the function evaluated at $(2,3)$, the coefficient of $\\epsilon_1$ is the first derivative with respect to $x$ (as is) and the coefficient of $\\epsilon_2$ is the first derivative with respect to $y$ function evaluated.\n",
+    "\n",
+    "The seccond derivatives of the function are:\n",
+    "$$\n",
+    "f_{xx}(x,y) = 80x^3y^4, \\\\\n",
+    "f_{xy}(x,y) = 80x^4y^3, \\\\\n",
+    "f_{yy}(x,y) = 48x^5y^2\n",
+    "$$\n",
+    "\n",
+    "Wich evaluated at $(2,3)$ gives\n",
+    "$$\n",
+    "f_{xx}(2,3) = 51840, \\\\ \n",
+    "f_{xy}(2,3) = 34560, \\\\\n",
+    "f_{yy}(2,3) = 13824\n",
+    "$$\n",
+    "\n",
+    "\n",
+    "Lets now change the order of both numbers, and see what we get:\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "10368 + 25920 * e([1]) + 13824 * e([2]) + 25920 * e([[1,2]]) + 34560 * e([1,2]) + 6912 * e([[2,2]]) + 12960 * e([[1,3]]) + 34560 * e([[1,2],2]) + 17280 * e([1,[2,2]]) + 1536 * e([[2,3]])\n"
+     ]
+    }
+   ],
+   "source": [
+    "# One can increase dynamically the order of an OTI number by \n",
+    "# adding a zero-coefficient OTI numbers with the new desired \n",
+    "# truncation order.\n",
+    "x = x + 0*oti.e(1,order=3) \n",
+    "y = y + 0*oti.e(1,order=3) \n",
+    "\n",
+    "result_2_order3 = funct_2(x,y)\n",
+    "print(result_2_order3)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "We can extract, based on the Taylor series, the different terms. However, in order to get an easy form to extract them, the method ```get_deriv(dirArray)``` helps in retreiving the derivatives according to the specifyed direction. It works as follows:"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "metadata": {
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "f(x_0, y_0)    :   10368\n",
+      "\n",
+      "f_x(x_0, y_0)  :   25920\n",
+      "f_y(x_0, y_0)  :   13824\n",
+      "\n",
+      "f_xx(x_0, y_0) :   51840\n",
+      "f_xy(x_0, y_0) :   34560\n",
+      "f_yy(x_0, y_0) :   13824\n",
+      "\n",
+      "f_xxx(x_0, y_0):   77760\n",
+      "f_xxy(x_0, y_0):   69120\n",
+      "f_xyy(x_0, y_0):   34560\n",
+      "f_yyy(x_0, y_0):    9216\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(f\"f(x_0, y_0)    :{result_2_order3.get_deriv([0]):8g}\")\n",
+    "print()\n",
+    "print(f\"f_x(x_0, y_0)  :{result_2_order3.get_deriv([1]):8g}\")\n",
+    "print(f\"f_y(x_0, y_0)  :{result_2_order3.get_deriv([2]):8g}\")\n",
+    "print()\n",
+    "print(f\"f_xx(x_0, y_0) :{result_2_order3.get_deriv([[1,2]]):8g}\")\n",
+    "print(f\"f_xy(x_0, y_0) :{result_2_order3.get_deriv([1,2]):8g}\")\n",
+    "print(f\"f_yy(x_0, y_0) :{result_2_order3.get_deriv([[2,2]]):8g}\")\n",
+    "print()\n",
+    "print(f\"f_xxx(x_0, y_0):{result_2_order3.get_deriv([1,1,1]):8g}\")\n",
+    "print(f\"f_xxy(x_0, y_0):{result_2_order3.get_deriv([1,1,2]):8g}\")\n",
+    "print(f\"f_xyy(x_0, y_0):{result_2_order3.get_deriv([1,2,2]):8g}\")\n",
+    "print(f\"f_yyy(x_0, y_0):{result_2_order3.get_deriv([2,2,2]):8g}\")"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "pyoti",
+   "language": "python",
+   "name": "pyoti"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.13"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

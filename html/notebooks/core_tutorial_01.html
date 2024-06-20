@@ -1,0 +1,1272 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>core Tutorial 01: Core module utilities &#8212; pyoti 0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/core_tutorial_01';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="sparse Tutorial 01: Sparse module basic usage." href="sparse_tutorial_01.html" />
+    <link rel="prev" title="Tutorials" href="../tutorials.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">pyoti 0.1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../aboutus.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../pyoti.html">
+    pyoti package
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../aboutus.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../pyoti.html">
+    pyoti package
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Core module</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">core</span></code> Tutorial 01: Core module utilities</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Sparse module</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="sparse_tutorial_01.html"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 01: Sparse module basic usage.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparse_tutorial_02.html"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 02: Computing arbitrary-order derivatives.</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><code...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="core-Tutorial-01:-Core-module-utilities">
+<h1><code class="docutils literal notranslate"><span class="pre">core</span></code> Tutorial 01: Core module utilities<a class="headerlink" href="#core-Tutorial-01:-Core-module-utilities" title="Permalink to this heading">#</a></h1>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Author:
+    Mauricio Aristizabal Cano
+        University of Texas at San Antonio
+        Universidad EAFIT
+
+Date of creation:  Jun 19 2024
+Last modification: Jun 19 2024
+</pre></div>
+</div>
+<section id="Introduction">
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
+<p>This document showcases and describes some of the capabilities of the core module in the <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> library.</p>
+<p>The reasoning behind the core module is to provide a unique module that contains the core functionality and classes that that are common to the different implementations of the OTI numbers (sparse, dense, etc), centralizing some of the calculations. Some of the capabilities are:</p>
+<ul class="simple">
+<li><p>Manipulation of imaginary direcitions (definition, multiplication/division between directions, etc)</p></li>
+<li><p>Translation layer between precomputed data and the OTI number implementation</p></li>
+<li><p>Utility functions, e.g. getting total number of directions for m basis and n order, translating human-readable notation to faster imaginary direction indexing, etc.</p></li>
+<li><p>Inquiring the capabilities of the implementation.</p></li>
+<li><p>many others</p></li>
+</ul>
+<p>In this document some of these capabilities will be shown.</p>
+<p>Start by importing the module using the following code:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyoti.core</span> <span class="k">as</span> <span class="nn">coti</span>  <span class="c1"># Import the core library module.</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Basics:-inquiring-library-capabilities.">
+<h2>Basics: inquiring library capabilities.<a class="headerlink" href="#Basics:-inquiring-library-capabilities." title="Permalink to this heading">#</a></h2>
+<p>An important information is to know what is the maximum number of bases and maximum truncation order supported by the precomputed data. This information is accessed via the function <code class="docutils literal notranslate"><span class="pre">print_capabilities()</span></code>. This function returns a string with the maximum number of basis that can be operated for a given order.</p>
+<p>The default version of the library can compute derivatives of up-to 150th order, which are limited as follows:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coti</span><span class="o">.</span><span class="n">print_capabilities</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ Order  Nbases    Ndir
+     1   65000   65000
+     2    1000  500500
+     3     100  171700
+     4     100 4421275
+     5      10    2002
+     6      10    5005
+     7      10   11440
+     8      10   24310
+     9      10   48620
+    10      10   92378
+    11       5    1365
+    12       5    1820
+    13       5    2380
+    14       5    3060
+    15       5    3876
+    16       5    4845
+    17       5    5985
+    18       5    7315
+    19       5    8855
+    20       5   10626
+    21       3     253
+    22       3     276
+    23       3     300
+    24       3     325
+    25       3     351
+    26       3     378
+    27       3     406
+    28       3     435
+    29       3     465
+    30       3     496
+    31       3     528
+    32       3     561
+    33       3     595
+    34       3     630
+    35       3     666
+    36       3     703
+    37       3     741
+    38       3     780
+    39       3     820
+    40       3     861
+    41       3     903
+    42       3     946
+    43       3     990
+    44       3    1035
+    45       3    1081
+    46       3    1128
+    47       3    1176
+    48       3    1225
+    49       3    1275
+    50       3    1326
+    51       2      52
+    52       2      53
+    53       2      54
+    54       2      55
+    55       2      56
+    56       2      57
+    57       2      58
+    58       2      59
+    59       2      60
+    60       2      61
+    61       2      62
+    62       2      63
+    63       2      64
+    64       2      65
+    65       2      66
+    66       2      67
+    67       2      68
+    68       2      69
+    69       2      70
+    70       2      71
+    71       2      72
+    72       2      73
+    73       2      74
+    74       2      75
+    75       2      76
+    76       2      77
+    77       2      78
+    78       2      79
+    79       2      80
+    80       2      81
+    81       2      82
+    82       2      83
+    83       2      84
+    84       2      85
+    85       2      86
+    86       2      87
+    87       2      88
+    88       2      89
+    89       2      90
+    90       2      91
+    91       2      92
+    92       2      93
+    93       2      94
+    94       2      95
+    95       2      96
+    96       2      97
+    97       2      98
+    98       2      99
+    99       2     100
+   100       2     101
+   101       2     102
+   102       2     103
+   103       2     104
+   104       2     105
+   105       2     106
+   106       2     107
+   107       2     108
+   108       2     109
+   109       2     110
+   110       2     111
+   111       2     112
+   112       2     113
+   113       2     114
+   114       2     115
+   115       2     116
+   116       2     117
+   117       2     118
+   118       2     119
+   119       2     120
+   120       2     121
+   121       2     122
+   122       2     123
+   123       2     124
+   124       2     125
+   125       2     126
+   126       2     127
+   127       2     128
+   128       2     129
+   129       2     130
+   130       2     131
+   131       2     132
+   132       2     133
+   133       2     134
+   134       2     135
+   135       2     136
+   136       2     137
+   137       2     138
+   138       2     139
+   139       2     140
+   140       2     141
+   141       2     142
+   142       2     143
+   143       2     144
+   144       2     145
+   145       2     146
+   146       2     147
+   147       2     148
+   148       2     149
+   149       2     150
+   150       2     151
+</pre></div></div>
+</div>
+<p>From this output, notice that for first order directions, upto 65000 independent basis can be used. In contrast, for third order this number is reduced to 100. This number depends on the pre-computed data information, which can be re-generated using the otigen executable (see compilation instructions).</p>
+<p>Another inquiry utility is the <code class="docutils literal notranslate"><span class="pre">get_trunc_order()</span></code> function, which returns the maximum truncation order of the implementation that is currently running.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coti</span><span class="o">.</span><span class="n">get_trunc_order</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+150
+</pre></div></div>
+</div>
+</section>
+<section id="Getting-number-of-imaginary-directions.">
+<h2>Getting number of imaginary directions.<a class="headerlink" href="#Getting-number-of-imaginary-directions." title="Permalink to this heading">#</a></h2>
+<p>A fully dense OTI number with truncation order <span class="math notranslate nohighlight">\(n\)</span> and a number of basis <span class="math notranslate nohighlight">\(m\)</span> will have a total of <span class="math notranslate nohighlight">\(n_{\mbox{total}}\)</span> imaginary directions (including the real direction). This number is given by:</p>
+<div class="math notranslate nohighlight">
+\[n_{\mbox{total}} = {n+m\choose m} = \frac{(n+m)!}{n!m!}\]</div>
+<p>This number can be efficiently evaluated using the function <code class="docutils literal notranslate"><span class="pre">ndir_total(</span> <span class="pre">nbasis,</span> <span class="pre">order</span> <span class="pre">)</span></code>. For instance, for a total of <span class="math notranslate nohighlight">\(m=2\)</span> basis and truncation order <span class="math notranslate nohighlight">\(n=3\)</span>, the number of imaginary directions is 10. For an OTI number <span class="math notranslate nohighlight">\(a^*\)</span>, with <span class="math notranslate nohighlight">\(a^*\in \mathbb{OTI}^{n=2}_{m=3}\)</span>, it is as follows:</p>
+<div class="math notranslate nohighlight">
+\[a^*=a_r +
+\underbrace{
+    a_{\epsilon_1}\epsilon_1+
+    a_{\epsilon_2}\epsilon_2
+}_{\mbox{Order 1}} +
+\underbrace{
+    a_{\epsilon_1^2}\epsilon_1^2+
+    a_{\epsilon_1\epsilon_2}\epsilon_1\epsilon_2+
+    a_{\epsilon_2^2}\epsilon_2^2
+}_{\mbox{Order 2}}+
+\underbrace{
+    a_{\epsilon_1^3}\epsilon_1^3+
+    a_{\epsilon_1^2\epsilon_2}\epsilon_1^2\epsilon_2+
+    a_{\epsilon_1\epsilon_2^2}\epsilon_1\epsilon_2^2+
+    a_{\epsilon_2^3}\epsilon_2^3
+}_{\mbox{Order 3}}\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_total</span> <span class="o">=</span> <span class="n">coti</span><span class="o">.</span><span class="n">ndir_total</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">n_total</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+10
+</pre></div></div>
+</div>
+<p>The total number of directions with a <strong>specific order</strong> <span class="math notranslate nohighlight">\(p\)</span>, <span class="math notranslate nohighlight">\(n_{p}\)</span> for a number of basis <span class="math notranslate nohighlight">\(m\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[n_{p} = {p+m-1\choose m-1} = \frac{(p+m-1)!}{p!(m-1)!}\]</div>
+<p>This number can be efficiently evaluated using the function <code class="docutils literal notranslate"><span class="pre">ndir_order(</span> <span class="pre">nbasis,</span> <span class="pre">order_p</span> <span class="pre">)</span></code>. For the prevous case, we have that</p>
+<div class="math notranslate nohighlight">
+\[a^*=a_r +
+\underbrace{
+    a_{\epsilon_1}\epsilon_1+
+    a_{\epsilon_2}\epsilon_2
+}_{n_1 = 2} +
+\underbrace{
+    a_{\epsilon_1^2}\epsilon_1^2+
+    a_{\epsilon_1\epsilon_2}\epsilon_1\epsilon_2+
+    a_{\epsilon_2^2}\epsilon_2^2
+}_{n_2 = 3}+
+\underbrace{
+    a_{\epsilon_1^3}\epsilon_1^3+
+    a_{\epsilon_1^2\epsilon_2}\epsilon_1^2\epsilon_2+
+    a_{\epsilon_1\epsilon_2^2}\epsilon_1\epsilon_2^2+
+    a_{\epsilon_2^3}\epsilon_2^3
+}_{n_3 = 4}\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n_1</span> <span class="o">=</span> <span class="n">coti</span><span class="o">.</span><span class="n">ndir_order</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">n_2</span> <span class="o">=</span> <span class="n">coti</span><span class="o">.</span><span class="n">ndir_order</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">n_3</span> <span class="o">=</span> <span class="n">coti</span><span class="o">.</span><span class="n">ndir_order</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;n_1 = </span><span class="si">{</span><span class="n">n_1</span><span class="si">}</span><span class="s2">, n_2 = </span><span class="si">{</span><span class="n">n_2</span><span class="si">}</span><span class="s2">, n_3 = </span><span class="si">{</span><span class="n">n_3</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+n_1 = 2, n_2 = 3, n_3 = 4
+</pre></div></div>
+</div>
+</section>
+<section id="Direction-helper">
+<h2>Direction helper<a class="headerlink" href="#Direction-helper" title="Permalink to this heading">#</a></h2>
+<p>The direction helper is an object of class dHelp, that loads and manipulates the precomputed data to speedup calculations. This object loads a particular set of precomputed data helper for each order of imaignary directions. Therefore, if the maximum truncation order is 150, the number of interal helpers in dHelp will be 150.</p>
+<p>Here are described some uses of the direction helper.</p>
+<section id="Getting-the-direction-helper">
+<h3>Getting the direction helper<a class="headerlink" href="#Getting-the-direction-helper" title="Permalink to this heading">#</a></h3>
+<p>Use the function <code class="docutils literal notranslate"><span class="pre">get_dHelp()</span></code> to get the direction helper object.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dh</span> <span class="o">=</span> <span class="n">coti</span><span class="o">.</span><span class="n">get_dHelp</span><span class="p">()</span>
+<span class="n">dh</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;dhelp with 150 helpers loaded&gt;
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can also use print(dh). Here, only a portion of the output is displayed.</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dh</span><span class="p">)[:</span><span class="mi">490</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Direction Helper object with 150 helpers:
+
+Helper 1:
+  - Truncation order: 1
+  - Number of imaginary bases: 65000
+  - Total number of imaginary directions: 65000
+  - Total number of multiplication tables: 0
+
+Helper 2:
+  - Truncation order: 2
+  - Number of imaginary bases: 1000
+  - Total number of imaginary directions: 500500
+  - Total number of multiplication tables: 1
+
+Helper 3:
+  - Truncation order: 3
+  - Number of imaginary bases: 100
+  - Total number of imaginary directions: 171700
+</pre></div></div>
+</div>
+</section>
+<section id="Extracting-the-full-directions-given-a-index-order-pair:">
+<h3>Extracting the full directions given a index-order pair:<a class="headerlink" href="#Extracting-the-full-directions-given-a-index-order-pair:" title="Permalink to this heading">#</a></h3>
+<p>The full direction of a “index,order” pair can be obtained from the precomputed data. For this, give the index, order pair and the direction helper will return the corresponding</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Order
+<span class="math notranslate nohighlight">\(\d
+ownarrow\)</span>
+/ Index
+:
+math:<cite>ri
+ghtarrow</cite></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(0\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(1\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(2\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(3\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(4\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(5\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(6\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(7\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(8\)</span></p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(9\)</span></p></th>
+<th class="head"><p>:mat
+h:<cite>c
+dots</cite></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{5}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{6}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{7}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{8}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{9}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{10}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(2\)</span></p></td>
+<td><p>:
+math:<cite>epsilon_{1}^{2}</cite></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{3}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}\epsilon_{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{3}\epsilon_{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{4}^{2}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(3\)</span></p></td>
+<td><p>:
+math:<cite>epsilon_{1}^{3}</cite></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{2}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{3}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}\epsilon_{3}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{3}^{3}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(4\)</span></p></td>
+<td><p>:
+math:<cite>epsilon_{1}^{4}</cite></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{2}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{3}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{3}^{2}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(5\)</span></p></td>
+<td><p>:
+math:<cite>epsilon_{1}^{5}</cite></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{5}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{2}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{3}\epsilon_{3}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(6\)</span></p></td>
+<td><p>:
+math:<cite>epsilon_{1}^{6}</cite></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{5}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{6}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{2}\epsilon_{3}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(7\)</span></p></td>
+<td><p>:
+math:<cite>epsilon_{1}^{7}</cite></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}^{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{5}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{6}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{7}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}\epsilon_{3}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(8\)</span></p></td>
+<td><p>:
+math:<cite>epsilon_{1}^{8}</cite></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{7}\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{2}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}^{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}^{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{5}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{6}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{7}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{8}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{7}\epsilon_{3}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(9\)</span></p></td>
+<td><p>:
+math:<cite>epsilon_{1}^{9}</cite></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{8}\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{7}\epsilon_{2}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{2}^{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}^{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}^{5}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{6}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{7}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{8}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{9}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+<tr class="row-odd"><td><p>:
+math:<cite>10</cite></p></td>
+<td><p>:m
+ath:<cite>epsilon_{1}^{10}</cite></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{9}\epsilon_{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{8}\epsilon_{2}^{2}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{7}\epsilon_{2}^{3}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{2}^{4}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}^{5}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}^{6}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{7}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{8}\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{9}\)</span></p></td>
+<td><p>:mat
+h:<cite>c
+dots</cite></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>From the Table above, the index-order pair &lt;9, 5&gt; (index 9, order 5) corresponds to the direction <span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{3}\epsilon_{3}\)</span>. Therefore, its compact <code class="docutils literal notranslate"><span class="pre">dirArray</span></code> representation is <code class="docutils literal notranslate"><span class="pre">[1,[2,3],3]</span></code>. This can be easily retrieved from the direction helper object using the <code class="docutils literal notranslate"><span class="pre">get_compact_fulldir(indx,order)</span></code> method:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">indx</span>  <span class="o">=</span> <span class="mi">9</span>
+<span class="n">order</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">dh</span><span class="o">.</span><span class="n">get_compact_fulldir</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, [2, 3], 3]
+</pre></div></div>
+</div>
+<p>The expanded full dir can be obtained using the <code class="docutils literal notranslate"><span class="pre">get_fulldir(indx,order)</span></code> method</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dh</span><span class="o">.</span><span class="n">get_fulldir</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([1, 2, 2, 2, 3], dtype=uint16)
+</pre></div></div>
+</div>
+<p>Imaginary directions can become extensive. An ideal representation is by defining its bases and exponents. This information is also efficiently provided by the direction helper. Use <code class="docutils literal notranslate"><span class="pre">dh.get_base(indx,</span> <span class="pre">order)</span></code></p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bases</span><span class="p">,</span><span class="n">exponents</span> <span class="o">=</span> <span class="n">dh</span><span class="o">.</span><span class="n">get_base_exp</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span><span class="n">order</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Bases </span><span class="si">{</span><span class="n">bases</span><span class="si">}</span><span class="s1">, exponents </span><span class="si">{</span><span class="n">exponents</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Bases [1 2 3], exponents [1 3 1]
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Converting-imaginary-direction-notations">
+<h2>Converting imaginary direction notations<a class="headerlink" href="#Converting-imaginary-direction-notations" title="Permalink to this heading">#</a></h2>
+<p>The direction helper provides an easy way to converting from index-order pairs to human readable compact and full direction expressions. However, the inverse operation is not trivial.</p>
+<section id="Converting-from-index-order-to-human-readable-dirArray">
+<h3>Converting from index-order to human readable dirArray<a class="headerlink" href="#Converting-from-index-order-to-human-readable-dirArray" title="Permalink to this heading">#</a></h3>
+<p>Use the direction helper’s <code class="docutils literal notranslate"><span class="pre">get_compact_fulldir(indx,</span> <span class="pre">order)</span></code> or <code class="docutils literal notranslate"><span class="pre">get_fulldir(indx,</span> <span class="pre">order)</span></code> methods:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">indx</span>  <span class="o">=</span> <span class="mi">9</span>
+<span class="n">order</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">dh</span><span class="o">.</span><span class="n">get_compact_fulldir</span><span class="p">(</span><span class="n">indx</span><span class="p">,</span> <span class="n">order</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, [2, 3], 3]
+</pre></div></div>
+</div>
+</section>
+<section id="Converting-from-human-readable-dirArray-to-index-order">
+<h3>Converting from human readable dirArray to index-order<a class="headerlink" href="#Converting-from-human-readable-dirArray-to-index-order" title="Permalink to this heading">#</a></h3>
+<p>Use the function <code class="docutils literal notranslate"><span class="pre">imdir(dirArray)</span></code> in the core module (this is not a method in the direction helper). This function uses the <code class="docutils literal notranslate"><span class="pre">dirArray</span></code> input and returns a 2-element list with the corresponding index-order pair of this direction.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coti</span><span class="o">.</span><span class="n">imdir</span><span class="p">([</span><span class="mi">1</span><span class="p">,[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[9, 5]
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Operating-Imaginary-directions">
+<h2>Operating Imaginary directions<a class="headerlink" href="#Operating-Imaginary-directions" title="Permalink to this heading">#</a></h2>
+<p>Imagianry directions can be multiplied and divided. Here are some functions in the core pyoti module that can provide this functionality.</p>
+<section id="Multiplying-imaginary-directions">
+<h3>Multiplying imaginary directions<a class="headerlink" href="#Multiplying-imaginary-directions" title="Permalink to this heading">#</a></h3>
+<p>Imaginary directions can be multiplied using the direction helper and the method <code class="docutils literal notranslate"><span class="pre">mult_dir(idx1,ord1,idx2,ord2)</span></code>. The first two inputs corrspond to the index order pairs of the first imatginary direction, and the last two inputs correspond to the second imaginary direction. The result is the index-order pair of the resulting imaginary direction.</p>
+<p>For example multiplying <span class="math notranslate nohighlight">\(\epsilon_{1}^{3}  \times \left( \epsilon_{2}^2\epsilon_{3}\right)\)</span> is $ (0,3) <span class="math">\times `(6,3) $ is the direction :math:</span>epsilon_{1}^{3}epsilon_{2}^{2}epsilon_{3}` which corresponds to the <span class="math notranslate nohighlight">\((9,6)\)</span> direction.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Multipying two</span>
+
+<span class="n">ridx</span><span class="p">,</span><span class="n">rord</span> <span class="o">=</span> <span class="n">dh</span><span class="o">.</span><span class="n">mult_dir</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span><span class="mi">3</span> <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result index: </span><span class="si">{</span><span class="n">ridx</span><span class="si">}</span><span class="s1"> order </span><span class="si">{</span><span class="n">rord</span><span class="si">}</span><span class="s1"> --&gt;  </span><span class="si">{</span><span class="n">dh</span><span class="o">.</span><span class="n">get_compact_fulldir</span><span class="p">(</span><span class="n">ridx</span><span class="p">,</span> <span class="n">rord</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Result index: 9 order 6 --&gt;  [[1, 3], [2, 2], 3]
+</pre></div></div>
+</div>
+</section>
+<section id="Dividing-imaginary-directions">
+<h3>Dividing imaginary directions<a class="headerlink" href="#Dividing-imaginary-directions" title="Permalink to this heading">#</a></h3>
+<p>At first glance, the user might think that this is a useless operation. However, division of two imaginary directions is necessary to determine whether a direction is multiple of another direction.</p>
+<p>Let’s consider the following example: Divide the direction <span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{2}\epsilon_{3}\)</span> (9,6) by <span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}\)</span> (1,3). The result is <span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}\epsilon_{3}\)</span>.</p>
+<p>This operation can be performed using the functions <code class="docutils literal notranslate"><span class="pre">div_imdir_idxord(num_idx,num_ord,</span> <span class="pre">den_idx,den_ord)</span></code> where <code class="docutils literal notranslate"><span class="pre">num_idx,num_ord</span></code> are the index-order pairs of the numerator direction, and <code class="docutils literal notranslate"><span class="pre">den_idx,den_ord</span></code> are index-order pair of the denominator direction. The result is a 2-element list with the index-order pair of the resulting direction.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coti</span><span class="o">.</span><span class="n">div_imdir_idxord</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[5, 3]
+</pre></div></div>
+</div>
+<p>The same operation can be achieved but in human readable form using the function <code class="docutils literal notranslate"><span class="pre">div_imdir(numDirArr,denDirArr)</span></code> where <code class="docutils literal notranslate"><span class="pre">numDirArr</span></code> is the dirArray of the numerator direction, and <code class="docutils literal notranslate"><span class="pre">denDirArr</span></code> is the dirArray of the denominator direction. For the same example, the result is the dirArray of the resulting direction.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coti</span><span class="o">.</span><span class="n">div_imdir</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="mi">3</span><span class="p">],</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[1, 2, 3]
+</pre></div></div>
+</div>
+<p>In the case the division of the imaginary directions is not possible, both functions return an integer -1. For example, dividing <span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\)</span> by <span class="math notranslate nohighlight">\(\epsilon_{2}\)</span> is not possible, and therefore the result is</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">coti</span><span class="o">.</span><span class="n">div_imdir</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]],</span> <span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+-1
+</pre></div></div>
+</div>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../tutorials.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tutorials</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="sparse_tutorial_01.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 01: Sparse module basic usage.</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Basics:-inquiring-library-capabilities.">Basics: inquiring library capabilities.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Getting-number-of-imaginary-directions.">Getting number of imaginary directions.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Direction-helper">Direction helper</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Getting-the-direction-helper">Getting the direction helper</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Extracting-the-full-directions-given-a-index-order-pair:">Extracting the full directions given a index-order pair:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Converting-imaginary-direction-notations">Converting imaginary direction notations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Converting-from-index-order-to-human-readable-dirArray">Converting from index-order to human readable dirArray</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Converting-from-human-readable-dirArray-to-index-order">Converting from human readable dirArray to index-order</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Operating-Imaginary-directions">Operating Imaginary directions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Multiplying-imaginary-directions">Multiplying imaginary directions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Dividing-imaginary-directions">Dividing imaginary directions</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/notebooks/core_tutorial_01.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2024, Mauricio Aristizabal.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -30,3 +30,5 @@ rm -rf -v !(html|Makefile|README.md)
 ``` bash
 mv html/* .
 ```
+
+7. add and commit the changes to the gh-pages branch, and push to the repository.

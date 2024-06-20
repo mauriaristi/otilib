@@ -41,6 +41,7 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'pyoti';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -135,6 +136,13 @@
 <li class="nav-item pst-header-nav-item">
   <a class="nav-link nav-internal" href="installation.html">
     Installation
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="tutorials.html">
+    Tutorials
   </a>
 </li>
 
@@ -239,6 +247,13 @@ document.write(`
 <li class="nav-item pst-header-nav-item">
   <a class="nav-link nav-internal" href="installation.html">
     Installation
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="tutorials.html">
+    Tutorials
   </a>
 </li>
 
@@ -2261,126 +2276,35 @@ nodal indices accordingly.</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">hex1_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.hex1_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 1 node triangle 2D element (0th order).</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><dl>
-<dt>zeta ^          4 y</dt><dd><blockquote>
-<div><div class="line-block">
-<div class="line-block">
-<div class="line-block">
-<div class="line-block">
-<div class="line-block">
-<div class="line">/ eta</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>     <span class="n">zeta</span> <span class="o">^</span>          <span class="mi">4</span> <span class="n">y</span>
+<span class="o">&gt;</span>          <span class="o">|</span>         <span class="o">/</span> <span class="n">eta</span>
+<span class="o">&gt;</span>          <span class="o">|</span>        <span class="o">/</span>
+<span class="o">&gt;</span>          <span class="o">|</span>       <span class="o">/</span>
+<span class="o">&gt;</span>          <span class="o">|</span>      <span class="o">/</span>
+<span class="o">&gt;</span>          <span class="o">|</span>     <span class="o">/</span>
+<span class="o">&gt;</span>      <span class="o">*</span>  <span class="o">*|*</span> <span class="o">*</span> <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>     <span class="o">*</span> <span class="o">|</span>  <span class="o">|</span>      <span class="o">**</span>
+<span class="o">&gt;</span>    <span class="o">*</span>     <span class="n">x</span>     <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>   <span class="o">|</span>       <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>   <span class="o">*</span>      <span class="n">xi</span>
+<span class="o">&gt;</span>  <span class="o">*</span>    <span class="o">|</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="o">*</span> <span class="n">x</span><span class="o">--------&gt;</span>
+<span class="o">&gt;</span>  <span class="o">*</span>    <span class="o">|-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">*</span> <span class="o">-</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="o">/</span>       <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>  <span class="o">/</span>        <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">/</span>         <span class="o">**</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>
+</pre></div>
 </div>
-<div class="line">/</div>
-</div>
-<div class="line">/</div>
-</div>
-<div class="line">/</div>
-</div>
-<div class="line">/</div>
-</div>
-</div></blockquote>
-<ul class="simple">
-<li><p><em>|</em> * *  *</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-<ul>
-<li><div class="line-block">
-<div class="line">|      **</div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<ul class="simple">
-<li><p>x     * *</p></li>
-</ul>
-</div></blockquote>
-<ul>
-<li><div class="line-block">
-<div class="line">*  *</div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<ul>
-<li><ul class="simple">
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><p>xi</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><div class="line-block">
-<div class="line">(0)  * x——–&gt;</div>
-</div>
-</li>
-<li><p><a href="#id3"><span class="problematic" id="id4">|</span></a>- - - * - *</p></li>
-<li><p>/       *  *</p></li>
-<li><p>/        * *</p></li>
-<li><p>/         **</p></li>
-<li><ul class="simple">
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0].</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2391,159 +2315,52 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <dd><p>Definition of basis functions for the 20-node brick 3D element (2nd order).
 Basis functions taken from Smith, I. “Programming the Finite Element Method” 5th ed. Wiley.</p>
 <p>NODE NUMBERING:   Node numbering corresponds to GMSH 4 numbering scheme.</p>
-<blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><p>4</p>
-</div></blockquote>
-<p>/</p>
-</div></blockquote>
-<p>^ zeta           /  eta
-|               /
-|              /
-|             /
-|            /
-|           /</p>
-</div></blockquote>
-<p>(7)* * * <em>|</em> (19)* * * * * <em>(6)
-*         |                 *</em></p>
-</div></blockquote>
-<ul>
-<li><div class="line-block">
-<div class="line">|        /       * *</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>                                         <span class="mi">4</span>
+<span class="o">&gt;</span>                                         <span class="o">/</span>
+<span class="o">&gt;</span>                       <span class="o">^</span> <span class="n">zeta</span>           <span class="o">/</span>  <span class="n">eta</span>
+<span class="o">&gt;</span>                       <span class="o">|</span>               <span class="o">/</span>
+<span class="o">&gt;</span>                       <span class="o">|</span>              <span class="o">/</span>
+<span class="o">&gt;</span>                       <span class="o">|</span>             <span class="o">/</span>
+<span class="o">&gt;</span>                       <span class="o">|</span>            <span class="o">/</span>
+<span class="o">&gt;</span>                       <span class="o">|</span>           <span class="o">/</span>
+<span class="o">&gt;</span>             <span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*|*</span> <span class="p">(</span><span class="mi">19</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="o">&gt;</span>             <span class="o">*</span>         <span class="o">|</span>                 <span class="o">**</span>
+<span class="o">&gt;</span>            <span class="o">*</span> <span class="o">|</span>        <span class="o">|</span>        <span class="o">/</span>       <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>           <span class="o">*</span>           <span class="o">|</span>               <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span>   <span class="o">|</span>        <span class="o">|</span>      <span class="o">/</span>       <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>        <span class="p">(</span><span class="mi">17</span><span class="p">)</span>           <span class="n">x</span>           <span class="p">(</span><span class="mi">18</span><span class="p">)</span>   <span class="o">*</span>
+<span class="o">&gt;</span>        <span class="o">*</span>     <span class="o">|</span>             <span class="o">/</span>       <span class="o">*</span>     <span class="o">*</span>
+<span class="o">&gt;</span>       <span class="o">*</span>     <span class="p">(</span><span class="mi">15</span><span class="p">)</span>          <span class="n">x</span>       <span class="o">*</span>     <span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+<span class="o">&gt;</span>      <span class="o">*</span>       <span class="o">|</span>                   <span class="o">*</span>       <span class="o">*</span>
+<span class="o">&gt;</span>     <span class="o">*</span>                           <span class="o">*</span>        <span class="o">*</span>
+<span class="o">&gt;</span>    <span class="o">*</span>         <span class="o">|</span>                 <span class="o">*</span>         <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>         <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>          <span class="o">|</span>                <span class="o">*</span>      <span class="n">x</span> <span class="o">-------------&gt;</span> <span class="n">xi</span>
+<span class="o">&gt;</span>   <span class="o">*</span>                           <span class="o">*</span>          <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>          <span class="o">|</span>                <span class="o">*</span>          <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>         <span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">----------</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span><span class="o">-*---------</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;</span>   <span class="o">*</span>         <span class="o">/</span>                 <span class="o">*</span>        <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>        <span class="o">/</span>                  <span class="o">*</span>       <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="p">(</span><span class="mi">10</span><span class="p">)</span>     <span class="o">/</span>                  <span class="p">(</span><span class="mi">12</span><span class="p">)</span>    <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>      <span class="o">/</span>                    <span class="o">*</span>     <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>    <span class="p">(</span><span class="mi">9</span><span class="p">)</span>                    <span class="o">*</span>   <span class="p">(</span><span class="mi">11</span><span class="p">)</span>
+<span class="o">&gt;</span>   <span class="o">*</span>    <span class="o">/</span>                      <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>   <span class="o">/</span>                       <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>  <span class="o">/</span>                        <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span> <span class="o">/</span>                         <span class="o">**</span>
+<span class="o">&gt;</span>  <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
 </div>
-</li>
-</ul>
-</div></blockquote>
-<ul>
-<li><div class="line-block">
-<div class="line">*  *</div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<ul>
-<li><div class="line-block">
-<div class="line">|      /       *   *</div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<p>(17)           x           (18)   *
-*     |             /       *     *</p>
-</div></blockquote>
-<ul class="simple">
-<li><ol class="arabic simple" start="15">
-<li><p>x       *     (14)</p></li>
-</ol>
-</li>
-</ul>
-</div></blockquote>
-<ul>
-<li><div class="line-block">
-<div class="line">*       *</div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<ul class="simple">
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-<ul>
-<li><div class="line-block">
-<div class="line">*         *</div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<dl>
-<dt>(4)* * * * * (16)* * * * * <a href="#id5"><span class="problematic" id="id6">*</span></a>(5)         *</dt><dd><ul>
-<li><div class="line-block">
-<div class="line">*      x ————-&gt; xi</div>
-</div>
-</li>
-<li><ul class="simple">
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><div class="line-block">
-<div class="line">*          *</div>
-</div>
-</li>
-<li><p>(3)———-(13)-<a href="#id7"><span class="problematic" id="id8">*</span></a>———(2)</p></li>
-<li><p>/                 *        *</p></li>
-<li><p>/                  *       *</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-<ol class="arabic simple" start="10">
-<li><p>/                  (12)    *</p></li>
-</ol>
-<blockquote>
-<div><ul class="simple">
-<li><p>/                    *     *</p></li>
-<li><ol class="arabic simple" start="9">
-<li><ul>
-<li><ol class="arabic simple" start="11">
-<li></li>
-</ol>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-<li><p>/                      *   *</p></li>
-<li><p>/                       *  *</p></li>
-<li><p>/                        * *</p></li>
-<li><p>/                         **</p></li>
-</ul>
-</div></blockquote>
-<p>(0)* * * * * <em>(8)</em> * * * * <a href="#id9"><span class="problematic" id="id10">*</span></a>(1)</p>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: Evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2553,99 +2370,36 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">hex8_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.hex8_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 8-node brick 3D element (1st order).
 Basis functions taken from Smith, I. “Programming the Finite Element Method” 5th ed. Wiley.</p>
-<dl>
-<dt>NODE NUMBERING:</dt><dd><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><dl>
-<dt>zeta ^          4 y</dt><dd><div class="line-block">
-<div class="line-block">
-<div class="line-block">
-<div class="line-block">
-<div class="line-block">
-<div class="line">/ eta</div>
+<p>NODE NUMBERING:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>     <span class="n">zeta</span> <span class="o">^</span>          <span class="mi">4</span>
+<span class="o">&gt;</span>          <span class="o">|</span>         <span class="o">/</span> <span class="n">eta</span>
+<span class="o">&gt;</span>          <span class="o">|</span>        <span class="o">/</span>
+<span class="o">&gt;</span>          <span class="o">|</span>       <span class="o">/</span>
+<span class="o">&gt;</span>          <span class="o">|</span>      <span class="o">/</span>
+<span class="o">&gt;</span>          <span class="o">|</span>     <span class="o">/</span>
+<span class="o">&gt;</span>      <span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="o">*|*</span> <span class="o">*</span> <span class="o">*</span> <span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+<span class="o">&gt;</span>     <span class="o">*</span> <span class="o">|</span>  <span class="o">|</span>      <span class="o">**</span>
+<span class="o">&gt;</span>    <span class="o">*</span>     <span class="n">x</span>     <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>   <span class="o">|</span>       <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="o">*</span>      <span class="n">xi</span>
+<span class="o">&gt;</span>  <span class="o">*</span>    <span class="o">|</span>      <span class="o">*</span> <span class="n">x</span><span class="o">--------&gt;</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="o">-</span> <span class="o">*</span> <span class="o">-</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="o">/</span>       <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>  <span class="o">/</span>        <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">/</span>         <span class="o">**</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="line">/</div>
-</div>
-<div class="line">/</div>
-</div>
-<div class="line">/</div>
-</div>
-<div class="line">/</div>
-</div>
-</dd>
-</dl>
-<p>(7)*|* * * (6)</p>
-</div></blockquote>
-<ul>
-<li><div class="line-block">
-<div class="line">|      **</div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<ul class="simple">
-<li><p>x     * *</p></li>
-</ul>
-</div></blockquote>
-<ul>
-<li><div class="line-block">
-<div class="line">*  *</div>
-</div>
-</li>
-</ul>
-</div></blockquote>
-<dl>
-<dt>(4)* * * * <a href="#id11"><span class="problematic" id="id12">*</span></a>(5)  *      xi</dt><dd><ul>
-<li><div class="line-block">
-<div class="line">* x——–&gt;</div>
-</div>
-</li>
-<li><ol class="arabic simple" start="3">
-<li><ul class="simple">
-<li><ul>
-<li><ul>
-<li><p>-(2)</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-<li><p>/       *  *</p></li>
-<li><p>/        * *</p></li>
-<li><p>/         **</p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-<p>(0)* * * * <a href="#id13"><span class="problematic" id="id14">*</span></a>(1)</p>
-</dd>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: Evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2688,33 +2442,19 @@ can be specified.</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">line1_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.line1_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 1 node line 1D element (0th order).</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><p>——(0)——</p>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="o">------</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">------</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
+</ul>
 </dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2724,18 +2464,20 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">line2_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.line2_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 2 node line 1D element (1st order).</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><p>(0)———(1)</p>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">---------</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
+</ul>
 </dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions at the given coordinates.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>[N0,N1,…]: Evaluated basis functions at the given coordinates.</p>
+<p>Derivatives are returned in the following manner:</p>
 <p># Real value.
 N       -&gt; real direction -&gt; [0] .</p>
 <p># First order derivatives
@@ -2750,7 +2492,7 @@ d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
 d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
 d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <p># etc…</p>
-</div></blockquote>
+</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2760,33 +2502,19 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">line3_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.line3_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 3 node Line 1D element (2nd order).</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><p>(0)—(2)—(1)</p>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">---</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">---</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
+</ul>
 </dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions at the given coordinates.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2874,8 +2602,8 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <dt>PORPUSE: This function loads a file with format given by its extension. This function uses gmsh to</dt><dd><p>open the data</p>
 </dd>
 <dt>Currently supported filenames are</dt><dd><ul class="simple">
-<li><p><a href="#id15"><span class="problematic" id="id16">*</span></a>.msh (GMSH format)</p></li>
-<li><p><a href="#id17"><span class="problematic" id="id18">*</span></a>.geo (GMSH format)</p></li>
+<li><p><a href="#id3"><span class="problematic" id="id4">*</span></a>.msh (GMSH format)</p></li>
+<li><p><a href="#id5"><span class="problematic" id="id6">*</span></a>.geo (GMSH format)</p></li>
 </ul>
 </dd>
 </dl>
@@ -2987,18 +2715,19 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">point1_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.point1_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 1 node point 0D element.  (0th order)</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><ol class="arabic simple" start="0">
-<li></li>
-</ol>
-</div></blockquote>
-<dl class="simple">
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>  <span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
+</ul>
 </dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3007,99 +2736,30 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <dt class="sig sig-object py" id="pyoti.fem.quad1_iso">
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">quad1_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.quad1_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 1 node triangle 2D element (0th order).</p>
-<dl>
-<dt>NODE NUMBERING:</dt><dd><blockquote>
-<div><p>^ eta
-|
-|</p>
-</div></blockquote>
-<ul class="simple">
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li><p>xi</p></li>
-</ul>
-</li>
-<li><ol class="arabic simple" start="0">
-<li><ul>
-<li><p>——-&gt;</p></li>
-</ul>
-</li>
-</ol>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<p>NODE NUMBERING:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>
+<span class="o">&gt;</span>       <span class="o">^</span> <span class="n">eta</span>
+<span class="o">&gt;</span>       <span class="o">|</span>
+<span class="o">&gt;</span>       <span class="o">|</span>
+<span class="o">&gt;</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span> <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span> <span class="o">*</span>           <span class="o">*</span>        <span class="n">xi</span>
+<span class="o">&gt;</span> <span class="o">*</span>    <span class="p">(</span><span class="mi">0</span><span class="p">)</span>    <span class="o">*</span> <span class="o">-------&gt;</span>
+<span class="o">&gt;</span> <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span> <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0].</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3109,62 +2769,29 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">quad4_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.quad4_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 4-node quad 2D element (1st order).This element works for both
 the first order quad and first order serendipity quad element.</p>
-<dl>
-<dt>NODE NUMBERING:</dt><dd><blockquote>
-<div><p>^ eta
-|
-|</p>
-</div></blockquote>
-<dl class="simple">
-<dt>(3)* * * * <a href="#id19"><span class="problematic" id="id20">*</span></a>(2)</dt><dd><ul class="simple">
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li><p>xi</p></li>
-</ul>
-</li>
-<li><ul>
-<li><p>——-&gt;</p></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
+<p>NODE NUMBERING:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>        <span class="o">^</span> <span class="n">eta</span>
+<span class="o">&gt;</span>        <span class="o">|</span>
+<span class="o">&gt;</span>        <span class="o">|</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span>        <span class="n">xi</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span> <span class="o">-------&gt;</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-<p>(0)* * * * <a href="#id21"><span class="problematic" id="id22">*</span></a>(1)</p>
-</dd>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3173,63 +2800,26 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <dt class="sig sig-object py" id="pyoti.fem.quad8_iso">
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">quad8_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.quad8_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the serendipity quad (8-node) 2D element.</p>
-<dl>
-<dt>NODE NUMBERING:</dt><dd><dl class="simple">
-<dt>(3)* <em>(6)</em> <a href="#id23"><span class="problematic" id="id24">*</span></a>(2)</dt><dd><ul class="simple">
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
+<p>NODE NUMBERING:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>  <span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;</span>   <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="p">(</span><span class="mi">7</span><span class="p">)</span>         <span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="o">&gt;</span>   <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>   <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-<ol class="arabic simple" start="7">
-<li><ol class="arabic simple" start="5">
-<li></li>
-</ol>
-</li>
-</ol>
-<blockquote>
-<div><ul class="simple">
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-<p>(0)* <em>(4)</em> <a href="#id25"><span class="problematic" id="id26">*</span></a>(1)</p>
-</dd>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3238,66 +2828,26 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <dt class="sig sig-object py" id="pyoti.fem.quad9_iso">
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">quad9_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.quad9_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 9-node quad 2D element (2nd order).</p>
-<dl>
-<dt>NODE NUMBERING:</dt><dd><dl class="simple">
-<dt>(3)* <em>(6)</em> <a href="#id27"><span class="problematic" id="id28">*</span></a>(2)</dt><dd><ul class="simple">
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
+<p>NODE NUMBERING:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">7</span><span class="p">)</span>   <span class="p">(</span><span class="mi">8</span><span class="p">)</span>   <span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-<ol class="arabic simple" start="7">
-<li><ol class="arabic simple" start="8">
-<li><ol class="arabic simple" start="5">
-<li></li>
-</ol>
-</li>
-</ol>
-</li>
-</ol>
-<blockquote>
-<div><ul class="simple">
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-<p>(0)* <em>(4)</em> <a href="#id29"><span class="problematic" id="id30">*</span></a>(1)</p>
-</dd>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3357,141 +2907,46 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">tet10_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.tet10_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 4-node tetrahedron 3D element (2nd order).</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><blockquote>
-<div><p>^ eta
-|                         4
-|                        / zeta
-|                       /
-|                      /
-|                     /
-|                    /
-|                   /
-|                  /</p>
-</div></blockquote>
-<dl class="simple">
-<dt>(2)******(9)******(3)</dt><dd><ul class="simple">
-<li><ul>
-<li><p>/ *</p></li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><p>/     *</p></li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><p>/         *</p></li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>/  *          *</p></li>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>  <span class="o">^</span> <span class="n">eta</span>
+<span class="o">&gt;</span>  <span class="o">|</span>                         <span class="mi">4</span>
+<span class="o">&gt;</span>  <span class="o">|</span>                        <span class="o">/</span> <span class="n">zeta</span>
+<span class="o">&gt;</span>  <span class="o">|</span>                       <span class="o">/</span>
+<span class="o">&gt;</span>  <span class="o">|</span>                      <span class="o">/</span>
+<span class="o">&gt;</span>  <span class="o">|</span>                     <span class="o">/</span>
+<span class="o">&gt;</span>  <span class="o">|</span>                    <span class="o">/</span>
+<span class="o">&gt;</span>  <span class="o">|</span>                   <span class="o">/</span>
+<span class="o">&gt;</span>  <span class="o">|</span>                  <span class="o">/</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">******</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">******</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span>              <span class="o">/</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="o">*</span>               <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>     <span class="o">*</span>        <span class="o">/</span>     <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>       <span class="o">*</span>             <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>         <span class="o">*</span>  <span class="o">/</span>         <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>           <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>          <span class="o">/</span>  <span class="o">*</span>          <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>               <span class="o">*</span>         <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">6</span><span class="p">)</span>      <span class="p">(</span><span class="mi">7</span><span class="p">)</span>      <span class="p">(</span><span class="mi">5</span><span class="p">)</span>      <span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span>                   <span class="o">*</span>       <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>      <span class="o">/</span>              <span class="o">*</span>      <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>                       <span class="o">*</span>     <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>    <span class="o">/</span>                    <span class="o">*</span>    <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>                           <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>  <span class="o">/</span>                          <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>                               <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*/</span>                                <span class="o">**</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">------&gt;</span> <span class="n">xi</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-<ol class="arabic simple" start="6">
-<li><ol class="arabic simple" start="7">
-<li><ol class="arabic simple" start="5">
-<li><ol class="arabic simple" start="8">
-<li></li>
-</ol>
-</li>
-</ol>
-</li>
-</ol>
-</li>
-</ol>
-<blockquote>
-<div><ul class="simple">
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>/              *      *</p></li>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>/                    *    *</p></li>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>/                          *  *</p></li>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><em>/                                *</em></p>
-</div></blockquote>
-<p>(0)* * * * * * <em>(4)</em> * * * * * * * <a href="#id31"><span class="problematic" id="id32">*</span></a>(1)——&gt; xi</p>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0].</p>
-<p>xi  -&gt; xi_r  + e1
-eta -&gt; eta_r + e2
-zeta -&gt; zeta_r + e3</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3501,44 +2956,30 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">tet1_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.tet1_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 1 node triangle 2D element (0th order).</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><p>^ eta
-|         4
-|        / zeta
-|       /
-|      /
-* * *  *
-* *  /  *
-*   *    *
-*  /  *   *
-*   (0) *  *
-<a href="#id33"><span class="problematic" id="id34">*</span></a>/        * *
-* * * * * * * ——&gt; xi</p>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>  <span class="o">^</span> <span class="n">eta</span>
+<span class="o">&gt;</span>  <span class="o">|</span>         <span class="mi">4</span>
+<span class="o">&gt;</span>  <span class="o">|</span>        <span class="o">/</span> <span class="n">zeta</span>
+<span class="o">&gt;</span>  <span class="o">|</span>       <span class="o">/</span>
+<span class="o">&gt;</span>  <span class="o">|</span>      <span class="o">/</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span>  <span class="o">/</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="o">*</span>    <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>  <span class="o">/</span>  <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*/</span>        <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">------&gt;</span> <span class="n">xi</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
+</ul>
 </dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0].</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3548,65 +2989,30 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">tet4_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.tet4_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 4-node tetrahedron 3D element (1st order).</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><blockquote>
-<div><p>^ eta
-|         4
-|        / zeta
-|       /
-|      /</p>
-</div></blockquote>
-<dl>
-<dt>(2)* * (3)</dt><dd><ul class="simple">
-<li><ul>
-<li><p>/  *</p></li>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>  <span class="o">^</span> <span class="n">eta</span>
+<span class="o">&gt;</span>  <span class="o">|</span>         <span class="mi">4</span>
+<span class="o">&gt;</span>  <span class="o">|</span>        <span class="o">/</span> <span class="n">zeta</span>
+<span class="o">&gt;</span>  <span class="o">|</span>       <span class="o">/</span>
+<span class="o">&gt;</span>  <span class="o">|</span>      <span class="o">/</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span>  <span class="o">/</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="o">*</span>    <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>  <span class="o">/</span>  <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>       <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*/</span>        <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">------&gt;</span> <span class="n">xi</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
-</li>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>/  *   *</p></li>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p><a href="#id35"><span class="problematic" id="id36">*</span></a>/        * *</p>
 </dd>
-</dl>
-<p>(0)* * * * <a href="#id37"><span class="problematic" id="id38">*</span></a>(1)——&gt; xi</p>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3616,101 +3022,25 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">tri1_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.tri1_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 1 node triangle 2D element (0th order).</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><ul>
-<li><div class="line-block">
-<div class="line"><a href="#id39"><span class="problematic" id="id40">*</span></a></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>  <span class="o">*</span>             <span class="o">|</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span>           <span class="o">|</span>  <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="o">*</span>            <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>     <span class="o">*</span>     <span class="o">&lt;</span><span class="ow">or</span><span class="o">&gt;</span> <span class="o">*</span>     <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>  <span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="o">*</span>        <span class="o">*</span>       <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>         <span class="o">*</span>   <span class="o">|</span>  <span class="o">*</span>         <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">|</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>
+</pre></div>
 </div>
-</li>
-<li><ul>
-<li><div class="line-block">
-<div class="line">* *</div>
-</div>
-</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
-</li>
-<li><ul class="simple">
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul class="simple">
-<li><p>&lt;– o r –&gt;      *     *</p></li>
-</ul>
-</li>
-<li><ol class="arabic simple" start="0">
-<li><ul class="simple">
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-<li><ul>
-<li><div class="line-block">
-<div class="line">*         *</div>
-</div>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><div class="line-block">
-<div class="line">(0)* * * * * *</div>
-</div>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
 </dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0].</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3719,57 +3049,26 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <dt class="sig sig-object py" id="pyoti.fem.tri3_iso">
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">tri3_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.tri3_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 3-node triangle 2D element (1st order).</p>
-<dl>
-<dt>NODE NUMBERING:</dt><dd><ol class="arabic simple" start="2">
-<li><ul class="simple">
-<li><ul>
-<li></li>
+<p>NODE NUMBERING:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>     <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>       <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>         <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<p>(0)* * * * <a href="#id41"><span class="problematic" id="id42">*</span></a>(1)</p>
 </dd>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3778,60 +3077,26 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <dt class="sig sig-object py" id="pyoti.fem.tri4_iso">
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">tri4_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.tri4_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 4-node triangle 2D element (bubble triangle).</p>
-<dl>
-<dt>NODE NUMBERING:</dt><dd><ol class="arabic simple" start="2">
-<li><ul class="simple">
-<li><ul>
-<li></li>
+<p>NODE NUMBERING:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>     <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>  <span class="p">(</span><span class="mi">3</span><span class="p">)</span>  <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>         <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ol class="arabic simple" start="3">
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ol>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<p>(0)* * * * <a href="#id43"><span class="problematic" id="id44">*</span></a>(1)</p>
 </dd>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3840,63 +3105,26 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <dt class="sig sig-object py" id="pyoti.fem.tri6_iso">
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">tri6_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.tri6_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 6-node triangle 2D element (2nd order).</p>
-<dl>
-<dt>NODE NUMBERING:</dt><dd><ol class="arabic simple" start="2">
-<li><ul class="simple">
-<li><ul>
-<li></li>
+<p>NODE NUMBERING:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">5</span><span class="p">)</span>   <span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="o">&gt;</span>  <span class="o">*</span>       <span class="o">*</span>
+<span class="o">&gt;</span>  <span class="o">*</span>         <span class="o">*</span>
+<span class="o">&gt;</span> <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<ol class="arabic simple" start="5">
-<li><ol class="arabic simple" start="4">
-<li></li>
-</ol>
-</li>
-</ol>
-<blockquote>
-<div><ul class="simple">
-<li><ul>
-<li></li>
-</ul>
-</li>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-<p>(0)* <em>(3)</em> <a href="#id45"><span class="problematic" id="id46">*</span></a>(1)</p>
 </dd>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -3908,138 +3136,44 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 Basis functions taken from Zienkiewicz, “The Finite Element Method: Its Basis and
 Fundamentals Seventh Edition” 7th ed. Elsevier.</p>
 <p>NODE NUMBERING:   Node numbering corresponds to Abaqus numbering scheme.</p>
-<blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><p>4 eta</p>
-</div></blockquote>
-<p>(5)     /
-* *    /</p>
-</div></blockquote>
-<p>^ zeta    * *  * /
-|        *  *   *
-|       *   *  /  *
-|      *    * /    *
-|   (11)    <em>/      (10)
-|   *     (14)        *
-|  *       /</em>           *
-| *       / *             *</p>
-</div></blockquote>
-<dl class="simple">
-<dt>(3)* * * * * (9) * * * * * <a href="#id47"><span class="problematic" id="id48">*</span></a>(4)    [zeta +1]</dt><dd><ul class="simple">
-<li><p>/    *               *</p></li>
-<li><p>/     *               *</p></li>
-<li><p>/     (2)              *</p></li>
-<li><p>/      * *              *</p></li>
-<li><p>/      *    *            *</p></li>
-<li><p>/      *      *           *</p></li>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>                             <span class="mi">4</span> <span class="n">eta</span>
+<span class="o">&gt;</span>                    <span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="o">/</span>
+<span class="o">&gt;</span>                    <span class="o">*</span> <span class="o">*</span>    <span class="o">/</span>
+<span class="o">&gt;</span>         <span class="o">^</span> <span class="n">zeta</span>    <span class="o">*</span> <span class="o">*</span>  <span class="o">*</span> <span class="o">/</span>
+<span class="o">&gt;</span>         <span class="o">|</span>        <span class="o">*</span>  <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span>       <span class="o">*</span>   <span class="o">*</span>  <span class="o">/</span>  <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span>      <span class="o">*</span>    <span class="o">*</span> <span class="o">/</span>    <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span>   <span class="p">(</span><span class="mi">11</span><span class="p">)</span>    <span class="o">*/</span>      <span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="o">&gt;</span>         <span class="o">|</span>   <span class="o">*</span>     <span class="p">(</span><span class="mi">14</span><span class="p">)</span>        <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span>  <span class="o">*</span>       <span class="o">/*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span> <span class="o">*</span>       <span class="o">/</span> <span class="o">*</span>             <span class="o">*</span>
+<span class="o">&gt;</span>        <span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="p">(</span><span class="mi">9</span><span class="p">)</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>    <span class="p">[</span><span class="n">zeta</span> <span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">&gt;</span>         <span class="o">*</span>      <span class="o">/</span>    <span class="o">*</span>               <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>     <span class="o">/</span>     <span class="o">*</span>               <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>    <span class="o">/</span>     <span class="p">(</span><span class="mi">2</span><span class="p">)</span>              <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>   <span class="o">/</span>      <span class="o">*</span> <span class="o">*</span>              <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>  <span class="o">/</span>      <span class="o">*</span>    <span class="o">*</span>            <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span> <span class="o">/</span>      <span class="o">*</span>      <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>       <span class="p">(</span><span class="mi">12</span><span class="p">)</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-*-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-*-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-</span><span class="p">(</span><span class="mi">13</span><span class="p">)</span> <span class="o">-------------&gt;</span> <span class="n">xi</span>
+<span class="o">&gt;</span>         <span class="o">*</span>      <span class="o">*</span>           <span class="o">*</span>        <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>    <span class="p">(</span><span class="mi">8</span><span class="p">)</span>           <span class="p">(</span><span class="mi">7</span><span class="p">)</span>      <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>    <span class="o">*</span>                <span class="o">*</span>     <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>   <span class="o">*</span>                  <span class="o">*</span>    <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>  <span class="o">*</span>                     <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span> <span class="o">*</span>                       <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>        <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>    <span class="p">[</span><span class="n">zeta</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-</div></blockquote>
-<ol class="arabic simple" start="12">
-<li><ul class="simple">
-<li><ul>
-<li><p>-<em>- - - - -</em>- - - -(13) ————-&gt; xi</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<div><blockquote>
-<div><ul class="simple">
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ol class="arabic simple" start="8">
-<li><ol class="arabic simple" start="7">
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ol>
-</li>
-</ol>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-<p>(0)* * * * * <em>(6)</em> * * * * <a href="#id49"><span class="problematic" id="id50">*</span></a>(1)    [zeta -1]</p>
-</div></blockquote>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -4049,172 +3183,44 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <span class="sig-prename descclassname"><span class="pre">pyoti.fem.</span></span><span class="sig-name descname"><span class="pre">wedge1_iso</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.fem.wedge1_iso" title="Permalink to this definition">#</a></dt>
 <dd><p>Definition of basis functions for the 1 node triangle 2D element (0th order).</p>
 <p>NODE NUMBERING:</p>
-<blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><p>4 eta</p>
-</div></blockquote>
-<ul class="simple">
-<li><p>/</p></li>
-</ul>
-</div></blockquote>
-<ul class="simple">
-<li><ul>
-<li><p>/</p></li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-<p>^ zeta    * *  * /
-|        *  *   *
-|       *   *  /  *
-|      *    * /    *
-|    *      <em>/       *
-|   *       *         *
-|  *       /</em>           *
-| *       / *             *
-* * * * * * * * * * * * * * *     [zeta +1]
-*      /    *               *
-*     /     *               *
-*    /      *               *
-*   /      * *              *
-*  /      *    *            *
-* /      *      *           *</p>
-</div></blockquote>
-<dl class="simple">
-<dt>(0)- - - * - - - - <em>- - - - -</em> ————-&gt; xi</dt><dd><ul class="simple">
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><p>[zeta -1]</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>                             <span class="mi">4</span> <span class="n">eta</span>
+<span class="o">&gt;</span>                     <span class="o">*</span>      <span class="o">/</span>
+<span class="o">&gt;</span>                    <span class="o">*</span> <span class="o">*</span>    <span class="o">/</span>
+<span class="o">&gt;</span>         <span class="o">^</span> <span class="n">zeta</span>    <span class="o">*</span> <span class="o">*</span>  <span class="o">*</span> <span class="o">/</span>
+<span class="o">&gt;</span>         <span class="o">|</span>        <span class="o">*</span>  <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span>       <span class="o">*</span>   <span class="o">*</span>  <span class="o">/</span>  <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span>      <span class="o">*</span>    <span class="o">*</span> <span class="o">/</span>    <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span>    <span class="o">*</span>      <span class="o">*/</span>       <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span>   <span class="o">*</span>       <span class="o">*</span>         <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span>  <span class="o">*</span>       <span class="o">/*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">|</span> <span class="o">*</span>       <span class="o">/</span> <span class="o">*</span>             <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>     <span class="p">[</span><span class="n">zeta</span> <span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">&gt;</span>         <span class="o">*</span>      <span class="o">/</span>    <span class="o">*</span>               <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>     <span class="o">/</span>     <span class="o">*</span>               <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>    <span class="o">/</span>      <span class="o">*</span>               <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>   <span class="o">/</span>      <span class="o">*</span> <span class="o">*</span>              <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>  <span class="o">/</span>      <span class="o">*</span>    <span class="o">*</span>            <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span> <span class="o">/</span>      <span class="o">*</span>      <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>        <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">*</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">*-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-*</span> <span class="o">-------------&gt;</span> <span class="n">xi</span>
+<span class="o">&gt;</span>         <span class="o">*</span>      <span class="o">*</span>           <span class="o">*</span>        <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>     <span class="o">*</span>              <span class="o">*</span>      <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>    <span class="o">*</span>                <span class="o">*</span>     <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>   <span class="o">*</span>                  <span class="o">*</span>    <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span>  <span class="o">*</span>                     <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span> <span class="o">*</span>                       <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span>     <span class="p">[</span><span class="n">zeta</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0].</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -4225,147 +3231,46 @@ d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
 <dd><p>Definition of basis functions for the 6-node wedge 3D element (1st order).
 Basis functions taken from Zienkiewicz, “The Finite Element Method: Its Basis and
 Fundamentals Seventh Edition” 7th ed. Elsevier.</p>
-<p>NODE NUMBERING:   Node numbering corresponds to Abaqus numbering scheme.</p>
-<blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><blockquote>
-<div><p>4 eta</p>
-</div></blockquote>
-<p>(5)     /
-* *    /</p>
-</div></blockquote>
-<p>^ zeta    * *  * /
-|        *  *   *
-|       *   *  /  *
-|      *    * /    *
-|    *      <em>/       *
-|   *       *         *
-|  *       /</em>           *
-| *       / *             *</p>
-</div></blockquote>
-<dl class="simple">
-<dt>(3)* * * * * * * * * * * * <a href="#id51"><span class="problematic" id="id52">*</span></a>(4)    [zeta +1]</dt><dd><ul class="simple">
-<li><p>/    *               *</p></li>
-<li><p>/     *               *</p></li>
-<li><p>/     (2)              *</p></li>
-<li><p>/      * *              *</p></li>
-<li><p>/      *    *            *</p></li>
-<li><p>/      *      *           *</p></li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><ul>
-<li><p><em>- - - - -</em> ————-&gt; xi</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><ul>
-<li><ul>
-<li><ul>
-<li></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<p>This function allows computing derivatives with OTI perturbations.</p>
+<p>NODE NUMBERING: Node numbering corresponds to Abaqus numbering scheme.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>                              <span class="mi">4</span> <span class="n">eta</span>
+<span class="o">&gt;</span>                     <span class="p">(</span><span class="mi">5</span><span class="p">)</span>     <span class="o">/</span>
+<span class="o">&gt;</span>                     <span class="o">*</span> <span class="o">*</span>    <span class="o">/</span>
+<span class="o">&gt;</span>          <span class="o">^</span> <span class="n">zeta</span>    <span class="o">*</span> <span class="o">*</span>  <span class="o">*</span> <span class="o">/</span>
+<span class="o">&gt;</span>          <span class="o">|</span>        <span class="o">*</span>  <span class="o">*</span>   <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">|</span>       <span class="o">*</span>   <span class="o">*</span>  <span class="o">/</span>  <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">|</span>      <span class="o">*</span>    <span class="o">*</span> <span class="o">/</span>    <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">|</span>    <span class="o">*</span>      <span class="o">*/</span>       <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">|</span>   <span class="o">*</span>       <span class="o">*</span>         <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">|</span>  <span class="o">*</span>       <span class="o">/*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">|</span> <span class="o">*</span>       <span class="o">/</span> <span class="o">*</span>             <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>    <span class="p">[</span><span class="n">zeta</span> <span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+<span class="o">&gt;</span>          <span class="o">*</span>      <span class="o">/</span>    <span class="o">*</span>               <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span>     <span class="o">/</span>     <span class="o">*</span>               <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span>    <span class="o">/</span>     <span class="p">(</span><span class="mi">2</span><span class="p">)</span>              <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span>   <span class="o">/</span>      <span class="o">*</span> <span class="o">*</span>              <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span>  <span class="o">/</span>      <span class="o">*</span>    <span class="o">*</span>            <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span> <span class="o">/</span>      <span class="o">*</span>      <span class="o">*</span>           <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">*</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">*-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-</span> <span class="o">-*</span> <span class="o">-------------&gt;</span> <span class="n">xi</span>
+<span class="o">&gt;</span>          <span class="o">*</span>      <span class="o">*</span>           <span class="o">*</span>        <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span>     <span class="o">*</span>              <span class="o">*</span>      <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span>    <span class="o">*</span>                <span class="o">*</span>     <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span>   <span class="o">*</span>                  <span class="o">*</span>    <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span>  <span class="o">*</span>                     <span class="o">*</span>  <span class="o">*</span>
+<span class="o">&gt;</span>          <span class="o">*</span> <span class="o">*</span>                       <span class="o">*</span> <span class="o">*</span>
+<span class="o">&gt;</span>         <span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span> <span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>    <span class="p">[</span><span class="n">zeta</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi</strong> – Xi  coordinate for this element.</p></li>
+<li><p><strong>eta</strong> – Eta coordinate for this element.</p></li>
+<li><p><strong>zeta</strong> – zeta coordinate for this element.</p></li>
 </ul>
 </dd>
-</dl>
-<p>(0)* * * * * * * * * * * * <a href="#id53"><span class="problematic" id="id54">*</span></a>(1)    [zeta -1]</p>
-</div></blockquote>
-<dl>
-<dt>INPUTS:</dt><dd><p>-&gt; xi:  Xi  coordinate for this element.
--&gt; eta: Eta coordinate for this element.
--&gt; zeta: zeta coordinate for this element.
--&gt; derOrder: Order of derivative required.</p>
-</dd>
-<dt>OUTPUTS:</dt><dd><p>-&gt; [N0,N1,…]: Evaluated basis functions.</p>
-<blockquote>
-<div><p>Derivatives are returned in the following manner:</p>
-<p># Real value.
-N       -&gt; real direction -&gt; [0] .</p>
-<p># First order derivatives
-dN/dxi  -&gt; e1 direction -&gt; [1].
-dN/deta -&gt; e2 direction -&gt; [2].
-dN/dzeta -&gt; e3 direction -&gt; [3].</p>
-<p># Second order derivatives:
-d2N/dxi  dxi  -&gt; e11 direction -&gt; [[1,2]].
-d2N/dxi  deta -&gt; e12 direction -&gt; [ 1,2 ].
-d2N/deta deta -&gt; e22 direction -&gt; [[2,2]].
-d2N/dxi  dzeta -&gt; e13 direction -&gt; [ 1,3 ].
-d2N/deta dzeta -&gt; e23 direction -&gt; [ 2,3 ].
-d2N/dzeta dzeta -&gt; e33 direction -&gt; [[3,2]].</p>
-<p># etc…</p>
-</div></blockquote>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>[N0,N1,…]: List of evaluated basis functions.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -7666,8 +6571,8 @@ indicates that the memory is owned by this instance of the object.</p></li>
 </dd>
 </dl>
 <p>This class provides overloads to the following operators (a and b are sotinum objects):</p>
-<div class="pst-scrollable-table-container"><table class="table" id="id55">
-<caption><span class="caption-text">Overloaded operations</span><a class="headerlink" href="#id55" title="Permalink to this table">#</a></caption>
+<div class="pst-scrollable-table-container"><table class="table" id="id7">
+<caption><span class="caption-text">Overloaded operations</span><a class="headerlink" href="#id7" title="Permalink to this table">#</a></caption>
 <colgroup>
 <col style="width: 50%" />
 <col style="width: 25%" />
@@ -8306,7 +7211,7 @@ unnecessary memory allocations.</p>
 
   <p class="copyright">
     
-      © Copyright 2024, Mauricio Aristizabal.
+      © Copyright 2024, Mauricio Aristizabal..
       <br/>
     
   </p>

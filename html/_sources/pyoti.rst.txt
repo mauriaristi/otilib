@@ -1,0 +1,85 @@
+pyoti package
+=============
+
+Submodules
+----------
+
+.. pyoti.auxFunctions module
+.. -------------------------
+
+.. .. automodule:: pyoti.auxFunctions
+..    :members:
+..    :undoc-members:
+..    :show-inheritance:
+
+.. pyoti.cmod\_writer module
+.. -------------------------
+
+.. .. automodule:: pyoti.cmod_writer
+..    :members:
+..    :undoc-members:
+..    :show-inheritance:
+
+pyoti.core module
+-----------------
+
+.. automodule:: pyoti.core
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyoti.dense module
+------------------
+
+.. automodule:: pyoti.dense
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyoti.fem module
+----------------
+
+.. automodule:: pyoti.fem
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. pyoti.fmod\_writer module
+.. -------------------------
+
+.. .. automodule:: pyoti.fmod_writer
+..    :members:
+..    :undoc-members:
+..    :show-inheritance:
+
+pyoti.real module
+-----------------
+
+.. automodule:: pyoti.real
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyoti.sparse module
+-------------------
+
+.. automodule:: pyoti.sparse
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pyoti.whereotilib module
+------------------------
+
+.. automodule:: pyoti.whereotilib
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: pyoti
+   :members:
+   :undoc-members:
+   :show-inheritance:

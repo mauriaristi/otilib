@@ -19,7 +19,7 @@ This is the repository of the Order Truncated Imaginary numbers (OTI numbers) im
 
 This library provides multiple implementations of OTI numbers. A core implementation is provided in C that supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, vector array operations, etc.
 
-Ongoing research and updates is currently focused towards the efficient implementation of a Fortran version of OTIs. 
+Ongoing research and updates are currently focused to improve efficiency of the Python and Fortran implementation of OTIs. 
 
 Currently three implementations are supported: 
 * Dynamic-Dense (outdated), 

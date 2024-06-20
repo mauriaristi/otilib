@@ -90,54 +90,49 @@ cdef class elbase:
   def createElement(uint64_t nbasis, uint8_t order, int64_t geomBase, int64_t  kind,   \
      uint8_t  ndim, object basis, list boundEls, list faceIndx ):
     """
-    PURPOSE:      Constructor of the Element class. Use this when adding new element types.
+    Static method to create an elbase object. Use this when adding new element types.
 
-    DESCRIPTION:  Creates and associates an element that can be called from the Problem class.
+    This creates and associates an element that can be called from the Problem class.
 
-    INPUTS:
+    
+    :param nbasis:   Number of basis - Number of degrees of freedom - Number of nodes.
+    :param order:    Maximum order of the element.
+    :param geomBase: Geometric element type - elLine, elTriangle, etc ...
+    :param kind:     Kind of element: Affine - IsoParametric
+    :param ndim:     Number of dimensions of the element. (0-> 0D, 1 -> 1D, 2 -> 2D, 3 -> 3D)
+    :param basis:    Function that evaluates the interpolation basis (N) of the element at the 
+                     integration points: [N0,N1,...] = basis( xi, eta, zeta)
 
-      -> nbasis:   Number of basis - Number of degrees of freedom - Number of nodes.
-      -> order:    Maximum order of the element.
-      -> geomBase: Geometric element type - elLine, elTriangle, etc ...
-      -> kind:     Kind of element: Affine - IsoParametric
-      -> ndim:     Number of dimensions of the element. (0-> 0D, 1 -> 1D, 2 -> 2D, 3 -> 3D)
-      -> basis:    Function that evaluates the interpolation basis (N) of the element at the 
-                   integration points:
-
-                    [N0,N1,...] = basis( xi, eta, chi)
-
-      -> boundEls: List of the already defined interpolation functions that define the boundary 
+    :param boundEls: List of the already defined interpolation functions that define the boundary 
                    interpolation, in the following order.  --> [0D, 1D, 2D]
 
-      -> faceIndx: Indices of the face to be used in the element.
+    :param faceIndx: Indices of the face to be used in the element.
 
-    RESULT:       
-            A new elbase object is created.
+    :returns: A new elbase object is created.
 
-    EXAMPLE:
-
-      # 3 node triangle: 
-              
-              (2)
-               * *
-               *   * 
-              (0)* *(1)
-
-      >>> lineIndx1 = np.array([[ 0, 1 ],     # Define the indices of the 1D (edges)
-                                [ 1, 2 ],     # in the triangle.
-                                [ 2, 0 ]],dtype=np.uint64)
-
-      >>> tri3 = elbase.createElement(3,              # Number of basis 
-                                      1,              # Characteristic order of the polynomials
-                                      elTriangle,     # Geometric type
-                                      elkindIso,      # Kind of element 
-                                      2,              # Number of dimensions
-                                      tri3_iso,       # Basis functions.
-                                      [point1, line2],# Face interpolation functions.
-                                      np.array([[0,1],
-                                       [1,2],         # Face indices
-                                       [2,0]],dtype=
-                                      )   
+    .. code-block::
+        # 3 node triangle: 
+        #        
+        # (2)
+        #  * *
+        #  *   * 
+        # (0)* *(1)
+        
+        >>> lineIndx1 = np.array([[ 0, 1 ],     # Define the indices of the 1D (edges)
+                                  [ 1, 2 ],     # in the triangle.
+                                  [ 2, 0 ]],dtype=np.uint64)
+        
+        >>> tri3 = elbase.createElement(3,              # Number of basis 
+                                        1,              # Characteristic order of the polynomials
+                                        elTriangle,     # Geometric type
+                                        elkindIso,      # Kind of element 
+                                        2,              # Number of dimensions
+                                        tri3_iso,       # Basis functions.
+                                        [point1, line2],# Face interpolation functions.
+                                        np.array([[0,1],
+                                         [1,2],         # Face indices
+                                         [2,0]],dtype=
+                                        )   
 
                   
     """

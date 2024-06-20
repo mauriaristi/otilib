@@ -5,17 +5,16 @@ cpdef line2_iso( xi, eta, zeta):
   Definition of basis functions for the 2 node line 1D element (1st order).
  
   NODE NUMBERING:
-  
-                          (0)---------(1)
 
-  INPUTS:
-    -> xi:  Xi  coordinate for this element.
-    -> eta: Eta coordinate for this element.
-    -> zeta: zeta coordinate for this element.
-    -> derOrder: Order of derivative required.
+  .. code-block::
 
-  OUTPUTS: 
-    -> [N0,N1,...]: Evaluated basis functions at the given coordinates.
+      > (0)---------(1)
+
+  :param xi:  Xi  coordinate for this element.
+  :param eta: Eta coordinate for this element.
+  :param zeta: zeta coordinate for this element.
+
+  :returns: [N0,N1,...]: Evaluated basis functions at the given coordinates.
 
         Derivatives are returned in the following manner:
 

@@ -229,20 +229,26 @@ def line(double a, double b, double he = 1.0, ndivs = None, element_order = 1, s
 
   The output contains the physical groups named as follows:
 
-    [left]                                  [right]
-      |               [domain]                 |
-      |                  v                     |
-      [----------------------------------------]
+  .. code-block::
+      [left]                                  [right]
+        |               [domain]                 |
+        |                  v                     |
+        [----------------------------------------]
 
-  @param[in] a <float> Starting point.
-  @param[in] b <float> Ending point. 
-  @param[in] he <float> Element size. (default he = 1.0)
-  @param[in] ndivs<int> Number of subdivisions of the line.(default None)
-  @param[in] element_order: Order of polynomial basis functions of the elements in the mesh 
-                            (int, default element_order = 1).
-  @param[in] save: Bool to save mesh into file (bool, default save = False).
-  @param[in] real: Bool to create a mesh with intrinsic double arrays, otherwise use oti arrays.
-          (bool, default real = False).
+  :param a: Starting point.
+  :type a: float
+  :param b: Ending point. 
+  :type b: float
+  :param he: <float> Element size. (default he = 1.0)
+  :type he: float
+  :param ndivs: Number of subdivisions of the line.
+  :type ndivs: int, optional. Devault ndivs=None.
+  :param element_order: Order of polynomial basis functions of the elements in the mesh 
+  :type element_order: int, optional, default element_order=1.                            
+  :param save: Bool to save mesh into file.
+  :type save: Bool, default save=False
+  :param real: Bool to create a mesh with intrinsic double arrays, otherwise use oti arrays.
+  :type real: Bool, default real=False
   """
   #***************************************************************************************************
   import gmsh

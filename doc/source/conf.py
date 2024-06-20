@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'pyoti'
-copyright = '2024, Mauricio Aristizabal'
+copyright = '2024, Mauricio Aristizabal, University of Texas at San Antonio and Universidad EAFIT'
 author = 'Mauricio Aristizabal'
 
 # The full version, including alpha/beta/rc tags

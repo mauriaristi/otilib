@@ -19,6 +19,16 @@ Minimum requirements are the following:
 * Cython 0.29 (Development plans are in place to support cython 3)
 * CMake>=3.20 
 
+.. warning::
+    
+    This library has been tested under the following operating systems:
+
+    - Unix platforms.
+    - macos
+    - Windows (only working under WSL)
+
+    A pure windows installation is currently not supported.
+    
 
 Conda environment installation instructions:
 --------------------------------------------

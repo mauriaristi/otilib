@@ -27,7 +27,8 @@ Currently three implementations are supported:
 * Dynamic-Sparse  (Slower, but the most versatile and robust)
 
 Most operations implemented so far are serial, and some support OpenMP parallelization. It is expected in the near future to fully support parallel excecution using OpenMP, MPI and GPU parallelization (OpenCL/CUDA/Metal, to be defined).
-***
+
+
 
 ## Current Programming languages: 
 * **C** (C99) for core routines.
@@ -36,7 +37,15 @@ Most operations implemented so far are serial, and some support OpenMP paralleli
 
 ## Quick Installation instructions:
 
+
 For more detailed instructions, see [installation](https://mauriaristi.github.io/otilib/installation)
+
+This library has been tested on:
+
+- Unix platforms.
+- macos
+- Windows (only working under WSL)
+
 
 1. Create the conda environment with dependencies from the ```environment.yml``` file:
 ``` bash
@@ -102,3 +111,19 @@ For the full Finite Element support, the following libraries are required.
 ## Bugs and problems with the library? New features required? ###
 
 * Report an issue using the Github interface, and this will be addressed in an orderly fashion. 
+
+
+<!-- 
+### Citations ###
+
+```bibtex
+@software{pyoti,
+ title = {OTIlib: An open source library for Order Truncated Imaginary (OTI) Numbers},
+ version = {0.1},
+ author = {Aristizabal, Mauricio},
+ year = 2024,
+ keywords = {Python, Hypercomplex Algebras, Complex Step, Hyperdual numbers,},
+ url = {https://github.com/mauriaristi/otilib}
+}
+```
+ -->

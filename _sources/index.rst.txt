@@ -22,16 +22,17 @@ Quick example:
 
 ---------------------------------------------
 
-Getting started
-===============
+Contents
+========
 
 .. toctree::
    :maxdepth: 2
-   :caption: Getting started:
+   :caption: Contents:
 
    installation
    tutorials
    examples
+   aboutus
 
 
 

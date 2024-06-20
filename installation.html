@@ -156,6 +156,13 @@
 
 
 <li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="aboutus.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
   <a class="nav-link nav-internal" href="pyoti.html">
     pyoti package
   </a>
@@ -267,6 +274,13 @@ document.write(`
 
 
 <li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="aboutus.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
   <a class="nav-link nav-internal" href="pyoti.html">
     pyoti package
   </a>
@@ -367,7 +381,10 @@ document.write(`
 <li><p>Python 3 (Tested with python 3.9)</p></li>
 <li><p>Numpy</p></li>
 <li><p>Scipy</p></li>
+<li><p>scikit-umfpack</p></li>
+<li><p>sksparse-cholmod</p></li>
 <li><p>Cython 0.29 (Development plans are in place to support cython 3)</p></li>
+<li><p>CMake&gt;=3.20</p></li>
 </ul>
 </section>
 <section id="conda-environment-installation-instructions">
@@ -404,7 +421,7 @@ conda env update --file environment.yml --prune
 </section>
 <section id="compiling-the-library">
 <h2>Compiling the library<a class="headerlink" href="#compiling-the-library" title="Permalink to this heading">#</a></h2>
-<p>Finally, to build the library, run the following commands:</p>
+<p>Finally, to build the library with your default compilers, run the following commands:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> path/to/src/otilib
 mkdir build
 <span class="nb">cd</span> build
@@ -413,7 +430,22 @@ make
 </pre></div>
 </div>
 <p>This will compile the library and link to the required dependencies.</p>
-<p><strong>NOTE</strong>: If this is your first time compiling the library, you should run the following command after the library is compiled:</p>
+<p>If you want to compile with a different compiler, e.g. the Intel OneApi compilers, you can define the <code class="docutils literal notranslate"><span class="pre">CC</span></code> and <code class="docutils literal notranslate"><span class="pre">FC</span></code> flags as follow</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> path/to/src/otilib
+mkdir build
+<span class="nb">cd</span> build
+<span class="nv">CC</span><span class="o">=</span>icx <span class="nv">FC</span><span class="o">=</span>icx cmake ..
+make
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you had previously compiled the library and want to change the compiler, you <strong>need</strong> to remove the contents of the build/ directory. Use <code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-rf</span> <span class="pre">-v</span> <span class="pre">!(data)</span></code> to keep the data folder (if any).</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If this is your first time compiling the library, you should run the following command after the library is compiled:</p>
+</div>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make gendata
 </pre></div>
 </div>
@@ -520,7 +552,7 @@ conda develop -u .
 
   <p class="copyright">
     
-      © Copyright 2024, Mauricio Aristizabal..
+      © Copyright 2024, Mauricio Aristizabal.
       <br/>
     
   </p>

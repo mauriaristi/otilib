@@ -778,15 +778,12 @@ cdef class otinum:
   #***************************************************************************************************
   def to_matrix(self,sparse_mat = False):
     """
-    PURPOSE:      To convert an otinum into its matrix form.
-                  
-    DESCRIPTION:  Convert to its own Cauchy-Riemann representation vector.
+    This function converts an otinum into its equivalent real-only matrix form 
+    (Cauchy-Riemann matrix form).
     
-    INPUTS:
-                  ismat: To define a matrix (1) or a vector (0)
-                  isshape: To use the shape that will result of the number 
-                    (-1) or an specific shape (given value).
-                  isspr: To result in a sparse matrix (1) or not (0).
+    :param sparse_mat: Bool to specify if it returns a sparse matrix.
+    :type sparse_mat: bool, optional. Default  sparse_mat=False.
+    
     """
     #*************************************************************************************************
 

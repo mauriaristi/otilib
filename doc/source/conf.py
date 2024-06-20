@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'pyoti'
-copyright = '2024, Mauricio Aristizabal.'
+copyright = '2024, Mauricio Aristizabal'
 author = 'Mauricio Aristizabal'
 
 # The full version, including alpha/beta/rc tags
@@ -31,11 +31,11 @@ release = '0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+	'nbsphinx',
+	'sphinx.ext.mathjax', # For math equation display.
 	'sphinx.ext.autodoc',
 	'sphinx.ext.viewcode',
-	'sphinx.ext.mathjax', # For math equation display.
 	'sphinx.ext.napoleon',
-	'nbsphinx',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

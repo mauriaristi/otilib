@@ -111,6 +111,7 @@ cdef class elbase:
     :returns: A new elbase object is created.
 
     .. code-block::
+    
         # 3 node triangle: 
         #        
         # (2)

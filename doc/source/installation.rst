@@ -14,10 +14,10 @@ Minimum requirements are the following:
 * Python 3 (Tested with python 3.9)
 * Numpy
 * Scipy
+* scikit-umfpack
+* sksparse-cholmod
 * Cython 0.29 (Development plans are in place to support cython 3)
-
-
-
+* CMake>=3.20 
 
 
 Conda environment installation instructions:
@@ -70,11 +70,10 @@ After this, and still within your environment, run the following to add pyoti to
 
 
 
-
 Compiling the library
 ---------------------
 
-Finally, to build the library, run the following commands:
+Finally, to build the library with your default compilers, run the following commands:
 
 .. code-block:: bash
 
@@ -84,10 +83,26 @@ Finally, to build the library, run the following commands:
     cmake ..
     make
 
-
 This will compile the library and link to the required dependencies.
 
-**NOTE**: If this is your first time compiling the library, you should run the following command after the library is compiled:
+If you want to compile with a different compiler, e.g. the Intel OneApi compilers, you can define the ``CC`` and ``FC`` flags as follow
+
+.. code-block:: bash
+
+    cd path/to/src/otilib
+    mkdir build
+    cd build
+    CC=icx FC=icx cmake ..
+    make
+
+
+.. note::
+    
+    If you had previously compiled the library and want to change the compiler, you **need** to remove the contents of the build/ directory. Use ``rm -rf -v !(data)`` to keep the data folder (if any).
+
+.. note::
+
+    If this is your first time compiling the library, you should run the following command after the library is compiled:
 
 .. code-block:: bash
 

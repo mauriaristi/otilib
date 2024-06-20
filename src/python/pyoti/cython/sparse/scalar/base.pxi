@@ -14,13 +14,17 @@ cdef class sotinum:
 
   :param re_coeff: Real coefficient of the imaginary number.
   :type re_coeff: float
+
   :param nbases: Number of bases to allocate memory.
   :type nbases: int, optional
+
   :param order: Truncation order of the number.
   :type order: int, optional
+
   :param FLAGS: Integer with flags associated to this object. The first bit active (FLAGS & 1) 
-                indicates that the memory is owned by this instance of the object.
+      indicates that the memory is owned by this instance of the object.
   :type FLAGS: int, optional
+
   :param nnz: Integer list with number of non-zeroes per order to allocate memory.
   :type nnz: list, optional
 
@@ -113,14 +117,13 @@ cdef class sotinum:
   def __init__(self, coeff_t re_coeff, bases_t nbases = 0,ord_t order = 0, uint8_t FLAGS = 1, 
     object nnz = None):
     """
-    DESCRIPTION: Constructor of a sparse OTI number.
+    Constructor of a sparse OTI number.
 
-    INPUTS:
-     - re_coeff : Real coefficient, which must be real scalar. (coeff_t re_coeff)
-     - nbases   : Integer which defines number of bases to allocate the number. (bases_t nbases = 0)
-     - order    : Integer (ord_t order = 0 )
-     - FLAGS    : Flags. Unused in this moment. (uint8_t FLAGS = 1)
-     - nnz      : Number of non zeros. List with (object nnz = None)
+    :param re_coeff: Real coefficient, which must be real scalar. (coeff_t re_coeff)
+    :param nbases: Integer which defines number of bases to allocate the number. (bases_t nbases = 0)
+    :param order: Integer (ord_t order = 0 )
+    :param FLAGS: Flags. Unused in this moment. (uint8_t FLAGS = 1)
+    :param nnz: Number of non zeros. List with (object nnz = None)
 
     """
     #*************************************************************************************************
@@ -181,9 +184,7 @@ cdef class sotinum:
   #***************************************************************************************************
   def __dealloc__(self): 
     """
-    PURPOSE:      Destructor of the class. 
-
-    DESCRIPTION:  Frees all pointers allocated in the 
+    Destructor of the class. Frees all memory from the object.
                   
     """
     #*************************************************************************************************
@@ -952,7 +953,9 @@ cdef class sotinum:
   #***************************************************************************************************
   def __pow__(self, n,z):
     """
-    PURPOSE:      To provide power function of sparse oti numbers.
+    Power function of sparse oti numbers.
+
+    
     """
     #*************************************************************************************************
     
@@ -1007,9 +1010,10 @@ cdef class sotinum:
     """
     Set a specific imaginary direction with the given coefficient.
 
-    INPUTS:
+
     :param val:  Value to be set.
     :type val: float, int
+
     :param humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
     :type val: int or list.
 
@@ -1041,11 +1045,13 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef  set_deriv( self,  object val, object humdir):
     """
-    PURPOSE:      to set a specific derivative as given.
+    Sets an imaginary coefficient grom the given derivative.
 
-    INPUTS:
-    - val:    Value to be set. Can be OTI in nature or real only.
-    - humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
+    :param val:  Derivative value to be set.
+    :type val: float, int
+
+    :param humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
+    :type val: int or list.
     
     """
     #*************************************************************************************************
@@ -1075,10 +1081,10 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef  truncate( self, object humdir):
     """
-    PURPOSE:      to set a specific imaginary direction as given.
+    Removes (sets zero) all coefficients along imaginary directions multiple to the given 
+    imaginary direction.
 
-    INPUTS:
-      humdir:    Imaginary direction given by the basis and exponents. Example [1,2,2]
+    :param humdir:    Imaginary direction given by the basis and exponents. Example [1,2,2]
 
     """
     #*************************************************************************************************
@@ -1098,7 +1104,9 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef  truncate_order( self, ord_t order):
     """
-    PURPOSE:    Truncate all imaginary directions with order larger than the one specified.
+    Truncates all imaginary directions with order equal or larger than the one specified.
+
+    :param order: Order to be truncated.
 
     """
     #*************************************************************************************************
@@ -1116,10 +1124,9 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef get_deriv( self, object humdir):
     """
-    PURPOSE:  Retrieves the derivatives contained in the oti number.
+    Retrieves the derivative contained in the oti number.
 
-    INPUTS:
-      humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
+    :param humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
 
     """
     #*************************************************************************************************
@@ -1136,7 +1143,9 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef get_im( self, object humdir):
     """
-    PURPOSE:      to retrieve the coefficient in the oti direction.
+    Retrieves the coefficient along the indicated imaginary direction direction.
+
+    :param humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
 
     """
     #*************************************************************************************************
@@ -1153,7 +1162,11 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef extract_im( self, object humdir):
     """
-    PURPOSE:      to retrieve the coefficient in the oti direction.
+    Retrieves the OTI number formed by all coefficients multiple of the given imagianry direction.
+    It extracts the coefficients by dividing each direction by the given direction and determining 
+    if it is possible to extract the corresponding coefficients.
+
+    :param humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
 
     """
     #*************************************************************************************************
@@ -1174,7 +1187,11 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef extract_deriv( self, object humdir):
     """
-    PURPOSE:      Get the derivative as an OTI number.
+    Similar to extract_im, this function retrieves the OTI number formed by all coefficients multiple 
+    of the given imagianry direction. However, this function also sets up the resulting OTI number
+    such that the resulting OTI number contains the correct derivatives
+
+    :param humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
 
     """
     #*************************************************************************************************
@@ -1195,7 +1212,9 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef get_order_im( self, ord_t order):
     """
-    PURPOSE:      Get the derivative as an OTI number.
+    Extract an OTI number with only the imagianry directions of the given order.
+
+    :param order: Order of imaginary directions to get.
 
     """
     #*************************************************************************************************
@@ -1213,7 +1232,8 @@ cdef class sotinum:
   #***************************************************************************************************
   def copy(self):
     """
-    PURPOSE:      To create a copy of the object.
+    Create a copy of the object.
+
     """
     #*************************************************************************************************
     global dhl
@@ -1226,7 +1246,8 @@ cdef class sotinum:
   #***************************************************************************************************
   def get_active_bases(self):
     """
-    PURPOSE:      Get all the active bases.
+    Get all the active bases.
+
     """
     #*************************************************************************************************
     global dhl
@@ -1263,11 +1284,10 @@ cdef class sotinum:
   #***************************************************************************************************
   def rom_eval(self, object bases, object deltas):
     """
-    PURPOSE:     Evaluate the Taylor series from the coefficients with in the OTI number.
-
-    INPUTS: 
-      - bases:  Python list of Imagiary bases to evaluate the ROM
-      - deltas: Python list float coefficients to evaluate the ROM (can be a 1D numpy array).
+    Evaluate the Taylor series from the coefficients with in the OTI number.
+ 
+    :param bases:  Python list of Imaginary bases to evaluate the ROM
+    :param deltas: Python list float coefficients to evaluate the ROM (can be a 1D numpy array).
 
     """
     #*************************************************************************************************
@@ -1305,15 +1325,12 @@ cdef class sotinum:
   #***************************************************************************************************
   def rom_eval_array(self, object bases, object deltas):
     """
-    PURPOSE:     Evaluate the Taylor series from the coefficients with in the OTI number.
+    Evaluate the Taylor series from the coefficients with in the OTI number.
 
-    INPUTS: 
-      - bases:  Python list of Imagiary bases to evaluate the ROM
-      - deltas: Python list with arrays of coefficients of the deltas to evaluate the ROM.
-                Arrays must be numpy arrays, and be of the same shape.
-
-    EXAMPLE:
-      >>> 
+    :param bases:  Python list of Imagiary bases to evaluate the ROM
+    :param deltas: Python list with arrays of coefficients of the deltas to evaluate the ROM.
+        Arrays must be numpy arrays, and be of the same shape.
+ 
 
     """
     #*************************************************************************************************

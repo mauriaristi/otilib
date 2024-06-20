@@ -141,21 +141,23 @@ cdef class mesh:
   @staticmethod
   def load(filename, generate = True, generate_level = 3):
     """
-    PORPUSE: This function loads a file with format given by its extension. This function uses gmsh to 
-             open the data
+    This function loads a file with format given by its extension. This function uses gmsh to 
+    as a backend to open the data.
 
     Currently supported filenames are 
-     - *.msh (GMSH format)
-     - *.geo (GMSH format)
+    
+    * .msh (GMSH format)
+    * .geo (GMSH format)
 
+    :param filename: String with the filename including extension.
+    :type  filename: str.
 
-    INPUTS: 
-
-    - filename: String with the filename including extension.
-    - generate: (Boolean, optional, default True) Perform mesh generation from gmsh.
-    - generate_level: (Integer, optional, default 3) Mesh generation option for the number of dimenions
-                      to be generated..
-
+    :param generate:  Perform mesh generation from gmsh.
+    :type  generate: bool, optional. Default generate=True
+    
+    :param generate_level: Mesh generation option for the number of dimensions
+        to be generated.
+    :type  generate_level: int, optional. Default generate_level=3. 
 
     """
 

@@ -230,6 +230,7 @@ def line(double a, double b, double he = 1.0, ndivs = None, element_order = 1, s
   The output contains the physical groups named as follows:
 
   .. code-block::
+  
       [left]                                  [right]
         |               [domain]                 |
         |                  v                     |
@@ -249,6 +250,7 @@ def line(double a, double b, double he = 1.0, ndivs = None, element_order = 1, s
   :type save: Bool, default save=False
   :param real: Bool to create a mesh with intrinsic double arrays, otherwise use oti arrays.
   :type real: Bool, default real=False
+
   """
   #***************************************************************************************************
   import gmsh
@@ -310,19 +312,43 @@ def line(double a, double b, double he = 1.0, ndivs = None, element_order = 1, s
 def square(double width, double hight, double he = 1e30, ndivs = None, element_order = 1, quads = False, 
            quad_incomplete = 1, quad_linear = 1, structured = False, save=False, real= False):
   """
-  PURPOSE: Define a square mesh.
+  Define a square mesh according to the given parameters. This function uses gmsh as the mesh generation
+  backend.
 
-  @param[in] width <float>: Width of the square.
-  @param[in] hight <float>: Height of the square.
-  @param[in] he <float>: Size of elements in the mesh. Defaults to 1e30. 
-  @param[in] ndivs <list>: Number of element divisions. [ndivx,ndivy]. If integer, sets both. 
-  @param[in] element_order <int>: Order of element to be implemented. Default 1
-  @param[in] quads <bool>: Bool to define if qued elements are to be generated. Defaluts to False. 
-  @param[in] quad_incomplete <int>: Indicates if quads are serendipity or not. Defaults to 1.
-  @param[in] quad_linear <int>: Defaults to 1.
-  @param[in] structured <Bool>: Bool to set structured mesh. Defaults to False.
-  @param[in] save <Bool>: Bool to save mesh. Defaults False.
-  @param[in] real <Bool>: Not used. Defaults False.
+  :param width:  Width of the square.
+  :type  width: float.
+
+  :param hight:  Height of the square.
+  :type  hight: float.
+
+  :param he: Size of elements in the mesh. Defaults to 1e30. 
+  :type  he: float, optional. Default he= 1e30.
+
+  :param ndivs: Number of element divisions. [ndivx,ndivy]. If integer, sets both. 
+  :type  ndivs:   list or int, optional. Default ndivsNone.
+
+  :param element_order: Order of element to be implemented. Default 1
+  :type  element_order: int, optional. Default element_order = 1.
+
+  :param quads: Bool to define if qued elements are to be generated. Defaluts to False. 
+  :type  quads:   bool, optional. Default quads = False
+
+  :param quad_incomplete: <int>: Indicates if quads are serendipity or not. Defaults to 1.
+  :type  quad_incomplete: int, optional. Default quad_incomplete = 1.
+
+  :param quad_linear: <int>: Defaults to 1.
+  :type  quad_linear: int, optional. Default quad_linear=1.
+  
+  :param structured: <Bool>: Bool to set structured mesh. Defaults to False.
+  :type  structured: bool, optional. Default structured=False.
+  
+  :param save: <Bool>: Bool to save mesh. Defaults False.
+  :type  save: bool, optional. Default save=False.
+
+  :param real: <Bool>: Not used. Defaults False.
+  :type  real: bool, optional. Default real=False.
+
+  :returns: a pyoti.fem.mesh object.
 
   """
   #***************************************************************************************************

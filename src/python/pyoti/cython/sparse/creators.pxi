@@ -2,6 +2,8 @@
 #*****************************************************************************************************
 cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
   """
+  e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
+
   This function creates a sotinum with value 1 along the specified imaginary direction
   in a human friendly manner.
 
@@ -68,7 +70,19 @@ cpdef e( object hum_dir, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
 #*****************************************************************************************************
 cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
   """
-  PURPOSE:  To create a scalar with real value 0 and every imaginary coefficient as zeros.
+  zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
+
+  This function creates a scalar OTI with real value 0 and every imaginary coefficient zero.
+
+  :param nbases: Define the number of bases to allocate memory in the resulting number.
+  :type  nbases: int, optional. Default nbases=0.
+
+  :param order: Define the truncation order used to allocate memory and control operations with the.
+      number.
+  :type  order: int, optional. Default order=0.
+
+  :param nip: Number of integration points for creating a gauss scalar type.
+  :type  nip: int, optional. Default nip=0.
 
   """
   #***************************************************************************************************
@@ -102,7 +116,20 @@ cpdef zero( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 #*****************************************************************************************************
 cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
   """
-  PURPOSE:  To create a scalar with real value 1 and every imaginary coefficient as zeros.
+  one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
+
+  This function creates a scalar OTI with real value 1 and every imaginary coefficient as zero.
+
+  :param nbases: Define the number of bases to allocate memory in the resulting number.
+  :type  nbases: int, optional. Default nbases=0.
+
+  :param order: Define the truncation order used to allocate memory and control operations with the.
+      number.
+  :type  order: int, optional. Default order=0.
+
+  :param nip: Number of integration points for creating a gauss scalar type.
+  :type  nip: int, optional. Default nip=0.
+
 
   """
   #***************************************************************************************************
@@ -136,8 +163,23 @@ cpdef one( bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
 #*****************************************************************************************************
 cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0):
   """
-  PURPOSE:  To create a sotinum with value 1 at the specified imaginary direction
-            in a human friendly manner
+  number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 0)
+
+  This function creates a scalar OTI with real value `num` and every imaginary coefficient as zero.
+
+  :param num: Define the number of bases to allocate memory in the resulting number.
+  :type  num: float or int.
+
+  :param nbases: Define the number of bases to allocate memory in the resulting number.
+  :type  nbases: int, optional. Default nbases=0.
+
+  :param order: Define the truncation order used to allocate memory and control operations with the.
+      number.
+  :type  order: int, optional. Default order=0.
+
+  :param nip: Number of integration points for creating a gauss scalar type.
+  :type  nip: int, optional. Default nip=0.
+
 
   """
   #***************************************************************************************************
@@ -172,7 +214,21 @@ cpdef number( coeff_t num, bases_t nbases = 0 , ord_t order = 0, uint64_t nip = 
 #*****************************************************************************************************
 cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
-  PURPOSE: Create identity matrix of shape: (size,size).
+  eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0)
+
+  This function creates an identity matrix of shape: (size,size).
+
+  :param size: dimension of the identity matrix to be created.
+  :type  num: int.
+
+  :param nbases: Define the number of bases to allocate memory in the object.
+  :type  nbases: int, optional. Default nbases=0.
+
+  :param order: Define the truncation order used to allocate memory in the object.
+  :type  order: int, optional. Default order=0.
+
+  :param nip: Number of integration points for creating a gauss scalar type.
+  :type  nip: int, optional. Default nip=0.
 
   """
   global dhl
@@ -203,16 +259,32 @@ cpdef eye(uint64_t size, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
 #*****************************************************************************************************
 cpdef array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0):
   """
-  PURPOSE: Create a matrix for OTI algebra, according to the given array values.
+  array( object arr, bases_t nbases = 0, ord_t order = 0, uint64_t nip = 0)
+  
+  Create a matrix for OTI numbers, according to the given array parameters.
 
-  Array can be:
-    - Scalar 
-    - 0D array
-    - 1D array
-    - 2D array or
-    - 3D array
+  
 
-  They can contain real or OTI values. No complex values are supported yet.
+
+  :param arr: Iterable that represents a 0D, 1D, 2D or 3D array. Can be given as a list of values, 
+      numpy.ndarray (of dtype float or int), or a scalar value. According to the shape, it will be 
+      created as a `matso` or `matsofe` array.
+
+      .. note::
+
+          If `arr` is defined from a list of values, `arr` can contain float, int or OTI values. 
+          Complex values are currently not supported.
+
+  :type  : sotinum, list or numpy.ndarray
+  
+  :param nbases: Define the number of bases to allocate memory in the object.
+  :type  nbases: int, optional. Default nbases=0.
+
+  :param order: Define the truncation order used to allocate memory in the object.
+  :type  order: int, optional. Default order=0.
+
+  :param nip: Number of integration points for creating a gauss scalar type.
+  :type  nip: int, optional. Default nip=0.
 
   """
   global dhl

@@ -12,6 +12,10 @@
 # cmake_minimum_required (VERSION 3.20)
 cmake_minimum_required (VERSION 3.20)
 
+# Set specific OS deployment target.
+# SET(CMAKE_OSX_DEPLOYMENT_TARGET 12.1)
+SET(CMAKE_OSX_DEPLOYMENT_TARGET 11.0)
+
 # Include the CMake script copyfiles.cmake. 
 include(CheckLanguage)
 
@@ -64,22 +68,25 @@ endif()
 option (USE_OPENMP "Use OpenMP to enamble <omp.h>" YES)
 message( "USE_OPENMP flag is set to: ${USE_OPENMP}" )
 
-set(OpenMP_EXTRA_INLCUDE_FLAGS "")
-set(OpenMP_EXTRA_LINK_FLAGS "")
+# set(OpenMP_EXTRA_INLCUDE_FLAGS "")
+# set(OpenMP_EXTRA_LINK_FLAGS "")
 # Uncomment this for macOS
 if(APPLE)
 	# This is for the case of apple macOS
-	#set(CMAKE_C_COMPILER "/usr/bin/clang")
+	
+  #set(CMAKE_C_COMPILER "/usr/bin/clang")
   #set(CYTHON_CMD_CALL_PREC "CC=gcc")
 
 
   # Openmp.
   if(USE_OPENMP)
-    set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp")
-    set(OpenMP_C_LIB_NAMES "omp")
-    set(OpenMP_omp_LIBRARY omp)
-    set(OpenMP_EXTRA_INLCUDE_FLAGS "-I/opt/homebrew/Cellar/libomp/14.0.0/include/")
-    set(OpenMP_EXTRA_LINK_FLAGS "-L/opt/homebrew/Cellar/libomp/14.0.0/lib/")
+    # set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp")
+    # set(OpenMP_C_LIB_NAMES "omp")
+    # set(OpenMP_omp_LIBRARY omp)
+    message( STATUS " -- OpenMP Link Flags: ${OpenMP_INLCUDE_FLAGS}" )
+    message( STATUS " -- OpenMP Link Flags: ${OpenMP_LINK_FLAGS}" )
+    set(OpenMP_EXTRA_INLCUDE_FLAGS "-I/opt/homebrew/opt/libomp/include/")
+    set(OpenMP_EXTRA_LINK_FLAGS "-L/opt/homebrew/opt/libomp/lib/")
   else(USE_OPENMP)
     set(OpenMP_C_FLAGS "")
   endif(USE_OPENMP)

@@ -48,8 +48,8 @@ language           = "c"
 dependencies       = ["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]  #,"@CYTHONIZE_BUILD_DIR@/../../src/fortran/static/libcwrapm1n1.a"]
 
 if openmp_compile_flag:
-  extra_compile_args += ['@OpenMP_C_FLAGS@']
-  extra_link_args    += ['@OpenMP_C_FLAGS@']
+  extra_compile_args += '@OpenMP_C_FLAGS@'.split()
+  extra_link_args    += '@OpenMP_C_FLAGS@'.split()
 # end if 
 
 

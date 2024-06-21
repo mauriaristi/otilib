@@ -42,9 +42,9 @@ For more detailed instructions, see [installation](https://mauriaristi.github.io
 
 This library has been tested on:
 
-- Unix platforms.
-- macos
-- Windows (only working under WSL)
+- **Unix** platforms.
+- **macOS** (Compilation: Failing on arm64 macos)
+- **Windows** (Only working under WSL)
 
 
 1. Create the conda environment with dependencies from the ```environment.yml``` file:

@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>sparse Tutorial 01: Sparse module basic usage. &#8212; pyoti 0.1 documentation</title>
+    <title>static Tutorial 01: Basic usage. &#8212; pyoti 0.1 documentation</title>
   
   
   
@@ -45,11 +45,11 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/sparse_tutorial_01';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/static_tutorial_01';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sparse Tutorial 02: Computing arbitrary-order derivatives." href="sparse_tutorial_02.html" />
-    <link rel="prev" title="core Tutorial 01: Core module utilities" href="core_tutorial_01.html" />
+    <link rel="next" title="static Tutorial 02: Computing derivatives." href="static_tutorial_02.html" />
+    <link rel="prev" title="sparse Tutorial 03: Linear algebra support." href="sparse_tutorial_03.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -325,14 +325,14 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="core_tutorial_01.html"><code class="docutils literal notranslate"><span class="pre">core</span></code> Tutorial 01: Core module utilities</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Sparse module</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 01: Sparse module basic usage.</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="sparse_tutorial_01.html"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 01: Sparse module basic usage.</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sparse_tutorial_02.html"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 02: Computing arbitrary-order derivatives.</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sparse_tutorial_03.html"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 03: Linear algebra support.</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Static module</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="static_tutorial_01.html"><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 01: Basic usage.</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 01: Basic usage.</a></li>
 <li class="toctree-l1"><a class="reference internal" href="static_tutorial_02.html"><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 02: Computing derivatives.</a></li>
 </ul>
 </div>
@@ -391,28 +391,127 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="sparse-Tutorial-01:-Sparse-module-basic-usage.">
-<h1><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 01: Sparse module basic usage.<a class="headerlink" href="#sparse-Tutorial-01:-Sparse-module-basic-usage." title="Permalink to this heading">#</a></h1>
+  <section id="static-Tutorial-01:-Basic-usage.">
+<h1><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 01: Basic usage.<a class="headerlink" href="#static-Tutorial-01:-Basic-usage." title="Permalink to this heading">#</a></h1>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contributors:
     Mauricio Aristizabal
         University of Texas at San Antonio
         Universidad EAFIT, Colombia.
 
-Date of creation:  Apr 20 2016
-Last modification: Jun 19 2024
+Date of creation:  Jun 20 2024
+Last modification: Jun 20 2024
 </pre></div>
 </div>
 <section id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
-<p>The main purpose of this document is to show the basic operation of the sparse ‘Order truncated Imaginary’ (OTI) module in <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> . Multiple examples are given in order to show and understand the capabilities of the library, as well as its basic advantages.</p>
+<p>The main purpose of this document is to show the basic operation of the static ‘Order truncated Imaginary’ (OTI) module in <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> . Multiple examples are given in order to show and understand the capabilities of the library, as well as its basic advantages.</p>
+<p>The sparse implementation provides a robust and dynamic interface to the OTI numbers. However, a significant performance gain can be obtained when using the static library implementation. That is the reasoning behind supporting a static OTI implementation. The word ‘static’ is used in connotation of two things:</p>
+<ul class="simple">
+<li><p>Static memory usage: The amount of memory used is fixed and no allocations are done to the</p></li>
+<li><p>Static algebra: OTIs have the capability to change truncation order and number of basis according to the needed applications. A static implementation means that the number of basis and truncation order is fixed.</p></li>
+</ul>
 <section id="Importing-the-library">
 <h3>Importing the library<a class="headerlink" href="#Importing-the-library" title="Permalink to this heading">#</a></h3>
-<p>Use the following commands to import the library into the current context.</p>
-<div class="nbinput nblast docutils container">
+<p>The static module is composed of multiple submodules that suport a specific combination of OTI numbers with number of imaginary basis <span class="math notranslate nohighlight">\(m\)</span> and truncation order <span class="math notranslate nohighlight">\(n\)</span>. To get that specific version of the library, you must load the version with the name <code class="docutils literal notranslate"><span class="pre">onumm&lt;nbasis&gt;n&lt;order&gt;</span></code>. For example, plain dual numbers which is the equivalent of an OTI with <span class="math notranslate nohighlight">\(m=1\)</span> and truncation order <span class="math notranslate nohighlight">\(n=1\)</span>, you should load the static submodule <code class="docutils literal notranslate"><span class="pre">onumm1n1</span></code>. This will allow the computations of first
+order derivatives with respect to a single variable, with <span class="math notranslate nohighlight">\(a^*\in \mathbb{OTI}^1_1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[a^*=a_r+
+a_{\epsilon_1} \epsilon_1\]</div>
+<p>Similarly, you can import a module for the static support of OTis with <span class="math notranslate nohighlight">\(m=2\)</span> and <span class="math notranslate nohighlight">\(n=3\)</span>, i.e. <span class="math notranslate nohighlight">\(a^*\in \mathbb{OTI}^3_2\)</span> where</p>
+<div class="math notranslate nohighlight">
+\[a^*=a_r+
+a_{\epsilon_1} \epsilon_1 + a_{\epsilon_2} \epsilon_2 +
+a_{\epsilon_1^2} \epsilon_1^2 + a_{\epsilon_1\epsilon_2} \epsilon_1\epsilon_2 + a_{\epsilon_2^2} \epsilon_2^2 +
+a_{\epsilon_1^3} \epsilon_1^3 + a_{\epsilon_1^2\epsilon_2} \epsilon_1^2\epsilon_2 +
+a_{\epsilon_1\epsilon_2^2} \epsilon_1\epsilon_2^2 +  a_{\epsilon_2^3} \epsilon_2^3\]</div>
+<p>The contents of <code class="docutils literal notranslate"><span class="pre">static</span></code> module mimic most of the functions on the <code class="docutils literal notranslate"><span class="pre">sparse</span></code> module. It is recommended the reader also looks at the tutorials of the <code class="docutils literal notranslate"><span class="pre">sparse</span></code> implementation.</p>
+<p>The static implementation of the library in the current version of pyoti comes with support for</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>m/n</p></th>
+<th class="head"><p>1</p></th>
+<th class="head"><p>2</p></th>
+<th class="head"><p>3</p></th>
+<th class="head"><p>4</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm1n1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm1n2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm1n3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm1n4</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm2n1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm2n2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm2n3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm2n4</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm3n1</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm3n2</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm3n3</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">onumm3n4</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>To print the available static modules, use the following</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyoti.sparse</span> <span class="k">as</span> <span class="nn">oti</span>  <span class="c1"># Import the library.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="s1">&#39;pyoti.static&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on package pyoti.static in pyoti:
+
+NAME
+    pyoti.static
+
+PACKAGE CONTENTS
+    onumm10n1
+    onumm10n2
+    onumm1n1
+    onumm1n10
+    onumm1n2
+    onumm1n20
+    onumm1n3
+    onumm1n30
+    onumm1n4
+    onumm2n1
+    onumm2n2
+    onumm2n3
+    onumm2n4
+    onumm3n1
+    onumm3n2
+    onumm3n3
+    onumm3n4
+
+FILE
+    (built-in)
+
+
+</pre></div></div>
+</div>
+<p>For the this tutorial, <span class="math notranslate nohighlight">\(m=2\)</span> and <span class="math notranslate nohighlight">\(n=2\)</span> will be used, <span class="math notranslate nohighlight">\(a^*\in \mathbb{OTI}^2_2\)</span> where</p>
+<div class="math notranslate nohighlight">
+\[a^*=a_r+
+a_{\epsilon_1} \epsilon_1 + a_{\epsilon_2} \epsilon_2 +
+a_{\epsilon_1^2} \epsilon_1^2 + a_{\epsilon_1\epsilon_2} \epsilon_1\epsilon_2 + a_{\epsilon_2^2} \epsilon_2^2\]</div>
+<p>thus the module <code class="docutils literal notranslate"><span class="pre">onumm2n2</span></code> is imported using:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyoti.static.onumm2n2</span> <span class="k">as</span> <span class="nn">oti</span>  <span class="c1"># Import the static library for m=2 and n=3.</span>
 </pre></div>
 </div>
 </div>
@@ -420,31 +519,14 @@ Last modification: Jun 19 2024
 </section>
 <section id="Basics">
 <h2>Basics<a class="headerlink" href="#Basics" title="Permalink to this heading">#</a></h2>
-<section id="Sparse-OTI-scalar-creation">
-<h3>Sparse OTI scalar creation<a class="headerlink" href="#Sparse-OTI-scalar-creation" title="Permalink to this heading">#</a></h3>
-<p>In order to create an OTI number (scalar), the easiest way to do so is as follows</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">5.2</span><span class="o">*</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="mi">4</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-10 + 1 * e([1]) + 5.2 * e([3,4]) + 3 * e([[2,3],4])
-</pre></div></div>
-</div>
+<section id="Scalar-creation">
+<h3>Scalar creation<a class="headerlink" href="#Scalar-creation" title="Permalink to this heading">#</a></h3>
+<p>In order to create an OTI scalar, the easiest way to do so is as follows</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">5.2</span><span class="o">*</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">5.2</span><span class="o">*</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="mi">3</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -454,24 +536,27 @@ Last modification: Jun 19 2024
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-10 + 1 * e([1]) + 5.2 * e([3,4]) + 3 * e([[2,3],4])
+10.0000 + 1.0000 * e([1]) + 0.0000 * e([2]) + 0.0000 * e([[1,2]]) + 5.2000 * e([1,2]) + 3.0000 * e([[2,2]])
 </pre></div></div>
 </div>
 <p>The OTI number <code class="docutils literal notranslate"><span class="pre">a</span></code> has been created. This number represents the following:</p>
 <div class="math notranslate nohighlight">
-\[a = 10 + \epsilon_1 + 5.2 \ \epsilon_3\epsilon_4+3 \ \epsilon_2^3\epsilon_4\]</div>
-<p>The ‘direction array’ given as a parameter to the function <code class="docutils literal notranslate"><span class="pre">oti.e(dirArray)</span></code> can be defined as follows:</p>
+\[a = 10 + \epsilon_1 + 5.2 \ \epsilon_1\epsilon_2 + 3 \ \epsilon_2^2\]</div>
+<p>The ‘direction array’ given as a parameter to the function <code class="docutils literal notranslate"><span class="pre">oti.e(dirArray)</span></code> is the same as the one used in the <code class="docutils literal notranslate"><span class="pre">sparse</span></code> module, and can be defined as follows:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">oti.e(i)</span></code> :<span class="math notranslate nohighlight">\(\epsilon_i\)</span> (unsigned integer)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">oti.e([i,j,k,l])</span></code> : <span class="math notranslate nohighlight">\(\epsilon_i\epsilon_j\epsilon_k\epsilon_l\)</span> (plain list of integers, with <span class="math notranslate nohighlight">\(n\)</span> elements)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">oti.e([[i,m],j,[k,n],l])</span></code> : <span class="math notranslate nohighlight">\(\epsilon_i^m\epsilon_j\epsilon_k^n\epsilon_l\)</span> (the items with exponents other than 1, are defined as a 2-element list representing the base and exponent pair. Usually <span class="math notranslate nohighlight">\(m\)</span>, <span class="math notranslate nohighlight">\(n\)</span> are greater than 1, but can be any integer <span class="math notranslate nohighlight">\(m,n\geq0\)</span>)</p></li>
 </ul>
-<p>The representation of the number and the conversion to string are equivalent:</p>
+<p>Note: the <code class="docutils literal notranslate"><span class="pre">e(dirArray)</span></code> function supports the same inputs as the sparse function. However, it will always create a static number (meaning all its directions will be created and will be zero). Therefore, there is no need to assign the truncation order for static implementations, as it is defined in the module itself.</p>
+<p>Additionally, creating directions that are outside of the truncation conditions of the static library selected, the result will be an OTI number filled with zeros.</p>
+<p>For example</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># Notice this is third order, but the module</span>
+               <span class="c1"># has truncation order 2.</span>
 </pre></div>
 </div>
 </div>
@@ -481,29 +566,12 @@ Last modification: Jun 19 2024
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-10 + 1 * e([1]) + 5.2 * e([3,4]) + 3 * e([[2,3],4])
+0.0000 + 0.0000 * e([1]) + 0.0000 * e([2]) + 0.0000 * e([[1,2]]) + 0.0000 * e([1,2]) + 0.0000 * e([[2,2]])
 </pre></div></div>
 </div>
-<p>Using string conversion or the print command.</p>
+<p>The number has been created with the same truncation order of the moudle. This can be requested from the object with the atribute <code class="docutils literal notranslate"><span class="pre">order</span></code></p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-10 + 1 * e([1]) + 5.2 * e([3,4]) + 3 * e([[2,3],4])
-</pre></div></div>
-</div>
-<p>The number has been created with the maximum truncation order corresponding to the maximum order of the given term. To know the order of the number, just call the atribute ‘order’</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
@@ -515,12 +583,12 @@ Last modification: Jun 19 2024
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-4
+2
 </pre></div></div>
 </div>
-<p>Some users maybe interested in knowing specific information about the sotinum object. <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> provides a <code class="docutils literal notranslate"><span class="pre">short_repr()</span></code> method to show basic information about the object. It shows the real coefficient, the total number of non-zero imaginary coefficients and its truncation order.</p>
+<p>Some users may be interested in knowing specific information about the <code class="docutils literal notranslate"><span class="pre">onumm2n2</span></code> object. <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> provides a <code class="docutils literal notranslate"><span class="pre">short_repr()</span></code> method to show basic information about the object. It shows the real coefficient, the total number of non-zero imaginary coefficients and its truncation order.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">short_repr</span><span class="p">())</span>
@@ -532,84 +600,10 @@ Last modification: Jun 19 2024
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-sotinum(10.0, nnz: 4, order: 4)
+onumm2n2(10.0, nnz: 3, order: 2)
 </pre></div></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">pyoti</span></code> also provides a longer representation accessible using the method <code class="docutils literal notranslate"><span class="pre">long_repr()</span></code>, which provides a more detailed description of the sotinum object:</p>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">long_repr</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-sotinum(10.0, nnz: 4, alloc: 4, actual order: 4, truncation order: 4, flag: 1
-  - Order 1-&gt;   nnz: 1  size: 1
-  - Order 2-&gt;   nnz: 1  size: 1
-  - Order 3-&gt;   nnz: 0  size: 0
-  - Order 4-&gt;   nnz: 1  size: 1
-)
-</pre></div></div>
-</div>
-<p>where,</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">nnz</span></code>: Number of non-zeroes of the OTI number</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">alloc</span></code>: Number of coefficients allocated in the memory of the number.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">actual</span> <span class="pre">order</span></code>: Actual order of the OTI number. This value is typically lower than the truncation order, and rises according to the arithmetic operations.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">truncation</span> <span class="pre">order</span></code>: Maximum order for the imaginary directions propagated with this OTI number.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">flag</span></code>: Flag set to the OTI number. Typically, 1 represents that the object is owner of the memory, and 0 means it is not the owner of the memory.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">Order</span> <span class="pre">O</span> <span class="pre">-&gt;</span></code>: Line that shows the number of nonzero elements and allocation size in number of coefficients for the imaginary directions of order <code class="docutils literal notranslate"><span class="pre">O</span></code>.</p></li>
-</ul>
 </section>
-</section>
-<section id="Display-options">
-<h2>Display options<a class="headerlink" href="#Display-options" title="Permalink to this heading">#</a></h2>
-<p>Each OTI number is displayed by default with a maximum of 4 imaginary directions and with format “g”.</p>
-<p>The current version of the library supports changing the representation using the <code class="docutils literal notranslate"><span class="pre">set_printoptions</span></code> function as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">oti</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">float_format</span><span class="o">=</span><span class="s2">&quot;g&quot;</span><span class="p">,</span><span class="n">terms_print</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-</pre></div>
-</div>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">float_format:</span></code> sets the format to print the coefficients in the OTI number.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">terms_print:</span></code> sets the number of terms to print from an OTI number.</p></li>
-</ul>
-<blockquote>
-<div><p><strong>TIP 1:</strong> Using <code class="docutils literal notranslate"><span class="pre">terms_print=-1</span></code> sets the OTI library to print <strong>all</strong> non-zero imaginary coefficients in the OTI numbers.</p>
-<p><strong>TIP 2:</strong> Reverting to the default configuration, simply call the function with no arguments <code class="docutils literal notranslate"><span class="pre">set_printoptions()</span></code>.</p>
-</div></blockquote>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">oti</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">terms_print</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">help</span><span class="p">(</span><span class="n">oti</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Help on built-in function set_printoptions in module pyoti.sparse:
-
-set_printoptions(...)
-    PURPOSE:   Set the print options for OTI numbers.
-
-    INPUTS:
-        - float_format: (Default &#34;g&#34;) Define the print format for t
-        - terms_print: (Default 4) Number of terms to print.
-
-    In order to reset the values to defaults, just call set_printoptions() with no arguments.
-
-</pre></div></div>
-</div>
 </section>
 <section id="Usign-OTI-numbers.">
 <h2>Usign OTI numbers.<a class="headerlink" href="#Usign-OTI-numbers." title="Permalink to this heading">#</a></h2>
@@ -645,21 +639,20 @@ set_printoptions(...)
 <h4>Addition<a class="headerlink" href="#Addition" title="Permalink to this heading">#</a></h4>
 <p>Add two OTIs using the <code class="docutils literal notranslate"><span class="pre">+</span></code> operator. For example, adding the numbers</p>
 <div class="math notranslate nohighlight">
-\[a = 10 + \phantom{2.5 } \epsilon_1 + 5.2 \ \epsilon_3\epsilon_4+3 \ \epsilon_2^3\epsilon_4\]</div>
-<div class="math notranslate nohighlight">
-\[b = 10 + 2.5 \ \epsilon_1 -5.2 \ \epsilon_3\epsilon_4 \phantom{+3 \ \epsilon_2^3\epsilon_4}\]</div>
-<div class="math notranslate nohighlight">
-\[a+b = 20 + 3.5  \ \epsilon_1 +0 \ \epsilon_3\epsilon_4 + 3 \ \epsilon_2^3\epsilon_4\]</div>
+\[\begin{split}\begin{array}{rcl}
+a &amp;=&amp; 10 + \phantom{2.5 } \epsilon_1 + 3 \ \epsilon_1\epsilon_2+5.2 \ \epsilon_2^2 \\
+b &amp;=&amp; 10 + 2.5 \ \epsilon_1 - 3 \ \epsilon_1\epsilon_2 \phantom{+3 \ \epsilon_2^2} \\
+a+b &amp;=&amp; 20 + 3.5  \ \epsilon_1 +0 \ \epsilon_1\epsilon_2 + 5.2 \ \epsilon_2^2
+\end{array}\end{split}\]</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">+</span>     <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="mi">4</span><span class="p">])</span> <span class="o">+</span> <span class="mf">5.2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
-<span class="n">b</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">+</span> <span class="mf">2.5</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>                        <span class="o">-</span> <span class="mf">5.2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">+</span>     <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="mf">5.2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">b</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">+</span> <span class="mf">2.5</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 
 <span class="n">sum_result</span> <span class="o">=</span> <span class="n">a</span><span class="o">+</span><span class="n">b</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The result is:&#39;</span><span class="p">,</span> <span class="n">sum_result</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;With truncation order:&quot;</span><span class="p">,</span> <span class="n">sum_result</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -668,8 +661,7 @@ set_printoptions(...)
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-The result is: 20 + 3.5 * e([1]) + 0 * e([3,4]) + 3 * e([[2,3],4])
-With truncation order: 4
+The result is: 20.0000 + 3.5000 * e([1]) + 0.0000 * e([2]) + 0.0000 * e([[1,2]]) + 0.0000 * e([1,2]) + 5.2000 * e([[2,2]])
 </pre></div></div>
 </div>
 </section>
@@ -677,7 +669,7 @@ With truncation order: 4
 <h4>Subtraction<a class="headerlink" href="#Subtraction" title="Permalink to this heading">#</a></h4>
 <p>To subtract two OTI numbers, use <code class="docutils literal notranslate"><span class="pre">-</span></code> operator:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sub_result</span> <span class="o">=</span> <span class="n">a</span><span class="o">-</span><span class="n">b</span>
@@ -692,23 +684,21 @@ With truncation order: 4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-The result of a-b:  - 1.5 * e([1]) + 10.4 * e([3,4]) + 3 * e([[2,3],4])
-Order of a-b:      4
+The result of a-b: 0.0000 - 1.5000 * e([1]) + 0.0000 * e([2]) + 0.0000 * e([[1,2]]) + 6.0000 * e([1,2]) + 5.2000 * e([[2,2]])
+Order of a-b:      2
 </pre></div></div>
 </div>
-<p>Notice that the result has order 4, despite adding/subtracting two numbers with different orders (<span class="math notranslate nohighlight">\(O(\)</span> <code class="docutils literal notranslate"><span class="pre">a</span></code> <span class="math notranslate nohighlight">\() = 4\)</span>, <span class="math notranslate nohighlight">\(O(\)</span> <code class="docutils literal notranslate"><span class="pre">b</span></code> <span class="math notranslate nohighlight">\() = 2\)</span>).</p>
-<p><strong>Addition and subtraction preserve the maximum truncation order from either of the operands</strong>.</p>
 </section>
 <section id="Multiplication">
 <h4>Multiplication<a class="headerlink" href="#Multiplication" title="Permalink to this heading">#</a></h4>
 <p>In order to Multiply two OTI numbers in the library, just use the <code class="docutils literal notranslate"><span class="pre">*</span></code> operator:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mult_result</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The result of a*b:&quot;</span><span class="p">,</span><span class="n">mult_result</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Order of a*b:     &quot;</span><span class="p">,</span><span class="n">mult_result</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The result of a*b:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mult_result</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -717,22 +707,21 @@ Order of a-b:      4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-The result of a*b: 100 + 35 * e([1]) + 2.5 * e([[1,2]]) + 0 * e([3,4]) + 7.8 * e([1,3,4]) + 30 * e([[2,3],4]) - 27.04 * e([[3,2],[4,2]])
-Order of a*b:      4
+The result of a*b:
+100.0000 + 35.0000 * e([1]) + 0.0000 * e([2]) + 2.5000 * e([[1,2]]) + 0.0000 * e([1,2]) + 52.0000 * e([[2,2]])
 </pre></div></div>
 </div>
-<p>Notice that the order of the result is 4. Therefore, for the multiplication, the <strong>maximum truncation order</strong> is preserved.</p>
 </section>
 <section id="Division">
 <h4>Division<a class="headerlink" href="#Division" title="Permalink to this heading">#</a></h4>
 <p>Division between two OTIs is performed as follows:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">div_result</span> <span class="o">=</span> <span class="n">a</span><span class="o">/</span><span class="n">b</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The result of a/b:&quot;</span><span class="p">,</span><span class="n">div_result</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Order of a/b:     &quot;</span><span class="p">,</span><span class="n">div_result</span><span class="o">.</span><span class="n">order</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The result of a/b:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">div_result</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -741,8 +730,8 @@ Order of a*b:      4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-The result of a/b: 1 - 0.15 * e([1]) + 0.0375 * e([[1,2]]) + 1.04 * e([3,4]) + 0.00625 * e([[1,3]]) - 0.078 * e([1,3,4]) + 0.3 * e([[2,3],4]) + 0.0325 * e([[1,2],3,4]) + 0.2704 * e([[3,2],[4,2]])
-Order of a/b:      4
+The result of a/b:
+1.0000 - 0.1500 * e([1]) + 0.0000 * e([2]) + 0.0375 * e([[1,2]]) + 0.6000 * e([1,2]) + 0.5200 * e([[2,2]])
 </pre></div></div>
 </div>
 </section>
@@ -850,25 +839,11 @@ Order of a/b:      4
 </tbody>
 </table>
 </div>
-<p>Other functions</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Function</p></th>
-<th class="head"><p>Symbol</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>Error function</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">erf(x)</span></code></p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mf">4.3</span> <span class="o">*</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">-</span> <span class="mf">4.3</span> <span class="o">*</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">oti</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
@@ -879,7 +854,7 @@ Order of a/b:      4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-0.14112 - 1.97998 * e([1]) - 0.28224 * e([[1,2]]) + 4.25697 * e([2,3])
+0.1411 - 1.9800 * e([1]) - 0.0000 * e([2]) - 0.2822 * e([[1,2]]) - 0.0000 * e([1,2]) + 4.2570 * e([[2,2]])
 </pre></div></div>
 </div>
 </section>
@@ -888,10 +863,10 @@ Order of a/b:      4
 <h3>Get and set coefficients of an OTI number.<a class="headerlink" href="#Get-and-set-coefficients-of-an-OTI-number." title="Permalink to this heading">#</a></h3>
 <p>To get an imaginary coefficient, use the method ‘<code class="docutils literal notranslate"><span class="pre">get_im(dirArray)</span></code>’ and place the direction array of the direction you want</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="mi">4</span><span class="p">])</span> <span class="o">+</span> <span class="mf">5.2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="mf">5.2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -901,12 +876,12 @@ Order of a/b:      4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-10 + 1 * e([1]) + 5.2 * e([3,4]) + 3 * e([[2,3],4])
+10.0000 + 1.0000 * e([1]) + 0.0000 * e([2]) + 0.0000 * e([[1,2]]) + 3.0000 * e([1,2]) + 5.2000 * e([[2,2]])
 </pre></div></div>
 </div>
 <p>To get the coefficient of the direction <span class="math notranslate nohighlight">\(\epsilon_1\)</span> use:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get_im</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
@@ -923,7 +898,7 @@ Order of a/b:      4
 </div>
 <p>or</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get_im</span><span class="p">([</span><span class="mi">1</span><span class="p">]))</span>
@@ -938,12 +913,12 @@ Order of a/b:      4
 1.0
 </pre></div></div>
 </div>
-<p>To get the coefficient of <span class="math notranslate nohighlight">\(\epsilon_2^3\epsilon_4\)</span> use:</p>
+<p>To get the coefficient of <span class="math notranslate nohighlight">\(\epsilon_2^2\)</span> use:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get_im</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="mi">4</span><span class="p">]))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get_im</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]]))</span>
 </pre></div>
 </div>
 </div>
@@ -952,15 +927,15 @@ Order of a/b:      4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-3.0
+5.2
 </pre></div></div>
 </div>
 <p>or</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get_im</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get_im</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -969,15 +944,15 @@ Order of a/b:      4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-3.0
+5.2
 </pre></div></div>
 </div>
 <p>Coefficients that are not explicitly shown in the number are zero. For example, the coefficient along direction <span class="math notranslate nohighlight">\(\epsilon_1\epsilon_2^2\)</span> is:</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get_im</span><span class="p">([</span><span class="mi">1</span><span class="p">,[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]]))</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get_im</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -991,7 +966,7 @@ Order of a/b:      4
 </div>
 <p>There are two ways to get the real coefficient: Get the real</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get_im</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
@@ -1007,7 +982,7 @@ Order of a/b:      4
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">real</span>
@@ -1015,7 +990,7 @@ Order of a/b:      4
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -1028,10 +1003,10 @@ Order of a/b:      4
 <h3>Set coefficients of an OTI number<a class="headerlink" href="#Set-coefficients-of-an-OTI-number" title="Permalink to this heading">#</a></h3>
 <p>Similar to the methods of getting coefficients, setting the values of coefficients works in the same way. If the coefficient already exist, it will be modified, and if the coefficient does not exist, it will be created. Use the method <code class="docutils literal notranslate"><span class="pre">set_im(newValue,dirArray)</span></code> to do so.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span><span class="mi">4</span><span class="p">])</span> <span class="o">+</span> <span class="mf">5.2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span> <span class="o">+</span> <span class="mf">5.2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1041,14 +1016,14 @@ Order of a/b:      4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-10 + 1 * e([1]) + 5.2 * e([3,4]) + 3 * e([[2,3],4])
+10.0000 + 1.0000 * e([1]) + 0.0000 * e([2]) + 0.0000 * e([[1,2]]) + 3.0000 * e([1,2]) + 5.2000 * e([[2,2]])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">set_im</span><span class="p">(</span><span class="mf">7.3</span><span class="p">,[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">set_im</span><span class="p">(</span><span class="mf">7.3</span><span class="p">,[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1058,14 +1033,14 @@ Order of a/b:      4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-10 + 1 * e([1]) + 7.3 * e([3,4]) + 3 * e([[2,3],4])
+10.0000 + 1.0000 * e([1]) + 0.0000 * e([2]) + 7.3000 * e([[1,2]]) + 3.0000 * e([1,2]) + 5.2000 * e([[2,2]])
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">set_im</span><span class="p">(</span><span class="mf">4.2</span><span class="p">,[</span><span class="mi">1</span><span class="p">,[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="o">.</span><span class="n">set_im</span><span class="p">(</span><span class="mf">4.2</span><span class="p">,[</span><span class="mi">2</span><span class="p">])</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1075,7 +1050,7 @@ Order of a/b:      4
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-10 + 1 * e([1]) + 7.3 * e([3,4]) + 4.2 * e([1,[3,2]]) + 3 * e([[2,3],4])
+10.0000 + 1.0000 * e([1]) + 4.2000 * e([2]) + 7.3000 * e([[1,2]]) + 3.0000 * e([1,2]) + 5.2000 * e([[2,2]])
 </pre></div></div>
 </div>
 </section>
@@ -1173,38 +1148,38 @@ Order of a/b:      4
 </div>
 <p>Index-order pairs are defined as a list of two elements, first the index (0-based) and then the order: <code class="docutils literal notranslate"><span class="pre">[idx,order]</span></code>.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">[</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="p">]</span> <span class="p">]</span> <span class="c1"># gets e([1]) coefficient</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">[</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">]</span> <span class="p">]</span> <span class="c1"># gets e([1,2]) coefficient</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-1.0
+3.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">[</span> <span class="p">[</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span> <span class="p">]</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">55</span> <span class="c1"># Sets e([1,1,3]) coefficient</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span><span class="p">[</span> <span class="p">[</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="p">]</span> <span class="p">]</span> <span class="o">=</span> <span class="mi">55</span> <span class="c1"># Sets e([2,2]) coefficient</span>
 <span class="n">a</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-10 + 1 * e([1]) + 7.3 * e([3,4]) + 55 * e([[1,2],3]) + 4.2 * e([1,[3,2]]) + 3 * e([[2,3],4])
+10.0000 + 1.0000 * e([1]) + 4.2000 * e([2]) + 7.3000 * e([[1,2]]) + 3.0000 * e([1,2]) + 55.0000 * e([[2,2]])
 </pre></div></div>
 </div>
 </section>
@@ -1222,20 +1197,20 @@ Order of a/b:      4
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="core_tutorial_01.html"
+       href="sparse_tutorial_03.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">core</span></code> Tutorial 01: Core module utilities</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 03: Linear algebra support.</p>
       </div>
     </a>
     <a class="right-next"
-       href="sparse_tutorial_02.html"
+       href="static_tutorial_02.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 02: Computing arbitrary-order derivatives.</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 02: Computing derivatives.</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1262,10 +1237,9 @@ Order of a/b:      4
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Basics">Basics</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Sparse-OTI-scalar-creation">Sparse OTI scalar creation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Scalar-creation">Scalar creation</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Display-options">Display options</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Usign-OTI-numbers.">Usign OTI numbers.</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Arithmetic-operations">Arithmetic operations</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#Addition">Addition</a></li>
@@ -1286,7 +1260,7 @@ Order of a/b:      4
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/sparse_tutorial_01.ipynb.txt">
+    <a href="../_sources/notebooks/static_tutorial_01.ipynb.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

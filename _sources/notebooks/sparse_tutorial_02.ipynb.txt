@@ -25,7 +25,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 52,
+   "execution_count": 1,
    "metadata": {
     "jupyter": {
      "outputs_hidden": false
@@ -98,7 +98,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 53,
+   "execution_count": 2,
    "metadata": {
     "jupyter": {
      "outputs_hidden": true
@@ -133,7 +133,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 54,
+   "execution_count": 3,
    "metadata": {
     "jupyter": {
      "outputs_hidden": false
@@ -166,7 +166,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 55,
+   "execution_count": 4,
    "metadata": {
     "jupyter": {
      "outputs_hidden": false
@@ -223,7 +223,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 56,
+   "execution_count": 5,
    "metadata": {},
    "outputs": [],
    "source": [
@@ -242,7 +242,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 57,
+   "execution_count": 6,
    "metadata": {},
    "outputs": [
     {
@@ -263,7 +263,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 58,
+   "execution_count": 7,
    "metadata": {
     "jupyter": {
      "outputs_hidden": false
@@ -354,7 +354,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 59,
+   "execution_count": 8,
    "metadata": {
     "jupyter": {
      "outputs_hidden": true
@@ -375,16 +375,16 @@
     "f_x(x,y) = 20x^4y^4, \\ \\ f_y(x,y) = 16x^5y^3\n",
     "$$\n",
     "\n",
-    "Now, how do we retreive the function's first derivatives by just evaluating the function with dual numbers? It's easy! \n",
+    "Now, how do we retreive the function's first derivatives by just evaluating the function with OTI numbers? It's easy! \n",
     "\n",
-    "According to the taylor series expansion of the function, we can retreive the function derivatives by evaluating the function at the point we want, say $(x_0,y_0)$ with a perturbation on the dual direction. In this case, the perturbation will occur as follows: $(x_0+\\epsilon_1,y_0+\\epsilon_2)$\n",
+    "According to the taylor series expansion of the function, we can retreive the function derivatives by evaluating the function at the point we want, say $(x_0,y_0)$ with a perturbation along OTI directions. In this case, the perturbation will occur as follows: $(x_0+\\epsilon_1,y_0+\\epsilon_2)$\n",
     "\n",
-    "To get first derivatives we most only evaluate the function into dual numbers of order one. In this way, we define the point $(x_0=2,y_0=3)$ and we get:"
+    "To get first derivatives we most only evaluate the function into OTI numbers of order one. In this way, we define the point $(x_0=2,y_0=3)$ and we get:"
    ]
   },
   {
    "cell_type": "code",
-   "execution_count": 60,
+   "execution_count": 9,
    "metadata": {
     "jupyter": {
      "outputs_hidden": true
@@ -398,7 +398,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 61,
+   "execution_count": 10,
    "metadata": {
     "jupyter": {
      "outputs_hidden": false
@@ -461,7 +461,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 62,
+   "execution_count": 11,
    "metadata": {
     "jupyter": {
      "outputs_hidden": false
@@ -503,7 +503,7 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 63,
+   "execution_count": 12,
    "metadata": {
     "jupyter": {
      "outputs_hidden": false

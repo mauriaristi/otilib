@@ -4156,19 +4156,31 @@ result.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyoti.sparse.array">
-<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.array" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE: Create a matrix for OTI algebra, according to the given array values.</p>
-<dl class="simple">
-<dt>Array can be:</dt><dd><ul class="simple">
-<li><p>Scalar</p></li>
-<li><p>0D array</p></li>
-<li><p>1D array</p></li>
-<li><p>2D array or</p></li>
-<li><p>3D array</p></li>
+<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">array</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span> <span class="pre">arr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases_t</span> <span class="pre">nbases</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord_t</span> <span class="pre">order</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uint64_t</span> <span class="pre">nip</span> <span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.array" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a matrix for OTI numbers, according to the given array parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arr</strong> – <p>Iterable that represents a 0D, 1D, 2D or 3D array. Can be given as a list of values,
+numpy.ndarray (of dtype float or int), or a scalar value. According to the shape, it will be
+created as a <cite>matso</cite> or <cite>matsofe</cite> array.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If <cite>arr</cite> is defined from a list of values, <cite>arr</cite> can contain float, int or OTI values.
+Complex values are currently not supported.</p>
+</div>
+</p>
+</dd>
+</dl>
+<p>:type  : sotinum, list or numpy.ndarray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nbases</strong> (<em>int</em><em>, </em><em>optional. Default nbases=0.</em>) – Define the number of bases to allocate memory in the object.</p></li>
+<li><p><strong>order</strong> (<em>int</em><em>, </em><em>optional. Default order=0.</em>) – Define the truncation order used to allocate memory in the object.</p></li>
+<li><p><strong>nip</strong> (<em>int</em><em>, </em><em>optional. Default nip=0.</em>) – Number of integration points for creating a gauss scalar type.</p></li>
 </ul>
 </dd>
 </dl>
-<p>They can contain real or OTI values. No complex values are supported yet.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -4491,7 +4503,7 @@ result.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyoti.sparse.e">
-<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">e</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.e" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">e</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span> <span class="pre">hum_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases_t</span> <span class="pre">nbases</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord_t</span> <span class="pre">order</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uint64_t</span> <span class="pre">nip</span> <span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.e" title="Permalink to this definition">#</a></dt>
 <dd><p>This function creates a sotinum with value 1 along the specified imaginary direction
 in a human friendly manner.</p>
 <dl class="field-list simple">
@@ -4858,8 +4870,18 @@ then standard types will be used. If nip &gt; 0, then a scalar gauss type will b
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyoti.sparse.eye">
-<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">eye</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.eye" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE: Create identity matrix of shape: (size,size).</p>
+<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">eye</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">uint64_t</span> <span class="pre">size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases_t</span> <span class="pre">nbases</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord_t</span> <span class="pre">order</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uint64_t</span> <span class="pre">nip</span> <span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.eye" title="Permalink to this definition">#</a></dt>
+<dd><p>This function creates an identity matrix of shape: (size,size).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>size</strong> – dimension of the identity matrix to be created.</p></li>
+<li><p><strong>nbases</strong> (<em>int</em><em>, </em><em>optional. Default nbases=0.</em>) – Define the number of bases to allocate memory in the object.</p></li>
+<li><p><strong>order</strong> (<em>int</em><em>, </em><em>optional. Default order=0.</em>) – Define the truncation order used to allocate memory in the object.</p></li>
+<li><p><strong>nip</strong> (<em>int</em><em>, </em><em>optional. Default nip=0.</em>) – Number of integration points for creating a gauss scalar type.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -5621,17 +5643,35 @@ result.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyoti.sparse.number">
-<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">number</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.number" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>PURPOSE:  To create a sotinum with value 1 at the specified imaginary direction</dt><dd><p>in a human friendly manner</p>
+<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">number</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coeff_t</span> <span class="pre">num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases_t</span> <span class="pre">nbases</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord_t</span> <span class="pre">order</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uint64_t</span> <span class="pre">nip</span> <span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.number" title="Permalink to this definition">#</a></dt>
+<dd><p>This function creates a scalar OTI with real value <cite>num</cite> and every imaginary coefficient as zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>num</strong> (<em>float</em><em> or </em><em>int.</em>) – Define the number of bases to allocate memory in the resulting number.</p></li>
+<li><p><strong>nbases</strong> (<em>int</em><em>, </em><em>optional. Default nbases=0.</em>) – Define the number of bases to allocate memory in the resulting number.</p></li>
+<li><p><strong>order</strong> (<em>int</em><em>, </em><em>optional. Default order=0.</em>) – Define the truncation order used to allocate memory and control operations with the.
+number.</p></li>
+<li><p><strong>nip</strong> (<em>int</em><em>, </em><em>optional. Default nip=0.</em>) – Number of integration points for creating a gauss scalar type.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyoti.sparse.one">
-<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">one</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.one" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:  To create a scalar with real value 1 and every imaginary coefficient as zeros.</p>
+<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">one</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bases_t</span> <span class="pre">nbases</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord_t</span> <span class="pre">order</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uint64_t</span> <span class="pre">nip</span> <span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.one" title="Permalink to this definition">#</a></dt>
+<dd><p>This function creates a scalar OTI with real value 1 and every imaginary coefficient as zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nbases</strong> (<em>int</em><em>, </em><em>optional. Default nbases=0.</em>) – Define the number of bases to allocate memory in the resulting number.</p></li>
+<li><p><strong>order</strong> (<em>int</em><em>, </em><em>optional. Default order=0.</em>) – Define the truncation order used to allocate memory and control operations with the.
+number.</p></li>
+<li><p><strong>nip</strong> (<em>int</em><em>, </em><em>optional. Default nip=0.</em>) – Number of integration points for creating a gauss scalar type.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -6023,33 +6063,48 @@ indicates that the memory is owned by this instance of the object.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.copy">
 <span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.copy" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:      To create a copy of the object.</p>
+<dd><p>Create a copy of the object.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.extract_deriv">
 <span class="sig-name descname"><span class="pre">extract_deriv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.extract_deriv" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:      Get the derivative as an OTI number.</p>
+<dd><p>Similar to extract_im, this function retrieves the OTI number formed by all coefficients multiple
+of the given imagianry direction. However, this function also sets up the resulting OTI number
+such that the resulting OTI number contains the correct derivatives</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>humdir</strong> – Imaginary direction given by the basis and exponents. Example [1,2,2]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.extract_im">
 <span class="sig-name descname"><span class="pre">extract_im</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.extract_im" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:      to retrieve the coefficient in the oti direction.</p>
+<dd><p>Retrieves the OTI number formed by all coefficients multiple of the given imagianry direction.
+It extracts the coefficients by dividing each direction by the given direction and determining
+if it is possible to extract the corresponding coefficients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>humdir</strong> – Imaginary direction given by the basis and exponents. Example [1,2,2]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.get_active_bases">
 <span class="sig-name descname"><span class="pre">get_active_bases</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.get_active_bases" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:      Get all the active bases.</p>
+<dd><p>Get all the active bases.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.get_deriv">
 <span class="sig-name descname"><span class="pre">get_deriv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.get_deriv" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:  Retrieves the derivatives contained in the oti number.</p>
-<dl class="simple">
-<dt>INPUTS:</dt><dd><p>humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]</p>
+<dd><p>Retrieves the derivative contained in the oti number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>humdir</strong> – Imaginary direction given by the basis and exponents. Example [1,2,2]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6057,7 +6112,12 @@ indicates that the memory is owned by this instance of the object.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.get_im">
 <span class="sig-name descname"><span class="pre">get_im</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.get_im" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:      to retrieve the coefficient in the oti direction.</p>
+<dd><p>Retrieves the coefficient along the indicated imaginary direction direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>humdir</strong> – Imaginary direction given by the basis and exponents. Example [1,2,2]</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -6078,7 +6138,12 @@ indicates that the memory is owned by this instance of the object.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.get_order_im">
 <span class="sig-name descname"><span class="pre">get_order_im</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.get_order_im" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:      Get the derivative as an OTI number.</p>
+<dd><p>Extract an OTI number with only the imagianry directions of the given order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>order</strong> – Order of imaginary directions to get.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -6126,11 +6191,12 @@ indicates that the memory is owned by this instance of the object.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.rom_eval">
 <span class="sig-name descname"><span class="pre">rom_eval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.rom_eval" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:     Evaluate the Taylor series from the coefficients with in the OTI number.</p>
-<dl class="simple">
-<dt>INPUTS:</dt><dd><ul class="simple">
-<li><p>bases:  Python list of Imagiary bases to evaluate the ROM</p></li>
-<li><p>deltas: Python list float coefficients to evaluate the ROM (can be a 1D numpy array).</p></li>
+<dd><p>Evaluate the Taylor series from the coefficients with in the OTI number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bases</strong> – Python list of Imaginary bases to evaluate the ROM</p></li>
+<li><p><strong>deltas</strong> – Python list float coefficients to evaluate the ROM (can be a 1D numpy array).</p></li>
 </ul>
 </dd>
 </dl>
@@ -6139,22 +6205,16 @@ indicates that the memory is owned by this instance of the object.</p></li>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.rom_eval_array">
 <span class="sig-name descname"><span class="pre">rom_eval_array</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.rom_eval_array" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:     Evaluate the Taylor series from the coefficients with in the OTI number.</p>
-<dl class="simple">
-<dt>INPUTS:</dt><dd><ul class="simple">
-<li><p>bases:  Python list of Imagiary bases to evaluate the ROM</p></li>
-<li><dl class="simple">
-<dt>deltas: Python list with arrays of coefficients of the deltas to evaluate the ROM.</dt><dd><p>Arrays must be numpy arrays, and be of the same shape.</p>
-</dd>
-</dl>
-</li>
+<dd><p>Evaluate the Taylor series from the coefficients with in the OTI number.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bases</strong> – Python list of Imagiary bases to evaluate the ROM</p></li>
+<li><p><strong>deltas</strong> – Python list with arrays of coefficients of the deltas to evaluate the ROM.
+Arrays must be numpy arrays, and be of the same shape.</p></li>
 </ul>
 </dd>
 </dl>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
-</pre></div>
-</div>
 </dd></dl>
 
 <dl class="py method">
@@ -6189,21 +6249,29 @@ unnecessary memory allocations.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.set_deriv">
 <span class="sig-name descname"><span class="pre">set_deriv</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.set_deriv" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:      to set a specific derivative as given.</p>
-<p>INPUTS:
-- val:    Value to be set. Can be OTI in nature or real only.
-- humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]</p>
+<dd><p>Sets an imaginary coefficient grom the given derivative.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val</strong> (<em>int</em><em> or </em><em>list.</em>) – Derivative value to be set.</p></li>
+<li><p><strong>humdir</strong> – Imaginary direction given by the basis and exponents. Example [1,2,2]</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.set_im">
 <span class="sig-name descname"><span class="pre">set_im</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.set_im" title="Permalink to this definition">#</a></dt>
 <dd><p>Set a specific imaginary direction with the given coefficient.</p>
-<p>INPUTS:
-:param val:  Value to be set.
-:type val: float, int
-:param humdir: Imaginary direction given by the basis and exponents. Example [1,2,2]
-:type val: int or list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val</strong> (<em>int</em><em> or </em><em>list.</em>) – Value to be set.</p></li>
+<li><p><strong>humdir</strong> – Imaginary direction given by the basis and exponents. Example [1,2,2]</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -6215,9 +6283,11 @@ unnecessary memory allocations.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.truncate">
 <span class="sig-name descname"><span class="pre">truncate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.truncate" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:      to set a specific imaginary direction as given.</p>
-<dl class="simple">
-<dt>INPUTS:</dt><dd><p>humdir:    Imaginary direction given by the basis and exponents. Example [1,2,2]</p>
+<dd><p>Removes (sets zero) all coefficients along imaginary directions multiple to the given
+imaginary direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>humdir</strong> – Imaginary direction given by the basis and exponents. Example [1,2,2]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -6225,7 +6295,12 @@ unnecessary memory allocations.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyoti.sparse.sotinum.truncate_order">
 <span class="sig-name descname"><span class="pre">truncate_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.sotinum.truncate_order" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:    Truncate all imaginary directions with order larger than the one specified.</p>
+<dd><p>Truncates all imaginary directions with order equal or larger than the one specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>order</strong> – Order to be truncated.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -6459,8 +6534,18 @@ unnecessary memory allocations.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyoti.sparse.zero">
-<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">zero</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.zero" title="Permalink to this definition">#</a></dt>
-<dd><p>PURPOSE:  To create a scalar with real value 0 and every imaginary coefficient as zeros.</p>
+<span class="sig-prename descclassname"><span class="pre">pyoti.sparse.</span></span><span class="sig-name descname"><span class="pre">zero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bases_t</span> <span class="pre">nbases</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ord_t</span> <span class="pre">order</span> <span class="pre">=</span> <span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uint64_t</span> <span class="pre">nip</span> <span class="pre">=</span> <span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyoti.sparse.zero" title="Permalink to this definition">#</a></dt>
+<dd><p>This function creates a scalar OTI with real value 0 and every imaginary coefficient zero.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nbases</strong> (<em>int</em><em>, </em><em>optional. Default nbases=0.</em>) – Define the number of bases to allocate memory in the resulting number.</p></li>
+<li><p><strong>order</strong> (<em>int</em><em>, </em><em>optional. Default order=0.</em>) – Define the truncation order used to allocate memory and control operations with the.
+number.</p></li>
+<li><p><strong>nip</strong> (<em>int</em><em>, </em><em>optional. Default nip=0.</em>) – Number of integration points for creating a gauss scalar type.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">

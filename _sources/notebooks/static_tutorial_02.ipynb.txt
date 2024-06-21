@@ -4,7 +4,7 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "## `sparse` Tutorial 02: Computing arbitrary-order derivatives.\n",
+    "## `static` Tutorial 02: Computing derivatives.\n",
     "\n",
     "```\n",
     "Contributors:\n",
@@ -12,13 +12,13 @@
     "        University of Texas at San Antonio\n",
     "        Universidad EAFIT, Colombia.\n",
     "\n",
-    "Date of creation:  Jun 19 2024\n",
-    "Last modification: Jun 19 2024\n",
+    "Date of creation:  Jun 20 2024\n",
+    "Last modification: Jun 20 2024\n",
     "```\n",
     "\n",
     "### Introduction\n",
     "\n",
-    "The main purpose of this document is to show how to compute derivatives of functions in python using the sparse 'Order truncated Imaginary' (OTI) module in ```pyoti```. Multiple examples are given in order to show and understand the capabilities of the library, as well as its basic advantages.\n",
+    "The main purpose of this document is to show how to compute derivatives of functions in python using the static 'Order truncated Imaginary' (OTI) module in ```pyoti```. Multiple examples are given in order to show and understand the capabilities of the library, as well as its basic advantages. For basic usage of the static module, see the ```static``` Tutorial 01.\n",
     "\n",
     "For this, first import the libraries required."
    ]
@@ -33,11 +33,8 @@
    },
    "outputs": [],
    "source": [
-    "import pyoti.sparse as oti  # Import the library.\n",
-    "import numpy as np\n",
-    "\n",
-    "# Set to print all components\n",
-    "oti.set_printoptions(terms_print=-1)"
+    "import pyoti.static.onumm2n2 as oti  # Import the library for m=2 and n=3\n",
+    "import numpy as np"
    ]
   },
   {
@@ -54,7 +51,7 @@
     "f(z) = \\sum_{p=0}^{\\infty}    \\frac{1}{p!}\\frac{\\partial^p f}{\\partial x^p}(a)\\;(z-a)^p\n",
     "$$\n",
     "\n",
-    "Let´s take, for convenience, $z=x_0+\\epsilon_1$ and $a=x_0$. Then what we get is the following:\n",
+    "Let´s take, for convenience, $z=x_0+\\epsilon_1$ and $a=x_0$. Then the following is obtained:\n",
     "\n",
     "$$\n",
     "f(x_0+\\epsilon_1 ) = f(x_0) + \n",
@@ -120,8 +117,6 @@
     "    \\displaystyle\\frac{\\partial   f}{\\partial x  }(x) &=& 50x^4-9x^2+2, \\\\ \n",
     "    \\displaystyle\\frac{\\partial^2 f}{\\partial x^2}(x) &=& 200x^3-18x,   \\\\ \n",
     "    \\displaystyle\\frac{\\partial^3 f}{\\partial x^3}(x) &=& 600x^2-18,    \\\\ \n",
-    "    \\displaystyle\\frac{\\partial^4 f}{\\partial x^4}(x) &=& 1200x,        \\\\ \n",
-    "    \\displaystyle\\frac{\\partial^5 f}{\\partial x^5}(x) &=& 1200,\n",
     "\\end{array}\n",
     "$$\n",
     "\n",
@@ -144,14 +139,14 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Variable x:       2.5 + 1 * e([1])\n",
-      "Truncation order: 5\n"
+      "Variable x:       2.5000 + 1.0000 * e([1]) + 0.0000 * e([2]) + 0.0000 * e([[1,2]]) + 0.0000 * e([1,2]) + 0.0000 * e([[2,2]])\n",
+      "Truncation order: 2\n"
      ]
     }
    ],
    "source": [
     "x = 2.5\n",
-    "x_star=x+oti.e([1],order=5)\n",
+    "x_star= x + oti.e(1)\n",
     "\n",
     "print(f'Variable x:       {x_star}')\n",
     "print(f'Truncation order: {x_star.order}')"
@@ -177,7 +172,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "924.688 + 1898.88 * e([1]) + 1540 * e([[1,2]]) + 622 * e([[1,3]]) + 125 * e([[1,4]]) + 10 * e([[1,5]])\n"
+      "924.6875 + 1898.8750 * e([1]) + 0.0000 * e([2]) + 1540.0000 * e([[1,2]]) + 0.0000 * e([1,2]) + 0.0000 * e([[2,2]])\n"
      ]
     }
    ],
@@ -190,31 +185,37 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Observe that the first two values correspond explicitly to the function and first derivative evaluated at $x_0=2.5$. In order to retreive the values of the other derivatives, the solution must take into account the following:\n",
+    "Observe that the first two values correspond explicitly to the function and first derivative evaluated at $x_0=2.5$. Only the values along $\\epsilon_1$ or its multipls are non-zero. \n",
     "\n",
-    "if our number results in something like\n",
+    "In order to retreive the values of the derivatives, the solution must take into account the following:\n",
     "$$\n",
-    "\\mbox{result} = a_0 + a_1\\epsilon_1 + a_2\\epsilon_1^2 + a_3\\epsilon_1^3 + a_4\\epsilon_1^4 + a_5\\epsilon_1^5 \n",
+    "\\mbox{result} = a_r + \n",
+    "a_{\\epsilon_1}\\epsilon_1 + a_{\\epsilon_2}\\epsilon_2 +\n",
+    "a_{\\epsilon_1^2}\\epsilon_1^2 + + a_{\\epsilon_1\\epsilon_2}\\epsilon_1\\epsilon_2 + a_{\\epsilon_2^2}\\epsilon_2^2\n",
     "$$\n",
     "\n",
     "and considering that \n",
+    "\n",
     "$$\n",
-    "f(x_0+\\epsilon) = f(x_0) + \n",
-    "\\displaystyle            \\frac{\\partial   f}{\\partial x  }(x_0){\\epsilon_1  } +\n",
-    "\\displaystyle\\frac{1}{2!}\\frac{\\partial^2 f}{\\partial x^2}(x_0){\\epsilon_1^2} +\n",
-    "\\displaystyle\\frac{1}{3!}\\frac{\\partial^3 f}{\\partial x^3}(x_0){\\epsilon_1^3} + ...\n",
+    "f(x_0+\\epsilon_1,y_0+\\epsilon_2) = f(x_0,y_0) + \n",
+    "\\displaystyle            \\frac{\\partial   f}{\\partial x  }(x_0,y_0){\\epsilon_1  } +\n",
+    "\\displaystyle            \\frac{\\partial   f}{\\partial y  }(x_0,y_0){\\epsilon_2  } +\n",
+    "\\displaystyle\\frac{1}{2!}\\frac{\\partial^2 f}{\\partial x^2}(x_0,y_0){\\epsilon_1^2} +\n",
+    "\\displaystyle            \\frac{\\partial^2 f}{\\partial x\\partial y}(x_0,y_0){\\epsilon_1\\epsilon_2} +\n",
+    "\\displaystyle\\frac{1}{2!}\\frac{\\partial^2 f}{\\partial y^2}(x_0,y_0){\\epsilon_2^2} +\n",
+    "...\n",
     "$$\n",
     "\n",
     "then to retreive the derivatives, we most do the following:\n",
     "\n",
     "$$\n",
     "\\begin{array}{rcl}\n",
-    "f(x_0) &=& a_0 \\\\\n",
-    "\\displaystyle \\frac{\\partial   f}{\\partial x  }(x_0) &=& a_1 \\\\\n",
-    "\\displaystyle\\frac{\\partial^2 f}{\\partial x^2}(x_0)&=&a_2*2! \\\\\n",
-    "\\displaystyle\\frac{\\partial^3 f}{\\partial x^3}(x_0)&=&a_3*3! \\\\ \n",
-    "\\displaystyle\\frac{\\partial^4 f}{\\partial x^4}(x_0)&=&a_4*4! \\\\ \n",
-    "\\displaystyle\\frac{\\partial^5 f}{\\partial x^5}(x_0)&=&a_5*5! \\\\ \n",
+    "f(x_0) &=& a_r \\\\\n",
+    "\\displaystyle \\frac{\\partial   f}{\\partial x  }(x_0,y_0)) &=&  a_{\\epsilon_1} \\\\\n",
+    "\\displaystyle \\frac{\\partial   f}{\\partial y  }(x_0,y_0) &=&  a_{\\epsilon_2} \\\\\n",
+    "\\displaystyle\\frac{\\partial^2 f}{\\partial x^2}(x_0,y_0)&=& a_{\\epsilon_1^2}\\;2! \\\\\n",
+    "\\displaystyle\\frac{\\partial^2 f}{\\partial x\\partial y}(x_0,y_0)&=& a_{\\epsilon_1\\epsilon_2} \\\\\n",
+    "\\displaystyle\\frac{\\partial^2 f}{\\partial y^2}(x_0,y_0)&=& a_{\\epsilon_2^2}\\;2! \\\\\n",
     "\\end{array}\n",
     "$$\n",
     "\n",
@@ -229,8 +230,7 @@
    "source": [
     "f       = result_1.real\n",
     "f_x     = result_1.get_im([1])\n",
-    "f_xx    = result_1.get_im([[1,2]]) * 2*1\n",
-    "f_xxx   = result_1.get_im([[1,3]]) * 3*2*1"
+    "f_xx    = result_1.get_im([[1,2]]) * 2*1"
    ]
   },
   {
@@ -249,15 +249,15 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "f_xxx:\n",
-      "3732.0 3732.0\n"
+      "f_xx:\n",
+      "3080.0 3080.0\n"
      ]
     }
    ],
    "source": [
-    "print(\"f_xxx:\")\n",
-    "print(result_1.get_im([[1,3]]) * 3*2*1, # Using get_im and the factorial\n",
-    "      result_1.get_deriv([[1,3]])       # Using just get_deriv.\n",
+    "print(\"f_xx:\")\n",
+    "print(result_1.get_im([1,1]) * 2*1, # Using get_im and the factorial\n",
+    "      result_1.get_deriv([1,1])     # Using just get_deriv.\n",
     "     )"
    ]
   },
@@ -279,16 +279,13 @@
       "f          |  924.688 |   924.688 |\n",
       "f_x        |  1898.88 |   1898.88 |\n",
       "f_xx       |     3080 |      3080 |\n",
-      "f_xxx      |     3732 |      3732 |\n",
-      "f_xxxx     |     3000 |      3000 |\n",
-      "f_xxxxx    |     1200 |      1200 |\n"
+      "f_xxx      |        0 |      3732 |\n"
      ]
     }
    ],
    "source": [
     "# Getting the other derivatives\n",
-    "f_xxxx  = result_1.get_deriv([[1,4]])\n",
-    "f_xxxxx = result_1.get_deriv([[1,5]])\n",
+    "f_xxx  = result_1.get_deriv([[1,3]])\n",
     "\n",
     "# Print results:\n",
     "print(f\"Derivative |   pyoti  | analytical|\")\n",
@@ -296,9 +293,7 @@
     "print(f\"f          | {f:8g} | {(10*x**5-3*x**3+2*x-10):9g} |\")\n",
     "print(f\"f_x        | {f_x:8g} | {(50*x**4-9*x**2+2):9g} |\")\n",
     "print(f\"f_xx       | {f_xx:8g} | {(200*x**3-18*x):9g} |\")    # \")#\n",
-    "print(f\"f_xxx      | {f_xxx:8g} | {(600*x**2-18):9g} |\")\n",
-    "print(f\"f_xxxx     | {f_xxxx:8g} | {(1200*x):9g} |\")\n",
-    "print(f\"f_xxxxx    | {f_xxxxx:8g} | {1200:9g} |\")\n"
+    "print(f\"f_xxx      | {f_xxx:8g} | {(600*x**2-18):9g} |\")\n"
    ]
   },
   {
@@ -346,7 +341,7 @@
     "To apply this to a simple example, let's consider the function \n",
     "\n",
     "$$\n",
-    "f(x,y) = 4x^5y^4\n",
+    "f(x,y) = cos( (x+2y-1)^2 )\n",
     "$$\n",
     "\n",
     "Let's define the function in the python environment:"
@@ -363,23 +358,24 @@
    "outputs": [],
    "source": [
     "def funct_2(x,y):\n",
-    "    return 4*x**5*y**4"
+    "    return oti.cos( ( x + 2*y - 1 ) ** 2 )"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Analitically, let's define the derivatives of the function:\n",
+    "Analytically, let's define the derivatives of the function:\n",
     "$$\n",
-    "f_x(x,y) = 20x^4y^4, \\ \\ f_y(x,y) = 16x^5y^3\n",
+    "f_x(x,y) = -2(x+2y-1)\\sin((x+2y-1)^2) , \\\\ \n",
+    "f_y(x,y) = -4(x+2y-1)sin((x+2y-1)^2)\n",
     "$$\n",
     "\n",
     "Now, how do we retreive the function's first derivatives by just evaluating the function with OTI numbers? It's easy! \n",
     "\n",
     "According to the taylor series expansion of the function, we can retreive the function derivatives by evaluating the function at the point we want, say $(x_0,y_0)$ with a perturbation along OTI directions. In this case, the perturbation will occur as follows: $(x_0+\\epsilon_1,y_0+\\epsilon_2)$\n",
     "\n",
-    "To get first derivatives we most only evaluate the function into OTI numbers of order one. In this way, we define the point $(x_0=2,y_0=3)$ and we get:"
+    "To get all the derivatives in a **single evaluation** of the function derivatives one most only evaluate the function into the OTI numbers. In this way, we define the point $(x_0=2,y_0=3)$ and we get:"
    ]
   },
   {
@@ -392,8 +388,8 @@
    },
    "outputs": [],
    "source": [
-    "x=2.0 + oti.e(1, order=2 )\n",
-    "y=3.0 + oti.e(2, order=2 )"
+    "x=2.0 + oti.e(1)\n",
+    "y=3.0 + oti.e(2)"
    ]
   },
   {
@@ -409,7 +405,7 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "10368 + 25920 * e([1]) + 13824 * e([2]) + 25920 * e([[1,2]]) + 34560 * e([1,2]) + 6912 * e([[2,2]])\n"
+      "0.3006 + 13.3525 * e([1]) + 26.7051 * e([2]) - 28.5043 * e([[1,2]]) - 114.0173 * e([1,2]) - 114.0173 * e([[2,2]])\n"
      ]
     }
    ],
@@ -422,88 +418,99 @@
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "Analitically, the results of evaluating all function and its derivatives are:\n",
-    "$$\n",
-    "f(2,3) = 10368\n",
-    "$$\n",
-    "$$\n",
-    "f_x(2,3) = 25920\n",
-    "$$\n",
-    "$$\n",
-    "f_y(2,3) = 13824\n",
-    "$$"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "Now, interestingly, the coefficients that we obtain are the following:\n",
-    "``` 2048.0 ``` on the real part, wich represents the function evaluated at $(2,3)$, the coefficient of $\\epsilon_1$ is the first derivative with respect to $x$ (as is) and the coefficient of $\\epsilon_2$ is the first derivative with respect to $y$ function evaluated.\n",
+    "All derivatives are now computed and lay in the coefficients of teh OTI number.\n",
     "\n",
-    "The seccond derivatives of the function are:\n",
-    "$$\n",
-    "f_{xx}(x,y) = 80x^3y^4, \\\\\n",
-    "f_{xy}(x,y) = 80x^4y^3, \\\\\n",
-    "f_{yy}(x,y) = 48x^5y^2\n",
-    "$$\n",
-    "\n",
-    "Wich evaluated at $(2,3)$ gives\n",
-    "$$\n",
-    "f_{xx}(2,3) = 51840, \\\\ \n",
-    "f_{xy}(2,3) = 34560, \\\\\n",
-    "f_{yy}(2,3) = 13824\n",
-    "$$\n",
-    "\n",
-    "\n",
-    "Lets now change the order of both numbers, and see what we get:\n"
+    "Comparing against the analytical derivatives, the following results are obtained:"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 11,
-   "metadata": {
-    "jupyter": {
-     "outputs_hidden": false
-    }
-   },
+   "metadata": {},
    "outputs": [
     {
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "10368 + 25920 * e([1]) + 13824 * e([2]) + 25920 * e([[1,2]]) + 34560 * e([1,2]) + 6912 * e([[2,2]]) + 12960 * e([[1,3]]) + 34560 * e([[1,2],2]) + 17280 * e([1,[2,2]]) + 1536 * e([[2,3]])\n"
+      " f(x,y): analytical: 0.30059254374363714\n",
+      "              pyoti: 0.3005925437436371\n",
+      "              Error: 5.551115123125783e-17\n"
      ]
     }
    ],
    "source": [
-    "# One can increase dynamically the order of an OTI number by \n",
-    "# adding a zero-coefficient OTI numbers with the new desired \n",
-    "# truncation order.\n",
-    "x = x + 0*oti.e(1,order=3) \n",
-    "y = y + 0*oti.e(1,order=3) \n",
-    "\n",
-    "result_2_order3 = funct_2(x,y)\n",
-    "print(result_2_order3)"
+    "f_an = np.cos( ( x.real + 2*y.real - 1 ) ** 2 )\n",
+    "print(f' f(x,y): analytical: {f_an}')\n",
+    "print(f'              pyoti: {result_2.real}')\n",
+    "print(f'              Error: {f_an-result_2.real}')"
    ]
   },
   {
    "cell_type": "markdown",
    "metadata": {},
    "source": [
-    "\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "metadata": {},
-   "source": [
-    "We can extract, based on the Taylor series, the different terms. However, in order to get an easy form to extract them, the method ```get_deriv(dirArray)``` helps in retreiving the derivatives according to the specifyed direction. It works as follows:"
+    "The results of the first-order derivatives are as follows:"
    ]
   },
   {
    "cell_type": "code",
    "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " f_x(x,y): analytical: 13.352537138632607\n",
+      "                pyoti: 13.352537138632606\n",
+      "                Error: 1.7763568394002505e-15\n"
+     ]
+    }
+   ],
+   "source": [
+    "f_x_an = -2*( x.real + 2*y.real - 1 ) * np.sin( ( x.real + 2*y.real - 1 ) ** 2 )\n",
+    "print(f' f_x(x,y): analytical: {f_x_an}')\n",
+    "print(f'                pyoti: {result_2.get_deriv([1])}')\n",
+    "print(f'                Error: {f_x_an-result_2.get_deriv([1])}')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " f_y(x,y): analytical: 26.705074277265215\n",
+      "                pyoti: 26.70507427726521\n",
+      "                Error: 3.552713678800501e-15\n"
+     ]
+    }
+   ],
+   "source": [
+    "f_y_an = -4*( x.real + 2*y.real - 1 ) * np.sin( ( x.real + 2*y.real - 1 ) ** 2 )\n",
+    "print(f' f_y(x,y): analytical: {f_y_an}')\n",
+    "print(f'                pyoti: {result_2.get_deriv([2])}')\n",
+    "print(f'                Error: {f_y_an-result_2.get_deriv([2])}')"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "The seccond derivatives of the function are:\n",
+    "$$\n",
+    "f_{xx}(x,y) = -2\\sin((x+2y-1)^2)-4(x+2y-1)^2\\cos((x+2y-1)^2), \\\\\n",
+    "f_{xy}(x,y) = -4\\sin((x+2y-1)^2)-8(x+2y-1)^2\\cos((x+2y-1)^2), \\\\\n",
+    "f_{yy}(x,y) = -8\\sin((x+2y-1)^2)-16(x+2y-1)^2\\sin((x+2y-1)^2)\n",
+    "$$\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
    "metadata": {
     "jupyter": {
      "outputs_hidden": false
@@ -514,36 +521,61 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "f(x_0, y_0)    :   10368\n",
-      "\n",
-      "f_x(x_0, y_0)  :   25920\n",
-      "f_y(x_0, y_0)  :   13824\n",
-      "\n",
-      "f_xx(x_0, y_0) :   51840\n",
-      "f_xy(x_0, y_0) :   34560\n",
-      "f_yy(x_0, y_0) :   13824\n",
-      "\n",
-      "f_xxx(x_0, y_0):   77760\n",
-      "f_xxy(x_0, y_0):   69120\n",
-      "f_xyy(x_0, y_0):   34560\n",
-      "f_yyy(x_0, y_0):    9216\n"
+      " f_xx(x,y): analytical: -57.008633268233936\n",
+      "                 pyoti: -57.00863326823392\n",
+      "                 Error: -1.4210854715202004e-14\n"
      ]
     }
    ],
    "source": [
-    "print(f\"f(x_0, y_0)    :{result_2_order3.get_deriv([0]):8g}\")\n",
-    "print()\n",
-    "print(f\"f_x(x_0, y_0)  :{result_2_order3.get_deriv([1]):8g}\")\n",
-    "print(f\"f_y(x_0, y_0)  :{result_2_order3.get_deriv([2]):8g}\")\n",
-    "print()\n",
-    "print(f\"f_xx(x_0, y_0) :{result_2_order3.get_deriv([[1,2]]):8g}\")\n",
-    "print(f\"f_xy(x_0, y_0) :{result_2_order3.get_deriv([1,2]):8g}\")\n",
-    "print(f\"f_yy(x_0, y_0) :{result_2_order3.get_deriv([[2,2]]):8g}\")\n",
-    "print()\n",
-    "print(f\"f_xxx(x_0, y_0):{result_2_order3.get_deriv([1,1,1]):8g}\")\n",
-    "print(f\"f_xxy(x_0, y_0):{result_2_order3.get_deriv([1,1,2]):8g}\")\n",
-    "print(f\"f_xyy(x_0, y_0):{result_2_order3.get_deriv([1,2,2]):8g}\")\n",
-    "print(f\"f_yyy(x_0, y_0):{result_2_order3.get_deriv([2,2,2]):8g}\")"
+    "f_xx_an = -2*oti.sin((x.real+2*y.real-1)**2)-4*(x.real+2*y.real-1)**2*np.cos((x.real+2*y.real-1)**2)\n",
+    "print(f' f_xx(x,y): analytical: {f_xx_an}')\n",
+    "print(f'                 pyoti: {result_2.get_deriv([1,1])}')\n",
+    "print(f'                 Error: {f_xx_an-result_2.get_deriv([1,1])}')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " f_xy(x,y): analytical: -114.01726653646787\n",
+      "                 pyoti: -114.01726653646784\n",
+      "                 Error: -2.842170943040401e-14\n"
+     ]
+    }
+   ],
+   "source": [
+    "f_xy_an = -4*oti.sin((x.real+2*y.real-1)**2)-8*(x.real+2*y.real-1)**2*np.cos((x.real+2*y.real-1)**2)\n",
+    "print(f' f_xy(x,y): analytical: {f_xy_an}')\n",
+    "print(f'                 pyoti: {result_2.get_deriv([1,2])}')\n",
+    "print(f'                 Error: {f_xy_an-result_2.get_deriv([1,2])}')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      " f_yy(x,y): analytical: -228.03453307293574\n",
+      "                 pyoti: -228.0345330729357\n",
+      "                 Error: -5.684341886080802e-14\n"
+     ]
+    }
+   ],
+   "source": [
+    "f_yy_an = -8*oti.sin((x.real+2*y.real-1)**2)-16*(x.real+2*y.real-1)**2*np.cos((x.real+2*y.real-1)**2)\n",
+    "print(f' f_yy(x,y): analytical: {f_yy_an}')\n",
+    "print(f'                 pyoti: {result_2.get_deriv([2,2])}')\n",
+    "print(f'                 Error: {f_yy_an-result_2.get_deriv([2,2])}')"
    ]
   }
  ],

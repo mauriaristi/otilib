@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>sparse Tutorial 02: Computing arbitrary-order derivatives. &#8212; pyoti 0.1 documentation</title>
+    <title>static Tutorial 02: Computing derivatives. &#8212; pyoti 0.1 documentation</title>
   
   
   
@@ -45,11 +45,11 @@
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/sparse_tutorial_02';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/static_tutorial_02';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="sparse Tutorial 03: Linear algebra support." href="sparse_tutorial_03.html" />
-    <link rel="prev" title="sparse Tutorial 01: Sparse module basic usage." href="sparse_tutorial_01.html" />
+    <link rel="next" title="Examples" href="../examples.html" />
+    <link rel="prev" title="static Tutorial 01: Basic usage." href="static_tutorial_01.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -325,15 +325,15 @@ document.write(`
 <li class="toctree-l1"><a class="reference internal" href="core_tutorial_01.html"><code class="docutils literal notranslate"><span class="pre">core</span></code> Tutorial 01: Core module utilities</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Sparse module</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="sparse_tutorial_01.html"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 01: Sparse module basic usage.</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 02: Computing arbitrary-order derivatives.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparse_tutorial_02.html"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 02: Computing arbitrary-order derivatives.</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sparse_tutorial_03.html"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 03: Linear algebra support.</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Static module</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="static_tutorial_01.html"><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 01: Basic usage.</a></li>
-<li class="toctree-l1"><a class="reference internal" href="static_tutorial_02.html"><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 02: Computing derivatives.</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 02: Computing derivatives.</a></li>
 </ul>
 </div>
 </nav></div>
@@ -391,30 +391,27 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="sparse-Tutorial-02:-Computing-arbitrary-order-derivatives.">
-<h1><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 02: Computing arbitrary-order derivatives.<a class="headerlink" href="#sparse-Tutorial-02:-Computing-arbitrary-order-derivatives." title="Permalink to this heading">#</a></h1>
+  <section id="static-Tutorial-02:-Computing-derivatives.">
+<h1><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 02: Computing derivatives.<a class="headerlink" href="#static-Tutorial-02:-Computing-derivatives." title="Permalink to this heading">#</a></h1>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contributors:
     Mauricio Aristizabal
         University of Texas at San Antonio
         Universidad EAFIT, Colombia.
 
-Date of creation:  Jun 19 2024
-Last modification: Jun 19 2024
+Date of creation:  Jun 20 2024
+Last modification: Jun 20 2024
 </pre></div>
 </div>
 <section id="Introduction">
 <h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
-<p>The main purpose of this document is to show how to compute derivatives of functions in python using the sparse ‘Order truncated Imaginary’ (OTI) module in <code class="docutils literal notranslate"><span class="pre">pyoti</span></code>. Multiple examples are given in order to show and understand the capabilities of the library, as well as its basic advantages.</p>
+<p>The main purpose of this document is to show how to compute derivatives of functions in python using the static ‘Order truncated Imaginary’ (OTI) module in <code class="docutils literal notranslate"><span class="pre">pyoti</span></code>. Multiple examples are given in order to show and understand the capabilities of the library, as well as its basic advantages. For basic usage of the static module, see the <code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 01.</p>
 <p>For this, first import the libraries required.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyoti.sparse</span> <span class="k">as</span> <span class="nn">oti</span>  <span class="c1"># Import the library.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyoti.static.onumm2n2</span> <span class="k">as</span> <span class="nn">oti</span>  <span class="c1"># Import the library for m=2 and n=3</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="c1"># Set to print all components</span>
-<span class="n">oti</span><span class="o">.</span><span class="n">set_printoptions</span><span class="p">(</span><span class="n">terms_print</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -425,7 +422,7 @@ Last modification: Jun 19 2024
 <p>Consider a <span class="math notranslate nohighlight">\(C^n\)</span> function <span class="math notranslate nohighlight">\(f: \mathbb{R} \rightarrow \mathbb{R}\)</span>, and it’s Taylor series:</p>
 <div class="math notranslate nohighlight">
 \[f(z) = \sum_{p=0}^{\infty}    \frac{1}{p!}\frac{\partial^p f}{\partial x^p}(a)\;(z-a)^p\]</div>
-<p>Let´s take, for convenience, <span class="math notranslate nohighlight">\(z=x_0+\epsilon_1\)</span> and <span class="math notranslate nohighlight">\(a=x_0\)</span>. Then what we get is the following:</p>
+<p>Let´s take, for convenience, <span class="math notranslate nohighlight">\(z=x_0+\epsilon_1\)</span> and <span class="math notranslate nohighlight">\(a=x_0\)</span>. Then the following is obtained:</p>
 <div class="math notranslate nohighlight">
 \[f(x_0+\epsilon_1 ) = f(x_0) +
 \displaystyle            \frac{\partial   f}{\partial x  }(x_0)\;{\epsilon_1  } +
@@ -466,8 +463,6 @@ Last modification: Jun 19 2024
     \displaystyle\frac{\partial   f}{\partial x  }(x) &amp;=&amp; 50x^4-9x^2+2, \\
     \displaystyle\frac{\partial^2 f}{\partial x^2}(x) &amp;=&amp; 200x^3-18x,   \\
     \displaystyle\frac{\partial^3 f}{\partial x^3}(x) &amp;=&amp; 600x^2-18,    \\
-    \displaystyle\frac{\partial^4 f}{\partial x^4}(x) &amp;=&amp; 1200x,        \\
-    \displaystyle\frac{\partial^5 f}{\partial x^5}(x) &amp;=&amp; 1200,
 \end{array}\end{split}\]</div>
 <p>Let’s use this simple exampel and use OTIs to compute up-to 5th order derivatives of this polynomial.</p>
 <p>First, apply the perturbation to the variable <span class="math notranslate nohighlight">\(x\)</span> along <span class="math notranslate nohighlight">\(\epsilon_1\)</span>, <span class="math notranslate nohighlight">\(x^* = 2.5+\epsilon_1\)</span>. Since want to obtain higher order terms, we need to redefine the order of the number. Therefore we will redefine it to order 5 (because we want to get up to the fifth derivative).</p>
@@ -476,7 +471,7 @@ Last modification: Jun 19 2024
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mf">2.5</span>
-<span class="n">x_star</span><span class="o">=</span><span class="n">x</span><span class="o">+</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span><span class="n">order</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">x_star</span><span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Variable x:       </span><span class="si">{</span><span class="n">x_star</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Truncation order: </span><span class="si">{</span><span class="n">x_star</span><span class="o">.</span><span class="n">order</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -488,8 +483,8 @@ Last modification: Jun 19 2024
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Variable x:       2.5 + 1 * e([1])
-Truncation order: 5
+Variable x:       2.5000 + 1.0000 * e([1]) + 0.0000 * e([2]) + 0.0000 * e([[1,2]]) + 0.0000 * e([1,2]) + 0.0000 * e([[2,2]])
+Truncation order: 2
 </pre></div></div>
 </div>
 <p>Now let’s evaluate the function at <span class="math notranslate nohighlight">\(x^*\)</span></p>
@@ -507,28 +502,33 @@ Truncation order: 5
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-924.688 + 1898.88 * e([1]) + 1540 * e([[1,2]]) + 622 * e([[1,3]]) + 125 * e([[1,4]]) + 10 * e([[1,5]])
+924.6875 + 1898.8750 * e([1]) + 0.0000 * e([2]) + 1540.0000 * e([[1,2]]) + 0.0000 * e([1,2]) + 0.0000 * e([[2,2]])
 </pre></div></div>
 </div>
-<p>Observe that the first two values correspond explicitly to the function and first derivative evaluated at <span class="math notranslate nohighlight">\(x_0=2.5\)</span>. In order to retreive the values of the other derivatives, the solution must take into account the following:</p>
-<p>if our number results in something like</p>
+<p>Observe that the first two values correspond explicitly to the function and first derivative evaluated at <span class="math notranslate nohighlight">\(x_0=2.5\)</span>. Only the values along <span class="math notranslate nohighlight">\(\epsilon_1\)</span> or its multipls are non-zero.</p>
+<p>In order to retreive the values of the derivatives, the solution must take into account the following:</p>
 <div class="math notranslate nohighlight">
-\[\mbox{result} = a_0 + a_1\epsilon_1 + a_2\epsilon_1^2 + a_3\epsilon_1^3 + a_4\epsilon_1^4 + a_5\epsilon_1^5\]</div>
+\[\mbox{result} = a_r +
+a_{\epsilon_1}\epsilon_1 + a_{\epsilon_2}\epsilon_2 +
+a_{\epsilon_1^2}\epsilon_1^2 + + a_{\epsilon_1\epsilon_2}\epsilon_1\epsilon_2 + a_{\epsilon_2^2}\epsilon_2^2\]</div>
 <p>and considering that</p>
 <div class="math notranslate nohighlight">
-\[f(x_0+\epsilon) = f(x_0) +
-\displaystyle            \frac{\partial   f}{\partial x  }(x_0){\epsilon_1  } +
-\displaystyle\frac{1}{2!}\frac{\partial^2 f}{\partial x^2}(x_0){\epsilon_1^2} +
-\displaystyle\frac{1}{3!}\frac{\partial^3 f}{\partial x^3}(x_0){\epsilon_1^3} + ...\]</div>
+\[f(x_0+\epsilon_1,y_0+\epsilon_2) = f(x_0,y_0) +
+\displaystyle            \frac{\partial   f}{\partial x  }(x_0,y_0){\epsilon_1  } +
+\displaystyle            \frac{\partial   f}{\partial y  }(x_0,y_0){\epsilon_2  } +
+\displaystyle\frac{1}{2!}\frac{\partial^2 f}{\partial x^2}(x_0,y_0){\epsilon_1^2} +
+\displaystyle            \frac{\partial^2 f}{\partial x\partial y}(x_0,y_0){\epsilon_1\epsilon_2} +
+\displaystyle\frac{1}{2!}\frac{\partial^2 f}{\partial y^2}(x_0,y_0){\epsilon_2^2} +
+...\]</div>
 <p>then to retreive the derivatives, we most do the following:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{array}{rcl}
-f(x_0) &amp;=&amp; a_0 \\
-\displaystyle \frac{\partial   f}{\partial x  }(x_0) &amp;=&amp; a_1 \\
-\displaystyle\frac{\partial^2 f}{\partial x^2}(x_0)&amp;=&amp;a_2*2! \\
-\displaystyle\frac{\partial^3 f}{\partial x^3}(x_0)&amp;=&amp;a_3*3! \\
-\displaystyle\frac{\partial^4 f}{\partial x^4}(x_0)&amp;=&amp;a_4*4! \\
-\displaystyle\frac{\partial^5 f}{\partial x^5}(x_0)&amp;=&amp;a_5*5! \\
+f(x_0) &amp;=&amp; a_r \\
+\displaystyle \frac{\partial   f}{\partial x  }(x_0,y_0)) &amp;=&amp;  a_{\epsilon_1} \\
+\displaystyle \frac{\partial   f}{\partial y  }(x_0,y_0) &amp;=&amp;  a_{\epsilon_2} \\
+\displaystyle\frac{\partial^2 f}{\partial x^2}(x_0,y_0)&amp;=&amp; a_{\epsilon_1^2}\;2! \\
+\displaystyle\frac{\partial^2 f}{\partial x\partial y}(x_0,y_0)&amp;=&amp; a_{\epsilon_1\epsilon_2} \\
+\displaystyle\frac{\partial^2 f}{\partial y^2}(x_0,y_0)&amp;=&amp; a_{\epsilon_2^2}\;2! \\
 \end{array}\end{split}\]</div>
 <p>As a result, in order to evaluate the result, consider the following:</p>
 <div class="nbinput nblast docutils container">
@@ -538,7 +538,6 @@ f(x_0) &amp;=&amp; a_0 \\
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f</span>       <span class="o">=</span> <span class="n">result_1</span><span class="o">.</span><span class="n">real</span>
 <span class="n">f_x</span>     <span class="o">=</span> <span class="n">result_1</span><span class="o">.</span><span class="n">get_im</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">f_xx</span>    <span class="o">=</span> <span class="n">result_1</span><span class="o">.</span><span class="n">get_im</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span> <span class="o">*</span> <span class="mi">2</span><span class="o">*</span><span class="mi">1</span>
-<span class="n">f_xxx</span>   <span class="o">=</span> <span class="n">result_1</span><span class="o">.</span><span class="n">get_im</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span> <span class="o">*</span> <span class="mi">3</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="mi">1</span>
 </pre></div>
 </div>
 </div>
@@ -547,9 +546,9 @@ f(x_0) &amp;=&amp; a_0 \\
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;f_xxx:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">result_1</span><span class="o">.</span><span class="n">get_im</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span> <span class="o">*</span> <span class="mi">3</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span> <span class="c1"># Using get_im and the factorial</span>
-      <span class="n">result_1</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>       <span class="c1"># Using just get_deriv.</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;f_xx:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result_1</span><span class="o">.</span><span class="n">get_im</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mi">2</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span> <span class="c1"># Using get_im and the factorial</span>
+      <span class="n">result_1</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>     <span class="c1"># Using just get_deriv.</span>
      <span class="p">)</span>
 </pre></div>
 </div>
@@ -559,8 +558,8 @@ f(x_0) &amp;=&amp; a_0 \\
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-f_xxx:
-3732.0 3732.0
+f_xx:
+3080.0 3080.0
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -568,8 +567,7 @@ f_xxx:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Getting the other derivatives</span>
-<span class="n">f_xxxx</span>  <span class="o">=</span> <span class="n">result_1</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">]])</span>
-<span class="n">f_xxxxx</span> <span class="o">=</span> <span class="n">result_1</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">]])</span>
+<span class="n">f_xxx</span>  <span class="o">=</span> <span class="n">result_1</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">]])</span>
 
 <span class="c1"># Print results:</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Derivative |   pyoti  | analytical|&quot;</span><span class="p">)</span>
@@ -578,8 +576,6 @@ f_xxx:
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_x        | </span><span class="si">{</span><span class="n">f_x</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="p">(</span><span class="mi">50</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">4</span><span class="o">-</span><span class="mi">9</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="si">:</span><span class="s2">9g</span><span class="si">}</span><span class="s2"> |&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_xx       | </span><span class="si">{</span><span class="n">f_xx</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="p">(</span><span class="mi">200</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="o">-</span><span class="mi">18</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="si">:</span><span class="s2">9g</span><span class="si">}</span><span class="s2"> |&quot;</span><span class="p">)</span>    <span class="c1"># &quot;)#</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_xxx      | </span><span class="si">{</span><span class="n">f_xxx</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="p">(</span><span class="mi">600</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">-</span><span class="mi">18</span><span class="p">)</span><span class="si">:</span><span class="s2">9g</span><span class="si">}</span><span class="s2"> |&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_xxxx     | </span><span class="si">{</span><span class="n">f_xxxx</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="p">(</span><span class="mi">1200</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="si">:</span><span class="s2">9g</span><span class="si">}</span><span class="s2"> |&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_xxxxx    | </span><span class="si">{</span><span class="n">f_xxxxx</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="mi">1200</span><span class="si">:</span><span class="s2">9g</span><span class="si">}</span><span class="s2"> |&quot;</span><span class="p">)</span>
 <br/></pre></div>
 </div>
 </div>
@@ -593,9 +589,7 @@ Derivative |   pyoti  | analytical|
 f          |  924.688 |   924.688 |
 f_x        |  1898.88 |   1898.88 |
 f_xx       |     3080 |      3080 |
-f_xxx      |     3732 |      3732 |
-f_xxxx     |     3000 |      3000 |
-f_xxxxx    |     1200 |      1200 |
+f_xxx      |        0 |      3732 |
 </pre></div></div>
 </div>
 </section>
@@ -628,29 +622,30 @@ f(x_{1_0},x_{2_0}) +
 <h3>Example<a class="headerlink" href="#Example" title="Permalink to this heading">#</a></h3>
 <p>To apply this to a simple example, let’s consider the function</p>
 <div class="math notranslate nohighlight">
-\[f(x,y) = 4x^5y^4\]</div>
+\[f(x,y) = cos( (x+2y-1)^2 )\]</div>
 <p>Let’s define the function in the python environment:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">funct_2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mi">4</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">5</span><span class="o">*</span><span class="n">y</span><span class="o">**</span><span class="mi">4</span>
+    <span class="k">return</span> <span class="n">oti</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="p">(</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>Analitically, let’s define the derivatives of the function:</p>
+<p>Analytically, let’s define the derivatives of the function:</p>
 <div class="math notranslate nohighlight">
-\[f_x(x,y) = 20x^4y^4, \ \ f_y(x,y) = 16x^5y^3\]</div>
+\[\begin{split}f_x(x,y) = -2(x+2y-1)\sin((x+2y-1)^2) , \\
+f_y(x,y) = -4(x+2y-1)sin((x+2y-1)^2)\end{split}\]</div>
 <p>Now, how do we retreive the function’s first derivatives by just evaluating the function with OTI numbers? It’s easy!</p>
 <p>According to the taylor series expansion of the function, we can retreive the function derivatives by evaluating the function at the point we want, say <span class="math notranslate nohighlight">\((x_0,y_0)\)</span> with a perturbation along OTI directions. In this case, the perturbation will occur as follows: <span class="math notranslate nohighlight">\((x_0+\epsilon_1,y_0+\epsilon_2)\)</span></p>
-<p>To get first derivatives we most only evaluate the function into OTI numbers of order one. In this way, we define the point <span class="math notranslate nohighlight">\((x_0=2,y_0=3)\)</span> and we get:</p>
+<p>To get all the derivatives in a <strong>single evaluation</strong> of the function derivatives one most only evaluate the function into the OTI numbers. In this way, we define the point <span class="math notranslate nohighlight">\((x_0=2,y_0=3)\)</span> and we get:</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span> <span class="p">)</span>
-<span class="n">y</span><span class="o">=</span><span class="mf">3.0</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span> <span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span><span class="o">=</span><span class="mf">3.0</span> <span class="o">+</span> <span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -668,40 +663,19 @@ f(x_{1_0},x_{2_0}) +
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-10368 + 25920 * e([1]) + 13824 * e([2]) + 25920 * e([[1,2]]) + 34560 * e([1,2]) + 6912 * e([[2,2]])
+0.3006 + 13.3525 * e([1]) + 26.7051 * e([2]) - 28.5043 * e([[1,2]]) - 114.0173 * e([1,2]) - 114.0173 * e([[2,2]])
 </pre></div></div>
 </div>
-<p>Analitically, the results of evaluating all function and its derivatives are:</p>
-<div class="math notranslate nohighlight">
-\[f(2,3) = 10368\]</div>
-<div class="math notranslate nohighlight">
-\[f_x(2,3) = 25920\]</div>
-<div class="math notranslate nohighlight">
-\[f_y(2,3) = 13824\]</div>
-<p>Now, interestingly, the coefficients that we obtain are the following: <code class="docutils literal notranslate"><span class="pre">2048.0</span></code> on the real part, wich represents the function evaluated at <span class="math notranslate nohighlight">\((2,3)\)</span>, the coefficient of <span class="math notranslate nohighlight">\(\epsilon_1\)</span> is the first derivative with respect to <span class="math notranslate nohighlight">\(x\)</span> (as is) and the coefficient of <span class="math notranslate nohighlight">\(\epsilon_2\)</span> is the first derivative with respect to <span class="math notranslate nohighlight">\(y\)</span> function evaluated.</p>
-<p>The seccond derivatives of the function are:</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}f_{xx}(x,y) = 80x^3y^4, \\
-f_{xy}(x,y) = 80x^4y^3, \\
-f_{yy}(x,y) = 48x^5y^2\end{split}\]</div>
-<p>Wich evaluated at <span class="math notranslate nohighlight">\((2,3)\)</span> gives</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}f_{xx}(2,3) = 51840, \\
-f_{xy}(2,3) = 34560, \\
-f_{yy}(2,3) = 13824\end{split}\]</div>
-<p>Lets now change the order of both numbers, and see what we get:</p>
+<p>All derivatives are now computed and lay in the coefficients of teh OTI number.</p>
+<p>Comparing against the analytical derivatives, the following results are obtained:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># One can increase dynamically the order of an OTI number by</span>
-<span class="c1"># adding a zero-coefficient OTI numbers with the new desired</span>
-<span class="c1"># truncation order.</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">0</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">0</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">e</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">order</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-
-<span class="n">result_2_order3</span> <span class="o">=</span> <span class="n">funct_2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">result_2_order3</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f_an</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span> <span class="p">(</span> <span class="n">x</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; f(x,y): analytical: </span><span class="si">{</span><span class="n">f_an</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;              pyoti: </span><span class="si">{</span><span class="n">result_2</span><span class="o">.</span><span class="n">real</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;              Error: </span><span class="si">{</span><span class="n">f_an</span><span class="o">-</span><span class="n">result_2</span><span class="o">.</span><span class="n">real</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -710,27 +684,20 @@ f_{yy}(2,3) = 13824\end{split}\]</div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-10368 + 25920 * e([1]) + 13824 * e([2]) + 25920 * e([[1,2]]) + 34560 * e([1,2]) + 6912 * e([[2,2]]) + 12960 * e([[1,3]]) + 34560 * e([[1,2],2]) + 17280 * e([1,[2,2]]) + 1536 * e([[2,3]])
+ f(x,y): analytical: 0.30059254374363714
+              pyoti: 0.3005925437436371
+              Error: 5.551115123125783e-17
 </pre></div></div>
 </div>
-<p>We can extract, based on the Taylor series, the different terms. However, in order to get an easy form to extract them, the method <code class="docutils literal notranslate"><span class="pre">get_deriv(dirArray)</span></code> helps in retreiving the derivatives according to the specifyed direction. It works as follows:</p>
+<p>The results of the first-order derivatives are as follows:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f(x_0, y_0)    :</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_x(x_0, y_0)  :</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_y(x_0, y_0)  :</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">2</span><span class="p">])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_xx(x_0, y_0) :</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_xy(x_0, y_0) :</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_yy(x_0, y_0) :</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_xxx(x_0, y_0):</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_xxy(x_0, y_0):</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_xyy(x_0, y_0):</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;f_yyy(x_0, y_0):</span><span class="si">{</span><span class="n">result_2_order3</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="si">:</span><span class="s2">8g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f_x_an</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span> <span class="n">x</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span> <span class="p">(</span> <span class="n">x</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; f_x(x,y): analytical: </span><span class="si">{</span><span class="n">f_x_an</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                pyoti: </span><span class="si">{</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                Error: </span><span class="si">{</span><span class="n">f_x_an</span><span class="o">-</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -739,19 +706,98 @@ f_{yy}(2,3) = 13824\end{split}\]</div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-f(x_0, y_0)    :   10368
-
-f_x(x_0, y_0)  :   25920
-f_y(x_0, y_0)  :   13824
-
-f_xx(x_0, y_0) :   51840
-f_xy(x_0, y_0) :   34560
-f_yy(x_0, y_0) :   13824
-
-f_xxx(x_0, y_0):   77760
-f_xxy(x_0, y_0):   69120
-f_xyy(x_0, y_0):   34560
-f_yyy(x_0, y_0):    9216
+ f_x(x,y): analytical: 13.352537138632607
+                pyoti: 13.352537138632606
+                Error: 1.7763568394002505e-15
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f_y_an</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span> <span class="n">x</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span> <span class="p">(</span> <span class="n">x</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span> <span class="o">-</span> <span class="mi">1</span> <span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; f_y(x,y): analytical: </span><span class="si">{</span><span class="n">f_y_an</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                pyoti: </span><span class="si">{</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">2</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                Error: </span><span class="si">{</span><span class="n">f_y_an</span><span class="o">-</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">2</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ f_y(x,y): analytical: 26.705074277265215
+                pyoti: 26.70507427726521
+                Error: 3.552713678800501e-15
+</pre></div></div>
+</div>
+<p>The seccond derivatives of the function are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}f_{xx}(x,y) = -2\sin((x+2y-1)^2)-4(x+2y-1)^2\cos((x+2y-1)^2), \\
+f_{xy}(x,y) = -4\sin((x+2y-1)^2)-8(x+2y-1)^2\cos((x+2y-1)^2), \\
+f_{yy}(x,y) = -8\sin((x+2y-1)^2)-16(x+2y-1)^2\sin((x+2y-1)^2)\end{split}\]</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f_xx_an</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; f_xx(x,y): analytical: </span><span class="si">{</span><span class="n">f_xx_an</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                 pyoti: </span><span class="si">{</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                 Error: </span><span class="si">{</span><span class="n">f_xx_an</span><span class="o">-</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ f_xx(x,y): analytical: -57.008633268233936
+                 pyoti: -57.00863326823392
+                 Error: -1.4210854715202004e-14
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f_xy_an</span> <span class="o">=</span> <span class="o">-</span><span class="mi">4</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">8</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; f_xy(x,y): analytical: </span><span class="si">{</span><span class="n">f_xy_an</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                 pyoti: </span><span class="si">{</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                 Error: </span><span class="si">{</span><span class="n">f_xy_an</span><span class="o">-</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ f_xy(x,y): analytical: -114.01726653646787
+                 pyoti: -114.01726653646784
+                 Error: -2.842170943040401e-14
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">f_yy_an</span> <span class="o">=</span> <span class="o">-</span><span class="mi">8</span><span class="o">*</span><span class="n">oti</span><span class="o">.</span><span class="n">sin</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="mi">16</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">real</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">y</span><span class="o">.</span><span class="n">real</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39; f_yy(x,y): analytical: </span><span class="si">{</span><span class="n">f_yy_an</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                 pyoti: </span><span class="si">{</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;                 Error: </span><span class="si">{</span><span class="n">f_yy_an</span><span class="o">-</span><span class="n">result_2</span><span class="o">.</span><span class="n">get_deriv</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ f_yy(x,y): analytical: -228.03453307293574
+                 pyoti: -228.0345330729357
+                 Error: -5.684341886080802e-14
 </pre></div></div>
 </div>
 </section>
@@ -769,20 +815,20 @@ f_yyy(x_0, y_0):    9216
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="sparse_tutorial_01.html"
+       href="static_tutorial_01.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 01: Sparse module basic usage.</p>
+        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 01: Basic usage.</p>
       </div>
     </a>
     <a class="right-next"
-       href="sparse_tutorial_03.html"
+       href="../examples.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">sparse</span></code> Tutorial 03: Linear algebra support.</p>
+        <p class="prev-next-title">Examples</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -819,7 +865,7 @@ f_yyy(x_0, y_0):    9216
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/notebooks/sparse_tutorial_02.ipynb.txt">
+    <a href="../_sources/notebooks/static_tutorial_02.ipynb.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

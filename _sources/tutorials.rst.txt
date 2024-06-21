@@ -23,6 +23,17 @@ This section contains tutorials for using the different modules in pyoti.
 
    notebooks/sparse_tutorial_01.ipynb
    notebooks/sparse_tutorial_02.ipynb
+   notebooks/sparse_tutorial_03.ipynb
+
+
+---------------------------------------------
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Static module
+
+   notebooks/static_tutorial_01.ipynb
+   notebooks/static_tutorial_02.ipynb
 
 
 .. ---------------------------------------------

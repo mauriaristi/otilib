@@ -11,9 +11,9 @@ dependencies:
   - cmake
   - pip
   - ipykernel
-  - pyvista
-  - gmsh
-  - python-gmsh
-  - vtk
-  - scikit-umfpack
-  - scikit-sparse
+  - conda-forge::pyvista
+  - conda-forge::gmsh
+  - conda-forge::python-gmsh
+  - conda-forge::vtk
+  - conda-forge::scikit-sparse
+  - conda-forge::scikit-umfpack

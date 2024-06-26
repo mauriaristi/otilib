@@ -162,6 +162,21 @@ if compile_static == True:
      extra_link_args = extra_link_args        ) )
   # end for 
 
+  libraries += ['otiarrinter']
+  dependencies += ["@CYTHONIZE_BUILD_DIR@/../lib/libotiarrinter.a"]
+  # Create a flag to create experimental segment.
+  extensions.append(
+    Extension("pyoti.experimental",
+      sources = ["@CYTHON_SOUCE_DIR@/experimental.pyx"],
+      include_dirs = include_dirs,
+      define_macros = macros,
+      libraries = libraries,
+      extra_compile_args = extra_compile_args,
+      extra_link_args = extra_link_args,
+      depends=dependencies
+      )
+  )
+  
 # end if 
 
 

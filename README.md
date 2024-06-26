@@ -43,7 +43,7 @@ For more detailed instructions, see [installation](https://mauriaristi.github.io
 This library has been tested on:
 
 - **Unix** platforms.
-- **macOS** (Compilation: Failing on arm64 macos)
+- **macOS** (Tested on Sonoma 14.5)
 - **Windows** (Only working under WSL)
 
 

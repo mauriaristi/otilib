@@ -101,6 +101,21 @@ target_link_libraries(oticwrap
     OpenMP::OpenMP_Fortran)
 
 
+file(GLOB array_interface_f90 
+    fortran/experimental/array_interface*.f90
+    fortran/static/real_utils.f90
+    fortran/static/master_parameters.f90 
+)
+
+add_library (otiarrinter STATIC 
+    ${array_interface_f90}
+)
+target_link_libraries(otiarrinter
+    oticwrap 
+    otistatic
+    OpenMP::OpenMP_Fortran)
+
+
 if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
     # Add free length of lines to compile fortran with gfortran.
     target_compile_options(otistatic 

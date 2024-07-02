@@ -296,6 +296,20 @@ fesoti_t fesoti_sqrt(fesoti_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+fesoti_t fesoti_pow_soti(fesoti_t* num, sotinum_t* e, dhelpl_t dhl){
+
+    fesoti_t res = fesoti_init();
+
+    res = fesoti_createEmpty_bases(num->nip, 0, 0, dhl);
+
+    fesoti_pow_soti_to(num, e, &res, dhl);
+    
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 fesoti_t fesoti_pow(fesoti_t* num, double e, dhelpl_t dhl){
 
     fesoti_t res = fesoti_init();
@@ -664,6 +678,23 @@ void fesoti_sqrt_to(fesoti_t* num, fesoti_t* res, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fesoti_pow_soti_to(fesoti_t* num, sotinum_t* e, fesoti_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    fesoti_dimCheck(num,res);
+
+    for( i = 0; i<num->nip; i++){
+        
+        soti_pow_soti_to(&num->p_data[i], e, &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 // ****************************************************************************************************
 void fesoti_pow_to(fesoti_t* num, double e, fesoti_t* res, dhelpl_t dhl){

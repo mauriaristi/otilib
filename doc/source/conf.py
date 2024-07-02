@@ -17,8 +17,8 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'pyoti'
-copyright = '2024, Mauricio Aristizabal, University of Texas at San Antonio and Universidad EAFIT'
+project = 'otilib-pyoti'
+copyright = '2016-2024, University of Texas at San Antonio and Universidad EAFIT'
 author = 'Mauricio Aristizabal'
 
 # The full version, including alpha/beta/rc tags

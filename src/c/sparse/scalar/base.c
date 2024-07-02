@@ -1078,7 +1078,7 @@ inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
 // ****************************************************************************************************
 sotinum_t soti_get_tmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl){
     
-    return soti_get_rtmp( ntmp + 10, trc_order, dhl );
+    return soti_get_rtmp( ntmp + 12, trc_order, dhl );
 }
 // ----------------------------------------------------------------------------------------------------
 

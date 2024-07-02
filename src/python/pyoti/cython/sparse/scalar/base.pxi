@@ -962,9 +962,35 @@ cdef class sotinum:
     global dhl
 
     cdef sotinum_t res
-    cdef sotinum S = self
+    cdef sotinum S
 
-    res = soti_pow(&S.num, n, dhl)
+    cdef sotinum n_oti # In case exponent is oti
+
+    t_s = type(self)
+    t_n = type(n)
+
+    if t_n is t_s:
+      
+      S = self
+      n_oti = n
+      res = soti_pow_soti(&S.num, &n_oti.num, dhl)
+    
+    elif t_s is sotinum:
+
+      S = self
+      res = soti_pow(&S.num, n, dhl)
+
+    elif t_n is sotinum:
+
+      S = number(self)
+      n_oti = n
+      res = soti_pow_soti(&S.num, &n_oti.num, dhl)
+
+    else:
+
+      return NotImplemented
+
+    # end if
     
     return sotinum.create(&res)
 

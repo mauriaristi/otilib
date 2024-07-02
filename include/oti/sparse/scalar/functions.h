@@ -164,7 +164,7 @@ void soti_logb_to(sotinum_t* num, double base, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Evaluation of Logarithm at base 10 function at (num).
+@brief Evaluation of Logarithm base 10 function at (num).
 
 @param[in] num Oti number.
 @param[in] dhl Direction helper list object.
@@ -185,10 +185,9 @@ void soti_log_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Evaluation of natural logarithm function at (num).
+@brief Evaluation of exponential function at (num).
 
 @param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl);
@@ -196,15 +195,25 @@ void soti_exp_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Evaluation of natural logarithm function at (num).
+@brief Power function for oti numbers to an oti exponent.
 
 @param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
+@param[in] e Oti number. Exponent for the power function.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_pow_soti(sotinum_t* num, sotinum_t* e, dhelpl_t dhl);
+void soti_pow_soti_to(sotinum_t* num, sotinum_t*e, sotinum_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Power function for oti numbers to a real exponent.
+
+@param[in] num Oti number.
+@param[in] e Real number. Exponent for the power function.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl);
 void soti_pow_to(sotinum_t* num, coeff_t e, sotinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Evaluation of a function f at (num).

@@ -215,7 +215,8 @@ cdef extern from "oti/oti.h" nogil:
   void    arrso_exp_to(  arrso_t* arr, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_pow(     arrso_t* arr, double e,               dhelpl_t dhl);
   void    arrso_pow_to(  arrso_t* arr, double e, arrso_t* res, dhelpl_t dhl);
-
+  arrso_t arrso_pow_soti(   arrso_t* arr, sotinum_t* e,               dhelpl_t dhl);
+  void    arrso_pow_soti_to(arrso_t* arr, sotinum_t* e, arrso_t* res, dhelpl_t dhl);
 
   # From oti/sparse/array/base.h
   void    arrso_taylor_integrate_to( coeff_t* deltas, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
@@ -666,6 +667,8 @@ cdef extern from "oti/oti.h" nogil:
   void soti_log_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl);
   void soti_exp_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+  sotinum_t soti_pow_soti(sotinum_t* num, sotinum_t* e, dhelpl_t dhl);
+  void soti_pow_soti_to(sotinum_t* num, sotinum_t*e, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl);
   void soti_pow_to(sotinum_t* num, coeff_t e, sotinum_t* res, dhelpl_t dhl);
   sotinum_t soti_feval(coeff_t* feval_re, sotinum_t* num, dhelpl_t dhl );
@@ -808,6 +811,8 @@ cdef extern from "oti/oti.h" nogil:
   void     fesoti_sqrt_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dhl);
   fesoti_t fesoti_pow(      fesoti_t* num, double e,                   dhelpl_t dhl);
   void     fesoti_pow_to(   fesoti_t* num, double e, fesoti_t* res,    dhelpl_t dhl);
+  fesoti_t fesoti_pow_soti(   fesoti_t* num, sotinum_t* e,                dhelpl_t dhl);
+  void     fesoti_pow_soti_to(fesoti_t* num, sotinum_t* e, fesoti_t* res, dhelpl_t dhl);
   sotinum_t fesoti_integrate(    fesoti_t* num, fesoti_t* w,                 dhelpl_t dhl);
   void      fesoti_integrate_to( fesoti_t* num, fesoti_t* w, sotinum_t* res, dhelpl_t dhl);
   sotinum_t fesoti_integrate_f(     fesoti_t* num, fesoti_t* w,                 dhelpl_t dhl);

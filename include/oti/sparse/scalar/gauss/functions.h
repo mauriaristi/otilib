@@ -108,6 +108,9 @@ void     fesoti_sqrt_to(  fesoti_t* num, fesoti_t* res,              dhelpl_t dh
 
 fesoti_t fesoti_pow(      fesoti_t* num, double e,                   dhelpl_t dhl);
 void     fesoti_pow_to(   fesoti_t* num, double e, fesoti_t* res,    dhelpl_t dhl);
+
+fesoti_t fesoti_pow_soti(fesoti_t* num, sotinum_t* e,                dhelpl_t dhl);
+void     fesoti_pow_soti_to(fesoti_t* num, sotinum_t* e, fesoti_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 

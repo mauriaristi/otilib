@@ -1224,7 +1224,7 @@ cdef class matso:
   #***************************************************************************************************
   def __pow__(self, n,z):
     """
-    PURPOSE:      Power function oversload
+    PURPOSE:      Power function overload
     """
     #*************************************************************************************************
     
@@ -1232,8 +1232,21 @@ cdef class matso:
 
     cdef arrso_t res 
     cdef matso S = self
+    cdef sotinum n_oti
 
-    res = arrso_pow( &S.arr, n, dhl)
+
+    t_n = type(n)
+
+    if t_n is sotinum:
+
+      n_oti = n
+      res = arrso_pow_soti( &S.arr, &n_oti.num, dhl)
+
+    else:
+
+      res = arrso_pow( &S.arr, n, dhl)
+
+    # end if 
     
     return matso.create(&res)
 

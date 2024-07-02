@@ -68,6 +68,9 @@ void soti_cbrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+
+
 // ****************************************************************************************************
 void soti_sqrt_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 
@@ -224,6 +227,26 @@ void soti_exp_to(sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+
+// ****************************************************************************************************
+void soti_pow_soti_to(sotinum_t* num, sotinum_t*e, sotinum_t* res, dhelpl_t dhl){
+
+    ord_t max_order = MAX(num->trc_order,e->trc_order);
+    sotinum_t tmp1 = soti_get_rtmp(10, max_order, dhl);
+    sotinum_t tmp2 = soti_get_rtmp(11, max_order, dhl);
+
+    // Evaluate exp(e * log(num) )
+    // tmp1 = log(num)
+    soti_log_to( num, &tmp1, dhl);
+
+    // tmp2 = tmp1 * e
+    soti_mul_oo_to( &tmp1, e, &tmp2, dhl);
+
+    // res = exp(tmp2) 
+    soti_exp_to( &tmp2, res, dhl);
+    
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 void soti_pow_to(sotinum_t* num, double e, sotinum_t* res, dhelpl_t dhl){

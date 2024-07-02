@@ -2528,7 +2528,7 @@ cpdef cbrt(object val, object out = None):
 
 
 #*****************************************************************************************************
-cpdef pow(object val, coeff_t e, object out = None):
+cpdef pow(object val, object e, object out = None):
   """
   PURPOSE:  Power function.
   
@@ -2565,96 +2565,146 @@ cpdef pow(object val, coeff_t e, object out = None):
   cdef darr_t    cRres
   cdef arrso_t   cOres
   cdef fearrso_t cFres  
+  cdef sotinum e_oti
 
   cdef uint8_t res_flag = 1
 
   cdef object res
 
   tval = type(val)
+  te   = type(e)
 
   if out is None:
     res_flag = 0
   # end if 
 
   #
-  if   tval is sotinum:
-    o = val
-    if res_flag:
-      
-      ores = out
-      soti_pow_to( &o.num, e, &ores.num, dhl)
+  if   te is sotinum:
+    e_oti = e
+    if   tval is sotinum:
+      o = val
+      if res_flag:
+        
+        ores = out
+        soti_pow_soti_to( &o.num, &e_oti.num, &ores.num, dhl)
 
-    else:
+      else:
 
-      cores = soti_pow( &o.num, e,  dhl)
-      res   = sotinum.create(&cores)
+        cores = soti_pow_soti( &o.num, &e_oti.num,  dhl)
+        res   = sotinum.create(&cores)
 
+      # end if 
+    elif tval is sotife:
+      f = val
+      if res_flag:
+        
+        fres = out
+        fesoti_pow_soti_to( &f.num, &e_oti.num, &fres.num, dhl)
+
+      else:
+
+        cfres = fesoti_pow_soti( &f.num, &e_oti.num,  dhl)
+        res   = sotife.create(&cfres)
+
+      # end if  
+    
+    elif tval is matso:
+      O = val
+      if res_flag:
+        
+        Ores = out
+        arrso_pow_soti_to( &O.arr, &e_oti.num, &Ores.arr, dhl)
+
+      else:
+
+        cOres = arrso_pow_soti( &O.arr, &e_oti.num,  dhl)
+        res   = matso.create(&cOres)
+
+      # end if      
+    else:  
+      raise TypeError("Unsupported types at power operation.")    
+      # return NotImplemented
     # end if 
-  elif tval is sotife:
-    f = val
-    if res_flag:
-      
-      fres = out
-      fesoti_pow_to( &f.num, e, &fres.num, dhl)
+  else:
 
-    else:
+    if   tval is sotinum:
+      o = val
+      if res_flag:
+        
+        ores = out
+        soti_pow_to( &o.num, e, &ores.num, dhl)
 
-      cfres = fesoti_pow( &f.num, e,  dhl)
-      res   = sotife.create(&cfres)
+      else:
 
-    # end if  
-  elif tval is matsofe:    
-    F = val
-    if res_flag:
+        cores = soti_pow( &o.num, e,  dhl)
+        res   = sotinum.create(&cores)
 
-      Fres = out
-      fearrso_pow_to( &F.arr, e, &Fres.arr, dhl)
+      # end if 
+    elif tval is sotife:
+      f = val
+      if res_flag:
+        
+        fres = out
+        fesoti_pow_to( &f.num, e, &fres.num, dhl)
 
-    else:
+      else:
 
-      cFres = fearrso_pow( &F.arr, e, dhl)
-      res   = matsofe.create(&cFres)
+        cfres = fesoti_pow( &f.num, e,  dhl)
+        res   = sotife.create(&cfres)
 
+      # end if  
+    elif tval is matsofe:    
+      F = val
+      if res_flag:
+
+        Fres = out
+        fearrso_pow_to( &F.arr, e, &Fres.arr, dhl)
+
+      else:
+
+        cFres = fearrso_pow( &F.arr, e, dhl)
+        res   = matsofe.create(&cFres)
+
+      # end if 
+    elif tval is matso:
+      O = val
+      if res_flag:
+        
+        Ores = out
+        arrso_pow_to( &O.arr, e, &Ores.arr, dhl)
+
+      else:
+
+        cOres = arrso_pow( &O.arr, e,  dhl)
+        res   = matso.create(&cOres)
+
+      # end if    
+    elif tval is dmat:
+      R = val
+      if res_flag:
+        
+        Rres = out
+        darr_pow_to( &R.arr, e, &Rres.arr)
+
+      else:
+
+        cRres = darr_pow( &R.arr , e)
+        res = dmat.create( &cRres )
+
+      # end if 
+    elif tval in number_types:
+      import math    
+      r    = val
+      rres = math.pow(r,e)
+      if res_flag:      
+        out = rres
+      else:
+        res = rres
+      # end if   
+    else:  
+      raise TypeError("Unsupported types at power operation.")    
+      # return NotImplemented
     # end if 
-  elif tval is matso:
-    O = val
-    if res_flag:
-      
-      Ores = out
-      arrso_pow_to( &O.arr, e, &Ores.arr, dhl)
-
-    else:
-
-      cOres = arrso_pow( &O.arr, e,  dhl)
-      res   = matso.create(&cOres)
-
-    # end if    
-  elif tval is dmat:
-    R = val
-    if res_flag:
-      
-      Rres = out
-      darr_pow_to( &R.arr, e, &Rres.arr)
-
-    else:
-
-      cRres = darr_pow( &R.arr , e)
-      res = dmat.create( &cRres )
-
-    # end if 
-  elif tval in number_types:
-    import math    
-    r    = val
-    rres = math.pow(r,e)
-    if res_flag:      
-      out = rres
-    else:
-      res = rres
-    # end if   
-  else:  
-    raise TypeError("Unsupported types at power operation.")    
-    # return NotImplemented
-  # end if 
 
   if res_flag == 0:
     return res

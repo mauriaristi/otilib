@@ -226,6 +226,18 @@ sotinum_t soti_exp(sotinum_t* num, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
+sotinum_t soti_pow_soti(sotinum_t* num, sotinum_t* e, dhelpl_t dhl){
+
+    sotinum_t res = soti_init();
+
+    soti_pow_soti_to(num, e, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 sotinum_t soti_pow(sotinum_t* num, double e, dhelpl_t dhl){
 
     coeff_t derivs[_MAXORDER_OTI+1];

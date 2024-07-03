@@ -122,7 +122,10 @@ if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
         PRIVATE
         -ffree-line-length-0
         )
-
+    target_compile_options(otiarrinter 
+        PRIVATE
+        -ffree-line-length-0
+        )
     # Declare additional link libraries for C-Fortran interface
     SET(ISOCBIND_Fortran_LFLAG gfortran) 
 

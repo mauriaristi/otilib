@@ -2553,6 +2553,53 @@ cpdef pow(object val, object e, object out = None):
   """
   #***************************************************************************************************
 
+  cdef object res = None
+  te   = type(e)
+
+  if   te is sotinum:
+
+    res = __pow__sotinumexp( val, e, out = out)
+
+  elif   te is matso:
+
+    res = __pow__matsoexp( val, e, out = out) 
+
+  else:
+
+    res = __pow__realexp( val, e, out = out)
+    
+  # end if 
+
+  return res
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef object __pow__realexp(object val, coeff_t e, object out = None):
+  """
+  cpdef __pow__realexp(object val, coeff_t e, object out = None)
+
+  Power function x**e, where e is a real coefficient.
+  
+  Supported types:
+
+      -  matso
+      -  matsofe
+      -  darr
+      -  sotinum
+      -  sotife
+      -  real
+
+  :param val: Power base. Must be a supported types.
+  :param e:   exponent.
+  :param out: (optional) Holder of result, in order to avoid memory allocation.
+
+  If out is not defined, then the result is a newlly allocated member containing the result.
+
+  """
+  #***************************************************************************************************
+
   cdef matso      O, Ores
   cdef dmat       R, Rres
   cdef matsofe    F, Fres
@@ -2566,152 +2613,303 @@ cpdef pow(object val, object e, object out = None):
   cdef arrso_t   cOres
   cdef fearrso_t cFres  
   cdef sotinum e_oti
+  cdef matso e_matso
+
+  cdef uint8_t res_flag = 1
+
+  cdef object res = None
+
+  tval = type(val)
+
+  if out is None:
+    res_flag = 0
+  # end if 
+
+  if   tval is sotinum:
+
+    o = val
+    if res_flag:
+      
+      ores = out
+      soti_pow_to( &o.num, e, &ores.num, dhl)
+
+    else:
+
+      cores = soti_pow( &o.num, e,  dhl)
+      res   = sotinum.create(&cores)
+
+    # end if 
+
+  elif tval is sotife:
+
+    f = val
+    if res_flag:
+      
+      fres = out
+      fesoti_pow_to( &f.num, e, &fres.num, dhl)
+
+    else:
+
+      cfres = fesoti_pow( &f.num, e,  dhl)
+      res   = sotife.create(&cfres)
+
+    # end if 
+
+  elif tval is matsofe:  
+
+    F = val
+    if res_flag:
+
+      Fres = out
+      fearrso_pow_to( &F.arr, e, &Fres.arr, dhl)
+
+    else:
+
+      cFres = fearrso_pow( &F.arr, e, dhl)
+      res   = matsofe.create(&cFres)
+
+    # end if 
+
+  elif tval is matso:
+
+    O = val
+    if res_flag:
+      
+      Ores = out
+      arrso_pow_to( &O.arr, e, &Ores.arr, dhl)
+
+    else:
+
+      cOres = arrso_pow( &O.arr, e,  dhl)
+      res   = matso.create(&cOres)
+
+    # end if    
+
+  elif tval is dmat:
+
+    R = val
+    if res_flag:
+      
+      Rres = out
+      darr_pow_to( &R.arr, e, &Rres.arr)
+
+    else:
+
+      cRres = darr_pow( &R.arr , e)
+      res = dmat.create( &cRres )
+
+    # end if 
+
+  elif tval in number_types:
+
+    import math    
+
+    r    = val
+    rres = math.pow(r,e)
+
+    if res_flag:      
+      out = rres
+    else:
+      res = rres
+    # end if   
+
+  else:  
+
+    raise TypeError("Unsupported base type {0} in pow function.".format(tval))
+
+  # end if 
+
+  return res
+
+#-----------------------------------------------------------------------------------------------------
+
+#*****************************************************************************************************
+cdef object __pow__sotinumexp(object val, sotinum e, object out = None):
+  """
+  cpdef __pow__sotinumexp(object val, sotinum e, object out = None)
+
+  Power function x ** e, where e is sotinum type.
+  
+  Supported types:
+
+      -  matso
+      -  sotinum
+      -  sotife
+
+  :param val: Power base. Must be a supported types.
+  :param e:   exponent.
+  :param out: (optional) Holder of result, in order to avoid memory allocation.
+
+  If out is not defined, then the result is a newlly allocated member containing the result.
+  """
+  #***************************************************************************************************
+
+  cdef matso      O, Ores
+  cdef dmat       R, Rres
+  cdef matsofe    F, Fres
+  cdef sotinum    o, ores
+  cdef coeff_t    r, rres
+  cdef sotife     f, fres
+  cdef coeff_t   crres
+  cdef sotinum_t cores
+  cdef fesoti_t  cfres
+  cdef darr_t    cRres
+  cdef arrso_t   cOres
+  cdef fearrso_t cFres  
+  cdef sotinum e_oti
+  cdef matso e_matso
+
+  cdef uint8_t res_flag = 1
+
+  cdef object res = None
+
+  tval = type(val)
+
+  if out is None:
+    res_flag = 0
+  # end if 
+
+
+  if   tval is sotinum:
+
+    o = val
+    if res_flag:
+      
+      ores = out
+      soti_pow_soti_to( &o.num, &e.num, &ores.num, dhl)
+
+    else:
+
+      cores = soti_pow_soti( &o.num, &e.num,  dhl)
+      res   = sotinum.create(&cores)
+
+    # end if 
+
+  elif tval is sotife:
+
+    f = val
+    if res_flag:
+      
+      fres = out
+      fesoti_pow_soti_to( &f.num, &e.num, &fres.num, dhl)
+
+    else:
+
+      cfres = fesoti_pow_soti( &f.num, &e.num,  dhl)
+      res   = sotife.create(&cfres)
+
+    # end if  
+  
+  elif tval is matso:
+
+    O = val
+    if res_flag:
+      
+      Ores = out
+      arrso_pow_soti_to( &O.arr, &e.num, &Ores.arr, dhl)
+
+    else:
+
+      cOres = arrso_pow_soti( &O.arr, &e.num,  dhl)
+      res   = matso.create(&cOres)
+
+    # end if      
+
+  else:  
+    
+    raise TypeError("Unsupported base type {0} in pow function.".format(tval))        
+    
+  # end if 
+  
+  return res
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cdef object __pow__matsoexp(object val, matso e, object out = None):
+  """
+  __pow__matsoexp(object x, matso e, object out = None)
+  
+  Power function x**e, where e is a matso.
+  
+  Supported types for the base:
+
+    -  matso
+    -  sotinum
+
+  :param val: Power base. Must be a supported types.
+  :param e:   exponent.
+  :param out: (optional) Holder of result, in order to avoid memory allocation.
+
+  If out is not defined, then the result is a newlly allocated member containing the result.
+
+  """
+  #***************************************************************************************************
+
+  cdef matso      O, Ores
+  cdef dmat       R, Rres
+  cdef matsofe    F, Fres
+  cdef sotinum    o, ores
+  cdef coeff_t    r, rres
+  cdef sotife     f, fres
+  cdef coeff_t   crres
+  cdef sotinum_t cores
+  cdef fesoti_t  cfres
+  cdef darr_t    cRres
+  cdef arrso_t   cOres
+  cdef fearrso_t cFres  
 
   cdef uint8_t res_flag = 1
 
   cdef object res
 
   tval = type(val)
-  te   = type(e)
 
   if out is None:
     res_flag = 0
   # end if 
-
-  #
-  if   te is sotinum:
-    e_oti = e
-    if   tval is sotinum:
-      o = val
-      if res_flag:
-        
-        ores = out
-        soti_pow_soti_to( &o.num, &e_oti.num, &ores.num, dhl)
-
-      else:
-
-        cores = soti_pow_soti( &o.num, &e_oti.num,  dhl)
-        res   = sotinum.create(&cores)
-
-      # end if 
-    elif tval is sotife:
-      f = val
-      if res_flag:
-        
-        fres = out
-        fesoti_pow_soti_to( &f.num, &e_oti.num, &fres.num, dhl)
-
-      else:
-
-        cfres = fesoti_pow_soti( &f.num, &e_oti.num,  dhl)
-        res   = sotife.create(&cfres)
-
-      # end if  
     
-    elif tval is matso:
-      O = val
-      if res_flag:
-        
-        Ores = out
-        arrso_pow_soti_to( &O.arr, &e_oti.num, &Ores.arr, dhl)
+  if   tval is sotinum:
 
-      else:
+    o = val
 
-        cOres = arrso_pow_soti( &O.arr, &e_oti.num,  dhl)
-        res   = matso.create(&cOres)
+    if res_flag:
+      
+      Ores = out
+      soti_pow_arrso_to( &o.num, &e.arr, &Ores.arr, dhl)
 
-      # end if      
-    else:  
-      raise TypeError("Unsupported types at power operation.")    
-      # return NotImplemented
+    else:
+
+      cOres = soti_pow_arrso( &o.num, &e.arr,  dhl)
+      res   = matso.create(&cOres)
+
     # end if 
-  else:
+  
+  elif tval is matso:
 
-    if   tval is sotinum:
-      o = val
-      if res_flag:
-        
-        ores = out
-        soti_pow_to( &o.num, e, &ores.num, dhl)
+    O = val
+    if res_flag:
+      
+      Ores = out
+      arrso_pow_arrso_to( &O.arr, &e.arr, &Ores.arr, dhl)
 
-      else:
+    else:
 
-        cores = soti_pow( &o.num, e,  dhl)
-        res   = sotinum.create(&cores)
+      cOres = arrso_pow_arrso( &O.arr, &e.arr,  dhl)
+      res   = matso.create(&cOres)
 
-      # end if 
-    elif tval is sotife:
-      f = val
-      if res_flag:
-        
-        fres = out
-        fesoti_pow_to( &f.num, e, &fres.num, dhl)
+    # end if
 
-      else:
+  else:  
+    
+    raise TypeError("Unsupported base type {0} in pow function.".format(tval))    
 
-        cfres = fesoti_pow( &f.num, e,  dhl)
-        res   = sotife.create(&cfres)
-
-      # end if  
-    elif tval is matsofe:    
-      F = val
-      if res_flag:
-
-        Fres = out
-        fearrso_pow_to( &F.arr, e, &Fres.arr, dhl)
-
-      else:
-
-        cFres = fearrso_pow( &F.arr, e, dhl)
-        res   = matsofe.create(&cFres)
-
-      # end if 
-    elif tval is matso:
-      O = val
-      if res_flag:
-        
-        Ores = out
-        arrso_pow_to( &O.arr, e, &Ores.arr, dhl)
-
-      else:
-
-        cOres = arrso_pow( &O.arr, e,  dhl)
-        res   = matso.create(&cOres)
-
-      # end if    
-    elif tval is dmat:
-      R = val
-      if res_flag:
-        
-        Rres = out
-        darr_pow_to( &R.arr, e, &Rres.arr)
-
-      else:
-
-        cRres = darr_pow( &R.arr , e)
-        res = dmat.create( &cRres )
-
-      # end if 
-    elif tval in number_types:
-      import math    
-      r    = val
-      rres = math.pow(r,e)
-      if res_flag:      
-        out = rres
-      else:
-        res = rres
-      # end if   
-    else:  
-      raise TypeError("Unsupported types at power operation.")    
-      # return NotImplemented
-    # end if 
-
-  if res_flag == 0:
-    return res
   # end if 
 
-#-----------------------------------------------------------------------------------------------------
+  return res
 
+#-----------------------------------------------------------------------------------------------------
 
 
 

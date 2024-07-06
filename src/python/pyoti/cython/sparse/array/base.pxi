@@ -1233,20 +1233,36 @@ cdef class matso:
     cdef arrso_t res 
     cdef matso S = self
     cdef sotinum n_oti
+    cdef matso n_matso
 
 
     t_n = type(n)
+    t_s = type(self)
 
-    if t_n is sotinum:
+    if t_s is matso:
 
-      n_oti = n
-      res = arrso_pow_soti( &S.arr, &n_oti.num, dhl)
+      if t_n is sotinum:
+
+        n_oti = n
+        res = arrso_pow_soti( &S.arr, &n_oti.num, dhl)
+
+      elif t_n is matso:
+
+        n_matso = n
+        res = arrso_pow_arrso( &S.arr, &n_matso.arr, dhl)
+
+      else:
+
+        res = arrso_pow( &S.arr, n, dhl)
+
+      # end if 
 
     else:
 
-      res = arrso_pow( &S.arr, n, dhl)
+      return NotImplemented
 
     # end if 
+
     
     return matso.create(&res)
 

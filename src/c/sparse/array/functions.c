@@ -282,6 +282,34 @@ arrso_t arrso_pow_soti(arrso_t* arr, sotinum_t* e, dhelpl_t dhl){
 
 
 // ****************************************************************************************************
+arrso_t arrso_pow_arrso(arrso_t* arr, arrso_t* earr, dhelpl_t dhl){
+
+    arrso_t res = arrso_init();
+
+    res = arrso_zeros_bases(arr->nrows, arr->ncols, 0, 0, dhl);
+
+    arrso_pow_arrso_to(arr, earr, &res, dhl);
+    
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+arrso_t soti_pow_arrso(sotinum_t* a, arrso_t* earr, dhelpl_t dhl){
+
+    arrso_t res = arrso_init();
+
+    res = arrso_zeros_bases(earr->nrows, earr->ncols, 0, 0, dhl);
+
+    soti_pow_arrso_to(a, earr, &res, dhl);
+    
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 arrso_t arrso_pow(arrso_t* arr, double e, dhelpl_t dhl){
 
     arrso_t res = arrso_init();

@@ -681,6 +681,84 @@ void arrso_pow_soti_to(arrso_t* arr, sotinum_t* e, arrso_t* res, dhelpl_t dhl){
 }
 // ----------------------------------------------------------------------------------------------------
 
+// ****************************************************************************************************
+void arrso_pow_arrso_to(arrso_t* arr, arrso_t* earr, arrso_t* res, dhelpl_t dhl){
+
+    // this is elementwise operation. All elements in arr are exponentiated
+    // element by elemen
+    // [1,2]^[3,4] = [1^3, 2^4]
+    //
+    // Loop for every element and add real to the oti number.
+    // #ifdef _OPENMP
+    // #pragma omp parallel
+    // #endif
+    // {
+    uint64_t i;
+    
+
+    // #ifdef _OPENMP
+    // int id = omp_get_thread_num();
+    // int nThrds = omp_get_num_threads();
+    // int istart = id*arr->size/nThrds;
+    // int iend = (id+1)*arr->size/nThrds;
+    // if (iend>arr->size) iend=arr->size;
+    // #else
+    int id = 0;
+    int nThrds = 1;
+    int istart = 0;
+    int iend = arr->size;
+    // #endif
+
+    for( i = istart; i<iend; i++){
+        
+        soti_pow_soti_to(&arr->p_data[i], &earr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+    // }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void soti_pow_arrso_to(sotinum_t* a, arrso_t* earr, arrso_t* res, dhelpl_t dhl){
+
+    // this is elementwise operation. All elements in arr are exponentiated
+    // element by elemen
+    // [1,2]^[3,4] = [1^3, 2^4]
+    //
+    // Loop for every element and add real to the oti number.
+    // #ifdef _OPENMP
+    // #pragma omp parallel
+    // #endif
+    // {
+    uint64_t i;
+    
+
+    // #ifdef _OPENMP
+    // int id = omp_get_thread_num();
+    // int nThrds = omp_get_num_threads();
+    // int istart = id*arr->size/nThrds;
+    // int iend = (id+1)*arr->size/nThrds;
+    // if (iend>arr->size) iend=arr->size;
+    // #else
+    int id = 0;
+    int nThrds = 1;
+    int istart = 0;
+    int iend = earr->size;
+    // #endif
+
+    for( i = istart; i<iend; i++){
+        
+        soti_pow_soti_to( a, &earr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+    // }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
 
 // ****************************************************************************************************
 void arrso_pow_to(arrso_t* arr, double e, arrso_t* res, dhelpl_t dhl){

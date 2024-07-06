@@ -65,8 +65,11 @@ void    arrso_pow_to(  arrso_t* arr, double e, arrso_t* res, dhelpl_t dhl);
 arrso_t arrso_pow_soti(   arrso_t* arr, sotinum_t* e,               dhelpl_t dhl);
 void    arrso_pow_soti_to(arrso_t* arr, sotinum_t* e, arrso_t* res, dhelpl_t dhl);
 
+arrso_t arrso_pow_arrso(     arrso_t* arr, arrso_t* earr,               dhelpl_t dhl);
+void    arrso_pow_arrso_to(  arrso_t* arr, arrso_t* earr, arrso_t* res, dhelpl_t dhl);
 
-
+arrso_t soti_pow_arrso(      sotinum_t* a, arrso_t* earr,               dhelpl_t dhl);
+void    soti_pow_arrso_to(   sotinum_t* a, arrso_t* earr, arrso_t* res, dhelpl_t dhl);
 
 
 

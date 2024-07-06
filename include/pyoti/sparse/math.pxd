@@ -20,3 +20,7 @@ cpdef cbrt(           object val,            object out = * )
 cpdef pow(            object val, object  e, object out = * )
 cpdef gauss_integrate(object val, sotife w,  object out = * )
 cpdef neg(            object val,            object out = * )
+
+cdef object __pow__realexp(   object val, coeff_t e, object out = *)
+cdef object __pow__sotinumexp(object val, sotinum e, object out = *)
+cdef object __pow__matsoexp(  object val, matso e,   object out = *)

@@ -3,10 +3,9 @@ channels:
   - anaconda
   - default
 dependencies:
-  - python=3.9.*
-  - numpy
+  - python=3.11.*
   - scipy
-  - cython=0.29.*
+  - cython=3.*
   - make
   - cmake
   - pip

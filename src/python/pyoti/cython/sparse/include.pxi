@@ -5,7 +5,7 @@
 
 import numpy as np                  # General numerical library
 cimport numpy as np                 # C-level functions of numpy
-from c_otilib cimport *             # OTI lib in C.
+from pyoti.c_otilib cimport *       # OTI lib in C.
 cimport cython                      #
 
 
@@ -39,4 +39,4 @@ from pyoti.real cimport dmat
 cdef dHelp h = get_cython_dHelp()
 cdef dhelpl_t dhl = h.dhl
 
-set_python_error_function(error_function)
+# set_python_error_function(error_function)

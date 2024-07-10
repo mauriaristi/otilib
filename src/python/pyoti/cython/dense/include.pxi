@@ -4,7 +4,7 @@
 
 import numpy as np                  # General numerical library
 cimport numpy as np                 # C-level functions of numpy
-from c_otilib cimport *             # OTI lib in C.
+from pyoti.c_otilib cimport *       # OTI lib in C.
 cimport cython                      #
 
 from libc.stdlib cimport free      # import memory managment functions.

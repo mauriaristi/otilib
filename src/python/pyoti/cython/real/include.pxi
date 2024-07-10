@@ -9,7 +9,7 @@ cimport cython                      #
 
 from pyoti.core import   number_types
 from pyoti.core cimport  c_ptr_to_np_2darray_double
-from c_otilib cimport *             # OTI lib in C.
+from pyoti.c_otilib cimport *       # OTI lib in C.
 
 #-----------------------------------------------------------------------------------------------------
 #---------------------------------   EXTERNAL LIBRARIES IMPORTS     ----------------------------------

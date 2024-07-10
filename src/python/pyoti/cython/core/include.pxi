@@ -18,7 +18,7 @@ from scipy.special import comb            # Classic combinatorials
 import pyoti.whereotilib as whereotilib   # A pure python script to get 
                                           #the current path of this folder.
 
-from c_otilib cimport *                   # OTI lib in C.
+from pyoti.c_otilib cimport *             # OTI lib in C.
 
 cimport cython                            #
 from cpython cimport PyObject             # 

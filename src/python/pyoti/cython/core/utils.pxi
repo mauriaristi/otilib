@@ -132,7 +132,8 @@ cpdef list imdir(hum_dir):
 cpdef list expand_imdir(hum_dir):
   """
   """
-  cpdef list res = []
+  cdef list res = []
+
   if type(hum_dir) in int_types:
 
     if hum_dir != 0:
@@ -1312,7 +1313,7 @@ cpdef ord_t get_trunc_order( ):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
-cdef void error_function( int64_t err_id ) nogil:
+cdef void error_function( int64_t err_id ) noexcept nogil:
   
   raise ValueError("Found an error: "+str(err_id))
   # All python errors

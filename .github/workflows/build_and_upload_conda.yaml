@@ -1,0 +1,33 @@
+name: Build and upload conda package
+
+on:
+  # release:
+  #   types: [published]
+  push:
+    branches:
+      - conda_package
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up Conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        activate-environment: base
+        auto-update-conda: true
+        python-version: 3.9
+        channels: conda-forge,defaults
+        channel-priority: strict
+    - name: Install conda-build
+      run: conda install conda-build anaconda-client
+    - name: Build Conda package
+      run: conda build conda
+    - name: Upload Conda package
+      env:
+        ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
+      run: |
+        PACKAGE_PATH=$(conda build conda --output)
+        anaconda upload -u eminizer $PACKAGE_PATH --label main

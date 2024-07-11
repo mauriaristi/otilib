@@ -6,6 +6,7 @@ dependencies:
   - python=3.9.*
   - numpy
   - scipy
+  - pandas
   - cython=0.29.*
   - make
   - cmake

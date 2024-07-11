@@ -1,0 +1,83 @@
+package:
+  name: pyoti
+  version: "1.0.0"
+
+source:
+  # git_rev: v1.0.0
+  # git_url: https://github.com/imqcam/otilib
+  path: ..
+
+build:
+  number: 0
+  script: |
+    mkdir build
+    cd build
+    cmake ..
+    make
+    make gendata
+    cp -r pyoti $SP_DIR/pyoti
+    cp -r data $SP_DIR/data
+
+requirements:
+  build:
+    - python=3.9.*
+    - numpy
+    - scipy
+    - pandas
+    - cython=0.29.*
+    - make
+    - cmake
+    - gfortran
+    - pip
+    - ipykernel
+    - conda-forge::pyvista
+    - conda-forge::gmsh
+    - conda-forge::python-gmsh
+    - conda-forge::vtk
+    - conda-forge::scikit-sparse
+    - conda-forge::scikit-umfpack
+
+  host:
+    - python=3.9.*
+    - numpy
+    - scipy
+    - pandas
+    - cython=0.29.*
+    - make
+    - cmake
+    - gfortran
+    - pip
+    - ipykernel
+    - conda-forge::pyvista
+    - conda-forge::gmsh
+    - conda-forge::python-gmsh
+    - conda-forge::vtk
+    - conda-forge::scikit-sparse
+    - conda-forge::scikit-umfpack
+
+  run:
+    - python=3.9.*
+    - numpy
+    - scipy
+    - pandas
+    - cython=0.29.*
+    - conda-forge::pyvista
+    - conda-forge::gmsh
+    - conda-forge::python-gmsh
+    - conda-forge::vtk
+    - conda-forge::scikit-sparse
+    - conda-forge::scikit-umfpack
+
+test:
+  imports:
+    - pyoti
+  commands:
+    - python -c "import pyoti"
+
+about:
+  home: imqcam/otilib
+
+channels:
+  - anaconda
+  - conda-forge
+  - defaults

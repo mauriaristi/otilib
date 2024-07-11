@@ -8,13 +8,13 @@ on:
       - conda_package
 
 jobs:
-  build:
+  build_and_upload:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Set up Conda
-      uses: conda-incubator/setup-miniconda@v2
+      uses: conda-incubator/setup-miniconda@v3
       with:
         activate-environment: base
         auto-update-conda: true

@@ -38,4 +38,4 @@ jobs:
         source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
-        anaconda upload -u eminizer $PACKAGE_PATH --label main
+        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main

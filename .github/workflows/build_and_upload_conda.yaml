@@ -23,22 +23,19 @@ jobs:
         channel-priority: strict
     - name: Install conda-build
       run: |
-        conda init bash
-        source ~/.bashrc
+        source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate pyoti
         conda install -y conda-build anaconda-client
     - name: Build Conda package
       run: |
-        conda init bash
-        source ~/.bashrc
+        source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate pyoti
         conda build conda
     - name: Upload Conda package
       env:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
-        conda init bash
-        source ~/.bashrc
+        source /usr/share/miniconda/etc/profile.d/conda.sh
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
         anaconda upload -u eminizer $PACKAGE_PATH --label main

@@ -16,7 +16,7 @@ jobs:
     - name: Set up Conda
       uses: conda-incubator/setup-miniconda@v3
       with:
-        activate-environment: base
+        activate-environment: pyoti
         auto-update-conda: true
         python-version: 3.9
         channels: conda-forge,defaults

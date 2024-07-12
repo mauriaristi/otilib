@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest] #, windows-latest]
+        os: [ubuntu-latest, macos-latest]
         arch: [x86_64, arm64]
     steps:
     - name: Checkout code
@@ -20,47 +20,41 @@ jobs:
     - name: Set up Conda
       uses: conda-incubator/setup-miniconda@v3
       with:
-        activate-environment: pyoti
         auto-update-conda: true
         python-version: 3.9
         channels: conda-forge,defaults
         channel-priority: strict
-    - name: Set environment variable for sourcing conda (Linux)
+    - name: Set environment variables (Linux)
       if: runner.os == 'Linux'
       run: |
         echo "RUNNER_OS_SOURCE=/home/runner/.bashrc" >> $GITHUB_ENV
-    - name: Set environment variable for sourcing conda (Mac)
+        echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
+    - name: Set environment variables (Mac)
       if: runner.os == 'macOS'
       run: |
         echo "RUNNER_OS_SOURCE=/Users/runner/.bash_profile" >> $GITHUB_ENV
-    - name: Set architecture environment variable (Mac)
-      if: runner.os == 'macOS'
-      run: |
         if [[ "${{ matrix.arch }}" == "arm64" ]]; then
           echo "CONDA_SUBDIR=osx-arm64" >> $GITHUB_ENV
-          conda config --set subdir osx-arm64
         else
           echo "CONDA_SUBDIR=osx-64" >> $GITHUB_ENV
-          conda config --set subdir osx-64
         fi
-    - name: Set architecture environment variable (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
-        conda config --set subdir linux-64
-    - name: Install conda-build and anaconda (Linux/Mac)
+    - name: Initialize Conda (Linux/Mac)
       if: runner.os != 'Windows'
       run: |
         conda init bash
         source $RUNNER_OS_SOURCE
-        conda activate pyoti
+        conda config --set subdir $CONDA_SUBDIR
         conda install -y conda-build anaconda-client zstandard
-    - name: Install conda-build and anaconda (Windows)
+    - name: Initialize Conda (Windows)
       if: runner.os == 'Windows'
       run: |
         conda init cmd.exe
-        conda activate pyoti
+        conda config --set subdir win-64
         conda install -y conda-build anaconda-client zstandard
+    - name: Create and activate environment
+      run: |
+        conda create --name pyoti python=3.9
+        conda activate pyoti
     - name: Build Conda package (Linux/Mac)
       if: runner.os != 'Windows'
       run: |

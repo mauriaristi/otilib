@@ -33,27 +33,31 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         echo "RUNNER_OS_SOURCE=/Users/runner/.bash_profile" >> $GITHUB_ENV
-    - name: Set architecture environment variable (Mac/Linux)
-      if: runner.os != 'Windows'
+    - name: Set architecture environment variable (Mac)
+      if: runner.os == 'macOS'
       run: |
         if [[ "${{ matrix.arch }}" == "arm64" ]]; then
           echo "CONDA_SUBDIR=osx-arm64" >> $GITHUB_ENV
         else
           echo "CONDA_SUBDIR=osx-64" >> $GITHUB_ENV
         fi
+    - name: Set architecture environment variable (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
     - name: Install conda-build and anaconda (Linux/Mac)
       if: runner.os != 'Windows'
       run: |
         conda init bash
         source $RUNNER_OS_SOURCE
         conda activate pyoti
-        conda install -y conda-build anaconda-client
+        conda install -y conda-build anaconda-client zstandard
     - name: Install conda-build and anaconda (Windows)
       if: runner.os == 'Windows'
       run: |
         conda init cmd.exe
         conda activate pyoti
-        conda install -y conda-build anaconda-client
+        conda install -y conda-build anaconda-client zstandard
     - name: Build Conda package (Linux/Mac)
       if: runner.os != 'Windows'
       run: |

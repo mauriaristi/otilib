@@ -38,7 +38,6 @@ requirements:
     - conda-forge::vtk
     - conda-forge::scikit-sparse
     - conda-forge::scikit-umfpack
-    - conda-forge:zstandard
 
   host:
     - python=3.9.*
@@ -57,7 +56,6 @@ requirements:
     - conda-forge::vtk
     - conda-forge::scikit-sparse
     - conda-forge::scikit-umfpack
-    - conda-forge:zstandard
 
   run:
     - python=3.9.*

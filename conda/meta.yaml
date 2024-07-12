@@ -13,10 +13,17 @@ build:
     mkdir build
     cd build
     cmake ..
+    {% if conda_build.is_windows %}
+    cmake --build . --config Release
+    cmake --build . --target gendata
+    if exist pyoti %SP_DIR%\pyoti
+    if exist data %SP_DIR\data
+    {% else %}
     make
     make gendata
     cp -r pyoti $SP_DIR/pyoti
     cp -r data $SP_DIR/data
+    {% endif %}
 
 requirements:
   build:
@@ -25,9 +32,9 @@ requirements:
     - scipy
     - pandas
     - cython=0.29.*
-    - make
+    - make [unix]
     - cmake
-    - gfortran
+    - gfortran [unix]
     - pip
     - ipykernel
     - conda-forge::pyvista
@@ -43,9 +50,9 @@ requirements:
     - scipy
     - pandas
     - cython=0.29.*
-    - make
+    - make [unix]
     - cmake
-    - gfortran
+    - gfortran [unix]
     - pip
     - ipykernel
     - conda-forge::pyvista

@@ -1,9 +1,11 @@
 name: pyoti
 channels:
+  - conda-forge
   - anaconda
   - default
 dependencies:
   - python=3.11.*
+  - numpy
   - scipy
   - cython=3.*
   - make

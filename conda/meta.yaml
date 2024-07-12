@@ -13,17 +13,12 @@ build:
     mkdir build
     cd build
     cmake ..
-    {% if conda_build.is_windows %}
-    cmake --build . --config Release
-    cmake --build . --target gendata
-    if exist pyoti %SP_DIR%\pyoti
-    if exist data %SP_DIR\data
-    {% else %}
+    echo "checking SP_DIR"
+    echo $SP_DIR
     make
     make gendata
-    cp -r pyoti $SP_DIR/pyoti
-    cp -r data $SP_DIR/data
-    {% endif %}
+    cp -r pyoti $PREFIX/lib/python$PY_VER/site-packages/pyoti
+    cp -r data $PREFIX/lib/python$PY_VER/site-packages/data
 
 requirements:
   build:
@@ -32,9 +27,9 @@ requirements:
     - scipy
     - pandas
     - cython=0.29.*
-    - make [unix]
+    - make
     - cmake
-    - gfortran [unix]
+    - gfortran
     - pip
     - ipykernel
     - conda-forge::pyvista
@@ -42,7 +37,7 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack [unix]
+    - conda-forge::scikit-umfpack
 
   host:
     - python=3.9.*
@@ -50,9 +45,9 @@ requirements:
     - scipy
     - pandas
     - cython=0.29.*
-    - make [unix]
+    - make
     - cmake
-    - gfortran [unix]
+    - gfortran
     - pip
     - ipykernel
     - conda-forge::pyvista
@@ -60,7 +55,7 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack [unix]
+    - conda-forge::scikit-umfpack
 
   run:
     - python=3.9.*
@@ -73,7 +68,7 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack [unix]
+    - conda-forge::scikit-umfpack
 
 test:
   imports:

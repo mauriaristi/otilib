@@ -27,11 +27,11 @@ jobs:
     - name: Set environment variable for sourcing conda (Linux)
       if: runner.os == 'Linux'
       run: |
-        echo "RUNNER_OS_SOURCE='/home/runner/.bashrc'" >> $GITHUB_ENV
+        echo "RUNNER_OS_SOURCE=/home/runner/.bashrc" >> $GITHUB_ENV
     - name: Set environment variable for sourcing conda (Mac)
       if: runner.os == 'macOS'
       run: |
-        echo "RUNNER_OS_SOURCE='/Users/runner/.bash_profile'" >> $GITHUB_ENV
+        echo "RUNNER_OS_SOURCE=/Users/runner/.bash_profile" >> $GITHUB_ENV
     - name: Install conda-build and anaconda (Linux/Mac)
       if: runner.os != 'Windows'
       run: |

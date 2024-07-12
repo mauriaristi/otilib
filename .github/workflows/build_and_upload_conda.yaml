@@ -9,7 +9,10 @@ on:
 
 jobs:
   build_and_upload:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -23,19 +26,25 @@ jobs:
         channel-priority: strict
     - name: Install conda-build
       run: |
-        source /usr/share/miniconda/etc/profile.d/conda.sh
+        if [[ $RUNNER_OS != "Windows" ]]; then
+          source /usr/share/miniconda/etc/profile.d/conda.sh
+        fi
         conda activate pyoti
         conda install -y conda-build anaconda-client
     - name: Build Conda package
       run: |
-        source /usr/share/miniconda/etc/profile.d/conda.sh
+        if [[ $RUNNER_OS != "Windows" ]]; then
+          source /usr/share/miniconda/etc/profile.d/conda.sh
+        fi
         conda activate pyoti
         conda build conda
     - name: Upload Conda package
       env:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
-        source /usr/share/miniconda/etc/profile.d/conda.sh
+        if [[ $RUNNER_OS != "Windows" ]]; then
+          source /usr/share/miniconda/etc/profile.d/conda.sh
+        fi
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
         anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main

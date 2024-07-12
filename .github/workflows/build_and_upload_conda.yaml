@@ -29,6 +29,8 @@ jobs:
         conda init bash
         if [[ $RUNNER_OS == "Linux" ]]; then
           source /home/runner/.bashrc
+        elif [[ $RUNNER_OS == "macOS" ]]; then
+          source /Users/runner/.bash_profile
         fi
         conda activate pyoti
         conda install -y conda-build anaconda-client
@@ -37,6 +39,8 @@ jobs:
         conda init bash
         if [[ $RUNNER_OS == "Linux" ]]; then
           source /home/runner/.bashrc
+        elif [[ $RUNNER_OS == "macOS" ]]; then
+          source /Users/runner/.bash_profile
         fi
         conda activate pyoti
         conda build conda
@@ -47,6 +51,8 @@ jobs:
         conda init bash
         if [[ $RUNNER_OS == "Linux" ]]; then
           source /home/runner/.bashrc
+        elif [[ $RUNNER_OS == "macOS" ]]; then
+          source /Users/runner/.bash_profile
         fi
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)

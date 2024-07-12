@@ -24,7 +24,8 @@ jobs:
         python-version: 3.9
         channels: conda-forge,defaults
         channel-priority: strict
-    - name: Install conda-build
+    - name: Install conda-build and anaconda (Linux/Mac)
+      if: runner.os != 'Windows'
       run: |
         conda init bash
         if [[ $RUNNER_OS == "Linux" ]]; then
@@ -34,7 +35,14 @@ jobs:
         fi
         conda activate pyoti
         conda install -y conda-build anaconda-client
-    - name: Build Conda package
+    - name: Install conda-build and anaconda (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        conda init cmd.exe
+        conda activate pyoti
+        conda install -y conda-build anaconda-client
+    - name: Build Conda package (Linux/Mac)
+      if: runner.os != 'Windows'
       run: |
         conda init bash
         if [[ $RUNNER_OS == "Linux" ]]; then
@@ -44,9 +52,16 @@ jobs:
         fi
         conda activate pyoti
         conda build conda
-    - name: Upload Conda package
+    - name: Build Conda package (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        conda init cmd.exe
+        conda activate pyoti
+        conda build conda
+    - name: Upload Conda package (Linux/Mac)
       env:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
+      if: runner.os != 'Windows'
       run: |
         conda init bash
         if [[ $RUNNER_OS == "Linux" ]]; then
@@ -54,6 +69,15 @@ jobs:
         elif [[ $RUNNER_OS == "macOS" ]]; then
           source /Users/runner/.bash_profile
         fi
+        conda activate pyoti
+        PACKAGE_PATH=$(conda build conda --output)
+        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main
+    - name: Upload Conda package (Windows)
+      env:
+        ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
+      if: runner.os == 'Windows'
+      run: |
+        conda init cmd.exe
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
         anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main

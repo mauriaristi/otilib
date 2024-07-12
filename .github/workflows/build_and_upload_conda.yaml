@@ -24,15 +24,19 @@ jobs:
         python-version: 3.9
         channels: conda-forge,defaults
         channel-priority: strict
+    - name: Set environment variable for sourcing conda (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        echo "RUNNER_OS_SOURCE='source /home/runner/.bashrc'" >> $GITHUB_ENV
+    - name: Set environment variable for sourcing conda (Mac)
+      if: runner.os == 'macOS'
+      run: |
+        echo "RUNNER_OS_SOURCE='source /Users/runner/.bash_profile'" >> $GITHUB_ENV
     - name: Install conda-build and anaconda (Linux/Mac)
       if: runner.os != 'Windows'
       run: |
         conda init bash
-        if [[ $RUNNER_OS == "Linux" ]]; then
-          source /home/runner/.bashrc
-        elif [[ $RUNNER_OS == "macOS" ]]; then
-          source /Users/runner/.bash_profile
-        fi
+        $RUNNER_OS_SOURCE
         conda activate pyoti
         conda install -y conda-build anaconda-client
     - name: Install conda-build and anaconda (Windows)
@@ -44,18 +48,12 @@ jobs:
     - name: Build Conda package (Linux/Mac)
       if: runner.os != 'Windows'
       run: |
-        conda init bash
-        if [[ $RUNNER_OS == "Linux" ]]; then
-          source /home/runner/.bashrc
-        elif [[ $RUNNER_OS == "macOS" ]]; then
-          source /Users/runner/.bash_profile
-        fi
+        $RUNNER_OS_SOURCE
         conda activate pyoti
         conda build conda
     - name: Build Conda package (Windows)
       if: runner.os == 'Windows'
       run: |
-        conda init cmd.exe
         conda activate pyoti
         conda build conda
     - name: Upload Conda package (Linux/Mac)
@@ -63,12 +61,7 @@ jobs:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       if: runner.os != 'Windows'
       run: |
-        conda init bash
-        if [[ $RUNNER_OS == "Linux" ]]; then
-          source /home/runner/.bashrc
-        elif [[ $RUNNER_OS == "macOS" ]]; then
-          source /Users/runner/.bash_profile
-        fi
+        $RUNNER_OS_SOURCE
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
         anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main
@@ -77,7 +70,6 @@ jobs:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       if: runner.os == 'Windows'
       run: |
-        conda init cmd.exe
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
         anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main

@@ -25,9 +25,6 @@ requirements:
     - scipy
     - pandas
     - cython=0.29.*
-    - make
-    - cmake
-    - gfortran
     - pip
     - ipykernel
     - conda-forge::pyvista
@@ -35,7 +32,13 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - {{ cmake }}
+    - {{ make }}
+    - conda-forge::scikit-umfpack  [unix]
+    - conda-forge::m2w64-toolchain [win]
 
   host:
     - python=3.9.*
@@ -43,9 +46,6 @@ requirements:
     - scipy
     - pandas
     - cython=0.29.*
-    - make
-    - cmake
-    - gfortran
     - pip
     - ipykernel
     - conda-forge::pyvista
@@ -53,7 +53,13 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - {{ cmake }}
+    - {{ make }}
+    - conda-forge::scikit-umfpack  [unix]
+    - conda-forge::m2w64-toolchain [win]
 
   run:
     - python=3.9.*
@@ -66,7 +72,7 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack
+    - conda-forge::scikit-umfpack [unix]
 
 test:
   imports:
@@ -78,6 +84,5 @@ about:
   home: imqcam/otilib
 
 channels:
-  - anaconda
   - conda-forge
   - defaults

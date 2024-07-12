@@ -13,6 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest] #, windows-latest]
+        arch: [x86_64, arm64]
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -32,6 +33,14 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         echo "RUNNER_OS_SOURCE=/Users/runner/.bash_profile" >> $GITHUB_ENV
+    - name: Set architecture environment variable (Mac/Linux)
+      if: runner.os != 'Windows'
+      run: |
+        if [[ "${{ matrix.arch }}" == "arm64" ]]; then
+          echo "CONDA_SUBDIR=osx-arm64" >> $GITHUB_ENV
+        else
+          echo "CONDA_SUBDIR=osx-64" >> $GITHUB_ENV
+        fi
     - name: Install conda-build and anaconda (Linux/Mac)
       if: runner.os != 'Windows'
       run: |

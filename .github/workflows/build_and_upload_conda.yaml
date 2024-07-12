@@ -51,7 +51,14 @@ jobs:
         conda init cmd.exe
         conda config --set subdir win-64
         conda install -y conda-build anaconda-client zstandard
-    - name: Create and activate environment
+    - name: Create and activate environment (Linux/Mac)
+      if: runner.os != 'Windows'
+      run: |
+        source $RUNNER_OS_SOURCE
+        conda create --name pyoti python=3.9
+        conda activate pyoti
+    - name: Create and activate environment (Windows)
+      if: runner.os == 'Windows'
       run: |
         conda create --name pyoti python=3.9
         conda activate pyoti

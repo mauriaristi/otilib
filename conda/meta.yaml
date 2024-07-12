@@ -21,10 +21,13 @@ build:
 requirements:
   build:
     - python=3.9.*
-    - numpy=1.22.*
+    - numpy
     - scipy
     - pandas
     - cython=0.29.*
+    - make
+    - cmake
+    - gfortran
     - pip
     - ipykernel
     - conda-forge::pyvista
@@ -32,20 +35,17 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
-    - {{ cmake }}
-    - {{ make }}
-    - conda-forge::scikit-umfpack  [unix]
-    - conda-forge::m2w64-toolchain [win]
+    - conda-forge::scikit-umfpack [unix]
 
   host:
     - python=3.9.*
-    - numpy=1.22.*
+    - numpy
     - scipy
     - pandas
     - cython=0.29.*
+    - make
+    - cmake
+    - gfortran
     - pip
     - ipykernel
     - conda-forge::pyvista
@@ -53,17 +53,11 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - {{ compiler('fortran') }}
-    - {{ cmake }}
-    - {{ make }}
-    - conda-forge::scikit-umfpack  [unix]
-    - conda-forge::m2w64-toolchain [win]
+    - conda-forge::scikit-umfpack [unix]
 
   run:
     - python=3.9.*
-    - numpy=1.22.*
+    - numpy
     - scipy
     - pandas
     - cython=0.29.*

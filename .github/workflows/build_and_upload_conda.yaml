@@ -38,13 +38,16 @@ jobs:
       run: |
         if [[ "${{ matrix.arch }}" == "arm64" ]]; then
           echo "CONDA_SUBDIR=osx-arm64" >> $GITHUB_ENV
+          conda config --set subdir osx-arm64
         else
           echo "CONDA_SUBDIR=osx-64" >> $GITHUB_ENV
+          conda config --set subdir osx-64
         fi
     - name: Set architecture environment variable (Linux)
       if: runner.os == 'Linux'
       run: |
         echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
+        conda config --set subdir linux-64
     - name: Install conda-build and anaconda (Linux/Mac)
       if: runner.os != 'Windows'
       run: |

@@ -64,7 +64,7 @@ jobs:
         source $RUNNER_OS_SOURCE
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
-        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main
+        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main --force
     - name: Upload Conda package (Windows)
       env:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
@@ -72,4 +72,4 @@ jobs:
       run: |
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
-        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main
+        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main --force

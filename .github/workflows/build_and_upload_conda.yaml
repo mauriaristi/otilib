@@ -28,45 +28,27 @@ jobs:
         python-version: 3.9
         channels: conda-forge,defaults
         channel-priority: strict
-        allow-softlinks: true
-        show-channel-urls: true
-        use-only-tar-bz2: true
-    - name: Set environment variables (Linux)
+    - name: Set environment variable for sourcing conda (Linux)
       if: runner.os == 'Linux'
       run: |
         echo "RUNNER_OS_SOURCE=/home/runner/.bashrc" >> $GITHUB_ENV
-        echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
-    - name: Set environment variables (Mac)
+    - name: Set environment variable for sourcing conda (Mac)
       if: runner.os == 'macOS'
       run: |
         echo "RUNNER_OS_SOURCE=/Users/runner/.bash_profile" >> $GITHUB_ENV
-        if [[ "${{ matrix.arch }}" != "arm64" ]]; then
-          echo "CONDA_SUBDIR=osx-64" >> $GITHUB_ENV
-        fi
-    - name: Initialize Conda (Linux/Mac)
+    - name: Install conda-build and anaconda (Linux/Mac)
       if: runner.os != 'Windows'
       run: |
         conda init bash
         source $RUNNER_OS_SOURCE
-        if [[ "${{ matrix.arch }}" != "arm64" ]]; then
-          conda config --set subdir $CONDA_SUBDIR
-        fi
-    - name: Initialize Conda (Windows)
+        conda activate pyoti
+        conda install -y conda-build anaconda-client
+    - name: Install conda-build and anaconda (Windows)
       if: runner.os == 'Windows'
       run: |
         conda init cmd.exe
-        conda config --set subdir win-64
-    - name: Install conda-build and anaconda-client in pyoti environment (Linux/Mac)
-      if: runner.os != 'Windows'
-      run: |
-        source $RUNNER_OS_SOURCE
         conda activate pyoti
-        conda install -y conda-build anaconda-client zstandard
-    - name: Install conda-build and anaconda-client in pyoti environment (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        conda activate pyoti
-        conda install -y conda-build anaconda-client zstandard
+        conda install -y conda-build anaconda-client
     - name: Build Conda package (Linux/Mac)
       if: runner.os != 'Windows'
       run: |

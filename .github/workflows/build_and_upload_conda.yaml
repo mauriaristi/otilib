@@ -47,7 +47,9 @@ jobs:
       run: |
         conda init bash
         source $RUNNER_OS_SOURCE
-        conda config --set subdir $CONDA_SUBDIR
+        if [[ "${{ matrix.arch }}" != "arm64" ]]; then
+          conda config --set subdir $CONDA_SUBDIR
+        fi
     - name: Initialize Conda (Windows)
       if: runner.os == 'Windows'
       run: |

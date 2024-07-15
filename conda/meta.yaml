@@ -19,6 +19,17 @@ build:
     make gendata
     cp -r pyoti $PREFIX/lib/python$PY_VER/site-packages/pyoti
     cp -r data $PREFIX/lib/python$PY_VER/site-packages/data
+  matrix:
+    - os: linux
+      arch: x86_64
+    # - os: linux
+    #   arch: ppc64le
+    # - os: linux
+    #   arch: arm64
+    - os: osx
+      arch: x86_64
+    - os: osx
+      arch: arm64
 
 requirements:
   build:

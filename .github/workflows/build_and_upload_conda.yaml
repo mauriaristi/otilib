@@ -23,11 +23,12 @@ jobs:
     - name: Set up Conda
       uses: conda-incubator/setup-miniconda@v3
       with:
+        activate-environment: pyoti
         auto-update-conda: true
         python-version: 3.9
         channels: conda-forge,defaults
-        allow-softlinks: true
         channel-priority: strict
+        allow-softlinks: true
         show-channel-urls: true
         use-only-tar-bz2: true
     - name: Set environment variables (Linux)
@@ -55,15 +56,6 @@ jobs:
       run: |
         conda init cmd.exe
         conda config --set subdir win-64
-    - name: Create environment (Linux/Mac)
-      if: runner.os != 'Windows'
-      run: |
-        source $RUNNER_OS_SOURCE
-        conda create --name pyoti python=3.9 -y
-    - name: Create environment (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        conda create --name pyoti python=3.9 -y
     - name: Install conda-build and anaconda-client in pyoti environment (Linux/Mac)
       if: runner.os != 'Windows'
       run: |

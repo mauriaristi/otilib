@@ -38,7 +38,7 @@ requirements:
     - conda-forge::vtk
     - conda-forge::scikit-sparse
     - conda-forge::scikit-umfpack
-    - conda-forge::mpi
+    - conda-forge::mpi=1
 
   host:
     - python=3.9
@@ -57,7 +57,7 @@ requirements:
     - conda-forge::vtk
     - conda-forge::scikit-sparse
     - conda-forge::scikit-umfpack
-    - conda-forge::mpi
+    - conda-forge::mpi=1
 
   run:
     - python=3.9
@@ -71,7 +71,7 @@ requirements:
     - conda-forge::vtk
     - conda-forge::scikit-sparse
     - conda-forge::scikit-umfpack
-    - conda-forge::mpi
+    - conda-forge::mpi=1
 
 test:
   imports:

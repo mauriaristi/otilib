@@ -81,7 +81,8 @@ jobs:
       run: |
         source $RUNNER_OS_SOURCE
         conda activate pyoti
-        conda build conda
+        conda list
+        conda build -vv conda
     - name: Build Conda package (Windows)
       if: runner.os == 'Windows'
       run: |

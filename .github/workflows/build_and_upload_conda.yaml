@@ -36,19 +36,6 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         echo "RUNNER_OS_SOURCE=/Users/runner/.bash_profile" >> $GITHUB_ENV
-    - name: Install build tools (Linux/Mac)
-      if: runner.os != 'Windows'
-      run: |
-        conda init bash
-        source $RUNNER_OS_SOURCE
-        conda activate pyoti
-        conda install -y conda-build anaconda-client conda-verify
-    - name: Install build tools (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        conda init cmd.exe
-        conda activate pyoti
-        conda install -y conda-build anaconda-client conda-verify
     - name: Set CONDA_SUBDIR based on architecture
       run: |
         if [[ "${{ runner.os }}" == "Linux" ]]; then
@@ -75,6 +62,19 @@ jobs:
       run: |
         conda activate pyoti
         conda config --env --set subdir $CONDA_SUBDIR
+    - name: Install build tools (Linux/Mac)
+      if: runner.os != 'Windows'
+      run: |
+        conda init bash
+        source $RUNNER_OS_SOURCE
+        conda activate pyoti
+        conda install -y conda-build anaconda-client conda-verify
+    - name: Install build tools (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        conda init cmd.exe
+        conda activate pyoti
+        conda install -y conda-build anaconda-client conda-verify
     - name: Build Conda package (Linux/Mac)
       if: runner.os != 'Windows'
       run: |

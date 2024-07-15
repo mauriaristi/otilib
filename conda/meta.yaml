@@ -36,8 +36,9 @@ requirements:
     - conda-forge::gmsh
     - conda-forge::python-gmsh
     - conda-forge::vtk
-    - scikit-sparse
+    - conda-forge::scikit-sparse>=0.4
     - conda-forge::scikit-umfpack
+    - conda-forge::suitesparse=5.10.1
     - conda-forge::mpi=1
 
   host:
@@ -55,8 +56,9 @@ requirements:
     - conda-forge::gmsh
     - conda-forge::python-gmsh
     - conda-forge::vtk
-    - scikit-sparse
+    - conda-forge::scikit-sparse>=0.4
     - conda-forge::scikit-umfpack
+    - conda-forge::suitesparse=5.10.1
     - conda-forge::mpi=1
 
   run:
@@ -69,8 +71,9 @@ requirements:
     - conda-forge::gmsh
     - conda-forge::python-gmsh
     - conda-forge::vtk
-    - scikit-sparse
+    - conda-forge::scikit-sparse>=0.4
     - conda-forge::scikit-umfpack
+    - conda-forge::suitesparse=5.10.1
     - conda-forge::mpi=1
 
 test:

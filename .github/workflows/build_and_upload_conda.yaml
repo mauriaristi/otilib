@@ -23,7 +23,10 @@ jobs:
         auto-update-conda: true
         python-version: 3.9
         channels: conda-forge,defaults
-        channel-priority: strict
+        allow-softlinks: true
+        channel-priority: flexible
+        show-channel-urls: true
+        use-only-tar-bz2: true
     - name: Set environment variables (Linux)
       if: runner.os == 'Linux'
       run: |
@@ -57,12 +60,10 @@ jobs:
       if: runner.os != 'Windows'
       run: |
         source $RUNNER_OS_SOURCE
-        conda update conda
         conda create --name pyoti python=3.9 -y
     - name: Create environment (Windows)
       if: runner.os == 'Windows'
       run: |
-        conda update conda
         conda create --name pyoti python=3.9 -y
     - name: Install conda-build and anaconda-client in pyoti environment (Linux/Mac)
       if: runner.os != 'Windows'

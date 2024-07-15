@@ -28,6 +28,7 @@ jobs:
         python-version: 3.9
         channels: conda-forge,defaults
         channel-priority: strict
+        architecture: ${{ matrix.arch }}
     - name: Set environment variable for sourcing conda (Linux)
       if: runner.os == 'Linux'
       run: |

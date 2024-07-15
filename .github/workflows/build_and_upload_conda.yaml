@@ -49,6 +49,7 @@ jobs:
         conda init bash
         source $RUNNER_OS_SOURCE
         conda config --set subdir $CONDA_SUBDIR
+        conda install -c conda-forge pycosat
         conda config --set solver classic
     - name: Initialize Conda (Windows)
       if: runner.os == 'Windows'

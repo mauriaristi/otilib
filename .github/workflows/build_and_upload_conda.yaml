@@ -29,46 +29,9 @@ jobs:
         channels: conda-forge,defaults
         channel-priority: strict
         architecture: ${{ matrix.arch }}
-    - name: Set environment variable for sourcing conda (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        echo "RUNNER_OS_SOURCE=/home/runner/.bashrc" >> $GITHUB_ENV
-    - name: Set environment variable for sourcing conda (Mac)
-      if: runner.os == 'macOS'
-      run: |
-        echo "RUNNER_OS_SOURCE=/Users/runner/.bash_profile" >> $GITHUB_ENV
-    - name: Set CONDA_SUBDIR based on architecture
-      run: |
-        if [[ "${{ runner.os }}" == "Linux" ]]; then
-          if [[ "${{ matrix.arch }}" == "x86_64" ]]; then
-            echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
-          elif [[ "${{ matrix.arch }}" == "arm64" ]]; then
-            echo "CONDA_SUBDIR=linux-arm64" >> $GITHUB_ENV
-          fi
-        elif [[ "${{ runner.os }}" == "macOS" ]]; then
-          if [[ "${{ matrix.arch }}" == "x86_64" ]]; then
-            echo "CONDA_SUBDIR=osx-64" >> $GITHUB_ENV
-          elif [[ "${{ matrix.arch }}" == "arm64" ]]; then
-            echo "CONDA_SUBDIR=osx-arm64" >> $GITHUB_ENV
-          fi
-        fi
-    - name: Configure Conda for the correct subdir (Linux/Mac)
-      if: runner.os != 'Windows'
-      run: |
-        source $RUNNER_OS_SOURCE
-        conda activate pyoti
-        conda config --env --set subdir $CONDA_SUBDIR
-    - name: Configure Conda for the correct subdir (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        conda activate pyoti
-        conda config --env --set subdir $CONDA_SUBDIR
     - name: Install build tools (Linux/Mac)
       if: runner.os != 'Windows'
       run: |
-        conda init bash
-        source $RUNNER_OS_SOURCE
-        conda activate pyoti
         conda install -y conda-build anaconda-client conda-verify
     - name: Install build tools (Windows)
       if: runner.os == 'Windows'

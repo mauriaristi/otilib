@@ -24,6 +24,7 @@ jobs:
         python-version: 3.9
         channels: conda-forge,defaults
         channel-priority: strict
+        miniforge-variant: Mambaforge
     - name: Set environment variables (Linux)
       if: runner.os == 'Linux'
       run: |

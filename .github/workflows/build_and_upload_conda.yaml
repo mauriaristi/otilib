@@ -34,18 +34,12 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         echo "RUNNER_OS_SOURCE=/home/runner/.bashrc" >> $GITHUB_ENV
-        if [[ "${{ matrix.arch }}" == "arm64" ]]; then
-          echo "CONDA_SUBDIR=linux-aarch64" >> $GITHUB_ENV
-        else
-          echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
-        fi
+        echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
     - name: Set environment variables (Mac)
       if: runner.os == 'macOS'
       run: |
         echo "RUNNER_OS_SOURCE=/Users/runner/.bash_profile" >> $GITHUB_ENV
-        if [[ "${{ matrix.arch }}" == "arm64" ]]; then
-          echo "CONDA_SUBDIR=osx-arm64" >> $GITHUB_ENV
-        else
+        if [[ "${{ matrix.arch }}" != "arm64" ]]; then
           echo "CONDA_SUBDIR=osx-64" >> $GITHUB_ENV
         fi
     - name: Initialize Conda (Linux/Mac)

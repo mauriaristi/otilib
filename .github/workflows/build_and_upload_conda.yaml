@@ -49,15 +49,19 @@ jobs:
         conda init cmd.exe
         conda activate pyoti
         conda install -y conda-build anaconda-client conda-verify
-    - name: Determine CONDA_SUBDIR based on architecture
+    - name: Set CONDA_SUBDIR based on architecture
       run: |
         if [[ "${{ runner.os }}" == "Linux" ]]; then
-          export CONDA_SUBDIR="linux-64"
+          if [[ "${{ matrix.arch }}" == "x86_64" ]]; then
+            echo "CONDA_SUBDIR=linux-64" >> $GITHUB_ENV
+          elif [[ "${{ matrix.arch }}" == "arm64" ]]; then
+            echo "CONDA_SUBDIR=linux-arm64" >> $GITHUB_ENV
+          fi
         elif [[ "${{ runner.os }}" == "macOS" ]]; then
           if [[ "${{ matrix.arch }}" == "x86_64" ]]; then
-            export CONDA_SUBDIR="osx-64"
+            echo "CONDA_SUBDIR=osx-64" >> $GITHUB_ENV
           elif [[ "${{ matrix.arch }}" == "arm64" ]]; then
-            export CONDA_SUBDIR="osx-arm64"
+            echo "CONDA_SUBDIR=osx-arm64" >> $GITHUB_ENV
           fi
         fi
     - name: Build Conda package (Linux/Mac)
@@ -79,7 +83,7 @@ jobs:
         source $RUNNER_OS_SOURCE
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
-        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --subdir $CONDA_SUBDIR --channel main --label main --force
+        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main --force
     - name: Upload Conda package (Windows)
       env:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
@@ -87,4 +91,4 @@ jobs:
       run: |
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
-        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --subdir $CONDA_SUBDIR --channel main --label main --force
+        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main --force

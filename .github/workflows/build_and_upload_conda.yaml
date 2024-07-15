@@ -12,8 +12,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest] #[ubuntu-latest] #, macos-latest]
-        arch: [x86_64] #, arm64]
+        os: [ubuntu-latest, macos-latest] #, windows-latest]
+        arch: [x86_64, arm64]
+        exclude:
+          - os: ubuntu-latest
+            arch: arm64
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -81,8 +84,7 @@ jobs:
       run: |
         source $RUNNER_OS_SOURCE
         conda activate pyoti
-        conda list
-        conda build --debug conda
+        conda build conda
     - name: Build Conda package (Windows)
       if: runner.os == 'Windows'
       run: |

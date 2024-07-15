@@ -64,6 +64,17 @@ jobs:
             echo "CONDA_SUBDIR=osx-arm64" >> $GITHUB_ENV
           fi
         fi
+    - name: Configure Conda for the correct subdir (Linux/Mac)
+      if: runner.os != 'Windows'
+      run: |
+        source $RUNNER_OS_SOURCE
+        conda activate pyoti
+        conda config --env --set subdir $CONDA_SUBDIR
+    - name: Configure Conda for the correct subdir (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        conda activate pyoti
+        conda config --env --set subdir $CONDA_SUBDIR
     - name: Build Conda package (Linux/Mac)
       if: runner.os != 'Windows'
       run: |

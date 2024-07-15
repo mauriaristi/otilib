@@ -22,10 +22,6 @@ build:
   matrix:
     - os: linux
       arch: x86_64
-    # - os: linux
-    #   arch: ppc64le
-    - os: linux
-      arch: arm64
     - os: osx
       arch: x86_64
     - os: osx

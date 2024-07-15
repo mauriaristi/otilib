@@ -29,16 +29,29 @@ jobs:
         channels: conda-forge,defaults
         channel-priority: strict
         architecture: ${{ matrix.arch }}
+    - name: Set environment variable for sourcing conda (Linux)
+      if: runner.os == 'Linux'
+      run: |
+        echo "RUNNER_OS_SOURCE=/home/runner/.profile" >> $GITHUB_ENV
+    - name: Set environment variable for sourcing conda (Mac)
+      if: runner.os == 'macOS'
+      run: |
+        echo "RUNNER_OS_SOURCE=/Users/runner/.profile" >> $GITHUB_ENV
     - name: Install build tools
       run: |
-        conda info
+        source $RUNNER_OS_SOURCE
+        conda activate pyoti
         conda install -y conda-build anaconda-client
     - name: Build Conda package
       run: |
+        source $RUNNER_OS_SOURCE
+        conda activate pyoti
         conda build conda
     - name: Upload Conda package
       env:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
+        source $RUNNER_OS_SOURCE
+        conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
         anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main --force

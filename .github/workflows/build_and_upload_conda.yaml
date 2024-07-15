@@ -24,7 +24,7 @@ jobs:
         python-version: 3.9
         channels: conda-forge,defaults
         allow-softlinks: true
-        channel-priority: flexible
+        channel-priority: strict
         show-channel-urls: true
         use-only-tar-bz2: true
     - name: Set environment variables (Linux)

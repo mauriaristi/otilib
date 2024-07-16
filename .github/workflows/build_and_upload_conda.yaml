@@ -49,7 +49,7 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         conda activate pyoti
-        conda install -y conda-build anaconda-client
+        conda install -y conda-build anaconda-client pip
     - name: Build Conda package (Linux/Mac)
       if: runner.os != 'Windows'
       run: |
@@ -60,6 +60,7 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         conda activate pyoti
+        pip install scikit-umfpack
         conda build conda
     - name: Upload Conda package (Linux/Mac)
       if: runner.os != 'Windows'

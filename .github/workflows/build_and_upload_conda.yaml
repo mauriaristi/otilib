@@ -5,7 +5,11 @@ on:
   #   types: [published]
   push:
     branches:
-      - conda_package
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
 
 jobs:
   build_and_upload:
@@ -54,4 +58,4 @@ jobs:
         source $RUNNER_OS_SOURCE
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
-        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main --force
+        anaconda -t $ANACONDA_TOKEN upload -u mauriaristi $PACKAGE_PATH --channel main --label main --force

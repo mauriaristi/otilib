@@ -17,6 +17,8 @@ jobs:
         exclude:
           - os: ubuntu-latest
             arch: arm64
+          - os: windows-latest
+            arch: arm64
     steps:
     - name: Checkout code
       uses: actions/checkout@v4

@@ -22,11 +22,13 @@ build:
   matrix:
     - os: linux
       arch: x86_64
-    - os: linux
-      arch: arm64
     - os: osx
       arch: x86_64
     - os: osx
+      arch: arm64
+    - os: windows
+      arch: x86_64
+    - os: windows
       arch: arm64
 
 requirements:

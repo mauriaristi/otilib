@@ -12,12 +12,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
         arch: [x86_64, arm64]
         exclude:
           - os: ubuntu-latest
-            arch: arm64
-          - os: windows-latest
             arch: arm64
     steps:
     - name: Checkout code
@@ -39,43 +37,21 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         echo "RUNNER_OS_SOURCE=/Users/runner/.profile" >> $GITHUB_ENV
-    - name: Install build tools (Linux/Mac)
-      if: runner.os != 'Windows'
+    - name: Install build tools
       run: |
         source $RUNNER_OS_SOURCE
         conda activate pyoti
         conda install -y conda-build anaconda-client
-    - name: Install build tools (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        conda activate pyoti
-        conda install -y conda-build anaconda-client pip
-    - name: Build Conda package (Linux/Mac)
-      if: runner.os != 'Windows'
+    - name: Build Conda package
       run: |
         source $RUNNER_OS_SOURCE
         conda activate pyoti
         conda build conda
-    - name: Build Conda package (Windows)
-      if: runner.os == 'Windows'
-      run: |
-        conda activate pyoti
-        pip install scikit-umfpack
-        conda build conda
-    - name: Upload Conda package (Linux/Mac)
-      if: runner.os != 'Windows'
+    - name: Upload Conda package
       env:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
         source $RUNNER_OS_SOURCE
-        conda activate pyoti
-        PACKAGE_PATH=$(conda build conda --output)
-        anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main --force
-    - name: Upload Conda package (Windows)
-      if: runner.os == 'Windows'
-      env:
-        ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
-      run: |
         conda activate pyoti
         PACKAGE_PATH=$(conda build conda --output)
         anaconda -t $ANACONDA_TOKEN upload -u eminizer $PACKAGE_PATH --channel main --label main --force

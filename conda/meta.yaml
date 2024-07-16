@@ -26,8 +26,6 @@ build:
       arch: x86_64
     - os: osx
       arch: arm64
-    - os: windows
-      arch: x86_64
 
 requirements:
   build:
@@ -46,7 +44,7 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack [unix]
+    - conda-forge::scikit-umfpack
 
   host:
     - python=3.9.*
@@ -64,7 +62,7 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack [unix]
+    - conda-forge::scikit-umfpack
 
   run:
     - python=3.9.*
@@ -77,7 +75,7 @@ requirements:
     - conda-forge::python-gmsh
     - conda-forge::vtk
     - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack [unix]
+    - conda-forge::scikit-umfpack
 
 test:
   imports:

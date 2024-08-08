@@ -1025,19 +1025,25 @@ void soti_print(sotinum_t* num, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
+sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
     
     sotinum_t res;
     ord_t ordi = 0;
+    
+    // char print_buffer[1024] = "", local_buffer[128] ; 
 
     // Get only temporal list available to the thread id.
     #ifdef _OPENMP
         int thrdId = omp_get_thread_num();
-        ndir_t ntmp = thrdId * 20 + pntmp;
+        ndir_t ntmp = thrdId * _NTMPS_PER_THREAD + pntmp;
         //if (thrdId != 0) printf("rtmp call thrdId: %d\n",thrdId);
     #else
         ndir_t ntmp = pntmp;
     #endif
+
+    // sprintf(print_buffer,"INFO: thread_id: %d\n",thrdId);
+    // sprintf(local_buffer,"INFO: tmp_id: %d\n",ntmp);
+    // strncat(print_buffer,local_buffer,128);
 
     if (trc_order == 0){
         // In case order==0, no allocated array exists.
@@ -1064,12 +1070,19 @@ inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
 
     for ( ordi = 0; ordi<trc_order; ordi++ ){
 
+
+        // Fill up the temporal with the correct allocated pointers.
         res.p_im[ordi]  = dhl.p_dh[ordi].p_im[ntmp];
         res.p_idx[ordi] = dhl.p_dh[ordi].p_idx[ntmp];
         res.p_nnz[ordi] = 0                  ; // Initialize to zero elements.
         res.p_size[ordi]= dhl.p_dh[ordi].Ndir;
+        
+        // sprintf(local_buffer,"\n >>> p_ord_%hhu %p",ordi, res.p_im[ordi]);   
+        // strncat(print_buffer,local_buffer,128);
 
     }
+    
+    // printf("%s\n",print_buffer);
 
     return res;
 }
@@ -1078,7 +1091,7 @@ inline sotinum_t soti_get_rtmp(ndir_t pntmp, ord_t trc_order, dhelpl_t dhl){
 // ****************************************************************************************************
 sotinum_t soti_get_tmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl){
     
-    return soti_get_rtmp( ntmp + 12, trc_order, dhl );
+    return soti_get_rtmp( ntmp + _NUM_RESERVED_TMPS, trc_order, dhl );
 }
 // ----------------------------------------------------------------------------------------------------
 

@@ -119,6 +119,9 @@ typedef uint8_t     flag_t; ///< Flag type.
 
 #define _REALLOC_SIZE 10
 
+#define _NUM_RESERVED_TMPS 12
+#define _NTMPS_PER_THREAD 30
+
 #define _MAXORDER_OTI 150
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------------      END DEFINES         ----------------------------------------

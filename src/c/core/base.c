@@ -45,9 +45,14 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
     nThrds = 1;
     #endif
 
-    ndir_t  ntmps = 30*nThrds ; // Number of arrays for temporal variables.
+    // printf("INFO: number of Threads: %d\n",nThrds);
+
+    ndir_t  ntmps = _NTMPS_PER_THREAD*nThrds ; // Number of arrays for temporal variables.
                                 // 2023.oct.25 Changed from 20 to 40 temporals due to large 
                                 //             use of temporals in sparse matrix inverse function.
+                                // 2024.aug.06 Revisited number of threads Left this at 30/thread.
+
+    // printf("INFO: number of tmps: %d\n",ntmps);
 
     for( i = 1; i<=dhl->ndh; i++){
 

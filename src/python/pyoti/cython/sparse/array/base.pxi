@@ -1319,6 +1319,9 @@ cdef class matso:
 
     #end for
 
+    # Free memory from C.
+    darr_free(&res_darr)
+
     return res
 
   #---------------------------------------------------------------------------------------------------

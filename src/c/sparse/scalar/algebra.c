@@ -301,11 +301,17 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
     ord_t ordlim1, ordlim2;
     ord_t ordi1, ordi2,ordires;
 
+    // #pragma omp critical 
+    // {
+    // printf("INFO: In multiplication: thread_id %d\n",omp_get_thread_num());
+    
     // Retreive sotinum temporals.
     // All tmps are created with no elements in imaginary directions (but fully allocated).
     tmp = soti_get_rtmp(3,res_ord,dhl); // will hold the final result.
     tmp2= soti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
     tmp3= soti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.
+    
+    // }
 
     // Multiply real coefficients.
     tmpdest->re = num1->re * num2->re;
@@ -456,6 +462,8 @@ inline sotinum_t soti_base_mul(sotinum_t* num1, sotinum_t* num2, dhelpl_t dhl){
         // soti_print(tmpdest,dhl);
     
     }
+    
+    // printf("INFO: Finished multiplication, thread_id %d\n",omp_get_thread_num());
     
     // This returns whatever temporal is selected at this time.
     return *tmpdest;

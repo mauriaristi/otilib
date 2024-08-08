@@ -160,6 +160,14 @@ void soti_mul_oo_to(sotinum_t* num1, sotinum_t* num2, sotinum_t* res, dhelpl_t d
     sotinum_t  tmp;
 
     tmp = soti_base_mul(num1,num2,dhl);
+    
+    // // #pragma omp barrier
+    // #pragma omp critical
+    // {
+    //     printf("\nINFO: Thread Id %d \n",omp_get_thread_num());
+    //     soti_print( &tmp , dhl );
+    // }
+    
 
     soti_copy_to(&tmp, res, dhl);
 

@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>static Tutorial 02: Computing derivatives. &#8212; otilib-pyoti 0.1 documentation</title>
   
@@ -19,29 +18,27 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -105,7 +102,7 @@
   
     <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -114,6 +111,8 @@
     
       <div class="navbar-item">
 
+  
+    
   
 
 <a class="navbar-brand logo" href="../index.html">
@@ -134,38 +133,38 @@
     <div class="me-auto navbar-header-items__center">
       
         <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../installation.html">
     Installation
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item current active">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../examples.html">
     Examples
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../aboutus.html">
     About
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../pyoti.html">
     pyoti package
   </a>
@@ -184,7 +183,7 @@
 
  <script>
  document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
     <span class="search-button__default-text">Search</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -198,10 +197,10 @@
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script></div>
@@ -215,7 +214,7 @@ document.write(`
 
  <script>
  document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
     <span class="search-button__default-text">Search</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -226,7 +225,7 @@ document.write(`
   
 
   
-    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -252,38 +251,38 @@ document.write(`
           
           
             <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../installation.html">
     Installation
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item current active">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../examples.html">
     Examples
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../aboutus.html">
     About
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../pyoti.html">
     pyoti package
   </a>
@@ -303,10 +302,10 @@ document.write(`
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script></div>
@@ -392,7 +391,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="static-Tutorial-02:-Computing-derivatives.">
-<h1><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 02: Computing derivatives.<a class="headerlink" href="#static-Tutorial-02:-Computing-derivatives." title="Permalink to this heading">#</a></h1>
+<h1><code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 02: Computing derivatives.<a class="headerlink" href="#static-Tutorial-02:-Computing-derivatives." title="Link to this heading">#</a></h1>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Contributors:
     Mauricio Aristizabal
         University of Texas at San Antonio
@@ -403,7 +402,7 @@ Last modification: Jun 20 2024
 </pre></div>
 </div>
 <section id="Introduction">
-<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading">#</a></h2>
 <p>The main purpose of this document is to show how to compute derivatives of functions in python using the static ‘Order truncated Imaginary’ (OTI) module in <code class="docutils literal notranslate"><span class="pre">pyoti</span></code>. Multiple examples are given in order to show and understand the capabilities of the library, as well as its basic advantages. For basic usage of the static module, see the <code class="docutils literal notranslate"><span class="pre">static</span></code> Tutorial 01.</p>
 <p>For this, first import the libraries required.</p>
 <div class="nbinput nblast docutils container">
@@ -417,7 +416,7 @@ Last modification: Jun 20 2024
 </div>
 </section>
 <section id="Derivatives-of-single-variable-functions.">
-<h2>Derivatives of single-variable functions.<a class="headerlink" href="#Derivatives-of-single-variable-functions." title="Permalink to this heading">#</a></h2>
+<h2>Derivatives of single-variable functions.<a class="headerlink" href="#Derivatives-of-single-variable-functions." title="Link to this heading">#</a></h2>
 <p>In general, OTI numbers have a strong application in finding derivatives of functions. In this sense let’s see some applications to obtain derivatives.</p>
 <p>Consider a <span class="math notranslate nohighlight">\(C^n\)</span> function <span class="math notranslate nohighlight">\(f: \mathbb{R} \rightarrow \mathbb{R}\)</span>, and it’s Taylor series:</p>
 <div class="math notranslate nohighlight">
@@ -443,7 +442,7 @@ Last modification: Jun 20 2024
 \[\displaystyle\frac{\partial^p f}{\partial x^p}(x_0) = p! \mbox{Im}_{\epsilon_1^p}\left[f(x_0+\epsilon_1)\right]\]</div>
 <p>To apply this in a real example let’s consider the following function:</p>
 <section id="Example:-Polynomial-function">
-<h3>Example: Polynomial function<a class="headerlink" href="#Example:-Polynomial-function" title="Permalink to this heading">#</a></h3>
+<h3>Example: Polynomial function<a class="headerlink" href="#Example:-Polynomial-function" title="Link to this heading">#</a></h3>
 <p>Consider the following function:</p>
 <div class="math notranslate nohighlight">
 \[f(x)= 10x^5-3x^3+2x-10\]</div>
@@ -595,7 +594,7 @@ f_xxx      |        0 |      3732 |
 </section>
 </section>
 <section id="Derivatives-of-multi-variable-functions">
-<h2>Derivatives of multi variable functions<a class="headerlink" href="#Derivatives-of-multi-variable-functions" title="Permalink to this heading">#</a></h2>
+<h2>Derivatives of multi variable functions<a class="headerlink" href="#Derivatives-of-multi-variable-functions" title="Link to this heading">#</a></h2>
 <p>A similar approach as in the single variable case applies to multivariable functions. If one considers a function <span class="math notranslate nohighlight">\(f: \mathbb{R}^m \rightarrow \mathbb{R}\)</span>, then all its derivatives can be obtained by perturbing the input parameters along <em>independent</em> imaginary directions, as follows:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{array}{rcl}
@@ -619,7 +618,7 @@ f(x_{1_0},x_{2_0}) +
 \frac{\partial^2 f }{ \partial x_1\partial x_2}(x_{1_0},x_{2_0})  \ \epsilon_2\epsilon_1 +
 \frac{1}{2!}\frac{\partial^2 f }{ \partial x_2^2}(x_{1_0},x_{2_0}) \  \epsilon_2^2 + \cdots\end{split}\]</div>
 <section id="Example">
-<h3>Example<a class="headerlink" href="#Example" title="Permalink to this heading">#</a></h3>
+<h3>Example<a class="headerlink" href="#Example" title="Link to this heading">#</a></h3>
 <p>To apply this to a simple example, let’s consider the function</p>
 <div class="math notranslate nohighlight">
 \[f(x,y) = cos( (x+2y-1)^2 )\]</div>
@@ -884,8 +883,8 @@ f_{yy}(x,y) = -8\sin((x+2y-1)^2)-16(x+2y-1)^2\sin((x+2y-1)^2)\end{split}\]</div>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -905,7 +904,7 @@ f_{yy}(x,y) = -8\sin((x+2y-1)^2)-16(x+2y-1)^2\sin((x+2y-1)^2)\end{split}\]</div>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
     <br/>
   </p>
 </div>
@@ -918,7 +917,7 @@ f_{yy}(x,y) = -8\sin((x+2y-1)^2)-16(x+2y-1)^2\sin((x+2y-1)^2)\end{split}\]</div>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
 </p></div>
       
     </div>

@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>core Tutorial 01: Core module utilities &#8212; otilib-pyoti 0.1 documentation</title>
   
@@ -19,29 +18,27 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -105,7 +102,7 @@
   
     <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -114,6 +111,8 @@
     
       <div class="navbar-item">
 
+  
+    
   
 
 <a class="navbar-brand logo" href="../index.html">
@@ -134,38 +133,38 @@
     <div class="me-auto navbar-header-items__center">
       
         <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../installation.html">
     Installation
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item current active">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../examples.html">
     Examples
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../aboutus.html">
     About
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../pyoti.html">
     pyoti package
   </a>
@@ -184,7 +183,7 @@
 
  <script>
  document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
     <span class="search-button__default-text">Search</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -198,10 +197,10 @@
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script></div>
@@ -215,7 +214,7 @@ document.write(`
 
  <script>
  document.write(`
-   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
     <span class="search-button__default-text">Search</span>
     <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -226,7 +225,7 @@ document.write(`
   
 
   
-    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -252,38 +251,38 @@ document.write(`
           
           
             <div class="navbar-item">
-<nav class="navbar-nav">
+<nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../installation.html">
     Installation
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item current active">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../examples.html">
     Examples
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../aboutus.html">
     About
   </a>
 </li>
 
 
-<li class="nav-item pst-header-nav-item">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../pyoti.html">
     pyoti package
   </a>
@@ -303,10 +302,10 @@ document.write(`
 
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
-    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script></div>
@@ -392,18 +391,18 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="core-Tutorial-01:-Core-module-utilities">
-<h1><code class="docutils literal notranslate"><span class="pre">core</span></code> Tutorial 01: Core module utilities<a class="headerlink" href="#core-Tutorial-01:-Core-module-utilities" title="Permalink to this heading">#</a></h1>
+<h1><code class="docutils literal notranslate"><span class="pre">core</span></code> Tutorial 01: Core module utilities<a class="headerlink" href="#core-Tutorial-01:-Core-module-utilities" title="Link to this heading">#</a></h1>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Author:
     Mauricio Aristizabal Cano
         University of Texas at San Antonio
         Universidad EAFIT
 
 Date of creation:  Jun 19 2024
-Last modification: Jun 19 2024
+Last modification: Aug 12 2024
 </pre></div>
 </div>
 <section id="Introduction">
-<h2>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#Introduction" title="Link to this heading">#</a></h2>
 <p>This document showcases and describes some of the capabilities of the core module in the <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> library.</p>
 <p>The reasoning behind the core module is to provide a unique module that contains the core functionality and classes that that are common to the different implementations of the OTI numbers (sparse, dense, etc), centralizing some of the calculations. Some of the capabilities are:</p>
 <ul class="simple">
@@ -425,7 +424,7 @@ Last modification: Jun 19 2024
 </div>
 </section>
 <section id="Basics:-inquiring-library-capabilities.">
-<h2>Basics: inquiring library capabilities.<a class="headerlink" href="#Basics:-inquiring-library-capabilities." title="Permalink to this heading">#</a></h2>
+<h2>Basics: inquiring library capabilities.<a class="headerlink" href="#Basics:-inquiring-library-capabilities." title="Link to this heading">#</a></h2>
 <p>An important information is to know what is the maximum number of bases and maximum truncation order supported by the precomputed data. This information is accessed via the function <code class="docutils literal notranslate"><span class="pre">print_capabilities()</span></code>. This function returns a string with the maximum number of basis that can be operated for a given order.</p>
 <p>The default version of the library can compute derivatives of up-to 150th order, which are limited as follows:</p>
 <div class="nbinput docutils container">
@@ -615,7 +614,7 @@ Last modification: Jun 19 2024
 </div>
 </section>
 <section id="Getting-number-of-imaginary-directions.">
-<h2>Getting number of imaginary directions.<a class="headerlink" href="#Getting-number-of-imaginary-directions." title="Permalink to this heading">#</a></h2>
+<h2>Getting number of imaginary directions.<a class="headerlink" href="#Getting-number-of-imaginary-directions." title="Link to this heading">#</a></h2>
 <p>A fully dense OTI number with truncation order <span class="math notranslate nohighlight">\(n\)</span> and a number of basis <span class="math notranslate nohighlight">\(m\)</span> will have a total of <span class="math notranslate nohighlight">\(n_{\mbox{total}}\)</span> imaginary directions (including the real direction). This number is given by:</p>
 <div class="math notranslate nohighlight">
 \[n_{\mbox{total}} = {n+m\choose m} = \frac{(n+m)!}{n!m!}\]</div>
@@ -697,11 +696,11 @@ n_1 = 2, n_2 = 3, n_3 = 4
 </div>
 </section>
 <section id="Direction-helper">
-<h2>Direction helper<a class="headerlink" href="#Direction-helper" title="Permalink to this heading">#</a></h2>
+<h2>Direction helper<a class="headerlink" href="#Direction-helper" title="Link to this heading">#</a></h2>
 <p>The direction helper is an object of class dHelp, that loads and manipulates the precomputed data to speedup calculations. This object loads a particular set of precomputed data helper for each order of imaignary directions. Therefore, if the maximum truncation order is 150, the number of interal helpers in dHelp will be 150.</p>
 <p>Here are described some uses of the direction helper.</p>
 <section id="Getting-the-direction-helper">
-<h3>Getting the direction helper<a class="headerlink" href="#Getting-the-direction-helper" title="Permalink to this heading">#</a></h3>
+<h3>Getting the direction helper<a class="headerlink" href="#Getting-the-direction-helper" title="Link to this heading">#</a></h3>
 <p>Use the function <code class="docutils literal notranslate"><span class="pre">get_dHelp()</span></code> to get the direction helper object.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -756,18 +755,13 @@ Helper 3:
 </pre></div></div>
 </div>
 </section>
-<section id="Extracting-the-full-directions-given-a-index-order-pair:">
-<h3>Extracting the full directions given a index-order pair:<a class="headerlink" href="#Extracting-the-full-directions-given-a-index-order-pair:" title="Permalink to this heading">#</a></h3>
+<section id="Extracting-the-full-directions-given-an-index-order-pair:">
+<h3>Extracting the full directions given an index-order pair:<a class="headerlink" href="#Extracting-the-full-directions-given-an-index-order-pair:" title="Link to this heading">#</a></h3>
 <p>The full direction of a “index,order” pair can be obtained from the precomputed data. For this, give the index, order pair and the direction helper will return the corresponding</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
-<tr class="row-odd"><th class="head"><p>Order
-<span class="math notranslate nohighlight">\(\d
-ownarrow\)</span>
-/ Index
-:
-math:<cite>ri
-ghtarrow</cite></p></th>
+<tr class="row-odd"><th class="head"><p>Index
+<span class="math notranslate nohighlight">\(\rightarrow\)</span></p></th>
 <th class="head"><p><span class="math notranslate nohighlight">\(0\)</span></p></th>
 <th class="head"><p><span class="math notranslate nohighlight">\(1\)</span></p></th>
 <th class="head"><p><span class="math notranslate nohighlight">\(2\)</span></p></th>
@@ -778,13 +772,11 @@ ghtarrow</cite></p></th>
 <th class="head"><p><span class="math notranslate nohighlight">\(7\)</span></p></th>
 <th class="head"><p><span class="math notranslate nohighlight">\(8\)</span></p></th>
 <th class="head"><p><span class="math notranslate nohighlight">\(9\)</span></p></th>
-<th class="head"><p>:mat
-h:<cite>c
-dots</cite></p></th>
+<th class="head"><p>…</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(1\)</span></p></td>
+<tr class="row-even"><td><p>Order <span class="math notranslate nohighlight">\(1\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{3}\)</span></p></td>
@@ -795,13 +787,10 @@ dots</cite></p></th>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{8}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{9}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{10}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
+<td><p>…</p></td>
 </tr>
-<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(2\)</span></p></td>
-<td><p>:
-math:<cite>epsilon_{1}^{2}</cite></p></td>
+<tr class="row-odd"><td><p>Order <span class="math notranslate nohighlight">\(2\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{3}\)</span></p></td>
@@ -811,13 +800,10 @@ math:<cite>epsilon_{1}^{2}</cite></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{2}\epsilon_{4}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{3}\epsilon_{4}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{4}^{2}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
+<td><p>…</p></td>
 </tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(3\)</span></p></td>
-<td><p>:
-math:<cite>epsilon_{1}^{3}</cite></p></td>
+<tr class="row-even"><td><p>Order <span class="math notranslate nohighlight">\(3\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{3}\)</span></p></td>
@@ -827,13 +813,10 @@ math:<cite>epsilon_{1}^{3}</cite></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{3}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{2}\epsilon_{3}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{3}^{3}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
+<td><p>…</p></td>
 </tr>
-<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(4\)</span></p></td>
-<td><p>:
-math:<cite>epsilon_{1}^{4}</cite></p></td>
+<tr class="row-odd"><td><p>Order <span class="math notranslate nohighlight">\(4\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{3}\)</span></p></td>
@@ -843,13 +826,10 @@ math:<cite>epsilon_{1}^{4}</cite></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{2}\epsilon_{3}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{3}\epsilon_{3}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{3}^{2}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
+<td><p>…</p></td>
 </tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(5\)</span></p></td>
-<td><p>:
-math:<cite>epsilon_{1}^{5}</cite></p></td>
+<tr class="row-even"><td><p>Order <span class="math notranslate nohighlight">\(5\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{3}\)</span></p></td>
@@ -859,13 +839,10 @@ math:<cite>epsilon_{1}^{5}</cite></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}\epsilon_{3}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{2}\epsilon_{3}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{3}\epsilon_{3}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
+<td><p>…</p></td>
 </tr>
-<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(6\)</span></p></td>
-<td><p>:
-math:<cite>epsilon_{1}^{6}</cite></p></td>
+<tr class="row-odd"><td><p>Order <span class="math notranslate nohighlight">\(6\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{3}\)</span></p></td>
@@ -875,13 +852,10 @@ math:<cite>epsilon_{1}^{6}</cite></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{3}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}\epsilon_{3}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{2}\epsilon_{3}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
+<td><p>…</p></td>
 </tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(7\)</span></p></td>
-<td><p>:
-math:<cite>epsilon_{1}^{7}</cite></p></td>
+<tr class="row-even"><td><p>Order <span class="math notranslate nohighlight">\(7\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{7}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}^{3}\)</span></p></td>
@@ -891,13 +865,10 @@ math:<cite>epsilon_{1}^{7}</cite></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{7}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{3}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}\epsilon_{3}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
+<td><p>…</p></td>
 </tr>
-<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(8\)</span></p></td>
-<td><p>:
-math:<cite>epsilon_{1}^{8}</cite></p></td>
+<tr class="row-odd"><td><p>Order <span class="math notranslate nohighlight">\(8\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{8}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{7}\epsilon_{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{2}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}^{3}\)</span></p></td>
@@ -907,13 +878,10 @@ math:<cite>epsilon_{1}^{8}</cite></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{7}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{8}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{7}\epsilon_{3}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
+<td><p>…</p></td>
 </tr>
-<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(9\)</span></p></td>
-<td><p>:
-math:<cite>epsilon_{1}^{9}</cite></p></td>
+<tr class="row-even"><td><p>Order <span class="math notranslate nohighlight">\(9\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{9}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{8}\epsilon_{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{7}\epsilon_{2}^{2}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{2}^{3}\)</span></p></td>
@@ -923,26 +891,7 @@ math:<cite>epsilon_{1}^{9}</cite></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{7}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{8}\)</span></p></td>
 <td><p><span class="math notranslate nohighlight">\(\epsilon_{2}^{9}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
-</tr>
-<tr class="row-odd"><td><p>:
-math:<cite>10</cite></p></td>
-<td><p>:m
-ath:<cite>epsilon_{1}^{10}</cite></p></td>
-<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{9}\epsilon_{2}\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{8}\epsilon_{2}^{2}\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{7}\epsilon_{2}^{3}\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{6}\epsilon_{2}^{4}\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{5}\epsilon_{2}^{5}\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{4}\epsilon_{2}^{6}\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{7}\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}^{8}\)</span></p></td>
-<td><p><span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}^{9}\)</span></p></td>
-<td><p>:mat
-h:<cite>c
-dots</cite></p></td>
+<td><p>…</p></td>
 </tr>
 </tbody>
 </table>
@@ -1006,10 +955,10 @@ Bases [1 2 3], exponents [1 3 1]
 </section>
 </section>
 <section id="Converting-imaginary-direction-notations">
-<h2>Converting imaginary direction notations<a class="headerlink" href="#Converting-imaginary-direction-notations" title="Permalink to this heading">#</a></h2>
+<h2>Converting imaginary direction notations<a class="headerlink" href="#Converting-imaginary-direction-notations" title="Link to this heading">#</a></h2>
 <p>The direction helper provides an easy way to converting from index-order pairs to human readable compact and full direction expressions. However, the inverse operation is not trivial.</p>
 <section id="Converting-from-index-order-to-human-readable-dirArray">
-<h3>Converting from index-order to human readable dirArray<a class="headerlink" href="#Converting-from-index-order-to-human-readable-dirArray" title="Permalink to this heading">#</a></h3>
+<h3>Converting from index-order to human readable dirArray<a class="headerlink" href="#Converting-from-index-order-to-human-readable-dirArray" title="Link to this heading">#</a></h3>
 <p>Use the direction helper’s <code class="docutils literal notranslate"><span class="pre">get_compact_fulldir(indx,</span> <span class="pre">order)</span></code> or <code class="docutils literal notranslate"><span class="pre">get_fulldir(indx,</span> <span class="pre">order)</span></code> methods:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
@@ -1032,7 +981,7 @@ Bases [1 2 3], exponents [1 3 1]
 </div>
 </section>
 <section id="Converting-from-human-readable-dirArray-to-index-order">
-<h3>Converting from human readable dirArray to index-order<a class="headerlink" href="#Converting-from-human-readable-dirArray-to-index-order" title="Permalink to this heading">#</a></h3>
+<h3>Converting from human readable dirArray to index-order<a class="headerlink" href="#Converting-from-human-readable-dirArray-to-index-order" title="Link to this heading">#</a></h3>
 <p>Use the function <code class="docutils literal notranslate"><span class="pre">imdir(dirArray)</span></code> in the core module (this is not a method in the direction helper). This function uses the <code class="docutils literal notranslate"><span class="pre">dirArray</span></code> input and returns a 2-element list with the corresponding index-order pair of this direction.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
@@ -1054,12 +1003,12 @@ Bases [1 2 3], exponents [1 3 1]
 </section>
 </section>
 <section id="Operating-Imaginary-directions">
-<h2>Operating Imaginary directions<a class="headerlink" href="#Operating-Imaginary-directions" title="Permalink to this heading">#</a></h2>
+<h2>Operating Imaginary directions<a class="headerlink" href="#Operating-Imaginary-directions" title="Link to this heading">#</a></h2>
 <p>Imagianry directions can be multiplied and divided. Here are some functions in the core pyoti module that can provide this functionality.</p>
 <section id="Multiplying-imaginary-directions">
-<h3>Multiplying imaginary directions<a class="headerlink" href="#Multiplying-imaginary-directions" title="Permalink to this heading">#</a></h3>
+<h3>Multiplying imaginary directions<a class="headerlink" href="#Multiplying-imaginary-directions" title="Link to this heading">#</a></h3>
 <p>Imaginary directions can be multiplied using the direction helper and the method <code class="docutils literal notranslate"><span class="pre">mult_dir(idx1,ord1,idx2,ord2)</span></code>. The first two inputs corrspond to the index order pairs of the first imatginary direction, and the last two inputs correspond to the second imaginary direction. The result is the index-order pair of the resulting imaginary direction.</p>
-<p>For example multiplying <span class="math notranslate nohighlight">\(\epsilon_{1}^{3}  \times \left( \epsilon_{2}^2\epsilon_{3}\right)\)</span> is $ (0,3) <span class="math">\times `(6,3) $ is the direction :math:</span>epsilon_{1}^{3}epsilon_{2}^{2}epsilon_{3}` which corresponds to the <span class="math notranslate nohighlight">\((9,6)\)</span> direction.</p>
+<p>For example multiplying <span class="math notranslate nohighlight">\(\epsilon_{1}^{3}  \times \left( \epsilon_{2}^2\epsilon_{3}\right)\)</span> is <span class="math notranslate nohighlight">\((0,3) \times (6,3)\)</span> is the direction <span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{2}\epsilon_{3}\)</span> which corresponds to the <span class="math notranslate nohighlight">\((9,6)\)</span> direction.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
@@ -1068,7 +1017,7 @@ Bases [1 2 3], exponents [1 3 1]
 
 <span class="n">ridx</span><span class="p">,</span><span class="n">rord</span> <span class="o">=</span> <span class="n">dh</span><span class="o">.</span><span class="n">mult_dir</span><span class="p">(</span> <span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span><span class="mi">3</span> <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result index: </span><span class="si">{</span><span class="n">ridx</span><span class="si">}</span><span class="s1"> order </span><span class="si">{</span><span class="n">rord</span><span class="si">}</span><span class="s1"> --&gt;  </span><span class="si">{</span><span class="n">dh</span><span class="o">.</span><span class="n">get_compact_fulldir</span><span class="p">(</span><span class="n">ridx</span><span class="p">,</span> <span class="n">rord</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Result index: </span><span class="si">{</span><span class="n">ridx</span><span class="si">}</span><span class="s1"> order </span><span class="si">{</span><span class="n">rord</span><span class="si">}</span><span class="s1"> --&gt;  </span><span class="si">{</span><span class="n">dh</span><span class="o">.</span><span class="n">get_compact_fulldir</span><span class="p">(</span><span class="n">ridx</span><span class="p">,</span><span class="w"> </span><span class="n">rord</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1082,7 +1031,7 @@ Result index: 9 order 6 --&gt;  [[1, 3], [2, 2], 3]
 </div>
 </section>
 <section id="Dividing-imaginary-directions">
-<h3>Dividing imaginary directions<a class="headerlink" href="#Dividing-imaginary-directions" title="Permalink to this heading">#</a></h3>
+<h3>Dividing imaginary directions<a class="headerlink" href="#Dividing-imaginary-directions" title="Link to this heading">#</a></h3>
 <p>At first glance, the user might think that this is a useless operation. However, division of two imaginary directions is necessary to determine whether a direction is multiple of another direction.</p>
 <p>Let’s consider the following example: Divide the direction <span class="math notranslate nohighlight">\(\epsilon_{1}^{3}\epsilon_{2}^{2}\epsilon_{3}\)</span> (9,6) by <span class="math notranslate nohighlight">\(\epsilon_{1}^{2}\epsilon_{2}\)</span> (1,3). The result is <span class="math notranslate nohighlight">\(\epsilon_{1}\epsilon_{2}\epsilon_{3}\)</span>.</p>
 <p>This operation can be performed using the functions <code class="docutils literal notranslate"><span class="pre">div_imdir_idxord(num_idx,num_ord,</span> <span class="pre">den_idx,den_ord)</span></code> where <code class="docutils literal notranslate"><span class="pre">num_idx,num_ord</span></code> are the index-order pairs of the numerator direction, and <code class="docutils literal notranslate"><span class="pre">den_idx,den_ord</span></code> are index-order pair of the denominator direction. The result is a 2-element list with the index-order pair of the resulting direction.</p>
@@ -1194,7 +1143,7 @@ Result index: 9 order 6 --&gt;  [[1, 3], [2, 2], 3]
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Getting-number-of-imaginary-directions.">Getting number of imaginary directions.</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Direction-helper">Direction helper</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Getting-the-direction-helper">Getting the direction helper</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Extracting-the-full-directions-given-a-index-order-pair:">Extracting the full directions given a index-order pair:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Extracting-the-full-directions-given-an-index-order-pair:">Extracting the full directions given an index-order pair:</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Converting-imaginary-direction-notations">Converting imaginary direction notations</a><ul class="nav section-nav flex-column">
@@ -1232,8 +1181,8 @@ Result index: 9 order 6 --&gt;  [[1, 3], [2, 2], 3]
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1253,7 +1202,7 @@ Result index: 9 order 6 --&gt;  [[1, 3], [2, 2], 3]
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.0.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
     <br/>
   </p>
 </div>
@@ -1266,7 +1215,7 @@ Result index: 9 order 6 --&gt;  [[1, 3], [2, 2], 3]
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
 </p></div>
       
     </div>

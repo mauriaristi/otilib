@@ -114,15 +114,19 @@ if (USE_OPENMP)
   message("OPENMP compilation - Enabled")
 
   find_package(OpenMP)
-  set(CYTHON_OPENMP_COMPILE_FLAG "True")
+  
 
   if (OpenMP_C_FOUND)
-  
-    set(LINK_TARGET_OMP OpenMP::OpenMP_C)
+    
+    set(CYTHON_OPENMP_COMPILE_FLAG "True")
+    set(LINK_TARGET_OMP_C OpenMP::OpenMP_C)
+    set(LINK_TARGET_OMP_Fortran OpenMP::OpenMP_Fortran)
 
   else(OpenMP_C_FOUND)
 
-    set(LINK_TARGET_OMP "")
+    set(CYTHON_OPENMP_COMPILE_FLAG "False")
+    set(LINK_TARGET_OMP_C "")
+    set(LINK_TARGET_OMP_Fortran "")
 
   endif(OpenMP_C_FOUND)
 

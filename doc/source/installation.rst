@@ -24,7 +24,7 @@ Minimum requirements are the following:
     This library has been tested under the following operating systems:
 
     - Unix platforms.
-    - macos
+    - macos (see macos specific instructions below.)
     - Windows (only working under WSL)
 
     A pure windows installation is currently not supported.
@@ -77,13 +77,31 @@ After this, and still within your environment, run the following to add pyoti to
 .. code-block:: bash
 
     python -m ipykernel install --user --name=pyoti
+    
 
+MacOS additional instructions:
+------------------------------
 
+When you use MacOS, particularly Apple Silicon Macs, it is recommended to have the following steps:
+
+Install libomp using brew:
+
+.. code-block:: bash
+
+    brew install libomp
+
+In addition, install GNU gfortran from conda-forge:
+
+.. code-block:: bash
+
+    conda install -c conda-forge gfortran
+
+This will add gfortran with support for the architecture of your processor, which is important.
 
 Compiling the library
 ---------------------
 
-Finally, to build the library with your default compilers, run the following commands:
+In order to build the library with your default compilers, run the following commands:
 
 .. code-block:: bash
 
@@ -121,7 +139,15 @@ If you want to compile with a different compiler, e.g. the Intel OneApi compiler
 
 This will pre-compute the data required for standard operation of OTI library.
 
-The library is currently in a developmental stage. Because of that, you need to add the library to the conda path in order to import the library in your projects. For this, please run the following command. (Got instructions from `this link <https://stackoverflow.com/questions/49474575/how-to-install-my-own-python-module-package-via-conda-and-watch-its-changes>`_ to add the build directory to the path):
+Additional CMake compilation options include disabling ``OpenMP`` compilation. For that, use a command line as follows:
+
+.. code-block:: bash
+
+    cmake -D USE_OPENMP=OFF ..
+
+
+
+The library is currently in an active development stage. Therefore, you need to add the library to the conda path in order to import the library in your projects. For this, please run the following command. (Got instructions from `this link <https://stackoverflow.com/questions/49474575/how-to-install-my-own-python-module-package-via-conda-and-watch-its-changes>`_ to add the build directory to the path):
 
 .. code-block:: bash
 

@@ -67,11 +67,11 @@ add_library (real_utils STATIC
 )
 
 target_link_libraries(master_parameters 
-    OpenMP::OpenMP_Fortran
+    ${LINK_TARGET_OMP_Fortran}
 )
 
 target_link_libraries(real_utils master_parameters 
-    OpenMP::OpenMP_Fortran
+    ${LINK_TARGET_OMP_Fortran}
 )
 
 
@@ -94,11 +94,11 @@ add_library (oticwrap STATIC
 )
 
 target_link_libraries(otistatic 
-    OpenMP::OpenMP_Fortran)
+    ${LINK_TARGET_OMP_Fortran})
 
 target_link_libraries(oticwrap 
     otistatic
-    OpenMP::OpenMP_Fortran)
+    ${LINK_TARGET_OMP_Fortran})
 
 
 file(GLOB array_interface_f90 
@@ -113,7 +113,7 @@ add_library (otiarrinter STATIC
 target_link_libraries(otiarrinter
     oticwrap 
     otistatic
-    OpenMP::OpenMP_Fortran)
+    ${LINK_TARGET_OMP_Fortran})
 
 
 if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
@@ -178,7 +178,7 @@ endif(APPLE)
 # Link to math libraries
 target_link_libraries(oti 
     m  oticwrap otistatic ${ISOCBIND_Fortran_LFLAG}
-    OpenMP::OpenMP_C)
+    ${LINK_TARGET_OMP_C})
 
 # -------------------------------------------------------------------
 # --------------------------- BUILD OTI -----------------------------

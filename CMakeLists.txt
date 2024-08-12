@@ -111,24 +111,30 @@ endif(APPLE)
 
 if (USE_OPENMP)
 
-  message("OPENMP compilation - Enabled")
+  message("OPENMP compilation - Enabled. Checking for OpenMP.")
 
   find_package(OpenMP)
   
 
   if (OpenMP_C_FOUND)
-    
+    message("OpenMP-C Found! Enabling for C compilation.")
     set(CYTHON_OPENMP_COMPILE_FLAG "True")
     set(LINK_TARGET_OMP_C OpenMP::OpenMP_C)
-    set(LINK_TARGET_OMP_Fortran OpenMP::OpenMP_Fortran)
+    
 
   else(OpenMP_C_FOUND)
 
     set(CYTHON_OPENMP_COMPILE_FLAG "False")
     set(LINK_TARGET_OMP_C "")
-    set(LINK_TARGET_OMP_Fortran "")
-
+    
   endif(OpenMP_C_FOUND)
+
+  if (OpenMP_Fortran_FOUND)
+    message("OpenMP-Fortran Found! Enabling for Fortran compilation.")
+    set(LINK_TARGET_OMP_Fortran OpenMP::OpenMP_Fortran)
+  else()
+    set(LINK_TARGET_OMP_Fortran "")
+  endif()
 
 else(USE_OPENMP)
 

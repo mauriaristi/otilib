@@ -389,24 +389,24 @@ void arrso_mul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     // }
 
     // Loop for every element and add real to the oti number.
-#ifdef _OPENMP
-    #pragma omp parallel
-#endif
+// #ifdef _OPENMP
+//     #pragma omp parallel
+// #endif
     {
     uint64_t i;
     
-#ifdef _OPENMP
-    int id = omp_get_thread_num();
-    int nThrds = omp_get_num_threads();
-    int istart = id*arr1->size/nThrds;
-    int iend = (id+1)*arr1->size/nThrds;
-    if (iend>arr1->size) iend=arr1->size;
-#else
+// #ifdef _OPENMP
+//     int id = omp_get_thread_num();
+//     int nThrds = omp_get_num_threads();
+//     int istart = id*arr1->size/nThrds;
+//     int iend = (id+1)*arr1->size/nThrds;
+//     if (iend>arr1->size) iend=arr1->size;
+// #else
     int id = 0;
     int nThrds = 1;
     int istart = 0;
     int iend = arr1->size;
-#endif
+// #endif
     
     
     for( i = istart; i<iend; i++){

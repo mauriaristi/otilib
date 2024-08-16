@@ -27,6 +27,21 @@ void arrso_neg_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+// 1.2 Abs.
+// ****************************************************************************************************
+void arrso_abs_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+    // Check first dimensions.
+    arrso_dimCheck_OO_elementwise(arr,arr,res);
+
+    // The loop for every element in arr.
+    for (i = 0; i<arr->size; i++){
+        soti_abs_to( &arr->p_data[i], &res->p_data[i], dhl);
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -375,7 +390,7 @@ void arrso_trunc_sub_OO_to( ord_t ord, arrso_t* arr1, arrso_t* arr2, arrso_t* re
 // ****************************************************************************************************
 void arrso_mul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     // Perform O * O
-    uint64_t i;
+    
 
     // Check inputs:
     arrso_dimCheck_OO_elementwise(arr1,arr2,res);
@@ -393,22 +408,21 @@ void arrso_mul_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
 //     #pragma omp parallel
 // #endif
     {
-    uint64_t i;
     
 // #ifdef _OPENMP
 //     int id = omp_get_thread_num();
 //     int nThrds = omp_get_num_threads();
-//     int istart = id*arr1->size/nThrds;
-//     int iend = (id+1)*arr1->size/nThrds;
-//     if (iend>arr1->size) iend=arr1->size;
 // #else
     int id = 0;
     int nThrds = 1;
-    int istart = 0;
-    int iend = arr1->size;
+    // int istart = 0;
+    // int iend = arr1->size;
 // #endif
+    int istart = id*arr1->size/nThrds;
+    int iend = (id+1)*arr1->size/nThrds;
+    if (iend>arr1->size) iend=arr1->size;    
     
-    
+    uint64_t i;
     for( i = istart; i<iend; i++){
         soti_mul_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i], dhl);
     }

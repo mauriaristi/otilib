@@ -32,10 +32,9 @@ void soti_get_active_bases(sotinum_t* num, imdir_t* list, dhelpl_t dhl){
 // ****************************************************************************************************
 bases_t soti_get_max_basis(sotinum_t* num, dhelpl_t dhl){
     
-    ord_t ordi, ordj;
+    ord_t ordi;
     bases_t* basisDir;
     bases_t max_basis = 0;
-    uint64_t i;
 
     for( ordi = 0; ordi < num->act_order; ordi++){
 

@@ -15,8 +15,23 @@
 @param[in]    dhl    Direction helper list object.
 ******************************************************************************************************/ 
 arrso_t arrso_neg(arrso_t* arr, dhelpl_t dhl);
-
 void arrso_neg_to(arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Absolute value operation for array of sparse oti numbers object type. The following operations 
+       are supported:
+
+       res = abs( rhs )
+
+- OO:  -  Array of SOTIs
+
+@param[in]    rhs    Reft hand side element of the operation.
+@param[inout] res    Arrso object with the result of the operation.
+@param[in]    dhl    Direction helper list object.
+******************************************************************************************************/ 
+arrso_t arrso_abs(arrso_t* arr, dhelpl_t dhl);
+void arrso_abs_to(arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

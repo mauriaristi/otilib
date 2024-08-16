@@ -18,6 +18,19 @@ fearrso_t fearrso_neg(    fearrso_t* arr,                 dhelpl_t dhl);
 void      fearrso_neg_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Matrix abs.
+
+RES = abs(ARR)
+
+@param[in] arr Matrix to be negated
+@param[in] res Result
+@param[in] dhl Direction helper list.
+******************************************************************************************************/
+fearrso_t fearrso_abs(    fearrso_t* arr,                 dhelpl_t dhl);
+void      fearrso_abs_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
+
 
 
 

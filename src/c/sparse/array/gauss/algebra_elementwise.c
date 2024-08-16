@@ -47,7 +47,39 @@ void fearrso_neg_to(fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
 
 }
 // ----------------------------------------------------------------------------------------------------
+// 1.2. Abs.
 
+// ****************************************************************************************************
+fearrso_t fearrso_abs(fearrso_t* arr,  dhelpl_t dhl){
+
+    fearrso_t res;
+
+    res = fearrso_createEmpty_bases(arr->nrows, arr->ncols, arr->nip, 0, 0, dhl);
+
+    fearrso_abs_to( arr, &res, dhl);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void fearrso_abs_to(fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
+
+    uint64_t i;
+
+    // Check first dimensions.
+    fearrso_dimCheck_FF_elementwise(arr, arr, res);
+
+    // The loop for every element in arr.
+    for (i = 0; i<res->nip; i++){
+
+        arrso_abs_to( &arr->p_data[i], &res->p_data[i], dhl);
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 
 

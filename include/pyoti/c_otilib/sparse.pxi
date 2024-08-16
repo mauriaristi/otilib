@@ -97,6 +97,8 @@ cdef extern from "oti/oti.h" nogil:
 
   arrso_t arrso_neg(arrso_t* arr, dhelpl_t dhl);
   void arrso_neg_to(arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+  arrso_t arrso_abs(arrso_t* arr, dhelpl_t dhl);
+  void arrso_abs_to(arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_sum_OO(arrso_t*   lhs, arrso_t* rhs, dhelpl_t dhl);
   arrso_t arrso_sum_RO(darr_t*    lhs, arrso_t* rhs, dhelpl_t dhl);
   arrso_t arrso_sum_oO(sotinum_t* lhs, arrso_t* rhs, dhelpl_t dhl);
@@ -322,6 +324,8 @@ cdef extern from "oti/oti.h" nogil:
 
   fearrso_t fearrso_neg(    fearrso_t* arr,                 dhelpl_t dhl);
   void      fearrso_neg_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  fearrso_t fearrso_abs(    fearrso_t* arr,                 dhelpl_t dhl);
+  void      fearrso_abs_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
   fearrso_t fearrso_sum_FF(   fearrso_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
   void      fearrso_sum_FF_to(fearrso_t* lhs, fearrso_t* rhs, fearrso_t* res, dhelpl_t dhl);
   fearrso_t fearrso_sum_fF(    fesoti_t* lhs, fearrso_t* rhs,                 dhelpl_t dhl);
@@ -739,6 +743,8 @@ cdef extern from "oti/oti.h" nogil:
 
   fesoti_t fesoti_neg(   fesoti_t* num,                dhelpl_t dhl);
   void     fesoti_neg_to(fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+  fesoti_t fesoti_abs(   fesoti_t* num,                dhelpl_t dhl);
+  void     fesoti_abs_to(fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
   fesoti_t fesoti_sum_ff(   fesoti_t* lhs, fesoti_t* rhs,                dhelpl_t dhl);
   void     fesoti_sum_ff_to(fesoti_t* lhs, fesoti_t* rhs, fesoti_t* res, dhelpl_t dhl);
   fesoti_t fesoti_sum_of(   sotinum_t* lhs, fesoti_t* rhs,                dhelpl_t dhl);

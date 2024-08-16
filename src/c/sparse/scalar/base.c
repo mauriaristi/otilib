@@ -792,13 +792,7 @@ sotinum_t soti_truncate_order( ord_t order, sotinum_t* num, dhelpl_t dhl){
 // ****************************************************************************************************
 void soti_truncate_order_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl){
     
-    int  success;
-    ord_t   resord, ordi;
-    imdir_t residx;
-    ndir_t ndir_ordi, diri;
-    sotinum_t tmp;
-    // bases_t* imdir_bases;
-    
+    ord_t   resord;
     
     if (order == 0){
         
@@ -1157,7 +1151,7 @@ void* soti_read_from_mem_to(void* mem, sotinum_t* dst, dhelpl_t dhl){
 // ****************************************************************************************************
 void soti_save(char* filename, sotinum_t* num, dhelpl_t dhl){
     
-    uint64_t i;
+    
     uint64_t mem_size=0;
     void *data = NULL;
     void *data_write;

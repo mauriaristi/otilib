@@ -73,6 +73,8 @@ cdef extern from "oti/oti.h" nogil:
 
   darr_t darr_neg(    darr_t* arr              );
   void   darr_neg_to( darr_t* arr, darr_t* res );
+  darr_t darr_abs(    darr_t* arr              );
+  void   darr_abs_to( darr_t* arr, darr_t* res );
   darr_t darr_div_RR(    darr_t* lhs, darr_t* rhs              );
   darr_t darr_div_Rr(    darr_t* lhs, coeff_t rhs              );
   darr_t darr_div_rR(    coeff_t lhs, darr_t* rhs              );

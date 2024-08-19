@@ -1,0 +1,89 @@
+package:
+  name: pyoti
+  version: "1.0.0"
+
+source:
+  path: ..
+
+build:
+  number: 0
+  script: |
+    mkdir build
+    cd build
+    cmake ..
+    echo "checking SP_DIR"
+    echo $SP_DIR
+    make
+    make gendata
+    cp -r pyoti $PREFIX/lib/python$PY_VER/site-packages/pyoti
+    cp -r data $PREFIX/lib/python$PY_VER/site-packages/data
+  matrix:
+    - os: linux
+      arch: x86_64
+    - os: osx
+      arch: x86_64
+    - os: osx
+      arch: arm64
+
+requirements:
+  build:
+    - python=3.9.*
+    - numpy
+    - scipy
+    - pandas
+    - cython=0.29.*
+    - make
+    - cmake
+    - gfortran
+    - pip
+    - ipykernel
+    - conda-forge::pyvista
+    - conda-forge::gmsh
+    - conda-forge::python-gmsh
+    - conda-forge::vtk
+    - conda-forge::scikit-sparse
+    - conda-forge::scikit-umfpack
+
+  host:
+    - python=3.9.*
+    - numpy
+    - scipy
+    - pandas
+    - cython=0.29.*
+    - make
+    - cmake
+    - gfortran
+    - pip
+    - ipykernel
+    - conda-forge::pyvista
+    - conda-forge::gmsh
+    - conda-forge::python-gmsh
+    - conda-forge::vtk
+    - conda-forge::scikit-sparse
+    - conda-forge::scikit-umfpack
+
+  run:
+    - python=3.9.*
+    - numpy
+    - scipy
+    - pandas
+    - cython=0.29.*
+    - conda-forge::pyvista
+    - conda-forge::gmsh
+    - conda-forge::python-gmsh
+    - conda-forge::vtk
+    - conda-forge::scikit-sparse
+    - conda-forge::scikit-umfpack
+
+test:
+  imports:
+    - pyoti
+  commands:
+    - python -c "import pyoti"
+
+about:
+  home: imqcam/otilib
+
+channels:
+  - conda-forge
+  - defaults

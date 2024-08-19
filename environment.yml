@@ -8,6 +8,7 @@ dependencies:
   - numpy
   - scipy
   - cython=0.29.*
+  - pandas
   - make
   - cmake
   - pip

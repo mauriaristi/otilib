@@ -419,39 +419,44 @@ MODULE sotin1
    !==========================================================================================!
 
 
-   ! !==========================================================================================!
-   ! !> @brief Evaluate single-variable TSE at given OTI point.
-   ! !! 
-   ! !! TSE(val)
-   ! !! 
-   ! !! @param[in] oti_tse: (sotin1_t) Value to evaluate the function (OTI).
-   ! !! @param[in] val: (sotin1_t) Value to evaluate the function (OTI).
-   ! !******************************************************************************************!
-   ! FUNCTION sotin1_tse_eval_o_s(val) RESULT (res)
-   !    ! --------------------------------------------------------------------------------------!
-   !    IMPLICIT NONE
-   !    ! --------------------------------------------------------------------------------------!
-   !    TYPE(sotin1_t), INTENT(IN) :: self
-   !    TYPE(sotin1_t), INTENT(IN) :: val
-   !    TYPE(sotin1_t)             :: res      
-   !    ! --------------------------------------------------------------------------------------!
-   !    INTEGER(nnz_t) :: i_val, i_ord
-   !    ! --------------------------------------------------------------------------------------!
+   !==========================================================================================!
+   !> @brief Evaluate OTI function (single-variable) at given OTI point.
+   !! 
+   !! 
+   !! 
+   !! @param[in] self: (sotin1_t) Value to evaluate the function (OTI).
+   !! @param[in] val: (sotin1_t) Value to evaluate the function (OTI).
+   !******************************************************************************************!
+   FUNCTION sotin1_feval_1var_o_s(self, val) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotin1_t), INTENT(IN) :: self
+      TYPE(sotin1_t), INTENT(IN) :: val
+      TYPE(sotin1_t)             :: res      
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(nnz_t) :: i_im, i_ord
+      ! --------------------------------------------------------------------------------------!
       
-   !    ! Considerations. This considers single variable evaluation.
-   !    !
-   !    ! 1. initialize with real value.
-   !    res  = self%r
+      ! Considerations. This considers single variable evaluation.
+      !
+      ! 1. initialize with the real value.
+      res  = self%r
 
-   !    DO i_ord = 1, self%act_ord
-   !       res
+      ! 2. Loop through orders
+      IF (self%act_ord>0)  THEN
+         
+         ! Assume the first imdir is the only one to be evaluated. Loop through imdirs
+         res%imCoeff(:val%m_active) = self.imCoeff(1) * val%imCoeff(:val%m_active)
+         res%imDir(:val%m_active)   = val%imDir(:val%m_active)
+         res%m_active               = val%m_active
 
-   !    END DO
+      END IF
 
 
 
-   ! END FUNCTION sotin1_tse_eval_o_s
-   ! !==========================================================================================!
+   END FUNCTION sotin1_feval_1var_o_s
+   !==========================================================================================!
 
    ! !==========================================================================================!
    ! !> @brief Evaluate single variable function at sotin1_t

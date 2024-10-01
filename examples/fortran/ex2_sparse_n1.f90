@@ -5,7 +5,7 @@ PROGRAM ex2_sparse_n1
 
     IMPLICIT NONE
 
-    TYPE(sotin1_t) :: x , y, z
+    TYPE(sotin1_t) :: x , y, z, f
 
     INTEGER i
 
@@ -29,5 +29,47 @@ PROGRAM ex2_sparse_n1
     CALL PPRINT(x,fmt='ES10.4')
     CALL PPRINT(y,fmt='ES10.4')
     CALL PPRINT(z,fmt='ES10.4')
+
+    x = 0.75d0 + eps(1) + 2.0d0 * eps(10)
+    f = FUNC1(x)
+
+
+    WRITE(*,*)  " "
+    WRITE(*,*)  " >> FUNCTION EVALUATION"
+    
+    CALL PPRINT(f,fmt='ES10.4')
+
+    ! Expected value of the derivative, vs derivative from OTI.
+    WRITE(*,*) dFUNC1_dx(x%r), f%imCoeff(1)
+
+    sotin1_feval_1var_o_s
+
+
+
+CONTAINS
+
+    FUNCTION FUNC1(x) RESULT (f)
+        
+        IMPLICIT NONE
+
+        TYPE(sotin1_t) :: x
+        TYPE(sotin1_t) :: f
+
+        ! x**5 + 4*x**2
+        f = x*x*x*x*x + 4.0d0 * x*x 
+
+    END FUNCTION
+
+    FUNCTION dFUNC1_dx(x) RESULT (df)
+        
+        IMPLICIT NONE
+
+        REAL(dp) :: x
+        REAL(dp) :: df
+
+        ! 5*x**4 + 8*x
+        df = 5.0d0 * x*x*x*x + 8.0d0 * x 
+
+    END FUNCTION
 
 END PROGRAM ex2_sparse_n1

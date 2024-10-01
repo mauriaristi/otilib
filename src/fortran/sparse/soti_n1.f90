@@ -418,6 +418,87 @@ MODULE sotin1
    END FUNCTION sotin1_mul_or_ss
    !==========================================================================================!
 
+
+   ! !==========================================================================================!
+   ! !> @brief Evaluate single-variable TSE at given OTI point.
+   ! !! 
+   ! !! TSE(val)
+   ! !! 
+   ! !! @param[in] oti_tse: (sotin1_t) Value to evaluate the function (OTI).
+   ! !! @param[in] val: (sotin1_t) Value to evaluate the function (OTI).
+   ! !******************************************************************************************!
+   ! FUNCTION sotin1_tse_eval_o_s(val) RESULT (res)
+   !    ! --------------------------------------------------------------------------------------!
+   !    IMPLICIT NONE
+   !    ! --------------------------------------------------------------------------------------!
+   !    TYPE(sotin1_t), INTENT(IN) :: self
+   !    TYPE(sotin1_t), INTENT(IN) :: val
+   !    TYPE(sotin1_t)             :: res      
+   !    ! --------------------------------------------------------------------------------------!
+   !    INTEGER(nnz_t) :: i_val, i_ord
+   !    ! --------------------------------------------------------------------------------------!
+      
+   !    ! Considerations. This considers single variable evaluation.
+   !    !
+   !    ! 1. initialize with real value.
+   !    res  = self%r
+
+   !    DO i_ord = 1, self%act_ord
+   !       res
+
+   !    END DO
+
+
+
+   ! END FUNCTION sotin1_tse_eval_o_s
+   ! !==========================================================================================!
+
+   ! !==========================================================================================!
+   ! !> @brief Evaluate single variable function at sotin1_t
+   ! !! 
+   ! !! f(val)
+   ! !! 
+   ! !! @param[in] val: (sotin1_t) Value to evaluate the function (OTI).
+   ! !! @param[in] rhs: (sotin1_t) right hand side operation.
+   ! !******************************************************************************************!
+   ! FUNCTION sotin1_feval_o_s(val,fevald) RESULT (res)
+   !    ! --------------------------------------------------------------------------------------!
+   !    IMPLICIT NONE
+   !    ! --------------------------------------------------------------------------------------!
+   !    TYPE(sotin1_t), INTENT(IN) :: val
+   !    TYPE(sotin1_t), INTENT(IN) :: fevald
+   !    TYPE(sotin1_t)             :: res      
+   !    ! --------------------------------------------------------------------------------------!
+   !    INTEGER(nnz_t) :: i_res, i_val
+   !    ! --------------------------------------------------------------------------------------!
+            
+   ! END FUNCTION sotin1_feval_o_s
+   ! !==========================================================================================!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
    !==========================================================================================!
    !> @brief This function only creates imaginary directions with integer parameters.
    !!        of actual order 1.

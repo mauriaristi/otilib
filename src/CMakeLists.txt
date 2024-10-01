@@ -80,6 +80,13 @@ file(GLOB static_f90
     fortran/static/real_utils.f90
     fortran/static/master_parameters.f90 
 )
+
+file(GLOB sparse_f
+    fortran/sparse/soti_n1.f90
+    fortran/core/real_utils.f90
+    fortran/core/master_parameters.f90 
+)
+
 file(GLOB cwrap_f90 
     fortran/static/cwrap*.f90
     )
@@ -88,12 +95,19 @@ add_library (otistatic STATIC
     ${static_f90}
 )
 
+add_library (otifsparse STATIC 
+    ${sparse_f}
+)
+
 
 add_library (oticwrap STATIC 
     ${cwrap_f90}
 )
 
 target_link_libraries(otistatic 
+    ${LINK_TARGET_OMP_Fortran})
+
+target_link_libraries(otifsparse 
     ${LINK_TARGET_OMP_Fortran})
 
 target_link_libraries(oticwrap 

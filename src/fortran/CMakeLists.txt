@@ -22,12 +22,17 @@ target_link_libraries(real_utils master_parameters OpenMP::OpenMP_Fortran)
 
 
 file(GLOB static_f90_srcs static/oti*.f90 static/cwrap*.f90)
+file(GLOB sparse_f90_srcs sparse/soti_n1.f90)
 
 add_library (otifort STATIC 
     ${static_f90_srcs}
+    ${sparse_f90_srcs}
 )
 
 target_link_libraries(otifort real_utils master_parameters OpenMP::OpenMP_Fortran)
+
+
+
 
 # add_library (otistatic c/core.c 
 #                     c/real.c

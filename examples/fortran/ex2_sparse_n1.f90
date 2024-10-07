@@ -42,7 +42,7 @@ PROGRAM ex2_sparse_n1
     ! Expected value of the derivative, vs derivative from OTI.
     WRITE(*,*) dFUNC1_dx(x%r), f%imCoeff(1)
 
-    sotin1_feval_1var_o_s
+    ! sotin1_feval_1var_o_s
 
 
 

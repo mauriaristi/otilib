@@ -9,26 +9,26 @@
 ! ============================================================================================!
 MODULE sotin1
    ! -----------------------------------------------------------------------------------------!
-   USE real_utils
-   USE master_parameters
+   ! USE real_utils
+   ! USE master_parameters
+   USE oti_core
    ! -----------------------------------------------------------------------------------------!
    IMPLICIT NONE
    ! -----------------------------------------------------------------------------------------!
    
    INTEGER, PARAMETER, PRIVATE :: m_max   = 100 ! up-to m_max imag. basis.
 
-   INTEGER, PARAMETER, PRIVATE :: ord_t   = 1  ! TODO This should go in a core Module.
-   INTEGER, PARAMETER, PRIVATE :: imdir_t = 8
-   INTEGER, PARAMETER, PRIVATE :: bases_t = 8
-   INTEGER, PARAMETER, PRIVATE :: nnz_t   = 8
+   ! INTEGER, PARAMETER, PRIVATE :: ord_t   = 1  ! TODO This should go in a core Module.
+   ! INTEGER, PARAMETER, PRIVATE :: imdir_t = 8
+   ! INTEGER, PARAMETER, PRIVATE :: bases_t = 8 ! TODO: Evaluate if this is better a 4 byte int.
 
    ! -----------------------------------------------------------------------------------------!
    TYPE sotin1_t
       REAL(dp)          :: r               !<- Real coefficient.
       REAL(dp)          :: imCoeff(m_max)  !<- Imag. coeffs.
       INTEGER(imdir_t)  :: imDir(m_max)    !<- Imag. dirs. (active, sorted). 
-      INTEGER(imdir_t)  :: m_active        !<- Number of active dirs.
-      INTEGER(ord_t)    :: act_ord         !<- Actual order. TODO: Should this be per-basis?
+      INTEGER(imdir_t)  :: m_active = 0    !<- Number of active dirs.
+      INTEGER(ord_t)    :: act_ord  = 0    !<- Actual order. TODO: Should this be per-basis?
    END TYPE sotin1_t
    ! -----------------------------------------------------------------------------------------!
    INTERFACE PPRINT
@@ -57,6 +57,10 @@ MODULE sotin1
       ! MODULE PROCEDURE sotin1_epsilon_2i    ! Create sotin1_t from two integers
       ! MODULE PROCEDURE sotin1_epsilon_imdir ! Create sotin1_t from imdir
       ! MODULE PROCEDURE sotin1_epsilon_list  ! Create sotin1_t from list representing IMDIR
+   END INTERFACE
+
+   INTERFACE FEVAL
+      MODULE PROCEDURE sotin1_feval_1var_o_s ! Evaluate in 
    END INTERFACE
    ! -----------------------------------------------------------------------------------------!
 
@@ -135,7 +139,7 @@ MODULE sotin1
       ! 
       ! Internal variables
       INTEGER(ord_t) :: i_ord
-      INTEGER(nnz_t) :: i_im, i
+      INTEGER(imdir_t) :: i_im, i
       ! --------------------------------------------------------------------------------------!
       
       ! Add two real numbers. This also initializes memory.
@@ -202,8 +206,8 @@ MODULE sotin1
       ! 
       ! Internal variables
       INTEGER(ord_t) :: i_ord
-      INTEGER(nnz_t) :: i_im, i_lhs, i_rhs, i_res
-      INTEGER(nnz_t) :: n_active
+      INTEGER(imdir_t) :: i_im, i_lhs, i_rhs, i_res
+      INTEGER(imdir_t) :: n_active
       ! --------------------------------------------------------------------------------------!
       
       IF ( (rhs%act_ord>0) .and. (lhs%act_ord>0) ) THEN
@@ -284,7 +288,7 @@ MODULE sotin1
       TYPE(sotin1_t), INTENT(IN) :: rhs
       TYPE(sotin1_t)             :: res
       INTEGER(ord_t) :: i_ord
-      INTEGER(nnz_t) :: i_im
+      INTEGER(imdir_t) :: i_im
 
       ! --------------------------------------------------------------------------------------!
       
@@ -325,7 +329,7 @@ MODULE sotin1
       TYPE(sotin1_t), INTENT(IN) :: rhs
       TYPE(sotin1_t)             :: res
       
-      INTEGER(nnz_t) :: i_res, i_rhs, i_lhs
+      INTEGER(imdir_t) :: i_res, i_rhs, i_lhs
 
       ! --------------------------------------------------------------------------------------!
       
@@ -409,7 +413,7 @@ MODULE sotin1
       REAL(dp), INTENT(IN)      :: rhs
       TYPE(sotin1_t)             :: res
       INTEGER(ord_t) ::i_ord
-      INTEGER(nnz_t) ::i_im
+      INTEGER(imdir_t) ::i_im
       ! --------------------------------------------------------------------------------------!
       
       ! multiply real - oti
@@ -435,7 +439,7 @@ MODULE sotin1
       TYPE(sotin1_t), INTENT(IN) :: val
       TYPE(sotin1_t)             :: res      
       ! --------------------------------------------------------------------------------------!
-      INTEGER(nnz_t) :: i_im, i_ord
+      INTEGER(imdir_t) :: i_im, i_ord
       ! --------------------------------------------------------------------------------------!
       
       ! Considerations. This considers single variable evaluation.
@@ -474,7 +478,7 @@ MODULE sotin1
    !    TYPE(sotin1_t), INTENT(IN) :: fevald
    !    TYPE(sotin1_t)             :: res      
    !    ! --------------------------------------------------------------------------------------!
-   !    INTEGER(nnz_t) :: i_res, i_val
+   !    INTEGER(imdir_t) :: i_res, i_val
    !    ! --------------------------------------------------------------------------------------!
             
    ! END FUNCTION sotin1_feval_o_s
@@ -554,6 +558,62 @@ MODULE sotin1
       END IF
 
    END FUNCTION sotin1_epsilon_i
+   !==========================================================================================!
+
+   !==========================================================================================!
+   !> @brief This function only activates a set of imaginary directions given an integer list.
+   !!
+   !! @param[in] base: (int, array) Array of imaginary bases to be created.
+   !! @param[in] order(optional): Truncation order to be set to the number. Default 1.
+   !!
+   !******************************************************************************************!
+   FUNCTION sotin1_epsilon_il(base,order) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      INTEGER, INTENT(IN)          :: base(:)
+      INTEGER, INTENT(IN),OPTIONAL :: order
+      INTEGER(ord_t)               :: i_ord
+      INTEGER                      :: i
+      INTEGER(bases_t)             :: basei
+      TYPE(sotin1_t)               :: res
+      ! --------------------------------------------------------------------------------------!
+
+      ! Create number as a zero. It also Deallocates memory.
+      res = zero
+
+      IF ( PRESENT(order) ) THEN
+         i_ord = order
+      ELSE
+         i_ord = 1
+      END IF
+      
+      ! Set truncation order to the one given.
+      ! res%order=i_ord
+
+      IF (i_ord == 0) THEN
+         res = one
+      ELSE
+         DO i=1,SIZE(base)
+            ! Only if imaginary basis supported, allocate memory. See how to update this.
+            basei = base(i)
+            IF (basei <= m_max) THEN
+               
+               res%imcoeff(i) = one   
+               res%imdir(i)   = basei
+               res%act_ord    = i_ord 
+               res%m_active   = res%m_active + 1
+               
+            ELSE
+               ! RAISE Warning that the number of imaginary direction is not supported 
+               ! in this occation.
+               PRINT*, "WARNING: Cant create OTI number with base ", basei 
+            END IF
+         END DO
+
+      END IF
+
+   END FUNCTION sotin1_epsilon_il
    !==========================================================================================!
 
    ! ! !==========================================================================================!

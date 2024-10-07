@@ -83,6 +83,7 @@ file(GLOB static_f90
 
 file(GLOB sparse_f
     fortran/sparse/soti_n1.f90
+    fortran/core/oti_core.f90
     fortran/core/real_utils.f90
     fortran/core/master_parameters.f90 
 )

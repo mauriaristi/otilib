@@ -451,7 +451,7 @@ MODULE sotin1
       IF (self%act_ord>0)  THEN
          
          ! Assume the first imdir is the only one to be evaluated. Loop through imdirs
-         res%imCoeff(:val%m_active) = self.imCoeff(1) * val%imCoeff(:val%m_active)
+         res%imCoeff(:val%m_active) = self%imCoeff(1) * val%imCoeff(:val%m_active)
          res%imDir(:val%m_active)   = val%imDir(:val%m_active)
          res%m_active               = val%m_active
 

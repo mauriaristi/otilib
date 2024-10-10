@@ -40,9 +40,17 @@ PROGRAM ex2_sparse_n1
     CALL PPRINT(f,fmt='ES10.4')
 
     ! Expected value of the derivative, vs derivative from OTI.
-    WRITE(*,*) dFUNC1_dx(x%r), f%imCoeff(1)
+    WRITE(*,*) dFUNC1_dx(x%r), f%im(1)
 
-    ! sotin1_feval_1var_o_s
+    
+    WRITE(*,*)  " "
+    WRITE(*,*)  " >> FUNCTION EVALUATION - SIN"
+    
+    f = sin(x)
+
+    CALL PPRINT(f,fmt='ES10.4')
+
+    WRITE(*,*) sin(x%r), cos(x%r), 2.0d0*cos(x%r)
 
 
 

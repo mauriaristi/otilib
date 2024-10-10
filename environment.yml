@@ -13,6 +13,7 @@ dependencies:
   - cmake
   - pip
   - ipykernel
+  - conda-forge::hdf5
   - conda-forge::pyvista
   - conda-forge::gmsh
   - conda-forge::python-gmsh

@@ -19,16 +19,17 @@ MODULE sotin1
    INTEGER, PARAMETER, PRIVATE :: m_max   = 100 ! up-to m_max imag. basis.
 
    ! INTEGER, PARAMETER, PRIVATE :: ord_t   = 1  ! TODO This should go in a core Module.
-   ! INTEGER, PARAMETER, PRIVATE :: imdir_t = 8
+   ! INTEGER, PARAMETER, PRIVATE :: bases_t = 8
    ! INTEGER, PARAMETER, PRIVATE :: bases_t = 8 ! TODO: Evaluate if this is better a 4 byte int.
 
    ! -----------------------------------------------------------------------------------------!
-   TYPE sotin1_t
+   TYPE sotin1_t!(m_max)
       REAL(dp)          :: r               !<- Real coefficient.
-      REAL(dp)          :: imCoeff(m_max)  !<- Imag. coeffs.
-      INTEGER(imdir_t)  :: imDir(m_max)    !<- Imag. dirs. (active, sorted). 
-      INTEGER(imdir_t)  :: m_active = 0    !<- Number of active dirs.
+      REAL(dp)          :: im(m_max)  !<- Imag. coeffs.
+      INTEGER(bases_t)  :: base(m_max)    !<- Imag. dirs. (active, sorted). 
+      INTEGER(bases_t)  :: act_bas = 0    !<- Number of active dirs.
       INTEGER(ord_t)    :: act_ord  = 0    !<- Actual order. TODO: Should this be per-basis?
+      ! INTEGER(bases_t), LEN :: m_max
    END TYPE sotin1_t
    ! -----------------------------------------------------------------------------------------!
    INTERFACE PPRINT
@@ -55,16 +56,24 @@ MODULE sotin1
    INTERFACE EPS
       MODULE PROCEDURE sotin1_epsilon_i     ! Create sotin1_t from integer 
       ! MODULE PROCEDURE sotin1_epsilon_2i    ! Create sotin1_t from two integers
-      ! MODULE PROCEDURE sotin1_epsilon_imdir ! Create sotin1_t from imdir
-      ! MODULE PROCEDURE sotin1_epsilon_list  ! Create sotin1_t from list representing IMDIR
+      ! MODULE PROCEDURE sotin1_epsilon_base ! Create sotin1_t from base
+      ! MODULE PROCEDURE sotin1_epsilon_list  ! Create sotin1_t from list representing base
    END INTERFACE
 
-   INTERFACE FEVAL
-      MODULE PROCEDURE sotin1_feval_1var_o_s ! Evaluate in 
+   INTERFACE FEVAL1
+      MODULE PROCEDURE sotin1_feval_1var_o_s
+   END INTERFACE
+
+   INTERFACE SIN
+      MODULE PROCEDURE sotin1_sin_o_s 
+   END INTERFACE
+
+   INTERFACE COS
+      MODULE PROCEDURE sotin1_cos_o_s 
    END INTERFACE
    ! -----------------------------------------------------------------------------------------!
 
-   CONTAINS
+CONTAINS
 
    !==========================================================================================!
    !> @brief This function assigns a real scalar to an OTI number object.
@@ -84,16 +93,16 @@ MODULE sotin1
       ! --------------------------------------------------------------------------------------!
       
       ! Real
-      res%r          = rhs
-      res%imCoeff(:) = zero ! Initialized for safety.
-      res%imDir(:)   = 0    ! Initialized for safety.
+      res%r       = rhs
+      res%im(:)   = zero ! Initialized for safety.
+      res%base(:) = 0    ! Initialized for safety.
             
-      ! Actual order and m_active should be initialized to zero for safety.
-      res%m_active = 0
-      res%act_ord  = 0
+      ! Actual order and act_bas should be initialized to zero for safety.
+      res%act_bas = 0 ! Number of active bases.
+      res%act_ord = 0 ! Actual order of this number (per basis?)
 
       ! ! Truncation order is zero for real numbers
-      ! res%order  = 0
+      ! res%trc_ord  = 0 ! Truncation order
       
    END SUBROUTINE sotin1_assign_r
    !==========================================================================================!
@@ -139,7 +148,7 @@ MODULE sotin1
       ! 
       ! Internal variables
       INTEGER(ord_t) :: i_ord
-      INTEGER(imdir_t) :: i_im, i
+      INTEGER(bases_t) :: i_im, i
       ! --------------------------------------------------------------------------------------!
       
       ! Add two real numbers. This also initializes memory.
@@ -148,14 +157,14 @@ MODULE sotin1
       IF (rhs%act_ord>0) THEN
          
          res%act_ord  = rhs%act_ord
-         res%m_active = rhs%m_active
+         res%act_bas = rhs%act_bas
          
          ! Copy information from rhs to res.
          DO i_ord = 1, rhs%act_ord            
             
-            res%imCoeff(1:rhs%m_active) = rhs%imCoeff(1:rhs%m_active)
+            res%im(1:rhs%act_bas) = rhs%im(1:rhs%act_bas)
 
-            res%imDir(1:rhs%m_active)   = rhs%imDir(1:rhs%m_active)
+            res%base(1:rhs%act_bas)   = rhs%base(1:rhs%act_bas)
             
          END DO
 
@@ -200,14 +209,14 @@ MODULE sotin1
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
-      TYPE( sotin1_t ), INTENT(IN)         :: lhs
+      TYPE( sotin1_t ), INTENT(IN) :: lhs
       TYPE( sotin1_t ), INTENT(IN) :: rhs
       TYPE( sotin1_t )             :: res
       ! 
       ! Internal variables
-      INTEGER(ord_t) :: i_ord
-      INTEGER(imdir_t) :: i_im, i_lhs, i_rhs, i_res
-      INTEGER(imdir_t) :: n_active
+      INTEGER(ord_t)  :: i_ord
+      INTEGER(bases_t) :: i_im, i_lhs, i_rhs, i_res
+      INTEGER(bases_t) :: n_active
       ! --------------------------------------------------------------------------------------!
       
       IF ( (rhs%act_ord>0) .and. (lhs%act_ord>0) ) THEN
@@ -215,7 +224,7 @@ MODULE sotin1
          res%r = lhs%r + rhs%r  ! This initializes res.
 
          res%act_ord  = MAX(rhs%act_ord,lhs%act_ord)
-         res%m_active = 0
+         res%act_bas = 0
 
          ! Start at first location of both operators.
          i_lhs = 1 !
@@ -224,37 +233,37 @@ MODULE sotin1
          ! Add up Copy information from rhs to res.
          DO 
             ! This is like a do while loop.
-            IF (i_lhs>lhs%m_active .and. i_rhs>rhs%m_active)  exit
+            IF (i_lhs>lhs%act_bas .and. i_rhs>rhs%act_bas)  exit
 
-            IF (i_lhs>lhs%m_active) THEN ! Prevent overflow rhs
+            IF (i_lhs>lhs%act_bas) THEN ! Prevent overflow rhs
                ! Only add the rhs.
-               res%imCoeff( i_res ) = rhs%imCoeff( i_rhs )
-               res%imDir(   i_res ) = rhs%imDir(   i_rhs )
+               res%im( i_res ) = rhs%im( i_rhs )
+               res%base(   i_res ) = rhs%base(   i_rhs )
                i_rhs = i_rhs + 1
-            ELSE IF (i_rhs>rhs%m_active) THEN ! Prevent overflow lhs
+            ELSE IF (i_rhs>rhs%act_bas) THEN ! Prevent overflow lhs
                ! Only add the lhs.
-               res%imCoeff( i_res ) = lhs%imCoeff( i_lhs )
-               res%imDir(   i_res ) = lhs%imDir(   i_lhs )
+               res%im( i_res ) = lhs%im( i_lhs )
+               res%base(   i_res ) = lhs%base(   i_lhs )
                i_lhs = i_lhs + 1
             ELSE ! Both lhs and rhs have something to evaluate.
-               IF (rhs%imDir(i_rhs)==lhs%imDir(i_lhs)) THEN ! Same imdirs.
-                  res%imCoeff(i_res) = rhs%imCoeff(i_rhs)+lhs%imCoeff(i_lhs)
-                  res%imDir(i_res)   = rhs%imDir(i_rhs)
+               IF (rhs%base(i_rhs)==lhs%base(i_lhs)) THEN ! Same bases.
+                  res%im(i_res) = rhs%im(i_rhs)+lhs%im(i_lhs)
+                  res%base(i_res)   = rhs%base(i_rhs)
                   i_lhs = i_lhs + 1
                   i_rhs = i_rhs + 1
-               ELSE IF (rhs%imDir(i_rhs) < lhs%imDir(i_lhs)) THEN ! Lower imdir rhs
-                  res%imCoeff(i_res) = rhs%imCoeff(i_rhs)
-                  res%imDir(i_res)   = rhs%imDir(i_rhs)
+               ELSE IF (rhs%base(i_rhs) < lhs%base(i_lhs)) THEN ! Lower base rhs
+                  res%im(i_res) = rhs%im(i_rhs)
+                  res%base(i_res)   = rhs%base(i_rhs)
                   i_rhs = i_rhs + 1
-               ELSE  ! Lower imdir lhs
-                  res%imCoeff(i_res) = lhs%imCoeff(i_lhs)
-                  res%imDir(i_res)   = lhs%imDir(i_lhs)
+               ELSE  ! Lower base lhs
+                  res%im(i_res) = lhs%im(i_lhs)
+                  res%base(i_res)   = lhs%base(i_lhs)
                   i_lhs = i_lhs + 1
                END IF 
 
             END IF
 
-            res%m_active  = res%m_active + 1
+            res%act_bas  = res%act_bas + 1
             i_res = i_res + 1
 
          END DO
@@ -288,7 +297,7 @@ MODULE sotin1
       TYPE(sotin1_t), INTENT(IN) :: rhs
       TYPE(sotin1_t)             :: res
       INTEGER(ord_t) :: i_ord
-      INTEGER(imdir_t) :: i_im
+      INTEGER(bases_t) :: i_im
 
       ! --------------------------------------------------------------------------------------!
       
@@ -298,13 +307,13 @@ MODULE sotin1
       IF (rhs%act_ord>0) THEN
          
          res%act_ord = rhs%act_ord
-         res%m_active = rhs%m_active
+         res%act_bas = rhs%act_bas
          
          ! Copy information from rhs to res.
-         DO i_im = 1, rhs%m_active
+         DO i_im = 1, rhs%act_bas
          
-            res%imcoeff(i_im) = lhs*rhs%imcoeff(i_im)
-            res%imdir( i_im)  = rhs%imdir( i_im)
+            res%im(i_im) = lhs*rhs%im(i_im)
+            res%base( i_im)  = rhs%base( i_im)
 
          END DO
 
@@ -329,7 +338,7 @@ MODULE sotin1
       TYPE(sotin1_t), INTENT(IN) :: rhs
       TYPE(sotin1_t)             :: res
       
-      INTEGER(imdir_t) :: i_res, i_rhs, i_lhs
+      INTEGER(bases_t) :: i_res, i_rhs, i_lhs
 
       ! --------------------------------------------------------------------------------------!
       
@@ -338,40 +347,40 @@ MODULE sotin1
          res%r = lhs%r * rhs%r  ! This initializes res.
 
          res%act_ord  = MAX(rhs%act_ord,lhs%act_ord)
-         res%m_active = 0
+         res%act_bas = 0
 
          ! Start at first location of both operators.
          i_lhs = 1 !
          i_rhs = 1 !
          i_res = 1 !
-         ! Multiply real x imdirs and add up
+         ! Multiply real x bases and add up
          DO 
             ! This is like a do while loop.
-            IF (i_lhs>lhs%m_active .and. i_rhs>rhs%m_active)  exit
+            IF (i_lhs>lhs%act_bas .and. i_rhs>rhs%act_bas)  exit
 
-            IF (i_lhs>lhs%m_active) THEN ! Prevent overflow rhs
+            IF (i_lhs>lhs%act_bas) THEN ! Prevent overflow rhs
                ! Only add the rhs.
-               res%imCoeff( i_res ) = lhs%r * rhs%imCoeff( i_rhs )
-               res%imDir(   i_res ) = rhs%imDir(   i_rhs )
+               res%im( i_res ) = lhs%r * rhs%im( i_rhs )
+               res%base(   i_res ) = rhs%base(   i_rhs )
                i_rhs = i_rhs + 1
-            ELSE IF (i_rhs>rhs%m_active) THEN ! Prevent overflow lhs
+            ELSE IF (i_rhs>rhs%act_bas) THEN ! Prevent overflow lhs
                ! Only add the lhs.
-               res%imCoeff( i_res ) = rhs%r * lhs%imCoeff( i_lhs )
-               res%imDir(   i_res ) = lhs%imDir(   i_lhs )
+               res%im( i_res ) = rhs%r * lhs%im( i_lhs )
+               res%base(   i_res ) = lhs%base(   i_lhs )
                i_lhs = i_lhs + 1
             ELSE ! Both lhs and rhs have something to evaluate.
-               IF (rhs%imDir(i_rhs)==lhs%imDir(i_lhs)) THEN ! Same imdirs.
-                  res%imCoeff(i_res) = lhs%r * rhs%imCoeff(i_rhs) + rhs%r * lhs%imCoeff(i_lhs)
-                  res%imDir(i_res)   = rhs%imDir(i_rhs)
+               IF (rhs%base(i_rhs)==lhs%base(i_lhs)) THEN ! Same bases.
+                  res%im(i_res) = lhs%r * rhs%im(i_rhs) + rhs%r * lhs%im(i_lhs)
+                  res%base(i_res)   = rhs%base(i_rhs)
                   i_lhs = i_lhs + 1
                   i_rhs = i_rhs + 1
-               ELSE IF (rhs%imDir(i_rhs) < lhs%imDir(i_lhs)) THEN ! Lower imdir rhs
-                  res%imCoeff(i_res) = lhs%r*rhs%imCoeff(i_rhs)
-                  res%imDir(i_res)   =       rhs%imDir(  i_rhs)
+               ELSE IF (rhs%base(i_rhs) < lhs%base(i_lhs)) THEN ! Lower base rhs
+                  res%im(i_res) = lhs%r*rhs%im(i_rhs)
+                  res%base(i_res)   =       rhs%base(  i_rhs)
                   i_rhs = i_rhs + 1
-               ELSE  ! Lower imdir lhs
-                  res%imCoeff(i_res) = rhs%r*lhs%imCoeff(i_lhs)
-                  res%imDir(i_res)   =       lhs%imDir(  i_lhs)
+               ELSE  ! Lower base lhs
+                  res%im(i_res) = rhs%r*lhs%im(i_lhs)
+                  res%base(i_res)   =       lhs%base(  i_lhs)
                   i_lhs = i_lhs + 1
                END IF 
 
@@ -379,7 +388,7 @@ MODULE sotin1
 
             ! TODO: Need a lower level function that handles this multiplication. 
             ! This can be done quite quickly for both cases. 
-            res%m_active  = res%m_active + 1
+            res%act_bas  = res%act_bas + 1
             i_res = i_res + 1
 
          END DO
@@ -408,12 +417,13 @@ MODULE sotin1
    FUNCTION sotin1_mul_or_ss(lhs,rhs) RESULT (res)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
-      ! --------------------------------------------------------------------------------------!
+      ! -------- INPUTS OUTPUTS --------------------------------------------------------------!
       TYPE(sotin1_t), INTENT(IN) :: lhs
-      REAL(dp), INTENT(IN)      :: rhs
+      REAL(dp), INTENT(IN)       :: rhs
       TYPE(sotin1_t)             :: res
-      INTEGER(ord_t) ::i_ord
-      INTEGER(imdir_t) ::i_im
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(ord_t)  :: i_ord
+      INTEGER(bases_t) :: i_im
       ! --------------------------------------------------------------------------------------!
       
       ! multiply real - oti
@@ -422,41 +432,42 @@ MODULE sotin1
    END FUNCTION sotin1_mul_or_ss
    !==========================================================================================!
 
-
    !==========================================================================================!
    !> @brief Evaluate OTI function (single-variable) at given OTI point.
    !! 
+   !! func(val)
    !! 
-   !! 
-   !! @param[in] self: (sotin1_t) Value to evaluate the function (OTI).
+   !! @param[in] func: (sotin1_t) Value to evaluate the function (OTI).
    !! @param[in] val: (sotin1_t) Value to evaluate the function (OTI).
    !******************************************************************************************!
-   FUNCTION sotin1_feval_1var_o_s(self, val) RESULT (res)
+   FUNCTION sotin1_feval_1var_o_s(func, val) RESULT (res)
       ! --------------------------------------------------------------------------------------!
       IMPLICIT NONE
       ! --------------------------------------------------------------------------------------!
-      TYPE(sotin1_t), INTENT(IN) :: self
+      TYPE(sotin1_t), INTENT(IN) :: func
       TYPE(sotin1_t), INTENT(IN) :: val
       TYPE(sotin1_t)             :: res      
       ! --------------------------------------------------------------------------------------!
-      INTEGER(imdir_t) :: i_im, i_ord
+      INTEGER(bases_t) :: i_im, i_ord
       ! --------------------------------------------------------------------------------------!
       
       ! Considerations. This considers single variable evaluation.
       !
       ! 1. initialize with the real value.
-      res  = self%r
+      res  = func%r
+      
+      res%act_ord = val%act_ord
 
-      ! 2. Loop through orders
-      IF (self%act_ord>0)  THEN
+      ! 2. Loop through order
+      DO  i_ord=1,func%act_ord
          
-         ! Assume the first imdir is the only one to be evaluated. Loop through imdirs
-         res%imCoeff(:val%m_active) = self%imCoeff(1) * val%imCoeff(:val%m_active)
-         res%imDir(:val%m_active)   = val%imDir(:val%m_active)
-         res%m_active               = val%m_active
+         ! Assume the first base is the only one to be evaluated. Loop through bases 
+         ! preparing for higher orders: +-
+         res%im(:val%act_bas)   = func%im(i_ord) * val%im(:val%act_bas)
+         res%base(:val%act_bas) = val%base(:val%act_bas)
+         res%act_bas = val%act_bas
 
-      END IF
-
+      END DO
 
 
    END FUNCTION sotin1_feval_1var_o_s
@@ -478,7 +489,7 @@ MODULE sotin1
    !    TYPE(sotin1_t), INTENT(IN) :: fevald
    !    TYPE(sotin1_t)             :: res      
    !    ! --------------------------------------------------------------------------------------!
-   !    INTEGER(imdir_t) :: i_res, i_val
+   !    INTEGER(bases_t) :: i_res, i_val
    !    ! --------------------------------------------------------------------------------------!
             
    ! END FUNCTION sotin1_feval_o_s
@@ -486,13 +497,255 @@ MODULE sotin1
 
 
 
+   
 
+   !==========================================================================================!
+   !> @brief Evaluate cosine function at oti number.
+   !! 
+   !! res = cos(x)
+   !! 
+   !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
+   !******************************************************************************************!
+   FUNCTION sotin1_cos_o_s(x) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotin1_t), INTENT(IN) :: x
+      TYPE(sotin1_t)             :: func
+      TYPE(sotin1_t)             :: res      
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(bases_t) :: i_res, i_val
+      ! --------------------------------------------------------------------------------------!
+      
+      ! Evaluate function for cosine
+      ! known
+      func%r       = cos(x%r)
+      func%im(1)   = -sin(x%r)
+      func%base(1) = 1
+      func%act_ord = 1
+      func%act_bas = 1
 
+      res = FEVAL1(func,x)
 
+   END FUNCTION sotin1_cos_o_s
+   !==========================================================================================!
+   
+   !==========================================================================================!
+   !> @brief Evaluate hyperbolic cosine function at oti number.
+   !! 
+   !! res = cosh(x)
+   !! 
+   !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
+   !******************************************************************************************!
+   FUNCTION sotin1_cosh_o_s(x) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotin1_t), INTENT(IN) :: x
+      TYPE(sotin1_t)             :: func
+      TYPE(sotin1_t)             :: res      
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(bases_t) :: i_res, i_val
+      ! --------------------------------------------------------------------------------------!
+      
+      ! Evaluate function for cosine
+      ! known
+      func%r       = cosh(x%r)
+      func%im(1)   = sinh(x%r)
+      func%base(1) = 1
+      func%act_ord = 1
+      func%act_bas = 1
 
+      res = FEVAL1(func,x)
 
+   END FUNCTION sotin1_cosh_o_s
+   !==========================================================================================!
 
+   !==========================================================================================!
+   !> @brief Evaluate exponential function at oti number.
+   !! 
+   !! res = exp(x)
+   !! 
+   !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
+   !******************************************************************************************!
+   FUNCTION sotin1_exp_o_s(x) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotin1_t), INTENT(IN) :: x
+      TYPE(sotin1_t)             :: func
+      TYPE(sotin1_t)             :: res      
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(bases_t) :: i_res, i_val
+      ! --------------------------------------------------------------------------------------!
+      
+      ! Evaluate function
+      func%r       = exp(x%r)
+      func%im(1)   = func%r
+      func%base(1) = 1
+      func%act_ord = 1
+      func%act_bas = 1
 
+      res = FEVAL1(func,x)
+
+   END FUNCTION sotin1_exp_o_s
+   !==========================================================================================!
+
+   !==========================================================================================!
+   !> @brief Evaluate natural logarithm function at oti number.
+   !! 
+   !! res = log(x)
+   !! 
+   !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
+   !******************************************************************************************!
+   FUNCTION sotin1_log_o_s(x) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotin1_t), INTENT(IN) :: x
+      TYPE(sotin1_t)             :: func
+      TYPE(sotin1_t)             :: res      
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(bases_t) :: i_res, i_val
+      ! --------------------------------------------------------------------------------------!
+      
+      ! Evaluate function
+      func%r       = log(x%r)
+      func%im(1)   = one/x%r
+      func%base(1) = 1
+      func%act_ord = 1
+      func%act_bas = 1
+
+      res = FEVAL1(func,x)
+
+   END FUNCTION sotin1_log_o_s
+   !==========================================================================================!
+
+   !==========================================================================================!
+   !> @brief Evaluate sine function at oti number.
+   !! 
+   !! res = sin(x)
+   !! 
+   !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
+   !******************************************************************************************!
+   FUNCTION sotin1_sin_o_s(x) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotin1_t), INTENT(IN) :: x
+      TYPE(sotin1_t)             :: func
+      TYPE(sotin1_t)             :: res      
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(bases_t) :: i_res, i_val
+      ! --------------------------------------------------------------------------------------!
+      
+      ! Evaluate function for sine
+      ! known
+      func%r = sin(x%r)
+      func%im(1) = cos(x%r)
+      func%base(1) = 1
+      func%act_ord = 1
+      func%act_bas = 1
+
+      res = FEVAL1(func,x)
+
+   END FUNCTION sotin1_sin_o_s
+   !==========================================================================================!
+
+   !==========================================================================================!
+   !> @brief Evaluate hyperbolic sine function at oti number.
+   !! 
+   !! res = sinh(x)
+   !! 
+   !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
+   !******************************************************************************************!
+   FUNCTION sotin1_sinh_o_s(x) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotin1_t), INTENT(IN) :: x
+      TYPE(sotin1_t)             :: func
+      TYPE(sotin1_t)             :: res      
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(bases_t) :: i_res, i_val
+      ! --------------------------------------------------------------------------------------!
+      
+      ! Evaluate function for sine
+      ! known
+      func%r       = sinh(x%r)
+      func%im(1)   = cosh(x%r)
+      func%base(1) = 1
+      func%act_ord = 1
+      func%act_bas = 1
+
+      res = FEVAL1(func,x)
+
+   END FUNCTION sotin1_sinh_o_s
+   !==========================================================================================!
+
+   !==========================================================================================!
+   !> @brief Evaluate tangent function at oti number.
+   !! 
+   !! res = tan(x)
+   !! 
+   !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
+   !******************************************************************************************!
+   FUNCTION sotin1_tan_o_s(x) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotin1_t), INTENT(IN) :: x
+      TYPE(sotin1_t)             :: func
+      TYPE(sotin1_t)             :: res      
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(bases_t) :: i_res, i_val
+      REAL(dp) :: x_tmp
+      ! --------------------------------------------------------------------------------------!
+      
+      ! Evaluate function
+      func%r = tan(x%r)
+
+      ! The following depends on truncation order.
+      x_tmp = cos(x%r)
+      func%im(1)   = one/(x_tmp*x_tmp)
+      func%base(1) = 1
+      func%act_ord = 1
+      func%act_bas = 1
+
+      res = FEVAL1(func,x)
+
+   END FUNCTION sotin1_tan_o_s
+   !==========================================================================================!
+
+   !==========================================================================================!
+   !> @brief Evaluate natural logarithm function at oti number.
+   !! 
+   !! res = log(x)
+   !! 
+   !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
+   !******************************************************************************************!
+   FUNCTION sotin1_log_o_s(x) RESULT (res)
+      ! --------------------------------------------------------------------------------------!
+      IMPLICIT NONE
+      ! --------------------------------------------------------------------------------------!
+      TYPE(sotin1_t), INTENT(IN) :: x
+      TYPE(sotin1_t)             :: func
+      TYPE(sotin1_t)             :: res      
+      ! --------------------------------------------------------------------------------------!
+      INTEGER(bases_t) :: i_res, i_val
+      ! --------------------------------------------------------------------------------------!
+      
+      ! Evaluate function
+      func%r       = log(x%r)
+      func%im(1)   = one/x%r
+      func%base(1) = 1
+      func%act_ord = 1
+      func%act_bas = 1
+
+      res = FEVAL1(func,x)
+
+   END FUNCTION sotin1_log_o_s
+   !==========================================================================================!
 
 
 
@@ -544,10 +797,10 @@ MODULE sotin1
          ! Only if imaginary basis supported, allocate memory. See how to update this.
          IF (base <= m_max) THEN
             
-            res%imcoeff(1) = one   
-            res%imdir(1)   = base  
+            res%im(1) = one   
+            res%base(1)   = base  
             res%act_ord    = i_ord 
-            res%m_active   = 1
+            res%act_bas   = 1
             
          ELSE
             ! RAISE Warning that the number of imaginary direction is not supported 
@@ -599,10 +852,10 @@ MODULE sotin1
             basei = base(i)
             IF (basei <= m_max) THEN
                
-               res%imcoeff(i) = one   
-               res%imdir(i)   = basei
+               res%im(i) = one   
+               res%base(i)   = basei
                res%act_ord    = i_ord 
-               res%m_active   = res%m_active + 1
+               res%act_bas   = res%act_bas + 1
                
             ELSE
                ! RAISE Warning that the number of imaginary direction is not supported 
@@ -629,7 +882,7 @@ MODULE sotin1
    ! !    INTEGER, INTENT(IN) :: ordin
    ! !    INTEGER, INTENT(IN),OPTIONAL :: order
    ! !    INTEGER(ord_t)      :: i_ord
-   ! !    INTEGER(imdir_t)    :: i_idx
+   ! !    INTEGER(bases_t)    :: i_idx
    ! !    TYPE(sotin1_t)       :: res
    ! !    ! --------------------------------------------------------------------------------------!
 
@@ -645,7 +898,7 @@ MODULE sotin1
    ! !       i_idx = ndir_order_cum(ordin)
 
    ! !       res%im(i_idx)    = one 
-   ! !       res%imdir(i_idx) = idx
+   ! !       res%base(i_idx) = idx
    ! !       res%nnz(ordin)   = 1
    ! !       res%act_ord      = ordin
    ! !       res%order        = i_ord
@@ -683,7 +936,7 @@ MODULE sotin1
    ! !    CHARACTER(len=:),ALLOCATABLE             :: advance_option
    ! !    INTEGER                                  :: unt
    ! !    INTEGER(ord_t)                           :: i_ord
-   ! !    INTEGER(imdir_t)                         :: i_im
+   ! !    INTEGER(bases_t)                         :: i_im
    ! !    INTEGER                                  :: offset, next_offset
    ! !    ! --------------------------------------------------------------------------------------!
    ! !    IF ( PRESENT(unit) ) THEN
@@ -720,7 +973,7 @@ MODULE sotin1
    ! !          CALL pprint( num%imcoef(i_im), unit=unt, fmt=output_format, advance='no')
              
    ! !          WRITE(unt,'(A)',advance='NO') '*eps(' 
-   ! !          WRITE(unt,'(I2,A,I2)',advance='NO') num%imdir(i_im), ',', i_ord
+   ! !          WRITE(unt,'(I2,A,I2)',advance='NO') num%base(i_im), ',', i_ord
    ! !          WRITE(unt,'(A)',advance='NO') ') '    !<- Adds space.
       
    ! !       END DO
@@ -757,7 +1010,7 @@ MODULE sotin1
       CHARACTER(len=:),ALLOCATABLE             :: advance_option
       INTEGER                                  :: unt
       INTEGER(ord_t)                           :: i_ord
-      INTEGER(imdir_t)                         :: i_im
+      INTEGER(bases_t)                         :: i_im
       INTEGER                                  :: offset, next_offset
       ! --------------------------------------------------------------------------------------!
          
@@ -790,15 +1043,15 @@ MODULE sotin1
       DO i_ord = 1, num%act_ord
          
          ! Loop through the imaginary terms
-         DO i_im=1,num%m_active
+         DO i_im=1,num%act_bas
             
             ! Print imaginary coefficient 
             WRITE(unt,'(A)',advance='NO') '+ ' !<- Adds space.
 
-            CALL pprint( num%imcoeff(i_im), unit=unt, fmt=output_format, advance='no')
+            CALL pprint( num%im(i_im), unit=unt, fmt=output_format, advance='no')
              
             WRITE(unt,'(A)',advance='NO') ' * eps(' 
-            WRITE(unt,'(I4)',advance='NO') num%imdir(i_im)
+            WRITE(unt,'(I4)',advance='NO') num%base(i_im)
             WRITE(unt,'(A)',advance='NO') ') '    !<- Adds space.
       
          END DO

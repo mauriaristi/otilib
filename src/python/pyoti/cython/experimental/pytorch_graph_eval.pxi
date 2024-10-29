@@ -92,7 +92,7 @@ def pytorch_agraph_eval_matso( graph, x_in, c):
         the graph should be evaluated.
     @param[in] c: numpy array of doubles with the constants of the evaluation.
 
-    @returns This function returns an omatm1n1 of shape (stack_size,neval_points) with the graph's
+    @returns This function returns a matso array of shape (1,neval_points) with the graph's
         intermediate evaluations.
     """
 
@@ -104,18 +104,19 @@ def pytorch_agraph_eval_matso( graph, x_in, c):
     cdef np.int64_t it1, it2, node, i_op, i_trpt, i
 
     cdef otispr.matso x, w, y
+
     cdef sotinum_t* p_tmpi 
     cdef sotinum_t* p_x1 
     cdef sotinum_t* p_x2
     cdef sotinum_t tmp2
     cdef arrso_t *w_all, wi
-    cdef otispr.sotinum tt
+    
     
     x = x_in
     
     stack_size = graph.shape[0]
     neval_points = x.shape[0]
-    nvars = x.shape[1] # 
+    nvars        = x.shape[1] # 
     nconst = c.size
 
     nthreads = omp_get_num_procs()
@@ -165,6 +166,7 @@ def pytorch_agraph_eval_matso( graph, x_in, c):
                 
                 # set tmp from read item
                 soti_set_o(p_x1, p_tmpi, dhl)
+                
                 # If perturbations are to be added, this is the moment.
 
             elif node ==  1: # Set from constant, tmpi = c[it1]
@@ -252,20 +254,20 @@ def pytorch_agraph_eval_matso( graph, x_in, c):
 
                 tmp2 = soti_get_rtmp(10, p_x1[0].trc_order, dhl)
 
-                soti_abs_to(p_x1,&tmp2,dhl)
-                soti_pow_soti_to(&tmp2,p_x2,p_tmpi,dhl)
+                soti_abs_to( p_x1, &tmp2, dhl)
+                soti_pow_soti_to( &tmp2, p_x2, p_tmpi, dhl)
             
             elif node == 14: # hyp. sine   tmpi = sinh(x1)
 
                 p_x1 = &wi.p_data[it1]
                 
-                soti_sinh_to(p_x1,p_tmpi,dhl)
+                soti_sinh_to( p_x1, p_tmpi, dhl)
             
             elif node == 15: # hyp. cosine tmpi = cosh(x1)
 
                 p_x1 = &wi.p_data[it1]
                 
-                soti_cosh_to(p_x1,p_tmpi,dhl)
+                soti_cosh_to( p_x1, p_tmpi, dhl)
 
             else:
                 # with gil:
@@ -333,6 +335,8 @@ def pytorch_agraph_eval_matso( graph, x_in, c):
 
 
 #     return w[stack_size-1,:]
+
+# # end function
 
 # def pytorch_agraph_eval_m1n2(graph, x_in, c):
 #     """

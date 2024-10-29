@@ -172,8 +172,8 @@ if compile_static == True:
       define_macros = macros,
       libraries = libraries,
       extra_compile_args = extra_compile_args,
-      extra_link_args = extra_link_args,
-      depends=dependencies
+      depends=dependencies,
+      extra_link_args = extra_link_args
       )
   )
   

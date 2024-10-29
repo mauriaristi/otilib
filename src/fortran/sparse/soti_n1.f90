@@ -560,61 +560,61 @@ MODULE sotin1
    END FUNCTION sotin1_epsilon_i
    !==========================================================================================!
 
-   !==========================================================================================!
-   !> @brief This function only activates a set of imaginary directions given an integer list.
-   !!
-   !! @param[in] base: (int, array) Array of imaginary bases to be created.
-   !! @param[in] order(optional): Truncation order to be set to the number. Default 1.
-   !!
-   !******************************************************************************************!
-   FUNCTION sotin1_epsilon_il(base,order) RESULT (res)
-      ! --------------------------------------------------------------------------------------!
-      IMPLICIT NONE
-      ! --------------------------------------------------------------------------------------!
-      INTEGER, INTENT(IN)          :: base(:)
-      INTEGER, INTENT(IN),OPTIONAL :: order
-      INTEGER(ord_t)               :: i_ord
-      INTEGER                      :: i
-      INTEGER(bases_t)             :: basei
-      TYPE(sotin1_t)               :: res
-      ! --------------------------------------------------------------------------------------!
+   ! !==========================================================================================!
+   ! !> @brief This function only activates a set of imaginary directions given an integer list.
+   ! !!
+   ! !! @param[in] base: (int, array) Array of imaginary bases to be created.
+   ! !! @param[in] order(optional): Truncation order to be set to the number. Default 1.
+   ! !!
+   ! !******************************************************************************************!
+   ! FUNCTION sotin1_epsilon_il(base,order) RESULT (res)
+   !    ! --------------------------------------------------------------------------------------!
+   !    IMPLICIT NONE
+   !    ! --------------------------------------------------------------------------------------!
+   !    INTEGER, INTENT(IN)          :: base(:)
+   !    INTEGER, INTENT(IN), OPTIONAL:: order
+   !    INTEGER(ord_t)               :: i_ord
+   !    INTEGER                      :: i
+   !    INTEGER(bases_t)             :: basei
+   !    TYPE(sotin1_t)               :: res
+   !    ! --------------------------------------------------------------------------------------!
 
-      ! Create number as a zero. It also Deallocates memory.
-      res = zero
+   !    ! Create number as a zero. It also Deallocates memory.
+   !    res = zero
 
-      IF ( PRESENT(order) ) THEN
-         i_ord = order
-      ELSE
-         i_ord = 1
-      END IF
+   !    IF ( PRESENT(order) ) THEN
+   !       i_ord = order
+   !    ELSE
+   !       i_ord = 1
+   !    END IF
       
-      ! Set truncation order to the one given.
-      ! res%order=i_ord
+   !    ! Set truncation order to the one given.
+   !    ! res%order=i_ord
 
-      IF (i_ord == 0) THEN
-         res = one
-      ELSE
-         DO i=1,SIZE(base)
-            ! Only if imaginary basis supported, allocate memory. See how to update this.
-            basei = base(i)
-            IF (basei <= m_max) THEN
+   !    IF (i_ord == 0) THEN
+   !       res = one
+   !    ELSE
+   !       DO i=1,SIZE(base)
+   !          ! Only if imaginary basis supported, allocate memory. See how to update this.
+   !          basei = base(i)
+   !          IF (basei <= m_max) THEN
                
-               res%imcoeff(i) = one   
-               res%imdir(i)   = basei
-               res%act_ord    = i_ord 
-               res%m_active   = res%m_active + 1
+   !             res%imcoeff(i) = one   
+   !             res%imdir(i)   = basei
+   !             res%act_ord    = i_ord 
+   !             res%m_active   = res%m_active + 1
                
-            ELSE
-               ! RAISE Warning that the number of imaginary direction is not supported 
-               ! in this occation.
-               PRINT*, "WARNING: Cant create OTI number with base ", basei 
-            END IF
-         END DO
+   !          ELSE
+   !             ! RAISE Warning that the number of imaginary direction is not supported 
+   !             ! in this occation.
+   !             PRINT*, "WARNING: Cant create OTI number with base ", basei 
+   !          END IF
+   !       END DO
 
-      END IF
+   !    END IF
 
-   END FUNCTION sotin1_epsilon_il
-   !==========================================================================================!
+   ! END FUNCTION sotin1_epsilon_il
+   ! !==========================================================================================!
 
    ! ! !==========================================================================================!
    ! ! !>

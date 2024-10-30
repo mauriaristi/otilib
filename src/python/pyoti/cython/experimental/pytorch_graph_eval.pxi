@@ -98,7 +98,7 @@ def pytorch_agraph_eval_matso( graph, x_in, c):
 
     cdef int stack_size, neval_points, nconst, nvars, nthreads
     
-    cdef np.int64_t[:,::1] graph_buff = graph
+    cdef np.int64_t[:,:] graph_buff = graph
     cdef np.float64_t[:] c_buff = c # not necessary to be c-contiguous. 
     
     cdef np.int64_t it1, it2, node, i_op, i_trpt, i

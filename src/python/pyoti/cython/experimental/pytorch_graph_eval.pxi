@@ -88,7 +88,7 @@ def pytorch_agraph_eval_matso( graph, x_in, c):
 
     @param[in] graph: numpy array of int64 of shape (stack_size,3) containing the graph
         following pytorch graph format.
-    @param[in] x: matso array of shape (nvars,neval_points) containing the points at which
+    @param[in] x: matso array of shape (neval_points,nvars) containing the points at which
         the graph should be evaluated.
     @param[in] c: numpy array of doubles with the constants of the evaluation.
 
@@ -99,7 +99,7 @@ def pytorch_agraph_eval_matso( graph, x_in, c):
     cdef int stack_size, neval_points, nconst, nvars, nthreads
     
     cdef np.int64_t[:,::1] graph_buff = graph
-    cdef np.float64_t[::1] c_buff = c 
+    cdef np.float64_t[:] c_buff = c # not necessary to be c-contiguous. 
     
     cdef np.int64_t it1, it2, node, i_op, i_trpt, i
 

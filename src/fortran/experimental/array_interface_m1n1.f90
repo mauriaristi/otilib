@@ -478,21 +478,21 @@ CONTAINS
 
                 ! PRINT*, "performing (abs(xi))**xj evaluation"
 
-            CASE(op_sinh)
+            ! CASE(op_sinh)
 
-                ! Get the id of the variable to load.
-                p1 = graph(2,j)+1
+            !     ! Get the id of the variable to load.
+            !     p1 = graph(2,j)+1
 
-                ! PRINT*, "performing sinh(xi) evaluation"
-                w_arr(:,j) = sinh(w_arr(:,p1))
+            !     ! PRINT*, "performing sinh(xi) evaluation"
+            !     w_arr(:,j) = sinh(w_arr(:,p1))
 
-            CASE(op_cosh)
+            ! CASE(op_cosh)
 
-                ! Get the id of the variable to load.
-                p1 = graph(2,j)+1
+            !     ! Get the id of the variable to load.
+            !     p1 = graph(2,j)+1
 
-                ! PRINT*, "performing cosh(xi) evaluation"
-                w_arr(:,j) = cosh(w_arr(:,p1))
+            !     ! PRINT*, "performing cosh(xi) evaluation"
+            !     w_arr(:,j) = cosh(w_arr(:,p1))
 
             CASE DEFAULT
                 PRINT*, "ERROR: Undefined node operation in the graph structure."

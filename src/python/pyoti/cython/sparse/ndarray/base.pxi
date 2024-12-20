@@ -6,9 +6,9 @@
 
 
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-# ::::::::::::::::::::::::::::::::::     CLASS  matso    ::::::::::::::::::::::::::::::::::::::::::::::
+# :::::::::::::::::::::::::::::::     CLASS  ndotiarray   ::::::::::::::::::::::::::::::::::::::::::::
 # ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-cdef class otiNdArr:
+cdef class ndotiarray:
   #---------------------------------------------------------------------------------------------------
   #------------------------------------   DEFINITION OF ATTRIBUTES   ---------------------------------
   #---------------------------------------------------------------------------------------------------
@@ -23,8 +23,8 @@ cdef class otiNdArr:
   
   def __init__(self, *argv ): 
     """
-    Python level constructor of the otindarr class.Creates a new ndArray fg, reserving memory Assumes 
-    coefficient values to be all zeroes.
+    Python level constructor of the ndotiarray class. Creates a new ndotiarray reserving memory 
+    Assumes coefficient values to be all zeroes.
 
     The idea is that this contains an attribute called data, which is itself a Numpy ND array.
     The components of allways, it is assumed that this data array is c-contiguous*, and the first 

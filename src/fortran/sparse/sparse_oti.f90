@@ -27,7 +27,7 @@ MODULE oti_semisparse
       REAL(dp)                       :: r                  !<- Real coefficient.
       REAL(dp),                      :: im(max_m,max_n)    !<- Imaginary coefficients. (data)
       INTEGER(ord_t)                 :: act_ord=0          !<- Actual order of the number. 
-      INTEGER(ord_t)                 :: order=0            !<- Truncation order of the number
+      INTEGER(ord_t)                 :: trc_ord=0          !<- Truncation order of the number
    CONTAINS
       final :: ssoti_destructor
    END TYPE ssoti
@@ -82,13 +82,13 @@ MODULE oti_semisparse
       
       ! Real
       res%r = rhs
-      res%im(:) = 0.0 ! Initialized for safety.
+      res%im(:) = 0.0 ! Initialized for safety (TODO: Not required though).
             
       ! Actual order and order should be initialized to zero, but hereinitialized for safety.
       res%act_ord = 0
 
       ! Truncation order is zero for real numbers
-      res%order  = 0
+      res%trc_ord  = 0
       
    END SUBROUTINE ssoti_assign_r
    !==========================================================================================!
@@ -147,7 +147,7 @@ MODULE oti_semisparse
                    res%nnz(    SIZE( rhs%nnz,    1) ) )
          
          res%act_ord = rhs%act_ord
-         res%order   = rhs%order
+         res%trc_ord   = rhs%trc_ord
          res%nnz(1)  = rhs%nnz(1) ! This should be 1.
          
          ! Copy information from rhs to res.
@@ -200,7 +200,7 @@ MODULE oti_semisparse
                    res%nnz(    SIZE( lhs%nnz,    1) ) )
          
          res%act_ord = lhs%act_ord
-         res%order   = lhs%order
+         res%trc_ord   = lhs%trc_ord
          res%nnz(1)  = lhs%nnz(1) ! This should be 1.
          
          ! Copy information from rhs to res.
@@ -253,7 +253,7 @@ MODULE oti_semisparse
                    res%nnz(    SIZE( rhs%nnz,    1) ) )
          
          res%act_ord = rhs%act_ord
-         res%order   = rhs%order
+         res%trc_ord   = rhs%trc_ord
          res%nnz(1)  = rhs%nnz(1) ! This should be 1.
          
          ! Copy information from rhs to res.
@@ -305,7 +305,7 @@ MODULE oti_semisparse
                    res%nnz(    SIZE( lhs%nnz,    1) ) )
          
          res%act_ord = lhs%act_ord
-         res%order   = lhs%order
+         res%trc_ord   = lhs%trc_ord
          res%nnz(1)  = lhs%nnz(1) ! This should be 1.
          
          ! Copy information from rhs to res.
@@ -342,7 +342,7 @@ MODULE oti_semisparse
       INTEGER, INTENT(IN) :: base
       INTEGER, INTENT(IN),OPTIONAL :: order
       INTEGER(ord_t)      :: i_ord
-      TYPE(ssoti)       :: res
+      TYPE(ssoti)         :: res
       ! --------------------------------------------------------------------------------------!
 
       ! Create number as a zero. It also Deallocates memory.
@@ -355,7 +355,7 @@ MODULE oti_semisparse
       END IF
       
       ! Set truncation order to the one given.
-      res%order=i_ord
+      res%trc_ord = i_ord
 
       IF (i_ord == 0) THEN
          res = one
@@ -412,7 +412,7 @@ MODULE oti_semisparse
    !       res%imdir(i_idx) = idx
    !       res%nnz(ordin)   = 1
    !       res%act_ord      = ordin
-   !       res%order        = i_ord
+   !       res%trc_ord        = i_ord
 
    !    END IF
 

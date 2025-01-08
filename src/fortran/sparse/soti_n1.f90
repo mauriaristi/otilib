@@ -9,8 +9,6 @@
 ! ============================================================================================!
 MODULE sotin1
    ! -----------------------------------------------------------------------------------------!
-   ! USE real_utils
-   ! USE master_parameters
    USE oti_core
    ! -----------------------------------------------------------------------------------------!
    IMPLICIT NONE
@@ -23,13 +21,13 @@ MODULE sotin1
    ! INTEGER, PARAMETER, PRIVATE :: bases_t = 8 ! TODO: Evaluate if this is better a 4 byte int.
 
    ! -----------------------------------------------------------------------------------------!
-   TYPE sotin1_t!(m_max)
+   TYPE sotin1_t(m_max)
       REAL(dp)          :: r               !<- Real coefficient.
-      REAL(dp)          :: im(m_max)  !<- Imag. coeffs.
-      INTEGER(bases_t)  :: base(m_max)    !<- Imag. dirs. (active, sorted). 
-      INTEGER(bases_t)  :: act_bas = 0    !<- Number of active dirs.
-      INTEGER(ord_t)    :: act_ord  = 0    !<- Actual order. TODO: Should this be per-basis?
-      ! INTEGER(bases_t), LEN :: m_max
+      REAL(dp)          :: im(m_max)       !<- Imag. coeffs.
+      INTEGER(bases_t)  :: base(m_max)     !<- Imag. dirs. (active, sorted). 
+      INTEGER(bases_t)  :: act_bas = 0     !<- Number of active dirs.
+      INTEGER(ord_t)    :: act_ord = 0     !<- Actual order. TODO: Should this be per-basis?
+      INTEGER(bases_t), LEN :: m_max
    END TYPE sotin1_t
    ! -----------------------------------------------------------------------------------------!
    INTERFACE PPRINT
@@ -219,10 +217,10 @@ CONTAINS
       INTEGER(bases_t) :: n_active
       ! --------------------------------------------------------------------------------------!
       
+      res = lhs%r + rhs%r  ! This initializes res.
+
       IF ( (rhs%act_ord>0) .and. (lhs%act_ord>0) ) THEN
          
-         res%r = lhs%r + rhs%r  ! This initializes res.
-
          res%act_ord  = MAX(rhs%act_ord,lhs%act_ord)
          res%act_bas = 0
 
@@ -717,35 +715,35 @@ CONTAINS
    END FUNCTION sotin1_tan_o_s
    !==========================================================================================!
 
-   !==========================================================================================!
-   !> @brief Evaluate natural logarithm function at oti number.
-   !! 
-   !! res = log(x)
-   !! 
-   !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
-   !******************************************************************************************!
-   FUNCTION sotin1_log_o_s(x) RESULT (res)
-      ! --------------------------------------------------------------------------------------!
-      IMPLICIT NONE
-      ! --------------------------------------------------------------------------------------!
-      TYPE(sotin1_t), INTENT(IN) :: x
-      TYPE(sotin1_t)             :: func
-      TYPE(sotin1_t)             :: res      
-      ! --------------------------------------------------------------------------------------!
-      INTEGER(bases_t) :: i_res, i_val
-      ! --------------------------------------------------------------------------------------!
+   ! !==========================================================================================!
+   ! !> @brief Evaluate natural logarithm function at oti number.
+   ! !! 
+   ! !! res = log(x)
+   ! !! 
+   ! !! @param[in] x: (sotin1_t) Value to evaluate the function (OTI).
+   ! !******************************************************************************************!
+   ! FUNCTION sotin1_log_o_s(x) RESULT (res)
+   !    ! --------------------------------------------------------------------------------------!
+   !    IMPLICIT NONE
+   !    ! --------------------------------------------------------------------------------------!
+   !    TYPE(sotin1_t), INTENT(IN) :: x
+   !    TYPE(sotin1_t)             :: func
+   !    TYPE(sotin1_t)             :: res      
+   !    ! --------------------------------------------------------------------------------------!
+   !    INTEGER(bases_t) :: i_res, i_val
+   !    ! --------------------------------------------------------------------------------------!
       
-      ! Evaluate function
-      func%r       = log(x%r)
-      func%im(1)   = one/x%r
-      func%base(1) = 1
-      func%act_ord = 1
-      func%act_bas = 1
+   !    ! Evaluate function
+   !    func%r       = log(x%r)
+   !    func%im(1)   = one/x%r
+   !    func%base(1) = 1
+   !    func%act_ord = 1
+   !    func%act_bas = 1
 
-      res = FEVAL1(func,x)
+   !    res = FEVAL1(func,x)
 
-   END FUNCTION sotin1_log_o_s
-   !==========================================================================================!
+   ! END FUNCTION sotin1_log_o_s
+   ! !==========================================================================================!
 
 
 
@@ -797,15 +795,17 @@ CONTAINS
          ! Only if imaginary basis supported, allocate memory. See how to update this.
          IF (base <= m_max) THEN
             
-            res%im(1) = one   
-            res%base(1)   = base  
-            res%act_ord    = i_ord 
-            res%act_bas   = 1
+            res%im(1)   = one   
+            res%base(1) = base  
+            res%act_ord = i_ord 
+            res%act_bas = 1
             
          ELSE
+            
             ! RAISE Warning that the number of imaginary direction is not supported 
             ! in this occation.
             PRINT*, "WARNING: Cant create OTI number with t" 
+
          END IF
 
       END IF

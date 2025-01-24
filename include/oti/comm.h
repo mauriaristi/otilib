@@ -5,6 +5,7 @@
 // ---------------------------------     EXTERNAL LIBRARIES     ---------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -12,6 +13,7 @@
 #include <stdbool.h>
 #include <inttypes.h>
 #include <math.h>
+#include <complex.h>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -49,6 +51,15 @@ enum oti_errors {
   
 };
 
+// Enumerators to assign a flag code
+enum oti_flags {  
+
+  // Define operations identifiers.
+  OTI_memory_is_owned   =     1,   ///< Owns memory.
+  OTI_memory_not_owned  =     0,   ///< Does not own memory
+  
+};
+
 // ----------------------------------------------------------------------------------------------------
 // ----------------------------------------    END ENUMS      -----------------------------------------
 // ----------------------------------------------------------------------------------------------------
@@ -58,14 +69,15 @@ enum oti_errors {
 // --------------------------------------       TYPEDEFS         --------------------------------------
 // ----------------------------------------------------------------------------------------------------
 
-typedef double     coeff_t; ///< Coefficient type.
-typedef double*      arr_t; ///< Coefficient array type.
-typedef uint64_t   imdir_t; ///< Imaginary direction type.
-typedef uint64_t    ndir_t; ///< Number of Imaginary directions type.
-typedef uint16_t   bases_t; ///< Imaginary bases type. 
-typedef uint8_t      ord_t; ///< Order type.
-typedef uint8_t      ndh_t; ///< Number of direction helpers type.
-typedef uint8_t     flag_t; ///< Flag type.
+typedef double complex    zcoeff_t; ///< Complex coefficient type.
+typedef double             coeff_t; ///< Coefficient type.
+typedef double*              arr_t; ///< Coefficient array type.
+typedef uint64_t           imdir_t; ///< Imaginary direction type.
+typedef uint64_t            ndir_t; ///< Number of Imaginary directions type.
+typedef uint16_t           bases_t; ///< Imaginary bases type. 
+typedef uint8_t              ord_t; ///< Order type.
+typedef uint8_t              ndh_t; ///< Number of direction helpers type.
+typedef uint8_t             flag_t; ///< Flag type.
 
 // typedef double complex zcoeff_t; ///< Complex Coefficient type.
 

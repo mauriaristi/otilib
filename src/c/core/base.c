@@ -362,6 +362,31 @@ void dhelp_get_idx_ord(bases_t* dir, ord_t len, imdir_t* residx, ord_t* resord, 
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
+imdir_t dhelp_map_index(imdir_t idx, ord_t order, bases_t* bases, dhelpl_t dhl ){
+
+    ord_t i;
+    bases_t* dummy_bases;
+    bases_t imBasis;
+    imdir_t idx_map = 0;
+
+    dummy_bases = &dhl.p_dh[order].p_fulldir[idx*order];
+
+
+    for( i = 0; i < order; i++){
+  
+        imBasis = bases[ dummy_bases[i]-1 ];
+    
+        // Only when the base is valid.
+        idx_map += dhl.p_dh[i].p_ndirs[imBasis-1];
+
+    }
+
+    return idx_map;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 coeff_t dhelp_compute_delta(imdir_t  idx, ord_t  ord, coeff_t* deltas, dhelpl_t dhl){
 
     bases_t* bases; 

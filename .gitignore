@@ -7,6 +7,7 @@ build/
 build*/
 
 .DS_Store
+.vscode/*
 src/python/pyoti/cython/*.c
 src/python/pyoti/cython/static/*.c
 src/python/pyoti/cython/*.h

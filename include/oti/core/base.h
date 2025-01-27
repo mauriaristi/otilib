@@ -9,7 +9,7 @@
 // ---------------------------------     DHELP FUNCTIONS  ---------------------------------------------
 // ----------------------------------------------------------------------------------------------------
 coeff_t dhelp_compute_delta(imdir_t  idx, ord_t  ord, coeff_t* deltas, dhelpl_t dhl);
-imdir_t dhelp_map_index(imdir_t idx, ord_t order, bases_t* bases, dhelpl_t dhl );
+imdir_t dhelp_map_index(imdir_t idx, ord_t order, const bases_t* bases, dhelpl_t dhl );
 
 void dhelp_div_imdir(imdir_t  numidx, ord_t  numord, 
                      imdir_t  denidx, ord_t  denord,

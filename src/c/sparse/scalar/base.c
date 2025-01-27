@@ -1012,9 +1012,10 @@ void soti_pprint(sotinum_t* num, dhelpl_t dhl){
             printf("  " _PCOEFFT " , ",  num->p_coeff[i]);
             dir = num->_oti.p_imidx[i];
 
-            imdir_bases = dhelp_get_imdir( dir, ordi, dhl);
+            printf(" ("_PIMDIRT","_PORDT")",dir,ordi);
+            //imdir_bases = dhelp_get_imdir( dir, ordi, dhl);
             
-            printArrayUI16( imdir_bases, ordi);
+            //printArrayUI16( imdir_bases, ordi);
 
             printf("\n");
 

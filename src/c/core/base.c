@@ -362,7 +362,7 @@ void dhelp_get_idx_ord(bases_t* dir, ord_t len, imdir_t* residx, ord_t* resord, 
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-imdir_t dhelp_map_index(imdir_t idx, ord_t order, bases_t* bases, dhelpl_t dhl ){
+imdir_t dhelp_map_index(imdir_t idx, ord_t order, const bases_t* bases, dhelpl_t dhl ){
 
     ord_t i;
     bases_t* dummy_bases;

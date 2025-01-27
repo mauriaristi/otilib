@@ -1269,6 +1269,67 @@ cdef class matso:
   #---------------------------------------------------------------------------------------------------  
 
   #***************************************************************************************************
+  def get_all_derivs(self, bases_t nbasis, ord_t order ):
+    """
+    This function creates a new 3D numpy array with all derivatives exported from the current OTI
+    structure.
+
+    :param nbasis: Number of bases in the OTI number (Related with the number of variables).
+
+    :param order: Maximum order of directions to export (max order of derivative).
+
+    :returns: Returns a new numpy array with the derivative information.
+
+    """
+    #*************************************************************************************************
+    global dhl
+
+    # cdef np.ndarray[coeff_t, ndim=3] res
+    cdef double[:,:,:] res
+    cdef coeff_t factor = 1
+    cdef ndir_t ndir
+    cdef ord_t ordi
+    cdef sotinum_t num
+    cdef imdir_t idx, imdir
+    cdef int64_t i, j, kk, count
+
+    
+    # get first the number of imaginary directions total
+    ndir = dhelp_ndirTotal(nbasis, order )
+    
+    res = np.zeros((ndir, self.arr.nrows, self.arr.ncols), dtype=np.float64)
+
+    # for i in range(self.arr.nrows):
+    #   for j in range(self.arr.ncols):
+    with nogil:
+      # This function can be easily parallelized here.
+      for kk in range(self.arr.size):
+        i = kk//self.arr.ncols
+        j = kk% self.arr.ncols
+        num = arrso_get_item_ij( &self.arr, i, j, dhl)
+        res[0,i,j] = num.re
+        count=1
+        # Set number imaginary directions
+        for ordi in range(min(num.act_order,order)):
+          
+          for idx in range(num.p_nnz[ordi]):
+            imdir = num.p_idx[ordi][idx]
+            factor = dhelp_get_deriv_factor(imdir, ordi+1, dhl)
+            
+            res[count+imdir,i,j] = factor*num.p_im[ordi][idx]
+
+          # end for 
+          
+          count = count + dhelp_ndirOrder(nbasis, ordi+1)
+
+      # end for 
+      
+
+    return np.asarray(res)
+
+  #---------------------------------------------------------------------------------------------------  
+
+  #***************************************************************************************************
   cpdef get_deriv(self, object hum_dir ):
     """
     PURPOSE: Get the corresponding derivative of the system.

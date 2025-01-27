@@ -1304,11 +1304,15 @@ cdef class matso:
     with nogil:
       # This function can be easily parallelized here.
       for kk in range(self.arr.size):
+        
         i = kk//self.arr.ncols
         j = kk% self.arr.ncols
+        
         num = arrso_get_item_ij( &self.arr, i, j, dhl)
+        
         res[0,i,j] = num.re
         count=1
+
         # Set number imaginary directions
         for ordi in range(min(num.act_order,order)):
           
@@ -1323,7 +1327,8 @@ cdef class matso:
           count = count + dhelp_ndirOrder(nbasis, ordi+1)
 
       # end for 
-      
+
+    # end with      
 
     return np.asarray(res)
 

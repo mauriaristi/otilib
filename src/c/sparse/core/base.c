@@ -69,7 +69,7 @@ void soticore_set_all_imidx( const bases_t* bases, soticore_t* obj,  dhelpl_t dh
 
     
     ord_t ordi, order;
-    ndir_t ndir;
+    ndir_t ndir, st_pos;
     imdir_t idx, idx_map;
 
     order = obj->flags[1]; // Actual order
@@ -77,13 +77,16 @@ void soticore_set_all_imidx( const bases_t* bases, soticore_t* obj,  dhelpl_t dh
     // This needs a temporal array with the total number of bases. This might need to be created via an
     // allocation call.
     
-    obj->p_ordptr[0] = 0;
+    obj->p_ordptr[0] = 0; // Starting point of all components (dummy?).
+    obj->p_imidx[0] = 0;  // Real direction.
     
-    for ( ordi = 1; ordi <= order+1; ordi++){
+    obj->p_ordptr[1] = 1;
+    
+    for ( ordi = 1; ordi <= order; ordi++){
         
         ndir = dhelp_ndirOrder( obj->nbases, ordi);
-
-        obj->p_ordptr[ordi] = obj->p_ordptr[ordi-1] + ndir;
+        st_pos = obj->p_ordptr[ordi]; // Starting point of all elements of order ordi.
+        obj->p_ordptr[ordi+1] = st_pos + ndir;
 
         // Loop to set all indices to the corresponding values from bases.
         // Maybe use some parallelism here.
@@ -91,14 +94,13 @@ void soticore_set_all_imidx( const bases_t* bases, soticore_t* obj,  dhelpl_t dh
             
             // This map index function must be as efficient as possible.
             idx_map = dhelp_map_index( idx, ordi, bases, dhl);
-            obj->p_imidx[idx] = idx_map;
+            obj->p_imidx[st_pos+idx] = idx_map;
 
         }
 
-
-
     }
 
+    
 }
 // -------------------------------------------------------------------------------------------------------
 
@@ -109,7 +111,7 @@ size_t soticore_memory_size( ndir_t nimdir, bases_t nbases, ord_t order){
     
     mem_size = ( (size_t)  nimdir    ) * sizeof(imdir_t) +
                ( (size_t)  nbases    ) * sizeof(bases_t) +
-               ( (size_t)  (order+1) ) * sizeof(ndir_t)  ;
+               ( (size_t)  (order+2) ) * sizeof(ndir_t)  ;
 
     return mem_size;
 

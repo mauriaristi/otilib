@@ -367,17 +367,22 @@ imdir_t dhelp_map_index(imdir_t idx, ord_t order, const bases_t* bases, dhelpl_t
     ord_t i;
     bases_t* dummy_bases;
     bases_t imBasis;
-    imdir_t idx_map = 0;
+    imdir_t idx_map = idx;
 
-    dummy_bases = &dhl.p_dh[order].p_fulldir[idx*order];
+    if (order!=0){
+        
+        idx_map = 0;
 
-
-    for( i = 0; i < order; i++){
-  
-        imBasis = bases[ dummy_bases[i]-1 ];
+        dummy_bases = &dhl.p_dh[order-1].p_fulldir[idx*order];
     
-        // Only when the base is valid.
-        idx_map += dhl.p_dh[i].p_ndirs[imBasis-1];
+        for( i = 0; i < order; i++){
+    
+            imBasis = bases[ dummy_bases[i]-1 ];
+        
+            // Only when the base is valid.
+            idx_map += dhl.p_dh[i].p_ndirs[imBasis-1];
+
+        }
 
     }
 

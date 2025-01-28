@@ -1001,21 +1001,21 @@ void soti_pprint(sotinum_t* num, dhelpl_t dhl){
     printf("      VALUE   ,    IMDIR  \n");
 
     // print real direction.
-    printf("  " _PCOEFFT " , [0]\n",num->p_coeff[0]);
+    // printf("  " _PCOEFFT " , [0]\n",num->p_coeff[0]);
 
     // loop over active orders:
-    for( ordi = 1; ordi <= act_order; ordi++){
+    for( ordi = 0; ordi <= act_order; ordi++){
 
         // loop over active imaginary directions:
-        for ( i = num->_oti.p_ordptr[ordi-1]; i< num->_oti.p_ordptr[ordi]; i++){
+        for ( i = num->_oti.p_ordptr[ordi]; i< num->_oti.p_ordptr[ordi+1]; i++){
             
             printf("  " _PCOEFFT " , ",  num->p_coeff[i]);
             dir = num->_oti.p_imidx[i];
 
-            printf(" ("_PIMDIRT","_PORDT")",dir,ordi);
-            //imdir_bases = dhelp_get_imdir( dir, ordi, dhl);
+            // printf(" ("_PIMDIRT","_PORDT")",dir,ordi);
+            imdir_bases = dhelp_get_imdir( dir, ordi, dhl);
             
-            //printArrayUI16( imdir_bases, ordi);
+            printArrayUI16( imdir_bases, ordi);
 
             printf("\n");
 
@@ -1578,16 +1578,29 @@ void soti_free(sotinum_t* num){
 }
 // -------------------------------------------------------------------------------------------------------
 
-// // ****************************************************************************************************
-// sotinum_t soti_createReal_bases(coeff_t num, bases_t nbases, ord_t trc_order, dhelpl_t dhl){
+// *******************************************************************************************************
+inline void soti_set_actual_order( sotinum_t* num, ord_t act_order ){
+
+    num->_oti.flags[1] = act_order;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+sotinum_t soti_createReal_bases(coeff_t num, const bases_t* bases, bases_t nbases, ord_t order, 
+                                dhelpl_t dhl){
     
-//     sotinum_t res = soti_createEmpty_bases(nbases,trc_order,dhl);
+    sotinum_t res = soti_createEmpty_bases(bases, nbases, order, dhl);
 
-//     res.re = num;
+    
+    res.p_coeff[0] = num;
 
-//     return res;
-// }
-// // ----------------------------------------------------------------------------------------------------
+    // set all imaginary coeffs as 0.
+    memset( &res.p_coeff[1], 0, ( res._oti.ncoeff - 1 )*sizeof(coeff_t) );
+
+    return res;
+}
+// ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
 sotinum_t soti_createEmpty_bases( const bases_t* bases, bases_t nbases, ord_t order, dhelpl_t dhl){
@@ -1605,16 +1618,19 @@ sotinum_t soti_createEmpty_bases( const bases_t* bases, bases_t nbases, ord_t or
 }
 // ----------------------------------------------------------------------------------------------------
 
-// // *******************************************************************************************************
-// sotinum_t soti_createReal(coeff_t num, bases_t nbases ,ord_t trc_order, dhelpl_t dhl){
+// *******************************************************************************************************
+sotinum_t soti_createReal(coeff_t num, ord_t trc_order, dhelpl_t dhl){
     
-//     sotinum_t res = soti_createEmpty(trc_order,dhl);
+    sotinum_t res = soti_init();
 
-//     res.re = num;
+    // set truncation order.
+    res._oti.flags[0] = trc_order;
 
-//     return res;
-// }
-// // -------------------------------------------------------------------------------------------------------
+    res.re = num;
+    
+    return res;
+}
+// -------------------------------------------------------------------------------------------------------
  
 // // ****************************************************************************************************
 // sotinum_t soti_createEmpty( ord_t trc_order, dhelpl_t dhl){
@@ -1637,22 +1653,30 @@ sotinum_t soti_createEmpty_bases( const bases_t* bases, bases_t nbases, ord_t or
 // }
 // // ----------------------------------------------------------------------------------------------------
 
-// // ****************************************************************************************************
-// sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
+// ****************************************************************************************************
+sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
     
-//     // This function assumes that 'other' is correctly allocated.
-//     // Defines a new memory space from the p_nnz (not p_size) of the input sparse number.
-//     sotinum_t res = soti_createEmpty_predef(other->p_nnz, other->trc_order, dhl);
+    // This function assumes that 'other' is correctly allocated.
+    // Defines a new memory space from the p_nnz (not p_size) of the input sparse number.
 
-//     return res;
+    sotinum_t res = soti_allocateEmpty_ndirtot(
+        other->_oti.ncoeff, 
+        other->_oti.nbases, 
+        other->_oti.flags[1], 
+        dhl
+    );
 
-// }
-// // ----------------------------------------------------------------------------------------------------
+    memcpy(res._oti.p_bases,other->_oti.p_bases,other->_oti.nbases);
+
+    return res;
+
+}
+// ----------------------------------------------------------------------------------------------------
 
 // *******************************************************************************************************
 inline sotinum_t soti_allocateEmpty_predef(bases_t nbases, ord_t order, dhelpl_t dhl ){
     
-    char fnName[] = "soti_createEmpty_predef"; // Function Name for error management.
+    char fnName[] = "soti_allocateEmpty_predef"; // Function Name for error management.
 
     sotinum_t res = soti_init(); // Initialize pointer values.
 
@@ -1679,7 +1703,52 @@ inline sotinum_t soti_allocateEmpty_predef(bases_t nbases, ord_t order, dhelpl_t
 
         if ( memory == NULL ){
 
-            printf("ERROR: Not enough memory to handle OTI number.\n Exiting...\n");
+            printf("ERROR(%s): Not enough memory to handle OTI number.\n Exiting...\n");
+            exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
+
+        }
+
+        memory = soti_distribute_memory( memory, &res );
+        
+        // Set flag that memory is owned.
+        soti_set_memory_ownership(&res);
+
+    } 
+    
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+// *******************************************************************************************************
+inline sotinum_t soti_allocateEmpty_ndirtot(ndir_t ncoeff, bases_t nbases, ord_t order, dhelpl_t dhl ){
+    
+    char fnName[] = "soti_allocateEmpty_ndirtot"; // Function Name for error management.
+
+    sotinum_t res = soti_init(); // Initialize pointer values.
+
+    void * memory = NULL;
+    uint64_t allocation_size = 0;
+    
+    if (order != 0){
+        
+        res._oti.flags[0] = order; // Truncation order
+        res._oti.flags[1] = order; // Actual order
+    
+        res._oti.nbases = nbases;
+
+        // Get the total number of coefficients for this number.
+        res._oti.ncoeff = ncoeff;        
+
+        // Get the allocation size of the OTI number:
+        allocation_size = soti_memory_size( ncoeff, nbases, order);
+
+        // Allocate memory and check if correctly allocated.
+        memory = malloc(allocation_size);
+
+        if ( memory == NULL ){
+
+            printf("ERROR(%s): Not enough memory to handle OTI number.\n Exiting...\n",fnName);
             exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
 
         }
@@ -1734,9 +1803,9 @@ void* soti_distribute_memory( void* mem, sotinum_t* res ){
 
     // Distribute memory among the different pointers.
     res->p_coeff  = (coeff_t*)memory;
-    memory    += res->_oti.ncoeff * sizeof(coeff_t*);
+    memory    += res->_oti.ncoeff * sizeof(coeff_t);
 
-    soticore_distribute_memory(mem,&res->_oti);
+    memory = soticore_distribute_memory( memory, &res->_oti );
 
     // If necessary, returns end of memory.
     return memory;

@@ -13,7 +13,7 @@ typedef struct {
                          ///< handle memory rather than this OTI struct.
     imdir_t*    p_imidx; ///< (ncoeff) Indices of the im. dirs associated to each coefficient per order.
     bases_t*    p_bases; ///< (nbases) Array with the active bases in the OTI number.
-    ndir_t*    p_ordptr; ///< (act_order) Array with the start-end positions of the coeffs for each order.
+    ndir_t*    p_ordptr; ///< (act_order+2) Array with the start-end positions of the coeffs for each order.
                          ///< flags[0]:  Truncation order.
                          ///< flags[1]:  Actual order of the number.
                          ///< flags[2]:  Mem. ownership flag: 1 if this structure owns memory, 0 otherwise

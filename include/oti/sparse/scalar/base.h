@@ -108,6 +108,17 @@ void* soti_distribute_memory( void* mem, sotinum_t* res );
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
+@brief Sets the actual order of the OTI number as given. This function simplifies the action and avoids
+       accessing the individual structure components.
+
+@param[in]     num   Addres of the OTI number to be set.
+@param[inout]  act_order   Order to be set.
+
+******************************************************************************************************/
+void soti_set_actual_order( sotinum_t* num, ord_t act_order );
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
 @brief Function that returns the size of memory to be allocated and distributed into a sparse OTI type.
 
 @param[in] nimdir Total number of coefficients for this number.
@@ -277,26 +288,30 @@ void soti_free(sotinum_t* num);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Create a new oti number with reserved memory and given real coefficient. 
+@brief Create a new oti number with reserved memory and initialized imaginary directions. 
+       In the case the 'createEmpty' function is used, memory of the im. coeffs. is not initialized.
+       In case 'createReal' is used, the real coefficient is set as given, and all other im. coeffs are 
+       set to 0.0.
 
 @param[in] num Real coefficient of the OTI number.
-@param[in] nbases Number of bases.
+@param[in] bases Pointer to an array of nbases that contains the actual basis of the number.
+@param[in] nbases Number of basis.
 @param[in] order Truncation order.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_createReal_bases(  coeff_t num, bases_t nbases, ord_t order, dhelpl_t dhl);
-sotinum_t soti_createEmpty_bases( const bases_t* bases, bases_t nbases, ord_t order, dhelpl_t dhl);
+sotinum_t soti_createReal_bases(coeff_t num, const bases_t* bases, bases_t nbases, ord_t order, dhelpl_t dhl);
+sotinum_t soti_createEmpty_bases(            const bases_t* bases, bases_t nbases, ord_t order, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-// /**************************************************************************************************//**
-// @brief Create a new oti number with a real coefficient given by the input parameter and 
+/**************************************************************************************************//**
+@brief Create a new oti number with a real coefficient given by the input parameter and 
 
-// @param[in] num Real coefficient of the OTI number.
-// @param[in] order Truncation order.
-// @param[in] dhl Direction helper list object.
-// ******************************************************************************************************/ 
-// sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl);
-// // ----------------------------------------------------------------------------------------------------
+@param[in] num Real coefficient of the OTI number.
+@param[in] trc_order Truncation order.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_createReal(coeff_t num, ord_t trc_order, dhelpl_t dhl);
+// ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
 @brief Allocate a new sparse oti number in memory. Creation follows the standard memory sizes as 

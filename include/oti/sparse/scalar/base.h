@@ -349,4 +349,15 @@ checks that the orders are within the bounds of the OTI number order
 void soti_reset_orders(ord_t ord_start, ord_t ord_end, sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**************************************************************************************************//**
+@brief Allocates the memory given the total number of directions, number of bases and order.
+
+@param[in] ncoeff Total number of coefficients.
+@param[in] nbases Total number of bases to be allocated.
+@param[in] order Truncation order.
+@param[in] dhl Direction helper list object.
+******************************************************************************************************/ 
+sotinum_t soti_allocateEmpty_ndirtot(ndir_t ncoeff, bases_t nbases, ord_t order, dhelpl_t dhl );
+// ----------------------------------------------------------------------------------------------------
+
 #endif

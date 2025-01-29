@@ -10,29 +10,44 @@ int main(){
 
 	// Create a variable x with real value 3.5
 
+	// ---------------------------------------------------------------------------------------------------
+	// TEST soti_init
+	// ---------------------------------------------------------------------------------------------------
+
 	printf(" > Loading pre-computed data\n");
     dhelp_load("../data/", &dhl);
 
 	printf(" > Loaded pre-computed data\n");
-	
+	printf("Test - soti_init \n");
 	x = soti_init();
 
 	soti_pprint(&x, dhl);
 
-	pritnf('Test - oti_createEmpty_bases \n');
+
+	// ---------------------------------------------------------------------------------------------------
+	// TEST soti_createEmpty_bases
+	// ---------------------------------------------------------------------------------------------------
+	printf("Test - soti_createEmpty_bases \n");
 	x = soti_createEmpty_bases(bases, 2, 2, dhl);
 	soti_pprint(&x, dhl);
 	soti_free(&x);
 
-
-	pritnf('Test - soti_createReal_bases \n');
+	// ---------------------------------------------------------------------------------------------------
+	// TEST soti_createReal_bases
+	// ---------------------------------------------------------------------------------------------------
+	bases[0] = 1;
+	bases[1] = 4;
+	printf("Test - soti_createReal_bases \n");
 	x = soti_createReal_bases(0.5, bases, 2, 2, dhl);
 	soti_pprint(&x, dhl);
 	soti_free(&x);
 
-	pritnf('Test - soti_createReal \n');
+	// ---------------------------------------------------------------------------------------------------
+	// TEST soti_createReal
+	// ---------------------------------------------------------------------------------------------------
+	printf("Test - soti_createReal \n");
 	x = soti_createReal(0.25, 0, dhl);
-	soti_pprint(&x, dhl);
+	soti_pprint(&x, dhl); 
 	soti_free(&x);
 
 

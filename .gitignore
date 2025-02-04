@@ -6,7 +6,7 @@ data/
 build/
 build*/
 
-.vscode
+.vscode*
 
 .DS_Store
 src/python/pyoti/cython/*.c

@@ -864,7 +864,16 @@ cpdef inv_block(object arr, object out = None):
 #*****************************************************************************************************
 cpdef solve(object K_in, matso b_in, matso out = None, solver = 'SuperLU', solver_args = {}):
   """
-  PURPOSE:   Solve OTI linear system of equations.
+  u = solve(object K_in, matso b_in, matso out = None, solver = 'SuperLU', solver_args = {})
+  
+  Solves an OTI linear system of equations Ku = b.
+
+  :param K_in: Coefficient matrix. This must be a csr_matrix or matso array.
+
+  :param b_in: right hand side vector. This must be a matso array.
+
+  :param solver: Optional string with the selected solver. default 'SuperLU'.
+  
   """
   #***************************************************************************************************
   global dhl
@@ -995,19 +1004,17 @@ cdef solve_dense(matso K_in, matso b_in, matso out = None, solver = 'SuperLU', s
 #*****************************************************************************************************
 cdef solve_sparse(csr_matrix K_in, matso b_in, matso out = None, solver = 'SuperLU', solver_args = {}):
   """
-  PURPOSE:   Solve an OTI sparse linear system of equations.
+  Solve an OTI sparse linear system of equations.
 
-  INPUTS: 
-
-        - K_in:    csr_matrix of OTI numbers.
+  :param K_in:    csr_matrix of OTI numbers.
   
-        - b_in:    Right hand side of the equation 
+  :param b_in:    Right hand side of the equation 
   
-        - out:     Result holder. Default None (returns newly allocated array)
+  :param out:     Result holder. Default None (returns newly allocated array)
   
-        - solver:  Default 'SuperLU'. Other options include: 'cholesky', 'spilu' and 'umfpack'
+  :param solver:  Default 'SuperLU'. Other options include: 'cholesky', 'spilu' and 'umfpack'
   
-        - **kwargs Specific factorized solver.
+  :param **kwargs Specific factorized solver.
 
   """
   #***************************************************************************************************

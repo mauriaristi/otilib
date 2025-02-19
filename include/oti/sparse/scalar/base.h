@@ -275,6 +275,7 @@ void soti_initialize(sotinum_t* res);
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
 void soti_pprint(sotinum_t* num, dhelpl_t dhl);
+void soti_print_struct(sotinum_t* num, dhelpl_t dhl);
 // void soti_print(sotinum_t* num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
@@ -304,13 +305,25 @@ sotinum_t soti_createEmpty_bases(            const bases_t* bases, bases_t nbase
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Create a new oti number with a real coefficient given by the input parameter and 
+@brief Create a new oti number with a real coefficient. This function is costly as it allocates memory.
+       
+Usage:
+       
+       sotinum_t num = soti_createReal(3.5, dhl);
+
+A preferred and more efficient approach is to use soti_initialize
+
+       sotinum_t num = soti_init();
+       soti_initialize(&num); 
+
+This sets up the number without any memory allocation calls. Useful when dealing with real numbers.
+
 
 @param[in] num Real coefficient of the OTI number.
-@param[in] trc_order Truncation order.
 @param[in] dhl Direction helper list object.
+
 ******************************************************************************************************/ 
-sotinum_t soti_createReal(coeff_t num, ord_t trc_order, dhelpl_t dhl);
+sotinum_t soti_createReal(coeff_t num, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -323,7 +336,7 @@ memory of the other elements correspond to zero value coefficients in the imagin
 @param[in] order Truncation order.
 @param[in] dhl Direction helper list object.
 ******************************************************************************************************/ 
-sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl); 
+sotinum_t soti_createEmpty( bases_t nbases, ord_t order, dhelpl_t dhl); 
 sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 

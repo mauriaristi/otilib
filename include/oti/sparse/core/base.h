@@ -2,7 +2,33 @@
 #define OTI_SPARSE_CORE_BASE_H
 
 
+/*****************************************************************************************************//**
+@brief Set all imaginary indices.
+
+@param[in] bases: List of the bases to be set.
+@param[inout] obj: soticore object to be set from the bases definition.
+
+*********************************************************************************************************/
 void soticore_set_all_imidx( const bases_t* bases, soticore_t* obj,  dhelpl_t dhl);
+// -------------------------------------------------------------------------------------------------------
+
+/*****************************************************************************************************//**
+@brief Initializes a soticore structre. This Nullyfies all pointers, making it "safe" to avoid accessing
+wrong memory addresses.
+
+Usage: When declaring a soticore structure. 
+
+       soticore_t num = soticore_init();
+
+In case you need this to behave as a real number, the initializer function must be used afterwards. 
+
+       soticore_t num = soticore_init();
+       soticore_initialize( &num );
+
+
+*********************************************************************************************************/
+soticore_t soticore_init(void);
+// -------------------------------------------------------------------------------------------------------
 
 /*****************************************************************************************************//**
 @brief Set/unset memory ownership flags for the OTI core structure.
@@ -42,7 +68,6 @@ size_t soticore_memory_size( ndir_t nimdir, bases_t nbases, ord_t order);
        uninitialized pointers in the structure.
 
 *********************************************************************************************************/
-soticore_t soticore_init(void);
 void soticore_initialize(soticore_t* res);
 // -------------------------------------------------------------------------------------------------------
 

@@ -983,6 +983,30 @@
 // // ----------------------------------------------------------------------------------------------------
 
 // *******************************************************************************************************
+void soti_print_struct(sotinum_t* num, dhelpl_t dhl){
+
+    printf(" sotinum_t.re:           %11.4e <at %p> \n", num->re, &num->re);
+    printf(" sotinum_t.p_coeff:      %p \n", num->p_coeff  );
+    printf(" sotinum_t._oti:         <at %p> \n", &num->_oti );
+    printf(" sotinum_t._oti.nbases:  "_PNDIRT" <at %p> \n", num->_oti.nbases, &num->_oti.nbases );
+    printf(" sotinum_t._oti.ncoeff:  "_PNDIRT" <at %p> \n", num->_oti.ncoeff, &num->_oti.ncoeff );
+    printf(" sotinum_t._oti.flags:   <at %p> ", &num->_oti.flags);
+        printArrayUI8( num->_oti.flags, 8); 
+        printf("\n");
+    printf(" sotinum_t._oti.p_imidx:  %p, ", num->_oti.p_imidx);
+        printArrayUI64( num->_oti.p_imidx, num->_oti.ncoeff); 
+        printf("\n");
+    printf(" sotinum_t._oti.p_bases:  %p, ", num->_oti.p_bases);
+        printArrayUI64( num->_oti.p_bases, num->_oti.nbases);  
+        printf("\n");
+    printf(" sotinum_t._oti.p_ordptr: %p, ", num->_oti.p_ordptr);
+        printArrayUI64( num->_oti.p_ordptr, num->_oti.flags[0]+2);  
+        printf("\n");
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 void soti_pprint(sotinum_t* num, dhelpl_t dhl){
 
     ndir_t ncoeffs, i;
@@ -990,34 +1014,41 @@ void soti_pprint(sotinum_t* num, dhelpl_t dhl){
     ord_t ordi, act_order, trc_order;
     bases_t* imdir_bases;
 
-    trc_order = num->_oti.flags[0];
-    act_order = num->_oti.flags[1];
+    if (num->p_coeff != NULL ) {
+        
+        trc_order = num->_oti.flags[0];
+        act_order = num->_oti.flags[1];
 
-    ncoeffs = num->_oti.ncoeff;
-    
-    printf("  act_ord: "_PORDT", trc_ord: "_PORDT", non_zero: "_PNDIRT", re: %11.4e\n",
-        act_order, trc_order, ncoeffs, num->p_coeff[0]);
-    
-    printf("      VALUE   ,    IMDIR  \n");
+        ncoeffs = num->_oti.ncoeff;
+        
+        printf("  act_ord: "_PORDT", trc_ord: "_PORDT", non_zero: "_PNDIRT", re: %11.4e\n",
+            act_order, trc_order, ncoeffs, num->p_coeff[0]);
+        
+        
 
-    // print real direction.
-    // printf("  " _PCOEFFT " , [0]\n",num->p_coeff[0]);
-
-    // loop over active orders:
-    for( ordi = 0; ordi <= act_order; ordi++){
-
-        // loop over active imaginary directions:
-        for ( i = num->_oti.p_ordptr[ordi]; i< num->_oti.p_ordptr[ordi+1]; i++){
+        if (num->_oti.p_ordptr != NULL && num->_oti.p_imidx != NULL){
             
-            printf("  " _PCOEFFT " , ",  num->p_coeff[i]);
-            dir = num->_oti.p_imidx[i];
+            printf("      VALUE   ,    IMDIR  \n");
 
-            // printf(" ("_PIMDIRT","_PORDT")",dir,ordi);
-            imdir_bases = dhelp_get_imdir( dir, ordi, dhl);
-            
-            printArrayUI16( imdir_bases, ordi);
+            // loop over active orders:
+            for( ordi = 0; ordi <= act_order; ordi++){
 
-            printf("\n");
+                // loop over active imaginary directions:
+                for ( i = num->_oti.p_ordptr[ordi]; i< num->_oti.p_ordptr[ordi+1]; i++){
+                    
+                    printf("  " _PCOEFFT " , ",  num->p_coeff[i]);
+                    dir = num->_oti.p_imidx[i];
+
+                    // printf(" ("_PIMDIRT","_PORDT")",dir,ordi);
+                    imdir_bases = dhelp_get_imdir( dir, ordi, dhl);
+                    
+                    printArrayUI16( imdir_bases, ordi);
+
+                    printf("\n");
+
+                }
+
+            }
 
         }
 
@@ -1542,7 +1573,9 @@ inline sotinum_t soti_init(void){
 
     sotinum_t res;
     
-    soti_initialize(&res);
+    res.p_coeff = NULL;
+
+    res._oti = soticore_init();
 
     return res;
 
@@ -1552,6 +1585,8 @@ inline sotinum_t soti_init(void){
 
 // *******************************************************************************************************
 inline void soti_initialize(sotinum_t* res){
+    
+    // NOTE: This assumes that the res structure comes initializied with soti_init().
 
     // Real part not modified.
     res->p_coeff   = &res->re;     // Address of the real coefficient. This corresponds to the starting 
@@ -1586,12 +1621,32 @@ inline void soti_set_actual_order( sotinum_t* num, ord_t act_order ){
 }
 // -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
+// *******************************************************************************************************
+sotinum_t soti_createReal(coeff_t num, dhelpl_t dhl){
+    
+    sotinum_t res = soti_allocateEmpty_predef( 0, 0, dhl);
+    ord_t ordi;
+
+    // set truncation order.
+    res._oti.flags[0] = 0; // truncation order.
+    res._oti.flags[1] = 0; // Actual order
+
+    res.p_coeff[0] = num;
+    res._oti.p_imidx[0] = 0; // Imdir 0
+    
+    
+    res._oti.p_ordptr[0] = 0; //  0
+    res._oti.p_ordptr[1] = 1;
+    
+    return res;
+}
+// -------------------------------------------------------------------------------------------------------
+
+// *******************************************************************************************************
 sotinum_t soti_createReal_bases(coeff_t num, const bases_t* bases, bases_t nbases, ord_t order, 
                                 dhelpl_t dhl){
     
     sotinum_t res = soti_createEmpty_bases(bases, nbases, order, dhl);
-
     
     res.p_coeff[0] = num;
 
@@ -1600,9 +1655,9 @@ sotinum_t soti_createReal_bases(coeff_t num, const bases_t* bases, bases_t nbase
 
     return res;
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
+// *******************************************************************************************************
 sotinum_t soti_createEmpty_bases( const bases_t* bases, bases_t nbases, ord_t order, dhelpl_t dhl){
     
     sotinum_t res;
@@ -1616,44 +1671,46 @@ sotinum_t soti_createEmpty_bases( const bases_t* bases, bases_t nbases, ord_t or
     return res;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 // *******************************************************************************************************
-sotinum_t soti_createReal(coeff_t num, ord_t trc_order, dhelpl_t dhl){
+sotinum_t soti_createReal_nbases(coeff_t num, bases_t nbases, ord_t order, dhelpl_t dhl){
     
-    sotinum_t res = soti_init();
+    sotinum_t res = soti_allocateEmpty_predef( nbases, order, dhl);
+
+    ord_t ordi;
 
     // set truncation order.
-    res._oti.flags[0] = trc_order;
+    res._oti.flags[0] = order; // truncation order.
+    res._oti.flags[1] = 0; // Actual order
 
-    res.re = num;
+    res.p_coeff[0] = num;
+    res._oti.p_imidx[0] = 0; // Imdir 0
+    
+    
+    res._oti.p_ordptr[0] = 0; //  0
+    res._oti.p_ordptr[1] = 1;
     
     return res;
 }
 // -------------------------------------------------------------------------------------------------------
  
-// // ****************************************************************************************************
-// sotinum_t soti_createEmpty( ord_t trc_order, dhelpl_t dhl){
-    
-//     sotinum_t res;
-    
-//     ndir_t p_nnz[_MAXORDER_OTI]; 
 
-//     ord_t i;
+
+ 
+// *******************************************************************************************************
+sotinum_t soti_createEmpty( bases_t nbases, ord_t order, dhelpl_t dhl){
     
-//     // Define allocation sizes.
-//     for ( i = 0; i < trc_order; i++){
-//         p_nnz[i] = dhl.p_dh[i].allocSize; // Get standard allocation sizes.
-//     }
+    sotinum_t res = soti_allocateEmpty_predef( nbases, order, dhl );
     
-//     res = soti_createEmpty_predef(p_nnz, trc_order, dhl);
+    // Setup the values for the bases and all mixed imaginary directions.
 
-//     return res;
+    return res;
 
-// }
-// // ----------------------------------------------------------------------------------------------------
+}
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
+// *******************************************************************************************************
 sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
     
     // This function assumes that 'other' is correctly allocated.
@@ -1671,50 +1728,21 @@ sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl){
     return res;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 // *******************************************************************************************************
 inline sotinum_t soti_allocateEmpty_predef(bases_t nbases, ord_t order, dhelpl_t dhl ){
     
     char fnName[] = "soti_allocateEmpty_predef"; // Function Name for error management.
 
-    sotinum_t res = soti_init(); // Initialize pointer values.
+    ndir_t ncoeff;
+    sotinum_t res;
 
-    void * memory = NULL;
-    uint64_t allocation_size = 0;
-    ord_t i;
-    ord_t act_order;
-    
-    if (order != 0){
-        
-        res._oti.flags[0] = order; // Truncation order
-        res._oti.flags[1] = order; // Actual order
-    
-        res._oti.nbases = nbases;
+    // Get the total number of coefficients for this number.
+    // TODO: Use dhl's mehtod to get ndirtotal (significantly faster)
+    ncoeff = dhelp_ndirTotal( nbases, order );
+    res = soti_allocateEmpty_ndirtot( ncoeff, nbases, order, dhl );
 
-        // Get the total number of coefficients for this number.
-        res._oti.ncoeff = dhelp_ndirTotal(nbases, order);        
-
-        // Get the allocation size of the OTI number:
-        allocation_size = soti_memory_size(res._oti.ncoeff, nbases, order);
-
-        // Allocate memory and check if correctly allocated.
-        memory = malloc(allocation_size);
-
-        if ( memory == NULL ){
-
-            printf("ERROR(%s): Not enough memory to handle OTI number.\n Exiting...\n");
-            exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
-
-        }
-
-        memory = soti_distribute_memory( memory, &res );
-        
-        // Set flag that memory is owned.
-        soti_set_memory_ownership(&res);
-
-    } 
-    
     return res;
 
 }
@@ -1729,37 +1757,34 @@ inline sotinum_t soti_allocateEmpty_ndirtot(ndir_t ncoeff, bases_t nbases, ord_t
 
     void * memory = NULL;
     uint64_t allocation_size = 0;
-    
-    if (order != 0){
         
-        res._oti.flags[0] = order; // Truncation order
-        res._oti.flags[1] = order; // Actual order
-    
-        res._oti.nbases = nbases;
-
-        // Get the total number of coefficients for this number.
-        res._oti.ncoeff = ncoeff;        
-
-        // Get the allocation size of the OTI number:
-        allocation_size = soti_memory_size( ncoeff, nbases, order);
-
-        // Allocate memory and check if correctly allocated.
-        memory = malloc(allocation_size);
-
-        if ( memory == NULL ){
-
-            printf("ERROR(%s): Not enough memory to handle OTI number.\n Exiting...\n",fnName);
-            exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
-
-        }
-
-        memory = soti_distribute_memory( memory, &res );
         
-        // Set flag that memory is owned.
-        soti_set_memory_ownership(&res);
+    res._oti.flags[0] = order; // Truncation order
+    res._oti.flags[1] = order; // Actual order
 
-    } 
+    res._oti.nbases = nbases;
+
+    // Get the total number of coefficients for this number.
+    res._oti.ncoeff = ncoeff;        
+
+    // Get the allocation size of the OTI number:
+    allocation_size = soti_memory_size( ncoeff, nbases, order);
+
+    // Allocate memory and check if correctly allocated.
+    memory = malloc(allocation_size);
+
+    if ( memory == NULL ){
+
+        printf("ERROR(%s): Not enough memory to handle OTI number.\n Exiting...\n",fnName);
+        exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
+
+    }
+
+    memory = soti_distribute_memory( memory, &res );
     
+    // Set flag that memory is owned.
+    soti_set_memory_ownership(&res);
+
     return res;
 
 }
@@ -1812,4 +1837,5 @@ void* soti_distribute_memory( void* mem, sotinum_t* res ){
 
 }
 // -------------------------------------------------------------------------------------------------------
+
 #endif

@@ -8,7 +8,11 @@ inline soticore_t soticore_init(void){
 
     soticore_t res;
 
-    soticore_initialize(&res);
+    res.flags[2] = 0;  // Memory ownership set to false.
+    
+    res.p_imidx   = NULL;
+    res.p_bases   = NULL;
+    res.p_ordptr  = NULL;
 
     return res;
 
@@ -19,11 +23,11 @@ inline soticore_t soticore_init(void){
 inline void soticore_initialize(soticore_t* res){
 
     int8_t i;
-
     
     res->nbases    = 0;   // No actual bases, this p_bases = NULL.
     res->ncoeff    = 1;   // Only 1 coefficient.
     
+    // TODO: Consider memset?
     // Set all flags to 0.
     for (i=0; i<8; i++){
         // res.flags[0]  = 0;   // Truncation order.
@@ -32,9 +36,9 @@ inline void soticore_initialize(soticore_t* res){
        res->flags[i] = 0; 
     }
 
-    res->p_imidx   = &res->nbases; // Address of  nbases. Gets p_imdir[0]=0.
+    res->p_imidx   = &res->nbases; // Address of nbases. Gets p_imdir[0]=0.
     res->p_bases   = NULL;
-    res->p_ordptr  = &res->nbases; // Picks up p_ordptr[0] = 0, p_ordptr[1] = 1
+    res->p_ordptr  = &res->nbases; // Picks up p_ordptr[0] = 0, p_ordptr[1]=1
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -78,7 +82,7 @@ void soticore_set_all_imidx( const bases_t* bases, soticore_t* obj,  dhelpl_t dh
     // allocation call.
     
     obj->p_ordptr[0] = 0; // Starting point of all components (dummy?).
-    obj->p_imidx[0] = 0;  // Real direction.
+    obj->p_imidx[0]  = 0; // Real direction.
     
     obj->p_ordptr[1] = 1;
     

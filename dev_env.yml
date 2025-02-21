@@ -1,0 +1,17 @@
+# ========================================================================================================
+# This file contains the development environments required to develop and test the library.
+#
+# Author:      
+#    Mauricio Aristizabal, PhD
+#    University of texas at San Antonio
+# 
+# Log:
+# 
+# 2025/02/19: Created.
+# 
+# ========================================================================================================
+channels:
+  - conda-forge
+  - default
+dependencies:
+  - cunit

@@ -1505,37 +1505,37 @@ void soti_pprint(sotinum_t* num, dhelpl_t dhl){
 // }
 // // ----------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-inline void soti_copy_nomemchk_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
+// // ****************************************************************************************************
+// inline void soti_copy_nomemchk_to(sotinum_t* src, sotinum_t* dest, dhelpl_t dhl){
     
-    // WARNING: This function does not check that destination memory can hold the source memory.
-    // This function assumes destination memory is available and 
-    ord_t i;
+//     // WARNING: This function does not check that destination memory can hold the source memory.
+//     // This function assumes destination memory is available and 
+//     ord_t i;
 
-    // Copy real coefficient
-    dest->re = src->re;
-    dest->act_order = src->act_order;
+//     // Copy real coefficient
+//     dest->re = src->re;
+//     dest->act_order = src->act_order;
 
-    // Copy imaginary coefficients
-    for ( i = 0; i < src->act_order; i++){
+//     // Copy imaginary coefficients
+//     for ( i = 0; i < src->act_order; i++){
         
-        // Copy memory to dest number. Only copy non zeros.
-        memcpy(dest->p_im[i], src->p_im[i], src->p_nnz[i]*sizeof(coeff_t) );
-        memcpy(dest->p_idx[i],src->p_idx[i],src->p_nnz[i]*sizeof(imdir_t) );
+//         // Copy memory to dest number. Only copy non zeros.
+//         memcpy(dest->p_im[i], src->p_im[i], src->p_nnz[i]*sizeof(coeff_t) );
+//         memcpy(dest->p_idx[i],src->p_idx[i],src->p_nnz[i]*sizeof(imdir_t) );
 
-        dest->p_nnz[i] = src->p_nnz[i]; 
+//         dest->p_nnz[i] = src->p_nnz[i]; 
 
-    }  
+//     }  
 
-    // Set all other elements in the imaginary directions to zero.
-    for (; i<dest->trc_order;i++){
+//     // Set all other elements in the imaginary directions to zero.
+//     for (; i<dest->trc_order;i++){
 
-        dest->p_nnz[i] = 0;
+//         dest->p_nnz[i] = 0;
 
-    }
+//     }
 
-}
-// ----------------------------------------------------------------------------------------------------
+// }
+// // ----------------------------------------------------------------------------------------------------
 
 // // ****************************************************************************************************
 // sotinum_t soti_copy(sotinum_t* num, dhelpl_t dhl){

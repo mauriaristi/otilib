@@ -1,5 +1,7 @@
+#ifndef OTI_SPARSE_CORE_BASE_SOTICORE_NULLIFY_C
+#define OTI_SPARSE_CORE_BASE_SOTICORE_NULLIFY_C
 // *******************************************************************************************************
-inline soticore_t soticore_init(void){
+inline soticore_t soticore_nullify(void){
 
     soticore_t res;
 
@@ -13,3 +15,4 @@ inline soticore_t soticore_init(void){
 
 }
 // -------------------------------------------------------------------------------------------------------
+#endif

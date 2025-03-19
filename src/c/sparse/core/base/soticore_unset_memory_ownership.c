@@ -1,3 +1,5 @@
+#ifndef OTI_SPARSE_CORE_BASE_C
+#define OTI_SPARSE_CORE_BASE_C
 // *******************************************************************************************************
 inline void soticore_unset_memory_ownership( soticore_t* num ){
 
@@ -5,3 +7,4 @@ inline void soticore_unset_memory_ownership( soticore_t* num ){
 
 }
 // -------------------------------------------------------------------------------------------------------
+#endif

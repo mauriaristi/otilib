@@ -1,3 +1,5 @@
+#ifndef OTI_SPARSE_CORE_BASE_SOTICORE_DISTRIBUTE_MEMORY_C
+#define OTI_SPARSE_CORE_BASE_SOTICORE_DISTRIBUTE_MEMORY_C
 // *******************************************************************************************************
 void* soticore_distribute_memory( void* mem, soticore_t* res ){
 
@@ -22,3 +24,4 @@ void* soticore_distribute_memory( void* mem, soticore_t* res ){
 
 }
 // -------------------------------------------------------------------------------------------------------
+#endif

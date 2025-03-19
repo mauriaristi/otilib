@@ -1,3 +1,5 @@
+#ifndef OTI_SPARSE_CORE_BASE_SOTICORE_SET_ALL_IMIDX_C
+#define OTI_SPARSE_CORE_BASE_SOTICORE_SET_ALL_IMIDX_C
 // *******************************************************************************************************
 void soticore_set_all_imidx( const bases_t* bases, soticore_t* obj,  dhelpl_t dhl){
 
@@ -37,3 +39,4 @@ void soticore_set_all_imidx( const bases_t* bases, soticore_t* obj,  dhelpl_t dh
     
 }
 // -------------------------------------------------------------------------------------------------------
+#endif

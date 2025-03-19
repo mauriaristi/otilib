@@ -1,3 +1,5 @@
+#ifndef OTI_SPARSE_CORE_BASE_SOTICORE_INITIALIZE_C
+#define OTI_SPARSE_CORE_BASE_SOTICORE_INITIALIZE_C
 // *******************************************************************************************************
 inline void soticore_initialize(soticore_t* res){
 
@@ -21,3 +23,4 @@ inline void soticore_initialize(soticore_t* res){
 
 }
 // -------------------------------------------------------------------------------------------------------
+#endif

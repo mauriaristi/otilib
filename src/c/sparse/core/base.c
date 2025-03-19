@@ -1,149 +1,17 @@
 #ifndef OTI_SPARSE_CORE_BASE_C
 #define OTI_SPARSE_CORE_BASE_C
 
-// MEMORY MANAGEMENT 
+// /base files.
 
-// *******************************************************************************************************
-inline soticore_t soticore_init(void){
-
-    soticore_t res;
-
-    res.flags[2] = 0;  // Memory ownership set to false.
-    
-    res.p_imidx   = NULL;
-    res.p_bases   = NULL;
-    res.p_ordptr  = NULL;
-
-    return res;
-
-}
-// -------------------------------------------------------------------------------------------------------
-
-// *******************************************************************************************************
-inline void soticore_initialize(soticore_t* res){
-
-    int8_t i;
-    
-    res->nbases    = 0;   // No actual bases, this p_bases = NULL.
-    res->ncoeff    = 1;   // Only 1 coefficient.
-    
-    // TODO: Consider memset?
-    // Set all flags to 0.
-    for (i=0; i<8; i++){
-        // res.flags[0]  = 0;   // Truncation order.
-        // res.flags[1]  = 0;   // actual order.
-        // res.flags[2]  = 0;   // Memory ownership.
-       res->flags[i] = 0; 
-    }
-
-    res->p_imidx   = &res->nbases; // Address of nbases. Gets p_imdir[0]=0.
-    res->p_bases   = NULL;
-    res->p_ordptr  = &res->nbases; // Picks up p_ordptr[0] = 0, p_ordptr[1]=1
-
-}
-// -------------------------------------------------------------------------------------------------------
+#include "sparse/core/base/soticore_distribute_memory.c"
+#include "sparse/core/base/soticore_get_memory_ownership.c"
+#include "sparse/core/base/soticore_initialize.c"
+#include "sparse/core/base/soticore_memory_size.c"
+#include "sparse/core/base/soticore_nullify.c"
+#include "sparse/core/base/soticore_set_all_imidx.c"
+#include "sparse/core/base/soticore_set_memory_ownership.c"
+#include "sparse/core/base/soticore_unset_memory_ownership.c"
 
 
-// *******************************************************************************************************
-inline flag_t soticore_get_memory_ownership( soticore_t* num ){
 
-    return num->flags[2] ;
-
-}
-// -------------------------------------------------------------------------------------------------------
-
-// *******************************************************************************************************
-inline void soticore_set_memory_ownership( soticore_t* num ){
-
-    num->flags[2] =  OTI_memory_is_owned;
-
-}
-// -------------------------------------------------------------------------------------------------------
-
-// *******************************************************************************************************
-inline void soticore_unset_memory_ownership( soticore_t* num ){
-
-    num->flags[2] =  OTI_memory_not_owned;
-
-}
-// -------------------------------------------------------------------------------------------------------
-
-// *******************************************************************************************************
-void soticore_set_all_imidx( const bases_t* bases, soticore_t* obj,  dhelpl_t dhl){
-
-    
-    ord_t ordi, order;
-    ndir_t ndir, st_pos;
-    imdir_t idx, idx_map;
-
-    order = obj->flags[1]; // Actual order
-    
-    // This needs a temporal array with the total number of bases. This might need to be created via an
-    // allocation call.
-    
-    obj->p_ordptr[0] = 0; // Starting point of all components (dummy?).
-    obj->p_imidx[0]  = 0; // Real direction.
-    
-    obj->p_ordptr[1] = 1;
-    
-    for ( ordi = 1; ordi <= order; ordi++){
-        
-        ndir = dhelp_ndirOrder( obj->nbases, ordi);
-        st_pos = obj->p_ordptr[ordi]; // Starting point of all elements of order ordi.
-        obj->p_ordptr[ordi+1] = st_pos + ndir;
-
-        // Loop to set all indices to the corresponding values from bases.
-        // Maybe use some parallelism here.
-        for (idx = 0; idx<ndir; idx ++ ){
-            
-            // This map index function must be as efficient as possible.
-            idx_map = dhelp_map_index( idx, ordi, bases, dhl);
-            obj->p_imidx[st_pos+idx] = idx_map;
-
-        }
-
-    }
-
-    
-}
-// -------------------------------------------------------------------------------------------------------
-
-// *******************************************************************************************************
-size_t soticore_memory_size( ndir_t nimdir, bases_t nbases, ord_t order){
-
-    size_t mem_size = 0;
-    
-    mem_size = ( (size_t)  nimdir    ) * sizeof(imdir_t) +
-               ( (size_t)  nbases    ) * sizeof(bases_t) +
-               ( (size_t)  (order+2) ) * sizeof(ndir_t)  ;
-
-    return mem_size;
-
-}
-// -------------------------------------------------------------------------------------------------------
-
-// *******************************************************************************************************
-void* soticore_distribute_memory( void* mem, soticore_t* res ){
-
-    ord_t order = res->flags[1]; // Extract order
-    void* memory = mem;
-
-    // // Distribute memory among the different pointers.
-    // res->p_coeff  = (coeff_t* ) memory;
-    // memory    += res->ncoeff * sizeof(coeff_t*);
-
-    res->p_imidx = (imdir_t*  ) memory;
-    memory    += res->ncoeff * sizeof(imdir_t);
-
-    res->p_bases = (bases_t*  ) memory;
-    memory    += res->nbases * sizeof(bases_t);
-
-    res->p_ordptr= (ndir_t*   ) memory;
-    memory    += ( order + 1  ) * sizeof(ndir_t); // This must reach the end of the memory block.
-
-    // If necessary, returns end of memory.
-    return memory;
-
-}
-// -------------------------------------------------------------------------------------------------------
 #endif

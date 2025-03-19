@@ -1,3 +1,5 @@
+#ifndef OTI_SPARSE_CORE_BASE_SOTICORE_MEMORY_SIZE_C
+#define OTI_SPARSE_CORE_BASE_SOTICORE_MEMORY_SIZE_C
 // *******************************************************************************************************
 size_t soticore_memory_size( ndir_t nimdir, bases_t nbases, ord_t order){
 
@@ -11,3 +13,4 @@ size_t soticore_memory_size( ndir_t nimdir, bases_t nbases, ord_t order){
 
 }
 // -------------------------------------------------------------------------------------------------------
+#endif

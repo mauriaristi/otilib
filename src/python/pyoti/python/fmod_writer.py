@@ -20,7 +20,12 @@ for i in range(65,91):
 
 endl = "\n"
 imdir_base_name = 'E'
-operators = ['*','-','+','/','**']
+operators = [
+  '*','-','+','/','**',
+  '==','/=','>','<','>=','<=',
+  # '.EQ.','.NE.','.GT.','.LT.','.GE.','.LE.', # Not needed as Fortran already
+                                               # assumes == the same as .eq.
+]
 
 class writer:
 
@@ -339,6 +344,12 @@ class writer:
     self.overloads['/'] = []
     self.overloads['='] = []
     self.overloads['**'] = []
+    self.overloads['=='] = []
+    self.overloads['/='] = []
+    self.overloads['>='] = []
+    self.overloads['<='] = []
+    self.overloads['>']  = []
+    self.overloads['<']  = []
     self.overloads['PPRINT'] = []
     self.overloads['TRANSPOSE'] = []
     self.overloads['MATMUL'] = []
@@ -498,6 +509,8 @@ class writer:
     return str_out
 
   #---------------------------------------------------------------------------------------------------  
+
+
   
 
 
@@ -678,6 +691,100 @@ class writer:
     return str_out
 
   #---------------------------------------------------------------------------------------------------  
+
+  
+
+
+  #***************************************************************************************************
+  def relation_like_function_real_oo(self, level = "", f_name = "function", 
+    lhs_name= "lhs", rhs_name= "rhs", separator = ",",
+    res_name = "res", f_open = "(", f_close = ")"
+    ):
+    """
+    PORPUSE:  relation like function between two numbers.
+    """
+    global h
+    str_out = ""
+
+
+    str_out += level + self.comment + "Relation like function \'"
+    str_out += f_name + f_open + lhs_name + separator + rhs_name + f_close
+    str_out += "\'\n"
+
+
+    # Write real part comparison.
+    str_out += level + self.comment + "Compare real-only " + self.endl
+    str_out += level + res_name + " = " + f_name + f_open
+    str_out +=    lhs_name + self.get + self.real_str 
+    str_out +=      separator
+    str_out +=    rhs_name + self.get + self.real_str 
+    str_out += f_close
+    str_out += self.endl
+
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def relation_like_function_real_ro(self, level = "", f_name = "function", 
+    lhs_name= "lhs", rhs_name= "rhs", separator = ",",
+    res_name = "res", f_open = "(", f_close = ")"
+    ):
+    """
+    PORPUSE:  relation like function between two numbers.
+    """
+    global h
+    str_out = ""
+
+
+    str_out += level + self.comment + "Relation like function \'"
+    str_out += f_name + f_open + lhs_name + separator + rhs_name + f_close
+    str_out += "\'\n"
+
+
+    # Write real part comparison.
+    str_out += level + self.comment + "Compare real-only " + self.endl
+    str_out += level + res_name + " = " + f_name + f_open
+    str_out +=    lhs_name 
+    str_out +=      separator
+    str_out +=    rhs_name + self.get + self.real_str 
+    str_out += f_close
+    str_out += self.endl
+
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def relation_like_function_real_or(self, level = "", f_name = "function", 
+    lhs_name= "lhs", rhs_name= "rhs", separator = ",",
+    res_name = "res", f_open = "(", f_close = ")"
+    ):
+    """
+    PORPUSE:  relation like function between two numbers.
+    """
+    global h
+    str_out = ""
+
+
+    str_out += level + self.comment + "Relation like function \'"
+    str_out += f_name + f_open + lhs_name + separator + rhs_name + f_close
+    str_out += "\'\n"
+
+
+    # Write real part comparison.
+    str_out += level + self.comment + "Compare real-only " + self.endl
+    str_out += level + res_name + " = " + f_name + f_open
+    str_out +=    lhs_name + self.get + self.real_str 
+    str_out +=      separator
+    str_out +=    rhs_name 
+    str_out += f_close
+    str_out += self.endl
+
+
+    return str_out
+  #--------------------------------------------------------------------------------------------------- 
+
 
   #***************************************************************************************************
   def multiplication_like_function_ro(self, level = "", f_name = "FUNCTION", lhs_name= "lhs",
@@ -2367,7 +2474,7 @@ class writer:
   #***************************************************************************************************
   def write_scalar_function(self, function_name = "FUNCTION", is_elemental = True, level = 0, tab = " ", 
     f_name = "FUNCTION", lhs_type= "O",lhs_shape= "S", rhs_type= "O", rhs_shape= "S", separator = ",", 
-    f_open = "(", f_close = ")", addition = " + ",generator = None,
+    f_open = "(", f_close = ")", addition = " + ",generator = None, res_type="O",
     overload = None ):
 
     str_out = ""
@@ -2401,6 +2508,14 @@ class writer:
       rhs_t = "TYPE("+self.type_name+")"
     # end if 
 
+    if res_type is self.real_str:
+      res_t = self.coeff_t
+    elif res_type == 'L': # Logical
+      res_t = "LOGICAL"
+    else:
+      res_t = "TYPE("+self.type_name+")"
+    # end if 
+
     # Check shape
     if lhs_shape == "V":
       lhs_comp = "(:)"
@@ -2429,7 +2544,13 @@ class writer:
     # end if
 
     if overload is not None:
-      self.overloads[overload].append(func_name)
+      if isinstance(overload,list):
+        for ovrld in overload:
+          self.overloads[ovrld].append(func_name)
+        # end if 
+      else:
+        self.overloads[overload].append(func_name)
+      # end if 
     # end if 
 
     
@@ -2438,7 +2559,8 @@ class writer:
     str_out += leveli*tab + "IMPLICIT NONE" + endl      
     str_out += leveli*tab + lhs_t + ", INTENT(IN) :: "+lhs+lhs_comp + endl
     str_out += leveli*tab + rhs_t + ", INTENT(IN) :: "+rhs+rhs_comp + endl
-    str_out += leveli*tab + "TYPE("+self.type_name+") :: "+res+res_comp+" " + endl
+    
+    str_out += leveli*tab + res_t + " :: " + res + res_comp+" " + endl
     str_out += endl
     
     if lhs_shape == 'V' and rhs_shape == 'V':
@@ -3412,6 +3534,37 @@ class writer:
         f_close = "", generator = self.multiplication_like_function_or, overload = "*" )
       contents += endl
 
+      # Standard Comparison operators:
+      comp_names = ["EQ","NE","LT","GT","LE","GE"]
+      comp_ops   = [
+        '==',
+        '/=',
+        '<' ,
+        '>' ,
+        '<=',
+        '>='
+      ]
+      for i_op in range(len(comp_names)):
+
+        separator = " "+comp_ops[i_op]+" "
+        contents += self.write_scalar_function(function_name = comp_names[i_op], is_elemental = True, level = level, 
+          tab = tab, f_name = "", lhs_type= "O", rhs_type= "O", separator = separator, f_open = "", 
+          lhs_shape = shape[0], rhs_shape = shape[1], res_type = 'L',
+          f_close = "", generator = self.relation_like_function_real_oo, overload = comp_ops[i_op])
+        contents += endl 
+
+        contents += self.write_scalar_function(function_name = comp_names[i_op], is_elemental = True, level = level, 
+          tab = tab, f_name = "", lhs_type= self.real_str, rhs_type= "O", separator = separator, f_open = "", 
+          lhs_shape = shape[0], rhs_shape = shape[1], res_type = 'L',
+          f_close = "", generator = self.relation_like_function_real_ro, overload = comp_ops[i_op] )
+        contents += endl
+
+        contents += self.write_scalar_function(function_name = comp_names[i_op], is_elemental = True, level = level, 
+          tab = tab, f_name = "", lhs_type= "O", rhs_type= self.real_str, separator = separator, f_open = "", 
+          lhs_shape = shape[0], rhs_shape = shape[1], res_type = 'L',
+          f_close = "", generator = self.relation_like_function_real_or, overload = comp_ops[i_op] )
+        contents += endl
+      # end for 
     # end for 
     
     # GEM

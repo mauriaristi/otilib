@@ -14,6 +14,7 @@ void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder ){
       exit(OTI_OutOfMemory);
 
     }
+    
     for ( order = 1; order<=maxorder; order++){
         
 
@@ -165,22 +166,24 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
             exit(OTI_OutOfMemory);
 
         }
-        i=0;
+        // i=0;
+        #pragma omp parallel for private(dirs1, dirs2, idx1, idx2 ) collapse(2)
         for(idx1=0;idx1<ndirs_o1;idx1++){
 
-            dirs1  = &dhl->p_dh[o1-1].p_fulldir[idx1*o1]; 
+            
 
-            if ( (i%10) == 0){
+            // if ( (i%10) == 0){
                 
-                print_progressbar(idx1*ndirs_o2+1,ndirs_o1*ndirs_o2);
-                printf(" table "_PORDT"/"_PORDT,o1,n_multtabls);
-                fflush(stdout);
+            //     print_progressbar(idx1*ndirs_o2+1,ndirs_o1*ndirs_o2);
+            //     printf(" table "_PORDT"/"_PORDT,o1,n_multtabls);
+            //     fflush(stdout);
 
-            }
-            i+=1;
+            // }
+            // i+=1;
 
             for(idx2=0;idx2<ndirs_o2;idx2++){
-                
+
+                dirs1  = &dhl->p_dh[o1-1].p_fulldir[idx1*o1]; 
                 dirs2  = &dhl->p_dh[o2-1].p_fulldir[idx2*o2]; 
                 
                 dhl->p_dh[order-1].p_multtabls[table].p_arr[idx1*ndirs_o2+idx2] =  
@@ -188,6 +191,7 @@ void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl){
 
             }           
         }
+        
     }
     print_progressbar(1,1); printf("\n");
 

@@ -337,3 +337,404 @@
       RES = X**0.5_DP
 
   END FUNCTION {type_name}_SQRT
+
+  FUNCTION {type_name}_MAX(X1,X2) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: X1, X2
+                                                
+      TYPE({type_name}) :: RES
+      RES = X1
+      IF (X2>RES) RES = X2  
+
+  END FUNCTION {type_name}_MAX
+
+  FUNCTION {type_name}_MIN(X1,X2) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: X1, X2
+                                                
+      TYPE({type_name}) :: RES
+      RES = X1
+      IF (X2<RES) RES = X2
+
+  END FUNCTION {type_name}_MIN
+
+  FUNCTION {type_name}_MAXLOC_R1(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+
+      RES = MAXLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION {type_name}_MAXLOC_R1
+
+  FUNCTION {type_name}_MAXLOC_R2(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+      RES = MAXLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION {type_name}_MAXLOC_R2
+  
+  FUNCTION {type_name}_MAXLOC_R3(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+      LOGICAL :: BACK_DEF
+      
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+      RES = MAXLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION {type_name}_MAXLOC_R3
+
+  FUNCTION {type_name}_MAXLOC_R4(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+
+      RES = MAXLOC(ARRAY%R, MASK = MASK_DEF,  BACK = BACK_DEF)
+
+  END FUNCTION {type_name}_MAXLOC_R4
+
+  
+  FUNCTION {type_name}_MAXVAL_R1(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE({type_name}) :: RES
+      
+
+      IDX = MAXLOC(ARRAY)
+      RES = ARRAY(IDX(1))
+
+  END FUNCTION {type_name}_MAXVAL_R1
+
+  FUNCTION {type_name}_MAXVAL_R2(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE({type_name}) :: RES
+      
+
+      IDX = MAXLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2))
+
+  END FUNCTION {type_name}_MAXVAL_R2
+
+  FUNCTION {type_name}_MAXVAL_R3(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE({type_name}) :: RES
+      
+
+      IDX = MAXLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2),IDX(3))
+
+  END FUNCTION {type_name}_MAXVAL_R3
+
+  FUNCTION {type_name}_MAXVAL_R4(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE({type_name}) :: RES
+      
+
+      IDX = MAXLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2),IDX(3),IDX(4))
+
+  END FUNCTION {type_name}_MAXVAL_R4
+
+
+    FUNCTION {type_name}_MINLOC_R1(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+
+      RES = MINLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION {type_name}_MINLOC_R1
+
+  FUNCTION {type_name}_MINLOC_R2(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+      RES = MINLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION {type_name}_MINLOC_R2
+  
+  FUNCTION {type_name}_MINLOC_R3(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+      LOGICAL :: BACK_DEF
+      
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+      RES = MINLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION {type_name}_MINLOC_R3
+
+  FUNCTION {type_name}_MINLOC_R4(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+
+      RES = MINLOC(ARRAY%R, MASK = MASK_DEF,  BACK = BACK_DEF)
+
+  END FUNCTION {type_name}_MINLOC_R4
+
+
+
+  FUNCTION {type_name}_MINVAL_R1(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE({type_name}) :: RES
+      
+
+      IDX = MINLOC(ARRAY)
+      RES = ARRAY(IDX(1))
+
+  END FUNCTION {type_name}_MINVAL_R1
+
+  FUNCTION {type_name}_MINVAL_R2(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE({type_name}) :: RES
+      
+
+      IDX = MINLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2))
+
+  END FUNCTION {type_name}_MINVAL_R2
+
+  FUNCTION {type_name}_MINVAL_R3(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE({type_name}) :: RES
+      
+
+      IDX = MINLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2),IDX(3))
+
+  END FUNCTION {type_name}_MINVAL_R3
+
+  FUNCTION {type_name}_MINVAL_R4(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE({type_name}) :: RES
+      
+
+      IDX = MINLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2),IDX(3),IDX(4))
+
+  END FUNCTION {type_name}_MINVAL_R4
+
+  ! FUNCTION {type_name}_MAXLOC_DIM_R1(ARRAY, DIM, MASK, KIND, BACK) RESULT(RES)
+  !     IMPLICIT NONE
+  !     TYPE({type_name}), INTENT(IN) :: ARRAY(:)
+  !     INTEGER, INTENT(IN) :: DIM  
+  !     LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1))
+  !     INTEGER, INTENT(IN), OPTIONAL :: KIND  ! Not used in this case.
+  !     LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+  !     INTEGER :: RES( RANK( ARRAY ) )
+      
+  !     LOGICAL :: MASK_DEF(SIZE(ARRAY,1))
+  !     LOGICAL :: BACK_DEF
+      
+  !     ! Assign defaults.
+  !     MASK_DEF = .true.
+  !     BACK_DEF = .false.
+      
+  !     IF (PRESENT(MASK)) MASK_DEF = MASK
+  !     IF (PRESENT(BACK)) BACK_DEF = BACK
+
+  !     RES = MAXLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  ! END FUNCTION {type_name}_MAXLOC_DIM_R1
+
+  ! FUNCTION {type_name}_MAXLOC_DIM_R2(ARRAY, DIM, MASK, KIND, BACK) RESULT(RES)
+  !     IMPLICIT NONE
+  !     TYPE({type_name}), INTENT(IN) :: ARRAY(:,:)
+  !     INTEGER, INTENT(IN) :: DIM  
+  !     LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2))
+  !     INTEGER, INTENT(IN), OPTIONAL :: KIND  ! Not used in this case.
+  !     LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+  !     INTEGER :: RES( RANK( ARRAY ) )
+      
+  !     LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2))
+  !     LOGICAL :: BACK_DEF
+      
+  !     ! Assign defaults.
+  !     MASK_DEF = .true.
+  !     BACK_DEF = .false.
+      
+  !     IF (PRESENT(MASK)) MASK_DEF = MASK
+  !     IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+  !     RES = MAXLOC(ARRAY%R, DIM, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  ! END FUNCTION {type_name}_MAXLOC_DIM_R2
+  
+  ! FUNCTION {type_name}_MAXLOC_DIM_R3(ARRAY, DIM, MASK, KIND, BACK) RESULT(RES)
+  !     IMPLICIT NONE
+  !     TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:)
+  !     INTEGER, INTENT(IN) :: DIM  
+  !     LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+  !     INTEGER, INTENT(IN), OPTIONAL :: KIND  ! Not used in this case.
+  !     LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+  !     INTEGER :: RES( RANK( ARRAY ) )
+      
+  !     LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+  !     LOGICAL :: BACK_DEF
+      
+      
+  !     ! Assign defaults.
+  !     MASK_DEF = .true.
+  !     BACK_DEF = .false.
+      
+  !     IF (PRESENT(MASK)) MASK_DEF = MASK
+  !     IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+  !     RES = MAXLOC(ARRAY%R, DIM, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  ! END FUNCTION {type_name}_MAXLOC_DIM_R3
+
+  ! FUNCTION {type_name}_MAXLOC_DIM_R4(ARRAY, DIM, MASK, KIND, BACK) RESULT(RES)
+  !     IMPLICIT NONE
+  !     TYPE({type_name}), INTENT(IN) :: ARRAY(:,:,:,:)
+  !     INTEGER, INTENT(IN) :: DIM  
+  !     LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+  !     INTEGER, INTENT(IN), OPTIONAL :: KIND  ! Not used in this case, just for compatibility.
+  !     LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+  !     INTEGER :: RES( RANK( ARRAY ) )
+      
+  !     LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+  !     LOGICAL :: BACK_DEF
+      
+  !     ! Assign defaults.
+  !     MASK_DEF = .true.
+  !     BACK_DEF = .false.
+      
+      
+  !     IF (PRESENT(MASK)) MASK_DEF = MASK
+  !     IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+
+  !     RES = MAXLOC(ARRAY%R, DIM, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  ! END FUNCTION {type_name}_MAXLOC_DIM_R4

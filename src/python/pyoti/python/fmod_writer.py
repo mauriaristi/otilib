@@ -25,6 +25,7 @@ operators = [
   '==','/=','>','<','>=','<=',
   # '.EQ.','.NE.','.GT.','.LT.','.GE.','.LE.', # Not needed as Fortran already
                                                # assumes == the same as .eq.
+                                               # as well as for the others.
 ]
 
 class writer:
@@ -67,6 +68,9 @@ class writer:
 
     self.tab     = tab
     self.coeff_t = coeff_type
+    self.int32_t = 'INTEGER(4)'
+    self.int64_t = 'INTEGER(8)'
+    self.int_t = 'INTEGER'
     self.lang    = language
   
     self.get = "%"
@@ -384,6 +388,12 @@ class writer:
     self.overloads['INV4X4'] = []
     self.overloads['GETIM'] = []
     self.overloads['SETIM'] = []
+    self.overloads['MAX'] = []
+    self.overloads['MIN'] = []
+    self.overloads['MAXLOC'] = []
+    self.overloads['MAXVAL'] = []
+    self.overloads['MINLOC'] = []
+    self.overloads['MINVAL'] = []
 
   #---------------------------------------------------------------------------------------------------  
 
@@ -1939,7 +1949,7 @@ class writer:
     func_header = ''
 
     func_header += leveli*tab + self.comment + " Definitions" + endl
-    func_header += leveli*tab + self.coeff_t + " :: COEF, DELTA"+self.endl
+    func_header += leveli*tab + self.coeff_t + " :: COEF"+self.endl
     func_header += leveli*tab + "TYPE("+self.type_name + "), INTENT(IN)  :: "+varx+','+vary+self.endl
     func_header += leveli*tab + self.coeff_t  + ", INTENT(IN)  :: "
     
@@ -2446,7 +2456,8 @@ class writer:
     str_out += leveli*tab + "REAL(DP) :: "+res+res_comp+" " + endl
     str_out += leveli*tab + "INTEGER, INTENT(IN) :: IDX" + endl*2
     
-    
+    str_out += leveli*tab + res + " = " + self.zero +endl*2
+
     str_out += leveli*tab + "SELECT CASE(IDX)" +endl
     
     i = 0
@@ -2493,7 +2504,16 @@ class writer:
     if lhs_type == self.real_str:    
       f_prev = self.func_name
       lhs_t = self.coeff_t
-      f_post = self.real_str    
+      f_post = self.real_str  
+    elif lhs_type[0] == 'I': #INTEGER Case.
+      if (len(lhs_type[0])>1):
+        if (lhs_type[1] == '8'):
+          lhs_t = self.int64_t
+        elif (lhs_type[1] == '4') :
+          lhs_t = self.int32_t
+        # end if 
+      else:
+        rhs_t = self.int_t  
     else:      
       f_prev = self.func_name
       f_post = 'O'      
@@ -2503,6 +2523,15 @@ class writer:
     if rhs_type is self.real_str:
       f_post += self.real_str
       rhs_t = self.coeff_t
+    elif rhs_type[0] == 'I': #INTEGER Case.
+      if (len(rhs_type[0])>1):
+        if (rhs_type[1] == '8'):
+          rhs_t = self.int64_t
+        elif (rhs_type[1] == '4') :
+          rhs_t = self.int32_t
+        # end if 
+      else:
+        rhs_t = self.int_t
     else:
       f_post += 'O'
       rhs_t = "TYPE("+self.type_name+")"
@@ -3324,6 +3353,99 @@ class writer:
       self.overloads['**'].append(self.type_name+"_POW_RO")
     # end if 
 
+
+    leveli = level
+    # Write power function.
+    power_int_function = leveli*tab 
+    if elemental:
+      power_int_function += 'ELEMENTAL '
+    # end if 
+    # Power to integer powers
+    power_int_function += "FUNCTION "+self.type_name+"_POW_I8O(E,X) RESULT(RES)"+ endl*2 # 0: function name.
+    leveli+=1
+    power_int_function += leveli*tab + "TYPE("+self.type_name+"), INTENT(IN) :: X"+ endl
+    power_int_function += leveli*tab + "INTEGER(8), INTENT(IN) :: E"+ endl # 1: Derivatives
+    power_int_function += leveli*tab + "TYPE("+self.type_name+") :: RES"+ endl
+    power_int_function += leveli*tab + endl
+    power_int_function += leveli*tab + "RES = " + self.type_name + "_POW_RO(REAL(E,8),X)" + endl
+    power_int_function += leveli*tab + endl
+    leveli-=1
+    power_int_function += leveli*tab + "END FUNCTION " + endl*2
+    str_out += power_int_function
+    if overload:
+      self.overloads['**'].append(self.type_name+"_POW_I8O")
+    # end if 
+
+    leveli = level
+    # Write power function.
+    power_int_function = leveli*tab 
+    if elemental:
+      power_int_function += 'ELEMENTAL '
+    # end if 
+    # Power to integer powers
+    power_int_function += "FUNCTION "+self.type_name+"_POW_I4O(E,X) RESULT(RES)"+ endl*2 # 0: function name.
+    leveli+=1
+    power_int_function += leveli*tab + "TYPE("+self.type_name+"), INTENT(IN) :: X"+ endl
+    power_int_function += leveli*tab + "INTEGER(4), INTENT(IN) :: E"+ endl # 1: Derivatives
+    power_int_function += leveli*tab + "TYPE("+self.type_name+") :: RES"+ endl
+    power_int_function += leveli*tab + endl
+    power_int_function += leveli*tab + "RES = " + self.type_name + "_POW_RO(REAL(E,8),X)" + endl
+    power_int_function += leveli*tab + endl
+    leveli-=1
+    power_int_function += leveli*tab + "END FUNCTION " + endl*2
+    str_out += power_int_function
+    if overload:
+      self.overloads['**'].append(self.type_name+"_POW_I4O")
+    # end if 
+
+
+
+    leveli = level
+    # Write power function.
+    power_int_function = leveli*tab 
+    if elemental:
+      power_int_function += 'ELEMENTAL '
+    # end if 
+    # Power to integer powers
+    power_int_function += "FUNCTION "+self.type_name+"_POW_OI8(X,E) RESULT(RES)"+ endl*2 # 0: function name.
+    leveli+=1
+    power_int_function += leveli*tab + "TYPE("+self.type_name+"), INTENT(IN) :: X"+ endl
+    power_int_function += leveli*tab + "INTEGER(8), INTENT(IN) :: E"+ endl # 1: Derivatives
+    power_int_function += leveli*tab + "TYPE("+self.type_name+") :: RES"+ endl
+    power_int_function += leveli*tab + endl
+    power_int_function += leveli*tab + "RES = " + self.type_name + "_POW_OR(X,REAL(E,8))" + endl
+    power_int_function += leveli*tab + endl
+    leveli-=1
+    power_int_function += leveli*tab + "END FUNCTION " + endl*2
+    str_out += power_int_function
+    if overload:
+      self.overloads['**'].append(self.type_name+"_POW_OI8")
+    # end if 
+
+    leveli = level
+    # Write power function.
+    power_int_function = leveli*tab 
+    if elemental:
+      power_int_function += 'ELEMENTAL '
+    # end if 
+    # Power to integer powers
+    power_int_function += "FUNCTION "+self.type_name+"_POW_OI4(X,E) RESULT(RES)"+ endl*2 # 0: function name.
+    leveli+=1
+    power_int_function += leveli*tab + "TYPE("+self.type_name+"), INTENT(IN) :: X"+ endl
+    power_int_function += leveli*tab + "INTEGER(4), INTENT(IN) :: E"+ endl # 1: Derivatives
+    power_int_function += leveli*tab + "TYPE("+self.type_name+") :: RES"+ endl
+    power_int_function += leveli*tab + endl
+    power_int_function += leveli*tab + "RES = " + self.type_name + "_POW_OR(X,REAL(E,8))" + endl
+    power_int_function += leveli*tab + endl
+    leveli-=1
+    power_int_function += leveli*tab + "END FUNCTION " + endl*2
+    str_out += power_int_function
+    if overload:
+      self.overloads['**'].append(self.type_name+"_POW_OI4")
+    # end if 
+
+
+
     return str_out
 
   #--------------------------------------------------------------------------------------------------- 
@@ -3719,6 +3841,30 @@ class writer:
       self.overloads['DET2X2'].append(self.type_name+"_det2x2")
       self.overloads['DET3X3'].append(self.type_name+"_det3x3")
       self.overloads['DET4X4'].append(self.type_name+"_det4x4")
+
+      self.overloads['MAX'].append(self.type_name+"_MAX")
+      self.overloads['MIN'].append(self.type_name+"_MIN")
+
+      self.overloads['MAXLOC'].append(self.type_name+"_MAXLOC_R1")
+      self.overloads['MAXLOC'].append(self.type_name+"_MAXLOC_R2")
+      self.overloads['MAXLOC'].append(self.type_name+"_MAXLOC_R3")
+      self.overloads['MAXLOC'].append(self.type_name+"_MAXLOC_R4")
+
+      self.overloads['MAXVAL'].append(self.type_name+"_MAXVAL_R1")
+      self.overloads['MAXVAL'].append(self.type_name+"_MAXVAL_R2")
+      self.overloads['MAXVAL'].append(self.type_name+"_MAXVAL_R3")
+      self.overloads['MAXVAL'].append(self.type_name+"_MAXVAL_R4")
+
+      self.overloads['MINLOC'].append(self.type_name+"_MINLOC_R1")
+      self.overloads['MINLOC'].append(self.type_name+"_MINLOC_R2")
+      self.overloads['MINLOC'].append(self.type_name+"_MINLOC_R3")
+      self.overloads['MINLOC'].append(self.type_name+"_MINLOC_R4")
+
+      self.overloads['MINVAL'].append(self.type_name+"_MINVAL_R1")
+      self.overloads['MINVAL'].append(self.type_name+"_MINVAL_R2")
+      self.overloads['MINVAL'].append(self.type_name+"_MINVAL_R3")
+      self.overloads['MINVAL'].append(self.type_name+"_MINVAL_R4")
+
 
       # These were removed because they belong to the real_utils module.
       # self.overloads['PPRINT'].append(self.type_name+"_PPRINT_M_R")

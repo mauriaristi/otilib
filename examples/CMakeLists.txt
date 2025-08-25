@@ -19,16 +19,18 @@ link_directories (
 )
 
 
-add_executable(basic_scalar_f fortran/basic_scalar.f90)
-add_executable(ex2_sparse_n1 fortran/ex2_sparse_n1.f90)
-add_executable(ex1_oti_core fortran/ex1_oti_core.f90)
+add_executable( basic_scalar_f  fortran/basic_scalar.f90    )
+add_executable( ex1_oti_core    fortran/ex1_oti_core.f90    )
+add_executable( ex2_sparse_n1   fortran/ex2_sparse_n1.f90   )
+add_executable( ex3_static_m1n2 fortran/ex3_static_m1n2.f90 )
 
-target_link_libraries ( basic_scalar_f otistatic ${LINK_TARGET_OMP_Fortran} )
-target_link_libraries ( ex2_sparse_n1 otifsparse  ${LINK_TARGET_OMP_Fortran} )
-target_link_libraries ( ex1_oti_core otifsparse  ${LINK_TARGET_OMP_Fortran} )
+target_link_libraries ( basic_scalar_f   otistatic   ${LINK_TARGET_OMP_Fortran} )
+target_link_libraries ( ex1_oti_core     otifsparse  ${LINK_TARGET_OMP_Fortran} )
+target_link_libraries ( ex2_sparse_n1    otifsparse  ${LINK_TARGET_OMP_Fortran} )
+target_link_libraries ( ex3_static_m1n2  otistatic   ${LINK_TARGET_OMP_Fortran} )
 
 add_executable(basic_scalar_c c/basic_scalar.c)
 add_executable(basic_array_c c/basic_array.c)
 
-target_link_libraries ( basic_scalar_c oti oticwrap ${LINK_TARGET_OMP_C} )
-target_link_libraries ( basic_array_c oti oticwrap ${LINK_TARGET_OMP_C} )
+target_link_libraries ( basic_scalar_c  oti  oticwrap  ${LINK_TARGET_OMP_C}  )
+target_link_libraries ( basic_array_c   oti  oticwrap  ${LINK_TARGET_OMP_C}  )

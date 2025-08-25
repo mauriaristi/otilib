@@ -189,6 +189,46 @@
 
   END FUNCTION {type_name}_POW
 
+  FUNCTION {type_name}_POW_R4(X,E) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE({type_name}), INTENT(IN) :: X
+      REAL(4), INTENT(IN) :: E
+      TYPE({type_name}) :: RES
+
+      DERIVS = DER_R_POW( X%R, E )
+
+      RES = FEVAL(X,DERIVS)
+
+  END FUNCTION {type_name}_POW_R4
+
+  FUNCTION {type_name}_POW_I8(X,E) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE({type_name}), INTENT(IN) :: X
+      INTEGER(8), INTENT(IN) :: E
+      TYPE({type_name}) :: RES
+
+      DERIVS = DER_R_POW( X%R, REAL(E,DP) )
+
+      RES = FEVAL(X,DERIVS)
+
+  END FUNCTION {type_name}_POW_I8
+
+  FUNCTION {type_name}_POW_I4(X,E) RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP) :: DERIVS(TORDER + 1) 
+      TYPE({type_name}), INTENT(IN) :: X
+      INTEGER(4), INTENT(IN) :: E
+      TYPE({type_name}) :: RES
+
+      DERIVS = DER_R_POW( X%R, REAL(E,DP) )
+
+      RES = FEVAL(X,DERIVS)
+
+  END FUNCTION {type_name}_POW_I4
+
+
   FUNCTION {type_name}_DIVISION_OO(X,Y) RESULT(RES)
       IMPLICIT NONE
       REAL(DP) :: DERIVS(TORDER + 1) 

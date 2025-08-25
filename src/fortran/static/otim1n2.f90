@@ -1,13 +1,13 @@
-MODULE OTIM1N2
+MODULE otim1n2
 
    USE master_parameters
    USE real_utils
 
    IMPLICIT NONE
 
-   INTEGER, PARAMETER :: NUM_IM_DIR = 3
-   INTEGER, PARAMETER :: TORDER     = 2
-   INTEGER, PARAMETER :: N_IMDIR_ORDER(3) = [1,1,1]
+   INTEGER, PARAMETER :: num_im_dir = 3
+   INTEGER, PARAMETER :: torder     = 2
+   INTEGER, PARAMETER :: n_imdir_order(3) = [1,1,1]
 
    TYPE ONUMM1N2
      ! Real
@@ -20,9 +20,9 @@ MODULE OTIM1N2
 
    ! Constant imaginary directions.
    ! Order 1
-   TYPE(ONUMM1N2), PARAMETER :: E1 = ONUMM1N2(0.0_DP,1.0_DP,0.0_DP)
+   TYPE(ONUMM1N2), PARAMETER :: E1 = ONUMM1N2(0.0_dp,1.0_dp,0.0_dp)
    ! Order 2
-   TYPE(ONUMM1N2), PARAMETER :: E11 = ONUMM1N2(0.0_DP,0.0_DP,1.0_DP)
+   TYPE(ONUMM1N2), PARAMETER :: E11 = ONUMM1N2(0.0_dp,0.0_dp,1.0_dp)
 
 
    INTERFACE OPERATOR(*)
@@ -55,7 +55,50 @@ MODULE OTIM1N2
    END INTERFACE
 
    INTERFACE OPERATOR(**)
-      MODULE PROCEDURE ONUMM1N2_POW_OR,ONUMM1N2_POW_RO,ONUMM1N2_POW_OO
+      MODULE PROCEDURE ONUMM1N2_POW_OR,ONUMM1N2_POW_RO,ONUMM1N2_POW_I8O,ONUMM1N2_POW_I4O,&
+                       ONUMM1N2_POW_OI8,ONUMM1N2_POW_OI4,ONUMM1N2_POW_OO
+   END INTERFACE
+
+   INTERFACE OPERATOR(==)
+      MODULE PROCEDURE ONUMM1N2_EQ_OO_SS,ONUMM1N2_EQ_RO_SS,ONUMM1N2_EQ_OR_SS,ONUMM1N2_EQ_OO_VS,&
+                       ONUMM1N2_EQ_RO_VS,ONUMM1N2_EQ_OR_VS,ONUMM1N2_EQ_OO_MS,ONUMM1N2_EQ_RO_MS,&
+                       ONUMM1N2_EQ_OR_MS,ONUMM1N2_EQ_OO_SV,ONUMM1N2_EQ_RO_SV,ONUMM1N2_EQ_OR_SV,&
+                       ONUMM1N2_EQ_OO_SM,ONUMM1N2_EQ_RO_SM,ONUMM1N2_EQ_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(/=)
+      MODULE PROCEDURE ONUMM1N2_NE_OO_SS,ONUMM1N2_NE_RO_SS,ONUMM1N2_NE_OR_SS,ONUMM1N2_NE_OO_VS,&
+                       ONUMM1N2_NE_RO_VS,ONUMM1N2_NE_OR_VS,ONUMM1N2_NE_OO_MS,ONUMM1N2_NE_RO_MS,&
+                       ONUMM1N2_NE_OR_MS,ONUMM1N2_NE_OO_SV,ONUMM1N2_NE_RO_SV,ONUMM1N2_NE_OR_SV,&
+                       ONUMM1N2_NE_OO_SM,ONUMM1N2_NE_RO_SM,ONUMM1N2_NE_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(>=)
+      MODULE PROCEDURE ONUMM1N2_GE_OO_SS,ONUMM1N2_GE_RO_SS,ONUMM1N2_GE_OR_SS,ONUMM1N2_GE_OO_VS,&
+                       ONUMM1N2_GE_RO_VS,ONUMM1N2_GE_OR_VS,ONUMM1N2_GE_OO_MS,ONUMM1N2_GE_RO_MS,&
+                       ONUMM1N2_GE_OR_MS,ONUMM1N2_GE_OO_SV,ONUMM1N2_GE_RO_SV,ONUMM1N2_GE_OR_SV,&
+                       ONUMM1N2_GE_OO_SM,ONUMM1N2_GE_RO_SM,ONUMM1N2_GE_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(<=)
+      MODULE PROCEDURE ONUMM1N2_LE_OO_SS,ONUMM1N2_LE_RO_SS,ONUMM1N2_LE_OR_SS,ONUMM1N2_LE_OO_VS,&
+                       ONUMM1N2_LE_RO_VS,ONUMM1N2_LE_OR_VS,ONUMM1N2_LE_OO_MS,ONUMM1N2_LE_RO_MS,&
+                       ONUMM1N2_LE_OR_MS,ONUMM1N2_LE_OO_SV,ONUMM1N2_LE_RO_SV,ONUMM1N2_LE_OR_SV,&
+                       ONUMM1N2_LE_OO_SM,ONUMM1N2_LE_RO_SM,ONUMM1N2_LE_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(>)
+      MODULE PROCEDURE ONUMM1N2_GT_OO_SS,ONUMM1N2_GT_RO_SS,ONUMM1N2_GT_OR_SS,ONUMM1N2_GT_OO_VS,&
+                       ONUMM1N2_GT_RO_VS,ONUMM1N2_GT_OR_VS,ONUMM1N2_GT_OO_MS,ONUMM1N2_GT_RO_MS,&
+                       ONUMM1N2_GT_OR_MS,ONUMM1N2_GT_OO_SV,ONUMM1N2_GT_RO_SV,ONUMM1N2_GT_OR_SV,&
+                       ONUMM1N2_GT_OO_SM,ONUMM1N2_GT_RO_SM,ONUMM1N2_GT_OR_SM
+   END INTERFACE
+
+   INTERFACE OPERATOR(<)
+      MODULE PROCEDURE ONUMM1N2_LT_OO_SS,ONUMM1N2_LT_RO_SS,ONUMM1N2_LT_OR_SS,ONUMM1N2_LT_OO_VS,&
+                       ONUMM1N2_LT_RO_VS,ONUMM1N2_LT_OR_VS,ONUMM1N2_LT_OO_MS,ONUMM1N2_LT_RO_MS,&
+                       ONUMM1N2_LT_OR_MS,ONUMM1N2_LT_OO_SV,ONUMM1N2_LT_RO_SV,ONUMM1N2_LT_OR_SV,&
+                       ONUMM1N2_LT_OO_SM,ONUMM1N2_LT_RO_SM,ONUMM1N2_LT_OR_SM
    END INTERFACE
 
    INTERFACE PPRINT
@@ -178,6 +221,30 @@ MODULE OTIM1N2
       MODULE PROCEDURE ONUMM1N2_SETIM_S,ONUMM1N2_SETIM_V,ONUMM1N2_SETIM_M
    END INTERFACE
 
+   INTERFACE MAX
+      MODULE PROCEDURE ONUMM1N2_MAX
+   END INTERFACE
+
+   INTERFACE MIN
+      MODULE PROCEDURE ONUMM1N2_MIN
+   END INTERFACE
+
+   INTERFACE MAXLOC
+      MODULE PROCEDURE ONUMM1N2_MAXLOC_R1,ONUMM1N2_MAXLOC_R2,ONUMM1N2_MAXLOC_R3,ONUMM1N2_MAXLOC_R4
+   END INTERFACE
+
+   INTERFACE MAXVAL
+      MODULE PROCEDURE ONUMM1N2_MAXVAL_R1,ONUMM1N2_MAXVAL_R2,ONUMM1N2_MAXVAL_R3,ONUMM1N2_MAXVAL_R4
+   END INTERFACE
+
+   INTERFACE MINLOC
+      MODULE PROCEDURE ONUMM1N2_MINLOC_R1,ONUMM1N2_MINLOC_R2,ONUMM1N2_MINLOC_R3,ONUMM1N2_MINLOC_R4
+   END INTERFACE
+
+   INTERFACE MINVAL
+      MODULE PROCEDURE ONUMM1N2_MINVAL_R1,ONUMM1N2_MINVAL_R2,ONUMM1N2_MINVAL_R3,ONUMM1N2_MINVAL_R4
+   END INTERFACE
+
    CONTAINS
 
    ELEMENTAL SUBROUTINE ONUMM1N2_ASSIGN_R(RES,LHS)
@@ -191,10 +258,10 @@ MODULE OTIM1N2
       RES%R = LHS
 
       ! Order 1
-      RES%E1 = 0.0_DP
+      RES%E1 = 0.0_dp
 
       ! Order 2
-      RES%E11 = 0.0_DP
+      RES%E11 = 0.0_dp
 
    END SUBROUTINE ONUMM1N2_ASSIGN_R
 
@@ -383,6 +450,240 @@ MODULE OTIM1N2
 
    END FUNCTION ONUMM1N2_MUL_OR_SS
 
+   ELEMENTAL FUNCTION ONUMM1N2_EQ_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_EQ_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_EQ_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS
+
+   END FUNCTION ONUMM1N2_EQ_OR_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_NE_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_NE_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_NE_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS
+
+   END FUNCTION ONUMM1N2_NE_OR_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_LT_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_LT_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_LT_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS
+
+   END FUNCTION ONUMM1N2_LT_OR_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_GT_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_GT_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_GT_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS
+
+   END FUNCTION ONUMM1N2_GT_OR_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_LE_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_LE_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_LE_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS
+
+   END FUNCTION ONUMM1N2_LE_OR_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_GE_OO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_OO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_GE_RO_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_RO_SS
+
+   ELEMENTAL FUNCTION ONUMM1N2_GE_OR_SS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS
+
+   END FUNCTION ONUMM1N2_GE_OR_SS
+
    FUNCTION ONUMM1N2_ADD_OO_VS(LHS,RHS)&
       RESULT(RES)
       IMPLICIT NONE
@@ -551,6 +852,240 @@ MODULE OTIM1N2
       RES%E11 = LHS%E11*RHS
 
    END FUNCTION ONUMM1N2_MUL_OR_VS
+
+   FUNCTION ONUMM1N2_EQ_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_OO_VS
+
+   FUNCTION ONUMM1N2_EQ_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_RO_VS
+
+   FUNCTION ONUMM1N2_EQ_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS
+
+   END FUNCTION ONUMM1N2_EQ_OR_VS
+
+   FUNCTION ONUMM1N2_NE_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_OO_VS
+
+   FUNCTION ONUMM1N2_NE_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_RO_VS
+
+   FUNCTION ONUMM1N2_NE_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS
+
+   END FUNCTION ONUMM1N2_NE_OR_VS
+
+   FUNCTION ONUMM1N2_LT_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_OO_VS
+
+   FUNCTION ONUMM1N2_LT_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_RO_VS
+
+   FUNCTION ONUMM1N2_LT_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS
+
+   END FUNCTION ONUMM1N2_LT_OR_VS
+
+   FUNCTION ONUMM1N2_GT_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_OO_VS
+
+   FUNCTION ONUMM1N2_GT_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_RO_VS
+
+   FUNCTION ONUMM1N2_GT_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS
+
+   END FUNCTION ONUMM1N2_GT_OR_VS
+
+   FUNCTION ONUMM1N2_LE_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_OO_VS
+
+   FUNCTION ONUMM1N2_LE_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_RO_VS
+
+   FUNCTION ONUMM1N2_LE_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS
+
+   END FUNCTION ONUMM1N2_LE_OR_VS
+
+   FUNCTION ONUMM1N2_GE_OO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_OO_VS
+
+   FUNCTION ONUMM1N2_GE_RO_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_RO_VS
+
+   FUNCTION ONUMM1N2_GE_OR_VS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS
+
+   END FUNCTION ONUMM1N2_GE_OR_VS
 
    FUNCTION ONUMM1N2_ADD_OO_MS(LHS,RHS)&
       RESULT(RES)
@@ -721,6 +1256,240 @@ MODULE OTIM1N2
 
    END FUNCTION ONUMM1N2_MUL_OR_MS
 
+   FUNCTION ONUMM1N2_EQ_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_OO_MS
+
+   FUNCTION ONUMM1N2_EQ_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_RO_MS
+
+   FUNCTION ONUMM1N2_EQ_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS
+
+   END FUNCTION ONUMM1N2_EQ_OR_MS
+
+   FUNCTION ONUMM1N2_NE_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_OO_MS
+
+   FUNCTION ONUMM1N2_NE_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_RO_MS
+
+   FUNCTION ONUMM1N2_NE_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS
+
+   END FUNCTION ONUMM1N2_NE_OR_MS
+
+   FUNCTION ONUMM1N2_LT_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_OO_MS
+
+   FUNCTION ONUMM1N2_LT_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_RO_MS
+
+   FUNCTION ONUMM1N2_LT_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS
+
+   END FUNCTION ONUMM1N2_LT_OR_MS
+
+   FUNCTION ONUMM1N2_GT_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_OO_MS
+
+   FUNCTION ONUMM1N2_GT_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_RO_MS
+
+   FUNCTION ONUMM1N2_GT_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS
+
+   END FUNCTION ONUMM1N2_GT_OR_MS
+
+   FUNCTION ONUMM1N2_LE_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_OO_MS
+
+   FUNCTION ONUMM1N2_LE_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_RO_MS
+
+   FUNCTION ONUMM1N2_LE_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS
+
+   END FUNCTION ONUMM1N2_LE_OR_MS
+
+   FUNCTION ONUMM1N2_GE_OO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_OO_MS
+
+   FUNCTION ONUMM1N2_GE_RO_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS(:,:)
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_RO_MS
+
+   FUNCTION ONUMM1N2_GE_OR_MS(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS(:,:)
+      REAL(DP), INTENT(IN) :: RHS
+      LOGICAL :: RES(SIZE(LHS,1),SIZE(LHS,2)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS
+
+   END FUNCTION ONUMM1N2_GE_OR_MS
+
    FUNCTION ONUMM1N2_ADD_OO_SV(LHS,RHS)&
       RESULT(RES)
       IMPLICIT NONE
@@ -889,6 +1658,240 @@ MODULE OTIM1N2
       RES%E11 = LHS%E11*RHS
 
    END FUNCTION ONUMM1N2_MUL_OR_SV
+
+   FUNCTION ONUMM1N2_EQ_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_OO_SV
+
+   FUNCTION ONUMM1N2_EQ_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_RO_SV
+
+   FUNCTION ONUMM1N2_EQ_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS
+
+   END FUNCTION ONUMM1N2_EQ_OR_SV
+
+   FUNCTION ONUMM1N2_NE_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_OO_SV
+
+   FUNCTION ONUMM1N2_NE_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_RO_SV
+
+   FUNCTION ONUMM1N2_NE_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS
+
+   END FUNCTION ONUMM1N2_NE_OR_SV
+
+   FUNCTION ONUMM1N2_LT_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_OO_SV
+
+   FUNCTION ONUMM1N2_LT_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_RO_SV
+
+   FUNCTION ONUMM1N2_LT_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS
+
+   END FUNCTION ONUMM1N2_LT_OR_SV
+
+   FUNCTION ONUMM1N2_GT_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_OO_SV
+
+   FUNCTION ONUMM1N2_GT_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_RO_SV
+
+   FUNCTION ONUMM1N2_GT_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS
+
+   END FUNCTION ONUMM1N2_GT_OR_SV
+
+   FUNCTION ONUMM1N2_LE_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_OO_SV
+
+   FUNCTION ONUMM1N2_LE_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_RO_SV
+
+   FUNCTION ONUMM1N2_LE_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS
+
+   END FUNCTION ONUMM1N2_LE_OR_SV
+
+   FUNCTION ONUMM1N2_GE_OO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_OO_SV
+
+   FUNCTION ONUMM1N2_GE_RO_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_RO_SV
+
+   FUNCTION ONUMM1N2_GE_OR_SV(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:)
+      LOGICAL :: RES(SIZE(RHS,1)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS
+
+   END FUNCTION ONUMM1N2_GE_OR_SV
 
    FUNCTION ONUMM1N2_ADD_OO_SM(LHS,RHS)&
       RESULT(RES)
@@ -1059,6 +2062,240 @@ MODULE OTIM1N2
 
    END FUNCTION ONUMM1N2_MUL_OR_SM
 
+   FUNCTION ONUMM1N2_EQ_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_OO_SM
+
+   FUNCTION ONUMM1N2_EQ_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS == RHS%R
+
+   END FUNCTION ONUMM1N2_EQ_RO_SM
+
+   FUNCTION ONUMM1N2_EQ_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS == RHS'
+      ! Compare real-only 
+      RES = LHS%R == RHS
+
+   END FUNCTION ONUMM1N2_EQ_OR_SM
+
+   FUNCTION ONUMM1N2_NE_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_OO_SM
+
+   FUNCTION ONUMM1N2_NE_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS /= RHS%R
+
+   END FUNCTION ONUMM1N2_NE_RO_SM
+
+   FUNCTION ONUMM1N2_NE_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS /= RHS'
+      ! Compare real-only 
+      RES = LHS%R /= RHS
+
+   END FUNCTION ONUMM1N2_NE_OR_SM
+
+   FUNCTION ONUMM1N2_LT_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_OO_SM
+
+   FUNCTION ONUMM1N2_LT_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS < RHS%R
+
+   END FUNCTION ONUMM1N2_LT_RO_SM
+
+   FUNCTION ONUMM1N2_LT_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS < RHS'
+      ! Compare real-only 
+      RES = LHS%R < RHS
+
+   END FUNCTION ONUMM1N2_LT_OR_SM
+
+   FUNCTION ONUMM1N2_GT_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_OO_SM
+
+   FUNCTION ONUMM1N2_GT_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS > RHS%R
+
+   END FUNCTION ONUMM1N2_GT_RO_SM
+
+   FUNCTION ONUMM1N2_GT_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS > RHS'
+      ! Compare real-only 
+      RES = LHS%R > RHS
+
+   END FUNCTION ONUMM1N2_GT_OR_SM
+
+   FUNCTION ONUMM1N2_LE_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_OO_SM
+
+   FUNCTION ONUMM1N2_LE_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS <= RHS%R
+
+   END FUNCTION ONUMM1N2_LE_RO_SM
+
+   FUNCTION ONUMM1N2_LE_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS <= RHS'
+      ! Compare real-only 
+      RES = LHS%R <= RHS
+
+   END FUNCTION ONUMM1N2_LE_OR_SM
+
+   FUNCTION ONUMM1N2_GE_OO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_OO_SM
+
+   FUNCTION ONUMM1N2_GE_RO_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      REAL(DP), INTENT(IN) :: LHS
+      TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS >= RHS%R
+
+   END FUNCTION ONUMM1N2_GE_RO_SM
+
+   FUNCTION ONUMM1N2_GE_OR_SM(LHS,RHS)&
+      RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: LHS
+      REAL(DP), INTENT(IN) :: RHS(:,:)
+      LOGICAL :: RES(SIZE(RHS,1),SIZE(RHS,2)) 
+
+      ! Relation like function 'LHS >= RHS'
+      ! Compare real-only 
+      RES = LHS%R >= RHS
+
+   END FUNCTION ONUMM1N2_GE_OR_SM
+
 ELEMENTAL    FUNCTION ONUMM1N2_GEM_OOO(A,B,C)&
       RESULT(RES)
       IMPLICIT NONE
@@ -1126,13 +2363,13 @@ ELEMENTAL    FUNCTION ONUMM1N2_GEM_ORO(A,B,C)&
       TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
       TYPE(ONUMM1N2) :: RES(SIZE(LHS,1),SIZE(RHS,2))
 
-      !  Multiplication like function 'MATMUL(LHS,RHS)'
+      !  Multiplication like function 'MATMUL(lhs,rhs)'
       ! Order 2
-      RES%E11 = MATMUL(LHS%R,RHS%E11) + MATMUL(LHS%E11,RHS%R) + MATMUL(LHS%E1,RHS%E1)
+      res%E11 = MATMUL(lhs%R,rhs%E11) + MATMUL(lhs%E11,rhs%R) + MATMUL(lhs%E1,rhs%E1)
       ! Order 1
-      RES%E1 = MATMUL(LHS%R,RHS%E1) + MATMUL(LHS%E1,RHS%R)
+      res%E1 = MATMUL(lhs%R,rhs%E1) + MATMUL(lhs%E1,rhs%R)
       ! Order 0
-      RES%R = MATMUL(LHS%R,RHS%R)
+      res%R = MATMUL(lhs%R,rhs%R)
 
    END FUNCTION ONUMM1N2_MATMUL_ONUMM1N2
 
@@ -1143,15 +2380,15 @@ ELEMENTAL    FUNCTION ONUMM1N2_GEM_ORO(A,B,C)&
       TYPE(ONUMM1N2), INTENT(IN) :: RHS(:,:)
       TYPE(ONUMM1N2) :: RES(SIZE(LHS,1),SIZE(RHS,2))
 
-      ! Multiplication like function 'MATMUL(LHS,RHS)'
+      ! Multiplication like function 'MATMUL(lhs,rhs)'
       !  Real
-      RES%R = MATMUL(LHS,RHS%R)
+      res%R = MATMUL(lhs,rhs%R)
 
       ! Order 1
-      RES%E1 = MATMUL(LHS,RHS%E1)
+      res%E1 = MATMUL(lhs,rhs%E1)
 
       ! Order 2
-      RES%E11 = MATMUL(LHS,RHS%E11)
+      res%E11 = MATMUL(lhs,rhs%E11)
 
    END FUNCTION R_MATMUL_ONUMM1N2
 
@@ -1162,15 +2399,15 @@ ELEMENTAL    FUNCTION ONUMM1N2_GEM_ORO(A,B,C)&
       REAL(DP), INTENT(IN) :: RHS(:,:)
       TYPE(ONUMM1N2) :: RES(SIZE(LHS,1),SIZE(RHS,2))
 
-      ! Multiplication like function 'MATMUL(LHS,RHS)'
+      ! Multiplication like function 'MATMUL(lhs,rhs)'
       !  Real
-      RES%R = MATMUL(LHS%R,RHS)
+      res%R = MATMUL(lhs%R,rhs)
 
       ! Order 1
-      RES%E1 = MATMUL(LHS%E1,RHS)
+      res%E1 = MATMUL(lhs%E1,rhs)
 
       ! Order 2
-      RES%E11 = MATMUL(LHS%E11,RHS)
+      res%E11 = MATMUL(lhs%E11,rhs)
 
    END FUNCTION ONUMM1N2_MATMUL_R
 
@@ -1181,13 +2418,13 @@ ELEMENTAL    FUNCTION ONUMM1N2_GEM_ORO(A,B,C)&
       TYPE(ONUMM1N2), INTENT(IN) :: RHS(SIZE(LHS))
       TYPE(ONUMM1N2) :: RES
 
-      !  Multiplication like function 'DOT_PRODUCT(LHS,RHS)'
+      !  Multiplication like function 'DOT_PRODUCT(lhs,rhs)'
       ! Order 2
-      RES%E11 = DOT_PRODUCT(LHS%R,RHS%E11) + DOT_PRODUCT(LHS%E11,RHS%R) + DOT_PRODUCT(LHS%E1,RHS%E1)
+      res%E11 = DOT_PRODUCT(lhs%R,rhs%E11) + DOT_PRODUCT(lhs%E11,rhs%R) + DOT_PRODUCT(lhs%E1,rhs%E1)
       ! Order 1
-      RES%E1 = DOT_PRODUCT(LHS%R,RHS%E1) + DOT_PRODUCT(LHS%E1,RHS%R)
+      res%E1 = DOT_PRODUCT(lhs%R,rhs%E1) + DOT_PRODUCT(lhs%E1,rhs%R)
       ! Order 0
-      RES%R = DOT_PRODUCT(LHS%R,RHS%R)
+      res%R = DOT_PRODUCT(lhs%R,rhs%R)
 
    END FUNCTION ONUMM1N2_DOT_PRODUCT_ONUMM1N2
 
@@ -1198,15 +2435,15 @@ ELEMENTAL    FUNCTION ONUMM1N2_GEM_ORO(A,B,C)&
       TYPE(ONUMM1N2), INTENT(IN) :: RHS(SIZE(LHS))
       TYPE(ONUMM1N2) :: RES
 
-      ! Multiplication like function 'DOT_PRODUCT(LHS,RHS)'
+      ! Multiplication like function 'DOT_PRODUCT(lhs,rhs)'
       !  Real
-      RES%R = DOT_PRODUCT(LHS,RHS%R)
+      res%R = DOT_PRODUCT(lhs,rhs%R)
 
       ! Order 1
-      RES%E1 = DOT_PRODUCT(LHS,RHS%E1)
+      res%E1 = DOT_PRODUCT(lhs,rhs%E1)
 
       ! Order 2
-      RES%E11 = DOT_PRODUCT(LHS,RHS%E11)
+      res%E11 = DOT_PRODUCT(lhs,rhs%E11)
 
    END FUNCTION R_DOT_PRODUCT_ONUMM1N2
 
@@ -1217,15 +2454,15 @@ ELEMENTAL    FUNCTION ONUMM1N2_GEM_ORO(A,B,C)&
       REAL(DP), INTENT(IN) :: RHS(SIZE(LHS))
       TYPE(ONUMM1N2) :: RES
 
-      ! Multiplication like function 'DOT_PRODUCT(LHS,RHS)'
+      ! Multiplication like function 'DOT_PRODUCT(lhs,rhs)'
       !  Real
-      RES%R = DOT_PRODUCT(LHS%R,RHS)
+      res%R = DOT_PRODUCT(lhs%R,rhs)
 
       ! Order 1
-      RES%E1 = DOT_PRODUCT(LHS%E1,RHS)
+      res%E1 = DOT_PRODUCT(lhs%E1,rhs)
 
       ! Order 2
-      RES%E11 = DOT_PRODUCT(LHS%E11,RHS)
+      res%E11 = DOT_PRODUCT(lhs%E11,rhs)
 
    END FUNCTION ONUMM1N2_DOT_PRODUCT_R
 
@@ -1383,6 +2620,8 @@ FUNCTION ONUMM1N2_GETIM_S(VAL,IDX) RESULT(RES)
       REAL(DP) :: RES 
       INTEGER, INTENT(IN) :: IDX
 
+      RES = 0.0_dp
+
       SELECT CASE(IDX)
       ! Order 0
       CASE(0)
@@ -1405,6 +2644,8 @@ FUNCTION ONUMM1N2_GETIM_V(VAL,IDX) RESULT(RES)
       REAL(DP) :: RES(SIZE(VAL)) 
       INTEGER, INTENT(IN) :: IDX
 
+      RES = 0.0_dp
+
       SELECT CASE(IDX)
       ! Order 0
       CASE(0)
@@ -1426,6 +2667,8 @@ FUNCTION ONUMM1N2_GETIM_M(VAL,IDX) RESULT(RES)
       TYPE(ONUMM1N2), INTENT(IN) :: VAL(:,:)
       REAL(DP) :: RES(SIZE(VAL,1),SIZE(VAL,2)) 
       INTEGER, INTENT(IN) :: IDX
+
+      RES = 0.0_dp
 
       SELECT CASE(IDX)
       ! Order 0
@@ -1573,8 +2816,8 @@ FUNCTION ONUMM1N2_GETIM_M(VAL,IDX) RESULT(RES)
       DX_P   = X
 
       !  Set real part of deltas zero.
-      DX%R = 0.0_DP
-      DX_P%R = 0.0_DP
+      DX%R = 0.0_dp
+      DX_P%R = 0.0_dp
 
       ! Sets real part
       RES = DER0
@@ -1892,7 +3135,7 @@ FUNCTION ONUMM1N2_GETIM_M(VAL,IDX) RESULT(RES)
 
   ELEMENTAL FUNCTION ONUMM1N2_DIVISION_OO(X,Y) RESULT(RES)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
+      ! REAL(DP) :: DERIVS(TORDER + 1) 
       TYPE(ONUMM1N2), INTENT(IN) :: X
       TYPE(ONUMM1N2), INTENT(IN) :: Y
       TYPE(ONUMM1N2) :: RES
@@ -1901,9 +3144,9 @@ FUNCTION ONUMM1N2_GETIM_M(VAL,IDX) RESULT(RES)
 
   END FUNCTION ONUMM1N2_DIVISION_OO
 
-  FUNCTION ONUMM1N2_DIVISION_OR(X,Y) RESULT(RES)
+  ELEMENTAL FUNCTION ONUMM1N2_DIVISION_OR(X,Y) RESULT(RES)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
+      ! REAL(DP) :: DERIVS(TORDER + 1) 
       TYPE(ONUMM1N2), INTENT(IN) :: X
       REAL(DP), INTENT(IN) :: Y
       TYPE(ONUMM1N2) :: RES
@@ -1912,9 +3155,9 @@ FUNCTION ONUMM1N2_GETIM_M(VAL,IDX) RESULT(RES)
 
   END FUNCTION ONUMM1N2_DIVISION_OR
 
-  FUNCTION ONUMM1N2_DIVISION_RO(X,Y) RESULT(RES)
+  ELEMENTAL FUNCTION ONUMM1N2_DIVISION_RO(X,Y) RESULT(RES)
       IMPLICIT NONE
-      REAL(DP) :: DERIVS(TORDER + 1) 
+      ! REAL(DP) :: DERIVS(TORDER + 1) 
       REAL(DP), INTENT(IN) :: X
       TYPE(ONUMM1N2), INTENT(IN) :: Y
       TYPE(ONUMM1N2) :: RES
@@ -1940,6 +3183,407 @@ FUNCTION ONUMM1N2_GETIM_M(VAL,IDX) RESULT(RES)
       RES = X**0.5_DP
 
   END FUNCTION ONUMM1N2_SQRT
+
+  FUNCTION ONUMM1N2_MAX(X1,X2) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: X1, X2
+                                                
+      TYPE(ONUMM1N2) :: RES
+      RES = X1
+      IF (X2>RES) RES = X2  
+
+  END FUNCTION ONUMM1N2_MAX
+
+  FUNCTION ONUMM1N2_MIN(X1,X2) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: X1, X2
+                                                
+      TYPE(ONUMM1N2) :: RES
+      RES = X1
+      IF (X2<RES) RES = X2
+
+  END FUNCTION ONUMM1N2_MIN
+
+  FUNCTION ONUMM1N2_MAXLOC_R1(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+
+      RES = MAXLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION ONUMM1N2_MAXLOC_R1
+
+  FUNCTION ONUMM1N2_MAXLOC_R2(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+      RES = MAXLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION ONUMM1N2_MAXLOC_R2
+  
+  FUNCTION ONUMM1N2_MAXLOC_R3(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+      LOGICAL :: BACK_DEF
+      
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+      RES = MAXLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION ONUMM1N2_MAXLOC_R3
+
+  FUNCTION ONUMM1N2_MAXLOC_R4(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+
+      RES = MAXLOC(ARRAY%R, MASK = MASK_DEF,  BACK = BACK_DEF)
+
+  END FUNCTION ONUMM1N2_MAXLOC_R4
+
+  
+  FUNCTION ONUMM1N2_MAXVAL_R1(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE(ONUMM1N2) :: RES
+      
+
+      IDX = MAXLOC(ARRAY)
+      RES = ARRAY(IDX(1))
+
+  END FUNCTION ONUMM1N2_MAXVAL_R1
+
+  FUNCTION ONUMM1N2_MAXVAL_R2(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE(ONUMM1N2) :: RES
+      
+
+      IDX = MAXLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2))
+
+  END FUNCTION ONUMM1N2_MAXVAL_R2
+
+  FUNCTION ONUMM1N2_MAXVAL_R3(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE(ONUMM1N2) :: RES
+      
+
+      IDX = MAXLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2),IDX(3))
+
+  END FUNCTION ONUMM1N2_MAXVAL_R3
+
+  FUNCTION ONUMM1N2_MAXVAL_R4(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE(ONUMM1N2) :: RES
+      
+
+      IDX = MAXLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2),IDX(3),IDX(4))
+
+  END FUNCTION ONUMM1N2_MAXVAL_R4
+
+
+    FUNCTION ONUMM1N2_MINLOC_R1(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+
+      RES = MINLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION ONUMM1N2_MINLOC_R1
+
+  FUNCTION ONUMM1N2_MINLOC_R2(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+      RES = MINLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION ONUMM1N2_MINLOC_R2
+  
+  FUNCTION ONUMM1N2_MINLOC_R3(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+      LOGICAL :: BACK_DEF
+      
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+      RES = MINLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  END FUNCTION ONUMM1N2_MINLOC_R3
+
+  FUNCTION ONUMM1N2_MINLOC_R4(ARRAY, MASK, BACK) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:,:)
+      LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+      LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+      INTEGER :: RES( RANK( ARRAY ) )
+      
+      LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+      LOGICAL :: BACK_DEF
+      
+      ! Assign defaults.
+      MASK_DEF = .true.
+      BACK_DEF = .false.
+      
+      
+      IF (PRESENT(MASK)) MASK_DEF = MASK
+      IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+
+      RES = MINLOC(ARRAY%R, MASK = MASK_DEF,  BACK = BACK_DEF)
+
+  END FUNCTION ONUMM1N2_MINLOC_R4
+
+
+
+  FUNCTION ONUMM1N2_MINVAL_R1(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE(ONUMM1N2) :: RES
+      
+
+      IDX = MINLOC(ARRAY)
+      RES = ARRAY(IDX(1))
+
+  END FUNCTION ONUMM1N2_MINVAL_R1
+
+  FUNCTION ONUMM1N2_MINVAL_R2(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE(ONUMM1N2) :: RES
+      
+
+      IDX = MINLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2))
+
+  END FUNCTION ONUMM1N2_MINVAL_R2
+
+  FUNCTION ONUMM1N2_MINVAL_R3(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE(ONUMM1N2) :: RES
+      
+
+      IDX = MINLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2),IDX(3))
+
+  END FUNCTION ONUMM1N2_MINVAL_R3
+
+  FUNCTION ONUMM1N2_MINVAL_R4(ARRAY) RESULT(RES)
+      IMPLICIT NONE
+      TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:,:)
+      INTEGER :: IDX( RANK( ARRAY ) )
+      TYPE(ONUMM1N2) :: RES
+      
+
+      IDX = MINLOC(ARRAY)
+      RES = ARRAY(IDX(1),IDX(2),IDX(3),IDX(4))
+
+  END FUNCTION ONUMM1N2_MINVAL_R4
+
+  ! FUNCTION ONUMM1N2_MAXLOC_DIM_R1(ARRAY, DIM, MASK, KIND, BACK) RESULT(RES)
+  !     IMPLICIT NONE
+  !     TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:)
+  !     INTEGER, INTENT(IN) :: DIM  
+  !     LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1))
+  !     INTEGER, INTENT(IN), OPTIONAL :: KIND  ! Not used in this case.
+  !     LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+  !     INTEGER :: RES( RANK( ARRAY ) )
+      
+  !     LOGICAL :: MASK_DEF(SIZE(ARRAY,1))
+  !     LOGICAL :: BACK_DEF
+      
+  !     ! Assign defaults.
+  !     MASK_DEF = .true.
+  !     BACK_DEF = .false.
+      
+  !     IF (PRESENT(MASK)) MASK_DEF = MASK
+  !     IF (PRESENT(BACK)) BACK_DEF = BACK
+
+  !     RES = MAXLOC(ARRAY%R, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  ! END FUNCTION ONUMM1N2_MAXLOC_DIM_R1
+
+  ! FUNCTION ONUMM1N2_MAXLOC_DIM_R2(ARRAY, DIM, MASK, KIND, BACK) RESULT(RES)
+  !     IMPLICIT NONE
+  !     TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:)
+  !     INTEGER, INTENT(IN) :: DIM  
+  !     LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2))
+  !     INTEGER, INTENT(IN), OPTIONAL :: KIND  ! Not used in this case.
+  !     LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+  !     INTEGER :: RES( RANK( ARRAY ) )
+      
+  !     LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2))
+  !     LOGICAL :: BACK_DEF
+      
+  !     ! Assign defaults.
+  !     MASK_DEF = .true.
+  !     BACK_DEF = .false.
+      
+  !     IF (PRESENT(MASK)) MASK_DEF = MASK
+  !     IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+  !     RES = MAXLOC(ARRAY%R, DIM, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  ! END FUNCTION ONUMM1N2_MAXLOC_DIM_R2
+  
+  ! FUNCTION ONUMM1N2_MAXLOC_DIM_R3(ARRAY, DIM, MASK, KIND, BACK) RESULT(RES)
+  !     IMPLICIT NONE
+  !     TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:)
+  !     INTEGER, INTENT(IN) :: DIM  
+  !     LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+  !     INTEGER, INTENT(IN), OPTIONAL :: KIND  ! Not used in this case.
+  !     LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+  !     INTEGER :: RES( RANK( ARRAY ) )
+      
+  !     LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3))
+  !     LOGICAL :: BACK_DEF
+      
+      
+  !     ! Assign defaults.
+  !     MASK_DEF = .true.
+  !     BACK_DEF = .false.
+      
+  !     IF (PRESENT(MASK)) MASK_DEF = MASK
+  !     IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+  !     RES = MAXLOC(ARRAY%R, DIM, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  ! END FUNCTION ONUMM1N2_MAXLOC_DIM_R3
+
+  ! FUNCTION ONUMM1N2_MAXLOC_DIM_R4(ARRAY, DIM, MASK, KIND, BACK) RESULT(RES)
+  !     IMPLICIT NONE
+  !     TYPE(ONUMM1N2), INTENT(IN) :: ARRAY(:,:,:,:)
+  !     INTEGER, INTENT(IN) :: DIM  
+  !     LOGICAL, INTENT(IN), OPTIONAL :: MASK(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+  !     INTEGER, INTENT(IN), OPTIONAL :: KIND  ! Not used in this case, just for compatibility.
+  !     LOGICAL, INTENT(IN), OPTIONAL :: BACK  ! Search from the back
+      
+  !     INTEGER :: RES( RANK( ARRAY ) )
+      
+  !     LOGICAL :: MASK_DEF(SIZE(ARRAY,1),SIZE(ARRAY,2),SIZE(ARRAY,3),SIZE(ARRAY,4))
+  !     LOGICAL :: BACK_DEF
+      
+  !     ! Assign defaults.
+  !     MASK_DEF = .true.
+  !     BACK_DEF = .false.
+      
+      
+  !     IF (PRESENT(MASK)) MASK_DEF = MASK
+  !     IF (PRESENT(BACK)) BACK_DEF = BACK
+      
+
+  !     RES = MAXLOC(ARRAY%R, DIM, MASK = MASK_DEF, BACK = BACK_DEF)
+
+  ! END FUNCTION ONUMM1N2_MAXLOC_DIM_R4
 
    ELEMENTAL FUNCTION ONUMM1N2_TAN(X) RESULT(RES)
 
@@ -2134,12 +3778,52 @@ FUNCTION ONUMM1N2_GETIM_M(VAL,IDX) RESULT(RES)
 
    END FUNCTION ONUMM1N2_POW_RO
 
+   ELEMENTAL FUNCTION ONUMM1N2_POW_I8O(E,X) RESULT(RES)
+
+      TYPE(ONUMM1N2), INTENT(IN) :: X
+      INTEGER(8), INTENT(IN) :: E
+      TYPE(ONUMM1N2) :: RES
+      
+      RES = ONUMM1N2_POW_RO(REAL(E,8),X)
+      
+   END FUNCTION 
+
+   ELEMENTAL FUNCTION ONUMM1N2_POW_I4O(E,X) RESULT(RES)
+
+      TYPE(ONUMM1N2), INTENT(IN) :: X
+      INTEGER(4), INTENT(IN) :: E
+      TYPE(ONUMM1N2) :: RES
+      
+      RES = ONUMM1N2_POW_RO(REAL(E,8),X)
+      
+   END FUNCTION 
+
+   ELEMENTAL FUNCTION ONUMM1N2_POW_OI8(X,E) RESULT(RES)
+
+      TYPE(ONUMM1N2), INTENT(IN) :: X
+      INTEGER(8), INTENT(IN) :: E
+      TYPE(ONUMM1N2) :: RES
+      
+      RES = ONUMM1N2_POW_OR(X,REAL(E,8))
+      
+   END FUNCTION 
+
+   ELEMENTAL FUNCTION ONUMM1N2_POW_OI4(X,E) RESULT(RES)
+
+      TYPE(ONUMM1N2), INTENT(IN) :: X
+      INTEGER(4), INTENT(IN) :: E
+      TYPE(ONUMM1N2) :: RES
+      
+      RES = ONUMM1N2_POW_OR(X,REAL(E,8))
+      
+   END FUNCTION 
+
    ELEMENTAL FUNCTION ONUMM1N2_F2EVAL(X,Y,DER0_0,DER1_0,DER1_1, &
                                   DER2_0,DER2_1,DER2_2)&
       RESULT(RES)
       IMPLICIT NONE
       !  Definitions
-      REAL(DP) :: COEF, DELTA
+      REAL(DP) :: COEF
       TYPE(ONUMM1N2), INTENT(IN)  :: X,Y
       REAL(DP), INTENT(IN)  :: DER0_0,DER1_0,DER1_1, &
                                DER2_0,DER2_1,DER2_2
@@ -2151,8 +3835,8 @@ FUNCTION ONUMM1N2_GETIM_M(VAL,IDX) RESULT(RES)
       DY     = Y
 
       !  Set real part of deltas zero.
-      DX%R = 0.0_DP
-      DY%R = 0.0_DP
+      DX%R = 0.0_dp
+      DY%R = 0.0_dp
 
       ! Set real part
       RES = DER0_0
@@ -2274,4 +3958,4 @@ FUNCTION ONUMM1N2_GETIM_M(VAL,IDX) RESULT(RES)
 
    END FUNCTION ONUMM1N2_INV4X4
 
-END MODULE OTIM1N2
+END MODULE otim1n2

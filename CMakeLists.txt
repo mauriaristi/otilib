@@ -12,6 +12,11 @@
 # cmake_minimum_required (VERSION 3.20)
 cmake_minimum_required (VERSION 3.20)
 
+# Name of the global project.
+project(oti 
+  VERSION 0.1
+  LANGUAGES Fortran C) 
+
 # Set specific OS deployment target.
 # SET(CMAKE_OSX_DEPLOYMENT_TARGET 12.1)
 SET(CMAKE_OSX_DEPLOYMENT_TARGET 11.0)
@@ -30,12 +35,6 @@ endif()
 
 # Enable fortran compilation.
 enable_language(Fortran)
-
-
-# Name of the global project.
-project(oti 
-  VERSION 0.1
-  LANGUAGES Fortran C) 
 
 message(STATUS "SETTING UP COMPILATION FOR OTIlib ${PROJECT_VERSION}")
 

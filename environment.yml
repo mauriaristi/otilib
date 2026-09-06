@@ -5,7 +5,7 @@ channels:
   - default
 dependencies:
   - python=3.9.*
-  - numpy
+  - numpy<1.25
   - scipy
   - cython=0.29.*
   - pandas
@@ -16,6 +16,6 @@ dependencies:
   - conda-forge::pyvista
   - conda-forge::gmsh
   - conda-forge::python-gmsh
-  - conda-forge::vtk
+  - conda-forge::vtk<9.4
   - conda-forge::scikit-sparse
   - conda-forge::scikit-umfpack

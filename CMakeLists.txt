@@ -174,14 +174,13 @@ endif (GENERATE_CYTHON_OTI)
 #   add_subdirectory (pyotifem)  
 # endif (GENERATE_CYTHON_OTIFEM)
 
-# # should we do the Cython part too?
-# option (GENERATE_C_TESTS
-#         "Generate C tests files" OFF) 
+# Tests configuration
+option (BUILD_TESTING "Build the test suite" ON)
 
-# if (GENERATE_C_TESTS)
-#   add_subdirectory (tests/c)
-# endif (GENERATE_C_TESTS)
-
+if (BUILD_TESTING)
+  enable_testing()
+  add_subdirectory (tests "${PROJECT_BINARY_DIR}/tests")
+endif (BUILD_TESTING)
 
 # should we do the Fortran part too?
 option (GENERATE_FORTRAN

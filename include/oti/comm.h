@@ -84,34 +84,34 @@ typedef uint8_t     flag_t; ///< Flag type.
 
 #define _PCOEFFT "%11.4e"   // Print format of coeff_t
 #define _PSCOEFFT "%+11.4e" // Print format of coeff_t with sign
-#define _PIMDIRT "%"PRIu64  // Print format of imdir_t
-#define _PNDIRT  "%"PRIu64  // Print format of ndir_t
-#define _PBASEST "%"PRIu16  // Print format of bases_t
-#define _PORDT   "%"PRIu8   // Print format of ord_t
-#define _PNDHT   "%"PRIu8   // Print format of ndh_t
-#define _PFLAGT  "%"PRIu8   // Print format of flag_t
+#define _PIMDIRT "%" PRIu64  // Print format of imdir_t
+#define _PNDIRT  "%" PRIu64  // Print format of ndir_t
+#define _PBASEST "%" PRIu16  // Print format of bases_t
+#define _PORDT   "%" PRIu8   // Print format of ord_t
+#define _PNDHT   "%" PRIu8   // Print format of ndh_t
+#define _PFLAGT  "%" PRIu8   // Print format of flag_t
 
-#define _PUINT64T "%"PRIu64
-#define _PUINT32T "%"PRIu32
-#define _PUINT16T "%"PRIu16
-#define _PUINT8T  "%"PRIu8
+#define _PUINT64T "%" PRIu64
+#define _PUINT32T "%" PRIu32
+#define _PUINT16T "%" PRIu16
+#define _PUINT8T  "%" PRIu8
 
-#define _PINT64T "%"PRId64
-#define _PINT32T "%"PRId32
+#define _PINT64T "%" PRId64
+#define _PINT32T "%" PRId32
 #define _PINT    "%d"
-#define _PINT16T "%"PRId16
-#define _PINT8T  "%"PRId8
+#define _PINT16T "%" PRId16
+#define _PINT8T  "%" PRId8
 
-#define _SUINT64T "%"SCNu64
-#define _SUINT32T "%"SCNu32
-#define _SUINT16T "%"SCNu16
-#define _SUINT8T  "%"SCNu8
+#define _SUINT64T "%" SCNu64
+#define _SUINT32T "%" SCNu32
+#define _SUINT16T "%" SCNu16
+#define _SUINT8T  "%" SCNu8
 
-#define _SINT64T "%"SCNd64
-#define _SINT32T "%"SCNd32
+#define _SINT64T "%" SCNd64
+#define _SINT32T "%" SCNd32
 #define _SINT    "%d"
-#define _SINT16T "%"SCNd16
-#define _SINT8T  "%"SCNd8
+#define _SINT16T "%" SCNd16
+#define _SINT8T  "%" SCNd8
 
 
 

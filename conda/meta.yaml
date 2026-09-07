@@ -1,6 +1,12 @@
+{% set version_match = load_file_regex(
+     load_file="../VERSION",
+     regex_pattern="([0-9]+\.[0-9]+\.[0-9]+)",
+     from_recipe_dir=True) %}
+{% set version = version_match.group(1) %}
+
 package:
   name: pyoti
-  version: "1.0.0"
+  version: "{{ version }}"
 
 source:
   path: ..
@@ -8,11 +14,25 @@ source:
 build:
   number: 0
   script: |
-    mkdir -p build
+    # Abort the build on the first failing command, so that a failed compilation or a failed test
+    # never produces a package.
+    set -ex
+
+    # `source: path: ..` copies the whole working tree, including any build/ directory the developer
+    # already has. Its CMakeCache.txt holds absolute paths from the original location, so configuring
+    # on top of it fails; start from a clean directory instead.
+    rm -rf build
+    mkdir build
     cd build
     cmake ..
     make
     make gendata
+
+    # Native (C / Fortran / C++) test suite. This runs in the build environment, where the compilers
+    # and the freshly built binaries are available, so a package is only produced if the compiled
+    # library actually works on this platform.
+    ctest --output-on-failure
+
     cp -r pyoti $SP_DIR/pyoti
     cp -r data $SP_DIR/data
 
@@ -47,10 +67,28 @@ requirements:
     - scikit-umfpack
 
 test:
+  # Copied into the test working directory so that the Python suite can run against the INSTALLED
+  # package (the build tree is gone by this point). VERSION comes along because the version tests
+  # compare the installed version against the source of truth.
+  source_files:
+    - VERSION
+    - tests/python
+
+  requires:
+    - pytest
+
   imports:
     - pyoti
+
   commands:
     - python -c "import pyoti"
+    # The package version, the Python sources and the compiled C library must all agree; a mismatch
+    # means the recipe and the build tree came from different versions of the source.
+    - python -c "import pyoti; assert pyoti.__version__ == '{{ version }}', pyoti.__version__"
+    - python -c "import pyoti, pyoti.core; assert pyoti.core.c_version() == pyoti.__version__, pyoti.core.c_version()"
+    # Full Python suite against the installed package: imports, precomputed data tables, derivative
+    # accuracy and version consistency. The native suite already ran via ctest during the build.
+    - pytest tests/python -v
 
 about:
   home: https://github.com/imqcam/otilib

@@ -46,6 +46,7 @@ SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS
 
 
 include_directories (   "${PROJECT_SOURCE_DIR}/include"
+                        "${OTI_GENERATED_INCLUDE_DIR}"
                         "${PROJECT_SOURCE_DIR}/src/c"
                         )
 
@@ -92,12 +93,19 @@ file(GLOB cwrap_f90
     fortran/static/cwrap*.f90
     )
 
-add_library (otistatic STATIC 
+# The generated oti_version module is compiled into both Fortran families. It declares PARAMETERs
+# only, so the duplication costs no symbols; each family emits its own .mod into its own module
+# directory (see the module output note below).
+SET(OTI_Fortran_VERSION_SRC "${OTI_GENERATED_SOURCE_DIR}/oti_version.f90")
+
+add_library (otistatic STATIC
     ${static_f90}
+    ${OTI_Fortran_VERSION_SRC}
 )
 
-add_library (otifsparse STATIC 
+add_library (otifsparse STATIC
     ${sparse_f}
+    ${OTI_Fortran_VERSION_SRC}
 )
 
 
@@ -198,7 +206,8 @@ endif()
 #                Setup C library compilation
 # =========================================================================
 
-add_library (oti    c/core.c 
+add_library (oti    c/version.c
+                    c/core.c
                     c/real.c
                     c/dense.c
                     c/sparse.c

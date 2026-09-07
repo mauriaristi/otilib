@@ -26,6 +26,9 @@ FILE(COPY  python/__init__.py
 SET(CYTHON_BUILD_DIR     "${PROJECT_BINARY_DIR}/pyoti"                   )
 SET(CYTHON_SOUCE_DIR     "${PROJECT_SOURCE_DIR}/src/python/pyoti/cython" )
 SET(CYTHON_INCLUDE_DIR   "${PROJECT_SOURCE_DIR}/include"                 )
+
+# Where CMake generated "oti/version.h" lives; the extensions include it through c_otilib.pxd.
+SET(CYTHON_GENERATED_INCLUDE_DIR "${OTI_GENERATED_INCLUDE_DIR}"          )
 SET(CYTHON_SETUP_DIR     "${PROJECT_BINARY_DIR}/tmp_src"                 )
 SET(CYTHON_LINK_DIR      "${PROJECT_BINARY_DIR}/lib"                     )
 

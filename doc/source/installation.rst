@@ -16,7 +16,7 @@ Minimum requirements are the following:
 * Scipy
 * scikit-umfpack
 * sksparse-cholmod
-* Cython 0.29 (Development plans are in place to support cython 3)
+* Cython>=3.0
 * CMake>=3.20 
 
 .. warning::

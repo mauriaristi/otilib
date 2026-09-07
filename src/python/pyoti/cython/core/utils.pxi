@@ -215,7 +215,7 @@ cdef np.ndarray[double, ndim=3]  c_ptr_to_np_3darray_double(void * ptr, np.npy_i
   if numpy_own != 0:
 
     # Pass the ownership flag to numpy.
-    PyArray_ENABLEFLAGS(arr, np.NPY_OWNDATA)
+    PyArray_ENABLEFLAGS(arr, np.NPY_ARRAY_OWNDATA)
 
   # end if
 
@@ -261,7 +261,7 @@ cdef np.ndarray[double, ndim=2]  c_ptr_to_np_2darray_double(void * ptr, np.npy_i
   if numpy_own != 0:
 
     # Pass the ownership flag to numpy.
-    PyArray_ENABLEFLAGS(arr, np.NPY_OWNDATA)
+    PyArray_ENABLEFLAGS(arr, np.NPY_ARRAY_OWNDATA)
 
   # end if
 
@@ -317,7 +317,7 @@ cdef np.ndarray[double, ndim=1]  c_ptr_to_np_1darray_double(void * ptr, np.npy_i
   if numpy_own != 0:
 
     # Pass the ownership flag to numpy.
-    PyArray_ENABLEFLAGS(arr, np.NPY_OWNDATA)
+    PyArray_ENABLEFLAGS(arr, np.NPY_ARRAY_OWNDATA)
 
   # end if
   
@@ -367,7 +367,7 @@ cdef np.ndarray[uint64_t, ndim=1]  c_ptr_to_np_1darray_uint64(void * ptr, np.npy
   if numpy_own != 0:
 
     # Pass the ownership flag to numpy.
-    PyArray_ENABLEFLAGS(arr, np.NPY_OWNDATA)
+    PyArray_ENABLEFLAGS(arr, np.NPY_ARRAY_OWNDATA)
 
   # end if
   
@@ -417,7 +417,7 @@ cdef np.ndarray[uint16_t, ndim=1]  c_ptr_to_np_1darray_uint16(void * ptr, np.npy
   if numpy_own != 0:
 
     # Pass the ownership flag to numpy.
-    PyArray_ENABLEFLAGS(arr, np.NPY_OWNDATA)
+    PyArray_ENABLEFLAGS(arr, np.NPY_ARRAY_OWNDATA)
 
   # end if
   
@@ -466,7 +466,7 @@ cdef np.ndarray[uint8_t, ndim=1]  c_ptr_to_np_1darray_uint8(void * ptr, np.npy_i
   if numpy_own != 0:
 
     # Pass the ownership flag to numpy.
-    PyArray_ENABLEFLAGS(arr, np.NPY_OWNDATA)
+    PyArray_ENABLEFLAGS(arr, np.NPY_ARRAY_OWNDATA)
 
   # end if
   

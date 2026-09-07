@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - default
 dependencies:
-  - cython
+  - cython>=3.0
   - pyvista
   - gmsh
   - python-gmsh

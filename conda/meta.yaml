@@ -31,7 +31,7 @@ requirements:
     - numpy
     - scipy
     - pandas
-    - cython=0.29.*
+    - cython>=3.0
     - make
     - cmake
     - gfortran
@@ -49,7 +49,7 @@ requirements:
     - numpy
     - scipy
     - pandas
-    - cython=0.29.*
+    - cython>=3.0
     - make
     - cmake
     - gfortran
@@ -67,7 +67,7 @@ requirements:
     - numpy
     - scipy
     - pandas
-    - cython=0.29.*
+    - cython>=3.0
     - conda-forge::pyvista
     - conda-forge::gmsh
     - conda-forge::python-gmsh

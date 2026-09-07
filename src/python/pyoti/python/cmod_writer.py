@@ -3639,6 +3639,7 @@ class writer:
     #
 
     out_dir = os.path.join(base_dir,"include/pyoti/c_otilib/static/")
+    os.makedirs(out_dir, exist_ok=True)
     InterHeader = """# ========================================================================================="""
          
     for key, files in folders.items():

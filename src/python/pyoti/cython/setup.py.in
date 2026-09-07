@@ -1,8 +1,7 @@
 
 import sys, os
 import platform
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup, Extension
 import numpy 
 
 # Check Cython is installed, Otherwise exit.
@@ -196,6 +195,7 @@ setup(
   version = "0.1",
   ext_modules = cythonize(extensions, 
     include_path=["@CYTHONIZE_INCLUDE_DIR@"],
+    compiler_directives={"language_level": "3", "c_api_binop_methods": True},
     # build_dir="@CYTHONIZE_BUILD_DIR@"
     ),
   # zip_safe    = False, # Only in case of Setuptools

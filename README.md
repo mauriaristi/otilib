@@ -32,7 +32,7 @@ Most operations implemented so far are serial, and some support OpenMP paralleli
 
 ## Current Programming languages: 
 * **C** (C99) for core routines.
-* **Python** (Version 3 or newer. This library requires [Cython](http://cython.org)
+* **Python** (Version 3 or newer. This library requires [Cython](http://cython.org) >= 3.0)
 * **Fortran** (F95 or newer, static dense implementation)
 
 ## Quick Installation instructions:
@@ -89,7 +89,7 @@ Requirements:
 
 * Numpy
 * Scipy
-* Cython (For compilation only)
+* Cython>=3.0 (For compilation only)
 * CMake (For compilation only)
 
 For the full Finite Element support, the following libraries are required.

@@ -34,4 +34,4 @@ from pyoti.real cimport dmat
 cdef dHelp h = get_cython_dHelp()
 cdef dhelpl_t dhl = h.dhl
 
-set_python_error_function(error_function)
+# set_python_error_function(error_function)

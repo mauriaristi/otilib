@@ -25,6 +25,8 @@ def test_arithmetic_operations():
     x = 3.0 + oti.e(1, order=2)
     y = 2.0 + oti.e(2, order=2)
 
+    x_r = 4.0
+
     # Addition: (x + y) -> real: 5, dx: 1, dy: 1
     res_add = x + y
     assert float(res_add.real) == pytest.approx(5.0)
@@ -49,6 +51,52 @@ def test_arithmetic_operations():
     assert float(res_div.real) == pytest.approx(1.5)
     assert float(res_div.get_deriv([1])) == pytest.approx(0.5)
     assert float(res_div.get_deriv([2])) == pytest.approx(-0.75)
+
+
+
+    # Real operations
+    # Addition: (x + y) -> real: 6, dx: 0, dy: 1
+    res_add = x_r + y
+    assert float(res_add.real) == pytest.approx(6.0)
+    assert float(res_add.get_deriv([1])) == pytest.approx(0.0)
+    assert float(res_add.get_deriv([2])) == pytest.approx(1.0)
+
+    # Addition: (y + x) -> real: 6, dx: 0, dy: 1
+    res_add = y + x_r
+    assert float(res_add.real) == pytest.approx(6.0)
+    assert float(res_add.get_deriv([1])) == pytest.approx(0.0)
+    assert float(res_add.get_deriv([2])) == pytest.approx(1.0)
+
+    # Subtraction: (x - y) -> real: 2, dx: 0, dy: -1
+    res_sub = x_r - y
+    assert float(res_sub.real) == pytest.approx(2.0)
+    assert float(res_sub.get_deriv([1])) == pytest.approx(0.0)
+    assert float(res_sub.get_deriv([2])) == pytest.approx(-1.0)
+
+    # Subtraction: (x - y) -> real: -2, dx: 0, dy: 1
+    res_sub =  y - x_r
+    assert float(res_sub.real) == pytest.approx(-2.0)
+    assert float(res_sub.get_deriv([1])) == pytest.approx(0.0)
+    assert float(res_sub.get_deriv([2])) == pytest.approx(1.0)
+
+    # Multiplication: (x * y) -> real: 6, dx: 2, dy: 3, dxdy: 1
+    res_mul = x_r * y
+    assert float(res_mul.real) == pytest.approx(8.0)
+    assert float(res_mul.get_deriv([1])) == pytest.approx(0.0)
+    assert float(res_mul.get_deriv([2])) == pytest.approx(4.0)
+
+    # Multiplication: (x * y) -> real: 6, dx: 2, dy: 3, dxdy: 1
+    res_mul = y * x_r 
+    assert float(res_mul.real) == pytest.approx(8.0)
+    assert float(res_mul.get_deriv([1])) == pytest.approx(0.0)
+    assert float(res_mul.get_deriv([2])) == pytest.approx(4.0)
+    
+
+    # Division: (x_r / y) -> real: 2, dx: 0, dy: -1
+    res_div = x_r / y
+    assert float(res_div.real) == pytest.approx(2.0)
+    assert float(res_div.get_deriv([1])) == pytest.approx(0.0)
+    assert float(res_div.get_deriv([2])) == pytest.approx(-1.0)
 
 # end function
 

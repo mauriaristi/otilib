@@ -105,13 +105,13 @@ add_library (oticwrap STATIC
     ${cwrap_f90}
 )
 
-target_link_libraries(otistatic 
+target_link_libraries(otistatic
     ${LINK_TARGET_OMP_Fortran})
 
-target_link_libraries(otifsparse 
+target_link_libraries(otifsparse
     ${LINK_TARGET_OMP_Fortran})
 
-target_link_libraries(oticwrap 
+target_link_libraries(oticwrap
     otistatic
     ${LINK_TARGET_OMP_Fortran})
 
@@ -126,9 +126,38 @@ add_library (otiarrinter STATIC
     ${array_interface_f90}
 )
 target_link_libraries(otiarrinter
-    oticwrap 
+    oticwrap
     otistatic
     ${LINK_TARGET_OMP_Fortran})
+
+
+# -------------------------------------------------------------------
+# Fortran module output directories.
+#
+# fortran/static/ and fortran/core/ both declare MODULE master_parameters
+# and MODULE real_utils with different interfaces (core's RPrint takes an
+# extra `advance` argument, static's does not). Emitting them all into a
+# single directory makes the targets clobber each other's .mod files, so
+# whether the build succeeds depends on target ordering. Give each family
+# its own directory and propagate it to consumers via PUBLIC includes.
+# -------------------------------------------------------------------
+
+SET(OTI_Fortran_MODDIR_STATIC "${PROJECT_BINARY_DIR}/lib/mod_static")
+SET(OTI_Fortran_MODDIR_SPARSE "${PROJECT_BINARY_DIR}/lib/mod_sparse")
+
+foreach(oti_f_target master_parameters real_utils otistatic oticwrap otiarrinter)
+
+    set_target_properties(${oti_f_target} PROPERTIES
+        Fortran_MODULE_DIRECTORY "${OTI_Fortran_MODDIR_STATIC}")
+    target_include_directories(${oti_f_target} PUBLIC
+        "${OTI_Fortran_MODDIR_STATIC}")
+
+endforeach()
+
+set_target_properties(otifsparse PROPERTIES
+    Fortran_MODULE_DIRECTORY "${OTI_Fortran_MODDIR_SPARSE}")
+target_include_directories(otifsparse PUBLIC
+    "${OTI_Fortran_MODDIR_SPARSE}")
 
 
 if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")

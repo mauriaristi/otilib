@@ -15,3 +15,6 @@ src/python/pyoti/cython/static/*.c
 src/python/pyoti/cython/*.h
 src/python/pyoti/cython/static/*.h
 tests/jupyter_notebook/*
+
+# Fortran module build artifacts
+*.mod

@@ -87,7 +87,7 @@ The current version depends on ```stdlib.h``` and ```math.h```
 
 Requirements:
 
-* Numpy >= 2.0, < 3
+* Numpy >= 2.1, < 3
 * Scipy
 * Cython>=3.0 (For compilation only)
 * CMake (For compilation only)

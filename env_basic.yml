@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - default
 dependencies:
-  - numpy>=2.0,<3
+  - numpy>=2.1,<3
   - cython>=3.0
   - pyvista
   - gmsh

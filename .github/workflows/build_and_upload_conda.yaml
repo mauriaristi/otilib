@@ -11,51 +11,59 @@ on:
     branches:
       - master
 
+defaults:
+  run:
+    # Login shell so that setup-miniconda's conda initialization is sourced and
+    # the base environment is active in every step.
+    shell: bash -el {0}
+
 jobs:
   build_and_upload:
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        arch: [x86_64, arm64]
-        exclude:
+        include:
           - os: ubuntu-latest
-            arch: arm64
+            target: linux-64
+          - os: macos-13        # Intel runner
+            target: osx-64
+          - os: macos-latest    # Apple silicon runner
+            target: osx-arm64
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+
     - name: Set up Conda
       uses: conda-incubator/setup-miniconda@v3
       with:
-        activate-environment: pyoti
         auto-update-conda: true
-        python-version: 3.13
-        channels: conda-forge,defaults
+        # conda-forge only: avoids the `defaults` channel Terms-of-Service
+        # prompt that makes non-interactive conda runs fail.
+        channels: conda-forge
         channel-priority: strict
-        architecture: ${{ matrix.arch }}
-    - name: Set environment variable for sourcing conda (Linux)
-      if: runner.os == 'Linux'
-      run: |
-        echo "RUNNER_OS_SOURCE=/home/runner/.profile" >> $GITHUB_ENV
-    - name: Set environment variable for sourcing conda (Mac)
-      if: runner.os == 'macOS'
-      run: |
-        echo "RUNNER_OS_SOURCE=/Users/runner/.profile" >> $GITHUB_ENV
+
     - name: Install build tools
       run: |
-        source $RUNNER_OS_SOURCE
-        conda activate pyoti
-        conda install -y conda-build anaconda-client
+        # conda-build must live in the *base* env: `conda build` is resolved as a
+        # plugin of the conda executable itself, not of the activated environment.
+        conda install -n base -c conda-forge -y conda-build anaconda-client
+        conda build --version
+
     - name: Build Conda package
       run: |
-        source $RUNNER_OS_SOURCE
-        conda activate pyoti
-        conda build conda
+        conda build conda -c conda-forge --output-folder "$GITHUB_WORKSPACE/dist"
+
     - name: Upload Conda package
+      if: github.event_name == 'push' || github.event.pull_request.merged == true
       env:
         ANACONDA_TOKEN: ${{ secrets.ANACONDA_TOKEN }}
       run: |
-        source $RUNNER_OS_SOURCE
-        conda activate pyoti
-        PACKAGE_PATH=$(conda build conda --output)
-        anaconda -t $ANACONDA_TOKEN upload -u mauriaristi $PACKAGE_PATH --channel main --label main --force
+        shopt -s nullglob
+        packages=("$GITHUB_WORKSPACE"/dist/${{ matrix.target }}/pyoti-*.conda "$GITHUB_WORKSPACE"/dist/${{ matrix.target }}/pyoti-*.tar.bz2)
+        if [ ${#packages[@]} -eq 0 ]; then
+          echo "No package found in dist/${{ matrix.target }}" >&2
+          exit 1
+        fi
+        anaconda -t "$ANACONDA_TOKEN" upload -u mauriaristi "${packages[@]}" \
+          --channel main --label main --force

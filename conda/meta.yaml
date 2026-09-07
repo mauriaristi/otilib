@@ -8,72 +8,43 @@ source:
 build:
   number: 0
   script: |
-    mkdir build
+    mkdir -p build
     cd build
     cmake ..
-    echo "checking SP_DIR"
-    echo $SP_DIR
     make
     make gendata
-    cp -r pyoti $PREFIX/lib/python$PY_VER/site-packages/pyoti
-    cp -r data $PREFIX/lib/python$PY_VER/site-packages/data
-  matrix:
-    - os: linux
-      arch: x86_64
-    - os: osx
-      arch: x86_64
-    - os: osx
-      arch: arm64
+    cp -r pyoti $SP_DIR/pyoti
+    cp -r data $SP_DIR/data
 
 requirements:
+  # Tools that run on the build machine (compilers, generators).
   build:
-    - python=3.13.*
-    - numpy>=2.1,<3
-    - scipy
-    - pandas
-    - cython>=3.0
+    - {{ compiler('c') }}
+    - {{ compiler('fortran') }}
     - make
     - cmake
-    - gfortran
-    - pip
-    - ipykernel
-    - conda-forge::pyvista
-    - conda-forge::gmsh
-    - conda-forge::python-gmsh
-    - conda-forge::vtk
-    - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack
+    - llvm-openmp  # [osx]
 
+  # Libraries linked against / headers compiled against, for the target platform.
   host:
-    - python=3.13.*
-    - numpy>=2.1,<3
-    - scipy
-    - pandas
-    - cython>=3.0
-    - make
-    - cmake
-    - gfortran
+    - python 3.13.*
+    - numpy >=2.1,<3
+    - cython >=3.0
     - pip
-    - ipykernel
-    - conda-forge::pyvista
-    - conda-forge::gmsh
-    - conda-forge::python-gmsh
-    - conda-forge::vtk
-    - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack
+    - llvm-openmp  # [osx]
 
+  # What the installed package needs at import time.
   run:
-    - python=3.13.*
-    - numpy>=2.1,<3
+    - python 3.13.*
+    - numpy >=2.1,<3
     - scipy
     - pandas
-    - cython>=3.0
-    - conda-forge::pyvista
-    - conda-forge::gmsh
-    - conda-forge::python-gmsh
-    - conda-forge::vtk
-    - conda-forge::scikit-sparse
-    - conda-forge::scikit-umfpack
+    - pyvista
+    - gmsh
+    - python-gmsh
+    - vtk <9.4
+    - scikit-sparse
+    - scikit-umfpack
 
 test:
   imports:
@@ -82,8 +53,7 @@ test:
     - python -c "import pyoti"
 
 about:
-  home: imqcam/otilib
-
-channels:
-  - conda-forge
-  - defaults
+  home: https://github.com/imqcam/otilib
+  license: GPL-3.0-or-later
+  license_file: LICENSE
+  summary: Order Truncated Imaginary (OTI) numbers library for multicomplex/hypercomplex automatic differentiation.

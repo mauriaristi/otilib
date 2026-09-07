@@ -12,12 +12,12 @@ The recommended way to install the prerequisites is to use conda and the provide
 Minimum requirements are the following:
 
 * Python 3 (Tested with python 3.9)
-* Numpy
+* Numpy >= 2.0, < 3
 * Scipy
-* scikit-umfpack
-* sksparse-cholmod
+* scikit-umfpack (optional; only needed for the `solver='umfpack'` sparse solver, requires a NumPy 2-compatible upstream build)
+* sksparse-cholmod (optional; only needed for the `solver='cholesky'` sparse solver, requires a NumPy 2-compatible upstream build)
 * Cython>=3.0
-* CMake>=3.20 
+* CMake>=3.20
 
 .. warning::
     

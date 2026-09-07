@@ -87,7 +87,7 @@ The current version depends on ```stdlib.h``` and ```math.h```
 
 Requirements:
 
-* Numpy
+* Numpy >= 2.0, < 3
 * Scipy
 * Cython>=3.0 (For compilation only)
 * CMake (For compilation only)
@@ -96,8 +96,8 @@ For the full Finite Element support, the following libraries are required.
 
 * PyVista
 * GMSH (and Python-GMSH)
-* scikit-umfpack
-* scikit-sparse
+* scikit-umfpack (optional accelerator for `solver='umfpack'`; requires a NumPy 2-compatible build from upstream)
+* scikit-sparse (optional accelerator for `solver='cholesky'`; requires a NumPy 2-compatible build from upstream)
 * vtk
 
   

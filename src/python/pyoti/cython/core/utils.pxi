@@ -2,7 +2,7 @@
 #*****************************************************************************************************
 cdef uint8_t is_integer(type in1):
   
-  if (in1 == int     or in1 == np.int  or in1 == np.int64  or in1 == np.int32  or in1 == np.int16  or 
+  if (in1 == int     or in1 == np.int64  or in1 == np.int32  or in1 == np.int16  or
       in1 == np.int8 or in1 == np.uint or in1 == np.uint64 or in1 == np.uint32 or in1 == np.uint16 or
       in1 == np.uint8 ):
   

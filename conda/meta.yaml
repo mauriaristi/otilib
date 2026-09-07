@@ -28,7 +28,7 @@ build:
 requirements:
   build:
     - python=3.9.*
-    - numpy
+    - numpy>=2.0,<3
     - scipy
     - pandas
     - cython>=3.0
@@ -46,7 +46,7 @@ requirements:
 
   host:
     - python=3.9.*
-    - numpy
+    - numpy>=2.0,<3
     - scipy
     - pandas
     - cython>=3.0
@@ -64,7 +64,7 @@ requirements:
 
   run:
     - python=3.9.*
-    - numpy
+    - numpy>=2.0,<3
     - scipy
     - pandas
     - cython>=3.0

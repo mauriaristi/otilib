@@ -3,6 +3,9 @@
 include "c_otilib/dependencies.pxi"
 include "c_otilib/types.pxi"
 
+# Library version.
+include "c_otilib/version.pxi"
+
 # include "c_otilib/enums.pxi"
 
 include "c_otilib/core.pxi"

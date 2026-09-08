@@ -7,6 +7,7 @@ An algebra for efficient arbitrary-order, multivariate differentiation.
 
 Useful links:
 
+* [Changelog](CHANGELOG.md)
 * [Documentation](https://mauriaristi.github.io/otilib/) (work in progress)
 * Theory, references, lecture notes and other information on Hypercomplex-based Automatic Differentiation [HYPAD](https://ceid.utsa.edu/HYPAD/).
 
@@ -32,7 +33,7 @@ Most operations implemented so far are serial, and some support OpenMP paralleli
 
 ## Current Programming languages: 
 * **C** (C99) for core routines.
-* **Python** (Version 3 or newer. This library requires [Cython](http://cython.org)
+* **Python** (Version 3 or newer. This library requires [Cython](http://cython.org) >= 3.0)
 * **Fortran** (F95 or newer, static dense implementation)
 
 ## Quick Installation instructions:
@@ -87,21 +88,62 @@ The current version depends on ```stdlib.h``` and ```math.h```
 
 Requirements:
 
-* Numpy
+* Numpy >= 2.1, < 3
 * Scipy
-* Cython (For compilation only)
+* Cython>=3.0 (For compilation only)
 * CMake (For compilation only)
 
 For the full Finite Element support, the following libraries are required.
 
 * PyVista
 * GMSH (and Python-GMSH)
-* scikit-umfpack
-* scikit-sparse
+* scikit-umfpack (optional accelerator for `solver='umfpack'`; requires a NumPy 2-compatible build from upstream)
+* scikit-sparse (optional accelerator for `solver='cholesky'`; requires a NumPy 2-compatible build from upstream)
 * vtk
 
   
 ***
+
+## Versioning
+
+OTIlib follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The version lives in the
+root [`VERSION`](VERSION) file, which is the single source of truth: CMake generates the C header,
+the Fortran module and the Python version module from it at configure time, and the conda recipe
+reads it directly. Notable changes are recorded in the [changelog](CHANGELOG.md).
+
+Querying the version from each implementation:
+
+```c
+#include <oti/oti.h>
+
+printf("%s\n", oti_version());        /* version of the linked library */
+printf("%s\n", OTI_VERSION_STRING);   /* version of the headers compiled against */
+
+#if OTI_VERSION_NUMBER >= OTI_VERSION_ENCODE(1, 1, 0)
+    /* feature available since 1.1.0 */
+#endif
+```
+
+```fortran
+USE oti_version
+
+WRITE(*,*) OTI_VERSION_STRING     ! "1.1.0"
+WRITE(*,*) OTI_VERSION_NUMBER     ! 10100
+```
+
+```python
+import pyoti
+
+pyoti.__version__          # '1.1.0'
+pyoti.__version_info__     # (1, 1, 0)
+pyoti.core.c_version()     # version of the linked C library
+```
+
+To release a new version, bump the `VERSION` file and re-run `cmake`:
+
+```bash
+python tools/bump_version.py minor    # or: major / patch / an explicit X.Y.Z
+```
 
 ## Contribution guidelines ###
 
@@ -119,7 +161,7 @@ For the full Finite Element support, the following libraries are required.
 ```bibtex
 @software{pyoti,
  title = {OTIlib: An open source library for Order Truncated Imaginary (OTI) Numbers},
- version = {0.1},
+ version = {1.1.0},
  author = {Aristizabal, Mauricio},
  year = 2024,
  keywords = {Python, Hypercomplex Algebras, Complex Step, Hyperdual numbers,},

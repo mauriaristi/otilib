@@ -6,7 +6,7 @@
 # Library to handle sparse Order Truncated Imaginary Numbers in Python, with a particular
 # focus on automatic differentiation. \n\n
 #
-# <b> Current Version</b>: 0.1  \n
+# <b> Current Version</b>: see <tt>pyoti.__version__</tt> (generated from the root VERSION file) \n
 # <b> First Created</b>: 04/08/2017 \n
 # <b> Last Modified</b>: 04/08/2017 \n
 #

@@ -1,8 +1,7 @@
 
 import sys, os
 import platform
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup, Extension
 import numpy 
 
 # Check Cython is installed, Otherwise exit.
@@ -40,10 +39,11 @@ compile_gnu    = @CYTHON_COMPILE_GNU_FLAG@
 openmp_compile_flag = @CYTHON_OPENMP_COMPILE_FLAG@
 
 libraries          = ['oti'] 
-include_dirs       = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@"]
+include_dirs       = [numpy.get_include(), "@CYTHON_INCLUDE_DIR@",
+                      "@CYTHON_GENERATED_INCLUDE_DIR@"]
 extra_compile_args = ["@DUTILS_ECARG1@","@DUTILS_ECARG2@","-O3"]
 extra_link_args    = ["-O3"]
-macros             = [("CYTHON_TRACE_NOGIL","1")]
+macros             = [("CYTHON_TRACE_NOGIL","1"), ("NPY_NO_DEPRECATED_API","NPY_1_7_API_VERSION")]
 language           = "c"
 dependencies       = ["@CYTHONIZE_BUILD_DIR@/../lib/liboti.a"]  #,"@CYTHONIZE_BUILD_DIR@/../../src/fortran/static/libcwrapm1n1.a"]
 
@@ -193,9 +193,10 @@ setup(
   name="pyoti",
   packages=["pyoti"],
   author = "Mauricio Aristizabal Cano",
-  version = "0.1",
+  version = "@OTI_VERSION@",
   ext_modules = cythonize(extensions, 
     include_path=["@CYTHONIZE_INCLUDE_DIR@"],
+    compiler_directives={"language_level": "3", "c_api_binop_methods": True},
     # build_dir="@CYTHONIZE_BUILD_DIR@"
     ),
   # zip_safe    = False, # Only in case of Setuptools

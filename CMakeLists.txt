@@ -12,10 +12,29 @@
 # cmake_minimum_required (VERSION 3.20)
 cmake_minimum_required (VERSION 3.20)
 
+# -------------------------------------------------------------------------------------------------
+# Single source of truth for the library version.
+#
+# The root VERSION file is the ONLY place where the version number is written by hand. Every other
+# artifact (C header, Fortran module, Python module, setup.py, conda recipe) is generated from it or
+# reads it, so a release bump is a one-line edit (see tools/bump_version.py).
+# -------------------------------------------------------------------------------------------------
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" OTI_VERSION_RAW)
+string(STRIP "${OTI_VERSION_RAW}" OTI_VERSION)
+
+if(NOT OTI_VERSION MATCHES "^([0-9]+)\\.([0-9]+)\\.([0-9]+)$")
+  message(FATAL_ERROR
+    "The VERSION file must contain a MAJOR.MINOR.PATCH version; got '${OTI_VERSION}'.")
+endif()
+
+set(OTI_VERSION_MAJOR ${CMAKE_MATCH_1})
+set(OTI_VERSION_MINOR ${CMAKE_MATCH_2})
+set(OTI_VERSION_PATCH ${CMAKE_MATCH_3})
+
 # Name of the global project.
-project(oti 
-  VERSION 0.1
-  LANGUAGES Fortran C) 
+project(oti
+  VERSION ${OTI_VERSION}
+  LANGUAGES Fortran C)
 
 # Set specific OS deployment target.
 # SET(CMAKE_OSX_DEPLOYMENT_TARGET 12.1)
@@ -82,9 +101,9 @@ if(APPLE)
     # set(OpenMP_C_FLAGS "-Xpreprocessor -fopenmp")
     # set(OpenMP_C_LIB_NAMES "omp")
     # set(OpenMP_omp_LIBRARY omp)
-    message( STATUS " -- OpenMP Link Flags: ${OpenMP_INLCUDE_FLAGS}" )
+    message( STATUS " -- OpenMP Link Flags: ${OpenMP_INCLUDE_FLAGS}" )
     message( STATUS " -- OpenMP Link Flags: ${OpenMP_LINK_FLAGS}" )
-    set(OpenMP_EXTRA_INLCUDE_FLAGS "-I/opt/homebrew/opt/libomp/include/")
+    set(OpenMP_EXTRA_INCLUDE_FLAGS "-I/opt/homebrew/opt/libomp/include/")
     set(OpenMP_EXTRA_LINK_FLAGS "-L/opt/homebrew/opt/libomp/lib/")
   else(USE_OPENMP)
     set(OpenMP_C_FLAGS "")
@@ -149,9 +168,40 @@ include( copyfiles )
  
 set(CMAKE_MACOSX_RPATH 1)
 
-# The version number.
-set (OTI_LIBRARY_VERSION_MAJOR 0)
-set (OTI_LIBRARY_VERSION_MINOR 1)
+# -------------------------------------------------------------------------------------------------
+# Version artifacts generated from the root VERSION file.
+#
+# All of these are written into the build tree (never into the source tree) so that the repository
+# never holds a second, stale copy of the version number:
+#
+#   ${PROJECT_BINARY_DIR}/include/oti/version.h  -> C / C++ / Cython
+#   ${PROJECT_BINARY_DIR}/generated/oti_version.f90 -> Fortran
+#   ${PROJECT_BINARY_DIR}/pyoti/_version.py      -> Python (pyoti.__version__)
+# -------------------------------------------------------------------------------------------------
+set(OTI_GENERATED_INCLUDE_DIR "${PROJECT_BINARY_DIR}/include")
+set(OTI_GENERATED_SOURCE_DIR  "${PROJECT_BINARY_DIR}/generated")
+
+file(MAKE_DIRECTORY "${OTI_GENERATED_INCLUDE_DIR}/oti")
+file(MAKE_DIRECTORY "${OTI_GENERATED_SOURCE_DIR}")
+file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/pyoti")
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/include/oti/version.h.in"
+  "${OTI_GENERATED_INCLUDE_DIR}/oti/version.h"
+  @ONLY)
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/src/fortran/core/oti_version.f90.in"
+  "${OTI_GENERATED_SOURCE_DIR}/oti_version.f90"
+  @ONLY)
+
+configure_file(
+  "${PROJECT_SOURCE_DIR}/src/python/pyoti/python/_version.py.in"
+  "${PROJECT_BINARY_DIR}/pyoti/_version.py"
+  @ONLY)
+
+# The generated header must be visible everywhere "oti/version.h" is included.
+include_directories("${OTI_GENERATED_INCLUDE_DIR}")
 
 set(CMAKE_BUILD_TYPE RELEASE)
 set(CMAKE_C_FLAGS_DEBUG "-g")
@@ -174,14 +224,13 @@ endif (GENERATE_CYTHON_OTI)
 #   add_subdirectory (pyotifem)  
 # endif (GENERATE_CYTHON_OTIFEM)
 
-# # should we do the Cython part too?
-# option (GENERATE_C_TESTS
-#         "Generate C tests files" OFF) 
+# Tests configuration
+option (BUILD_TESTING "Build the test suite" ON)
 
-# if (GENERATE_C_TESTS)
-#   add_subdirectory (tests/c)
-# endif (GENERATE_C_TESTS)
-
+if (BUILD_TESTING)
+  enable_testing()
+  add_subdirectory (tests "${PROJECT_BINARY_DIR}/tests")
+endif (BUILD_TESTING)
 
 # should we do the Fortran part too?
 option (GENERATE_FORTRAN

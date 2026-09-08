@@ -25,7 +25,7 @@ if(APPLE)
     # This is for the case of apple macOS
     # SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
     # SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -g -fwrapv -O3 -Wall -Wstrict-prototypes -arch x86_64 ${OpenMP_EXTRA_INLCUDE_FLAGS}")
-    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall -Wstrict-prototypes ${OpenMP_EXTRA_INLCUDE_FLAGS}")
+    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall -Wstrict-prototypes ${OpenMP_EXTRA_INCLUDE_FLAGS}")
     SET(GCC_COVERAGE_LINK_FLAGS "${OpenMP_EXTRA_LINK_FLAGS} ")
   
 elseif(UNIX)
@@ -46,6 +46,7 @@ SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS
 
 
 include_directories (   "${PROJECT_SOURCE_DIR}/include"
+                        "${OTI_GENERATED_INCLUDE_DIR}"
                         "${PROJECT_SOURCE_DIR}/src/c"
                         )
 
@@ -92,12 +93,19 @@ file(GLOB cwrap_f90
     fortran/static/cwrap*.f90
     )
 
-add_library (otistatic STATIC 
+# The generated oti_version module is compiled into both Fortran families. It declares PARAMETERs
+# only, so the duplication costs no symbols; each family emits its own .mod into its own module
+# directory (see the module output note below).
+SET(OTI_Fortran_VERSION_SRC "${OTI_GENERATED_SOURCE_DIR}/oti_version.f90")
+
+add_library (otistatic STATIC
     ${static_f90}
+    ${OTI_Fortran_VERSION_SRC}
 )
 
-add_library (otifsparse STATIC 
+add_library (otifsparse STATIC
     ${sparse_f}
+    ${OTI_Fortran_VERSION_SRC}
 )
 
 
@@ -105,13 +113,13 @@ add_library (oticwrap STATIC
     ${cwrap_f90}
 )
 
-target_link_libraries(otistatic 
+target_link_libraries(otistatic
     ${LINK_TARGET_OMP_Fortran})
 
-target_link_libraries(otifsparse 
+target_link_libraries(otifsparse
     ${LINK_TARGET_OMP_Fortran})
 
-target_link_libraries(oticwrap 
+target_link_libraries(oticwrap
     otistatic
     ${LINK_TARGET_OMP_Fortran})
 
@@ -126,9 +134,38 @@ add_library (otiarrinter STATIC
     ${array_interface_f90}
 )
 target_link_libraries(otiarrinter
-    oticwrap 
+    oticwrap
     otistatic
     ${LINK_TARGET_OMP_Fortran})
+
+
+# -------------------------------------------------------------------
+# Fortran module output directories.
+#
+# fortran/static/ and fortran/core/ both declare MODULE master_parameters
+# and MODULE real_utils with different interfaces (core's RPrint takes an
+# extra `advance` argument, static's does not). Emitting them all into a
+# single directory makes the targets clobber each other's .mod files, so
+# whether the build succeeds depends on target ordering. Give each family
+# its own directory and propagate it to consumers via PUBLIC includes.
+# -------------------------------------------------------------------
+
+SET(OTI_Fortran_MODDIR_STATIC "${PROJECT_BINARY_DIR}/lib/mod_static")
+SET(OTI_Fortran_MODDIR_SPARSE "${PROJECT_BINARY_DIR}/lib/mod_sparse")
+
+foreach(oti_f_target master_parameters real_utils otistatic oticwrap otiarrinter)
+
+    set_target_properties(${oti_f_target} PROPERTIES
+        Fortran_MODULE_DIRECTORY "${OTI_Fortran_MODDIR_STATIC}")
+    target_include_directories(${oti_f_target} PUBLIC
+        "${OTI_Fortran_MODDIR_STATIC}")
+
+endforeach()
+
+set_target_properties(otifsparse PROPERTIES
+    Fortran_MODULE_DIRECTORY "${OTI_Fortran_MODDIR_SPARSE}")
+target_include_directories(otifsparse PUBLIC
+    "${OTI_Fortran_MODDIR_SPARSE}")
 
 
 if (CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
@@ -169,7 +206,8 @@ endif()
 #                Setup C library compilation
 # =========================================================================
 
-add_library (oti    c/core.c 
+add_library (oti    c/version.c
+                    c/core.c
                     c/real.c
                     c/dense.c
                     c/sparse.c

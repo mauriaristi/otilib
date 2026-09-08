@@ -4,18 +4,19 @@ channels:
   - anaconda
   - default
 dependencies:
-  - python=3.9.*
-  - numpy
+  - python=3.13.*
+  - numpy>=2.1,<3
   - scipy
-  - cython=0.29.*
+  - cython>=3.0
   - pandas
   - make
   - cmake
   - pip
+  - pytest
   - ipykernel
   - conda-forge::pyvista
   - conda-forge::gmsh
   - conda-forge::python-gmsh
-  - conda-forge::vtk
+  - conda-forge::vtk<9.4
   - conda-forge::scikit-sparse
   - conda-forge::scikit-umfpack

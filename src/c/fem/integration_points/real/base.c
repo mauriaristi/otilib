@@ -1157,7 +1157,7 @@ int64_t fem_intPts_real( uint64_t order, int64_t elementType,
         fednum_t    zeta_line_tmp;
         fednum_t weights_line_tmp;
 
-        sotinum_t val_tmp = soti_init();
+        coeff_t val_tmp = 0.0;
 
         uint64_t currentIndex = 0 ;
 
@@ -1182,15 +1182,15 @@ int64_t fem_intPts_real( uint64_t order, int64_t elementType,
         for ( i = 0; i < xi_tri_tmp.nip; i++ ){
 
             // Get the first weight.
-            fednum_get_item_k_to(     &xi_tri_tmp, i, &val_tmp );  a      = val_tmp.re;
-            fednum_get_item_k_to(    &eta_tri_tmp, i, &val_tmp );  b      = val_tmp.re;
-            fednum_get_item_k_to(&weights_tri_tmp, i, &val_tmp );  w_tmp1 = val_tmp.re;
+            fednum_get_item_k_to(     &xi_tri_tmp, i, &val_tmp );  a      = val_tmp;
+            fednum_get_item_k_to(    &eta_tri_tmp, i, &val_tmp );  b      = val_tmp;
+            fednum_get_item_k_to(&weights_tri_tmp, i, &val_tmp );  w_tmp1 = val_tmp;
 
             for ( j = 0; j < xi_line_tmp.nip; j++ ){
 
                 // Get the second weight.
-                fednum_get_item_k_to(     &xi_line_tmp, j, &val_tmp ); c      = val_tmp.re;
-                fednum_get_item_k_to(&weights_line_tmp, j, &val_tmp ); w_tmp2 = val_tmp.re;
+                fednum_get_item_k_to(     &xi_line_tmp, j, &val_tmp ); c      = val_tmp;
+                fednum_get_item_k_to(&weights_line_tmp, j, &val_tmp ); w_tmp2 = val_tmp;
 
                 w = w_tmp1 * w_tmp2;
 

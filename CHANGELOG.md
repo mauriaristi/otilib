@@ -13,6 +13,9 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ### Fixed
 
+- Conda CI upload step failed with exit code 127 (`anaconda: command not found`): setup-miniconda
+  activates a `test` environment rather than base, so the `anaconda` client installed into base was
+  not on PATH. The workflow now calls it through `$(conda info --base)/bin/anaconda`.
 - Conda CI build failed on every platform since the repository restructuring:
   - `src/c/fem/integration_points/real/base.c`: the prism integration-point block passed a
     `sotinum_t` where `fednum_get_item_k_to()` expects a `coeff_t*`. GCC 16 and clang 23 (the

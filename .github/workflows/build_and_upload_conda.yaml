@@ -13,8 +13,9 @@ on:
 
 defaults:
   run:
-    # Login shell so that setup-miniconda's conda initialization is sourced and
-    # the base environment is active in every step.
+    # Login shell so that setup-miniconda's conda initialization is sourced. Note that the action
+    # activates its own `test` environment, NOT base: `conda` itself still resolves to the base
+    # installation (so `conda build` works), but plain binaries installed into base are not on PATH.
     shell: bash -el {0}
 
 jobs:
@@ -107,5 +108,7 @@ jobs:
           echo "No package found in dist/${{ matrix.target }}" >&2
           exit 1
         fi
-        anaconda -t "$ANACONDA_TOKEN" upload -u mauriaristi "${packages[@]}" \
-          --channel main --label main --force
+        # anaconda-client was installed into base (see "Install build tools"), but the active
+        # environment is setup-miniconda's `test`, so base/bin is not on PATH: call it by path.
+        "$(conda info --base)/bin/anaconda" -t "$ANACONDA_TOKEN" upload -u mauriaristi "${packages[@]}" \
+          --label main --force

@@ -33,6 +33,7 @@ jobs:
         auto-update-conda: true
         channels: conda-forge
         channel-priority: strict
+        conda-remove-defaults: true
 
     - name: Install build tools
       run: conda install -n base -c conda-forge -y conda-build
@@ -66,7 +67,7 @@ jobs:
         include:
           - os: ubuntu-latest
             target: linux-64
-          - os: macos-13        # Intel runner
+          - os: macos-15-intel  # Intel runner (macos-13 was retired 2025-12-04)
             target: osx-64
           - os: macos-latest    # Apple silicon runner
             target: osx-arm64
@@ -82,6 +83,7 @@ jobs:
         # prompt that makes non-interactive conda runs fail.
         channels: conda-forge
         channel-priority: strict
+        conda-remove-defaults: true
 
     - name: Install build tools
       run: |

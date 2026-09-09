@@ -169,8 +169,14 @@ The recipe verifies its own compilation, so a full package build is the closest 
 what CI does:
 
 ```bash
-conda build conda -c conda-forge --output-folder dist
+CONDA_SOLVER=libmamba conda build conda --override-channels -c conda-forge --output-folder dist
 ```
+
+Use `--override-channels`: a `.condarc` that lists only the `defaults` channels (with the classic
+solver) makes the plain `-c conda-forge` form fail with an opaque "Unsatisfiable dependencies for
+platform ...: {'__unix', '__osx', ...}" message. CI is conda-forge only, so this mirrors it.
+Prefer running from a clean export (`git archive HEAD | tar -x -C <dir>`) so a local `build/` tree
+is not copied into the recipe's work directory.
 
 - **Build phase** runs `ctest --output-on-failure` after `make gendata`, covering the C, Fortran and
   C++ suites in the build environment. The script starts with `set -ex`, so any failure aborts the

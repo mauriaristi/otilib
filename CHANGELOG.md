@@ -11,6 +11,22 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ## [Unreleased]
 
+### Fixed
+
+- Conda CI build failed on every platform since the repository restructuring:
+  - `src/c/fem/integration_points/real/base.c`: the prism integration-point block passed a
+    `sotinum_t` where `fednum_get_item_k_to()` expects a `coeff_t*`. GCC 16 and clang 23 (the
+    conda-forge compilers the recipe now uses) treat this as an error; the system compilers used by
+    the previous recipe only warned.
+  - `conda/meta.yaml`: `setuptools` added to the host requirements (conda-forge's Python 3.13 / pip
+    no longer pull it in), and `{{ compiler('cxx') }}` added to the build requirements so the C++
+    tests no longer fall back to the runner's system compiler. `environment.yml` gained
+    `setuptools` to match.
+  - Workflow: the Intel macOS job moved from the retired `macos-13` runner to `macos-15-intel`, and
+    `setup-miniconda` no longer adds the `defaults` channel implicitly.
+- `-Wstrict-prototypes` is now applied to C sources only instead of every Fortran file, and the
+  `oticython` custom commands declare `POST_BUILD` explicitly (CMake policy CMP0175).
+
 ## [1.1.0] - 2026-09-07
 
 ### Added

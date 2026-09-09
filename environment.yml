@@ -12,6 +12,7 @@ dependencies:
   - make
   - cmake
   - pip
+  - setuptools
   - pytest
   - ipykernel
   - conda-forge::pyvista

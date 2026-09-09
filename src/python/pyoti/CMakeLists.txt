@@ -117,6 +117,7 @@ ADD_CUSTOM_TARGET(oticython ALL
 # # 2. Execute Cython setup call 
 ADD_CUSTOM_COMMAND (
 	TARGET  oticython
+	POST_BUILD
 	# COMMAND python3 ${CYTHON_SETUP_DIR}/setup.py build_ext -b${PROJECT_BINARY_DIR} 
 	# COMMAND CC=icc python3 ${CYTHON_SETUP_DIR}/setup.py build_ext -b${PROJECT_BINARY_DIR} 
 	COMMAND ${CYTHON_CMD_CALL_PREC} python ${CYTHON_SETUP_DIR}/setup.py -q build_ext -b${PROJECT_BINARY_DIR} -j 8 -v
@@ -125,6 +126,7 @@ ADD_CUSTOM_COMMAND (
 #  ---- 
 ADD_CUSTOM_COMMAND (
 	TARGET  oticython
+	POST_BUILD
 	# COMMAND pwd
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/__init__.py      ${CYTHON_BUILD_DIR}/
 	COMMAND cp ${PROJECT_SOURCE_DIR}/src/python/pyoti/python/whereotilib.py   ${CYTHON_BUILD_DIR}/

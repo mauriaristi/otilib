@@ -25,12 +25,12 @@ if(APPLE)
     # This is for the case of apple macOS
     # SET(GCC_COVERAGE_COMPILE_FLAGS "-arch i386 -arch x86_64 -g -fwrapv -O3 -Wall -Wstrict-prototypes")
     # SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -g -fwrapv -O3 -Wall -Wstrict-prototypes -arch x86_64 ${OpenMP_EXTRA_INLCUDE_FLAGS}")
-    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall -Wstrict-prototypes ${OpenMP_EXTRA_INCLUDE_FLAGS}")
+    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall ${OpenMP_EXTRA_INCLUDE_FLAGS}")
     SET(GCC_COVERAGE_LINK_FLAGS "${OpenMP_EXTRA_LINK_FLAGS} ")
   
 elseif(UNIX)
     # This is for the case of Unix (Linux systems.)
-    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall -Wstrict-prototypes")
+    SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -O3 -Wall")
     SET(GCC_COVERAGE_LINK_FLAGS "")
     # SET(GCC_COVERAGE_COMPILE_FLAGS "-fPIC -fwrapv -Ofast -Wall -Wstrict-prototypes")
 endif(APPLE)
@@ -41,6 +41,8 @@ endif(APPLE)
 
 
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
+# C-only diagnostics: gfortran warns on every file if this reaches the Fortran compiler.
+add_compile_options($<$<COMPILE_LANGUAGE:C>:-Wstrict-prototypes>)
 SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 

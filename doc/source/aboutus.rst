@@ -1,7 +1,7 @@
 About
 =====
 
-The OTI numbers, and its corresponding computational implementation, were initially developed by Dr. Mauricio Aristizabal during his Ph.D. studies as he was researching the use of hypercomplex algebras and other automatic differentiation approaches to compute high-order shape derivatives in Finite Element analyses for optimization appliations. Although hypercomplex algebras like Hyperdual numbers and Multicomplex numbers were options for obtaining high-order derivatives, its exponential growth in size prevents its deployment high performance multivariate analysis. 
+The OTI numbers, and its corresponding computational implementation, were initially developed by Dr. Mauricio Aristizabal during his Ph.D. studies as he was researching the use of hypercomplex algebras and other automatic differentiation approaches to compute high-order shape derivatives in Finite Element analyses for optimization appliations. Although hypercomplex algebras like Hyperdual numbers and Multicomplex numbers were options for obtaining high-order derivatives, its exponential growth in size prevented its deployment for high performance multivariate analysis. 
 
 The focus has always been to provide support for linear-algebra applications, like the Finite Element analses, with a robust an efficient implementation of an algebra that allows arbitrary order multivariable derivatives.
 
@@ -13,26 +13,26 @@ Contributors
 ============
 The following is a list of contributors for the development of the ``otilib/pyoti`` library.
 
-Mauricio Aristizabal,
+Mauricio Aristizabal, Ph.D.,
 Samuel Roberts,
 Jose-Leonel Hernandez-Estrada
 
 
-Special thanks to advisorship from the following people
+Special thanks to the advisorship from:
 
-Manuel J. Garcia (Ph.D. sdvisor)
-Harry Millwater (Postdoc advisor)
+Dr. Manuel J. Garcia (Ph.D. sdvisor)
+Dr. Harry Millwater (Postdoc advisor)
 
 
 Acknowledgements
 ================
 
-The development of the OTIlib and pyoti libraries has been developed with support from:
+The development of the OTIlib and pyoti libraries has been possible thanks to the support from:
 
 - St. Mary's University
 - National Aeronautics and Space Administration (NASA), grant 80NSSC23K1342.
 - Army Research Office (U.S. Department of Defense), grant W911NF2010315.
 - U.S. Department of Defense, grant W911NF1510456.
-- COLCIENCIAS (now Minciencias) scholarship program 647-2014.
 - University of Texas at San Antonio.
+- COLCIENCIAS (now Minciencias) scholarship program 647-2014.
 - Universidad EAFIT.

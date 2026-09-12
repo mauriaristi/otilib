@@ -39,8 +39,7 @@ This command:
 
 * Creates a new environment named ``pyoti-env`` (you may choose any other name).
 * Installs all dependencies from the ``conda-forge`` channel.
-* Installs ``pyoti`` from the ``mauriaristi`` channel on anaconda.org (the ``mauriaristi::pyoti``
-  package specification).
+* Installs ``pyoti`` from the ``mauriaristi`` channel on anaconda.org.
 * Uses the ``rattler`` solver. This is required because the current default solver freezes while
   solving the environment (observed with conda 26.7.2).
 

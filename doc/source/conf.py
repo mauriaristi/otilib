@@ -10,7 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
@@ -21,8 +21,14 @@ project = 'otilib-pyoti'
 copyright = 'Mauricio Aristizabal (2016-Current), St. Mary\'s University (2025-Current), UT San Antonio (2022-2025) and Universidad EAFIT (2016-2020)'
 author = 'Mauricio Aristizabal'
 
-# The full version, including alpha/beta/rc tags
-release = '0.1'
+# The root VERSION file is the single source of truth for the library's version (see AGENTS.md
+# "Versioning"): CMake generates the C/Fortran/Python version modules from it, and conda/meta.yaml
+# reads it directly. Read it here too, instead of hardcoding a version, so the docs never drift
+# from the library actually being compiled/documented.
+with open(os.path.join(os.path.dirname(__file__), '..', '..', 'VERSION')) as _version_file:
+	release = _version_file.read().strip()
+# The short X.Y form Sphinx uses for e.g. the version switcher / <title> ("Major.Minor").
+version = '.'.join(release.split('.')[:2])
 
 
 # -- General configuration ---------------------------------------------------

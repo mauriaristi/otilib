@@ -1,0 +1,14 @@
+.. _exhale_function_omp__dummy_8h_1a26c2db9c501cff462039397e97ee2c79:
+
+Function omp_set_num_threads
+============================
+
+- Defined in :ref:`file_oti_omp_dummy.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: omp_set_num_threads(int)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2functions_8h_1aaefb69a1c01d9af2c69964abbb721212:
+
+Function darr_tan
+=================
+
+- Defined in :ref:`file_oti_real_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_tan(darr_t *)
+   :project: OTIlib

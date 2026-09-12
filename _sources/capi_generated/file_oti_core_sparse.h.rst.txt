@@ -1,0 +1,54 @@
+
+.. _file_oti_core_sparse.h:
+
+File core/sparse.h
+==================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/core/sparse.h``)
+----------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_core_sparse.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_core.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_core_2sparse_8h_1aae472b09346c63f07d5f98b52ab742d1`
+
+- :ref:`exhale_function_core_2sparse_8h_1a889798c1d81b6a2cfde6d24f67455ab2`
+
+- :ref:`exhale_function_core_2sparse_8h_1a9190a5e40054f5880509c1f3c0ba0f43`
+
+- :ref:`exhale_function_core_2sparse_8h_1ac00a8549c7e418d883c7fecda3c0d5c6`
+
+- :ref:`exhale_function_core_2sparse_8h_1ac956fbb7b8f447b6de5ba8d483ae9868`
+
+- :ref:`exhale_function_core_2sparse_8h_1a17fd3d937ddc48e536e66e10a0ff74b8`
+
+- :ref:`exhale_function_core_2sparse_8h_1a75843405b2defab4f94a6b99de79b068`
+
+- :ref:`exhale_function_core_2sparse_8h_1a2b7f94c7f2fd0a71c4f2fbd1657b5081`
+

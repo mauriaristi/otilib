@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2functions_8h_1ac54cf9767153e5b14789f44f9c1fc61d:
+
+Function fedarr_acos(fedarr_t \*)
+=================================
+
+- Defined in :ref:`file_oti_real_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_acos(fedarr_t *)
+   :project: OTIlib

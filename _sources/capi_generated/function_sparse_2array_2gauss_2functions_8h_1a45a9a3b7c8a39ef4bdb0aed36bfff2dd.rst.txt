@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2functions_8h_1a45a9a3b7c8a39ef4bdb0aed36bfff2dd:
+
+Function fearrso_asin
+=====================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_asin(fearrso_t *, dhelpl_t)
+   :project: OTIlib

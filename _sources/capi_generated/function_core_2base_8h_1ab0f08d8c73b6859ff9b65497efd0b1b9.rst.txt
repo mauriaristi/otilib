@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1ab0f08d8c73b6859ff9b65497efd0b1b9:
+
+Function dhelp_multDir
+======================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_multDir(imdir_t, ord_t, imdir_t, ord_t, imdir_t *, ord_t *, dhelpl_t)
+   :project: OTIlib

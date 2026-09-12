@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2base_8h_1abf668d08dc9e93622d53b6130e0f9461:
+
+Function oarr_set_item_i_o
+==========================
+
+- Defined in :ref:`file_oti_dense_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_set_item_i_o(otinum_t *, uint64_t, oarr_t *, dhelpl_t)
+   :project: OTIlib

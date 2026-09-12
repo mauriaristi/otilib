@@ -1,0 +1,17 @@
+.. _exhale_struct_structlil__node:
+
+Struct lil_node
+===============
+
+- Defined in :ref:`file_oti_core_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: lil_node
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

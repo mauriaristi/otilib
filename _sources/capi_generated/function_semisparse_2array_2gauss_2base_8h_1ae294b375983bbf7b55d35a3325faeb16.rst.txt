@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2gauss_2base_8h_1ae294b375983bbf7b55d35a3325faeb16:
+
+Function fearrsso_set_item_ijk_r
+================================
+
+- Defined in :ref:`file_oti_semisparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrsso_set_item_ijk_r(coeff_t, uint64_t, uint64_t, uint64_t, fearrsso_t *, dhelpl_t)
+   :project: OTIlib

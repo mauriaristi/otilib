@@ -1,0 +1,17 @@
+.. _exhale_struct_structfeoarr__t:
+
+Struct feoarr_t
+===============
+
+- Defined in :ref:`file_oti_fem_gauss_array_oarr_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: feoarr_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

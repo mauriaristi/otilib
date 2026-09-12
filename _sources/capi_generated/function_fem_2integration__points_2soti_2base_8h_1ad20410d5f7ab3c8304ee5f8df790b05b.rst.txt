@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2integration__points_2soti_2base_8h_1ad20410d5f7ab3c8304ee5f8df790b05b:
+
+Function fem_addLineIntegrationPoints
+=====================================
+
+- Defined in :ref:`file_oti_fem_integration_points_soti_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fem_addLineIntegrationPoints(uint8_t, uint64_t, double, double, darr_t *, darr_t *)
+   :project: OTIlib

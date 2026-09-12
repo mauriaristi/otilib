@@ -1,0 +1,34 @@
+
+.. _program_listing_file_oti_fem_gauss_scalar.h:
+
+Program Listing for File scalar.h
+=================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_fem_gauss_scalar.h>` (``oti/fem/gauss/scalar.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_FEM_GAUSS_SCALAR_H
+   #define OTI_FEM_GAUSS_SCALAR_H
+   
+   
+   
+   
+   
+   
+   // Gauss Sparse OTI number.
+   // #include "scalar/fesotinum.h"
+   
+   // Gauss real number.
+   #include "scalar/fereal.h"
+   
+   // Gauss dense OTI number.
+   #include "scalar/feotinum.h"
+   
+   
+   
+   
+   
+   #endif

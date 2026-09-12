@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a2c8ad38e31d6be0d5c97744b9fcd948b:
+
+Function soti_init
+==================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_init(void)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1a38b634ac432bc8d8e57334894fc7803c:
+
+Function fearrso_truncate_order
+===============================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_truncate_order(ord_t, fearrso_t *, dhelpl_t)
+   :project: OTIlib

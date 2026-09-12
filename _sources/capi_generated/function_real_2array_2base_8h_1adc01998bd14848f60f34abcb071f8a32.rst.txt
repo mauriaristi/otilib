@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2base_8h_1adc01998bd14848f60f34abcb071f8a32:
+
+Function darr_init
+==================
+
+- Defined in :ref:`file_oti_real_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_init(void)
+   :project: OTIlib

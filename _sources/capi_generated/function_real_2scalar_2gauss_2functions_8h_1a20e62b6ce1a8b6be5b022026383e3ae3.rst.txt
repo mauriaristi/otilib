@@ -1,0 +1,14 @@
+.. _exhale_function_real_2scalar_2gauss_2functions_8h_1a20e62b6ce1a8b6be5b022026383e3ae3:
+
+Function fednum_exp
+===================
+
+- Defined in :ref:`file_oti_real_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fednum_exp(fednum_t *)
+   :project: OTIlib

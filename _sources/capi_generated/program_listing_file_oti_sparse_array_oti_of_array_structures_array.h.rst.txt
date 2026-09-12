@@ -1,0 +1,27 @@
+
+.. _program_listing_file_oti_sparse_array_oti_of_array_structures_array.h:
+
+Program Listing for File structures_array.h
+===========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_sparse_array_oti_of_array_structures_array.h>` (``oti/sparse/array/oti_of_array/structures_array.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef struct {
+       sotinum_t*    p_data; 
+       uint64_t       nrows; 
+       uint64_t       ncols; 
+       uint64_t        size; 
+       flag_t          flag; 
+   } sarr_t;                 
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------

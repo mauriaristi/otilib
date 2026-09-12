@@ -1,0 +1,11 @@
+.. _dir_dense:
+
+
+Directory dense
+===============
+
+
+*Directory path:* ``dense``
+
+
+

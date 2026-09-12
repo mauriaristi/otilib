@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2base_8h_1ac13a54a8ac9852b01445af83a0c6c12f:
+
+Function darr_get_item_ij
+=========================
+
+- Defined in :ref:`file_oti_real_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_get_item_ij(darr_t *, uint64_t, uint64_t)
+   :project: OTIlib

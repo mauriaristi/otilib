@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2algebra_8h_1a81633052314dd4de5e7f9d0fcf2951ae:
+
+Function fearrso_dotproduct_OF
+==============================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_dotproduct_OF(arrso_t *, fearrso_t *, dhelpl_t)
+   :project: OTIlib

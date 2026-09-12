@@ -1,0 +1,14 @@
+.. _exhale_define_comm_8h_1a0fe9e552a5c03745b0a84a7d9b020664:
+
+Define _PIMDIRT
+===============
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: _PIMDIRT
+   :project: OTIlib

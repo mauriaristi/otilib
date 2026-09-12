@@ -1,0 +1,50 @@
+
+.. _file_oti_oti.h:
+
+File oti.h
+==========
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/oti.h``)
+--------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_oti.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``oti/core.h`` (:ref:`file_oti_core.h`)
+
+- ``oti/dense.h`` (:ref:`file_oti_dense.h`)
+
+- ``oti/fem.h`` (:ref:`file_oti_fem.h`)
+
+- ``oti/real.h`` (:ref:`file_oti_real.h`)
+
+- ``oti/sparse.h`` (:ref:`file_oti_sparse.h`)
+
+- ``oti/static.h`` (:ref:`file_oti_static.h`)
+
+- ``oti/version.h``
+
+
+
+
+

@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1af423b8575349a34879330373c23d72ae:
+
+Function dhelp_printImdir
+=========================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_printImdir(imdir_t, ord_t, dhelpl_t)
+   :project: OTIlib

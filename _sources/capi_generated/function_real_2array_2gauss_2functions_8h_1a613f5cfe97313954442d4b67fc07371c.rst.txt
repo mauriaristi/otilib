@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2functions_8h_1a613f5cfe97313954442d4b67fc07371c:
+
+Function fedarr_tanh_to(fedarr_t \*, fedarr_t \*)
+=================================================
+
+- Defined in :ref:`file_oti_real_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_tanh_to(fedarr_t *, fedarr_t *)
+   :project: OTIlib

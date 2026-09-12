@@ -1,0 +1,60 @@
+
+.. _file_oti_fem_element_soti_base.h:
+
+File fem/element/soti/base.h
+============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/element/soti/base.h``)
+--------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_element_soti_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_element.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1ac29831f670b3372b0fae2715bd06821d`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1a80afd0fde36b115483adc8d33c87f041`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1a2a3b5d0944db477db8bfdc0c8ffabf06`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1a15a2e451aa7fbec81c713aed603cb6db`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1a649df4f2effe22eed5b630f56562d2c0`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1a608da141cca2c415cfbb79452cf215ad`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1a60995ecdb389d1a290eafd9cb5bc67eb`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1a6ca1ec5c99c7dc335f28f06c35051fee`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1ae7cf54f85224e093df635ac01d823366`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1a59286f95ff4ac2201b470a185ad99800`
+
+- :ref:`exhale_function_fem_2element_2soti_2base_8h_1a31662d0f4af01e479610abc685f28129`
+

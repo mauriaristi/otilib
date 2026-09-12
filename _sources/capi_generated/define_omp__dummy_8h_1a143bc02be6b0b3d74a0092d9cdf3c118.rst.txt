@@ -1,0 +1,14 @@
+.. _exhale_define_omp__dummy_8h_1a143bc02be6b0b3d74a0092d9cdf3c118:
+
+Define _LIBGOMP_OMP_LOCK_DEFINED
+================================
+
+- Defined in :ref:`file_oti_omp_dummy.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: _LIBGOMP_OMP_LOCK_DEFINED
+   :project: OTIlib

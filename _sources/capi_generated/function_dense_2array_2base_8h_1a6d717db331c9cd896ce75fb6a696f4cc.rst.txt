@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2base_8h_1a6d717db331c9cd896ce75fb6a696f4cc:
+
+Function oarr_ones
+==================
+
+- Defined in :ref:`file_oti_dense_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_ones(uint64_t, uint64_t, bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

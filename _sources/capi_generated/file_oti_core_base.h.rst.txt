@@ -1,0 +1,78 @@
+
+.. _file_oti_core_base.h:
+
+File core/base.h
+================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/core/base.h``)
+--------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_core_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_core.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_core_2base_8h_1a1be2f495b3ecb0516a53b1f565ca3a4f`
+
+- :ref:`exhale_function_core_2base_8h_1a604ab4f2666bea0d451de6c3b571b5dc`
+
+- :ref:`exhale_function_core_2base_8h_1a5fccee3ef2e2f6a0bbe96bb33d0edc98`
+
+- :ref:`exhale_function_core_2base_8h_1aa2c99c8664324869ab6ef92fded9aaa9`
+
+- :ref:`exhale_function_core_2base_8h_1a0cd8a47ee5e41f3737937f216045f6ab`
+
+- :ref:`exhale_function_core_2base_8h_1aef88b4eee36f9e416e679426daed6a1d`
+
+- :ref:`exhale_function_core_2base_8h_1a30096521a72218708652d47822b45386`
+
+- :ref:`exhale_function_core_2base_8h_1a9792db344b374e3f2e725c42449083d7`
+
+- :ref:`exhale_function_core_2base_8h_1a126d0d8e9d8bce9f53cc70ec57aff0e4`
+
+- :ref:`exhale_function_core_2base_8h_1a270ffc6ac4595c2dd5ea2d9b5fc203b7`
+
+- :ref:`exhale_function_core_2base_8h_1a110d6856006f08fd5fce31585db541ef`
+
+- :ref:`exhale_function_core_2base_8h_1a3a1f8be652fd4c28337286d92a1e7b46`
+
+- :ref:`exhale_function_core_2base_8h_1a6082383809b002285799183bc85f3daf`
+
+- :ref:`exhale_function_core_2base_8h_1a37b8cd39a5efde9873c86975c84c6922`
+
+- :ref:`exhale_function_core_2base_8h_1ab0f08d8c73b6859ff9b65497efd0b1b9`
+
+- :ref:`exhale_function_core_2base_8h_1a2649eaf37dec84808be5b202f129f0c2`
+
+- :ref:`exhale_function_core_2base_8h_1a2e62dd53bbe626aee00856652f4ad44e`
+
+- :ref:`exhale_function_core_2base_8h_1a2f5bab89fbd778dd0cc918632e7bc6c5`
+
+- :ref:`exhale_function_core_2base_8h_1af423b8575349a34879330373c23d72ae`
+
+- :ref:`exhale_function_core_2base_8h_1a5b5067bbb66cae7b92361fd8ce2aa8c3`
+

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1ae9384e48ab4e3f5d358025a7733fa030:
+
+Function soti_get_deriv_o
+=========================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_get_deriv_o(imdir_t, ord_t, sotinum_t *, dhelpl_t)
+   :project: OTIlib

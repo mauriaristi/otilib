@@ -1,0 +1,29 @@
+
+.. _program_listing_file_oti_fem_gauss_scalar_real_structures.h:
+
+Program Listing for File fem/gauss/scalar/real/structures.h
+===========================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_fem_gauss_scalar_real_structures.h>` (``oti/fem/gauss/scalar/real/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_FEM_GAUSS_SCALAR_REAL_STRUCTURES_H
+   #define OTI_FEM_GAUSS_SCALAR_REAL_STRUCTURES_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef struct{
+       coeff_t*  p_data;   
+       uint64_t    nIntPts;  
+   } fereal_t;
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

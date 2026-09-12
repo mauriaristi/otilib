@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2utils_8h_1a4ed8a4d4f4b2629a8de4a6581939286c:
+
+Function soti_get_max_basis
+===========================
+
+- Defined in :ref:`file_oti_sparse_scalar_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_get_max_basis(sotinum_t *, dhelpl_t)
+   :project: OTIlib

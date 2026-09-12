@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2functions_8h_1a14d475d6e5952f65ad4d394d22993aad:
+
+Function fecnum_integrate_f
+===========================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_integrate_f(fecnum_t *, fecnum_t *)
+   :project: OTIlib

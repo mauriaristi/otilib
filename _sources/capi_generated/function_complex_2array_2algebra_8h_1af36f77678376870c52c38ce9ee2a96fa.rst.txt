@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1af36f77678376870c52c38ce9ee2a96fa:
+
+Function carr_self_sub_R
+========================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_self_sub_R(carr_t *, carr_t *)
+   :project: OTIlib

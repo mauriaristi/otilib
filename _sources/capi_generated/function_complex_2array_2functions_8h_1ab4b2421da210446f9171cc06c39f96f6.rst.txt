@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1ab4b2421da210446f9171cc06c39f96f6:
+
+Function carr_asinh
+===================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_asinh(carr_t *)
+   :project: OTIlib

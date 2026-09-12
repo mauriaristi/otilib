@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1ab9f779029500e2b99959326e81daa70c:
+
+Function soti_set_item
+======================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_set_item(coeff_t, imdir_t, ord_t, sotinum_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2functions_8h_1a6ed9439c831be68ef346960698b51319:
+
+Function fesoti_tanh
+====================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_tanh(fesoti_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2functions_8h_1a878d4cfe04892e98f2e0afbab2a8ba9a:
+
+Function arrso_sinh
+===================
+
+- Defined in :ref:`file_oti_sparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_sinh(arrso_t *, dhelpl_t)
+   :project: OTIlib

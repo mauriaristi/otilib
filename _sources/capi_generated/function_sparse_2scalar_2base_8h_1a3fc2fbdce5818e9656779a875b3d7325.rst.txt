@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a3fc2fbdce5818e9656779a875b3d7325:
+
+Function soti_get_order_im
+==========================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_get_order_im(ord_t, sotinum_t *, dhelpl_t)
+   :project: OTIlib

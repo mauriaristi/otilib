@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1a9009286e417ffd3061852fcbabccc967:
+
+Function carr_tan
+=================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_tan(carr_t *)
+   :project: OTIlib

@@ -1,0 +1,63 @@
+
+.. _program_listing_file_oti_real_scalar_gauss_algebra.h:
+
+Program Listing for File real/scalar/gauss/algebra.h
+====================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_real_scalar_gauss_algebra.h>` (``oti/real/scalar/gauss/algebra.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_REAL_SCALAR_GAUSS_ALGEBRA_H
+   #define OTI_REAL_SCALAR_GAUSS_ALGEBRA_H
+   
+   
+   /**************************************************************************************************/
+   fednum_t fednum_neg(   fednum_t* num               );
+   void     fednum_neg_to(fednum_t* num, fednum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fednum_t fednum_sum_ff(   fednum_t* lhs, fednum_t* rhs               );
+   void     fednum_sum_ff_to(fednum_t* lhs, fednum_t* rhs, fednum_t* res);
+   
+   fednum_t fednum_sum_rf(     coeff_t lhs, fednum_t* rhs               );
+   void     fednum_sum_rf_to(  coeff_t lhs, fednum_t* rhs, fednum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fednum_t fednum_sub_ff(     fednum_t* lhs,  fednum_t* rhs               );
+   void     fednum_sub_ff_to(  fednum_t* lhs,  fednum_t* rhs, fednum_t* res);
+   
+   fednum_t fednum_sub_rf(       coeff_t lhs,  fednum_t* rhs               );
+   void     fednum_sub_rf_to(    coeff_t lhs,  fednum_t* rhs, fednum_t* res);
+   
+   fednum_t fednum_sub_fr(     fednum_t* lhs,    coeff_t rhs               );
+   void     fednum_sub_fr_to(  fednum_t* lhs,    coeff_t rhs, fednum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fednum_t fednum_mul_ff(   fednum_t* lhs, fednum_t* rhs               );
+   void     fednum_mul_ff_to(fednum_t* lhs, fednum_t* rhs, fednum_t* res);
+   
+   fednum_t fednum_mul_rf(     coeff_t lhs, fednum_t* rhs               );
+   void     fednum_mul_rf_to(  coeff_t lhs, fednum_t* rhs, fednum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fednum_t fednum_div_ff(     fednum_t* lhs,  fednum_t* rhs               );
+   void     fednum_div_ff_to(  fednum_t* lhs,  fednum_t* rhs, fednum_t* res);
+   
+   fednum_t fednum_div_rf(       coeff_t lhs,  fednum_t* rhs               );
+   void     fednum_div_rf_to(    coeff_t lhs,  fednum_t* rhs, fednum_t* res);
+   
+   fednum_t fednum_div_fr(     fednum_t* lhs,    coeff_t rhs               );
+   void     fednum_div_fr_to(  fednum_t* lhs,    coeff_t rhs, fednum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   #endif

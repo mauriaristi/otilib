@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2utils_8h_1a4497954d8800f44d5258c82991a29b4b:
+
+Function fecarr_dimCheck_RF_matmul
+==================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_dimCheck_RF_matmul(carr_t *, fecarr_t *, fecarr_t *)
+   :project: OTIlib

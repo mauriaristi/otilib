@@ -1,0 +1,183 @@
+
+.. _file_oti_comm.h:
+
+File comm.h
+===========
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/comm.h``)
+---------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_comm.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``inttypes.h``
+
+- ``math.h``
+
+- ``stdbool.h``
+
+- ``stdint.h``
+
+- ``stdio.h``
+
+- ``stdlib.h``
+
+- ``string.h``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex.h`
+
+- :ref:`file_oti_core.h`
+
+- :ref:`file_oti_experimental.h`
+
+- :ref:`file_oti_fem.h`
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structcoomat__ui64__t`
+
+- :ref:`exhale_struct_structcsrmat__ui64__t`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_comm_8h_1adcebd8b1cb36a897426bb63a5cd84e22`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_comm_8h_1a2e33d64e9cd67bde4bdfe92c0fb1eaac`
+
+- :ref:`exhale_define_comm_8h_1aa1dff99bfd6f2e6e3ed41e562d9ef5f7`
+
+- :ref:`exhale_define_comm_8h_1a719ad21910a73704f98002b258d9090b`
+
+- :ref:`exhale_define_comm_8h_1ac04219814d21fb38e005f0e42794b1b1`
+
+- :ref:`exhale_define_comm_8h_1a741820b74b423254f54d68c15c05fcc8`
+
+- :ref:`exhale_define_comm_8h_1ac5e2a2c6cd54c54b4b22596091f3fc07`
+
+- :ref:`exhale_define_comm_8h_1a88d3949655692c28535e3c7b7bb61d5c`
+
+- :ref:`exhale_define_comm_8h_1a0fe9e552a5c03745b0a84a7d9b020664`
+
+- :ref:`exhale_define_comm_8h_1a1e247afeceee27def837b34802b98d93`
+
+- :ref:`exhale_define_comm_8h_1a6b6806b11728ec1e65afb028fdbd7983`
+
+- :ref:`exhale_define_comm_8h_1ab7ba6ec2260ce077d1291d70df7d2feb`
+
+- :ref:`exhale_define_comm_8h_1acbacdff3585875a478c2e87a9c763dc2`
+
+- :ref:`exhale_define_comm_8h_1afe5f637d10c85f7dbdf2c8ec0a5342d5`
+
+- :ref:`exhale_define_comm_8h_1ab8d71ffd7383adb7ca02c97cde581421`
+
+- :ref:`exhale_define_comm_8h_1aa9d61d103ec736151b81920252bc0df6`
+
+- :ref:`exhale_define_comm_8h_1a9559093ba8ae3f673cbcf1e472569c1a`
+
+- :ref:`exhale_define_comm_8h_1a71f82d59906c55b7abcdd0e4261213ce`
+
+- :ref:`exhale_define_comm_8h_1a1eb552401aaefbe33fa7bcdbd6553b91`
+
+- :ref:`exhale_define_comm_8h_1a48156489750d9163d650f80805df6eb2`
+
+- :ref:`exhale_define_comm_8h_1ae63c7561afa0739e49be427853970804`
+
+- :ref:`exhale_define_comm_8h_1a9fc899bbe14c06e93534977c6c2b442d`
+
+- :ref:`exhale_define_comm_8h_1acc25a16c4d2a77fa29e7dc1375eb908d`
+
+- :ref:`exhale_define_comm_8h_1abccf7bcd745c49b291c7200d075a5a3d`
+
+- :ref:`exhale_define_comm_8h_1af82e80968760941e7867d0a1f59b4ce4`
+
+- :ref:`exhale_define_comm_8h_1a687a6a9d47bd8779890f4f00fa7aa40a`
+
+- :ref:`exhale_define_comm_8h_1a14a9c6b16da7508387bd6e0afa66794b`
+
+- :ref:`exhale_define_comm_8h_1a1701f2957cbb6a97468e08c3239c2ac4`
+
+- :ref:`exhale_define_comm_8h_1aae68f605f39ec261c08c539fea87f76e`
+
+- :ref:`exhale_define_comm_8h_1a48c0f629260b1a6513d912f532288506`
+
+- :ref:`exhale_define_comm_8h_1ac57d3aaef1e9e20fac2300d548dc7746`
+
+- :ref:`exhale_define_comm_8h_1a9d7c3d10f142b11fa2d3b3d5ce05fd19`
+
+- :ref:`exhale_define_comm_8h_1afa99ec4acc4ecb2dc3c2d05da15d0e3f`
+
+- :ref:`exhale_define_comm_8h_1a3acffbd305ee72dcd4593c0d8af64a4f`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_comm_8h_1a75126e90a3b504307d910f4b2e805a62`
+
+- :ref:`exhale_typedef_comm_8h_1ac40713e87f3b93139d054aa8d8a009c1`
+
+- :ref:`exhale_typedef_comm_8h_1a28b573dc21c6305d878a68deabcbf737`
+
+- :ref:`exhale_typedef_comm_8h_1a7aab378bb2885042eacfec0eac09b8bb`
+
+- :ref:`exhale_typedef_comm_8h_1a2e71aee4911a3e03df3d7c666bccfff1`
+
+- :ref:`exhale_typedef_comm_8h_1a4eb34d2fe127e0139c11d3395418512b`
+
+- :ref:`exhale_typedef_comm_8h_1a7a6989b01a7e915f122a3870843a99f1`
+
+- :ref:`exhale_typedef_comm_8h_1a7d2d39b4ff87ece237a3d63946489673`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_comm_8h_1aa403a4fbcc7e37266a93052e026ab2e7`
+
+- :ref:`exhale_variable_comm_8h_1ae3b2fae9252fea92fa41b4b26e70bafd`
+
+- :ref:`exhale_variable_comm_8h_1a3fa4e9e2580b3e8cff2138bff03a5784`
+

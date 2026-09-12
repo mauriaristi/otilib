@@ -1,0 +1,36 @@
+
+.. _program_listing_file_oti_semisparse_scalar_structures.h:
+
+Program Listing for File semisparse/scalar/structures.h
+=======================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_semisparse_scalar_structures.h>` (``oti/semisparse/scalar/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SEMISPARSE_SCALAR_STRUCTURES_H
+   #define OTI_SEMISPARSE_SCALAR_STRUCTURES_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   typedef struct {
+       coeff_t          re; 
+       coeff_t**      p_im; 
+       bases_t   act_nbases; 
+       bases_t   tot_nbases; 
+       ord_t     act_order; 
+       ord_t     trc_order; 
+       flag_t         flag; 
+   } semiotin_t;          
+     
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

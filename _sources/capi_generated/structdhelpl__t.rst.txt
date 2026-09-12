@@ -1,0 +1,17 @@
+.. _exhale_struct_structdhelpl__t:
+
+Struct dhelpl_t
+===============
+
+- Defined in :ref:`file_oti_core_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: dhelpl_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

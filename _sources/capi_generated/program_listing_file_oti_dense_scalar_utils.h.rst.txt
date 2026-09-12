@@ -1,0 +1,24 @@
+
+.. _program_listing_file_oti_dense_scalar_utils.h:
+
+Program Listing for File dense/scalar/utils.h
+=============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_dense_scalar_utils.h>` (``oti/dense/scalar/utils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_DENSE_SCALAR_UTILS_H
+   #define OTI_DENSE_SCALAR_UTILS_H
+   
+   
+   /**************************************************************************************************/ 
+   darr_t oti_to_cr_dense(otinum_t* num,  dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   #endif

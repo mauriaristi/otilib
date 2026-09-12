@@ -1,0 +1,17 @@
+.. _exhale_struct_structomp__nest__lock__t:
+
+Struct omp_nest_lock_t
+======================
+
+- Defined in :ref:`file_oti_omp_dummy.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: omp_nest_lock_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

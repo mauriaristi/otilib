@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2utils_8h_1a69aeab3bbec26a7ea676072650b90e4d:
+
+Function fedarr_dimCheck_FF_elementwise
+=======================================
+
+- Defined in :ref:`file_oti_real_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_dimCheck_FF_elementwise(fedarr_t *, fedarr_t *, fedarr_t *)
+   :project: OTIlib

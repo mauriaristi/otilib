@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2algebra_8h_1adee858ccd590d3babbb9da47857a365c:
+
+Function fedarr_sum_rF
+======================
+
+- Defined in :ref:`file_oti_real_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_sum_rF(coeff_t, fedarr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2base_8h_1a098c785a784965bcc0dd7e847a1eb0f2:
+
+Function oti_trunc_ssum
+=======================
+
+- Defined in :ref:`file_oti_dense_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_trunc_ssum(otinum_t *, ord_t, otinum_t *, dhelpl_t)
+   :project: OTIlib

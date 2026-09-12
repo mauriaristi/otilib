@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2functions_8h_1a1e6201cc70ce37a4c86e0842ac238037:
+
+Function arrsso_cosh_to
+=======================
+
+- Defined in :ref:`file_oti_semisparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrsso_cosh_to(arrsso_t *, arrsso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1ab050d925053c86b60a3ce50dec45fe06:
+
+Function carr_self_mul_r
+========================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_self_mul_r(ccoeff_t, carr_t *)
+   :project: OTIlib

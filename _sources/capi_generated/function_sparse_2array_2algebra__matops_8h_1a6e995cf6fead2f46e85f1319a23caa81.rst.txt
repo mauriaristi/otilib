@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2algebra__matops_8h_1a6e995cf6fead2f46e85f1319a23caa81:
+
+Function arrso_det_to
+=====================
+
+- Defined in :ref:`file_oti_sparse_array_algebra_matops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_det_to(arrso_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

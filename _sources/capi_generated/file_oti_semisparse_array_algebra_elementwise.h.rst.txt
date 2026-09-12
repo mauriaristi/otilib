@@ -1,0 +1,130 @@
+
+.. _file_oti_semisparse_array_algebra_elementwise.h:
+
+File semisparse/array/algebra_elementwise.h
+===========================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/array/algebra_elementwise.h``)
+-----------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_array_algebra_elementwise.h.rst
+
+
+
+
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1ad41d7abffebd03da4b6e66057f0a25f7`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a261275d248c240e7a855e32a517bb7a3`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a8b1e460846c4b74dd27b78c1b8bccc64`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1abefa3a69f29c369257b39b7825705a61`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1aa9dc39d70de5d233226c58e56926c5cb`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a2934d945240bd118c6592a7650a1b84b`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a3ab9e84ca62a8abd6a3165b983dc082b`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a505f66099d28a5d18862f0fbe1258c0c`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a87e7565f4e1afaff326a3fa59f895985`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1af0f10ec92e35a7b8a3cf4b4231eadf07`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a0038657efd947f82a2c19ab006e1250c`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1aae2b7343e2cb91dc47bba6ec543733c6`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a048e872c2c770586979be10aa81deef7`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a2efd0e9e8540f582f90ef5ce8c976694`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a62b5dec8139d179b3683abab94166094`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a3653f20edb7a1fd80b7205c0e4a1face`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a42a1f4127759f6328d18f5381cafad1a`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1afab43d43ae3f2100cd38b725b9d1f785`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a0b53ffd490bec6930f6cb6ff85307294`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1acefb101c2679895223812b22a513c96d`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1abc5759033437eb4ea6c419c9584db93e`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1ab7181abf3d5136ce72d36031f07afd92`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a9b423b28b54a0e4f240383690d1aafd9`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1ae033a19e2c68c050d138070e94c569fc`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a258667810886e1da39e0d73b8880009a`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a42169485f48f60f686757927459135c1`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a0ff763dfb7d8747f23f5f301e85a348b`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a702d2a57aeb2e1bf0868e76026f30f47`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1aa650b76b4b1ddb946b4a0a8575ef35af`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1af9f5150dc2855e1cc9c5777a58dac5ce`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a26f1f2e64c50a05ae89f79eeda3f09bf`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a4aef535e5f02d94f55fc3a94975dab70`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1ac24c99c9fd459d2e666f1abff15d59c6`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a627f7ee4af4fae440bb6b8116a0016d7`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a6acb415e54961a3902a240dc996298b3`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a1d466c18e8da30949524736cf22df940`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1afdb38af2a7f39007513c6aab16ac9e42`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a2b23582a0882e1d100bee145935050c8`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a8228de84f76359e31edd46b9cbb19bc4`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1ab1291adef1c0b55c2286f5c0571a1f0f`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a21d00cc88395b1b1ba4a8b41f97c7683`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1aab34b869a79b31add9a1cf32213e96a1`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1aeab9cb064eb64298ae19a7ae240f4099`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1acdecd971d00e912b97bdf4feed271bfc`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a9facf40fb3a7b3f143e6143e42accea8`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a89017da68c55dd8d14b9c53fb2e6bbdd`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a590b418593a4f11b784c1b77704e11d0`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1ace3ef66b9b2130ff26641232d6d63159`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__elementwise_8h_1a58464ad000327be25520cfc7ea48ac82`
+

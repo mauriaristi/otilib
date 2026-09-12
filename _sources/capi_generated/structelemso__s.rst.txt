@@ -1,0 +1,17 @@
+.. _exhale_struct_structelemso__s:
+
+Struct elemso_s
+===============
+
+- Defined in :ref:`file_oti_fem_element_soti_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: elemso_s
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2utils_8h_1a3ff914f728b3307d4ee1466f9f5599f0:
+
+Function arrso_get_order
+========================
+
+- Defined in :ref:`file_oti_sparse_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_get_order(arrso_t *)
+   :project: OTIlib

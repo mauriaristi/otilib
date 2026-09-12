@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a91c08a62eec88b34e428f610e31699d0:
+
+Function soti_copy_to
+=====================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_copy_to(sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

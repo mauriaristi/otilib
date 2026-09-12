@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1adb180d16481dbd4663b0bf9add07d3b5:
+
+Function fearrso_set_item_k_R
+=============================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_set_item_k_R(arrso_t *, uint64_t, fearrso_t *, dhelpl_t)
+   :project: OTIlib

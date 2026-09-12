@@ -1,0 +1,106 @@
+
+.. _file_oti_semisparse_scalar_gauss_algebra.h:
+
+File semisparse/scalar/gauss/algebra.h
+======================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/scalar/gauss/algebra.h``)
+------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_scalar_gauss_algebra.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_semisparse_scalar_gauss.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a89ae14673c9d43e2a0d7e7d9ab58f82f`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a076b3f8d463ee07e5df6b2fe58947529`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a145f7f27e4cb27bebd19958d7957a53a`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1adb24334ba8c84fafd85e63fe74993d2e`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a7580054d5c613ef151d75b916b4e191a`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1abc8514c2c37afe99156478f87c3a5bf7`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1aabfffc8669e83bb28ca7925351b5f403`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1abbacecff2e74be7aa16ed1384d0b47f5`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a43901a77e7180aadda80bdec657a3dda`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a765146ca362d1976faea429a792462cd`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a9ca585b032686bef97f0d63b6e614a2b`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1aa558116e65a0147e58c7c21ea5edbe12`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a4e1079d6e23c8cba8ef449d1a89b3712`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a7722816471c051627eaf398a9501aece`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a36bd1510284ee413a5b336e6cbb7cc35`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a26f83f07ba71d80fac55460d5d298eb3`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a84d6de696a3d1e8c84ebecb11825af23`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a3e17783b84eaca0c79ed6eb54771163a`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a112591eecf35c34736711ead4ab7516d`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1afff87f93cf6807f194fa0df669c6e8cb`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a276be833da7d7f1821dd27ce3dc825bc`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1aed14f7f11a995061fd14d1505f22808f`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a67f9726b9c864a4f491c94b1c692b31f`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a33e2aae8e1e0d2fae8ea95cedb64982e`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a70a5bede4bb5de31a16e495fe2568879`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a4e08fc045529302a9ad3ae3e90f8084a`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a04680d74556f3c88d23371b9bffbd8be`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1aa5033c1d3cf8c94ab72e3bf5c14f68b0`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a5260c25a64d27713008dc551d1f646d7`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a316f5d85163f33ff770f5dff6f1bfefb`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a8ca8c9cf189b3622fe9aca24ac4f5da8`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a1b7bfae8022e6b5727eb1a71bd6821e3`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a6db40766136f17b04c8257c9f0f42358`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1ac27e2902bd71c335c51a671b22570320`
+

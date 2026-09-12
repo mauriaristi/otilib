@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2real_2base_8h_1ad61de40e4b26ca9d7aad5e1c0b565220:
+
+Function elemd_raise_flag_alloc
+===============================
+
+- Defined in :ref:`file_oti_fem_element_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemd_raise_flag_alloc(elemd_t *)
+   :project: OTIlib

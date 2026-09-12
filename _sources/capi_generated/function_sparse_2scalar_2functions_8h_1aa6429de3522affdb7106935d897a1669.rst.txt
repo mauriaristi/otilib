@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2functions_8h_1aa6429de3522affdb7106935d897a1669:
+
+Function soti_cos_to
+====================
+
+- Defined in :ref:`file_oti_sparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_cos_to(sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

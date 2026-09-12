@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2functions_8h_1a267ac6004c2cc589ec60cafb8b659fd3:
+
+Function arrso_log10
+====================
+
+- Defined in :ref:`file_oti_sparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_log10(arrso_t *, dhelpl_t)
+   :project: OTIlib

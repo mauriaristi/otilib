@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1a138524c0d34866c34522b39877f4b13f:
+
+Function arrso_truncate_im_to
+=============================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_truncate_im_to(imdir_t, ord_t, arrso_t *, arrso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1aaed6dad541bdb7bc568470b71f286635:
+
+Function printArrayUI16
+=======================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: printArrayUI16(uint16_t *, uint8_t)
+   :project: OTIlib

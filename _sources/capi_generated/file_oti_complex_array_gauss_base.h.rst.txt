@@ -1,0 +1,100 @@
+
+.. _file_oti_complex_array_gauss_base.h:
+
+File complex/array/gauss/base.h
+===============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex/array/gauss/base.h``)
+-----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex_array_gauss_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a8dd03b83a6124a3d2f67b71330e81420`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a5e8264373c55eed53397571bc58c8a4c`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1aab45a1e7f7bef0981787b39971b451b4`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1ac3865b736875aa8fe27e550ba84316c2`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a4042bec707ae3577853446a1165d39b1`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a4fb87cb2d60887c0f08fea2c212db232`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a6a06a22a9fe3274edc1c42a115d823ea`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1ad9e4f3926ebfadee10ed547a6c7941ba`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1abf33ae8f032835fed6b35c689c5cbba3`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1ac02d2b5d64aaef610fc41c09021fe869`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1ae5749b9cff55e92f9e05d020abba25c0`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1ad18e0dbf566ebaf923c6b73f3cf9543f`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a9ed7dd9f592201e4df7294cc5214d458`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1ad885bc4430ccc1280928094c982019eb`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a6b80b2e3bdd09b292a594d5dd7ed331d`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1ac9b9698117b06afc927b8514d5ff914d`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a4ea0cb22edba693471530e0a41316146`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1ac9caa5e96b16caa31c338f41fb328215`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1aa3521c3273f0db5282bbb2278dfdeb9f`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a4d810fe8276a55726d25e909baeb9e05`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a99ea8a76357c34c434204a18a99b75df`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1afdb6bcbc8cb64f5deadea4fadb443b3a`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1acacd1eb5a9454727cb5025171376e8a9`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1ac5615230814d952b19742a50577fe7ed`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a1416d51e598c4ee113c9b308c37145c2`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a4098b60db28cf7319a282aee838f8c84`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a6695271c9b4a9934ffc5b3aef3352cab`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a74d60ac709d26a92583b3a59b56a6f8a`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a1c2a81ce8985c2f39b63da2c08a6e2bf`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1a4d87a98bec4761e870e95a2788353fe7`
+
+- :ref:`exhale_function_complex_2array_2gauss_2base_8h_1af6859b68a0498104ed8eebc8382a0027`
+

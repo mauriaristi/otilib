@@ -1,0 +1,14 @@
+.. _exhale_function_fileio_8h_1aaa9d0aa39611eebf4cbc629dec6c0950:
+
+Function savenpy
+================
+
+- Defined in :ref:`file_oti_core_fileio.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: savenpy(char *, uint8_t, void *, uint64_t, uint64_t)
+   :project: OTIlib

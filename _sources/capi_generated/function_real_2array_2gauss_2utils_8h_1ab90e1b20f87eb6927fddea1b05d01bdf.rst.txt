@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2utils_8h_1ab90e1b20f87eb6927fddea1b05d01bdf:
+
+Function fedarr_dimCheck_FF_samesize
+====================================
+
+- Defined in :ref:`file_oti_real_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_dimCheck_FF_samesize(fedarr_t *, fedarr_t *, fednum_t *)
+   :project: OTIlib

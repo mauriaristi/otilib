@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2utils_8h_1a3db31e75defc67b4217a1875f28cc5b5:
+
+Function oarr_trc_mul
+=====================
+
+- Defined in :ref:`file_oti_dense_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_trc_mul(oarr_t *, ord_t, oarr_t *, ord_t, oarr_t *, dhelpl_t)
+   :project: OTIlib

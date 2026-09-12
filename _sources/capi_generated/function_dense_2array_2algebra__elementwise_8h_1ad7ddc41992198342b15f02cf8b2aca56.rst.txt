@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2algebra__elementwise_8h_1ad7ddc41992198342b15f02cf8b2aca56:
+
+Function oarr_div_rO_to
+=======================
+
+- Defined in :ref:`file_oti_dense_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_div_rO_to(coeff_t, oarr_t *, oarr_t *, dhelpl_t)
+   :project: OTIlib

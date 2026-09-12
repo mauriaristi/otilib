@@ -1,0 +1,36 @@
+
+.. _program_listing_file_oti_semisparse_scalar_utils.h:
+
+Program Listing for File semisparse/scalar/utils.h
+==================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_semisparse_scalar_utils.h>` (``oti/semisparse/scalar/utils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SEMISPARSE_SCALAR_UTILS_H
+   #define OTI_SEMISPARSE_SCALAR_UTILS_H
+   
+   /**************************************************************************************************/ 
+   void ssoti_trunc_ssum(semiotin_t* num1, ord_t ord, semiotin_t* res, dhelpl_t dhl );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void ssoti_trunc_mul(semiotin_t* num1, ord_t ord1, 
+                       semiotin_t* num2, ord_t ord2, 
+                       semiotin_t* dest, dhelpl_t dhl );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void ssoti_trunc_smul_real(coeff_t a, ord_t ord, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   void ssoti_get_active_bases(semiotin_t* num, imdir_t* list, dhelpl_t dhl);
+   
+   
+   
+   #endif

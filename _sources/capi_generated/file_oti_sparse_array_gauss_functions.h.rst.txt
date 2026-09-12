@@ -1,0 +1,118 @@
+
+.. _file_oti_sparse_array_gauss_functions.h:
+
+File sparse/array/gauss/functions.h
+===================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/array/gauss/functions.h``)
+---------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_array_gauss_functions.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_sparse_array_gauss.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a8226ae4aed5ee6a65378ccdb438da0ee`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a1f14f9f912280a14c76ff764209a85d9`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1abea4b1e6a60b2c934fdb0238df4d1851`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a7c32ee036f85538b1449f8859f83b228`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a45a9a3b7c8a39ef4bdb0aed36bfff2dd`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1ac58f93721812ed77fe8fd0f63e879505`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a162df022896fd55c19bbbee709d1e0ac`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1ac25b0fb22513a9cbfc66485ee3d14684`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a6ad4a5af79344c0db8cec0b1ab9b003d`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a6e17dc5ba76c04a5253b64d138172233`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a7f7af86f2736423fa79d930075c37c24`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a0e2fd83dbdbd7fd7acce2b624a1d1082`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1adebbcbad7207f418a14bc37b3971cfb3`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1aef585f86f89197386264360dad66ead0`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a94d61e639ec487e8b93720070885fd39`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a74a9b3a0ee550052c3b40fc197e43510`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1afbaff4af2f7683aafea337abae6d4096`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1ae7119f16855a37b5cbbda43bcd5e2b05`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a997c3237aca33d4b00c56d2cb11b6c1e`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a2fcfa544bd48127c34e0c511f5bc54c7`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a8bad4412e858ccda9431a2a88fb63040`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a28c84f2a51099f069c6fdfd85a2d8c24`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1accc56f240c5b4c0ab9e97e1915e2748d`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a05b1a5a69b48543af422fa330855cf3c`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1acef7fac97e0f7379a82f262cc5fce624`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1adfa2253bb9f7d2fb3722cd1d11c6dd99`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1ae6a5697b53e69ced8b3d599f54cf904b`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1aee8239b5b6886f255efccc3eff359cc9`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1ac2f66baae8961f592ab1f51c4d619fca`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a4d80d81c6ea680209402db4ac86e2a4e`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a7d0e9c8d92f8337f30c4784834e9ba35`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a0e225401b176d7d21a7d4bce06fff922`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1aaa3a89672b650b7cfd776fcf9eb01298`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1aafa2c71649a9a59a36400f9980d129cb`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a6c3c7b306f01c389095a95824fc07dec`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a89a126db40fc13b4fbb6c3b3d3dc0d9c`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1aae11aad63e7cc686977b2c14b54bea28`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a60078062502605ecd298ab3c5aa3f447`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a47d08996c5b15798b55be0bbd5959f5d`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2functions_8h_1a422c7933442a07d155ae07a081151570`
+

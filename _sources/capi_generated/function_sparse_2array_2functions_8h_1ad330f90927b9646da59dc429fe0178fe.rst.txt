@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2functions_8h_1ad330f90927b9646da59dc429fe0178fe:
+
+Function arrso_pow_to
+=====================
+
+- Defined in :ref:`file_oti_sparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_pow_to(arrso_t *, double, arrso_t *, dhelpl_t)
+   :project: OTIlib

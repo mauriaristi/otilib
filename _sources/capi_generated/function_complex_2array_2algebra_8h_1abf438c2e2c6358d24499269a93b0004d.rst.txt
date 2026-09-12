@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1abf438c2e2c6358d24499269a93b0004d:
+
+Function carr_invert
+====================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_invert(carr_t *)
+   :project: OTIlib

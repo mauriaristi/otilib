@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1a6baa6ac16d6714dda2795d2246ab137a:
+
+Function arrso_get_item_ij_to
+=============================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_get_item_ij_to(arrso_t *, uint64_t, uint64_t, sotinum_t *, dhelpl_t)
+   :project: OTIlib

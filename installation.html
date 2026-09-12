@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Installation &#8212; otilib-pyoti 0.1 documentation</title>
+    <title>Installation &#8212; otilib-pyoti 1.1.0 documentation</title>
   
   
   
@@ -16,64 +16,67 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
   
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
-  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=2709fde1"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/documentation_options.js?v=fc837d61"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+    <script src="_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'installation';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Tutorials" href="tutorials.html" />
     <link rel="prev" title="Welcome to OTIlib and pyoti documentation!" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.1" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -81,7 +84,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -89,15 +91,15 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -119,7 +121,7 @@
   
   
   
-    <p class="title logo__title">otilib-pyoti 0.1 documentation</p>
+    <p class="title logo__title">otilib-pyoti 1.1.0 documentation</p>
   
 </a></div>
     
@@ -167,6 +169,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="capi.html">
+    C API Reference
+  </a>
+</li>
+
   </ul>
 </nav></div>
       
@@ -178,29 +187,28 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script></div>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
     </div>
     
@@ -209,15 +217,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -236,7 +240,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -285,6 +290,13 @@ document.write(`
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="capi.html">
+    C API Reference
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -297,22 +309,33 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
-`);
-</script></div>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
       </div>
     
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
         <div class="sidebar-primary-item">
+
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
@@ -322,9 +345,14 @@ document.write(`
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -342,8 +370,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -352,7 +378,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Installation</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installation</span></li>
   </ul>
 </nav>
 </div>
@@ -371,78 +397,120 @@ document.write(`
                   
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
-<p>Currently, the only way to install pyoti is to build it from source. The source code can be downloaded from <a class="github reference external" href="https://github.com/mauriaristi/otilib">mauriaristi/otilib</a>. Make sure that all prerequisites are installed before continuing with the setup of pyoti.</p>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
-<p>The recommended way to install the prerequisites is to use conda and the provided environment.yml file.</p>
-<p>Minimum requirements are the following:</p>
+<p>There are two ways to get <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> (the Python interface to OTIlib) on your system:</p>
 <ul class="simple">
-<li><p>Python 3 (Tested with python 3.9)</p></li>
-<li><p>Numpy</p></li>
-<li><p>Scipy</p></li>
-<li><p>scikit-umfpack</p></li>
-<li><p>sksparse-cholmod</p></li>
-<li><p>Cython 0.29 (Development plans are in place to support cython 3)</p></li>
-<li><p>CMake&gt;=3.20</p></li>
+<li><p><strong>Install the conda package</strong> (recommended for most users). A precompiled package is published on
+<a class="reference external" href="https://anaconda.org/mauriaristi/pyoti">anaconda.org</a> for Linux and macOS. No compilers or
+build steps are required.</p></li>
+<li><p><strong>Build from source</strong> (recommended for development, or if you need a compiler configuration that
+the conda package does not provide). The source code is available at
+<a class="github reference external" href="https://github.com/mauriaristi/otilib">mauriaristi/otilib</a>.</p></li>
 </ul>
+<p>Both approaches use conda to manage the environment and its dependencies. Make sure you have a
+conda distribution installed (see <a class="reference external" href="https://www.anaconda.com/download">Anaconda</a> or
+<a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>).</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>This library has been tested under the following operating systems:</p>
 <ul class="simple">
-<li><p>Unix platforms.</p></li>
-<li><p>macos (see macos specific instructions below.)</p></li>
-<li><p>Windows (only working under WSL)</p></li>
+<li><p>Unix platforms (Ubuntu, CentOS, Rocky Linux).</p></li>
+<li><p>macOS (tested on Tahoe 26.*; see macOS specific instructions below when building from source).</p></li>
+<li><p>Windows (only working under <a class="reference external" href="https://learn.microsoft.com/en-us/windows/wsl/">WSL</a>).</p></li>
 </ul>
-<p>A pure windows installation is currently not supported.</p>
+<p>A pure Windows installation is currently not supported.</p>
+</div>
+<section id="installing-with-conda">
+<h2>Installing with conda<a class="headerlink" href="#installing-with-conda" title="Link to this heading">#</a></h2>
+<p>The easiest way to get <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> installed is to create a separate conda environment that includes
+the package and all of its requirements:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>pyoti-env<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>mauriaristi::pyoti<span class="w"> </span>--solver<span class="w"> </span>rattler
+</pre></div>
+</div>
+<p>This command:</p>
+<ul class="simple">
+<li><p>Creates a new environment named <code class="docutils literal notranslate"><span class="pre">pyoti-env</span></code> (you may choose any other name).</p></li>
+<li><p>Installs all dependencies from the <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code> channel.</p></li>
+<li><p>Installs <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> from the <code class="docutils literal notranslate"><span class="pre">mauriaristi</span></code> channel on anaconda.org.</p></li>
+<li><p>Uses the <code class="docutils literal notranslate"><span class="pre">rattler</span></code> solver. This is required because the current default solver freezes while
+solving the environment (observed with conda 26.7.2).</p></li>
+</ul>
+<p>The conda package ships the compiled library together with the precomputed data tables, so no
+compilation or <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">gendata</span></code> step is needed.</p>
+<p>After the installation completes, activate the environment so that <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> becomes importable:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>pyoti-env
+</pre></div>
+</div>
+<p>You can verify the installation with:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">"import pyoti; print(pyoti.__version__)"</span>
+</pre></div>
+</div>
+<p>To update to the latest published version at a later time, run the following from within the
+environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>update<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>mauriaristi::pyoti<span class="w"> </span>--solver<span class="w"> </span>rattler
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you also want to use <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> from Jupyter notebooks, see
+<a class="reference internal" href="#jupyter-kernel"><span class="std std-ref">Adding the environment to the global jupyter notebook server</span></a> below. The steps are the same for both installation methods, replacing the
+environment name where appropriate.</p>
 </div>
 </section>
-<section id="conda-environment-installation-instructions">
-<h2>Conda environment installation instructions:<a class="headerlink" href="#conda-environment-installation-instructions" title="Link to this heading">#</a></h2>
-<p>First you need <a class="reference external" href="https://www.anaconda.com/download">Anaconda</a> with Python 3. After cloning OTILIB, go to a terminal instance and go to the directory where you donwloaded this repository.</p>
+<section id="building-from-source">
+<h2>Building from source<a class="headerlink" href="#building-from-source" title="Link to this heading">#</a></h2>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h3>
+<p>The recommended way to install the prerequisites is to use conda and the provided
+<code class="docutils literal notranslate"><span class="pre">environment.yml</span></code> file.</p>
+<p>Minimum requirements are the following:</p>
+<ul class="simple">
+<li><p>Python 3 (Tested with python 3.13)</p></li>
+<li><p>Numpy &gt;= 2.1, &lt; 3</p></li>
+<li><p>Scipy</p></li>
+<li><p>scikit-umfpack (optional; only needed for the <cite>solver=’umfpack’</cite> sparse solver, requires a NumPy 2-compatible upstream build)</p></li>
+<li><p>sksparse-cholmod (optional; only needed for the <cite>solver=’cholesky’</cite> sparse solver, requires a NumPy 2-compatible upstream build)</p></li>
+<li><p>Cython&gt;=3.0</p></li>
+<li><p>CMake&gt;=3.20</p></li>
+</ul>
+</section>
+<section id="conda-environment-for-building">
+<h3>Conda environment for building<a class="headerlink" href="#conda-environment-for-building" title="Link to this heading">#</a></h3>
+<p>After cloning OTILIB, go to a terminal instance and go to the directory where you downloaded this repository.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>/PATH/TO/OTILIB-MASTER/
 </pre></div>
 </div>
-<p>It is recomended to create a conda environment with the required dependencies. For this, it is easier to install the environment.yml file by runing:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>environment.yml
+<p>It is recommended to create a conda environment with the required dependencies. For this, it is easier to install the environment.yml file by running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>env<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>environment.yml<span class="w"> </span>--solver<span class="w"> </span>rattler
 </pre></div>
 </div>
+<p>The <code class="docutils literal notranslate"><span class="pre">--solver</span> <span class="pre">rattler</span></code> flag is needed for the same reason as above: the default solver may hang
+while solving this environment.</p>
 <p><strong>NOTE</strong>: If you had a previous version of OTILIB, you may avoid this step. However, it is recommended that you update your current environment. For this, run the following command (see <a class="reference external" href="https://stackoverflow.com/questions/42352841/how-to-update-an-existing-conda-environment-with-a-yml-file">this</a> for more details):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>pyoti
-conda<span class="w"> </span>env<span class="w"> </span>update<span class="w"> </span>--file<span class="w"> </span>environment.yml<span class="w"> </span>--prune
+conda<span class="w"> </span>env<span class="w"> </span>update<span class="w"> </span>--file<span class="w"> </span>environment.yml<span class="w"> </span>--prune<span class="w"> </span>--solver<span class="w"> </span>rattler
 </pre></div>
 </div>
 <p>Note: Use <code class="docutils literal notranslate"><span class="pre">env_basic.yml</span></code> to use <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> in its most basic form.</p>
-<p>After runing the previous command, you should have installed/updated the  conda environment that will allow you to use the python version of the library. To activate this environment, run the following command:</p>
+<p>After running the previous command, you should have installed/updated the conda environment that will allow you to build and use the python version of the library. To activate this environment, run the following command:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>activate<span class="w"> </span>pyoti
-</pre></div>
-</div>
-</section>
-<section id="adding-the-local-environment-to-the-global-jupyter-notebook-server">
-<h2>Adding the local environment to the global jupyter notebook server<a class="headerlink" href="#adding-the-local-environment-to-the-global-jupyter-notebook-server" title="Link to this heading">#</a></h2>
-<p>You need to install <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> within your environment. To do so, activate your environment if not activated and run the following command.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>anaconda<span class="w"> </span>ipykernel
-</pre></div>
-</div>
-<p>After this, and still within your environment, run the following to add pyoti to your ipython kernel options.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>pyoti
 </pre></div>
 </div>
 </section>
 <section id="macos-additional-instructions">
-<h2>MacOS additional instructions:<a class="headerlink" href="#macos-additional-instructions" title="Link to this heading">#</a></h2>
+<h3>MacOS additional instructions<a class="headerlink" href="#macos-additional-instructions" title="Link to this heading">#</a></h3>
 <p>When you use MacOS, particularly Apple Silicon Macs, it is recommended to have the following steps:</p>
 <p>Install libomp using brew:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>libomp
 </pre></div>
 </div>
 <p>In addition, install GNU gfortran from conda-forge:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>gfortran
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>gfortran<span class="w"> </span>--solver<span class="w"> </span>rattler
 </pre></div>
 </div>
 <p>This will add gfortran with support for the architecture of your processor, which is important.</p>
 </section>
 <section id="compiling-the-library">
-<h2>Compiling the library<a class="headerlink" href="#compiling-the-library" title="Link to this heading">#</a></h2>
+<h3>Compiling the library<a class="headerlink" href="#compiling-the-library" title="Link to this heading">#</a></h3>
 <p>In order to build the library with your default compilers, run the following commands:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>path/to/src/otilib
 mkdir<span class="w"> </span>build
@@ -490,6 +558,18 @@ conda<span class="w"> </span>develop<span class="w"> </span>-u<span class="w"> <
 </div>
 </section>
 </section>
+<section id="adding-the-environment-to-the-global-jupyter-notebook-server">
+<span id="jupyter-kernel"></span><h2>Adding the environment to the global jupyter notebook server<a class="headerlink" href="#adding-the-environment-to-the-global-jupyter-notebook-server" title="Link to this heading">#</a></h2>
+<p>You need to install <code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> within your environment. To do so, activate your environment if not activated and run the following command (<code class="docutils literal notranslate"><span class="pre">ipykernel</span></code> is already included when the environment was created from <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code>).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>ipykernel<span class="w"> </span>--solver<span class="w"> </span>rattler
+</pre></div>
+</div>
+<p>After this, and still within your environment, run the following to add the environment to your ipython kernel options. Replace <code class="docutils literal notranslate"><span class="pre">pyoti-env</span></code> with <code class="docutils literal notranslate"><span class="pre">pyoti</span></code> if you built from source.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>pyoti-env
+</pre></div>
+</div>
+</section>
+</section>
 
 
                 </article>
@@ -526,7 +606,8 @@ conda<span class="w"> </span>develop<span class="w"> </span>-u<span class="w"> <
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -535,13 +616,17 @@ conda<span class="w"> </span>develop<span class="w"> </span>-u<span class="w"> <
     class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conda-environment-installation-instructions">Conda environment installation instructions:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-the-local-environment-to-the-global-jupyter-notebook-server">Adding the local environment to the global jupyter notebook server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#macos-additional-instructions">MacOS additional instructions:</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling-the-library">Compiling the library</a></li>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-with-conda">Installing with conda</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-from-source">Building from source</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conda-environment-for-building">Conda environment for building</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#macos-additional-instructions">MacOS additional instructions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling-the-library">Compiling the library</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-the-environment-to-the-global-jupyter-notebook-server">Adding the environment to the global jupyter notebook server</a></li>
 </ul>
   </nav></div>
 
@@ -567,8 +652,8 @@ conda<span class="w"> </span>develop<span class="w"> </span>-u<span class="w"> <
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -579,7 +664,7 @@ conda<span class="w"> </span>develop<span class="w"> </span>-u<span class="w"> <
 
   <p class="copyright">
     
-      © Copyright 2016-2024, University of Texas at San Antonio and Universidad EAFIT.
+      © Copyright Mauricio Aristizabal (2016-Current), St. Mary&#39;s University (2025-Current), UT San Antonio (2022-2025) and Universidad EAFIT (2016-2020).
       <br/>
     
   </p>
@@ -588,7 +673,7 @@ conda<span class="w"> </span>develop<span class="w"> </span>-u<span class="w"> <
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.4.7.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
@@ -601,7 +686,8 @@ conda<span class="w"> </span>develop<span class="w"> </span>-u<span class="w"> <
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

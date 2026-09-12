@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a2f5bab89fbd778dd0cc918632e7bc6c5:
+
+Function dhelp_print
+====================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_print(dhelp_t *)
+   :project: OTIlib

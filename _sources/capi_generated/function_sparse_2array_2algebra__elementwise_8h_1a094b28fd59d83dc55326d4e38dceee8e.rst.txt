@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2algebra__elementwise_8h_1a094b28fd59d83dc55326d4e38dceee8e:
+
+Function arrso_mul_OO
+=====================
+
+- Defined in :ref:`file_oti_sparse_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_mul_OO(arrso_t *, arrso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2derivatives_8h_1a9b55ff986830d88d42b68d9eff5e1b7e:
+
+Function der_c_acosh
+====================
+
+- Defined in :ref:`file_oti_complex_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_c_acosh(coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

@@ -1,0 +1,27 @@
+
+.. _file_oti_sparse_array_oti_of_array_base.h:
+
+File sparse/array/oti_of_array/base.h
+=====================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/array/oti_of_array/base.h``)
+-----------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_array_oti_of_array_base.h.rst
+
+
+
+
+
+
+
+
+

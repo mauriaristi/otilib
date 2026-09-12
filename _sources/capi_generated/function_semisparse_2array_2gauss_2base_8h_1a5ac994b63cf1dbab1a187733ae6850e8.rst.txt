@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2gauss_2base_8h_1a5ac994b63cf1dbab1a187733ae6850e8:
+
+Function fearrsso_truncate_im_to
+================================
+
+- Defined in :ref:`file_oti_semisparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrsso_truncate_im_to(imdir_t, ord_t, fearrsso_t *, fearrsso_t *, dhelpl_t)
+   :project: OTIlib

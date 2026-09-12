@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2utils_8h_1a07510f321934f81d1037adf2bf2e48e2:
+
+Function fearrso_dimCheck_Ff_elementwise
+========================================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_dimCheck_Ff_elementwise(fearrso_t *, fesoti_t *, fearrso_t *)
+   :project: OTIlib

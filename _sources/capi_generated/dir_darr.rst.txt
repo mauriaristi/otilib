@@ -1,0 +1,11 @@
+.. _dir_darr:
+
+
+Directory darr
+==============
+
+
+*Directory path:* ``darr``
+
+
+

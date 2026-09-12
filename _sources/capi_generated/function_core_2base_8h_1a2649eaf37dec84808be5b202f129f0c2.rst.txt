@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a2649eaf37dec84808be5b202f129f0c2:
+
+Function dhelp_ndirOrder
+========================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_ndirOrder(bases_t, ord_t)
+   :project: OTIlib

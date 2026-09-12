@@ -1,0 +1,52 @@
+
+.. _file_oti_core_fileio.h:
+
+File fileio.h
+=============
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/core/fileio.h``)
+----------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_core_fileio.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_core.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_fileio_8h_1a10e58e52f55134c553fb6c21819f0f5b`
+
+- :ref:`exhale_function_fileio_8h_1a80a4a1945ded5151dcb8d8cfda069bc7`
+
+- :ref:`exhale_function_fileio_8h_1ab5580d32e8217c90cb1e99549b6d6a35`
+
+- :ref:`exhale_function_fileio_8h_1ab9c86bb5a00b10dd25863fe628d4dc27`
+
+- :ref:`exhale_function_fileio_8h_1aeaea1a31f3a8b9e3350ff3ef3161665c`
+
+- :ref:`exhale_function_fileio_8h_1ac2416693c169191cd4c8a72ef2f8490f`
+
+- :ref:`exhale_function_fileio_8h_1aaa9d0aa39611eebf4cbc629dec6c0950`
+

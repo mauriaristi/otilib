@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2base_8h_1aac4f6347871fd95e5eb66fb0bff7546e:
+
+Function oarr_free
+==================
+
+- Defined in :ref:`file_oti_dense_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_free(oarr_t *)
+   :project: OTIlib

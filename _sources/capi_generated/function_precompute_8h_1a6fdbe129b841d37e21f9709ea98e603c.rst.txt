@@ -1,0 +1,14 @@
+.. _exhale_function_precompute_8h_1a6fdbe129b841d37e21f9709ea98e603c:
+
+Function dhelp_precompute
+=========================
+
+- Defined in :ref:`file_oti_core_precompute.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_precompute(char *, bases_t *, ord_t)
+   :project: OTIlib

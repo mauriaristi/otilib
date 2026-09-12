@@ -1,0 +1,137 @@
+
+.. _program_listing_file_oti_fem_enums.h:
+
+Program Listing for File enums.h
+================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_fem_enums.h>` (``oti/fem/enums.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_FEM_ENUMS_H
+   #define OTI_FEM_ENUMS_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -----------------------------------------      ENUMS        ----------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   // Enumerators to assign a code to FEM constants
+   enum operEnum {  
+     // Define operations identifiers.
+     opAdd         =   1 ,   
+     opSub         =   2 ,   
+     opMul         =   3 ,   
+     opTruediv     =   4 ,   
+     opPowr        =   5 ,   
+     opInt0d       =   60,   
+     opInt1d       =   6 ,   
+     opInt2d       =   7 ,   
+     opInt3d       =   8 ,   
+     opDx          =   9 ,   
+     opDy          =   10,   
+     opDz          =   11,   
+     opDxx         =   12,   
+     opDxy         =   13,   
+     opDyy         =   14,   
+     opDxz         =   15,   
+     opDyz         =   16,   
+     opDzz         =   17,   
+     opDef         =   18,   
+     opDefData     =   61,   
+     opOn          =   19,   
+     opNeg         =   20,   
+     opDxi         =   21,   
+     opDeta        =   22,   
+     opDzeta       =   23,   
+     opDxixi       =   24,   
+     opDxieta      =   25,   
+     opDetaeta     =   26,   
+     opDxizeta     =   27,   
+     opDetazeta    =   28,   
+     opDzetazeta   =   29,   
+   
+   
+     subOpDefBasis =   50,   
+     subOpDefKnown =   51,   
+     subOpInt      =   52,   
+     subOpNeg      =   53,   
+     subOpMulRes   =   54,   
+     subOpMulKnown =   55,   
+     subOpOn       =   56,   
+     subOpIntBound =   57,   
+     
+     // Basis type for this case.
+     basisN        =  101,   
+     basisNx       =  102,   
+     basisNy       =  103,   
+     basisNz       =  104,   
+     basisNxx      =  105,   
+     basisNxy      =  106,   
+     basisNyy      =  107,   
+     basisNxz      =  108,   
+     basisNyz      =  109,   
+     basisNzz      =  110,   
+     
+     // Kind of data
+     kindOtiArr    =  200,    
+     kindOtiNum    =  201,    
+     kindReal      =  202,    
+     kindScalar    =  203,    
+     kindFunc      =  204,    
+   
+     // Determine the type of FE variable, if Constant or Variable.
+     feConstant    =  301,    
+     feVariable    =  302,    
+   
+     // Element geometric types 
+     elNode        =  400,    
+     elLine        =  401,    
+     elTriangle    =  402,    
+     elQuadrangle  =  403,    
+     elTetrahedra  =  404,    
+     elHexahedra   =  405,    
+     elWedge       =  406,    
+     
+     // Element Geometric type with Lobatto integration points.
+     elLineL        =  411,    
+     elQuadrangleL  =  413,    
+     elHexahedraL   =  415,    
+   
+     // Element kind : Iso-parametric or Affine
+     elkindIso     =  501,    
+     elkindAff     =  502,    
+   
+     // Derivative types.
+     derN          =  601,   
+     derNa         =  602,   
+     derNb         =  603,   
+     derNc         =  604,   
+     derNaa        =  605,   
+     derNab        =  606,   
+     derNbb        =  607,   
+     derNac        =  608,   
+     derNbc        =  609,   
+     derNcc        =  610,   
+   
+     // Nature of Finite Element Function
+     feNatTest     =  701,   
+     feNatUndef    =  702,   
+     feNatDef      =  703,   
+     feNatDefConst =  704,   
+     feNatOperRes  =  705,   
+     feNatPostIntK =  706,   
+     feNatPostIntF =  707,   
+     feNatBoundary =  708,   
+     feUndefined   =  709    
+   };
+   
+   
+   // ----------------------------------------------------------------------------------------------------
+   // ----------------------------------------    END ENUMS      -----------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   #endif

@@ -1,0 +1,78 @@
+
+.. _file_oti_sparse_array_algebra_matops.h:
+
+File sparse/array/algebra_matops.h
+==================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/array/algebra_matops.h``)
+--------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_array_algebra_matops.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_sparse.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a1e91559ef2932b95a9565238fb1476aa`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a6e995cf6fead2f46e85f1319a23caa81`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a2da33cf3c0a275582a57c6c00eb633b2`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1af7ef5854da526d219daa9a09d4c0f755`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a7c105063a2ae6b505025a8fd33f91ccb`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a29e93f98837728ea8201ed1067d74989`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1abf0b800982ff022e6546b5bc3efa24f0`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a42c9c43010e3cd326a629bf663309a37`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a8e3095f178a3c5c1cfe411b91fdf996b`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a90ad69a9ee592144843087c7f3c3b94f`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1abfb2aff52511ddc8b207f6020bdfaf74`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1add796c453a4871bf4fdb75e7680a2796`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a8d317c802899b4ef55d62b39f993fd0f`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a319ec4dc3e69171f3fc306381f16121f`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1ad9b00fb0202d89a1d292d570e7c56214`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a4aeb5dc72613488367df41625839684c`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a9222bcf5f22f367a5ef3dde4caf77d74`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a1cbfddfcb856716dba2d4f132947b690`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1a2f71e9cd4244f7b883642d6ee172965e`
+
+- :ref:`exhale_function_sparse_2array_2algebra__matops_8h_1ad6ea79e6157b32ed9703f19e2180fbf2`
+

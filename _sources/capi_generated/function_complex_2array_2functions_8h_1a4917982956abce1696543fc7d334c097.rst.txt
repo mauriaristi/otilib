@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1a4917982956abce1696543fc7d334c097:
+
+Function carr_cosh
+==================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_cosh(carr_t *)
+   :project: OTIlib

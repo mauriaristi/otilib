@@ -1,0 +1,17 @@
+.. _exhale_struct_structfereal__t:
+
+Struct fereal_t
+===============
+
+- Defined in :ref:`file_oti_fem_gauss_scalar_real_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: fereal_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

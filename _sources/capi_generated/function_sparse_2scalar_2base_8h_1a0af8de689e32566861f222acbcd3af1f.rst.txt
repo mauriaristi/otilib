@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a0af8de689e32566861f222acbcd3af1f:
+
+Function soti_truncate_im
+=========================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_truncate_im(imdir_t, ord_t, sotinum_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1a77f37469482a4d1982a98d4a52ccdf3d:
+
+Function carr_atan
+==================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_atan(carr_t *)
+   :project: OTIlib

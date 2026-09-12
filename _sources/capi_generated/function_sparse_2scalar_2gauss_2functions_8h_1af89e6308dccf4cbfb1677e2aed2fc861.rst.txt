@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2functions_8h_1af89e6308dccf4cbfb1677e2aed2fc861:
+
+Function fesoti_sqrt
+====================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_sqrt(fesoti_t *, dhelpl_t)
+   :project: OTIlib

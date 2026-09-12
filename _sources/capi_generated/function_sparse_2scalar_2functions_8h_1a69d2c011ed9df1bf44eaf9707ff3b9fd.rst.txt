@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2functions_8h_1a69d2c011ed9df1bf44eaf9707ff3b9fd:
+
+Function soti_erf_to
+====================
+
+- Defined in :ref:`file_oti_sparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_erf_to(sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

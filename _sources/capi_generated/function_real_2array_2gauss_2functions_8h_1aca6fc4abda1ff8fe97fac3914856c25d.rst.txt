@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2functions_8h_1aca6fc4abda1ff8fe97fac3914856c25d:
+
+Function fedarr_pow_to(fedarr_t \*, double, fedarr_t \*)
+========================================================
+
+- Defined in :ref:`file_oti_real_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_pow_to(fedarr_t *, double, fedarr_t *)
+   :project: OTIlib

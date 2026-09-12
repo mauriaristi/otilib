@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2utils_8h_1a3c4f968990c431e9b16e21417e23defa:
+
+Function carr_dimCheck_RR_samesize
+==================================
+
+- Defined in :ref:`file_oti_complex_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_dimCheck_RR_samesize(carr_t *, carr_t *)
+   :project: OTIlib

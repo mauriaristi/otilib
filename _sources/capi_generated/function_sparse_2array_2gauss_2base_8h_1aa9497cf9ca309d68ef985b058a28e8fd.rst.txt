@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1aa9497cf9ca309d68ef985b058a28e8fd:
+
+Function fearrso_eye_bases
+==========================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_eye_bases(uint64_t, uint64_t, bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

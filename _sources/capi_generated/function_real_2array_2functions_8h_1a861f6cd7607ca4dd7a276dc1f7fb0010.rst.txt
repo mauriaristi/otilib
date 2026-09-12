@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2functions_8h_1a861f6cd7607ca4dd7a276dc1f7fb0010:
+
+Function darr_acos_to
+=====================
+
+- Defined in :ref:`file_oti_real_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_acos_to(darr_t *, darr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2base_8h_1a8218c1fc2d6b6d3f8ae43c18862654fe:
+
+Function oarr_createEmpty
+=========================
+
+- Defined in :ref:`file_oti_dense_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_createEmpty(uint64_t, uint64_t, bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

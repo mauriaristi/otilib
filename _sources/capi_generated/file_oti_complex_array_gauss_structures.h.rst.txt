@@ -1,0 +1,40 @@
+
+.. _file_oti_complex_array_gauss_structures.h:
+
+File complex/array/gauss/structures.h
+=====================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex/array/gauss/structures.h``)
+-----------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex_array_gauss_structures.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex.h`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structfecarr__t`
+

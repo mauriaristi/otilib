@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2derivatives_8h_1a69eda6544246fbc0df7002b4fcef32f9:
+
+Function der_c_atan
+===================
+
+- Defined in :ref:`file_oti_complex_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_c_atan(coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

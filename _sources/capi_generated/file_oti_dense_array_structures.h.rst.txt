@@ -1,0 +1,40 @@
+
+.. _file_oti_dense_array_structures.h:
+
+File dense/array/structures.h
+=============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/dense/array/structures.h``)
+---------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_dense_array_structures.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structoarr__t`
+

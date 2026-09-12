@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1a28db2e10d576a0a2eadfca3f0cbb16d7:
+
+Function fearrso_ones_bases
+===========================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_ones_bases(uint64_t, uint64_t, uint64_t, bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

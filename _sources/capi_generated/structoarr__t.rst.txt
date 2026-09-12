@@ -1,0 +1,17 @@
+.. _exhale_struct_structoarr__t:
+
+Struct oarr_t
+=============
+
+- Defined in :ref:`file_oti_dense_array_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: oarr_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

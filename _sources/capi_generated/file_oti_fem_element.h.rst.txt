@@ -1,0 +1,45 @@
+
+.. _file_oti_fem_element.h:
+
+File element.h
+==============
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/element.h``)
+----------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_element.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``element/real/base.h`` (:ref:`file_oti_fem_element_real_base.h`)
+
+- ``element/real/structures.h`` (:ref:`file_oti_fem_element_real_structures.h`)
+
+- ``element/soti/base.h`` (:ref:`file_oti_fem_element_soti_base.h`)
+
+- ``element/soti/structures.h`` (:ref:`file_oti_fem_element_soti_structures.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem.h`
+
+
+

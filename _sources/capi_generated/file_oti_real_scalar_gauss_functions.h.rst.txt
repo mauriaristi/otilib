@@ -1,0 +1,130 @@
+
+.. _file_oti_real_scalar_gauss_functions.h:
+
+File real/scalar/gauss/functions.h
+==================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/scalar/gauss/functions.h``)
+--------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_scalar_gauss_functions.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a87ea7d7a0048c72d82bbed13adece0bd`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a1ea2ffe80d213bc965e2432e35b94b4d`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a8fc9def665ec496e465d200a0ed1e5ee`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a052cd66c91758294313171afcc1fea5d`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a882471769da3a0429987d5d4a6a0a0f8`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1af94b682b975299ef3f9c973afb591fb3`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a8629beb98f151014333b72af4f214c85`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1afdf998a637acee8e97f1a85e41d5cf24`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a72690089dc87accd9be162f8d8d937d8`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1ad02ac957d1622e81149e9df1cc793cb3`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1aa964ad4e6ba798dfc58b100c303956b5`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1aae2a1dfba9f5cab20fef93ef21b66403`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a8d9616538726dadaf8c5fdc86440e707`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a32baaa3b2ab0e0742fb5cad127d9afa5`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a9e9f42bcbd574d73043ece93ffd3b3ae`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1acee71f33f98a5abea6741c1bacea11e3`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1aa40be0fda53922899adeda8a464e56f4`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a271ad9ca0a634577eb90f38d4c1847b6`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1af69d9dfd3c061af564752e64cce609bd`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a1868b8c38d9dcfb02c36e4547ac5257b`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a20e62b6ce1a8b6be5b022026383e3ae3`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1af9560128ec0a92076dae25b533e4e71e`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a4bc8d0c11eebf20f413a4d947ee0a253`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1adee6c5a924b26e1e0b49a4b875d049db`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a7901bec92f5886ea266854bfaa5b7c4b`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a710d2a8f1ac323a28771e09b1b737714`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a9842a28ab08142c044af4b8fcd6c17c8`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1ac91381d80fd6065f4e4153965be15673`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a8dc7c30e7fe7a7e359655cd09b16d940`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a98905d1311956e056565ef188584a2f1`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1ada7cc5c483a1e2c4da4d142ef99c692f`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a610020875d97e62e05342b3afcc56709`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a246a7a3beee2b41aaa1c322d78fdd3a0`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1acab51dc58d08dc7b8f81059ac915810f`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a000fe0177098303a1276e67618249a17`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a9ef85e3b5ea981a348477ca0bb2c2bd9`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1ab214d8d07f89b8973ce1619a1d6af028`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1ab6c8dbc49681ebf4fe2884e86e3963a4`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a198a54a9d8f3799e72d041f208f387b1`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1aa10ed07c1af3403c2d1c7f1dc9681bdf`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a6b7c54f70f15859cc78f44ba0938b4fb`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1ab870cd3baff29cf4caf0e774f37d09f8`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1add4b5d1d7576bde5e179c7c8291ade74`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1a58065c90d96c736fc5b6d2fe2d83b03c`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1aebf7e6eae31460c795e299603cef31f8`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2functions_8h_1ae5eb89f227bdcbd50cb759dab7d4e373`
+

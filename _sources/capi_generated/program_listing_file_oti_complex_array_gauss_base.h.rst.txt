@@ -1,0 +1,137 @@
+
+.. _program_listing_file_oti_complex_array_gauss_base.h:
+
+Program Listing for File complex/array/gauss/base.h
+===================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_complex_array_gauss_base.h>` (``oti/complex/array/gauss/base.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_COMPLEX_ARRAY_GAUSS_BASE_H
+   #define OTI_COMPLEX_ARRAY_GAUSS_BASE_H
+   
+   
+   
+   /**************************************************************************************************/
+   fedarr_t fedarr_copy(   fedarr_t* src               );
+   void     fedarr_copy_to(fedarr_t* src, fedarr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   darr_t   fedarr_get_item_k(  fedarr_t* arr, uint64_t k                         );
+   fednum_t fedarr_get_item_ij( fedarr_t* arr, uint64_t i, uint64_t j             );
+   coeff_t  fedarr_get_item_ijk(fedarr_t* arr, uint64_t i, uint64_t j, uint64_t k );
+   
+   void fedarr_get_item_ij_to(  fedarr_t* arr, uint64_t i, uint64_t j, fednum_t* res);
+   
+   void fedarr_get_item_k_to(   fedarr_t* arr, uint64_t k, darr_t* res);
+   
+   void fedarr_get_item_ijk_to( fedarr_t* arr, uint64_t i, uint64_t j, uint64_t k, coeff_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   fedarr_t fedarr_get_slice(fedarr_t* arr, 
+                             int64_t starti, int64_t stopi, int64_t stepi,
+                             int64_t startj, int64_t stopj, int64_t stepj );
+   
+   void     fedarr_get_slice_to(fedarr_t* arr, 
+                             int64_t starti, int64_t stopi, int64_t stepi,
+                             int64_t startj, int64_t stopj, int64_t stepj, 
+                             fedarr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   void fedarr_set_item_ij_r(   coeff_t  elm, uint64_t i, uint64_t j, fedarr_t* res);
+   void fedarr_set_item_ij_f(  fednum_t* elm, uint64_t i, uint64_t j, fedarr_t* res);
+   
+   void fedarr_set_item_k_r(    coeff_t  elm, uint64_t k, fedarr_t* res);
+   void fedarr_set_item_k_R(     darr_t* elm, uint64_t k, fedarr_t* res);
+   
+   void fedarr_set_item_ijk_r(   coeff_t  elm, uint64_t i, uint64_t j, uint64_t k, fedarr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/ 
+   void fedarr_set_slice_r( coeff_t val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fedarr_t* res);
+   void fedarr_set_slice_f( fednum_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fedarr_t* res);
+   void fedarr_set_slice_R( darr_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fedarr_t* res);
+   void fedarr_set_slice_F( fedarr_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fedarr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   /**************************************************************************************************/
+   void fedarr_set_all_r(   coeff_t  num, fedarr_t* arr );
+   void fedarr_set_all_f(  fednum_t* num, fedarr_t* arr );
+   
+   void fedarr_set_r(    coeff_t src, fedarr_t* res );
+   void fedarr_set_f(  fednum_t* src, fedarr_t* res );
+   
+   void fedarr_set_R(    darr_t* src, fedarr_t* res );
+   void fedarr_set_F(  fedarr_t* src, fedarr_t* res );
+   
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fedarr_t fedarr_eye( uint64_t size, uint64_t nip );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fedarr_t fedarr_zeros( uint64_t nrows, uint64_t ncols, uint64_t nIntPts );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fedarr_t fedarr_ones( uint64_t nrows, uint64_t ncols, uint64_t nip );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fedarr_t fedarr_createEmpty( uint64_t nrows, uint64_t ncols, uint64_t nIntPts );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void fedarr_free(fedarr_t* arr);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fedarr_t fedarr_init(void);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   #endif

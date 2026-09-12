@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1a607c8e0e312f5886b8f8400c2110224d:
+
+Function printArrayDBL
+======================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: printArrayDBL(double *, uint64_t)
+   :project: OTIlib

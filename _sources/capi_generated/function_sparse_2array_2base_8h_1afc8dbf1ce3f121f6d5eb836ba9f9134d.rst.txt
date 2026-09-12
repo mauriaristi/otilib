@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1afc8dbf1ce3f121f6d5eb836ba9f9134d:
+
+Function arrso_copy
+===================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_copy(arrso_t *, dhelpl_t)
+   :project: OTIlib

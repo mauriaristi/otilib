@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2base_8h_1abf9cd087625f3fa5f020607be013f5c5:
+
+Function oarr_copy
+==================
+
+- Defined in :ref:`file_oti_dense_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_copy(oarr_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1a7436302ca07c1ce272b1e19d5a170c06:
+
+Function carr_pow
+=================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_pow(carr_t *, ccoeff_t)
+   :project: OTIlib

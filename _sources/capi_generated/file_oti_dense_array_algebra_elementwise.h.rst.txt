@@ -1,0 +1,130 @@
+
+.. _file_oti_dense_array_algebra_elementwise.h:
+
+File dense/array/algebra_elementwise.h
+======================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/dense/array/algebra_elementwise.h``)
+------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_dense_array_algebra_elementwise.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a297e9118b12f346e946896cbba9e0aba`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1ace80877ae97a8ff59104845efd7bb2c5`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a4388909b075653a3ddcabb8da19bf101`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a13471787bee9c014e0204f9dc658e1d8`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1accd9516dcbb9338b48d7548b937ae1c3`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a015e36792e7a430990cd385a29547fdb`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1ad3b9f9c8db28d20646e833b8bc7f5a14`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a34bd6082ead4eb285a36756f5bdc4173`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1aee9da64b7ff49f4f61c730ccea2d83e2`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a3f9eaa2f54ba2fc8c9aa19ba637f9924`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1ab93d821c9b29fdf0c93294e737ca59dc`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a697d5bc3338f72fd1f86ee20b5cb80f8`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1ad7ddc41992198342b15f02cf8b2aca56`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1aa1c08eea1c765736a4091946dffab75c`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1ac0e02c763ea3c0a027eb0d9a5d1ae587`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1ac7b011a3188f1ace88f224fe489f24b7`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1af79e03e508d5049d3a4f8c22e6805156`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a52472b43cc35269d9ff92906f2453918`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a7b7ed779d5a7af41231ddaa238038538`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1aaf4a4829382941495fd3339ce7401bd5`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a2d83e4ada9613777540b9d3bbd044482`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1af53b2f0a5152109061197e0334102c01`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a23cb2269f105a0eb95b9289eba7ae3f0`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a6e5e2787d82c82ed03bc1c09cbbd4c00`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a63529aeb5de309e60b1ff47443297631`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1afe0f99cbc44de16dab035b00d9a6da12`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a3e743c03b0de08cfc0f2e73320800a29`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1ae8317bdbe568b91b9c25c1c88d75cc94`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a7c326dccef20547eb73f9e420e0c8fdb`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a886f0a48cccf930ae4c760992be21f96`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a5f39534a099e9a150faaaebab84f3847`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a27e119083681809092f23181e460425d`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a6a76943bf5e3295b94c0fdb0af834b43`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a7dc73dcd882a7ad12f3136c383d5c01c`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a2a4509edd0657f93c23bd49c1f662efb`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1ac3b59c00832e984ee187f1280f67bf2a`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a29279a0d72cdf9bbf20b847a060eca21`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a84974e257cf37ee3be8e3f8b269221f3`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1aefdf96c9307c1a38b826d101f2a9818a`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a23574a6f152c7361690a4769f2d53733`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a43c8750155bba2649b2970d6f008ac0a`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a3e5a573405f01330301e30556342e495`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a44e15322590e9cc9b76eb281c78fac9d`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a8a8c0557143a11007033ae9cb6903277`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1ac518b275faad6045db6ac3e41d984632`
+
+- :ref:`exhale_function_dense_2array_2algebra__elementwise_8h_1a4ced537f8af600c431cdab0cb8bc3e06`
+

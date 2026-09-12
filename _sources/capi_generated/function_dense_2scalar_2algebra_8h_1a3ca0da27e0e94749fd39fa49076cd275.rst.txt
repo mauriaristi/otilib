@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2algebra_8h_1a3ca0da27e0e94749fd39fa49076cd275:
+
+Function oti_div_oo
+===================
+
+- Defined in :ref:`file_oti_dense_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_div_oo(otinum_t *, otinum_t *, dhelpl_t)
+   :project: OTIlib

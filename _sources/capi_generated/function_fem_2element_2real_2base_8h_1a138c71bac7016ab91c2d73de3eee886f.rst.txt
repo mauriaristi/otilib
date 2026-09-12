@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2real_2base_8h_1a138c71bac7016ab91c2d73de3eee886f:
+
+Function elemd_allocate
+=======================
+
+- Defined in :ref:`file_oti_fem_element_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemd_allocate(elemd_t *, uint64_t)
+   :project: OTIlib

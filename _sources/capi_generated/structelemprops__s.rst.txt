@@ -1,0 +1,17 @@
+.. _exhale_struct_structelemprops__s:
+
+Struct elemprops_s
+==================
+
+- Defined in :ref:`file_oti_fem_element_old_real_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: elemprops_s
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

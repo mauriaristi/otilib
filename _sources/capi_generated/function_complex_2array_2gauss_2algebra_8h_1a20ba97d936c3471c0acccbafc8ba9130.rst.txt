@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2algebra_8h_1a20ba97d936c3471c0acccbafc8ba9130:
+
+Function fecarr_sub_FF_to
+=========================
+
+- Defined in :ref:`file_oti_complex_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_sub_FF_to(fecarr_t *, fecarr_t *, fecarr_t *)
+   :project: OTIlib

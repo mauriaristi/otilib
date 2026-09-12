@@ -1,0 +1,42 @@
+
+.. _file_oti_dense_array_functions.h:
+
+File dense/array/functions.h
+============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/dense/array/functions.h``)
+--------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_dense_array_functions.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_dense_2array_2functions_8h_1afca867066eda11afa6469c3d8031a535`
+
+- :ref:`exhale_function_dense_2array_2functions_8h_1a1c2f852d736cd6336b183081a26a9692`
+

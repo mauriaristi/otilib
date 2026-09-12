@@ -1,0 +1,17 @@
+.. _exhale_struct_structcoomat__ui64__t:
+
+Struct coomat_ui64_t
+====================
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: coomat_ui64_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

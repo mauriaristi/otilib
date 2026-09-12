@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2algebra__elementwise_8h_1a42c495068f6602790fb5c0e2da88d553:
+
+Function arrso_sum_oO_to
+========================
+
+- Defined in :ref:`file_oti_sparse_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_sum_oO_to(sotinum_t *, arrso_t *, arrso_t *, dhelpl_t)
+   :project: OTIlib

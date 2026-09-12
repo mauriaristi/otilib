@@ -1,0 +1,62 @@
+
+.. _file_oti_real_array_gauss_utils.h:
+
+File real/array/gauss/utils.h
+=============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/array/gauss/utils.h``)
+---------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_array_gauss_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1a0270dc7a912b58d536c8287065f30a11`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1abfed57a99d7dbd9ac57be193ccb27fea`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1aab1068e3a094e01d357cd24527975279`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1a69aeab3bbec26a7ea676072650b90e4d`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1a63fd9ae26cda2c310271fe13ca0c089a`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1a424435c375fba41a81072d859dd90502`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1ab90e1b20f87eb6927fddea1b05d01bdf`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1a4a4010dfef0575097817c5560298bf8e`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1a51ab88a17f57a0178907b37c97d6b8b7`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1a4c231278d09b0d091eb39405b1822676`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1aea26c0d1ef58e242d1db59fa909c9d2d`
+
+- :ref:`exhale_function_real_2array_2gauss_2utils_8h_1ad0a734b9de0fc5ebb96d5d8e3e20930b`
+

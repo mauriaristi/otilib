@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2base_8h_1a6533b7c41549d884ecb54bc1cf5fa875:
+
+Function carr_createEmpty
+=========================
+
+- Defined in :ref:`file_oti_complex_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_createEmpty(uint64_t, uint64_t)
+   :project: OTIlib

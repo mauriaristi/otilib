@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2algebra__elementwise_8h_1a98a0d85b55ce86446547bd9540ff3f87:
+
+Function arrso_div_oO_to
+========================
+
+- Defined in :ref:`file_oti_sparse_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_div_oO_to(sotinum_t *, arrso_t *, arrso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2algebra_8h_1a49881d5241aceb5f00160ae006e95c08:
+
+Function soti_base_trunc_sum
+============================
+
+- Defined in :ref:`file_oti_sparse_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_base_trunc_sum(ord_t, sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_enum_enums_8h_1af7c819eb7a4b1c8a229c3c02dfbcb9f0:
+
+Enum operEnum
+=============
+
+- Defined in :ref:`file_oti_fem_enums.h`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: operEnum
+   :project: OTIlib

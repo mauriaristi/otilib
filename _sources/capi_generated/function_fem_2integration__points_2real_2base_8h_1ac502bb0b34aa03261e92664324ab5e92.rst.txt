@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2integration__points_2real_2base_8h_1ac502bb0b34aa03261e92664324ab5e92:
+
+Function fem_addTetrahedraIntPts_real
+=====================================
+
+- Defined in :ref:`file_oti_fem_integration_points_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fem_addTetrahedraIntPts_real(uint8_t, uint64_t, double, double, double, double, double, fednum_t *, fednum_t *, fednum_t *, fednum_t *)
+   :project: OTIlib

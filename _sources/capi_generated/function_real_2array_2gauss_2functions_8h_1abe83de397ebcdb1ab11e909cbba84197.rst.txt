@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2functions_8h_1abe83de397ebcdb1ab11e909cbba84197:
+
+Function fedarr_logb_to(fedarr_t \*, double, fedarr_t \*)
+=========================================================
+
+- Defined in :ref:`file_oti_real_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_logb_to(fedarr_t *, double, fedarr_t *)
+   :project: OTIlib

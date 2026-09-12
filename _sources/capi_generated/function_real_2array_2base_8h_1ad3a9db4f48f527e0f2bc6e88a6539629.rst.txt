@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2base_8h_1ad3a9db4f48f527e0f2bc6e88a6539629:
+
+Function darr_zeros
+===================
+
+- Defined in :ref:`file_oti_real_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_zeros(uint64_t, uint64_t)
+   :project: OTIlib

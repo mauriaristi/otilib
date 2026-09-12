@@ -1,0 +1,14 @@
+.. _exhale_function_core_2sparse_8h_1a2b7f94c7f2fd0a71c4f2fbd1657b5081:
+
+Function dhelp_sparse_sub_dirs
+==============================
+
+- Defined in :ref:`file_oti_core_sparse.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_sparse_sub_dirs(coeff_t *, imdir_t *, ndir_t, coeff_t *, imdir_t *, ndir_t, coeff_t *, imdir_t *, ndir_t *, dhelpl_t)
+   :project: OTIlib

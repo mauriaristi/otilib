@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1affd84c8826d4231d385c8b0df06b8961:
+
+Function carr_exp
+=================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_exp(carr_t *)
+   :project: OTIlib

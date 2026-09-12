@@ -1,0 +1,14 @@
+.. _exhale_function_real_2scalar_2gauss_2algebra_8h_1a01e02510944ef1563c91ee126518c140:
+
+Function fednum_sum_rf
+======================
+
+- Defined in :ref:`file_oti_real_scalar_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fednum_sum_rf(coeff_t, fednum_t *)
+   :project: OTIlib

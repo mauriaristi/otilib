@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1aa747f2201fceea95da7330b062999596:
+
+Function carr_sin
+=================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_sin(carr_t *)
+   :project: OTIlib

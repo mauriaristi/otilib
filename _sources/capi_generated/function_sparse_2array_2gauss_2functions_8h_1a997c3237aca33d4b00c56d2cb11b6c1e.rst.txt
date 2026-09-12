@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2functions_8h_1a997c3237aca33d4b00c56d2cb11b6c1e:
+
+Function fearrso_erf
+====================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_erf(fearrso_t *, dhelpl_t)
+   :project: OTIlib

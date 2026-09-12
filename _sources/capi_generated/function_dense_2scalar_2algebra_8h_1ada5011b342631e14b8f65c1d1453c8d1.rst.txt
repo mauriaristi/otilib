@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2algebra_8h_1ada5011b342631e14b8f65c1d1453c8d1:
+
+Function oti_mul_ro_to
+======================
+
+- Defined in :ref:`file_oti_dense_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_mul_ro_to(coeff_t, otinum_t *, otinum_t *, dhelpl_t)
+   :project: OTIlib

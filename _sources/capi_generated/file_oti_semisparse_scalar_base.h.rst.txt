@@ -1,0 +1,138 @@
+
+.. _file_oti_semisparse_scalar_base.h:
+
+File semisparse/scalar/base.h
+=============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/scalar/base.h``)
+---------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_scalar_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_semisparse.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a61a2eae7d394fcce4e4e4595c2f2a866`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a20a9aeeafae06aee609020ec6887fcb9`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a509bb48f4da593ad34534f133ceb0893`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a5a3c72295ee646e6eed433674dad8731`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1aa6b5ac27da75c7019f28d1e111b0fbdb`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a5348f22c1f24ac8b4469f3047239b5e8`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a9b816c88bf34bf990cd3973644d5571d`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a5f0bea8013222c08e75b97016e4f63df`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a048bc8db9ab9ec6c1eac93a8939ed840`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1acb51286dfb706dc0484d0a73870c24de`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a3f63b05487bff3b582d520a7f4b5bf17`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1afdf4302d7174231d8c3c2a24a47dbab4`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a1569aa264e4b168c22473b758205c30c`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a5ca8c92c05b4c74016400862d4fa15b6`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a01c9cae1239ee64c2ef40817dbcccf04`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a5539d831a003a6e88297ae3dbacadd54`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a8ccdc7c290f230d147786b2a1a2da829`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a82d4efb71b98fc4c7810d6636072fb79`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1af6d1f22436cc47bc648533d83a4f3d35`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a80a94a122ef3d42015d8d6a34aa5ad2e`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1afdfab0f27186a2af44ba8cefe5e39cd0`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a04a8592efb53cb67abc55f706000e7cc`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1ae42a3ad378551d8ba10a16db70d89d7e`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a40d05ea9eb8b1b07a44fc16b8c68ac5b`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1aa79eca9d492946cf276aecc238345f00`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1ada9f26d472aefd309c51d7af441248ff`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a0ebfa8c0ed7fd91bcc6a9d1790a3f8bb`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1aac973209c7724eee6c2562662faead5e`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a4d7a67d4e6b1e8ff036c366236f7eaa7`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1af5c8307d00e2026c10502da52772e9a2`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a209c2295919a7001383db965d88d05c2`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1afc67c2915cb375bc71d66000050b59c3`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1ad114a92bd1dec8beceabc24047d80839`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1ab88403992abc7f4b28db87c656ce5d32`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a9ce03e203fea7bc0eaa7823fa35320f1`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a35b2e03133570daf9354db3bd4aad1a4`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a52c76b2b945ea01549bc939405c802c7`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1ab7641ece0fba50fbd98daaf6c299c967`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a356a82838077570fc6a998345125cf34`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a6af66146b4752f756fcf1b300faaa6df`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a940deb4707af2edf9c53f401c182e189`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a9b0e657fb1dedc800c7488f1928e6633`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a46ec229eb0c9f2b7d8554de8c46117c0`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a73fb9754eec6d0ce56bea6493efa9a85`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a9e6b702bfa8482ebc4dca7ba89243ebf`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a7117d53ae6300be123961965d7172160`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a32317877f1a08ceb9680a7f2160a141c`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1ad6523c4b1bdfd77a57ea856a6a31f344`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a08ca7cc65fdd39543e6a93dd41dbd801`
+
+- :ref:`exhale_function_semisparse_2scalar_2base_8h_1a47bdd0af9018b011110318585e9751bb`
+

@@ -1,0 +1,112 @@
+
+.. _file_oti_semisparse_scalar_algebra.h:
+
+File semisparse/scalar/algebra.h
+================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/scalar/algebra.h``)
+------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_scalar_algebra.h.rst
+
+
+
+
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a2a312fa70d923f0b429e27db2f1fb9bd`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a02f2c3b64ab09717916fc87602074a1f`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a9ecfc379f68cb5f0e6f5c7b586b3a7ad`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a87ee453c67961896a2ce583c7e2e8e79`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1acc6dc9403d9aa2a7fe5230576b6ecfc0`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1acc7ddec396317c3b69dc9de93ee81a3d`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a9683bddc23083c540ea1377a1fb8fae1`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a6a5ebbb4ee6d8ac1ac2af3aeb20e28c2`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1aa097758dd3b58e47733acb09622b786b`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1aa3ae01aa63ef25543044409db16d16e7`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1aff75e4e248365e83f5c9eb1cfbc94624`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a4f6035f4c7f2b91ef2eefa52c72e7734`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a924a1a15d8112bf96b8f96fc5cd0269d`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a1acc2d9cf11484db74618f9ab57c9319`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a20eeca4208f8be73653550543f4698a5`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a9f49694e2db398da57763a5c55a26d61`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a198da27df5ac55480a3939be28627163`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1ad7d355bdc67e3d6da51ba3a465633be2`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a62c7271545e338da2a2e21eb3d4deb3e`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1aa5c78d574aeba57309a00f5d0f0dba94`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a3d3a13a880511d469d000584f4a328bd`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a7d0f8acd4fce5073d6e458753085cc8b`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1aef3018dac11d4e79efd2a86157ca1234`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a5ef58c5726a61d68be10561023803b90`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1af570f39e744c6fa4db77be0af9b6f89e`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1ac1501e658559973a1f98d7e08e20aced`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a086cb91bbfdfc6251c259c800d615c92`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1ab92e281b73aafe9baafafab585b5a462`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a11e87db556193298cf8dee2b9f0b5a91`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a804706c7225032c44c8bba37b4a344b1`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1aa54317dc142398d8f08b9f984b25deae`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1aa769e1d2500bc9dc063b0cdccdcea447`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a0add64aeb13690710a30ab4211c1baf8`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a65478216a668e769f0a0ac0190ee7a9a`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1af33576492e286888ae002c987effa898`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a70eb57932c67771886140442390ece89`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1afb7014e566117d1df9375a2ef6e38b79`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1a487d19096dc9f9f89eb3403700793b60`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1ae12d1f4cbf9854d503438c3a8eb34afe`
+
+- :ref:`exhale_function_semisparse_2scalar_2algebra_8h_1ab9a269ca7fa2397c970fbc0bdcaa7a61`
+

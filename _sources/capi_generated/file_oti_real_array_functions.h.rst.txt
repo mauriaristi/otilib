@@ -1,0 +1,118 @@
+
+.. _file_oti_real_array_functions.h:
+
+File real/array/functions.h
+===========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/array/functions.h``)
+-------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_array_functions.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a6dab15398fa05f2ecf3e56a9805d664c`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a861f6cd7607ca4dd7a276dc1f7fb0010`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1acaf02bbce9cc62ba6ef36c05e9eab31e`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a2920f0b977342acd9e1c93d89c9c401a`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1acbba3daf2c251370a1b3f0989d598865`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a16f85203f47142c594daa980aaeb3316`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1af9801ff91cea56cf90cd56edfea72d66`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a6128bbf909c4cc4f106a0905b2f86ba1`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a8c9cef2d5b967ae6347e03e2306d7fe1`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a854d3d6e6d3b3dc9e3c4025328376613`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a259a8fe4c247bc584c2840bde7b67780`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a055c05f45abadb0ffa093d7553f699b7`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1ad379aba4934dab3038d8092c7a3781fb`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a81c6b2f8a1a1415c2e3dddfca506c66f`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1ab581343b562527f81c757dc415d09330`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1adc615806d517a19533d3386a1522dd39`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a36d920243f7d1f22b4a7955a9d8b46fc`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a7e20ba19d68a531f8a5bd2a9dcc9c11f`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1ab3771ac919271f9fb0c06725b80c0d7f`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a21769e17a4bbd619d4eb983caa00985f`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a7a434701053255f64e1b2f14c4e55947`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a0cf72fe31afc7c9b81f90c8184babcbc`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1adbd5755adefbe19a31f115d2264c8586`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a61ff8f75d685d9aefbdb793fbe595b34`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a6e99d4aeb111e1af820e885b1f0f6fa5`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1aecb35874a2b3b9943e3ddb2b8d2fe162`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a3673726357c850a702a71487fb91172f`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a270bfbad8a0ad47a231cbdd2fdf69db7`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a70deedf41a7880f1857c6ecdcb2c2683`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a4da515223e2cf57419c163e4dfbf06de`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1ac0904df04fa9491248958d8cba8acef7`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a581f984caa62cb526b299b9733390b0d`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a8b209c769f7ab6a5eca3af49c9f0bdcb`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a6762d4782390716b20d53c82d821ba51`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a26990e3bf2163a830f05ac46d32dafc5`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a01a1cf6b0a3994a94abac3b832702d7b`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1aaefb69a1c01d9af2c69964abbb721212`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a0e741c9ae4affa717912aa7d84761464`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a4d1dcc3ab22560afc76761e4cd86e22e`
+
+- :ref:`exhale_function_real_2array_2functions_8h_1a8371f77806b61b941293154ede8a499b`
+

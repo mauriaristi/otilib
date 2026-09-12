@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2gauss_2functions_8h_1a81f0248e73c0381f2e52c735a20a1a6f:
+
+Function fessoti_asin_to
+========================
+
+- Defined in :ref:`file_oti_semisparse_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fessoti_asin_to(fessoti_t *, fessoti_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_core_2sparse_8h_1a9190a5e40054f5880509c1f3c0ba0f43:
+
+Function dhelp_search_prev_dir
+==============================
+
+- Defined in :ref:`file_oti_core_sparse.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_search_prev_dir(coeff_t *, imdir_t *, ndir_t, ord_t, coeff_t *, imdir_t *, ndir_t, ord_t, coeff_t *, imdir_t *, ndir_t *, imdir_t, imdir_t, ndir_t, ndir_t, imdir2d_t)
+   :project: OTIlib

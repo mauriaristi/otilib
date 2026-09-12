@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a90182ab9148c383283c7b88799ca0be4:
+
+Function soti_requiresrealloc
+=============================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_requiresrealloc(sotinum_t *, sotinum_t *)
+   :project: OTIlib

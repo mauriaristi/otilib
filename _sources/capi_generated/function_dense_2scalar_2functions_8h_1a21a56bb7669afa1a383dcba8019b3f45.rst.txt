@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2functions_8h_1a21a56bb7669afa1a383dcba8019b3f45:
+
+Function oti_acos_to
+====================
+
+- Defined in :ref:`file_oti_dense_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_acos_to(otinum_t *, otinum_t *, dhelpl_t)
+   :project: OTIlib

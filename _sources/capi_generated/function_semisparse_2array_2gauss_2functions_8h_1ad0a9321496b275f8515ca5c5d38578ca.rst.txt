@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2gauss_2functions_8h_1ad0a9321496b275f8515ca5c5d38578ca:
+
+Function fearrsso_logb
+======================
+
+- Defined in :ref:`file_oti_semisparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrsso_logb(fearrsso_t *, double, dhelpl_t)
+   :project: OTIlib

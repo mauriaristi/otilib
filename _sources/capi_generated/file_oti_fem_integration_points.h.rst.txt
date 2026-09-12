@@ -1,0 +1,41 @@
+
+.. _file_oti_fem_integration_points.h:
+
+File integration_points.h
+=========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/integration_points.h``)
+---------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_integration_points.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``integration_points/real/base.h`` (:ref:`file_oti_fem_integration_points_real_base.h`)
+
+- ``integration_points/soti/base.h`` (:ref:`file_oti_fem_integration_points_soti_base.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem.h`
+
+
+

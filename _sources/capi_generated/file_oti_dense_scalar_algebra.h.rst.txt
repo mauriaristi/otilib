@@ -1,0 +1,82 @@
+
+.. _file_oti_dense_scalar_algebra.h:
+
+File dense/scalar/algebra.h
+===========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/dense/scalar/algebra.h``)
+-------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_dense_scalar_algebra.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a3ca0da27e0e94749fd39fa49076cd275`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1ad5b7a4f0faa1df5e3eefcfeab6b1397d`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a6b8b950c495eb96e4fb1585db94ef3fd`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1acf89c870705e27876522e6c8e5747f3a`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1afff6e531cde136ccfccc5819b72b12d5`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a34c8436f964367239fcdd87e76829c13`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1aa11d464940c7b303047e992994057259`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a899f944f29dd23243373df74b73a3562`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a0173d88cbf4ac8a686e5ae45acecbb4e`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1ada5011b342631e14b8f65c1d1453c8d1`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1ae69f0baa10400487125a658b6b31265f`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1aead9bb098336b7863e3ca9c9e7b6e7eb`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a9e2efed5be10854d12db97b87d37c14b`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1aee89094004d0d8574afee546ee1f3de1`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a8142ae6d51bdcb5bc231f86b29f9a706`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a1790eda6ff1d8a39eef99f982021b75e`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a8353f8a71e97772944694d55dfb3178d`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a41c749d6a37f45fce27c0f54cfad14ba`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a0d36d589704a452c7f8ef657a896385b`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a9f6f61e57c0670bcc03cc938d5dab248`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a1ded8d1ebba8a679f955db68e6b9f4ea`
+
+- :ref:`exhale_function_dense_2scalar_2algebra_8h_1a6ba012bf8a8863e51d950d07aa99accd`
+

@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1aede1cddc8f932b3ca1ac3dfdc35d6c51:
+
+Function printArrayUI64
+=======================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: printArrayUI64(uint64_t *, uint64_t)
+   :project: OTIlib

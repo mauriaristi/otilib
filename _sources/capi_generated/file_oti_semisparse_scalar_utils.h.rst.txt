@@ -1,0 +1,40 @@
+
+.. _file_oti_semisparse_scalar_utils.h:
+
+File semisparse/scalar/utils.h
+==============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/scalar/utils.h``)
+----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_scalar_utils.h.rst
+
+
+
+
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_semisparse_2scalar_2utils_8h_1aa60052ec5ff122926c26add8d9d6ebf8`
+
+- :ref:`exhale_function_semisparse_2scalar_2utils_8h_1ade57af3de6e8c5751155418b6083624c`
+
+- :ref:`exhale_function_semisparse_2scalar_2utils_8h_1a187674dc5eb95fb2031b79a45991c857`
+
+- :ref:`exhale_function_semisparse_2scalar_2utils_8h_1a18ae7f27cb20dd07ec87b98a282579c4`
+

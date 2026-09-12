@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a7e80fbd046e722048d68b7e5fea05938:
+
+Function soti_truncate_order_to
+===============================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_truncate_order_to(ord_t, sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

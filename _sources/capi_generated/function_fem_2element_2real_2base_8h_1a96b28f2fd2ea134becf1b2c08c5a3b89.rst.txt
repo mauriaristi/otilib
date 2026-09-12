@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2real_2base_8h_1a96b28f2fd2ea134becf1b2c08c5a3b89:
+
+Function elemd_free
+===================
+
+- Defined in :ref:`file_oti_fem_element_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemd_free(elemd_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2base_8h_1a448c584fc6c2f9c8eb8649b8ccd810ec:
+
+Function fesoti_set_item_k_o
+============================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_set_item_k_o(sotinum_t *, uint64_t, fesoti_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2base_8h_1a99ea8a76357c34c434204a18a99b75df:
+
+Function fedarr_set_item_ij_r(coeff_t, uint64_t, uint64_t, fedarr_t \*)
+=======================================================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_set_item_ij_r(coeff_t, uint64_t, uint64_t, fedarr_t *)
+   :project: OTIlib

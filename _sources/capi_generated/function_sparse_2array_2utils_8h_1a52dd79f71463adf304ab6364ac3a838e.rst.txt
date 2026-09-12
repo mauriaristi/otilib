@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2utils_8h_1a52dd79f71463adf304ab6364ac3a838e:
+
+Function arrso_dimCheck_OO_matmul
+=================================
+
+- Defined in :ref:`file_oti_sparse_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_dimCheck_OO_matmul(arrso_t *, arrso_t *, arrso_t *)
+   :project: OTIlib

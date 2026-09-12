@@ -1,0 +1,14 @@
+.. _exhale_function_omp__dummy_8h_1ae624ad8ab33dd6b6cb783327b3052539:
+
+Function omp_set_schedule
+=========================
+
+- Defined in :ref:`file_oti_omp_dummy.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: omp_set_schedule(omp_sched_t, int)
+   :project: OTIlib

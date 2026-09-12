@@ -1,0 +1,62 @@
+
+.. _file_oti_real_scalar_gauss_base.h:
+
+File real/scalar/gauss/base.h
+=============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/scalar/gauss/base.h``)
+---------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_scalar_gauss_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1a3ec0079cf6974c933d4500aa036e2acd`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1a0dcfecf077edb5ecd716e8f060b069f5`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1a0decbee0a4cc679922035771a4c47991`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1affdfd4ad8fa2e7a3807f0e764bc8e00c`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1a43ac314b6dd58fb1969f30d5bd8550b9`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1ada3bb7245b54e753df4fa89e638481d3`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1affcfc3932e67ce61ef485d180faaacf3`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1acf14129632bebd086200b341eacc9fcd`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1a0732fe91a121ce44768c9959b9ae320a`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1ae486ca843818581d7e696bb13b15e6b4`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1a9d316cbdfa7fb0857ed9d3948ec53a44`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2base_8h_1a0464dc9421f0957e86fdbd1970a479dd`
+

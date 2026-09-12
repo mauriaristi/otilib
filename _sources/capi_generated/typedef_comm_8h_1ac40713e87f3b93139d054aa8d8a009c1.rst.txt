@@ -1,0 +1,14 @@
+.. _exhale_typedef_comm_8h_1ac40713e87f3b93139d054aa8d8a009c1:
+
+Typedef bases_t
+===============
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: bases_t
+   :project: OTIlib

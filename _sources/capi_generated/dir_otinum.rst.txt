@@ -1,0 +1,11 @@
+.. _dir_otinum:
+
+
+Directory otinum
+================
+
+
+*Directory path:* ``otinum``
+
+
+

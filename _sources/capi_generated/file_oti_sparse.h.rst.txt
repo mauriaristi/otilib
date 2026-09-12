@@ -1,0 +1,74 @@
+
+.. _file_oti_sparse.h:
+
+File sparse.h
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse.h``)
+-----------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``oti/core.h`` (:ref:`file_oti_core.h`)
+
+- ``oti/real.h`` (:ref:`file_oti_real.h`)
+
+- ``sparse/array/algebra_elementwise.h`` (:ref:`file_oti_semisparse_array_algebra_elementwise.h`)
+
+- ``sparse/array/algebra_matops.h`` (:ref:`file_oti_semisparse_array_algebra_matops.h`)
+
+- ``sparse/array/base.h`` (:ref:`file_oti_semisparse_array_base.h`)
+
+- ``sparse/array/functions.h`` (:ref:`file_oti_semisparse_array_functions.h`)
+
+- ``sparse/array/gauss.h`` (:ref:`file_oti_semisparse_array_gauss.h`)
+
+- ``sparse/array/structures.h`` (:ref:`file_oti_semisparse_array_structures.h`)
+
+- ``sparse/array/utils.h`` (:ref:`file_oti_semisparse_array_utils.h`)
+
+- ``sparse/scalar/algebra.h`` (:ref:`file_oti_semisparse_scalar_algebra.h`)
+
+- ``sparse/scalar/base.h`` (:ref:`file_oti_semisparse_scalar_base.h`)
+
+- ``sparse/scalar/functions.h`` (:ref:`file_oti_semisparse_scalar_functions.h`)
+
+- ``sparse/scalar/gauss.h`` (:ref:`file_oti_semisparse_scalar_gauss.h`)
+
+- ``sparse/scalar/structures.h`` (:ref:`file_oti_semisparse_scalar_structures.h`)
+
+- ``sparse/scalar/utils.h`` (:ref:`file_oti_semisparse_scalar_utils.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem.h`
+
+- :ref:`file_oti_oti.h`
+
+
+

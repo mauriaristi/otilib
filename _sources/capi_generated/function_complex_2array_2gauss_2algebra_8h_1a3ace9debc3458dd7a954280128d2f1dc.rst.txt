@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2algebra_8h_1a3ace9debc3458dd7a954280128d2f1dc:
+
+Function fecarr_pnorm
+=====================
+
+- Defined in :ref:`file_oti_complex_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_pnorm(fecarr_t *, ccoeff_t)
+   :project: OTIlib

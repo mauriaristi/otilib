@@ -1,0 +1,128 @@
+
+.. _file_oti_sparse_scalar_functions.h:
+
+File sparse/scalar/functions.h
+==============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/scalar/functions.h``)
+----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_scalar_functions.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_sparse.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1aa1dab5cbd39a63dca239c31c21774bf5`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1aefd4f1f224ba976a4e96ed97680e9f98`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a0059d9d8bcee5ca1486efc43d4532283`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a0aa0e71d28d140861028d243f9d7242d`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1af2c823a6fa23df5e85903cdb6241675b`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a9e6eeb8c3d4968ad4e34465d0c4b9f3a`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ae97ad992420c683aa66cc5ddbcc774f0`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1af69b93f91bd24faf81abaa6fe7d63dcd`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a0edca399676bd8fb453a9e659a9adbb1`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a522ae043af298bdc0a85980e2a403548`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ad90cc86206f89a21ff0d62fc2cd5ce94`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a9e119223b0218fe033b9450a731d20e0`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ac716ba3b95cd77851de8566b3ddffa1d`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ad9837a437c983dcb7340c12d22425679`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ac80190bd6cb75d3164a1b766c16f5379`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ac176cfe756bf090d12f558c79bbb8cda`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1aa6429de3522affdb7106935d897a1669`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a200d99d7784a46ce248e2deb983e6b30`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1abb7fd87e30ba7dece253a518481f854b`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a697d362975abd1c81528e0625e519b08`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a69d2c011ed9df1bf44eaf9707ff3b9fd`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a5edaecfd44c31ec91f73807d6addb0f1`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ae1569eaab4b3b22799b72e4e9641610e`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a0a83e806e1c7b0193b1698c1b0c3ec64`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a279e1ee8359bd248f24bf69f0cd95fe6`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a24652a27b6a07c3d76a4f3bca5168b04`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a68fe95e7f791523a0ce971a59a98f5ac`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a58fc1467597220e9ba43c78166784cc6`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a25a74f71c642e3d030d60ba781dabdfc`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a77a023e8f4e5e7fedc8738830763a5de`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a252f42347f5ae995b54dbd723ee546de`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a4d52444eda638899109e5d6d545ecb56`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1af5aafdea3b6e01580fce20c31e081153`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a0bd007d9b8546db50ddba04e83c0074c`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1aab8e5cad7b8d2818508f986b50a88b3b`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a95b1ab3a18092c28abd2e5bb1b35ea91`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a42f5697877bd66ba63819d34bedf9879`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1aea77fcee6d7e5e0fcc440495037ab3fd`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ac2cb1699315ec5f100399ce7ad208e65`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a7dba8f3f7f4e5a44f57d8a4cd80d5938`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a1e425e1912954f19e12fd1b009fb6d90`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1abe8997359e26c6b91222e895653f4f08`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ae27a92200e4c089e2a8bbf3331229525`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1a02ca6a87050f926ec9fda639f04f60ea`
+
+- :ref:`exhale_function_sparse_2scalar_2functions_8h_1ad25499fe1bd713e2a573095e314db196`
+

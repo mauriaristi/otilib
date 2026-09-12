@@ -1,0 +1,54 @@
+
+.. _program_listing_file_oti_sparse_scalar_structures.h:
+
+Program Listing for File sparse/scalar/structures.h
+===================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_sparse_scalar_structures.h>` (``oti/sparse/scalar/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SPARSE_SCALAR_STRUCTURES_H
+   #define OTI_SPARSE_SCALAR_STRUCTURES_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   // typedef struct {
+   //     coeff_t          re; ///< Real coefficient.
+   //     coeff_t**      p_im; ///< Array with all imaginary coefficients per order.
+   // } soticoef_t;            ///< Sparse OTI number type
+   
+   typedef struct {
+       coeff_t          re; 
+       coeff_t**      p_im; 
+       imdir_t**     p_idx; 
+       ndir_t*       p_nnz; 
+       ndir_t*      p_size; 
+       ord_t     act_order; 
+       ord_t     trc_order; 
+       flag_t         flag; 
+   } sotinum_t;             
+   
+   
+   typedef struct {
+       coeff_t          re; 
+       coeff_t**      p_im; 
+       imdir_t**     p_idx; 
+       ndir_t*       p_nnz; 
+   } somin_t;               
+   
+   typedef struct {
+       sotinum_t*   p_data; 
+       ndir_t        nTmps; 
+   } sotmpl_t;               
+   
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

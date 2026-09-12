@@ -1,0 +1,41 @@
+
+.. _file_oti_semisparse_scalar_gauss.h:
+
+File semisparse/scalar/gauss.h
+==============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/scalar/gauss.h``)
+----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_scalar_gauss.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``gauss/algebra.h`` (:ref:`file_oti_complex_array_gauss_algebra.h`)
+
+- ``gauss/base.h`` (:ref:`file_oti_complex_array_gauss_base.h`)
+
+- ``gauss/functions.h`` (:ref:`file_oti_complex_array_gauss_functions.h`)
+
+- ``gauss/structures.h`` (:ref:`file_oti_complex_array_gauss_structures.h`)
+
+- ``gauss/utils.h`` (:ref:`file_oti_complex_array_gauss_utils.h`)
+
+
+
+
+

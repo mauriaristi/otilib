@@ -1,0 +1,14 @@
+.. _exhale_function_core_2sparse_8h_1ac956fbb7b8f447b6de5ba8d483ae9868:
+
+Function dhelp_sparse_copy
+==========================
+
+- Defined in :ref:`file_oti_core_sparse.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_sparse_copy(coeff_t *, imdir_t *, ndir_t, coeff_t *, imdir_t *, ndir_t *, dhelpl_t)
+   :project: OTIlib

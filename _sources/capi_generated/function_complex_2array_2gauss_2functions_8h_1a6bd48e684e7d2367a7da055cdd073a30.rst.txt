@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2functions_8h_1a6bd48e684e7d2367a7da055cdd073a30:
+
+Function fedarr_cosh(fedarr_t \*)
+=================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_cosh(fedarr_t *)
+   :project: OTIlib

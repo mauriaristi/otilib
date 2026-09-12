@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2functions_8h_1a0edca399676bd8fb453a9e659a9adbb1:
+
+Function soti_atan
+==================
+
+- Defined in :ref:`file_oti_sparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_atan(sotinum_t *, dhelpl_t)
+   :project: OTIlib

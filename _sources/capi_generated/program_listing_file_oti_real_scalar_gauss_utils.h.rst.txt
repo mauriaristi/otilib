@@ -1,0 +1,22 @@
+
+.. _program_listing_file_oti_real_scalar_gauss_utils.h:
+
+Program Listing for File real/scalar/gauss/utils.h
+==================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_real_scalar_gauss_utils.h>` (``oti/real/scalar/gauss/utils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_REAL_SCALAR_GAUSS_UTILS_H
+   #define OTI_REAL_SCALAR_GAUSS_UTILS_H
+   
+   /**************************************************************************************************/
+   void fednum_dimCheck(fednum_t* num1,fednum_t* num2);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   #endif

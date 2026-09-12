@@ -1,0 +1,45 @@
+
+.. _file_oti_fem_gauss_scalar_feotinum.h:
+
+File feotinum.h
+===============
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/gauss/scalar/feotinum.h``)
+------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_gauss_scalar_feotinum.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``otinum/algebra.h`` (:ref:`file_oti_fem_gauss_scalar_otinum_algebra.h`)
+
+- ``otinum/base.h`` (:ref:`file_oti_fem_gauss_scalar_otinum_base.h`)
+
+- ``otinum/structures.h`` (:ref:`file_oti_fem_gauss_scalar_otinum_structures.h`)
+
+- ``otinum/utils.h`` (:ref:`file_oti_fem_gauss_scalar_otinum_utils.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_gauss_scalar.h`
+
+
+

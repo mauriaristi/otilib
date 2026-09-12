@@ -1,0 +1,41 @@
+
+.. _file_oti_fem_gauss_scalar.h:
+
+File scalar.h
+=============
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/gauss/scalar.h``)
+---------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_gauss_scalar.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``scalar/feotinum.h`` (:ref:`file_oti_fem_gauss_scalar_feotinum.h`)
+
+- ``scalar/fereal.h`` (:ref:`file_oti_fem_gauss_scalar_fereal.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_gauss.h`
+
+
+

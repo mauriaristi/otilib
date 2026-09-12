@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1a36a465b5a4f25c6d4b3ed6a9cbc3e4f1:
+
+Function arrso_distribute_memory
+================================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_distribute_memory(void *, uint64_t, uint64_t, ndir_t *, ord_t, flag_t, arrso_t *)
+   :project: OTIlib

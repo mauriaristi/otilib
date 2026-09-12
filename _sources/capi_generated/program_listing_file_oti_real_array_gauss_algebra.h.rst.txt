@@ -1,0 +1,190 @@
+
+.. _program_listing_file_oti_real_array_gauss_algebra.h:
+
+Program Listing for File real/array/gauss/algebra.h
+===================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_real_array_gauss_algebra.h>` (``oti/real/array/gauss/algebra.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_REAL_ARRAY_GAUSS_ALGEBRA_H
+   #define OTI_REAL_ARRAY_GAUSS_ALGEBRA_H
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   fedarr_t  fedarr_neg(    fedarr_t * arr                );
+   void      fedarr_neg_to( fedarr_t * arr, fedarr_t * res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   /**************************************************************************************************/
+   fedarr_t  fedarr_sum_FF(   fedarr_t * lhs, fedarr_t * rhs                );
+   void      fedarr_sum_FF_to(fedarr_t * lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_sum_fF(    fednum_t* lhs, fedarr_t * rhs                );
+   void      fedarr_sum_fF_to( fednum_t* lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_sum_RF(      darr_t* lhs, fedarr_t * rhs                );
+   void      fedarr_sum_RF_to(   darr_t* lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_sum_rF(     coeff_t  lhs, fedarr_t * rhs                );
+   void      fedarr_sum_rF_to(  coeff_t  lhs, fedarr_t * rhs, fedarr_t * res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   fedarr_t  fedarr_sub_FF(    fedarr_t * lhs, fedarr_t * rhs                );
+   void      fedarr_sub_FF_to( fedarr_t * lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_sub_fF(    fednum_t* lhs, fedarr_t * rhs                 );
+   void      fedarr_sub_fF_to( fednum_t* lhs, fedarr_t * rhs, fedarr_t * res );
+   
+   fedarr_t  fedarr_sub_Ff(    fedarr_t * lhs, fednum_t* rhs                 );
+   void      fedarr_sub_Ff_to( fedarr_t * lhs, fednum_t* rhs, fedarr_t * res );
+   
+   fedarr_t  fedarr_sub_RF(       darr_t* lhs, fedarr_t * rhs                );
+   void      fedarr_sub_RF_to(    darr_t* lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_sub_FR(    fedarr_t * lhs,    darr_t* rhs                );
+   void      fedarr_sub_FR_to( fedarr_t * lhs,    darr_t* rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_sub_rF(      coeff_t  lhs, fedarr_t * rhs                );
+   void      fedarr_sub_rF_to(    coeff_t lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_sub_Fr(    fedarr_t * lhs,   coeff_t  rhs                );
+   void      fedarr_sub_Fr_to( fedarr_t * lhs,   coeff_t  rhs, fedarr_t * res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/
+   fedarr_t  fedarr_mul_FF(   fedarr_t * lhs, fedarr_t * rhs                );
+   void      fedarr_mul_FF_to(fedarr_t * lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_mul_fF(    fednum_t* lhs, fedarr_t * rhs                );
+   void      fedarr_mul_fF_to( fednum_t* lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_mul_RF(      darr_t* lhs, fedarr_t * rhs                );
+   void      fedarr_mul_RF_to(   darr_t* lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_mul_rF(     coeff_t  lhs, fedarr_t * rhs                );
+   void      fedarr_mul_rF_to(  coeff_t  lhs, fedarr_t * rhs, fedarr_t * res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   /**************************************************************************************************/
+   fedarr_t  fedarr_div_FF(    fedarr_t * lhs, fedarr_t * rhs                );
+   void      fedarr_div_FF_to( fedarr_t * lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_div_fF(     fednum_t* lhs, fedarr_t * rhs                );
+   void      fedarr_div_fF_to(  fednum_t* lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_div_Ff(    fedarr_t* lhs,  fednum_t* rhs                );
+   void      fedarr_div_Ff_to( fedarr_t* lhs,  fednum_t* rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_div_RF(       darr_t* lhs, fedarr_t * rhs                );
+   void      fedarr_div_RF_to(    darr_t* lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_div_FR(    fedarr_t* lhs,    darr_t* rhs                );
+   void      fedarr_div_FR_to( fedarr_t* lhs,    darr_t* rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_div_rF(      coeff_t  lhs, fedarr_t * rhs                );
+   void      fedarr_div_rF_to(    coeff_t lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_div_Fr(    fedarr_t* lhs,   coeff_t  rhs                );
+   void      fedarr_div_Fr_to( fedarr_t* lhs,   coeff_t  rhs, fedarr_t * res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   darr_t fedarr_integrate(    fedarr_t* arr, fednum_t* w              );
+   void    fedarr_integrate_to( fedarr_t* arr, fednum_t* w, darr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   // VECTOR ALGEBRA
+   
+   /**************************************************************************************************/
+   fednum_t fedarr_dotproduct_FF(    fedarr_t* lhs, fedarr_t * rhs               );
+   void     fedarr_dotproduct_FF_to( fedarr_t* lhs, fedarr_t * rhs, fednum_t* res);
+   
+   fednum_t fedarr_dotproduct_RF(       darr_t* lhs, fedarr_t * rhs               );
+   void     fedarr_dotproduct_RF_to(    darr_t* lhs, fedarr_t * rhs, fednum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   // MATRIX ALGEBRA.
+   
+   /**************************************************************************************************/
+   fedarr_t  fedarr_matmul_FF(    fedarr_t* lhs, fedarr_t * rhs                );
+   void      fedarr_matmul_FF_to( fedarr_t* lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_matmul_RF(    darr_t*    lhs, fedarr_t * rhs                );
+   void      fedarr_matmul_RF_to( darr_t*    lhs, fedarr_t * rhs, fedarr_t * res);
+   
+   fedarr_t  fedarr_matmul_FR(    fedarr_t* lhs, darr_t*    rhs                );
+   void      fedarr_matmul_FR_to( fedarr_t* lhs, darr_t*    rhs, fedarr_t * res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fednum_t fedarr_det(   fedarr_t* arr               );
+   void     fedarr_det_to(fedarr_t* arr, fednum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fednum_t fedarr_norm(     fedarr_t* arr               );
+   void     fedarr_norm_to(  fedarr_t* arr, fednum_t* res);
+   
+   fednum_t fedarr_pnorm(    fedarr_t* arr, coeff_t p               );
+   void     fedarr_pnorm_to( fedarr_t* arr, coeff_t p, fednum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fedarr_t    fedarr_invert(    fedarr_t* arr                );
+   void        fedarr_invert_to( fedarr_t* arr, fedarr_t * res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fedarr_t    fedarr_transpose(   fedarr_t* arr                );
+   void        fedarr_transpose_to(fedarr_t* arr, fedarr_t * res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   #endif

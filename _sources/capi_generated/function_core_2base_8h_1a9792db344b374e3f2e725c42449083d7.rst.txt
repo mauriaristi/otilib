@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a9792db344b374e3f2e725c42449083d7:
+
+Function dhelp_get_deriv_factor
+===============================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_get_deriv_factor(imdir_t, ord_t, dhelpl_t)
+   :project: OTIlib

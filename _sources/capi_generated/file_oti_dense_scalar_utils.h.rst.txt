@@ -1,0 +1,40 @@
+
+.. _file_oti_dense_scalar_utils.h:
+
+File dense/scalar/utils.h
+=========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/dense/scalar/utils.h``)
+-----------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_dense_scalar_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_dense_2scalar_2utils_8h_1a190de1cd30d08a5125bb43b68034a419`
+

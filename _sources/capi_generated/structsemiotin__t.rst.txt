@@ -1,0 +1,17 @@
+.. _exhale_struct_structsemiotin__t:
+
+Struct semiotin_t
+=================
+
+- Defined in :ref:`file_oti_semisparse_scalar_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: semiotin_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

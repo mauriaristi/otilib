@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a212c00409be72d8cc0d3bc46837ea693:
+
+Function soti_taylor_integrate_to
+=================================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_taylor_integrate_to(coeff_t *, sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

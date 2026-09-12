@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2base_8h_1a7761024fc09b75bd182c951c4f52edc8:
+
+Function fecnum_set_item_k_r
+============================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_set_item_k_r(ccoeff_t, uint64_t, fecnum_t *)
+   :project: OTIlib

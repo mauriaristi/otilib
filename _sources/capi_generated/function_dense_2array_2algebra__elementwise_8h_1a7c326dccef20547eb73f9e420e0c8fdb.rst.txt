@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2algebra__elementwise_8h_1a7c326dccef20547eb73f9e420e0c8fdb:
+
+Function oarr_sub_oO_to
+=======================
+
+- Defined in :ref:`file_oti_dense_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_sub_oO_to(otinum_t *, oarr_t *, oarr_t *, dhelpl_t)
+   :project: OTIlib

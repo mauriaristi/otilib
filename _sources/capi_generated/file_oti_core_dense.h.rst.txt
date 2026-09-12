@@ -1,0 +1,42 @@
+
+.. _file_oti_core_dense.h:
+
+File core/dense.h
+=================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/core/dense.h``)
+---------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_core_dense.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_core.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_core_2dense_8h_1a548257925dd38ccf85874170b2e70f74`
+
+- :ref:`exhale_function_core_2dense_8h_1a20417f33204e7d689811470df9a56ac6`
+

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1a4fe9fbf7deb855c7d244960f3df3a109:
+
+Function fearrso_createEmpty_bases
+==================================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_createEmpty_bases(uint64_t, uint64_t, uint64_t, bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

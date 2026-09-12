@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2functions_8h_1a70deedf41a7880f1857c6ecdcb2c2683:
+
+Function darr_pow
+=================
+
+- Defined in :ref:`file_oti_real_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_pow(darr_t *, double)
+   :project: OTIlib

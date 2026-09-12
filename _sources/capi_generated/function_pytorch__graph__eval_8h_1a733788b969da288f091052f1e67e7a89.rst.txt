@@ -1,0 +1,14 @@
+.. _exhale_function_pytorch__graph__eval_8h_1a733788b969da288f091052f1e67e7a89:
+
+Function pytorch_graph_eval_m1n2
+================================
+
+- Defined in :ref:`file_oti_experimental_pytorch_graph_eval.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: pytorch_graph_eval_m1n2(int64_t *, int *, double *, int *, oarrm1n2_t *, oarrm1n2_t *)
+   :project: OTIlib

@@ -1,0 +1,156 @@
+
+.. _file_oti_real_array_algebra.h:
+
+File real/array/algebra.h
+=========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/array/algebra.h``)
+-----------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_array_algebra.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1abea16411e5f717e55a526524688b00e8`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1aab009ed70c22922ab96d3dde9749ff0a`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1af34f1addaa7418c9fa3beafa7932e852`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a753ad6e7f910378fd7c491cbc20c59e8`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ad20612a2cb4b37c045e870f7f22edc18`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1af5e2512f2d3a6e0d57e997403c0d6c28`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1afd66b81cb844df1fa0d94aaf51222229`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a9180facea0fd06a8366859b364f33779`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a42b1a958e47c33b762d0fc892d08f622`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ad92899d0d1d371d39832403df13f24a8`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ae5147a4e8b02d34c724b0a5df44897b2`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a4a1e4d767f81392d884abeee2edff523`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a2b995996fd7248e64450cf8ef69b8f46`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a323c0bc60f165c21eace2feb34827154`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1aacda497e2e2d1c6c20439708ff24269a`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ac77c36d1fe099bf298348add4a86ffbc`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a5952b3e6cd1eb9599f298717065ed710`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a24a45bd11c3d047a233a45d30cd690ab`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a6669654248ec8b513da1edeb7ab5df13`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a6c0d028061785ebd97a196158b7b1eb9`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a5343b165d4f1129bb935bf825c3ba90f`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ae6800b1d7679c67da3758c8b1a227d87`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a8aff4bdaf4d0f6ae7ead21ac63298887`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a36f810d4586a4e8248ad8b46da424ab9`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a8228dbabf9dd7379d524c2ed52d22731`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a6153733814f5d71cab742fc014020b79`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a389e6db936e704887123c9a6a733420a`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a83ad239c87594b5c90a6b451cd13d36b`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ad3c67e3a86b40d379a0bba1db9f79a2c`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1aa89808a8c7f24ba722d45e35594c7553`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a242c655ba51b194694c509467c4851ef`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1acbf3ceb62c23b77bbacb7ca6393bd563`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ab69b692141ce0e02e3a9e031ca99748c`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1aba0fb032196f8207eeaba7b85f2f673b`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a5aa9d7fcf696bcb079c82e508f13168b`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a5c60b5c1c530fe40240d438290b26f65`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1abfda181a5dea4099e50938e954a2aab6`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a6df73102eb564c3a0e451fe28a4b234b`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a8a5b2d3efae3e3a17691135c33ced1c9`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a56a5e446db5a92d411e1fc2993f6c967`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a8b55c0bda093e1c61d84cb42a13964ca`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a0b8085d389f3ae2c61e8419323aa0ac2`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ae4cc5c8ceb2ed30329d87f2851a1ec6c`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a7cf7575370bc6fbc285195741ab95d61`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a47cb482e3c10da29c31cf52d7647f5bf`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a182cfb63890f4e4800a0c102ed94f02d`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a5f3c2e7217ba569a8255c34e1ece8522`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a19a8ccda10fb9899ee84bd901c0cdbd0`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ac327936b5405d4a486825a80b8368d71`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a26ab57cba18a510dabbfbc4f6eb446a8`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1aeb3870102658a278eccebd3756c35c41`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a7d020a426424701929337383dfb5933f`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a64e34dd395cb3055f4889253dec153ef`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a3d067f1f07d7ecaebf7abc587cb604d6`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a1cec4c04e458c472bb02f80fdf2e78f9`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1ab31a746f257a4f70a3ebeca1cad4abef`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a6c2eab628f1596ef25af79e7780b9bdb`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a88d2fe95c3683495e3ee033c66b5b84a`
+
+- :ref:`exhale_function_real_2array_2algebra_8h_1a486c64c807bad9a388db7b3d910c973e`
+

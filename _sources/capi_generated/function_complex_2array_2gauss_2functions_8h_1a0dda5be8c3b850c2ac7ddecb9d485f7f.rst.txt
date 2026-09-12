@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2functions_8h_1a0dda5be8c3b850c2ac7ddecb9d485f7f:
+
+Function fedarr_sqrt(fedarr_t \*)
+=================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_sqrt(fedarr_t *)
+   :project: OTIlib

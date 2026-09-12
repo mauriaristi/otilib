@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2base_8h_1a2bbf10ae92fa40005ba9ec6ce41fe74a:
+
+Function oarr_set_all_r
+=======================
+
+- Defined in :ref:`file_oti_dense_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_set_all_r(coeff_t, oarr_t *, dhelpl_t)
+   :project: OTIlib

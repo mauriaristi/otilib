@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2base_8h_1a6956fee08f96aeab3bf86aff834cb05d:
+
+Function fesoti_set_im_o
+========================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_set_im_o(sotinum_t *, imdir_t, ord_t, fesoti_t *, dhelpl_t)
+   :project: OTIlib

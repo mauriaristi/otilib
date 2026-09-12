@@ -1,0 +1,78 @@
+
+.. _file_oti_static.h:
+
+File static.h
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/static.h``)
+-----------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_static.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``static/onumm10n1.h``
+
+- ``static/onumm10n2.h``
+
+- ``static/onumm1n1.h``
+
+- ``static/onumm1n10.h``
+
+- ``static/onumm1n2.h``
+
+- ``static/onumm1n20.h``
+
+- ``static/onumm1n3.h``
+
+- ``static/onumm1n30.h``
+
+- ``static/onumm1n4.h``
+
+- ``static/onumm2n1.h``
+
+- ``static/onumm2n2.h``
+
+- ``static/onumm2n3.h``
+
+- ``static/onumm2n4.h``
+
+- ``static/onumm3n1.h``
+
+- ``static/onumm3n2.h``
+
+- ``static/onumm3n3.h``
+
+- ``static/onumm3n4.h``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_experimental.h`
+
+- :ref:`file_oti_oti.h`
+
+
+

@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2algebra__matops_8h_1a6ff7e677f643a3e176bd3d1c1b89f476:
+
+Function arrsso_invert
+======================
+
+- Defined in :ref:`file_oti_semisparse_array_algebra_matops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrsso_invert(arrsso_t *, dhelpl_t)
+   :project: OTIlib

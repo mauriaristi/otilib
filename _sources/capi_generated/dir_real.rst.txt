@@ -1,0 +1,11 @@
+.. _dir_real:
+
+
+Directory real
+==============
+
+
+*Directory path:* ``real``
+
+
+

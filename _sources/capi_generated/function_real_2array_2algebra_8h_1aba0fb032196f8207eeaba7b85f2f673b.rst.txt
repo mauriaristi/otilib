@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1aba0fb032196f8207eeaba7b85f2f673b:
+
+Function darr_norm
+==================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_norm(darr_t *)
+   :project: OTIlib

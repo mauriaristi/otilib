@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2soti_2base_8h_1ae7cf54f85224e093df635ac01d823366:
+
+Function elemso_raise_flag_alloc
+================================
+
+- Defined in :ref:`file_oti_fem_element_soti_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemso_raise_flag_alloc(elemso_t *)
+   :project: OTIlib

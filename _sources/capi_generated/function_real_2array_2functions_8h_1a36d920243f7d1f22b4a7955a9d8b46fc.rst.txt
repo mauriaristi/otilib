@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2functions_8h_1a36d920243f7d1f22b4a7955a9d8b46fc:
+
+Function darr_cosh
+==================
+
+- Defined in :ref:`file_oti_real_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_cosh(darr_t *)
+   :project: OTIlib

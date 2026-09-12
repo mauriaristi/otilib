@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2algebra__matops_8h_1a3cac280d99927ae76e63f9ac91e6fb57:
+
+Function oarr_matmul_OR
+=======================
+
+- Defined in :ref:`file_oti_dense_array_algebra_matops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_matmul_OR(oarr_t *, darr_t *, dhelpl_t)
+   :project: OTIlib

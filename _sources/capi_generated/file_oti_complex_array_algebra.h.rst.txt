@@ -1,0 +1,150 @@
+
+.. _file_oti_complex_array_algebra.h:
+
+File complex/array/algebra.h
+============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex/array/algebra.h``)
+--------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex_array_algebra.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ac0043567d4d777040d51801786b464eb`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a37754b4fbac0f9f2a120a4a7606c023d`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a3ebfb6f50dbc7199785b4f942d0af28e`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a239ad5f092188d9300e98d8aafeba148`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ae5b2665645c8bb5d71f04e89e744a1c8`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1afd8b3ebe9f78a3a619ac75c50a7a1d21`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ae48172707b3564d2ba00e9d40c014817`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a8cb126be38ea0596fee1b169ef7e31fa`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ad9f0831892660bcc19a1b7342e4baf7f`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a62c55d04ca5eee3e3dcc26f4b15c1496`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a014c65a1bcff1f23a3617ecd32a2def5`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a1c0ee897f0875a633d6cfd3afe11c8ed`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a78d15fbe5edc8a38390966c06effc26d`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1abf438c2e2c6358d24499269a93b0004d`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a091ce2047bc0995740ad7c861d75f2e2`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a99b52c091358650c0df6b2679a216f6d`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a7b9b520595327fbd8d049085cd63d4b1`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a0f9e2a3ffeb729d6e51c0037b8394cf0`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a5e4fff5aba6d9d14291c592d5088129f`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ac92d917cd5adad6713b9581dc319b239`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a47b82bc92185418c3c96f2a6caf34b78`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a01cb819f628f1648f0658feececb7554`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ab16382f0e04fc0ea79f31407bb506dce`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1af16ca199da25ed601a95dbf4274e944c`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a25c4351c61a3620f2c62c4427c95fafc`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a09dfd4a2b1df6ed9f4159e56886bb37b`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a7f3d047617def399f99deb61336aa976`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a7a1e5e2f41c479bc3338c246ff43b246`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ad20bc9eb816155a07aa14304a7a97628`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ae4ef402d21805986806492f258887528`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a2e1d818823dfe969be08fcf76c484c83`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a5774ab9e6aa57374a0f77b55a31ba472`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ae9aa2a2708906b00923d17961e10d9c7`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1af11840e41631aa0e42a899cc8798c3ca`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a46c94237a457831e2ebb3b469bc80bd8`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a6954d146b217e331d20108feba9827d3`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ab050d925053c86b60a3ce50dec45fe06`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a2f68aec11c0f697598608a3f8a59c336`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a1b35ec5de136845d4b2cb3219634522f`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1af36f77678376870c52c38ce9ee2a96fa`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a1ab7f396f3a46a142df3897583233a3d`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1abb63ab2f703277f331063ccc89e44be8`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1ac80df656b4bcad63ea9c332ec4384ad1`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a5f4ffae43089581f1ca2f92c11515b00`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1abdc95eeb3a3441b2c22e4d0902a8a986`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a5a0a5a07a41d3403dcfe7bf23cc4dbc2`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a43d5ea0b9e7e27b17fab7d190f05f83e`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a09a8bad0cfd263ee50b964f54f2d379e`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a557064e4700ed4bda9d53f9357170b54`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a227accb9222065d91bfcb897387ae319`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1abe15bad55d31a4417497c7d1563cf1f0`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1aedcc2c2c1c65891118ab40ba4ed8fc42`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1aef8c7f4642ef11dd00ec2d11503e30fc`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a7b01665173ecf0908ae9c3680c862ca2`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1a080d4a14108685602bbf906c6427b18c`
+
+- :ref:`exhale_function_complex_2array_2algebra_8h_1aa575d285dbc805e57c08f2a5a43aeed7`
+

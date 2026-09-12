@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2base_8h_1a3659a2194149a31c992993a9e250df6d:
+
+Function oarr_eye
+=================
+
+- Defined in :ref:`file_oti_dense_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_eye(uint64_t, bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

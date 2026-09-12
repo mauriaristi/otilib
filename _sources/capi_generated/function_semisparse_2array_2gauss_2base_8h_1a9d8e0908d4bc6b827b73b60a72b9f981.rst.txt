@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2gauss_2base_8h_1a9d8e0908d4bc6b827b73b60a72b9f981:
+
+Function fearrsso_set_item_k_O
+==============================
+
+- Defined in :ref:`file_oti_semisparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrsso_set_item_k_O(arrsso_t *, uint64_t, fearrsso_t *, dhelpl_t)
+   :project: OTIlib

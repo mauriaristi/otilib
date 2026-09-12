@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2algebra_8h_1a0d4c3a8e84c7ddf74c18978aaff159cf:
+
+Function fedarr_neg
+===================
+
+- Defined in :ref:`file_oti_real_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_neg(fedarr_t *)
+   :project: OTIlib

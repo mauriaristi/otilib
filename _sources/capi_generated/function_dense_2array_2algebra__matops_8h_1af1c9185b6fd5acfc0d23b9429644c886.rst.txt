@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2algebra__matops_8h_1af1c9185b6fd5acfc0d23b9429644c886:
+
+Function oarr_transpose_to
+==========================
+
+- Defined in :ref:`file_oti_dense_array_algebra_matops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_transpose_to(oarr_t *, oarr_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2functions_8h_1a85561fe5f56d64704d007eda91232442:
+
+Function fedarr_log(fedarr_t \*)
+================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_log(fedarr_t *)
+   :project: OTIlib

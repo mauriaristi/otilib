@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2functions_8h_1a8a566c1df836153c3620780034723cf3:
+
+Function fedarr_cos(fedarr_t \*)
+================================
+
+- Defined in :ref:`file_oti_real_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_cos(fedarr_t *)
+   :project: OTIlib

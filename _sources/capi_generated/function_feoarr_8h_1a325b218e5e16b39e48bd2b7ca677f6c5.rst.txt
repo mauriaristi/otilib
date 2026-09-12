@@ -1,0 +1,14 @@
+.. _exhale_function_feoarr_8h_1a325b218e5e16b39e48bd2b7ca677f6c5:
+
+Function feoarr_neg_to(feoarr_t \*, feoarr_t \*, dhelpl_t)
+==========================================================
+
+- Defined in :ref:`file_oti_fem_feoarr.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_neg_to(feoarr_t *, feoarr_t *, dhelpl_t)
+   :project: OTIlib

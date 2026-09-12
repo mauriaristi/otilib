@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2derivatives_8h_1a2d6d7aff82f7b8e813ec533cbc1585f0:
+
+Function der_c_sqrt
+===================
+
+- Defined in :ref:`file_oti_complex_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_c_sqrt(coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

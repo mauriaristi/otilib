@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2algebra__matops_8h_1af2568acc69706e174374b2a018c6029a:
+
+Function oarr_invert
+====================
+
+- Defined in :ref:`file_oti_dense_array_algebra_matops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_invert(oarr_t *, dhelpl_t)
+   :project: OTIlib

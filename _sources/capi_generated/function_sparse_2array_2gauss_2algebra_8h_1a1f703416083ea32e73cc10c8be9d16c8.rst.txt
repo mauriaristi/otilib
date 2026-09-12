@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2algebra_8h_1a1f703416083ea32e73cc10c8be9d16c8:
+
+Function fearrso_transpose
+==========================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_transpose(fearrso_t *, dhelpl_t)
+   :project: OTIlib

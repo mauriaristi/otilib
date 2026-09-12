@@ -1,0 +1,72 @@
+
+.. _file_oti_sparse_array_gauss_utils.h:
+
+File sparse/array/gauss/utils.h
+===============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/array/gauss/utils.h``)
+-----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_array_gauss_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_sparse_array_gauss.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1a9958b178596786913fded364d674297e`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1ac41cedba9dd85f1b72cd6c7d2334e742`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1a242f5a7c38992b7db50c4ee056c2e483`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1a07510f321934f81d1037adf2bf2e48e2`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1af3c412a2dc639aa3c25c041639a27889`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1a444740f25ee333977f3dbf323bad38ac`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1a2ce60d12e9b6b061578aea18d2704237`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1a55bc8ef973b2065435a552a912527395`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1aa91f8ab2ed43983dad539f6bba6fc73d`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1afb68e2e40d683b60e36bd92bf0f3c7cb`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1a38e43beb606b04710ceb185e6c0cab24`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1ab370d886bebc407d5af30ec87a0072ab`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1aabcc59c835d1117aec6ba3f4736ff60b`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1adea5c3e4c9ef1950a0e8be18142f397f`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1a1813914480cb0c7b99d540008d259745`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1a408f5839815b286ce368beb6fddcec65`
+
+- :ref:`exhale_function_sparse_2array_2gauss_2utils_8h_1ae6d729e5bf310ab6a78d82ff3c6eb754`
+

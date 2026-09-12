@@ -1,0 +1,14 @@
+.. _exhale_function_fileio_8h_1aeaea1a31f3a8b9e3350ff3ef3161665c:
+
+Function loadnpy_ndirs
+======================
+
+- Defined in :ref:`file_oti_core_fileio.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: loadnpy_ndirs(char *, ord_t, dhelp_t *)
+   :project: OTIlib

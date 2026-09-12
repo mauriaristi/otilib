@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2utils_8h_1a6654c61fd54aabf077409f65c87838dd:
+
+Function oarr_trc_self_sum
+==========================
+
+- Defined in :ref:`file_oti_dense_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_trc_self_sum(oarr_t *, ord_t, oarr_t *, dhelpl_t)
+   :project: OTIlib

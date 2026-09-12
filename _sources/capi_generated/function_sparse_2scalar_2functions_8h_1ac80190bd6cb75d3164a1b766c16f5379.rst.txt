@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2functions_8h_1ac80190bd6cb75d3164a1b766c16f5379:
+
+Function soti_cbrt_to
+=====================
+
+- Defined in :ref:`file_oti_sparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_cbrt_to(sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

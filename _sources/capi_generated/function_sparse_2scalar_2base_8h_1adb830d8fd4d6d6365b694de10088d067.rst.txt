@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1adb830d8fd4d6d6365b694de10088d067:
+
+Function soti_get_memsize_save
+==============================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_get_memsize_save(sotinum_t *, dhelpl_t)
+   :project: OTIlib

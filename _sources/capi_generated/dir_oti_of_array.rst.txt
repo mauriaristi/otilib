@@ -1,0 +1,11 @@
+.. _dir_oti_of_array:
+
+
+Directory oti_of_array
+======================
+
+
+*Directory path:* ``oti_of_array``
+
+
+

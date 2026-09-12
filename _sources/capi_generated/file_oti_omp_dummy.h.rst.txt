@@ -1,0 +1,129 @@
+
+.. _file_oti_omp_dummy.h:
+
+File omp_dummy.h
+================
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/omp_dummy.h``)
+--------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_omp_dummy.h.rst
+
+
+
+
+
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structomp__lock__t`
+
+- :ref:`exhale_struct_structomp__nest__lock__t`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_omp__dummy_8h_1ab769cd28f876c6f973de1356e3d167c7`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_omp__dummy_8h_1af4df92e231a75a0462319415cfdd6d33`
+
+- :ref:`exhale_function_omp__dummy_8h_1a0dcdbb2dc015f2f187adba8ed0f49f80`
+
+- :ref:`exhale_function_omp__dummy_8h_1ac10cbcb5a717dc3d03aaf80bc844f4aa`
+
+- :ref:`exhale_function_omp__dummy_8h_1a4d84ea8b6dbd8f58678db1c9ad20f067`
+
+- :ref:`exhale_function_omp__dummy_8h_1af6a3613a1eb4247a2f419c194df7f5df`
+
+- :ref:`exhale_function_omp__dummy_8h_1a9c50b90416dbb06d3932d628a0e7dac5`
+
+- :ref:`exhale_function_omp__dummy_8h_1a231d4e774203f4812e97918ead79791b`
+
+- :ref:`exhale_function_omp__dummy_8h_1aa00d2b875207d14eba24b62e65e795dd`
+
+- :ref:`exhale_function_omp__dummy_8h_1a1ac016a437ca14b410b4acf04af76257`
+
+- :ref:`exhale_function_omp__dummy_8h_1a669d6cb8c2e92e8b13df20e9c089f730`
+
+- :ref:`exhale_function_omp__dummy_8h_1a9ed0474735f00e49f9e37e8c76e935e5`
+
+- :ref:`exhale_function_omp__dummy_8h_1a50ae47cea09023bdcdcf08fb3ccc193d`
+
+- :ref:`exhale_function_omp__dummy_8h_1a9de077ef42b75ef39c480a5a3046b433`
+
+- :ref:`exhale_function_omp__dummy_8h_1a61a6bd3f9c5b6d9d0405c8eb9313c389`
+
+- :ref:`exhale_function_omp__dummy_8h_1afd4d1cfdcccf111a8ab472b1fef44d7f`
+
+- :ref:`exhale_function_omp__dummy_8h_1a4b93b0e4775add58ed5e29b8f29ea2af`
+
+- :ref:`exhale_function_omp__dummy_8h_1aa02ecdff3ea7c347fec7a7f269d8428c`
+
+- :ref:`exhale_function_omp__dummy_8h_1afc9d0c25c3e17b17c0b5c53d87f0d36d`
+
+- :ref:`exhale_function_omp__dummy_8h_1a3813cb266202aaf2950db02d93a2b00b`
+
+- :ref:`exhale_function_omp__dummy_8h_1af9a8501afd143757d6f32a8f86cdc3bd`
+
+- :ref:`exhale_function_omp__dummy_8h_1a0eb8d5a5b3cf94c28bdf91f524e212a1`
+
+- :ref:`exhale_function_omp__dummy_8h_1ab306e0d3de13445b4ca9d93b67b8fd25`
+
+- :ref:`exhale_function_omp__dummy_8h_1a308ee3d100e165dc997c28add2206431`
+
+- :ref:`exhale_function_omp__dummy_8h_1a44be34041a438458074d17c2e2e47b8c`
+
+- :ref:`exhale_function_omp__dummy_8h_1ac8a91c0e9dde0e09464b70bdb554af38`
+
+- :ref:`exhale_function_omp__dummy_8h_1a26c2db9c501cff462039397e97ee2c79`
+
+- :ref:`exhale_function_omp__dummy_8h_1ae624ad8ab33dd6b6cb783327b3052539`
+
+- :ref:`exhale_function_omp__dummy_8h_1ab153771e6ec8135a8b234144b701f582`
+
+- :ref:`exhale_function_omp__dummy_8h_1ac3b09cbac9fe72de741fe97370af12e3`
+
+- :ref:`exhale_function_omp__dummy_8h_1aaf7282f4c7262612a1c68395bc764470`
+
+- :ref:`exhale_function_omp__dummy_8h_1ab0cdbc940555aecafa65dce068486004`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_omp__dummy_8h_1a143bc02be6b0b3d74a0092d9cdf3c118`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_omp__dummy_8h_1a5c8e4b93cac3c55c44cf4f3a646946b8`
+

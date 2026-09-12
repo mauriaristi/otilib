@@ -1,0 +1,138 @@
+
+.. _file_oti_sparse_scalar_base.h:
+
+File sparse/scalar/base.h
+=========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/scalar/base.h``)
+-----------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_scalar_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_sparse.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a01842b904d5d618d686017a4ff0e9de9`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a8266ed82d5213cc86c715823ca3195f2`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a91c08a62eec88b34e428f610e31699d0`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1aa279a23a0fd35d800321d3218b5793f0`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a8db1c1942f74949b1976deed238358fc`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1afd31558572bb2b89424d4f8d232c3b99`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1ad4c7a8106a8d0ee3a25e4947225d91bd`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a2b93ebab593fdd69853cf7dcd22f64f7`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1aedb67a48b167c182f5a9aed93a6c5d3d`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a36dd62d83ac492049045edb4b3a3e6b9`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a773abccad8a9079f8c386b189d2a00c0`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a58e91c57dd4537b428b836c120e87596`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1ab96e2ea442305b03b9a2f1e0a6ae4ce8`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a5349507463488fc82d1260cc067149b8`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a925a343736ae1eea177ca61dc4c710fd`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a3ce3c49d9c6885253e743146270945c3`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1ae9384e48ab4e3f5d358025a7733fa030`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1aadecc5610d6383a92c47da91199ece98`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1ad05cbeb8e24969a987d5f6e71125be09`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1abd4fe5dbec49341d802d0bf860d42195`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a5e6a0d2a65f96a220eca6a2e1ba4ec20`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1af02bd849f48eac7ed2c2dcbe4e36e6da`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a719e68340929bdebf0a71c780ef67883`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1adb830d8fd4d6d6365b694de10088d067`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a3fc2fbdce5818e9656779a875b3d7325`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a0fc4284e76fa5d04cb71a2fc05117e5b`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a80f2e7b5f485066cb861e1c6f62ab30b`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1abc3f09023ab591625adc1cfee359ef3d`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a2c8ad38e31d6be0d5c97744b9fcd948b`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a18ba56517e9c381b25881a3c42b570a2`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a4cd791582e9efcf1ad62cfee49279722`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a89c31390b5cf807bf3ba7f246475c42f`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1aecd3aef1c47c85d588828498474865a7`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a90182ab9148c383283c7b88799ca0be4`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1aaa9429929d6c2a90c1d1071442f5cae1`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1ad2435337020f0d8bf1b39e2f1f5424ef`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1af972e414f86840212388e05d8df291c2`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a1c10b9b3f3be892d83bae155aeb44a78`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1aca89dec5959c19de2f8cf2234bc6e39b`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1ae315073101482f299c5db48740a2408e`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1ab9f779029500e2b99959326e81daa70c`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1acd52409921b03f0af98b90dbffa7724c`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1aae10f0986cfd47cd8bb6d47f4f904c8f`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1ac1400f34ef3a84e9002917164a500817`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1afc65cbbf6fa57e54c61aeb9f4467e4b7`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a212c00409be72d8cc0d3bc46837ea693`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a0af8de689e32566861f222acbcd3af1f`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1aea8eca296d16b38a8e7f163f39eb908e`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a9e7d405ac123498cac94f2c9808b7a76`
+
+- :ref:`exhale_function_sparse_2scalar_2base_8h_1a7e80fbd046e722048d68b7e5fea05938`
+

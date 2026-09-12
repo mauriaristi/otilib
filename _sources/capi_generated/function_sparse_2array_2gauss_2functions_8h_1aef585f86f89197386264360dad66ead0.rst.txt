@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2functions_8h_1aef585f86f89197386264360dad66ead0:
+
+Function fearrso_cbrt_to
+========================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_cbrt_to(fearrso_t *, fearrso_t *, dhelpl_t)
+   :project: OTIlib

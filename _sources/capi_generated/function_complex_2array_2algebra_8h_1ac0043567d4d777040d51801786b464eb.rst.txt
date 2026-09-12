@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1ac0043567d4d777040d51801786b464eb:
+
+Function carr_det
+=================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_det(carr_t *)
+   :project: OTIlib

@@ -1,0 +1,27 @@
+.. _dir_oti:
+
+
+Directory oti
+=============
+
+
+*Directory path:* ``oti``
+
+
+Files
+-----
+
+- :ref:`file_oti_comm.h`
+- :ref:`file_oti_complex.h`
+- :ref:`file_oti_core.h`
+- :ref:`file_oti_dense.h`
+- :ref:`file_oti_experimental.h`
+- :ref:`file_oti_fem.h`
+- :ref:`file_oti_omp_dummy.h`
+- :ref:`file_oti_oti.h`
+- :ref:`file_oti_real.h`
+- :ref:`file_oti_semisparse.h`
+- :ref:`file_oti_sparse.h`
+- :ref:`file_oti_static.h`
+
+

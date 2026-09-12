@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2algebra__elementwise_8h_1a34bd6082ead4eb285a36756f5bdc4173:
+
+Function oarr_div_Or
+====================
+
+- Defined in :ref:`file_oti_dense_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_div_Or(oarr_t *, coeff_t, dhelpl_t)
+   :project: OTIlib

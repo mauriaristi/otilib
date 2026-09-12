@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2derivatives_8h_1a2247c5d72e897813318f659ffea0b64a:
+
+Function der_c_asin
+===================
+
+- Defined in :ref:`file_oti_complex_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_c_asin(coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

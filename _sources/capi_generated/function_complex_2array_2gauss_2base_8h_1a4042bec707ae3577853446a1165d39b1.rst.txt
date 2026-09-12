@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2base_8h_1a4042bec707ae3577853446a1165d39b1:
+
+Function fedarr_free(fedarr_t \*)
+=================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_free(fedarr_t *)
+   :project: OTIlib

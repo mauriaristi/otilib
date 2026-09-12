@@ -1,0 +1,72 @@
+
+.. _file_oti_semisparse_array_algebra_matops.h:
+
+File semisparse/array/algebra_matops.h
+======================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/array/algebra_matops.h``)
+------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_array_algebra_matops.h.rst
+
+
+
+
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1ae4eef8485a5c0d15638f51b5d033a7ae`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1ade39399d34209274ffa67dd0f2b83302`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1ab0a790a13ca46b398275f05e71897eb5`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a2b388f9cc6b2084b8e838b4808dcb36d`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a14384f2100e258232fd4c6fa73315592`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1ad3234db34cda9c6db3e8676d1540b65b`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a6ff7e677f643a3e176bd3d1c1b89f476`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1ad019111208d89d115b97d024ebe754d5`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1acb1d0e48ab1460ae15585d13828f8c89`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a526eaf87fbee9117e0fcd4e6edfca3d1`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1ab2ed754436b320a6dc74f4096b99b395`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a75ff0678a3e74b1dd9552772b8fdc566`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a4436863fae0ade5da93149b620e8c884`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1ad4b736f221ff5369405ed9ea0dba9638`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a303692d35b6c5c20cdc3bb9ef7115d94`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a5f43d305ed20d0a909ac2f5c3f96a819`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a789ad3197b0cc58ce2d3daf10bdc5cff`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a1607018389c7bbad7adc15bf7e753d94`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a20b560f79ace13f18fb24ed5c6fa68e1`
+
+- :ref:`exhale_function_semisparse_2array_2algebra__matops_8h_1a05f3914e88513e33808b2ffd759a592c`
+

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2functions_8h_1a9bb342a581da2fe7b4263afb3ece5088:
+
+Function fesoti_pow_soti_to
+===========================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_pow_soti_to(fesoti_t *, sotinum_t *, fesoti_t *, dhelpl_t)
+   :project: OTIlib

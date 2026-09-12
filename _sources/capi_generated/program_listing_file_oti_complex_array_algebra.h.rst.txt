@@ -1,0 +1,153 @@
+
+.. _program_listing_file_oti_complex_array_algebra.h:
+
+Program Listing for File complex/array/algebra.h
+================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_complex_array_algebra.h>` (``oti/complex/array/algebra.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_COMPLEX_ALGEBRA_H
+   #define OTI_COMPLEX_ALGEBRA_H
+   
+   
+   
+   /**************************************************************************************************/
+   carr_t carr_neg(    carr_t* arr              );
+   
+   void   carr_neg_to( carr_t* arr, carr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   carr_t carr_div_RR(    carr_t* lhs, carr_t* rhs              );
+   carr_t carr_div_Rr(    carr_t* lhs, ccoeff_t rhs              );
+   carr_t carr_div_rR(    ccoeff_t lhs, carr_t* rhs              );
+   
+   void   carr_div_RR_to( carr_t* lhs, carr_t* rhs, carr_t* res );
+   void   carr_div_Rr_to( carr_t* lhs, ccoeff_t rhs, carr_t* res );
+   void   carr_div_rR_to( ccoeff_t lhs, carr_t* rhs, carr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   carr_t carr_mul_RR(    carr_t* lhs, carr_t* rhs              );
+   void   carr_mul_RR_to( carr_t* lhs, carr_t* rhs, carr_t* res );
+   
+   carr_t carr_mul_rR(    ccoeff_t lhs, carr_t* rhs              );
+   void   carr_mul_rR_to( ccoeff_t lhs, carr_t* rhs, carr_t* res );
+   
+   carr_t carr_mul_Rr(    carr_t* lhs, ccoeff_t rhs              );
+   void   carr_mul_Rr_to( carr_t* lhs, ccoeff_t rhs, carr_t* res );
+   
+   void carr_mul_and_selfsum_RR_to( carr_t* lhs, carr_t* rhs, carr_t* res);
+   void carr_mul_and_selfsum_rR_to( ccoeff_t lhs, carr_t* rhs, carr_t* res);
+   void carr_mul_and_selfsum_Rr_to( carr_t* lhs, ccoeff_t rhs, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   carr_t carr_sub_RR(    carr_t* lhs, carr_t* rhs             );
+   void   carr_sub_RR_to( carr_t* lhs, carr_t* rhs, carr_t* res);
+   
+   carr_t carr_sub_Rr(carr_t* lhs, ccoeff_t rhs);
+   carr_t carr_sub_rR(ccoeff_t lhs, carr_t* rhs);
+   
+   void carr_sub_Rr_to(carr_t* lhs, ccoeff_t rhs, carr_t* res);
+   void carr_sub_rR_to(ccoeff_t lhs, carr_t* rhs, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   carr_t carr_sum_RR(    carr_t* lhs, carr_t* rhs              );
+   void   carr_sum_RR_to( carr_t* lhs, carr_t* rhs, carr_t* res );
+   
+   carr_t carr_sum_rR(    ccoeff_t lhs, carr_t* rhs              );
+   void   carr_sum_rR_to( ccoeff_t lhs, carr_t* rhs, carr_t* res );
+   
+   carr_t carr_sum_Rr(    carr_t* lhs, ccoeff_t rhs              );
+   void   carr_sum_Rr_to( carr_t* lhs, ccoeff_t rhs, carr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   /**************************************************************************************************/ 
+   ccoeff_t carr_dotproduct_RR(    carr_t* lhs, carr_t* rh              );
+   void    carr_dotproduct_RR_to( carr_t* lhs, carr_t* rh, ccoeff_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void carr_matmul_and_selfsum_RR_to(carr_t* lhs, carr_t* rhs, carr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   carr_t carr_matmul(    carr_t* lhs, carr_t* rhs               );
+   void   carr_matmul_to( carr_t* lhs, carr_t* rhs, carr_t* res );
+   
+   carr_t carr_matmul_RR(    carr_t* lhs, carr_t* rhs               );
+   void   carr_matmul_RR_to( carr_t* lhs, carr_t* rhs, carr_t* res );
+   
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   carr_t carr_transpose(    carr_t* arr             );
+   void   carr_transpose_to( carr_t* arr, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   carr_t carr_invert(    carr_t* arr             );
+   void   carr_invert_to( carr_t* arr, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   ccoeff_t carr_det( carr_t* arr );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   ccoeff_t carr_pnorm( carr_t* arr, ccoeff_t p );
+   ccoeff_t carr_norm(  carr_t* arr );
+   
+   void carr_pnorm_to( carr_t* arr1, ccoeff_t p, ccoeff_t* res );
+   void carr_norm_to( carr_t* arr1, ccoeff_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void carr_self_neg(  carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void carr_self_sum_R( carr_t* rhs, carr_t* res );
+   void carr_self_sum_r( ccoeff_t rhs, carr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void carr_self_sub_R(carr_t* rhs, carr_t* res);
+   void carr_self_sub_r(ccoeff_t rhs, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void carr_self_mul_R( carr_t* rhs, carr_t* res );
+   void carr_self_mul_r( ccoeff_t rhs, carr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   carr_t carr_gem_RR(   carr_t* arr1, carr_t* arr2, carr_t* arr3             );
+   carr_t carr_gem_rR(   ccoeff_t arr1, carr_t* arr2, carr_t* arr3             );
+   
+   void   carr_gem_RR_to(carr_t* arr1, carr_t* arr2, carr_t* arr3, carr_t* res);
+   void   carr_gem_rR_to(ccoeff_t arr1, carr_t* arr2, carr_t* arr3, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   #endif

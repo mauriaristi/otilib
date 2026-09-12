@@ -1,0 +1,33 @@
+
+.. _file_oti_fem_gauss_array_oarr_utils.h:
+
+File fem/gauss/array/oarr/utils.h
+=================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/gauss/array/oarr/utils.h``)
+-------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_gauss_array_oarr_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_gauss_array_feoarr.h`
+
+
+

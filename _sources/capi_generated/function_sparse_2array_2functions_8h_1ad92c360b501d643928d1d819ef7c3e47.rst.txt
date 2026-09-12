@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2functions_8h_1ad92c360b501d643928d1d819ef7c3e47:
+
+Function arrso_acos
+===================
+
+- Defined in :ref:`file_oti_sparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_acos(arrso_t *, dhelpl_t)
+   :project: OTIlib

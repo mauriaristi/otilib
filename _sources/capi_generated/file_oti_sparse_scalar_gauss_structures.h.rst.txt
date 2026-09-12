@@ -1,0 +1,40 @@
+
+.. _file_oti_sparse_scalar_gauss_structures.h:
+
+File sparse/scalar/gauss/structures.h
+=====================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/scalar/gauss/structures.h``)
+-----------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_scalar_gauss_structures.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_sparse_scalar_gauss.h`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structfesoti__t`
+

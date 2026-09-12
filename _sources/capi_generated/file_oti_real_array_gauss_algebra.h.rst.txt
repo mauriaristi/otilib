@@ -1,0 +1,174 @@
+
+.. _file_oti_real_array_gauss_algebra.h:
+
+File real/array/gauss/algebra.h
+===============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/array/gauss/algebra.h``)
+-----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_array_gauss_algebra.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a9c761dcd64d8800dd7163d66a2adeb02`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a859001f01fef8bb9f8bed1568a060df3`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a90949656e8dc3fe0981038bc20c791fa`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1aa12b80612c2a0afdf4647f127d231999`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a5daa13a5cf4727c4051afa6392c606b7`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a8682f6eef3f24a7fef0da7aaa79a52b4`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a546142b0961cb94f0df463b994abf5e2`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a7be948b09b881b892480d910c5e06028`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a19109550b59492eecd717bbd5dd73dbb`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1acf7d392080c33e7186f740dc737d5893`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a440a37131a700f87ca5d12f4a80dd1ff`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a69bfd0419f6af1454b174ffda540bca8`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a8e77c9030c5d500772a7db34a2e05b8f`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ad6fe181b206ae7dbac4451a6930347ac`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a1bfaf040db1627bfff278799890b1368`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1aca6051c468998d00530bf451b4ee891d`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1adb0fcd633316e7afc954b2fde9500413`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a0bf4dffd9230486c0c82003a5b9cdb84`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a2841fd24fc9ca1869db852ff9593583f`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a041617e1766744a8d806adc3a2a2d88f`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ae130f8a2ea76786b02a4f09386a1346e`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a21184e0e6dbd509bdc22974fe427ae24`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1af78eaeb63c6bba17aae71c09d750fae3`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a24a60c7adefefa54b4a12de4b2039552`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a63b071261e72c0fde5aba77c29be3806`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a29f7ee3c303d89a748d7779d0ab741c3`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a427d81833016dc72a9a83541faf956f5`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a487592fd87bb673225324d4926ecfa18`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ad0cd5e1d2a86a458d469035b7da65a4c`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a9fd87dad1b3b8c0775b1451a4efd9c0f`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ace94f5c8b71e6fe1b7c9e67914c43d3a`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a73ed54affdb15f5e6a3e48caf0dc9789`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a078e6161cc51a4e47a23f6030852acf8`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a222794e4f0be8292caa067318dd87d0e`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a4fb970096eb6f7c03d3dec3c2cd19758`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1adea2276af66cd75ef1d9f4a86ee6554c`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a0fe2312335332ff54d49af448a5d9130`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a59c61b356be15a621fb63f3163bca103`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a0d4c3a8e84c7ddf74c18978aaff159cf`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ae08cc8a18e8fb2c235b041f4d4d9a0d9`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a7ea7853c1cf0307b8e72a8a9f124cabc`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1aa5b8aa59caddbd5624aaf277fa05e1de`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a042d548a62f4547c4ee5b4675da4ede7`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a4a40456cc6dce16ae09f4f9d28e3d1b8`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1abc9cbc310c6f2b3e8e9df64821898e2c`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ac058d6a1c38c4b16cfa9d44fd56e1e16`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ab965d587222eedea9ff6e97b1e0c530a`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1aa1ef58e6819b13e1246729e030428f27`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a3092d2056cf12082a2a3155a37bf768c`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a442126ad1816ff755d8a9c5bbaf453cd`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1acbff0e328259e130455ccf63a8a4e2fb`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a31b1d693a61fb5c31a5c245c99065087`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ad520508ad8eb2befc563d2b44277746d`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ace24081377fc35799f59f397895a0891`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a7235208dccdcbccd5cf97bf289b67fe3`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a7f73e125abb3ab3fdd7b10ebbd46c2c6`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ae97187c3186d93dfde20780e93b7e315`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ad883a1c53ec1a5699a6e081c21bb5739`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a5e648c8ae23e7bd086c6a207f6954f72`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a9d0cecc3ffa907eb92b4dd852e59a709`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ac643266410f91b200ab777559b1511b4`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a8d174dd98a99f3f32f16e659e4890e98`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a3ff2510cb4d3266d3eff18af9ce63ba4`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1adee858ccd590d3babbb9da47857a365c`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1ac58104635aa4a3d0dd0c2b1eaf66bd2a`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1acf5514e8665cecb861443dd9314421e3`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a11cdd8a9255e44d0e880e3d69ac9dbce`
+
+- :ref:`exhale_function_real_2array_2gauss_2algebra_8h_1a505d7fc6647ed9abe5cc9719f93ed38b`
+

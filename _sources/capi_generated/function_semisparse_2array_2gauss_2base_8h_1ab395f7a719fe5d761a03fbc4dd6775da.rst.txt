@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2gauss_2base_8h_1ab395f7a719fe5d761a03fbc4dd6775da:
+
+Function fearrsso_extract_im
+============================
+
+- Defined in :ref:`file_oti_semisparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrsso_extract_im(imdir_t, ord_t, fearrsso_t *, dhelpl_t)
+   :project: OTIlib

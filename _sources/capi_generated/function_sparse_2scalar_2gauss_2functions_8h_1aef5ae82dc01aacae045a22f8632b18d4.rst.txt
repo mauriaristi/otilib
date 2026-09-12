@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2functions_8h_1aef5ae82dc01aacae045a22f8632b18d4:
+
+Function fesoti_log_to
+======================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_log_to(fesoti_t *, fesoti_t *, dhelpl_t)
+   :project: OTIlib

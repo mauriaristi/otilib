@@ -1,0 +1,80 @@
+
+.. _file_oti_real_array_base.h:
+
+File real/array/base.h
+======================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/array/base.h``)
+--------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_array_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2array_2base_8h_1a1446c43016b5212b37be4548504714c0`
+
+- :ref:`exhale_function_real_2array_2base_8h_1a27f8adf778cdc8ba13a831ce7e3c979f`
+
+- :ref:`exhale_function_real_2array_2base_8h_1ab24504357e2d505876625c489ee410f8`
+
+- :ref:`exhale_function_real_2array_2base_8h_1ab9578cff03e68a751b236e28eaf9a415`
+
+- :ref:`exhale_function_real_2array_2base_8h_1a927c80061f2aeac1e650159bab7a3a04`
+
+- :ref:`exhale_function_real_2array_2base_8h_1a773016fa9ffe4257d3c6cd24f4da7938`
+
+- :ref:`exhale_function_real_2array_2base_8h_1a4bcf3e312f4554727c598d081b37f3af`
+
+- :ref:`exhale_function_real_2array_2base_8h_1ac13a54a8ac9852b01445af83a0c6c12f`
+
+- :ref:`exhale_function_real_2array_2base_8h_1ab8ba26da4749b395dad8cdd578abd63b`
+
+- :ref:`exhale_function_real_2array_2base_8h_1a0f62a6a3348e762ff4489fd405d00fdc`
+
+- :ref:`exhale_function_real_2array_2base_8h_1a484b30669ff8b4ed1958b3762d0e1050`
+
+- :ref:`exhale_function_real_2array_2base_8h_1ae062b0f79e534a670048097e0ca71a22`
+
+- :ref:`exhale_function_real_2array_2base_8h_1adc01998bd14848f60f34abcb071f8a32`
+
+- :ref:`exhale_function_real_2array_2base_8h_1aa345b15350a52dfaf0133e3b60637277`
+
+- :ref:`exhale_function_real_2array_2base_8h_1a9e571edbafacbca46605b6710d422394`
+
+- :ref:`exhale_function_real_2array_2base_8h_1ae3cdc988e2e7da534e9f905096487507`
+
+- :ref:`exhale_function_real_2array_2base_8h_1a14282233245b28990a715b099e88074f`
+
+- :ref:`exhale_function_real_2array_2base_8h_1ae1f6b9c50c34ab88c181828cf865a9f9`
+
+- :ref:`exhale_function_real_2array_2base_8h_1a738d1846866f7a9fe8698c14e4edf194`
+
+- :ref:`exhale_function_real_2array_2base_8h_1ace503cc786e69fe449c80451d9f21f4c`
+
+- :ref:`exhale_function_real_2array_2base_8h_1ad3a9db4f48f527e0f2bc6e88a6539629`
+

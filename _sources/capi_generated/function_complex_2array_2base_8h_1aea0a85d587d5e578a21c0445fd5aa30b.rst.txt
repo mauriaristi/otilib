@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2base_8h_1aea0a85d587d5e578a21c0445fd5aa30b:
+
+Function carr_getSize
+=====================
+
+- Defined in :ref:`file_oti_complex_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_getSize(carr_t *)
+   :project: OTIlib

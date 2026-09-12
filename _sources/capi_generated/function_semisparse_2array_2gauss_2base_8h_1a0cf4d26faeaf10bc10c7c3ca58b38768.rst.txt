@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2gauss_2base_8h_1a0cf4d26faeaf10bc10c7c3ca58b38768:
+
+Function fearrsso_copy_to
+=========================
+
+- Defined in :ref:`file_oti_semisparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrsso_copy_to(fearrsso_t *, fearrsso_t *, dhelpl_t)
+   :project: OTIlib

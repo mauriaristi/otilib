@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2utils_8h_1a93b7f89c5eb18a60258aaabccf9adb78:
+
+Function fecarr_dimCheck_fF_elementwise
+=======================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_dimCheck_fF_elementwise(fecnum_t *, fecarr_t *, fecarr_t *)
+   :project: OTIlib

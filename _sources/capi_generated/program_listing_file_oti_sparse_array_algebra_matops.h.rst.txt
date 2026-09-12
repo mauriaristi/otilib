@@ -1,0 +1,63 @@
+
+.. _program_listing_file_oti_sparse_array_algebra_matops.h:
+
+Program Listing for File sparse/array/algebra_matops.h
+======================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_sparse_array_algebra_matops.h>` (``oti/sparse/array/algebra_matops.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SPARSE_ARRAY_ALGEBRA_MATOPS_H
+   #define OTI_SPARSE_ARRAY_ALGEBRA_MATOPS_H
+   
+   /**************************************************************************************************/ 
+   sotinum_t arrso_dotproduct_OO(    arrso_t* lhs, arrso_t* rhs,                 dhelpl_t dhl);
+   void      arrso_dotproduct_OO_to( arrso_t* lhs, arrso_t* rhs, sotinum_t* res, dhelpl_t dhl);
+   
+   sotinum_t arrso_dotproduct_RO(     darr_t* lhs, arrso_t* rhs,                 dhelpl_t dhl);
+   void      arrso_dotproduct_RO_to(  darr_t* lhs, arrso_t* rhs, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   arrso_t arrso_matmul_OO(    arrso_t* lhs, arrso_t* rhs,               dhelpl_t dhl);
+   arrso_t arrso_matmul_OR(    arrso_t* lhs,  darr_t* rhs,               dhelpl_t dhl);
+   arrso_t arrso_matmul_RO(     darr_t* lhs, arrso_t* rhs,               dhelpl_t dhl);
+   
+   void    arrso_matmul_OO_to( arrso_t* lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+   void    arrso_matmul_OR_to( arrso_t* lhs,  darr_t* rhs, arrso_t* res, dhelpl_t dhl);
+   void    arrso_matmul_RO_to(  darr_t* lhs, arrso_t* rhs, arrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   arrso_t arrso_transpose(    arrso_t* arr1,               dhelpl_t dhl);
+   void    arrso_transpose_to( arrso_t* arr1, arrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   arrso_t arrso_invert(    arrso_t* arr1,               dhelpl_t dhl);
+   void    arrso_invert_to( arrso_t* arr1, arrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   sotinum_t arrso_det(    arrso_t* arr1,                 dhelpl_t dhl);
+   void      arrso_det_to( arrso_t* arr1, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   sotinum_t arrso_norm(    arrso_t* arr1,                  dhelpl_t dhl);
+   void      arrso_norm_to( arrso_t* arr1,  sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   sotinum_t arrso_pnorm(    arrso_t* arr1, coeff_t p,                 dhelpl_t dhl);
+   void      arrso_pnorm_to( arrso_t* arr1, coeff_t p, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

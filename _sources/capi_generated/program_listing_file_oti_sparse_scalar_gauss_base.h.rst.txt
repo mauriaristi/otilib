@@ -1,0 +1,113 @@
+
+.. _program_listing_file_oti_sparse_scalar_gauss_base.h:
+
+Program Listing for File sparse/scalar/gauss/base.h
+===================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_sparse_scalar_gauss_base.h>` (``oti/sparse/scalar/gauss/base.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SPARSE_SCALAR_GAUSS_BASE_H
+   #define OTI_SPARSE_SCALAR_GAUSS_BASE_H
+   
+   
+   
+   void     fesoti_get_order_im_to( ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+   fesoti_t fesoti_get_order_im(    ord_t order, fesoti_t* num,                dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fesoti_t fesoti_get_im(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+   void     fesoti_get_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fesoti_t fesoti_get_deriv(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+   void     fesoti_get_deriv_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void fesoti_set_im_r(   coeff_t  val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+   void fesoti_set_im_o( sotinum_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+   void fesoti_set_im_f(  fesoti_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void fesoti_set_deriv_r(   coeff_t  val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+   void fesoti_set_deriv_o( sotinum_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+   void fesoti_set_deriv_f(  fesoti_t* val, imdir_t idx, ord_t order, fesoti_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/
+   fesoti_t fesoti_extract_im(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+   void     fesoti_extract_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fesoti_t fesoti_extract_deriv(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+   void     fesoti_extract_deriv_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fesoti_t fesoti_truncate_im(    imdir_t idx, ord_t order, fesoti_t* num,                dhelpl_t dhl);
+   void     fesoti_truncate_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void     fesoti_truncate_order_to( ord_t ord, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+   fesoti_t fesoti_truncate_order(    ord_t ord, fesoti_t* num,               dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fesoti_t fesoti_copy(    fesoti_t* src,                dhelpl_t dhl);
+   void     fesoti_copy_to( fesoti_t* src, fesoti_t* dst, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void fesoti_set_r(    coeff_t num, fesoti_t* res, dhelpl_t dhl);
+   void fesoti_set_o( sotinum_t* num, fesoti_t* res, dhelpl_t dhl);
+   void fesoti_set_f(  fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void fesoti_set_item_k_r(   coeff_t  num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
+   void fesoti_set_item_k_o( sotinum_t* num, uint64_t k, fesoti_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   sotinum_t fesoti_get_item_k(   fesoti_t* num, uint64_t k,                 dhelpl_t dhl);
+   void      fesoti_get_item_k_to(fesoti_t* num, uint64_t k, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fesoti_t fesoti_zeros_bases(uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fesoti_t fesoti_createEmpty_bases(uint64_t nIntPts, bases_t nbases, ord_t order, dhelpl_t dhl);
+   fesoti_t fesoti_empty_like(fesoti_t* arr, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void fesoti_free(fesoti_t* num);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   ord_t fesoti_get_order( fesoti_t* num );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fesoti_t fesoti_init(void);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   #endif

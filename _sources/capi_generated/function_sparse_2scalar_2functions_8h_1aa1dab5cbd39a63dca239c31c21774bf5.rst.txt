@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2functions_8h_1aa1dab5cbd39a63dca239c31c21774bf5:
+
+Function soti_acos
+==================
+
+- Defined in :ref:`file_oti_sparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_acos(sotinum_t *, dhelpl_t)
+   :project: OTIlib

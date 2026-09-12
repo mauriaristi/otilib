@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2algebra_8h_1a50ad0cea991fc6a0114eb96f710ac7f8:
+
+Function soti_sub_ro_to
+=======================
+
+- Defined in :ref:`file_oti_sparse_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_sub_ro_to(coeff_t, sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

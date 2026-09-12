@@ -1,0 +1,988 @@
+:orphan:
+
+
+Full API
+========
+
+Directories
+***********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_array.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_array.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_array.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_array.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_array.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_array.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_complex.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_core.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_darr.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_dense.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_element.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_experimental.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_fem.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_gauss.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_gauss.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_gauss.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_gauss.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_gauss.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_gauss.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_gauss.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_gauss.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_gauss.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_include.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_integration_points.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_oarr.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_old.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_oti.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_oti_of_array.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_otinum.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_real.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_real.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_real.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_real.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_real.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_semisparse.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_soti.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_soti.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir_sparse.rst
+
+Files
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_basis_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_comm.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_gauss_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_gauss_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_gauss_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_gauss_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_gauss_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_array_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_derivatives.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_scalar_comm.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_scalar_gauss_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_scalar_gauss_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_scalar_gauss_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_scalar_gauss_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_complex_scalar_gauss_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_core.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_core_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_core_dense.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_core_sparse.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_core_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_core_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_array_algebra_elementwise.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_array_algebra_matops.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_array_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_array_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_array_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_array_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_scalar_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_scalar_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_scalar_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_scalar_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_dense_scalar_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_element.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_enums.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_experimental.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_fedarr.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_element_old_real_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_element_old_real_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_element_real_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_element_real_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_element_soti_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_element_soti_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_darr_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_darr_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_darr_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_darr_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_oarr_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_oarr_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_oarr_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_oarr_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_otinum_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_otinum_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_otinum_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_otinum_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_real_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_real_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_real_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_real_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_integration_points_real_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_integration_points_soti_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_feoarr.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_feotinum.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar_fereal.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_core_fileio.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_array_feoarr.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_integration_points.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_core_linkedlist.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_omp_dummy.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_oti.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_core_precompute.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_experimental_pytorch_graph_eval.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_gauss_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_gauss_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_gauss_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_gauss_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_gauss_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_array_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_derivatives.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_scalar_gauss_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_scalar_gauss_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_scalar_gauss_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_scalar_gauss_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_real_scalar_gauss_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_fem_gauss_scalar.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_algebra_elementwise.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_algebra_matops.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_gauss.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_gauss_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_gauss_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_gauss_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_gauss_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_gauss_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_array_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_gauss.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_gauss_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_gauss_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_gauss_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_gauss_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_gauss_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_semisparse_scalar_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_algebra_elementwise.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_algebra_matops.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_gauss.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_gauss_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_gauss_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_gauss_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_gauss_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_gauss_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_oti_of_array_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_oti_of_array_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_gauss.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_gauss_algebra.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_gauss_base.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_gauss_functions.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_gauss_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_gauss_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_structures.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_scalar_utils.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_static.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file_oti_sparse_array_oti_of_array_structures_array.h.rst

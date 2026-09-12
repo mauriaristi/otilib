@@ -1,0 +1,17 @@
+.. _exhale_struct_structfecarr__t:
+
+Struct fecarr_t
+===============
+
+- Defined in :ref:`file_oti_complex_array_gauss_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: fecarr_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

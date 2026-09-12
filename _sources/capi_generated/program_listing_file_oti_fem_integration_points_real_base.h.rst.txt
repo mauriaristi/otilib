@@ -1,0 +1,65 @@
+
+.. _program_listing_file_oti_fem_integration_points_real_base.h:
+
+Program Listing for File fem/integration_points/real/base.h
+===========================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_fem_integration_points_real_base.h>` (``oti/fem/integration_points/real/base.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   
+   
+   
+   // Integration points.
+   
+   
+   
+   
+   
+   
+   int64_t fem_intPts_real( uint64_t order, int64_t elementType, 
+                            fednum_t*  xi,   fednum_t*   eta,   fednum_t* zeta, 
+                            fednum_t* weights );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   
+   uint64_t fem_addLineIntPts_real(uint8_t nperm, uint64_t start, double a,  double w,
+                                   fednum_t* xi, fednum_t* eta, fednum_t* zeta, 
+                                   fednum_t* weights );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   uint64_t fem_addTriangleIntPts_real(uint8_t nperm, uint64_t start, 
+                                       double a, double b, double c, double w,
+                                       fednum_t* xi, fednum_t* eta, fednum_t* zeta, 
+                                       fednum_t* weights );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   uint64_t fem_addTetrahedraIntPts_real(uint8_t nperm, uint64_t start, 
+                                         double a, double b, double c, double d, double w,
+                                         fednum_t* xi, fednum_t* eta, fednum_t* zeta, 
+                                         fednum_t* weights );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   

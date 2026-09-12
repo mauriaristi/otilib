@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2utils_8h_1ab749683ae229e3b23522b34404757f40:
+
+Function arrso_dimCheck_RO_elementwise
+======================================
+
+- Defined in :ref:`file_oti_sparse_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_dimCheck_RO_elementwise(darr_t *, arrso_t *, arrso_t *)
+   :project: OTIlib

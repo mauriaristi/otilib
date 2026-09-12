@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2gauss_2algebra_8h_1a67f9726b9c864a4f491c94b1c692b31f:
+
+Function fessoti_sub_fr
+=======================
+
+- Defined in :ref:`file_oti_semisparse_scalar_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fessoti_sub_fr(fessoti_t *, coeff_t, dhelpl_t)
+   :project: OTIlib

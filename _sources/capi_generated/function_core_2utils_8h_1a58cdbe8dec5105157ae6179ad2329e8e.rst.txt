@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1a58cdbe8dec5105157ae6179ad2329e8e:
+
+Function set_global_test
+========================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: set_global_test(int)
+   :project: OTIlib

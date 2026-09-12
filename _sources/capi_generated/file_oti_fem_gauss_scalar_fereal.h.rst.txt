@@ -1,0 +1,45 @@
+
+.. _file_oti_fem_gauss_scalar_fereal.h:
+
+File fereal.h
+=============
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/gauss/scalar/fereal.h``)
+----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_gauss_scalar_fereal.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``real/algebra.h`` (:ref:`file_oti_fem_gauss_scalar_real_algebra.h`)
+
+- ``real/base.h`` (:ref:`file_oti_fem_element_old_real_base.h`)
+
+- ``real/structures.h`` (:ref:`file_oti_fem_element_old_real_structures.h`)
+
+- ``real/utils.h`` (:ref:`file_oti_fem_gauss_scalar_real_utils.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_gauss_scalar.h`
+
+
+

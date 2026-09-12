@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2real_2base_8h_1a5d9c898deefbb8a78e35d6438ca97849:
+
+Function elemd_is_allocated
+===========================
+
+- Defined in :ref:`file_oti_fem_element_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemd_is_allocated(elemd_t *)
+   :project: OTIlib

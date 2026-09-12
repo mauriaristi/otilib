@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2old_2real_2base_8h_1afeaa76c7124136a43bb94d4ce8a6c2c1:
+
+Function elem_raise_flag_start
+==============================
+
+- Defined in :ref:`file_oti_fem_element_old_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elem_raise_flag_start(elem_t *)
+   :project: OTIlib

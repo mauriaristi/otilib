@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1a006cc9d1e980e645e46a1f8d813b662b:
+
+Function fearrso_get_order_im_to
+================================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_get_order_im_to(ord_t, fearrso_t *, fearrso_t *, dhelpl_t)
+   :project: OTIlib

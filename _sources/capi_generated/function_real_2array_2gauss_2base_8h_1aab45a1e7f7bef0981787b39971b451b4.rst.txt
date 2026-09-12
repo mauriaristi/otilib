@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2base_8h_1aab45a1e7f7bef0981787b39971b451b4:
+
+Function fedarr_createEmpty(uint64_t, uint64_t, uint64_t)
+=========================================================
+
+- Defined in :ref:`file_oti_real_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_createEmpty(uint64_t, uint64_t, uint64_t)
+   :project: OTIlib

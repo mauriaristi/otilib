@@ -1,0 +1,14 @@
+.. _exhale_function_feoarr_8h_1a97c0b5f8a8d1510b83105d3a297abf1a:
+
+Function feoarr_gaussIntegrateOverElement
+=========================================
+
+- Defined in :ref:`file_oti_fem_feoarr.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_gaussIntegrateOverElement(feoarr_t *, elemProps_t *, oarr_t *, dhelpl_t)
+   :project: OTIlib

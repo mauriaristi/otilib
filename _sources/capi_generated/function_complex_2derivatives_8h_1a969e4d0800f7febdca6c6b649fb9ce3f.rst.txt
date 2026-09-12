@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2derivatives_8h_1a969e4d0800f7febdca6c6b649fb9ce3f:
+
+Function der_c_sinh
+===================
+
+- Defined in :ref:`file_oti_complex_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_c_sinh(coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

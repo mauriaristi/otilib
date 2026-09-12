@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2gauss_2base_8h_1a53f3d4aaac4ccf8cffd65c2096309be9:
+
+Function fessoti_createEmpty_bases
+==================================
+
+- Defined in :ref:`file_oti_semisparse_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fessoti_createEmpty_bases(uint64_t, bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

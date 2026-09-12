@@ -1,0 +1,114 @@
+
+.. _file_oti_real_array_gauss_functions.h:
+
+File real/array/gauss/functions.h
+=================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/array/gauss/functions.h``)
+-------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_array_gauss_functions.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1ac54cf9767153e5b14789f44f9c1fc61d`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a6987198b4a9dc2a71a88399746ea4df8`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a247c01c221a6843b09ab10406d8a07f2`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1aa1bf7789e3d4b2968711857c678dd4be`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a83fd93fc59dcf42e905f6d64ad0d98bf`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a893516265f7e8965e74f63d61be67956`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a8283ca5edc42e46b2a1954c6c2c32415`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a2bbfff90622a626dec5bd6886fbf2c09`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1aaf1b4dac5d1b9d67ec9d86f5d408c988`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1abdbb9bbb9cdfcf2243245f116acb34bf`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1ab19f03e4f8ccfb35287e4fb78c4b3fbf`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1ab48ba3bdabed0866820eb82b8ceaa375`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1ab456a05f51eca58452507f3e3766f77e`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1aa62d468a862d5935d22ab5a5fa0aed74`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a8a566c1df836153c3620780034723cf3`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a484d9a27019a4ef7d46ed40e2544fc3d`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a6bd48e684e7d2367a7da055cdd073a30`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a1c491cd268a40d26373d227430dc0ce8`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a7695bb090055f572f91e10434afe02dc`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a176f1d707488e927b0a6190eaf1c92bf`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a85561fe5f56d64704d007eda91232442`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a0c058a6389e5899527e903eef1651e17`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a3c64abd7108370658993835cc6ef0a96`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a7cc3078a7ee248f0de4ef6ff68fdf2dd`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a3d705ae749be780bca30e2892879e738`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1abe83de397ebcdb1ab11e909cbba84197`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a495c99baa0a1ddab56adf5783772d40b`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1aca6fc4abda1ff8fe97fac3914856c25d`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a96dbc1fbf4cb99ea38a13325444f5481`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a3353285f2b8cd4e3f93a8061c78e7431`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a9116ebdb19f7be241f663a70176bab4e`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a3853219c3380ad0d476a1471225fd71c`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a0dda5be8c3b850c2ac7ddecb9d485f7f`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a0054539c0a6cf95b1e11cdc14b42d96c`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a8ae8bfa124b477560777967d35353d6f`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a44142001e14b584e0f54ba7e5a82cf7d`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a0246709b9a9fbe2148821613c3fedebf`
+
+- :ref:`exhale_function_real_2array_2gauss_2functions_8h_1a613f5cfe97313954442d4b67fc07371c`
+

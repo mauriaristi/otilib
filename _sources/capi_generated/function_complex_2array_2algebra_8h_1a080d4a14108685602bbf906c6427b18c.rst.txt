@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1a080d4a14108685602bbf906c6427b18c:
+
+Function carr_transpose
+=======================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_transpose(carr_t *)
+   :project: OTIlib

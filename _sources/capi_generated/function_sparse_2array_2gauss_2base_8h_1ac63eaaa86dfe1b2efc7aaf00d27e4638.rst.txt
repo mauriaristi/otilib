@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1ac63eaaa86dfe1b2efc7aaf00d27e4638:
+
+Function fearrso_set_item_ij_f
+==============================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_set_item_ij_f(fesoti_t *, uint64_t, uint64_t, fearrso_t *, dhelpl_t)
+   :project: OTIlib

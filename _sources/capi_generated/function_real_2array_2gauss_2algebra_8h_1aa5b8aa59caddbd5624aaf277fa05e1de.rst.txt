@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2algebra_8h_1aa5b8aa59caddbd5624aaf277fa05e1de:
+
+Function fedarr_norm_to
+=======================
+
+- Defined in :ref:`file_oti_real_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_norm_to(fedarr_t *, fednum_t *)
+   :project: OTIlib

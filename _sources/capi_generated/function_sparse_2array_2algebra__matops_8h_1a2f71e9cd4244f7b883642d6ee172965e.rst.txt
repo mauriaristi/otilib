@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2algebra__matops_8h_1a2f71e9cd4244f7b883642d6ee172965e:
+
+Function arrso_transpose
+========================
+
+- Defined in :ref:`file_oti_sparse_array_algebra_matops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_transpose(arrso_t *, dhelpl_t)
+   :project: OTIlib

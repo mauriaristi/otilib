@@ -1,0 +1,17 @@
+.. _exhale_struct_structsoarr__t:
+
+Struct soarr_t
+==============
+
+- Defined in :ref:`file_oti_sparse_array_oti_of_array_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: soarr_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

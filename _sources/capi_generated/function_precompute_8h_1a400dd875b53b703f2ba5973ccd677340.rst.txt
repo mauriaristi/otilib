@@ -1,0 +1,14 @@
+.. _exhale_function_precompute_8h_1a400dd875b53b703f2ba5973ccd677340:
+
+Function dhelp_precompute_multtabls
+===================================
+
+- Defined in :ref:`file_oti_core_precompute.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_precompute_multtabls(ord_t, bases_t, dhelpl_t *)
+   :project: OTIlib

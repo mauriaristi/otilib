@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2base_8h_1a20d7efc8413cc15f851fd9950d706196:
+
+Function fesoti_set_deriv_f
+===========================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_set_deriv_f(fesoti_t *, imdir_t, ord_t, fesoti_t *, dhelpl_t)
+   :project: OTIlib

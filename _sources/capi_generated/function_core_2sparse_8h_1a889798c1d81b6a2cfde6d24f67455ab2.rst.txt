@@ -1,0 +1,14 @@
+.. _exhale_function_core_2sparse_8h_1a889798c1d81b6a2cfde6d24f67455ab2:
+
+Function dhelp_add_sparse
+=========================
+
+- Defined in :ref:`file_oti_core_sparse.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_add_sparse(coeff_t *, imdir_t *, ndir_t, coeff_t *, imdir_t *, ndir_t, coeff_t *, imdir_t *, ndir_t *, dhelpl_t)
+   :project: OTIlib

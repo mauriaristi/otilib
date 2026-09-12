@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1a6ea3282cf8d2fe7a18c9ab47db382c9b:
+
+Function arrso_set_r
+====================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_set_r(coeff_t, arrso_t *, dhelpl_t)
+   :project: OTIlib

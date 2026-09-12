@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2utils_8h_1a89f7d060bfc753732151457720e94e0f:
+
+Function carr_dimCheck_R_transpose
+==================================
+
+- Defined in :ref:`file_oti_complex_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_dimCheck_R_transpose(carr_t *, carr_t *)
+   :project: OTIlib

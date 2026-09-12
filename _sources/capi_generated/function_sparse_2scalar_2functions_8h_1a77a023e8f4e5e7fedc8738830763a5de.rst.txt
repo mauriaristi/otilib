@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2functions_8h_1a77a023e8f4e5e7fedc8738830763a5de:
+
+Function soti_logb
+==================
+
+- Defined in :ref:`file_oti_sparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_logb(sotinum_t *, double, dhelpl_t)
+   :project: OTIlib

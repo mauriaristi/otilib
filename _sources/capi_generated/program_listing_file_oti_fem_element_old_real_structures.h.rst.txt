@@ -1,0 +1,77 @@
+
+.. _program_listing_file_oti_fem_element_old_real_structures.h:
+
+Program Listing for File fem/element/old/real/structures.h
+==========================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_fem_element_old_real_structures.h>` (``oti/fem/element/old/real/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_FEM_ELEMENT_REAL_STRUCTURES_H
+   #define OTI_FEM_ELEMENT_REAL_STRUCTURES_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef struct elemprops_s{
+       // OTI properties
+       ord_t           otiorder; 
+       bases_t        otinbases; 
+       // FEM Properties
+       uint64_t          nbasis; 
+       uint64_t           order; 
+       int64_t         geomBase; 
+       int64_t             kind; 
+       uint8_t             ndim; 
+       uint64_t         nIntPts; 
+       uint8_t             nder; 
+       uint8_t           isInit; 
+       uint8_t     nDimAnalysis; 
+       darr_t       p_intPoints; 
+       darr_t      p_intWeights; 
+       darr_t*      p_evalBasis; 
+       feoarr_t               J; 
+       feoarr_t            Jinv; 
+       feoarr_t            Jdet; 
+       feoarr_t*        p_basis; 
+       feoarr_t    p_detWeights; 
+       int64_t (*f_basis)(int64_t,int64_t,darr_t*,void*,darr_t*); 
+   } elemProps_t;
+   
+   typedef struct elem_s{    
+       // FEM Properties
+       uint64_t          nbasis; 
+       uint64_t           order; 
+       int64_t         geomBase; 
+       int64_t             kind; 
+       uint8_t             ndim; 
+       uint64_t         nIntPts; 
+       uint8_t             nder; 
+       uint8_t           isInit; 
+       uint8_t     nDimAnalysis; 
+       darr_t            intPts; 
+       darr_t            intWts; 
+       darr_t*      p_evalBasis; 
+                                 // p_evalBasis[0] -> N  
+                                 // p_evalBasis[1] -> Na 
+                                 // p_evalBasis[2] -> Nb 
+                                 // p_evalBasis[3] -> Nc 
+                                 // p_evalBasis[4] -> Naa
+                                 // p_evalBasis[5] -> Nab
+                                 // p_evalBasis[6] -> Nbb
+                                 // p_evalBasis[7] -> Nac
+                                 // p_evalBasis[8] -> Nbc
+                                 // p_evalBasis[9] -> Ncc
+   } elem_t;
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   #endif 

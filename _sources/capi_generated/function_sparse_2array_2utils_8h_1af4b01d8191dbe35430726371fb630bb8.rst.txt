@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2utils_8h_1af4b01d8191dbe35430726371fb630bb8:
+
+Function arrso_get_active_bases
+===============================
+
+- Defined in :ref:`file_oti_sparse_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_get_active_bases(arrso_t *, imdir_t *, dhelpl_t)
+   :project: OTIlib

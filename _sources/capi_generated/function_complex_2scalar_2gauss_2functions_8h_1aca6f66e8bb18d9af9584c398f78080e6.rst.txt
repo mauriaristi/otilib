@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2functions_8h_1aca6f66e8bb18d9af9584c398f78080e6:
+
+Function fecnum_sqrt
+====================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_sqrt(fecnum_t *)
+   :project: OTIlib

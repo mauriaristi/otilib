@@ -1,0 +1,82 @@
+
+.. _file_oti_real_scalar_gauss_algebra.h:
+
+File real/scalar/gauss/algebra.h
+================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/scalar/gauss/algebra.h``)
+------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_scalar_gauss_algebra.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a14f625cfeedb8123bd3573a577be642c`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1ab56d67618c0e6afe5b5f87b497632d77`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a7541762fe09a190acf4ca8f75865d450`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a71dd6689bea6627303f9fb269aa8b16a`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1aa83cef99aac83c4e53bffa2ffb1c027a`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1ad9435723bdff2f2690add07518574bde`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1aa3b8fb017b35580291d0be5e01be6d77`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1adeb0ee3b75250d221244542f71f845a6`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a6f13f5e9bc500e95d2e45d8723c884cd`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a4f126c9fa4cf3a6e761f342d38372c00`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a507987dd56495511b6ce70de2c60fdcc`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a640e87cd6022ff69a8a3653ebfa248fe`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a4f1776ebc490a6375e286e55ed9088b6`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1acc3c55335c6567d6620f41deb9822843`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a95814da1217bb2bc6d84379bfa04fd71`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1ab13236df727664e00b75306fccbd28c2`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a87a937e2a7986c250539fada6989e9ea`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1ae47e98305b8068f0dcbe4c3bbe840896`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a3912d513a20e3b64fce83d253c9b6bfc`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1abc90d5fb986585586c716a0c89c09c01`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a01e02510944ef1563c91ee126518c140`
+
+- :ref:`exhale_function_real_2scalar_2gauss_2algebra_8h_1a1be0d2bf092d8df35c4785ccf4cc2e13`
+

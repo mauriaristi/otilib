@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2algebra_8h_1a4b8dd5c2cb8657d41c2cdc05b2660f41:
+
+Function fearrso_mul_fF_to
+==========================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_mul_fF_to(fesoti_t *, fearrso_t *, fearrso_t *, dhelpl_t)
+   :project: OTIlib

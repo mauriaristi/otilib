@@ -1,0 +1,14 @@
+.. _exhale_function_real_2derivatives_8h_1a2d35228951e4363c12f69b6bcee1b7cb:
+
+Function der_r_atanh
+====================
+
+- Defined in :ref:`file_oti_real_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_r_atanh(coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

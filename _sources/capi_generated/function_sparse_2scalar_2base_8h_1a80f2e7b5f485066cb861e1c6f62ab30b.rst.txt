@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a80f2e7b5f485066cb861e1c6f62ab30b:
+
+Function soti_get_rtmp
+======================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_get_rtmp(ndir_t, ord_t, dhelpl_t)
+   :project: OTIlib

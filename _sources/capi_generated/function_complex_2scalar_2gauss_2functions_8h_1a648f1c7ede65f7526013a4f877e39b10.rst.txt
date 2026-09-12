@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2functions_8h_1a648f1c7ede65f7526013a4f877e39b10:
+
+Function fecnum_pow
+===================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_pow(fecnum_t *, double)
+   :project: OTIlib

@@ -1,0 +1,40 @@
+
+.. _file_oti_complex_scalar_comm.h:
+
+File complex/scalar/comm.h
+==========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex/scalar/comm.h``)
+------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex_scalar_comm.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``complex.h`` (:ref:`file_oti_complex.h`)
+
+
+
+
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_complex_2scalar_2comm_8h_1ade801bc50619add34d969ee816f58d1c`
+

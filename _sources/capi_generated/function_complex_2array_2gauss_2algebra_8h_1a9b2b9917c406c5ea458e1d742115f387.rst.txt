@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2algebra_8h_1a9b2b9917c406c5ea458e1d742115f387:
+
+Function fecarr_invert_to
+=========================
+
+- Defined in :ref:`file_oti_complex_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_invert_to(fecarr_t *, fecarr_t *)
+   :project: OTIlib

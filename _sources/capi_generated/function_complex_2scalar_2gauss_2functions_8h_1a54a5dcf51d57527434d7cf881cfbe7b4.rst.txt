@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2functions_8h_1a54a5dcf51d57527434d7cf881cfbe7b4:
+
+Function fecnum_log_to
+======================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_log_to(fecnum_t *, fecnum_t *)
+   :project: OTIlib

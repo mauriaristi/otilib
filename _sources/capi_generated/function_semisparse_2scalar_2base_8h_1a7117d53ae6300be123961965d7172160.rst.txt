@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2base_8h_1a7117d53ae6300be123961965d7172160:
+
+Function ssoti_set_trunc
+========================
+
+- Defined in :ref:`file_oti_semisparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ssoti_set_trunc(semiotin_t *, ord_t, semiotin_t *, dhelpl_t)
+   :project: OTIlib

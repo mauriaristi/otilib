@@ -1,0 +1,14 @@
+.. _exhale_function_core_2dense_8h_1a548257925dd38ccf85874170b2e70f74:
+
+Function dhelp_dense_mult
+=========================
+
+- Defined in :ref:`file_oti_core_dense.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_dense_mult(coeff_t *, ndir_t, ord_t, coeff_t *, ndir_t, ord_t, coeff_t *, ndir_t, dhelpl_t)
+   :project: OTIlib

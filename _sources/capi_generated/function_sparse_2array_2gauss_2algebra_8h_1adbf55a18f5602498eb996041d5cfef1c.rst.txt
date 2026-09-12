@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2algebra_8h_1adbf55a18f5602498eb996041d5cfef1c:
+
+Function fearrso_matmul_RF_to
+=============================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_matmul_RF_to(darr_t *, fearrso_t *, fearrso_t *, dhelpl_t)
+   :project: OTIlib

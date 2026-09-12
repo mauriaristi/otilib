@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2base_8h_1a61bdb9ded90e5b8234f9bf0ad756d248:
+
+Function carr_get_slice_to
+==========================
+
+- Defined in :ref:`file_oti_complex_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_get_slice_to(carr_t *, int64_t, int64_t, int64_t, int64_t, int64_t, int64_t, carr_t *)
+   :project: OTIlib

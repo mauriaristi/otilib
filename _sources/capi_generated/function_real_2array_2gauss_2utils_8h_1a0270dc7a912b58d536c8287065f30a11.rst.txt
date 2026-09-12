@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2utils_8h_1a0270dc7a912b58d536c8287065f30a11:
+
+Function fedarr_dimCheck_F_squareness
+=====================================
+
+- Defined in :ref:`file_oti_real_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_dimCheck_F_squareness(fedarr_t *, fedarr_t *)
+   :project: OTIlib

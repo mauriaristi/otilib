@@ -1,0 +1,14 @@
+.. _exhale_function_feoarr_8h_1a8234a5877aeb9373948b3be26c311788:
+
+Function feoarr_set_item_k(oarr_t \*, uint64_t, feoarr_t \*, dhelpl_t)
+======================================================================
+
+- Defined in :ref:`file_oti_fem_feoarr.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_set_item_k(oarr_t *, uint64_t, feoarr_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,86 @@
+
+.. _file_oti_real.h:
+
+File real.h
+===========
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real.h``)
+---------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``math.h``
+
+- ``oti/comm.h`` (:ref:`file_oti_comm.h`)
+
+- ``real/array/algebra.h`` (:ref:`file_oti_real_array_algebra.h`)
+
+- ``real/array/base.h`` (:ref:`file_oti_real_array_base.h`)
+
+- ``real/array/functions.h`` (:ref:`file_oti_real_array_functions.h`)
+
+- ``real/array/gauss/algebra.h`` (:ref:`file_oti_real_array_gauss_algebra.h`)
+
+- ``real/array/gauss/base.h`` (:ref:`file_oti_real_array_gauss_base.h`)
+
+- ``real/array/gauss/functions.h`` (:ref:`file_oti_real_array_gauss_functions.h`)
+
+- ``real/array/gauss/structures.h`` (:ref:`file_oti_real_array_gauss_structures.h`)
+
+- ``real/array/gauss/utils.h`` (:ref:`file_oti_real_array_gauss_utils.h`)
+
+- ``real/array/structures.h`` (:ref:`file_oti_real_array_structures.h`)
+
+- ``real/array/utils.h`` (:ref:`file_oti_real_array_utils.h`)
+
+- ``real/derivatives.h`` (:ref:`file_oti_real_derivatives.h`)
+
+- ``real/scalar/gauss/algebra.h`` (:ref:`file_oti_real_scalar_gauss_algebra.h`)
+
+- ``real/scalar/gauss/base.h`` (:ref:`file_oti_real_scalar_gauss_base.h`)
+
+- ``real/scalar/gauss/functions.h`` (:ref:`file_oti_real_scalar_gauss_functions.h`)
+
+- ``real/scalar/gauss/structures.h`` (:ref:`file_oti_real_scalar_gauss_structures.h`)
+
+- ``real/scalar/gauss/utils.h`` (:ref:`file_oti_real_scalar_gauss_utils.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+- :ref:`file_oti_fem.h`
+
+- :ref:`file_oti_oti.h`
+
+- :ref:`file_oti_semisparse.h`
+
+- :ref:`file_oti_sparse.h`
+
+
+

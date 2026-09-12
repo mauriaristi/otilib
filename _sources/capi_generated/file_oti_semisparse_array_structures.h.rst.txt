@@ -1,0 +1,34 @@
+
+.. _file_oti_semisparse_array_structures.h:
+
+File semisparse/array/structures.h
+==================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/array/structures.h``)
+--------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_array_structures.h.rst
+
+
+
+
+
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structarrsso__t`
+

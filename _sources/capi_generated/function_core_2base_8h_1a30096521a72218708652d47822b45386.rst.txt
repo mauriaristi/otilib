@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a30096521a72218708652d47822b45386:
+
+Function dhelp_freeItem
+=======================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_freeItem(dhelp_t *)
+   :project: OTIlib

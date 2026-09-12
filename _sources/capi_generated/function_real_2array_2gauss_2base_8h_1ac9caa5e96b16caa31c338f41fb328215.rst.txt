@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2base_8h_1ac9caa5e96b16caa31c338f41fb328215:
+
+Function fedarr_set_f(fednum_t \*, fedarr_t \*)
+===============================================
+
+- Defined in :ref:`file_oti_real_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_set_f(fednum_t *, fedarr_t *)
+   :project: OTIlib

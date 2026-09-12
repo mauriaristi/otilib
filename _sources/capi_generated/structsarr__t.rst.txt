@@ -1,0 +1,17 @@
+.. _exhale_struct_structsarr__t:
+
+Struct sarr_t
+=============
+
+- Defined in :ref:`file_oti_sparse_array_oti_of_array_structures_array.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: sarr_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1aaf0cc53142e0dd58a55ec65cb2928af0:
+
+Function arrso_set_slice_o
+==========================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_set_slice_o(sotinum_t *, int64_t, int64_t, int64_t, int64_t, int64_t, int64_t, arrso_t *, dhelpl_t)
+   :project: OTIlib

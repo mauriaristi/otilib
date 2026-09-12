@@ -1,0 +1,14 @@
+.. _exhale_define_comm_8h_1aae68f605f39ec261c08c539fea87f76e:
+
+Define _SUINT16T
+================
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: _SUINT16T
+   :project: OTIlib

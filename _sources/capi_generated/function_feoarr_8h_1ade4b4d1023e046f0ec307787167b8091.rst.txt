@@ -1,0 +1,14 @@
+.. _exhale_function_feoarr_8h_1ade4b4d1023e046f0ec307787167b8091:
+
+Function feoarr_createEmpty(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, bases_t, ord_t, dhelpl_t)
+=======================================================================================================
+
+- Defined in :ref:`file_oti_fem_feoarr.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_createEmpty(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

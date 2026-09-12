@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2algebra_8h_1af0b50596f36e71c93a086ec5a28f1a84:
+
+Function fearrso_div_Fo
+=======================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_div_Fo(fearrso_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

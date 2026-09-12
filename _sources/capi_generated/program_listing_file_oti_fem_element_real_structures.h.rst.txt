@@ -1,0 +1,47 @@
+
+.. _program_listing_file_oti_fem_element_real_structures.h:
+
+Program Listing for File fem/element/real/structures.h
+======================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_fem_element_real_structures.h>` (``oti/fem/element/real/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_FEM_ELEMENT_REAL_STRUCTURES_H
+   #define OTI_FEM_ELEMENT_REAL_STRUCTURES_H
+   
+   
+   typedef struct elemd_s{    
+       // FEM Properties
+       uint64_t          nbasis; 
+       uint64_t           order; 
+       int64_t         geomBase; 
+       int64_t             kind; 
+       uint8_t             ndim; 
+       uint64_t             nip; 
+       uint8_t             nder; 
+       uint8_t           isInit; 
+       uint8_t     nDimAnalysis; 
+       fednum_t              xi; 
+       fednum_t             eta; 
+       fednum_t            zeta; 
+       fednum_t               w; 
+       fedarr_t*    p_evalBasis; 
+                                 // p_evalBasis[0] -> N  
+                                 // p_evalBasis[1] -> Na 
+                                 // p_evalBasis[2] -> Nb 
+                                 // p_evalBasis[3] -> Nc 
+                                 // p_evalBasis[4] -> Naa
+                                 // p_evalBasis[5] -> Nab
+                                 // p_evalBasis[6] -> Nbb
+                                 // p_evalBasis[7] -> Nac
+                                 // p_evalBasis[8] -> Nbc
+                                 // p_evalBasis[9] -> Ncc
+   } elemd_t;
+   
+   
+   
+   #endif 

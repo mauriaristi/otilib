@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1abe15bad55d31a4417497c7d1563cf1f0:
+
+Function carr_sum_Rr
+====================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_sum_Rr(carr_t *, ccoeff_t)
+   :project: OTIlib

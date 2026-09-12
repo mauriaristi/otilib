@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1a486c64c807bad9a388db7b3d910c973e:
+
+Function darr_transpose_to
+==========================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_transpose_to(darr_t *, darr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2functions_8h_1aeab133888afb9afca1606080fa7fda88:
+
+Function arrso_sqrt_to
+======================
+
+- Defined in :ref:`file_oti_sparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_sqrt_to(arrso_t *, arrso_t *, dhelpl_t)
+   :project: OTIlib

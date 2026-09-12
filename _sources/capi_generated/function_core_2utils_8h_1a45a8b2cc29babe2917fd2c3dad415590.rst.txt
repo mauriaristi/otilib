@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1a45a8b2cc29babe2917fd2c3dad415590:
+
+Function error_exit
+===================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: error_exit(int64_t)
+   :project: OTIlib

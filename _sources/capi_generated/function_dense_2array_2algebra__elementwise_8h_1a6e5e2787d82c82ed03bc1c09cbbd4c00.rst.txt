@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2algebra__elementwise_8h_1a6e5e2787d82c82ed03bc1c09cbbd4c00:
+
+Function oarr_neg_to
+====================
+
+- Defined in :ref:`file_oti_dense_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_neg_to(oarr_t *, oarr_t *, dhelpl_t)
+   :project: OTIlib

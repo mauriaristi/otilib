@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2utils_8h_1a2db394f90a8132091f85820bd17953f4:
+
+Function fecarr_dimCheck_F_transpose
+====================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_dimCheck_F_transpose(fecarr_t *, fecarr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2derivatives_8h_1a89260170dbebdffaad8a8dc621d3d966:
+
+Function der_c_log
+==================
+
+- Defined in :ref:`file_oti_complex_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_c_log(coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

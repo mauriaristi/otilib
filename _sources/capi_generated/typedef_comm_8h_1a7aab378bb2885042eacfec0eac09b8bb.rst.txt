@@ -1,0 +1,14 @@
+.. _exhale_typedef_comm_8h_1a7aab378bb2885042eacfec0eac09b8bb:
+
+Typedef flag_t
+==============
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: flag_t
+   :project: OTIlib

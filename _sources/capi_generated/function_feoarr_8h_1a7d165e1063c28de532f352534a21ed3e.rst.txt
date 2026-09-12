@@ -1,0 +1,14 @@
+.. _exhale_function_feoarr_8h_1a7d165e1063c28de532f352534a21ed3e:
+
+Function feoarr_invert_to(feoarr_t \*, feoarr_t \*, dhelpl_t)
+=============================================================
+
+- Defined in :ref:`file_oti_fem_feoarr.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_invert_to(feoarr_t *, feoarr_t *, dhelpl_t)
+   :project: OTIlib

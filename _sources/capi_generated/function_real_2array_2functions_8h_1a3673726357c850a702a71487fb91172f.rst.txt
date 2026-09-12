@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2functions_8h_1a3673726357c850a702a71487fb91172f:
+
+Function darr_logb
+==================
+
+- Defined in :ref:`file_oti_real_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_logb(darr_t *, double)
+   :project: OTIlib

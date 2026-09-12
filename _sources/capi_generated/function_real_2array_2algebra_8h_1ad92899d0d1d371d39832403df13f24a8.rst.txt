@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1ad92899d0d1d371d39832403df13f24a8:
+
+Function darr_dotproduct_RR
+===========================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_dotproduct_RR(darr_t *, darr_t *)
+   :project: OTIlib

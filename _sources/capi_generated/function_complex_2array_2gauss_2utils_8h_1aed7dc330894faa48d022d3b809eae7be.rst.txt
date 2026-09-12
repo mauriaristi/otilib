@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2utils_8h_1aed7dc330894faa48d022d3b809eae7be:
+
+Function fecarr_dimCheck_F_squareness
+=====================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_dimCheck_F_squareness(fecarr_t *, fecarr_t *)
+   :project: OTIlib

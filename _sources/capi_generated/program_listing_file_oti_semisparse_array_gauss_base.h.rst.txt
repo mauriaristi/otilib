@@ -1,0 +1,231 @@
+
+.. _program_listing_file_oti_semisparse_array_gauss_base.h:
+
+Program Listing for File semisparse/array/gauss/base.h
+======================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_semisparse_array_gauss_base.h>` (``oti/semisparse/array/gauss/base.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SEMISPARSE_ARRAY_GAUSS_BASE_H
+   #define OTI_SEMISPARSE_ARRAY_GAUSS_BASE_H
+   
+   
+   
+   
+   void      fearrsso_get_order_im_to( ord_t order, fearrsso_t* arr, fearrsso_t* res, dhelpl_t dhl);
+   fearrsso_t fearrsso_get_order_im(    ord_t order, fearrsso_t* arr,                 dhelpl_t dhl);
+   
+   fearrsso_t fearrsso_get_deriv(   imdir_t idx, ord_t order, fearrsso_t* arr,                 dhelpl_t dhl);
+   void      fearrsso_get_deriv_to(imdir_t idx, ord_t order, fearrsso_t* arr, fearrsso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   fearrsso_t fearrsso_get_im(      imdir_t idx, ord_t order, fearrsso_t* arr,                 dhelpl_t dhl);
+   void      fearrsso_get_im_to(   imdir_t idx, ord_t order, fearrsso_t* arr, fearrsso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   fearrsso_t fearrsso_truncate_im(   imdir_t idx, ord_t order, fearrsso_t* arr,                 dhelpl_t dhl);
+   void      fearrsso_truncate_im_to(imdir_t idx, ord_t order, fearrsso_t* arr, fearrsso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/
+   fearrsso_t fearrsso_copy(   fearrsso_t* src,                 dhelpl_t dhl);
+   void      fearrsso_copy_to(fearrsso_t* src, fearrsso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fearrsso_t fearrsso_get_im(    imdir_t idx, ord_t order, fearrsso_t* arr,                 dhelpl_t dhl);
+   void      fearrsso_get_im_to( imdir_t idx, ord_t order, fearrsso_t* arr, fearrsso_t* res, dhelpl_t dhl);
+   
+   fearrsso_t fearrsso_get_deriv(    imdir_t idx, ord_t order, fearrsso_t* arr,                 dhelpl_t dhl);
+   void      fearrsso_get_deriv_to( imdir_t idx, ord_t order, fearrsso_t* arr, fearrsso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   /**************************************************************************************************/
+   fearrsso_t fearrsso_extract_im(    imdir_t idx, ord_t order, fearrsso_t* arr,                  dhelpl_t dhl);
+   void      fearrsso_extract_im_to( imdir_t idx, ord_t order, fearrsso_t* arr,  fearrsso_t* res, dhelpl_t dhl);
+   
+   fearrsso_t fearrsso_extract_deriv(    imdir_t idx, ord_t order, fearrsso_t* arr,                 dhelpl_t dhl);
+   void      fearrsso_extract_deriv_to( imdir_t idx, ord_t order, fearrsso_t* arr, fearrsso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   arrsso_t   fearrsso_get_item_k(  fearrsso_t* arr, uint64_t k,                         dhelpl_t dhl);
+   fessoti_t  fearrsso_get_item_ij( fearrsso_t* arr, uint64_t i, uint64_t j,             dhelpl_t dhl);
+   semiotin_t fearrsso_get_item_ijk(fearrsso_t* arr, uint64_t i, uint64_t j, uint64_t k, dhelpl_t dhl);
+   
+   void fearrsso_get_item_ij_to(  fearrsso_t* arr, uint64_t i, uint64_t j, 
+                                  fessoti_t* res, dhelpl_t dhl);
+   
+   void fearrsso_get_item_k_to(   fearrsso_t* arr, uint64_t k, 
+                                   arrsso_t* res, dhelpl_t dhl);
+   
+   void fearrsso_get_item_ijk_to( fearrsso_t* arr, uint64_t i, uint64_t j, uint64_t k, 
+                                 semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   fearrsso_t fearrsso_get_slice(fearrsso_t* arr, 
+                             int64_t starti, int64_t stopi, int64_t stepi,
+                             int64_t startj, int64_t stopj, int64_t stepj, 
+                              dhelpl_t dhl);
+   
+   void      fearrsso_get_slice_to(fearrsso_t* arr, 
+                             int64_t starti, int64_t stopi, int64_t stepi,
+                             int64_t startj, int64_t stopj, int64_t stepj, 
+                             fearrsso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   void fearrsso_set_item_ij_r(   coeff_t  elm, uint64_t i, uint64_t j,
+                               fearrsso_t* res, dhelpl_t dhl);
+   
+   void fearrsso_set_item_ij_o(  semiotin_t* elm, uint64_t i, uint64_t j,
+                                fearrsso_t* res, dhelpl_t dhl);
+   
+   void fearrsso_set_item_ij_f(  fessoti_t* elm, uint64_t i, uint64_t j,
+                               fearrsso_t* res, dhelpl_t dhl);
+   
+   void fearrsso_set_item_k_r(    coeff_t  elm, uint64_t k, 
+                               fearrsso_t* res, dhelpl_t dhl);
+   
+   void fearrsso_set_item_k_o(  semiotin_t* elm, uint64_t k, 
+                               fearrsso_t* res, dhelpl_t dhl);
+   
+   void fearrsso_set_item_k_R(    arrsso_t* elm, uint64_t k, 
+                             fearrsso_t* res, dhelpl_t dhl);
+   
+   void fearrsso_set_item_k_O(    arrsso_t* elm, uint64_t k, 
+                             fearrsso_t* res, dhelpl_t dhl);
+   
+   void fearrsso_set_item_ijk_r(   coeff_t  elm, uint64_t i, uint64_t j, uint64_t k, 
+                                fearrsso_t* res, dhelpl_t dhl);
+   
+   void fearrsso_set_item_ijk_o( semiotin_t* elm, uint64_t i, uint64_t j, uint64_t k, 
+                                fearrsso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/ 
+   void fearrsso_set_slice_r( coeff_t val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrsso_t* res, dhelpl_t dhl);
+   void fearrsso_set_slice_o( semiotin_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrsso_t* res, dhelpl_t dhl);
+   void fearrsso_set_slice_f( fessoti_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrsso_t* res, dhelpl_t dhl);
+   void fearrsso_set_slice_O( arrsso_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrsso_t* res, dhelpl_t dhl);
+   void fearrsso_set_slice_F( fearrsso_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrsso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   void fearrsso_set_all_o( semiotin_t* num, fearrsso_t* arr, dhelpl_t dhl );
+   void fearrsso_set_all_r(   coeff_t  num, fearrsso_t* arr, dhelpl_t dhl );
+   void fearrsso_set_all_f(  fessoti_t* num, fearrsso_t* arr, dhelpl_t dhl );
+   
+   void fearrsso_set_r(    coeff_t src, fearrsso_t* res, dhelpl_t dhl );
+   void fearrsso_set_o( semiotin_t* src, fearrsso_t* res, dhelpl_t dhl );
+   void fearrsso_set_f(  fessoti_t* src, fearrsso_t* res, dhelpl_t dhl );
+   
+   void fearrsso_set_R(    darr_t* src, fearrsso_t* res, dhelpl_t dhl );
+   void fearrsso_set_O(   arrsso_t* src, fearrsso_t* res, dhelpl_t dhl );
+   void fearrsso_set_F( fearrsso_t* src, fearrsso_t* res, dhelpl_t dhl );
+   
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fearrsso_t fearrsso_eye_bases( uint64_t size,
+                                  uint64_t nip, bases_t  nbases, 
+                                  ord_t    order,   dhelpl_t dhl     );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fearrsso_t fearrsso_zeros_bases( uint64_t nrows,   uint64_t ncols, 
+                                  // uint64_t offsetx, uint64_t offsety, 
+                                  uint64_t nIntPts, bases_t  nbases, 
+                                  ord_t    order,   dhelpl_t dhl     );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fearrsso_t fearrsso_ones_bases( uint64_t nrows,   uint64_t ncols, 
+                                  uint64_t nip, bases_t  nbases, 
+                                  ord_t    order,   dhelpl_t dhl     );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fearrsso_t fearrsso_createEmpty_bases( uint64_t nrows,   uint64_t ncols, 
+                                        // uint64_t offsetx, uint64_t offsety, 
+                                        uint64_t nIntPts, bases_t  nbases, 
+                                        ord_t    order,   dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void fearrsso_free(fearrsso_t* arr);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fearrsso_t fearrsso_init(void);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   ord_t fearrsso_get_order(fearrsso_t* arr);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   #endif

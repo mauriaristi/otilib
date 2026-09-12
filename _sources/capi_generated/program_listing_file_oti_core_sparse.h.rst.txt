@@ -1,0 +1,79 @@
+
+.. _program_listing_file_oti_core_sparse.h:
+
+Program Listing for File core/sparse.h
+======================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_core_sparse.h>` (``oti/core/sparse.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_CORE_SPARSE_H
+   #define OTI_CORE_SPARSE_H
+   
+   void dhelp_add_coeff( coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres, 
+       coeff_t im, imdir_t idx );
+   
+   
+   
+   /**************************************************************************************************/ 
+   void dhelp_sparse_copy(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                          coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
+                          dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void dhelp_add_sparse(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,  
+                         coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2,  
+                         coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,          
+                         dhelpl_t dhl);                                                 
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/ 
+   void dhelp_sparse_sub_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,   // Input 1
+                              coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2,   // Input 2
+                              coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres, // Result 
+                              dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/ 
+   void dhelp_sparse_add_dirs(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,    // Input 1
+                              coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2,    // Input 2
+                              coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,  // Result 
+                              dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/ 
+   void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t ord1,  // Input 1
+                          coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2,  // Input 2
+                          coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,            // Result 
+                          dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void dhelp_sparse_mult_real(coeff_t val,
+                               coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
+                               coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,          
+                               dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void dhelp_search_prev_dir( coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t ord1,
+                               coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2,
+                               coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,          
+                               imdir_t prev_idx, imdir_t next_idx, ndir_t curr_i1, ndir_t curr_i2,
+                               imdir2d_t tmp_multtabl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   #endif

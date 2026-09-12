@@ -1,0 +1,14 @@
+.. _exhale_function_fileio_8h_1ab9c86bb5a00b10dd25863fe628d4dc27:
+
+Function loadnpy_multtabls
+==========================
+
+- Defined in :ref:`file_oti_core_fileio.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: loadnpy_multtabls(char *, ord_t, dhelp_t *)
+   :project: OTIlib

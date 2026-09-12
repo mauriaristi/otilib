@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2algebra__matops_8h_1ad3234db34cda9c6db3e8676d1540b65b:
+
+Function arrsso_dotproduct_RO_to
+================================
+
+- Defined in :ref:`file_oti_semisparse_array_algebra_matops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrsso_dotproduct_RO_to(darr_t *, arrsso_t *, semiotin_t *, dhelpl_t)
+   :project: OTIlib

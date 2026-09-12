@@ -1,0 +1,14 @@
+.. _exhale_function_real_2derivatives_8h_1aa4831f6e6634a10f701ec043966bf4bc:
+
+Function der_r_acos
+===================
+
+- Defined in :ref:`file_oti_real_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_r_acos(coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

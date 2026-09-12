@@ -1,0 +1,14 @@
+.. _exhale_function_real_2scalar_2gauss_2functions_8h_1aae2a1dfba9f5cab20fef93ef21b66403:
+
+Function fednum_atanh_to
+========================
+
+- Defined in :ref:`file_oti_real_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fednum_atanh_to(fednum_t *, fednum_t *)
+   :project: OTIlib

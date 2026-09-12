@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2functions_8h_1acde83cc1f9b13c7f260abbf5a56b0780:
+
+Function oti_cos
+================
+
+- Defined in :ref:`file_oti_dense_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_cos(otinum_t *, dhelpl_t)
+   :project: OTIlib

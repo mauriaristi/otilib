@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1aaa9429929d6c2a90c1d1071442f5cae1:
+
+Function soti_reset_orders
+==========================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_reset_orders(ord_t, ord_t, sotinum_t *, dhelpl_t)
+   :project: OTIlib

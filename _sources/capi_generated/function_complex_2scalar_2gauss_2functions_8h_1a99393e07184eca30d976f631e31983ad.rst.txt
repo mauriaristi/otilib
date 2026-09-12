@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2functions_8h_1a99393e07184eca30d976f631e31983ad:
+
+Function fecnum_acos_to
+=======================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_acos_to(fecnum_t *, fecnum_t *)
+   :project: OTIlib

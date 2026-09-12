@@ -1,0 +1,35 @@
+
+.. _program_listing_file_oti_sparse_array_structures.h:
+
+Program Listing for File sparse/array/structures.h
+==================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_sparse_array_structures.h>` (``oti/sparse/array/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SPARSE_ARRAY_STRUCTURES_H
+   #define OTI_SPARSE_ARRAY_STRUCTURES_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   // Structure for array of sparse OTI numbers (2D)
+   
+   typedef struct {
+       sotinum_t*    p_data; 
+       uint64_t       nrows; 
+       uint64_t       ncols; 
+       uint64_t        size; 
+       flag_t          flag; 
+   } arrso_t;                
+   
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2algebra_8h_1a1acc2d9cf11484db74618f9ab57c9319:
+
+Function ssoti_div_ro_to
+========================
+
+- Defined in :ref:`file_oti_semisparse_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ssoti_div_ro_to(coeff_t, semiotin_t *, semiotin_t *, dhelpl_t)
+   :project: OTIlib

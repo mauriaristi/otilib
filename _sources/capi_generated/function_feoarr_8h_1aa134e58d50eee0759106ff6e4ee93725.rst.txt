@@ -1,0 +1,14 @@
+.. _exhale_function_feoarr_8h_1aa134e58d50eee0759106ff6e4ee93725:
+
+Function feoarr_free(feoarr_t \*)
+=================================
+
+- Defined in :ref:`file_oti_fem_feoarr.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_free(feoarr_t *)
+   :project: OTIlib

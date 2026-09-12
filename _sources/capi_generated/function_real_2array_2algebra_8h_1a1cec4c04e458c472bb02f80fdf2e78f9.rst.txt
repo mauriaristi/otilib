@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1a1cec4c04e458c472bb02f80fdf2e78f9:
+
+Function darr_sum_RR_to
+=======================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_sum_RR_to(darr_t *, darr_t *, darr_t *)
+   :project: OTIlib

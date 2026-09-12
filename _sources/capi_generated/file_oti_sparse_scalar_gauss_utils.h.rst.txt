@@ -1,0 +1,42 @@
+
+.. _file_oti_sparse_scalar_gauss_utils.h:
+
+File sparse/scalar/gauss/utils.h
+================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/scalar/gauss/utils.h``)
+------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_scalar_gauss_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_sparse_scalar_gauss.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_sparse_2scalar_2gauss_2utils_8h_1adacc61d1e9c3b5cb914df7c15c90f652`
+
+- :ref:`exhale_function_sparse_2scalar_2gauss_2utils_8h_1a2767a35c1144d1ec6eef20efb1427d31`
+

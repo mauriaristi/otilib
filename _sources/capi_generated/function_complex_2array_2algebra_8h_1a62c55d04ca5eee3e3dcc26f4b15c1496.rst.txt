@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1a62c55d04ca5eee3e3dcc26f4b15c1496:
+
+Function carr_gem_RR
+====================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_gem_RR(carr_t *, carr_t *, carr_t *)
+   :project: OTIlib

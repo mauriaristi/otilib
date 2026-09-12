@@ -1,0 +1,78 @@
+
+.. _file_oti_real_derivatives.h:
+
+File real/derivatives.h
+=======================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/derivatives.h``)
+---------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_derivatives.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2derivatives_8h_1aa4831f6e6634a10f701ec043966bf4bc`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a9e01c494a70726d145ed629ecae6ea4f`
+
+- :ref:`exhale_function_real_2derivatives_8h_1acab667d9b26bf18f07e55deeedc9c5ce`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a220b44ad3adbfe1319da3506ecdc0d42`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a1410e21196be7f8fe7ff18774de63230`
+
+- :ref:`exhale_function_real_2derivatives_8h_1aaac09305aff9c0a993c62e61de1016f9`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a2d35228951e4363c12f69b6bcee1b7cb`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a3b31f8ea0a1cc123888472f5538cdebf`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a5ee63ec49c134dab724edbf655c5c1df`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a9f74f269e4e1b31e0c90cec99e599670`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a684f90f10742a56a36e82f8252cf2406`
+
+- :ref:`exhale_function_real_2derivatives_8h_1ae9f5f54f9e149fcc4f0ec7834e4d391e`
+
+- :ref:`exhale_function_real_2derivatives_8h_1ab5eb668300582c24c9dfce32b2c4afdc`
+
+- :ref:`exhale_function_real_2derivatives_8h_1aa22eb9472186869ea6cfe7e8b855afde`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a7f39f855afe62cf3524814fcc9530c97`
+
+- :ref:`exhale_function_real_2derivatives_8h_1ad1633412d8079f4edc45abdee6c60c5e`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a4db48521c1b98c9246caff63d6918ca5`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a99c9ec780969908094da254627ce40b1`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a36c823f81b1d2f14e41bd4155645f677`
+
+- :ref:`exhale_function_real_2derivatives_8h_1a6eb7a4e2adef1cb0cf5f75deb40384ec`
+

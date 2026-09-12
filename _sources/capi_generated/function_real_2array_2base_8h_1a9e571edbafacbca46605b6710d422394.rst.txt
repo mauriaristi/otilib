@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2base_8h_1a9e571edbafacbca46605b6710d422394:
+
+Function darr_set_all
+=====================
+
+- Defined in :ref:`file_oti_real_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_set_all(coeff_t, darr_t *)
+   :project: OTIlib

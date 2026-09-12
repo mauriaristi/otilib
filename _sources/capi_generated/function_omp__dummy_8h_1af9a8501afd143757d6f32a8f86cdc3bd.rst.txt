@@ -1,0 +1,14 @@
+.. _exhale_function_omp__dummy_8h_1af9a8501afd143757d6f32a8f86cdc3bd:
+
+Function omp_init_nest_lock
+===========================
+
+- Defined in :ref:`file_oti_omp_dummy.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: omp_init_nest_lock(omp_nest_lock_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2functions_8h_1a6987198b4a9dc2a71a88399746ea4df8:
+
+Function fedarr_acos_to(fedarr_t \*, fedarr_t \*)
+=================================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_acos_to(fedarr_t *, fedarr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1a6df73102eb564c3a0e451fe28a4b234b:
+
+Function darr_self_abs
+======================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_self_abs(darr_t *)
+   :project: OTIlib

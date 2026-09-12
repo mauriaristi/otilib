@@ -1,0 +1,41 @@
+
+.. _file_oti_fem_gauss.h:
+
+File fem/gauss.h
+================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/gauss.h``)
+--------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_gauss.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``gauss/array.h`` (:ref:`file_oti_fem_gauss_array.h`)
+
+- ``gauss/scalar.h`` (:ref:`file_oti_fem_gauss_scalar.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem.h`
+
+
+

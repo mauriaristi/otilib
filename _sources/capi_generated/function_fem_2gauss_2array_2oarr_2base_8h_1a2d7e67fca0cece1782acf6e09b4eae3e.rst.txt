@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2gauss_2array_2oarr_2base_8h_1a2d7e67fca0cece1782acf6e09b4eae3e:
+
+Function feoarr_copy_to(feoarr_t \*, feoarr_t \*, dhelpl_t)
+===========================================================
+
+- Defined in :ref:`file_oti_fem_gauss_array_oarr_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_copy_to(feoarr_t *, feoarr_t *, dhelpl_t)
+   :project: OTIlib

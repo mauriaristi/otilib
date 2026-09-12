@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2functions_8h_1aa1452eafdfee9148b38de044935e12f0:
+
+Function ssoti_feval
+====================
+
+- Defined in :ref:`file_oti_semisparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ssoti_feval(coeff_t *, semiotin_t *, dhelpl_t)
+   :project: OTIlib

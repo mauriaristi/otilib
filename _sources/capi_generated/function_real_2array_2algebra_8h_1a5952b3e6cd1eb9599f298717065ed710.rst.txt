@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1a5952b3e6cd1eb9599f298717065ed710:
+
+Function darr_invert_to
+=======================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_invert_to(darr_t *, darr_t *)
+   :project: OTIlib

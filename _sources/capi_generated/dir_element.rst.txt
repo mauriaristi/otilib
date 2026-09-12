@@ -1,0 +1,11 @@
+.. _dir_element:
+
+
+Directory element
+=================
+
+
+*Directory path:* ``element``
+
+
+

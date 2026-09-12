@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2gauss_2base_8h_1a7c6081cc7397ab22d7de917b7be00292:
+
+Function fessoti_get_item_k
+===========================
+
+- Defined in :ref:`file_oti_semisparse_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fessoti_get_item_k(fessoti_t *, uint64_t, dhelpl_t)
+   :project: OTIlib

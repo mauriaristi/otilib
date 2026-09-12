@@ -1,0 +1,14 @@
+.. _exhale_typedef_comm_8h_1a28b573dc21c6305d878a68deabcbf737:
+
+Typedef coeff_t
+===============
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: coeff_t
+   :project: OTIlib

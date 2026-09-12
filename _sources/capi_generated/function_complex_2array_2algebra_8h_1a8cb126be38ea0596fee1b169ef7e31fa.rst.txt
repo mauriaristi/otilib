@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1a8cb126be38ea0596fee1b169ef7e31fa:
+
+Function carr_dotproduct_RR
+===========================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_dotproduct_RR(carr_t *, carr_t *)
+   :project: OTIlib

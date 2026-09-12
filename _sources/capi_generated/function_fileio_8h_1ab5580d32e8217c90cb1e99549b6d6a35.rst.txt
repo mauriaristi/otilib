@@ -1,0 +1,14 @@
+.. _exhale_function_fileio_8h_1ab5580d32e8217c90cb1e99549b6d6a35:
+
+Function loadnpy_fulldir
+========================
+
+- Defined in :ref:`file_oti_core_fileio.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: loadnpy_fulldir(char *, ord_t, dhelp_t *)
+   :project: OTIlib

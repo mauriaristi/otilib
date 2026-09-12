@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2algebra_8h_1ab911f4f865a31963a8d3b88f4448a778:
+
+Function fecnum_div_rf
+======================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_div_rf(ccoeff_t, fecnum_t *)
+   :project: OTIlib

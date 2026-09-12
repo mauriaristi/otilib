@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2base_8h_1ad18e0dbf566ebaf923c6b73f3cf9543f:
+
+Function fedarr_get_slice(fedarr_t \*, int64_t, int64_t, int64_t, int64_t, int64_t, int64_t)
+============================================================================================
+
+- Defined in :ref:`file_oti_real_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_get_slice(fedarr_t *, int64_t, int64_t, int64_t, int64_t, int64_t, int64_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1aa0264305cd9e537f1abf3cf49847e310:
+
+Function array2d_getel_ui64_t
+=============================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: array2d_getel_ui64_t(uint64_t *, uint64_t, uint64_t, uint64_t)
+   :project: OTIlib

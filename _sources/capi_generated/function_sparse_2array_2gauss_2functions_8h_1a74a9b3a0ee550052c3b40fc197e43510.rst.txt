@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2functions_8h_1a74a9b3a0ee550052c3b40fc197e43510:
+
+Function fearrso_cos_to
+=======================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_cos_to(fearrso_t *, fearrso_t *, dhelpl_t)
+   :project: OTIlib

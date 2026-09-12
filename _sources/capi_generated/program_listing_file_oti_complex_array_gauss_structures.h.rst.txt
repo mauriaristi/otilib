@@ -1,0 +1,33 @@
+
+.. _program_listing_file_oti_complex_array_gauss_structures.h:
+
+Program Listing for File complex/array/gauss/structures.h
+=========================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_complex_array_gauss_structures.h>` (``oti/complex/array/gauss/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_COMPLEX_ARRAY_GAUSS_STRUCTURES_H
+   #define OTI_COMPLEX_ARRAY_GAUSS_STRUCTURES_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef struct {
+       carr_t*       p_data; 
+       uint64_t       nrows; 
+       uint64_t       ncols; 
+       uint64_t        size; 
+       uint64_t         nip; 
+   } fecarr_t;               
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   #endif

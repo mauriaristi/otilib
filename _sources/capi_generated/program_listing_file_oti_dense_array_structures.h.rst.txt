@@ -1,0 +1,36 @@
+
+.. _program_listing_file_oti_dense_array_structures.h:
+
+Program Listing for File dense/array/structures.h
+=================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_dense_array_structures.h>` (``oti/dense/array/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_DENSE_ARRAY_STRUCTURES_H
+   #define OTI_DENSE_ARRAY_STRUCTURES_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef struct {
+       arr_t            re;  
+       arr_t**        p_im;  
+       ndir_t*      p_ndpo;  
+       ndir_t         ndir;  
+       bases_t      nbases;  
+       ord_t         order;  
+       uint64_t      nrows;  
+       uint64_t      ncols;  
+       uint64_t       size;  
+   } oarr_t;     
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

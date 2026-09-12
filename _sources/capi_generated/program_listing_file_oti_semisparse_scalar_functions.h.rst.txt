@@ -1,0 +1,118 @@
+
+.. _program_listing_file_oti_semisparse_scalar_functions.h:
+
+Program Listing for File semisparse/scalar/functions.h
+======================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_semisparse_scalar_functions.h>` (``oti/semisparse/scalar/functions.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SEMISPARSE_SCALAR_FUNCTIONS_H
+   #define OTI_SEMISPARSE_SCALAR_FUNCTIONS_H
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_atanh(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_atanh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_asinh(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_asinh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_acosh(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_acosh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_tanh(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_tanh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_sqrt(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_sqrt_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_cbrt(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_cbrt_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_cosh(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_cosh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_sinh(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_sinh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_asin(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_asin_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_acos(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_acos_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_atan(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_atan_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_tan(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_tan_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_cos(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_cos_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_sin(semiotin_t* num, dhelpl_t dhl );
+   void ssoti_sin_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_logb(semiotin_t* num, double base, dhelpl_t dhl);
+   void ssoti_logb_to(semiotin_t* num, double base, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_log10(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_log10_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_log(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_log_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_exp(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_exp_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_pow(semiotin_t* num, double e, dhelpl_t dhl);
+   void ssoti_pow_to(semiotin_t* num, coeff_t e, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_feval(coeff_t* feval_re, semiotin_t* num, dhelpl_t dhl );
+   semiotin_t ssoti_base_feval(coeff_t* feval_re, semiotin_t* num, dhelpl_t dhl );
+   
+   void ssoti_feval_to(coeff_t* feval_re, semiotin_t* num, semiotin_t* res, dhelpl_t dhl );
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

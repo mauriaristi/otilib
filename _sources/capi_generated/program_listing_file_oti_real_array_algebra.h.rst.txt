@@ -1,0 +1,157 @@
+
+.. _program_listing_file_oti_real_array_algebra.h:
+
+Program Listing for File real/array/algebra.h
+=============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_real_array_algebra.h>` (``oti/real/array/algebra.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_REAL_ALGEBRA_H
+   #define OTI_REAL_ALGEBRA_H
+   
+   
+   
+   /**************************************************************************************************/
+   darr_t darr_neg(    darr_t* arr              );
+   void   darr_neg_to( darr_t* arr, darr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void   darr_abs_to(   darr_t* arr1, darr_t* aRes );
+   void   darr_self_abs( darr_t* res                );
+   darr_t darr_abs(      darr_t* arr1               );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   darr_t darr_div_RR(    darr_t* lhs, darr_t* rhs              );
+   darr_t darr_div_Rr(    darr_t* lhs, coeff_t rhs              );
+   darr_t darr_div_rR(    coeff_t lhs, darr_t* rhs              );
+   
+   void   darr_div_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res );
+   void   darr_div_Rr_to( darr_t* lhs, coeff_t rhs, darr_t* res );
+   void   darr_div_rR_to( coeff_t lhs, darr_t* rhs, darr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   darr_t darr_mul_RR(    darr_t* lhs, darr_t* rhs              );
+   void   darr_mul_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res );
+   
+   darr_t darr_mul_rR(    coeff_t lhs, darr_t* rhs              );
+   void   darr_mul_rR_to( coeff_t lhs, darr_t* rhs, darr_t* res );
+   
+   darr_t darr_mul_Rr(    darr_t* lhs, coeff_t rhs              );
+   void   darr_mul_Rr_to( darr_t* lhs, coeff_t rhs, darr_t* res );
+   
+   void darr_mul_and_selfsum_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res);
+   void darr_mul_and_selfsum_rR_to( coeff_t lhs, darr_t* rhs, darr_t* res);
+   void darr_mul_and_selfsum_Rr_to( darr_t* lhs, coeff_t rhs, darr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   darr_t darr_sub_RR(    darr_t* lhs, darr_t* rhs             );
+   void   darr_sub_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res);
+   
+   darr_t darr_sub_Rr(darr_t* lhs, coeff_t rhs);
+   darr_t darr_sub_rR(coeff_t lhs, darr_t* rhs);
+   
+   void darr_sub_Rr_to(darr_t* lhs, coeff_t rhs, darr_t* res);
+   void darr_sub_rR_to(coeff_t lhs, darr_t* rhs, darr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   darr_t darr_sum_RR(    darr_t* lhs, darr_t* rhs              );
+   void   darr_sum_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res );
+   
+   darr_t darr_sum_rR(    coeff_t lhs, darr_t* rhs              );
+   void   darr_sum_rR_to( coeff_t lhs, darr_t* rhs, darr_t* res );
+   
+   darr_t darr_sum_Rr(    darr_t* lhs, coeff_t rhs              );
+   void   darr_sum_Rr_to( darr_t* lhs, coeff_t rhs, darr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   /**************************************************************************************************/ 
+   coeff_t darr_dotproduct_RR(    darr_t* lhs, darr_t* rh              );
+   void    darr_dotproduct_RR_to( darr_t* lhs, darr_t* rh, coeff_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void darr_matmul_and_selfsum_RR_to(darr_t* lhs, darr_t* rhs, darr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   darr_t darr_matmul(    darr_t* lhs, darr_t* rhs               );
+   void   darr_matmul_to( darr_t* lhs, darr_t* rhs, darr_t* res );
+   
+   darr_t darr_matmul_RR(    darr_t* lhs, darr_t* rhs               );
+   void   darr_matmul_RR_to( darr_t* lhs, darr_t* rhs, darr_t* res );
+   
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   darr_t darr_transpose(    darr_t* arr             );
+   void   darr_transpose_to( darr_t* arr, darr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   darr_t darr_invert(    darr_t* arr             );
+   void   darr_invert_to( darr_t* arr, darr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   coeff_t darr_det( darr_t* arr );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   coeff_t darr_pnorm( darr_t* arr, coeff_t p );
+   coeff_t darr_norm(  darr_t* arr );
+   
+   void darr_pnorm_to( darr_t* arr1, coeff_t p, coeff_t* res );
+   void darr_norm_to( darr_t* arr1, coeff_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void darr_self_neg(  darr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void darr_self_sum_R( darr_t* rhs, darr_t* res );
+   void darr_self_sum_r( coeff_t rhs, darr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void darr_self_sub_R(darr_t* rhs, darr_t* res);
+   void darr_self_sub_r(coeff_t rhs, darr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void darr_self_mul_R( darr_t* rhs, darr_t* res );
+   void darr_self_mul_r( coeff_t rhs, darr_t* res );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   darr_t darr_gem_RR(   darr_t* arr1, darr_t* arr2, darr_t* arr3             );
+   darr_t darr_gem_rR(   coeff_t arr1, darr_t* arr2, darr_t* arr3             );
+   
+   void   darr_gem_RR_to(darr_t* arr1, darr_t* arr2, darr_t* arr3, darr_t* res);
+   void   darr_gem_rR_to(coeff_t arr1, darr_t* arr2, darr_t* arr3, darr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   #endif

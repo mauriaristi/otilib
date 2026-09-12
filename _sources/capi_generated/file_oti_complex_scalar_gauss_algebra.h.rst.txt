@@ -1,0 +1,82 @@
+
+.. _file_oti_complex_scalar_gauss_algebra.h:
+
+File complex/scalar/gauss/algebra.h
+===================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex/scalar/gauss/algebra.h``)
+---------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex_scalar_gauss_algebra.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a0fa5a36eb60abc57bc5c54d63996a289`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a02d16b7f152a8b054978887bc6273194`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a251ce6653fb549f5ec0f91fb88930483`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a5a7d696e3951bc7396fbf22eb7501afd`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1ab911f4f865a31963a8d3b88f4448a778`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a026d8bb73c29c277ffc5f8528c8adb93`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a4ff2f0d797b616152ac86da46141490f`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a02ebc3b3eb9780b498816b1ffbbe6cc8`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1aae0e6f4c3f3fe0e7234e1a21f44e1b9b`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a5feb271abe447103b798202110cc14d0`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a0eb63e252a79f82fc9975d9d79df72ed`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1afc50fbd9e2f05528f502c639d392f0a6`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1ad1d8ca3e40224b6df9f9b0597de242d9`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a3405726b07f450eb547f97073df6aa37`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1af0190f6935cbc4e9b2d8ed5ba97f1b43`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a4f1e457e125b3d34862cd0050362c01c`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a951045b22af6b738a727dd34bee7523c`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a441c4896de19b1ce0eb0e76a6b0b2b04`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1afd1e30e8a0ed31de51235c4519029919`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1ab0071e6c592ecdb581fa37cfcae71edf`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a28f8e678172b719b99ee213bbfb94868`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2algebra_8h_1a380135e9713f623f01353c52ab91512a`
+

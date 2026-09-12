@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2functions_8h_1af3f4ec18ff56ef42a2e40b21b473e18c:
+
+Function oti_pow
+================
+
+- Defined in :ref:`file_oti_dense_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_pow(otinum_t *, double, dhelpl_t)
+   :project: OTIlib

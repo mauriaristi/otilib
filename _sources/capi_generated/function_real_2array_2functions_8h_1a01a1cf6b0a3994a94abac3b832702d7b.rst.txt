@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2functions_8h_1a01a1cf6b0a3994a94abac3b832702d7b:
+
+Function darr_sqrt_to
+=====================
+
+- Defined in :ref:`file_oti_real_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_sqrt_to(darr_t *, darr_t *)
+   :project: OTIlib

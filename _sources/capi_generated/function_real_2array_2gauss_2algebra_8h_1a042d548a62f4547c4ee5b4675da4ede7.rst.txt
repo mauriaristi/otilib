@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2algebra_8h_1a042d548a62f4547c4ee5b4675da4ede7:
+
+Function fedarr_pnorm
+=====================
+
+- Defined in :ref:`file_oti_real_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_pnorm(fedarr_t *, coeff_t)
+   :project: OTIlib

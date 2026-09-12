@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1af09b2d0649fa6aa20a3176cd30b86d59:
+
+Function arrso_ones
+===================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_ones(uint64_t, uint64_t, ndir_t *, ord_t, dhelpl_t)
+   :project: OTIlib

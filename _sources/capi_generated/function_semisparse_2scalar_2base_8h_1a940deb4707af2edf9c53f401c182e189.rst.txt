@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2base_8h_1a940deb4707af2edf9c53f401c182e189:
+
+Function ssoti_set_im_o
+=======================
+
+- Defined in :ref:`file_oti_semisparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ssoti_set_im_o(semiotin_t *, imdir_t, ord_t, semiotin_t *, dhelpl_t)
+   :project: OTIlib

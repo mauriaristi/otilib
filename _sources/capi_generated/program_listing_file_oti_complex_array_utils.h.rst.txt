@@ -1,0 +1,46 @@
+
+.. _program_listing_file_oti_complex_array_utils.h:
+
+Program Listing for File complex/array/utils.h
+==============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_complex_array_utils.h>` (``oti/complex/array/utils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_COMPLEX_UTILS_H
+   #define OTI_COMPLEX_UTILS_H
+   
+   
+   /**************************************************************************************************/ 
+   void carr_set_slice_R( carr_t* arr, int64_t starti, int64_t stopi, int64_t stepi,
+                          int64_t startj, int64_t stopj, int64_t stepj, carr_t* res   );
+   void carr_set_slice_r( coeff_t val, int64_t starti, int64_t stopi, int64_t stepi,
+                           int64_t startj, int64_t stopj, int64_t stepj,carr_t* res   );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void carr_dimCheck_RR_samesize(carr_t* lhs, carr_t* rhs);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void carr_dimCheck_RR_elementwise(carr_t* lhs, carr_t* rhs, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void carr_dimCheck_RR_matmul( carr_t* lhs, carr_t* rhs, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void carr_dimCheck_R_squareness( carr_t* lhs, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void carr_dimCheck_R_transpose( carr_t* lhs, carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

@@ -1,0 +1,11 @@
+.. _dir_semisparse:
+
+
+Directory semisparse
+====================
+
+
+*Directory path:* ``semisparse``
+
+
+

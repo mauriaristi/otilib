@@ -1,0 +1,14 @@
+.. _exhale_variable_comm_8h_1aa403a4fbcc7e37266a93052e026ab2e7:
+
+Variable __PY_ERROR_OTI_EXIT
+============================
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: __PY_ERROR_OTI_EXIT
+   :project: OTIlib

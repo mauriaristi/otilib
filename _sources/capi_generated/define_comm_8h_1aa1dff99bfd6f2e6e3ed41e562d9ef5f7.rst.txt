@@ -1,0 +1,14 @@
+.. _exhale_define_comm_8h_1aa1dff99bfd6f2e6e3ed41e562d9ef5f7:
+
+Define _MAXORDER_OTI
+====================
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: _MAXORDER_OTI
+   :project: OTIlib

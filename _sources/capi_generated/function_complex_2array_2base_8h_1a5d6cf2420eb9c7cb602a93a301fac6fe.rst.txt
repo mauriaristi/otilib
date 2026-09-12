@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2base_8h_1a5d6cf2420eb9c7cb602a93a301fac6fe:
+
+Function carr_free
+==================
+
+- Defined in :ref:`file_oti_complex_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_free(carr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_real_2derivatives_8h_1ad1633412d8079f4edc45abdee6c60c5e:
+
+Function der_r_sin
+==================
+
+- Defined in :ref:`file_oti_real_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_r_sin(coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

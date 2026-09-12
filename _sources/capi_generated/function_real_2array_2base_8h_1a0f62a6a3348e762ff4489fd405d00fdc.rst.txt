@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2base_8h_1a0f62a6a3348e762ff4489fd405d00fdc:
+
+Function darr_get_slice
+=======================
+
+- Defined in :ref:`file_oti_real_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_get_slice(darr_t *, int64_t, int64_t, int64_t, int64_t, int64_t, int64_t)
+   :project: OTIlib

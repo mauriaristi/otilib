@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1a0463334d96f9ba83f57e1f2447dbc109:
+
+Function arrso_truncate_order_to
+================================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_truncate_order_to(ord_t, arrso_t *, arrso_t *, dhelpl_t)
+   :project: OTIlib

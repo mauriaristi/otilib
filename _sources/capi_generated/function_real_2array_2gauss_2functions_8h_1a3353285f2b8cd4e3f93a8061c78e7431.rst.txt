@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2functions_8h_1a3353285f2b8cd4e3f93a8061c78e7431:
+
+Function fedarr_sin_to(fedarr_t \*, fedarr_t \*)
+================================================
+
+- Defined in :ref:`file_oti_real_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_sin_to(fedarr_t *, fedarr_t *)
+   :project: OTIlib

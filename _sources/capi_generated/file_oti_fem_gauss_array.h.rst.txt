@@ -1,0 +1,41 @@
+
+.. _file_oti_fem_gauss_array.h:
+
+File array.h
+============
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/gauss/array.h``)
+--------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_gauss_array.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``array/fedarr.h`` (:ref:`file_oti_fem_gauss_array_fedarr.h`)
+
+- ``array/feoarr.h`` (:ref:`file_oti_fem_gauss_array_feoarr.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_gauss.h`
+
+
+

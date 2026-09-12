@@ -1,0 +1,48 @@
+
+.. _file_oti_sparse_scalar_utils.h:
+
+File sparse/scalar/utils.h
+==========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/scalar/utils.h``)
+------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_scalar_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_sparse.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_sparse_2scalar_2utils_8h_1a012a07195d7723b271ac4caf906cc094`
+
+- :ref:`exhale_function_sparse_2scalar_2utils_8h_1a4ed8a4d4f4b2629a8de4a6581939286c`
+
+- :ref:`exhale_function_sparse_2scalar_2utils_8h_1a1dc6b94fa587f82a7942f19c3de363d4`
+
+- :ref:`exhale_function_sparse_2scalar_2utils_8h_1a6f1e4bf6bb531a3c96ec832969eea212`
+
+- :ref:`exhale_function_sparse_2scalar_2utils_8h_1a29beda830c0160ba17cee5e48e1ac2dd`
+

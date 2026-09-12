@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2base_8h_1a1446c43016b5212b37be4548504714c0:
+
+Function darr_copy
+==================
+
+- Defined in :ref:`file_oti_real_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_copy(darr_t *)
+   :project: OTIlib

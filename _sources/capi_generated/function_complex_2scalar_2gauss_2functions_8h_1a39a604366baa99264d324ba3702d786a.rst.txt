@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2functions_8h_1a39a604366baa99264d324ba3702d786a:
+
+Function fecnum_sinh
+====================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_sinh(fecnum_t *)
+   :project: OTIlib

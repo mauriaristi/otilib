@@ -1,0 +1,62 @@
+
+.. _file_oti_fem_gauss_array_oarr_base.h:
+
+File fem/gauss/array/oarr/base.h
+================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/gauss/array/oarr/base.h``)
+------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_gauss_array_oarr_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_gauss_array_feoarr.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1a9a674f3d5a9e52c5a354ba5c97a8fed5`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1a2d7e67fca0cece1782acf6e09b4eae3e`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1ade4b4d1023e046f0ec307787167b8091`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1aa134e58d50eee0759106ff6e4ee93725`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1a1ff955136d05446d5565e1f94694ce6c`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1a76555786151a814b3b3368b4156168b5`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1af74975b0958cdf21f174ab1c85530865`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1aa8cb196234b39e618e5174be5ee91b12`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1a6f413c23c474c069cc536afb27981393`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1ac968b623282deeda1ee274903005ca3b`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1a8234a5877aeb9373948b3be26c311788`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2base_8h_1a49b3445d381f1fe7d30e0b1ac25150db`
+

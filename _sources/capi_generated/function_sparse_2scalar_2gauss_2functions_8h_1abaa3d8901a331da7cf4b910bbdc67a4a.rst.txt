@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2functions_8h_1abaa3d8901a331da7cf4b910bbdc67a4a:
+
+Function fesoti_pow
+===================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_pow(fesoti_t *, double, dhelpl_t)
+   :project: OTIlib

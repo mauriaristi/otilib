@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1ad66ae9881d52917fe0d75b7d7239ca90:
+
+Function carr_cos
+=================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_cos(carr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a2e62dd53bbe626aee00856652f4ad44e:
+
+Function dhelp_ndirTotal
+========================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_ndirTotal(bases_t, ord_t)
+   :project: OTIlib

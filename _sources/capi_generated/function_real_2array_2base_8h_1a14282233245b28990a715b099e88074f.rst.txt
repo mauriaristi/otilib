@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2base_8h_1a14282233245b28990a715b099e88074f:
+
+Function darr_set_item_i
+========================
+
+- Defined in :ref:`file_oti_real_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_set_item_i(coeff_t, uint64_t, darr_t *)
+   :project: OTIlib

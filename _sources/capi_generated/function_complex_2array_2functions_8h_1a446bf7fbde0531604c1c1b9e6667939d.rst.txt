@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1a446bf7fbde0531604c1c1b9e6667939d:
+
+Function carr_acos_to
+=====================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_acos_to(carr_t *, carr_t *)
+   :project: OTIlib

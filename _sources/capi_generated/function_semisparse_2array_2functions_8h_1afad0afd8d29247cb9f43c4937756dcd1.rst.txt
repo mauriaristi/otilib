@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2functions_8h_1afad0afd8d29247cb9f43c4937756dcd1:
+
+Function arrsso_acos_to
+=======================
+
+- Defined in :ref:`file_oti_semisparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrsso_acos_to(arrsso_t *, arrsso_t *, dhelpl_t)
+   :project: OTIlib

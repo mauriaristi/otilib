@@ -1,0 +1,32 @@
+
+.. _program_listing_file_oti_dense_scalar_structures.h:
+
+Program Listing for File dense/scalar/structures.h
+==================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_dense_scalar_structures.h>` (``oti/dense/scalar/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_DENSE_SCALAR_STRUCTURES_H
+   #define OTI_DENSE_SCALAR_STRUCTURES_H
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef struct {
+       coeff_t          re;  
+       coeff_t**      p_im;  
+       ndir_t*      p_ndpo;  
+       ndir_t         ndir;  
+       bases_t      nbases;  
+       ord_t         order;  
+   } otinum_t;  
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

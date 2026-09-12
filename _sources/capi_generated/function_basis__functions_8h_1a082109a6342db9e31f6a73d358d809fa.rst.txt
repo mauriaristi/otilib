@@ -1,0 +1,14 @@
+.. _exhale_function_basis__functions_8h_1a082109a6342db9e31f6a73d358d809fa:
+
+Function fem_basisFunctions_N_TriangP1_2Diso
+============================================
+
+- Defined in :ref:`file_oti_fem_basis_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fem_basisFunctions_N_TriangP1_2Diso(int64_t, int64_t, darr_t *, void *, darr_t *)
+   :project: OTIlib

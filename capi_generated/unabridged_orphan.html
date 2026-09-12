@@ -1,0 +1,2659 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Full API &#8212; otilib-pyoti 1.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../_static/documentation_options.js?v=fc837d61"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'capi_generated/unabridged_orphan';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">otilib-pyoti 1.1.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../aboutus.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../pyoti.html">
+    pyoti package
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../capi.html">
+    C API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../aboutus.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../pyoti.html">
+    pyoti package
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../capi.html">
+    C API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Full API</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="full-api">
+<h1>Full API<a class="headerlink" href="#full-api" title="Link to this heading">#</a></h1>
+<section id="directories">
+<h2>Directories<a class="headerlink" href="#directories" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_array.html">Directory array</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_array.html">Directory array</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_array.html">Directory array</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_array.html">Directory array</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_array.html">Directory array</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_array.html">Directory array</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_complex.html">Directory complex</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_core.html">Directory core</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_darr.html">Directory darr</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_dense.html">Directory dense</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_element.html">Directory element</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_experimental.html">Directory experimental</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_fem.html">Directory fem</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_gauss.html">Directory gauss</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_gauss.html">Directory gauss</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_gauss.html">Directory gauss</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_gauss.html">Directory gauss</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_gauss.html">Directory gauss</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_gauss.html">Directory gauss</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_gauss.html">Directory gauss</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_gauss.html">Directory gauss</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_gauss.html">Directory gauss</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_include.html">Directory include</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_integration_points.html">Directory integration_points</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_oarr.html">Directory oarr</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_old.html">Directory old</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_oti.html">Directory oti</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dir_oti.html#files">Files</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_oti_of_array.html">Directory oti_of_array</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_otinum.html">Directory otinum</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_real.html">Directory real</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_real.html">Directory real</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_real.html">Directory real</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_real.html">Directory real</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_real.html">Directory real</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_scalar.html">Directory scalar</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_scalar.html">Directory scalar</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_scalar.html">Directory scalar</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_scalar.html">Directory scalar</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_scalar.html">Directory scalar</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_scalar.html">Directory scalar</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_semisparse.html">Directory semisparse</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_soti.html">Directory soti</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_soti.html">Directory soti</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dir_sparse.html">Directory sparse</a></li>
+</ul>
+</div>
+</section>
+<section id="files">
+<h2>Files<a class="headerlink" href="#files" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array.h.html">File array.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array.h.html#definition-oti-fem-gauss-array-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array.h.html">Program Listing for File array.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_basis_functions.h.html">File basis_functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_basis_functions.h.html#definition-oti-fem-basis-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/basis_functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_basis_functions.h.html">Program Listing for File basis_functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_basis_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_basis_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_comm.h.html">File comm.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_comm.h.html#definition-oti-comm-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/comm.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_comm.h.html">Program Listing for File comm.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_comm.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_comm.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_comm.h.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_comm.h.html#enums">Enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_comm.h.html#defines">Defines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_comm.h.html#typedefs">Typedefs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_comm.h.html#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex.h.html">File complex.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex.h.html#definition-oti-complex-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex.h.html">Program Listing for File complex.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_algebra.h.html">File complex/array/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_algebra.h.html#definition-oti-complex-array-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_algebra.h.html">Program Listing for File complex/array/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_base.h.html">File complex/array/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_base.h.html#definition-oti-complex-array-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_base.h.html">Program Listing for File complex/array/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_functions.h.html">File complex/array/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_functions.h.html#definition-oti-complex-array-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_functions.h.html">Program Listing for File complex/array/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_gauss_algebra.h.html">File complex/array/gauss/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_algebra.h.html#definition-oti-complex-array-gauss-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/gauss/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_gauss_algebra.h.html">Program Listing for File complex/array/gauss/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_gauss_base.h.html">File complex/array/gauss/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_base.h.html#definition-oti-complex-array-gauss-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/gauss/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_gauss_base.h.html">Program Listing for File complex/array/gauss/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_gauss_functions.h.html">File complex/array/gauss/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_functions.h.html#definition-oti-complex-array-gauss-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/gauss/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_gauss_functions.h.html">Program Listing for File complex/array/gauss/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_gauss_structures.h.html">File complex/array/gauss/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_structures.h.html#definition-oti-complex-array-gauss-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/gauss/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_gauss_structures.h.html">Program Listing for File complex/array/gauss/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_gauss_utils.h.html">File complex/array/gauss/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_utils.h.html#definition-oti-complex-array-gauss-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/gauss/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_gauss_utils.h.html">Program Listing for File complex/array/gauss/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_gauss_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_structures.h.html">File complex/array/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_structures.h.html#definition-oti-complex-array-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_structures.h.html">Program Listing for File complex/array/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_array_utils.h.html">File complex/array/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_utils.h.html#definition-oti-complex-array-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/array/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_array_utils.h.html">Program Listing for File complex/array/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_array_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_derivatives.h.html">File complex/derivatives.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_derivatives.h.html#definition-oti-complex-derivatives-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/derivatives.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_derivatives.h.html">Program Listing for File complex/derivatives.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_derivatives.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_derivatives.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_scalar_comm.h.html">File complex/scalar/comm.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_comm.h.html#definition-oti-complex-scalar-comm-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/scalar/comm.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_scalar_comm.h.html">Program Listing for File complex/scalar/comm.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_comm.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_comm.h.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_scalar_gauss_algebra.h.html">File complex/scalar/gauss/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_algebra.h.html#definition-oti-complex-scalar-gauss-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/scalar/gauss/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_scalar_gauss_algebra.h.html">Program Listing for File complex/scalar/gauss/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_scalar_gauss_base.h.html">File complex/scalar/gauss/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_base.h.html#definition-oti-complex-scalar-gauss-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/scalar/gauss/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_scalar_gauss_base.h.html">Program Listing for File complex/scalar/gauss/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_scalar_gauss_functions.h.html">File complex/scalar/gauss/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_functions.h.html#definition-oti-complex-scalar-gauss-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/scalar/gauss/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_scalar_gauss_functions.h.html">Program Listing for File complex/scalar/gauss/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_scalar_gauss_structures.h.html">File complex/scalar/gauss/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_structures.h.html#definition-oti-complex-scalar-gauss-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/scalar/gauss/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_scalar_gauss_structures.h.html">Program Listing for File complex/scalar/gauss/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_complex_scalar_gauss_utils.h.html">File complex/scalar/gauss/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_utils.h.html#definition-oti-complex-scalar-gauss-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/complex/scalar/gauss/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_complex_scalar_gauss_utils.h.html">Program Listing for File complex/scalar/gauss/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_complex_scalar_gauss_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_core.h.html">File core.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core.h.html#definition-oti-core-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/core.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_core.h.html">Program Listing for File core.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_core_base.h.html">File core/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_base.h.html#definition-oti-core-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/core/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_core_base.h.html">Program Listing for File core/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_core_dense.h.html">File core/dense.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_dense.h.html#definition-oti-core-dense-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/core/dense.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_core_dense.h.html">Program Listing for File core/dense.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_dense.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_dense.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_core_sparse.h.html">File core/sparse.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_sparse.h.html#definition-oti-core-sparse-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/core/sparse.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_core_sparse.h.html">Program Listing for File core/sparse.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_sparse.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_sparse.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_core_structures.h.html">File core/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_structures.h.html#definition-oti-core-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/core/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_core_structures.h.html">Program Listing for File core/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_structures.h.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_structures.h.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_core_utils.h.html">File core/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_utils.h.html#definition-oti-core-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/core/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_core_utils.h.html">Program Listing for File core/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_utils.h.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_utils.h.html#variables">Variables</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense.h.html">File dense.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense.h.html#definition-oti-dense-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense.h.html">Program Listing for File dense.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_array_algebra_elementwise.h.html">File dense/array/algebra_elementwise.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_algebra_elementwise.h.html#definition-oti-dense-array-algebra-elementwise-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/array/algebra_elementwise.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_array_algebra_elementwise.h.html">Program Listing for File dense/array/algebra_elementwise.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_algebra_elementwise.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_algebra_elementwise.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_array_algebra_matops.h.html">File dense/array/algebra_matops.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_algebra_matops.h.html#definition-oti-dense-array-algebra-matops-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/array/algebra_matops.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_array_algebra_matops.h.html">Program Listing for File dense/array/algebra_matops.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_algebra_matops.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_algebra_matops.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_array_base.h.html">File dense/array/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_base.h.html#definition-oti-dense-array-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/array/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_array_base.h.html">Program Listing for File dense/array/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_array_functions.h.html">File dense/array/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_functions.h.html#definition-oti-dense-array-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/array/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_array_functions.h.html">Program Listing for File dense/array/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_array_structures.h.html">File dense/array/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_structures.h.html#definition-oti-dense-array-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/array/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_array_structures.h.html">Program Listing for File dense/array/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_array_utils.h.html">File dense/array/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_utils.h.html#definition-oti-dense-array-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/array/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_array_utils.h.html">Program Listing for File dense/array/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_array_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_scalar_algebra.h.html">File dense/scalar/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_algebra.h.html#definition-oti-dense-scalar-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/scalar/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_scalar_algebra.h.html">Program Listing for File dense/scalar/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_scalar_base.h.html">File dense/scalar/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_base.h.html#definition-oti-dense-scalar-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/scalar/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_scalar_base.h.html">Program Listing for File dense/scalar/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_scalar_functions.h.html">File dense/scalar/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_functions.h.html#definition-oti-dense-scalar-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/scalar/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_scalar_functions.h.html">Program Listing for File dense/scalar/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_scalar_structures.h.html">File dense/scalar/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_structures.h.html#definition-oti-dense-scalar-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/scalar/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_scalar_structures.h.html">Program Listing for File dense/scalar/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_dense_scalar_utils.h.html">File dense/scalar/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_utils.h.html#definition-oti-dense-scalar-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/dense/scalar/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_dense_scalar_utils.h.html">Program Listing for File dense/scalar/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_dense_scalar_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_element.h.html">File element.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element.h.html#definition-oti-fem-element-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/element.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_element.h.html">Program Listing for File element.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_enums.h.html">File enums.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_enums.h.html#definition-oti-fem-enums-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/enums.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_enums.h.html">Program Listing for File enums.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_enums.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_enums.h.html#enums">Enums</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_experimental.h.html">File experimental.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_experimental.h.html#definition-oti-experimental-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/experimental.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_experimental.h.html">Program Listing for File experimental.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_experimental.h.html#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_fedarr.h.html">File fedarr.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_fedarr.h.html#definition-oti-fem-gauss-array-fedarr-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/fedarr.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_fedarr.h.html">Program Listing for File fedarr.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_fedarr.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_fedarr.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem.h.html">File fem.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem.h.html#definition-oti-fem-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem.h.html">Program Listing for File fem.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_element_old_real_base.h.html">File fem/element/old/real/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_old_real_base.h.html#definition-oti-fem-element-old-real-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/element/old/real/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_element_old_real_base.h.html">Program Listing for File fem/element/old/real/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_old_real_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_element_old_real_structures.h.html">File fem/element/old/real/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_old_real_structures.h.html#definition-oti-fem-element-old-real-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/element/old/real/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_element_old_real_structures.h.html">Program Listing for File fem/element/old/real/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_old_real_structures.h.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_old_real_structures.h.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_element_real_base.h.html">File fem/element/real/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_real_base.h.html#definition-oti-fem-element-real-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/element/real/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_element_real_base.h.html">Program Listing for File fem/element/real/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_real_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_real_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_element_real_structures.h.html">File fem/element/real/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_real_structures.h.html#definition-oti-fem-element-real-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/element/real/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_element_real_structures.h.html">Program Listing for File fem/element/real/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_real_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_real_structures.h.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_real_structures.h.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_element_soti_base.h.html">File fem/element/soti/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_soti_base.h.html#definition-oti-fem-element-soti-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/element/soti/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_element_soti_base.h.html">Program Listing for File fem/element/soti/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_soti_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_soti_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_element_soti_structures.h.html">File fem/element/soti/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_soti_structures.h.html#definition-oti-fem-element-soti-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/element/soti/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_element_soti_structures.h.html">Program Listing for File fem/element/soti/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_soti_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_soti_structures.h.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_element_soti_structures.h.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_functions.h.html">File fem/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_functions.h.html#definition-oti-fem-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_functions.h.html">Program Listing for File fem/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_functions.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss.h.html">File fem/gauss.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss.h.html#definition-oti-fem-gauss-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss.h.html">Program Listing for File fem/gauss.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_darr_algebra.h.html">File fem/gauss/array/darr/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_darr_algebra.h.html#definition-oti-fem-gauss-array-darr-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/darr/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_darr_algebra.h.html">Program Listing for File fem/gauss/array/darr/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_darr_algebra.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_darr_base.h.html">File fem/gauss/array/darr/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_darr_base.h.html#definition-oti-fem-gauss-array-darr-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/darr/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_darr_base.h.html">Program Listing for File fem/gauss/array/darr/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_darr_base.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_darr_structures.h.html">File fem/gauss/array/darr/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_darr_structures.h.html#definition-oti-fem-gauss-array-darr-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/darr/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_darr_structures.h.html">Program Listing for File fem/gauss/array/darr/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_darr_structures.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_darr_utils.h.html">File fem/gauss/array/darr/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_darr_utils.h.html#definition-oti-fem-gauss-array-darr-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/darr/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_darr_utils.h.html">Program Listing for File fem/gauss/array/darr/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_darr_utils.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_algebra.h.html">File fem/gauss/array/oarr/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_algebra.h.html#definition-oti-fem-gauss-array-oarr-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/oarr/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_oarr_algebra.h.html">Program Listing for File fem/gauss/array/oarr/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_base.h.html">File fem/gauss/array/oarr/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_base.h.html#definition-oti-fem-gauss-array-oarr-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/oarr/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_oarr_base.h.html">Program Listing for File fem/gauss/array/oarr/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_structures.h.html">File fem/gauss/array/oarr/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_structures.h.html#definition-oti-fem-gauss-array-oarr-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/oarr/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_oarr_structures.h.html">Program Listing for File fem/gauss/array/oarr/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_utils.h.html">File fem/gauss/array/oarr/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_utils.h.html#definition-oti-fem-gauss-array-oarr-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/oarr/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_oarr_utils.h.html">Program Listing for File fem/gauss/array/oarr/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_oarr_utils.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_algebra.h.html">File fem/gauss/scalar/otinum/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_algebra.h.html#definition-oti-fem-gauss-scalar-otinum-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/otinum/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_otinum_algebra.h.html">Program Listing for File fem/gauss/scalar/otinum/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_algebra.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_base.h.html">File fem/gauss/scalar/otinum/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_base.h.html#definition-oti-fem-gauss-scalar-otinum-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/otinum/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_otinum_base.h.html">Program Listing for File fem/gauss/scalar/otinum/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_base.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_structures.h.html">File fem/gauss/scalar/otinum/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_structures.h.html#definition-oti-fem-gauss-scalar-otinum-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/otinum/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_otinum_structures.h.html">Program Listing for File fem/gauss/scalar/otinum/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_utils.h.html">File fem/gauss/scalar/otinum/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_utils.h.html#definition-oti-fem-gauss-scalar-otinum-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/otinum/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_otinum_utils.h.html">Program Listing for File fem/gauss/scalar/otinum/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_otinum_utils.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_algebra.h.html">File fem/gauss/scalar/real/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_algebra.h.html#definition-oti-fem-gauss-scalar-real-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/real/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_real_algebra.h.html">Program Listing for File fem/gauss/scalar/real/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_algebra.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_base.h.html">File fem/gauss/scalar/real/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_base.h.html#definition-oti-fem-gauss-scalar-real-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/real/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_real_base.h.html">Program Listing for File fem/gauss/scalar/real/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_base.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_structures.h.html">File fem/gauss/scalar/real/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_structures.h.html#definition-oti-fem-gauss-scalar-real-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/real/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_real_structures.h.html">Program Listing for File fem/gauss/scalar/real/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_utils.h.html">File fem/gauss/scalar/real/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_utils.h.html#definition-oti-fem-gauss-scalar-real-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/real/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_real_utils.h.html">Program Listing for File fem/gauss/scalar/real/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_real_utils.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_integration_points_real_base.h.html">File fem/integration_points/real/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_integration_points_real_base.h.html#definition-oti-fem-integration-points-real-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/integration_points/real/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_integration_points_real_base.h.html">Program Listing for File fem/integration_points/real/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_integration_points_real_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_integration_points_real_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_integration_points_soti_base.h.html">File fem/integration_points/soti/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_integration_points_soti_base.h.html#definition-oti-fem-integration-points-soti-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/integration_points/soti/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_integration_points_soti_base.h.html">Program Listing for File fem/integration_points/soti/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_integration_points_soti_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_integration_points_soti_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_feoarr.h.html">File feoarr.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_feoarr.h.html#definition-oti-fem-feoarr-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/feoarr.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_feoarr.h.html">Program Listing for File feoarr.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_feoarr.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_feotinum.h.html">File feotinum.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_feotinum.h.html#definition-oti-fem-gauss-scalar-feotinum-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/feotinum.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_feotinum.h.html">Program Listing for File feotinum.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_feotinum.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_feotinum.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar_fereal.h.html">File fereal.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_fereal.h.html#definition-oti-fem-gauss-scalar-fereal-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar/fereal.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar_fereal.h.html">Program Listing for File fereal.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_fereal.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar_fereal.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_core_fileio.h.html">File fileio.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_fileio.h.html#definition-oti-core-fileio-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/core/fileio.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_core_fileio.h.html">Program Listing for File fileio.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_fileio.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_fileio.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_array_feoarr.h.html">File gauss/array/feoarr.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_feoarr.h.html#definition-oti-fem-gauss-array-feoarr-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/array/feoarr.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_array_feoarr.h.html">Program Listing for File gauss/array/feoarr.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_feoarr.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_array_feoarr.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_integration_points.h.html">File integration_points.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_integration_points.h.html#definition-oti-fem-integration-points-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/integration_points.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_integration_points.h.html">Program Listing for File integration_points.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_integration_points.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_integration_points.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_core_linkedlist.h.html">File linkedlist.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_linkedlist.h.html#definition-oti-core-linkedlist-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/core/linkedlist.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_core_linkedlist.h.html">Program Listing for File linkedlist.h</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_omp_dummy.h.html">File omp_dummy.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_omp_dummy.h.html#definition-oti-omp-dummy-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/omp_dummy.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_omp_dummy.h.html">Program Listing for File omp_dummy.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_omp_dummy.h.html#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_omp_dummy.h.html#enums">Enums</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_omp_dummy.h.html#functions">Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_omp_dummy.h.html#defines">Defines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_omp_dummy.h.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_oti.h.html">File oti.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_oti.h.html#definition-oti-oti-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/oti.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_oti.h.html">Program Listing for File oti.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_oti.h.html#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_core_precompute.h.html">File precompute.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_precompute.h.html#definition-oti-core-precompute-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/core/precompute.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_core_precompute.h.html">Program Listing for File precompute.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_precompute.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_core_precompute.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_experimental_pytorch_graph_eval.h.html">File pytorch_graph_eval.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_experimental_pytorch_graph_eval.h.html#definition-oti-experimental-pytorch-graph-eval-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/experimental/pytorch_graph_eval.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_experimental_pytorch_graph_eval.h.html">Program Listing for File pytorch_graph_eval.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_experimental_pytorch_graph_eval.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_experimental_pytorch_graph_eval.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real.h.html">File real.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real.h.html#definition-oti-real-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real.h.html">Program Listing for File real.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_algebra.h.html">File real/array/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_algebra.h.html#definition-oti-real-array-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_algebra.h.html">Program Listing for File real/array/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_base.h.html">File real/array/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_base.h.html#definition-oti-real-array-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_base.h.html">Program Listing for File real/array/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_functions.h.html">File real/array/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_functions.h.html#definition-oti-real-array-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_functions.h.html">Program Listing for File real/array/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_gauss_algebra.h.html">File real/array/gauss/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_algebra.h.html#definition-oti-real-array-gauss-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/gauss/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_gauss_algebra.h.html">Program Listing for File real/array/gauss/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_gauss_base.h.html">File real/array/gauss/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_base.h.html#definition-oti-real-array-gauss-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/gauss/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_gauss_base.h.html">Program Listing for File real/array/gauss/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_gauss_functions.h.html">File real/array/gauss/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_functions.h.html#definition-oti-real-array-gauss-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/gauss/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_gauss_functions.h.html">Program Listing for File real/array/gauss/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_gauss_structures.h.html">File real/array/gauss/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_structures.h.html#definition-oti-real-array-gauss-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/gauss/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_gauss_structures.h.html">Program Listing for File real/array/gauss/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_gauss_utils.h.html">File real/array/gauss/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_utils.h.html#definition-oti-real-array-gauss-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/gauss/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_gauss_utils.h.html">Program Listing for File real/array/gauss/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_gauss_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_structures.h.html">File real/array/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_structures.h.html#definition-oti-real-array-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_structures.h.html">Program Listing for File real/array/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_array_utils.h.html">File real/array/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_utils.h.html#definition-oti-real-array-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/array/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_array_utils.h.html">Program Listing for File real/array/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_array_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_derivatives.h.html">File real/derivatives.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_derivatives.h.html#definition-oti-real-derivatives-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/derivatives.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_derivatives.h.html">Program Listing for File real/derivatives.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_derivatives.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_derivatives.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_scalar_gauss_algebra.h.html">File real/scalar/gauss/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_algebra.h.html#definition-oti-real-scalar-gauss-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/scalar/gauss/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_scalar_gauss_algebra.h.html">Program Listing for File real/scalar/gauss/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_scalar_gauss_base.h.html">File real/scalar/gauss/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_base.h.html#definition-oti-real-scalar-gauss-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/scalar/gauss/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_scalar_gauss_base.h.html">Program Listing for File real/scalar/gauss/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_scalar_gauss_functions.h.html">File real/scalar/gauss/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_functions.h.html#definition-oti-real-scalar-gauss-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/scalar/gauss/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_scalar_gauss_functions.h.html">Program Listing for File real/scalar/gauss/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_scalar_gauss_structures.h.html">File real/scalar/gauss/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_structures.h.html#definition-oti-real-scalar-gauss-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/scalar/gauss/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_scalar_gauss_structures.h.html">Program Listing for File real/scalar/gauss/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_real_scalar_gauss_utils.h.html">File real/scalar/gauss/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_utils.h.html#definition-oti-real-scalar-gauss-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/real/scalar/gauss/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_real_scalar_gauss_utils.h.html">Program Listing for File real/scalar/gauss/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_real_scalar_gauss_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_fem_gauss_scalar.h.html">File scalar.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar.h.html#definition-oti-fem-gauss-scalar-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/fem/gauss/scalar.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_fem_gauss_scalar.h.html">Program Listing for File scalar.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_fem_gauss_scalar.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse.h.html">File semisparse.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse.h.html#definition-oti-semisparse-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse.h.html">Program Listing for File semisparse.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse.h.html#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_algebra_elementwise.h.html">File semisparse/array/algebra_elementwise.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_algebra_elementwise.h.html#definition-oti-semisparse-array-algebra-elementwise-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/algebra_elementwise.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_algebra_elementwise.h.html">Program Listing for File semisparse/array/algebra_elementwise.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_algebra_elementwise.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_algebra_matops.h.html">File semisparse/array/algebra_matops.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_algebra_matops.h.html#definition-oti-semisparse-array-algebra-matops-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/algebra_matops.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_algebra_matops.h.html">Program Listing for File semisparse/array/algebra_matops.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_algebra_matops.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_base.h.html">File semisparse/array/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_base.h.html#definition-oti-semisparse-array-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_base.h.html">Program Listing for File semisparse/array/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_functions.h.html">File semisparse/array/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_functions.h.html#definition-oti-semisparse-array-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_functions.h.html">Program Listing for File semisparse/array/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_gauss.h.html">File semisparse/array/gauss.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss.h.html#definition-oti-semisparse-array-gauss-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/gauss.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_gauss.h.html">Program Listing for File semisparse/array/gauss.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss.h.html#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_gauss_algebra.h.html">File semisparse/array/gauss/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_algebra.h.html#definition-oti-semisparse-array-gauss-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/gauss/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_gauss_algebra.h.html">Program Listing for File semisparse/array/gauss/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_gauss_base.h.html">File semisparse/array/gauss/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_base.h.html#definition-oti-semisparse-array-gauss-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/gauss/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_gauss_base.h.html">Program Listing for File semisparse/array/gauss/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_gauss_functions.h.html">File semisparse/array/gauss/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_functions.h.html#definition-oti-semisparse-array-gauss-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/gauss/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_gauss_functions.h.html">Program Listing for File semisparse/array/gauss/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_gauss_structures.h.html">File semisparse/array/gauss/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_structures.h.html#definition-oti-semisparse-array-gauss-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/gauss/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_gauss_structures.h.html">Program Listing for File semisparse/array/gauss/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_gauss_utils.h.html">File semisparse/array/gauss/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_utils.h.html#definition-oti-semisparse-array-gauss-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/gauss/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_gauss_utils.h.html">Program Listing for File semisparse/array/gauss/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_gauss_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_structures.h.html">File semisparse/array/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_structures.h.html#definition-oti-semisparse-array-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_structures.h.html">Program Listing for File semisparse/array/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_array_utils.h.html">File semisparse/array/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_utils.h.html#definition-oti-semisparse-array-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/array/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_array_utils.h.html">Program Listing for File semisparse/array/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_array_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_algebra.h.html">File semisparse/scalar/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_algebra.h.html#definition-oti-semisparse-scalar-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_algebra.h.html">Program Listing for File semisparse/scalar/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_base.h.html">File semisparse/scalar/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_base.h.html#definition-oti-semisparse-scalar-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_base.h.html">Program Listing for File semisparse/scalar/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_functions.h.html">File semisparse/scalar/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_functions.h.html#definition-oti-semisparse-scalar-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_functions.h.html">Program Listing for File semisparse/scalar/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_gauss.h.html">File semisparse/scalar/gauss.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss.h.html#definition-oti-semisparse-scalar-gauss-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/gauss.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_gauss.h.html">Program Listing for File semisparse/scalar/gauss.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss.h.html#includes">Includes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_algebra.h.html">File semisparse/scalar/gauss/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_algebra.h.html#definition-oti-semisparse-scalar-gauss-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/gauss/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_gauss_algebra.h.html">Program Listing for File semisparse/scalar/gauss/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_base.h.html">File semisparse/scalar/gauss/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_base.h.html#definition-oti-semisparse-scalar-gauss-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/gauss/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_gauss_base.h.html">Program Listing for File semisparse/scalar/gauss/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_functions.h.html">File semisparse/scalar/gauss/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_functions.h.html#definition-oti-semisparse-scalar-gauss-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/gauss/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_gauss_functions.h.html">Program Listing for File semisparse/scalar/gauss/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_structures.h.html">File semisparse/scalar/gauss/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_structures.h.html#definition-oti-semisparse-scalar-gauss-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/gauss/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_gauss_structures.h.html">Program Listing for File semisparse/scalar/gauss/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_utils.h.html">File semisparse/scalar/gauss/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_utils.h.html#definition-oti-semisparse-scalar-gauss-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/gauss/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_gauss_utils.h.html">Program Listing for File semisparse/scalar/gauss/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_gauss_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_structures.h.html">File semisparse/scalar/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_structures.h.html#definition-oti-semisparse-scalar-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_structures.h.html">Program Listing for File semisparse/scalar/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_semisparse_scalar_utils.h.html">File semisparse/scalar/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_utils.h.html#definition-oti-semisparse-scalar-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/semisparse/scalar/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_semisparse_scalar_utils.h.html">Program Listing for File semisparse/scalar/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_semisparse_scalar_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse.h.html">File sparse.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse.h.html#definition-oti-sparse-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse.h.html">Program Listing for File sparse.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_algebra_elementwise.h.html">File sparse/array/algebra_elementwise.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_algebra_elementwise.h.html#definition-oti-sparse-array-algebra-elementwise-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/algebra_elementwise.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_algebra_elementwise.h.html">Program Listing for File sparse/array/algebra_elementwise.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_algebra_elementwise.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_algebra_elementwise.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_algebra_matops.h.html">File sparse/array/algebra_matops.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_algebra_matops.h.html#definition-oti-sparse-array-algebra-matops-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/algebra_matops.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_algebra_matops.h.html">Program Listing for File sparse/array/algebra_matops.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_algebra_matops.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_algebra_matops.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_base.h.html">File sparse/array/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_base.h.html#definition-oti-sparse-array-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_base.h.html">Program Listing for File sparse/array/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_functions.h.html">File sparse/array/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_functions.h.html#definition-oti-sparse-array-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_functions.h.html">Program Listing for File sparse/array/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_gauss.h.html">File sparse/array/gauss.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss.h.html#definition-oti-sparse-array-gauss-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/gauss.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_gauss.h.html">Program Listing for File sparse/array/gauss.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_gauss_algebra.h.html">File sparse/array/gauss/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_algebra.h.html#definition-oti-sparse-array-gauss-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/gauss/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_gauss_algebra.h.html">Program Listing for File sparse/array/gauss/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_gauss_base.h.html">File sparse/array/gauss/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_base.h.html#definition-oti-sparse-array-gauss-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/gauss/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_gauss_base.h.html">Program Listing for File sparse/array/gauss/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_gauss_functions.h.html">File sparse/array/gauss/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_functions.h.html#definition-oti-sparse-array-gauss-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/gauss/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_gauss_functions.h.html">Program Listing for File sparse/array/gauss/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_gauss_structures.h.html">File sparse/array/gauss/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_structures.h.html#definition-oti-sparse-array-gauss-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/gauss/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_gauss_structures.h.html">Program Listing for File sparse/array/gauss/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_gauss_utils.h.html">File sparse/array/gauss/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_utils.h.html#definition-oti-sparse-array-gauss-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/gauss/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_gauss_utils.h.html">Program Listing for File sparse/array/gauss/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_gauss_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_oti_of_array_base.h.html">File sparse/array/oti_of_array/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_oti_of_array_base.h.html#definition-oti-sparse-array-oti-of-array-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/oti_of_array/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_oti_of_array_base.h.html">Program Listing for File sparse/array/oti_of_array/base.h</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_oti_of_array_structures.h.html">File sparse/array/oti_of_array/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_oti_of_array_structures.h.html#definition-oti-sparse-array-oti-of-array-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/oti_of_array/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_oti_of_array_structures.h.html">Program Listing for File sparse/array/oti_of_array/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_oti_of_array_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_structures.h.html">File sparse/array/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_structures.h.html#definition-oti-sparse-array-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_structures.h.html">Program Listing for File sparse/array/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_utils.h.html">File sparse/array/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_utils.h.html#definition-oti-sparse-array-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_utils.h.html">Program Listing for File sparse/array/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_algebra.h.html">File sparse/scalar/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_algebra.h.html#definition-oti-sparse-scalar-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_algebra.h.html">Program Listing for File sparse/scalar/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_base.h.html">File sparse/scalar/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_base.h.html#definition-oti-sparse-scalar-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_base.h.html">Program Listing for File sparse/scalar/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_functions.h.html">File sparse/scalar/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_functions.h.html#definition-oti-sparse-scalar-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_functions.h.html">Program Listing for File sparse/scalar/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_gauss.h.html">File sparse/scalar/gauss.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss.h.html#definition-oti-sparse-scalar-gauss-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/gauss.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_gauss.h.html">Program Listing for File sparse/scalar/gauss.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_gauss_algebra.h.html">File sparse/scalar/gauss/algebra.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_algebra.h.html#definition-oti-sparse-scalar-gauss-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/gauss/algebra.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_gauss_algebra.h.html">Program Listing for File sparse/scalar/gauss/algebra.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_algebra.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_algebra.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_gauss_base.h.html">File sparse/scalar/gauss/base.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_base.h.html#definition-oti-sparse-scalar-gauss-base-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/gauss/base.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_gauss_base.h.html">Program Listing for File sparse/scalar/gauss/base.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_base.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_base.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_gauss_functions.h.html">File sparse/scalar/gauss/functions.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_functions.h.html#definition-oti-sparse-scalar-gauss-functions-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/gauss/functions.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_gauss_functions.h.html">Program Listing for File sparse/scalar/gauss/functions.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_functions.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_functions.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_gauss_structures.h.html">File sparse/scalar/gauss/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_structures.h.html#definition-oti-sparse-scalar-gauss-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/gauss/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_gauss_structures.h.html">Program Listing for File sparse/scalar/gauss/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_gauss_utils.h.html">File sparse/scalar/gauss/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_utils.h.html#definition-oti-sparse-scalar-gauss-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/gauss/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_gauss_utils.h.html">Program Listing for File sparse/scalar/gauss/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_gauss_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_structures.h.html">File sparse/scalar/structures.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_structures.h.html#definition-oti-sparse-scalar-structures-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/structures.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_structures.h.html">Program Listing for File sparse/scalar/structures.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_structures.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_structures.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_scalar_utils.h.html">File sparse/scalar/utils.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_utils.h.html#definition-oti-sparse-scalar-utils-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/scalar/utils.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_scalar_utils.h.html">Program Listing for File sparse/scalar/utils.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_utils.h.html#included-by">Included By</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_scalar_utils.h.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_static.h.html">File static.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_static.h.html#definition-oti-static-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/static.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_static.h.html">Program Listing for File static.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_static.h.html#includes">Includes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_static.h.html#included-by">Included By</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file_oti_sparse_array_oti_of_array_structures_array.h.html">File structures_array.h</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_oti_of_array_structures_array.h.html#definition-oti-sparse-array-oti-of-array-structures-array-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/oti_of_array/structures_array.h</span></code>)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="program_listing_file_oti_sparse_array_oti_of_array_structures_array.h.html">Program Listing for File structures_array.h</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="file_oti_sparse_array_oti_of_array_structures_array.h.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#directories">Directories</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#files">Files</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/capi_generated/unabridged_orphan.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mauricio Aristizabal (2016-Current), St. Mary&#39;s University (2025-Current), UT San Antonio (2022-2025) and Universidad EAFIT (2016-2020).
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

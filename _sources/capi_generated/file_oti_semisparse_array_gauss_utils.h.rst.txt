@@ -1,0 +1,72 @@
+
+.. _file_oti_semisparse_array_gauss_utils.h:
+
+File semisparse/array/gauss/utils.h
+===================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/array/gauss/utils.h``)
+---------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_array_gauss_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_semisparse_array_gauss.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1a2537a791eeebbed44c8b54e24049e515`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1ad66bce9e137bb1345f450bd4efb413e8`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1a7e65e552d727687ff80f1adf42b1c153`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1ab82b4229c66321421d1465cb28517f9d`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1ad722542a67106e10fa419d25fafb0407`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1af76a741762a6d65b0e83137693b1bbe5`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1afff85ed1b5111c58b50437b88fac73d5`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1ab17a4903531cac5b6b2a0a4b31e24bfa`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1ad091d7e59e935b5e2d04b2827e502f2f`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1a1e84809d43c72ac1cafe1219bac81550`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1a098757761cc270e139d5b9c8c313036b`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1aa5534ec8fc9103190a1db06078826264`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1ad2c50ee013870fda4903794daa8bcd93`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1a367e77fbeea7525f0380c559be349ca0`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1a24368481ca9d3675e9fa886744418333`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1ac218ceed3ac9f2209108babc643f9682`
+
+- :ref:`exhale_function_semisparse_2array_2gauss_2utils_8h_1abf1634f5b8fd429e2739a79e6464ce2b`
+

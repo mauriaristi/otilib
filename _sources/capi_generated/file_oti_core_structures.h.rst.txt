@@ -1,0 +1,55 @@
+
+.. _file_oti_core_structures.h:
+
+File core/structures.h
+======================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/core/structures.h``)
+--------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_core_structures.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_core.h`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structdhelp__t`
+
+- :ref:`exhale_struct_structdhelpl__t`
+
+- :ref:`exhale_struct_structimdir2d__t`
+
+- :ref:`exhale_struct_structlil__node`
+
+- :ref:`exhale_struct_structmatrix__form__t`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_core_2structures_8h_1ae345d3deeb92d37525b659bd503afc69`
+

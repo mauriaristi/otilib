@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2algebra__matops_8h_1a9f2a7109265fc6af759beba820043f9c:
+
+Function oarr_det_to
+====================
+
+- Defined in :ref:`file_oti_dense_array_algebra_matops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_det_to(oarr_t *, otinum_t *, dhelpl_t)
+   :project: OTIlib

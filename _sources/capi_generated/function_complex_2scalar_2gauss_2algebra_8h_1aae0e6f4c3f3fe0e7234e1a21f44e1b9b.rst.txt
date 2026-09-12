@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2algebra_8h_1aae0e6f4c3f3fe0e7234e1a21f44e1b9b:
+
+Function fecnum_mul_rf
+======================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_mul_rf(ccoeff_t, fecnum_t *)
+   :project: OTIlib

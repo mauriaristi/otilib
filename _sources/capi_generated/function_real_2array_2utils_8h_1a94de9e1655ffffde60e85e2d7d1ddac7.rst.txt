@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2utils_8h_1a94de9e1655ffffde60e85e2d7d1ddac7:
+
+Function darr_dimCheck_RR_samesize
+==================================
+
+- Defined in :ref:`file_oti_real_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_dimCheck_RR_samesize(darr_t *, darr_t *)
+   :project: OTIlib

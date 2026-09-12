@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2utils_8h_1a13a3e85bc028ccbb429904c615d23e1c:
+
+Function carr_dimCheck_RR_elementwise
+=====================================
+
+- Defined in :ref:`file_oti_complex_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_dimCheck_RR_elementwise(carr_t *, carr_t *, carr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_precompute_8h_1a43d6f9ad565c24d261add56a5c8ec28a:
+
+Function dhelp_precompute_multiply
+==================================
+
+- Defined in :ref:`file_oti_core_precompute.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_precompute_multiply(bases_t *, ord_t, bases_t *, ord_t, dhelpl_t)
+   :project: OTIlib

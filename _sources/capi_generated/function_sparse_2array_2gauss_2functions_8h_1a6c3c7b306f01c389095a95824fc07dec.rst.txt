@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2functions_8h_1a6c3c7b306f01c389095a95824fc07dec:
+
+Function fearrso_sqrt
+=====================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_sqrt(fearrso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,87 @@
+
+.. _file_oti_core_utils.h:
+
+File core/utils.h
+=================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/core/utils.h``)
+---------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_core_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_core.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_core_2utils_8h_1a5929f8af1ffd5be21890f43dab8f8521`
+
+- :ref:`exhale_function_core_2utils_8h_1ae562ef8a0730fe921063f1a018a26fea`
+
+- :ref:`exhale_function_core_2utils_8h_1a4524e8891218bc153eefd2b56f0174d6`
+
+- :ref:`exhale_function_core_2utils_8h_1a584d5da269e97c0ee4dc652fac5d6698`
+
+- :ref:`exhale_function_core_2utils_8h_1aa0264305cd9e537f1abf3cf49847e310`
+
+- :ref:`exhale_function_core_2utils_8h_1a3ab896e9117ac7f1f8cee89f56e647b4`
+
+- :ref:`exhale_function_core_2utils_8h_1a80cde315fb228afeeea29dc6131ec2e1`
+
+- :ref:`exhale_function_core_2utils_8h_1a45a8b2cc29babe2917fd2c3dad415590`
+
+- :ref:`exhale_function_core_2utils_8h_1af6f3f3eaa9dac04b4b9781a986d689e4`
+
+- :ref:`exhale_function_core_2utils_8h_1a1c9a670d7570abfab84cee0f44a7b3d8`
+
+- :ref:`exhale_function_core_2utils_8h_1a682067cceaad1faf69a5138edc1d55bc`
+
+- :ref:`exhale_function_core_2utils_8h_1a607c8e0e312f5886b8f8400c2110224d`
+
+- :ref:`exhale_function_core_2utils_8h_1aaed6dad541bdb7bc568470b71f286635`
+
+- :ref:`exhale_function_core_2utils_8h_1aede1cddc8f932b3ca1ac3dfdc35d6c51`
+
+- :ref:`exhale_function_core_2utils_8h_1ae9243ee967bd27e58c9738b2689da895`
+
+- :ref:`exhale_function_core_2utils_8h_1a58cdbe8dec5105157ae6179ad2329e8e`
+
+- :ref:`exhale_function_core_2utils_8h_1a3b98b1d3505b7094f59f9a7a3e5077de`
+
+- :ref:`exhale_function_core_2utils_8h_1acb1ab07dd37b202142b337beeae4d63b`
+
+- :ref:`exhale_function_core_2utils_8h_1a4970d8db853cbe9f984dabeffd81b490`
+
+- :ref:`exhale_function_core_2utils_8h_1a2a86b0c7d15893e42f2312caee82a11a`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_core_2utils_8h_1aa403a4fbcc7e37266a93052e026ab2e7`
+
+- :ref:`exhale_variable_core_2utils_8h_1a3fa4e9e2580b3e8cff2138bff03a5784`
+

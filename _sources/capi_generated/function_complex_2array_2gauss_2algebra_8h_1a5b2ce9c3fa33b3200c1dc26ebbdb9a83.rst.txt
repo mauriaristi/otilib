@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2algebra_8h_1a5b2ce9c3fa33b3200c1dc26ebbdb9a83:
+
+Function fecarr_integrate
+=========================
+
+- Defined in :ref:`file_oti_complex_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_integrate(fecarr_t *, fecnum_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2algebra_8h_1a7b011665c27843141a3a9f62fd2bfc17:
+
+Function soti_sum_ro
+====================
+
+- Defined in :ref:`file_oti_sparse_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_sum_ro(coeff_t, sotinum_t *, dhelpl_t)
+   :project: OTIlib

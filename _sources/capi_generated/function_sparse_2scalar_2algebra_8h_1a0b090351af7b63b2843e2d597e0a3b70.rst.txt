@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2algebra_8h_1a0b090351af7b63b2843e2d597e0a3b70:
+
+Function soti_base_trunc_sub
+============================
+
+- Defined in :ref:`file_oti_sparse_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_base_trunc_sub(ord_t, sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

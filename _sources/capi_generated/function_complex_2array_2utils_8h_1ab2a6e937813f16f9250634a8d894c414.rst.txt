@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2utils_8h_1ab2a6e937813f16f9250634a8d894c414:
+
+Function carr_dimCheck_RR_matmul
+================================
+
+- Defined in :ref:`file_oti_complex_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_dimCheck_RR_matmul(carr_t *, carr_t *, carr_t *)
+   :project: OTIlib

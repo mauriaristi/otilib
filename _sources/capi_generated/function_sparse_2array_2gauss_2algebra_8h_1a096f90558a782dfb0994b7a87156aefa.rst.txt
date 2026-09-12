@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2algebra_8h_1a096f90558a782dfb0994b7a87156aefa:
+
+Function fearrso_neg
+====================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_neg(fearrso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2algebra_8h_1a23f811a341bcbce92f9083e349126fe8:
+
+Function fecarr_dotproduct_FF
+=============================
+
+- Defined in :ref:`file_oti_complex_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_dotproduct_FF(fecarr_t *, fecarr_t *)
+   :project: OTIlib

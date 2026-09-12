@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2functions_8h_1a5f58362a71a36f37d4e4a97994d56c36:
+
+Function oti_log10_to
+=====================
+
+- Defined in :ref:`file_oti_dense_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_log10_to(otinum_t *, otinum_t *, dhelpl_t)
+   :project: OTIlib

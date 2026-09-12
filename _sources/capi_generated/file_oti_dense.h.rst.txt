@@ -1,0 +1,70 @@
+
+.. _file_oti_dense.h:
+
+File dense.h
+============
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/dense.h``)
+----------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_dense.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``dense/array/algebra_elementwise.h`` (:ref:`file_oti_dense_array_algebra_elementwise.h`)
+
+- ``dense/array/algebra_matops.h`` (:ref:`file_oti_dense_array_algebra_matops.h`)
+
+- ``dense/array/base.h`` (:ref:`file_oti_dense_array_base.h`)
+
+- ``dense/array/functions.h`` (:ref:`file_oti_dense_array_functions.h`)
+
+- ``dense/array/structures.h`` (:ref:`file_oti_dense_array_structures.h`)
+
+- ``dense/array/utils.h`` (:ref:`file_oti_dense_array_utils.h`)
+
+- ``dense/scalar/algebra.h`` (:ref:`file_oti_dense_scalar_algebra.h`)
+
+- ``dense/scalar/base.h`` (:ref:`file_oti_dense_scalar_base.h`)
+
+- ``dense/scalar/functions.h`` (:ref:`file_oti_dense_scalar_functions.h`)
+
+- ``dense/scalar/structures.h`` (:ref:`file_oti_dense_scalar_structures.h`)
+
+- ``dense/scalar/utils.h`` (:ref:`file_oti_dense_scalar_utils.h`)
+
+- ``oti/core.h`` (:ref:`file_oti_core.h`)
+
+- ``oti/real.h`` (:ref:`file_oti_real.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem.h`
+
+- :ref:`file_oti_oti.h`
+
+
+

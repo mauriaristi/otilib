@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1a8a7e5a3087ef850021b94a5204201ce9:
+
+Function fearrso_copy
+=====================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_copy(fearrso_t *, dhelpl_t)
+   :project: OTIlib

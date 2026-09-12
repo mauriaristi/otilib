@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1a5f4323a9ca902b5cfca14989240eb3d3:
+
+Function arrso_empty_like
+=========================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_empty_like(arrso_t *, dhelpl_t)
+   :project: OTIlib

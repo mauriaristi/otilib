@@ -1,0 +1,14 @@
+.. _exhale_function_core_2sparse_8h_1a17fd3d937ddc48e536e66e10a0ff74b8:
+
+Function dhelp_sparse_mult
+==========================
+
+- Defined in :ref:`file_oti_core_sparse.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_sparse_mult(coeff_t *, imdir_t *, ndir_t, ord_t, coeff_t *, imdir_t *, ndir_t, ord_t, coeff_t *, imdir_t *, ndir_t *, dhelpl_t)
+   :project: OTIlib

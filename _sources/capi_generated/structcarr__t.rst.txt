@@ -1,0 +1,17 @@
+.. _exhale_struct_structcarr__t:
+
+Struct carr_t
+=============
+
+- Defined in :ref:`file_oti_complex_array_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: carr_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

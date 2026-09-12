@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2algebra_8h_1aead9bb098336b7863e3ca9c9e7b6e7eb:
+
+Function oti_neg_to
+===================
+
+- Defined in :ref:`file_oti_dense_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_neg_to(otinum_t *, otinum_t *, dhelpl_t)
+   :project: OTIlib

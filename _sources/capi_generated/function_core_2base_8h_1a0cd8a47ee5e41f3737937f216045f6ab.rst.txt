@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a0cd8a47ee5e41f3737937f216045f6ab:
+
+Function dhelp_extract_ndirTotal
+================================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_extract_ndirTotal(bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

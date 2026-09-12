@@ -1,0 +1,14 @@
+.. _exhale_typedef_comm_8h_1a7a6989b01a7e915f122a3870843a99f1:
+
+Typedef ndir_t
+==============
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: ndir_t
+   :project: OTIlib

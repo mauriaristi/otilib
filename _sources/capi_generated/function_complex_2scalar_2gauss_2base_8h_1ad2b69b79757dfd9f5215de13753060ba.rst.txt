@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2base_8h_1ad2b69b79757dfd9f5215de13753060ba:
+
+Function fecnum_init
+====================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_init(void)
+   :project: OTIlib

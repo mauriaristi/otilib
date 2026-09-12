@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1a2a86b0c7d15893e42f2312caee82a11a:
+
+Function usage_python_error_function
+====================================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: usage_python_error_function(void(*)(int64_t), int64_t, int64_t)
+   :project: OTIlib

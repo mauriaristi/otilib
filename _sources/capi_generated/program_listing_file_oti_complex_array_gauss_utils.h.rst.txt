@@ -1,0 +1,49 @@
+
+.. _program_listing_file_oti_complex_array_gauss_utils.h:
+
+Program Listing for File complex/array/gauss/utils.h
+====================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_complex_array_gauss_utils.h>` (``oti/complex/array/gauss/utils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_COMPLEX_ARRAY_GAUSS_UTILS_H
+   #define OTI_COMPLEX_ARRAY_GAUSS_UTILS_H
+   
+   
+   /**************************************************************************************************/ 
+   void fecarr_dimCheck_FF_samesize( fecarr_t* arr1, fecarr_t* arr2, fecnum_t* res);
+   void fecarr_dimCheck_RF_samesize(   carr_t* arr1, fecarr_t* arr2, fecnum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void fecarr_dimCheck_FF_elementwise( fecarr_t* arr1,  fecarr_t* arr2, fecarr_t* res);
+   void fecarr_dimCheck_RF_elementwise(   carr_t* arr1,  fecarr_t* arr2, fecarr_t* res);
+   void fecarr_dimCheck_fF_elementwise( fecnum_t* num1,  fecarr_t* arr2, fecarr_t* res);
+   void fecarr_dimCheck_Ff_elementwise( fecarr_t* arr1,  fecnum_t* num2, fecarr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void fecarr_dimCheck_FF_matmul( fecarr_t* lhs, fecarr_t* rhs, fecarr_t* res);
+   void fecarr_dimCheck_RF_matmul(   carr_t* lhs, fecarr_t* rhs, fecarr_t* res);
+   void fecarr_dimCheck_FR_matmul( fecarr_t* lhs,   carr_t* rhs, fecarr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void fecarr_dimCheck_F_squareness( fecarr_t* arr1, fecarr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void fecarr_dimCheck_F_transpose( fecarr_t* arr1, fecarr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void fecarr_dimCheck_FfR_integrate(fecarr_t* arr, fecnum_t* num,carr_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   #endif

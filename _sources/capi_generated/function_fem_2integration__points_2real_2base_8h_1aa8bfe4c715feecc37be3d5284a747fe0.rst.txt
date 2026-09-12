@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2integration__points_2real_2base_8h_1aa8bfe4c715feecc37be3d5284a747fe0:
+
+Function fem_intPts_real
+========================
+
+- Defined in :ref:`file_oti_fem_integration_points_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fem_intPts_real(uint64_t, int64_t, fednum_t *, fednum_t *, fednum_t *, fednum_t *)
+   :project: OTIlib

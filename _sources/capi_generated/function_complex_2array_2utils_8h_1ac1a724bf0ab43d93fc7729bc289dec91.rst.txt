@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2utils_8h_1ac1a724bf0ab43d93fc7729bc289dec91:
+
+Function carr_dimCheck_R_squareness
+===================================
+
+- Defined in :ref:`file_oti_complex_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_dimCheck_R_squareness(carr_t *, carr_t *)
+   :project: OTIlib

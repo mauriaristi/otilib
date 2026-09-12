@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2algebra_8h_1a947b6360390cdbbd170c0f24899c0b00:
+
+Function fecarr_matmul_RF
+=========================
+
+- Defined in :ref:`file_oti_complex_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_matmul_RF(carr_t *, fecarr_t *)
+   :project: OTIlib

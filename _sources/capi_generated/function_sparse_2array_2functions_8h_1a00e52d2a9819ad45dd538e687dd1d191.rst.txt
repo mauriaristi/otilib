@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2functions_8h_1a00e52d2a9819ad45dd538e687dd1d191:
+
+Function arrso_asin
+===================
+
+- Defined in :ref:`file_oti_sparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_asin(arrso_t *, dhelpl_t)
+   :project: OTIlib

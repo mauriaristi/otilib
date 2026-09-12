@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2functions_8h_1a81c6b2f8a1a1415c2e3dddfca506c66f:
+
+Function darr_cbrt_to
+=====================
+
+- Defined in :ref:`file_oti_real_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_cbrt_to(darr_t *, darr_t *)
+   :project: OTIlib

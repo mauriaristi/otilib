@@ -1,0 +1,39 @@
+
+.. _program_listing_file_oti_sparse_array_gauss.h:
+
+Program Listing for File sparse/array/gauss.h
+=============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_sparse_array_gauss.h>` (``oti/sparse/array/gauss.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SPARSE_ARRAY_GAUSS_H
+   #define OTI_SPARSE_ARRAY_GAUSS_H
+   
+   
+   
+   
+   // Define structures.
+   #include "gauss/structures.h"
+   
+   // Define Base operations.
+   #include "gauss/base.h"
+   
+   // Define algebra
+   #include "gauss/algebra.h"
+   
+   // Define algebra
+   #include "gauss/functions.h"
+   
+   //Define utility functions.
+   #include "gauss/utils.h"
+   
+   
+   
+   
+   
+   
+   #endif

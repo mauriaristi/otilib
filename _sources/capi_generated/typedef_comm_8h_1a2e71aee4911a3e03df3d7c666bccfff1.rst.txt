@@ -1,0 +1,14 @@
+.. _exhale_typedef_comm_8h_1a2e71aee4911a3e03df3d7c666bccfff1:
+
+Typedef imdir_t
+===============
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: imdir_t
+   :project: OTIlib

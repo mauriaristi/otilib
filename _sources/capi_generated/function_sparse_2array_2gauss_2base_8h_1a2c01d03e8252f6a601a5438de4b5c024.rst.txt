@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1a2c01d03e8252f6a601a5438de4b5c024:
+
+Function fearrso_set_slice_F
+============================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_set_slice_F(fearrso_t *, int64_t, int64_t, int64_t, int64_t, int64_t, int64_t, fearrso_t *, dhelpl_t)
+   :project: OTIlib

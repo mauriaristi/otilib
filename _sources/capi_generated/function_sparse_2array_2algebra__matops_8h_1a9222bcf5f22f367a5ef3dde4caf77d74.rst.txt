@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2algebra__matops_8h_1a9222bcf5f22f367a5ef3dde4caf77d74:
+
+Function arrso_pnorm
+====================
+
+- Defined in :ref:`file_oti_sparse_array_algebra_matops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_pnorm(arrso_t *, coeff_t, dhelpl_t)
+   :project: OTIlib

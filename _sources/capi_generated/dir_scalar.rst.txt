@@ -1,0 +1,11 @@
+.. _dir_scalar:
+
+
+Directory scalar
+================
+
+
+*Directory path:* ``scalar``
+
+
+

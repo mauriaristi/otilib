@@ -1,0 +1,51 @@
+
+.. _file_oti_fem_element_soti_structures.h:
+
+File fem/element/soti/structures.h
+==================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/element/soti/structures.h``)
+--------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_element_soti_structures.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_element.h`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structelemso__s`
+
+- :ref:`exhale_struct_structelemso__spt__s`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_fem_2element_2soti_2structures_8h_1a6e7bd0c8be1448930e562644362e2b1b`
+
+- :ref:`exhale_typedef_fem_2element_2soti_2structures_8h_1ae9e6886d01c67ceff9cb99b854d7622f`
+

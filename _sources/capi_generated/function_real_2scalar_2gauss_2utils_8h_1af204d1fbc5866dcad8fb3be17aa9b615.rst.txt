@@ -1,0 +1,14 @@
+.. _exhale_function_real_2scalar_2gauss_2utils_8h_1af204d1fbc5866dcad8fb3be17aa9b615:
+
+Function fednum_dimCheck
+========================
+
+- Defined in :ref:`file_oti_real_scalar_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fednum_dimCheck(fednum_t *, fednum_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2utils_8h_1a8b4c5e346e31ce71351954b16b57a1c3:
+
+Function dhelp_oarr_mul_iI
+==========================
+
+- Defined in :ref:`file_oti_dense_array_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_oarr_mul_iI(otinum_t *, ord_t, oarr_t *, ord_t, oarr_t *, dhelpl_t)
+   :project: OTIlib

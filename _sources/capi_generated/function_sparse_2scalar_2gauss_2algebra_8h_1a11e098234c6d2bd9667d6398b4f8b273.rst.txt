@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2algebra_8h_1a11e098234c6d2bd9667d6398b4f8b273:
+
+Function fesoti_div_of_to
+=========================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_div_of_to(sotinum_t *, fesoti_t *, fesoti_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2algebra_8h_1a272928f0da2938b3eb5fb96cf13f1f06:
+
+Function soti_mul_oo_to
+=======================
+
+- Defined in :ref:`file_oti_sparse_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_mul_oo_to(sotinum_t *, sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

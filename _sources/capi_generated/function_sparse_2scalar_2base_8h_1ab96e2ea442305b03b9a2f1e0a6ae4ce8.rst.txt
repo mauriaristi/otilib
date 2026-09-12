@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1ab96e2ea442305b03b9a2f1e0a6ae4ce8:
+
+Function soti_extract_im
+========================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_extract_im(imdir_t, ord_t, sotinum_t *, dhelpl_t)
+   :project: OTIlib

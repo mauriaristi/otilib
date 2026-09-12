@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2algebra_8h_1a5946baaf7d37b9b367cb7547994a62ef:
+
+Function fearrso_norm
+=====================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_norm(fearrso_t *, dhelpl_t)
+   :project: OTIlib

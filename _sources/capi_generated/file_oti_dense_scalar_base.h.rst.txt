@@ -1,0 +1,72 @@
+
+.. _file_oti_dense_scalar_base.h:
+
+File dense/scalar/base.h
+========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/dense/scalar/base.h``)
+----------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_dense_scalar_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1a90e34ab59089af9e50dcfb5640c0022a`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1a6f9d16149debd104462bd2d9af5bbf72`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1a16ef5f64d953874d89bfe80fc0d165b5`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1ac46e628b6830037fe7e4cd92d61e7a70`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1ac817e05481b6551fb1a44056242bd28d`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1a71a638e8bd9600dca7a36f353304cce0`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1ae5b1086a268dcfbe007b9638c7faa607`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1aa1c2ca83d127236818c6510926c96eeb`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1af16eb4556d29ad0853b8bdc46163d99e`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1ace8607e1236f4bffbac9e81e0dd3a4fd`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1a70ca717ae31a8d6e7c91c088100103cc`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1aa3f4116d0eccc60f11a0fc46211c90ac`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1a66b5b699200037e509dc6e57906df1bd`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1ac570e8f3368bb4877f6206f97a600816`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1a09a03239b00a2df3790b376fa380fd50`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1af4c9a495071466bf060a30798b3bca18`
+
+- :ref:`exhale_function_dense_2scalar_2base_8h_1a098c785a784965bcc0dd7e847a1eb0f2`
+

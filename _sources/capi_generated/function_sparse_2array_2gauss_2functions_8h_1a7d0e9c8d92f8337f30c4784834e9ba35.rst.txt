@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2functions_8h_1a7d0e9c8d92f8337f30c4784834e9ba35:
+
+Function fearrso_sin
+====================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_sin(fearrso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,142 @@
+
+.. _file_oti_sparse_array_algebra_elementwise.h:
+
+File sparse/array/algebra_elementwise.h
+=======================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/sparse/array/algebra_elementwise.h``)
+-------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_sparse_array_algebra_elementwise.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_sparse.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a59f28f7ded4cbbe373f9fa6cf2c930f7`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a5a717e5d4e647f89d2a4ab2c1d9726f4`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1af36e9b6d2616a559ba6c4a8db0918213`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a876457e449945a0aff1d92fa1aebfec5`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a8c29132eb45e76ad6278f8a0941fab03`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a5bec47b1318d1304dc6311eca3b55b8b`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a98a0d85b55ce86446547bd9540ff3f87`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1af8f22c1aba8938a0ab86f09a2938a287`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a3dd70ba57c5ea31f671638a9666c4586`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a571b4803a48dba068f0a911a3d5271bf`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a8b4adc8374ba9e35436c5d514330aa28`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1aadd267c74da2a31a415d023bf901a2bd`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1ab7e488b27180f827a03acc1e64314cc6`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a79c035d13395ff084e53bf3bbafed0f8`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1abe1455dc7cdaadb80c0856c175846ba2`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a3af70cdc99674b4084f8acf6c83134dd`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1ae514274901f1f5f3ed5061a654d6625f`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a43e78c628d0cf6c6d0c33806c97937b6`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a094b28fd59d83dc55326d4e38dceee8e`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a39c46c93213cbf4ac2971dcc9c82d893`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a3ad356129f6128bbbd9166c1d524e570`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a30923dc80800aad8c9635be8df36281a`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a03a8c727d15d3f59de9e0e601e064a04`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a41b011b15c65e893e32c85844824cf14`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1aabe1b997741e4313bce4e720bc6b7dfd`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a049104faf3b69946270a4c706f10701d`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1aeda9a655b8f128a6e8c326aa88a6fe10`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a335da4754b5d3a1ef9c384875662ce81`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a720a8c899d9d726a9ae2b6c5ce7c7f66`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a7d44a07b279f9ef6a398691b1a77d07e`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1aaf0ea27323f3437aaa9a0cc967da3c76`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a8c9439b80d688018cdd2230f18c55f10`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1abf91f8f0ce9d79c34018b6a4e6b02a74`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1ae014bb98b2090028af8fa3131d1b6c0b`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a0e6dc831ad4405dbcf244a7b438fffce`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1aacb687775403a519bd6bf57a14d5b500`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a9766c65a79b159e1d44a01f0babece9c`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1ab31d028d9189113151771f830cf9a077`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a19417b86107db254126fe6db97d50b5f`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a12d6e104fa7c6b6edb8d37bfd79b024a`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a066bb63d65f3597e4cbf354cdbc2fe7e`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1aae514496b1176cb266c02f2bec639efa`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a1ed12f101438e58676cb7f4580c3e4fa`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1ac537afb7850ccd5e5d1704a24752dc5d`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a42c495068f6602790fb5c0e2da88d553`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a574688e26da35a26244179d4bcf135e9`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a74665295113a6a6db3f7493df67dee2b`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1ad8d4b76096bb4262564918119b3aafb6`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a7b34976ac1286b050c27ead3e1bdd417`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a822c92bde0b0fe93ff47b0134fd15e40`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1ad7185e650793f9e398f2f39ea847d375`
+
+- :ref:`exhale_function_sparse_2array_2algebra__elementwise_8h_1a8f22e9a966d01c9c00632892eceac6a0`
+

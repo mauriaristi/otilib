@@ -1,0 +1,17 @@
+.. _exhale_struct_structfeotinum__t:
+
+Struct feotinum_t
+=================
+
+- Defined in :ref:`file_oti_fem_gauss_scalar_otinum_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: feotinum_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

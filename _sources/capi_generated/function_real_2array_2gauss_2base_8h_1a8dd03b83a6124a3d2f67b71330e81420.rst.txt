@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2base_8h_1a8dd03b83a6124a3d2f67b71330e81420:
+
+Function fedarr_copy(fedarr_t \*)
+=================================
+
+- Defined in :ref:`file_oti_real_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_copy(fedarr_t *)
+   :project: OTIlib

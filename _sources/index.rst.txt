@@ -53,6 +53,7 @@ Module documentation
    :caption: Module documentation:
 
    pyoti
+   capi
 
 
 Indices and tables

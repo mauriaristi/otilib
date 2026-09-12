@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2base_8h_1acacd1eb5a9454727cb5025171376e8a9:
+
+Function fedarr_set_item_k_r(coeff_t, uint64_t, fedarr_t \*)
+============================================================
+
+- Defined in :ref:`file_oti_real_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_set_item_k_r(coeff_t, uint64_t, fedarr_t *)
+   :project: OTIlib

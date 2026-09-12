@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1ab69b692141ce0e02e3a9e031ca99748c:
+
+Function darr_neg_to
+====================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_neg_to(darr_t *, darr_t *)
+   :project: OTIlib

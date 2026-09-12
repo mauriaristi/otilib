@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2algebra_8h_1a52aa8358f7c3620c88a4846b744e79f1:
+
+Function fearrso_sum_oF
+=======================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_sum_oF(sotinum_t *, fearrso_t *, dhelpl_t)
+   :project: OTIlib

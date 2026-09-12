@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1a8aff4bdaf4d0f6ae7ead21ac63298887:
+
+Function darr_mul_and_selfsum_rR_to
+===================================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_mul_and_selfsum_rR_to(coeff_t, darr_t *, darr_t *)
+   :project: OTIlib

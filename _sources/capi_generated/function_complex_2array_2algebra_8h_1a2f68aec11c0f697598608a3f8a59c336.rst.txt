@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1a2f68aec11c0f697598608a3f8a59c336:
+
+Function carr_self_neg
+======================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_self_neg(carr_t *)
+   :project: OTIlib

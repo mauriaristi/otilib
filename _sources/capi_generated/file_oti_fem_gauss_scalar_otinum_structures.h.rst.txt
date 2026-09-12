@@ -1,0 +1,40 @@
+
+.. _file_oti_fem_gauss_scalar_otinum_structures.h:
+
+File fem/gauss/scalar/otinum/structures.h
+=========================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/gauss/scalar/otinum/structures.h``)
+---------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_gauss_scalar_otinum_structures.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_gauss_scalar_feotinum.h`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structfeotinum__t`
+

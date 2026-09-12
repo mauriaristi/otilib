@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1a19a8ccda10fb9899ee84bd901c0cdbd0:
+
+Function darr_sub_rR
+====================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_sub_rR(coeff_t, darr_t *)
+   :project: OTIlib

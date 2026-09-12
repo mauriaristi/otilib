@@ -1,0 +1,114 @@
+
+.. _file_oti_semisparse_scalar_functions.h:
+
+File semisparse/scalar/functions.h
+==================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/scalar/functions.h``)
+--------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_scalar_functions.h.rst
+
+
+
+
+
+
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a0e1c47b5160a0e108cf6e842b7987f38`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1aefc86756fe9924a71f4eef822c97652b`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ad9c2202bb2769eb8c4967042482f167f`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1aec3380981886753f61ce8173435da40f`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ade351d1f67d0e3a7c89496ebf7d8ef96`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ac984f03cd6afc977d6cb0046649a27aa`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ab316884aa1a8dcea094953de8417ee54`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ac5807eb5609461a1cf04c149ca72401f`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ae5262988b38a0e4ced5566f2946fd048`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a73988409a6a6bbf20a14e9fe00f28a4c`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a96eeff24e5ffdc465344f8a7ab429059`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ac571a5f3b02c2f33b975283f676b8e69`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a4c942f7d28df9b92265fa12715c04e39`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a9c3b604b0dace976564666e6d6f02519`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a9c8708b14b85bec87ab0314b30a7f857`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1adb3f219b7d1eb74fc15f5a134a9cd97b`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ac252504525b81cd453168ada6458c403`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a84a6453fadca01699889423ed9a5fc48`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a6b38d22428b66d777fdbde76663aedd9`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a9480bad148f39e775f515e474366dc23`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ab77454bafdfb99662a20a20c4c450196`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1aa1452eafdfee9148b38de044935e12f0`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1acea410d899a877976e6766a7edd40800`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ace572d3b44fa1abc4aece8ed6ab7b7c3`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a9c52c1c52273d2fd262bc86f14d3de77`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a22f99bd6eb8fbd27fd3737294dda3ed0`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a091a78ae2497823584901cdfd108b93b`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1aa11d140a2d111639bfbed9705ef00527`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1ac071d9b6a8c37472d4a91a7a367fe859`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1acedb2cfb0f06ea639365b76c6b4d1ca8`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a24091d780cd6e3d55339f42aab695ea0`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a543a8cbd4ccbd28c866f92955484bd8c`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a4ca70e23f00a71f0aca4f61c0806fa49`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a35214dfbbe981ec06c56a514b95ac782`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1abd4eefe126aa008bbe3d455e59e6cea5`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a4f17c566d745ce3175d24cc6f395f6b6`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1afbfc9da2b44d8b15a8934839d1317566`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a7c3521956dc93785a3da6995e07d9f7a`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1afc31a7231665e14e5c0cb627709958ff`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a0d00f525e7d4442065f82494fed311ea`
+
+- :ref:`exhale_function_semisparse_2scalar_2functions_8h_1a89321daeef300c3cfef0dec36413cf8e`
+

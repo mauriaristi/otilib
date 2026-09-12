@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1a7ccbee053848fe4cc815e6055b327bca:
+
+Function arrso_get_im_to
+========================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_get_im_to(imdir_t, ord_t, arrso_t *, arrso_t *, dhelpl_t)
+   :project: OTIlib

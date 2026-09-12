@@ -1,0 +1,14 @@
+.. _exhale_typedef_comm_8h_1a7d2d39b4ff87ece237a3d63946489673:
+
+Typedef ord_t
+=============
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: ord_t
+   :project: OTIlib

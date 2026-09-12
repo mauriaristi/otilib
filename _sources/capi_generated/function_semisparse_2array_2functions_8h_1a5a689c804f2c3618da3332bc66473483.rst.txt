@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2functions_8h_1a5a689c804f2c3618da3332bc66473483:
+
+Function arrsso_log
+===================
+
+- Defined in :ref:`file_oti_semisparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrsso_log(arrsso_t *, dhelpl_t)
+   :project: OTIlib

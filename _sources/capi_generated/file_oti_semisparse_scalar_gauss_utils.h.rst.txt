@@ -1,0 +1,42 @@
+
+.. _file_oti_semisparse_scalar_gauss_utils.h:
+
+File semisparse/scalar/gauss/utils.h
+====================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/scalar/gauss/utils.h``)
+----------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_scalar_gauss_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_semisparse_scalar_gauss.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2utils_8h_1a1a9841d46ac0f077467d9b0fc80d2f74`
+
+- :ref:`exhale_function_semisparse_2scalar_2gauss_2utils_8h_1af281e6150ea143cb5b3ea7bf855d5b7e`
+

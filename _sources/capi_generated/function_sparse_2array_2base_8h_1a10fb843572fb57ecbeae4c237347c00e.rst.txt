@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1a10fb843572fb57ecbeae4c237347c00e:
+
+Function arrso_init
+===================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_init(void)
+   :project: OTIlib

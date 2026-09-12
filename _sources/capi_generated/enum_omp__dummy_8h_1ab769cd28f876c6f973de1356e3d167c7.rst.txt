@@ -1,0 +1,14 @@
+.. _exhale_enum_omp__dummy_8h_1ab769cd28f876c6f973de1356e3d167c7:
+
+Enum omp_sched_t
+================
+
+- Defined in :ref:`file_oti_omp_dummy.h`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: omp_sched_t
+   :project: OTIlib

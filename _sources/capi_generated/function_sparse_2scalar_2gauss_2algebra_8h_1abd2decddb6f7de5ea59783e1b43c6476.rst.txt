@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2algebra_8h_1abd2decddb6f7de5ea59783e1b43c6476:
+
+Function fesoti_sum_ff
+======================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_sum_ff(fesoti_t *, fesoti_t *, dhelpl_t)
+   :project: OTIlib

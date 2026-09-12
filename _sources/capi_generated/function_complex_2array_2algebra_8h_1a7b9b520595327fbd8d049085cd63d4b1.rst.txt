@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1a7b9b520595327fbd8d049085cd63d4b1:
+
+Function carr_matmul_and_selfsum_RR_to
+======================================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_matmul_and_selfsum_RR_to(carr_t *, carr_t *, carr_t *)
+   :project: OTIlib

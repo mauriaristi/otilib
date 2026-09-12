@@ -1,0 +1,11 @@
+.. _dir_array:
+
+
+Directory array
+===============
+
+
+*Directory path:* ``array``
+
+
+

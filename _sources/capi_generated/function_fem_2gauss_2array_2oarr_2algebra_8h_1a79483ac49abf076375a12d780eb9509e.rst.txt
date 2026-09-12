@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2gauss_2array_2oarr_2algebra_8h_1a79483ac49abf076375a12d780eb9509e:
+
+Function feoarr_mul_rF_to(coeff_t, feoarr_t \*, feoarr_t \*, dhelpl_t)
+======================================================================
+
+- Defined in :ref:`file_oti_fem_gauss_array_oarr_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_mul_rF_to(coeff_t, feoarr_t *, feoarr_t *, dhelpl_t)
+   :project: OTIlib

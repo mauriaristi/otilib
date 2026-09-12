@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2functions_8h_1afca867066eda11afa6469c3d8031a535:
+
+Function oarr_feval
+===================
+
+- Defined in :ref:`file_oti_dense_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_feval(darr_t *, oarr_t *, dhelpl_t)
+   :project: OTIlib

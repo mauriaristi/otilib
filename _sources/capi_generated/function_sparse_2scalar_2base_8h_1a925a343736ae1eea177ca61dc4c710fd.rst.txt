@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a925a343736ae1eea177ca61dc4c710fd:
+
+Function soti_free
+==================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_free(sotinum_t *)
+   :project: OTIlib

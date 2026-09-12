@@ -1,0 +1,80 @@
+
+.. _file_oti_complex.h:
+
+File complex.h
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex.h``)
+------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``complex.h`` (:ref:`file_oti_complex.h`)
+
+- ``complex/array/algebra.h`` (:ref:`file_oti_complex_array_algebra.h`)
+
+- ``complex/array/base.h`` (:ref:`file_oti_complex_array_base.h`)
+
+- ``complex/array/functions.h`` (:ref:`file_oti_complex_array_functions.h`)
+
+- ``complex/array/gauss/algebra.h`` (:ref:`file_oti_complex_array_gauss_algebra.h`)
+
+- ``complex/array/gauss/base.h`` (:ref:`file_oti_complex_array_gauss_base.h`)
+
+- ``complex/array/gauss/functions.h`` (:ref:`file_oti_complex_array_gauss_functions.h`)
+
+- ``complex/array/gauss/structures.h`` (:ref:`file_oti_complex_array_gauss_structures.h`)
+
+- ``complex/array/gauss/utils.h`` (:ref:`file_oti_complex_array_gauss_utils.h`)
+
+- ``complex/array/structures.h`` (:ref:`file_oti_complex_array_structures.h`)
+
+- ``complex/array/utils.h`` (:ref:`file_oti_complex_array_utils.h`)
+
+- ``complex/derivatives.h`` (:ref:`file_oti_complex_derivatives.h`)
+
+- ``complex/scalar/gauss/algebra.h`` (:ref:`file_oti_complex_scalar_gauss_algebra.h`)
+
+- ``complex/scalar/gauss/base.h`` (:ref:`file_oti_complex_scalar_gauss_base.h`)
+
+- ``complex/scalar/gauss/functions.h`` (:ref:`file_oti_complex_scalar_gauss_functions.h`)
+
+- ``complex/scalar/gauss/structures.h`` (:ref:`file_oti_complex_scalar_gauss_structures.h`)
+
+- ``complex/scalar/gauss/utils.h`` (:ref:`file_oti_complex_scalar_gauss_utils.h`)
+
+- ``oti/comm.h`` (:ref:`file_oti_comm.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex_scalar_comm.h`
+
+- :ref:`file_oti_complex.h`
+
+
+

@@ -1,0 +1,41 @@
+
+.. _program_listing_file_oti_semisparse_scalar_gauss.h:
+
+Program Listing for File semisparse/scalar/gauss.h
+==================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_semisparse_scalar_gauss.h>` (``oti/semisparse/scalar/gauss.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SEMISPARSE_SCALAR_GAUSS_H
+   #define OTI_SEMISPARSE_SCALAR_GAUSS_H
+   
+   
+   
+   
+   
+   
+   // Define structures.
+   #include "gauss/structures.h"
+   
+   // Define Base operations.
+   #include "gauss/base.h"
+   
+   // Define algebra
+   #include "gauss/algebra.h"
+   
+   // Define functions
+   #include "gauss/functions.h"
+   
+   //Define utility functions.
+   #include "gauss/utils.h"
+   
+   
+   
+   
+   
+   
+   #endif

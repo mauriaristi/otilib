@@ -1,0 +1,14 @@
+.. _exhale_function_feoarr_8h_1abe092700b61d291102a84f5f0b47be0f:
+
+Function feoarr_matmul_to(feoarr_t \*, feoarr_t \*, feoarr_t \*, dhelpl_t)
+==========================================================================
+
+- Defined in :ref:`file_oti_fem_feoarr.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_matmul_to(feoarr_t *, feoarr_t *, feoarr_t *, dhelpl_t)
+   :project: OTIlib

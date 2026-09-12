@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1ac3b5e9994001fe57dbbdedbecc63a528:
+
+Function arrso_extract_im
+=========================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_extract_im(imdir_t, ord_t, arrso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2base_8h_1a8cb64d1378ea34688e39bf216d9a316d:
+
+Function carr_eye
+=================
+
+- Defined in :ref:`file_oti_complex_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_eye(uint64_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2functions_8h_1a35214dfbbe981ec06c56a514b95ac782:
+
+Function ssoti_sinh
+===================
+
+- Defined in :ref:`file_oti_semisparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ssoti_sinh(semiotin_t *, dhelpl_t)
+   :project: OTIlib

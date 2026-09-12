@@ -1,0 +1,40 @@
+
+.. _file_oti_semisparse_scalar_structures.h:
+
+File semisparse/scalar/structures.h
+===================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse/scalar/structures.h``)
+---------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse_scalar_structures.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_semisparse.h`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structsemiotin__t`
+

@@ -1,0 +1,62 @@
+
+.. _file_oti_complex_scalar_gauss_base.h:
+
+File complex/scalar/gauss/base.h
+================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex/scalar/gauss/base.h``)
+------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex_scalar_gauss_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1a78d72c88ee050191b14ae00d9314676f`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1af73999c7c2324b229c02036268aef1a9`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1a6612f495724cb941c81261981cb9ad20`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1acc4405a18e93d216c9fb70da92faa1ca`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1aeb65fed71c4ad250867541bb2f9b114a`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1a6592de9725a5c278e7633f0fadadbb98`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1adc0b208e265fa16310ac78759d5ad742`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1ad2b69b79757dfd9f5215de13753060ba`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1a80d5f32085f93ee834a218462ea1a53f`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1a7761024fc09b75bd182c951c4f52edc8`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1a5510919a20e8a618d9908bc40710cc42`
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2base_8h_1a920cb5ee2f427a267d82a7fdcc137fe1`
+

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2scalar_2gauss_2functions_8h_1a13fe2fece2e76360abd8553269636a48:
+
+Function fecnum_cbrt_to
+=======================
+
+- Defined in :ref:`file_oti_complex_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecnum_cbrt_to(fecnum_t *, fecnum_t *)
+   :project: OTIlib

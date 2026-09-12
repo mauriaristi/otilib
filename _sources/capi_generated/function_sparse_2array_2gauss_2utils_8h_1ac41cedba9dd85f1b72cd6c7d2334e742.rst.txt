@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2utils_8h_1ac41cedba9dd85f1b72cd6c7d2334e742:
+
+Function fearrso_dimCheck_F_transpose
+=====================================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_dimCheck_F_transpose(fearrso_t *, fearrso_t *)
+   :project: OTIlib

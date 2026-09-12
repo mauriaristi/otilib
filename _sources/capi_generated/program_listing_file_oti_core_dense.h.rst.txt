@@ -1,0 +1,30 @@
+
+.. _program_listing_file_oti_core_dense.h:
+
+Program Listing for File core/dense.h
+=====================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_core_dense.h>` (``oti/core/dense.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_CORE_DENSE_H
+   #define OTI_CORE_DENSE_H
+   
+   /**************************************************************************************************/ 
+   void dhelp_dense_mult(coeff_t* p_im1, ndir_t ndir1, ord_t ord1, // Input 1
+                         coeff_t* p_im2, ndir_t ndir2, ord_t ord2, // Input 2
+                         coeff_t* p_imres, ndir_t ndirres,         // Result
+                         dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void dhelp_dense_mult_real(coeff_t* p_im1, ndir_t ndir1, // Input 1
+                         coeff_t a,                         // Input 2
+                         coeff_t* p_imres, ndir_t ndirres,  // Result
+                         dhelpl_t dhl);                     // Helper  
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

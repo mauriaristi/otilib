@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2gauss_2functions_8h_1acf46e30f5b176073909def264ec23250:
+
+Function fearrsso_atan
+======================
+
+- Defined in :ref:`file_oti_semisparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrsso_atan(fearrsso_t *, dhelpl_t)
+   :project: OTIlib

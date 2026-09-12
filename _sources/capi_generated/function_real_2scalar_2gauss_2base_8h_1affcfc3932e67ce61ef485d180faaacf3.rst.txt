@@ -1,0 +1,14 @@
+.. _exhale_function_real_2scalar_2gauss_2base_8h_1affcfc3932e67ce61ef485d180faaacf3:
+
+Function fednum_get_item_k_to
+=============================
+
+- Defined in :ref:`file_oti_real_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fednum_get_item_k_to(fednum_t *, uint64_t, coeff_t *)
+   :project: OTIlib

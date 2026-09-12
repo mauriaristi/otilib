@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2functions_8h_1ac716ba3b95cd77851de8566b3ddffa1d:
+
+Function soti_base_feval
+========================
+
+- Defined in :ref:`file_oti_sparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_base_feval(coeff_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

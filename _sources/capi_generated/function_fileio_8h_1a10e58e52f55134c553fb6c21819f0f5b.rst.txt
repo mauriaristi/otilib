@@ -1,0 +1,14 @@
+.. _exhale_function_fileio_8h_1a10e58e52f55134c553fb6c21819f0f5b:
+
+Function concat_filename
+========================
+
+- Defined in :ref:`file_oti_core_fileio.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: concat_filename(const char *, const char *, ord_t, ord_t, char *)
+   :project: OTIlib

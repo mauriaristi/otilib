@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2algebra__elementwise_8h_1a258667810886e1da39e0d73b8880009a:
+
+Function arrsso_neg
+===================
+
+- Defined in :ref:`file_oti_semisparse_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrsso_neg(arrsso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2functions_8h_1ac2cb1699315ec5f100399ce7ad208e65:
+
+Function soti_sinh_to
+=====================
+
+- Defined in :ref:`file_oti_sparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_sinh_to(sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1a5709d7f5ccf238df5fb6c23ac15d60bc:
+
+Function carr_cbrt
+==================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_cbrt(carr_t *)
+   :project: OTIlib

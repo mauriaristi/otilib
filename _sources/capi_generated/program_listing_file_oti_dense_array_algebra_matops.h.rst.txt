@@ -1,0 +1,44 @@
+
+.. _program_listing_file_oti_dense_array_algebra_matops.h:
+
+Program Listing for File dense/array/algebra_matops.h
+=====================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_dense_array_algebra_matops.h>` (``oti/dense/array/algebra_matops.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_DENSE_ARRAY_ALGEBRA_MATOPS_H
+   #define OTI_DENSE_ARRAY_ALGEBRA_MATOPS_H
+   
+   /**************************************************************************************************/ 
+   otinum_t oarr_det(oarr_t* arr, dhelpl_t dhl);
+   void     oarr_det_to(oarr_t* arr, otinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   oarr_t oarr_transpose(oarr_t* arr, dhelpl_t dhl);
+   void   oarr_transpose_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   oarr_t oarr_invert(oarr_t* arr, dhelpl_t dhl);
+   void   oarr_invert_to(oarr_t* arr, oarr_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   oarr_t oarr_matmul_OO(oarr_t* lhs, oarr_t* rhs, dhelpl_t dhl);
+   oarr_t oarr_matmul_OR(oarr_t* lhs, darr_t* rhs, dhelpl_t dhl);
+   oarr_t oarr_matmul_RO(darr_t* lhs, oarr_t* rhs, dhelpl_t dhl);
+   
+   void   oarr_matmul_OO_to(oarr_t* lhs, oarr_t* rhs, oarr_t* res, dhelpl_t dhl);
+   void   oarr_matmul_OR_to(oarr_t* lhs, darr_t* rhs, oarr_t* res, dhelpl_t dhl);
+   void   oarr_matmul_RO_to(darr_t* lhs, oarr_t* rhs, oarr_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

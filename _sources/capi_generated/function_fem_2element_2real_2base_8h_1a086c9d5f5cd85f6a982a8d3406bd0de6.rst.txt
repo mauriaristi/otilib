@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2real_2base_8h_1a086c9d5f5cd85f6a982a8d3406bd0de6:
+
+Function elemd_clear_flag_start
+===============================
+
+- Defined in :ref:`file_oti_fem_element_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemd_clear_flag_start(elemd_t *)
+   :project: OTIlib

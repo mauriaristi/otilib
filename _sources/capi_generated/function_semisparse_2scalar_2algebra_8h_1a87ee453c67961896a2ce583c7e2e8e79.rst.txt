@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2algebra_8h_1a87ee453c67961896a2ce583c7e2e8e79:
+
+Function ssoti_base_sub
+=======================
+
+- Defined in :ref:`file_oti_semisparse_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ssoti_base_sub(semiotin_t *, semiotin_t *, dhelpl_t)
+   :project: OTIlib

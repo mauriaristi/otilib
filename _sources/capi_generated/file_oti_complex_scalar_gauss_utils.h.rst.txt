@@ -1,0 +1,40 @@
+
+.. _file_oti_complex_scalar_gauss_utils.h:
+
+File complex/scalar/gauss/utils.h
+=================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex/scalar/gauss/utils.h``)
+-------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex_scalar_gauss_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_complex_2scalar_2gauss_2utils_8h_1a76296e50b4311c72d175e80f1fc65450`
+

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2base_8h_1a7a0f16c046117d4e29058e99be96d040:
+
+Function carr_ones
+==================
+
+- Defined in :ref:`file_oti_complex_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_ones(uint64_t, uint64_t)
+   :project: OTIlib

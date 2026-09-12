@@ -1,0 +1,14 @@
+.. _exhale_typedef_comm_8h_1a4eb34d2fe127e0139c11d3395418512b:
+
+Typedef ndh_t
+=============
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: ndh_t
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_real_2derivatives_8h_1aa22eb9472186869ea6cfe7e8b855afde:
+
+Function der_r_logb
+===================
+
+- Defined in :ref:`file_oti_real_derivatives.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: der_r_logb(coeff_t, coeff_t, ord_t, coeff_t *)
+   :project: OTIlib

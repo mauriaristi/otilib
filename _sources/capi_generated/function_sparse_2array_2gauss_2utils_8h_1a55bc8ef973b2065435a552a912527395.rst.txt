@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2utils_8h_1a55bc8ef973b2065435a552a912527395:
+
+Function fearrso_dimCheck_FfO_integrate
+=======================================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_dimCheck_FfO_integrate(fearrso_t *, fesoti_t *, arrso_t *)
+   :project: OTIlib

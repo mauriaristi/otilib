@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2functions_8h_1abde13a7d651f99e07ee3800b251824f8:
+
+Function arrso_cbrt_to
+======================
+
+- Defined in :ref:`file_oti_sparse_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_cbrt_to(arrso_t *, arrso_t *, dhelpl_t)
+   :project: OTIlib

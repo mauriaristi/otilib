@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2base_8h_1aa0d65b20861524b26ed419c219162882:
+
+Function fesoti_empty_like
+==========================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_empty_like(fesoti_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,156 @@
+
+.. _program_listing_file_oti_semisparse_scalar_base.h:
+
+Program Listing for File semisparse/scalar/base.h
+=================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_semisparse_scalar_base.h>` (``oti/semisparse/scalar/base.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SEMISPARSE_SCALAR_BASE_H
+   #define OTI_SEMISPARSE_SCALAR_BASE_H
+   
+   
+   /**************************************************************************************************/
+   semiotin_t ssoti_taylor_integrate(    coeff_t* deltas, semiotin_t* num,                 dhelpl_t dhl);
+   void      ssoti_taylor_integrate_to( coeff_t* deltas, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   semiotin_t ssoti_get_order_im(    ord_t order, semiotin_t* num,                 dhelpl_t dhl);
+   void      ssoti_get_order_im_to( ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   semiotin_t ssoti_truncate_im(    imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
+   void      ssoti_truncate_im_to( imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   semiotin_t ssoti_extract_deriv(   imdir_t idx, ord_t ord, semiotin_t* num,                 dhelpl_t dhl);
+   void      ssoti_extract_deriv_to(imdir_t idx, ord_t ord, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   semiotin_t ssoti_extract_im(   imdir_t idx, ord_t ord, semiotin_t* num,                 dhelpl_t dhl);
+   void      ssoti_extract_im_to(imdir_t idx, ord_t ord, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void*     ssoti_read_from_mem_to( void* mem,       semiotin_t* dst, dhelpl_t dhl);
+   void      ssoti_save_to_mem(      semiotin_t* num,  void* mem,      dhelpl_t dhl);
+   uint64_t  ssoti_get_memsize_save( semiotin_t* num,                  dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void* ssoti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_t flag, semiotin_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   uint8_t ssoti_requiresrealloc(semiotin_t* src, semiotin_t* dest);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   semiotin_t ssoti_init(void);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void ssoti_set_o( semiotin_t* src, semiotin_t* dest, dhelpl_t dhl);
+   void ssoti_set_r(    coeff_t src, semiotin_t* dest, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void ssoti_set_trunc( semiotin_t* src, ord_t ord, semiotin_t* dest, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void ssoti_set_deriv_r(   coeff_t  coef, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
+   void ssoti_set_deriv_o( semiotin_t* coef, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   coeff_t   ssoti_get_deriv(    imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
+   semiotin_t ssoti_get_deriv_o(  imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
+   void      ssoti_get_deriv_to( imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_get_tmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl);
+   semiotin_t ssoti_get_rtmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/ 
+   void ssoti_insert_item(ndir_t pos, coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void ssoti_set_item(   coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
+   void ssoti_set_im_r(   coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
+   void ssoti_set_im_o(semiotin_t* val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   coeff_t ssoti_get_item(    imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
+   coeff_t ssoti_get_im(      imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
+   semiotin_t ssoti_get_im_o(  imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
+   void    ssoti_get_im_to_o( imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   void    ssoti_get_im_to_r( imdir_t idx, ord_t order, semiotin_t* num,   coeff_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_copy(             semiotin_t* num,                  dhelpl_t dhl);
+   void      ssoti_copy_to(          semiotin_t* src, semiotin_t* dest, dhelpl_t dhl);
+   void      ssoti_copy_nomemchk_to( semiotin_t* src, semiotin_t* dest, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void ssoti_print(semiotin_t* num, dhelpl_t dhl);
+   void ssoti_print_full(semiotin_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void ssoti_help_set_all_coeffs( coeff_t a, semiotin_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void ssoti_free(semiotin_t* num);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_createReal_bases(  coeff_t num, bases_t nbases, ord_t order, dhelpl_t dhl);
+   semiotin_t ssoti_createEmpty_bases(              bases_t nbases, ord_t order, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_createReal(coeff_t num, bases_t tot_nbases, ord_t trc_order, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_createEmpty( bases_t tot_nbases, ord_t trc_order, dhelpl_t dhl); 
+   semiotin_t ssoti_createEmpty_like( semiotin_t* other, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_createEmpty_predef( bases_t nbases, ord_t trc_order, dhelpl_t dhl); 
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void ssoti_reset_orders(ord_t ord_start, ord_t ord_end, semiotin_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void ssoti_reset_nbases(bases_t base_start, bases_t base_end, semiotin_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   #endif

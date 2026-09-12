@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1a5e4fff5aba6d9d14291c592d5088129f:
+
+Function carr_matmul_RR_to
+==========================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_matmul_RR_to(carr_t *, carr_t *, carr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2algebra_8h_1a10b199404c96d43622bf828c148bc34f:
+
+Function fesoti_mul_rf
+======================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_mul_rf(coeff_t, fesoti_t *, dhelpl_t)
+   :project: OTIlib

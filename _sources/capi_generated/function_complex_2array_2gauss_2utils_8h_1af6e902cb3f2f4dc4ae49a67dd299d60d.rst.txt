@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2utils_8h_1af6e902cb3f2f4dc4ae49a67dd299d60d:
+
+Function fecarr_dimCheck_RF_samesize
+====================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_dimCheck_RF_samesize(carr_t *, fecarr_t *, fecnum_t *)
+   :project: OTIlib

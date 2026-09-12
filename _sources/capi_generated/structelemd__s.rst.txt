@@ -1,0 +1,17 @@
+.. _exhale_struct_structelemd__s:
+
+Struct elemd_s
+==============
+
+- Defined in :ref:`file_oti_fem_element_real_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: elemd_s
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

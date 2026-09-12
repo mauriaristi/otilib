@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2algebra_8h_1a4fb970096eb6f7c03d3dec3c2cd19758:
+
+Function fedarr_mul_rF
+======================
+
+- Defined in :ref:`file_oti_real_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_mul_rF(coeff_t, fedarr_t *)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2base_8h_1a3f3250f192fa296dca3b720dae7e28c4:
+
+Function arrso_get_deriv
+========================
+
+- Defined in :ref:`file_oti_sparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_get_deriv(imdir_t, ord_t, arrso_t *, dhelpl_t)
+   :project: OTIlib

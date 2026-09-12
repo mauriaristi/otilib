@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2gauss_2utils_8h_1a51ab88a17f57a0178907b37c97d6b8b7:
+
+Function fedarr_dimCheck_FR_matmul
+==================================
+
+- Defined in :ref:`file_oti_real_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_dimCheck_FR_matmul(fedarr_t *, darr_t *, fedarr_t *)
+   :project: OTIlib

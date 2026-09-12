@@ -1,0 +1,14 @@
+.. _exhale_function_feoarr_8h_1aa8cb196234b39e618e5174be5ee91b12:
+
+Function feoarr_init(void)
+==========================
+
+- Defined in :ref:`file_oti_fem_feoarr.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_init(void)
+   :project: OTIlib

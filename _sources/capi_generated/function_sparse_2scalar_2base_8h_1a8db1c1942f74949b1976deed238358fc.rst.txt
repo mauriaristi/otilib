@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a8db1c1942f74949b1976deed238358fc:
+
+Function soti_createEmpty_bases
+===============================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_createEmpty_bases(bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

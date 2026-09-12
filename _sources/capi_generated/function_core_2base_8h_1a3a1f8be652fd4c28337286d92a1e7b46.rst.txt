@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a3a1f8be652fd4c28337286d92a1e7b46:
+
+Function dhelp_load_singl
+=========================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_load_singl(char *, ord_t, uint64_t, ndir_t, dhelp_t *)
+   :project: OTIlib

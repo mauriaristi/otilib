@@ -1,0 +1,66 @@
+
+.. _file_oti_core.h:
+
+File core.h
+===========
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/core.h``)
+---------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_core.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``core/base.h`` (:ref:`file_oti_core_base.h`)
+
+- ``core/dense.h`` (:ref:`file_oti_core_dense.h`)
+
+- ``core/fileio.h`` (:ref:`file_oti_core_fileio.h`)
+
+- ``core/precompute.h`` (:ref:`file_oti_core_precompute.h`)
+
+- ``core/sparse.h`` (:ref:`file_oti_core_sparse.h`)
+
+- ``core/structures.h`` (:ref:`file_oti_core_structures.h`)
+
+- ``core/utils.h`` (:ref:`file_oti_core_utils.h`)
+
+- ``math.h``
+
+- ``oti/comm.h`` (:ref:`file_oti_comm.h`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+- :ref:`file_oti_oti.h`
+
+- :ref:`file_oti_semisparse.h`
+
+- :ref:`file_oti_sparse.h`
+
+
+

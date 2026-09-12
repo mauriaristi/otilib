@@ -1,0 +1,14 @@
+.. _exhale_variable_comm_8h_1a3fa4e9e2580b3e8cff2138bff03a5784:
+
+Variable is_python_error_def
+============================
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: is_python_error_def
+   :project: OTIlib

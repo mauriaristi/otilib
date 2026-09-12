@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2algebra_8h_1a91a334d55f0d21a24facc505b61bd8cd:
+
+Function fecarr_mul_fF_to
+=========================
+
+- Defined in :ref:`file_oti_complex_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_mul_fF_to(fecnum_t *, fecarr_t *, fecarr_t *)
+   :project: OTIlib

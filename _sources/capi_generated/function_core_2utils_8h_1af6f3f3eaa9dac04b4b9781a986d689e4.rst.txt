@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1af6f3f3eaa9dac04b4b9781a986d689e4:
+
+Function is_openmp_compiled
+===========================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: is_openmp_compiled(void)
+   :project: OTIlib

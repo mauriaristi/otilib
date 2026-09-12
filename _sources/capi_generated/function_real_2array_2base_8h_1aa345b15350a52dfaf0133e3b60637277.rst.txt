@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2base_8h_1aa345b15350a52dfaf0133e3b60637277:
+
+Function darr_ones
+==================
+
+- Defined in :ref:`file_oti_real_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_ones(uint64_t, uint64_t)
+   :project: OTIlib

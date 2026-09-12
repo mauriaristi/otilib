@@ -1,0 +1,11 @@
+.. _dir_soti:
+
+
+Directory soti
+==============
+
+
+*Directory path:* ``soti``
+
+
+

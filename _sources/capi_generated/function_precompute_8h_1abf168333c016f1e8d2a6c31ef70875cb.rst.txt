@@ -1,0 +1,14 @@
+.. _exhale_function_precompute_8h_1abf168333c016f1e8d2a6c31ef70875cb:
+
+Function dhelp_precompute_ndirs
+===============================
+
+- Defined in :ref:`file_oti_core_precompute.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_precompute_ndirs(ord_t, bases_t, dhelpl_t *)
+   :project: OTIlib

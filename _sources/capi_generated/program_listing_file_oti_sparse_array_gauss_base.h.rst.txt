@@ -1,0 +1,235 @@
+
+.. _program_listing_file_oti_sparse_array_gauss_base.h:
+
+Program Listing for File sparse/array/gauss/base.h
+==================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_sparse_array_gauss_base.h>` (``oti/sparse/array/gauss/base.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SPARSE_ARRAY_GAUSS_BASE_H
+   #define OTI_SPARSE_ARRAY_GAUSS_BASE_H
+   
+   
+   
+   
+   void      fearrso_get_order_im_to( ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+   fearrso_t fearrso_get_order_im(    ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+   
+   fearrso_t fearrso_get_deriv(   imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+   void      fearrso_get_deriv_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   fearrso_t fearrso_get_im(      imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+   void      fearrso_get_im_to(   imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   fearrso_t fearrso_truncate_im(   imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+   void      fearrso_truncate_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   fearrso_t fearrso_truncate_order(   ord_t ord, fearrso_t* arr,                 dhelpl_t dhl);
+   void      fearrso_truncate_order_to(ord_t ord, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/
+   fearrso_t fearrso_copy(   fearrso_t* src,                 dhelpl_t dhl);
+   void      fearrso_copy_to(fearrso_t* src, fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fearrso_t fearrso_get_im(    imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+   void      fearrso_get_im_to( imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+   
+   fearrso_t fearrso_get_deriv(    imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+   void      fearrso_get_deriv_to( imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   /**************************************************************************************************/
+   fearrso_t fearrso_extract_im(    imdir_t idx, ord_t order, fearrso_t* arr,                  dhelpl_t dhl);
+   void      fearrso_extract_im_to( imdir_t idx, ord_t order, fearrso_t* arr,  fearrso_t* res, dhelpl_t dhl);
+   
+   fearrso_t fearrso_extract_deriv(    imdir_t idx, ord_t order, fearrso_t* arr,                 dhelpl_t dhl);
+   void      fearrso_extract_deriv_to( imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   arrso_t   fearrso_get_item_k(  fearrso_t* arr, uint64_t k,                         dhelpl_t dhl);
+   fesoti_t  fearrso_get_item_ij( fearrso_t* arr, uint64_t i, uint64_t j,             dhelpl_t dhl);
+   sotinum_t fearrso_get_item_ijk(fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, dhelpl_t dhl);
+   
+   void fearrso_get_item_ij_to(  fearrso_t* arr, uint64_t i, uint64_t j, 
+                                  fesoti_t* res, dhelpl_t dhl);
+   
+   void fearrso_get_item_k_to(   fearrso_t* arr, uint64_t k, 
+                                   arrso_t* res, dhelpl_t dhl);
+   
+   void fearrso_get_item_ijk_to( fearrso_t* arr, uint64_t i, uint64_t j, uint64_t k, 
+                                 sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   fearrso_t fearrso_get_slice(fearrso_t* arr, 
+                             int64_t starti, int64_t stopi, int64_t stepi,
+                             int64_t startj, int64_t stopj, int64_t stepj, 
+                              dhelpl_t dhl);
+   
+   void      fearrso_get_slice_to(fearrso_t* arr, 
+                             int64_t starti, int64_t stopi, int64_t stepi,
+                             int64_t startj, int64_t stopj, int64_t stepj, 
+                             fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   void fearrso_set_item_ij_r(   coeff_t  elm, uint64_t i, uint64_t j,
+                               fearrso_t* res, dhelpl_t dhl);
+   
+   void fearrso_set_item_ij_o(  sotinum_t* elm, uint64_t i, uint64_t j,
+                                fearrso_t* res, dhelpl_t dhl);
+   
+   void fearrso_set_item_ij_f(  fesoti_t* elm, uint64_t i, uint64_t j,
+                               fearrso_t* res, dhelpl_t dhl);
+   
+   void fearrso_set_item_k_r(    coeff_t  elm, uint64_t k, 
+                               fearrso_t* res, dhelpl_t dhl);
+   
+   void fearrso_set_item_k_o(  sotinum_t* elm, uint64_t k, 
+                               fearrso_t* res, dhelpl_t dhl);
+   
+   void fearrso_set_item_k_R(    arrso_t* elm, uint64_t k, 
+                             fearrso_t* res, dhelpl_t dhl);
+   
+   void fearrso_set_item_k_O(    arrso_t* elm, uint64_t k, 
+                             fearrso_t* res, dhelpl_t dhl);
+   
+   void fearrso_set_item_ijk_r(   coeff_t  elm, uint64_t i, uint64_t j, uint64_t k, 
+                                fearrso_t* res, dhelpl_t dhl);
+   
+   void fearrso_set_item_ijk_o( sotinum_t* elm, uint64_t i, uint64_t j, uint64_t k, 
+                                fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   /**************************************************************************************************/ 
+   void fearrso_set_slice_r( coeff_t val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrso_t* res, dhelpl_t dhl);
+   void fearrso_set_slice_o( sotinum_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrso_t* res, dhelpl_t dhl);
+   void fearrso_set_slice_f( fesoti_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrso_t* res, dhelpl_t dhl);
+   void fearrso_set_slice_O( arrso_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrso_t* res, dhelpl_t dhl);
+   void fearrso_set_slice_F( fearrso_t* val, 
+                            int64_t starti, int64_t stopi, int64_t stepi,
+                            int64_t startj, int64_t stopj, int64_t stepj,
+                             fearrso_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   /**************************************************************************************************/
+   void fearrso_set_all_o( sotinum_t* num, fearrso_t* arr, dhelpl_t dhl );
+   void fearrso_set_all_r(   coeff_t  num, fearrso_t* arr, dhelpl_t dhl );
+   void fearrso_set_all_f(  fesoti_t* num, fearrso_t* arr, dhelpl_t dhl );
+   
+   void fearrso_set_r(    coeff_t src, fearrso_t* res, dhelpl_t dhl );
+   void fearrso_set_o( sotinum_t* src, fearrso_t* res, dhelpl_t dhl );
+   void fearrso_set_f(  fesoti_t* src, fearrso_t* res, dhelpl_t dhl );
+   
+   void fearrso_set_R(    darr_t* src, fearrso_t* res, dhelpl_t dhl );
+   void fearrso_set_O(   arrso_t* src, fearrso_t* res, dhelpl_t dhl );
+   void fearrso_set_F( fearrso_t* src, fearrso_t* res, dhelpl_t dhl );
+   
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fearrso_t fearrso_eye_bases( uint64_t size,
+                                  uint64_t nip, bases_t  nbases, 
+                                  ord_t    order,   dhelpl_t dhl     );
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   fearrso_t fearrso_zeros_bases( uint64_t nrows,   uint64_t ncols, 
+                                  // uint64_t offsetx, uint64_t offsety, 
+                                  uint64_t nIntPts, bases_t  nbases, 
+                                  ord_t    order,   dhelpl_t dhl     );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fearrso_t fearrso_ones_bases( uint64_t nrows,   uint64_t ncols, 
+                                  uint64_t nip, bases_t  nbases, 
+                                  ord_t    order,   dhelpl_t dhl     );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fearrso_t fearrso_createEmpty_bases( uint64_t nrows,   uint64_t ncols, 
+                                        // uint64_t offsetx, uint64_t offsety, 
+                                        uint64_t nIntPts, bases_t  nbases, 
+                                        ord_t    order,   dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void fearrso_free(fearrso_t* arr);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   fearrso_t fearrso_init(void);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   ord_t fearrso_get_order(fearrso_t* arr);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   
+   #endif

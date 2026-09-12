@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>File sparse/array/gauss/algebra.h &#8212; otilib-pyoti 1.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css?v=a885cde7" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../_static/documentation_options.js?v=fc837d61"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js?v=73120307"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js?v=660e4f45"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'capi_generated/file_oti_sparse_array_gauss_algebra.h';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">otilib-pyoti 1.1.0 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../aboutus.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../pyoti.html">
+    pyoti package
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../capi.html">
+    C API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../aboutus.html">
+    About
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../pyoti.html">
+    pyoti package
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../capi.html">
+    C API Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_oti_sparse_array_gauss_algebra.h.html">Program Listing for File sparse/array/gauss/algebra.h</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">File sparse/array/gauss/algebra.h</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="file-sparse-array-gauss-algebra-h">
+<span id="file-oti-sparse-array-gauss-algebra-h"></span><h1>File sparse/array/gauss/algebra.h<a class="headerlink" href="#file-sparse-array-gauss-algebra-h" title="Link to this heading">#</a></h1>
+<nav class="contents local" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-oti-sparse-array-gauss-algebra-h" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/gauss/algebra.h</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#included-by" id="id2">Included By</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id3">Functions</a></p></li>
+</ul>
+</nav>
+<section id="definition-oti-sparse-array-gauss-algebra-h">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/gauss/algebra.h</span></code>)<a class="headerlink" href="#definition-oti-sparse-array-gauss-algebra-h" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_oti_sparse_array_gauss_algebra.h.html">Program Listing for File sparse/array/gauss/algebra.h</a></li>
+</ul>
+</div>
+</section>
+<section id="included-by">
+<h2>Included By<a class="headerlink" href="#included-by" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="file_oti_sparse_array_gauss.h.html#file-oti-sparse-array-gauss-h"><span class="std std-ref">File sparse/array/gauss.h</span></a></p></li>
+</ul>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a3b018fababbb141bf2030ba6b2bd820a.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a3b018fababbb141bf2030ba6b2bd820a"><span class="std std-ref">Function fearrso_abs</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a02f8c149a9f87e1946bfdd3bd653a313.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a02f8c149a9f87e1946bfdd3bd653a313"><span class="std std-ref">Function fearrso_abs_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1aa82d44bd6ca869cfb37d092c2e8601ab.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1aa82d44bd6ca869cfb37d092c2e8601ab"><span class="std std-ref">Function fearrso_det</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a857f2ce1b2ef04947aff6a1f477a1c84.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a857f2ce1b2ef04947aff6a1f477a1c84"><span class="std std-ref">Function fearrso_det_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a0fa76e8ae632d46a1c2be09c9c73aef0.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a0fa76e8ae632d46a1c2be09c9c73aef0"><span class="std std-ref">Function fearrso_div_FF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ae6e37aa4b46136c426f7df19b63a2019.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ae6e37aa4b46136c426f7df19b63a2019"><span class="std std-ref">Function fearrso_div_fF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a59c744e3de2d9519c939df09a0085655.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a59c744e3de2d9519c939df09a0085655"><span class="std std-ref">Function fearrso_div_Ff</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1aed59e0633b9c786544ff25d2b0585534.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1aed59e0633b9c786544ff25d2b0585534"><span class="std std-ref">Function fearrso_div_FF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a60518b1edcdf6fc4dc5b065ce99e7328.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a60518b1edcdf6fc4dc5b065ce99e7328"><span class="std std-ref">Function fearrso_div_fF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ac8cfb29f51b8f923de0996097ba2253e.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ac8cfb29f51b8f923de0996097ba2253e"><span class="std std-ref">Function fearrso_div_Ff_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1adee80713e3c61b60f0673f2c450d88f2.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1adee80713e3c61b60f0673f2c450d88f2"><span class="std std-ref">Function fearrso_div_FO</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1af0b50596f36e71c93a086ec5a28f1a84.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1af0b50596f36e71c93a086ec5a28f1a84"><span class="std std-ref">Function fearrso_div_Fo</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ae86d027fc583be3ba63b177cde5ba2e5.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ae86d027fc583be3ba63b177cde5ba2e5"><span class="std std-ref">Function fearrso_div_FO_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a3d4a62025bb62de1945b76068f76feba.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a3d4a62025bb62de1945b76068f76feba"><span class="std std-ref">Function fearrso_div_Fo_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a7bfd3d1406c8e61b26ca8eb492ed4fb1.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a7bfd3d1406c8e61b26ca8eb492ed4fb1"><span class="std std-ref">Function fearrso_div_FR</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a29eba011c8981299674b0bd38c4a5b3a.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a29eba011c8981299674b0bd38c4a5b3a"><span class="std std-ref">Function fearrso_div_Fr</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1aaa189b3fe27d5431f6dfce3086acbbe3.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1aaa189b3fe27d5431f6dfce3086acbbe3"><span class="std std-ref">Function fearrso_div_FR_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a8e4ecd0607b5fbba4b18a2a01c158d2b.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a8e4ecd0607b5fbba4b18a2a01c158d2b"><span class="std std-ref">Function fearrso_div_Fr_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ace9f8f371eabf5b74b226e4fa4b205d9.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ace9f8f371eabf5b74b226e4fa4b205d9"><span class="std std-ref">Function fearrso_div_OF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ae02efac2d09c2005c023190b4244996c.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ae02efac2d09c2005c023190b4244996c"><span class="std std-ref">Function fearrso_div_oF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ac62527c7d17094306d8b95aa30122c80.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ac62527c7d17094306d8b95aa30122c80"><span class="std std-ref">Function fearrso_div_OF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a09a73d72d2d574b2ed8e1c02bb28a2c9.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a09a73d72d2d574b2ed8e1c02bb28a2c9"><span class="std std-ref">Function fearrso_div_oF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a8ca3f064b7dab2e24cfb687680e817f4.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a8ca3f064b7dab2e24cfb687680e817f4"><span class="std std-ref">Function fearrso_div_RF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a50284d93fb7682185de51f00e37d8b58.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a50284d93fb7682185de51f00e37d8b58"><span class="std std-ref">Function fearrso_div_rF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a65ddd1eada4a98a886c79288931d9e86.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a65ddd1eada4a98a886c79288931d9e86"><span class="std std-ref">Function fearrso_div_RF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ad04eef50ab24dbb66856af428dc182e3.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ad04eef50ab24dbb66856af428dc182e3"><span class="std std-ref">Function fearrso_div_rF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a732a402cd4be07dc5e1e8342da97447a.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a732a402cd4be07dc5e1e8342da97447a"><span class="std std-ref">Function fearrso_dotproduct_FF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a7b7b248dd2b97126e1a77970c99fd310.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a7b7b248dd2b97126e1a77970c99fd310"><span class="std std-ref">Function fearrso_dotproduct_FF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a81633052314dd4de5e7f9d0fcf2951ae.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a81633052314dd4de5e7f9d0fcf2951ae"><span class="std std-ref">Function fearrso_dotproduct_OF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a40dc34ff7432d63c4b9106ce3de4e552.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a40dc34ff7432d63c4b9106ce3de4e552"><span class="std std-ref">Function fearrso_dotproduct_OF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a423b0b6469a8a3b940ce88e77e1069b5.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a423b0b6469a8a3b940ce88e77e1069b5"><span class="std std-ref">Function fearrso_dotproduct_RF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a71c34670a9bdf8019da251ac91178834.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a71c34670a9bdf8019da251ac91178834"><span class="std std-ref">Function fearrso_dotproduct_RF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1aba9c7710a59ecb27802e3a1bb5581593.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1aba9c7710a59ecb27802e3a1bb5581593"><span class="std std-ref">Function fearrso_integrate</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1aa8e971eeb25b98367fe4321ae7e709ee.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1aa8e971eeb25b98367fe4321ae7e709ee"><span class="std std-ref">Function fearrso_integrate_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a5c932bc758f38691e6604a6310c15bf6.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a5c932bc758f38691e6604a6310c15bf6"><span class="std std-ref">Function fearrso_invert</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a25daf0baac3a4024f76617a98d69532b.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a25daf0baac3a4024f76617a98d69532b"><span class="std std-ref">Function fearrso_invert_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a8b8bab628339e68159cfbc51c0c75151.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a8b8bab628339e68159cfbc51c0c75151"><span class="std std-ref">Function fearrso_matmul_FF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a65c7ed3dcc4a0345b44c315e721f32fb.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a65c7ed3dcc4a0345b44c315e721f32fb"><span class="std std-ref">Function fearrso_matmul_FF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a3ac4c350d9a05243fc422ef94c5f04b2.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a3ac4c350d9a05243fc422ef94c5f04b2"><span class="std std-ref">Function fearrso_matmul_FO</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ace4e6812bfa9adeb637e8abb974d9157.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ace4e6812bfa9adeb637e8abb974d9157"><span class="std std-ref">Function fearrso_matmul_FO_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1afcc8019a34af9ca8e95eb08e349ca83c.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1afcc8019a34af9ca8e95eb08e349ca83c"><span class="std std-ref">Function fearrso_matmul_FR</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a02a6b2512957d12ad5dbbb74d9d81415.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a02a6b2512957d12ad5dbbb74d9d81415"><span class="std std-ref">Function fearrso_matmul_FR_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a4f6a60d0e4591a4b0657b5523aee5cef.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a4f6a60d0e4591a4b0657b5523aee5cef"><span class="std std-ref">Function fearrso_matmul_OF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a54fcc18e88b00114b8262c592224357a.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a54fcc18e88b00114b8262c592224357a"><span class="std std-ref">Function fearrso_matmul_OF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a2386fc39fb84b36057f8fcb6541b6bee.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a2386fc39fb84b36057f8fcb6541b6bee"><span class="std std-ref">Function fearrso_matmul_RF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1adbf55a18f5602498eb996041d5cfef1c.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1adbf55a18f5602498eb996041d5cfef1c"><span class="std std-ref">Function fearrso_matmul_RF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a8c910610fd5a6382f7bf936d9f4f501a.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a8c910610fd5a6382f7bf936d9f4f501a"><span class="std std-ref">Function fearrso_mul_FF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a182369af7f416ef74e3dedbece3f0e67.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a182369af7f416ef74e3dedbece3f0e67"><span class="std std-ref">Function fearrso_mul_fF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1aae2945bc0b8118aa6063aa6cce32b37c.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1aae2945bc0b8118aa6063aa6cce32b37c"><span class="std std-ref">Function fearrso_mul_FF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a4b8dd5c2cb8657d41c2cdc05b2660f41.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a4b8dd5c2cb8657d41c2cdc05b2660f41"><span class="std std-ref">Function fearrso_mul_fF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a765233ec008f6c348d588169dcae165f.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a765233ec008f6c348d588169dcae165f"><span class="std std-ref">Function fearrso_mul_OF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a392872e854d6315a4aac58cade9ff780.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a392872e854d6315a4aac58cade9ff780"><span class="std std-ref">Function fearrso_mul_oF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a0d8ae077e3a2e5d3bb3bfa1be4421710.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a0d8ae077e3a2e5d3bb3bfa1be4421710"><span class="std std-ref">Function fearrso_mul_OF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ada6f099b9a393d25290b7f5e087e0152.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ada6f099b9a393d25290b7f5e087e0152"><span class="std std-ref">Function fearrso_mul_oF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a6491338d9dc69314e01b226c49161785.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a6491338d9dc69314e01b226c49161785"><span class="std std-ref">Function fearrso_mul_RF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1aca76cac4e89b844153f63a81b6ec564b.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1aca76cac4e89b844153f63a81b6ec564b"><span class="std std-ref">Function fearrso_mul_rF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a5221b65ca805909b8c4b96123bf7a217.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a5221b65ca805909b8c4b96123bf7a217"><span class="std std-ref">Function fearrso_mul_RF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a98abee4c2224a0abd65809312e9bea54.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a98abee4c2224a0abd65809312e9bea54"><span class="std std-ref">Function fearrso_mul_rF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a096f90558a782dfb0994b7a87156aefa.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a096f90558a782dfb0994b7a87156aefa"><span class="std std-ref">Function fearrso_neg</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1aa377f2683c0a601be4f9399d2144ecf7.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1aa377f2683c0a601be4f9399d2144ecf7"><span class="std std-ref">Function fearrso_neg_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a5946baaf7d37b9b367cb7547994a62ef.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a5946baaf7d37b9b367cb7547994a62ef"><span class="std std-ref">Function fearrso_norm</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a97ea8c4bef536f532e2ed10a75ce1b78.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a97ea8c4bef536f532e2ed10a75ce1b78"><span class="std std-ref">Function fearrso_norm_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a6ff6cfc3bf41d28838a6fa55796fde5c.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a6ff6cfc3bf41d28838a6fa55796fde5c"><span class="std std-ref">Function fearrso_pnorm</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1aced176edaf28e9a4239ad931fa87a446.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1aced176edaf28e9a4239ad931fa87a446"><span class="std std-ref">Function fearrso_pnorm_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ab9e88766135dc1733e1c037d318ede41.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ab9e88766135dc1733e1c037d318ede41"><span class="std std-ref">Function fearrso_sub_FF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1afd491057034d36712c1d2eca40e122fe.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1afd491057034d36712c1d2eca40e122fe"><span class="std std-ref">Function fearrso_sub_fF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a99ae42e8cba08d9a4cd741a8e619fbbc.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a99ae42e8cba08d9a4cd741a8e619fbbc"><span class="std std-ref">Function fearrso_sub_Ff</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a01893c0a77f65ba9df8a4fd60595aba5.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a01893c0a77f65ba9df8a4fd60595aba5"><span class="std std-ref">Function fearrso_sub_FF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a0ef774cd21278b2d77462db89b6c11cf.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a0ef774cd21278b2d77462db89b6c11cf"><span class="std std-ref">Function fearrso_sub_fF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1af7c03eaf516c5fe88b6236b722b5ce99.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1af7c03eaf516c5fe88b6236b722b5ce99"><span class="std std-ref">Function fearrso_sub_Ff_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1acfe3b2106d35764261e61eb1c8cb637c.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1acfe3b2106d35764261e61eb1c8cb637c"><span class="std std-ref">Function fearrso_sub_FO</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a205d3f4dabb110c9b0987b1287a9ba45.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a205d3f4dabb110c9b0987b1287a9ba45"><span class="std std-ref">Function fearrso_sub_Fo</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a3a6a5ad5d9a27f28557da6bb28286bb0.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a3a6a5ad5d9a27f28557da6bb28286bb0"><span class="std std-ref">Function fearrso_sub_FO_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a03ceca19b22cb33595309d9e5c10eb29.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a03ceca19b22cb33595309d9e5c10eb29"><span class="std std-ref">Function fearrso_sub_Fo_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a915c1439be7b28abd1dd6bf80d2b2555.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a915c1439be7b28abd1dd6bf80d2b2555"><span class="std std-ref">Function fearrso_sub_FR</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a140eecd648d75d06e8e57c912fdc8dd6.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a140eecd648d75d06e8e57c912fdc8dd6"><span class="std std-ref">Function fearrso_sub_Fr</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1acbb02916e48c106ce02d72a00d5ed421.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1acbb02916e48c106ce02d72a00d5ed421"><span class="std std-ref">Function fearrso_sub_FR_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ad7b7305e392659376014ed8240fc0b84.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ad7b7305e392659376014ed8240fc0b84"><span class="std std-ref">Function fearrso_sub_Fr_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ab920f451b27fd051124f4796e2e357e1.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ab920f451b27fd051124f4796e2e357e1"><span class="std std-ref">Function fearrso_sub_OF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a91913db55994c7f679064e931afc2fd0.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a91913db55994c7f679064e931afc2fd0"><span class="std std-ref">Function fearrso_sub_oF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a6d14c68e642674b0319df513def11538.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a6d14c68e642674b0319df513def11538"><span class="std std-ref">Function fearrso_sub_OF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a0d0ec1a1f4ef62fce9de0fac31dd184c.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a0d0ec1a1f4ef62fce9de0fac31dd184c"><span class="std std-ref">Function fearrso_sub_oF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a1eda0e28179948d738cb844da2143241.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a1eda0e28179948d738cb844da2143241"><span class="std std-ref">Function fearrso_sub_RF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a6667625d7449ebc9d0c0d7c2a4e93357.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a6667625d7449ebc9d0c0d7c2a4e93357"><span class="std std-ref">Function fearrso_sub_rF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a099690dfb5b56e1c9b62cd8dd383901c.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a099690dfb5b56e1c9b62cd8dd383901c"><span class="std std-ref">Function fearrso_sub_RF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ae064b6d65d8e384d44971ab0a3ad3889.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ae064b6d65d8e384d44971ab0a3ad3889"><span class="std std-ref">Function fearrso_sub_rF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1abf6d20b21a25bca260be1245bcde00ec.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1abf6d20b21a25bca260be1245bcde00ec"><span class="std std-ref">Function fearrso_sum_fF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a6db11894692de00dc06ed86ac8e456e3.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a6db11894692de00dc06ed86ac8e456e3"><span class="std std-ref">Function fearrso_sum_FF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ab0fdb5ab99486c25656c4b775e469b67.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ab0fdb5ab99486c25656c4b775e469b67"><span class="std std-ref">Function fearrso_sum_FF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1abe2afde8a07bc8edd1b4b1b5e092fa2e.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1abe2afde8a07bc8edd1b4b1b5e092fa2e"><span class="std std-ref">Function fearrso_sum_fF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ab53034b34b9498dd3a8c6c11243ad91b.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ab53034b34b9498dd3a8c6c11243ad91b"><span class="std std-ref">Function fearrso_sum_OF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a52aa8358f7c3620c88a4846b744e79f1.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a52aa8358f7c3620c88a4846b744e79f1"><span class="std std-ref">Function fearrso_sum_oF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ae4f41c759231b71cfc0a3ade65271603.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ae4f41c759231b71cfc0a3ade65271603"><span class="std std-ref">Function fearrso_sum_OF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1ad960014eee70c30f9e3a808be861b602.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1ad960014eee70c30f9e3a808be861b602"><span class="std std-ref">Function fearrso_sum_oF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a2a33551de76f0e5cb80896eacf199f76.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a2a33551de76f0e5cb80896eacf199f76"><span class="std std-ref">Function fearrso_sum_RF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1af83d8ea48d0bb45ee2598263587f5f4f.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1af83d8ea48d0bb45ee2598263587f5f4f"><span class="std std-ref">Function fearrso_sum_rF</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a3ff9cd6f97940363d622a73d158ee685.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a3ff9cd6f97940363d622a73d158ee685"><span class="std std-ref">Function fearrso_sum_RF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a22e0aa2597f3b73464c252bf5a245b33.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a22e0aa2597f3b73464c252bf5a245b33"><span class="std std-ref">Function fearrso_sum_rF_to</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a1f703416083ea32e73cc10c8be9d16c8.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a1f703416083ea32e73cc10c8be9d16c8"><span class="std std-ref">Function fearrso_transpose</span></a></p></li>
+<li><p><a class="reference internal" href="function_sparse_2array_2gauss_2algebra_8h_1a01cff8eba9f49f68110440b470cad3a8.html#exhale-function-sparse-2array-2gauss-2algebra-8h-1a01cff8eba9f49f68110440b470cad3a8"><span class="std std-ref">Function fearrso_transpose_to</span></a></p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-oti-sparse-array-gauss-algebra-h">Definition (<code class="docutils literal notranslate"><span class="pre">oti/sparse/array/gauss/algebra.h</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#included-by">Included By</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#functions">Functions</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/capi_generated/file_oti_sparse_array_gauss_algebra.h.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Mauricio Aristizabal (2016-Current), St. Mary&#39;s University (2025-Current), UT San Antonio (2022-2025) and Universidad EAFIT (2016-2020).
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

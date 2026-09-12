@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1ad7b65c486b737d435cc0dab4fc059701:
+
+Function fearrso_set_o
+======================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_set_o(sotinum_t *, fearrso_t *, dhelpl_t)
+   :project: OTIlib

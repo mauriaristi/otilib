@@ -1,0 +1,14 @@
+.. _exhale_function_real_2scalar_2gauss_2functions_8h_1a87ea7d7a0048c72d82bbed13adece0bd:
+
+Function fednum_acos
+====================
+
+- Defined in :ref:`file_oti_real_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fednum_acos(fednum_t *)
+   :project: OTIlib

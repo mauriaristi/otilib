@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a2b93ebab593fdd69853cf7dcd22f64f7:
+
+Function soti_createReal
+========================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_createReal(coeff_t, ord_t, dhelpl_t)
+   :project: OTIlib

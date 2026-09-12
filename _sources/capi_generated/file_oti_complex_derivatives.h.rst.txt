@@ -1,0 +1,76 @@
+
+.. _file_oti_complex_derivatives.h:
+
+File complex/derivatives.h
+==========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex/derivatives.h``)
+------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex_derivatives.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a480f880d5d9cdb3c1e853767f5b7da96`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a9b55ff986830d88d42b68d9eff5e1b7e`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a2247c5d72e897813318f659ffea0b64a`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a6f0d5c82fd1dfaac88b084f6e6caa1a8`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a69eda6544246fbc0df7002b4fcef32f9`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a15f9a1d738c231692e4de09f6e811167`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1aff97da1a5994c18e9009e780ba6b56e5`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a50547a824e571d85f3d913cf85bae5c1`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a61e3974fbc7d4489ece2ddec57515141`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a18c5cfda550ef327bd9341b5c3ae9f84`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a89260170dbebdffaad8a8dc621d3d966`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1ab043a4b847bb6a56613967a26e4cd0c9`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1ac575ee961f52f149646019d485245388`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a8f50ccbad1976d82a69a75a1be316174`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1aad9ba3109fba23ffb1a39699a211d0c1`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a969e4d0800f7febdca6c6b649fb9ce3f`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a2d6d7aff82f7b8e813ec533cbc1585f0`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a05def288a80a2597f9ee5cdbd5228702`
+
+- :ref:`exhale_function_complex_2derivatives_8h_1a786b8a12a0d67b07fe11798b47b27031`
+

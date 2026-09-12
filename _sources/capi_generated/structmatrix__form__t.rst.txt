@@ -1,0 +1,17 @@
+.. _exhale_struct_structmatrix__form__t:
+
+Struct matrix_form_t
+====================
+
+- Defined in :ref:`file_oti_core_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: matrix_form_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

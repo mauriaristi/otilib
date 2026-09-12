@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1a1c9a670d7570abfab84cee0f44a7b3d8:
+
+Function print_global_test
+==========================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: print_global_test(void)
+   :project: OTIlib

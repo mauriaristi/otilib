@@ -1,0 +1,62 @@
+
+.. _file_oti_dense_array_algebra_matops.h:
+
+File dense/array/algebra_matops.h
+=================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/dense/array/algebra_matops.h``)
+-------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_dense_array_algebra_matops.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1a65658384715719f0934a1b9c790cc4ea`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1a9f2a7109265fc6af759beba820043f9c`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1af2568acc69706e174374b2a018c6029a`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1a4848b614b8f5896ed19c81ca1c53e2ec`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1aaea414fca557a0df43287f0f72bc82e4`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1a74ed1b20bd65f6d71276afb1b0017b3b`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1a3cac280d99927ae76e63f9ac91e6fb57`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1a57f5822936271b86dde38f9983a31240`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1ad23814cd123b9ecb85f86378df9ed9ee`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1ac5759f690df520cfb32e4463f5df6ceb`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1a2e19514ac299c509ad8051d0873af2fb`
+
+- :ref:`exhale_function_dense_2array_2algebra__matops_8h_1af1c9185b6fd5acfc0d23b9429644c886`
+

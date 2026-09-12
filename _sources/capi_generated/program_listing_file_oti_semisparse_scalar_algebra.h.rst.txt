@@ -1,0 +1,89 @@
+
+.. _program_listing_file_oti_semisparse_scalar_algebra.h:
+
+Program Listing for File semisparse/scalar/algebra.h
+====================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_semisparse_scalar_algebra.h>` (``oti/semisparse/scalar/algebra.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SEMISPARSE_SCALAR_ALGEBRA_H
+   #define OTI_SEMISPARSE_SCALAR_ALGEBRA_H
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_div_oo(semiotin_t* num, semiotin_t* den, dhelpl_t dhl);
+   semiotin_t ssoti_div_ro(   coeff_t num, semiotin_t* den, dhelpl_t dhl);
+   semiotin_t ssoti_div_or(semiotin_t* num,    coeff_t val, dhelpl_t dhl);
+   
+   void      ssoti_div_oo_to(semiotin_t* num, semiotin_t* den, semiotin_t* res, dhelpl_t dhl);
+   void      ssoti_div_ro_to(coeff_t num, semiotin_t* den, semiotin_t* res, dhelpl_t dhl);
+   void      ssoti_div_or_to(semiotin_t* num, coeff_t val, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_mul_oo(   semiotin_t* num1, semiotin_t* num2,                 dhelpl_t dhl);
+   semiotin_t ssoti_mul_ro(      coeff_t num1, semiotin_t* num2,                 dhelpl_t dhl);
+   semiotin_t ssoti_mul_or(   semiotin_t* num1,    coeff_t num2,                 dhelpl_t dhl);
+   
+   semiotin_t ssoti_base_mul( semiotin_t* num1, semiotin_t* num2,                 dhelpl_t dhl);
+   semiotin_t ssoti_base_trunc_mul(ord_t ord1, semiotin_t* num1, ord_t ord2, semiotin_t* num2, dhelpl_t dhl);
+   
+   void      ssoti_mul_oo_to(semiotin_t* num1, semiotin_t* num2, semiotin_t* res, dhelpl_t dhl);
+   void      ssoti_mul_ro_to(   coeff_t num1, semiotin_t* num2, semiotin_t* res, dhelpl_t dhl);
+   void      ssoti_mul_or_to(semiotin_t* num1,    coeff_t num2, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void ssoti_gem_oo_to( semiotin_t* a, semiotin_t* b, semiotin_t* c, semiotin_t* res, dhelpl_t dhl);
+   void ssoti_gem_or_to( semiotin_t* a,    coeff_t b, semiotin_t* c, semiotin_t* res, dhelpl_t dhl);
+   void ssoti_gem_ro_to(    coeff_t a, semiotin_t* b, semiotin_t* c, semiotin_t* res, dhelpl_t dhl);
+   
+   void ssoti_trunc_gem_oo_to(ord_t orda, semiotin_t* a, ord_t ordb, semiotin_t* b, semiotin_t* c, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_sub_oo(    semiotin_t* num1, semiotin_t* num2,                 dhelpl_t dhl);
+   semiotin_t ssoti_sub_ro(       coeff_t num1, semiotin_t* num2,                 dhelpl_t dhl);
+   semiotin_t ssoti_sub_or(    semiotin_t* num1,    coeff_t num2,                 dhelpl_t dhl);
+   
+   semiotin_t ssoti_base_sub(semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl);
+   
+   void      ssoti_sub_oo_to( semiotin_t* num1, semiotin_t* num2, semiotin_t* res, dhelpl_t dhl);
+   void      ssoti_sub_ro_to(    coeff_t num1, semiotin_t* num2, semiotin_t* res, dhelpl_t dhl);
+   void      ssoti_sub_or_to( semiotin_t* num1,    coeff_t num2, semiotin_t* res, dhelpl_t dhl);
+   
+   semiotin_t ssoti_base_trunc_sub(ord_t ord, semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl);
+   void ssoti_trunc_sub_oo_to(ord_t ord, semiotin_t* num1, semiotin_t* num2, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_sum_oo(    semiotin_t* num1, semiotin_t* num2,                 dhelpl_t dhl);
+   semiotin_t ssoti_sum_ro(       coeff_t num1, semiotin_t* num2,                 dhelpl_t dhl);
+   semiotin_t ssoti_sum_or(    semiotin_t* num1,    coeff_t num2,                 dhelpl_t dhl);
+   
+   semiotin_t ssoti_base_sum(  semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl);
+   
+   void      ssoti_sum_oo_to( semiotin_t* num1, semiotin_t* num2, semiotin_t* res, dhelpl_t dhl);
+   void      ssoti_sum_ro_to(    coeff_t num1, semiotin_t* num2, semiotin_t* res, dhelpl_t dhl);
+   void      ssoti_sum_or_to( semiotin_t* num1,    coeff_t num2, semiotin_t* res, dhelpl_t dhl);
+   
+   semiotin_t ssoti_base_trunc_sum(ord_t ord, semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl);
+   void ssoti_trunc_sum_oo_to(ord_t ord, semiotin_t* num1, semiotin_t* num2, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_neg(semiotin_t* num, dhelpl_t dhl);
+   void      ssoti_neg_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   semiotin_t ssoti_abs(   semiotin_t* num,                 dhelpl_t dhl);
+   void      ssoti_abs_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

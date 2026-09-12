@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2algebra_8h_1a79cf15cbb1abbe176b8cc8f418c9c7f6:
+
+Function fecarr_neg_to
+======================
+
+- Defined in :ref:`file_oti_complex_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_neg_to(fecarr_t *, fecarr_t *)
+   :project: OTIlib

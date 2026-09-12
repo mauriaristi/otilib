@@ -1,0 +1,17 @@
+.. _exhale_struct_structsotmpl__t:
+
+Struct sotmpl_t
+===============
+
+- Defined in :ref:`file_oti_sparse_scalar_structures.h`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: sotmpl_t
+   :project: OTIlib
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,40 @@
+
+.. _file_oti_dense_scalar_structures.h:
+
+File dense/scalar/structures.h
+==============================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/dense/scalar/structures.h``)
+----------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_dense_scalar_structures.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_dense.h`
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structotinum__t`
+

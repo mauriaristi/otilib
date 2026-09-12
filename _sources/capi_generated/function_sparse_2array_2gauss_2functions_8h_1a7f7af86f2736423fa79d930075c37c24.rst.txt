@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2functions_8h_1a7f7af86f2736423fa79d930075c37c24:
+
+Function fearrso_atanh
+======================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_atanh(fearrso_t *, dhelpl_t)
+   :project: OTIlib

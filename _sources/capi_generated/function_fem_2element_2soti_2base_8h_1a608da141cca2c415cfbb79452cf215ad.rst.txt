@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2soti_2base_8h_1a608da141cca2c415cfbb79452cf215ad:
+
+Function elemso_init
+====================
+
+- Defined in :ref:`file_oti_fem_element_soti_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemso_init(void)
+   :project: OTIlib

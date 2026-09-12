@@ -1,0 +1,14 @@
+.. _exhale_function_precompute_8h_1ad1b6ea1444ac41c7596a2f2f12fe9c7d:
+
+Function dhelp_precompute_fulldir
+=================================
+
+- Defined in :ref:`file_oti_core_precompute.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_precompute_fulldir(ord_t, bases_t, dhelpl_t *)
+   :project: OTIlib

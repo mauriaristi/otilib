@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2base_8h_1a9e6b702bfa8482ebc4dca7ba89243ebf:
+
+Function ssoti_set_r
+====================
+
+- Defined in :ref:`file_oti_semisparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ssoti_set_r(coeff_t, semiotin_t *, dhelpl_t)
+   :project: OTIlib

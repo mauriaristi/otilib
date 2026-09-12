@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2real_2base_8h_1a8aaefc587907ff31959d924087624ad5:
+
+Function elemd_init
+===================
+
+- Defined in :ref:`file_oti_fem_element_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemd_init(void)
+   :project: OTIlib

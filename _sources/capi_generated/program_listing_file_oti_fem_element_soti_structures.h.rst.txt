@@ -1,0 +1,78 @@
+
+.. _program_listing_file_oti_fem_element_soti_structures.h:
+
+Program Listing for File fem/element/soti/structures.h
+======================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_fem_element_soti_structures.h>` (``oti/fem/element/soti/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_FEM_ELEMENT_SOTI_STRUCTURES_H
+   #define OTI_FEM_ELEMENT_SOTI_STRUCTURES_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   typedef struct elemso_s{    
+       // FEM Properties
+       uint64_t          nbasis; 
+       uint64_t           order; 
+       int64_t         geomBase; 
+       int64_t             kind; 
+       uint8_t             ndim; 
+       uint64_t             nip; 
+       uint8_t             nder; 
+       uint8_t           isInit; 
+       uint8_t     nDimAnalysis; 
+       fesoti_t              xi; 
+       fesoti_t             eta; 
+       fesoti_t            zeta; 
+       fesoti_t               w; 
+       fearrso_t*   p_evalBasis; 
+                                 // p_evalBasis[0] -> N  
+                                 // p_evalBasis[1] -> Na 
+                                 // p_evalBasis[2] -> Nb 
+                                 // p_evalBasis[3] -> Nc 
+                                 // p_evalBasis[4] -> Naa
+                                 // p_evalBasis[5] -> Nab
+                                 // p_evalBasis[6] -> Nbb
+                                 // p_evalBasis[7] -> Nac
+                                 // p_evalBasis[8] -> Nbc
+                                 // p_evalBasis[9] -> Ncc
+   } elemso_t;
+   
+   
+   typedef struct elemso_spt_s{    
+       // FEM Spatial variables 
+       fearrso_t         J; 
+       fearrso_t      Jinv; 
+       fesoti_t       Jdet; 
+       fesoti_t   p_w_detJ; 
+       fearrso_t*  p_basis; 
+                            //  p_basis[0] -> N  
+                            //  p_basis[1] -> Nx 
+                            //  p_basis[2] -> Ny 
+                            //  p_basis[3] -> Nz 
+                            //  p_basis[4] -> Nxx
+                            //  p_basis[5] -> Nxy
+                            //  p_basis[6] -> Nyy
+                            //  p_basis[7] -> Nxz
+                            //  p_basis[8] -> Nyz
+                            //  p_basis[9] -> Nzz
+   } elemso_spt_t;
+   
+   
+    
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   #endif 

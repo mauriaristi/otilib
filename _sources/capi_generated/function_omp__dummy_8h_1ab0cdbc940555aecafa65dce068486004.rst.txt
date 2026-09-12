@@ -1,0 +1,14 @@
+.. _exhale_function_omp__dummy_8h_1ab0cdbc940555aecafa65dce068486004:
+
+Function omp_unset_nest_lock
+============================
+
+- Defined in :ref:`file_oti_omp_dummy.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: omp_unset_nest_lock(omp_nest_lock_t *)
+   :project: OTIlib

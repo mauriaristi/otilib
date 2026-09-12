@@ -1,0 +1,14 @@
+.. _exhale_function_real_2scalar_2gauss_2base_8h_1a43ac314b6dd58fb1969f30d5bd8550b9:
+
+Function fednum_free
+====================
+
+- Defined in :ref:`file_oti_real_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fednum_free(fednum_t *)
+   :project: OTIlib

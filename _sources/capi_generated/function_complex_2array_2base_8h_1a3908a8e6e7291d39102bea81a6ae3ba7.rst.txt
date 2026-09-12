@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2base_8h_1a3908a8e6e7291d39102bea81a6ae3ba7:
+
+Function carr_set_all_r
+=======================
+
+- Defined in :ref:`file_oti_complex_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_set_all_r(ccoeff_t, carr_t *)
+   :project: OTIlib

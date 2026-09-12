@@ -1,0 +1,80 @@
+
+.. _file_oti_complex_array_base.h:
+
+File complex/array/base.h
+=========================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/complex/array/base.h``)
+-----------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_complex_array_base.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_complex.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a5c13796ec49d1ce19a327326bf6633f7`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a3efd0a6c396587c8cc3c2bb95353ace7`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a6533b7c41549d884ecb54bc1cf5fa875`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a8cb64d1378ea34688e39bf216d9a316d`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a5d6cf2420eb9c7cb602a93a301fac6fe`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a1535866b0070289afba927ef2132c254`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a0e6a733d03b6646cc0fd1d3ceb721fca`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a5b189c31131f4746d80c177a769ed21e`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a344f9db5531f21633d489ac8e17cda9f`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a531f2c4e5a3d360761b4822ea3fc9e51`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a61bdb9ded90e5b8234f9bf0ad756d248`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1aea0a85d587d5e578a21c0445fd5aa30b`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a953fa3603db5f40d3c94b443d69e2242`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a7a0f16c046117d4e29058e99be96d040`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a5bf088d001a56d1857b81d5fb85bf165`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a3908a8e6e7291d39102bea81a6ae3ba7`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1ad8aef5567ea1fd3ac86a71a20bdd2047`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1ac66e0583840bc7ce34036da6f0bff6d0`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1ad027c918c8bb24ca34b9c770b2bdf09a`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1afb7a021cb4731268f661754e3f7d6f08`
+
+- :ref:`exhale_function_complex_2array_2base_8h_1a5247ae03805fd86b7c244020b4a86f8a`
+

@@ -1,0 +1,14 @@
+.. _exhale_define_comm_8h_1ac04219814d21fb38e005f0e42794b1b1:
+
+Define _NUM_RESERVED_TMPS
+=========================
+
+- Defined in :ref:`file_oti_comm.h`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: _NUM_RESERVED_TMPS
+   :project: OTIlib

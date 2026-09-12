@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2base_8h_1a36dd62d83ac492049045edb4b3a3e6b9:
+
+Function soti_distribute_memory
+===============================
+
+- Defined in :ref:`file_oti_sparse_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_distribute_memory(void *, const ndir_t *, ord_t, flag_t, sotinum_t *)
+   :project: OTIlib

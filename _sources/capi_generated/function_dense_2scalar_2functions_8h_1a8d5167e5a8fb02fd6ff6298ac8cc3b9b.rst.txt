@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2functions_8h_1a8d5167e5a8fb02fd6ff6298ac8cc3b9b:
+
+Function oti_sin
+================
+
+- Defined in :ref:`file_oti_dense_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_sin(otinum_t *, dhelpl_t)
+   :project: OTIlib

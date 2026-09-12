@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2functions_8h_1aa62d468a862d5935d22ab5a5fa0aed74:
+
+Function fedarr_cbrt_to(fedarr_t \*, fedarr_t \*)
+=================================================
+
+- Defined in :ref:`file_oti_complex_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fedarr_cbrt_to(fedarr_t *, fedarr_t *)
+   :project: OTIlib

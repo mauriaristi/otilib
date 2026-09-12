@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2gauss_2base_8h_1af172342343067d8a7e4e3c025ca7a63f:
+
+Function fessoti_truncate_im
+============================
+
+- Defined in :ref:`file_oti_semisparse_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fessoti_truncate_im(imdir_t, ord_t, fessoti_t *, dhelpl_t)
+   :project: OTIlib

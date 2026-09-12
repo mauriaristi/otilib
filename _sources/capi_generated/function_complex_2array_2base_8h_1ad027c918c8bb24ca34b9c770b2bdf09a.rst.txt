@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2base_8h_1ad027c918c8bb24ca34b9c770b2bdf09a:
+
+Function carr_set_item_ij
+=========================
+
+- Defined in :ref:`file_oti_complex_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_set_item_ij(ccoeff_t, uint64_t, uint64_t, carr_t *)
+   :project: OTIlib

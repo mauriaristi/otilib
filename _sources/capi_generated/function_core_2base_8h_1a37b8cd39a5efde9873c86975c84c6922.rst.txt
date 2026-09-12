@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a37b8cd39a5efde9873c86975c84c6922:
+
+Function dhelp_matrix_form_indices
+==================================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_matrix_form_indices(bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

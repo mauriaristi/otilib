@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a604ab4f2666bea0d451de6c3b571b5dc:
+
+Function dhelp_compute_delta
+============================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_compute_delta(imdir_t, ord_t, coeff_t *, dhelpl_t)
+   :project: OTIlib

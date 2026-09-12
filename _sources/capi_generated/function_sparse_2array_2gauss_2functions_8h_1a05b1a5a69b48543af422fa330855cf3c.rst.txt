@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2functions_8h_1a05b1a5a69b48543af422fa330855cf3c:
+
+Function fearrso_log10
+======================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_log10(fearrso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2gauss_2algebra_8h_1aeab1973b0ddcf2966a6ce7118e868e19:
+
+Function fecarr_div_fF
+======================
+
+- Defined in :ref:`file_oti_complex_array_gauss_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fecarr_div_fF(fecnum_t *, fecarr_t *)
+   :project: OTIlib

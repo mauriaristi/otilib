@@ -1,0 +1,14 @@
+.. _exhale_function_real_2array_2algebra_8h_1a8a5b2d3efae3e3a17691135c33ced1c9:
+
+Function darr_self_mul_R
+========================
+
+- Defined in :ref:`file_oti_real_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: darr_self_mul_R(darr_t *, darr_t *)
+   :project: OTIlib

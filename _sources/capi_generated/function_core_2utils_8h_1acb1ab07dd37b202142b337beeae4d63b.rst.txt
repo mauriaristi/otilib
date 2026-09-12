@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1acb1ab07dd37b202142b337beeae4d63b:
+
+Function slice_size
+===================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: slice_size(int64_t, int64_t, int64_t)
+   :project: OTIlib

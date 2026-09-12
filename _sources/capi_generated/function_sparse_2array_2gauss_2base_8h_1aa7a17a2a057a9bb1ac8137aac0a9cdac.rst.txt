@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2base_8h_1aa7a17a2a057a9bb1ac8137aac0a9cdac:
+
+Function fearrso_get_im_to
+==========================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_get_im_to(imdir_t, ord_t, fearrso_t *, fearrso_t *, dhelpl_t)
+   :project: OTIlib

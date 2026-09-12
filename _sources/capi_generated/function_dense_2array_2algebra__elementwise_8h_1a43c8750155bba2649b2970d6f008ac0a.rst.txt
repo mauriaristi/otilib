@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2array_2algebra__elementwise_8h_1a43c8750155bba2649b2970d6f008ac0a:
+
+Function oarr_sum_OO_to
+=======================
+
+- Defined in :ref:`file_oti_dense_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oarr_sum_OO_to(oarr_t *, oarr_t *, oarr_t *, dhelpl_t)
+   :project: OTIlib

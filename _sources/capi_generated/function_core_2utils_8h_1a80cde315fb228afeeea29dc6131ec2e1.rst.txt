@@ -1,0 +1,14 @@
+.. _exhale_function_core_2utils_8h_1a80cde315fb228afeeea29dc6131ec2e1:
+
+Function binSearchUI64
+======================
+
+- Defined in :ref:`file_oti_core_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: binSearchUI64(uint64_t, uint64_t *, uint64_t, flag_t *)
+   :project: OTIlib

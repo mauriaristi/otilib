@@ -1,0 +1,14 @@
+.. _exhale_function_core_2base_8h_1a1be2f495b3ecb0516a53b1f565ca3a4f:
+
+Function dhelp_comb
+===================
+
+- Defined in :ref:`file_oti_core_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_comb(int64_t, int64_t)
+   :project: OTIlib

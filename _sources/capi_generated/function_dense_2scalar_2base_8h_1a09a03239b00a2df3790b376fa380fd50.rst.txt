@@ -1,0 +1,14 @@
+.. _exhale_function_dense_2scalar_2base_8h_1a09a03239b00a2df3790b376fa380fd50:
+
+Function oti_trunc_mul
+======================
+
+- Defined in :ref:`file_oti_dense_scalar_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: oti_trunc_mul(otinum_t *, ord_t, otinum_t *, ord_t, otinum_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2base_8h_1abab8cc73d60f4404e48b256d86867859:
+
+Function arrsso_get_order_im
+============================
+
+- Defined in :ref:`file_oti_semisparse_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrsso_get_order_im(ord_t, arrsso_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2functions_8h_1a8eab0a83fc517e4555125cc79ec8410e:
+
+Function fesoti_integrate_r_to
+==============================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_integrate_r_to(coeff_t, fesoti_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

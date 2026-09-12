@@ -1,0 +1,28 @@
+
+.. _program_listing_file_oti_semisparse_scalar_gauss_utils.h:
+
+Program Listing for File semisparse/scalar/gauss/utils.h
+========================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_semisparse_scalar_gauss_utils.h>` (``oti/semisparse/scalar/gauss/utils.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SEMISPARSE_SCALAR_GAUSS_UTILS_H
+   #define OTI_SEMISPARSE_SCALAR_GAUSS_UTILS_H
+   
+   
+   
+   /**************************************************************************************************/
+   void fessoti_dimCheck(fessoti_t* arr1,fessoti_t* arr2);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void fessoti_get_active_bases(fessoti_t* num, imdir_t* list_vals, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   #endif

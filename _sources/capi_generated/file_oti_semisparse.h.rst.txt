@@ -1,0 +1,44 @@
+
+.. _file_oti_semisparse.h:
+
+File semisparse.h
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir_oti>` (``oti``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/semisparse.h``)
+---------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_semisparse.h.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``oti/core.h`` (:ref:`file_oti_core.h`)
+
+- ``oti/real.h`` (:ref:`file_oti_real.h`)
+
+- ``semisparse/scalar/base.h`` (:ref:`file_oti_semisparse_scalar_base.h`)
+
+- ``semisparse/scalar/structures.h`` (:ref:`file_oti_semisparse_scalar_structures.h`)
+
+
+
+
+

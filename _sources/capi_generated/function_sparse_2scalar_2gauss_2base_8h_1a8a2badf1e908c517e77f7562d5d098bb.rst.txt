@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2gauss_2base_8h_1a8a2badf1e908c517e77f7562d5d098bb:
+
+Function fesoti_truncate_im_to
+==============================
+
+- Defined in :ref:`file_oti_sparse_scalar_gauss_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fesoti_truncate_im_to(imdir_t, ord_t, fesoti_t *, fesoti_t *, dhelpl_t)
+   :project: OTIlib

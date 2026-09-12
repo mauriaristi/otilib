@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2scalar_2algebra_8h_1a4a59cb9a0ef056b89bf4bb0dcc915b88:
+
+Function soti_abs_to
+====================
+
+- Defined in :ref:`file_oti_sparse_scalar_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: soti_abs_to(sotinum_t *, sotinum_t *, dhelpl_t)
+   :project: OTIlib

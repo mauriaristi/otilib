@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2real_2base_8h_1a732bab13f7f43c9952eb5e0ae3ec1b39:
+
+Function elemd_is_started
+=========================
+
+- Defined in :ref:`file_oti_fem_element_real_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemd_is_started(elemd_t *)
+   :project: OTIlib

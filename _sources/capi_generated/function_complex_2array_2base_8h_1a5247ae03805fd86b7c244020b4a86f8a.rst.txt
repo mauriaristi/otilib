@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2base_8h_1a5247ae03805fd86b7c244020b4a86f8a:
+
+Function carr_zeros
+===================
+
+- Defined in :ref:`file_oti_complex_array_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_zeros(uint64_t, uint64_t)
+   :project: OTIlib

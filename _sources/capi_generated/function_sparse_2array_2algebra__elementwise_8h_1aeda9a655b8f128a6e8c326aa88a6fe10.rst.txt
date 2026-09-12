@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2algebra__elementwise_8h_1aeda9a655b8f128a6e8c326aa88a6fe10:
+
+Function arrso_neg
+==================
+
+- Defined in :ref:`file_oti_sparse_array_algebra_elementwise.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: arrso_neg(arrso_t *, dhelpl_t)
+   :project: OTIlib

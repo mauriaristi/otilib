@@ -1,0 +1,14 @@
+.. _exhale_function_real_2scalar_2gauss_2functions_8h_1a246a7a3beee2b41aaa1c322d78fdd3a0:
+
+Function fednum_logb
+====================
+
+- Defined in :ref:`file_oti_real_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fednum_logb(fednum_t *, double)
+   :project: OTIlib

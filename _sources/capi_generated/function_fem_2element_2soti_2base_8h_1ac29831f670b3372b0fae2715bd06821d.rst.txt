@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2soti_2base_8h_1ac29831f670b3372b0fae2715bd06821d:
+
+Function elemso_allocate
+========================
+
+- Defined in :ref:`file_oti_fem_element_soti_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemso_allocate(elemso_t *, uint64_t, bases_t, ord_t, dhelpl_t)
+   :project: OTIlib

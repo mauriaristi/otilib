@@ -1,0 +1,14 @@
+.. _exhale_function_sparse_2array_2gauss_2utils_8h_1afb68e2e40d683b60e36bd92bf0f3c7cb:
+
+Function fearrso_dimCheck_FR_matmul
+===================================
+
+- Defined in :ref:`file_oti_sparse_array_gauss_utils.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrso_dimCheck_FR_matmul(fearrso_t *, darr_t *, fearrso_t *)
+   :project: OTIlib

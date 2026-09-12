@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2scalar_2functions_8h_1a24091d780cd6e3d55339f42aab695ea0:
+
+Function ssoti_pow_to
+=====================
+
+- Defined in :ref:`file_oti_semisparse_scalar_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: ssoti_pow_to(semiotin_t *, coeff_t, semiotin_t *, dhelpl_t)
+   :project: OTIlib

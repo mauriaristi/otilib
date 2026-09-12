@@ -1,0 +1,14 @@
+.. _exhale_function_feoarr_8h_1ac968b623282deeda1ee274903005ca3b:
+
+Function feoarr_set_item_ijk(otinum_t \*, uint64_t, uint64_t, uint64_t, feoarr_t \*, dhelpl_t)
+==============================================================================================
+
+- Defined in :ref:`file_oti_fem_feoarr.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: feoarr_set_item_ijk(otinum_t *, uint64_t, uint64_t, uint64_t, feoarr_t *, dhelpl_t)
+   :project: OTIlib

@@ -1,0 +1,14 @@
+.. _exhale_typedef_complex_2scalar_2comm_8h_1ade801bc50619add34d969ee816f58d1c:
+
+Typedef ccoeff_t
+================
+
+- Defined in :ref:`file_oti_complex_scalar_comm.h`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: ccoeff_t
+   :project: OTIlib

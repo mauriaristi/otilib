@@ -1,0 +1,32 @@
+
+.. _program_listing_file_oti_sparse_array_oti_of_array_structures.h:
+
+Program Listing for File sparse/array/oti_of_array/structures.h
+===============================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_sparse_array_oti_of_array_structures.h>` (``oti/sparse/array/oti_of_array/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef struct {
+       arr_t            re;  
+       arr_t**        p_im;  
+       imdir_t**     p_idx;  
+       ndir_t*       p_nnz;  
+       ndir_t*      p_size;  
+       ord_t         order;  
+       uint64_t       nrows; 
+       uint64_t       ncols; 
+       uint64_t        size; 
+   } soarr_t;                
+   
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------

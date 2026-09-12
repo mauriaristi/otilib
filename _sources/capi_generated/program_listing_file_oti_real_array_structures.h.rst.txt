@@ -1,0 +1,32 @@
+
+.. _program_listing_file_oti_real_array_structures.h:
+
+Program Listing for File real/array/structures.h
+================================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_real_array_structures.h>` (``oti/real/array/structures.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_REAL_STRUCTURES_H
+   #define OTI_REAL_STRUCTURES_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef struct {
+       coeff_t*      p_data; 
+       uint64_t       nrows; 
+       uint64_t       ncols; 
+       uint64_t        size; 
+   } darr_t;                 
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   #endif

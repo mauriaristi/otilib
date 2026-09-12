@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1a702ff1f4de3d35582d43ca2f915b4f47:
+
+Function carr_sqrt_to
+=====================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_sqrt_to(carr_t *, carr_t *)
+   :project: OTIlib

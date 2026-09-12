@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2algebra_8h_1a5774ab9e6aa57374a0f77b55a31ba472:
+
+Function carr_norm
+==================
+
+- Defined in :ref:`file_oti_complex_array_algebra.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_norm(carr_t *)
+   :project: OTIlib

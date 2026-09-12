@@ -1,0 +1,14 @@
+.. _exhale_function_semisparse_2array_2gauss_2functions_8h_1aeb783879bec217b46095b200d523c2c3:
+
+Function fearrsso_cbrt
+======================
+
+- Defined in :ref:`file_oti_semisparse_array_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fearrsso_cbrt(fearrsso_t *, dhelpl_t)
+   :project: OTIlib

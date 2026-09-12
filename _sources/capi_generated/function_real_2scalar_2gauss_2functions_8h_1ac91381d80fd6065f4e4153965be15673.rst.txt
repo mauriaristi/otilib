@@ -1,0 +1,14 @@
+.. _exhale_function_real_2scalar_2gauss_2functions_8h_1ac91381d80fd6065f4e4153965be15673:
+
+Function fednum_integrate_to
+============================
+
+- Defined in :ref:`file_oti_real_scalar_gauss_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: fednum_integrate_to(fednum_t *, fednum_t *, coeff_t *)
+   :project: OTIlib

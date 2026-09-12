@@ -1,0 +1,14 @@
+.. _exhale_function_core_2sparse_8h_1aae472b09346c63f07d5f98b52ab742d1:
+
+Function dhelp_add_coeff
+========================
+
+- Defined in :ref:`file_oti_core_sparse.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: dhelp_add_coeff(coeff_t *, imdir_t *, ndir_t *, coeff_t, imdir_t)
+   :project: OTIlib

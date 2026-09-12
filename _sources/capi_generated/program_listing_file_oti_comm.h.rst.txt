@@ -1,0 +1,181 @@
+
+.. _program_listing_file_oti_comm.h:
+
+Program Listing for File comm.h
+===============================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_comm.h>` (``oti/comm.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_COMM_H
+   #define OTI_COMM_H
+   
+   // ----------------------------------------------------------------------------------------------------
+   // ---------------------------------     EXTERNAL LIBRARIES     ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   #include <stdlib.h>
+   #include <string.h>
+   #include <stdio.h>
+   #include <stdint.h>
+   #include <stdbool.h>
+   #include <inttypes.h>
+   #include <math.h>
+   
+   #ifdef _OPENMP
+   #include <omp.h>
+   #endif
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------    END EXTERNAL LIBRARIES     -------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -----------------------------------------      ENUMS        ----------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   // Enumerators to assign a code to constants
+   enum oti_errors {  
+   
+     // Define operations identifiers.
+     OTI_success         =     0,   
+     OTI_OutOfMemory     =    -1,   
+     OTI_BadIndx         =    -2,   
+     OTI_NonPreComp      =    -3,   
+     OTI_NotImplemented  =    -4,   
+     OTI_BadDim          =    -5,   
+   
+     OTI_FEM_InvalidBaseId = -100,         
+   
+     OTI_FEM_InvalidElementType = -101,    
+                                           // (elLine, elTria, elQuad, elTetr, elHexa).
+   
+     OTI_FEM_NotImplemented     = -102,    
+   
+     OTI_undetErr     = -20000             
+     
+   };
+   
+   // ----------------------------------------------------------------------------------------------------
+   // ----------------------------------------    END ENUMS      -----------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------       TYPEDEFS         --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef double     coeff_t; 
+   typedef double*      arr_t; 
+   typedef uint64_t   imdir_t; 
+   typedef uint64_t    ndir_t; 
+   typedef uint16_t   bases_t; 
+   typedef uint8_t      ord_t; 
+   typedef uint8_t      ndh_t; 
+   typedef uint8_t     flag_t; 
+   
+   // typedef double complex zcoeff_t; ///< Complex Coefficient type.
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------     END TYPEDEFS       --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   // ----------------------------------------------------------------------------------------------------
+   // ---------------------------------------      DEFINES         ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   #define MAX(a,b) ((a) > (b) ? a : b)
+   #define MIN(a,b) ((a) < (b) ? a : b)
+   
+   #define _PCOEFFT "%11.4e"   // Print format of coeff_t
+   #define _PSCOEFFT "%+11.4e" // Print format of coeff_t with sign
+   #define _PIMDIRT "%" PRIu64  // Print format of imdir_t
+   #define _PNDIRT  "%" PRIu64  // Print format of ndir_t
+   #define _PBASEST "%" PRIu16  // Print format of bases_t
+   #define _PORDT   "%" PRIu8   // Print format of ord_t
+   #define _PNDHT   "%" PRIu8   // Print format of ndh_t
+   #define _PFLAGT  "%" PRIu8   // Print format of flag_t
+   
+   #define _PUINT64T "%" PRIu64
+   #define _PUINT32T "%" PRIu32
+   #define _PUINT16T "%" PRIu16
+   #define _PUINT8T  "%" PRIu8
+   
+   #define _PINT64T "%" PRId64
+   #define _PINT32T "%" PRId32
+   #define _PINT    "%d"
+   #define _PINT16T "%" PRId16
+   #define _PINT8T  "%" PRId8
+   
+   #define _SUINT64T "%" SCNu64
+   #define _SUINT32T "%" SCNu32
+   #define _SUINT16T "%" SCNu16
+   #define _SUINT8T  "%" SCNu8
+   
+   #define _SINT64T "%" SCNd64
+   #define _SINT32T "%" SCNd32
+   #define _SINT    "%d"
+   #define _SINT16T "%" SCNd16
+   #define _SINT8T  "%" SCNd8
+   
+   
+   
+   #define _ENDL "\n"
+   
+   #define _REALLOC_SIZE 10
+   
+   #define _NUM_RESERVED_TMPS 12
+   #define _NTMPS_PER_THREAD 30
+   
+   #define _MAXORDER_OTI 150
+   // ----------------------------------------------------------------------------------------------------
+   // ----------------------------------      END DEFINES         ----------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   // ----------------------------------------------------------------------------------------------------
+   // --------------------------------------      STRUCTURES        --------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   typedef struct{
+       uint64_t*     p_data; 
+       uint64_t*     p_cols; 
+       uint64_t*     p_rows; 
+       uint64_t       sizex; 
+       uint64_t       sizey; 
+       uint64_t     nonzero; 
+   } coomat_ui64_t;
+   
+   typedef struct{
+       uint64_t*     p_data; 
+       uint64_t*  p_indices; 
+       uint64_t*   p_indptr; 
+       uint64_t       sizex; 
+       uint64_t       nrows; 
+       uint64_t     nonzero; 
+   } csrmat_ui64_t;
+   
+   // ----------------------------------------------------------------------------------------------------
+   // -------------------------------------    END STRUCTURES      ---------------------------------------
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   
+   
+   
+   // GLOBALS:
+   
+   extern int global_test;
+   extern void (*__PY_ERROR_OTI_EXIT)(int64_t);
+   extern uint64_t is_python_error_def;
+   
+   
+   
+   #endif

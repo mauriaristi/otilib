@@ -1,0 +1,54 @@
+
+.. _file_oti_fem_gauss_array_oarr_algebra.h:
+
+File fem/gauss/array/oarr/algebra.h
+===================================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/fem/gauss/array/oarr/algebra.h``)
+---------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_fem_gauss_array_oarr_algebra.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_fem_gauss_array_feoarr.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2algebra_8h_1ae1cccf1f4a64070b06d7bf02dcbc3410`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2algebra_8h_1a7d165e1063c28de532f352534a21ed3e`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2algebra_8h_1abe092700b61d291102a84f5f0b47be0f`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2algebra_8h_1adb039208003ac720726e4059e994c73c`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2algebra_8h_1a79483ac49abf076375a12d780eb9509e`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2algebra_8h_1a325b218e5e16b39e48bd2b7ca677f6c5`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2algebra_8h_1a856500ff84c63c2685147ae101bade23`
+
+- :ref:`exhale_function_fem_2gauss_2array_2oarr_2algebra_8h_1aaa126c6c90e81aa12e01a93207d5c2ee`
+

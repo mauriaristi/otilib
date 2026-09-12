@@ -1,0 +1,14 @@
+.. _exhale_function_complex_2array_2functions_8h_1a0885bc0b2fa9a4cf33ef2fd359d50bdc:
+
+Function carr_log_to
+====================
+
+- Defined in :ref:`file_oti_complex_array_functions.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: carr_log_to(carr_t *, carr_t *)
+   :project: OTIlib

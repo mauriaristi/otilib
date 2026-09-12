@@ -1,0 +1,54 @@
+
+.. _file_oti_real_array_utils.h:
+
+File real/array/utils.h
+=======================
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``oti/real/array/utils.h``)
+---------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file_oti_real_array_utils.h.rst
+
+
+
+
+
+
+
+Included By
+-----------
+
+
+- :ref:`file_oti_real.h`
+
+
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_real_2array_2utils_8h_1a1f17484d75da8f46193da8e668a765c2`
+
+- :ref:`exhale_function_real_2array_2utils_8h_1aecd9f9fd7a8c8367ba216da5f2c0e89c`
+
+- :ref:`exhale_function_real_2array_2utils_8h_1a789d08876733ef3d141f283ad86ab0dc`
+
+- :ref:`exhale_function_real_2array_2utils_8h_1a447c729bcd91d90c4fe9262b88a01814`
+
+- :ref:`exhale_function_real_2array_2utils_8h_1a94de9e1655ffffde60e85e2d7d1ddac7`
+
+- :ref:`exhale_function_real_2array_2utils_8h_1ac02d3c74d8db0ae6839515a7f17be7d6`
+
+- :ref:`exhale_function_real_2array_2utils_8h_1a1137a45164bf28477c0d75ad2c6d89f6`
+
+- :ref:`exhale_function_real_2array_2utils_8h_1a8e3359272229f707e0f67d196e60ebdd`
+

@@ -1,0 +1,154 @@
+
+.. _program_listing_file_oti_sparse_scalar_base.h:
+
+Program Listing for File sparse/scalar/base.h
+=============================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file_oti_sparse_scalar_base.h>` (``oti/sparse/scalar/base.h``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   #ifndef OTI_SPARSE_SCALAR_BASE_H
+   #define OTI_SPARSE_SCALAR_BASE_H
+   
+   
+   /**************************************************************************************************/
+   sotinum_t soti_taylor_integrate(    coeff_t* deltas, sotinum_t* num,                 dhelpl_t dhl);
+   void      soti_taylor_integrate_to( coeff_t* deltas, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   sotinum_t soti_get_order_im(    ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+   void      soti_get_order_im_to( ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   sotinum_t soti_truncate_im(    imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+   void      soti_truncate_im_to( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   sotinum_t soti_truncate_order(    ord_t ord, sotinum_t* num,                 dhelpl_t dhl );
+   void      soti_truncate_order_to( ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   sotinum_t soti_extract_deriv(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
+   void      soti_extract_deriv_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   sotinum_t soti_extract_im(   imdir_t idx, ord_t ord, sotinum_t* num,                 dhelpl_t dhl);
+   void      soti_extract_im_to(imdir_t idx, ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void*     soti_read_from_mem_to( void* mem,       sotinum_t* dst, dhelpl_t dhl);
+   void      soti_save_to_mem(      sotinum_t* num,  void* mem,      dhelpl_t dhl);
+   uint64_t  soti_get_memsize_save( sotinum_t* num,                  dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void* soti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_t flag, sotinum_t* res);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   size_t soti_memory_size( const ndir_t* p_nnz, ord_t order);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   uint8_t soti_requiresrealloc(sotinum_t* src, sotinum_t* dest);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   sotinum_t soti_init(void);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/
+   void soti_set_o( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
+   void soti_set_r(    coeff_t src, sotinum_t* dest, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/
+   void soti_set_trunc( sotinum_t* src, ord_t ord, sotinum_t* dest, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void soti_set_deriv_r(   coeff_t  coef, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+   void soti_set_deriv_o( sotinum_t* coef, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   coeff_t   soti_get_deriv(    imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+   sotinum_t soti_get_deriv_o(  imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+   void      soti_get_deriv_to( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   sotinum_t soti_get_tmp( ndir_t ntmp, ord_t order, dhelpl_t dhl);
+   sotinum_t soti_get_rtmp(ndir_t ntmp, ord_t order, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   
+   /**************************************************************************************************/ 
+   void soti_insert_item(ndir_t pos, coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void soti_set_item(   coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+   void soti_set_im_r(   coeff_t val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+   void soti_set_im_o(sotinum_t* val, imdir_t idx, ord_t order, sotinum_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   coeff_t soti_get_item(    imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+   coeff_t soti_get_im(      imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+   sotinum_t soti_get_im_o(  imdir_t idx, ord_t order, sotinum_t* num,                 dhelpl_t dhl);
+   void    soti_get_im_to_o( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
+   void    soti_get_im_to_r( imdir_t idx, ord_t order, sotinum_t* num,   coeff_t* res, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   sotinum_t soti_copy(             sotinum_t* num,                  dhelpl_t dhl);
+   void      soti_copy_to(          sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
+   void      soti_copy_nomemchk_to( sotinum_t* src, sotinum_t* dest, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   
+   /**************************************************************************************************/ 
+   void soti_print(sotinum_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void soti_free(sotinum_t* num);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   sotinum_t soti_createReal_bases(  coeff_t num, bases_t nbases, ord_t order, dhelpl_t dhl);
+   sotinum_t soti_createEmpty_bases(              bases_t nbases, ord_t order, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   sotinum_t soti_createReal(coeff_t num, ord_t order, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   sotinum_t soti_createEmpty( ord_t order, dhelpl_t dhl); 
+   sotinum_t soti_createEmpty_like( sotinum_t* other, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   sotinum_t soti_createEmpty_predef(ndir_t* p_nnz, ord_t order, dhelpl_t dhl); 
+   // ----------------------------------------------------------------------------------------------------
+   
+   /**************************************************************************************************/ 
+   void soti_reset_orders(ord_t ord_start, ord_t ord_end, sotinum_t* num, dhelpl_t dhl);
+   // ----------------------------------------------------------------------------------------------------
+   
+   #endif

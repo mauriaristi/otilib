@@ -1,0 +1,14 @@
+.. _exhale_function_fem_2element_2soti_2base_8h_1a2a3b5d0944db477db8bfdc0c8ffabf06:
+
+Function elemso_clear_flag_start
+================================
+
+- Defined in :ref:`file_oti_fem_element_soti_base.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: elemso_clear_flag_start(elemso_t *)
+   :project: OTIlib

@@ -185,6 +185,71 @@ is not copied into the recipe's work directory.
   consistency checks. `tests/python` and `VERSION` reach that phase through the recipe's
   `source_files:`; the build tree no longer exists there.
 
+## Generating the Documentation
+
+Step-by-step instructions live in `doc/README.md`; this section adds the gotchas found in
+practice that aren't spelled out there.
+
+- **Folder layout:** `doc/Makefile` hardcodes `BUILDDIR = ../../otilib-gh-pages/` (relative to
+  `doc/`), i.e. a sibling of this repo's own checkout, not a subfolder inside it. Before building,
+  clone the `gh-pages` branch there:
+  ```bash
+  cd .. && git clone -b gh-pages https://github.com/mauriaristi/otilib otilib-gh-pages
+  ```
+- **Compiled library required first:** `doc/source/pyoti.rst` uses autodoc, which imports the
+  real `pyoti` package. `build/` must already be compiled and linked (`conda develop .` from
+  `build/`, see Build Workflow above) before running `make html`, or the module page fails to
+  generate.
+- **`pandoc` is not in `doc/requirements.txt`:** nbsphinx needs it too. A `pandoc` on `PATH`
+  outside the `pyoti` env (e.g. in `base`) is not picked up by `conda run -n pyoti`; install it
+  into the env explicitly:
+  ```bash
+  conda install -n pyoti -c conda-forge pandoc --solver rattler
+  ```
+- **Tutorial notebooks are not tracked under `doc/source/notebooks/`:** copy them in before
+  building:
+  ```bash
+  cp examples/notebooks/*.ipynb doc/source/notebooks/
+  ```
+- **`doxygen` is not in `environment.yml` or `doc/requirements.txt`:** it's a system tool invoked
+  as a subprocess by the `breathe`/`exhale` Sphinx extensions, not a Python package. Install it
+  into the `pyoti` env explicitly:
+  ```bash
+  conda install -n pyoti -c conda-forge doxygen --solver rattler
+  ```
+- **C API pages are generated automatically during `make html`, not as a separate step:**
+  `doc/source/Doxyfile` (`exhaleUseDoxyfile = True`) is invoked by Exhale directly from the Sphinx
+  build; it walks `include/oti/` (excluding `include/oti/static/` — see the note in
+  `doc/source/capi.rst`) and Breathe/Exhale turn the resulting Doxygen XML into a full page tree
+  with zero hand-maintained per-file RST. Output lands in `doc/source/doxyoutput/` (raw Doxygen
+  XML) and `doc/source/capi_generated/` (Exhale's generated RST), both gitignored and regenerated
+  fresh on every build. Exhale does not purge `capi_generated/` before regenerating, so a renamed
+  or removed header can leave a stale page behind; if the C API section looks out of date after
+  such a change, `rm -rf doc/source/doxyoutput doc/source/capi_generated` before rebuilding.
+- **Build:**
+  ```bash
+  cd doc && conda run -n pyoti make html
+  ```
+  Output lands in `../../otilib-gh-pages/html/` (the sibling clone), not a local `_build/`.
+- **Publishing the built site (`doc/README.md` step 4):** move `html/*` into the
+  `otilib-gh-pages` clone's root, replacing the old rendered pages, keeping only `.git`,
+  `Makefile` and `README.md` from the previous state — then restore `.nojekyll` (an empty file
+  GitHub Pages needs so `_static/`, `_sources/` and `_modules/` aren't swallowed by Jekyll; it
+  does not survive a naive "keep only html/Makefile/README.md" cleanup because it lived at the
+  clone's root, not inside `html/`):
+  ```bash
+  cd ../../otilib-gh-pages
+  find . -maxdepth 1 ! -name . ! -name html ! -name Makefile ! -name README.md ! -name .git -exec rm -rf {} +
+  cp -a html/. . && rm -rf html
+  touch .nojekyll
+  ```
+  Do this as a single `cp -a` / `rm -rf`, not an incremental per-file `mv` loop: if any item at
+  the destination already exists (e.g. a stale same-named directory left over from a previous
+  build), `mv` silently fails on just that item and leaves old and new content mixed with no
+  obvious error.
+- Review the generated site locally (open `otilib-gh-pages/index.html` in a browser) before
+  committing and pushing the `gh-pages` branch.
+
 ## Python and cython coding Standards & Style Guide
 
 Whenever writing, generating, or modifying Python code, strictly adhere to the following formatting and 

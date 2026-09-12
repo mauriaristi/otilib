@@ -56,6 +56,10 @@ breathe_projects = {
 	"OTIlib": "./doxyoutput/xml"
 }
 breathe_default_project = "OTIlib"
+# include/oti is C, not C++: without this, Breathe renders declarations with Sphinx's stricter
+# C++ domain grammar, which fails to parse plain-C constructs (function-pointer typedefs,
+# __attribute__ annotations, etc.) found throughout these headers.
+breathe_domain_by_extension = {"h": "c", "c": "c"}
 
 exhale_args = {
 	"containmentFolder":     "./capi_generated",

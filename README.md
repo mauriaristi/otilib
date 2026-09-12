@@ -33,19 +33,25 @@ Most operations implemented so far are serial, and some support OpenMP paralleli
 
 ## Current Programming languages: 
 * **C** (C99) for core routines.
-* **Python** (Version 3 or newer. This library requires [Cython](http://cython.org) >= 3.0)
+* **Python** (Version 3.10 or newer. This library requires [Cython](http://cython.org) >= 3.0)
 * **Fortran** (F95 or newer, static dense implementation)
 
 ## Quick Installation instructions:
 
+### Conda
+The easiest way to get ```otilib``` installed in your system is using conda. Make sure you have a conda installed (see [Anaconda](https://www.anaconda.com/download).)
 
-For more detailed instructions, see [installation](https://mauriaristi.github.io/otilib/installation)
+``` bash
+conda install -c mauriaristi pyoti
+```
+
+### Compilation
 
 This library has been tested on:
 
-- **Unix** platforms.
-- **macOS** (Tested on Sonoma 14.5)
-- **Windows** (Only working under WSL)
+- **Unix** platforms (Ubuntu, CentOS, Rocky Linux).
+- **macOS** (Tested on Tahoe 26.*)
+- **Windows** (Works only under Windows Subsystem for Linux - [WSL](https://learn.microsoft.com/en-us/windows/wsl/) ) 
 
 
 1. Create the conda environment with dependencies from the ```environment.yml``` file:
@@ -77,6 +83,9 @@ make gendata
 conda activate pyoti
 conda develop .
 ```
+
+For more detailed instructions, see [installation](https://mauriaristi.github.io/otilib/installation)
+
 
 ### Requirements
 

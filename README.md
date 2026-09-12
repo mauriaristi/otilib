@@ -39,24 +39,29 @@ Most operations implemented so far are serial, and some support OpenMP paralleli
 ## Quick Installation instructions:
 
 ### Conda
-The easiest way to get ```otilib``` installed in your system is using conda. Make sure you have a conda installed (see [Anaconda](https://www.anaconda.com/download).)
+The easiest way to get ```otilib``` installed in your system is using conda on a separate environment that includes all requirements. Make sure you have a conda installed (see [Anaconda](https://www.anaconda.com/download).)
 
 ``` bash
-conda install -c mauriaristi pyoti
+conda create -n pyoti-env -c conda-forge mauriaristi::pyoti --solver rattler
+```
+- Installs dependencies from conda-forge
+- Installs the library from conda.
+- Utilizes the ```rattler``` solver as the current defaul solver freezes during environment solve (using conda 26.7.2).
+
+After installation, you can activate your conda environment so that otilib is accessible. You can use it via Python using ```pyoti```.
+
+``` bash
+conda activate pyoti-env
 ```
 
-### Compilation
+## Compilation
 
-This library has been tested on:
-
-- **Unix** platforms (Ubuntu, CentOS, Rocky Linux).
-- **macOS** (Tested on Tahoe 26.*)
-- **Windows** (Works only under Windows Subsystem for Linux - [WSL](https://learn.microsoft.com/en-us/windows/wsl/) ) 
+In order to compile this library, the recommended approach is to use a conda environment setup with the ```environment.yml``` file.
 
 
 1. Create the conda environment with dependencies from the ```environment.yml``` file:
 ``` bash
-conda env create -f environment.yml
+conda env create -f environment.yml --solver rattler
 conda activate pyoti
 ```
 
@@ -86,6 +91,11 @@ conda develop .
 
 For more detailed instructions, see [installation](https://mauriaristi.github.io/otilib/installation)
 
+This library has been tested on:
+
+- **Unix** platforms (Ubuntu, CentOS, Rocky Linux).
+- **macOS** (Tested on Tahoe 26.*)
+- **Windows** (Works only under Windows Subsystem for Linux - [WSL](https://learn.microsoft.com/en-us/windows/wsl/) ) 
 
 ### Requirements
 

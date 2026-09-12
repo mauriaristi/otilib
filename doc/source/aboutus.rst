@@ -5,27 +5,25 @@ The OTI numbers, and its corresponding computational implementation, were initia
 
 The focus has always been to provide support for linear-algebra applications, like the Finite Element analses, with a robust an efficient implementation of an algebra that allows arbitrary order multivariable derivatives.
 
-The development of the library (otilib and pyoti), began in 2016 and has been actively developed by Dr. Aristizabal since then. 
-In 2024, Samuel Roberts (PhD Student, UTSA) helped with started contributing to the development of the library, specially integrating Fotran and C versions of the static-dense implementation of the library.
-
+The development of the library (otilib and pyoti), began in 2016 and has been actively developed by Dr. Aristizabal since then. Minor contrubutions to the library were provided by students who worked together with Dr. Aristizabal before 2024.
 
 Contributors
 ============
 The following is a list of contributors for the development of the ``otilib/pyoti`` library.
 
-Mauricio Aristizabal, Ph.D.,
-Samuel Roberts,
-Jose-Leonel Hernandez-Estrada
+Mauricio Aristizabal, Ph.D.;
+Samuel Roberts (Ph.D. student, UT San Antonio);
+Jose-Leonel Hernandez-Estrada (Master student, Universidad EAFIT)
 
+
+Acknowledgements
+================
 
 Special thanks to the advisorship from:
 
 Dr. Manuel J. Garcia (Ph.D. sdvisor)
 Dr. Harry Millwater (Postdoc advisor)
 
-
-Acknowledgements
-================
 
 The development of the OTIlib and pyoti libraries has been possible thanks to the support from:
 

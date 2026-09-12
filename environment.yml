@@ -2,7 +2,7 @@ name: pyoti
 channels:
   - conda-forge
   - anaconda
-  - default
+  - defaults
 dependencies:
   - python=3.13.*
   - numpy>=2.1,<3

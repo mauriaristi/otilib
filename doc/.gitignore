@@ -1,3 +1,5 @@
 *~
 latex/
 .DS_Store
+source/doxyoutput/
+source/capi_generated/

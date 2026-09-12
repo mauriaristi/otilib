@@ -41,6 +41,9 @@ requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('fortran') }}
+    # The C++ test suite (tests/cpp) is compiled here too; without this it silently falls back to
+    # whatever system compiler the runner happens to have.
+    - {{ compiler('cxx') }}
     - make
     - cmake
     - llvm-openmp  # [osx]
@@ -51,6 +54,11 @@ requirements:
     - numpy >=2.1,<3
     - cython >=3.0
     - pip
+    # tmp_src/setup.py (generated from src/python/pyoti/cython/setup.py.in) does
+    # `from setuptools import setup, Extension`. conda-forge's python >=3.12 and pip no longer
+    # depend on setuptools, so it must be listed explicitly or the oticython target fails with
+    # "ModuleNotFoundError: No module named 'setuptools'".
+    - setuptools
     - llvm-openmp  # [osx]
 
   # What the installed package needs at import time.

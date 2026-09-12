@@ -24,7 +24,9 @@ header, the Fortran module, the Python package and the conda recipe. Use
   - `conda/meta.yaml`: `setuptools` added to the host requirements (conda-forge's Python 3.13 / pip
     no longer pull it in), and `{{ compiler('cxx') }}` added to the build requirements so the C++
     tests no longer fall back to the runner's system compiler. `environment.yml` gained
-    `setuptools` to match.
+    `setuptools` to match. Both lines were later lost while editing the recipe's `about` section,
+    which reintroduced `ModuleNotFoundError: No module named 'setuptools'` in the `oticython`
+    step; they are restored, now with comments explaining why they are required.
   - Workflow: the Intel macOS job moved from the retired `macos-13` runner to `macos-15-intel`, and
     `setup-miniconda` no longer adds the `defaults` channel implicitly.
 - `-Wstrict-prototypes` is now applied to C sources only instead of every Fortran file, and the

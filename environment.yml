@@ -7,6 +7,10 @@ dependencies:
   - python=3.13.*
   - numpy>=2.1,<3
   - scipy
+  # LAPACK / BLAS for the C core (found by CMake's FindLAPACK). conda-forge's stubs are switchable
+  # between OpenBLAS, MKL, Accelerate and netlib with `blas=*=<impl>`.
+  - libblas
+  - liblapack
   - cython>=3.0
   - pandas
   - make

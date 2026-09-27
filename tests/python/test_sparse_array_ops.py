@@ -8,8 +8,9 @@ too, and every derivative d^(a+b) / dx^a dy^b with ``a + b <= ORDER`` is compare
 Operations that only need to agree with the (already verified) scalar path are compared entry by
 entry against the scalar functions instead.
 
-Invalid shapes must raise ``ValueError`` (the C core would call ``exit()``). Known library bugs
-still open (``inv`` / ``det`` for n >= 4) are documented as ``xfail(strict=True)`` tests.
+Invalid shapes must raise ``ValueError`` (the C core would call ``exit()``). The one known
+limitation still open (``det`` of an array larger than 3x3 whose real part is singular) is a strict
+``xfail`` test.
 """
 
 import functools
@@ -18,6 +19,7 @@ import operator
 
 import numpy as np
 import pytest
+import scipy.linalg
 import sympy
 import pyoti.real as real
 import pyoti.sparse as oti
@@ -29,6 +31,10 @@ pytestmark = pytest.mark.filterwarnings("ignore:bitcount function is deprecated"
 ORDER = 4
 REL_TOL = 1e-9
 ABS_TOL = 1e-10
+# Product residuals (e.g. K inv(K) - I) are compared, per direction, with RES_TOL times the scale of
+# the terms that cancel there: 4th derivatives of an inverse reach 1e6, so a fixed absolute tolerance
+# does not fit them.
+RES_TOL = 1e-14
 
 # Constant real operand used in the real-array operator tests.
 CONST = 1.7
@@ -79,6 +85,13 @@ MATRICES = {
         [[0.5, 0.0, 0.2], [0.0, 0.3, 0.0]],
         [[0.0, -0.4, 0.0], [0.6, 0.0, -0.2]],
         [[0.1, 0.0, 0.0], [0.0, 0.0, 0.2]],
+    ),
+    # Zero leading real entry: the LU path (n > 3) must pivot.
+    "M4": (
+        [[0.0, 2.0, 1.0, 0.5], [1.5, 1.0, 0.3, 2.0], [0.4, 0.6, 3.0, 1.0], [2.0, 0.1, 0.8, 1.2]],
+        [[0.0, 0.5, 0.0, 0.0], [0.3, 0.0, 0.0, 1.0], [0.0, 0.0, 0.2, 0.0], [0.0, 0.4, 0.0, 0.0]],
+        [[1.0, 0.0, 0.0, 0.3], [0.0, 0.0, 0.7, 0.0], [0.5, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.6]],
+        [[0.2, 0.0, 0.1, 0.0], [0.0, 0.3, 0.0, 0.0], [0.0, 0.0, 0.0, 0.4], [0.1, 0.0, 0.0, 0.0]],
     ),
     "b2": (
         [[1.0], [2.0]],
@@ -539,6 +552,106 @@ def _assert_oti_equal(result, expected, label):
 # end function
 
 
+def _max_coeff(obj, a, b):
+    """
+    Largest absolute value of the real part (``a = b = 0``) or of d^(a+b) / dx^a dy^b of an OTI
+    object.
+
+    Parameters
+    ----------
+    obj : matso or sotinum
+        OTI array or scalar.
+    a : int
+        Derivative order along x.
+    b : int
+        Derivative order along y.
+
+    Returns
+    -------
+    float
+        Maximum over every entry.
+
+    Examples
+    --------
+    >>> _max_coeff(oti.array([[1.0, -3.0]]), 0, 0)
+    3.0
+    """
+    return float(np.max(np.abs(_oti_value(obj, a, b))))
+
+# end function
+
+
+def _product_scale(lhs, rhs, a, b):
+    """
+    Magnitude of the terms of d^(a+b) (lhs rhs) / dx^a dy^b, the scale of its rounding error.
+
+    By the Leibniz rule the derivative is the sum over a' <= a, b' <= b of
+    C(a, a') C(b, b') lhs_(a-a', b-b') rhs_(a', b'); each term is bounded by the largest entries
+    times the inner dimension.
+
+    Parameters
+    ----------
+    lhs : matso
+        Left factor.
+    rhs : matso
+        Right factor.
+    a : int
+        Derivative order along x.
+    b : int
+        Derivative order along y.
+
+    Returns
+    -------
+    float
+        ``ncols(lhs) * sum C(a, a') C(b, b') max|lhs_(a-a', b-b')| max|rhs_(a', b')|``.
+
+    Examples
+    --------
+    >>> _product_scale(oti.eye(2), oti.eye(2), 0, 0)
+    2.0
+    """
+    return lhs.shape[1] * sum(
+        math.comb(a, ap) * math.comb(b, bp) * _max_coeff(lhs, a - ap, b - bp) * _max_coeff(rhs, ap, bp)
+        for ap in range(a + 1) for bp in range(b + 1)
+    )
+
+# end function
+
+
+def _assert_product_residual(lhs, rhs, expected, label):
+    """
+    Asserts ``lhs rhs = expected`` in every direction, each within ``RES_TOL`` times the scale of
+    the terms that cancel in that direction (``_product_scale``).
+
+    Parameters
+    ----------
+    lhs : matso
+        Left factor.
+    rhs : matso
+        Right factor.
+    expected : matso
+        Expected product.
+    label : str
+        Name used in assertion messages.
+
+    Examples
+    --------
+    >>> _assert_product_residual(oti.eye(2), oti.eye(2), oti.eye(2), "I I")
+    """
+    residual = oti.dot(lhs, rhs) - expected
+
+    for a, b in _directions():
+
+        np.testing.assert_array_less(
+            np.abs(_oti_value(residual, a, b)), RES_TOL * max(1.0, _product_scale(lhs, rhs, a, b)),
+            err_msg=f"{label}: d^{a + b} / dx^{a} dy^{b}",
+        )
+
+    # end for
+
+# end function
+
+
 def _entries(arr):
     """
     Returns the entries of an OTI array as an object array of ``sotinum``.
@@ -931,6 +1044,11 @@ LINALG = [
     ("det_2x2", lambda o: oti.det(o["A"]), lambda o: o["A"].det()),
     ("det_3x3", lambda o: oti.det(o["M3"]), lambda o: o["M3"].det()),
     ("det_out", lambda o: _with_out(oti.det, None)(o["M3"]), lambda o: o["M3"].det()),
+    # Berkowitz is division-free: the default (Bareiss) divides by the symbolic pivot M4[0, 0],
+    # which vanishes at (0, 0), and evaluates to NaN there.
+    ("det_4x4", lambda o: oti.det(o["M4"]), lambda o: o["M4"].det(method="berkowitz")),
+    ("det_4x4_out", lambda o: _with_out(oti.det, None)(o["M4"]),
+     lambda o: o["M4"].det(method="berkowitz")),
     ("norm_default", lambda o: oti.norm(o["A"]), lambda o: _sym_pnorm(o["A"], 2)),
     ("norm_p1", lambda o: oti.norm(o["A"], 1.0), lambda o: _sym_pnorm(o["A"], 1)),
     ("norm_p3", lambda o: oti.norm(o["A"], 3.0), lambda o: _sym_pnorm(o["A"], 3)),
@@ -1757,6 +1875,11 @@ def test_moving_average(size):
 # Solves and inverses beyond the sympy table.
 # ------------------------------------------------------------------------------------------------
 
+# Real 4x4 matrix (the n >= 4 path used to fail on it: bugs C and G).
+DATA_4X4 = np.array([[4.0, 1.0, 0.0, 0.5], [1.0, 3.0, 1.0, 0.0], [0.0, 1.0, 2.0, 0.3],
+                     [0.5, 0.2, 0.3, 5.0]])
+
+
 @pytest.mark.parametrize("use_out", [False, True], ids=["alloc", "out"])
 def test_solve_multiple_rhs(use_out):
     """
@@ -1816,6 +1939,561 @@ def test_inv_block_out():
 
     assert ret is None
     _assert_oti_equal(out, oti.inv_block(arr), "inv_block out")
+
+# end function
+
+
+def _oti_square(n):
+    """
+    Builds a nonsymmetric n x n OTI array with every derivative up to ``ORDER`` populated and a zero
+    leading real entry (so the LU path has to pivot).
+
+    Parameters
+    ----------
+    n : int
+        Array size.
+
+    Returns
+    -------
+    matso
+        ``A0 + x A1 + y A2 + q(x, y) A3`` with deterministic, well-conditioned ``A0``.
+
+    Examples
+    --------
+    >>> float(_oti_square(4).real[0, 0])
+    0.0
+    """
+    i, j = np.indices((n, n))
+    a0 = np.sin(1.0 + 3.0 * i + 7.0 * j) + 3.0 * np.eye(n)
+    a0[0, 0] = 0.0
+    x = oti.e(1, order=ORDER)
+    y = oti.e(2, order=ORDER)
+    q = x * y + x**3 + (x * y)**2 + y**4
+
+    return (oti.array(a0) + x * oti.array(np.cos(2.0 * i + j))
+            + y * oti.array(0.5 * np.sin(i + 5.0 * j)) + q * oti.array(0.25 * np.cos(3.0 * i - j)))
+
+# end function
+
+
+def _oti_rhs(n, ncols):
+    """
+    Builds an n x ncols OTI right-hand side with derivatives in both bases.
+
+    Parameters
+    ----------
+    n : int
+        Number of rows.
+    ncols : int
+        Number of right-hand sides.
+
+    Returns
+    -------
+    matso
+        ``B0 + y B1 + x^2 B2``.
+
+    Examples
+    --------
+    >>> _oti_rhs(3, 2).shape
+    (3, 2)
+    """
+    i, j = np.indices((n, ncols))
+    x = oti.e(1, order=ORDER)
+    y = oti.e(2, order=ORDER)
+
+    return (oti.array(1.0 + i + 0.5 * j) + y * oti.array(np.cos(i - j))
+            + x**2 * oti.array(0.3 * np.sin(i + 2.0 * j)))
+
+# end function
+
+
+def _lu_parts(lu, piv):
+    """
+    Splits the packed output of ``lu_factor`` into L, U and the row permutation.
+
+    Parameters
+    ----------
+    lu : matso
+        Packed factors (strictly lower part L, upper part with the diagonal U).
+    piv : numpy.ndarray
+        0-based LAPACK row interchanges.
+
+    Returns
+    -------
+    tuple
+        ``(L, U, perm)``: unit lower and upper triangular ``matso`` arrays, and ``perm`` such that
+        row k of ``P^T A`` is row ``perm[k]`` of A.
+
+    Examples
+    --------
+    >>> _lu_parts(oti.eye(2), np.array([1, 1]))[2]
+    array([1, 0])
+    """
+    n = lu.shape[0]
+    lmat = oti.eye(n)
+    umat = oti.zeros((n, n))
+
+    for i in range(n):
+
+        for j in range(n):
+
+            if i > j:
+
+                lmat[i, j] = lu[i, j]
+
+            else:
+
+                umat[i, j] = lu[i, j]
+
+            # end if
+
+        # end for
+
+    # end for
+
+    perm = np.arange(n)
+
+    for k, p in enumerate(piv):
+
+        perm[[k, p]] = perm[[p, k]]
+
+    # end for
+
+    return lmat, umat, perm
+
+# end function
+
+
+def _permute_rows(arr, perm):
+    """
+    Returns ``arr`` with its rows reordered: row k of the result is row ``perm[k]`` of ``arr``.
+
+    Parameters
+    ----------
+    arr : matso
+        OTI array.
+    perm : numpy.ndarray
+        Row order.
+
+    Returns
+    -------
+    matso
+        ``P^T arr`` for the permutation matrix ``P`` of ``perm``.
+
+    Examples
+    --------
+    >>> _permute_rows(oti.array([[1.0], [2.0]]), np.array([1, 0])).real
+    array([[2.],
+           [1.]])
+    """
+    n = len(perm)
+    pmat = np.zeros((n, n))
+    pmat[np.arange(n), perm] = 1.0
+
+    return oti.dot(oti.array(pmat), arr)
+
+# end function
+
+
+def test_inv_4x4():
+    """
+    Test inversion of a 4x4 real-valued OTI array against NumPy (formerly bug C: all zeros).
+    """
+    res = oti.inv(oti.array(DATA_4X4)).real
+
+    np.testing.assert_allclose(res, np.linalg.inv(DATA_4X4), rtol=REL_TOL)
+
+# end function
+
+
+def test_det_4x4():
+    """
+    Test the determinant of a 4x4 real-valued OTI array against NumPy (formerly bug G: generalized
+    Sarrus rule).
+    """
+    res = oti.det(oti.array(DATA_4X4)).real
+
+    assert res == pytest.approx(np.linalg.det(DATA_4X4), rel=REL_TOL)
+
+# end function
+
+
+@pytest.mark.parametrize("n", [3, 4, 5, 8])
+@pytest.mark.parametrize("use_out", [False, True], ids=["alloc", "out"])
+def test_inv_identity(n, use_out):
+    """
+    Test inv() on both sides of the closed-form limit (n <= 3) through ``K inv(K) = I`` in every
+    direction, with pivoting (zero leading real entry).
+
+    Parameters
+    ----------
+    n : int
+        Array size.
+    use_out : bool
+        Whether to invert into a stale ``out=`` holder.
+    """
+    kmat = _oti_square(n)
+    res = _with_out(oti.inv, (n, n))(kmat) if use_out else oti.inv(kmat)
+
+    np.testing.assert_allclose(res.real, np.linalg.inv(kmat.real), rtol=REL_TOL)
+    _assert_product_residual(kmat, res, oti.eye(n), f"K inv(K), n={n}")
+
+# end function
+
+
+@pytest.mark.parametrize("n", [3, 4, 6])
+def test_det_matches_lu_diagonal(n):
+    """
+    Test det() against the product of the diagonal of U from lu_factor and the pivot sign, on both
+    sides of the closed-form limit.
+
+    Parameters
+    ----------
+    n : int
+        Array size.
+    """
+    kmat = _oti_square(n)
+    lu, piv = oti.lu_factor(kmat)
+    ref = oti.number(-1.0 if np.count_nonzero(piv != np.arange(n)) % 2 else 1.0)
+
+    for k in range(n):
+
+        ref = ref * lu[k, k]
+
+    # end for
+
+    np.testing.assert_allclose(oti.det(kmat).real, np.linalg.det(kmat.real), rtol=REL_TOL)
+    _assert_oti_equal(oti.det(kmat), ref, f"det, n={n}")
+
+# end function
+
+
+def test_solve_5x5_matches_inv_block():
+    """
+    Test the C block solver against the Python block inverse on a 5x5 array at 4th order.
+    """
+    kmat = _oti_square(5)
+    rhs = _oti_rhs(5, 2)
+
+    _assert_oti_equal(oti.solve(kmat, rhs), oti.dot(oti.inv_block(kmat), rhs), "solve 5x5")
+
+# end function
+
+
+def test_solve_rhs_is_out():
+    """
+    Test solve() writing its result into the right-hand-side array itself.
+    """
+    kmat = _oti_square(4)
+    rhs = _oti_rhs(4, 2)
+    ref = oti.solve(kmat, rhs)
+    ret = oti.solve(kmat, rhs, out=rhs)
+
+    assert ret is None
+    _assert_oti_equal(rhs, ref, "solve out=b")
+
+# end function
+
+
+@pytest.mark.parametrize("n", [2, 4, 6])
+def test_lu_factor_real_part_matches_scipy(n):
+    """
+    Test that the real part and the pivots of lu_factor equal scipy.linalg.lu_factor.
+
+    Parameters
+    ----------
+    n : int
+        Array size.
+    """
+    kmat = _oti_square(n)
+    lu, piv = oti.lu_factor(kmat)
+    lu_ref, piv_ref = scipy.linalg.lu_factor(kmat.real)
+
+    assert piv.dtype == np.int32
+    np.testing.assert_array_equal(piv, piv_ref)
+    np.testing.assert_allclose(lu.real, lu_ref, rtol=REL_TOL, atol=ABS_TOL)
+
+# end function
+
+
+@pytest.mark.parametrize("n", [2, 4, 6])
+def test_lu_factor_reconstruction(n):
+    """
+    Test ``P^T A = L U`` in every direction for the OTI factors of lu_factor.
+
+    Parameters
+    ----------
+    n : int
+        Array size.
+    """
+    kmat = _oti_square(n)
+    lmat, umat, perm = _lu_parts(*oti.lu_factor(kmat))
+
+    _assert_oti_equal(oti.dot(lmat, umat), _permute_rows(kmat, perm), f"L U, n={n}")
+
+# end function
+
+
+def test_lu_factor_out():
+    """
+    Test the ``out=`` path of lu_factor, into a stale holder and into the input array itself.
+    """
+    kmat = _oti_square(5)
+    lu_ref, piv_ref = oti.lu_factor(kmat)
+
+    out = _stale_holder((5, 5))
+    lu, piv = oti.lu_factor(kmat, out=out)
+    assert lu is out
+    np.testing.assert_array_equal(piv, piv_ref)
+    _assert_oti_equal(out, lu_ref, "lu_factor out")
+
+    lu, piv = oti.lu_factor(kmat, out=kmat)
+    assert lu is kmat
+    np.testing.assert_array_equal(piv, piv_ref)
+    _assert_oti_equal(kmat, lu_ref, "lu_factor out=A")
+
+# end function
+
+
+@pytest.mark.parametrize("ncols", [1, 3])
+@pytest.mark.parametrize("use_out", [False, True], ids=["alloc", "out"])
+def test_lu_solve_matches_solve(ncols, use_out):
+    """
+    Test that lu_solve with the factors of lu_factor equals solve, for one and several right-hand
+    sides.
+
+    Parameters
+    ----------
+    ncols : int
+        Number of right-hand sides.
+    use_out : bool
+        Whether to solve into a stale ``out=`` holder.
+    """
+    kmat = _oti_square(5)
+    rhs = _oti_rhs(5, ncols)
+    lu_piv = oti.lu_factor(kmat)
+
+    if use_out:
+
+        res = _with_out(lambda b, out: oti.lu_solve(lu_piv, b, out=out), (5, ncols))(rhs)
+
+    else:
+
+        res = oti.lu_solve(lu_piv, rhs)
+
+    # end if
+
+    _assert_oti_equal(res, oti.solve(kmat, rhs), "lu_solve")
+    _assert_oti_equal(oti.dot(kmat, res) - rhs, _entries(oti.zeros((5, ncols))), "K u - b")
+
+# end function
+
+
+def test_lu_solve_accepts_scipy_style_pivots():
+    """
+    Test that lu_solve accepts pivots as a list or as another integer dtype.
+    """
+    kmat = _oti_square(4)
+    rhs = _oti_rhs(4, 1)
+    lu, piv = oti.lu_factor(kmat)
+    ref = oti.lu_solve((lu, piv), rhs)
+
+    _assert_oti_equal(oti.lu_solve((lu, piv.tolist()), rhs), ref, "list pivots")
+    _assert_oti_equal(oti.lu_solve((lu, piv.astype(np.int64)), rhs), ref, "int64 pivots")
+
+# end function
+
+
+def _fe_array(n, nip):
+    """
+    Builds an FE (Gauss) array whose integration points hold different OTI arrays.
+
+    Parameters
+    ----------
+    n : int
+        Array size.
+    nip : int
+        Number of integration points.
+
+    Returns
+    -------
+    matsofe
+        Integration point k holds ``(1 + 0.25 k) _oti_square(n)``.
+
+    Examples
+    --------
+    >>> _fe_array(2, 3).nip
+    3
+    """
+    base = _oti_square(n)
+    fe_arr = oti.zeros((n, n), nip=nip)
+
+    for k in range(nip):
+
+        for i in range(n):
+
+            for j in range(n):
+
+                fe_arr.set_ijk(base[i, j] * (1.0 + 0.25 * k), i, j, k)
+
+            # end for
+
+        # end for
+
+    # end for
+
+    return fe_arr
+
+# end function
+
+
+@pytest.mark.parametrize("n", [3, 4])
+def test_fe_inv_det(n):
+    """
+    Test inv and det of FE arrays (allocating and stale ``out=`` paths) against the ``matso``
+    result at every integration point.
+
+    Parameters
+    ----------
+    n : int
+        Array size.
+    """
+    nip = 3
+    fe_arr = _fe_array(n, nip)
+    stale = _stale_holder(None)
+
+    # Stale out= holders: every integration point starts with coefficients in every direction.
+    inv_out = oti.zeros((n, n), nip=nip) + _stale_holder((n, n))
+    det_out = oti.zero(nip=nip) + stale
+    assert oti.inv(fe_arr, out=inv_out) is None
+    assert oti.det(fe_arr, out=det_out) is None
+
+    for fe_inv, fe_det, kind in [(oti.inv(fe_arr), oti.det(fe_arr), "alloc"),
+                                 (inv_out, det_out, "out")]:
+
+        for k in range(nip):
+
+            _assert_oti_equal(fe_inv.get_ip(k), oti.inv(fe_arr.get_ip(k)), f"FE inv {kind}, ip {k}")
+            _assert_oti_equal(fe_det[k], oti.det(fe_arr.get_ip(k)), f"FE det {kind}, ip {k}")
+
+        # end for
+
+    # end for
+
+# end function
+
+
+# ------------------------------------------------------------------------------------------------
+# Singular real part.
+# ------------------------------------------------------------------------------------------------
+
+def _singular_diag(n):
+    """
+    Builds ``diag(x, 1, ..., 1)``: its real part is singular, its determinant is ``x``.
+
+    Parameters
+    ----------
+    n : int
+        Array size.
+
+    Returns
+    -------
+    matso
+        OTI array truncated at ``ORDER``.
+
+    Examples
+    --------
+    >>> _singular_diag(2).real
+    array([[0., 0.],
+           [0., 1.]])
+    """
+    arr = oti.eye(n)
+    arr[0, 0] = oti.e(1, order=ORDER)
+
+    return arr
+
+# end function
+
+
+@pytest.mark.parametrize(
+    "call",
+    [
+        pytest.param(lambda: oti.inv(_singular_diag(4)), id="inv_4x4"),
+        pytest.param(lambda: oti.inv(_singular_diag(3)), id="inv_3x3"),
+        pytest.param(lambda: oti.inv(_singular_diag(1)), id="inv_1x1"),
+        pytest.param(lambda: oti.matso.inv(_singular_diag(4)), id="matso_inv"),
+        pytest.param(lambda: oti.inv(oti.zeros((4, 4), nip=2) + _singular_diag(4)), id="fe_inv"),
+        pytest.param(lambda: oti.solve(_singular_diag(4), oti.ones((4, 1))), id="solve"),
+        pytest.param(lambda: oti.lu_factor(_singular_diag(4)), id="lu_factor"),
+        pytest.param(lambda: oti.lu_solve((oti.zeros((2, 2)), np.array([0, 1])), oti.ones((2, 1))),
+                     id="lu_solve_zero_pivot"),
+    ],
+)
+def test_singular_real_part_raises(call):
+    """
+    Test that inverses and solves of an array with a singular real part raise LinAlgError.
+
+    Parameters
+    ----------
+    call : callable
+        Call to evaluate.
+    """
+
+    with pytest.raises(np.linalg.LinAlgError, match="singular"):
+
+        call()
+
+    # end with
+
+# end function
+
+
+@pytest.mark.parametrize("n", [1, 2, 3])
+def test_det_singular_real_part_closed_form(n):
+    """
+    Test det of ``diag(x, 1, ..., 1)`` up to 3x3, where the closed forms need no division.
+
+    Parameters
+    ----------
+    n : int
+        Array size.
+    """
+    _assert_oti_equal(oti.det(_singular_diag(n)), oti.e(1, order=ORDER), f"det, n={n}")
+
+# end function
+
+
+# Rank-3 real part plus x I: the determinant is a nonzero polynomial in x without a constant term.
+RANK3_4X4 = [[1.0, 2.0, 3.0, 4.0], [2.0, 4.0, 6.0, 8.0], [1.0, 0.0, 1.0, 0.0], [0.0, 1.0, 0.0, 1.0]]
+
+
+@pytest.mark.xfail(raises=np.linalg.LinAlgError, strict=True,
+                   reason="Known limitation: det of an OTI array larger than 3x3 with a singular "
+                          "real part (bug-report.md)")
+@pytest.mark.parametrize("case", ["diag", "rank3"])
+def test_det_singular_real_part_4x4(case):
+    """
+    Test det of 4x4 arrays whose real part is singular but whose determinant has nonzero
+    derivatives.
+
+    Parameters
+    ----------
+    case : str
+        ``"diag"``: ``diag(x, 1, 1, 1)``, determinant ``x``. ``"rank3"``: ``R + x I`` with a rank-3
+        real part ``R``, compared with sympy.
+    """
+
+    if case == "diag":
+
+        _assert_oti_equal(oti.det(_singular_diag(4)), oti.e(1, order=ORDER), "det diag")
+
+    else:
+
+        arr = oti.array(RANK3_4X4) + oti.e(1, order=ORDER) * oti.eye(4)
+        ref = (sympy.Matrix(RANK3_4X4) + X_SYM * sympy.eye(4)).det()
+        _assert_matches_sympy(oti.det(arr), ref, "det rank3")
+
+    # end if
 
 # end function
 
@@ -1894,6 +2572,21 @@ def _shape_error_cases():
         ("inv_block", lambda: oti.inv_block(a23), "must be square"),
         ("solve_square", lambda: oti.solve(a23, oti.ones((2, 1))), "must be square"),
         ("solve_rhs", lambda: oti.solve(a22, oti.ones((3, 1))), "not aligned"),
+        ("lu_factor", lambda: oti.lu_factor(a23), "must be square"),
+        ("lu_solve_square", lambda: oti.lu_solve((a23, np.array([0, 1])), oti.ones((2, 1))),
+         "must be square"),
+        ("lu_solve_rhs", lambda: oti.lu_solve((a22, np.array([0, 1])), oti.ones((3, 1))),
+         "not aligned"),
+        ("lu_solve_piv_shape", lambda: oti.lu_solve((a22, np.array([0])), oti.ones((2, 1))),
+         "piv has shape"),
+        ("lu_solve_piv_range", lambda: oti.lu_solve((a22, np.array([0, 2])), oti.ones((2, 1))),
+         "out of range"),
+        ("lu_solve_piv_negative", lambda: oti.lu_solve((a22, np.array([-1, 1])), oti.ones((2, 1))),
+         "out of range"),
+        ("lu_solve_piv_float", lambda: oti.lu_solve((a22, np.array([0.0, 1.0])), oti.ones((2, 1))),
+         "must hold integers"),
+        ("lu_solve_piv_wrap", lambda: oti.lu_solve((a22, np.array([2**32, 1])), oti.ones((2, 1))),
+         "out of range"),
         ("interp1d_data", lambda: oti.interp1d(x, oti.ones((3, 1)), oti.ones((4, 1))),
          "different shapes"),
         # out= holders of the wrong shape or kind.
@@ -1905,6 +2598,9 @@ def _shape_error_cases():
         ("inv_block_out", lambda: oti.inv_block(a22, out=a33), "out has shape"),
         ("solve_out", lambda: oti.solve(a22, oti.ones((2, 1)), out=oti.zeros((3, 1))),
          "out has shape"),
+        ("lu_factor_out", lambda: oti.lu_factor(a22, out=a33), "out has shape"),
+        ("lu_solve_out", lambda: oti.lu_solve((a22, np.array([0, 1])), oti.ones((2, 1)),
+                                              out=oti.zeros((3, 1))), "out has shape"),
         ("det_out", lambda: oti.det(a22, out=a22), "scalar holder"),
         ("norm_out", lambda: oti.norm(a22, out=a22), "scalar holder"),
         ("dot_product_out", lambda: oti.dot_product(a22, a22, out=a22), "scalar holder"),
@@ -2013,100 +2709,6 @@ def test_array_fe_broadcasting():
 
     assert res.nip == 3
     assert oti.gauss_integrate(res, oti.zero(nip=3) + 0.5).shape == (2, 2)
-
-# end function
-
-
-# ------------------------------------------------------------------------------------------------
-# Known bugs (to be fixed with a new method). Strict xfails: they fail once the bug is fixed, so the
-# marker gets removed. Each counts as an expected failure only for the documented symptom.
-# ------------------------------------------------------------------------------------------------
-
-class KnownBug(Exception):
-    """
-    Raised when a test reproduces a documented library bug.
-
-    Tests marked ``xfail(raises=KnownBug, strict=True)`` only count as expected failures when the
-    documented symptom is observed; any other failure is reported as a real failure.
-
-    Examples
-    --------
-    >>> issubclass(KnownBug, Exception)
-    True
-    """
-
-# end class
-
-
-DATA_4X4 = np.array([[4.0, 1.0, 0.0, 0.5], [1.0, 3.0, 1.0, 0.0], [0.0, 1.0, 2.0, 0.3],
-                     [0.5, 0.2, 0.3, 5.0]])
-
-
-def _sarrus(data):
-    """
-    Evaluates the generalized Sarrus sum used by ``arrso_det_to`` for sizes >= 3 (bug G).
-
-    Parameters
-    ----------
-    data : numpy.ndarray
-        Square real matrix.
-
-    Returns
-    -------
-    float
-        Sum of the n wrapped diagonals minus the n wrapped anti-diagonals (the determinant only
-        for n <= 3).
-
-    Examples
-    --------
-    >>> _sarrus(np.eye(3))
-    1.0
-    """
-    n = data.shape[0]
-    diag = sum(np.prod([data[i, (i + j) % n] for i in range(n)]) for j in range(n))
-    anti = sum(np.prod([data[i, n - 1 - (i + j) % n] for i in range(n)]) for j in range(n))
-
-    return float(diag - anti)
-
-# end function
-
-
-@pytest.mark.xfail(raises=KnownBug, strict=True,
-                   reason="Bug C: inv() of arrays larger than 3x3 returns zeros")
-def test_inv_4x4():
-    """
-    Test inversion of a 4x4 real-valued OTI array.
-    """
-    res = oti.inv(oti.array(DATA_4X4)).real
-
-    if np.all(res == 0.0):
-
-        raise KnownBug("inv() returned an all-zero 4x4 array")
-
-    # end if
-
-    np.testing.assert_allclose(res, np.linalg.inv(DATA_4X4), rtol=REL_TOL)
-
-# end function
-
-
-@pytest.mark.xfail(raises=KnownBug, strict=True,
-                   reason="Bug G: det() applies the 3x3 Sarrus rule to every size >= 3")
-def test_det_4x4():
-    """
-    Test the determinant of a 4x4 real-valued OTI array.
-    """
-    res = oti.det(oti.array(DATA_4X4)).real
-
-    assert _sarrus(DATA_4X4) != pytest.approx(np.linalg.det(DATA_4X4)), "matrix cannot expose bug"
-
-    if res == pytest.approx(_sarrus(DATA_4X4), rel=REL_TOL):
-
-        raise KnownBug("det() returned the generalized Sarrus sum")
-
-    # end if
-
-    assert res == pytest.approx(np.linalg.det(DATA_4X4), rel=REL_TOL)
 
 # end function
 

@@ -318,20 +318,48 @@ void arrso_transpose_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 
 // 2.3. Inversion.
 // ****************************************************************************************************
-void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
+int arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 
     arrso_t tmpA1 = arrso_init();
+    arrso_t eye   = arrso_init();
+    arrso_t copy  = arrso_init();
     ord_t order;
-    sotinum_t tmp1, tmp2, tmp3, det;
+    int info;
+    sotinum_t tmp1, det;
 
     // Check dimensions.
     arrso_dimCheck_O_squareness( arr1, res);
 
+    if ( arr1->ncols == 0 ){
+        return 0;
+    }
+
+    // Larger matrices: block solver on the LAPACK LU factors of the real part, A X = I.
+    if ( arr1->ncols > _OTI_LINALG_CLOSED_FORM_MAX || arr1->ncols > 3 ){
+
+        eye  = arrso_eye_bases( arr1->nrows, 0, 0, dhl);
+        info = arrso_solve_to( arr1, &eye, res, dhl);
+        arrso_free(&eye);
+
+        return info;
+
+    }
+
+    // Closed forms (cofactors / determinant). Singular real part: no inverse.
+    if ( arr1->ncols == 1 && arr1->p_data[0].re == 0.0 ){
+        arrso_set_nan( res, dhl);
+        return 1;
+    }
+
+    // The closed forms read arr1 while writing res.
+    if ( arr1 == res ){
+        copy = arrso_copy( arr1, dhl);
+        arr1 = &copy;
+    }
+
     order = arrso_get_order( arr1 );
 
     tmp1 = soti_get_tmp( 5, order, dhl);
-    tmp2 = soti_get_tmp( 6, order, dhl);
-    tmp3 = soti_get_tmp( 7, order, dhl);
     det  = soti_get_tmp( 8, order, dhl);
 
     if(arr1->ncols == 1){
@@ -341,6 +369,12 @@ void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
     } else if (arr1->ncols == 2){
 
         arrso_det_to( arr1, &det, dhl); // Get determinant.
+
+        if ( det.re == 0.0 ){
+            arrso_free(&copy);
+            arrso_set_nan( res, dhl);
+            return 1;
+        }
 
         // res->p_data[0] =  arr1->p_data[3]/det;
         soti_div_oo_to(&arr1->p_data[3],&det,&tmp1,dhl);
@@ -369,6 +403,13 @@ void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
         tmpA1.p_data[3] = soti_get_tmp( 12, order, dhl);
         
         arrso_det_to( arr1, &det, dhl); // Get determinant.
+
+        if ( det.re == 0.0 ){
+            arrso_free(&tmpA1);
+            arrso_free(&copy);
+            arrso_set_nan( res, dhl);
+            return 1;
+        }
         
         // Set position 0,0
         // tmpA1.p_data[0] = arr1->p_data[4];
@@ -527,6 +568,10 @@ void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 
     } 
 
+    arrso_free(&copy);
+
+    return 0;
+
 }
 // ----------------------------------------------------------------------------------------------------
 
@@ -554,16 +599,83 @@ void arrso_invert_to(arrso_t* arr1, arrso_t* res, dhelpl_t dhl){
 // 2.4. Determinant.
 
 // ****************************************************************************************************
-void arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
+static int arrso_det_lu_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
+    // det A = sign(P) prod_i U_ii, from arrso_lu_factor_to. A singular real part is not supported
+    // (known limitation): the status is returned and res is set to NaN.
+
+    uint64_t  i, n = arr1->nrows;
+    int       info, npiv = 0;
+    int32_t*  ipiv;
+    ord_t     order;
+    arrso_t   LU = arrso_init();
+    sotinum_t tmp1, tmp2;
+
+    ipiv = (int32_t*)malloc( n * sizeof(int32_t) );
+    if ( ipiv == NULL ){
+        soti_set_r( NAN, res, dhl);
+        return OTI_LINALG_ERR_MEMORY;
+    }
+
+    LU   = arrso_zeros_bases( n, n, 0, 0, dhl);
+    info = arrso_lu_factor_to( arr1, &LU, ipiv, dhl);
+
+    if ( info != 0 ){
+        soti_set_r( NAN, res, dhl);
+    } else {
+
+        order = MAX( arrso_get_order( arr1 ), arrso_get_order( &LU ) );
+        tmp1  = soti_get_tmp( 5, order, dhl);
+        tmp2  = soti_get_tmp( 6, order, dhl);
+
+        // tmp1 = prod_i U_ii
+        soti_set_o( &LU.p_data[0], &tmp1, dhl);
+        for (i = 1; i < n; i++){
+            soti_mul_oo_to( &tmp1, &LU.p_data[ i + i*n ], &tmp2, dhl);
+            soti_set_o( &tmp2, &tmp1, dhl);
+        }
+
+        // sign(P) = (-1)^(number of actual interchanges)
+        for (i = 0; i < n; i++){
+            if ( (uint64_t)ipiv[i] != i + 1 ){
+                npiv++;
+            }
+        }
+        if ( npiv % 2 ){
+            soti_neg_to( &tmp1, &tmp1, dhl);
+        }
+
+        soti_set_o( &tmp1, res, dhl);
+
+    }
+
+    free(ipiv);
+    arrso_free(&LU);
+
+    return info;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+int arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
     
     uint64_t i, j;
 
     ord_t order;
     sotinum_t tmp1, tmp2, tmp3;
-    // printf("Here 1\n");
 
     // Check dimensions.
     arrso_dimCheck_O_squareness( arr1, arr1);
+
+    if ( arr1->ncols == 0 ){
+        soti_set_r( 1.0, res, dhl);
+        return 0;
+    }
+
+    // Larger matrices: det A = sign(P) prod_i U_ii from the OTI LU factorization.
+    if ( arr1->ncols > _OTI_LINALG_CLOSED_FORM_MAX || arr1->ncols > 3 ){
+        return arrso_det_lu_to( arr1, res, dhl);
+    }
     
     order = arrso_get_order( arr1 );
 
@@ -596,8 +708,9 @@ void arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
             res,
             dhl);
 
-    } else if (arr1->ncols >= 3){
+    } else if (arr1->ncols == 3){
         
+        // Rule of Sarrus (3x3 only).
         // tmp3 = 0
         soti_set_r( 0.0, &tmp3, dhl);
 
@@ -665,6 +778,8 @@ void arrso_det_to(arrso_t* arr1, sotinum_t* res, dhelpl_t dhl){
         soti_set_o(&tmp3, res, dhl);
 
     }
+
+    return 0;
 
 }
 // ----------------------------------------------------------------------------------------------------

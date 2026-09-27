@@ -126,6 +126,16 @@ target_link_libraries(oticwrap
     ${LINK_TARGET_OMP_Fortran})
 
 
+# C-callable LAPACK / BLAS wrappers (BIND(C) external subroutines, no module). Every C consumer of
+# LAPACK goes through them; LAPACK::LAPACK comes from find_package(LAPACK) in the root CMakeLists.
+add_library (otilapack STATIC
+    fortran/core/oti_lapack.f90
+)
+
+target_link_libraries(otilapack PUBLIC
+    LAPACK::LAPACK)
+
+
 file(GLOB array_interface_f90 
     fortran/experimental/array_interface*.f90
     fortran/static/real_utils.f90
@@ -231,8 +241,10 @@ elseif(UNIX)
 endif(APPLE)    
 
 # Link to math libraries
-target_link_libraries(oti 
-    m  oticwrap otistatic ${ISOCBIND_Fortran_LFLAG}
+# Keyword (PUBLIC) form: CMake rejects mixing it with the plain form for one target, and PUBLIC
+# propagates otilapack / LAPACK::LAPACK to every executable that links oti.
+target_link_libraries(oti PUBLIC
+    m  oticwrap otistatic otilapack ${ISOCBIND_Fortran_LFLAG}
     ${LINK_TARGET_OMP_C})
 
 # -------------------------------------------------------------------

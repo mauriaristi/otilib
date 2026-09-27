@@ -98,13 +98,22 @@ This library has been tested on:
 
 - **Unix** platforms (Ubuntu, CentOS, Rocky Linux).
 - **macOS** (Tested on Tahoe 26.*)
-- **Windows** (Works only under Windows Subsystem for Linux - [WSL](https://learn.microsoft.com/en-us/windows/wsl/) ) 
+- **Windows** (Works only under Windows Subsystem for Linux - [WSL](https://learn.microsoft.com/en-us/windows/wsl/) ). Native Windows builds are not supported.
 
 ### Requirements
 
 #### **C** version
 
-The current version depends on ```stdlib.h``` and ```math.h```
+The current version depends on ```stdlib.h```, ```math.h``` and a LAPACK / BLAS library (LP64,
+32-bit integers), found at build time by CMake (>= 3.22):
+
+* conda: `libblas` and `liblapack` (already in `environment.yml`).
+* Linux: `liblapack-dev` or `libopenblas-dev` from the system package manager.
+* macOS: Accelerate, part of the OS (`cmake -DOTI_BLA_VENDOR=Apple ..`).
+
+`OTI_BLA_VENDOR` accepts CMake's `BLA_VENDOR` values (`Apple`, `OpenBLAS`, `Generic`,
+`Intel10_64lp`, ...); left empty, CMake searches in its default order. A Fortran compiler is
+required as well: the C code calls LAPACK through Fortran wrappers.
 
 #### Python version 3:
 
@@ -113,7 +122,8 @@ Requirements:
 * Numpy >= 2.1, < 3
 * Scipy
 * Cython>=3.0 (For compilation only)
-* CMake (For compilation only)
+* CMake >= 3.22 (For compilation only)
+* LAPACK / BLAS (For compilation; see the C requirements above)
 
 For the full Finite Element support, the following libraries are required.
 

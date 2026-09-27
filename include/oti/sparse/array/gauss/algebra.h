@@ -272,14 +272,18 @@ void      fearrso_matmul_FR_to( fearrso_t* lhs, darr_t*    rhs, fearrso_t* res, 
 /**************************************************************************************************//**
 @brief Matrix determinant.
 
-res = DET( ARR )
+res = DET( ARR ), at every integration point (see arrso_det_to()).
 
-@param[in] arr Array to compute determinant.
-@param[in] res Result 
-@param[in] dhl Direction helper list
+@param[in]  arr Array to compute determinant.
+@param[out] res Result (_to variant), one value per integration point.
+@param[in]  dhl Direction helper list
+
+@return (_to) First nonzero status of arrso_det_to over the integration points (0 on success).
+        The allocating variant returns a new fesoti_t owned by the caller, to be released with
+        fesoti_free(); the points that failed hold NaN.
 ******************************************************************************************************/
 fesoti_t fearrso_det(   fearrso_t* arr,                dhelpl_t dhl);
-void     fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
+int      fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -303,14 +307,18 @@ void     fearrso_pnorm_to( fearrso_t* arr, coeff_t p, fesoti_t* res, dhelpl_t dh
 /**************************************************************************************************//**
 @brief Matrix invertion.
 
-RES = ARR^( -1 )
+RES = ARR^( -1 ), at every integration point (see arrso_invert_to()).
 
-@param[in] arr Array to invert.
-@param[in] res Result 
-@param[in] dhl Direction helper list
+@param[in]  arr Array to invert.
+@param[out] res Result (_to variant), same shape and integration points as arr.
+@param[in]  dhl Direction helper list
+
+@return (_to) First nonzero status of arrso_invert_to over the integration points (0 on success).
+        The allocating variant returns a new fearrso_t owned by the caller, to be released with
+        fearrso_free(); the points that failed hold NaN.
 ******************************************************************************************************/
 fearrso_t   fearrso_invert(    fearrso_t* arr,                 dhelpl_t dhl);
-void        fearrso_invert_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+int         fearrso_invert_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

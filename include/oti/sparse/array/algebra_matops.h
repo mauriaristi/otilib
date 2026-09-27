@@ -50,15 +50,23 @@ void    arrso_transpose_to( arrso_t* arr1, arrso_t* res, dhelpl_t dhl);
 
 
 /**************************************************************************************************//**
-@brief Matrix invertion.
+@brief Matrix inversion.
 
 RES  = INVERSE( ARR1 )
 
-@param[in] arr1   Array to be inverted.
-@param[in] dhl    Direction helper list object.
+n <= _OTI_LINALG_CLOSED_FORM_MAX (at most 3): closed forms (cofactors over the determinant).
+Larger n: block solver on the LAPACK LU factors of the real part, arrso_solve_to(ARR1, I, RES).
+
+@param[in]  arr1   Square array to be inverted.
+@param[out] res    Result, same shape, allocated by the caller (_to variant). May be arr1.
+@param[in]  dhl    Direction helper list object.
+
+@return (_to) 0 on success; > 0 if the real part of arr1 is singular; < 0 on a size or memory error
+        (see algebra_lu.h). On failure res is filled with NaN. The allocating variant returns a new
+        array owned by the caller (NaN-filled on failure).
 ******************************************************************************************************/ 
 arrso_t arrso_invert(    arrso_t* arr1,               dhelpl_t dhl);
-void    arrso_invert_to( arrso_t* arr1, arrso_t* res, dhelpl_t dhl);
+int     arrso_invert_to( arrso_t* arr1, arrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 
@@ -67,11 +75,20 @@ void    arrso_invert_to( arrso_t* arr1, arrso_t* res, dhelpl_t dhl);
 
 RES  = DET( ARR1 )
 
-@param[in] arr1   Array to compute determinant.
-@param[in] dhl    Direction helper list object.
+n <= _OTI_LINALG_CLOSED_FORM_MAX (at most 3): closed forms (valid for any real part).
+Larger n: det = sign(P) prod_i U_ii from the OTI LU factorization (arrso_lu_factor_to). Known
+limitation: a singular real part is not supported for n > 3 (status > 0, NaN result).
+
+@param[in]  arr1   Square array.
+@param[out] res    Result (_to variant). Its memory is reallocated if needed.
+@param[in]  dhl    Direction helper list object.
+
+@return (_to) 0 on success; > 0 if the LU path met a singular real part; < 0 on a size or memory
+        error (see algebra_lu.h). On failure res is NaN. The allocating variant returns a new
+        sotinum_t owned by the caller, to be released with soti_free() (NaN on failure).
 ******************************************************************************************************/ 
 sotinum_t arrso_det(    arrso_t* arr1,                 dhelpl_t dhl);
-void      arrso_det_to( arrso_t* arr1, sotinum_t* res, dhelpl_t dhl);
+int       arrso_det_to( arrso_t* arr1, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

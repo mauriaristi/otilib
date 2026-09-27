@@ -1813,27 +1813,13 @@ cdef class matso:
   @staticmethod
   def inv( matso arr,  matso out = None): 
     """
-    PURPOSE: Matrix invertion.
+    PURPOSE: Matrix inversion. Same as the module function ``inv``.
+
+    :raises numpy.linalg.LinAlgError: the real part of the array is singular.
     """
-    global dhl
 
-    _check_square("inv", arr)
-    _check_out_shape("inv", out, arr.shape)
-    
-    cdef arrso_t res 
-
-
-    if out is not None:
-      
-      arrso_invert_to( &arr.arr,&out.arr, dhl)
-
-    else:
-
-      res = arrso_invert( &arr.arr, dhl)
-
-      return matso.create(&res)
-
-    # end if 
+    # Module-level inv (class-scope names are not visible here).
+    return inv( arr, out = out)
 
   #-----------------------------------------------------------------------------
 

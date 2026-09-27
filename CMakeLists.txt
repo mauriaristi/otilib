@@ -9,8 +9,8 @@
 # This file sets up CMake to run the appropriate commands to 
 # compile the OTI number library project
 
-# cmake_minimum_required (VERSION 3.20)
-cmake_minimum_required (VERSION 3.20)
+# 3.22: FindLAPACK honours BLA_SIZEOF_INTEGER (see the LAPACK section below).
+cmake_minimum_required (VERSION 3.22)
 
 # -------------------------------------------------------------------------------------------------
 # Single source of truth for the library version.
@@ -163,6 +163,115 @@ endif(USE_OPENMP)
 # -------------------------------------------------------------------------------------------------
 
 message(STATUS ${LINK_TARGET_OMP})
+
+# -------------------------------------------------------------------------------------------------
+# LAPACK / BLAS.
+#
+# Required by the dense linear algebra of the C core (LU factorization, solve, inverse, determinant).
+# The C code only calls the Fortran wrappers in src/fortran/core/oti_lapack.f90 (library otilapack),
+# which link to the target LAPACK::LAPACK found here.
+#
+# OTI_BLA_VENDOR selects the implementation (CMake's BLA_VENDOR values, e.g. Apple, OpenBLAS,
+# Generic, Intel10_64lp). Empty means CMake's default search order. The conda recipe uses Generic
+# so that conda-forge's switchable libblas / liblapack stubs are linked.
+#
+# BLA_SIZEOF_INTEGER = 4: the wrappers use 32-bit integers (LP64 LAPACK).
+# -------------------------------------------------------------------------------------------------
+set(OTI_BLA_VENDOR "" CACHE STRING "LAPACK vendor passed to FindLAPACK as BLA_VENDOR (empty: auto)")
+
+if (OTI_BLA_VENDOR)
+  set(BLA_VENDOR ${OTI_BLA_VENDOR})
+endif ()
+
+set(BLA_SIZEOF_INTEGER 4)
+
+find_package(LAPACK REQUIRED)
+
+message(STATUS "LAPACK libraries: ${LAPACK_LIBRARIES}")
+
+# Link arguments for the Cython extensions (setup.py.in), which are not CMake targets.
+#   - The order of LAPACK_LIBRARIES is kept as found: static archives may be repeated on purpose
+#     to resolve cycles, so the list is never deduplicated.
+#   - Frameworks become "-Wl,-framework,<name>", plus "-F<dir>" outside Apple's default locations.
+#   - Non-system library directories (absolute paths and -L entries) get an rpath, appended at
+#     the end, so the extension finds shared LAPACK libraries at import time.
+#   - A static LAPACK (.a) needs the Fortran runtime after it; CMake's implicit Fortran link
+#     directories and libraries are appended in that case (GNU ld resolves left to right).
+set(OTI_LAPACK_LINK_ARGS "")
+set(OTI_LAPACK_RPATH_DIRS "")
+set(OTI_LAPACK_IS_STATIC FALSE)
+
+foreach (oti_lapack_item ${LAPACK_LINKER_FLAGS} ${LAPACK_LIBRARIES})
+
+  set(oti_lapack_dir "")
+
+  if (oti_lapack_item MATCHES "^(.*)/([^/]+)\\.framework$")
+    list(APPEND OTI_LAPACK_LINK_ARGS "-Wl,-framework,${CMAKE_MATCH_2}")
+    set(oti_lapack_dir "${CMAKE_MATCH_1}")
+
+    if (NOT oti_lapack_dir MATCHES "^/System(/|$)|\\.sdk(/|$)")
+      list(APPEND OTI_LAPACK_LINK_ARGS "-F${oti_lapack_dir}")
+    endif ()
+
+  else ()
+    list(APPEND OTI_LAPACK_LINK_ARGS "${oti_lapack_item}")
+
+    if (oti_lapack_item MATCHES "^-L(.+)$")
+      set(oti_lapack_dir "${CMAKE_MATCH_1}")
+    elseif (IS_ABSOLUTE "${oti_lapack_item}" AND NOT oti_lapack_item MATCHES "\\.tbd$")
+      get_filename_component(oti_lapack_dir "${oti_lapack_item}" DIRECTORY)
+    endif ()
+
+    if (oti_lapack_item MATCHES "\\.a$")
+      set(OTI_LAPACK_IS_STATIC TRUE)
+    endif ()
+  endif ()
+
+  if (oti_lapack_dir)
+    list(APPEND OTI_LAPACK_RPATH_DIRS "${oti_lapack_dir}")
+  endif ()
+
+endforeach ()
+
+if (OTI_LAPACK_IS_STATIC)
+
+  foreach (oti_lapack_dir ${CMAKE_Fortran_IMPLICIT_LINK_DIRECTORIES})
+    list(APPEND OTI_LAPACK_LINK_ARGS "-L${oti_lapack_dir}")
+    list(APPEND OTI_LAPACK_RPATH_DIRS "${oti_lapack_dir}")
+  endforeach ()
+
+  foreach (oti_lapack_lib ${CMAKE_Fortran_IMPLICIT_LINK_LIBRARIES})
+    list(APPEND OTI_LAPACK_LINK_ARGS "-l${oti_lapack_lib}")
+  endforeach ()
+
+endif ()
+
+list(REMOVE_DUPLICATES OTI_LAPACK_RPATH_DIRS)
+
+foreach (oti_lapack_dir ${OTI_LAPACK_RPATH_DIRS})
+
+  # No rpath for system directories or SDK stubs, which the loader already resolves. Whole path
+  # components are matched, so /usr/lib64 or /usr/library-custom are not treated as /usr/lib.
+  if (NOT oti_lapack_dir MATCHES "^(/usr/lib|/lib|/System)(/|$)|\\.sdk(/|$)")
+    list(APPEND OTI_LAPACK_LINK_ARGS "-Wl,-rpath,${oti_lapack_dir}")
+  endif ()
+
+endforeach ()
+
+# Python list literal for setup.py.in. Backslashes and single quotes are escaped so that any path
+# stays a valid Python string literal.
+set(OTI_LAPACK_LINK_ARGS_PY "")
+
+foreach (oti_lapack_item ${OTI_LAPACK_LINK_ARGS})
+  string(REPLACE "\\" "\\\\" oti_lapack_item "${oti_lapack_item}")
+  string(REPLACE "'" "\\'" oti_lapack_item "${oti_lapack_item}")
+  list(APPEND OTI_LAPACK_LINK_ARGS_PY "'${oti_lapack_item}'")
+endforeach ()
+
+list(JOIN OTI_LAPACK_LINK_ARGS_PY ", " OTI_LAPACK_LINK_ARGS_PY)
+set(OTI_LAPACK_LINK_ARGS_PY "[${OTI_LAPACK_LINK_ARGS_PY}]")
+
+message(STATUS "LAPACK link arguments for Cython: ${OTI_LAPACK_LINK_ARGS_PY}")
 
 include( copyfiles )
  

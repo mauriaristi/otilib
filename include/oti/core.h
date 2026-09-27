@@ -33,5 +33,8 @@
 // Sparse.
 #include "core/sparse.h"
 
+// LAPACK / BLAS interface (Fortran wrappers, library otilapack).
+#include "core/lapack.h"
+
 
 #endif

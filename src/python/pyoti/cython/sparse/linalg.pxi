@@ -555,22 +555,63 @@ cpdef transpose(object arr, object out = None):
 #-----------------------------------------------------------------------------------------------------
 
 #*****************************************************************************************************
+cdef object _raise_linalg_status(str op, int status):
+  """
+  PURPOSE:  Raise the Python exception that matches a status of the C linear algebra functions
+            (oti/sparse/array/algebra_lu.h). Status 0 (success) returns None.
+  """
+  #***************************************************************************************************
+
+  if status == 0:
+    return None
+  elif status > 0:
+    if op == "det":
+      raise np.linalg.LinAlgError(
+        "det: the real part of the matrix is singular. The determinant of an OTI matrix larger "
+        "than {0}x{0} with a singular real part is not supported yet (known limitation)."
+        .format(_OTI_LINALG_CLOSED_FORM_MAX))
+    # end if
+    # The closed forms (n <= 3) report 1 without a pivot position, so the row is not reported.
+    raise np.linalg.LinAlgError("{0}: the real part of the matrix is singular.".format(op))
+  elif status == OTI_LINALG_ERR_SIZE:
+    raise ValueError("{0}: the matrix is too large for the 32-bit LAPACK interface.".format(op))
+  elif status == OTI_LINALG_ERR_MEMORY:
+    raise MemoryError("{0}: could not allocate the work buffers.".format(op))
+  elif status == OTI_LINALG_ERR_PIVOT:
+    raise ValueError("{0}: pivot indices out of range.".format(op))
+  # end if
+
+  raise RuntimeError("{0}: failed with status {1}.".format(op, status))
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
 cpdef det(object arr, object out = None):
   """
-  PURPOSE:  Matrix determinant.
+  det(arr, out = None)
+
+  Determinant of a square array.
+
+  Up to 3x3 the closed forms are used. Larger OTI arrays use the LU factorization of the real part
+  (LAPACK) and obtain every imaginary order by real triangular solves.
+
+  :param arr: Square ``matso``, ``matsofe`` or ``dmat`` array.
+  :param out: Optional result holder (``sotinum`` for ``matso``, ``sotife`` for ``matsofe``).
+
+  :raises numpy.linalg.LinAlgError: an OTI array larger than 3x3 whose real part is singular (known
+    limitation: the determinant exists but is not computed).
   """
   #***************************************************************************************************
 
   cdef matso      O
   cdef dmat       R
   cdef matsofe    F
-  cdef coeff_t   crres
   cdef sotinum_t cores
   cdef fesoti_t  cfres
   cdef sotife     fres
   cdef sotinum    ores
-
-  cdef uint8_t res_flag = 1
+  cdef int       status
 
   cdef object res
 
@@ -580,10 +621,6 @@ cpdef det(object arr, object out = None):
   _check_out_shape("det", out, None)
   _check_nip("det", arr, out)
 
-  if out is None:
-    res_flag = 0
-  # end if 
-
   # supported types:
   #    -  matso
   #    -  matsofe
@@ -592,40 +629,43 @@ cpdef det(object arr, object out = None):
   if   tarr is matsofe:
     
     F = arr
-    if res_flag:
+    if out is not None:
       fres = out
-      fearrso_det_to( &F.arr, &fres.num, dhl)
     else:
-      cfres = fearrso_det( &F.arr, dhl)
-      res = sotife.create(&cfres)
+      cfres = fesoti_createEmpty_bases( F.arr.nip, 0, 0, dhl)
+      fres = sotife.create(&cfres)
     # end if 
+    status = fearrso_det_to( &F.arr, &fres.num, dhl)
+    res = fres
 
   elif tarr is matso:
     
     O = arr
-    if res_flag:      
+    if out is not None:
       ores = out
-      arrso_det_to( &O.arr, &ores.num, dhl)
     else:
-      cores = arrso_det( &O.arr,  dhl)
-      res = sotinum.create(&cores)
+      cores = soti_init()
+      ores = sotinum.create(&cores)
     # end if    
+    status = arrso_det_to( &O.arr, &ores.num, dhl)
+    res = ores
 
   elif tarr is dmat:
     
-    if res_flag:
+    if out is not None:
       raise TypeError("det of a real array returns a float; out= is not supported.")
     # end if
 
     R = arr
-    res = darr_det( &R.arr)
+    return darr_det( &R.arr)
 
   else:
     raise TypeError("Unsupported types at det operation.")    
-    # return NotImplemented
   # end if 
 
-  if res_flag == 0:
+  _raise_linalg_status("det", status)
+
+  if out is None:
     return res
   # end if 
 
@@ -719,30 +759,31 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
 #*****************************************************************************************************
 cpdef inv(object arr, object out = None):
   """
-  PURPOSE:   Matrix inverse. Only supported up to 3x3 matrices.
+  inv(arr, out = None)
+
+  Inverse of a square array.
+
+  Up to 3x3 the closed forms are used. Larger OTI arrays are solved with A X = I on the LU factors
+  of the real part (LAPACK), every imaginary order by real triangular solves.
+
+  :param arr: Square ``matso``, ``matsofe`` or ``dmat`` array.
+  :param out: Optional result holder of the same type and shape.
+
+  :raises numpy.linalg.LinAlgError: the real part of the array is singular.
   """
   #***************************************************************************************************
 
   cdef matso      O, Ores
-  cdef arrso_t   cOres
   cdef dmat       R, Rres
   cdef darr_t    cRres
   cdef matsofe    F, Fres
-  cdef fearrso_t cFres
-
-  cdef uint8_t res_flag = 1
-
-  cdef object res
+  cdef int       status
 
   tarr = type(arr)
 
   _check_square("inv", arr)
   _check_out_shape("inv", out, _array_shape(arr))
   _check_nip("inv", arr, out)
-
-  if out is None:
-    res_flag = 0
-  # end if 
 
   # supported types:
   #    -  matso
@@ -751,25 +792,19 @@ cpdef inv(object arr, object out = None):
 
   if   tarr is matsofe:    
     F = arr
-    if res_flag:
-      Fres = out
-      fearrso_invert_to( &F.arr, &Fres.arr, dhl)
-    else:
-      cFres = fearrso_invert( &F.arr, dhl)
-      res = matsofe.create(&cFres)
-    # end if 
+    Fres = out if out is not None else zeros(F.shape, nip = F.arr.nip)
+    status = fearrso_invert_to( &F.arr, &Fres.arr, dhl)
+    _raise_linalg_status("inv", status)
+    res = Fres
   elif tarr is matso:
     O = arr
-    if res_flag:
-      Ores = out
-      arrso_invert_to( &O.arr, &Ores.arr, dhl)
-    else:
-      cOres = arrso_invert( &O.arr,  dhl)
-      res = matso.create(&cOres)
-    # end if
+    Ores = out if out is not None else zeros(O.shape)
+    status = arrso_invert_to( &O.arr, &Ores.arr, dhl)
+    _raise_linalg_status("inv", status)
+    res = Ores
   elif tarr is dmat:    
     R = arr
-    if res_flag:
+    if out is not None:
       Rres = out
       darr_invert_to( &R.arr, &Rres.arr)
     else:
@@ -780,27 +815,11 @@ cpdef inv(object arr, object out = None):
     raise TypeError("Unsupported types at inverse operation.")    
   # end if 
 
-  if res_flag == 0:
+  if out is None:
     return res
   # end if 
 
 #-----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #*****************************************************************************************************
 cpdef inv_block(object arr, object out = None):
@@ -901,23 +920,27 @@ cpdef solve(object K_in, matso b_in, matso out = None, solver = 'SuperLU', solve
   
   Solves an OTI linear system of equations Ku = b.
 
+  A dense ``matso`` K is solved in C: the real part is factorized once with LAPACK and every
+  imaginary order follows by real solves with the same factors (block solver).
+
   :param K_in: Coefficient matrix. This must be a csr_matrix or matso array.
 
   :param b_in: right hand side vector. This must be a matso array.
 
-  :param solver: Optional string with the selected solver. default 'SuperLU'.
-  
+  :param out: Optional result holder, same shape as b_in.
+
+  :param solver: Optional string with the selected sparse solver, default 'SuperLU'. Only used
+    when K_in is a csr_matrix (options: 'SuperLU', 'cholesky', 'spilu', 'umfpack').
+
+  :param solver_args: Optional arguments of the sparse solver (csr_matrix only).
+
+  :raises numpy.linalg.LinAlgError: a dense K_in whose real part is singular.
   """
   #***************************************************************************************************
   global dhl
 
-  from scipy.linalg import lu_factor, lu_solve
-  import scipy.sparse.linalg as spla
-
-  cdef matso      O, Ores, Otmp
-  cdef csr_matrix  S, Sres, Stmp  
-  cdef uint64_t i,j,k,l
-  cdef ord_t ordi, ord_lhs, ord_rhs, Oord
+  cdef matso      K, Ores
+  cdef int       status
   cdef uint8_t res_flag = 1
   cdef object res
 
@@ -935,12 +958,12 @@ cpdef solve(object K_in, matso b_in, matso out = None, solver = 'SuperLU', solve
   #    -  csr_matrix
 
   if   tK is matso:
-    
-    if res_flag:
-      solve_dense( K_in, b_in, out = out, solver=solver, solver_args=solver_args)
-    else:      
-      res = solve_dense(K_in, b_in, out = None, solver=solver, solver_args=solver_args)
-    # end if
+
+    K = K_in
+    Ores = out if res_flag else zeros(b_in.shape)
+    status = arrso_solve_to( &K.arr, &b_in.arr, &Ores.arr, dhl)
+    _raise_linalg_status("solve", status)
+    res = Ores
 
   elif tK is csr_matrix:
 
@@ -951,7 +974,7 @@ cpdef solve(object K_in, matso b_in, matso out = None, solver = 'SuperLU', solve
     # end if
 
   else:
-    raise TypeError("Unsupported types at Block-solver inverse operation.")
+    raise TypeError("Unsupported types at solve operation.")
   # end if 
 
   if res_flag == 0:
@@ -961,77 +984,124 @@ cpdef solve(object K_in, matso b_in, matso out = None, solver = 'SuperLU', solve
 #-----------------------------------------------------------------------------------------------------
 
 
-
-
-
-
 #*****************************************************************************************************
-cdef solve_dense(matso K_in, matso b_in, matso out = None, solver = 'SuperLU', solver_args = {}):
+cpdef lu_factor(matso A, matso out = None):
   """
-  PURPOSE:   Solve OTI linear system of equations for a dense K_in.
+  lu, piv = lu_factor(matso A, matso out = None)
+
+  LU factorization with partial pivoting of an OTI array, A = P L U, as ``scipy.linalg.lu_factor``.
+
+  Pivoting is decided by the real part (LAPACK ``dgetrf``); every imaginary order of L and U follows
+  by real triangular solves, so no OTI division is performed.
+
+  :param A: Square ``matso`` array.
+  :param out: Optional ``matso`` holder for the factors, same shape as A. May be A itself.
+
+  :return: ``(lu, piv)``. ``lu`` holds L below the diagonal (unit diagonal not stored) and U on and
+    above it. ``piv`` (``int32``, 0-based): row i was interchanged with row ``piv[i]``.
+
+  :raises numpy.linalg.LinAlgError: the real part of A is singular.
+
+  Examples
+  --------
+  >>> import numpy as np, scipy.linalg
+  >>> import pyoti.sparse as oti
+  >>> A = oti.array([[0.0, 2.0, 1.0], [3.0, 1.0, 0.0], [1.0, 0.0, 4.0]])
+  >>> A[0, 0] += oti.e(1, order=2)
+  >>> lu, piv = oti.lu_factor(A)
+  >>> piv
+  array([1, 1, 2], dtype=int32)
+  >>> np.allclose(lu.real, scipy.linalg.lu_factor(A.real)[0])   # real part as in SciPy
+  True
   """
   #***************************************************************************************************
   global dhl
 
-  from scipy.linalg import lu_factor, lu_solve
+  cdef matso      LU
+  cdef int       status
+  cdef np.ndarray piv
 
-  cdef matso      O, Ores, Otmp
-  cdef uint64_t i,j,k,l
-  cdef ord_t ordi, ord_lhs, ord_rhs, Oord
-  cdef uint8_t res_flag = 1
+  _check_square("lu_factor", A)
+  _check_out_shape("lu_factor", out, A.shape)
 
-  if out is None:
-    res_flag = 0
-  # end if      
-  
-  if res_flag:
-    Ores = out
-  else:
-    Ores = zeros(b_in.shape)
+  LU  = out if out is not None else zeros(A.shape)
+  piv = np.empty(A.shape[0], dtype = np.int32)
+
+  status = arrso_lu_factor_to( &A.arr, &LU.arr, <int32_t*> np.PyArray_DATA(piv), dhl)
+  _raise_linalg_status("lu_factor", status)
+
+  # LAPACK pivots are 1-based.
+  piv -= 1
+
+  return LU, piv
+
+#-----------------------------------------------------------------------------------------------------
+
+
+#*****************************************************************************************************
+cpdef lu_solve(object lu_and_piv, matso b, matso out = None):
+  """
+  x = lu_solve(lu_and_piv, matso b, matso out = None)
+
+  Solves A x = b with the factors of ``lu_factor``, as ``scipy.linalg.lu_solve``.
+
+  :param lu_and_piv: ``(lu, piv)`` as returned by ``lu_factor``.
+  :param b: Right-hand side, ``matso`` with as many rows as ``lu``.
+  :param out: Optional result holder, same shape as b.
+
+  :raises numpy.linalg.LinAlgError: a diagonal entry of the real part of U is zero.
+  :raises ValueError: shapes do not match, or the pivot indices are out of range.
+
+  Examples
+  --------
+  >>> import numpy as np
+  >>> import pyoti.sparse as oti
+  >>> A = oti.array([[0.0, 2.0, 1.0], [3.0, 1.0, 0.0], [1.0, 0.0, 4.0]])
+  >>> A[0, 0] += oti.e(1, order=2)
+  >>> b = oti.array([[1.0], [2.0], [3.0]])
+  >>> x = oti.lu_solve(oti.lu_factor(A), b)
+  >>> r = oti.dot(A, x) - b                       # residual, every order
+  >>> all(np.abs(r.get_im(d)).max() < 1e-14 for d in (0, 1, [1, 1]))
+  True
+  """
+  #***************************************************************************************************
+  global dhl
+
+  cdef matso      LU, Ores
+  cdef int       status
+  cdef np.ndarray ipiv
+
+  LU, piv = lu_and_piv
+
+  _check_square("lu_solve", LU)
+  _check_matmul("lu_solve", LU, b, out)
+
+  piv = np.asarray(piv)
+
+  if piv.shape != (LU.shape[0],):
+    raise ValueError("lu_solve: piv has shape {0}, expected ({1},).".format(piv.shape, LU.shape[0]))
   # end if
 
-  lu = lu_factor(K_in.real)
-  # Solve the real system of equations, using LU solver. Use the returned array: overwrite_b only
-  # works in place for Fortran-contiguous right-hand sides (e.g. not for multiple columns).
-  rhs = lu_solve(lu, b_in.real)
+  # Validate before narrowing to int32: a cast would truncate fractions and wrap large integers.
+  if not np.issubdtype(piv.dtype, np.integer):
+    raise ValueError("lu_solve: piv must hold integers, got dtype {0}.".format(piv.dtype))
+  # end if
 
-  # Solve the real coefficient
-  for i in range(Ores.nrows):      
-    for j in range(Ores.ncols):
+  if piv.size > 0 and (piv.min() < 0 or piv.max() >= LU.shape[0]):
+    raise ValueError("lu_solve: pivot indices out of range [0, {0}).".format(LU.shape[0]))
+  # end if
 
-      arrso_set_item_ij_r( rhs[i,j], i, j, &Ores.arr, dhl)
+  # 1-based pivots for LAPACK, in a fresh contiguous int32 array.
+  ipiv = piv.astype(np.int32) + np.int32(1)
 
-    # end for
-  # end for
-  
-  Oord = max( K_in.order, b_in.order)
+  Ores = out if out is not None else zeros(b.shape)
 
-  for ordi in range( 1, Oord + 1 ):
-        
-    tmp = b_in.get_order_im(ordi)
+  status = arrso_lu_solve_to( &LU.arr, <int32_t*> np.PyArray_DATA(ipiv), &b.arr, &Ores.arr, dhl)
+  _raise_linalg_status("lu_solve", status)
 
-    for ord_rhs in range(ordi):
-
-      ord_lhs = ordi - ord_rhs
-
-      tmp -= dot( K_in.get_order_im(ord_lhs), Ores.get_order_im(ord_rhs))
-
-    # end for 
-    
-    # Convert tmp to array (for specific order)
-    rhs = get_order_im_array(ordi,tmp)
-    # print(rhs)
-    rhs = lu_solve( lu, rhs )
-    # print(rhs)
-    set_order_im_from_array( ordi, rhs, Ores)
-
-  # end for 
-
-  if res_flag == 0:
-
+  if out is None:
     return Ores
-
-  # end if 
+  # end if
 
 #-----------------------------------------------------------------------------------------------------
 

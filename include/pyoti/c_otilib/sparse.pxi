@@ -162,13 +162,38 @@ cdef extern from "oti/oti.h" nogil:
   arrso_t arrso_transpose(    arrso_t* arr1,               dhelpl_t dhl);
   void    arrso_transpose_to( arrso_t* arr1, arrso_t* res, dhelpl_t dhl);
   arrso_t arrso_invert(    arrso_t* arr1,               dhelpl_t dhl);
-  void    arrso_invert_to( arrso_t* arr1, arrso_t* res, dhelpl_t dhl);
+  int     arrso_invert_to( arrso_t* arr1, arrso_t* res, dhelpl_t dhl);
   sotinum_t arrso_det(    arrso_t* arr1,                 dhelpl_t dhl);
-  void      arrso_det_to( arrso_t* arr1, sotinum_t* res, dhelpl_t dhl);
+  int       arrso_det_to( arrso_t* arr1, sotinum_t* res, dhelpl_t dhl);
   sotinum_t arrso_norm(    arrso_t* arr1,                  dhelpl_t dhl);
   void      arrso_norm_to( arrso_t* arr1,  sotinum_t* res, dhelpl_t dhl);
   sotinum_t arrso_pnorm(    arrso_t* arr1, coeff_t p,                 dhelpl_t dhl);
   void      arrso_pnorm_to( arrso_t* arr1, coeff_t p, sotinum_t* res, dhelpl_t dhl);
+
+
+  # From oti/sparse/array/algebra_lu.h
+  int _OTI_LINALG_CLOSED_FORM_MAX
+  int OTI_LINALG_ERR_SIZE
+  int OTI_LINALG_ERR_MEMORY
+  int OTI_LINALG_ERR_PIVOT
+  int OTI_MASK_FULL
+  int OTI_MASK_STRICT_LOWER
+  int OTI_MASK_UPPER
+  bases_t arrso_get_nbases(arrso_t* arr, dhelpl_t dhl);
+  void    arrso_get_real_colmajor(arrso_t* arr, coeff_t* buf);
+  void    arrso_get_order_colmajor(arrso_t* arr, ord_t ord, bases_t nbases, coeff_t* buf);
+  void    arrso_set_order_colmajor(coeff_t* buf, ord_t ord, bases_t nbases, int mask, arrso_t* arr,
+                                   dhelpl_t dhl);
+  void    arrso_permute_rows_to(arrso_t* arr, int32_t* ipiv, arrso_t* res, dhelpl_t dhl);
+  void    arrso_tril_to(arrso_t* arr, int strict, arrso_t* res, dhelpl_t dhl);
+  void    arrso_triu_to(arrso_t* arr, int strict, arrso_t* res, dhelpl_t dhl);
+  int     arrso_solve_to(arrso_t* K, arrso_t* b, arrso_t* x, dhelpl_t dhl);
+  arrso_t arrso_solve(arrso_t* K, arrso_t* b, int* status, dhelpl_t dhl);
+  int     arrso_lu_factor_to(arrso_t* A, arrso_t* LU, int32_t* ipiv, dhelpl_t dhl);
+  arrso_t arrso_lu_factor(arrso_t* A, int32_t* ipiv, int* status, dhelpl_t dhl);
+  int     arrso_lu_solve_to(arrso_t* LU, int32_t* ipiv, arrso_t* b, arrso_t* x, dhelpl_t dhl);
+  arrso_t arrso_lu_solve(arrso_t* LU, int32_t* ipiv, arrso_t* b, int* status, dhelpl_t dhl);
+  void    arrso_set_nan(arrso_t* arr, dhelpl_t dhl);
 
 
   # From oti/sparse/array/gauss.h
@@ -413,13 +438,13 @@ cdef extern from "oti/oti.h" nogil:
   fearrso_t fearrso_matmul_FR(    fearrso_t* lhs, darr_t*    rhs,                 dhelpl_t dhl);
   void      fearrso_matmul_FR_to( fearrso_t* lhs, darr_t*    rhs, fearrso_t* res, dhelpl_t dhl);
   fesoti_t fearrso_det(   fearrso_t* arr,                dhelpl_t dhl);
-  void     fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
+  int      fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
   fesoti_t fearrso_norm(     fearrso_t* arr,                dhelpl_t dhl);
   void     fearrso_norm_to(  fearrso_t* arr, fesoti_t* res, dhelpl_t dhl);
   fesoti_t fearrso_pnorm(    fearrso_t* arr, coeff_t p,                dhelpl_t dhl);
   void     fearrso_pnorm_to( fearrso_t* arr, coeff_t p, fesoti_t* res, dhelpl_t dhl);
   fearrso_t   fearrso_invert(    fearrso_t* arr,                 dhelpl_t dhl);
-  void        fearrso_invert_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+  int         fearrso_invert_to( fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
   fearrso_t   fearrso_transpose(   fearrso_t* arr,                 dhelpl_t dhl);
   void        fearrso_transpose_to(fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 

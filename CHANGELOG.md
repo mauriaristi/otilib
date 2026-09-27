@@ -32,9 +32,30 @@ header, the Fortran module, the Python package and the conda recipe. Use
   `inv_block`, `solve`; truncation and extraction utilities, `rom_eval`, `interp1d`,
   `moving_average`) up to 4th order derivatives in two bases against `sympy`, including the `out=`
   paths of these functions and the new shape validation. FE (`matsofe`) arrays are only covered by
-  the shape/integration-point checks. `inv` / `det` of arrays larger than 3x3 (still wrong) are
-  strict xfails.
+  the shape/integration-point checks.
 - `matso` supports the `@` operator (`__matmul__` / `__rmatmul__`, delegating to `dot`).
+- `pyoti.sparse.lu_factor(A, out=None)` and `lu_solve((lu, piv), b, out=None)`: LU factorization
+  with partial pivoting of a dense `matso`, `A = P L U`, with the same conventions as
+  `scipy.linalg.lu_factor` / `lu_solve` (packed factors, 0-based `int32` pivots). Pivoting is
+  decided by the real part (LAPACK `dgetrf`); every imaginary order of L and U follows by real
+  triangular solves (HYPAD LU, Pan, Yu and Stewart 1997, Algorithm 3.1), so no OTI division is
+  performed. `lu_solve` reuses the factors for any number of right-hand sides.
+- C API (`include/oti/sparse/array/algebra_lu.h`): `arrso_solve[_to]` (block solver: one real
+  factorization, every order by batched real solves), `arrso_lu_factor[_to]`,
+  `arrso_lu_solve[_to]`, the packing helpers (`arrso_get_real_colmajor`,
+  `arrso_get_order_colmajor`, `arrso_set_order_colmajor`, `arrso_permute_rows_to`,
+  `arrso_tril_to` / `arrso_triu_to`, `arrso_set_nan`, `arrso_get_nbases`) and the status codes
+  `OTI_LINALG_ERR_SIZE` / `_MEMORY` / `_PIVOT`. The `_to` variants accept an output that aliases an
+  input.
+- C interface to LAPACK (`include/oti/core/lapack.h`, library `otilapack`): Fortran `bind(C)`
+  wrappers `oti_dgetrf`, `oti_dgetrs`, `oti_dtrsm`, `oti_dtrmm` and `oti_lapack_fits()`.
+- Tests: `tests/c/test_lapack.c` (wrappers), `tests/c/test_sparse_linalg.c` (det / inv / solve /
+  LU of OTI arrays up to n = 7, pivoting, aliasing, singular real part), and in
+  `tests/python/test_sparse_array_ops.py` an OTI-valued 4x4 `det` against sympy (all derivatives up
+  to 4th order, two bases), `K inv(K) = I` in every direction for n = 3..8, `lu_factor` /
+  `lu_solve` against SciPy and `solve`, FE arrays, singular real parts and the error paths.
+- `tools/bench_linalg.py`: timings and correctness checks of `det`, `inv`, `inv_block` and `solve`
+  (`--json`).
 
 ### Changed
 
@@ -62,6 +83,23 @@ header, the Fortran module, the Python package and the conda recipe. Use
 - Functions called with `out=` whose result is a float raise `TypeError` instead of silently
   ignoring `out`: `det` / `norm` of a real `dmat`, math and truncation functions of a real number
   and `sum` / `sub` / `mul` / `div` of two reals.
+- **The build requires LAPACK / BLAS**, found by CMake's `find_package(LAPACK)` (32-bit integers,
+  LP64). `OTI_BLA_VENDOR` (passed to `BLA_VENDOR`, e.g. `Apple`, `OpenBLAS`, `Generic`) selects the
+  implementation; empty means CMake's default search order. `environment.yml` and the conda recipe
+  add `libblas` / `liblapack`; the recipe builds with `-DOTI_BLA_VENDOR=Generic` so the package
+  links conda-forge's switchable stubs.
+- CMake >= 3.22 is required (`BLA_SIZEOF_INTEGER`).
+- `solve` with a dense `matso` coefficient matrix runs in C (`arrso_solve_to`) instead of Python
+  and SciPy; `solver` / `solver_args` only apply to a `csr_matrix`. `solve_dense` was removed.
+- `inv` and `det` of arrays larger than 3x3 use the LU path; the closed forms remain for n <= 3
+  (`_OTI_LINALG_CLOSED_FORM_MAX`).
+- `arrso_invert_to`, `arrso_det_to`, `fearrso_invert_to` and `fearrso_det_to` return an `int`
+  status instead of `void` (0 on success, > 0 singular real part, < 0 `OTI_LINALG_ERR_*`; the FE
+  variants return the first nonzero status over the integration points). The allocating variants
+  keep their signatures and fill the result with NaN on failure.
+- `inv`, `solve`, `lu_factor` and `lu_solve` raise `numpy.linalg.LinAlgError` when the real part is
+  singular, for every size (the closed forms now detect it too). `det` of a matrix larger than 3x3
+  with a singular real part raises `LinAlgError` naming the limitation below.
 
 ### Fixed
 
@@ -100,6 +138,15 @@ header, the Fortran module, the Python package and the conda recipe. Use
     `setup-miniconda` no longer adds the `defaults` channel implicitly.
 - `-Wstrict-prototypes` is now applied to C sources only instead of every Fortran file, and the
   `oticython` custom commands declare `POST_BUILD` explicitly (CMake policy CMP0175).
+- `inv` of an n x n `matso` with n >= 4 returned zeros (`arrso_invert_to`).
+- `det` of an n x n `matso` with n >= 4 used a generalized Sarrus rule and was wrong
+  (`arrso_det_to`).
+
+### Known issues
+
+- `det` of an array larger than 3x3 whose real part is singular (e.g. `diag(e1, 1, 1, 1)`) raises
+  `LinAlgError` instead of returning the determinant, whose derivatives can be nonzero
+  (`bug-report.md`; strict xfail `test_det_singular_real_part_4x4`).
 
 ## [1.1.0] - 2026-09-07
 

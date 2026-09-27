@@ -1,19 +1,29 @@
 *~
 
+# pdf files generated should not be committed.
 *.pdf
 
+# Root data folder
 data/
 build/
 build*/
 
+# VSCode garbage
 .vscode*
 
+# MacOS trash
 .DS_Store
+
+# Python trash
 __pycache__/
+
+# Cython generated modules.
 src/python/pyoti/cython/*.c
 src/python/pyoti/cython/static/*.c
 src/python/pyoti/cython/*.h
 src/python/pyoti/cython/static/*.h
+
+# test jupyter notebooks
 tests/jupyter_notebook/*
 
 # Fortran module build artifacts

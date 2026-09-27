@@ -17,7 +17,7 @@ import os
 
 # -- Project information -----------------------------------------------------
 
-project = 'otilib-pyoti'
+project = 'otilib'
 copyright = 'Mauricio Aristizabal (2016-Current), St. Mary\'s University (2025-Current), UT San Antonio (2022-2025) and Universidad EAFIT (2016-2020)'
 author = 'Mauricio Aristizabal'
 

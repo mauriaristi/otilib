@@ -11,8 +11,39 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ## [Unreleased]
 
+### Added
+
+- `tests/python/test_sparse_scalar_functions.py`: checks every supported `pyoti.sparse` scalar
+  function and operator (trigonometric, hyperbolic and their inverses, `exp`, `log`, `log10`,
+  `logb`, `sqrt`, `cbrt`, `pow` with integer, real and OTI exponents, `erf`, `neg`, `abs`, and all
+  real/OTI arithmetic operators) up to 6th order derivatives against exact `sympy` references, for
+  both univariate derivatives and all mixed derivatives of f(x*y). Also covers the `out=` path of
+  every function that accepts it, including clearing stale coefficients in the destination.
+- `tests/python/test_sparse_scalar_utils.py`: unit tests for `sotinum.rom_eval` (Taylor polynomial
+  and truncation error, polynomial exactness, bivariate case, basis order, omitted bases, array
+  deltas, length mismatch), `truncate` (method and module function, with and without `out=`) and
+  `truncate_order` (every cutoff from 0 to beyond the truncation order).
+- `sympy` as a test-only dependency in `environment.yml` and the conda recipe's `test.requires`.
+
+### Changed
+
+- Documented the `truncate_order` semantics: the real part is the term of order zero, so
+  `truncate_order(0)` returns zero (with truncation order 0), and `truncate_order(k)` keeps orders
+  `0 .. k-1`. Updated the Cython docstrings of `sotinum`, `matso`, `sotife` and `matsofe`, and added
+  Doxygen blocks for `soti_`, `arrso_`, `fesoti_` and `fearrso_truncate_order[_to]` in
+  `include/oti/sparse/`, including memory ownership and the reallocation requirements of the `_to`
+  variants.
+- Python tests brought in line with the `AGENTS.md` style rules: `test_sparse_scalar.py` rewritten
+  (arithmetic split into OTI-OTI and real-OTI tests, incorrect comments corrected, `oti / real`
+  case added; its function tests moved to the new 6th-order suite), C-style dividers removed from
+  `test_version.py`, and minor docstring and formatting fixes in `test_imports.py` and
+  `run_tests.py`.
+
 ### Fixed
 
+- The 4th derivative of `acosh` was wrong for every OTI type (sparse, dense and static):
+  `der_r_acosh` in `src/c/real/function_derivatives.c` used `pow(x0, .2)` instead of
+  `pow(x0, 2.)`. For example, at x = 1.7 it returned 0.0605 instead of -4.8245.
 - Conda CI upload step failed with exit code 127 (`anaconda: command not found`): setup-miniconda
   activates a `test` environment rather than base, so the `anaconda` client installed into base was
   not on PATH. The workflow now calls it through `$(conda info --base)/bin/anaconda`.

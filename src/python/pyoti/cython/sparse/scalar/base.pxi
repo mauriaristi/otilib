@@ -1167,10 +1167,33 @@ cdef class sotinum:
   #***************************************************************************************************
   cpdef  truncate_order( self, ord_t order):
     """
-    Truncates all imaginary directions with order equal or larger than the one specified.
+    Truncates every term whose order is equal to or larger than ``order``.
 
-    :param order: Order to be truncated.
+    The real part is the term of order zero, so it is treated like any other order:
+    ``truncate_order(0)`` removes every term, including the real part, and returns zero.
+    ``truncate_order(k)`` with ``k >= 1`` keeps the real part and all imaginary directions of
+    order ``1 .. k-1``. For ``order >= 1`` the result keeps the truncation order of the input;
+    for ``order = 0`` the result is zero with truncation order 0.
 
+    Parameters
+    ----------
+    order : int
+        Lowest order to remove. Terms of order ``0 .. order-1`` are kept.
+
+    Returns
+    -------
+    sotinum
+        New sotinum with the truncated terms set to zero. The original is not modified.
+
+    Examples
+    --------
+    >>> x = 2.0 + oti.e(1, order=3)
+    >>> y = x * x                    # 4 + 4*e1 + e1^2
+    >>> t = y.truncate_order(2)      # removes orders >= 2
+    >>> t.real, t.get_deriv([1]), t.get_deriv([[1, 2]])
+    (4.0, 4.0, 0.0)
+    >>> y.truncate_order(0).real     # removes everything, including the real part
+    0.0
     """
     #*************************************************************************************************
     global dhl

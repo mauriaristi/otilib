@@ -103,16 +103,51 @@ fesoti_t fesoti_truncate_im(    imdir_t idx, ord_t order, fesoti_t* num,        
 void     fesoti_truncate_im_to( imdir_t idx, ord_t order, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Truncate all imaginary directions with order greater than ord.
+/**
+ * @name Sparse OTI Gauss Number Order Truncation Variants
+ * Functions that remove all terms of a given order and higher at every integration point.
+ * @{
+ */
 
-@param[in] num   Number.
-@param[in] ord   Order of imaginary direction.
-@param[in] res   Result
-@param[in] dhl   Direction helper list
-******************************************************************************************************/
+/**
+ * @brief Truncates all terms of order @p ord and higher at every integration point, into an
+ *        existing destination.
+ *
+ * Applies soti_truncate_order_to() at each integration point. The real part is the term of order
+ * zero, so @p ord = 0 sets @p res to zero at every integration point, including the real parts.
+ * For @p ord >= 1 the real parts and all imaginary directions of order 1 to @p ord - 1 are kept.
+ *
+ * @param[in]     ord  Lowest order to remove. Terms of order 0 to @p ord - 1 are kept.
+ * @param[in]     num  Gauss-point number to truncate. Must not be NULL.
+ * @param[in,out] res  Pre-allocated destination. Must have the same number of integration points
+ *                     as @p num. Each integration point may be reallocated, following the rules
+ *                     of soti_truncate_order_to().
+ * @param[in]     dhl  Direction helper list object.
+ *
+ * @see fesoti_truncate_order() for the allocating variant.
+ */
 void     fesoti_truncate_order_to( ord_t ord, fesoti_t* num, fesoti_t* res, dhelpl_t dhl);
+
+/**
+ * @brief Truncates all terms of order @p ord and higher at every integration point (allocating
+ *        variant).
+ *
+ * Same semantics as fesoti_truncate_order_to(): @p ord = 0 returns zero at every integration
+ * point, including the real parts; for @p ord >= 1 the real parts and all imaginary directions of
+ * order 1 to @p ord - 1 are kept.
+ *
+ * @param[in] ord  Lowest order to remove. Terms of order 0 to @p ord - 1 are kept.
+ * @param[in] num  Gauss-point number to truncate. Must not be NULL.
+ * @param[in] dhl  Direction helper list object.
+ *
+ * @return Newly allocated fesoti_t with the same number of integration points as @p num. Caller
+ *         owns memory and must free via fesoti_free().
+ *
+ * @see fesoti_truncate_order_to() for the existing-destination variant.
+ */
 fesoti_t fesoti_truncate_order(    ord_t ord, fesoti_t* num,               dhelpl_t dhl);
+
+/** @} */
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

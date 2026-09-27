@@ -19,8 +19,52 @@ fearrso_t fearrso_truncate_im(   imdir_t idx, ord_t order, fearrso_t* arr,      
 void      fearrso_truncate_im_to(imdir_t idx, ord_t order, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
+/**
+ * @name Sparse OTI Gauss Array Order Truncation Variants
+ * Functions that remove all terms of a given order and higher from every element at every
+ * integration point.
+ * @{
+ */
+
+/**
+ * @brief Truncates all terms of order @p ord and higher from every element at every integration
+ *        point (allocating variant).
+ *
+ * Applies arrso_truncate_order_to() at each integration point. The real part is the term of order
+ * zero, so @p ord = 0 returns an array of zeros, including the real parts. For @p ord >= 1 the
+ * real parts and all imaginary directions of order 1 to @p ord - 1 are kept.
+ *
+ * @param[in] ord  Lowest order to remove. Terms of order 0 to @p ord - 1 are kept.
+ * @param[in] arr  Gauss-point array to truncate. Must not be NULL.
+ * @param[in] dhl  Direction helper list object.
+ *
+ * @return Newly allocated fearrso_t with the same shape and number of integration points as
+ *         @p arr. Caller owns memory and must free via fearrso_free().
+ *
+ * @see fearrso_truncate_order_to() for the existing-destination variant.
+ */
 fearrso_t fearrso_truncate_order(   ord_t ord, fearrso_t* arr,                 dhelpl_t dhl);
+
+/**
+ * @brief Truncates all terms of order @p ord and higher from every element at every integration
+ *        point, into an existing destination.
+ *
+ * Same semantics as fearrso_truncate_order(): @p ord = 0 sets @p res to zero, including the real
+ * parts; for @p ord >= 1 the real parts and all imaginary directions of order 1 to @p ord - 1 are
+ * kept.
+ *
+ * @param[in]     ord  Lowest order to remove. Terms of order 0 to @p ord - 1 are kept.
+ * @param[in]     arr  Gauss-point array to truncate. Must not be NULL.
+ * @param[in,out] res  Pre-allocated destination. Must have the same shape and number of
+ *                     integration points as @p arr. Each element may be reallocated, following
+ *                     the rules of soti_truncate_order_to().
+ * @param[in]     dhl  Direction helper list object.
+ *
+ * @see fearrso_truncate_order() for the allocating variant.
+ */
 void      fearrso_truncate_order_to(ord_t ord, fearrso_t* arr, fearrso_t* res, dhelpl_t dhl);
+
+/** @} */
 // ----------------------------------------------------------------------------------------------------
 
 

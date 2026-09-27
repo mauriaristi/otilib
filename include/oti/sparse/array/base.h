@@ -89,16 +89,50 @@ arrso_t arrso_truncate_im(    imdir_t idx, ord_t order, arrso_t* arr,           
 void    arrso_truncate_im_to( imdir_t idx, ord_t order, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Truncate imaginary directions with orders greater or equal than ord.
+/**
+ * @name Sparse OTI Array Order Truncation Variants
+ * Functions that remove all terms of a given order and higher from every element of an arrso_t.
+ * @{
+ */
 
-@param[in]    ord  Order of the imaignary direction.
-@param[in]    arr  Address of array from which to get data.
-@param[inout] res  Address of the result holder
-@param[in]    dhl  Direction helper list object.
-******************************************************************************************************/ 
+/**
+ * @brief Truncates all terms of order @p ord and higher from every element, into an existing
+ *        destination.
+ *
+ * Applies soti_truncate_order_to() elementwise. The real part is the term of order zero, so
+ * @p ord = 0 sets every element of @p res to zero, including its real part. For @p ord >= 1 the
+ * real part and all imaginary directions of order 1 to @p ord - 1 are kept.
+ *
+ * @param[in]     ord  Lowest order to remove. Terms of order 0 to @p ord - 1 are kept.
+ * @param[in]     arr  Array to truncate. Must not be NULL.
+ * @param[in,out] res  Pre-allocated destination array. Must have the same shape as @p arr. Each
+ *                     element may be reallocated, following the rules of
+ *                     soti_truncate_order_to().
+ * @param[in]     dhl  Direction helper list object.
+ *
+ * @see arrso_truncate_order() for the allocating variant.
+ */
 void    arrso_truncate_order_to( ord_t ord, arrso_t* arr, arrso_t* res, dhelpl_t dhl);
+
+/**
+ * @brief Truncates all terms of order @p ord and higher from every element (allocating variant).
+ *
+ * Same semantics as arrso_truncate_order_to(): @p ord = 0 returns an array of zeros, including
+ * the real parts; for @p ord >= 1 the real parts and all imaginary directions of order 1 to
+ * @p ord - 1 are kept.
+ *
+ * @param[in] ord  Lowest order to remove. Terms of order 0 to @p ord - 1 are kept.
+ * @param[in] arr  Array to truncate. Must not be NULL.
+ * @param[in] dhl  Direction helper list object.
+ *
+ * @return Newly allocated arrso_t with the same shape as @p arr, holding the truncated array.
+ *         Caller owns memory and must free via arrso_free().
+ *
+ * @see arrso_truncate_order_to() for the existing-destination variant.
+ */
 arrso_t arrso_truncate_order(    ord_t ord, arrso_t* arr,               dhelpl_t dhl);
+
+/** @} */
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

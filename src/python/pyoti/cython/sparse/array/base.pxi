@@ -1582,8 +1582,31 @@ cdef class matso:
   #*****************************************************************************
   cpdef  truncate_order( self, ord_t order):
     """
-    PURPOSE:      to set a specific imaginary direction as given.
+    Truncates every term whose order is equal to or larger than ``order``.
 
+    The real part is the term of order zero, so it is treated like any other order:
+    ``truncate_order(0)`` removes every term, including the real part, and returns zero.
+    ``truncate_order(k)`` with ``k >= 1`` keeps the real part and all imaginary directions of
+    order ``1 .. k-1``. For ``order >= 1`` the result keeps the truncation order of the input;
+    for ``order = 0`` the result is zero with truncation order 0.
+
+    Parameters
+    ----------
+    order : int
+        Lowest order to remove. Terms of order ``0 .. order-1`` are kept.
+
+    Returns
+    -------
+    matso
+        New matso with the truncated terms set to zero. The original is not modified.
+
+    Examples
+    --------
+    >>> A = oti.array([[1.0, 2.0]]) + oti.e(1, order=3)
+    >>> A.truncate_order(1).real     # only the real part remains
+    array([[1., 2.]])
+    >>> A.truncate_order(0).real     # the real part (order 0) is also removed
+    array([[0., 0.]])
     """
     #***************************************************************************
     global dhl

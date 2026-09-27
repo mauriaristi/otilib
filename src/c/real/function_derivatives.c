@@ -266,7 +266,7 @@ void der_r_acosh(coeff_t x0, ord_t order, coeff_t* derivs){
     case 3:
     derivs[3]  =  (3.*pow(x0, 2.)/(x2m1) - 1.)/pow(sqx2m1, 3.0);
     case 4:
-    derivs[4]  =  3.*x0*(-5.*pow(x0, .2)/(x2m1) + 3.)/pow(sqx2m1, 5.0);
+    derivs[4]  =  3.*x0*(-5.*pow(x0, 2.)/(x2m1) + 3.)/pow(sqx2m1, 5.0);
     case 5:
     derivs[5]  =  3.*(35.*pow(x0, 4.)/pow(x2m1, 2.) - 30*pow(x0, 2.)/(x2m1) + 3.)/pow(sqx2m1, 5.0);
     case 6:

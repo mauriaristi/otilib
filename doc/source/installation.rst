@@ -22,7 +22,8 @@ conda distribution installed (see `Anaconda <https://www.anaconda.com/download>`
     - macOS (tested on Tahoe 26.*; see macOS specific instructions below when building from source).
     - Windows (only working under `WSL <https://learn.microsoft.com/en-us/windows/wsl/>`_).
 
-    A pure Windows installation is currently not supported.
+    A pure Windows installation is currently not supported: the build links the Python extensions
+    with Unix-style archives and linker flags.
 
 
 Installing with conda
@@ -89,7 +90,12 @@ Minimum requirements are the following:
 * scikit-umfpack (optional; only needed for the `solver='umfpack'` sparse solver, requires a NumPy 2-compatible upstream build)
 * sksparse-cholmod (optional; only needed for the `solver='cholesky'` sparse solver, requires a NumPy 2-compatible upstream build)
 * Cython>=3.0
-* CMake>=3.20
+* CMake>=3.22
+* A Fortran compiler (``gfortran``)
+* LAPACK and BLAS (LP64, 32-bit integers). The ``environment.yml`` file installs conda-forge's
+  ``libblas`` and ``liblapack``. Outside conda, install ``liblapack-dev`` (or ``libopenblas-dev``)
+  on Linux; on macOS, Accelerate (part of the OS) can be used instead (see
+  :ref:`selecting-lapack`).
 
 
 Conda environment for building
@@ -145,6 +151,12 @@ In addition, install GNU gfortran from conda-forge:
     conda install -c conda-forge gfortran --solver rattler
 
 This will add gfortran with support for the architecture of your processor, which is important.
+
+If Homebrew ``flang`` is also installed, CMake (4.x) may pick it over ``gfortran`` when a build
+directory is configured for the first time, and the Accelerate check of CMake's ``FindBLAS`` fails
+under ``flang``. In that case, add ``-DCMAKE_Fortran_COMPILER=gfortran`` to the ``cmake ..``
+command of `Compiling the library`_ (``cmake -DCMAKE_Fortran_COMPILER=gfortran ..`` from inside
+``build/``).
 
 
 Compiling the library
@@ -211,6 +223,31 @@ In order to remove this folder to the path, run:
     cd /PATH/TO/OTILIB-MASTER/build/
     conda activate pyoti
     conda develop -u .
+
+
+.. _selecting-lapack:
+
+Selecting the LAPACK library
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The dense linear algebra of the library (``inv``, ``det``, ``solve``, ``lu_factor``,
+``lu_solve``) requires LAPACK, which CMake finds with ``find_package(LAPACK)``. By default CMake
+uses its own search order; inside the ``pyoti`` conda environment this finds conda's OpenBLAS. To
+choose a specific implementation, set ``OTI_BLA_VENDOR`` to one of CMake's ``BLA_VENDOR`` values:
+
+.. code-block:: bash
+
+    # macOS Accelerate
+    cmake -DOTI_BLA_VENDOR=Apple ..
+    # OpenBLAS
+    cmake -DOTI_BLA_VENDOR=OpenBLAS ..
+    # conda-forge's switchable libblas / liblapack
+    cmake -DOTI_BLA_VENDOR=Generic -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" ..
+
+On macOS, ``Generic`` without ``CMAKE_PREFIX_PATH`` finds the SDK's ``libblas`` (Accelerate)
+first. The configure output prints the selected libraries (``LAPACK libraries: ...``). Changing
+the vendor of an existing build directory requires a fresh configure (empty ``build/`` first),
+because CMake caches the search result.
 
 
 .. _jupyter-kernel:

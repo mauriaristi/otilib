@@ -19,6 +19,8 @@ cpdef sum(object lhs, object rhs, object out = None):
 
   tlhs = type(lhs)
 
+  _check_elementwise("sum", lhs, rhs, out)
+
   if out is None:
     res_flag = 0
   # end if 
@@ -56,6 +58,8 @@ cpdef sub(object lhs, object rhs, object out = None):
   cdef object res = None
 
   tlhs = type(lhs)
+
+  _check_elementwise("sub", lhs, rhs, out)
 
   if out is None:
     res_flag = 0
@@ -95,6 +99,8 @@ cpdef mul(object lhs, object rhs, object out = None):
 
   tlhs = type(lhs)
 
+  _check_elementwise("mul", lhs, rhs, out)
+
   if out is None:
     res_flag = 0
   # end if 
@@ -133,6 +139,8 @@ cpdef div(object lhs, object rhs, object out = None):
 
   tlhs = type(lhs)
 
+  _check_elementwise("div", lhs, rhs, out)
+
   if out is None:
     res_flag = 0
   # end if 
@@ -166,6 +174,8 @@ cpdef trunc_sub(ord_t order, matso Olhs, matso Orhs, matso out = None):
   """
   #***************************************************************************************************
   global dhl
+
+  _check_elementwise("trunc_sub", Olhs, Orhs, out)
   
   cdef uint8_t res_flag = 1
   cdef object res = None

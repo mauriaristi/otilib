@@ -61,6 +61,11 @@ if compile_static:
   libraries    += ['oticwrap','otistatic']
 # end if 
 
+# LAPACK wrappers (libotilapack.a) and the LAPACK found by CMake. Always needed: liboti calls them.
+dependencies    += ["@CYTHONIZE_BUILD_DIR@/../lib/libotilapack.a"]
+libraries       += ['otilapack']
+extra_link_args += @OTI_LAPACK_LINK_ARGS_PY@
+
 if compile_intel:
   libraries += ['ifcore','ifcoremt','svml','intlc']
 elif compile_gnu:

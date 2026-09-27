@@ -230,7 +230,7 @@ void ssoti_gem_or_to( semiotin_t* b, coeff_t a, semiotin_t* c, semiotin_t* res, 
 void ssoti_gem_ro_to(coeff_t a, semiotin_t* b, semiotin_t* c, semiotin_t* res, dhelpl_t dhl){
     // This function does GEM (GEneral Multiplication): res = a*b + c
 
-    semiotin_t tmp1 = ssoti_get_tmp( 0, b->act_order, dhl);
+    semiotin_t tmp1 = ssoti_get_tmp( 0, b->trc_order, dhl);
     semiotin_t tmp2;
 
     ssoti_mul_ro_to( a, b, &tmp1, dhl); // This is temporal 10

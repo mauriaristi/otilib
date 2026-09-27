@@ -39,16 +39,58 @@ sotinum_t soti_truncate_im(    imdir_t idx, ord_t order, sotinum_t* num,        
 void      soti_truncate_im_to( imdir_t idx, ord_t order, sotinum_t* num, sotinum_t* res, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Truncate all imaginary directions with ord o or larger.
+/**
+ * @name Sparse OTI Order Truncation Variants
+ * Functions that remove all terms of a given order and higher from a sparse OTI number.
+ * @{
+ */
 
-@param[in]  num   OTI number to truncate direction
-@param[in]  ord   Order of imaginary direction to extract.
-@param[in]  res   Addres of the resulting OTI number that will hold result.
-@param[in]  dhl   Direction helper list.
-******************************************************************************************************/
+/**
+ * @brief Truncates all terms of order @p ord and higher (allocating variant).
+ *
+ * The real part is the term of order zero, so it is treated like any other order: @p ord = 0
+ * removes every term, including the real part, and the result is zero with truncation order 0.
+ * For @p ord >= 1 the real part and all imaginary directions of order 1 to @p ord - 1 are kept,
+ * and the result has the truncation order of @p num.
+ *
+ * @param[in] ord  Lowest order to remove. Terms of order 0 to @p ord - 1 are kept.
+ * @param[in] num  OTI number to truncate. Must not be NULL.
+ * @param[in] dhl  Direction helper list object.
+ *
+ * @return Newly allocated sotinum_t holding the truncated number. Caller owns memory and must free
+ *         via soti_free().
+ *
+ * @note The active order of @p num is changed temporarily during the call and restored before
+ *       returning, so @p num must not be accessed concurrently from another thread.
+ *
+ * @see soti_truncate_order_to() for the existing-destination variant.
+ */
 sotinum_t soti_truncate_order(    ord_t ord, sotinum_t* num,                 dhelpl_t dhl );
+
+/**
+ * @brief Truncates all terms of order @p ord and higher into an existing destination.
+ *
+ * Same semantics as soti_truncate_order(): @p ord = 0 sets @p res to zero, including its real
+ * part, and leaves the truncation order of @p res unchanged; for @p ord >= 1 the real part and all
+ * imaginary directions of order 1 to @p ord - 1 are copied into @p res.
+ *
+ * @param[in]     ord  Lowest order to remove. Terms of order 0 to @p ord - 1 are kept.
+ * @param[in]     num  OTI number to truncate. Must not be NULL.
+ * @param[in,out] res  Destination for the truncated number. Must be initialized (e.g. via
+ *                     soti_init()).
+ * @param[in]     dhl  Direction helper list object.
+ *
+ * @note For @p ord >= 1, if @p res lacks the capacity to hold the result, its memory is freed and
+ *       reallocated. This requires @p res to own its memory (nonzero flag); a non-owning @p res
+ *       without enough capacity terminates the program.
+ * @note The active order of @p num is changed temporarily during the call and restored before
+ *       returning, so @p num must not be accessed concurrently from another thread.
+ *
+ * @see soti_truncate_order() for the allocating variant.
+ */
 void      soti_truncate_order_to( ord_t ord, sotinum_t* num, sotinum_t* res, dhelpl_t dhl );
+
+/** @} */
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

@@ -238,7 +238,7 @@ void soti_gem_or_to( sotinum_t* b, coeff_t a, sotinum_t* c, sotinum_t* res, dhel
 void soti_gem_ro_to(coeff_t a, sotinum_t* b, sotinum_t* c, sotinum_t* res, dhelpl_t dhl){
     // This function does GEM (GEneral Multiplication): res = a*b + c
 
-    sotinum_t tmp1 = soti_get_tmp( 0, b->act_order, dhl);
+    sotinum_t tmp1 = soti_get_tmp( 0, b->trc_order, dhl);
     sotinum_t tmp2;
 
     soti_mul_ro_to( a, b, &tmp1, dhl); // This is temporal 10

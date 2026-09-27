@@ -1,40 +1,43 @@
-# OTIlib and pyoti 
+# OTIlib 
 
 <p align="center">
 An open source library for Order Truncated Imaginary (OTI) Numbers. 
 An algebra for efficient arbitrary-order, multivariate differentiation.
 </p>
 
+
 Useful links:
 
 * [Changelog](CHANGELOG.md)
 * [Documentation](https://mauriaristi.github.io/otilib/) (work in progress)
-* Theory, references, lecture notes and other information on Hypercomplex-based Automatic Differentiation [HYPAD](https://ceid.utsa.edu/HYPAD/).
+* Additional theory, references, lecture notes, and other information on Hypercomplex-based Automatic Differentiation [HYPAD](https://ceid.utsa.edu/HYPAD/).
 
 
 # OVERVIEW #
 
 **OTILIB** 
 
-This is the repository of the Order Truncated Imaginary numbers (OTI numbers) implemented in different programming languages. OTI numbers, initially developed in [the Ph.D. thesis "Order Truncated Imaginary Algebra for Computation of Multivariable High-Order Derivatives in Finite Element Analysis"](https://www.proquest.com/docview/2749270507/). OTI numbers are an extension of Dual numbers, which can be used to compute high-order derivatives with respect to multiple variables. In contrast to the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ), OTI numbers set a truncation condition other than $\epsilon^2 = 0$, and considers multiple imaginary basis. For instance $\epsilon_1^5,\epsilon_1^2\epsilon_2,\ldots,\epsilon_m$ can be non-truncated imaginary directions.
+This is the repository of the Order Truncated Imaginary numbers (OTI numbers), a hypercomplex algebra that allows the calculation of high-order, multivariable derivatives in computer programs. The core implementation is developed in C++ (following the majority of the C++20 standard), and provides an interface with C to languages like Fortran, Python, Julia, and Matlab. OTI numbers were initially developed in the PhD thesis titled ["Order Truncated Imaginary Algebra for Computation of Multivariable High-Order Derivatives in Finite Element Analysis"](https://www.proquest.com/docview/2749270507/). This project started with this PhD project, and has been developed since 2016.
 
-This library provides multiple implementations of OTI numbers. A core implementation is provided in C that supports various techniques to efficiently treat scalar and array operations such as matrix multiplication, vector dot product, vector array operations, etc.
+OTI numbers extend the Dual numbers and can be used to compute high-order derivatives with respect to multiple variables. In contrast to the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ), OTI numbers set a truncation condition other than $\epsilon^2 = 0$, and considers multiple imaginary basis. For instance $\epsilon_1^5,\epsilon_1^2\epsilon_2,\ldots,\epsilon_m$ can be non-truncated imaginary directions.
 
-Ongoing research and updates are currently focused to improve efficiency of the Python and Fortran implementation of OTIs. 
+This library provides multiple implementations of OTI numbers, supporting different usage cases. Each implementation supports techniques to efficiently treat scalar and tensor operations such as elementwise operations, matrix multiplication, vector dot product, vector array operations, etc in an efficient manner.
 
 Currently three implementations are supported: 
-* Dynamic-Dense (outdated), 
-* Static-Dense (modern, fastest) and 
-* Dynamic-Sparse  (Slower, but the most versatile and robust)
+* Sparse implementation (default)
+* Dynamic dense implementation (partial support)
+* Static-Dense 
 
-Most operations implemented so far are serial, and some support OpenMP parallelization. It is expected in the near future to fully support parallel excecution using OpenMP, MPI and GPU parallelization (OpenCL/CUDA/Metal, to be defined).
-
-
+Parallelization is supported for shared-memory (OpenMP), distributed memory (MPI), and GPU support is provided via CUDA and Metal backends.
 
 ## Current Programming languages: 
-* **C** (C99) for core routines.
-* **Python** (Version 3.10 or newer. This library requires [Cython](http://cython.org) >= 3.0)
-* **Fortran** (F95 or newer, static dense implementation)
+
+* **C++** (C++20) for core routines.
+* **C**: Exposed from the C++ implementation via extern C declarations.
+* **Python** (Version 3.13 or newer. This library requires [Cython](http://cython.org) >= 3.0)
+* **Fortran** (F2018  standard or newer) Exposes all core features.
+* **MATLAB** .
+* **Julia** .
 
 ## Quick Installation instructions:
 
@@ -95,13 +98,22 @@ This library has been tested on:
 
 - **Unix** platforms (Ubuntu, CentOS, Rocky Linux).
 - **macOS** (Tested on Tahoe 26.*)
-- **Windows** (Works only under Windows Subsystem for Linux - [WSL](https://learn.microsoft.com/en-us/windows/wsl/) ) 
+- **Windows** (Works only under Windows Subsystem for Linux - [WSL](https://learn.microsoft.com/en-us/windows/wsl/) ). Native Windows builds are not supported.
 
 ### Requirements
 
 #### **C** version
 
-The current version depends on ```stdlib.h``` and ```math.h```
+The current version depends on ```stdlib.h```, ```math.h``` and a LAPACK / BLAS library (LP64,
+32-bit integers), found at build time by CMake (>= 3.22):
+
+* conda: `libblas` and `liblapack` (already in `environment.yml`).
+* Linux: `liblapack-dev` or `libopenblas-dev` from the system package manager.
+* macOS: Accelerate, part of the OS (`cmake -DOTI_BLA_VENDOR=Apple ..`).
+
+`OTI_BLA_VENDOR` accepts CMake's `BLA_VENDOR` values (`Apple`, `OpenBLAS`, `Generic`,
+`Intel10_64lp`, ...); left empty, CMake searches in its default order. A Fortran compiler is
+required as well: the C code calls LAPACK through Fortran wrappers.
 
 #### Python version 3:
 
@@ -110,7 +122,8 @@ Requirements:
 * Numpy >= 2.1, < 3
 * Scipy
 * Cython>=3.0 (For compilation only)
-* CMake (For compilation only)
+* CMake >= 3.22 (For compilation only)
+* LAPACK / BLAS (For compilation; see the C requirements above)
 
 For the full Finite Element support, the following libraries are required.
 

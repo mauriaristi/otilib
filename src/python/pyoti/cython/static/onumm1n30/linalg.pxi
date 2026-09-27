@@ -155,7 +155,7 @@ cpdef dot(object lhs, object rhs, object out = None):
         res = feomatm1n30.create(&cFres)
       # end if 
 
-    elif tlhs is dmat:    # FR
+    elif trhs is dmat:    # FR
 
       Rrhs = rhs
       if res_flag:
@@ -194,7 +194,7 @@ cpdef dot(object lhs, object rhs, object out = None):
         res = omatm1n30.create(&cOres)
       # end if 
 
-    elif tlhs is dmat:    # OR
+    elif trhs is dmat:    # OR
     
       Rrhs = rhs
       if res_flag:
@@ -247,7 +247,7 @@ cpdef dot(object lhs, object rhs, object out = None):
         res = omatm1n30.create(&cOres)
       # end if 
 
-    elif tlhs is dmat:    # RR
+    elif trhs is dmat:    # RR
       Rrhs = rhs
       if res_flag:
         Rres = out

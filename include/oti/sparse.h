@@ -70,6 +70,7 @@
 // Append algebra declarations.
 #include "sparse/array/algebra_elementwise.h"
 #include "sparse/array/algebra_matops.h"
+#include "sparse/array/algebra_lu.h"
 
 // Append utils.
 #include "sparse/array/utils.h"

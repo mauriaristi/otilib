@@ -412,9 +412,10 @@ fesoti_t fearrso_det(fearrso_t* arr, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl){
+int fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl){
     
     uint64_t i;
+    int info, status = 0;
     
     // Check dimensions (squareness)
     fearrso_dimCheck_F_squareness( arr, arr);
@@ -422,9 +423,16 @@ void fearrso_det_to(fearrso_t* arr, fesoti_t* res, dhelpl_t dhl){
 
     for (i = 0; i<arr->nip; i++){
         
-        arrso_det_to( &arr->p_data[i], &res->p_data[i], dhl);
+        info = arrso_det_to( &arr->p_data[i], &res->p_data[i], dhl);
+
+        // Keep the first failure.
+        if ( status == 0 ){
+            status = info;
+        }
 
     }
+
+    return status;
 
 }
 // ----------------------------------------------------------------------------------------------------
@@ -463,18 +471,26 @@ fearrso_t fearrso_invert(fearrso_t* arr, dhelpl_t dhl){
 // ----------------------------------------------------------------------------------------------------
 
 // ****************************************************************************************************
-void fearrso_invert_to(fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
+int fearrso_invert_to(fearrso_t* arr, fearrso_t* res, dhelpl_t dhl){
 
     uint64_t i;
+    int info, status = 0;
 
     // Check dimensions (must be square and equal).
     fearrso_dimCheck_F_squareness( arr, res);
     
     for (i = 0; i<arr->nip; i++){
 
-        arrso_invert_to( &arr->p_data[i], &res->p_data[i], dhl);
+        info = arrso_invert_to( &arr->p_data[i], &res->p_data[i], dhl);
+
+        // Keep the first failure.
+        if ( status == 0 ){
+            status = info;
+        }
 
     }
+
+    return status;
 
 }
 // ----------------------------------------------------------------------------------------------------

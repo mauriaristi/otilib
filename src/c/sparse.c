@@ -59,6 +59,9 @@
 #include "sparse/array/algebra_matops.c"
 #include "sparse/array/algebra_matops_to.c"
 
+// Array algebra: LU factorization and linear solves on LAPACK (inv / det for n > 3 use them).
+#include "sparse/array/algebra_lu.c"
+
 #include "sparse/array/utils.c"
 
 

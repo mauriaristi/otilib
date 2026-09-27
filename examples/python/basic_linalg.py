@@ -27,7 +27,7 @@ A[1,0] += oti.e(2)
 print('\nA:')
 print(A)
 
-# Compute the inverse of A. Inv only supports 1x1, 2x2 or 3x3 matrices.
+# Compute the inverse of A (any n x n matrix whose real part is invertible).
 Ainv = oti.inv(A)
 
 print('\ninv(A):')

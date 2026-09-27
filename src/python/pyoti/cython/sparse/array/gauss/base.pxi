@@ -1030,6 +1030,8 @@ cdef class matsofe:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("addition", self, other)
     
     if (tlhs == trhs):     # FF
 
@@ -1145,6 +1147,8 @@ cdef class matsofe:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("subtraction", self, other)
     
     if (tlhs == trhs):     # FF
 
@@ -1259,6 +1263,8 @@ cdef class matsofe:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("multiplication", self, other)
     
     if (tlhs == trhs):     # FF
 
@@ -1374,6 +1380,8 @@ cdef class matsofe:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("division", self, other)
     
     if (tlhs == trhs):     # FF
 
@@ -1612,8 +1620,28 @@ cdef class matsofe:
   #***************************************************************************************************
   cpdef  truncate_order( self, ord_t order):
     """
-    PURPOSE:      to set a specific imaginary direction as given.
+    Truncates every term whose order is equal to or larger than ``order``.
 
+    The real part is the term of order zero, so it is treated like any other order:
+    ``truncate_order(0)`` removes every term, including the real part, and returns zero.
+    ``truncate_order(k)`` with ``k >= 1`` keeps the real part and all imaginary directions of
+    order ``1 .. k-1``. For ``order >= 1`` the result keeps the truncation order of the input;
+    for ``order = 0`` the result is zero with truncation order 0.
+
+    Parameters
+    ----------
+    order : int
+        Lowest order to remove. Terms of order ``0 .. order-1`` are kept.
+
+    Returns
+    -------
+    matsofe
+        New matsofe with the truncated terms set to zero. The original is not modified.
+
+    Examples
+    --------
+    >>> res = val.truncate_order(2)  # keeps orders 0 and 1 at every integration point
+    >>> res = val.truncate_order(0)  # zero at every integration point
     """
     #*************************************************************************************************
     global dhl

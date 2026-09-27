@@ -11,6 +11,16 @@ Guidance for AI agents working in this repository.
   - `vtk<9.4`: `pyvista` compatibility (prevents `vtkCapsuleSource` import error with VTK 9.5+).
   - `cython>=3.0`: Cython 3.x is the standard compiler for building extension modules.
 - **OpenMP (macOS):** Requires Homebrew `libomp` at `/opt/homebrew/opt/libomp` and `gfortran` (Homebrew GCC).
+- **LAPACK / BLAS (required):** The C core's dense linear algebra (`inv`, `det`, `solve`,
+  `lu_factor`, `lu_solve`) links a LAPACK found by CMake's `find_package(LAPACK)` with 32-bit
+  integers (LP64). Sources, by platform:
+  - conda: `libblas`, `liblapack` (in `environment.yml`; conda-forge's stubs, switchable between
+    OpenBLAS, MKL, Accelerate and netlib with `blas=*=<impl>`).
+  - Linux system packages: `liblapack-dev` (or `libopenblas-dev`).
+  - macOS: Accelerate, part of the OS (`-DOTI_BLA_VENDOR=Apple`).
+- **CMake >= 3.22** (`BLA_SIZEOF_INTEGER`).
+- **Platforms:** Linux and macOS. Native Windows is not supported: the Cython link line in
+  `setup.py.in` assumes Unix archives and `-Wl,` linker flags. Use WSL.
 
 ### Dependency Availability Check
 
@@ -70,6 +80,20 @@ conda develop .
 1. **`make gendata` is required:** Compiles and runs `otigen` to generate lookup tables (`build/data/*.npy`). Importing `pyoti` fails without these files.
 2. **`conda develop .` (from `build/`):** Links `build/pyoti` to the conda environment site-packages so `import pyoti` works repository-wide.
 3. **Cython build (`oticython` target):** Automatically invoked during `make`. Generated shared objects (`*.so`) are placed into `build/pyoti/`.
+4. **Choosing the LAPACK:** `cmake -DOTI_BLA_VENDOR=<vendor> ..` passes `<vendor>` to FindLAPACK
+   as `BLA_VENDOR` (`Apple`, `OpenBLAS`, `Generic`, `Intel10_64lp`, ...). Empty (the default)
+   uses CMake's search order, which picks the conda OpenBLAS inside the `pyoti` env. The configure
+   log prints `LAPACK libraries:` and the Cython link arguments; check them after switching.
+   - `Generic` on macOS finds the SDK's `libblas.tbd` (Accelerate) unless
+     `-DCMAKE_PREFIX_PATH="$CONDA_PREFIX"` is also given; the conda recipe passes `$PREFIX`.
+   - Check the linked library with `otool -L build/pyoti/sparse*.so` (macOS) or `ldd` (Linux).
+   - Changing the vendor in an existing `build/` needs a fresh configure (FindLAPACK caches its
+     result).
+5. **Fortran compiler on macOS:** a fresh configure with CMake 4 picks Homebrew `flang` over
+   `gfortran` when both are installed, and FindBLAS's Accelerate check fails under `flang`. Pass
+   the compiler explicitly on a new build directory:
+   `cmake -DCMAKE_Fortran_COMPILER=gfortran ..`. An existing `build/` keeps the compiler in its
+   cache.
 
 ## Architecture & Layout
 
@@ -104,6 +128,9 @@ Note: as of the Python 3.13 migration, `scikits.umfpack`/`sksparse` conda-forge 
 ### 2. Verify PyOTI Package Installation & Test Suite
 Run the Python test suite from the repository root to verify imports, precomputed data tables, and mathematical derivative accuracy:
 
+Reference derivatives in the scalar-function tests are computed with `sympy`, a test-only dependency
+(listed in `environment.yml` and the conda recipe's `test.requires`).
+
 ```bash
 # Run full Python test suite
 pytest tests/python
@@ -112,8 +139,11 @@ python tests/run_tests.py
 
 # Run specific verification tests
 pytest tests/python/test_imports.py        # Installation, submodules & data tables
-pytest tests/python/test_sparse_scalar.py  # Scalar math & derivative extraction
+pytest tests/python/test_sparse_scalar.py  # Scalar creation & basic arithmetic
+pytest tests/python/test_sparse_scalar_functions.py  # All scalar functions/operators, up to 6th order
+pytest tests/python/test_sparse_scalar_utils.py      # rom_eval, truncate, truncate_order
 pytest tests/python/test_sparse_array.py   # Matrix/array operations & linalg
+pytest tests/python/test_sparse_array_ops.py  # Dense matso ops & linalg vs sympy, up to 4th order
 pytest tests/python/test_static.py         # Static dense modules (onummXnY)
 pytest tests/python/test_dense.py          # Dynamic dense OTI numbers
 ```
@@ -129,6 +159,8 @@ ctest --output-on-failure
 # Or run individual test executables:
 ./tests/c/test_c_scalar
 ./tests/c/test_c_array
+./tests/c/test_c_lapack          # LAPACK wrappers
+./tests/c/test_c_sparse_linalg   # det / inv / solve / LU of OTI arrays (needs make gendata)
 ./tests/fortran/test_f_static_scalar
 ./tests/fortran/test_f_sparse_scalar
 ./tests/cpp/test_cpp_vector
@@ -379,6 +411,26 @@ Align arguments in multiline function declarations when defining groups of varia
 
 Keep inline comments succinct and place them directly above the relevant operations or on the same line if within the 106-column budget.
 
-### 5. Performance & Link-Time Optimization (LTO) Awareness
+### 5. Calling LAPACK / BLAS
+
+- **Never call LAPACK or BLAS symbols (`dgetrf_`, `DGETRF`, `cblas_*`, ...) from C directly**, and
+  never include vendor headers (`<Accelerate/Accelerate.h>`, `lapacke.h`). Use the `oti_d*`
+  wrappers declared in `include/oti/core/lapack.h`. They are Fortran `bind(C)` subroutines
+  (`src/fortran/core/oti_lapack.f90`, library `otilapack`), so the Fortran compiler resolves symbol
+  mangling and the hidden string-length arguments on every platform and vendor.
+- A new routine means a new wrapper in `oti_lapack.f90` (`integer(c_int)` arguments, flags as
+  `character(kind=c_char), value` copied into a default-kind `character(len=1)` local), its
+  prototype and Doxygen block in `lapack.h`, and a case in `tests/c/test_lapack.c`.
+- Size checks, two kinds:
+  - Every value passed to a wrapper as an `int` (dimension, leading dimension, right-hand-side
+    count such as `ncols * N_ord`) goes through `oti_lapack_fits()` before it is narrowed.
+  - Byte counts of work buffers are checked for `size_t` overflow before `malloc`
+    (`lu_buffer_bytes()` in `src/c/sparse/array/algebra_lu.c`); `oti_lapack_fits()` does not
+    cover them.
+- Linear algebra functions return a status: `info > 0` from `dgetrf` (singular real part) or an
+  `OTI_LINALG_ERR_*` code (< 0, `include/oti/sparse/array/algebra_lu.h`). The Python layer maps it
+  to an exception (`_raise_linalg_status` in `sparse/linalg.pxi`); never `exit()` on it.
+
+### 6. Performance & Link-Time Optimization (LTO) Awareness
 - **Elemental Mathematical Kernels:** Small helper routines (degree checks, monomial table lookups, coefficient index calculations) that are called inside inner loops must be declared static inline in internal header files rather than being isolated as non-inline functions in separate compilation units.
 - **Separation of Concerns:** Keep files modular and grouped by algebraic domain (e.g., static/dense vs. dynamic/sparse vs. basis indexing). Do not collapse entire modules into single monster files purely for inlining purposes; rely on CMake INTERPROCEDURAL_OPTIMIZATION (IPO/LTO) to inline across translation units.

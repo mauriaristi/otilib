@@ -24,7 +24,11 @@ build:
     rm -rf build
     mkdir build
     cd build
-    cmake ..
+    # ${CMAKE_ARGS} (unquoted, word-split on purpose) carries conda-build's toolchain settings:
+    # sysroot, find-root path, deployment target and cross-compilation flags.
+    # Generic + $PREFIX: link conda-forge's libblas / liblapack stubs (switchable after install).
+    # Without the prefix path, macOS finds the SDK's libblas.tbd (Accelerate) first.
+    cmake ${CMAKE_ARGS} -DOTI_BLA_VENDOR=Generic -DCMAKE_PREFIX_PATH="$PREFIX" ..
     make
     make gendata
 
@@ -60,6 +64,9 @@ requirements:
     # "ModuleNotFoundError: No module named 'setuptools'".
     - setuptools
     - llvm-openmp  # [osx]
+    # LAPACK / BLAS for the C core. Their run_exports add the matching run requirements.
+    - libblas
+    - liblapack
 
   # What the installed package needs at import time.
   run:
@@ -84,6 +91,7 @@ test:
 
   requires:
     - pytest
+    - sympy
 
   imports:
     - pyoti

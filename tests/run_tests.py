@@ -23,6 +23,12 @@ def run_all_tests():
     -------
     int
         Exit code returned by pytest (0 for success, non-zero for failure).
+
+    Examples
+    --------
+    >>> exit_code = run_all_tests()  # doctest: +SKIP
+    >>> exit_code
+    0
     """
     repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

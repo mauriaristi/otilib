@@ -104,6 +104,9 @@ Note: as of the Python 3.13 migration, `scikits.umfpack`/`sksparse` conda-forge 
 ### 2. Verify PyOTI Package Installation & Test Suite
 Run the Python test suite from the repository root to verify imports, precomputed data tables, and mathematical derivative accuracy:
 
+Reference derivatives in the scalar-function tests are computed with `sympy`, a test-only dependency
+(listed in `environment.yml` and the conda recipe's `test.requires`).
+
 ```bash
 # Run full Python test suite
 pytest tests/python
@@ -112,7 +115,9 @@ python tests/run_tests.py
 
 # Run specific verification tests
 pytest tests/python/test_imports.py        # Installation, submodules & data tables
-pytest tests/python/test_sparse_scalar.py  # Scalar math & derivative extraction
+pytest tests/python/test_sparse_scalar.py  # Scalar creation & basic arithmetic
+pytest tests/python/test_sparse_scalar_functions.py  # All scalar functions/operators, up to 6th order
+pytest tests/python/test_sparse_scalar_utils.py      # rom_eval, truncate, truncate_order
 pytest tests/python/test_sparse_array.py   # Matrix/array operations & linalg
 pytest tests/python/test_static.py         # Static dense modules (onummXnY)
 pytest tests/python/test_dense.py          # Dynamic dense OTI numbers

@@ -119,6 +119,7 @@ pytest tests/python/test_sparse_scalar.py  # Scalar creation & basic arithmetic
 pytest tests/python/test_sparse_scalar_functions.py  # All scalar functions/operators, up to 6th order
 pytest tests/python/test_sparse_scalar_utils.py      # rom_eval, truncate, truncate_order
 pytest tests/python/test_sparse_array.py   # Matrix/array operations & linalg
+pytest tests/python/test_sparse_array_ops.py  # Dense matso ops & linalg vs sympy, up to 4th order
 pytest tests/python/test_static.py         # Static dense modules (onummXnY)
 pytest tests/python/test_dense.py          # Dynamic dense OTI numbers
 ```

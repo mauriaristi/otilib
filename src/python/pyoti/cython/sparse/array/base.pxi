@@ -767,6 +767,7 @@ cdef class matso:
         starti, stopi, stepi = slice( val, val+1, None).indices( self.arr.nrows )
         startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
 
+        _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
         arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
         
       else:
@@ -781,6 +782,7 @@ cdef class matso:
       starti, stopi, stepi = val.indices( self.arr.nrows )
       startj, stopj, stepj = slice(None, None, None).indices( self.arr.ncols )
 
+      _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
       arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
     
     elif tval == tuple:
@@ -797,6 +799,7 @@ cdef class matso:
             starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
             startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
 
+            _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
             arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
             
           else:
@@ -812,6 +815,7 @@ cdef class matso:
             starti, stopi, stepi = slice(val[0], val[0]+1, None).indices( self.arr.nrows )
             startj, stopj, stepj = val[1].indices( self.arr.ncols )
 
+            _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
             arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
 
           else:
@@ -827,6 +831,7 @@ cdef class matso:
             starti, stopi, stepi = val[0].indices( self.arr.nrows )
             startj, stopj, stepj = slice(val[1], val[1]+1, None).indices( self.arr.ncols )
 
+            _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
             arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
 
           else:
@@ -840,6 +845,7 @@ cdef class matso:
           starti, stopi, stepi = val[0].indices( self.arr.nrows )
           startj, stopj, stepj = val[1].indices( self.arr.ncols )
 
+          _check_slice_assign(value, starti, stopi, stepi, startj, stopj, stepj)
           arrso_set_slice_O( &value.arr, starti, stopi, stepi, startj, stopj, stepj, &self.arr, dhl)
 
         else:
@@ -908,6 +914,8 @@ cdef class matso:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("addition", self, other)
     
     if (tlhs == trhs):
 
@@ -993,6 +1001,8 @@ cdef class matso:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("subtraction", self, other)
     
     if (tlhs == trhs):
 
@@ -1078,6 +1088,8 @@ cdef class matso:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("multiplication", self, other)
     
     if (tlhs == trhs):
 
@@ -1165,6 +1177,8 @@ cdef class matso:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("division", self, other)
     
     if (tlhs == trhs):
 
@@ -1222,6 +1236,28 @@ cdef class matso:
   #-----------------------------------------------------------------------------
 
   #*****************************************************************************
+  def __matmul__(self, other):
+    """
+    PURPOSE: Matrix multiplication overload (self @ other). Equivalent to dot(self, other).
+    """
+    #***************************************************************************
+
+    return dot(self, other)
+
+  #-----------------------------------------------------------------------------
+
+  #*****************************************************************************
+  def __rmatmul__(self, other):
+    """
+    PURPOSE: Reflected matrix multiplication overload (other @ self).
+    """
+    #***************************************************************************
+
+    return dot(other, self)
+
+  #-----------------------------------------------------------------------------
+
+  #*****************************************************************************
   def __pow__(self, n,z):
     """
     PURPOSE:      Power function overload
@@ -1248,6 +1284,7 @@ cdef class matso:
 
       elif t_n is matso:
 
+        _check_elementwise("power", self, n)
         n_matso = n
         res = arrso_pow_arrso( &S.arr, &n_matso.arr, dhl)
 
@@ -1640,6 +1677,7 @@ cdef class matso:
 
     elif trhs is matso:
 
+      _check_elementwise("set", self, rhs)
       Orhs = rhs
       arrso_set_O( &Orhs.arr, &self.arr, dhl)      
 
@@ -1749,6 +1787,8 @@ cdef class matso:
     PURPOSE: Matrix multiplication.
     """
     global dhl
+
+    _check_matmul("dot", lhs, rhs, out)
     
     cdef arrso_t res 
 
@@ -1776,6 +1816,9 @@ cdef class matso:
     PURPOSE: Matrix invertion.
     """
     global dhl
+
+    _check_square("inv", arr)
+    _check_out_shape("inv", out, arr.shape)
     
     cdef arrso_t res 
 
@@ -1801,6 +1844,8 @@ cdef class matso:
     PURPOSE: Matrix transpose.
     """
     global dhl
+
+    _check_out_shape("transpose", out, (arr.shape[1], arr.shape[0]))
     
     cdef arrso_t res 
 
@@ -1825,6 +1870,8 @@ cdef class matso:
     PURPOSE: Matrix elementwise addition.
     """
     global dhl
+
+    _check_elementwise("add", lhs, rhs, out)
     
     cdef arrso_t res 
 

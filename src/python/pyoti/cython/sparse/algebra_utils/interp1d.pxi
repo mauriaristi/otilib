@@ -24,10 +24,10 @@ cdef sotinum __interp1d_OOo(matso xvals, matso yvals, sotinum x , sotinum out = 
   
   if out is None:
     res_flag = 0
-    y = zero()
-  else:  
-    y = out
   # end if 
+
+  # y is rebound below, so it can not alias `out`; the result is copied into `out` at the end.
+  y = zero()
   
   start  = 1
   finish = xvals.shape[0]
@@ -71,6 +71,8 @@ cdef sotinum __interp1d_OOo(matso xvals, matso yvals, sotinum x , sotinum out = 
 
   if res_flag == 0:
     return y
+  else:
+    out.set(y)
   # end if 
 
 #-----------------------------------------------------------------------------------------------------

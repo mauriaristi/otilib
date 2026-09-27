@@ -1030,6 +1030,8 @@ cdef class matsofe:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("addition", self, other)
     
     if (tlhs == trhs):     # FF
 
@@ -1145,6 +1147,8 @@ cdef class matsofe:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("subtraction", self, other)
     
     if (tlhs == trhs):     # FF
 
@@ -1259,6 +1263,8 @@ cdef class matsofe:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("multiplication", self, other)
     
     if (tlhs == trhs):     # FF
 
@@ -1374,6 +1380,8 @@ cdef class matsofe:
     
     tlhs = type(self)
     trhs = type(other)
+
+    _check_elementwise("division", self, other)
     
     if (tlhs == trhs):     # FF
 

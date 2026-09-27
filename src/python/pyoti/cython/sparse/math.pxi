@@ -34,6 +34,8 @@ cpdef erf(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("erf", val, out)
   #
   if   tval is sotinum:
     o = val
@@ -156,6 +158,8 @@ cpdef cos(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("cos", val, out)
   #
   if   tval is sotinum:
     o = val
@@ -280,6 +284,8 @@ cpdef sin(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("sin", val, out)
 
   #
   if   tval is sotinum:
@@ -408,6 +414,8 @@ cpdef tan(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("tan", val, out)
 
   #
   if   tval is sotinum:
@@ -539,6 +547,8 @@ cpdef acos(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("acos", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -669,6 +679,8 @@ cpdef asin(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("asin", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -795,6 +807,8 @@ cpdef atan(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("atan", val, out)
 
   #
   if   tval is sotinum:
@@ -955,6 +969,8 @@ cpdef sinh(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("sinh", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -1082,6 +1098,8 @@ cpdef cosh(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("cosh", val, out)
 
   #
   if   tval is sotinum:
@@ -1213,6 +1231,8 @@ cpdef tanh(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("tanh", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -1342,6 +1362,8 @@ cpdef acosh(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("acosh", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -1470,6 +1492,8 @@ cpdef asinh(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("asinh", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -1596,6 +1620,8 @@ cpdef atanh(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("atanh", val, out)
 
   #
   if   tval is sotinum:
@@ -1751,6 +1777,8 @@ cpdef exp(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("exp", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -1885,6 +1913,8 @@ cpdef log(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("log", val, out)
 
   #
   if   tval is sotinum:
@@ -2021,6 +2051,8 @@ cpdef log10(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("log10", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -2156,6 +2188,8 @@ cpdef logb(object val, coeff_t b, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("logb", val, out)
 
   #
   if   tval is sotinum:
@@ -2296,6 +2330,8 @@ cpdef sqrt(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("sqrt", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -2434,6 +2470,8 @@ cpdef cbrt(object val, object out = None):
     res_flag = 0
   # end if 
 
+  _check_math_out("cbrt", val, out)
+
   #
   if   tval is sotinum:
     o = val
@@ -2555,6 +2593,14 @@ cpdef pow(object val, object e, object out = None):
 
   cdef object res = None
   te   = type(e)
+
+  # An array exponent determines the result shape together with the base (a scalar base with an
+  # array exponent returns an array), so it is validated as a binary elementwise operation.
+  if te is matso:
+    _check_elementwise("pow", val, e, out)
+  else:
+    _check_math_out("pow", val, out)
+  # end if
 
   if   te is sotinum:
 
@@ -2862,7 +2908,7 @@ cdef object __pow__matsoexp(object val, matso e, object out = None):
 
   cdef uint8_t res_flag = 1
 
-  cdef object res
+  cdef object res = None
 
   tval = type(val)
 
@@ -2955,6 +3001,9 @@ cpdef gauss_integrate(object val, sotife w, object out = None ):
   if out is None:
     res_flag = 0
   # end if
+
+  _check_nip("gauss_integrate", val, w)
+  _check_out_shape("gauss_integrate", out, _array_shape(val))
 
   if   tval is sotife:
     f = val
@@ -3060,6 +3109,8 @@ cpdef neg(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("neg", val, out)
   #
   if   tval is sotinum:
     o = val
@@ -3183,6 +3234,8 @@ cpdef abs(object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("abs", val, out)
   #
   if   tval is sotinum:
     o = val

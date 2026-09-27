@@ -108,6 +108,8 @@ cpdef truncate(object humdir, object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("truncate", val, out)
   
   # Scalar Types
   if   tval is sotinum:
@@ -237,6 +239,8 @@ cpdef extract_im(object humdir, object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("extract_im", val, out)
   
   # Scalar Types
   if   tval is sotinum:
@@ -365,6 +369,8 @@ cpdef extract_deriv(object humdir, object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("extract_deriv", val, out)
   
   # Scalar Types
   if   tval is sotinum:
@@ -494,6 +500,8 @@ cpdef get_im(object humdir, object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("get_im", val, out)
   
   # Scalar Types
   if   tval is sotinum:
@@ -624,6 +632,8 @@ cpdef get_deriv(object humdir, object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("get_deriv", val, out)
   
   # Scalar Types
   if   tval is sotinum:
@@ -748,6 +758,8 @@ cpdef get_order_im(ord_t order, object val, object out = None):
   if out is None:
     res_flag = 0
   # end if 
+
+  _check_math_out("get_order_im", val, out)
   
   # Scalar Types
   if   tval is sotinum:

@@ -11,6 +11,8 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-09-27
+
 ### Added
 
 - `tests/python/test_sparse_scalar_functions.py`: checks every supported `pyoti.sparse` scalar
@@ -24,6 +26,15 @@ header, the Fortran module, the Python package and the conda recipe. Use
   deltas, length mismatch), `truncate` (method and module function, with and without `out=`) and
   `truncate_order` (every cutoff from 0 to beyond the truncation order).
 - `sympy` as a test-only dependency in `environment.yml` and the conda recipe's `test.requires`.
+- `tests/python/test_sparse_array_ops.py`: checks the dense `matso` array operations of
+  `pyoti.sparse` (elementwise arithmetic between arrays and reals, OTI scalars and real `dmat`
+  arrays; powers; math functions; `dot`, `dot_product`, `transpose`, `det`, `norm`, `inv`,
+  `inv_block`, `solve`; truncation and extraction utilities, `rom_eval`, `interp1d`,
+  `moving_average`) up to 4th order derivatives in two bases against `sympy`, including the `out=`
+  paths of these functions and the new shape validation. FE (`matsofe`) arrays are only covered by
+  the shape/integration-point checks. `inv` / `det` of arrays larger than 3x3 (still wrong) are
+  strict xfails.
+- `matso` supports the `@` operator (`__matmul__` / `__rmatmul__`, delegating to `dot`).
 
 ### Changed
 
@@ -39,8 +50,35 @@ header, the Fortran module, the Python package and the conda recipe. Use
   `test_version.py`, and minor docstring and formatting fixes in `test_imports.py` and
   `run_tests.py`.
 
+- `pyoti.sparse` array operations validate their operands and raise `ValueError` for mismatched
+  shapes, non-square arrays, wrongly shaped `out=` holders, slice assignments of the wrong shape and
+  FE (`matsofe` / `sotife`) operands with different numbers of integration points, instead of
+  reaching the C core's dimension checks, which print a message and terminate the interpreter with
+  `exit()` (`sparse/array/checks.pxi`). Covered entry points: the `matso` and `matsofe` arithmetic
+  operators, `matso` `**`, `set` and slice assignment, `sum` / `sub` / `mul` / `div` /
+  `trunc_sub`, `dot` / `trunc_dot` / `dot_product`, `det`, `inv`, `inv_block`, `transpose`,
+  `solve`, `interp1d`, `gauss_integrate`, and the `out=` paths of the math and truncation /
+  extraction functions. The C API keeps its behaviour.
+- Functions called with `out=` whose result is a float raise `TypeError` instead of silently
+  ignoring `out`: `det` / `norm` of a real `dmat`, math and truncation functions of a real number
+  and `sum` / `sub` / `mul` / `div` of two reals.
+
 ### Fixed
 
+- `soti_gem_ro_to` (and the semisparse `ssoti_gem_ro_to`) sized its temporary by the operand's
+  actual order instead of its truncation order, so `soti_copy_to` terminated the process
+  ("Cant change memory") whenever an operand's actual order was below its truncation order. This
+  crashed `dot(dmat, matso)` and `dot_product` with a `dmat` operand for arrays of order >= 2.
+- `dot(matso, dmat)` (and `dot(matsofe, dmat)`) raised `TypeError`: the dispatch tested the type
+  of the left operand instead of the right one. Fixed in `pyoti.sparse`, in the static module
+  template (`source_conv`, `source`) and in the 17 generated `onummXnY` modules.
+- `solve` of a dense OTI system with a multi-column right-hand side returned the right-hand side's
+  real part unchanged: the real solve discarded `scipy.linalg.lu_solve`'s result and relied on
+  `overwrite_b`, which only works for Fortran-contiguous arrays.
+- `pow(val, e, out=o)` with a `matso` exponent wrote `o` and then raised `UnboundLocalError`.
+- `inv_block(arr, out=o)` left `o` with only the real part of the inverse, and
+  `interp1d(x, xvals, yvals, out=o)` for a scalar `x` never wrote `o`: both rebound the local name
+  that referenced `out`.
 - The 4th derivative of `acosh` was wrong for every OTI type (sparse, dense and static):
   `der_r_acosh` in `src/c/real/function_derivatives.c` used `pow(x0, .2)` instead of
   `pow(x0, 2.)`. For example, at x = 1.7 it returned 0.0605 instead of -4.8245.

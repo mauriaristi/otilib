@@ -22,6 +22,10 @@ cpdef interp1d(object x, matso xvals, matso yvals, object out = None):
 
   tx = type(x)
 
+  _check_elementwise("interp1d", xvals, yvals)
+  _check_out_shape("interp1d", out, _array_shape(x))
+  _check_nip("interp1d", x, out)
+
   if out is None:
     res_flag = 0
   # end if 
@@ -133,6 +137,9 @@ cpdef dot_product(object lhs, object rhs, object out = None):
   cdef object res = None
 
   tlhs = type(lhs)
+
+  _check_same_size("dot_product", lhs, rhs, out)
+  _check_out_shape("dot_product", out, None)
 
   if out is None:
     res_flag = 0
@@ -254,6 +261,8 @@ cpdef dot(object lhs, object rhs, object out = None):
   tlhs = type(lhs)
   trhs = type(rhs)
 
+  _check_matmul("dot", lhs, rhs, out)
+
   if out is None:
     res_flag = 0
   # end if 
@@ -287,7 +296,7 @@ cpdef dot(object lhs, object rhs, object out = None):
         res = matsofe.create(&cFres)
       # end if 
 
-    elif tlhs is dmat:    # FR
+    elif trhs is dmat:    # FR
 
       Rrhs = rhs
       if res_flag:
@@ -326,7 +335,7 @@ cpdef dot(object lhs, object rhs, object out = None):
         res = matso.create(&cOres)
       # end if 
 
-    elif tlhs is dmat:    # OR
+    elif trhs is dmat:    # OR
     
       Rrhs = rhs
       if res_flag:
@@ -380,7 +389,7 @@ cpdef dot(object lhs, object rhs, object out = None):
         res = matso.create(&cOres)
       # end if 
 
-    elif tlhs is dmat:    # RR
+    elif trhs is dmat:    # RR
       Rrhs = rhs
       if res_flag:
         Rres = out
@@ -426,6 +435,8 @@ cpdef trunc_dot(ord_t ordlhs, object lhs, ord_t ordrhs, object rhs, object out =
 
   tlhs = type(lhs)
   trhs = type(rhs)
+
+  _check_matmul("trunc_dot", lhs, rhs, out)
 
   if out is None:
     res_flag = 0
@@ -480,6 +491,14 @@ cpdef transpose(object arr, object out = None):
   cdef object res
 
   tarr = type(arr)
+
+  shape = _array_shape(arr)
+
+  if shape is not None:
+    _check_out_shape("transpose", out, (shape[1], shape[0]))
+  # end if
+
+  _check_nip("transpose", arr, out)
 
   if out is None:
 
@@ -557,6 +576,10 @@ cpdef det(object arr, object out = None):
 
   tarr = type(arr)
 
+  _check_square("det", arr)
+  _check_out_shape("det", out, None)
+  _check_nip("det", arr, out)
+
   if out is None:
     res_flag = 0
   # end if 
@@ -590,14 +613,12 @@ cpdef det(object arr, object out = None):
 
   elif tarr is dmat:
     
-    R = arr
-    crres = darr_det( &R.arr)
-
     if res_flag:
-      out = crres
-    else:
-      res = crres
-    # end if 
+      raise TypeError("det of a real array returns a float; out= is not supported.")
+    # end if
+
+    R = arr
+    res = darr_det( &R.arr)
 
   else:
     raise TypeError("Unsupported types at det operation.")    
@@ -631,6 +652,9 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
   cdef object res
 
   tarr = type(arr)
+
+  _check_out_shape("norm", out, None)
+  _check_nip("norm", arr, out)
 
   if out is None:
 
@@ -667,16 +691,15 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
 
   elif tarr is dmat:
     
-    R = arr
-    crres = darr_pnorm( &R.arr, p)
     if res_flag:
-      out = crres
-    else:
-      res = crres
-    # end if 
+      raise TypeError("norm of a real array returns a float; out= is not supported.")
+    # end if
+
+    R = arr
+    res = darr_pnorm( &R.arr, p)
 
   else:
-    raise TypeError("Unsupported types at det operation.")
+    raise TypeError("Unsupported types at norm operation.")
   # end if 
 
   if res_flag == 0:
@@ -712,6 +735,10 @@ cpdef inv(object arr, object out = None):
   cdef object res
 
   tarr = type(arr)
+
+  _check_square("inv", arr)
+  _check_out_shape("inv", out, _array_shape(arr))
+  _check_nip("inv", arr, out)
 
   if out is None:
     res_flag = 0
@@ -799,6 +826,10 @@ cpdef inv_block(object arr, object out = None):
 
   tarr = type(arr)
 
+  _check_square("inv_block", arr)
+  _check_out_shape("inv_block", out, _array_shape(arr))
+  _check_nip("inv_block", arr, out)
+
   if out is None:
 
     res_flag = 0
@@ -811,13 +842,10 @@ cpdef inv_block(object arr, object out = None):
 
   if   tarr is matso:    
     O = arr
-    if res_flag:
-      Ores = out
-    else:
-      Ores = zeros(O.shape)
-    # end if
+    # Always work on a local array: the update below (Ores += ...) rebinds Ores, so it can not
+    # write into `out` directly. The result is copied into `out` at the end.
+    Ores = zeros(O.shape)
 
-    # res = Ores
     inverse = np.linalg.inv(O.real)
 
     # Copy the inverse to the values of the inverse.
@@ -843,6 +871,11 @@ cpdef inv_block(object arr, object out = None):
       # end for 
       Ores += dot( Ores.get_order_im(0), tmp)
     # end for 
+
+    if res_flag:
+      out.set(Ores)
+    # end if
+
     res = Ores
   else:
     raise TypeError("Unsupported types at Block-solver inverse operation.")
@@ -889,6 +922,9 @@ cpdef solve(object K_in, matso b_in, matso out = None, solver = 'SuperLU', solve
   cdef object res
 
   tK = type(K_in)
+
+  _check_square("solve", K_in)
+  _check_matmul("solve", K_in, b_in, out)
 
   if out is None:
     res_flag = 0
@@ -955,9 +991,9 @@ cdef solve_dense(matso K_in, matso b_in, matso out = None, solver = 'SuperLU', s
   # end if
 
   lu = lu_factor(K_in.real)
-  rhs = b_in.real
-  # Solve the real system of equations, using LU solver:
-  lu_solve(lu,rhs, overwrite_b=True)
+  # Solve the real system of equations, using LU solver. Use the returned array: overwrite_b only
+  # works in place for Fortran-contiguous right-hand sides (e.g. not for multiple columns).
+  rhs = lu_solve(lu, b_in.real)
 
   # Solve the real coefficient
   for i in range(Ores.nrows):      

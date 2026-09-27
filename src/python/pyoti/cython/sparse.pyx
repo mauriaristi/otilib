@@ -78,6 +78,9 @@ include "sparse/sprarray/csc/base.pxi"
 
 
 
+# Shape validation (raise ValueError before the C core would exit()).
+include "sparse/array/checks.pxi"
+
 # Common functions.
 include "sparse/creators.pxi"
 

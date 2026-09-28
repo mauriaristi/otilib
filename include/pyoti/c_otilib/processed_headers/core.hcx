@@ -4,6 +4,8 @@
 ctypedef struct : # {
   imdir_t*    p_arr;
   uint64_t shape[2];
+  ord_t        ord1;
+  ord_t        ord2;
 # } imdir2d_t;
 ctypedef struct: # {
     imdir_t*        p_im;
@@ -78,18 +80,6 @@ void dhelp_dense_mult_real(coeff_t* p_im1, ndir_t ndir1,
                       dhelpl_t dhl);
 
 
-# From oti/core/fileio.h
-
-void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape);
-void savenpy(char* filename, uint8_t dtype, void* data, uint64_t shapex, uint64_t shapey);
-void loadnpy_multtabls( char* strLocation, ord_t order, dhelp_t* p_dH);
-void loadnpy_ndirs( char* strLocation, ord_t order, dhelp_t* p_dH);
-void loadnpy_fulldir( char* strLocation, ord_t order, dhelp_t* p_dH);
-void concat_filename(const char* strLocation, const char* base_name,
-    ord_t after, ord_t order, char* filename);
-void print_progressbar(double i, double imax);
-
-
 # From oti/core/sparse.h
 
 void dhelp_add_coeff( coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
@@ -121,19 +111,16 @@ void dhelp_search_prev_dir( coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, 
                             coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2,
                             coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,
                             imdir_t prev_idx, imdir_t next_idx, ndir_t curr_i1, ndir_t curr_i2,
-                            imdir2d_t tmp_multtabl);
+                            const imdir2d_t* tmp_multtabl);
 
 
 # From oti/core/precompute.h
 
 imdir_t dhelp_precompute_multiply(bases_t* dir1,ord_t ord1, bases_t* dir2,ord_t ord2, dhelpl_t dhl);
-void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl);
+void dhelp_init_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl);
+imdir_t* dhelp_fill_multtabl(ord_t order, ord_t table, dhelpl_t dhl);
 void dhelp_precompute_fulldir(ord_t order, bases_t nbases, dhelpl_t* dhl);
 void dhelp_precompute_ndirs(ord_t order, bases_t nbases, dhelpl_t* dhl);
-void dhelp_save_fulldir(char* directory, bases_t base, ord_t order, dhelpl_t dhl );
-void dhelp_save_ndirs(char* directory, bases_t base, ord_t order,  dhelpl_t dhl);
-void dhelp_save_multtabls(char* directory, bases_t base, ord_t order,  dhelpl_t dhl);
-void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder );
 
 
 # From oti/core/base.h
@@ -151,14 +138,13 @@ ndir_t dhelp_extract_ndirTotal(bases_t nbases, ord_t order,dhelpl_t dhl);
 int64_t dhelp_comb(int64_t a, int64_t b);
 ndir_t dhelp_ndirTotal(bases_t nbases, ord_t order);
 ndir_t dhelp_ndirOrder(bases_t nbases, ord_t order);
-void dhelp_load_singl( char* strLoc, ord_t order, uint64_t nhelps, ndir_t allocSize,
-  dhelp_t* p_dH);
 void dhelp_multDir(imdir_t indx1, ord_t ord1, imdir_t indx2, ord_t ord2,
     imdir_t* p_ixres, ord_t* p_ores, dhelpl_t dhl);
 void dhelp_freeItem(  dhelp_t* p_dH);
 bases_t* dhelp_get_imdir( imdir_t idx, ord_t order, dhelpl_t dhl);
 void dhelp_free( dhelpl_t* dhl);
 void dhelp_load( char* strLocation, dhelpl_t* dhl);
+bases_t dhelp_default_nbasis(ord_t order);
 void dhelp_load_tmps( dhelp_t* p_dH);
 void dhelp_print( dhelp_t* p_dH);
 void dhelp_printImdir(imdir_t indx, ord_t order, dhelpl_t dhl);

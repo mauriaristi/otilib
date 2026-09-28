@@ -6,8 +6,10 @@
 // ----------------------------------------------------------------------------------------------------
 
 typedef struct {
-  imdir_t*    p_arr;  ///< Array of imaginary directions
+  imdir_t*    p_arr;  ///< Array of imaginary directions. NULL until the table is built.
   uint64_t shape[2];  ///< Shape of the array.
+  ord_t        ord1;  ///< Order of the row directions (multiplication tables).
+  ord_t        ord2;  ///< Order of the column directions (multiplication tables).
 } imdir2d_t;          ///< imaginary direction array type.
 
 

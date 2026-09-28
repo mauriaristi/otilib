@@ -92,13 +92,13 @@ inline void dhelp_oarr_mul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
     tmp_res.ncols  = res->ncols;
     tmp_res.size   = res->size ;
 
-    imdir2d_t tmp_multtabl ;
+    const imdir2d_t* tmp_multtabl ;
     
     // The multiplication tables are made in a specific order.
     // Therefore, it is important to select the correct one.
     if (ord_lhs < ord_rhs){
         
-        tmp_multtabl = dhl.p_dh[ord_res-1].p_multtabls[ord_lhs-1];
+        tmp_multtabl = dhelp_get_multtabl(ord_res, ord_lhs, dhl);
 
         // Perform the multiplication.
         for ( i = 0; i < lhs->p_ndpo[ord_lhs-1]; i++){
@@ -110,7 +110,7 @@ inline void dhelp_oarr_mul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
                 tmp_rhs.p_data = rhs->p_im[ord_rhs-1][j];
 
                 // Get the resulting imaginary direction.
-                k = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],i,j);
+                k = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],i,j);
 
                 tmp_res.p_data = res->p_im[ord_res-1][k];                
 
@@ -125,7 +125,7 @@ inline void dhelp_oarr_mul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
     } else {
 
         // Get the multiplication table of the 
-        tmp_multtabl = dhl.p_dh[ord_res-1].p_multtabls[ord_rhs-1];
+        tmp_multtabl = dhelp_get_multtabl(ord_res, ord_rhs, dhl);
 
         // Perform the multiplication.
         for ( i = 0; i < lhs->p_ndpo[ord_lhs-1]; i++){
@@ -137,7 +137,7 @@ inline void dhelp_oarr_mul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
                 tmp_rhs.p_data = rhs->p_im[ord_rhs-1][j];
 
                 // Get the resulting imaginary direction.
-                k = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],j,i);
+                k = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],j,i);
 
                 tmp_res.p_data = res->p_im[ord_res-1][k];                
 
@@ -306,13 +306,13 @@ inline void dhelp_oarr_matmul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
     tmp_res.ncols  = res->ncols;
     tmp_res.size   = res->size ;
 
-    imdir2d_t tmp_multtabl ;
+    const imdir2d_t* tmp_multtabl ;
     
     // The multiplication tables are made in a specific order.
     // Therefore, it is important to select the correct one.
     if (ord_lhs < ord_rhs){
         
-        tmp_multtabl = dhl.p_dh[ord_res-1].p_multtabls[ord_lhs-1];
+        tmp_multtabl = dhelp_get_multtabl(ord_res, ord_lhs, dhl);
 
         // Perform the multiplication.
         for ( i = 0; i < lhs->p_ndpo[ord_lhs-1]; i++){
@@ -324,7 +324,7 @@ inline void dhelp_oarr_matmul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
                 tmp_rhs.p_data = rhs->p_im[ord_rhs-1][j];
 
                 // Get the resulting imaginary direction.
-                k = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],i,j);
+                k = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],i,j);
 
                 tmp_res.p_data = res->p_im[ord_res-1][k];                
 
@@ -339,7 +339,7 @@ inline void dhelp_oarr_matmul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
     } else {
 
         // Get the multiplication table of the 
-        tmp_multtabl = dhl.p_dh[ord_res-1].p_multtabls[ord_rhs-1];
+        tmp_multtabl = dhelp_get_multtabl(ord_res, ord_rhs, dhl);
 
         // Perform the multiplication.
         for ( i = 0; i < lhs->p_ndpo[ord_lhs-1]; i++){
@@ -351,7 +351,7 @@ inline void dhelp_oarr_matmul_II(oarr_t* lhs, ord_t ord_lhs, // Input 1
                 tmp_rhs.p_data = rhs->p_im[ord_rhs-1][j];
 
                 // Get the resulting imaginary direction.
-                k = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],j,i);
+                k = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],j,i);
 
                 tmp_res.p_data = res->p_im[ord_res-1][k];                
 
@@ -522,13 +522,13 @@ inline void dhelp_oarr_mul_iI(otinum_t* lhs, ord_t ord_lhs, // Input 1
     tmp_res.ncols  = res->ncols;
     tmp_res.size   = res->size ;
 
-    imdir2d_t tmp_multtabl ;
+    const imdir2d_t* tmp_multtabl ;
     
     // The multiplication tables are made in a specific order.
     // Therefore, it is important to select the correct one.
     if (ord_lhs < ord_rhs){
         
-        tmp_multtabl = dhl.p_dh[ord_res-1].p_multtabls[ord_lhs-1];
+        tmp_multtabl = dhelp_get_multtabl(ord_res, ord_lhs, dhl);
 
         // Perform the multiplication.
         for ( i = 0; i < lhs->p_ndpo[ord_lhs-1]; i++){
@@ -538,7 +538,7 @@ inline void dhelp_oarr_mul_iI(otinum_t* lhs, ord_t ord_lhs, // Input 1
                 tmp_rhs.p_data = rhs->p_im[ord_rhs-1][j];
 
                 // Get the resulting imaginary direction.
-                k = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],i,j);
+                k = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],i,j);
 
                 tmp_res.p_data = res->p_im[ord_res-1][k];                
 
@@ -553,7 +553,7 @@ inline void dhelp_oarr_mul_iI(otinum_t* lhs, ord_t ord_lhs, // Input 1
     } else {
 
         // Get the multiplication table of the 
-        tmp_multtabl = dhl.p_dh[ord_res-1].p_multtabls[ord_rhs-1];
+        tmp_multtabl = dhelp_get_multtabl(ord_res, ord_rhs, dhl);
 
         // Perform the multiplication.
         for ( i = 0; i < lhs->p_ndpo[ord_lhs-1]; i++){
@@ -563,7 +563,7 @@ inline void dhelp_oarr_mul_iI(otinum_t* lhs, ord_t ord_lhs, // Input 1
                 tmp_rhs.p_data = rhs->p_im[ord_rhs-1][j];
 
                 // Get the resulting imaginary direction.
-                k = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],j,i);
+                k = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],j,i);
 
                 tmp_res.p_data = res->p_im[ord_res-1][k];                
 

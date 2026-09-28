@@ -16,15 +16,31 @@
 
 
 // ****************************************************************************************************
+bases_t dhelp_default_nbasis(ord_t order){
+
+    // Number of bases available at each truncation order.
+    if (order <=   1) return 65000;
+    if (order <=   2) return  1000;
+    if (order <=   4) return   100;
+    if (order <=  10) return    10;
+    if (order <=  20) return     5;
+    if (order <=  50) return     3;
+    return 2;
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
 void dhelp_load( char* strLocation, dhelpl_t* dhl){          
     
-    // TODO: Make a reload function that is capable of loading different set of files.
-    // TODO: Add a default configuration file that indicates the number of elements to be loaded
+    // strLocation is ignored: the tables are computed in memory. ndirs and fulldir are built here;
+    // each multiplication table is built on first use (see dhelp_get_multtabl).
     int i;
+    bases_t nbases;
     
     dhl->ndh  = 150;             // Number of elements in the ndirs array
 
-    dhl->p_dh = (dhelp_t* )malloc(dhl->ndh * sizeof(dhelp_t));
+    dhl->p_dh = (dhelp_t* )calloc(dhl->ndh, sizeof(dhelp_t));
 
     dhl->order    = (ord_t*)malloc(1);
     
@@ -56,8 +72,64 @@ void dhelp_load( char* strLocation, dhelpl_t* dhl){
 
     for( i = 1; i<=dhl->ndh; i++){
 
-        // dhelp_load_singl(strLocation, i, ntmps,allocSzs_ord[i-1], &(dhl->p_dh[i-1]));
-        dhelp_load_singl(strLocation, i, ntmps, 0, &(dhl->p_dh[i-1]));
+        nbases = dhelp_default_nbasis(i);
+
+        dhl->p_dh[i-1].order     = i;
+        dhl->p_dh[i-1].Nbasis    = nbases;
+        dhl->p_dh[i-1].Ntmps     = ntmps;
+        dhl->p_dh[i-1].allocSize = 0;
+
+        dhelp_precompute_ndirs(   i, nbases, dhl);
+        dhelp_precompute_fulldir( i, nbases, dhl);
+        dhelp_init_multtabls(     i, nbases, dhl);
+
+        dhelp_load_tmps( &(dhl->p_dh[i-1]) );
+
+    }
+
+}
+// ----------------------------------------------------------------------------------------------------
+
+// ****************************************************************************************************
+void dhelp_load_tmps( dhelp_t* p_dH){
+
+    ndir_t i;
+    // Allocate pointers
+    p_dH->p_im  = ( coeff_t**) malloc(p_dH->Ntmps*sizeof( coeff_t*));
+    p_dH->p_idx = ( imdir_t**) malloc(p_dH->Ntmps*sizeof( imdir_t*)); 
+    
+    p_dH->p_ims = (coeff_t***) malloc(p_dH->Ntmps*sizeof(coeff_t**));
+    p_dH->p_ids = (imdir_t***) malloc(p_dH->Ntmps*sizeof(imdir_t**));
+
+    p_dH->p_nnz = (  ndir_t**) malloc(p_dH->Ntmps*sizeof(  ndir_t*));
+    p_dH->p_size= (  ndir_t**) malloc(p_dH->Ntmps*sizeof(  ndir_t*));
+
+    if ( p_dH->p_im  == NULL || p_dH->p_idx  == NULL ||
+         p_dH->p_ims == NULL || p_dH->p_ids  == NULL ||
+         p_dH->p_nnz == NULL || p_dH->p_size == NULL   ){
+
+      printf("ERROR: Not enough memory for temporal arrays. Exiting...\n");
+      exit(OTI_OutOfMemory);
+
+    }
+
+    for (i = 0; i<p_dH->Ntmps; i++){
+
+        p_dH->p_im[i]   = (coeff_t*) malloc( p_dH->Ndir*sizeof(coeff_t));
+        p_dH->p_idx[i]  = (imdir_t*) malloc( p_dH->Ndir*sizeof(imdir_t));
+
+        p_dH->p_ims[i]  = (coeff_t**) malloc( p_dH->order*sizeof(coeff_t*));
+        p_dH->p_ids[i]  = (imdir_t**) malloc( p_dH->order*sizeof(imdir_t*));
+
+        p_dH->p_nnz[i]  = ( ndir_t*) malloc(p_dH->order*sizeof( ndir_t));
+        p_dH->p_size[i] = ( ndir_t*) malloc(p_dH->order*sizeof( ndir_t));
+
+        if ( p_dH->p_im[i]  == NULL || p_dH->p_idx[i] == NULL ||
+             p_dH->p_ims[i] == NULL || p_dH->p_ids[i] == NULL ||
+             p_dH->p_size[i]== NULL || p_dH->p_nnz[i] == NULL   ){
+            printf("ERROR: Not enough memory for temporal arrays. Exiting...\n");
+            exit(OTI_OutOfMemory);
+        }
 
     }
 
@@ -190,7 +262,7 @@ void dhelp_multDir(imdir_t  indx1,   ord_t  ord1,   imdir_t indx2, ord_t ord2,
                    imdir_t* p_ixres, ord_t* p_ores, dhelpl_t dhl){
 
     ord_t     tmp_ord      = ord1 + ord2;
-    imdir2d_t tmp_multtabl ;
+    const imdir2d_t* tmp_multtabl ;
 
     // Check first that the resulting order lies within the available orders:
     if (tmp_ord > dhl.ndh){
@@ -205,11 +277,11 @@ void dhelp_multDir(imdir_t  indx1,   ord_t  ord1,   imdir_t indx2, ord_t ord2,
     *p_ores = tmp_ord;
 
     if (ord1<ord2){
-        tmp_multtabl = dhl.p_dh[tmp_ord-1].p_multtabls[ord1-1];
-        *p_ixres = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],indx1,indx2);    
+        tmp_multtabl = dhelp_get_multtabl(tmp_ord, ord1, dhl);
+        *p_ixres = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],indx1,indx2);    
     } else {
-        tmp_multtabl = dhl.p_dh[tmp_ord-1].p_multtabls[ord2-1];
-        *p_ixres = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],indx2,indx1);    
+        tmp_multtabl = dhelp_get_multtabl(tmp_ord, ord2, dhl);
+        *p_ixres = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],indx2,indx1);    
     }
 
 }

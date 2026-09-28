@@ -15,39 +15,21 @@ cdef class dHelp:
   #***************************************************************************************************
   def __init__(self):
     """
-    PURPOSE:     Initialize the h_indx for the specified This will load the respective
-                 direction and exponent arrays, and will also pre-load in memory supplementary
-                 arrays.
+    PURPOSE:     Initialize the direction helper. This computes the direction arrays of every
+                 order in memory and pre-loads supplementary arrays. Multiplication tables are
+                 built on first use.
      
     DESCRIPTION: This will create, allocate, and initialize (if necessary) memory for all internal 
                  helper attributes.
               
     """
     #*************************************************************************************************
-    # cdef str PATH_TO_FILES = whereotilib.getpath()+'../' # "/.../.../spr_otilibvX.Y/"
-    cdef str PATH_TO_FILES = whereotilib.getpath()+'../data'
-    cdef char* c_string = <char*>malloc(1024*sizeof(char))
-    cdef uint64_t i   
-
-    
-    # copy data to to a c_string (to pass to a c_function.)
-    for i in range(len(PATH_TO_FILES)):
-    
-      c_string[i] = <char>ord(PATH_TO_FILES[i])
-    
-    # end for 
-    
-    c_string[len(PATH_TO_FILES)] = <char>ord('\0') 
-
-    # Load direction helper list using c_function.
-    dhelp_load(c_string, &self.dhl)
+    # Load direction helper list using c_function. The tables are computed in memory; the path
+    # argument is ignored.
+    dhelp_load(NULL, &self.dhl)
     
     # Set also the global object.
     dhl = self.dhl
-
-    # Unload variables.
-    free(c_string)
-    c_string = NULL
 
   #--------------------------------------------------------------------------------------------------- 
 
@@ -292,6 +274,40 @@ cdef class dHelp:
 
     """  
     return dhelp_ndirOrder(nbases, order)
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def get_nbasis(self, ord_t order):
+    """
+    PURPOSE: Return the number of imaginary bases supported at the given truncation order.
+
+    @param[in] order: Truncation order (1 to the maximum loaded order).
+
+    """
+    if order < 1 or order > self.dhl.ndh:
+      raise ValueError("order must be between 1 and " + str(self.dhl.ndh) + ".")
+    # end if
+    return self.dhl.p_dh[order-1].Nbasis
+  #--------------------------------------------------------------------------------------------------- 
+
+  #***************************************************************************************************
+  def is_multtabl_loaded(self, ord_t order, ord_t k):
+    """
+    PURPOSE: Check whether a multiplication table has been built. Tables are built on first use.
+
+    @param[in] order: Order of the resulting directions.
+    @param[in] k:     Table index (0-based): table k multiplies directions of order k+1 by
+                      directions of order order-k-1.
+
+    """
+    if order < 1 or order > self.dhl.ndh:
+      raise ValueError("order must be between 1 and " + str(self.dhl.ndh) + ".")
+    # end if
+    if k >= self.dhl.p_dh[order-1].Nmult:
+      raise ValueError("order " + str(order) + " has " + str(self.dhl.p_dh[order-1].Nmult) +
+                       " multiplication tables.")
+    # end if
+    return self.dhl.p_dh[order-1].p_multtabls[k].p_arr != NULL
   #--------------------------------------------------------------------------------------------------- 
 
   def mult_dir(self,imdir_t indx1, ord_t ord1, imdir_t indx2, ord_t ord2):

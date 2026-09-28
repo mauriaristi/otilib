@@ -11,6 +11,8 @@ cdef extern from "oti/oti.h" nogil:
   ctypedef struct imdir2d_t:
     imdir_t* p_arr     
     uint64_t shape[2]
+    ord_t        ord1
+    ord_t        ord2
 
   ctypedef struct dhelp_t:    
     bases_t*      p_fulldir
@@ -96,14 +98,6 @@ cdef extern from "oti/oti.h" nogil:
 
   float    array2d_getel_f32_t( float*    arr,uint64_t ncols, uint64_t i, uint64_t j );
 
-  void loadnpy(char* filename, void** data, uint8_t* ndim, uint64_t* shape);
-
-  void loadnpy_multtabls( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH);
-
-  void loadnpy_ndirs( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH);
-
-  void loadnpy_fulldir( char* strLocation, ord_t order, bases_t nbasis, dhelp_t* p_dH);
-
   void dhelp_dense_mult(coeff_t* p_im1, ndir_t ndir1, ord_t ord1, 
                         coeff_t* p_im2, ndir_t ndir2, ord_t ord2, 
                         coeff_t* p_imres, ndir_t ndirres,         
@@ -124,9 +118,6 @@ cdef extern from "oti/oti.h" nogil:
 
   ndir_t dhelp_ndirOrder(bases_t nbases, ord_t order);
 
-  void dhelp_load_singl( char* strLoc, ord_t order, bases_t nbasis, uint64_t nhelps, 
-      ndir_t allocSize, dhelp_t* p_dH);
-
   void dhelp_multDir(imdir_t indx1, ord_t ord1, imdir_t indx2, ord_t ord2, 
       imdir_t* p_ixres, ord_t* p_ores, dhelpl_t dhl);
 
@@ -135,6 +126,8 @@ cdef extern from "oti/oti.h" nogil:
   void dhelp_free( dhelpl_t* dhl);
 
   void dhelp_load( char* strLocation, dhelpl_t* dhl);
+
+  bases_t dhelp_default_nbasis(ord_t order);
 
   void dhelp_print( dhelp_t* p_dH);
 

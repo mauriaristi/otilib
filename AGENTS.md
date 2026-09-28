@@ -72,12 +72,15 @@ conda activate pyoti
 mkdir -p build && cd build
 cmake ..
 make
-make gendata
 conda develop .
 ```
 
 ### Critical Steps & Gotchas
-1. **`make gendata` is required:** Compiles and runs `otigen` to generate lookup tables (`build/data/*.npy`). Importing `pyoti` fails without these files.
+1. **Direction-helper tables are lazy, in-memory:** `ndirs` and `fulldir` are computed at
+   `dhelp_load` (import time); each order's `multtabl` is built the first time a multiplication
+   needs it and cached for the rest of the process. The first build of an order's table is
+   thread-safe (an OpenMP critical section), since sparse array multiplications may call it from
+   inside `omp parallel`.
 2. **`conda develop .` (from `build/`):** Links `build/pyoti` to the conda environment site-packages so `import pyoti` works repository-wide.
 3. **Cython build (`oticython` target):** Automatically invoked during `make`. Generated shared objects (`*.so`) are placed into `build/pyoti/`.
 4. **Choosing the LAPACK:** `cmake -DOTI_BLA_VENDOR=<vendor> ..` passes `<vendor>` to FindLAPACK
@@ -101,10 +104,8 @@ conda develop .
 - `src/fortran/`: Fortran implementations and wrappers (`core/`, `static/`, `sparse/`, `experimental/`).
 - `src/python/pyoti/cython/`: Cython bindings (`core.pyx`, `dense.pyx`, `sparse.pyx`, `real.pyx`, `fem.pyx`, `static/*.pyx`).
 - `src/python/pyoti/python/`: Pure Python modules and code generators (`whereotilib.py`, `fmod_writer.py`, `cmod_writer.py`).
-- `src/datagen/`: `oti_gen_data.c` binary generator used for `make gendata`.
 - `include/oti/`: C/C++ header files.
 - `build/pyoti/`: Compiled Python package containing `.so` extensions and copied `.py` files.
-- `build/data/`: Generated precomputed order tables (`.npy` files).
 
 ## Verification & Testing
 
@@ -126,7 +127,7 @@ except ImportError as e:
 Note: as of the Python 3.13 migration, `scikits.umfpack`/`sksparse` conda-forge builds were re-verified as available for `python=3.13` across linux-64, osx-64, and osx-arm64 (unlike the earlier NumPy 2.0/Python 3.9 migration, where the osx-arm64 build was initially missing). If this regresses in the future, re-run the "Dependency Availability Check" above before assuming the optional `solver='umfpack'`/`solver='cholesky'` paths are broken — the default `solver='SuperLU'` path never depends on these.
 
 ### 2. Verify PyOTI Package Installation & Test Suite
-Run the Python test suite from the repository root to verify imports, precomputed data tables, and mathematical derivative accuracy:
+Run the Python test suite from the repository root to verify imports, the direction-helper tables, and mathematical derivative accuracy:
 
 Reference derivatives in the scalar-function tests are computed with `sympy`, a test-only dependency
 (listed in `environment.yml` and the conda recipe's `test.requires`).
@@ -138,7 +139,7 @@ pytest tests/python
 python tests/run_tests.py
 
 # Run specific verification tests
-pytest tests/python/test_imports.py        # Installation, submodules & data tables
+pytest tests/python/test_imports.py        # Installation, submodules & direction-helper tables
 pytest tests/python/test_sparse_scalar.py  # Scalar creation & basic arithmetic
 pytest tests/python/test_sparse_scalar_functions.py  # All scalar functions/operators, up to 6th order
 pytest tests/python/test_sparse_scalar_utils.py      # rom_eval, truncate, truncate_order
@@ -160,11 +161,19 @@ ctest --output-on-failure
 ./tests/c/test_c_scalar
 ./tests/c/test_c_array
 ./tests/c/test_c_lapack          # LAPACK wrappers
-./tests/c/test_c_sparse_linalg   # det / inv / solve / LU of OTI arrays (needs make gendata)
+./tests/c/test_c_sparse_linalg   # det / inv / solve / LU of OTI arrays
+./tests/c/test_c_dhelp           # direction-helper tables: lazy multtabl build vs dhelp_precompute_multiply
 ./tests/fortran/test_f_static_scalar
 ./tests/fortran/test_f_sparse_scalar
 ./tests/cpp/test_cpp_vector
 ./tests/cpp/test_cpp_headers
+```
+
+Benchmark the direction-helper tables (import time, RSS, `mult_dir`/multiplication timings at
+several orders) with:
+
+```bash
+python tools/bench_dhelp.py
 ```
 
 ### 4. Verify Native C & Fortran Examples
@@ -210,7 +219,7 @@ platform ...: {'__unix', '__osx', ...}" message. CI is conda-forge only, so this
 Prefer running from a clean export (`git archive HEAD | tar -x -C <dir>`) so a local `build/` tree
 is not copied into the recipe's work directory.
 
-- **Build phase** runs `ctest --output-on-failure` after `make gendata`, covering the C, Fortran and
+- **Build phase** runs `ctest --output-on-failure` after `make`, covering the C, Fortran and
   C++ suites in the build environment. The script starts with `set -ex`, so any failure aborts the
   build instead of producing a package.
 - **Test phase** runs `pytest tests/python -v` against the *installed* package, plus the version

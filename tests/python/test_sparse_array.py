@@ -7,6 +7,7 @@ import pytest
 import pyoti.sparse as oti
 
 
+# ********************************************************************************************************
 def test_array_creation_and_indexing():
     """
     Test creating 2D OTI arrays and indexing.
@@ -17,8 +18,10 @@ def test_array_creation_and_indexing():
     np.testing.assert_allclose(re, np.array(data))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_elementwise_functions():
     """
     Test applying elemental functions (sin, exp) over OTI arrays.
@@ -35,8 +38,10 @@ def test_elementwise_functions():
     np.testing.assert_allclose(im1, np.cos(data), rtol=1e-6)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_matrix_inversion():
     """
     Test matrix inversion and derivative propagation through inv().
@@ -55,6 +60,7 @@ def test_matrix_inversion():
     assert im_inv[1, 1] == pytest.approx(0.0)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":

@@ -77,6 +77,7 @@ FUNCTION_PARAMS = [pytest.param(*entry, id=entry[0]) for entry in FUNCTIONS]
 SYMPY_FUNCTIONS = {entry[0]: entry[2] for entry in FUNCTIONS}
 
 
+# ********************************************************************************************************
 def _humdir(a, b):
     """
     Builds the human-readable imaginary direction for d^(a+b) / dx^a dy^b.
@@ -103,8 +104,10 @@ def _humdir(a, b):
     return [[basis, exp] for basis, exp in ((1, a), (2, b)) if exp > 0]
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @functools.lru_cache(maxsize=None)
 def _sympy_mixed_derivs(name, x0, y0, max_order):
     """
@@ -153,8 +156,10 @@ def _sympy_mixed_derivs(name, x0, y0, max_order):
     return derivs
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("name, oti_fn, sym_fn, x0", FUNCTION_PARAMS)
 def test_univariate_derivatives(name, oti_fn, sym_fn, x0):
     """
@@ -192,8 +197,10 @@ def test_univariate_derivatives(name, oti_fn, sym_fn, x0):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("name, oti_fn, sym_fn, x0", FUNCTION_PARAMS)
 def test_bivariate_mixed_derivatives(name, oti_fn, sym_fn, x0):
     """
@@ -233,6 +240,7 @@ def test_bivariate_mixed_derivatives(name, oti_fn, sym_fn, x0):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 OUT_FUNCTIONS = [
@@ -261,6 +269,7 @@ OUT_FUNCTIONS = [
 ]
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "name, fn, x0", [pytest.param(*entry, id=entry[0]) for entry in OUT_FUNCTIONS]
 )
@@ -311,6 +320,7 @@ def test_function_out_argument(name, fn, x0):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":

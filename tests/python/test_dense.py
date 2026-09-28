@@ -6,6 +6,7 @@ import pytest
 import pyoti.dense as d
 
 
+# ********************************************************************************************************
 def test_dense_otinum_creation():
     """
     Test creating dense otinum instances with specified order and basis.
@@ -15,8 +16,10 @@ def test_dense_otinum_creation():
     assert x.nbases == 2
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_dense_arithmetic():
     """
     Test arithmetic on dense OTI numbers.
@@ -33,8 +36,10 @@ def test_dense_arithmetic():
     assert res_mul.order == 4
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_dense_functions():
     """
     Test mathematical functions on dense numbers.
@@ -44,6 +49,7 @@ def test_dense_functions():
     assert f_sin.order == 2
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":

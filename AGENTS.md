@@ -291,6 +291,11 @@ practice that aren't spelled out there.
 - Review the generated site locally (open `otilib-gh-pages/index.html` in a browser) before
   committing and pushing the `gh-pages` branch.
 
+
+
+
+
+
 ## Python and cython coding Standards & Style Guide
 
 Whenever writing, generating, or modifying Python code, strictly adhere to the following formatting and 
@@ -312,7 +317,17 @@ documentation rules:
   - Context & Exceptions: `# end with`, `# end try`
 - Add a new line before and after the `# end <keyword>` comment.
 
-### 3. NumPy-Style Docstring Format
+### 3. Function/method/class implementation Delimiters
+
+Every function, method or class implementation in a source file must be visually framed using single-line horizontal dividers starting at the declaration indentation level and ending **exactly at the 106 character marks**:
+
+- **Top Divider (Opening):** Use an asterisk line preceded by `# ` (Fill with characters until you reach the 106 character mark).
+  - The top divider must be placed in the line before the declaration except there is any decorator of a function.
+- **Bottom Divider (Closing):** Use a hyphen line preceded by `# ` (Fill with characters until you reach the 106 character mark).
+  - The bottom divider must be placed in the line after the `# end <keyword>` comment. Add a new line after this delimeter.
+
+
+### 4. NumPy-Style Docstring Format
 Every module, class, function, and method must include a NumPy-style docstring:
 - **docstring structure:** Always format all docstrings (including single-line docstrings) with the opening and closing triple quotes on their own separate lines. Never place triple quotes on the same line as the docstring text.
 - **One-line summary:** First line directly summarizes the action or behavior.
@@ -338,9 +353,9 @@ This repository enforces a specific code organization, documentation, and format
 - Pointers adhere to C style with the asterisk bound to the identifier (`type *var` or `type* var` consistently matching the enclosing file).
 - Constness must be explicitly specified for read-only pointer arguments (`const sotinum_t *num`).
 
-### 2. Function Implementation Delimiters (`.c` / `.cpp`)
+### 2. Function/method/class Implementation Delimiters (`.c` / `.cpp`)
 
-Every function implementation in a source file must be visually framed using single-line horizontal dividers of **exactly 106 characters**:
+Every function, method or class implementation in a source file must be visually framed using single-line horizontal dividers of **exactly 106 characters**:
 
 - **Top Divider (Opening):** Use an asterisk line preceded by `// ` (total length: 106 characters).
 - **Bottom Divider (Closing):** Use a hyphen line preceded by `// ` (total length: 106 characters).

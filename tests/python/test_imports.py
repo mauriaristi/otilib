@@ -9,6 +9,7 @@ import numpy as np
 import pytest
 
 
+# ********************************************************************************************************
 def test_import_pyoti():
     """
     Test importing the top-level pyoti package.
@@ -18,8 +19,10 @@ def test_import_pyoti():
     assert pyoti is not None
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "mod_name",
     [
@@ -44,8 +47,10 @@ def test_import_core_submodules(mod_name: str):
     assert mod is not None
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "sm",
     [
@@ -82,8 +87,10 @@ def test_import_static_modules(sm: str):
     assert cls is not None, f"Class {sm} not found in pyoti.static.{sm}"
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _ndirs(k, m):
     """
     Colex-rank building block: number of order-``k`` directions using at most ``m`` bases.
@@ -105,8 +112,10 @@ def _ndirs(k, m):
     return math.comb(k + m - 1, k)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _rank(sorted_bases):
     """
     Pure-Python colex rank of a sorted, merged direction.
@@ -127,8 +136,10 @@ def _rank(sorted_bases):
     return sum(_ndirs(i, base - 1) for i, base in enumerate(sorted_bases, start=1))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "order, expected_nbasis",
     [
@@ -162,8 +173,10 @@ def test_dhelp_nbasis_schedule(order: int, expected_nbasis: int):
     assert core.get_dHelp().get_nbasis(order) == expected_nbasis
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_mult_dir_matches_rank():
     """
     Verify h.mult_dir against an independent, pure-Python colex rank of the merged direction.
@@ -182,8 +195,11 @@ def test_mult_dir_matches_rank():
 
         ord_res = ord1 + ord2
         nb = h.get_nbasis(ord_res)
+
         if ord_res == 4:
+
             assert nb == 100
+
         # end if
 
         n1 = h.get_ndir_order(nb, ord1)
@@ -207,8 +223,10 @@ def test_mult_dir_matches_rank():
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_multtabl_lazy():
     """
     Verify a multiplication table is built lazily, on first use, and cached afterward.
@@ -226,6 +244,7 @@ def test_multtabl_lazy():
     assert dh.is_multtabl_loaded(order, k)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":

@@ -15,6 +15,7 @@ import sys
 import pytest
 
 
+# ********************************************************************************************************
 def run_all_tests():
     """
     Discover and execute all pytest test cases in tests/python.
@@ -42,6 +43,7 @@ def run_all_tests():
     return pytest.main(["-v", this_dir])
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":

@@ -345,7 +345,7 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
 
     // This function multiplies two arrays of imaginary coefficients.
     ord_t     tmp_ord      = ord1 + ord2;
-    imdir2d_t tmp_multtabl ;
+    const imdir2d_t* tmp_multtabl ;
     ndir_t i,j;
 
     // Get temporal arrays 0,1 and 2. These must be reserved at all times for this porpuses.
@@ -424,11 +424,11 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
         // Get the relevant multiplication table.
         if ( flag ){
             
-            tmp_multtabl = dhl.p_dh[tmp_ord-1].p_multtabls[ordmax-1];
+            tmp_multtabl = dhelp_get_multtabl(tmp_ord, ordmax, dhl);
 
         } else {
             
-            tmp_multtabl = dhl.p_dh[tmp_ord-1].p_multtabls[ordmin-1];
+            tmp_multtabl = dhelp_get_multtabl(tmp_ord, ordmin, dhl);
 
         }
         
@@ -445,12 +445,12 @@ void dhelp_sparse_mult(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, ord_t
                 // Multiply the elements
                 if (flag){
                     
-                    idx_next_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
+                    idx_next_res = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],
                         p_idxmax[j],idx_i); 
 
                 } else {
 
-                    idx_next_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
+                    idx_next_res = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],
                         idx_i,p_idxmax[j]); 
 
                 }
@@ -506,7 +506,7 @@ void dhelp_sparse_mult_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
 
 
     ord_t     tmp_ord      = ord1 + ord2;
-    imdir2d_t tmp_multtabl ;
+    const imdir2d_t* tmp_multtabl ;
     ndir_t i,j;
 
     imdir_t idx_curr_res = 0;
@@ -554,12 +554,12 @@ void dhelp_sparse_mult_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
         }
 
         // Get the relevant multiplication table.
-        tmp_multtabl = dhl.p_dh[tmp_ord-1].p_multtabls[ordmin-1];
+        tmp_multtabl = dhelp_get_multtabl(tmp_ord, ordmin, dhl);
         
         // Do first multiplication:
         // idx1[0] * idx2[0];
         
-        idx_next_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
+        idx_next_res = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],
             p_idxmin[0],p_idxmax[0]); 
 
         // printf("Adding %lu\n",idx_next_res);
@@ -574,7 +574,7 @@ void dhelp_sparse_mult_old(coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, o
 
             for (j = 0; j<ndirmax; j++){
 
-                idx_next_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
+                idx_next_res = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],
                     p_idxmin[i],p_idxmax[j]); 
 
                 if (idx_next_res > idx_curr_res){
@@ -637,7 +637,7 @@ void dhelp_search_prev_dir(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
                        coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2, // Input 2 
                        coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,           // Result
                        imdir_t prev_idx, imdir_t next_idx, ndir_t curr_i1, ndir_t curr_i2,
-                       imdir2d_t tmp_multtabl){                                        // Helper
+                       const imdir2d_t* tmp_multtabl){                                        // Helper
     
     // i1 - > Index along im1
     // i2 - > Index along im2
@@ -662,7 +662,7 @@ void dhelp_search_prev_dir(  coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1,
         for (next_i2 = 0; next_i2<curr_i2; next_i2++){
 
             // Find the result of multiplying the next elements
-            idx_res = array2d_getel_ui64_t(tmp_multtabl.p_arr,tmp_multtabl.shape[1],
+            idx_res = array2d_getel_ui64_t(tmp_multtabl->p_arr,tmp_multtabl->shape[1],
                 p_idx1[next_i1], p_idx2[next_i2] ); 
 
 

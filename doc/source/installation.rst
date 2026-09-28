@@ -44,8 +44,7 @@ This command:
 * Uses the ``rattler`` solver. This is required because the current default solver freezes while
   solving the environment (observed with conda 26.7.2).
 
-The conda package ships the compiled library together with the precomputed data tables, so no
-compilation or ``make gendata`` step is needed.
+The conda package ships the compiled library, so no compilation step is needed.
 
 After the installation completes, activate the environment so that ``pyoti`` becomes importable:
 
@@ -187,18 +186,7 @@ If you want to compile with a different compiler, e.g. the Intel OneApi compiler
 
 .. note::
 
-    If you had previously compiled the library and want to change the compiler, you **need** to remove the contents of the build/ directory. Use ``rm -rf -v !(data)`` to keep the data folder (if any).
-
-.. note::
-
-    If this is your first time compiling the library, you should run the following command after the library is compiled:
-
-.. code-block:: bash
-
-    make gendata
-
-
-This will pre-compute the data required for standard operation of OTI library.
+    If you had previously compiled the library and want to change the compiler, you **need** to remove the contents of the build/ directory.
 
 Additional CMake compilation options include disabling ``OpenMP`` compilation. For that, use a command line as follows:
 

@@ -34,3 +34,6 @@ tests/jupyter_notebook/*
 include/oti/version.h
 src/fortran/core/oti_version.f90
 src/python/pyoti/python/_version.py
+
+# Jupyter notebook autosave checkpoints
+.ipynb_checkpoints/

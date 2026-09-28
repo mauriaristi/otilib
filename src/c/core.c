@@ -11,7 +11,6 @@
 #include "core/utils.c"
 
 #include "core/save.c"
-#include "core/load.c"
 
 #include "core/dense_helper.c"
 #include "core/sparse_helper.c"

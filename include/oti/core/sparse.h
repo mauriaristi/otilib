@@ -162,7 +162,7 @@ void dhelp_search_prev_dir( coeff_t* p_im1,   imdir_t* p_idx1,   ndir_t  ndir1, 
                             coeff_t* p_im2,   imdir_t* p_idx2,   ndir_t  ndir2, ord_t ord2,
                             coeff_t* p_imres, imdir_t* p_idxres, ndir_t* ndirres,          
                             imdir_t prev_idx, imdir_t next_idx, ndir_t curr_i1, ndir_t curr_i2,
-                            imdir2d_t tmp_multtabl);
+                            const imdir2d_t* tmp_multtabl);
 // ----------------------------------------------------------------------------------------------------
 
 

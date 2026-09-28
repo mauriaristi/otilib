@@ -78,13 +78,7 @@ cmake ..
 make
 ```
 
-3. Generate the precomputed data using the following command:
-
-``` bash
-make gendata
-```
-
-4. Add the current folder to the conda path using :
+3. Add the current folder to the conda path using :
 
 ``` bash
 

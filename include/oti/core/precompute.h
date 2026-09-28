@@ -14,13 +14,27 @@ imdir_t dhelp_precompute_multiply(bases_t* dir1,ord_t ord1, bases_t* dir2,ord_t 
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Precompute multiplication tables (after precomputing ndirs and fulldir)
+@brief Set up the multiplication tables of an order without building them (after precomputing ndirs
+and fulldir of all orders up to `order`). Each table gets its shape and orders, and `p_arr = NULL`;
+the table is built on first use by dhelp_get_multtabl.
 
-@param order: Truncation order to be loaded.
-@param nbases: number of bases to be loaded.
+@param order: Truncation order to be set up.
+@param nbases: number of bases of this order.
 @param dhl: Addres of a direction helper list.
 ******************************************************************************************************/ 
-void dhelp_precompute_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl);
+void dhelp_init_multtabls(ord_t order, bases_t nbases, dhelpl_t* dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Allocate and fill one multiplication table. The table itself is not modified: the caller
+publishes the returned array (see dhelp_get_multtabl).
+
+@param order: Order of the resulting directions.
+@param table: Index of the table (0-based, the order of the row directions minus one).
+@param dhl: Direction helper list, with ndirs, fulldir and the table shapes set.
+@return Newly allocated array with shape `p_multtabls[table].shape`.
+******************************************************************************************************/ 
+imdir_t* dhelp_fill_multtabl(ord_t order, ord_t table, dhelpl_t dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
@@ -42,51 +56,6 @@ void dhelp_precompute_fulldir(ord_t order, bases_t nbases, dhelpl_t* dhl);
 ******************************************************************************************************/ 
 void dhelp_precompute_ndirs(ord_t order, bases_t nbases, dhelpl_t* dhl);
 // ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Save full direction array.
-
-@param directory: String with the folder where the data is to be stored.
-@param base: number of bases to be saved
-@param order: Truncation order to be saved.
-@param dhl: Direction helper list.
-******************************************************************************************************/ 
-void dhelp_save_fulldir(char* directory, bases_t base, ord_t order, dhelpl_t dhl );
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Save number of directions array.
-
-@param directory: String with the folder where the data is to be stored.
-@param base: number of bases to be saved
-@param order: Truncation order to be saved.
-@param dhl: Direction helper list.
-******************************************************************************************************/ 
-void dhelp_save_ndirs(char* directory, bases_t base, ord_t order,  dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Save full multiplication tables.
-
-@param directory: String with the folder where the data is to be stored.
-@param base: number of bases to be saved
-@param order: Truncation order to be saved.
-@param dhl: Direction helper list.
-******************************************************************************************************/ 
-void dhelp_save_multtabls(char* directory, bases_t base, ord_t order,  dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Precompute data
-
-@param directory: String with the folder where the data is to be stored.
-@param max_basis_k: Array with the maximum number of bases to be generated (per order)
-@param maxorder: Defines the length of max_basis_k array. Also correspond to the maximum order to be
-generated.
-******************************************************************************************************/ 
-void dhelp_precompute(char* directory, bases_t* max_basis_k, ord_t maxorder );
-// ----------------------------------------------------------------------------------------------------
-
 
 
 #endif

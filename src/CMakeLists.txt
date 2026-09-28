@@ -253,7 +253,7 @@ target_link_libraries(oti PUBLIC
 
 
 
-# BUILD DATAGEN.
+# COMPILER / LINKER FLAGS.
 
 # To compile with linux uncomment the following line
 # SET(GCC_COVERAGE_COMPILE_FLAGS "-g -fwrapv -O3 -Wall -Wstrict-prototypes ")
@@ -266,45 +266,6 @@ SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS
 # SET(CMAKE_OSX_DEPLOYMENT_TARGET 12.1)
 
 include_directories ("${PROJECT_SOURCE_DIR}/include")
-add_executable(otigen datagen/oti_gen_data.c)
-
-target_link_libraries (otigen oti ${LINK_TARGET_OMP})
-
-# -d Sets directory
-# -o Sets global order
-# -a sets the number of basis for all elements
-# -s Sets a starting order
-# -f Sets an ending order
-# -m sets the number of basis for the start-finish pair.
-SET(OTIGEN_FLAGS -d"${PROJECT_BINARY_DIR}/data/" -o150 -a2)
-SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s21 -f50 -m3)
-SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s11 -f20 -m5)
-SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s5 -f10 -m10)
-SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s3 -f4 -m100)
-SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s2 -f2 -m1000)
-SET(OTIGEN_FLAGS ${OTIGEN_FLAGS} -s1 -f1 -m65000)
-
-
-# To generate data call
-# ...: make gendata
-ADD_CUSTOM_TARGET(gendata 
-    COMMAND otigen ${OTIGEN_FLAGS}
-    DEPENDS otigen)
-
-
-# Create folder for data.
-FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
-
-# ADD_CUSTOM_COMMAND (
-#     TARGET  gendata    
-#     # OUTPUT  ${PROJECT_BINARY_DIR}/data/ndirs_n1.npy
-#     COMMAND otigen ${OTIGEN_FLAGS}
-#     DEPENDS otigen
-# )
-
-# INSTALL(
-    
-#     )
 
 
 

@@ -88,19 +88,6 @@ ndir_t dhelp_ndirOrder(bases_t nbases, ord_t order);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Loads a direction helper from a set of files within the specified folder. 
-     
-@param strLocation String with the folder where the data is located. Example "../../data"
-@param order Order to be loaded in memory. Example: 3
-@param nbasis Number of basis directions to load. Example: 100
-@param nhelps Number of help arrays to be allocated in the array.
-@param[out] p_dH Address of the helper to be loaded.
-******************************************************************************************************/ 
-void dhelp_load_singl( char* strLoc, ord_t order, uint64_t nhelps, ndir_t allocSize,
-  dhelp_t* p_dH);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
 @brief Multiplies 2 imaginary directions and gives the corresponding result.
 
 @param[in]  indx1  Index of imaginary direction. 
@@ -144,12 +131,32 @@ void dhelp_free( dhelpl_t* dhl);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**
-@brief Load a set of 10 helpers from order 1 until order 10 with 10 bases.
+@brief Load the direction helpers of orders 1 to 150, computed in memory. The number of bases of
+each order follows dhelp_default_nbasis. ndirs and fulldir are built here; each multiplication table
+is built on first use (see dhelp_get_multtabl).
     
-@param strLocation: Path to the folder that contains the files to load.
+@param strLocation: Ignored (kept for compatibility; the tables are no longer read from files).
 @param[out] dhl: Direction helper list with the loaded data.
 ******************************************************************************************************/ 
 void dhelp_load( char* strLocation, dhelpl_t* dhl);
+// ----------------------------------------------------------------------------------------------------
+
+/**************************************************************************************************//**
+@brief Number of bases the direction helper of a given truncation order supports.
+
+| Orders | Bases |
+|---|---|
+| 1 | 65000 |
+| 2 | 1000 |
+| 3-4 | 100 |
+| 5-10 | 10 |
+| 11-20 | 5 |
+| 21-50 | 3 |
+| 51-150 | 2 |
+
+@param order: Truncation order (1 to 150).
+******************************************************************************************************/ 
+bases_t dhelp_default_nbasis(ord_t order);
 // ----------------------------------------------------------------------------------------------------
 
 /**************************************************************************************************//**

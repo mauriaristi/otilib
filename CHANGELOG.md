@@ -11,6 +11,34 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-09-27
+
+### Added
+
+- Lazy, in-memory direction-helper tables: `ndirs` and `fulldir` are built at `dhelp_load` (import
+  time), and each order's `multtabl` is built the first time a multiplication needs it and cached
+  for the rest of the process (an OpenMP critical section makes the first build thread-safe).
+  `dhelp_default_nbasis(order)` encodes the per-order basis schedule, and the Cython layer exposes
+  `dHelp.get_nbasis` / `dHelp.is_multtabl_loaded` for tests.
+- `tools/bench_dhelp.py`: import time, RSS after import, and `mult_dir` / multiplication timings at
+  several orders (`--json`).
+- `tests/c/test_dhelp.c`: checks table values against `dhelp_precompute_multiply`, including an
+  OpenMP parallel first touch.
+
+### Changed
+
+- Import time drops from about 1.3 s to about 0.16 s, and RSS after import from about 663 MiB to
+  about 262 MiB (`tools/bench_dhelp.py`). The tables built at import are about 49 MB; most of the
+  rest is the per-order temporaries of `dhelp_load_tmps`. The first multiplication at a given order
+  now pays a one-time table build instead of that memory being paid at import for every order (for
+  example, about 340 MB and about 0.14 s for order 4).
+
+### Removed
+
+- `make gendata` / the `otigen` CMake target, `src/datagen/`, and the ~857 MB of precomputed
+  `build/data/*.npy` tables they generated.
+- The `.npy` loaders in `src/c/core/load.c` and `pyoti`'s `precompute.py`.
+
 ## [1.2.0] - 2026-09-27
 
 ### Added

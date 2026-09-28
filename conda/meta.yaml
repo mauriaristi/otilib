@@ -30,7 +30,6 @@ build:
     # Without the prefix path, macOS finds the SDK's libblas.tbd (Accelerate) first.
     cmake ${CMAKE_ARGS} -DOTI_BLA_VENDOR=Generic -DCMAKE_PREFIX_PATH="$PREFIX" ..
     make
-    make gendata
 
     # Native (C / Fortran / C++) test suite. This runs in the build environment, where the compilers
     # and the freshly built binaries are available, so a package is only produced if the compiled
@@ -38,7 +37,6 @@ build:
     ctest --output-on-failure
 
     cp -r pyoti $SP_DIR/pyoti
-    cp -r data $SP_DIR/data
 
 requirements:
   # Tools that run on the build machine (compilers, generators).
@@ -102,7 +100,7 @@ test:
     # means the recipe and the build tree came from different versions of the source.
     - python -c "import pyoti; assert pyoti.__version__ == '{{ version }}', pyoti.__version__"
     - python -c "import pyoti, pyoti.core; assert pyoti.core.c_version() == pyoti.__version__, pyoti.core.c_version()"
-    # Full Python suite against the installed package: imports, precomputed data tables, derivative
+    # Full Python suite against the installed package: imports, direction-helper tables, derivative
     # accuracy and version consistency. The native suite already ran via ctest during the build.
     - pytest tests/python -v
 

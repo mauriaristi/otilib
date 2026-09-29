@@ -124,6 +124,16 @@ Extension("pyoti.sparse",
   extra_link_args = extra_link_args,
   depends=dependencies
   ),
+# Semi-sparse scalar and SoA bindings; AoS follows after its C implementation (step 4).
+Extension("pyoti.semisparse",
+  sources = ["@CYTHON_SOUCE_DIR@/semisparse.pyx"],
+  include_dirs = include_dirs,
+  define_macros = macros,
+  libraries = libraries,
+  extra_compile_args = extra_compile_args,
+  extra_link_args = extra_link_args,
+  depends = dependencies
+  ),
 #
 Extension("pyoti.fem",
   sources = ["@CYTHON_SOUCE_DIR@/fem.pyx"],

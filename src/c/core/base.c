@@ -227,9 +227,12 @@ void dhelp_free(dhelpl_t* dhl){
     for( i = 1; i<=dhl->ndh; i++){
       dhelp_freeItem( &dhl->p_dh[i-1] );
     }
-    // Free the list 
+    // Free the list
     free(dhl->p_dh);   dhl->p_dh  = NULL;
     free(dhl->order);  dhl->order = NULL;
+
+    // Release the semi-sparse local product-table cache (include/oti/core/semisparse.h).
+    sshelp_cache_free();
 }
 // ----------------------------------------------------------------------------------------------------
 

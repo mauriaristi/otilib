@@ -102,10 +102,63 @@ conda develop .
 
 - `src/c/`: C core implementations (scalar, array, dense, sparse, semisparse, static, fem).
 - `src/fortran/`: Fortran implementations and wrappers (`core/`, `static/`, `sparse/`, `experimental/`).
-- `src/python/pyoti/cython/`: Cython bindings (`core.pyx`, `dense.pyx`, `sparse.pyx`, `real.pyx`, `fem.pyx`, `static/*.pyx`).
+- `src/python/pyoti/cython/`: Cython bindings (`core.pyx`, `dense.pyx`, `sparse.pyx`, `real.pyx`, `fem.pyx`, `semisparse.pyx`, `static/*.pyx`).
 - `src/python/pyoti/python/`: Pure Python modules and code generators (`whereotilib.py`, `fmod_writer.py`, `cmod_writer.py`).
 - `include/oti/`: C/C++ header files.
 - `build/pyoti/`: Compiled Python package containing `.so` extensions and copied `.py` files.
+- **Semi-sparse (`PLAN-semisparse.md`)**: a dense-over-active-bases type, alongside the sparse
+  types (`sotinum_t` / `arrso_t`), with conversions both ways.
+  - `src/c/semisparse/scalar/`, `src/c/semisparse/soa/`, `src/c/semisparse/array/`: scalar
+    (`ssotinum_t`), structure-of-arrays (`oarrss_t`) and array-of-structures (`arrss_t`)
+    implementations, unity-included from `src/c/semisparse.c`.
+  - `include/oti/semisparse/{scalar,soa,array}/`: their public C headers, aggregated by
+    `include/oti/semisparse.h`.
+  - `include/oti/core/semisparse.h`: index helpers shared by all three (`sshelp_*`: local/global
+    direction numbering, unions, the table-vs-rank product index, the local product-table cache,
+    per-thread workspaces), implemented in `src/c/core/semisparse_helper.c`.
+  - `src/python/pyoti/cython/semisparse.pyx`: the `pyoti.semisparse` module (scalar, AoS and SoA
+    classes, conversions to/from `pyoti.sparse`, direction blocks as NumPy views).
+
+## Semi-sparse gotchas
+
+- **Local vs. global direction numbering.** Scalar/array functions that take a direction (e.g.
+  `ssoti_get_item`, `ssoti_truncate_im`) take it as a **global** `(idx, order)` pair, same numbering
+  as `sotinum_t`. Internally, a number's own directions are numbered **locally** over its sorted
+  active bases (`include/oti/core/semisparse.h`): local base `u` is global base `p_bases[u]`, and
+  order-p directions using only local bases `0..k-1` are exactly local indices `0 .. N_p(k)-1` (the
+  colex prefix property). Converting between the two goes through `sshelp_local_to_global` /
+  `sshelp_global_to_local` / `sshelp_global_unrank`, never through `dhelp_get_imdir` (its tables
+  don't cover the full label range semi-sparse allows, up to 65535).
+- **Python directions parse like `pyoti.sparse`**: in `pyoti.semisparse` a list or tuple is always
+  a list of bases (`(4, 2)` is `e([2, 4])`). A raw global `(index, order)` pair must be wrapped in
+  `pyoti.semisparse.rawdir(index, order)`, which every direction argument accepts.
+- **Result truncation order is the MAX of the operands'**, as `sotinum_t` does; an operand with a
+  lower truncation order is expanded (zero-extended) to match before the kernel runs, rather than
+  being used in place.
+- **Bases are never dropped automatically.** Cancelling a coefficient (e.g. `x - x`) leaves its
+  bases in the active set with zero coefficients; call `ssoti_compact` / `arrss_compact_to` (or the
+  Python equivalent) to shrink the set and, for arrays, `arrss_to_oarrss` / `arrss_from_oarrss` when
+  moving through the SoA layout, which always uses the union of the input sets.
+- **Storage order differs between array layouts.** SoA (`oarrss_t`) blocks are column-major
+  (`element (r, c)` at `r + c*nrows`), so a NumPy view of one is Fortran-ordered; AoS (`arrss_t`),
+  like `arrso_t`, is row-major (`element (i, j)` at `p_data[j + i*ncols]`).
+- **The local product-table cache** (`sshelp_get_pair`, `src/c/core/semisparse_helper.c`) lazily
+  builds and caches, per process, a table for any `(k, p, q)` beyond the global multiplication
+  table's reach (`k > Nbasis(p+q)`), instead of the plain per-call rank fallback. Budgeted at 256
+  MiB total (`SSHELP_CACHE_DEFAULT_MB`), overridable with the `OTI_SS_TABLE_CACHE_MB` environment
+  variable (MiB, read once, on the first table build); past the budget it silently keeps using the
+  rank fallback (always correct, just slower). Freed by `dhelp_free()`.
+- **`det`/`inv` need a nonsingular real part**: unlike the sparse types' closed forms for n <= 3
+  (`_OTI_LINALG_CLOSED_FORM_MAX`), the semi-sparse SoA linear algebra (`src/c/semisparse/soa/linalg.c`)
+  always goes through the real LU factorization first, with no closed-form fallback at any size, so
+  a singular real part fails at every n, not just above the closed-form cutoff.
+- **OpenMP vs. threaded BLAS: don't nest them.** Elementwise operations (scalar kernels run over
+  array elements) parallelize with OpenMP; SoA `matmul` and `solve`/`inv`/`det` (one `dgemm` /
+  `dgetrf` per order) rely on BLAS's own threading instead. Running both nested oversubscribes the
+  machine. Set `OMP_NUM_THREADS` for the OpenMP side and `OPENBLAS_NUM_THREADS` /
+  `VECLIB_MAXIMUM_THREADS` (OpenBLAS / Accelerate, matching the linked LAPACK vendor -- see
+  "Choosing the LAPACK" above) for the BLAS side; don't set both to the machine's full core count
+  at once.
 
 ## Verification & Testing
 
@@ -147,6 +200,9 @@ pytest tests/python/test_sparse_array.py   # Matrix/array operations & linalg
 pytest tests/python/test_sparse_array_ops.py  # Dense matso ops & linalg vs sympy, up to 4th order
 pytest tests/python/test_static.py         # Static dense modules (onummXnY)
 pytest tests/python/test_dense.py          # Dynamic dense OTI numbers
+pytest tests/python/test_semisparse_scalar.py  # pyoti.semisparse scalar vs the sparse oracle
+pytest tests/python/test_semisparse_soa.py     # SoA arrays (oarrss) vs the sparse oracle
+pytest tests/python/test_semisparse_aos.py     # AoS arrays (arrss) vs the sparse oracle
 ```
 
 ### 3. Verify Native Multi-Language Tests (CTest)
@@ -163,17 +219,46 @@ ctest --output-on-failure
 ./tests/c/test_c_lapack          # LAPACK wrappers
 ./tests/c/test_c_sparse_linalg   # det / inv / solve / LU of OTI arrays
 ./tests/c/test_c_dhelp           # direction-helper tables: lazy multtabl build vs dhelp_precompute_multiply
+./tests/c/test_c_semisparse_core   # index helpers: union/positions, remap vs rank, local<->global
+                                    #   round trips, table sub-block vs rank, the product-table cache
+./tests/c/test_c_semisparse_scalar # ssotinum_t vs the sotinum_t oracle
+./tests/c/test_c_semisparse_soa    # oarrss_t (SoA) vs the arrso_t oracle
+./tests/c/test_c_semisparse_aos    # arrss_t (AoS) vs the arrso_t oracle
+./tests/c/test_c_semisparse_review # edge cases found in review (e.g. 0x0 SoA matrices)
 ./tests/fortran/test_f_static_scalar
 ./tests/fortran/test_f_sparse_scalar
 ./tests/cpp/test_cpp_vector
 ./tests/cpp/test_cpp_headers
 ```
 
+`tests/c/CMakeLists.txt` registers `test_c_semisparse_<name>` / `c_semisparse_<name>_test`
+automatically, for every `tests/c/test_semisparse_<name>.c` that exists (a `foreach` over
+`core scalar soa aos review`), so adding one of those files needs no `CMakeLists.txt` edit.
+
 Benchmark the direction-helper tables (import time, RSS, `mult_dir`/multiplication timings at
 several orders) with:
 
 ```bash
 python tools/bench_dhelp.py
+```
+
+Benchmark the semi-sparse types (scalar, AoS and SoA arrays: elementwise ops, `matmul`,
+`solve`/`inv`/`det`; k in `{2, 5, 10, 20, 50, 100}` x order in `{1, 2, 3, 4, 6, 8, 10}`) against the
+`pyoti.sparse` and dense `pyoti.dense` baselines, each case in its own fresh process, with:
+
+```bash
+python tools/bench_semisparse.py --quick                                  # small validation grid
+python tools/bench_semisparse.py --json build/bench_semisparse_baseline.json  # full grid, saved
+python tools/bench_semisparse.py --quick --compare build/bench_semisparse_baseline.json  # speedup
+```
+
+The C-level benchmarks (`tools/bench/`, no Python overhead; identical inputs on both sides and a
+result check per case) are built only on request, with `-DOTI_BUILD_BENCH=ON`:
+
+```bash
+cmake -DOTI_BUILD_BENCH=ON .. && make bench_semisparse_scalar bench_semisparse_arrays
+./tools/bench/bench_semisparse_scalar [--quick] > scalar.csv   # ssotinum_t vs sotinum_t
+./tools/bench/bench_semisparse_arrays [--quick] > arrays.csv   # arrss_t / oarrss_t vs arrso_t
 ```
 
 ### 4. Verify Native C & Fortran Examples

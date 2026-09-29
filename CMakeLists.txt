@@ -341,6 +341,13 @@ if (BUILD_TESTING)
   add_subdirectory (tests "${PROJECT_BINARY_DIR}/tests")
 endif (BUILD_TESTING)
 
+# C benchmarks of the semi-sparse types (tools/bench), built only on request.
+option (OTI_BUILD_BENCH "Build the C semi-sparse benchmarks in tools/bench" OFF)
+
+if (OTI_BUILD_BENCH)
+  add_subdirectory (tools/bench "${PROJECT_BINARY_DIR}/tools/bench")
+endif (OTI_BUILD_BENCH)
+
 # should we do the Fortran part too?
 option (GENERATE_FORTRAN
         "Generate the Fortran library wrapper" OFF) 

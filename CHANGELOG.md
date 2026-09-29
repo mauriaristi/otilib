@@ -11,6 +11,45 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ## [Unreleased]
 
+### Added
+
+- A semi-sparse OTI type (`PLAN-semisparse.md`), alongside the sparse types (`sotinum_t` /
+  `arrso_t`), with conversions both ways: a dense representation over a sorted list of active
+  bases, aimed at FEM/CFD-style workloads with a handful to ~100 parameters at moderate truncation
+  order.
+  - C: scalar `ssotinum_t`, structure-of-arrays `oarrss_t` and array-of-structures `arrss_t`
+    (`ssoti_` / `oarrss_` / `arrss_` prefixes), in `src/c/semisparse/` and
+    `include/oti/semisparse/`. Shared index helpers (`sshelp_*`: local/global direction numbering,
+    unions, the table-vs-rank product index, per-thread workspaces) in
+    `include/oti/core/semisparse.h` / `src/c/core/semisparse_helper.c`.
+  - A lazily built, process-wide local product-table cache for `sshelp_get_pair()`, covering
+    `(k, p, q)` combinations beyond the global multiplication table's reach (previously a per-call
+    rank fallback on every multiplication): budgeted at 256 MiB by default
+    (`SSHELP_CACHE_DEFAULT_MB`, overridable with `OTI_SS_TABLE_CACHE_MB`), thread-safe like
+    `dhelp_get_multtabl()`. Measured about 18x faster at k=11, order 5 (1.3x -> 23x versus the
+    sparse type; the global table already gave about 15x at k=10).
+  - Python: `pyoti.semisparse` (scalar, AoS and SoA classes, conversions to/from `pyoti.sparse`,
+    direction blocks of a SoA array as NumPy views). `pyoti.semisparse.e(hum_dir, nbases=0,
+    order=0, nip=0)` creates the imaginary unit along a direction, like `pyoti.sparse.e` (C:
+    `ssoti_e()`), and directions are parsed exactly as in `pyoti.sparse` (a tuple is a list of
+    bases). `pyoti.semisparse.rawdir(index, order)` passes a raw global direction to any of them.
+  - `tools/bench_semisparse.py`: scalar, AoS and SoA timings and memory against `pyoti.sparse` /
+    `pyoti.dense`, across a `k`/order/fill/set-relation grid, each case in a fresh process
+    (`--quick`, `--json`, `--compare`).
+  - `tools/bench/`: C-level benchmarks of the semi-sparse types against `sotinum_t` / `arrso_t`,
+    built with `-DOTI_BUILD_BENCH=ON`.
+  - Tests: `tests/c/test_semisparse_{core,scalar,soa,aos,review}.c` (auto-registered by
+    `tests/c/CMakeLists.txt`) and `tests/python/test_semisparse_{scalar,soa,aos}.py`.
+- C interface to BLAS (`include/oti/core/lapack.h`, library `otilapack`): `oti_dgemm`, in the same
+  style as the existing `oti_dgetrf` / `oti_dgetrs` / `oti_dtrsm` / `oti_dtrmm` wrappers, used by
+  the semi-sparse SoA matrix product.
+
+### Removed
+
+- The old, non-functional `src/c/semisparse/` (only `scalar/base.c` was compiled, and it referenced
+  fields its own struct didn't have) and the matching `include/oti/semisparse/`,
+  `include/pyoti/semisparse/`, replaced in place by the semi-sparse type above.
+
 ## [1.2.1] - 2026-09-27
 
 ### Added

@@ -1,75 +1,44 @@
 #include "oti/semisparse.h"
 
+// Semi-sparse OTI numbers (PLAN-semisparse.md).
 
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------     SCALAR FUNCTIONS     --------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
+// Memory management and the per-thread workspace.
+#include "semisparse/scalar/memory.c"
 
-
-
-// ----------------------------------------------------------------------------------------------------
-// --------------------------------------    SCALAR FUNCTIONS   ---------------------------------------
-// ----------------------------------------------------------------------------------------------------
-
-// Base functions to support manipulation.
+// Element access, conversions to and from sotinum_t, truncation and compaction.
 #include "semisparse/scalar/base.c"
 
-// // Operations where a truncation is recquired.
-// #include "semisparse/scalar/trunc_ops.c"
+// Kernels (same-set product, expansion into a larger set) and algebra.
+#include "semisparse/scalar/algebra.c"
 
-// // Basic algebraic operations, such as addition and multiplication.
-// #include "semisparse/scalar/algebra.c"
-// #include "semisparse/scalar/algebra_to.c"
-
-// // Analytic and Trascendental function evaluation.
-// #include "semisparse/scalar/functions.c"
-// #include "semisparse/scalar/functions_to.c"
-
-// // Utils
-// #include "semisparse/scalar/utils.c"
-
-// // Gauss 
-// #include "semisparse/scalar/gauss.c"
+// Taylor series evaluation and elementary functions.
+#include "semisparse/scalar/functions.c"
 
 
-// ----------------------------------------------------------------------------------------------------
-// -----------------------------------   END SCALAR FUNCTIONS   ---------------------------------------
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------     SOA ARRAY FUNCTIONS     -----------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+// Memory, element and block access, conversions to and from arrso_t, truncation.
+#include "semisparse/soa/base.c"
+
+// Elementwise and matrix block-product kernels.
+#include "semisparse/soa/kernels.c"
+
+// Elementwise algebra and functions, matrix products.
+#include "semisparse/soa/algebra.c"
+
+// Linear algebra: LU, solve, inverse, determinant.
+#include "semisparse/soa/linalg.c"
 
 
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------     AOS ARRAY FUNCTIONS     -----------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-// ----------------------------------------------------------------------------------------------------
-// --------------------------------------    ARRAY  FUNCTIONS   ---------------------------------------
-// ----------------------------------------------------------------------------------------------------
-
-// // Array of OTIs support:
-// // Base functions to support memory manipulation.
-// #include "semisparse/array/base.c"
-
-// // Array algebra.
-// #include "semisparse/array/algebra_elementwise.c"
-// #include "semisparse/array/algebra_elementwise_to.c"
-
-// // Array algebra: Matrix operations such as matmul, determinant and invertion.
-// #include "semisparse/array/algebra_matops.c"
-// #include "semisparse/array/algebra_matops_to.c"
-
-// #include "semisparse/array/utils.c"
-
-
-// // Array functions: Elementwise function evaluation.
-// #include "semisparse/array/functions.c"
-// #include "semisparse/array/functions_to.c"
-
-// // Gauss 
-// #include "semisparse/array/gauss.c"
-
-// ----------------------------------------------------------------------------------------------------
-// --------------------------------------  END ARRAY FUNCTIONS   --------------------------------------
-// ----------------------------------------------------------------------------------------------------
-
+// Arrays of semi-sparse scalars: elementwise, matmul, conversions, linear algebra through SoA.
+#include "semisparse/array/array.c"

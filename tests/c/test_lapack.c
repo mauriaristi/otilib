@@ -240,6 +240,139 @@ static void test_trsm_trmm(void){
 
 
 // *******************************************************************************************************
+static void store_op_matrix(double* dst, int ld, char trans, int op_rows, int op_cols,
+                            const double* logical){
+
+    // Fills dst (column-major, leading dimension ld) with the matrix BLAS must read so that
+    // op(dst) equals the op_rows x op_cols row-major "logical" matrix.
+    int i, j;
+
+    if (trans == 'N'){
+
+        for (j = 0; j < op_cols; j++){
+
+            for (i = 0; i < op_rows; i++){
+                dst[i + ld * j] = logical[i * op_cols + j];
+            }
+
+        }
+
+    } else {
+
+        for (j = 0; j < op_rows; j++){
+
+            for (i = 0; i < op_cols; i++){
+                dst[i + ld * j] = logical[j * op_cols + i];
+            }
+
+        }
+
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+static void run_dgemm_case(const char* label, char transa, char transb, double alpha, double beta,
+                           int nan_fill){
+
+    // Non-square op(A) (m x k) times op(B) (k x n), checked against a naive triple loop. lda, ldb
+    // and ldc are all padded beyond the minimum, and the ldc padding is checked untouched afterwards.
+    const int m = 3, n = 2, k = 4;
+    static const double logical_a[12] = { 1.0, 2.0, 3.0, 4.0,
+                                          5.0, 6.0, 7.0, 8.0,
+                                          9.0, 10.0, 11.0, 12.0 };
+    static const double logical_b[8] = { 1.0, 2.0,
+                                         3.0, 4.0,
+                                         5.0, 6.0,
+                                         7.0, 8.0 };
+    static const double c_init[6] = { 100.0, 200.0, 300.0, 400.0, 500.0, 600.0 };
+    const double sentinel = 12345.0;
+    int a_rows = (transa == 'N') ? m : k;
+    int a_cols = (transa == 'N') ? k : m;
+    int b_rows = (transb == 'N') ? k : n;
+    int b_cols = (transb == 'N') ? n : k;
+    int lda = a_rows + 2;
+    int ldb = b_rows + 2;
+    int ldc = m + 2;
+    double a_buf[80], b_buf[80], c_buf[40];
+    double c_ref[6];
+    char msg[128];
+    int i, j, p;
+
+    for (i = 0; i < lda * a_cols; i++){
+        a_buf[i] = sentinel;
+    }
+
+    for (i = 0; i < ldb * b_cols; i++){
+        b_buf[i] = sentinel;
+    }
+
+    for (j = 0; j < n; j++){
+
+        for (i = 0; i < ldc; i++){
+            c_buf[i + ldc * j] = (i < m) ? (nan_fill ? NAN : c_init[i * n + j]) : sentinel;
+        }
+
+    }
+
+    store_op_matrix(a_buf, lda, transa, m, k, logical_a);
+    store_op_matrix(b_buf, ldb, transb, k, n, logical_b);
+
+    for (i = 0; i < m; i++){
+
+        for (j = 0; j < n; j++){
+
+            double sum = 0.0;
+
+            for (p = 0; p < k; p++){
+                sum += logical_a[i * k + p] * logical_b[p * n + j];
+            }
+
+            // beta == 0 must not read the (possibly NaN) initial C, matching the BLAS contract.
+            c_ref[i * n + j] = (beta == 0.0) ? alpha * sum : alpha * sum + beta * c_init[i * n + j];
+
+        }
+
+    }
+
+    oti_dgemm(transa, transb, m, n, k, alpha, a_buf, lda, b_buf, ldb, beta, c_buf, ldc);
+
+    for (i = 0; i < m; i++){
+
+        for (j = 0; j < n; j++){
+            snprintf(msg, sizeof(msg), "dgemm %s (%d,%d)", label, i, j);
+            check_close(msg, c_buf[i + ldc * j], c_ref[i * n + j]);
+        }
+
+    }
+
+    for (j = 0; j < n; j++){
+        snprintf(msg, sizeof(msg), "dgemm %s ldc padding untouched (col %d)", label, j);
+        check_close(msg, c_buf[m + ldc * j], sentinel);
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+static void test_dgemm(void){
+
+    run_dgemm_case("NN", 'N', 'N', 1.0, 0.0, 1);
+    run_dgemm_case("NT", 'N', 'T', 1.0, 0.0, 1);
+    run_dgemm_case("TN", 'T', 'N', 1.0, 0.0, 1);
+    run_dgemm_case("TT", 'T', 'T', 1.0, 0.0, 1);
+    run_dgemm_case("beta1 accumulate", 'N', 'N', 1.0, 1.0, 0);
+    run_dgemm_case("alpha=-1", 'N', 'N', -1.0, 0.0, 1);
+    run_dgemm_case("alpha=-1 beta=1", 'T', 'N', -1.0, 1.0, 0);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int main(void){
 
     if (!oti_lapack_fits(4) || oti_lapack_fits((uint64_t)INT_MAX + 1)){
@@ -251,6 +384,7 @@ int main(void){
     test_getrs_transposed_padded();
     test_getrf_singular();
     test_trsm_trmm();
+    test_dgemm();
 
     if (n_failed != 0){
         fprintf(stderr, "LAPACK wrapper tests: %d check(s) failed.\n", n_failed);

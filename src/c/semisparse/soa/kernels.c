@@ -141,7 +141,7 @@ void oarrss_kernel_mul_acc(const coeff_t* A, ord_t alo, ord_t ahi, const coeff_t
 
     ord_t p, q;
     ndir_t i, j, Np, Nq;
-    uint64_t e, len = e1 - e0;
+    uint64_t e, len = e1 - e0, bp, bq, bpq;
     const coeff_t *Ai, *Bj;
     coeff_t* Rd;
     oarrss_pairsrc_t src;
@@ -153,15 +153,19 @@ void oarrss_kernel_mul_acc(const coeff_t* A, ord_t alo, ord_t ahi, const coeff_t
     for (p = alo; p <= ahi && p + blo <= trc; p++){
 
         Np = sshelp_ndir_order(k, p);
+        bp = oarrss_block_index(k, p, 0);
 
+        // Block offsets once per order (block of direction i of order p: bp + i).
         for (q = blo; q <= bhi && p + q <= trc; q++){
 
             Nq  = sshelp_ndir_order(k, q);
+            bq  = oarrss_block_index(k, q, 0);
+            bpq = oarrss_block_index(k, p + q, 0);
             src = oarrss_pairsrc_init(k, p, q, dhl);
 
             for (i = 0; i < Np; i++){
 
-                Ai = A + oarrss_block_index(k, p, i) * m + e0;
+                Ai = A + (bp + i) * m + e0;
 
                 if (oarrss_all_zero(Ai, len)){
                     continue;
@@ -169,8 +173,8 @@ void oarrss_kernel_mul_acc(const coeff_t* A, ord_t alo, ord_t ahi, const coeff_t
 
                 for (j = 0; j < Nq; j++){
 
-                    Bj = B + oarrss_block_index(k, q, j) * m + e0;
-                    Rd = R + oarrss_block_index(k, p + q, oarrss_pairsrc_idx(&src, i, j)) * m + e0;
+                    Bj = B + (bq + j) * m + e0;
+                    Rd = R + (bpq + oarrss_pairsrc_idx(&src, i, j)) * m + e0;
 
                     for (e = 0; e < len; e++){
                         Rd[e] += Ai[e] * Bj[e];
@@ -198,7 +202,7 @@ int oarrss_kernel_matmul_acc(const coeff_t* A, ord_t alo, ord_t ahi, const coeff
 
     ord_t p, q;
     ndir_t i, j, Np, Nq;
-    uint64_t e, sa = nrows * ninner, sb = ninner * ncols, sr = nrows * ncols;
+    uint64_t e, sa = nrows * ninner, sb = ninner * ncols, sr = nrows * ncols, bp, bpq;
     const coeff_t *Ai, *Bq;
     coeff_t *Rd, *Wj;
     oarrss_pairsrc_t src;
@@ -227,11 +231,13 @@ int oarrss_kernel_matmul_acc(const coeff_t* A, ord_t alo, ord_t ahi, const coeff
     for (p = alo; p <= ahi && p + blo <= trc; p++){
 
         Np = sshelp_ndir_order(k, p);
+        bp = oarrss_block_index(k, p, 0);
 
         for (q = blo; q <= bhi && p + q <= trc; q++){
 
             Nq  = sshelp_ndir_order(k, q);
             Bq  = B + oarrss_block_index(k, q, 0) * sb;
+            bpq = oarrss_block_index(k, p + q, 0);
             src = oarrss_pairsrc_init(k, p, q, dhl);
 
             if (Nq == 0){
@@ -241,7 +247,7 @@ int oarrss_kernel_matmul_acc(const coeff_t* A, ord_t alo, ord_t ahi, const coeff
 
             for (i = 0; i < Np; i++){
 
-                Ai = A + oarrss_block_index(k, p, i) * sa;
+                Ai = A + (bp + i) * sa;
 
                 if (oarrss_all_zero(Ai, sa)){
                     continue;
@@ -251,7 +257,7 @@ int oarrss_kernel_matmul_acc(const coeff_t* A, ord_t alo, ord_t ahi, const coeff
 
                     // Identity product index: the order-q blocks (or the one block) of the result
                     // are contiguous, so the product goes straight into R.
-                    Rd = R + oarrss_block_index(k, p + q, (p == 0) ? 0 : i) * sr;
+                    Rd = R + (bpq + ((p == 0) ? 0 : i)) * sr;
                     oti_dgemm('N', 'N', (int)nrows, (int)(ncols * Nq), (int)ninner, alpha, Ai,
                               (int)nrows, Bq, (int)ninner, 1.0, Rd, (int)nrows);
 
@@ -264,7 +270,7 @@ int oarrss_kernel_matmul_acc(const coeff_t* A, ord_t alo, ord_t ahi, const coeff
                     for (j = 0; j < Nq; j++){
 
                         Wj = work + j * sr;
-                        Rd = R + oarrss_block_index(k, p + q, oarrss_pairsrc_idx(&src, i, j)) * sr;
+                        Rd = R + (bpq + oarrss_pairsrc_idx(&src, i, j)) * sr;
 
                         for (e = 0; e < sr; e++){
                             Rd[e] += Wj[e];

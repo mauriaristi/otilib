@@ -10,6 +10,9 @@ Guidance for AI agents working in this repository.
   - `numpy>=2.1,<3`: OTILib's own C-API usage is NumPy-2-compatible (enforced at build time via `NPY_NO_DEPRECATED_API` in `setup.py.in`). The lower bound is `2.1` rather than `2.0` because numpy 2.0.x publishes no Python 3.13 build at all. The optional `solver='umfpack'`/`solver='cholesky'` sparse-solver paths (`scikits.umfpack`, `sksparse`) depend on those upstream packages publishing NumPy-2-compatible builds; the default `solver='SuperLU'` path is unaffected either way.
   - `vtk<9.4`: `pyvista` compatibility (prevents `vtkCapsuleSource` import error with VTK 9.5+).
   - `cython>=3.0`: Cython 3.x is the standard compiler for building extension modules.
+  - `scikit-sparse<0.5`: 0.5.0 returns a tuple from `cholesky(A)`, while `sparse/linalg.pxi` expects the
+    callable `Factor` of 0.4.x, so `solve(csr, b, solver='cholesky')` fails with `TypeError: 'tuple'
+    object is not callable` on 0.5. Supporting the 0.5 API is a later item.
 - **OpenMP (macOS):** Requires Homebrew `libomp` at `/opt/homebrew/opt/libomp` and `gfortran` (Homebrew GCC).
 - **LAPACK / BLAS (required):** The C core's dense linear algebra (`inv`, `det`, `solve`,
   `lu_factor`, `lu_solve`) links a LAPACK found by CMake's `find_package(LAPACK)` with 32-bit
@@ -31,7 +34,7 @@ CONDA_SUBDIR=linux-64 CONDA_OVERRIDE_GLIBC=2.28 \
 conda create -n __pintest --solver rattler --dry-run -c conda-forge -c anaconda \
   "python=3.13.*" "numpy>=2.1,<3" scipy "cython>=3.0" pandas make cmake pip pytest ipykernel \
   "conda-forge::vtk<9.4" conda-forge::gmsh conda-forge::python-gmsh conda-forge::pyvista \
-  conda-forge::scikit-sparse conda-forge::scikit-umfpack -y
+  "conda-forge::scikit-sparse<0.5" conda-forge::scikit-umfpack -y
 ```
 
 ## Versioning
@@ -117,9 +120,33 @@ conda develop .
     direction numbering, unions, the table-vs-rank product index, the local product-table cache,
     per-thread workspaces), implemented in `src/c/core/semisparse_helper.c`.
   - `src/python/pyoti/cython/semisparse.pyx`: the `pyoti.semisparse` module (scalar, AoS and SoA
-    classes, conversions to/from `pyoti.sparse`, direction blocks as NumPy views).
+    classes, conversions to/from `pyoti.sparse`, direction blocks as NumPy views). Like
+    `sparse.pyx`, it is only headers and `include` lines; the code is in
+    `src/python/pyoti/cython/semisparse/*.pxi` (`scalar/`, `soa/`, `aos/` hold the class bodies).
+  - **Feature parity with `pyoti.sparse` (`PLAN-semisparse-sparse-leveling.md`)**, each area with
+    its C source, header, Cython declarations (`include/pyoti/c_otilib/semisparse_<area>.pxi`) and
+    module code:
+    - order/derivative plumbing, `trunc_dot`/`trunc_sub`/`dot_product`, `rom_eval*`, `interp1d`,
+      `moving_average`, `inv_block`: `src/c/semisparse/{scalar,soa}/utils.c`, `semisparse/order.pxi`;
+    - save/read: `src/c/semisparse/io/`, `include/oti/semisparse/io/io.h` (the file format is
+      documented there), `semisparse/io.pxi`;
+    - Gauss-point types `ssotife`/`oarrssfe` (C `feoarrss_t`): `src/c/semisparse/gauss/`,
+      `include/oti/semisparse/gauss/gauss.h`, `semisparse/gauss/base.pxi`;
+    - FEM element helper `elm_help`: `semisparse/fem/base.pxi`;
+    - OTI sparse matrices: `src/c/semisparse/csr/`, `include/oti/semisparse/csr/csr.h` (the
+      `lilss_t` hash-table triplet builder behind `lil_matrix`, the `csrss_t` CSR view with values as
+      one nnz x 1 `oarrss_t` and int64 `indices`/`indptr`, `csrss_matmul_to`, the block-solve
+      right-hand sides `csrss_solve_init`/`csrss_solve_rhs`); Python `csr_matrix`, `lil_matrix` and
+      `_csr_solve` in `semisparse/csr/base.pxi`.
+  - `examples/python/fem_twc.py`: the thick-walled-cylinder FEM model, `run(algebra, ndivs, order,
+    perturb_geometry=False)`; it never branches on the algebra and is the drop-in acceptance test
+    of `pyoti.semisparse` against `pyoti.sparse`.
 
 ## Semi-sparse gotchas
+- **Block offsets in kernels.** `oarrss_block_index(k, p, i)` and `sshelp_order_offset(k, p)` compute
+  a binomial coefficient on every call. Compute the order's first block once per order and add the
+  local index (`bp + i`), never call them per direction or per direction pair: per-pair calls were
+  about 30% of the TWC element product before this was fixed.
 
 - **Local vs. global direction numbering.** Scalar/array functions that take a direction (e.g.
   `ssoti_get_item`, `ssoti_truncate_im`) take it as a **global** `(idx, order)` pair, same numbering
@@ -159,6 +186,59 @@ conda develop .
   `VECLIB_MAXIMUM_THREADS` (OpenBLAS / Accelerate, matching the linked LAPACK vendor -- see
   "Choosing the LAPACK" above) for the BLAS side; don't set both to the machine's full core count
   at once.
+- **No coefficient-sized buffer outlives a SoA call.** SoA elementwise operations, functions,
+  `matmul`, `transpose`, `add_bases` and `compact` write straight into `res`; when `res` aliases an
+  operand the result is built in a call-local buffer and copied. Only the small index buffers (union
+  of bases, position maps) stay in the per-thread workspace, so after a call the process holds only
+  the lazy tables. New SoA code should follow the same rule (`malloc`/`free` inside the call).
+- **API parity with `pyoti.sparse`.** `pyoti.semisparse` mirrors the sparse names and call
+  signatures (creators, `array`, `zeros(shape, nbases, order, nip, bases=)`, `sum`/`sub`/`mul`/
+  `div`/`neg`/`abs`/`norm`/`transpose`/`dot`/`inv`/`det` with `out=`, the Phase 2 functions,
+  `save`/`read`). `nbases=` is accepted everywhere and has no effect (a capacity hint in sparse).
+  In-place operators rebind (`a += b` is `a = a + b`), as in sparse.
+- **Assignment raises the truncation order.** `A[i, j] = x` and slice assignment on SoA/AoS arrays
+  (and Gauss types) raise the array's truncation order to the value's, zero-extending the entries
+  already there, and grow the active set; `f = zeros((n, 1)); f[i, 0] = f[i, 0] + x` keeps every
+  derivative of `x`. Matrix indexing follows `matso`: `A[i]` is a row block, `A[i, j]` an
+  `ssotinum` copy; negative indices count from the end (sparse does not support them).
+- **`sum`, `abs` and `pow` are module functions** of `pyoti.semisparse` and shadow the builtins inside
+  every `.pxi` of `semisparse.pyx`; use `_builtins.sum` / `_builtins.abs` there (`import builtins as
+  _builtins` is in `semisparse/utils.pxi`). Cython also rejects generator expressions other than
+  inlined `all`/`any`/`sum` inside `cdef` functions; use list comprehensions.
+- **Gauss-point layout.** A `feoarrss_t` (Python `ssotife` scalar, `oarrssfe` matrix) embeds one
+  `oarrss_t` of shape `nip x (nrows * ncols)`: entry (i, j) at point ip is element
+  (ip, i + j*nrows), points fastest, one active set for all points. Elementwise operations and
+  functions are the SoA kernels on it; a Gauss x plain matrix product, `dot_product` with a plain
+  array and `gauss_integrate` are single SoA matrix products on reinterpreted shapes. Gauss scalars
+  broadcast over Gauss arrays point by point; plain OTI values are the same at every point. `.real`,
+  `get_im`, `get_deriv` return NumPy of shape `(nip,)` / `(nip, nrows, ncols)` (sparse returns real
+  Gauss types). Gauss `det`/`inv` use closed forms for n <= 3 (a singular real part gives inf/nan,
+  no status) and LU per point above (status on a singular real part).
+- **`dot_product` pairs entries row-major**, as sparse does (the kernels pair column-major, which is
+  the same for equal shapes and vectors; otherwise the transposes are paired).
+- **FEM with semi-sparse.** `pyoti.fem.set_global_algebra(pyoti.semisparse)` builds mesh
+  coordinates with `pyoti.semisparse.array` (SoA columns) and elements hold a semi-sparse
+  `elm_help`. `elbase.allocate` still evaluates shape functions with sparse numbers and fills the
+  helper only through `set_ijk(real, 0, i, ip)`. `set_global_algebra` reports the underlying error
+  when an algebra fails its probe.
+- **Save/read formats differ.** `pyoti.semisparse.save`/`read` files start `93 'O' 'T' 'S'` (a
+  versioned, validated format, host byte order); `pyoti.sparse` files start `93 'O' 'T' 'I'`. The two
+  are not interchangeable.
+- **OTI sparse matrices.** `lil_matrix.tocsr()` empties the builder, as in `pyoti.sparse`
+  (`preserve_in=True` keeps it). Setting an element overwrites it; accumulate with
+  `K[i, j] = K[i, j] + v` or the faster `K.add(i, j, v)`, and scatter an element matrix with
+  `K.add_block(rows, cols, Ke)` (both algebras; one call instead of 64 Python calls for a quad4).
+  `csr_matrix.real` is a SciPy CSR matrix sharing memory with the OTI matrix's real part (writing
+  its `data` changes the OTI matrix); `indices`/`indptr` are read-only int64 arrays shared by
+  copies. `solve(csr, b, solver=...)`
+  factors the real part once (SciPy SuperLU/spilu, scikit-sparse cholmod, scikit-umfpack) and solves
+  all directions of one order as a single multi-column right-hand side built in C; the solution is
+  dense over the union of K's and b's bases. `csr @ x` never expands or copies either operand
+  (directions are remapped into the union's product tables).
+- **Phase 2 global layouts** (`get_all_ims`, `get_order_im_array`) are indexed by global direction
+  index and skip directions with bases beyond the layout instead of writing out of range.
+  `soa/utils.c` and `gauss/gauss.c` rely on the unity-build order (they reuse `oarrss_pairsrc_*`
+  and other statics of `soa/kernels.c` / `soa/base.c`).
 
 ## Verification & Testing
 
@@ -203,6 +283,17 @@ pytest tests/python/test_dense.py          # Dynamic dense OTI numbers
 pytest tests/python/test_semisparse_scalar.py  # pyoti.semisparse scalar vs the sparse oracle
 pytest tests/python/test_semisparse_soa.py     # SoA arrays (oarrss) vs the sparse oracle
 pytest tests/python/test_semisparse_aos.py     # AoS arrays (arrss) vs the sparse oracle
+pytest tests/python/test_semisparse_api.py     # API parity (creators, methods, indexing, out=) vs sparse
+pytest tests/python/test_semisparse_order.py   # get_order_im*, extract_*, trunc_dot/sub, dot_product,
+                                               #   rom_eval*, interp1d, moving_average, inv_block
+pytest tests/python/test_semisparse_io.py      # save/read round trips, sparse cross-check, bad files
+pytest tests/python/test_semisparse_gauss.py   # Gauss-point types (ssotife, oarrssfe) vs sotife/matsofe
+pytest tests/python/test_semisparse_csr.py     # lil/csr vs sparse, matmul, solve (all four solvers)
+pytest tests/python/test_sparse_io.py          # matso save/read, file names, bad files
+pytest tests/python/test_sparse_gauss.py       # sparse Gauss types and elm_help (oracle checks)
+pytest tests/python/test_sparse_csr.py         # sparse lil/csr and the four solvers (oracle checks)
+pytest tests/python/test_fem_elements.py       # every pyoti.fem element, both algebras
+pytest tests/python/test_fem_twc.py            # TWC model: Lame check, refinement, semi vs sparse
 ```
 
 ### 3. Verify Native Multi-Language Tests (CTest)
@@ -225,6 +316,10 @@ ctest --output-on-failure
 ./tests/c/test_c_semisparse_soa    # oarrss_t (SoA) vs the arrso_t oracle
 ./tests/c/test_c_semisparse_aos    # arrss_t (AoS) vs the arrso_t oracle
 ./tests/c/test_c_semisparse_review # edge cases found in review (e.g. 0x0 SoA matrices)
+./tests/c/test_c_semisparse_utils  # Phase 2 kernels vs the sotinum_t/arrso_t oracle
+./tests/c/test_c_semisparse_io     # save/read format
+./tests/c/test_c_semisparse_gauss  # Gauss-point types (feoarrss_t) vs per-point oarrss_t / arrso_t
+./tests/c/test_c_semisparse_csr    # triplet builder, CSR spmm and solve RHS vs dense SoA
 ./tests/fortran/test_f_static_scalar
 ./tests/fortran/test_f_sparse_scalar
 ./tests/cpp/test_cpp_vector
@@ -233,7 +328,8 @@ ctest --output-on-failure
 
 `tests/c/CMakeLists.txt` registers `test_c_semisparse_<name>` / `c_semisparse_<name>_test`
 automatically, for every `tests/c/test_semisparse_<name>.c` that exists (a `foreach` over
-`core scalar soa aos review`), so adding one of those files needs no `CMakeLists.txt` edit.
+`core scalar soa aos review utils io gauss csr`), so adding one of those files needs no
+`CMakeLists.txt` edit; a new `<name>` needs one word added to that list.
 
 Benchmark the direction-helper tables (import time, RSS, `mult_dir`/multiplication timings at
 several orders) with:

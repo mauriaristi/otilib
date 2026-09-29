@@ -1125,6 +1125,450 @@ static void test_aliasing(dhelpl_t dhl){
 
 
 // -------------------------------------------------------------------------------------------------------
+// -------------------------------------     RESULT PATHS     --------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+// *******************************************************************************************************
+/* A destination that already holds something else: a different shape, other bases and (for the
+ * large one) a bigger capacity than any result below, or (for the small one) less than needed. */
+static oarrss_t make_dirty_dest(int large, dhelpl_t dhl){
+
+    arrso_t arr = large ? build_arrso_operand(5, 6, SET_B_SUPER, 4, TRC, MAXORDER, DENSITY, 2.0, 3.0,
+                              dhl)
+                        : build_arrso_operand(1, 1, SET_E, 2, 1, 1, DENSITY, 2.0, 3.0, dhl);
+    oarrss_t dest = oarrss_from_arrso(&arr, dhl);
+
+    arrso_free(&arr);
+
+    return dest;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+/* Elementwise array/array operations, for every scenario: into a fresh, a dirty small and a dirty
+ * large destination, with res == arr1, res == arr2 and (arr1 == arr2 == res). The operands must be
+ * left untouched when the destination is separate. */
+static void test_result_paths_OO(dhelpl_t dhl){
+
+    size_t s, o;
+
+    for (s = 0; s < N_SCENARIOS; s++){
+
+        const scenario_t* sc = &SCENARIOS[s];
+        arrso_t arr1 = build_arrso_operand(3, 2, sc->bases1, sc->k1, TRC, MAXORDER, DENSITY, 0.6,
+            1.4, dhl);
+        arrso_t arr2 = build_arrso_operand(3, 2, sc->bases2, sc->k2, TRC, MAXORDER, DENSITY, 0.4,
+            0.9, dhl);
+        oarrss_t soa1 = oarrss_from_arrso(&arr1, dhl);
+        oarrss_t soa2 = oarrss_from_arrso(&arr2, dhl);
+
+        for (o = 0; o < N_OO_OPS; o++){
+
+            arrso_t oracle = arrso_empty_like(&arr1, dhl);
+            arrso_t oracle_self = arrso_empty_like(&arr1, dhl);
+            char ctx[160];
+            int large;
+
+            OO_OPS[o].arrso_fn(&arr1, &arr2, &oracle, dhl);
+            OO_OPS[o].arrso_fn(&arr1, &arr1, &oracle_self, dhl);
+
+            for (large = 0; large < 2; large++){
+
+                oarrss_t res = make_dirty_dest(large, dhl);
+
+                OO_OPS[o].oarrss_fn(&soa1, &soa2, &res, dhl);
+                snprintf(ctx, sizeof(ctx), "%s(%s) into a dirty %s destination", OO_OPS[o].name,
+                    sc->label, large ? "large" : "small");
+                compare_oarrss_vs_arrso(&res, &oracle, dhl, OO_OPS[o].tol, ctx);
+                snprintf(ctx, sizeof(ctx), "%s(%s): operand 1 untouched (%s dest)",
+                    OO_OPS[o].name, sc->label, large ? "large" : "small");
+                compare_oarrss_vs_arrso(&soa1, &arr1, dhl, 0.0, ctx);
+                snprintf(ctx, sizeof(ctx), "%s(%s): operand 2 untouched (%s dest)",
+                    OO_OPS[o].name, sc->label, large ? "large" : "small");
+                compare_oarrss_vs_arrso(&soa2, &arr2, dhl, 0.0, ctx);
+
+                oarrss_free(&res);
+
+            }
+
+            {
+                oarrss_t a1 = oarrss_copy(&soa1);
+
+                OO_OPS[o].oarrss_fn(&a1, &soa2, &a1, dhl);
+                snprintf(ctx, sizeof(ctx), "%s(%s) res == arr1", OO_OPS[o].name, sc->label);
+                compare_oarrss_vs_arrso(&a1, &oracle, dhl, OO_OPS[o].tol, ctx);
+                oarrss_free(&a1);
+            }
+
+            {
+                oarrss_t a2 = oarrss_copy(&soa2);
+
+                OO_OPS[o].oarrss_fn(&soa1, &a2, &a2, dhl);
+                snprintf(ctx, sizeof(ctx), "%s(%s) res == arr2", OO_OPS[o].name, sc->label);
+                compare_oarrss_vs_arrso(&a2, &oracle, dhl, OO_OPS[o].tol, ctx);
+                oarrss_free(&a2);
+            }
+
+            {
+                oarrss_t a1 = oarrss_copy(&soa1);
+
+                OO_OPS[o].oarrss_fn(&a1, &a1, &a1, dhl);
+                snprintf(ctx, sizeof(ctx), "%s(%s) arr1 == arr2 == res", OO_OPS[o].name,
+                    sc->label);
+                compare_oarrss_vs_arrso(&a1, &oracle_self, dhl, OO_OPS[o].tol, ctx);
+                oarrss_free(&a1);
+            }
+
+            arrso_free(&oracle);
+            arrso_free(&oracle_self);
+
+        }
+
+        oarrss_free(&soa1);
+        oarrss_free(&soa2);
+        arrso_free(&arr1);
+        arrso_free(&arr2);
+
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+/* Scalar/array operations (sum, sub, mul, div and sub/div with the array first), for every scenario
+ * (scalar over the second set): into dirty destinations and with res == arr. */
+static void test_result_paths_mixed(dhelpl_t dhl){
+
+    typedef void (*arrso_oO_fn)(sotinum_t*, arrso_t*, arrso_t*, dhelpl_t);
+    typedef void (*arrso_Oo_fn)(arrso_t*, sotinum_t*, arrso_t*, dhelpl_t);
+    typedef void (*oarrss_oO_fn)(const ssotinum_t*, const oarrss_t*, oarrss_t*, dhelpl_t);
+    typedef void (*oarrss_Oo_fn)(const oarrss_t*, const ssotinum_t*, oarrss_t*, dhelpl_t);
+
+    static const struct { const char* name; arrso_oO_fn ofn; oarrss_oO_fn sfn; double tol; } OO_S[] = {
+        { "sum_oO", arrso_sum_oO_to, oarrss_sum_oO_to, 0.0 },
+        { "sub_oO", arrso_sub_oO_to, oarrss_sub_oO_to, 0.0 },
+        { "mul_oO", arrso_mul_oO_to, oarrss_mul_oO_to, 1e-9 },
+        { "div_oO", arrso_div_oO_to, oarrss_div_oO_to, 1e-9 },
+    };
+    static const struct { const char* name; arrso_Oo_fn ofn; oarrss_Oo_fn sfn; double tol; } OS_S[] = {
+        { "sub_Oo", arrso_sub_Oo_to, oarrss_sub_Oo_to, 0.0 },
+        { "div_Oo", arrso_div_Oo_to, oarrss_div_Oo_to, 1e-9 },
+    };
+    size_t s, o;
+
+    for (s = 0; s < N_SCENARIOS; s++){
+
+        const scenario_t* sc = &SCENARIOS[s];
+        arrso_t arr = build_arrso_operand(3, 2, sc->bases1, sc->k1, TRC, MAXORDER, DENSITY, 0.6,
+            1.4, dhl);
+        sotinum_t scalar = build_soti_elem(sc->bases2, sc->k2, TRC, MAXORDER, DENSITY, 0.7, dhl);
+        ssotinum_t ss_scalar = ssoti_from_soti(&scalar, dhl);
+        oarrss_t soa = oarrss_from_arrso(&arr, dhl);
+
+        for (o = 0; o < 4 + 2; o++){
+
+            arrso_t oracle = arrso_empty_like(&arr, dhl);
+            const char* name = (o < 4) ? OO_S[o].name : OS_S[o - 4].name;
+            double tol = (o < 4) ? OO_S[o].tol : OS_S[o - 4].tol;
+            char ctx[160];
+            int large;
+
+            if (o < 4){
+                OO_S[o].ofn(&scalar, &arr, &oracle, dhl);
+            } else {
+                OS_S[o - 4].ofn(&arr, &scalar, &oracle, dhl);
+            }
+
+            for (large = 0; large < 2; large++){
+
+                oarrss_t res = make_dirty_dest(large, dhl);
+
+                if (o < 4){
+                    OO_S[o].sfn(&ss_scalar, &soa, &res, dhl);
+                } else {
+                    OS_S[o - 4].sfn(&soa, &ss_scalar, &res, dhl);
+                }
+
+                snprintf(ctx, sizeof(ctx), "%s(%s) into a dirty %s destination", name, sc->label,
+                    large ? "large" : "small");
+                compare_oarrss_vs_arrso(&res, &oracle, dhl, tol, ctx);
+                snprintf(ctx, sizeof(ctx), "%s(%s): array untouched (%s dest)", name, sc->label,
+                    large ? "large" : "small");
+                compare_oarrss_vs_arrso(&soa, &arr, dhl, 0.0, ctx);
+                oarrss_free(&res);
+
+            }
+
+            {
+                oarrss_t a = oarrss_copy(&soa);
+
+                if (o < 4){
+                    OO_S[o].sfn(&ss_scalar, &a, &a, dhl);
+                } else {
+                    OS_S[o - 4].sfn(&a, &ss_scalar, &a, dhl);
+                }
+
+                snprintf(ctx, sizeof(ctx), "%s(%s) res == arr", name, sc->label);
+                compare_oarrss_vs_arrso(&a, &oracle, dhl, tol, ctx);
+                oarrss_free(&a);
+            }
+
+            arrso_free(&oracle);
+
+        }
+
+        oarrss_free(&soa);
+        ssoti_free(&ss_scalar);
+        soti_free(&scalar);
+        arrso_free(&arr);
+
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+/* Functions of an array (exp, sqrt, pow) and transpose: dirty destinations and res == arr. */
+static void test_result_paths_unary(dhelpl_t dhl){
+
+    size_t s;
+
+    for (s = 0; s < N_SCENARIOS; s++){
+
+        const scenario_t* sc = &SCENARIOS[s];
+        arrso_t arr = build_arrso_operand(3, 2, sc->bases1, sc->k1, TRC, MAXORDER, DENSITY, 0.8,
+            1.4, dhl);
+        oarrss_t soa = oarrss_from_arrso(&arr, dhl);
+        arrso_t o_exp = arrso_empty_like(&arr, dhl);
+        arrso_t o_pow = arrso_empty_like(&arr, dhl);
+        arrso_t o_tr = arrso_transpose(&arr, dhl);
+        char ctx[160];
+        int large;
+
+        arrso_exp_to(&arr, &o_exp, dhl);
+        arrso_pow_to(&arr, -1.0, &o_pow, dhl);
+
+        for (large = 0; large < 2; large++){
+
+            oarrss_t res = make_dirty_dest(large, dhl);
+
+            oarrss_exp_to(&soa, &res, dhl);
+            snprintf(ctx, sizeof(ctx), "exp(%s) into a dirty %s destination", sc->label,
+                large ? "large" : "small");
+            compare_oarrss_vs_arrso(&res, &o_exp, dhl, 1e-9, ctx);
+            compare_oarrss_vs_arrso(&soa, &arr, dhl, 0.0, "exp: operand untouched");
+
+            oarrss_pow_to(&soa, -1.0, &res, dhl);
+            snprintf(ctx, sizeof(ctx), "pow(-1)(%s) into a dirty %s destination", sc->label,
+                large ? "large" : "small");
+            compare_oarrss_vs_arrso(&res, &o_pow, dhl, 1e-9, ctx);
+
+            oarrss_transpose_to(&soa, &res, dhl);
+            snprintf(ctx, sizeof(ctx), "transpose(%s) into a dirty %s destination", sc->label,
+                large ? "large" : "small");
+            compare_oarrss_vs_arrso(&res, &o_tr, dhl, 0.0, ctx);
+            compare_oarrss_vs_arrso(&soa, &arr, dhl, 0.0, "transpose: operand untouched");
+
+            oarrss_free(&res);
+
+        }
+
+        {
+            oarrss_t a = oarrss_copy(&soa);
+
+            oarrss_exp_to(&a, &a, dhl);
+            snprintf(ctx, sizeof(ctx), "exp(%s) res == arr", sc->label);
+            compare_oarrss_vs_arrso(&a, &o_exp, dhl, 1e-9, ctx);
+            oarrss_free(&a);
+        }
+
+        {
+            oarrss_t a = oarrss_copy(&soa);
+
+            oarrss_pow_to(&a, -1.0, &a, dhl);
+            snprintf(ctx, sizeof(ctx), "pow(-1)(%s) res == arr", sc->label);
+            compare_oarrss_vs_arrso(&a, &o_pow, dhl, 1e-9, ctx);
+            oarrss_free(&a);
+        }
+
+        {
+            oarrss_t a = oarrss_copy(&soa);
+
+            oarrss_transpose_to(&a, &a, dhl);
+            snprintf(ctx, sizeof(ctx), "transpose(%s) res == arr", sc->label);
+            compare_oarrss_vs_arrso(&a, &o_tr, dhl, 0.0, ctx);
+            oarrss_free(&a);
+        }
+
+        oarrss_free(&soa);
+        arrso_free(&o_exp);
+        arrso_free(&o_pow);
+        arrso_free(&o_tr);
+        arrso_free(&arr);
+
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+/* matmul for every scenario: dirty destinations, res == arr1, res == arr2, and arr1 == arr2 == res
+ * (square operands over one set), plus the error path leaving the destination unchanged. */
+static void test_result_paths_matmul(dhelpl_t dhl){
+
+    size_t s;
+
+    for (s = 0; s < N_SCENARIOS; s++){
+
+        const scenario_t* sc = &SCENARIOS[s];
+        arrso_t a = build_arrso_operand(3, 3, sc->bases1, sc->k1, TRC, MAXORDER, DENSITY, 0.5, 1.2,
+            dhl);
+        arrso_t b = build_arrso_operand(3, 3, sc->bases2, sc->k2, TRC, MAXORDER, DENSITY, 0.3, 0.9,
+            dhl);
+        arrso_t oracle = arrso_matmul_OO(&a, &b, dhl);
+        arrso_t oracle_self = arrso_matmul_OO(&a, &a, dhl);
+        oarrss_t soa_a = oarrss_from_arrso(&a, dhl), soa_b = oarrss_from_arrso(&b, dhl);
+        char ctx[160];
+        int large;
+
+        for (large = 0; large < 2; large++){
+
+            oarrss_t res = make_dirty_dest(large, dhl);
+
+            check(oarrss_matmul_OO_to(&soa_a, &soa_b, &res, dhl) == 0, "matmul into dirty: status");
+            snprintf(ctx, sizeof(ctx), "matmul(%s) into a dirty %s destination", sc->label,
+                large ? "large" : "small");
+            compare_oarrss_vs_arrso(&res, &oracle, dhl, 1e-9, ctx);
+            compare_oarrss_vs_arrso(&soa_a, &a, dhl, 0.0, "matmul: operand 1 untouched");
+            compare_oarrss_vs_arrso(&soa_b, &b, dhl, 0.0, "matmul: operand 2 untouched");
+            oarrss_free(&res);
+
+        }
+
+        {
+            oarrss_t x = oarrss_copy(&soa_a);
+
+            check(oarrss_matmul_OO_to(&x, &soa_b, &x, dhl) == 0, "matmul res == arr1: status");
+            snprintf(ctx, sizeof(ctx), "matmul(%s) res == arr1", sc->label);
+            compare_oarrss_vs_arrso(&x, &oracle, dhl, 1e-9, ctx);
+            oarrss_free(&x);
+        }
+
+        {
+            oarrss_t x = oarrss_copy(&soa_b);
+
+            check(oarrss_matmul_OO_to(&soa_a, &x, &x, dhl) == 0, "matmul res == arr2: status");
+            snprintf(ctx, sizeof(ctx), "matmul(%s) res == arr2", sc->label);
+            compare_oarrss_vs_arrso(&x, &oracle, dhl, 1e-9, ctx);
+            oarrss_free(&x);
+        }
+
+        {
+            oarrss_t x = oarrss_copy(&soa_a);
+
+            check(oarrss_matmul_OO_to(&x, &x, &x, dhl) == 0, "matmul arr1 == arr2 == res: status");
+            snprintf(ctx, sizeof(ctx), "matmul(%s) arr1 == arr2 == res", sc->label);
+            compare_oarrss_vs_arrso(&x, &oracle_self, dhl, 1e-9, ctx);
+            oarrss_free(&x);
+        }
+
+        oarrss_free(&soa_a);
+        oarrss_free(&soa_b);
+        arrso_free(&oracle);
+        arrso_free(&oracle_self);
+        arrso_free(&a);
+        arrso_free(&b);
+
+    }
+
+    {
+        // A shape error must leave the destination as it was.
+        arrso_t a = build_arrso_operand(2, 3, SET_A, 2, TRC, MAXORDER, DENSITY, 0.5, 1.2, dhl);
+        arrso_t b = build_arrso_operand(2, 2, SET_D, 2, TRC, MAXORDER, DENSITY, 0.3, 0.9, dhl);
+        arrso_t keep = build_arrso_operand(2, 2, SET_C, 2, TRC, MAXORDER, DENSITY, 0.3, 0.9, dhl);
+        oarrss_t soa_a = oarrss_from_arrso(&a, dhl), soa_b = oarrss_from_arrso(&b, dhl);
+        oarrss_t res = oarrss_from_arrso(&keep, dhl);
+
+        check(oarrss_matmul_OO_to(&soa_a, &soa_b, &res, dhl) == OTI_LINALG_ERR_SIZE,
+            "matmul: shape error is reported");
+        compare_oarrss_vs_arrso(&res, &keep, dhl, 0.0, "matmul: destination unchanged on error");
+
+        oarrss_free(&res); oarrss_free(&soa_a); oarrss_free(&soa_b);
+        arrso_free(&keep); arrso_free(&a); arrso_free(&b);
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+/* The thread's coefficient workspace must not grow, or hold anything, because of an elementwise
+ * operation, function, matmul, transpose, add_bases (interleaved remap) or compact: results,
+ * expanded operands and scratch are call-local (only the small base and index buffers stay in the
+ * workspace). The workspace is emptied first, so any use at all makes it grow. */
+static void test_workspace_not_used(dhelpl_t dhl){
+
+    const scenario_t* sc = &SCENARIOS[2];
+    arrso_t a = build_arrso_operand(20, 20, sc->bases1, sc->k1, TRC, MAXORDER, DENSITY, 0.8, 1.4,
+        dhl);
+    arrso_t b = build_arrso_operand(20, 20, sc->bases2, sc->k2, TRC, MAXORDER, DENSITY, 0.8, 1.4,
+        dhl);
+    oarrss_t soa_a = oarrss_from_arrso(&a, dhl), soa_b = oarrss_from_arrso(&b, dhl);
+    ssotinum_t scalar = ssoti_from_soti(&a.p_data[0], dhl);
+    oarrss_t res = oarrss_init();
+    oarrss_t x = oarrss_copy(&soa_a);
+    oarrss_t y = oarrss_copy(&soa_a);
+    bases_t add_mid[1] = {2};
+    sshelp_ws_t* ws = ssoti_ws();
+    size_t before;
+
+    // Start from an empty coefficient workspace, so any use by the calls below shows up.
+    sshelp_ws_free(ws);
+    before = ws->ncoef;
+
+    // {1,3} + {2}: interleaved (non-leading) remap, then compact drops the zero base 2 again.
+    oarrss_add_bases(add_mid, 1, &y);
+    check(y.nbases == 3, "workspace: add_bases (interleaved) grew the set");
+    oarrss_compact_to(&y, &res);
+    check(res.nbases == 2, "workspace: compact dropped the zero base");
+    oarrss_compact_to(&y, &y);
+    check(y.nbases == 2, "workspace: aliased compact dropped the zero base");
+
+    oarrss_sum_OO_to(&soa_a, &soa_b, &res, dhl);
+    oarrss_mul_OO_to(&soa_a, &soa_b, &res, dhl);
+    oarrss_div_OO_to(&soa_a, &soa_b, &res, dhl);
+    oarrss_mul_oO_to(&scalar, &soa_a, &res, dhl);
+    oarrss_sub_Oo_to(&soa_a, &scalar, &res, dhl);
+    oarrss_exp_to(&soa_a, &res, dhl);
+    oarrss_pow_to(&soa_a, 0.5, &res, dhl);
+    check(oarrss_matmul_OO_to(&soa_a, &soa_b, &res, dhl) == 0, "workspace: matmul status");
+    oarrss_transpose_to(&soa_a, &res, dhl);
+    oarrss_mul_OO_to(&x, &soa_b, &x, dhl);
+    check(oarrss_matmul_OO_to(&x, &soa_b, &x, dhl) == 0, "workspace: aliased matmul status");
+    oarrss_exp_to(&x, &x, dhl);
+    oarrss_transpose_to(&x, &x, dhl);
+
+    check(ws->ncoef == before, "the coefficient workspace did not grow through SoA operations");
+
+    ssoti_free(&scalar);
+    oarrss_free(&res);
+    oarrss_free(&x);
+    oarrss_free(&y);
+    oarrss_free(&soa_a);
+    oarrss_free(&soa_b);
+    arrso_free(&a);
+    arrso_free(&b);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
 // -------------------------------------     OPENMP THREAD COUNT     --------------------------------------
 // -------------------------------------------------------------------------------------------------------
 
@@ -1844,6 +2288,11 @@ int main(void){
     test_truncation(dhl);
     test_compact(dhl);
     test_aliasing(dhl);
+    test_result_paths_OO(dhl);
+    test_result_paths_mixed(dhl);
+    test_result_paths_unary(dhl);
+    test_result_paths_matmul(dhl);
+    test_workspace_not_used(dhl);
     test_openmp_threads(dhl);
     test_linalg_scenarios(dhl);
     test_linalg_operand_relations(dhl);

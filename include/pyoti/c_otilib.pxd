@@ -13,6 +13,10 @@ include "c_otilib/real.pxi"
 include "c_otilib/dense.pxi"
 include "c_otilib/sparse.pxi"
 include "c_otilib/semisparse.pxi"
+include "c_otilib/semisparse_utils.pxi"
+include "c_otilib/semisparse_io.pxi"
+include "c_otilib/semisparse_gauss.pxi"
+include "c_otilib/semisparse_csr.pxi"
 
 # Static algebras.
 include "c_otilib/static.pxi"

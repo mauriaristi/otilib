@@ -382,13 +382,22 @@ void oarrss_add_bases(const bases_t* bases, bases_t k, oarrss_t* arr){
 
     } else {
 
-        // Remap through scratch: the source layout is still the old set's.
+        // Remap through call-local scratch: the source layout is still the old set's.
         size_t need = (size_t)(1 + sshelp_ndir_total(nu, arr->trc_order)) * arr->size;
 
-        ssoti_ws_need(ws, need, 0, 0);
+        if (need > 0){
 
-        oarrss_kernel_expand(arr, p_pos, nu, arr->trc_order, ws->p_coef);
-        memcpy(arr->p_data, ws->p_coef, need * sizeof(coeff_t));
+            coeff_t* scratch = (coeff_t*)malloc(need * sizeof(coeff_t));
+
+            if (scratch == NULL){
+                ssoti_out_of_memory();
+            }
+
+            oarrss_kernel_expand(arr, p_pos, nu, arr->trc_order, scratch);
+            memcpy(arr->p_data, scratch, need * sizeof(coeff_t));
+            free(scratch);
+
+        }
 
     }
 
@@ -458,8 +467,9 @@ void oarrss_get_item_to(uint64_t i, uint64_t j, const oarrss_t* arr, ssotinum_t*
         ndir_t off = sshelp_order_offset(arr->nbases, p);
         ndir_t idx;
 
+        // Direction idx of order p is block 1 + off + idx (oarrss_block_index).
         for (idx = 0; idx < np; idx++){
-            res->p_im[off + idx] = arr->p_data[oarrss_block_index(arr->nbases, p, idx) * arr->size + e];
+            res->p_im[off + idx] = arr->p_data[(1 + off + idx) * arr->size + e];
         }
 
     }
@@ -489,9 +499,10 @@ void oarrss_set_item(const ssotinum_t* num, uint64_t i, uint64_t j, oarrss_t* ar
     for (p = 1; p <= arr->trc_order; p++){
 
         ndir_t np = sshelp_ndir_order(arr->nbases, p);
+        uint64_t b0 = oarrss_block_index(arr->nbases, p, 0);
 
         for (idx = 0; idx < np; idx++){
-            arr->p_data[oarrss_block_index(arr->nbases, p, idx) * arr->size + e] = 0.0;
+            arr->p_data[(b0 + idx) * arr->size + e] = 0.0;
         }
 
     }
@@ -504,6 +515,7 @@ void oarrss_set_item(const ssotinum_t* num, uint64_t i, uint64_t j, oarrss_t* ar
 
         ndir_t np  = sshelp_ndir_order(num->nbases, p);
         ndir_t off = sshelp_order_offset(num->nbases, p);
+        uint64_t b0 = oarrss_block_index(arr->nbases, p, 0);
 
         for (idx = 0; idx < np; idx++){
 
@@ -523,7 +535,7 @@ void oarrss_set_item(const ssotinum_t* num, uint64_t i, uint64_t j, oarrss_t* ar
                 continue;
             }
 
-            arr->p_data[oarrss_block_index(arr->nbases, p, aidx) * arr->size + e] = val;
+            arr->p_data[(b0 + aidx) * arr->size + e] = val;
 
         }
 
@@ -548,10 +560,11 @@ void oarrss_set_item_r(coeff_t val, uint64_t i, uint64_t j, oarrss_t* arr){
     for (p = 1; p <= arr->trc_order; p++){
 
         ndir_t np = sshelp_ndir_order(arr->nbases, p);
+        uint64_t b0 = oarrss_block_index(arr->nbases, p, 0);
         ndir_t idx;
 
         for (idx = 0; idx < np; idx++){
-            arr->p_data[oarrss_block_index(arr->nbases, p, idx) * arr->size + e] = 0.0;
+            arr->p_data[(b0 + idx) * arr->size + e] = 0.0;
         }
 
     }
@@ -966,7 +979,6 @@ void oarrss_compact_to(const oarrss_t* arr, oarrss_t* res){
     bases_t* new_bases = NULL;
     ord_t p;
     size_t need;
-    sshelp_ws_t* ws = ssoti_ws();
     coeff_t* scratch;
 
     if (k == 0){
@@ -1076,8 +1088,12 @@ void oarrss_compact_to(const oarrss_t* arr, oarrss_t* res){
     free(keep);
 
     need = (size_t)(1 + sshelp_ndir_total(nu, arr->trc_order)) * arr->size;
-    ssoti_ws_need(ws, need, 0, 0);
-    scratch = ws->p_coef;
+    // Call-local: nothing coefficient-sized outlives the call (res may alias arr).
+    scratch = (coeff_t*)malloc(need * sizeof(coeff_t) + 1);
+
+    if (scratch == NULL){
+        ssoti_out_of_memory();
+    }
 
     memcpy(scratch, arr->p_data, (size_t)arr->size * sizeof(coeff_t));
 
@@ -1134,6 +1150,7 @@ void oarrss_compact_to(const oarrss_t* arr, oarrss_t* res){
     res->size      = arr->size;
     res->act_order = oarrss_scan_act_order(res, arr->act_order);
 
+    free(scratch);
     free(keep_old_local);
     free(new_bases);
 

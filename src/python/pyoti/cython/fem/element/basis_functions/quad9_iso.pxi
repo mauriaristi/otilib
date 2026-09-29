@@ -55,7 +55,7 @@ cpdef quad9_iso( coeff_t xi_r, coeff_t eta_r, coeff_t chi_r, ord_t derOrder):
   cdef otinum N5 = 0.50 * ( xi ** 2 + xi ) * ( 1.0 - eta ** 2 )
   cdef otinum N6 = 0.50 * ( 1.0 - xi ** 2) * ( eta ** 2 + eta )
   cdef otinum N7 = 0.50 * ( xi ** 2 - xi ) * ( 1.0 - eta ** 2 )
-  cdef otinum N8 = 0.50 * ( 1.0 - xi ** 2) * ( 1.0 - eta ** 2 )
+  cdef otinum N8 = ( 1.0 - xi ** 2) * ( 1.0 - eta ** 2 )
 
   return [ N0, N1, N2, N3, N4, N5, N6, N7, N8]
 

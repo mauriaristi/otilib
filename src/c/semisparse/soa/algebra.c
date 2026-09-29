@@ -1,8 +1,13 @@
 // Semi-sparse SoA arrays: elementwise algebra, functions, matrix products and transpose.
 // Conventions in include/oti/semisparse/soa/algebra.h and soa/base.h. Reuses the scalar module's
-// workspace (ssoti_ws, ssoti_ws_need, ssoti_out_of_memory, ssoti_nimag_checked) and the kernels of
-// src/c/semisparse/soa/kernels.c (oarrss_kernel_mul_acc, oarrss_kernel_matmul_acc), included just
-// before this file.
+// workspace helpers (ssoti_ws, ssoti_ws_need, ssoti_out_of_memory, ssoti_nimag_checked) and the
+// kernels of src/c/semisparse/soa/kernels.c (oarrss_kernel_mul_acc, oarrss_kernel_matmul_acc),
+// included just before this file.
+//
+// Memory: every operation writes its result straight into `res` when `res` does not alias an
+// operand. When it does, the result is built in a call-local buffer and copied in. Expanded
+// operands and scratch are call-local too, so nothing result- or operand-sized outlives a call; only
+// the small index buffers (union of bases, position maps) stay in the thread workspace.
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -24,22 +29,92 @@ static void oarrss_dim_check(const oarrss_t* a, const oarrss_t* b){
 
 
 // *******************************************************************************************************
-// Operands of a binary array operation in the layout of the union of their sets.
+// True when `res` is `x` or shares its coefficient buffer, so writing into `res` would overwrite `x`.
+static int oarrss_res_aliases(const oarrss_t* res, const oarrss_t* x){
+
+    return (res == x) || (res->p_data != NULL && res->p_data == x->p_data);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Call-local coefficient buffer (freed by the caller before it returns); NULL for ncoef == 0.
+static coeff_t* oarrss_scratch_alloc(size_t ncoef){
+
+    coeff_t* p_buf;
+
+    if (ncoef == 0){
+        return NULL;
+    }
+
+    p_buf = (coeff_t*)malloc(ncoef * sizeof(coeff_t));
+
+    if (p_buf == NULL){
+        ssoti_out_of_memory();
+    }
+
+    return p_buf;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Shapes `res` as a result over `nu` bases (whose sorted labels are `p_u`) and truncation order `trc`,
+// without changing its contents, and returns its coefficient buffer.
+static coeff_t* oarrss_result_begin(oarrss_t* res, const bases_t* p_u, bases_t nu, ord_t trc,
+                                    uint64_t nrows, uint64_t ncols){
+
+    oarrss_reserve(res, nu, nrows, ncols, trc);
+
+    if (nu > 0){
+        memmove(res->p_bases, p_u, (size_t)nu * sizeof(bases_t));
+    }
+
+    return res->p_data;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Marks `res` as holding a finished result computed in its own buffer by oarrss_result_begin().
+static void oarrss_result_end(oarrss_t* res, bases_t nu, ord_t trc, ord_t act, uint64_t nrows,
+                              uint64_t ncols){
+
+    res->nbases    = nu;
+    res->trc_order = trc;
+    res->act_order = (act < trc) ? act : trc;
+    res->nrows     = nrows;
+    res->ncols     = ncols;
+    res->size      = nrows * ncols;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Operands of a binary array operation in the layout of the union of their sets. The result goes
+// straight into the destination unless it aliases an operand, in which case it goes into `p_tmp`
+// first. `p_tmp` also holds the expanded operands; nothing here outlives the operation.
 typedef struct {
     const coeff_t* p_a;
     const coeff_t* p_b;
     coeff_t*       p_r;
+    coeff_t*       p_tmp;
     const bases_t* p_u;
     bases_t         nu;
     ord_t          trc;
     ndir_t       nimag;
+    int         direct;
     uint64_t      size, nrows, ncols;
 } oarrss_binop_t;
 // -------------------------------------------------------------------------------------------------------
 
 
 // *******************************************************************************************************
-static oarrss_binop_t oarrss_binop_prepare(const oarrss_t* a, const oarrss_t* b){
+static oarrss_binop_t oarrss_binop_prepare(const oarrss_t* a, const oarrss_t* b, oarrss_t* res){
 
     sshelp_ws_t* ws = ssoti_ws();
     oarrss_binop_t op;
@@ -54,6 +129,7 @@ static oarrss_binop_t oarrss_binop_prepare(const oarrss_t* a, const oarrss_t* b)
     op.ncols = a->ncols;
     op.trc   = (a->trc_order > b->trc_order) ? a->trc_order : b->trc_order;
 
+    // Index buffers only (bases and position maps); the coefficient buffers below are call-local.
     ssoti_ws_need(ws, 0, 0, 2 * nb + 1);
     p_u   = ws->p_bases;
     pos_a = ws->p_bases + nb;
@@ -66,13 +142,25 @@ static oarrss_binop_t oarrss_binop_prepare(const oarrss_t* a, const oarrss_t* b)
     own_a = (a->nbases == op.nu && a->trc_order >= op.trc);
     own_b = (b->nbases == op.nu && b->trc_order >= op.trc);
 
+    op.direct = !oarrss_res_aliases(res, a) && !oarrss_res_aliases(res, b);
+
     need = (size_t)(1 + op.nimag) * op.size;
 
-    ssoti_ws_need(ws, need * (1 + !own_a + !own_b), 0, 0);
+    op.p_tmp = oarrss_scratch_alloc(need * (!op.direct + !own_a + !own_b));
 
-    op.p_r = ws->p_coef;
-    p_ea   = op.p_r + need;
-    p_eb   = p_ea + (own_a ? 0 : need);
+    if (op.direct){
+
+        op.p_r = oarrss_result_begin(res, p_u, op.nu, op.trc, op.nrows, op.ncols);
+        p_ea   = op.p_tmp;
+
+    } else {
+
+        op.p_r = op.p_tmp;
+        p_ea   = op.p_tmp + need;
+
+    }
+
+    p_eb = p_ea + (own_a ? 0 : need);
 
     if (own_a){
         op.p_a = a->p_data;
@@ -95,27 +183,23 @@ static oarrss_binop_t oarrss_binop_prepare(const oarrss_t* a, const oarrss_t* b)
 
 
 // *******************************************************************************************************
-// Stores a flat union-layout result buffer into an (possibly aliasing) destination array.
-static void oarrss_store_result(const bases_t* p_u, bases_t nu, ord_t trc, ndir_t nimag,
-                                uint64_t nrows, uint64_t ncols, uint64_t size, const coeff_t* p_r,
-                                ord_t act, oarrss_t* res){
+// Finishes a binary or mixed array operation: moves an aliased result into `res` and releases the
+// call-local buffer.
+static void oarrss_binop_finish(oarrss_binop_t* op, ord_t act, oarrss_t* res){
 
-    size_t nbytes = (size_t)(1 + nimag) * size * sizeof(coeff_t);
+    if (!op->direct){
 
-    oarrss_reserve(res, nu, nrows, ncols, trc);
+        size_t nbytes = (size_t)(1 + op->nimag) * op->size * sizeof(coeff_t);
+        coeff_t* p_dst = oarrss_result_begin(res, op->p_u, op->nu, op->trc, op->nrows, op->ncols);
 
-    if (nu > 0){
-        memcpy(res->p_bases, p_u, (size_t)nu * sizeof(bases_t));
+        memcpy(p_dst, op->p_r, nbytes);
+
     }
 
-    memcpy(res->p_data, p_r, nbytes);
+    oarrss_result_end(res, op->nu, op->trc, act, op->nrows, op->ncols);
 
-    res->nbases    = nu;
-    res->trc_order = trc;
-    res->act_order = (act < trc) ? act : trc;
-    res->nrows     = nrows;
-    res->ncols     = ncols;
-    res->size      = size;
+    free(op->p_tmp);
+    op->p_tmp = NULL;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -126,7 +210,7 @@ static void oarrss_store_result(const bases_t* p_u, bases_t nu, ord_t trc, ndir_
 static void oarrss_axpby_to(coeff_t sa, const oarrss_t* a, coeff_t sb, const oarrss_t* b,
                             oarrss_t* res){
 
-    oarrss_binop_t op = oarrss_binop_prepare(a, b);
+    oarrss_binop_t op = oarrss_binop_prepare(a, b, res);
     size_t n = (size_t)(1 + op.nimag) * op.size, i;
     ord_t act = (a->act_order > b->act_order) ? a->act_order : b->act_order;
 
@@ -134,8 +218,7 @@ static void oarrss_axpby_to(coeff_t sa, const oarrss_t* a, coeff_t sb, const oar
         op.p_r[i] = sa * op.p_a[i] + sb * op.p_b[i];
     }
 
-    oarrss_store_result(op.p_u, op.nu, op.trc, op.nimag, op.nrows, op.ncols, op.size, op.p_r, act,
-        res);
+    oarrss_binop_finish(&op, act, res);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -231,27 +314,17 @@ static void oarrss_kernel_expand_scalar(const ssotinum_t* num, const bases_t* po
 
 
 // *******************************************************************************************************
-// Operands of a scalar/array operation in the layout of the union of their sets.
-typedef struct {
-    coeff_t* p_o;
-    coeff_t* p_O;
-    coeff_t* p_r;
-    const bases_t* p_u;
-    bases_t nu;
-    ord_t trc;
-    ndir_t nimag;
-    uint64_t size, nrows, ncols;
-} oarrss_mixop_t;
-// -------------------------------------------------------------------------------------------------------
-
-
-// *******************************************************************************************************
-static oarrss_mixop_t oarrss_mixop_prepare(const ssotinum_t* num, const oarrss_t* arr){
+// Operands of a scalar/array operation in the layout of the union of their sets, in an
+// oarrss_binop_t: `p_a` is the scalar broadcast over the elements, `p_b` the array.
+static oarrss_binop_t oarrss_mixop_prepare(const ssotinum_t* num, const oarrss_t* arr,
+                                           oarrss_t* res){
 
     sshelp_ws_t* ws = ssoti_ws();
-    oarrss_mixop_t op;
+    oarrss_binop_t op;
     size_t nb = (size_t)num->nbases + arr->nbases;
     bases_t *p_u, *pos_o, *pos_O;
+    coeff_t *p_eo, *p_eO;
+    int own_O;
     size_t need;
 
     op.size  = arr->size;
@@ -269,16 +342,36 @@ static oarrss_mixop_t oarrss_mixop_prepare(const ssotinum_t* num, const oarrss_t
     op.nimag = ssoti_nimag_checked(op.nu, op.trc);
     op.p_u   = p_u;
 
+    own_O     = (arr->nbases == op.nu && arr->trc_order >= op.trc);
+    op.direct = !oarrss_res_aliases(res, arr);
+
     need = (size_t)(1 + op.nimag) * op.size;
 
-    ssoti_ws_need(ws, need * 3, 0, 0);
+    op.p_tmp = oarrss_scratch_alloc(need * (!op.direct + 1 + !own_O));
 
-    op.p_r = ws->p_coef;
-    op.p_o = op.p_r + need;
-    op.p_O = op.p_o + need;
+    if (op.direct){
 
-    oarrss_kernel_expand_scalar(num, pos_o, op.nu, op.trc, op.size, op.p_o);
-    oarrss_kernel_expand(arr, pos_O, op.nu, op.trc, op.p_O);
+        op.p_r = oarrss_result_begin(res, p_u, op.nu, op.trc, op.nrows, op.ncols);
+        p_eo   = op.p_tmp;
+
+    } else {
+
+        op.p_r = op.p_tmp;
+        p_eo   = op.p_tmp + need;
+
+    }
+
+    p_eO = p_eo + need;
+
+    oarrss_kernel_expand_scalar(num, pos_o, op.nu, op.trc, op.size, p_eo);
+    op.p_a = p_eo;
+
+    if (own_O){
+        op.p_b = arr->p_data;
+    } else {
+        oarrss_kernel_expand(arr, pos_O, op.nu, op.trc, p_eO);
+        op.p_b = p_eO;
+    }
 
     return op;
 
@@ -304,18 +397,17 @@ void oarrss_sum_OO_to(const oarrss_t* arr1, const oarrss_t* arr2, oarrss_t* res,
 // *******************************************************************************************************
 void oarrss_sum_oO_to(const ssotinum_t* num, const oarrss_t* arr1, oarrss_t* res, dhelpl_t dhl){
 
-    oarrss_mixop_t op = oarrss_mixop_prepare(num, arr1);
+    oarrss_binop_t op = oarrss_mixop_prepare(num, arr1, res);
     size_t n = (size_t)(1 + op.nimag) * op.size, i;
     ord_t act = (num->act_order > arr1->act_order) ? num->act_order : arr1->act_order;
 
     (void)dhl;
 
     for (i = 0; i < n; i++){
-        op.p_r[i] = op.p_o[i] + op.p_O[i];
+        op.p_r[i] = op.p_a[i] + op.p_b[i];
     }
 
-    oarrss_store_result(op.p_u, op.nu, op.trc, op.nimag, op.nrows, op.ncols, op.size, op.p_r, act,
-        res);
+    oarrss_binop_finish(&op, act, res);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -351,18 +443,17 @@ void oarrss_sub_OO_to(const oarrss_t* arr1, const oarrss_t* arr2, oarrss_t* res,
 // *******************************************************************************************************
 void oarrss_sub_oO_to(const ssotinum_t* num, const oarrss_t* arr1, oarrss_t* res, dhelpl_t dhl){
 
-    oarrss_mixop_t op = oarrss_mixop_prepare(num, arr1);
+    oarrss_binop_t op = oarrss_mixop_prepare(num, arr1, res);
     size_t n = (size_t)(1 + op.nimag) * op.size, i;
     ord_t act = (num->act_order > arr1->act_order) ? num->act_order : arr1->act_order;
 
     (void)dhl;
 
     for (i = 0; i < n; i++){
-        op.p_r[i] = op.p_o[i] - op.p_O[i];
+        op.p_r[i] = op.p_a[i] - op.p_b[i];
     }
 
-    oarrss_store_result(op.p_u, op.nu, op.trc, op.nimag, op.nrows, op.ncols, op.size, op.p_r, act,
-        res);
+    oarrss_binop_finish(&op, act, res);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -386,18 +477,17 @@ void oarrss_sub_rO_to(coeff_t val, const oarrss_t* arr1, oarrss_t* res, dhelpl_t
 // *******************************************************************************************************
 void oarrss_sub_Oo_to(const oarrss_t* arr1, const ssotinum_t* num, oarrss_t* res, dhelpl_t dhl){
 
-    oarrss_mixop_t op = oarrss_mixop_prepare(num, arr1);
+    oarrss_binop_t op = oarrss_mixop_prepare(num, arr1, res);
     size_t n = (size_t)(1 + op.nimag) * op.size, i;
     ord_t act = (num->act_order > arr1->act_order) ? num->act_order : arr1->act_order;
 
     (void)dhl;
 
     for (i = 0; i < n; i++){
-        op.p_r[i] = op.p_O[i] - op.p_o[i];
+        op.p_r[i] = op.p_b[i] - op.p_a[i];
     }
 
-    oarrss_store_result(op.p_u, op.nu, op.trc, op.nimag, op.nrows, op.ncols, op.size, op.p_r, act,
-        res);
+    oarrss_binop_finish(&op, act, res);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -422,7 +512,7 @@ void oarrss_mul_OO_to(const oarrss_t* arr1, const oarrss_t* arr2, oarrss_t* res,
     ord_t atop, btop, act;
 
     oarrss_dim_check(arr1, arr2);
-    op = oarrss_binop_prepare(arr1, arr2);
+    op = oarrss_binop_prepare(arr1, arr2, res);
     n  = (size_t)(1 + op.nimag) * op.size;
 
     memset(op.p_r, 0, n * sizeof(coeff_t));
@@ -435,8 +525,7 @@ void oarrss_mul_OO_to(const oarrss_t* arr1, const oarrss_t* arr2, oarrss_t* res,
 
     act = (ord_t)(((unsigned)atop + btop > 255) ? 255 : (atop + btop));
 
-    oarrss_store_result(op.p_u, op.nu, op.trc, op.nimag, op.nrows, op.ncols, op.size, op.p_r, act,
-        res);
+    oarrss_binop_finish(&op, act, res);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -445,20 +534,19 @@ void oarrss_mul_OO_to(const oarrss_t* arr1, const oarrss_t* arr2, oarrss_t* res,
 // *******************************************************************************************************
 void oarrss_mul_oO_to(const ssotinum_t* num, const oarrss_t* arr1, oarrss_t* res, dhelpl_t dhl){
 
-    oarrss_mixop_t op = oarrss_mixop_prepare(num, arr1);
+    oarrss_binop_t op = oarrss_mixop_prepare(num, arr1, res);
     size_t n = (size_t)(1 + op.nimag) * op.size;
     ord_t atop = (num->act_order < op.trc) ? num->act_order : op.trc;
     ord_t Otop = (arr1->act_order < op.trc) ? arr1->act_order : op.trc;
     ord_t act;
 
     memset(op.p_r, 0, n * sizeof(coeff_t));
-    oarrss_kernel_mul_acc(op.p_o, 0, atop, op.p_O, 0, Otop, op.nu, op.trc, op.size, 0, op.size,
+    oarrss_kernel_mul_acc(op.p_a, 0, atop, op.p_b, 0, Otop, op.nu, op.trc, op.size, 0, op.size,
         op.p_r, dhl);
 
     act = (ord_t)(((unsigned)atop + Otop > 255) ? 255 : (atop + Otop));
 
-    oarrss_store_result(op.p_u, op.nu, op.trc, op.nimag, op.nrows, op.ncols, op.size, op.p_r, act,
-        res);
+    oarrss_binop_finish(&op, act, res);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -566,15 +654,15 @@ void oarrss_neg_to(const oarrss_t* arr1, oarrss_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 void oarrss_feval_to(const coeff_t* derivs, const oarrss_t* arr1, oarrss_t* res, dhelpl_t dhl){
 
-    sshelp_ws_t* ws = ssoti_ws();
     bases_t k = arr1->nbases;
     ord_t trc = arr1->trc_order, act = arr1->act_order, i;
     ndir_t nimag = ssoti_nimag_checked(k, trc);
     uint64_t m = arr1->size;
     size_t nblock = (size_t)(1 + nimag) * m;
-    coeff_t *P, *Q, *R, *tmp, factor = 1.0;
+    coeff_t *P, *Q, *R, *tmp, *p_buf, factor = 1.0;
+    int direct = !oarrss_res_aliases(res, arr1);
 
-    if (k == 0 || act == 0 || trc == 0){
+    if (k == 0 || act == 0 || trc == 0 || m == 0){
 
         uint64_t e;
         ndir_t nimag_res;
@@ -597,9 +685,22 @@ void oarrss_feval_to(const coeff_t* derivs, const oarrss_t* arr1, oarrss_t* res,
 
     }
 
-    ssoti_ws_need(ws, 3 * nblock, 0, 0);
-    R = ws->p_coef;
-    P = R + nblock;
+    // P and Q ping-pong the running power; R is the result, which goes straight into `res` unless it
+    // aliases the operand. Everything is call-local.
+    p_buf = oarrss_scratch_alloc(nblock * (2 + !direct));
+
+    if (direct){
+
+        R = oarrss_result_begin(res, arr1->p_bases, k, trc, arr1->nrows, arr1->ncols);
+        P = p_buf;
+
+    } else {
+
+        R = p_buf;
+        P = p_buf + nblock;
+
+    }
+
     Q = P + nblock;
 
     memcpy(P, arr1->p_data, nblock * sizeof(coeff_t));
@@ -670,13 +771,12 @@ void oarrss_feval_to(const coeff_t* derivs, const oarrss_t* arr1, oarrss_t* res,
 
     }
 
-    oarrss_reserve(res, k, arr1->nrows, arr1->ncols, trc);
+    if (!direct){
 
-    if (res != arr1){
-        memcpy(res->p_bases, arr1->p_bases, (size_t)k * sizeof(bases_t));
+        oarrss_result_begin(res, arr1->p_bases, k, trc, arr1->nrows, arr1->ncols);
+        memcpy(res->p_data + m, R + m, (nblock - m) * sizeof(coeff_t));
+
     }
-
-    memcpy(res->p_data + m, R + m, (nblock - m) * sizeof(coeff_t));
 
     {
         uint64_t e;
@@ -685,12 +785,8 @@ void oarrss_feval_to(const coeff_t* derivs, const oarrss_t* arr1, oarrss_t* res,
         }
     }
 
-    res->nbases    = k;
-    res->trc_order = trc;
-    res->act_order = trc;
-    res->nrows     = arr1->nrows;
-    res->ncols     = arr1->ncols;
-    res->size      = m;
+    oarrss_result_end(res, k, trc, trc, arr1->nrows, arr1->ncols);
+    free(p_buf);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -991,10 +1087,10 @@ int oarrss_matmul_OO_to(const oarrss_t* arr1, const oarrss_t* arr2, oarrss_t* re
     size_t nb = (size_t)arr1->nbases + arr2->nbases;
     ord_t trc, atop, btop, act;
     ndir_t nimag, maxNq, q;
-    coeff_t *p_ea, *p_eb, *R, *work;
+    coeff_t *p_ea, *p_eb, *R, *work, *p_buf;
     uint64_t nrows = arr1->nrows, ninner = arr1->ncols, ncols = arr2->ncols;
     size_t needR, needWork, needA, needB;
-    int own_a, own_b, status;
+    int own_a, own_b, status, direct;
 
     if (arr1->ncols != arr2->nrows){
         return OTI_LINALG_ERR_SIZE;
@@ -1026,22 +1122,54 @@ int oarrss_matmul_OO_to(const oarrss_t* arr1, const oarrss_t* arr2, oarrss_t* re
 
     }
 
-    own_a = (arr1->nbases == nu && arr1->trc_order >= trc);
-    own_b = (arr2->nbases == nu && arr2->trc_order >= trc);
+    // The kernel's size checks, done before `res` is touched so that an error leaves it unchanged.
+    if (nrows > 0 && ncols > 0){
+
+        if (!oti_lapack_fits(nrows) || !oti_lapack_fits(ninner) || !oti_lapack_fits(ncols)){
+            return OTI_LINALG_ERR_SIZE;
+        }
+
+        for (q = 0; q <= btop; q++){
+
+            if (!oti_lapack_fits(ncols * sshelp_ndir_order(nu, (ord_t)q))){
+                return OTI_LINALG_ERR_SIZE;
+            }
+
+        }
+
+    }
+
+    own_a  = (arr1->nbases == nu && arr1->trc_order >= trc);
+    own_b  = (arr2->nbases == nu && arr2->trc_order >= trc);
+    direct = !oarrss_res_aliases(res, arr1) && !oarrss_res_aliases(res, arr2);
 
     needR    = (size_t)(1 + nimag) * nrows * ncols;
     needWork = (size_t)nrows * ncols * maxNq;
     needA    = own_a ? 0 : (size_t)(1 + nimag) * arr1->size;
     needB    = own_b ? 0 : (size_t)(1 + nimag) * arr2->size;
 
-    ssoti_ws_need(ws, needR + needWork + needA + needB, 0, 0);
+    // The product accumulates straight into `res` unless it aliases an operand; the work buffer and
+    // the expanded operands are call-local, so nothing result-sized outlives the call.
+    p_buf = oarrss_scratch_alloc((direct ? 0 : needR) + needWork + needA + needB);
 
-    R    = ws->p_coef;
-    work = R + needR;
+    if (direct){
+
+        R    = oarrss_result_begin(res, p_u, nu, trc, nrows, ncols);
+        work = p_buf;
+
+    } else {
+
+        R    = p_buf;
+        work = R + needR;
+
+    }
+
     p_ea = work + needWork;
     p_eb = p_ea + needA;
 
-    memset(R, 0, needR * sizeof(coeff_t));
+    if (needR > 0){
+        memset(R, 0, needR * sizeof(coeff_t));
+    }
 
     if (own_a){
         p_ea = arr1->p_data;
@@ -1059,25 +1187,23 @@ int oarrss_matmul_OO_to(const oarrss_t* arr1, const oarrss_t* arr2, oarrss_t* re
         1.0, R, work, dhl);
 
     if (status != 0){
+
+        free(p_buf);
         return status;
+
     }
 
-    oarrss_reserve(res, nu, nrows, ncols, trc);
+    if (!direct){
 
-    if (nu > 0){
-        memcpy(res->p_bases, p_u, (size_t)nu * sizeof(bases_t));
+        R = oarrss_result_begin(res, p_u, nu, trc, nrows, ncols);
+        memcpy(R, p_buf, needR * sizeof(coeff_t));
+
     }
-
-    memcpy(res->p_data, R, needR * sizeof(coeff_t));
 
     act = (ord_t)(((unsigned)atop + btop > 255) ? 255 : (atop + btop));
 
-    res->nbases    = nu;
-    res->trc_order = trc;
-    res->act_order = (act < trc) ? act : trc;
-    res->nrows     = nrows;
-    res->ncols     = ncols;
-    res->size      = nrows * ncols;
+    oarrss_result_end(res, nu, trc, act, nrows, ncols);
+    free(p_buf);
 
     return 0;
 
@@ -1088,18 +1214,24 @@ int oarrss_matmul_OO_to(const oarrss_t* arr1, const oarrss_t* arr2, oarrss_t* re
 // *******************************************************************************************************
 void oarrss_transpose_to(const oarrss_t* arr1, oarrss_t* res, dhelpl_t dhl){
 
-    sshelp_ws_t* ws = ssoti_ws();
-    ndir_t nimag = sshelp_ndir_total(arr1->nbases, arr1->trc_order);
+    bases_t k = arr1->nbases;
+    ord_t trc = arr1->trc_order, act = arr1->act_order;
+    ndir_t nimag = sshelp_ndir_total(k, trc);
     size_t nblocks = 1 + nimag;
     uint64_t nrows = arr1->nrows, ncols = arr1->ncols, size = arr1->size;
-    coeff_t* T;
+    int direct = !oarrss_res_aliases(res, arr1);
+    coeff_t *T, *p_buf = NULL;
     size_t b;
     uint64_t r, c;
 
     (void)dhl;
 
-    ssoti_ws_need(ws, nblocks * size, 0, 0);
-    T = ws->p_coef;
+    // Straight into `res` unless it aliases the operand, which needs a call-local copy.
+    if (direct){
+        T = oarrss_result_begin(res, arr1->p_bases, k, trc, ncols, nrows);
+    } else {
+        T = p_buf = oarrss_scratch_alloc(nblocks * size);
+    }
 
     for (b = 0; b < nblocks; b++){
 
@@ -1116,20 +1248,15 @@ void oarrss_transpose_to(const oarrss_t* arr1, oarrss_t* res, dhelpl_t dhl){
 
     }
 
-    oarrss_reserve(res, arr1->nbases, ncols, nrows, arr1->trc_order);
+    if (!direct){
 
-    if (arr1->nbases > 0){
-        memcpy(res->p_bases, arr1->p_bases, (size_t)arr1->nbases * sizeof(bases_t));
+        T = oarrss_result_begin(res, arr1->p_bases, k, trc, ncols, nrows);
+        memcpy(T, p_buf, nblocks * size * sizeof(coeff_t));
+        free(p_buf);
+
     }
 
-    memcpy(res->p_data, T, nblocks * size * sizeof(coeff_t));
-
-    res->nbases    = arr1->nbases;
-    res->trc_order = arr1->trc_order;
-    res->act_order = arr1->act_order;
-    res->nrows     = ncols;
-    res->ncols     = nrows;
-    res->size      = size;
+    oarrss_result_end(res, k, trc, act, ncols, nrows);
 
 }
 // -------------------------------------------------------------------------------------------------------

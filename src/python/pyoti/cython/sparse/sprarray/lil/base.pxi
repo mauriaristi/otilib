@@ -330,7 +330,93 @@ cdef class lil_matrix:
     # end if
 
 
-  #---------------------------------------------------------------------------------------------------  
+  #---------------------------------------------------------------------------------------------------
+
+
+  # ******************************************************************************************************
+  def add_block(self, rows, cols, block):
+      """
+      Add a dense block in place: ``K[rows[a], cols[b]] += block[a, b]`` for every a, b.
+
+      The scatter of a finite-element matrix in one call, with the same result as the loops of
+      ``K[i, j] = K[i, j] + block[a, b]``. Stored elements are updated in place, new ones are copies.
+      Repeated rows or columns add up. Nothing changes when an index is out of range or the block has
+      the wrong shape.
+
+      Parameters
+      ----------
+      rows : array_like of int
+          Global row of each block row.
+      cols : array_like of int
+          Global column of each block column.
+      block : matso or array_like
+          Values, len(rows) x len(cols).
+
+      Examples
+      --------
+      >>> import pyoti.sparse as oti
+      >>> K = oti.lil_matrix((4, 4))
+      >>> K.add_block([0, 2], [0, 2], oti.array([[1.0, 2.0], [3.0, 4.0]]) * oti.e(1, order=1))
+      >>> K.add_block([0], [0], oti.array([[10.0]]))
+      >>> K[0, 0].real, K[2, 0].get_deriv([1])
+      (10.0, 3.0)
+      """
+
+      global dhl
+
+      cdef np.ndarray r = np.ascontiguousarray(rows, dtype=np.int64).reshape(-1)
+      cdef np.ndarray c = np.ascontiguousarray(cols, dtype=np.int64).reshape(-1)
+      cdef matso blk = block if type(block) is matso else array(block)
+      cdef int64_t[::1] rv = r
+      cdef int64_t[::1] cv = c
+      cdef uint64_t nr = r.size, nc = c.size, a, b, j, pos
+      cdef sotinum entry
+      cdef sotinum_t new
+      cdef list row, data
+
+      if blk.arr.nrows != nr or blk.arr.ncols != nc:
+
+          raise ValueError("lil_matrix.add_block: block shape {} does not match ({}, {})".format(
+              blk.shape, nr, nc))
+
+      # end if
+
+      if ((nr and (r.min() < 0 or r.max() >= <int64_t>self.nrows))
+              or (nc and (c.min() < 0 or c.max() >= <int64_t>self.ncols))):
+
+          raise IndexError("lil_matrix.add_block: index out of bounds for shape {}".format(self.shape))
+
+      # end if
+
+      for a in range(nr):
+
+          row = self.rows[rv[a]]
+          data = self.data[rv[a]]
+
+          for b in range(nc):
+
+              j = <uint64_t>cv[b]
+              pos = binSearch_list(row, j)
+
+              if pos < len(row) and row[pos] == j:
+
+                  entry = data[pos]
+                  soti_sum_oo_to(&entry.num, &blk.arr.p_data[a * nc + b], &entry.num, dhl)
+
+              else:
+
+                  new = soti_copy(&blk.arr.p_data[a * nc + b], dhl)
+                  row.insert(pos, j)
+                  data.insert(pos, sotinum.create(&new))
+
+              # end if
+
+          # end for
+
+      # end for
+
+  # end function
+  # ------------------------------------------------------------------------------------------------------
 
 
   #***************************************************************************************************

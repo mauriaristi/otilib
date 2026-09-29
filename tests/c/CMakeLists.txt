@@ -42,7 +42,7 @@ add_test(NAME c_dhelp_test COMMAND test_c_dhelp)
 #   soa    oarrss_t (SoA arrays) against the arrso_t oracle;
 #   aos    arrss_t (AoS arrays) against the arrso_t oracle.
 # A test whose source is not written yet is skipped, so the tree always configures.
-foreach(ss_test core scalar soa aos review)
+foreach(ss_test core scalar soa aos review utils io gauss csr)
     if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_semisparse_${ss_test}.c")
         add_executable(test_c_semisparse_${ss_test} test_semisparse_${ss_test}.c)
         target_link_libraries(test_c_semisparse_${ss_test} oti oticwrap ${LINK_TARGET_OMP_C})

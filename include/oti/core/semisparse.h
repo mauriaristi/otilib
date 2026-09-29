@@ -111,6 +111,21 @@ static inline uint64_t sshelp_comb(uint64_t a, uint64_t b){
         b = a - b;
     }
 
+    // Small sets (every block-offset call of the kernels): each product c * (a-b+i+1) equals
+    // C(a-b+i+1, i+1) (i+1) <= 62 C(61, 30) < 2^64, so 64-bit arithmetic is exact and avoids the
+    // software 128-bit division.
+    if (a <= 62){
+
+        uint64_t c64 = 1;
+
+        for (i = 0; i < b; i++){
+            c64 = c64 * (a - b + i + 1) / (i + 1);
+        }
+
+        return c64;
+
+    }
+
     // c = C(a-b+i+1, i+1) after step i: exact at every step.
     for (i = 0; i < b; i++){
 

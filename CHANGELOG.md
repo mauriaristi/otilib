@@ -43,12 +43,82 @@ header, the Fortran module, the Python package and the conda recipe. Use
 - C interface to BLAS (`include/oti/core/lapack.h`, library `otilapack`): `oti_dgemm`, in the same
   style as the existing `oti_dgetrf` / `oti_dgetrs` / `oti_dtrsm` / `oti_dtrmm` wrappers, used by
   the semi-sparse SoA matrix product.
+- Semi-sparse / sparse feature leveling (`PLAN-semisparse-sparse-leveling.md`): `import
+  pyoti.semisparse as oti` runs sparse scripts unchanged, including the FEM code.
+  - API parity: the sparse creators (`e`, `zero`, `one`, `number`, `zeros`, `ones`, `eye`, `array`,
+    all with `nip=`), scalar and array methods (`get_deriv`, `get_im`, `set_im`, `extract_*`,
+    `copy`, `real`, `nrows`/`ncols`/`size`, `dot`, `inv`, `transpose`, ...), matso-style indexing and
+    slice assignment, in-place operators, and `sum`/`sub`/`mul`/`div`/`neg`/`abs`/`norm`/
+    `transpose`/`dot`/`inv`/`det` with `out=`; `set_printoptions`, `short_repr`, `long_repr`.
+  - Order and derivative plumbing in C (`src/c/semisparse/{scalar,soa}/utils.c`): `get_order_im`,
+    `get_order_im_array`, `set_order_im_from_array`, `get_all_ims`/`get_all_derivs`, `extract_im`/
+    `extract_deriv`, `trunc_dot`, `trunc_sub`, `dot_product`, `rom_eval*`, `interp1d`,
+    `moving_average`, `inv_block`.
+  - `pyoti.semisparse.save` / `read`: a versioned, validated binary format for `ssotinum`, `arrss`
+    and `oarrss` (C `ssoti_/arrss_/oarrss_save/read`, `ssio_peek`, `ssio_strerror`).
+  - Gauss-point types `ssotife` (scalar) and `oarrssfe` (matrix) at `nip` integration points (C
+    `feoarrss_t`), SoA batched over the points: arithmetic with broadcasting, elementary functions,
+    per-point `dot`/`inv`/`det`/`transpose`, `set_ijk`, `get_ip`, `gauss_integrate`, conversions to
+    and from `sotife`/`matsofe`.
+  - A semi-sparse `elm_help`, so `pyoti.fem.set_global_algebra(pyoti.semisparse)` works; its
+    Jacobian computation is batched over the integration points.
+  - OTI sparse matrices `lil_matrix` / `csr_matrix` with the `pyoti.sparse` API (item get/set,
+    `tocsr`, conversions to and from `pyoti.sparse` and SciPy, arithmetic, derivative extractors,
+    `K @ x`), `real` exposed as a SciPy CSR matrix without a copy (C `lilss_*` / `csrss_*`), and
+    `solve(K, b, solver='SuperLU' | 'spilu' | 'cholesky' | 'umfpack', solver_args={})`: the real
+    part is factored once and each order's right-hand side is built in C; the dense `solve` takes the
+    same `out`/`solver`/`solver_args` arguments.
+  - `examples/python/fem_twc.py`: the thick-walled-cylinder model as `run(algebra, ndivs, order,
+    perturb_geometry=False)`, the drop-in acceptance test; `tools/bench_fem_twc.py` benchmarks it
+    for both algebras (stage timings, peak RSS and heap, correctness per case).
+  - `examples/notebooks/semisparse_tutorial_01.ipynb`.
+  - Tests: `tests/python/test_semisparse_{api,order,io,gauss,csr}.py`,
+    `tests/python/test_sparse_{io,gauss,csr}.py` (sparse oracle checks), `tests/python/
+    test_fem_{elements,twc}.py`, `tests/c/test_semisparse_{utils,io,gauss,csr}.c`.
+- `lil_matrix.add_block(rows, cols, block)` in `pyoti.sparse` and `pyoti.semisparse`: adds a dense
+  block in place, `K[rows[a], cols[b]] += block[a, b]`, the scatter of an element matrix in one
+  call (C `lilss_add_block` for semi-sparse: new entries are written straight from the block and
+  stored ones over the block's active set are updated in place).
+
+### Changed
+
+- Semi-sparse SoA elementwise operations, functions, `matmul`, `transpose`, `add_bases` and
+  `compact` no longer keep a result-sized buffer in the per-thread workspace after a call: they
+  write into the destination directly (call-local scratch when it aliases an operand). After one
+  `mul` of a 1000x1000 array (k = 5, order 3) the process held 439 MiB before and 11.5 MiB (the
+  tables) after.
+- Pinned `scikit-sparse<0.5`: 0.5 returns a tuple from `cholesky()`, which broke
+  `solve(csr, b, solver='cholesky')`.
+- `pyoti.fem`: mesh coordinates are built with the global algebra (`alg.array`) and
+  `set_global_algebra` reports why an algebra fails its probe.
+- `pyoti.semisparse.zeros` takes `nbases` as its second positional argument, as in `pyoti.sparse`
+  (`bases=` stays as a keyword).
+- `examples/python/fem_twc.py` allocates each element type once (it allocated for every element),
+  builds the constitutive matrix once (it was built at every integration point) and scatters each
+  element matrix with one `add_block` call (it made 64 Python get/add/set calls), for both
+  algebras. The solution is bitwise unchanged.
+- Semi-sparse kernels no longer compute a binomial coefficient per direction pair:
+  `sshelp_comb()` uses 64-bit arithmetic for sets of at most 62 (it always went through a
+  software 128-bit division), and the SoA elementwise, matrix, Gauss-point, CSR and truncated
+  products and the element accessors (`oarrss_get_item_to`, `oarrss_set_item*`) compute each
+  order's block offset once. On the TWC model (80 x 80 mesh, order 4, six bases) the element
+  products take 0.56 s instead of 0.79 s, and with the example changes above the K assembly is
+  11.0x faster than with `pyoti.sparse` (4.3x before).
 
 ### Removed
 
 - The old, non-functional `src/c/semisparse/` (only `scalar/base.c` was compiled, and it referenced
   fields its own struct didn't have) and the matching `include/oti/semisparse/`,
   `include/pyoti/semisparse/`, replaced in place by the semi-sparse type above.
+
+### Fixed
+
+- `pyoti.sparse.read` wrote one byte past its filename buffer and misbehaved on an empty filename;
+  `save`/`read` now accept non-ASCII and path-like names and raise Python exceptions for a missing
+  or invalid file instead of exiting the interpreter.
+- Quad9 elements: the centre shape function had a spurious factor of 0.5, so the shape functions
+  summed to 0.5 at the centre.
+- `oarrss_feval_to` divided by zero on an empty array with active bases.
 
 ## [1.2.1] - 2026-09-27
 

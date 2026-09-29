@@ -20,6 +20,7 @@
 #include "semisparse/scalar/base.h"
 #include "semisparse/scalar/algebra.h"
 #include "semisparse/scalar/functions.h"
+#include "semisparse/scalar/utils.h"
 
 
 // -------------------------------------------------------------------------------------------------------
@@ -30,11 +31,15 @@
 #include "semisparse/soa/base.h"
 #include "semisparse/soa/algebra.h"
 #include "semisparse/soa/linalg.h"
+#include "semisparse/soa/utils.h"
 
 // -------------------------------------------------------------------------------------------------------
 // ---------------------------------     AOS ARRAY DECLARATIONS     --------------------------------------
 // -------------------------------------------------------------------------------------------------------
 
 #include "semisparse/array/array.h"
+#include "semisparse/io/io.h"
+#include "semisparse/gauss/gauss.h"
+#include "semisparse/csr/csr.h"
 
 #endif

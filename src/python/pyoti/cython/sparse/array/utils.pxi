@@ -78,6 +78,41 @@ def get_active_bases(obj_in):
 
 
 #***************************************************************************************************
+def _io_filename( filename ):
+  """
+  Encode a file name for the C layer.
+
+  INPUTS:
+  - filename: str, bytes or os.PathLike with the name of the file.
+
+  OUTPUTS:
+  - path: bytes with the name in the file system encoding.
+
+  Raises ValueError if the name is empty or has a NUL character.
+
+  """
+  import os as _os
+
+  path = _os.fsencode(filename)
+
+  if len(path) == 0:
+
+    raise ValueError("the file name is empty")
+
+  # end if
+
+  if b"\0" in path:
+
+    raise ValueError("the file name contains a NUL character")
+
+  # end if
+
+  return path
+
+#---------------------------------------------------------------------------------------------------
+
+
+#***************************************************************************************************
 def save( matso arr, filename ): 
   """
   PURPOSE: Export array into a binary proprietary format.
@@ -92,22 +127,10 @@ def save( matso arr, filename ):
   """
   global dhl
   
-  cdef char * filename_c 
-  cdef int64_t i, nchars
+  cdef bytes path = _io_filename( filename )
 
-  nchars = len(filename)+1
-
-  filename_c=<char *>malloc(nchars*sizeof(char))
-  
-  for i in range(len(filename)):
-    filename_c[i] = ord(filename[i])
-  # end for
-  
-  filename_c[i+1] = ord('\0')
-  
-  arrso_save( filename_c, &arr.arr, dhl )
-
-  free(filename_c)
+  # A bytes object converts to the char* argument, with its terminating '\0'.
+  arrso_save( path, &arr.arr, dhl )
 
 #---------------------------------------------------------------------------------------------------
 
@@ -126,22 +149,52 @@ def read( filename ):
   OUTPUTS:
   - arr: matso array loaded from memory.
 
+  Raises FileNotFoundError if the file does not exist and ValueError if it is not a saved matso array
+  (the C reader would exit the interpreter on both).
+
   """
+  import os as _os
+  import sys as _sys
   global dhl
   
-  cdef char * filename_c 
-  cdef int64_t i
+  cdef bytes path = _io_filename( filename )
   cdef arrso_t res
+  cdef uint64_t mem_size
 
-  filename_c=<char *>malloc(len(filename)*sizeof(char))
+  if not _os.path.isfile( _os.fsdecode(filename) ):
 
-  for i in range(len(filename)):
-    filename_c[i] = ord(filename[i])
-  # end for
+    raise FileNotFoundError("no such file: '%s'" % _os.fsdecode(filename))
 
-  filename_c[i+1] = ord('\0')
+  # end if
 
-  res = arrso_read( filename_c, dhl)
+  # Checks the C reader would answer with exit(): 64-byte header, magic, array format, data size.
+  with open( path, "rb" ) as handle:
+
+    header = handle.read(64)
+
+  # end with
+
+  if len(header) < 64 or header[:4] != b"\x93OTI":
+
+    raise ValueError("not an OTI array file: '%s'" % _os.fsdecode(filename))
+
+  # end if
+
+  if header[6] != 21:
+
+    raise ValueError("not a matso array file (format %d): '%s'" % ( header[6], _os.fsdecode(filename) ))
+
+  # end if
+
+  mem_size = int.from_bytes( header[8:16], _sys.byteorder )
+
+  if mem_size != _os.path.getsize( path ) - 64:
+
+    raise ValueError("truncated or corrupt matso file: '%s'" % _os.fsdecode(filename))
+
+  # end if
+
+  res = arrso_read( path, dhl )
 
   return matso.create(&res)
 

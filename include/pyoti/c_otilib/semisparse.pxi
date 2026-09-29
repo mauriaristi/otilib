@@ -37,6 +37,10 @@ cdef extern from "oti/core/semisparse.h":
     sshelp_ws_t sshelp_ws_init()
     int sshelp_ws_reserve(sshelp_ws_t *ws, size_t ncoef, size_t nmap, size_t nbases)
     void sshelp_ws_free(sshelp_ws_t *ws)
+    ndir_t sshelp_ndir_order(bases_t k, ord_t p)
+    ndir_t sshelp_order_offset(bases_t k, ord_t p)
+    ndir_t sshelp_ndir_total(bases_t k, ord_t n)
+    ndir_t sshelp_rank(const bases_t *u, ord_t p, const sshelp_rank_tab_t *tab)
 
 cdef extern from "oti/semisparse.h":
     ctypedef struct ssotinum_t:

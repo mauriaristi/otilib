@@ -115,11 +115,17 @@ def test_e_arguments_and_arithmetic():
     assert semi.e([], order=2).real == 1.0
     assert semi.e([], order=2).active_bases == ()
 
-    with pytest.raises(NotImplementedError):
+    points = semi.e(1, order=2, nip=4)
+    assert isinstance(points, semi.ssotife)
+    assert points.nip == 4
+    assert points.order == 2
 
-        semi.e(1, nip=4)
+    for point in range(4):
 
-    # end with
+        assert points[point].get_im(1) == 1.0
+        assert points[point].active_bases == (1,)
+
+    # end for
 
     with pytest.raises(ValueError):
 

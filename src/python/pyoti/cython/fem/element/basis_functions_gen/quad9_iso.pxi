@@ -32,7 +32,7 @@ cpdef quad9_iso( xi, eta, zeta):
   N5 = 0.50 * ( xi ** 2 + xi ) * ( 1.0 - eta ** 2 )
   N6 = 0.50 * ( 1.0 - xi ** 2) * ( eta ** 2 + eta )
   N7 = 0.50 * ( xi ** 2 - xi ) * ( 1.0 - eta ** 2 )
-  N8 = 0.50 * ( 1.0 - xi ** 2) * ( 1.0 - eta ** 2 )
+  N8 = ( 1.0 - xi ** 2) * ( 1.0 - eta ** 2 )
 
   return [ N0, N1, N2, N3, N4, N5, N6, N7, N8]
 

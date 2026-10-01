@@ -29,6 +29,7 @@ def test_import_pyoti():
         "pyoti.core",
         "pyoti.sparse",
         "pyoti.dense",
+        "pyoti.semisparse",
         "pyoti.real",
         "pyoti.fem",
         "pyoti.whereotilib",
@@ -45,6 +46,34 @@ def test_import_core_submodules(mod_name: str):
     """
     mod = importlib.import_module(mod_name)
     assert mod is not None
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def test_top_level_reexports_new_dense_api():
+    """
+    Check that ``import pyoti`` re-exports the new dense API (PLAN-dense-update.md, decision 4).
+
+    The top-level namespace carries the dense classes and creators, and no longer re-exports the
+    global truncation order controls, which stay in ``pyoti.core`` (decision 2).
+    """
+    import pyoti
+    import pyoti.core as core
+    import pyoti.dense as dense
+
+    assert pyoti.otinum is dense.otinum
+    assert pyoti.omat is dense.omat
+    assert pyoti.e is dense.e
+
+    x = pyoti.e(3, order=2)
+
+    assert isinstance(x, dense.otinum)
+    assert x.order == 2
+    assert not hasattr(pyoti, "set_trunc_order")
+    assert not hasattr(pyoti, "get_trunc_order")
+    assert hasattr(core, "set_trunc_order")
 
 # end function
 # --------------------------------------------------------------------------------------------------------

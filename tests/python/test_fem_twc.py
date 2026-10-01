@@ -125,45 +125,47 @@ def test_sparse_geometry_derivatives_match_lame():
 
 
 # ********************************************************************************************************
-@pytest.mark.parametrize("perturb_geometry", [False, True])
-def test_semisparse_matches_sparse(perturb_geometry):
+def _assert_matches_sparse(module, perturb_geometry):
     """
-    Compare every semi-sparse displacement derivative with the sparse oracle.
+    Compare every displacement derivative of the TWC model in an algebra with the sparse oracle.
+
+    Skips when the algebra lacks the TWC APIs or ``pyoti.fem`` rejects it.
 
     Parameters
     ----------
+    module : module
+        Algebra under test (``pyoti.semisparse`` or ``pyoti.dense``).
     perturb_geometry : bool
         Whether the comparison includes derivatives with respect to both radii.
     """
-    import pyoti.semisparse as semisparse
-
+    name = module.__name__
     original_algebra = fem.get_global_algebra()
 
     try:
 
         required = ("array", "e", "lil_matrix", "set_printoptions", "solve", "zeros", "zero")
-        missing = [name for name in required if not hasattr(semisparse, name)]
+        missing = [label for label in required if not hasattr(module, label)]
 
         if missing:
 
-            pytest.skip(f"pyoti.semisparse lacks TWC APIs: {', '.join(missing)}")
+            pytest.skip(f"{name} lacks TWC APIs: {', '.join(missing)}")
 
         # end if
 
         try:
 
-            fem.set_global_algebra(semisparse)
+            fem.set_global_algebra(module)
 
         except Exception as error:
 
-            pytest.skip(f"pyoti.fem.set_global_algebra rejects semisparse: {error}")
+            pytest.skip(f"pyoti.fem.set_global_algebra rejects {name}: {error}")
 
         # end try
 
         sparse_result = run(sparse, [4, 4], 2, perturb_geometry)
-        semisparse_result = run(semisparse, [4, 4], 2, perturb_geometry)
+        other_result = run(module, [4, 4], 2, perturb_geometry)
         sparse_solution = sparse_result["u"]
-        semisparse_solution = semisparse_result["u"]
+        other_solution = other_result["u"]
         directions = _directions(len(sparse_result["bases"]), 2)
 
         for direction in directions:
@@ -173,18 +175,18 @@ def test_semisparse_matches_sparse(perturb_geometry):
                 sparse_values = np.asarray(
                     sparse_solution.get_deriv(list(direction)), dtype=np.float64
                 )
-                semisparse_values = np.asarray(
-                    semisparse_solution.get_deriv(list(direction)), dtype=np.float64
+                other_values = np.asarray(
+                    other_solution.get_deriv(list(direction)), dtype=np.float64
                 )
 
             else:
 
                 sparse_values = np.asarray(sparse_solution.real, dtype=np.float64)
-                semisparse_values = np.asarray(semisparse_solution.real, dtype=np.float64)
+                other_values = np.asarray(other_solution.real, dtype=np.float64)
 
             # end if
 
-            error_norm = float(np.linalg.norm(sparse_values - semisparse_values))
+            error_norm = float(np.linalg.norm(sparse_values - other_values))
             reference_norm = float(np.linalg.norm(sparse_values))
 
             if reference_norm == 0.0:
@@ -207,4 +209,43 @@ def test_semisparse_matches_sparse(perturb_geometry):
 
     # end try
 
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("perturb_geometry", [False, True])
+def test_semisparse_matches_sparse(perturb_geometry):
+    """
+    Compare every semi-sparse displacement derivative with the sparse oracle.
+
+    Parameters
+    ----------
+    perturb_geometry : bool
+        Whether the comparison includes derivatives with respect to both radii.
+    """
+    import pyoti.semisparse as semisparse
+
+    _assert_matches_sparse(semisparse, perturb_geometry)
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+@pytest.mark.parametrize("perturb_geometry", [False, True])
+def test_dense_matches_sparse(perturb_geometry):
+    """
+    Compare every dense displacement derivative with the sparse oracle (PLAN-dense-update.md).
+
+    Parameters
+    ----------
+    perturb_geometry : bool
+        Whether the comparison includes derivatives with respect to both radii.
+    """
+    import pyoti.dense as dense
+
+    _assert_matches_sparse(dense, perturb_geometry)
+
+# end function
 # --------------------------------------------------------------------------------------------------------

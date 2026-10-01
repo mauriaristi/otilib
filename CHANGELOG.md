@@ -79,6 +79,37 @@ header, the Fortran module, the Python package and the conda recipe. Use
   block in place, `K[rows[a], cols[b]] += block[a, b]`, the scatter of an element matrix in one
   call (C `lilss_add_block` for semi-sparse: new entries are written straight from the block and
   stored ones over the block's active set are updated in place).
+- The dense OTI type rewritten (`PLAN-dense-update.md`): every number is dense over the global
+  bases 1..nact and carries its own truncation order, with the semi-sparse order rules (result
+  truncation order and nact are the operands' maxima; lower operands are zero-extended). It reaches
+  the capabilities of `pyoti.semisparse`, and `pyoti.fem.set_global_algebra(pyoti.dense)` runs the
+  FEM element tests and the TWC model.
+  - C (`src/c/dense/`, `include/oti/dense/`): scalar `otinum_t` (`oti_*`), structure-of-arrays
+    `oarr_t` (`oarr_*`, one buffer, column-major blocks), array-of-structures `arro_t` (`arro_*`),
+    linear algebra (`oarr_lu_factor/lu_solve/solve_to/inv_to/det_to` through the `oti_d*` LAPACK
+    wrappers, at every n), order plumbing and truncated products, save/read (magic
+    `0x93 'O' 'T' 'D'`, `dnio_peek`), Gauss-point types `feoarr_t` / `feotinum_t` (`fearr_*`), and
+    OTI sparse matrices `lilo_t` / `csro_t` with the block-solve right-hand sides. Operands with a
+    smaller nact are read in place at their own offsets (the colex prefix property), so products
+    of mixed-nact operands do no expansion. Every function that can allocate returns a status
+    (`DN_OK` / `DN_ERR_*`, `CSRO_*`, `DNIO_*`); nothing calls `exit()`, and the global truncation
+    order is never read.
+  - Python: `pyoti.dense` mirrors the `pyoti.sparse` names and call signatures (`otinum`, `omat`,
+    `arro`, `otife`, `omatfe`, `lil_matrix`, `csr_matrix`, the creators with `nip=`, module
+    functions with `out=`, `solve` with the four sparse solvers, `save` / `read`, `elm_help`).
+  - Tests: `tests/c/test_dense_{scalar,soa,linalg,aos,utils,io,gauss,csr}.c` against the
+    `sotinum_t` / `arrso_t` oracle and semi-sparse, `tests/python/test_dense_*.py` against
+    `pyoti.sparse`, the dense parameter of `tests/python/test_fem_elements.py`, and the dense twin in
+    `tests/python/test_fem_twc.py`.
+  - `examples/python/fem_twc.py --algebra dense`; `tools/bench_fem_twc.py` and
+    `tools/bench_semisparse.py` cover the three algebras.
+  - Performance (`reports/2026-09-30-dense-update/`): against sparse in its valid range, scalars
+    about 5-6x faster, SoA arrays 12-100x, the TWC model 4.3-9.7x at 80x80; against semi-sparse a tie
+    when operands share the labels 1..k, faster on products and sums over different label sets, and
+    slower with more memory when values use only a few high labels.
+  - Oversized requests fail with `MemoryError` / `DN_ERR_MEMORY` instead of an overcommitted
+    allocation: a single coefficient buffer may not exceed `OTI_DENSE_MAX_MB` megabytes (default:
+    the physical memory).
 
 ### Changed
 
@@ -105,8 +136,19 @@ header, the Fortran module, the Python package and the conda recipe. Use
   products take 0.56 s instead of 0.79 s, and with the example changes above the K assembly is
   11.0x faster than with `pyoti.sparse` (4.3x before).
 
+- **Breaking:** the old `pyoti.dense` API is replaced by the rewrite above. Products no longer grow
+  in order up to a global cap (`2 x 2 -> 4` before, now the operands' maximum), `det` / `inv` no
+  longer need `set_trunc_order`, and `omat` follows the `matso` API. `import pyoti` still re-exports
+  `pyoti.dense`, now with the new API; `pyoti.set_trunc_order` / `pyoti.get_trunc_order` are no
+  longer available at the top level (they stay in `pyoti.core`). Earlier dense benchmark baselines
+  are not comparable.
+
 ### Removed
 
+- The old dense implementation: `src/c/dense/` and `include/oti/dense/` (replaced in place),
+  `dhelp_dense_mult` (`include/oti/core/dense.h`, `src/c/core/dense_helper.c`), the old Cython
+  `pyoti.dense` (`spr_omat`, `oti_n2m2`, `otibase`), the dormant FEM `feoarr_t` / `feotinum_t`
+  sources (never compiled) with `fem/feoarr.pxi`, and `tests/python/test_dense.py`.
 - The old, non-functional `src/c/semisparse/` (only `scalar/base.c` was compiled, and it referenced
   fields its own struct didn't have) and the matching `include/oti/semisparse/`,
   `include/pyoti/semisparse/`, replaced in place by the semi-sparse type above.
@@ -119,6 +161,10 @@ header, the Fortran module, the Python package and the conda recipe. Use
 - Quad9 elements: the centre shape function had a spurious factor of 0.5, so the shape functions
   summed to 0.5 at the centre.
 - `oarrss_feval_to` divided by zero on an empty array with active bases.
+- Dense (by the rewrite): `det` / `invert` segfaulted unless `set_trunc_order(arr.order)` was
+  called first, `invert` returned zeros and `det` was wrong for n >= 4, `nbases > Nbasis(order)`
+  called `exit()`, `otinum(3.0, 2, 0)` segfaulted, and the temporary pool was global and not
+  thread-safe.
 
 ## [1.2.1] - 2026-09-27
 

@@ -12,8 +12,7 @@
 // Gauss real number.
 #include "scalar/fereal.h"
 
-// Gauss dense OTI number.
-#include "scalar/feotinum.h"
+// Gauss dense OTI numbers are feotinum_t in include/oti/dense/gauss/gauss.h (PLAN-dense-update.md).
 
 
 

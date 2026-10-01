@@ -28,11 +28,9 @@
 // Inline helpers (lazy multiplication tables).
 #include "core/dhelp_inline.h"
 
-// Semi-sparse index helpers (active-base unions, local/global ranks, product-index pairs).
+// Semi-sparse index helpers (active-base unions, local/global ranks, product-index pairs). The dense
+// module (include/oti/dense.h) uses them too.
 #include "core/semisparse.h"
-
-// Dense.
-#include "core/dense.h"
 
 // Sparse.
 #include "core/sparse.h"

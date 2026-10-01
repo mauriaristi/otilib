@@ -5,6 +5,7 @@ Test the public finite-element API against algebra-neutral affine identities.
 import numpy as np
 import pytest
 
+import pyoti.dense as dense
 import pyoti.fem as fem
 import pyoti.semisparse as semisparse
 import pyoti.sparse as sparse
@@ -18,6 +19,7 @@ ELEMENT_IDS = (1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 15, 16, 17, 18)
     params=[
         pytest.param(sparse, id="sparse"),
         pytest.param(semisparse, id="semisparse"),
+        pytest.param(dense, id="dense"),
     ]
 )
 def algebra(request):
@@ -42,10 +44,10 @@ def algebra(request):
 
     except ValueError as error:
 
-        if selected is semisparse:
+        if selected is semisparse or selected is dense:
 
             fem.set_global_algebra(sparse)
-            pytest.skip(f"semi-sparse FEM algebra is not available yet: {error}")
+            pytest.skip(f"{selected.__name__} FEM algebra is not available yet: {error}")
 
         # end if
 

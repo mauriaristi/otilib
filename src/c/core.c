@@ -12,7 +12,6 @@
 
 #include "core/save.c"
 
-#include "core/dense_helper.c"
 #include "core/sparse_helper.c"
 #include "core/semisparse_helper.c"
 

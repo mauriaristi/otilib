@@ -19,7 +19,7 @@ cimport pyoti.real as r
 import  pyoti.sparse as soti
 cimport pyoti.sparse as soti
 
-from pyoti.dense import  omat, otinum, e as eps
+from pyoti.dense import  omat, otinum
 from pyoti.dense cimport omat, otinum
 
 from pyoti.sparse  import e

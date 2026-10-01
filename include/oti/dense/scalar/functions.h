@@ -1,200 +1,648 @@
 #ifndef OTI_DENSE_SCALAR_FUNCTIONS_H
 #define OTI_DENSE_SCALAR_FUNCTIONS_H
 
-/**************************************************************************************************//**
-@brief Evaluation of inverse hyperbolic tangent function at (num).
+// Dense scalar functions. Conventions in include/oti/dense/scalar/base.h.
+//
+// Every function is a truncated Taylor series in the imaginary part d = num - num.re,
+// f(num) = sum_i f^(i)(re) / i! * d^i (same algorithm as soti_feval()). All powers of d share
+// the input's layout (nact, trc), so only the same-layout kernel runs. The result has the input's
+// nact and trc, and act_order = trc (0 for a real input).
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_atanh(   otinum_t* num,                dhelpl_t dhl);
-void     oti_atanh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of inverse hyperbolic sine function at (num).
+/**
+ * @name Dense Taylor series evaluation
+ * @{
+ */
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_asinh(   otinum_t* num,                dhelpl_t dhl);
-void     oti_asinh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Evaluates a function from its derivatives at the real part (allocating variant).
+ *
+ * @param[in] derivs Derivatives f(re), f'(re), ..., f^(trc)(re); num->trc_order + 1 values.
+ * @param[in] num    Argument.
+ * @param[in] dhl    Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_feval(const coeff_t* derivs, const otinum_t* num, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of inverse hyperbolic cosine function at (num).
+/**
+ * @brief Evaluates a function from its derivatives into an existing number.
+ *
+ * @param[in]     derivs Derivatives f(re), ..., f^(trc)(re); num->trc_order + 1 values.
+ * @param[in]     num    Argument.
+ * @param[in,out] res    Result; may alias @p num.
+ * @param[in]     dhl    Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_feval_to(const coeff_t* derivs, const otinum_t* num, otinum_t* res, dhelpl_t dhl);
 
-@param[in] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_acosh(   otinum_t* num,                dhelpl_t dhl);
-void     oti_acosh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of hiperbolic tangent function at (num).
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_tanh(   otinum_t* num,                dhelpl_t dhl);
-void     oti_tanh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @name Dense exponential
+ * @{
+ */
 
-/**************************************************************************************************//**
-@brief Evaluation of square root function at (num).
+/**
+ * @brief Exponential of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_exp(const otinum_t* num, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_sqrt(   otinum_t* num,                dhelpl_t dhl);
-void     oti_sqrt_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Exponential of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_exp_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of hiperbolic cosine function at (num).
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_cosh(   otinum_t* num,                dhelpl_t dhl);
-void     oti_cosh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of hiperbolic sine function at (num).
+/**
+ * @name Dense natural logarithm
+ * @{
+ */
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_sinh(   otinum_t* num,                dhelpl_t dhl);
-void     oti_sinh_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Natural logarithm of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_log(const otinum_t* num, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of arcsine function at (num).
+/**
+ * @brief Natural logarithm of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_log_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_asin(   otinum_t* num,                dhelpl_t dhl);
-void     oti_asin_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of arccosine function at (num).
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_acos(   otinum_t* num,                dhelpl_t dhl);
-void     oti_acos_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @name Dense base-10 logarithm
+ * @{
+ */
 
-/**************************************************************************************************//**
-@brief Evaluation of arctangent function at (num).
+/**
+ * @brief Base-10 logarithm of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_log10(const otinum_t* num, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_atan(   otinum_t* num,                dhelpl_t dhl);
-void     oti_atan_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Base-10 logarithm of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_log10_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of the tangent function at (num).
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_tan(   otinum_t* num,                dhelpl_t dhl);
-void     oti_tan_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of function cosine at (num).
+/**
+ * @name Dense square root
+ * @{
+ */
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_cos(   otinum_t* num,                dhelpl_t dhl);
-void     oti_cos_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Square root of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_sqrt(const otinum_t* num, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of function sine at (num).
+/**
+ * @brief Square root of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_sqrt_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_sin(   otinum_t* num,                dhelpl_t dhl );
-void     oti_sin_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of Logarithm at base b function at (num).
 
-@param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_logb(   otinum_t* num, double base,                dhelpl_t dhl);
-void     oti_logb_to(otinum_t* num, double base, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @name Dense cube root
+ * @{
+ */
 
-/**************************************************************************************************//**
-@brief Evaluation of Logarithm at base 10 function at (num).
+/**
+ * @brief Cube root of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_cbrt(const otinum_t* num, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_log10(   otinum_t* num,                dhelpl_t dhl);
-void     oti_log10_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Cube root of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_cbrt_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of natural logarithm function at (num).
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-@param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_log(   otinum_t* num,                dhelpl_t dhl);
-void     oti_log_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of natural logarithm function at (num).
+/**
+ * @name Dense sine
+ * @{
+ */
 
-@param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_exp(   otinum_t* num,                dhelpl_t dhl);
-void     oti_exp_to(otinum_t* num, otinum_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Sine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_sin(const otinum_t* num, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of natural logarithm function at (num).
+/**
+ * @brief Sine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_sin_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_pow(   otinum_t* num, double e,                dhelpl_t dhl);
-void     oti_pow_to(otinum_t* num, double e, otinum_t* res, dhelpl_t dhl);
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of a function f at (num).
+/**
+ * @name Dense cosine
+ * @{
+ */
 
-@param[in] feval_re Function, and its derivatives, evaluated at the real coefficient of num.
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-otinum_t oti_feval(    coeff_t* feval_re, otinum_t* num,                dhelpl_t dhl );
-void     oti_feval_to( coeff_t* feval_re, otinum_t* num, otinum_t* res, dhelpl_t dhl );
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Cosine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_cos(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Cosine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_cos_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense tangent
+ * @{
+ */
+
+/**
+ * @brief Tangent of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_tan(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Tangent of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_tan_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense arcsine
+ * @{
+ */
+
+/**
+ * @brief Arcsine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_asin(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Arcsine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_asin_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense arccosine
+ * @{
+ */
+
+/**
+ * @brief Arccosine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_acos(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Arccosine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_acos_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense arctangent
+ * @{
+ */
+
+/**
+ * @brief Arctangent of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_atan(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Arctangent of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_atan_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense hyperbolic sine
+ * @{
+ */
+
+/**
+ * @brief Hyperbolic sine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_sinh(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Hyperbolic sine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_sinh_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense hyperbolic cosine
+ * @{
+ */
+
+/**
+ * @brief Hyperbolic cosine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_cosh(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Hyperbolic cosine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_cosh_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense hyperbolic tangent
+ * @{
+ */
+
+/**
+ * @brief Hyperbolic tangent of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_tanh(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Hyperbolic tangent of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_tanh_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense inverse hyperbolic sine
+ * @{
+ */
+
+/**
+ * @brief Inverse hyperbolic sine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_asinh(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Inverse hyperbolic sine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_asinh_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense inverse hyperbolic cosine
+ * @{
+ */
+
+/**
+ * @brief Inverse hyperbolic cosine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_acosh(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Inverse hyperbolic cosine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_acosh_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense inverse hyperbolic tangent
+ * @{
+ */
+
+/**
+ * @brief Inverse hyperbolic tangent of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_atanh(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Inverse hyperbolic tangent of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_atanh_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense error function
+ * @{
+ */
+
+/**
+ * @brief Error function of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_erf(const otinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Error function of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_erf_to(const otinum_t* num, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense power
+ * @{
+ */
+
+/**
+ * @brief Power of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] e   Real exponent.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_pow(const otinum_t* num,coeff_t e, dhelpl_t dhl);
+
+/**
+ * @brief Power of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in]     e   Real exponent.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_pow_to(const otinum_t* num,coeff_t e, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense logarithm in a given base
+ * @{
+ */
+
+/**
+ * @brief Logarithm in a given base of a number (allocating variant).
+ *
+ * @param[in] num  Argument.
+ * @param[in] base Logarithm base.
+ * @param[in] dhl  Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via oti_free().
+ */
+otinum_t oti_logb(const otinum_t* num,coeff_t base, dhelpl_t dhl);
+
+/**
+ * @brief Logarithm in a given base of a number into an existing one.
+ *
+ * @param[in]     num  Argument.
+ * @param[in]     base Logarithm base.
+ * @param[in,out] res  Result; may alias @p num.
+ * @param[in]     dhl  Direction helper list.
+ *
+ * @return DN_OK, or a DN_ERR_* status (the result is then unspecified but freeable).
+ */
+int oti_logb_to(const otinum_t* num,coeff_t base, otinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
 
 #endif

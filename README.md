@@ -1,10 +1,9 @@
-# OTIlib 
+# OTIlib #
 
 <p align="center">
 An open source library for Order Truncated Imaginary (OTI) Numbers. 
-An algebra for efficient arbitrary-order, multivariate differentiation.
+An algebra for efficient high-order differentiation with respect to multiple variables.
 </p>
-
 
 Useful links:
 
@@ -15,29 +14,83 @@ Useful links:
 
 # OVERVIEW #
 
-**OTILIB** 
+**OTILIB** is a library that implements the Order Truncated Imaginary numbers (OTI numbers), a hypercomplex algebra that computes exact high-order derivatives with respect to many variables at once. An OTI number stores a real value and coefficients that carry derivative information up to a chosen order.  Arithmetic and supported
+mathematical functions propagate these coefficients through your calculation.  
 
-This is the repository of the Order Truncated Imaginary numbers (OTI numbers), a hypercomplex algebra that allows the calculation of high-order, multivariable derivatives in computer programs. The core implementation is developed in C++ (following the majority of the C++20 standard), and provides an interface with C to languages like Fortran, Python, Julia, and Matlab. OTI numbers were initially developed in the PhD thesis titled ["Order Truncated Imaginary Algebra for Computation of Multivariable High-Order Derivatives in Finite Element Analysis"](https://www.proquest.com/docview/2749270507/). This project started with this PhD project, and has been developed since 2016.
+You write your program once, with OTI numbers in place of real numbers, and the library returns the value
+of the result together with coefficients that contains its derivatives up to the order you choose. This allows you to extract first derivatives, higher derivatives, and mixed derivatives of a computed result.
 
-OTI numbers extend the Dual numbers and can be used to compute high-order derivatives with respect to multiple variables. In contrast to the Dual numbers ( $a + b \epsilon, \epsilon^2 = 0$ ), OTI numbers set a truncation condition other than $\epsilon^2 = 0$, and considers multiple imaginary basis. For instance $\epsilon_1^5,\epsilon_1^2\epsilon_2,\ldots,\epsilon_m$ can be non-truncated imaginary directions.
+OTI numbers extend the Dual numbers. A Dual number $a + b \epsilon, \epsilon^2 = 0$  with $\epsilon^2 = 0$ carries only first derivatives of one variable. An OTI number carries one imaginary unit
+$\epsilon_1, \ldots, \epsilon_m$ per variable and truncates products only above a chosen order, so
+terms such as $\epsilon_1^5$ or $\epsilon_1^2\epsilon_2$ survive and hold the corresponding
+high-order and mixed derivatives.
 
-This library provides multiple implementations of OTI numbers, supporting different usage cases. Each implementation supports techniques to efficiently treat scalar and tensor operations such as elementwise operations, matrix multiplication, vector dot product, vector array operations, etc in an efficient manner.
+The project began in 2016, when OTI numbers were initially developed in the PhD thesis titled 
+["Order Truncated Imaginary Algebra for Computation of Multivariable High-Order Derivatives in Finite Element Analysis"](https://www.proquest.com/docview/2749270507/) from Universidad EAFIT, in Medellin, Colombia.
 
-Currently three implementations are supported: 
-* Sparse implementation (default)
-* Dynamic dense implementation (partial support)
-* Static-Dense 
 
-Parallelization is supported for shared-memory (OpenMP), distributed memory (MPI), and GPU support is provided via CUDA and Metal backends.
+### Languages and execution
 
-## Current Programming languages: 
+The library implements the OTI algebra in a **C core** and exposes it to **Python** using Cython as `pyoti`, with NumPy and SciPy integration; and partially, to **Fortran** which provides generated fixed-size OTI types and a limited first-order sparse type.   Current Fortran tests check representative scalar arithmetic, an elementary function, and version information. Fortran also supplies the BLAS/LAPACK wrappers used by the C core; but it does not yet expose the full dynamic C API to Fortran applications. 
 
-* **C++** (C++20) for core routines.
-* **C**: Exposed from the C++ implementation via extern C declarations.
-* **Python** (Version 3.13 or newer. This library requires [Cython](http://cython.org) >= 3.0)
-* **Fortran** (F2018  standard or newer) Exposes all core features.
-* **MATLAB** .
-* **Julia** .
+For every implementation it provides:
+
+* **Scalars**: arithmetic (`+ - * /`, powers) between OTI numbers and real numbers.
+* **Elementary functions**: `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `sinh`, `cosh`, `tanh`,
+  `asinh`, `acosh`, `atanh`, `exp`, `log`, `log10`, `logb`, `sqrt`, `cbrt`, `pow`, `erf`, `abs`.
+* **Arrays and matrices** of OTI numbers: elementwise operations and functions, matrix product,
+  dot product, transpose, norm, indexing and slicing.
+* **Dense linear algebra** on OTI matrices: `solve`, `inv`, `det`, `lu_factor`, `lu_solve`. These
+  routines factor the real part once with LAPACK and reuse that factorization for every derivative.
+* **Derivative access**: read and write individual imaginary coefficients and derivatives
+  (`get_im`, `get_deriv`, `set_im`, `extract_im`, `extract_deriv`, `get_all_derivs`, ...), and change
+  the truncation order of a number.
+* **Utilities**: Taylor series evaluation (`rom_eval`), `interp1d`, `moving_average`,
+  truncated products and subtractions.
+* **Save and read** of OTI numbers and arrays in binary files.
+* **Finite elements**: Gauss-point OTI types, OTI sparse matrices (`lil_matrix`, `csr_matrix`) with
+  a sparse solver (SciPy SuperLU by default; UMFPACK and CHOLMOD optionally), and the `pyoti.fem`
+  module (meshes through GMSH, 1D/2D/3D Lagrange elements, numerical integration, assembly). This
+  lets you compute derivatives of a finite element solution with respect to material, load or
+  geometry parameters.
+
+Selected CPU operations use **OpenMP**. Matrix multiplication and linear algebra also use
+**BLAS/LAPACK**, whose threading depends on the linked library. Avoid assigning all CPU cores
+to both OpenMP and BLAS at the same time.
+
+The current release does not provide Julia, MATLAB, or Rust bindings, MPI execution, or CUDA,
+HIP, or Metal backends.
+
+
+
+### Available implementations
+
+
+OTIlib provides four implementations. They differ in how they store the
+imaginary coefficients, so each one suits a different kind of problem.
+
+| Implementation | Python module | Storage | Best suited for |
+|---|---|---|---|
+| **Dense** (default) | `pyoti.dense` (also `import pyoti`) | Stores every coefficient over the bases $1 \ldots n$; each number carries its own truncation order (up to 150). | General use with a moderate number of variables. |
+| **Semi-sparse** | `pyoti.semisparse` | Stores every coefficient, but only over the bases the number actually uses (base labels up to 65535). | Problems with a handful to about 100 parameters at moderate order, for example FEM and CFD models. |
+| **Sparse** | `pyoti.sparse` | Stores only the nonzero imaginary directions. | Many variables where each result depends on only a few of them. |
+| **Static** | `pyoti.static.onumm<M>n<N>` | Fixed number of bases `M` and fixed order `N`, generated at compile time. | Small, fixed problems where speed matters most. |
+
+
+The dense, semi-sparse and sparse implementations share the same Python API. A script written for
+`pyoti.sparse` runs unchanged with `pyoti.semisparse` or `pyoti.dense`. Each of these three
+implementations provides scalars, arrays in two memory layouts (array-of-structures and
+structure-of-arrays), Gauss-point types, OTI sparse matrices, and save/read, and converts to and
+from the sparse types.
+
+The static implementation provides by default the following combinations of bases (`m`) and order (`n`):
+
+* 1 basis: orders 1, 2, 3, 4, 10, 20 and 30 (`onumm1n1` ... `onumm1n30`).
+* 2 bases: orders 1 to 4 (`onumm2n1` ... `onumm2n4`).
+* 3 bases: orders 1 to 4 (`onumm3n1` ... `onumm3n4`).
+* 10 bases: orders 1 and 2 (`onumm10n1`, `onumm10n2`).
+
+Other combinations can be generated using the `pyoti.core.cmod_writer(...)` and `pyoti.core.fmod_writer(...)` utils provided with the library.
 
 ## Quick Installation instructions:
 
@@ -57,9 +110,26 @@ After installation, you can activate your conda environment so that otilib is ac
 conda activate pyoti-env
 ```
 
+### Example
+
+A first example in Python:
+
+```python
+import pyoti.semisparse as oti
+
+x = 0.5 + oti.e(1, order=3)      # x = 0.5, perturbed along variable 1, up to order 3
+y = 2.0 + oti.e(2, order=3)      # y = 2.0, perturbed along variable 2
+f = oti.sin(x * y)
+
+print(f"f(0.5.2.0) : {f.real}")                 # sin(1.0)
+print(f"d^2f/ dx dy: {f.get_deriv([1, 2])}")    # d^2 f / dx dy
+print(f"d^3f/ dx^3 : {f.get_deriv([1, 1, 1])}") # d^3 f / dx^3
+```
+
+
 ## Compilation
 
-In order to compile this library, the recommended approach is to use a conda environment setup with the ```environment.yml``` file.
+The recommended approach to compile this library is to use a conda environment setup with the ```environment.yml``` file.
 
 
 1. Create the conda environment with dependencies from the ```environment.yml``` file:
@@ -93,6 +163,8 @@ This library has been tested on:
 - **Unix** platforms (Ubuntu, CentOS, Rocky Linux).
 - **macOS** (Tested on Tahoe 26.*)
 - **Windows** (Works only under Windows Subsystem for Linux - [WSL](https://learn.microsoft.com/en-us/windows/wsl/) ). Native Windows builds are not supported.
+
+
 
 ### Requirements
 

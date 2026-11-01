@@ -101,6 +101,18 @@ conda develop .
    `cmake -DCMAKE_Fortran_COMPILER=gfortran ..`. An existing `build/` keeps the compiler in its
    cache.
 
+## Plan Documents
+
+Design and implementation plans are `PLAN-*.md` files. They are local working documents and are
+**not part of the repository**: they are git-ignored or untracked, so a fresh clone does not have
+them. References to a `PLAN-*.md` file in this file, in `CHANGELOG.md` or in code comments point to
+these local documents and are for context only.
+
+- Active and pending plans live at the repository root.
+- When a plan is fully implemented (or superseded), move it to `plans/finished/`. The `plans/`
+  folder is listed in `.gitignore`.
+- Never commit a plan file, and do not make the build, tests or docs depend on one.
+
 ## Architecture & Layout
 
 - `src/c/`: C core implementations (scalar, array, dense, sparse, semisparse, static, fem).

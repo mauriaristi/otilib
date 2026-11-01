@@ -37,3 +37,6 @@ src/python/pyoti/python/_version.py
 
 # Jupyter notebook autosave checkpoints
 .ipynb_checkpoints/
+
+# Local planning documents
+plans/

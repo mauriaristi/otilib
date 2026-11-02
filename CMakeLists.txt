@@ -315,6 +315,14 @@ include_directories("${OTI_GENERATED_INCLUDE_DIR}")
 set(CMAKE_BUILD_TYPE RELEASE)
 set(CMAKE_C_FLAGS_DEBUG "-g")
 set(CMAKE_C_FLAGS_RELEASE "-O3 -Wall -std=c99")
+
+# -std=c99 makes glibc hide every POSIX declaration (fseeko / ftello in the io modules, mkdtemp in
+# the io tests, ...); GCC 14+ then rejects the implicit declarations as errors. _DEFAULT_SOURCE
+# restores glibc's default POSIX 2008 + BSD/SVID set without changing the language standard. Not
+# on Apple, whose libc already declares them and where feature-test macros restrict, not extend.
+if(UNIX AND NOT APPLE)
+  add_compile_definitions(_DEFAULT_SOURCE)
+endif()
  
 
 # should we do the Cython part too?

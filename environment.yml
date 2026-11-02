@@ -24,5 +24,5 @@ dependencies:
   - conda-forge::gmsh
   - conda-forge::python-gmsh
   - conda-forge::vtk<9.4
-  - conda-forge::scikit-sparse
+  - conda-forge::scikit-sparse<0.5  # 0.5 returns a tuple from cholesky(); sparse/linalg.pxi needs the 0.4 Factor
   - conda-forge::scikit-umfpack

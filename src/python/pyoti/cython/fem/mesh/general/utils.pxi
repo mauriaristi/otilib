@@ -464,75 +464,82 @@ def square(double width, double hight, double he = 1e30, ndivs = None, element_o
 
 
 
-#*****************************************************************************************************
-cpdef op_int2d(mesh Th, matso f, intorder = None, region = None ):
-  """
-  PURPOSE: Integrate over 2D elements.
-  """
-  #***************************************************************************************************
-  
-  global alg
+# ********************************************************************************************************
+cpdef op_int2d(mesh Th, object f, intorder=None, region=None):
+    """
+    Integrate a nodal field over the mesh's two-dimensional elements.
 
-  cdef int64_t  i, j, ii
-  cdef object integral, tmp2, tmp1, fh
-  cdef elbase elem
+    Parameters
+    ----------
+    Th : mesh
+        Mesh containing two-dimensional elements and nodal coordinates.
+    f : object
+        Nodal field array accepted by the selected FEM algebra.
+    intorder : int, optional
+        Integration order used when allocating each element.
+    region : object, optional
+        Reserved for selecting a mesh region.
 
-  els = Th.elements[2]
+    Returns
+    -------
+    object
+        Integral represented by the selected FEM algebra.
+    """
+    global alg
 
-  integral = alg.zero()
-  
-  end_elements()
-  
-  #integrate 2D a fem array.
-  for j in range(els['types'].size):
+    cdef int64_t i, j, ii
+    cdef object integral, tmp2, tmp1, fh
+    cdef elbase elem
 
-    elem = element[ els['types'][j] ]
+    els = Th.elements[2]
+    integral = alg.zero()
 
-    if not elem.is_allocated():
-      
-      elem.end()
-      elem.allocate(intorder)
-      elem.allocate_spatial(2,compute_Jinv = False)
+    end_elements()
 
-      # Here the temporals shhould be created.
-      fh   = alg.zeros( ( elem.nbasis, 1 ) )      
-      tmp1 = alg.zero(nip=elem.nip)      
-      tmp2 = alg.zero()
+    for j in range(els['types'].size):
 
-    # end if 
+        elem = element[els['types'][j]]
 
-    elm_nodes = els['indices'][j]
+        if not elem.is_allocated():
 
-    for i in range(elm_nodes.shape[0]):
+            elem.end()
+            elem.allocate(intorder)
+            elem.allocate_spatial(2, compute_Jinv=False)
 
-      elem.set_coordinates(Th.x,Th.y,Th.z,elm_nodes[i,:])
-      elem.compute_jacobian()
+            fh = alg.zeros((elem.nbasis, 1))
+            tmp1 = alg.zero(nip=elem.nip)
+            tmp2 = alg.zero()
 
-      for ii in range(elem.nbasis):
-        fh[ii,0] = f[ int(elm_nodes[i,ii]),0]
-      # end for 
-      
-      alg.dot_product(fh,elem.N,out=tmp1)
-      alg.gauss_integrate( tmp1, elem.w_dJ, out=tmp2)
-      alg.sum(tmp2,integral, out=integral)
-            
-      # integral = integral + gauss_integrate( dot_product( fh, elem.N), elem.w_dJ)
-              
-      # integral = integral + oti.dot_product( fh, oti.gauss_integrate( element.N, element.w_dJ) )
+        # end if
+
+        elm_nodes = els['indices'][j]
+
+        for i in range(elm_nodes.shape[0]):
+
+            elem.set_coordinates(Th.x, Th.y, Th.z, elm_nodes[i, :])
+            elem.compute_jacobian()
+
+            for ii in range(elem.nbasis):
+
+                fh[ii, 0] = f[int(elm_nodes[i, ii]), 0]
+
+            # end for
+
+            alg.dot_product(fh, elem.N, out=tmp1)
+            alg.gauss_integrate(tmp1, elem.dV, out=tmp2)
+            alg.sum(tmp2, integral, out=integral)
+
+        # end for
 
     # end for
 
-  # end for
-  
-  end_elements()
-  
-  return integral
+    end_elements()
 
-#-----------------------------------------------------------------------------------------------------
+    return integral
 
+# end function
 
-
-
+# --------------------------------------------------------------------------------------------------------
 
 
 

@@ -1,744 +1,670 @@
-// This file contains the base operations to support OTI manipulation.
+// Dense scalar: element access, conversions to and from sotinum_t, truncation and compaction
+// (include/oti/dense/scalar/base.h).
+//
+// Unity-included from src/c/dense.c: static helpers here carry the dnsb_ prefix. A global direction is
+// its own index in a dense number (prefix property), so no remap happens anywhere in this file.
 
 
+// *******************************************************************************************************
+// Tells whether the multiset v (length nv) contains the multiset u (length nu) with at least the same
+// multiplicities. Both are sorted ascending.
+static int dnsb_contains(const bases_t* v, ord_t nv, const bases_t* u, ord_t nu){
 
-// There should also be an extract derivative...
+    ord_t i = 0, j = 0;
 
-// // ****************************************************************************************************
-// otinum_t oti_extract_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
+    while (j < nu){
 
-//     coeff_t coef = oti_get(idx,order,num,dhl);
-//     coeff_t factor = 1.0;
-//     bases_t* dirs;
-//     bases_t dir_prev;
-//     ord_t i, j = 2;
-
-//     // compute the factor 
-    
-//     if (coef != 0.0){
-//         dirs = dhelp_get_imdir(idx,order,dhl);
-//         dir_prev = dirs[0];
-//         for (i=1; i<order; i++){
-//             if (dirs[i] == dir_prev){
-//                 factor *= j;
-//                 j+=1;
-//             } else{
-//                 j=2;
-//                 dir_prev = dirs[i];
-//             }
-//         }
-//     }
-
-//     return coef*factor;
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-
-
-// // ****************************************************************************************************
-// otinum_t oti_extract_imdir( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
-    
-//     // This function extracts an OTI number out of the specified imaginary direction (idx,order). 
-//     otinum_t res;
-//     ord_t order_res;
-
-
-
-//     // Check input possibilities:
-//     // 1. Requested imdir has order 0                -> Return a copy of num.
-//     // 2. Requested imdir has order > num.order      -> Return otinum 0.
-//     // 3. Requested imdir has 0<order<num.order and index within bounds -> Extract numbers.
-//     // 4. Requested imdir has 0<order<num.order but index out of bounds -> Return otinum 0.
-    
-//     // Case 1.
-//     if ( order == 0 ){
-    
-//         res = oti_copy(num,dhl);
-        
-//     // Case 2.
-//     } else if (order > num->order)  {
-
-//         // Returns an otinum with truncation order equa to zero.
-//         res = oti_createZero( 0, 0, dhl);
-
-//     //Cases 3 & 4.
-//     } else if (order <= num->order)  {
-
-//         // Case 3.
-//         if (idx < num->p_ndpo[order-1]){ // Only if the index is within the available memory.
-
-//             // In this case, idx and order correspond to an imaginary direction within the number.
-
-//             // coeff_t dhelp_get_deriv_factor(imdir_t idx, ord_t order, dhl);
-
-//             // Get all directions with order greater to the imdir order and
-//             // that contain the imaginary direction (idx,order) from input.
-
-//             res = num->p_im[ order-1 ][ idx ];
-
-//         } else {
-
-//             // Case 4.
-//             res  = oti_createZero( 0, 0, dhl);
-
-//         }
-
-        
-        
-//     }
-
-//     return res;
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-darr_t oti_to_cr_dense(otinum_t* num,  dhelpl_t dhl){
-    
-    ord_t ordi, ordj, ord_res;
-    imdir_t idx_i, idx_j, idx_res;
-    ndir_t ndir = num->ndir+1; 
-    ndir_t ndir_i, ndir_j; 
-    coeff_t val;
-    darr_t res;
-    uint64_t i,ii,jj, k;
-        
-    res = darr_zeros(ndir,ndir);
-
-    // set all diagonal coeffs to the real coefficient
-    val = num->re;
-    
-    for(i = 0; i<ndir; i++){
-
-        darr_set_item_ij(val,i,i,&res);
-
-    }
-
-    // set all first column coeffs to the imaginary directions
-    k=1;
-    for (ordi = 0; ordi<num->order; ordi++){
-        
-        for (idx_i = 0; idx_i < num->p_ndpo[ordi]; idx_i++){
-
-            val = num->p_im[ordi][idx_i];
-            darr_set_item_ij(val,k,0,&res);
-            k++;
-
+        if (i >= nv){
+            return 0;
         }
 
-    }
+        if (v[i] == u[j]){
 
-    // Put all other elements under the diagonal.
-    for( ordi = 1; ordi < num->order ; ordi++){
-        
-        ndir_i = num->p_ndpo[ordi-1];
+            i++;
+            j++;
 
-        for( ordj = 1; ordj <= (num->order-ordi) ; ordj++){
-            
-            ndir_j = num->p_ndpo[ordj-1];
+        } else if (v[i] < u[j]){
 
-            if (ordj == 1){
-                
-                jj = 1;
-
-            } else {
-                
-                jj = num->p_ndpo[ordj-2];    
-
-            }
-            
-            if(ordi+ordj-1 == 1){
-                
-                ii = 1;
-
-            } else {
-                
-                ii = num->p_ndpo[ordi+ordj-2];
-
-            }
-            
-
-            for (idx_i=0; idx_i<ndir_i; idx_i++){
-                
-                for (idx_j=0; idx_j<ndir_j; idx_j++){
-                    
-                    dhelp_multDir( idx_i, ordi, idx_j, ordj, &idx_res,&ord_res,dhl);
-                    
-                    val = num->p_im[ord_res-1][idx_res];
-                    darr_set_item_ij(val, ii + idx_res, jj + idx_j ,&res);
-                    
-                }
-
-            }            
-
-        }
-
-    }
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-void oti_copy_to(otinum_t* num, otinum_t* res, dhelpl_t dhl){
-
-    ord_t ord;
-
-    // Copy real information.
-    res->re = num->re;
-    
-    // Copy imagiary information from num1 to res.
-    for( ord = 0; ord<num->order; ord++){
-
-        memcpy( res->p_im[ord], num->p_im[ord], num->p_ndpo[ord]*sizeof(coeff_t) );
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-void oti_change_nbases(otinum_t* num, bases_t newnbases, dhelpl_t dhl){
-
-    ord_t ordi;
-    
-    // Create new memory object
-    otinum_t new_num = oti_init();
-
-    if (newnbases != num->nbases) {
-
-        new_num = oti_createZero( newnbases, num->order, dhl);
-        
-        new_num.re = num->re;
-
-        // Copy information from num to new_num.
-        // Only loop the minimym ammount of times necessary.
-        for( ordi = 0; ordi< new_num.order; ordi++){
-
-            memcpy( new_num.p_im[ordi], num->p_im[ordi], 
-                MIN( new_num.p_ndpo[ordi], num->p_ndpo[ordi] ) * sizeof(coeff_t) );
-
-        }
-
-        // Free memory in num and then copy the contents of new num.
-        oti_free(num);
-
-        *num = new_num;
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-void oti_change_order(otinum_t* num, ord_t neworder, dhelpl_t dhl){
-
-    ord_t ordi;
-    
-
-    // Create new memory object
-    otinum_t new_num = oti_init();
-
-    if (neworder != num->order) {
-
-        new_num = oti_createZero( num->nbases, neworder, dhl);
-        
-        new_num.re = num->re;
-
-        // Copy information from num to new_num.
-        // Only loop the minimym ammount of times necessary.
-        for( ordi = 0; ordi< MIN( neworder, num->order); ordi++){
-
-            memcpy( new_num.p_im[ordi], num->p_im[ordi], num->p_ndpo[ordi]*sizeof(coeff_t) );
-
-        }
-
-        // Free memory in num and then copy the contents of new num.
-        oti_free(num);
-
-        *num = new_num;
-
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-otinum_t oti_copy(otinum_t* num, dhelpl_t dhl){
-    
-    ord_t ord;
-    otinum_t res;
-        
-    // Allocate res.
-    res = oti_createEmpty( num->nbases, num->order, dhl);
-
-    res.re = num->re;
-    
-    // Copy information from num1 to res.
-    for( ord = 0; ord<num->order; ord++){
-
-        res.p_ndpo[ord] = num->p_ndpo[ord];
-
-        memcpy( res.p_im[ord], num->p_im[ord], res.p_ndpo[ord]*sizeof(coeff_t) );
-
-    }
-
-    return res;
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-otinum_t oti_get_rtmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl){
-    
-    otinum_t res = oti_init();
-
-    ord_t ordi=0;
-    
-    if (order != 0){
-        
-        // Get possible errors.
-        if (order > dhl.ndh){
-            printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
-            exit(OTI_undetErr);
-        }
-        if (ntmp >= dhl.p_dh[order-1].Ntmps){
-            printf("ERROR: Trying to get a temporal that does not exist.\n");
-            exit(OTI_undetErr);   
-        }
-
-        res.p_im    = dhl.p_dh[order-1].p_ims[ntmp]; 
-        res.p_ndpo  = dhl.p_dh[order-1].p_nnz[ntmp];
-
-        // set the values
-        res.order  = order;
-        res.nbases = nbases;
-        res.ndir   = 0; // Excludes the real direction.
-        res.re     = 0;
-
-        for (ordi=0; ordi<order; ordi++){
-
-            // Set the pointers according to the ntemp.
-            res.p_im[ordi]   = dhl.p_dh[ordi].p_im[ntmp];
-            
-            res.p_ndpo[ordi] = dhelp_extract_ndirOrder( res.nbases, ordi+1, dhl );
-            
-            // Initialize imaginary coefficients in res as 0.
-            memset( res.p_im[ordi], 0, res.p_ndpo[ordi]*sizeof(coeff_t) );
-
-            res.ndir += res.p_ndpo[ordi];
-
-        }
-
-    }
-
-    return res;
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-otinum_t oti_get_tmp( ndir_t ntmp, ord_t order, bases_t nbases, dhelpl_t dhl){
-    
-    otinum_t res= oti_init();
-
-    ord_t i=0;
-    
-    if (order != 0){
-        
-        // Get possible errors.
-        if (order > dhl.ndh){
-            printf("ERROR: Maximum order not allowed in soti_get_tmp.\n");
-            exit(OTI_undetErr);
-        }
-        if (ntmp >= (dhl.p_dh[order-1].Ntmps-10) ){
-            printf("ERROR: Trying to get a temporal that does not exist.\n");
-            exit(OTI_undetErr);   
-        }
-
-        res.p_im   = dhl.p_dh[order-1].p_ims[ntmp+10]; 
-        res.p_ndpo = dhl.p_dh[order-1].p_nnz[ntmp+10];
-
-        // set the values
-        res.order  = order;
-        res.nbases = nbases;
-        res.ndir   = 0; // Excludes the real direction.
-        res.re     = 0;
-
-        for (i=0; i<order; i++){
-
-            // Set the pointers according to the ntemp.
-            res.p_im[i]   = dhl.p_dh[i].p_im[ntmp+10];
-            res.p_ndpo[i] = dhelp_extract_ndirOrder( res.nbases, i+1, dhl );
-            
-            // Initialize imaginary coefficients in res as 0.
-            memset( res.p_im[i], 0, res.p_ndpo[i]*sizeof(coeff_t) );
-
-            res.ndir += res.p_ndpo[i];
-
-        }
-
-    }
-
-    return res;
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-coeff_t oti_get( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
-    
-    coeff_t res = 0.0;
-
-    if (order == 0){
-    
-        res = num->re;
-    
-    } else if (order <= num->order)  {
-
-        if (idx < num->p_ndpo[order-1]){ // Only if the index is within the available memory.
-
-            res = num->p_im[ order-1 ][ idx ];
-
-        }
-        
-    }
-
-    return res;
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-coeff_t oti_get_deriv( imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
-
-    coeff_t coef = oti_get(idx,order,num,dhl);
-    coeff_t factor = 1.0;
-    bases_t* dirs;
-    bases_t dir_prev;
-    ord_t i, j = 2;
-
-    // compute the factor 
-    
-    if (coef != 0.0){
-        dirs = dhelp_get_imdir(idx,order,dhl);
-        dir_prev = dirs[0];
-        for (i=1; i<order; i++){
-            if (dirs[i] == dir_prev){
-                factor *= j;
-                j+=1;
-            } else{
-                j=2;
-                dir_prev = dirs[i];
-            }
-        }
-    }
-
-    return coef*factor;
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void oti_setIm_IdxOrd( coeff_t a, imdir_t idx, ord_t order, otinum_t* num, dhelpl_t dhl){
-
-    if (order == 0){
-    
-        num->re = a;
-    
-    } else if (order <= num->order)  {
-
-        if (idx < num->p_ndpo[order-1]){ // Only if the index is within the available memory.
-
-            num->p_im[ order-1 ][ idx ] = a;
+            i++;
 
         } else {
 
-            printf("ERROR: Assignment of elements that require reallocation is not yet supported.");
-            printf(" Sorry.\n Error code: %d\n", OTI_undetErr);
-            exit(OTI_undetErr);
-
-        }
-        
-    } else {
-
-        printf("ERROR: Can't assign a number of greater order than the truncation order of the ");
-        printf("number. Sorry.\n Error code: %d\n", OTI_undetErr);
-        exit(OTI_undetErr);
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-// ****************************************************************************************************
-void oti_print( otinum_t* num, dhelpl_t dhl){
-    ord_t ord ;
-    ndir_t dir;
-    // char* string = NULL;
-    printf("  Order: "_PORDT", nbases: "_PBASEST", ndir: "_PNDIRT", re: "_PCOEFFT"\n",
-        num->order, num->nbases, num->ndir, num->re);
-    printf("  ORD ,    IMDIR  ,   VALUE   \n");
-
-    printf("    0 ,         0 ,"_PCOEFFT"\n",num->re);
-
-    for( ord = 1; ord<=num->order; ord++){
-
-        ndir_t ndir_i = num->p_ndpo[ord];
-
-        for ( dir=0; dir< ndir_i; dir++){
-
-            printf(" " _PORDT " , " _PNDIRT " ," _PCOEFFT "\n",
-                ord, dir, num->p_im[ord-1][dir]);
+            return 0;
 
         }
 
     }
 
+    return 1;
+
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-otinum_t oti_init( void ){
-    
-    otinum_t num;
-    
-    // Get the number of imaginary directions for nbases and order.
-    num.ndir = 0; // Excludes the real direction.
 
-    // Set the values of the number first.
-    num.order  = 0;
-    num.nbases = 0;
+// *******************************************************************************************************
+// Derivative factor of a global direction: product of the factorials of its base multiplicities.
+// Uses sshelp_global_unrank() only, so it covers every label up to 65535.
+static coeff_t dnsb_deriv_factor(imdir_t idx, ord_t order){
 
-    // Set pointer as null.
-    num.p_im = NULL;   
-    num.p_ndpo = NULL;     
+    bases_t g[256];
 
-    return num;
+    if (order == 0 || sshelp_global_unrank(idx, order, g) != SSHELP_OK){
+        return 1.0;
+    }
+
+    return dnutil_tuple_factor(g, order);
+
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-void oti_free( otinum_t* num ){
-    
-    // ord_t ordi ;
-    if (num->p_im != NULL){
 
-        // for ( ordi = 0; ordi<num->order; ordi++){
-        //     free( num->p_im[ordi] );
-        // }
+// *******************************************************************************************************
+// Largest base (1-based) of the order-p direction with index idx.
+static bases_t dnsb_max_base(ndir_t idx, ord_t p){
 
-        // free(num->p_ndpo);
-        free(num->p_im);
+    bases_t u[256];
 
-        num->p_im = NULL;
+    sshelp_unrank(idx, p, u);
+
+    return (bases_t)(u[p - 1] + 1);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     ACCESS     ------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+// *******************************************************************************************************
+coeff_t oti_get_item(imdir_t idx, ord_t order, const otinum_t* num){
+
+    if (order == 0){
+        return (idx == 0) ? num->re : 0.0;
+    }
+
+    if (order > num->trc_order || !dnutil_dir_inside(idx, order, num->nact)){
+        return 0.0;
+    }
+
+    return num->p_im[sshelp_order_offset(num->nact, order) + idx];
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int oti_set_item(coeff_t val, imdir_t idx, ord_t order, otinum_t* num){
+
+    bases_t g[256];
+    int status;
+
+    if (order == 0){
+
+        num->re = val;
+        return DN_OK;
 
     }
 
+    if (order > num->trc_order){
+        return DN_OK;
+    }
 
-    // Set all other values as 0.
-    *num = oti_init();
+    if (!dnutil_dir_inside(idx, order, num->nact)){
+
+        // Nothing stored there and nothing to store: do not grow for a zero.
+        if (val == 0.0){
+            return DN_OK;
+        }
+
+        if (sshelp_global_unrank(idx, order, g) != SSHELP_OK){
+            return DN_ERR_INDEX;
+        }
+
+        status = oti_add_bases(g[order - 1], num);
+
+        if (status != DN_OK){
+            return status;
+        }
+
+    }
+
+    num->p_im[sshelp_order_offset(num->nact, order) + idx] = val;
+
+    if (val != 0.0 && order > num->act_order){
+        num->act_order = order;
+    }
+
+    return DN_OK;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-otinum_t oti_createZero( bases_t nbases, ord_t order, dhelpl_t dhl){
-    
-    otinum_t res = oti_createEmpty(nbases,order,dhl);
 
-    oti_setFromReal(0.0, &res, dhl);
+// *******************************************************************************************************
+coeff_t oti_get_deriv(imdir_t idx, ord_t order, const otinum_t* num){
+
+    coeff_t coef = oti_get_item(idx, order, num);
+
+    if (coef == 0.0){
+        return 0.0;
+    }
+
+    return coef * dnsb_deriv_factor(idx, order);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+double oti_density(const otinum_t* num){
+
+    ndir_t total = sshelp_ndir_total(num->nact, num->trc_order);
+    ndir_t nz = 0, i;
+
+    if (total == 0){
+        return 0.0;
+    }
+
+    for (i = 0; i < total; i++){
+
+        if (num->p_im[i] != 0.0){
+            nz++;
+        }
+
+    }
+
+    return (double)nz / (double)total;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+size_t oti_memory_size(const otinum_t* num){
+
+    return sizeof(otinum_t) + (size_t)dnsm_capacity(num) * sizeof(coeff_t);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void oti_print(const otinum_t* num){
+
+    bases_t u[256];
+    ord_t p, j;
+    ndir_t off, n, li;
+
+    printf("  act_ord: " _PORDT ", trc_ord: " _PORDT ", nact: " _PBASEST ", re: " _PCOEFFT "\n",
+        num->act_order, num->trc_order, num->nact, num->re);
+
+    printf("      VALUE   ,    IMDIR  \n");
+    printf("  " _PCOEFFT " , [0]\n", num->re);
+
+    for (p = 1; p <= num->act_order && num->nact > 0; p++){
+
+        off = sshelp_order_offset(num->nact, p);
+        n   = sshelp_ndir_order(num->nact, p);
+
+        for (li = 0; li < n; li++){
+
+            if (num->p_im[off + li] == 0.0){
+                continue;
+            }
+
+            printf("  " _PCOEFFT " , ", num->p_im[off + li]);
+
+            sshelp_unrank(li, p, u);
+
+            for (j = 0; j < p; j++){
+                u[j]++;
+            }
+
+            printArrayUI16(u, p);
+
+            printf("\n");
+
+        }
+
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     CONVERSION     --------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+// *******************************************************************************************************
+otinum_t oti_from_soti(const sotinum_t* num, dhelpl_t dhl){
+
+    otinum_t res = oti_init();
+
+    return dnsm_ret(oti_from_soti_to(num, &res, dhl), &res);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int oti_from_soti_to(const sotinum_t* num, otinum_t* res, dhelpl_t dhl){
+
+    bases_t g[256], nact = 0;
+    ord_t ordi, p, act = 0;
+    ndir_t i, off;
+    int status;
+
+    (void)dhl;
+
+    // nact is the largest base of any stored direction (explicit zeros included).
+    for (ordi = 0; ordi < num->act_order; ordi++){
+
+        p = ordi + 1;
+
+        for (i = 0; i < num->p_nnz[ordi]; i++){
+
+            if (sshelp_global_unrank(num->p_idx[ordi][i], p, g) != SSHELP_OK){
+                return DN_ERR_INDEX;
+            }
+
+            if (g[p - 1] > nact){
+                nact = g[p - 1];
+            }
+
+        }
+
+        if (num->p_nnz[ordi] > 0){
+            act = p;
+        }
+
+    }
+
+    status = oti_create_empty_to(nact, num->trc_order, res);
+
+    if (status != DN_OK){
+        return status;
+    }
+
+    res->re = num->re;
+
+    for (ordi = 0; ordi < act; ordi++){
+
+        p   = ordi + 1;
+        off = sshelp_order_offset(nact, p);
+
+        for (i = 0; i < num->p_nnz[ordi]; i++){
+            res->p_im[off + num->p_idx[ordi][i]] = num->p_im[ordi][i];
+        }
+
+    }
+
+    res->act_order = (nact == 0) ? 0 : act;
+
+    return DN_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+sotinum_t oti_to_soti(const otinum_t* num, dhelpl_t dhl){
+
+    ndir_t p_nnz[_MAXORDER_OTI];
+    ord_t ordi, p, act_order = 0;
+    ndir_t off, n, li, pos;
+    coeff_t val;
+    sotinum_t res;
+
+    // p_nnz is sized _MAXORDER_OTI: a hand-built number above it gives an empty number, re = NaN.
+    if (num->trc_order > _MAXORDER_OTI){
+
+        res    = soti_init();
+        res.re = NAN;
+
+        return res;
+
+    }
+
+    for (ordi = 0; ordi < num->trc_order; ordi++){
+
+        p   = ordi + 1;
+        off = sshelp_order_offset(num->nact, p);
+        n   = (p <= num->act_order) ? sshelp_ndir_order(num->nact, p) : 0;
+        p_nnz[ordi] = 0;
+
+        for (li = 0; li < n; li++){
+
+            if (num->p_im[off + li] != 0.0){
+                p_nnz[ordi]++;
+            }
+
+        }
+
+        if (p_nnz[ordi] > 0){
+            act_order = p;
+        }
+
+    }
+
+    res = soti_createEmpty_predef(p_nnz, num->trc_order, dhl);
+    res.re = num->re;
+    res.act_order = act_order;
+
+    // Local and global indices coincide, and a block is already sorted by index.
+    for (ordi = 0; ordi < act_order; ordi++){
+
+        p   = ordi + 1;
+        off = sshelp_order_offset(num->nact, p);
+        n   = sshelp_ndir_order(num->nact, p);
+        pos = 0;
+
+        for (li = 0; li < n; li++){
+
+            val = num->p_im[off + li];
+
+            if (val != 0.0){
+
+                res.p_im[ordi][pos]  = val;
+                res.p_idx[ordi][pos] = (imdir_t)li;
+                pos++;
+
+            }
+
+        }
+
+        res.p_nnz[ordi] = pos;
+
+    }
 
     return res;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-void oti_setFromReal( coeff_t a, otinum_t* num, dhelpl_t dhl){
-    ord_t ordi;
-    num->re = a;
-    
-    // Set all imaginary directions to 0
-    if (num->order != 0){
-        
-        for ( ordi = 0; ordi < num->order; ordi++){
-            
-            memset( num->p_im[ordi], 0, num->p_ndpo[ordi]*sizeof(coeff_t) );
-        
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     TRUNCATION     --------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+// *******************************************************************************************************
+otinum_t oti_truncate_im(imdir_t idx, ord_t order, const otinum_t* num){
+
+    otinum_t res = oti_init();
+
+    return dnsm_ret(oti_truncate_im_to(idx, order, num, &res), &res);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int oti_truncate_im_to(imdir_t idx, ord_t order, const otinum_t* num, otinum_t* res){
+
+    bases_t u_target[256], v[256], k;
+    ndir_t off, n, li, total;
+    ord_t dord;
+    int status;
+
+    // A no-op when res == num, a full copy otherwise; everything below works on res.
+    status = oti_copy_to(num, res);
+
+    if (status != DN_OK){
+        return status;
+    }
+
+    k = res->nact;
+
+    if (order == 0){
+
+        total = sshelp_ndir_total(k, res->trc_order);
+
+        if (total > 0){
+            memset(res->p_im, 0, (size_t)total * sizeof(coeff_t));
+        }
+
+        res->re        = 0.0;
+        res->act_order = 0;
+
+        return DN_OK;
+
+    }
+
+    // A direction with a base above nact, or above act_order: nothing contains it.
+    if (order > res->act_order || !dnutil_dir_inside(idx, order, k)){
+        return DN_OK;
+    }
+
+    sshelp_unrank((ndir_t)idx, order, u_target);
+
+    for (dord = order; dord <= res->act_order; dord++){
+
+        off = sshelp_order_offset(k, dord);
+        n   = sshelp_ndir_order(k, dord);
+
+        memset(v, 0, (size_t)dord * sizeof(bases_t));
+
+        for (li = 0; li < n; li++){
+
+            if (dnsb_contains(v, dord, u_target, order)){
+                res->p_im[off + li] = 0.0;
+            }
+
+            sshelp_next_dir(v, dord, k);
+
         }
 
     }
 
+    return DN_OK;
+
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+otinum_t oti_truncate_order(ord_t order, const otinum_t* num){
+
+    otinum_t res = oti_init();
+
+    return dnsm_ret(oti_truncate_order_to(order, num, &res), &res);
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+int oti_truncate_order_to(ord_t order, const otinum_t* num, otinum_t* res){
 
-// ****************************************************************************************************
-inline void oti_setup(otinum_t* num,  bases_t nbases, ord_t order, dhelpl_t dhl ){
-    
-    
-    ord_t ordi; 
+    ndir_t off, nimag;
+    int status = oti_copy_to(num, res);
 
-    // Get the number of imaginary directions for nbases and order.
+    if (status != DN_OK){
+        return status;
+    }
 
-    num->ndir = 0; // Excludes the real direction.
+    if (order > res->trc_order){
+        return DN_OK;
+    }
 
-    // Set the values of the number first.
-    num->order  = order;
-    num->nbases = nbases;
+    // Keep trc_order and nact; zero orders >= order so that orders above act_order hold zeros. Order 0
+    // removes everything, the real part included (soti_truncate_order).
+    if (order == 0){
+        res->re = 0.0;
+    }
 
-    for (ordi = 0; ordi < num->order; ordi++){
+    off   = (order == 0) ? 0 : sshelp_order_offset(res->nact, order);
+    nimag = sshelp_ndir_total(res->nact, res->trc_order);
 
-        num->p_ndpo[ordi] = dhelp_extract_ndirOrder( num->nbases, ordi+1, dhl );
-        num->ndir += num->p_ndpo[ordi];
+    if (nimag > off){
+        memset(res->p_im + off, 0, (size_t)(nimag - off) * sizeof(coeff_t));
+    }
+
+    if (order == 0 || res->act_order > order - 1){
+        res->act_order = (order == 0) ? 0 : (ord_t)(order - 1);
+    }
+
+    return DN_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+otinum_t oti_get_order_im(ord_t order, const otinum_t* num){
+
+    otinum_t res = oti_init();
+
+    return dnsm_ret(oti_get_order_im_to(order, num, &res), &res);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int oti_get_order_im_to(ord_t order, const otinum_t* num, otinum_t* res){
+
+    ord_t p;
+    ndir_t off, n, total;
+    int status = oti_copy_to(num, res);
+
+    if (status != DN_OK){
+        return status;
+    }
+
+    if (order == 0){
+
+        total = sshelp_ndir_total(res->nact, res->trc_order);
+
+        if (total > 0){
+            memset(res->p_im, 0, (size_t)total * sizeof(coeff_t));
+        }
+
+        res->act_order = 0;
+
+        return DN_OK;
 
     }
 
-    
+    res->re = 0.0;
+
+    for (p = 1; p <= res->trc_order; p++){
+
+        if (p == order){
+            continue;
+        }
+
+        off = sshelp_order_offset(res->nact, p);
+        n   = sshelp_ndir_order(res->nact, p);
+
+        if (n > 0){
+            memset(res->p_im + off, 0, (size_t)n * sizeof(coeff_t));
+        }
+
+    }
+
+    res->act_order = (order <= res->act_order && res->nact > 0) ? order : 0;
+
+    return DN_OK;
+
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+otinum_t oti_compact(const otinum_t* num){
+
+    otinum_t res = oti_init();
+
+    return dnsm_ret(oti_compact_to(num, &res), &res);
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
-// ****************************************************************************************************
-inline otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
-    
-    otinum_t num = oti_init();
-    ord_t ordi; 
+// *******************************************************************************************************
+int oti_compact_to(const otinum_t* num, otinum_t* res){
 
-    uint64_t total_memory = 0;
-    void * memory = NULL;
+    bases_t k = num->nact, new_k = 0, b;
+    ord_t p, new_act = 0, trc = num->trc_order;
+    ndir_t j, n, off_old, off_new, nimag_new, start;
+    const coeff_t* C;
+    coeff_t re = num->re;
 
-    
-    // Get the number of imaginary directions for nbases and order.
-    num.ndir = dhelp_ndirTotal( nbases, order)-1; // Excludes the real direction.
+    // Colex order: the last nonzero of each order has the largest base of that order.
+    for (p = 1; p <= num->act_order && k > 0; p++){
 
-    // Set the values of the number first.
-    num.order  = order;
-    num.nbases = nbases;
+        n = sshelp_ndir_order(k, p);
+        C = num->p_im + sshelp_order_offset(k, p);
 
+        for (j = n; j > 0; j--){
 
-    if (num.ndir != 0){
+            if (C[j - 1] != 0.0){
 
-        total_memory = num.order*sizeof(coeff_t*) + // Memory for p_im
-                       num.order*sizeof( ndir_t ) + // Memory for p_ndpo
-                       num.ndir *sizeof(coeff_t ) ; // Memory for imaginary direction coefficients.
+                b = dnsb_max_base(j - 1, p);
+                new_k   = (b > new_k) ? b : new_k;
+                new_act = p;
+                break;
 
-        // Goal: Do only one malloc call.
-        memory = malloc(total_memory);
-        
-        if (memory == NULL ){
-            printf("--- ERROR: Out of memory to create oti number.\n");
-            exit(OTI_OutOfMemory);
-        }
-
-        // Allocate memory.
-        num.p_im   = ( coeff_t** ) memory; // First element is p_im
-
-        // Shift memory.
-        memory += num.order*sizeof(coeff_t*);
-
-        num.p_ndpo = ( ndir_t*   ) memory;
-        
-        memory += num.order*sizeof(ndir_t);
-
-        for (ordi = 0; ordi<num.order; ordi++){
-
-            num.p_ndpo[ordi] = dhelp_extract_ndirOrder( num.nbases, ordi+1, dhl );
-            num.p_im[ordi]   = ( coeff_t* ) memory;
-
-            // Move memory:
-            memory += num.p_ndpo[ordi]*sizeof(coeff_t );
-            // num.ndir += num.p_ndpo[ordi];
+            }
 
         }
-    
+
+    }
+
+    if (new_k == 0){
+        new_act = 0;
+    }
+
+    nimag_new = sshelp_ndir_total(new_k, trc);
+
+    if (res == num){
+
+        // In place, lowest order first: new offsets and blocks are no larger than the old ones.
+        for (p = 1; p <= new_act; p++){
+
+            off_old = sshelp_order_offset(k, p);
+            off_new = sshelp_order_offset(new_k, p);
+            n       = sshelp_ndir_order(new_k, p);
+
+            memmove(res->p_im + off_new, res->p_im + off_old, (size_t)n * sizeof(coeff_t));
+
+        }
+
     } else {
-            
-        // Set pointers to null, no memory allocation required.
 
-        num.p_im   = NULL;   
-        num.p_ndpo = NULL;     
+        int status = dnsm_prepare(res, new_k, trc);
 
-    } 
+        if (status != DN_OK){
+            return status;
+        }
 
-    return num;
-    
+        for (p = 1; p <= new_act; p++){
+
+            off_old = sshelp_order_offset(k, p);
+            off_new = sshelp_order_offset(new_k, p);
+            n       = sshelp_ndir_order(new_k, p);
+
+            memcpy(res->p_im + off_new, num->p_im + off_old, (size_t)n * sizeof(coeff_t));
+
+        }
+
+    }
+
+    // Orders above the new act_order are zero.
+    start = sshelp_order_offset(new_k, (ord_t)(new_act + 1));
+
+    if (nimag_new > start){
+        memset(res->p_im + start, 0, (size_t)(nimag_new - start) * sizeof(coeff_t));
+    }
+
+    res->re        = re;
+    res->nact      = new_k;
+    res->trc_order = trc;
+    res->act_order = new_act;
+
+    return DN_OK;
+
 }
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-// // ****************************************************************************************************
-// inline otinum_t oti_createEmpty(  bases_t nbases, ord_t order, dhelpl_t dhl ){
-    
-//     otinum_t num;
-//     ord_t ordi; 
-    
-//     // Get the number of imaginary directions for nbases and order.
-//     num.ndir = 0; // Excludes the real direction.
-
-//     // Set the values of the number first.
-//     num.order  = order;
-//     num.nbases = nbases;
-
-    
-//     if (num.order != 0){
-            
-//         // Allocate memory.
-//         num.p_im   = ( coeff_t** ) malloc( num.order*sizeof(coeff_t*) );
-//         num.p_ndpo = (  ndir_t*  ) malloc( num.order*sizeof(ndir_t) );
-
-//         if (num.p_im == NULL  || num.p_ndpo == NULL ){
-//             printf("--- ERROR: Out of memory\n");
-//             exit(OTI_OutOfMemory);
-//         }
-
-//         for (ordi = 0; ordi<num.order; ordi++){
-
-//             num.p_ndpo[ordi] = dhelp_extract_ndirOrder( num.nbases, ordi+1, dhl );
-//             // num.p_ndpo[ordi] = dhelp_ndirOrder( num.nbases, ordi+1 );
-//             num.p_im[ordi]   = ( coeff_t* ) malloc( num.p_ndpo[ordi]*sizeof(coeff_t) );
-//             num.ndir += num.p_ndpo[ordi];
-
-
-//             if ( num.p_im[ordi] == NULL ){
-//                 printf("--- ERROR: Out of memory\n");
-//                 exit(OTI_OutOfMemory);
-//             }
-
-//         }
-
-//     } else {
-
-//         // Set pointer to null
-//         num.p_im = NULL;   
-//         num.p_ndpo = NULL;     
-//     }
-
-//     return num;
-    
-// }
-// // ----------------------------------------------------------------------------------------------------
-
+// -------------------------------------------------------------------------------------------------------

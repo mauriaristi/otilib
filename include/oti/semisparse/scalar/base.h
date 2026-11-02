@@ -1,333 +1,406 @@
 #ifndef OTI_SEMISPARSE_SCALAR_BASE_H
 #define OTI_SEMISPARSE_SCALAR_BASE_H
 
+// Semi-sparse scalar: memory, element access, conversions and truncation.
+//
+// Conventions for the whole ssoti_ API:
+//   - Directions are given as global (index, order) pairs, the same numbering as sotinum_t.
+//   - Allocating functions return a new number the caller releases with ssoti_free().
+//   - A `_to` variant writes into an existing number @p res, grows its buffers as needed and
+//     replaces its active set, truncation order and values. @p res may alias any input.
+//   - Scratch space comes from a per-thread workspace (ssoti_ws()); no function uses the dhelp
+//     p_im scratch arrays.
+//   - Allocation failures print a message and exit(OTI_OutOfMemory), like the sparse types.
+
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     MEMORY     ------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Real zero with no active bases and truncation order 0.
+ *
+ * @return Number with NULL buffers (flag = 1). ssoti_free() on it is a no-op.
+ */
+ssotinum_t ssoti_init(void);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Creates a zero number over the given active bases.
+ *
+ * @param[in] bases     Active global bases, strictly increasing, length @p k. May be NULL if k = 0.
+ * @param[in] k         Number of active bases.
+ * @param[in] trc_order Truncation order.
+ *
+ * @return Newly allocated number with act_order = 0. Caller owns memory and must free via
+ *         ssoti_free().
+ */
+ssotinum_t ssoti_create_empty(const bases_t* bases, bases_t k, ord_t trc_order);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Creates a real number with no active bases.
+ *
+ * @param[in] re        Real value.
+ * @param[in] trc_order Truncation order.
+ *
+ * @return Newly allocated number (no buffers). Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_create_r(coeff_t re, ord_t trc_order);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Creates the imaginary unit along a direction: coefficient 1 along it, zero elsewhere.
+ *
+ * Semi-sparse counterpart of the e() creators of the sparse, dense and static types. The active
+ * set is the distinct bases of the direction, and the truncation order is the larger of
+ * @p trc_order and the direction's order, so the coefficient is never dropped.
+ *
+ * @param[in] idx       Global direction index within @p order.
+ * @param[in] order     Direction order; 0 gives the real number 1.
+ * @param[in] trc_order Requested truncation order.
+ *
+ * @return Newly allocated number. Caller must free via ssoti_free(). Exits with OTI_BadIndx if the
+ *         direction needs a base label above 65535.
+ */
+ssotinum_t ssoti_e(imdir_t idx, ord_t order, ord_t trc_order);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Grows the buffers of a number to hold at least @p cap bases at @p trc_order.
+ *
+ * Keeps nbases, the active set and every coefficient; if @p trc_order is above the current
+ * truncation order, the new orders are zero and trc_order is raised.
+ *
+ * @param[in,out] num       Number (must own its memory).
+ * @param[in]     cap       Required base capacity.
+ * @param[in]     trc_order Required truncation order.
+ */
+void ssoti_reserve(ssotinum_t* num, bases_t cap, ord_t trc_order);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Releases the buffers of a number and resets it to ssoti_init().
+ *
+ * Does nothing to the buffers of a view (flag = 0).
+ *
+ * @param[in,out] num Number.
+ */
+void ssoti_free(ssotinum_t* num);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse copy
+ * @{
+ */
+
+/**
+ * @brief Copies a number.
+ *
+ * @param[in] num Number to copy.
+ *
+ * @return Newly allocated copy with capacity nbases. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_copy(const ssotinum_t* num);
+
+/**
+ * @brief Copies a number into an existing one.
+ *
+ * @param[in]     num Number to copy.
+ * @param[in,out] res Destination; grown as needed.
+ */
+void ssoti_copy_to(const ssotinum_t* num, ssotinum_t* res);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Adds bases to the active set of a number, keeping its value.
+ *
+ * The new active set is the union of the current one and @p bases. Coefficients are moved to
+ * their new local positions (zero-extension when the current set is a leading part of the union,
+ * remap otherwise); new directions are zero.
+ *
+ * @param[in]     bases Global bases to add, strictly increasing, length @p k.
+ * @param[in]     k     Number of bases to add.
+ * @param[in,out] num   Number (must own its memory).
+ */
+void ssoti_add_bases(const bases_t* bases, bases_t k, ssotinum_t* num);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Sets a number to a real value, keeping its truncation order. Clears the active set.
+ *
+ * @param[in]     val Real value.
+ * @param[in,out] num Number.
+ */
+void ssoti_set_r(coeff_t val, ssotinum_t* num);
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     ACCESS     ------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Coefficient of a global direction.
+ *
+ * @param[in] idx   Global direction index within @p order.
+ * @param[in] order Direction order; 0 gives the real part.
+ * @param[in] num   Number.
+ *
+ * @return The coefficient; 0 when a base of the direction is not active or order > trc_order.
+ */
+coeff_t ssoti_get_item(imdir_t idx, ord_t order, const ssotinum_t* num);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Sets the coefficient of a global direction.
+ *
+ * Adds the bases of the direction to the active set when they are missing (unless @p val is 0,
+ * which is then a no-op). Raises act_order when needed. Ignored when order > trc_order.
+ *
+ * @param[in]     val   Value.
+ * @param[in]     idx   Global direction index within @p order.
+ * @param[in]     order Direction order; 0 sets the real part.
+ * @param[in,out] num   Number.
+ */
+void ssoti_set_item(coeff_t val, imdir_t idx, ord_t order, ssotinum_t* num);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Derivative along a global direction: the coefficient times the product of the
+ * factorials of the base multiplicities.
+ *
+ * @param[in] idx   Global direction index within @p order.
+ * @param[in] order Direction order.
+ * @param[in] num   Number.
+ *
+ * @return The derivative value.
+ */
+coeff_t ssoti_get_deriv(imdir_t idx, ord_t order, const ssotinum_t* num);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Density diagnostic: nonzero imaginary coefficients divided by imaginary slots.
+ *
+ * @param[in] num Number.
+ *
+ * @return Value in [0, 1]; 0 when there are no slots.
+ */
+double ssoti_density(const ssotinum_t* num);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Bytes used by the buffers of a number (its capacity), plus the struct.
+ *
+ * @param[in] num Number.
+ *
+ * @return Size in bytes.
+ */
+size_t ssoti_memory_size(const ssotinum_t* num);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Prints a number: real part, active bases, and every nonzero direction as global bases.
+ *
+ * @param[in] num Number.
+ */
+void ssoti_print(const ssotinum_t* num);
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     CONVERSION     --------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Converts a sparse number to semi-sparse.
+ *
+ * The active set is every base present in a stored direction of @p num (explicit zeros included),
+ * sorted.
+ *
+ * @param[in] num Sparse number.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated number with the same truncation order. Caller must free via
+ *         ssoti_free().
+ */
+ssotinum_t ssoti_from_soti(const sotinum_t* num, dhelpl_t dhl);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Converts a semi-sparse number to sparse.
+ *
+ * Only nonzero coefficients are stored; each order comes out sorted by global index.
+ *
+ * @param[in] num Semi-sparse number.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated sparse number. Caller must free via soti_free().
+ */
+sotinum_t ssoti_to_soti(const ssotinum_t* num, dhelpl_t dhl);
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     TRUNCATION     --------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+/**
+ * @name Semi-sparse truncation of a direction
+ * Zeroes a direction and every higher-order direction that contains it (same result as
+ * soti_truncate_im()). The active set is kept; call ssoti_compact() to drop emptied bases.
+ * @{
+ */
+
+/**
+ * @brief Truncates a direction (allocating variant).
+ *
+ * @param[in] idx   Global direction index within @p order.
+ * @param[in] order Direction order (>= 1).
+ * @param[in] num   Number.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_truncate_im(imdir_t idx, ord_t order, const ssotinum_t* num);
+
+/**
+ * @brief Truncates a direction into an existing number.
+ *
+ * @param[in]     idx   Global direction index within @p order.
+ * @param[in]     order Direction order (>= 1).
+ * @param[in]     num   Number.
+ * @param[in,out] res   Result; may alias @p num.
+ */
+void ssoti_truncate_im_to(imdir_t idx, ord_t order, const ssotinum_t* num, ssotinum_t* res);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse truncation of orders
+ * Zeroes orders @p order and higher and lowers act_order to at most order-1, keeping the
+ * truncation order (same result as soti_truncate_order()). Order 0 gives a real zero.
+ * @{
+ */
+
+/**
+ * @brief Truncates orders (allocating variant).
+ *
+ * @param[in] order First order removed.
+ * @param[in] num   Number.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_truncate_order(ord_t order, const ssotinum_t* num);
+
+/**
+ * @brief Truncates orders into an existing number.
+ *
+ * @param[in]     order First order removed.
+ * @param[in]     num   Number.
+ * @param[in,out] res   Result; may alias @p num.
+ */
+void ssoti_truncate_order_to(ord_t order, const ssotinum_t* num, ssotinum_t* res);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse single-order extraction
+ * Keeps only the coefficients of one order, zero elsewhere including the real part (same result
+ * as soti_get_order_im()). Order 0 keeps only the real part.
+ * @{
+ */
+
+/**
+ * @brief Extracts one order (allocating variant).
+ *
+ * @param[in] order Order to keep.
+ * @param[in] num   Number.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_get_order_im(ord_t order, const ssotinum_t* num);
+
+/**
+ * @brief Extracts one order into an existing number.
+ *
+ * @param[in]     order Order to keep.
+ * @param[in]     num   Number.
+ * @param[in,out] res   Result; may alias @p num.
+ */
+void ssoti_get_order_im_to(ord_t order, const ssotinum_t* num, ssotinum_t* res);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse compaction
+ * Removes every active base whose directions are all zero and lowers act_order to the highest
+ * order with a nonzero. The value is unchanged.
+ * @{
+ */
+
+/**
+ * @brief Compacts a number (allocating variant).
+ *
+ * @param[in] num Number.
+ *
+ * @return Newly allocated result with capacity equal to its new nbases. Caller must free via
+ *         ssoti_free().
+ */
+ssotinum_t ssoti_compact(const ssotinum_t* num);
+
+/**
+ * @brief Compacts a number into an existing one.
+ *
+ * @param[in]     num Number.
+ * @param[in,out] res Result; may alias @p num (then compacted in place, without shrinking).
+ */
+void ssoti_compact_to(const ssotinum_t* num, ssotinum_t* res);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     WORKSPACE     ---------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+/**
+ * @brief The calling thread's scratch workspace for semi-sparse scalar operations.
+ *
+ * Thread-local; grown by the operations as needed and kept between calls.
+ *
+ * @return Pointer to the workspace of the calling thread.
+ */
+sshelp_ws_t* ssoti_ws(void);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Releases the calling thread's scratch workspace.
+ */
+void ssoti_ws_release(void);
+// -------------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Perform a taylor series integration according to the OTI imaginary directions.
-
-@param[in]  deltas Array with the deltas for every imaginary basis.
-@param[in]  num   OTI number to Taylor-integrate.
-@param[in]  res   Addres of the resulting OTI number that will hold result.
-@param[in]  dhl   Direction helper list.
-******************************************************************************************************/
-semiotin_t ssoti_taylor_integrate(    coeff_t* deltas, semiotin_t* num,                 dhelpl_t dhl);
-void      ssoti_taylor_integrate_to( coeff_t* deltas, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Truncate everything but the coefficeints at a given order.
-
-@param[in]  ord   Order of imaginary direction to extract.
-@param[in]  num   OTI number to truncate direction
-@param[in]  res   Addres of the resulting OTI number that will hold result.
-@param[in]  dhl   Direction helper list.
-******************************************************************************************************/
-semiotin_t ssoti_get_order_im(    ord_t order, semiotin_t* num,                 dhelpl_t dhl);
-void      ssoti_get_order_im_to( ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Truncate an imaginary direction.
-
-@param[in]  num   OTI number to truncate direction
-@param[in]  idx   Index of imaginary direction to extract.
-@param[in]  ord   Order of imaginary direction to extract.
-@param[in]  res   Addres of the resulting OTI number that will hold result.
-@param[in]  dhl   Direction helper list.
-******************************************************************************************************/
-semiotin_t ssoti_truncate_im(    imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
-void      ssoti_truncate_im_to( imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Extract derivative from an OTI number as an oti number.
-
-@param[in]  idx   Index of imaginary direction to extract.
-@param[in]  ord   Order of imaginary direction to extract.
-@param[in]  num   OTI number to extract direction
-@param[in]  res   Addres of the resulting OTI number that will hold result.
-@param[in]  dhl   Direction helper list.
-******************************************************************************************************/
-semiotin_t ssoti_extract_deriv(   imdir_t idx, ord_t ord, semiotin_t* num,                 dhelpl_t dhl);
-void      ssoti_extract_deriv_to(imdir_t idx, ord_t ord, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Extract imaginary direction as an OTI number.
-
-@param[in]  idx   Index of imaginary direction to extract.
-@param[in]  ord   Order of imaginary direction to extract.
-@param[in]  num   OTI number to extract direction
-@param[in]  res   Addres of the resulting OTI number that will hold result.
-@param[in]  dhl   Direction helper list.
-******************************************************************************************************/
-semiotin_t ssoti_extract_im(   imdir_t idx, ord_t ord, semiotin_t* num,                 dhelpl_t dhl);
-void      ssoti_extract_im_to(imdir_t idx, ord_t ord, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-/**************************************************************************************************//**
-@brief Function utilities to read and save OTI numbers.
-
-******************************************************************************************************/
-void*     ssoti_read_from_mem_to( void* mem,       semiotin_t* dst, dhelpl_t dhl);
-void      ssoti_save_to_mem(      semiotin_t* num,  void* mem,      dhelpl_t dhl);
-uint64_t  ssoti_get_memsize_save( semiotin_t* num,                  dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-/**************************************************************************************************//**
-@brief Function that distribute memory along the different components of an OTI number.
-
-@param[in]  mem   Addres of the allocated memory.
-@param[in]  p_nnz List of values corresponding to the allocation size per element.
-@param[in]  order OTI Truncation order.
-@param[in]  flag  Memory flag. flag=1 means memory is owned by the respective sotinum, otherwise flag=0.
-@param[in]  res   Addres of the resulting OTI number that will be distributed accordingly.
-@param[out] void* Address after every item was distributed.
-******************************************************************************************************/
-void* ssoti_distribute_memory(void* mem, const ndir_t* p_nnz, ord_t order, flag_t flag, semiotin_t* res);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Function that compares memory from two oti numbers and determines weather if memory reallocation 
-       is necessary if src is will be copied to dest.
-
-@param[in] src   Address of the source oti number.
-@param[in] dest  Address of the destination oti number.
-******************************************************************************************************/
-uint8_t ssoti_requiresrealloc(semiotin_t* src, semiotin_t* dest);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Initialization of a sparse oti type. This function prevents memory leaks from uninitialized 
-       pointers.
-
-******************************************************************************************************/
-semiotin_t ssoti_init(void);
-// ----------------------------------------------------------------------------------------------------
-
-
-/**************************************************************************************************//**
-@brief Copy information from src to dest. Does not check if memory needs to be reallocated.
-Useful when copying data to a temporal sotinum.
-
-dest = src
-
-@param[in] src  Oti number.
-@param[in] dest Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/
-void ssoti_set_o( semiotin_t* src, semiotin_t* dest, dhelpl_t dhl);
-void ssoti_set_r(    coeff_t src, semiotin_t* dest, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Copy information from src to dest only with orders ord or greater. Does not check if memory 
-needs to be reallocated. Useful when copying data to a temporal sotinum.
-
-@param[in] src Oti number.
-@param[in] ord Order.
-@param[in] dest Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/
-void ssoti_set_trunc( semiotin_t* src, ord_t ord, semiotin_t* dest, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief  Set the derivative corresponding to the index and order.
-
-@param[in] coef Derivative to be set.
-@param[in] idx Number of imaginary bases.
-@param[in] order Truncation order of the number.
-@param[in] num Address of the otin number to be modified.    
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-void ssoti_set_deriv_r(   coeff_t  coef, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
-void ssoti_set_deriv_o( semiotin_t* coef, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief  Get the derivative corresponding to the index and order.
-
-@param[in] idx Number of imaginary bases.
-@param[in] order Truncation order of the number.
-@param[in] num Address of the otin number to be modified.    
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-coeff_t   ssoti_get_deriv(    imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
-semiotin_t ssoti_get_deriv_o(  imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
-void      ssoti_get_deriv_to( imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Generate a temporal sparse otinum with the allocated data in the direction helper.
-
-@param[in] ntmp Number of temporal array to be retreived.
-@param[in] order Truncation order.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_get_tmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl);
-semiotin_t ssoti_get_rtmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-
-/**************************************************************************************************//**
-@brief Function that inserts the corresponding value in the arrays defining the oti number. If the 
-array requires reallocation, it performs the reallocation in memory. This function preserves the order
-of the indices.
-
-@param[in] val Value to be set.
-@param[in] idx Index of the imaginary direction
-@param[in] order Order that defines the imaginary direction.
-@param[inout] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-void ssoti_insert_item(ndir_t pos, coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Function that sets the specified item value.
-
-@param[in] val Value to be set.
-@param[in] idx Index of the imaginary direction
-@param[in] order Order that defines the imaginary direction.
-@param[inout] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-void ssoti_set_item(   coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
-void ssoti_set_im_r(   coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
-void ssoti_set_im_o(semiotin_t* val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Function that gets the specified imaginary direction.
-
-@param[in] idx Index of the imaginary direction
-@param[in] order Order that defines the imaginary direction.
-@param[in] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-coeff_t ssoti_get_item(    imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
-coeff_t ssoti_get_im(      imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
-semiotin_t ssoti_get_im_o(  imdir_t idx, ord_t order, semiotin_t* num,                 dhelpl_t dhl);
-void    ssoti_get_im_to_o( imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-void    ssoti_get_im_to_r( imdir_t idx, ord_t order, semiotin_t* num,   coeff_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Copy to another (new) sparse oti elements.
-
-@param[in] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_copy(             semiotin_t* num,                  dhelpl_t dhl);
-void      ssoti_copy_to(          semiotin_t* src, semiotin_t* dest, dhelpl_t dhl);
-void      ssoti_copy_nomemchk_to( semiotin_t* src, semiotin_t* dest, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-/**************************************************************************************************//**
-@brief Print function for oti numbers
-
-@param[in] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-void ssoti_print(semiotin_t* num, dhelpl_t dhl);
-void ssoti_print_full(semiotin_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-/**************************************************************************************************//**
-@brief Sets all coefficients to the given parameter.
-
-@param[in] a Real coefficient.
-@param[out] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-void ssoti_help_set_all_coeffs( coeff_t a, semiotin_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-/**************************************************************************************************//**
-@brief Free memory allocated for the given OTI number.
-
-@param[in] num OTI number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-void ssoti_free(semiotin_t* num);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Create a new oti number with reserved memory and given real coefficient. 
-
-@param[in] num Real coefficient of the OTI number.
-@param[in] nbases Number of bases.
-@param[in] order Truncation order.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_createReal_bases(  coeff_t num, bases_t nbases, ord_t order, dhelpl_t dhl);
-semiotin_t ssoti_createEmpty_bases(              bases_t nbases, ord_t order, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Create a new oti number with a real coefficient given by the input parameter as well as 
-the truncation order.  
-
-@param[in] num Real coefficient of the OTI number.
-@param[in] nbases Truncation order.
-@param[in] order Truncation order.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_createReal(coeff_t num, bases_t tot_nbases, ord_t trc_order, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Allocate a new sparse oti number in memory. Creation follows the standard memory sizes as 
-indicated in dhl.
-
-The number is created with a non-zero real coefficient (which is initialized to zero) and memory is 
-allocated according to the pair tot_nbases and trc_order.
-
-@param[in] tot_nbases Total number of bases to allocate.
-@param[in] trc_order Truncation order.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_createEmpty( bases_t tot_nbases, ord_t trc_order, dhelpl_t dhl); 
-semiotin_t ssoti_createEmpty_like( semiotin_t* other, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Allocate a new sparse oti number in memory using a specified allocated size.
-
-@param[in] nnz Array of length order containing the sizes per order to be allocated.
-@param[in] order Truncation order.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_createEmpty_predef( bases_t nbases, ord_t trc_order, dhelpl_t dhl); 
-// ----------------------------------------------------------------------------------------------------
-
-/**************************************************************************************************//**
-@brief Sets all coefficients to zero if they have imagianry orders from ord_start to ord_end.
-
-@param[in] ord_start Starting order of im. directions to be removed from the number.
-@param[in] ord_end Ending order of im. directions to be removed from the number.
-@param[in] num OTI number to be operated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-void ssoti_reset_orders(ord_t ord_start, ord_t ord_end, semiotin_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
-
-
-/**************************************************************************************************//**
-@brief Sets all coefficients to zero if they have imagianry basis from base_start to base_end.
-
-@param[in] base_start Starting bases of im. directions to be reset from the number.
-@param[in] base_end Ending bases of im. directions to be reset from the number.
-@param[in] num OTI number to be operated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-void ssoti_reset_nbases(bases_t base_start, bases_t base_end, semiotin_t* num, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 #endif

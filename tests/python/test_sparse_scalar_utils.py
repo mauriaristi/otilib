@@ -18,6 +18,7 @@ X0 = 0.3
 Y0 = 0.2
 
 
+# ********************************************************************************************************
 def _directions(max_order):
     """
     Lists every bivariate derivative direction up to a total order.
@@ -45,8 +46,10 @@ def _directions(max_order):
     ]
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _humdir(a, b):
     """
     Builds the human-readable imaginary direction for d^(a+b) / dx^a dy^b.
@@ -71,8 +74,10 @@ def _humdir(a, b):
     return [[basis, exp] for basis, exp in ((1, a), (2, b)) if exp > 0]
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _bivariate_number():
     """
     Creates f(x, y) = exp(x + 2y) at (X0, Y0) truncated at MAX_ORDER.
@@ -97,8 +102,10 @@ def _bivariate_number():
     return oti.exp(x + 2.0 * y)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _bivariate_deriv(a, b):
     """
     Exact derivative d^(a+b) / dx^a dy^b of exp(x + 2y) at (X0, Y0).
@@ -123,8 +130,10 @@ def _bivariate_deriv(a, b):
     return 2.0**b * math.exp(X0 + 2.0 * Y0)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _assert_truncated(res, removed):
     """
     Asserts that ``res`` equals exp(x + 2y) except on directions where ``removed`` is True.
@@ -152,8 +161,10 @@ def _assert_truncated(res, removed):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "humdir, removed",
     [
@@ -185,8 +196,10 @@ def test_truncate_method(humdir, removed):
     _assert_truncated(f, lambda a, b: False)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_truncate_module_function():
     """
     Checks that oti.truncate matches the method, with and without a preallocated output.
@@ -203,8 +216,10 @@ def test_truncate_module_function():
     _assert_truncated(out, removed)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_truncate_unsupported_type():
     """
     Checks that oti.truncate rejects unsupported types.
@@ -217,8 +232,10 @@ def test_truncate_unsupported_type():
     # end with
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("order", range(1, MAX_ORDER + 2))
 def test_truncate_order(order):
     """
@@ -240,8 +257,10 @@ def test_truncate_order(order):
     _assert_truncated(f, lambda a, b: False)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_truncate_order_zero_removes_real_part():
     """
     Checks that truncate_order(0) also removes the real part, which is the term of order zero.
@@ -262,8 +281,10 @@ def test_truncate_order_zero_removes_real_part():
     _assert_truncated(f, lambda a, b: False)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("h", [0.1, 0.05, -0.2])
 def test_rom_eval_univariate_taylor_polynomial(h):
     """
@@ -285,13 +306,16 @@ def test_rom_eval_univariate_taylor_polynomial(h):
     assert abs(value - math.exp(X0 + h)) <= bound
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_rom_eval_polynomial_is_exact():
     """
     Checks that rom_eval reproduces a polynomial of total degree <= MAX_ORDER exactly.
     """
 
+    # ****************************************************************************************************
     def poly(x, y):
         """
         Evaluates the reference polynomial.
@@ -316,6 +340,7 @@ def test_rom_eval_polynomial_is_exact():
         return x**3 * y**2 + 2.0 * x * y - y**4 + 3.0 * x**6 + 0.5
 
     # end function
+    # ----------------------------------------------------------------------------------------------------
 
     dx, dy = 0.4, -0.7
     x = X0 + oti.e(1, order=MAX_ORDER)
@@ -326,8 +351,10 @@ def test_rom_eval_polynomial_is_exact():
     assert value == pytest.approx(poly(X0 + dx, Y0 + dy), rel=1e-12)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_rom_eval_bivariate_matches_sympy():
     """
     Checks rom_eval of sin(x*y) against the sympy total-degree-6 Taylor polynomial.
@@ -357,8 +384,10 @@ def test_rom_eval_bivariate_matches_sympy():
     assert float(f.rom_eval([1, 2], [dx, dy]).real) == pytest.approx(expected, rel=1e-12)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_rom_eval_basis_order_and_omitted_basis():
     """
     Checks that basis order does not matter and that omitted bases use a zero step.
@@ -378,8 +407,10 @@ def test_rom_eval_basis_order_and_omitted_basis():
     assert array_deltas == pytest.approx(ordered, rel=1e-14)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_rom_eval_length_mismatch():
     """
     Checks that rom_eval raises ValueError when bases and deltas have different lengths.
@@ -393,6 +424,7 @@ def test_rom_eval_length_mismatch():
     # end with
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":

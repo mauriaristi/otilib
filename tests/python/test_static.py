@@ -9,6 +9,7 @@ import pyoti.static.onumm2n2 as st22
 import pyoti.static.onumm3n2 as st32
 
 
+# ********************************************************************************************************
 def test_static_onumm1n1_exp():
     """
     Test onumm1n1 (1 basis, order 1) exponential.
@@ -21,8 +22,10 @@ def test_static_onumm1n1_exp():
     assert float(f.get_deriv([1])) == pytest.approx(np.exp(1.5), abs=1e-7)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_static_onumm2n2_multivariate():
     """
     Test onumm2n2 (2 bases, order 2) multivariate sine.
@@ -45,8 +48,10 @@ def test_static_onumm2n2_multivariate():
     assert float(f.get_deriv([1, 2])) == pytest.approx(expected_dxdy, abs=1e-7)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_static_onumm3n2_product():
     """
     Test onumm3n2 (3 bases, order 2) three-variable product: f(x,y,z) = x*y*z.
@@ -69,6 +74,7 @@ def test_static_onumm3n2_product():
     assert float(f.get_deriv([2, 3])) == pytest.approx(1.0)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":

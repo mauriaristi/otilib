@@ -11,4 +11,4 @@ dependencies:
   - ipykernel
   - vtk
   - scikit-umfpack
-  - scikit-sparse
+  - scikit-sparse<0.5  # 0.5 returns a tuple from cholesky(); sparse/linalg.pxi needs the 0.4 Factor

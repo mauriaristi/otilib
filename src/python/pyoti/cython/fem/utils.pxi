@@ -75,25 +75,46 @@ cpdef get_global_algebra():
     
 #-----------------------------------------------------------------------------------------------------
 
-# ****************************************************************************************************
+# ********************************************************************************************************
 cpdef set_global_algebra(object algebra):
-  """
-  PORPUSE: Define the algebra used for the FEM analysis.
-  """
-  global alg
+    """
+    Set and validate the algebra used for FEM operations.
 
-  try:
-    
-    new_el_test      = algebra.elm_help()
-    new_gauss_array  = algebra.zeros((2,2),nip=2)
-    new_gauss_scalar = algebra.zero(nip=2)
-    
+    Parameters
+    ----------
+    algebra : module
+        Algebra module providing the FEM scalar, array, Gauss, and element-helper APIs.
+
+    Raises
+    ------
+    ValueError
+        If the algebra fails one of the required FEM API probes.
+
+    Examples
+    --------
+    >>> import pyoti.sparse as oti
+    >>> set_global_algebra(oti)
+    """
+    global alg
+
+    try:
+
+        new_el_test = algebra.elm_help()
+        new_gauss_array = algebra.zeros((2, 2), nip=2)
+        new_gauss_scalar = algebra.zero(nip=2)
+
+    except Exception as exc:
+
+        raise ValueError(f"Invalid algebra for pyoti.fem: {exc}") from exc
+
+    # end try
+
     alg = algebra
 
-  except:
-    raise ValueError("Invalid algebra for << pyoti.fem >> module.")
-  # end try
-    
+# end function
+
+# --------------------------------------------------------------------------------------------------------
+
 #-----------------------------------------------------------------------------------------------------
 
 
@@ -591,7 +612,4 @@ cdef dict enum2str = {
 
 #   return (np_coords, np_weights)
 # #-----------------------------
-
-
-
 

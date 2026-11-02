@@ -1,998 +1,610 @@
+// Semi-sparse scalar: kernels and algebra.
 
 
+// *******************************************************************************************************
+// Rank-fallback product of one order pair: res_r[rank(u_i ∪ u_j)] += A[i] * B[j].
+static void ssoti_kernel_pair_rank(const coeff_t* A, ord_t p, const coeff_t* B, ord_t q,
+                                   bases_t k, coeff_t* R){
 
+    ndir_t i, j, Np = sshelp_ndir_order(k, p), Nq = sshelp_ndir_order(k, q);
+    bases_t *dirs_p, *dirs_q;
+    sshelp_rank_tab_t tab;
+    coeff_t ai;
 
+    dirs_p = (bases_t*)malloc((size_t)Np * p * sizeof(bases_t));
+    dirs_q = (bases_t*)malloc((size_t)Nq * q * sizeof(bases_t));
 
-// Algebraic operations:
+    if (dirs_p == NULL || dirs_q == NULL || sshelp_rank_tab_init(&tab, k, p + q) != SSHELP_OK){
+        ssoti_out_of_memory();
+    }
 
+    sshelp_local_dirs(k, p, dirs_p);
+    sshelp_local_dirs(k, q, dirs_q);
 
-// Negation
+    for (i = 0; i < Np; i++){
 
-// ****************************************************************************************************
-semiotin_t ssoti_neg(semiotin_t* num, dhelpl_t dhl){
-    
-    return ssoti_mul_ro(-1.0,num,dhl);
+        ai = A[i];
 
-}
-// ----------------------------------------------------------------------------------------------------
+        if (ai == 0.0){
+            continue;
+        }
 
-// ****************************************************************************************************
-semiotin_t ssoti_abs(semiotin_t* num, dhelpl_t dhl){
-    
-    semiotin_t res;
-
-    res = ssoti_copy(num,dhl);
-
-    ssoti_abs_to( num, &res ,dhl);
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-// Addition.
-
-// ****************************************************************************************************
-semiotin_t ssoti_sum_oo(semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl){
-
-    semiotin_t res, tmp;
-
-    tmp = ssoti_base_sum( num1, num2, dhl);
-
-    res = ssoti_copy(&tmp, dhl); // Newly allocated.
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-semiotin_t ssoti_sum_or(semiotin_t* num, coeff_t val, dhelpl_t dhl){
-    
-    return ssoti_sum_ro(val, num, dhl);
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-semiotin_t ssoti_sum_ro(coeff_t val, semiotin_t* num, dhelpl_t dhl){
-    
-    semiotin_t res = ssoti_copy(num,dhl);
-
-    res.re += val;
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-inline semiotin_t ssoti_base_sum(semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl){
-
-    semiotin_t tmp;
-    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
-    ord_t ordi;
-
-    // Create a semiotin with no elements in imaginary directions.
-    tmp = ssoti_get_rtmp(7, res_ord, dhl);
-
-    tmp.re = num1->re + num2->re; 
-
-    res_ord = MAX(num1->act_order,num2->act_order);
-    tmp.act_order = res_ord;
-
-    // TODO: divide in three for loops
-    // ord_t min_ord = MIN(num1->order,num2->order);
-    // for(ordi=0; ordi<min_ord; ordi++){ 
-    //     dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-    //                           num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-    //                           tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-    // }
-
-    // for(ordi=min_ord; ordi< num1->order; ordi++){ 
-    //     dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-    //                           NULL, NULL, 0,
-    //                           tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-    // }
-
-    // for(ordi=min_ord; ordi< num2->order; ordi++){ 
-    //     dhelp_sparse_add_dirs(num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-    //                           NULL, NULL, 0,
-    //                           tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);    
-    // }
-    
-    for(ordi=0; ordi<res_ord; ordi++){
-        
-        if (ordi < num1->act_order && ordi < num2->act_order){
-            
-            dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-
-        } else if (ordi < num1->act_order){
-
-            dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-                                  NULL, NULL, 0,
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-
-        } else {
-
-            dhelp_sparse_add_dirs(num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-                                  NULL, NULL, 0,
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
-
+        for (j = 0; j < Nq; j++){
+            R[sshelp_prod_rank(&dirs_p[i * p], p, &dirs_q[j * q], q, &tab)] += ai * B[j];
         }
 
     }
 
-    return tmp;
+    sshelp_rank_tab_free(&tab);
+    free(dirs_p);
+    free(dirs_q);
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+void ssoti_kernel_mul_acc(const coeff_t* a_im, ord_t alo, ord_t ahi,
+                          const coeff_t* b_im, ord_t blo, ord_t bhi,
+                          bases_t k, ord_t trc, coeff_t* res_im, dhelpl_t dhl){
 
+    ord_t p, q;
+    ndir_t i, j, Np, Nq;
+    const coeff_t *A, *B;
+    const imdir_t* T;
+    coeff_t *R, c;
+    sshelp_pair_t pair;
 
-
-
-
-
-
-
-
-// Subtraction.
-
-
-// ****************************************************************************************************
-semiotin_t ssoti_sub_oo(semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl){
-
-    semiotin_t res, tmp;
-
-    tmp = ssoti_base_sub( num1, num2, dhl);
-
-    res = ssoti_copy(&tmp, dhl); // Newly allocated.
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-semiotin_t ssoti_sub_ro( coeff_t val, semiotin_t* num, dhelpl_t dhl){
-
-    semiotin_t res = ssoti_neg(num,dhl);
-    
-    res.re += val;
-
-    return res;
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-semiotin_t ssoti_sub_or(semiotin_t* num, coeff_t val, dhelpl_t dhl){
-
-    return ssoti_sum_ro(-val,num,dhl);
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-inline semiotin_t ssoti_base_sub(semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl){
-
-    semiotin_t tmp;
-    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
-    ord_t ordi;
-
-    tmp = ssoti_get_rtmp(7,res_ord,dhl); // creates a semiotin with no elements in imaginary directions.
-
-    tmp.re = num1->re - num2->re;
-
-    res_ord = MAX(num1->act_order,num2->act_order);
-    tmp.act_order = res_ord;
-
-    for(ordi = 0; ordi < res_ord; ordi++){
-
-        
-        if (ordi < num1->act_order && ordi < num2->act_order){
-            
-            dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-
-        } else if (ordi < num1->act_order){
-
-            dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-                                  NULL, NULL, 0,
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-
-        } else {
-
-            dhelp_sparse_sub_dirs(NULL, NULL, 0,
-                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
-
-        }
-
+    if (k == 0){
+        return;
     }
 
-    return tmp;
+    for (p = alo; p <= ahi && p + blo <= trc; p++){
 
-}
-// ----------------------------------------------------------------------------------------------------
+        Np = sshelp_ndir_order(k, p);
+        A  = a_im + sshelp_order_offset(k, p);
 
+        for (q = blo; q <= bhi && p + q <= trc; q++){
 
+            Nq   = sshelp_ndir_order(k, q);
+            B    = b_im   + sshelp_order_offset(k, q);
+            R    = res_im + sshelp_order_offset(k, p + q);
+            pair = sshelp_get_pair(k, p, q, dhl);
 
+            if (pair.p_tab == NULL){
 
+                ssoti_kernel_pair_rank(A, p, B, q, k, R);
 
+            } else if (!pair.transpose){
 
+                // Table rows are order-p directions.
+                for (i = 0; i < Np; i++){
 
+                    c = A[i];
 
+                    if (c == 0.0){
+                        continue;
+                    }
 
+                    T = pair.p_tab + i * pair.stride;
 
+                    for (j = 0; j < Nq; j++){
+                        R[T[j]] += c * B[j];
+                    }
 
-// Multiplication.
-
-// ****************************************************************************************************
-semiotin_t ssoti_mul_oo(semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl){
-
-    
-    semiotin_t res, tmp;
-
-    tmp = ssoti_base_mul(num1,num2,dhl);
-
-    res = ssoti_copy(&tmp, dhl); // Newly allocated.
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-semiotin_t ssoti_mul_or(semiotin_t* num, coeff_t val, dhelpl_t dhl){
-
-    return ssoti_mul_ro(val, num, dhl);
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-semiotin_t ssoti_mul_ro(coeff_t val, semiotin_t* num, dhelpl_t dhl){
-    
-    ord_t i;
-    ndir_t j;
-
-    semiotin_t res = ssoti_copy(num,dhl);
-
-    res.re *= val;
-
-    for ( i=0; i<res.act_order; i++){
-        
-        for ( j = 0; j<res.p_nnz[i]; j++){
-
-            res.p_im[i][j] *= val;
-
-        }
-
-    }
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-inline semiotin_t ssoti_base_mul(semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl){
-
-    semiotin_t tmp, tmp2, tmp3;
-
-    semiotin_t* tmpsrc  = &tmp ;
-    semiotin_t* tmpdest = &tmp3;
-    semiotin_t* tmpswap;
-    coeff_t*   p_im_swap;
-    imdir_t*  p_idx_swap;
-    ndir_t    p_nnz_swap;
-    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
-    ord_t ordlim1, ordlim2;
-    ord_t ordi1, ordi2,ordires;
-
-    // Retreive semiotin temporals.
-    // All tmps are created with no elements in imaginary directions (but fully allocated).
-    tmp = ssoti_get_rtmp(3,res_ord,dhl); // will hold the final result.
-    tmp2= ssoti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
-    tmp3= ssoti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.
-
-    // Multiply real coefficients.
-    tmpdest->re = num1->re * num2->re;
-
-    // Set source with the same real value.
-    tmpsrc->re  = tmpdest->re;
-
-    // Estimate the resulting order (Maximum order from operations)
-    res_ord = MIN(tmp.trc_order,num1->act_order+num2->act_order);
-
-    tmp.act_order =res_ord;
-    tmp2.act_order=res_ord;
-    tmp3.act_order=res_ord;
-
-    // printf("Multiplying lhs(ord:%hhu) by rhs(ord:%hhu)\n",num1->order,num2->order);
-    // printf("Multiply lhs.re:%g x im of rhs ========= \n", num1->re);
-    // ssoti_print(num2,dhl);
-
-    if (num1->re != 0.0 && num2->act_order > 0 ){
-        
-        // Swap pointers
-        tmpswap = tmpsrc; 
-        tmpsrc  = tmpdest; 
-        tmpdest = tmpswap;
-
-        for (ordi1 = 0; ordi1<num2->act_order; ordi1++){
-
-            // Perform multiplication
-            dhelp_sparse_mult_real(num1->re,
-                               num2->p_im[ordi1], num2->p_idx[ordi1], num2->p_nnz[ordi1],
-                                tmp2.p_im[ordi1],  tmp2.p_idx[ordi1], &tmp2.p_nnz[ordi1],       
-                               dhl);              
-
-            dhelp_sparse_add_dirs(    tmp2.p_im[ordi1],     tmp2.p_idx[ordi1],      tmp2.p_nnz[ordi1],
-                                   tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
-                                  tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
-
-        }
-        
-        // printf("\n -- \n");
-        // ssoti_print(tmpdest,dhl);
-
-    }
-    
-    // printf("\n//////////////////////////////////////\n");
-    // printf("\nMultiply rhs.re:%g x im of lhs =========  \n", num2->re);
-    // ssoti_print(num1,dhl);
-
-
-    if (num2->re != 0.0 && num1->act_order > 0 ){
-
-        // Swap pointers
-        tmpswap = tmpsrc; 
-        tmpsrc  = tmpdest; 
-        tmpdest = tmpswap;
-
-        for (ordi1 = 0; ordi1<num1->act_order; ordi1++){
-
-            // Perform multiplication
-            dhelp_sparse_mult_real(num2->re,
-                               num1->p_im[ordi1], num1->p_idx[ordi1],  num1->p_nnz[ordi1],
-                                tmp2.p_im[ordi1],  tmp2.p_idx[ordi1],  &tmp2.p_nnz[ordi1],       
-                               dhl);  
-
-            dhelp_sparse_add_dirs(    tmp2.p_im[ordi1],     tmp2.p_idx[ordi1],      tmp2.p_nnz[ordi1],
-                                   tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
-                                  tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
-
-        }
-
-        for (ordi2 = ordi1; ordi2<res_ord; ordi2++){
-
-            // // Perform multiplication
-            // dhelp_sparse_add_dirs(                NULL,                  NULL,                      0,
-            //                        tmpsrc->p_im[ordi2],  tmpsrc->p_idx[ordi2],   tmpsrc->p_nnz[ordi2],
-            //                       tmpdest->p_im[ordi2], tmpdest->p_idx[ordi2], &tmpdest->p_nnz[ordi2], dhl);
-
-            // // Swap 
-
-            p_im_swap  = tmpsrc->p_im[ordi2] ;
-            p_idx_swap = tmpsrc->p_idx[ordi2];
-            p_nnz_swap = tmpsrc->p_nnz[ordi2];
-
-            tmpsrc->p_im[ordi2]  = tmpdest->p_im[ordi2] ;
-            tmpsrc->p_idx[ordi2] = tmpdest->p_idx[ordi2];
-            tmpsrc->p_nnz[ordi2] = tmpdest->p_nnz[ordi2];
-
-            tmpdest->p_im[ordi2]  = p_im_swap ;
-            tmpdest->p_idx[ordi2] = p_idx_swap;
-            tmpdest->p_nnz[ordi2] = p_nnz_swap;
-
-        }
-        // printf("\n -- \n");
-        // ssoti_print(tmpdest,dhl);
-
-    }
-    
-    if ( num1->act_order > 0 && num2->act_order > 0 ){
-        
-
-        // Start with both temporals with the same values.
-        ssoti_copy_nomemchk_to(tmpdest,tmpsrc,dhl);
-        
-        // Assign order 1 elements to src.
-        tmpsrc->p_im[0]  = tmpdest->p_im[0] ;
-        tmpsrc->p_idx[0] = tmpdest->p_idx[0];
-        tmpsrc->p_nnz[0] = tmpdest->p_nnz[0];  
-        
-        
-
-        ordlim1 = MIN( num1->act_order, res_ord - 1 );
-        
-        for(ordi1=0; ordi1<ordlim1; ordi1++){
-
-            ordlim2 = MIN( num2->act_order, res_ord - (ordi1+1) );
-
-            tmpswap = tmpsrc; 
-            tmpsrc  = tmpdest; 
-            tmpdest = tmpswap;
-
-            // Multiply elements of order ordi1 times all elements of order 
-            for (ordi2=0; ordi2<ordlim2; ordi2++){
-
-                ordires = ordi1 + ordi2 +1;
-
-                dhelp_sparse_mult( num1->p_im[ordi1],   num1->p_idx[ordi1],    num1->p_nnz[ordi1],  ordi1+1,
-                                   num2->p_im[ordi2],   num2->p_idx[ordi2],    num2->p_nnz[ordi2],  ordi2+1,
-                                    tmp2.p_im[ordires],  tmp2.p_idx[ordires],  &tmp2.p_nnz[ordires],         dhl);
-
-                dhelp_sparse_add_dirs(    tmp2.p_im[ordires],     tmp2.p_idx[ordires],      tmp2.p_nnz[ordires],
-                                       tmpsrc->p_im[ordires],  tmpsrc->p_idx[ordires],   tmpsrc->p_nnz[ordires],
-                                      tmpdest->p_im[ordires], tmpdest->p_idx[ordires], &tmpdest->p_nnz[ordires], dhl);
-
-            }
-            ordires = ordi1+1;
-            
-            tmpsrc->p_im[ ordires] = tmpdest->p_im[ ordires];
-            tmpsrc->p_idx[ordires] = tmpdest->p_idx[ordires];
-            tmpsrc->p_nnz[ordires] = tmpdest->p_nnz[ordires];
-
-            // printf("\n -- \n");
-            // printf("     Multiplying lhs(ord:%hhu) x rhs\n",ordi1+1);
-            // ssoti_print(tmpdest,dhl);
-
-        }
-
-        // printf("\n -- \n");
-        // ssoti_print(tmpdest,dhl);
-    
-    }
-    
-    // This returns whatever temporal is selected at this time.
-    return *tmpdest;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-// ****************************************************************************************************
-semiotin_t ssoti_mul_old(semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl){
-
-    // WARNING: This function was implemented before the order_split conversion.
-    // Therefore, this function does not comply to this specification.
-    // If you want to use it again, please you will have to adapt it to the 
-    // trc_order / act_order convention
-    
-
-    semiotin_t res, tmp, tmp2, tmp3;
-    semiotin_t* tmpsrc= &tmp ;
-    semiotin_t* tmpdest=&tmp3;
-    semiotin_t* tmpswap;
-    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
-    ord_t ordi, order;
-    ord_t ord_mul1;
-
-    // Retreive semiotin temporals.
-    // All tmps are created with no elements in imaginary directions (but allocated).
-    tmp = ssoti_get_rtmp(3,res_ord,dhl); // will hold the final result.
-    tmp2= ssoti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
-    tmp3= ssoti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.
-    
-
-    // Multiply real coefficients.
-    tmpdest->re = num1->re * num2->re;
-    tmpsrc->re  = tmpdest->re;
-
-    // printf("Multiplying order %hhu x %hhu\n", num1->order, num2->order);
-
-    for( order = 1; order<=res_ord; order++){
-
-        ordi = order - 1;
-
-        // First multiply  re x ordi         
-        if ( order <= num2->act_order && num1->re != 0.0){
-            
-            // Perform multiplication
-            dhelp_sparse_mult_real(num1->re,
-                               num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-                               tmp2.p_im[ordi], tmp2.p_idx[ordi], &tmp2.p_nnz[ordi],       
-                               dhl);  
-            
-            
-            // Swap pointers
-            tmpswap=tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
-
-            dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                                  tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
-                                  tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
-
-        }
-
-
-        // Then multiply   ordi x re
-        if ( order <= num1->act_order && num2->re != 0.0){
-            
-            // Perform multiplication
-            dhelp_sparse_mult_real(num2->re,
-                               num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-                               tmp2.p_im[ordi], tmp2.p_idx[ordi], &tmp2.p_nnz[ordi],       
-                               dhl);  
-            
-            
-            // Swap pointers
-            tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;
-            
-            dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                                  tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
-                                  tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
-
-        }
-
-        for ( ord_mul1 = 1; ord_mul1 <= order/2; ord_mul1++){
-
-            ord_t ord_mul2 = order - ord_mul1;
-            // printf("Multiplying %hhu X %hhu\n",ord_mul1,ord_mul2);
-
-            if ( ord_mul1 <= num1->act_order && ord_mul2 <= num2->act_order){
-                
-                dhelp_sparse_mult(num1->p_im[ord_mul1-1], num1->p_idx[ord_mul1-1], num1->p_nnz[ord_mul1-1],ord_mul1,
-                                  num2->p_im[ord_mul2-1], num2->p_idx[ord_mul2-1], num2->p_nnz[ord_mul2-1],ord_mul2,
-                                  tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
-                                
-                // Swap pointers
-                tmpswap = tmpsrc; tmpsrc=tmpdest; tmpdest=tmpswap;
-                
-                dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                                      tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
-                                      tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
-
-            }
-            
-
-            if (ord_mul1 != ord_mul2){
-                
-                if ( ord_mul2 <= num1->act_order && ord_mul1 <= num2->act_order){
-                    dhelp_sparse_mult(num1->p_im[ord_mul2-1], num1->p_idx[ord_mul2-1], num1->p_nnz[ord_mul2-1],ord_mul2,
-                                      num2->p_im[ord_mul1-1], num2->p_idx[ord_mul1-1], num2->p_nnz[ord_mul1-1],ord_mul1,
-                                      tmp2.p_im[ordi],  tmp2.p_idx[ordi], &tmp2.p_nnz[ordi], dhl);
-                    
-                    
-                    // Swap pointers
-                    tmpswap = tmpsrc; tmpsrc=tmpdest;tmpdest=tmpswap;
-                    
-                    dhelp_sparse_add_dirs(tmp2.p_im[ordi], tmp2.p_idx[ordi], tmp2.p_nnz[ordi],
-                                          tmpsrc->p_im[ordi], tmpsrc->p_idx[ordi], tmpsrc->p_nnz[ordi],
-                                          tmpdest->p_im[ordi], tmpdest->p_idx[ordi], &tmpdest->p_nnz[ordi], dhl);
                 }
 
-            }  
+            } else {
+
+                // Table rows are order-q directions.
+                for (j = 0; j < Nq; j++){
+
+                    c = B[j];
+
+                    if (c == 0.0){
+                        continue;
+                    }
+
+                    T = pair.p_tab + j * pair.stride;
+
+                    for (i = 0; i < Np; i++){
+                        R[T[i]] += A[i] * c;
+                    }
+
+                }
+
+            }
 
         }
 
     }
 
-    // reset the size values of the tmp number    
-    for(ordi=0; ordi<res_ord; ordi++){
+}
+// -------------------------------------------------------------------------------------------------------
 
-        tmpdest->p_size[ordi] = MAX(dhl.p_dh[ordi].allocSize,tmpdest->p_nnz[ordi]);
+
+// *******************************************************************************************************
+void ssoti_kernel_expand(const ssotinum_t* num, const bases_t* pos, bases_t ku, ord_t trc,
+                         coeff_t* dst_im){
+
+    bases_t k = num->nbases, u[256], v[256];
+    int leading = sshelp_is_leading(pos, k);
+    ord_t p, i, top = (num->act_order < trc) ? num->act_order : trc;
+    ndir_t j, Ns, Nd;
+    const coeff_t* S;
+    coeff_t* D;
+    sshelp_rank_tab_t tab = {NULL, 0, 0};
+
+    if (!leading && sshelp_rank_tab_init(&tab, ku, trc) != SSHELP_OK){
+        ssoti_out_of_memory();
     }
 
-    res = ssoti_copy(tmpdest, dhl);
+    for (p = 1; p <= trc; p++){
+
+        Nd = sshelp_ndir_order(ku, p);
+        D  = dst_im + sshelp_order_offset(ku, p);
+
+        if (p > top || k == 0){
+
+            memset(D, 0, Nd * sizeof(coeff_t));
+            continue;
+
+        }
+
+        Ns = sshelp_ndir_order(k, p);
+        S  = num->p_im + sshelp_order_offset(k, p);
+
+        if (leading){
+
+            // Colex prefix: the source block is the first Ns destination directions.
+            memcpy(D, S, Ns * sizeof(coeff_t));
+            memset(D + Ns, 0, (Nd - Ns) * sizeof(coeff_t));
+
+        } else {
+
+            memset(D, 0, Nd * sizeof(coeff_t));
+
+            for (i = 0; i < p; i++){
+                u[i] = 0;
+            }
+
+            for (j = 0; j < Ns; j++){
+
+                for (i = 0; i < p; i++){
+                    v[i] = pos[u[i]];
+                }
+
+                D[sshelp_rank(v, p, &tab)] = S[j];
+                sshelp_next_dir(u, p, k);
+
+            }
+
+        }
+
+    }
+
+    sshelp_rank_tab_free(&tab);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Operands of a binary operation in the layout of the union of their sets.
+typedef struct {
+    const coeff_t* p_a; ///< First operand, union layout (may be the operand's own buffer).
+    const coeff_t* p_b; ///< Second operand, union layout.
+    coeff_t*       p_r; ///< Result scratch, union layout, zeroed.
+    const bases_t* p_u; ///< Union of the sets.
+    bases_t         nu; ///< Size of the union.
+    ord_t          trc; ///< Truncation order of the result.
+    ndir_t       nimag; ///< Imaginary coefficients of the result.
+} ssoti_binop_t;
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Builds the union layout of two operands in the calling thread's workspace.
+static ssoti_binop_t ssoti_binop_prepare(const ssotinum_t* a, const ssotinum_t* b){
+
+    sshelp_ws_t* ws = ssoti_ws();
+    ssoti_binop_t op;
+    size_t nb = (size_t)a->nbases + b->nbases;
+    bases_t *p_u, *pos_a, *pos_b;
+    coeff_t *p_ea, *p_eb;
+    int own_a, own_b;
+
+    op.trc = (a->trc_order > b->trc_order) ? a->trc_order : b->trc_order;
+
+    ssoti_ws_need(ws, 0, 0, 2 * nb + 1);
+    p_u   = ws->p_bases;
+    pos_a = ws->p_bases + nb;
+    pos_b = pos_a + a->nbases;
+
+    op.nu    = sshelp_union_bases(a->p_bases, a->nbases, b->p_bases, b->nbases, p_u, pos_a, pos_b);
+    op.nimag = ssoti_nimag_checked(op.nu, op.trc);
+    op.p_u   = p_u;
+
+    // An operand whose set is the union and whose buffer holds every order of the result is used
+    // in place (offsets do not depend on trc); otherwise it is expanded, with zeros above its
+    // own truncation order.
+    own_a = (a->nbases == op.nu && a->trc_order >= op.trc);
+    own_b = (b->nbases == op.nu && b->trc_order >= op.trc);
+
+    ssoti_ws_need(ws, (size_t)op.nimag * (1 + !own_a + !own_b), 0, 0);
+
+    op.p_r = ws->p_coef;
+    p_ea   = op.p_r + op.nimag;
+    p_eb   = p_ea + (own_a ? 0 : op.nimag);
+
+    memset(op.p_r, 0, op.nimag * sizeof(coeff_t));
+
+    if (own_a){
+        op.p_a = a->p_im;
+    } else {
+        ssoti_kernel_expand(a, pos_a, op.nu, op.trc, p_ea);
+        op.p_a = p_ea;
+    }
+
+    if (own_b){
+        op.p_b = b->p_im;
+    } else {
+        ssoti_kernel_expand(b, pos_b, op.nu, op.trc, p_eb);
+        op.p_b = p_eb;
+    }
+
+    return op;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Stores the result scratch of a binary operation into res.
+static void ssoti_binop_store(const ssoti_binop_t* op, coeff_t re, ord_t act, ssotinum_t* res){
+
+    ssoti_reserve(res, op->nu, op->trc);
+
+    if (op->nu > 0){
+
+        memcpy(res->p_bases, op->p_u, (size_t)op->nu * sizeof(bases_t));
+        memcpy(res->p_im, op->p_r, op->nimag * sizeof(coeff_t));
+
+    }
+
+    res->re        = re;
+    res->nbases    = op->nu;
+    res->trc_order = op->trc;
+    res->act_order = (act < op->trc) ? act : op->trc;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// res = sa * a + sb * b (sums and subtractions).
+static void ssoti_axpby_to(coeff_t sa, const ssotinum_t* a, coeff_t sb, const ssotinum_t* b,
+                           ssotinum_t* res){
+
+    ssoti_binop_t op = ssoti_binop_prepare(a, b);
+    ndir_t i;
+
+    for (i = 0; i < op.nimag; i++){
+        op.p_r[i] = sa * op.p_a[i] + sb * op.p_b[i];
+    }
+
+    ssoti_binop_store(&op, sa * a->re + sb * b->re,
+        (a->act_order > b->act_order) ? a->act_order : b->act_order, res);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// res = a * b.
+static void ssoti_mul_to(const ssotinum_t* a, const ssotinum_t* b, ssotinum_t* res, dhelpl_t dhl){
+
+    ssoti_binop_t op = ssoti_binop_prepare(a, b);
+    ord_t atop = (a->act_order < op.trc) ? a->act_order : op.trc;
+    ord_t btop = (b->act_order < op.trc) ? b->act_order : op.trc;
+    ndir_t i;
+
+    // Real x imaginary.
+    for (i = 0; i < op.nimag; i++){
+        op.p_r[i] = a->re * op.p_b[i] + b->re * op.p_a[i];
+    }
+
+    // Imaginary x imaginary.
+    if (atop > 0 && btop > 0){
+        ssoti_kernel_mul_acc(op.p_a, 1, atop, op.p_b, 1, btop, op.nu, op.trc, op.p_r, dhl);
+    }
+
+    ssoti_binop_store(&op, a->re * b->re, (ord_t)((unsigned)atop + btop > 255 ? 255 : atop + btop),
+        res);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+ssotinum_t ssoti_sum_oo(const ssotinum_t* num1, const ssotinum_t* num2, dhelpl_t dhl){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_sum_oo_to(num1, num2, &res, dhl);
 
     return res;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_sum_or(const ssotinum_t* num1, coeff_t val, dhelpl_t dhl){
 
+    ssotinum_t res = ssoti_init();
 
+    ssoti_sum_or_to(num1, val, &res, dhl);
 
-
-
-
-
-
-
-
-
-
-
-// ****************************************************************************************************
-inline semiotin_t ssoti_base_trunc_sum(ord_t ord, semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl){
-
-    semiotin_t tmp;
-    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
-    ord_t ordi;
-
-    // Create a semiotin with no elements in imaginary directions.
-    tmp = ssoti_get_rtmp(7, res_ord, dhl);
-
-    ssoti_set_r(0.0, &tmp, dhl);
-    res_ord = MAX(num1->act_order,num2->act_order);
-    tmp.act_order = res_ord;
-
-    if (ord == 0){
-    
-        tmp.re = num1->re + num2->re; 
-    
-    } else {
-
-        ordi = ord - 1;
-
-        if ( ordi < num1->act_order && ordi < num2->act_order ){
-            
-            dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-
-        } else if ( ordi < num1->act_order ){
-
-            dhelp_sparse_add_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-                                  NULL, NULL, 0,
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-
-        } else if ( ordi < num2->act_order ){
-
-            dhelp_sparse_add_dirs(num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-                                  NULL, NULL, 0,
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
-
-        }
-
-    }
-    
-
-    return tmp;
+    return res;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-inline semiotin_t ssoti_base_trunc_sub(ord_t ord, semiotin_t* num1, semiotin_t* num2, dhelpl_t dhl){
 
-    semiotin_t tmp;
-    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
-    ord_t ordi;
+// *******************************************************************************************************
+void ssoti_sum_oo_to(const ssotinum_t* num1, const ssotinum_t* num2, ssotinum_t* res,
+                     dhelpl_t dhl){
 
-    // Create a semiotin with no elements in imaginary directions.
-    tmp = ssoti_get_rtmp(7, res_ord, dhl);
-
-    ssoti_set_r(0.0, &tmp, dhl);
-    res_ord = MAX(num1->act_order,num2->act_order);
-    tmp.act_order = res_ord;
-
-    if (ord == 0){
-    
-        tmp.re = num1->re - num2->re; 
-    
-    } else {
-
-        ordi = ord - 1;
-
-        if ( ordi < num1->act_order && ordi < num2->act_order ){
-            
-            dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-
-        } else if ( ordi < num1->act_order ){
-
-            dhelp_sparse_sub_dirs(num1->p_im[ordi], num1->p_idx[ordi], num1->p_nnz[ordi],
-                                  NULL, NULL, 0,
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);
-
-        } else if ( ordi < num2->act_order ){
-
-            dhelp_sparse_sub_dirs(NULL, NULL, 0,
-                                  num2->p_im[ordi], num2->p_idx[ordi], num2->p_nnz[ordi],                                  
-                                  tmp.p_im[ordi], tmp.p_idx[ordi], &tmp.p_nnz[ordi], dhl);            
-
-        }
-
-    }
-    
-
-    return tmp;
+    (void)dhl;
+    ssoti_axpby_to(1.0, num1, 1.0, num2, res);
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 
-// ****************************************************************************************************
-inline semiotin_t ssoti_base_trunc_mul(ord_t ord1, semiotin_t* num1, ord_t ord2, semiotin_t* num2, dhelpl_t dhl){
+// *******************************************************************************************************
+void ssoti_sum_or_to(const ssotinum_t* num1, coeff_t val, ssotinum_t* res, dhelpl_t dhl){
 
-    semiotin_t tmp, tmp2, tmp3;
-
-    semiotin_t* tmpsrc  = &tmp ;
-    semiotin_t* tmpdest = &tmp3;
-    semiotin_t* tmpswap;
-    ord_t res_ord = MAX(num1->trc_order,num2->trc_order);
-    
-    ord_t ordi1, ordi2, ordires;
-
-    // Retreive semiotin temporals.
-    // All tmps are created with no elements in imaginary directions (but fully allocated).
-    tmp = ssoti_get_rtmp(3,res_ord,dhl); // will hold the final result.
-    tmp2= ssoti_get_rtmp(4,res_ord,dhl); // Will hold the temporary result.
-    tmp3= ssoti_get_rtmp(5,res_ord,dhl); // Will hold the temporary result.
-
-    // Multiply real coefficients.
-    ssoti_set_r(0.0,  tmpsrc, dhl);
-    ssoti_set_r(0.0, tmpdest, dhl);
-
-    res_ord = MIN(res_ord,ord1+ord2);
-    tmp.act_order =res_ord;
-    tmp2.act_order=res_ord;
-    tmp3.act_order=res_ord;
-
-    if (ord1 == 0 && ord2 == 0){
-        
-        tmpdest->re = num1->re * num2->re;
-
-    } else if (ord1 == 0) {
-
-        if (num1->re != 0.0 && num2->act_order >= ord2 ){
-        
-            // Swap pointers
-            tmpswap = tmpsrc; 
-            tmpsrc  = tmpdest; 
-            tmpdest = tmpswap;
-
-            ordi1 = ord2-1;
-            // Perform multiplication
-            dhelp_sparse_mult_real(num1->re,
-                               num2->p_im[ordi1], num2->p_idx[ordi1], num2->p_nnz[ordi1],
-                                tmp2.p_im[ordi1],  tmp2.p_idx[ordi1], &tmp2.p_nnz[ordi1],       
-                               dhl);              
-
-            dhelp_sparse_add_dirs(    tmp2.p_im[ordi1],     tmp2.p_idx[ordi1],      tmp2.p_nnz[ordi1],
-                                   tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
-                                  tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
-
-
-
-        }
-
-    } else if (ord2 == 0) {
-
-        if (num2->re != 0.0 && num1->act_order >= ord1 ){
-
-            // Swap pointers
-            tmpswap = tmpsrc; 
-            tmpsrc  = tmpdest; 
-            tmpdest = tmpswap;
-
-            ordi1 = ord1-1;
-        
-            dhelp_sparse_mult_real(num2->re,
-                                   num1->p_im[ordi1], num1->p_idx[ordi1],  num1->p_nnz[ordi1],
-                                   tmp2.p_im[ordi1],  tmp2.p_idx[ordi1],  &tmp2.p_nnz[ordi1],       
-                                   dhl);  
-
-            dhelp_sparse_add_dirs(    tmp2.p_im[ordi1],     tmp2.p_idx[ordi1],      tmp2.p_nnz[ordi1],
-                                   tmpsrc->p_im[ordi1],  tmpsrc->p_idx[ordi1],   tmpsrc->p_nnz[ordi1],
-                                  tmpdest->p_im[ordi1], tmpdest->p_idx[ordi1], &tmpdest->p_nnz[ordi1], dhl);
-            
-        }
-
-    } else {
-
-        if ( num1->act_order >= ord1 && num2->act_order >= ord2 ){
-        
-            // ord_t ordlim1 = MIN( num1->act_order, res_ord - 1 );
-            ordi1 = ord1-1;
-            ordi2 = ord2-1;    
-
-            ordires = ordi1 + ordi2 + 1;
-
-            dhelp_sparse_mult( num1->p_im[ordi1],   num1->p_idx[ordi1],    num1->p_nnz[ordi1],  ordi1+1,
-                               num2->p_im[ordi2],   num2->p_idx[ordi2],    num2->p_nnz[ordi2],  ordi2+1,
-                                tmp2.p_im[ordires],  tmp2.p_idx[ordires],  &tmp2.p_nnz[ordires],         dhl);
-
-            dhelp_sparse_add_dirs(    tmp2.p_im[ordires],     tmp2.p_idx[ordires],      tmp2.p_nnz[ordires],
-                                   tmpsrc->p_im[ordires],  tmpsrc->p_idx[ordires],   tmpsrc->p_nnz[ordires],
-                                  tmpdest->p_im[ordires], tmpdest->p_idx[ordires], &tmpdest->p_nnz[ordires], dhl);
-
-        
-        }
-
-    }
-
-    // This returns whatever temporal is selected at this time.
-    return *tmpdest;
+    (void)dhl;
+    ssoti_copy_to(num1, res);
+    res->re += val;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_sub_oo(const ssotinum_t* num1, const ssotinum_t* num2, dhelpl_t dhl){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_sub_oo_to(num1, num2, &res, dhl);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_sub_or(const ssotinum_t* num1, coeff_t val, dhelpl_t dhl){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_sub_or_to(num1, val, &res, dhl);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_sub_ro(coeff_t val, const ssotinum_t* num1, dhelpl_t dhl){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_sub_ro_to(val, num1, &res, dhl);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+void ssoti_sub_oo_to(const ssotinum_t* num1, const ssotinum_t* num2, ssotinum_t* res,
+                     dhelpl_t dhl){
+
+    (void)dhl;
+    ssoti_axpby_to(1.0, num1, -1.0, num2, res);
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+void ssoti_sub_or_to(const ssotinum_t* num1, coeff_t val, ssotinum_t* res, dhelpl_t dhl){
+
+    (void)dhl;
+    ssoti_copy_to(num1, res);
+    res->re -= val;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+void ssoti_sub_ro_to(coeff_t val, const ssotinum_t* num1, ssotinum_t* res, dhelpl_t dhl){
+
+    ssoti_neg_to(num1, res, dhl);
+    res->re += val;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_neg(const ssotinum_t* num, dhelpl_t dhl){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_neg_to(num, &res, dhl);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+void ssoti_neg_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl){
+
+    ssoti_mul_or_to(num, -1.0, res, dhl);
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_mul_oo(const ssotinum_t* num1, const ssotinum_t* num2, dhelpl_t dhl){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_mul_oo_to(num1, num2, &res, dhl);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_mul_or(const ssotinum_t* num1, coeff_t val, dhelpl_t dhl){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_mul_or_to(num1, val, &res, dhl);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+void ssoti_mul_oo_to(const ssotinum_t* num1, const ssotinum_t* num2, ssotinum_t* res,
+                     dhelpl_t dhl){
+
+    ssoti_mul_to(num1, num2, res, dhl);
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+void ssoti_mul_or_to(const ssotinum_t* num1, coeff_t val, ssotinum_t* res, dhelpl_t dhl){
+
+    ndir_t i, nimag;
+
+    (void)dhl;
+    ssoti_copy_to(num1, res);
+
+    nimag = sshelp_ndir_total(res->nbases, res->trc_order);
+
+    for (i = 0; i < nimag; i++){
+        res->p_im[i] *= val;
+    }
+
+    res->re *= val;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+void ssoti_gem_oo_to(const ssotinum_t* num1, const ssotinum_t* num2, const ssotinum_t* num3,
+                     ssotinum_t* res, dhelpl_t dhl){
+
+    ssotinum_t prod = ssoti_init();
+
+    // The product goes to scratch first, so res may alias any input.
+    ssoti_mul_oo_to(num1, num2, &prod, dhl);
+    ssoti_sum_oo_to(&prod, num3, res, dhl);
+    ssoti_free(&prod);
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_div_oo(const ssotinum_t* num, const ssotinum_t* den, dhelpl_t dhl){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_div_oo_to(num, den, &res, dhl);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_div_ro(coeff_t val, const ssotinum_t* den, dhelpl_t dhl){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_div_ro_to(val, den, &res, dhl);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
 
 
+// *******************************************************************************************************
+ssotinum_t ssoti_div_or(const ssotinum_t* num, coeff_t val, dhelpl_t dhl){
 
-// Division.
+    ssotinum_t res = ssoti_init();
 
-// ****************************************************************************************************
-semiotin_t ssoti_div_ro(coeff_t num, semiotin_t* den, dhelpl_t dhl){
+    ssoti_div_or_to(num, val, &res, dhl);
 
-    
-    semiotin_t inv = ssoti_pow(den,-1,dhl);
-    semiotin_t res = ssoti_mul_ro(num,&inv,dhl);
+    return res;
 
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void ssoti_div_oo_to(const ssotinum_t* num, const ssotinum_t* den, ssotinum_t* res,
+                     dhelpl_t dhl){
+
+    ssotinum_t inv = ssoti_init();
+
+    ssoti_pow_to(den, -1.0, &inv, dhl);
+    ssoti_mul_oo_to(num, &inv, res, dhl);
     ssoti_free(&inv);
 
-    return res;
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void ssoti_div_ro_to(coeff_t val, const ssotinum_t* den, ssotinum_t* res, dhelpl_t dhl){
+
+    ssoti_pow_to(den, -1.0, res, dhl);
+    ssoti_mul_or_to(res, val, res, dhl);
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-semiotin_t ssoti_div_oo(semiotin_t* num, semiotin_t* den, dhelpl_t dhl){
 
-    
-    semiotin_t inv = ssoti_get_rtmp(7,den->trc_order,dhl);
-    ssoti_pow_to(den,-1.0, &inv,dhl);
-    semiotin_t res = ssoti_mul_oo(num,&inv,dhl);
-    
-    return res;
+// *******************************************************************************************************
+void ssoti_div_or_to(const ssotinum_t* num, coeff_t val, ssotinum_t* res, dhelpl_t dhl){
+
+    ssoti_mul_or_to(num, 1.0 / val, res, dhl);
 
 }
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-semiotin_t ssoti_div_or(semiotin_t* num, coeff_t val, dhelpl_t dhl){
-
-    return ssoti_mul_ro(1.0/val,num,dhl);
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Function evaluation.
-
-// ****************************************************************************************************
-inline semiotin_t ssoti_feval(coeff_t* feval_re, semiotin_t* num , dhelpl_t dhl){
-    
-    
-    semiotin_t res;
-    semiotin_t tmp = ssoti_base_feval(feval_re, num, dhl);
-    
-    // copy ....
-    res = ssoti_copy( &tmp, dhl); // Newly allocated.
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-inline semiotin_t ssoti_base_feval(coeff_t* feval_re, semiotin_t* num , dhelpl_t dhl){
-    
-    ord_t i ;
-
-    coeff_t factor = 1.0, val = 0.0;
-
-    semiotin_t tmp1 = ssoti_get_rtmp( 7,num->trc_order,dhl);
-    semiotin_t tmp2 = ssoti_get_rtmp( 8,num->trc_order,dhl);
-    semiotin_t tmp3 = ssoti_get_rtmp( 9,num->trc_order,dhl);
-
-    ssoti_set_o( num, &tmp2, dhl);
-    
-    for ( i = 1; i < num->trc_order; i++){
-        
-        factor *= i;
-
-        val = feval_re[i]/factor;
-
-        // tmp2 = tmp1
-        ssoti_set_o(&tmp2 , &tmp1, dhl);
-        
-        // tmp2 = tmp2 * val
-        ssoti_trunc_smul_real( val, i, &tmp2, dhl);
-        
-        // tmp3 += tmp2;
-        ssoti_trunc_ssum( &tmp2, i, &tmp3, dhl );
-
-        
-        // update
-        ssoti_set_r( 0.0, &tmp2, dhl);
-        ssoti_trunc_mul(&tmp1, i, num, 1, &tmp2, dhl );
-
-    }
-
-    for (; i <= num->trc_order; i++){
-        
-        factor *= i;
-        val = feval_re[i]/factor;        
-
-        // tmp1 = tmp2;
-        ssoti_set_o(&tmp2 , &tmp1, dhl);
-
-        // tmp2 = tmp2 * val;
-        ssoti_trunc_smul_real( val, i, &tmp2, dhl);
-
-        // tmp3 += tmp2;
-        ssoti_trunc_ssum( &tmp2, i, &tmp3, dhl );
-
-    }
-
-    // Set real value.
-    tmp3.re = feval_re[0];
-    
-    return tmp3;
-
-}
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------

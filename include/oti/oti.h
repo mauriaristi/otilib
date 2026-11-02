@@ -16,7 +16,7 @@
 // Algebras.
 #include "oti/dense.h"
 #include "oti/sparse.h"
-// #include "oti/semisparse.h"
+#include "oti/semisparse.h"
 
 // Multidual
 #include "oti/static.h"

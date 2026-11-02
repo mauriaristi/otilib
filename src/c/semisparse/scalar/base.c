@@ -1,1450 +1,781 @@
+// Semi-sparse scalar: element access, conversions to/from sotinum_t, truncation and compaction.
 
-// // ====================================================================================================
-// // ====================================================================================================
-// // =============================        TAYLOR INTEGRATOR FUNCTIONS       =============================
-// // ====================================================================================================
-// // ====================================================================================================
 
-// // ****************************************************************************************************
-// semiotin_t ssoti_taylor_integrate(coeff_t* deltas, semiotin_t* num, dhelpl_t dhl){
-    
-//     semiotin_t res = ssoti_createEmpty( 0, dhl); 
-    
-//     ssoti_taylor_integrate_to( deltas, num, &res, dhl);
+// *******************************************************************************************************
+// Comparator for qsort() over bases_t labels, used by ssoti_from_soti() to sort raw base labels.
+static int ssoti_base_cmp_bases(const void* a, const void* b){
 
-//     return res;
+    bases_t x = *(const bases_t*)a;
+    bases_t y = *(const bases_t*)b;
 
-// }
-// // ----------------------------------------------------------------------------------------------------
+    return (x > y) - (x < y);
 
-// // ****************************************************************************************************
-// void ssoti_taylor_integrate_to(coeff_t* deltas, semiotin_t* num, semiotin_t* res, dhelpl_t dhl){
-    
-//     ord_t   ordi;
-//     ndir_t  ndir_ordi, diri;
-//     coeff_t val = 0.0, delta;
-    
-//     val = num->re;
-    
-//     for(ordi = 0; ordi < num->act_order ; ordi++ ){
+}
+// -------------------------------------------------------------------------------------------------------
 
-//         // 
-//         ndir_ordi = num->p_nnz[ordi];
 
-//         for ( diri = 0; diri< ndir_ordi; diri++){ 
-            
-//             delta  = dhelp_compute_delta( num->p_idx[ordi][diri], ordi + 1, deltas, dhl);
-//             val   += num->p_im[ordi][diri] * delta;
+// *******************************************************************************************************
+// Tells whether the multiset v (length nv, nondecreasing) contains the multiset u (length nu,
+// nondecreasing) with at least the same multiplicities. Both must be sorted ascending.
+static int ssoti_base_contains(const bases_t* v, ord_t nv, const bases_t* u, ord_t nu){
 
-//         }
+    ord_t i = 0, j = 0;
 
-//     }
-    
-//     ssoti_set_r(val,res,dhl);
+    while (j < nu){
 
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// semiotin_t ssoti_get_order_im( ord_t order, semiotin_t* num, dhelpl_t dhl){
-
-//     semiotin_t res = ssoti_createEmpty( 0, dhl);
-
-//     // Set imaginary direction.
-//     ssoti_get_order_im_to( order, num, &res, dhl);
-    
-//     return res;
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_get_order_im_to( ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl){
-
-//     uint8_t reallocate = 0;
-
-//     // Copy real coefficient
-//     if (order == 0){
-    
-//         ssoti_set_r(0.0,res,dhl);
-//         res->re = num->re;
-    
-//     } else if ( order > num->act_order ){
-        
-//         ssoti_set_r(0.0,res,dhl);
-
-//     } else {
-
-//         // Check if reallocation is necessary
-//         if (res->trc_order < order ){
-//             reallocate = 0xFF; // True
-//         } else {
-//             if ( num->p_nnz[order-1] > res->p_size[order-1] ){
-//                 reallocate = 0xFF; // True
-//             }
-//         }
-
-//         // TODO: Add check to wheather dest has not been initialized.
-//         // TODO: Add case when the two elements have different orders.
-//         // TODO: Add check if dest is a tmp function.
-
-//         if( reallocate ){
-//             // Reallocation IS required.
-//             // Easiest way: Free current memory in dest and allocate new memory.
-//             if (res->flag != 0){
-//                 ssoti_free(res);  
-//                 (*res) = ssoti_createEmpty_like( num, dhl);
-//             } else {
-//                 // TODO: What happens if this is a tmp value?
-//                 printf("ERROR: Cant change memory of the given number (in function ssoti_get_order_im_to(...) ) \n");
-//                 exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
-//             }
-//         }
-
-//         // Set as zero, as well as all non-zero counters. Sets res->act_order to 0.
-//         ssoti_set_r(0.0,res,dhl);
-
-        
-//         // Only copy in the case num->act_order <= order
-//         // Copy only order.
-//         memcpy(res->p_im[order-1], num->p_im[order-1],  num->p_nnz[order-1]*sizeof(coeff_t) );
-//         memcpy(res->p_idx[order-1],num->p_idx[order-1], num->p_nnz[order-1]*sizeof(imdir_t) );
-
-//         res->p_nnz[order-1] = num->p_nnz[order-1]; 
-
-//         // The actual order must be the actual order being set.
-//         res->act_order = order;
-
-//     }
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // Setter.
-// ****************************************************************************************************
-void ssoti_set_im_r(coeff_t val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-    flag_t flag;
-    bases_t* imdir_bases;
-    bases_t max_idx_base;
-    semiotin_t tmp = ssoti_init();
-
-    if ( order == 0 ){
-        
-        num->re = val;
-
-    } else if ( order <= num->act_order ){
-            
-        // TODO: Check if (idx,order) is within precomputed-data.
-        imdir_bases = dhelp_get_imdir( idx, order, dhl);
-        max_idx_base = imdir_bases[order-1];
-
-
-        if (max_idx_base <= num->act_nbases){
-            
-            num->p_im[order-1][idx] = val;
-
-        } else if (max_idx_base <= num->tot_nbases){
-
-            // Set all new bases directions to 0.
-            ssoti_reset_nbases( num->act_nbases + 1, max_idx_base, num, dhl);
-            num->act_nbases = max_idx_base; // change the number of bases.
-            num->p_im[order-1][idx] = val;
-
-
-        } else { 
-            
-            // Reallocation is required.
-            tmp = ssoti_createEmpty(max_idx_base,num->trc_order,dhl);
-            ssoti_copy_to(num, &tmp, dhl);
-            ssoti_free(num);
-            (*num)=tmp;
-
-            // Recursive call to re pass through this function.
-            ssoti_set_im_r( val, idx, order, num, dhl);
+        if (i >= nv){
+            return 0;
         }
 
-    } else if (order <= num->trc_order){
-        
-        // Be sure that the nnz for all orders up to the new order are zero. 
-        // TODO: Overkill? Necesary?
-        
-        ssoti_reset_orders(num->act_order+1, order, num, dhl);
-        num->act_order = order;
-        
-        // Recursive call to re pass through this function.
-        ssoti_set_im_r( val, idx, order, num, dhl);
-        
-    } else {
+        if (v[i] == u[j]){
 
-	    // TODO: what happens if the order is greater than the number?
-	    // Change order and add one element to the specified order.
-	    // Memory needs to be reallocated .? or since the truncation order is larger then
-	    // no need to reallocate or do anything.
-        
-        tmp = ssoti_createEmpty(num->tot_nbases,order,dhl);
-        ssoti_copy_to(num, &tmp, dhl);
-        ssoti_free(num);
-        (*num)=tmp;
-        ssoti_print_full(num,dhl);
+            i++;
+            j++;
 
-        printf("Before setim_r function\n");
-        // Recursive call to re pass through this function.
-        ssoti_set_im_r( val, idx, order, num, dhl); 
+        } else if (v[i] < u[j]){
 
-    }
-    
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_set_deriv_o(semiotin_t* val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-//     imdir_t idxr;
-//     ndir_t diri;
-//     semiotin_t tmp;
-//     coeff_t factornum, factorden, value;
-//     ord_t res_order, ordi, ordr, ord_iter;
-    
-//     if (order == 0){
-        
-//         ssoti_set_o( val, num, dhl);
-
-//     }else{
-
-//         // TODO: Determine what is the required order: Actual or Truncation...
-//         res_order = MIN( dhl.ndh, MAX(num->trc_order, order + val->trc_order) );
-        
-//         tmp = ssoti_get_tmp(0, res_order, dhl);
-
-        
-//         tmp.re = num->re; //  Set real coefficient.
-        
-//         // Initiall, copy all data from num to the result.
-//         ord_iter = MIN( num->act_order, res_order);
-//         tmp.act_order = ord_iter;
-        
-//         for ( ordi = 0; ordi < tmp.act_order; ordi++){
-            
-//             // Copy memory to dest number. Only copy non zeros.
-//             memcpy(tmp.p_im[ordi], num->p_im[ordi], num->p_nnz[ordi]*sizeof(coeff_t) );
-//             memcpy(tmp.p_idx[ordi],num->p_idx[ordi],num->p_nnz[ordi]*sizeof(imdir_t) );
-
-//             tmp.p_nnz[ordi] = num->p_nnz[ordi]; 
-
-//         }            
-
-
-//         if (order <= dhl.ndh){
-
-
-//             factorden = dhelp_get_deriv_factor(idx, order, dhl);            
-//             ssoti_set_im_r(val->re/factorden, idx, order, &tmp, dhl);
-
-//             ord_iter = MIN( val->act_order, res_order - val->act_order);
-//             tmp.act_order = MAX( ord_iter + order, tmp.act_order );
-
-//             for ( ordi = 0; ordi < ord_iter; ordi++){
-
-//                 for (diri = 0; diri < val->p_nnz[ordi]; diri++){
-
-//                     dhelp_multDir( idx, order, val->p_idx[ordi][diri], ordi+1, &idxr, &ordr, dhl);
-
-//                     factorden = dhelp_get_deriv_factor(idxr, ordr, dhl);
-//                     factornum = dhelp_get_deriv_factor(val->p_idx[ordi][diri], ordi+1, dhl);
-                    
-//                     value = val->p_im[ordi][diri] * factornum / factorden;
-                    
-//                     ssoti_set_im_r( value, idxr, ordr, &tmp, dhl);
-                    
-//                 }
-                
-//             }
-
-//         }
-
-//         // Copy back to number.
-//         ssoti_set_o( &tmp, num, dhl);
-
-//     }
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-
-// // ****************************************************************************************************
-// void ssoti_set_im_o(semiotin_t* val, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-//     imdir_t idxr;
-//     ndir_t diri;
-//     semiotin_t tmp;
-
-//     ord_t res_order, ordi, ordr, ord_iter;
-    
-//     if (order == 0){
-        
-//         ssoti_set_o( val, num, dhl);
-
-//     }else{
-
-//         // TODO: Determine what is the required order: Actual or Truncation...
-//         res_order = MIN( dhl.ndh, MAX(num->trc_order, order + val->trc_order) );
-        
-//         tmp = ssoti_get_tmp(0, res_order, dhl);
-
-        
-//         tmp.re = num->re; //  Set real coefficient.
-        
-//         // Initiall, copy all data from num to the result.
-//         ord_iter = MIN( num->act_order, res_order);
-//         tmp.act_order = ord_iter;
-        
-//         for ( ordi = 0; ordi < tmp.act_order; ordi++){
-            
-//             // Copy memory to dest number. Only copy non zeros.
-//             memcpy(tmp.p_im[ordi], num->p_im[ordi], num->p_nnz[ordi]*sizeof(coeff_t) );
-//             memcpy(tmp.p_idx[ordi],num->p_idx[ordi],num->p_nnz[ordi]*sizeof(imdir_t) );
-
-//             tmp.p_nnz[ordi] = num->p_nnz[ordi]; 
-
-//         }            
-
-
-//         if (order <= dhl.ndh){
-        
-//             // Set given OTI number val as coefficients for the imaginary direction (idx,order)
-//             ssoti_set_im_r(val->re, idx, order, &tmp, dhl);
-
-//             // ord_iter = MIN( val->act_order, res_order - order );
-//             ord_iter = MIN( val->act_order, res_order - val->act_order);
-
-//             tmp.act_order = MAX( ord_iter + order, tmp.act_order );
-
-//             for ( ordi = 0; ordi < ord_iter; ordi++) {
-
-//                 for (diri = 0; diri < val->p_nnz[ordi]; diri++){
-
-//                     dhelp_multDir( idx, order, val->p_idx[ordi][diri], ordi+1, &idxr, &ordr, dhl);
-                    
-//                     ssoti_set_im_r(val->p_im[ordi][diri], idxr, ordr, &tmp, dhl);                
-                    
-//                 }
-                
-//             }
-
-//         }
-
-//         ssoti_set_o( &tmp, num, dhl);
-
-//     }
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void ssoti_set_r( coeff_t a, semiotin_t* num, dhelpl_t dhl){
-    // Do "num = a"
-    ord_t i;
-    
-    num->re         = a;
-    num->act_order  = 0;
-    num->act_nbases = 0;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_set_o( semiotin_t* src, semiotin_t* dest, dhelpl_t dhl){
-    
-//     // This function sets an oti number from another OTI number.
-//     uint8_t reallocate = ssoti_requiresrealloc(src, dest);
-//     ord_t i;
-
-//     // TODO: Add check to wheather dest has not been initialized.
-//     // TODO: Add case when the two elements have different orders.
-//     // TODO: Add check if dest is a tmp function.
-
-//     if( reallocate ){
-//         // Reallocation IS required.
-//         // Easiest way: Free current memory in dest and allocate new memory.
-        
-//         if (dest->flag != 0){
-
-//             ssoti_free(dest);  
-//             *dest = ssoti_createEmpty_like( src, dhl);        
-
-//         } else {
-
-//             // TODO: What happens if this is a tmp value?
-//             printf("ERROR: Cant change memory of given OTI number.\n");
-//             exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
-
-//         }
-
-//     }
-
-//     // Copy real coefficient
-//     dest->re = src->re;
-//     dest->act_order = src->act_order;
-
-//     // Copy imaginary coefficients
-//     for ( i = 0; i < src->act_order; i++){
-
-//         // Copy memory to dest number. Only copy non zeros.
-//         memcpy(dest->p_im[i], src->p_im[i], src->p_nnz[i]*sizeof(coeff_t) );
-//         memcpy(dest->p_idx[i],src->p_idx[i],src->p_nnz[i]*sizeof(imdir_t) );
-
-//         dest->p_nnz[i] = src->p_nnz[i]; 
-
-//     }
-
-//     // Set all other elements in the imaginary directions to zero.
-//     for (; i<dest->trc_order;i++){
-
-//         dest->p_nnz[i] = 0;
-
-//     }
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ====================================================================================================
-// // ====================================================================================================
-// // =====================        IMAGINARY DIR. EXTRACTOR FUNCTIONS         ============================
-// // ====================================================================================================
-// // ====================================================================================================
-
-// // ****************************************************************************************************
-// coeff_t ssoti_get_item(imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-//     coeff_t res = 0.0; // Default answer.
-//     flag_t flag;
-//     imdir_t pos;
-    
-//     if (order == 0){
-        
-//         res = num->re;
-
-//     } else {
-
-//         if ( order<=num->act_order ){            
-//             if(num->p_nnz[order-1] != 0){
-//                 pos = binSearchUI64(idx, num->p_idx[order-1], num->p_nnz[order-1], &flag );
-//                 if (flag != 0){
-//                     res = num->p_im[order-1][pos];
-//                 }
-//             }
-//         }
-
-//     }
-
-//     return res;
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-coeff_t ssoti_get_im(imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-    coeff_t res = 0.0; // Default answer.
-    bases_t* imdir_bases;
-    bases_t max_idx_base;
-
-    if (order == 0){
-        
-        res = num->re;
-
-    } else {
-
-        imdir_bases = dhelp_get_imdir( idx, order, dhl);
-        max_idx_base = imdir_bases[order-1];
-        
-        if ( order <= num->act_order || order <= num->act_nbases ){ 
-                
-            res = num->p_im[order-1][idx];
-                
-        }
-
-    }
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// semiotin_t ssoti_get_im_o(imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-//     semiotin_t res = ssoti_init();
-//     coeff_t rres = ssoti_get_im(idx, order, num, dhl);
-
-//     res.re = rres;
-
-//     return res;
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_get_im_to_o(imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl){
-    
-//     coeff_t rres = ssoti_get_im(idx, order, num, dhl);
-
-//     ssoti_set_r(rres,res, dhl);
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_get_im_to_r(imdir_t idx, ord_t order, semiotin_t* num, coeff_t* res, dhelpl_t dhl){
-    
-//     *res = ssoti_get_im(idx, order, num, dhl);
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-
-// // ****************************************************************************************************
-// semiotin_t ssoti_extract_im(imdir_t idx, ord_t order, semiotin_t* num,  dhelpl_t dhl){
-
-//     semiotin_t res = ssoti_init();
-
-//     ssoti_extract_im_to(idx, order, num, &res, dhl);
-
-//     return res;
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_extract_im_to(imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl){
-    
-//     int  success;
-//     ord_t   resord, ordi, ordj;
-//     imdir_t residx;
-//     ndir_t ndir_ordi, diri;
-//     semiotin_t tmp;
-    
-//     if (order == 0){
-        
-//         // If getting the "real" part, it is the same number.
-//         ssoti_set_o(num,res,dhl);
-
-//     } else if (order > num->act_order){
-
-//         // If the requested order is greater, it will be zero.
-//         ssoti_set_r(0.0, res, dhl);
-
-//     } else {
-
-//         // use temporal 0.
-//         tmp = ssoti_get_tmp(0, num->trc_order - order, dhl);
-        
-//         // Get real part.
-//         tmp.re = ssoti_get_item(idx, order, num, dhl);
-
-//         // Set new order
-//         tmp.act_order = num->act_order - order;
-
-//         // loop for the remaining orders:
-//         for(ordi = order; ordi<num->act_order; ordi++){
-
-//             // Divide the remaining directions in the number by the requested direction
-//             // 
-//             ndir_ordi = num->p_nnz[ordi];
-
-//             for ( diri = 0; diri< ndir_ordi; diri++){ 
-
-//                 dhelp_div_imdir( num->p_idx[ordi][diri], ordi + 1, 
-//                                  idx, order, &residx, &resord, &success, dhl);
-//                 // if derivative is possible:
-//                 if (success == 0){
-
-//                     ordj = resord-1;
-                    
-//                     tmp.p_idx[ordj][tmp.p_nnz[ordj]] = residx;
-//                     tmp.p_im[ ordj][tmp.p_nnz[ordj]] = num->p_im[ordi][diri] ;
-//                     tmp.p_nnz[ordj]++;
-
-//                 }
-
-//             }
-
-//         }
-        
-//         ssoti_copy_to(&tmp,res,dhl);
-
-//     }
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ====================================================================================================
-// // ====================================================================================================
-// // ===================================      TRUNCATOR FUNCTIONS      ==================================
-// // ====================================================================================================
-// // ====================================================================================================
-
-// // ****************************************************************************************************
-// semiotin_t ssoti_truncate_im(imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-//     semiotin_t res = ssoti_init();
-
-//     ssoti_truncate_im_to( idx, order, num, &res, dhl);
-
-//     return res;
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_truncate_im_to(imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl){
-    
-//     int  success;
-//     ord_t   resord, ordi;
-//     imdir_t residx;
-//     ndir_t ndir_ordi, diri;
-//     semiotin_t tmp;
-//     // bases_t* imdir_bases;
-    
-    
-//     if (order == 0){
-        
-//         // All the number is truncated zero.
-//         ssoti_set_r( 0.0, res, dhl);
-//         return;
-
-//     } else if (order > num->act_order){
-        
-//         // no need to truncate anything
-//         ssoti_set_o(num,res,dhl);
-//         return;
-
-//     } else {
-
-//         // use temporal 0.
-//         tmp = ssoti_get_tmp( 0, num->trc_order, dhl);
-        
-//         // Set real part.
-//         tmp.re = num->re;
-//         tmp.act_order = num->act_order;
-
-//         // First, copy all elements up to order - 1 .
-//         for( ordi = 0; ordi < (order-1); ordi++ ){
-            
-//             memcpy(tmp.p_im[ordi], num->p_im[ordi], num->p_nnz[ordi]*sizeof(coeff_t) );
-//             memcpy(tmp.p_idx[ordi],num->p_idx[ordi],num->p_nnz[ordi]*sizeof(imdir_t) );
-
-//             tmp.p_nnz[ordi] = num->p_nnz[ordi]; 
-
-//         }
-        
-//         // Then, set all other imaginary directions according to truncation.
-//         for(ordi = order-1; ordi< num->act_order; ordi++){
-
-//             // Divide the remaining directions in the number by the requested direction
-//             // 
-//             ndir_ordi = num->p_nnz[ordi];
-
-//             for ( diri = 0; diri< ndir_ordi; diri++){ 
-
-//                 dhelp_div_imdir( num->p_idx[ordi][diri], ordi + 1, idx, order, &residx, &resord, &success, dhl);
-                
-//                 // if derivative is not possible, number is preserved.
-//                 if (success != 0){
-                    
-//                     tmp.p_idx[ordi][tmp.p_nnz[ordi]] = num->p_idx[ordi][diri];
-//                     tmp.p_im [ordi][tmp.p_nnz[ordi]] = num->p_im[ ordi][diri];
-//                     tmp.p_nnz[ordi]++;
-
-//                 }
-
-//             }
-
-//         }
-        
-//         ssoti_copy_to(&tmp,res,dhl);
-
-//     }  
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ====================================================================================================
-// // ====================================================================================================
-// // ============================        DERIVATIVE EXTRACTOR FUNCTIONS       ===========================
-// // ====================================================================================================
-// // ====================================================================================================
-
-// // ****************************************************************************************************
-// void ssoti_set_deriv_r( coeff_t coef, imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-    
-//     coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
-
-//     ssoti_set_im_r( coef/factor, idx, order, num, dhl);
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-
-// // ****************************************************************************************************
-// coeff_t ssoti_get_deriv( imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-
-//     coeff_t coef   = ssoti_get_item(idx,order,num,dhl);
-//     coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
-
-//     return coef*factor;
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// semiotin_t ssoti_get_deriv_o( imdir_t idx, ord_t order, semiotin_t* num, dhelpl_t dhl){
-
-//     semiotin_t res = ssoti_init();
-
-//     // Set imaginary direction.
-//     ssoti_get_deriv_to( idx, order, num, &res, dhl);
-    
-//     return res;
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_get_deriv_to( imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl){
-
-//     coeff_t coef   = ssoti_get_item(idx,order,num,dhl);
-//     coeff_t factor = dhelp_get_deriv_factor(idx, order, dhl);
-
-//     ssoti_set_r( coef * factor, res, dhl);
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// semiotin_t ssoti_extract_deriv(imdir_t idx, ord_t order, semiotin_t* num,  dhelpl_t dhl){
-
-//     semiotin_t res = ssoti_init();
-
-//     ssoti_extract_deriv_to(idx, order, num, &res, dhl);
-
-//     return res;
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// // ****************************************************************************************************
-// void ssoti_extract_deriv_to(imdir_t idx, ord_t order, semiotin_t* num, semiotin_t* res, dhelpl_t dhl){
-    
-//     int  success;
-//     ord_t   resord, ordi, ordj;
-//     imdir_t residx;
-//     coeff_t factornum, factorden;
-//     ndir_t ndir_ordi, diri;
-//     semiotin_t tmp;
-    
-//     if (order == 0){
-        
-//         // If getting the "real" part, it is the same number.
-//         ssoti_set_o(num,res,dhl);
-//         return;
-
-//     } else if (order > num->act_order){
-
-//         // If the requested order is greater, it will be zero.
-//         ssoti_set_r(0.0, res, dhl);
-//         return;
-
-//     // Add another check to see if the number of bases is greater than the act_nbases from the number. 
-
-//     } else {
-
-//         // use temporal 0.
-//         tmp = ssoti_get_tmp(0, num->trc_order - order, dhl);
-        
-//         // Get real part.
-//         tmp.re = ssoti_get_item(idx, order, num, dhl) * dhelp_get_deriv_factor(idx, order, dhl);
-
-//         // Set new order
-//         tmp.act_order = num->act_order - order;
-
-//         // loop for the remaining orders:
-//         for( ordi = order; ordi < num->act_order; ordi++ ){
-
-//             // Divide the remaining directions in the number by the requested direction            
-//             ndir_ordi = num->p_nnz[ordi];
-
-//             for ( diri = 0; diri< ndir_ordi; diri++){ 
-
-//                 dhelp_div_imdir( num->p_idx[ordi][diri], ordi + 1, idx, order, &residx, &resord, &success, dhl);
-
-//                 // if division was possible:
-//                 if (success == 0){
-
-//                     ordj = resord - 1;
-
-//                     factornum = dhelp_get_deriv_factor(num->p_idx[ordi][diri], ordi+1, dhl);
-//                     factorden = dhelp_get_deriv_factor(residx, resord, dhl);
-
-//                     tmp.p_idx[ordj][tmp.p_nnz[ordj]] = residx;
-//                     tmp.p_im[ ordj][tmp.p_nnz[ordj]] = num->p_im[ordi][diri] * (factornum/factorden);
-//                     tmp.p_nnz[ordj]++;
-
-//                 }
-
-//             }
-
-//         }
-
-//         ssoti_copy_to(&tmp,res,dhl);
-//     }    
-
-// }
-// // ----------------------------------------------------------------------------------------------------
-
-// ====================================================================================================
-// ====================================================================================================
-// ===================================        HELPER FUNCTIONS       ==================================
-// ====================================================================================================
-// ====================================================================================================
-
-// ****************************************************************************************************
-void ssoti_help_set_all_coeffs( coeff_t a, semiotin_t* num, dhelpl_t dhl){
-
-    imdir_t imdir;
-    ndir_t ndir=0;
-    ord_t ordi;
-    bases_t* imdir_bases;
-
-    num->re = a;
-
-    // loop over active orders:
-    for( ordi = 0; ordi < num->trc_order; ordi++){
-
-        ndir = dhl.p_dh[ordi].p_ndirs[num->tot_nbases];
-
-        // loop over active imaginary directions:
-        for ( imdir = 0; imdir < ndir; imdir++){
-            
-            num->p_im[ordi][imdir] = a ;
-
-        }
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-inline void ssoti_reset_orders(ord_t ord_start, ord_t ord_end, semiotin_t* num, dhelpl_t dhl){
-    
-    ord_t ordi = 0;
-    ord_t o_start = MIN(num->trc_order,ord_start);
-    ord_t o_end   = MIN(num->trc_order,ord_end  );
-    ndir_t ndir;
-
-    if ( o_start == 0 ) {
-
-        num->re = 0.0;
-        o_start = 1;
-
-    }
-
-    // Loop among all orders in num to be reset.
-    for (ordi = o_start-1; ordi < o_end; ordi++){
-        
-        ndir = dhl.p_dh[ordi].p_ndirs[num->act_nbases];
-        
-        memset( num->p_im[ordi], 0, ndir*sizeof(coeff_t) );
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-inline void ssoti_reset_nbases(bases_t base_start, bases_t base_end, semiotin_t* num, dhelpl_t dhl){
-    
-    ord_t ordi = 0;
-    bases_t b_start = MIN(num->tot_nbases,base_start);
-    bases_t b_end   = MIN(num->tot_nbases,base_end  );
-    ndir_t ndirs,ndire;
-    if ( b_start == 0 ){
-    	b_start = 1;
-    }
-    // Loop among all orders in num.
-    for (ordi = 0; ordi < num->act_order; ordi++){
-        
-        ndirs = dhl.p_dh[ordi].p_ndirs[b_start-1];
-        ndire = dhl.p_dh[ordi].p_ndirs[b_end];
-        
-        memset( &num->p_im[ordi][ndirs], 0, (ndire-ndirs)*sizeof(coeff_t) );
-        
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-
-// ****************************************************************************************************
-void ssoti_print_full(semiotin_t* num, dhelpl_t dhl){
-
-    imdir_t imdir;
-    ndir_t ndir=0;
-    ord_t ordi;
-    bases_t* imdir_bases;
-
-    printf("<semiotin, ");
-    printf("act_nbases: "_PBASEST", ",num->act_nbases);
-    printf("act_order: "_PORDT", ",num->act_order); 
-    printf("tot_nbases: "_PBASEST", ",num->tot_nbases); 
-    printf("trc_order: "_PORDT",\n",num->trc_order); 
-    
-    // Print real direction:
-    printf("    "_PCOEFFT" \n", num->re);
-
-    // loop over active orders:
-    for( ordi = 0; ordi < num->trc_order; ordi++){
-
-        ndir = dhl.p_dh[ordi].p_ndirs[num->tot_nbases];
-
-        // loop over active imaginary directions:
-        for ( imdir = 0; imdir < ndir; imdir++){
-            
-            printf("    " _PSCOEFFT " * e(",  num->p_im[ordi][imdir]);
-
-            imdir_bases = dhelp_get_imdir( imdir, ordi+1, dhl);
-            
-            printArrayUI16( imdir_bases, ordi+1 );
-
-            printf(")\n");
-
-        }
-
-    }
-    printf(">\n");
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-void ssoti_print(semiotin_t* num, dhelpl_t dhl){
-
-    imdir_t imdir;
-    ndir_t ndir=0;
-    ord_t ordi;
-    bases_t* imdir_bases;
-
-    printf("<semiotin, ");
-    printf("act_nbases: "_PBASEST", ",num->act_nbases);
-    printf("act_order: "_PORDT", ",num->act_order); 
-    printf("tot_nbases: "_PBASEST", ",num->tot_nbases); 
-    printf("trc_order: "_PORDT",\n",num->trc_order); 
-    
-    // Print real direction:
-    printf("    "_PCOEFFT" \n", num->re);
-
-    // loop over active orders:
-    for( ordi = 0; ordi < num->act_order; ordi++){
-        
-        ndir = dhl.p_dh[ordi].p_ndirs[num->act_nbases];
-        
-        // loop over active imaginary directions:
-        for ( imdir = 0; imdir < ndir; imdir++){
-            
-            printf("   " _PSCOEFFT " * e(",  num->p_im[ordi][imdir]);
-
-            imdir_bases = dhelp_get_imdir( imdir, ordi+1, dhl);
-            
-            printArrayUI16( imdir_bases, ordi+1 );
-
-            printf(")\n");
-
-        }
-
-    }
-    printf(">\n");
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-inline semiotin_t ssoti_get_rtmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl){
-    
-    semiotin_t res=ssoti_init();
-    ord_t ordi = 0;
-
-    if (trc_order != 0){
-        
-        if (trc_order > dhl.ndh){
-            printf("ERROR: Maximum order not allowed in ssoti_get_rtmp.\n");
-            exit(OTI_undetErr);
-        }
-        if (ntmp >= dhl.p_dh[trc_order-1].Ntmps){
-            printf("ERROR: Trying to get a temporal that does not exist.\n");
-            exit(OTI_undetErr);   
-        }
-        res.re     = 0.0; // Set real value to zero.
-        res.p_im   = dhl.p_dh[trc_order-1].p_ims[ntmp]; 
-        res.act_nbases = 0; // Actual bases = 0, so "no imagianry direction..."
-        res.tot_nbases = dhl.p_dh[trc_order-1].Nbasis;
-        res.act_order = 0;
-        res.trc_order = trc_order; 
-        res.flag      = 0; // Memory is not owned by this number.
-
-        for ( ordi = 0; ordi<trc_order; ordi++ ){
-
-            res.p_im[ordi]  = dhl.p_dh[ordi].p_im[ntmp];
-
-        }
-
-    }
-
-    return res;
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-semiotin_t ssoti_get_tmp(ndir_t ntmp, ord_t trc_order, dhelpl_t dhl){
-    
-    return ssoti_get_rtmp( ntmp + 10, trc_order, dhl );
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ====================================================================================================
-// ====================================================================================================
-// ===================================        MEMORY MANAGEMENT      ==================================
-// ====================================================================================================
-// ====================================================================================================
-
-// ****************************************************************************************************
-void* ssoti_read_from_mem_to(void* mem, semiotin_t* dst, dhelpl_t dhl){
-
-    // Mem must come allocated.
-    ord_t ordi;
-    ndir_t ndir;
-    void* read_mem = mem;
-    coeff_t re = 0.0;
-    ord_t act_order = 0;
-    ord_t trc_order = 0;
-    bases_t act_nbases = 0;
-    semiotin_t tmp;
-
-    // read real coefficient:
-    memcpy( &re, read_mem, sizeof(coeff_t) );
-    read_mem += sizeof(coeff_t);
-
-    // read truncation order:
-    memcpy( &trc_order, read_mem, sizeof(ord_t) );
-    read_mem += sizeof(ord_t);
-
-    // read number of arrays order:
-    memcpy( &act_order, read_mem, sizeof(ord_t) );
-    read_mem += sizeof(ord_t);
-
-    // read number of bases
-    memcpy( &act_nbases, read_mem, sizeof(bases_t) );
-    read_mem += sizeof(bases_t);
-
-    // TODO: CHeck for compatibility of read values and data.
-    tmp = ssoti_createEmpty( act_nbases, trc_order, dhl);
-    tmp.re = re; // Set real coefficient.
-    tmp.act_order = act_order;
-
-    // Add the standard allocation sizes:
-    for ( ordi = 0; ordi < tmp.act_order; ordi++){
-
-        // Read number of directions.
-        memcpy(  &ndir, read_mem, sizeof(ndir_t) );
-        read_mem += sizeof(ndir_t);
-
-        // read array of coefficients (if any):
-        memcpy( tmp.p_im[ordi], read_mem, ndir*sizeof(coeff_t) );
-
-        read_mem += ndir*sizeof(coeff_t);
-
-    }
-
-    // Copy to result. 
-    // TODO: Avoid copying information, but only checking that it is possible to use memory in dst.
-    ssoti_copy_to( &tmp, dst, dhl);
-    return read_mem;
-}
-// ----------------------------------------------------------------------------------------------------
-
-
-// ****************************************************************************************************
-void ssoti_save_to_mem(semiotin_t* num, void* mem, dhelpl_t dhl){
-
-    // Mem must come allocated.
-    ord_t ordi;
-    ndir_t ndir;
-    void* write_mem = mem;
-
-    // Write real coefficient:
-    memcpy( write_mem, &num->re, sizeof(coeff_t) );
-    write_mem += sizeof(coeff_t);
-
-    // Write truncation order:
-    memcpy( write_mem, &num->trc_order, sizeof(ord_t) );
-    write_mem += sizeof(ord_t);
-
-    // Write number of arrays:
-    memcpy( write_mem, &num->act_order, sizeof(ord_t) );
-    write_mem += sizeof(ord_t);
-
-    // Write number of bases:
-    memcpy( write_mem, &num->act_nbases, sizeof(bases_t) );
-    write_mem += sizeof(bases_t);
-
-    // Add the standard allocation sizes:
-    for ( ordi = 0; ordi < num->act_order ; ordi++){
-
-        ndir = dhl.p_dh[ordi].p_ndirs[num->act_nbases];
-
-        // Write number of arrays order:
-        // TODO: Can this be avoided to save a bit of space saving?
-        memcpy( write_mem, &ndir, sizeof(ndir_t) );
-        write_mem += sizeof(ndir_t);
-
-        // Write array of coefficients:
-        memcpy( write_mem, num->p_im[ordi], ndir*sizeof(coeff_t) );
-        write_mem += ndir*sizeof(coeff_t);
-
-    }
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-uint64_t ssoti_get_memsize_save(semiotin_t* num, dhelpl_t dhl){
-
-    uint64_t mem_size = 0;
-    ord_t i;
-    ndir_t ndir;
-    
-    mem_size = sizeof(coeff_t) + // Real coefficient  
-               sizeof(ord_t) +   // Actual order
-               sizeof(ord_t) +   // Truncation order
-               sizeof(bases_t);  // Actual number of bases.
-                       
-
-    // Add the standard allocation sizes:
-    for ( i = 0 ; i < num->act_order ; i++){
-
-        ndir = dhl.p_dh[i].p_ndirs[num->act_nbases];
-
-        mem_size += sizeof(ndir_t) + ndir*( sizeof(coeff_t) ) ;
-
-    }
-    
-    return mem_size;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-uint64_t ssoti_get_min_memsize(semiotin_t* num, dhelpl_t dhl){
-
-    uint64_t allocation_size = 0;
-    ord_t ordi;
-    ndir_t ndir;
-    
-    // Get the allocation size of the OTI number:
-    allocation_size = num->trc_order * ( 
-        sizeof(coeff_t*)   // imaginary coefficients.
-    );
-
-    // Add only number of non zero.:
-    for ( ordi = 0; ordi < num->act_order ; ordi++){
-        
-        ndir = dhl.p_dh[ordi].p_ndirs[num->act_nbases];
-
-        allocation_size += ndir * ( sizeof(coeff_t) );
-
-    }
-
-    return allocation_size;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-uint64_t ssoti_get_total_memsize(semiotin_t* num, dhelpl_t dhl){
-
-    uint64_t allocation_size = 0;
-    ord_t ordi;
-    ndir_t ndir;
-
-    // Get the allocation size of the OTI number:
-    allocation_size = num->trc_order * (
-        sizeof(coeff_t*) // imaginary coefficients.
-    );
-
-    // Add total allocation per order:
-    for ( ordi = 0; ordi < num->trc_order; ordi++){
-        
-        ndir = dhl.p_dh[ordi].p_ndirs[num->tot_nbases];
-
-        allocation_size += ndir * ( sizeof(coeff_t) );
-
-    }
-
-    return allocation_size;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-uint8_t ssoti_requiresrealloc(semiotin_t* src, semiotin_t* dest){
-    
-    uint8_t reallocate = 0; // False
-
-    // Check if reallocation is necessary
-    if (src->act_order > dest->trc_order || src->act_nbases > dest->tot_nbases ) {
-       
-        reallocate = 0xFF; // True
-
-    }
-
-    return reallocate;
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void ssoti_copy_to(semiotin_t* src, semiotin_t* dest, dhelpl_t dhl){
-        
-    uint8_t reallocate = ssoti_requiresrealloc(src, dest);
-
-    // TODO: Add check to wheather dest has not been initialized.
-    // TODO: Add case when the two elements have different orders.
-    // TODO: Add check if dest is a tmp function.
-
-    if( reallocate ){
-        // Reallocation IS required.
-        // Easiest way: Free current memory in dest and allocate new memory.       
-
-        if (dest->flag != 0){
-
-            ssoti_free(dest);            
-            (*dest) = ssoti_createEmpty_like( src, dhl );
+            i++;
 
         } else {
 
-            // TODO: What happens if this is a tmp value?
-            printf("ERROR: Cant change memory of the given number (function ssoti_copy_to(...) ) \n");
-            exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
+            return 0;
 
         }
 
     }
 
-    // At this point, both inputs must have same trc_order.
-    ssoti_copy_nomemchk_to( src, dest, dhl);
-
+    return 1;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-inline void ssoti_copy_nomemchk_to(semiotin_t* src, semiotin_t* dest, dhelpl_t dhl){
-    
-    // Only recommended to use when using temporals.
-    // when memory is guaranteed to be allocated.
-    // Also, in this case, truncation order is not changed to the dest element.
-    ord_t ordi;
-    ndir_t ndir;
 
-    // Copy real coefficient
-    dest->re         = src->re;    
-    dest->act_nbases = src->act_nbases; 
-    dest->act_order  = src->act_order;
+// *******************************************************************************************************
+// Factorial of a small order, as a coeff_t (matches dhelp_get_deriv_factor's scale).
+static coeff_t ssoti_base_factorial(ord_t n){
 
-    // Copy imaginary coefficients
-    for ( ordi = 0; ordi < src->act_order; ordi++){
-        
-        ndir = dhl.p_dh[ordi].p_ndirs[src->act_nbases];
+    coeff_t r = 1.0;
+    ord_t i;
 
-        // Copy memory to dest number. Only copy non zeros.
-        memcpy(dest->p_im[ordi], src->p_im[ordi], ndir*sizeof(coeff_t) );
-
-    }  
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-semiotin_t ssoti_copy(semiotin_t* num, dhelpl_t dhl){
-
-    semiotin_t res = ssoti_createEmpty_like( num, dhl);
-
-    ssoti_copy_nomemchk_to( num, &res, dhl);
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-inline semiotin_t ssoti_init(void){
-
-    semiotin_t res;
-
-    res.re        = 0.0;
-    
-    res.p_im      = NULL;
-
-    res.act_nbases= 0;
-    res.tot_nbases= 0;
-    res.act_order = 0;
-    res.trc_order = 0;
-
-    res.flag=1;
-
-    return res;
-
-}
-// ----------------------------------------------------------------------------------------------------
-
-// ****************************************************************************************************
-void ssoti_free(semiotin_t* num){
-                
-    if (num->p_im != NULL && num->flag != 0){
-        free(num->p_im);
+    for (i = 2; i <= n; i++){
+        r *= (coeff_t)i;
     }
 
-    (*num) = ssoti_init();
-    
+    return r;
+
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
 
-// ****************************************************************************************************
-semiotin_t ssoti_createReal(coeff_t num, bases_t tot_nbases, ord_t trc_order, dhelpl_t dhl){
-    
-    semiotin_t res = ssoti_createEmpty(tot_nbases, trc_order,dhl);
+// *******************************************************************************************************
+// Derivative factor of a global direction: the product of the factorials of its base multiplicities.
+// Computed from sshelp_global_unrank() only, so it covers labels up to 65535 (no dhelp table lookup).
+static coeff_t ssoti_base_deriv_factor(imdir_t idx, ord_t order){
 
-    res.re = num;
+    bases_t g[_MAXORDER_OTI];
+    coeff_t factor = 1.0;
+    ord_t i = 0, mult;
 
-    return res;
+    if (order == 0){
+        return 1.0;
+    }
+
+    sshelp_global_unrank(idx, order, g);
+
+    while (i < order){
+
+        mult = 1;
+
+        while (i + mult < order && g[i + mult] == g[i]){
+            mult++;
+        }
+
+        factor *= ssoti_base_factorial(mult);
+        i += mult;
+
+    }
+
+    return factor;
+
 }
-// ----------------------------------------------------------------------------------------------------
- 
-// ****************************************************************************************************
-semiotin_t ssoti_createEmpty( bases_t tot_nbases, ord_t trc_order, dhelpl_t dhl){
-    
-    semiotin_t res = ssoti_init();
-    ord_t ordi;
-    ndir_t ndir;
-    ndir_t p_nnz[_MAXORDER_OTI]; 
-
-    uint64_t allocation_size = 0;
-    void * memory = NULL;
-    
-    res.tot_nbases= tot_nbases;
-    res.trc_order = trc_order;
-
-    
-    // Get the number of *imaginary* directions for nbases and order.
-    ndir = dhelp_extract_ndirTotal( tot_nbases, trc_order, dhl) - 1; // Excludes the real direction.
-    // If this passes, it is safe to avoid function call dhelp_extract_ndirOrder.
-
-    if (res.trc_order != 0 && res.tot_nbases != 0){
-
-        // Get the allocation size of the OTI number:
-        allocation_size  = res.trc_order*(sizeof(coeff_t*));
+// -------------------------------------------------------------------------------------------------------
 
 
-        // Add the standard allocation sizes:
-        for ( ordi = 0; ordi<res.trc_order; ordi++){
-            
-            // dhl.p_dh[order-1].p_ndirs[nbases] <-- Location of nbases. Macro?
-            p_nnz[ordi] = dhl.p_dh[ordi].p_ndirs[tot_nbases]; //dhelp_extract_ndirOrder( res.nbases,ordi+1,dhl);
-            
-            allocation_size += p_nnz[ordi]*(sizeof(coeff_t));
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     ACCESS     ------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+// *******************************************************************************************************
+coeff_t ssoti_get_item(imdir_t idx, ord_t order, const ssotinum_t* num){
+
+    ndir_t local_idx;
+    int found;
+
+    if (order == 0){
+        return num->re;
+    }
+
+    if (order > num->trc_order){
+        return 0.0;
+    }
+
+    found = sshelp_global_to_local(idx, order, num->p_bases, num->nbases, &local_idx);
+
+    if (found != 1){
+        return 0.0;
+    }
+
+    return num->p_im[sshelp_order_offset(num->nbases, order) + local_idx];
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void ssoti_set_item(coeff_t val, imdir_t idx, ord_t order, ssotinum_t* num){
+
+    bases_t g[_MAXORDER_OTI];
+    bases_t unique_g[_MAXORDER_OTI];
+    ord_t m = 0, i;
+    ndir_t local_idx;
+    int found;
+
+    if (order == 0){
+
+        num->re = val;
+        return;
+
+    }
+
+    if (order > num->trc_order){
+        return;
+    }
+
+    found = sshelp_global_to_local(idx, order, num->p_bases, num->nbases, &local_idx);
+
+    if (found != 1){
+
+        if (val == 0.0){
+            // Nothing stored there yet and nothing to add: don't grow the set for a zero.
+            return;
+        }
+
+        sshelp_global_unrank(idx, order, g);
+
+        for (i = 0; i < order; i++){
+
+            if (m == 0 || unique_g[m - 1] != g[i]){
+                unique_g[m++] = g[i];
+            }
 
         }
 
-        // Allocate memory and check if correctly allocated.
-        memory = malloc(allocation_size);
-        if ( memory == NULL ){
-            printf("ERROR: Not enough memory to handle oti number.\n Exiting...\n");
-            exit(OTI_OutOfMemory); // TODO: Raise error instead of quitting the program.
+        ssoti_add_bases(unique_g, m, num);
+
+        found = sshelp_global_to_local(idx, order, num->p_bases, num->nbases, &local_idx);
+
+    }
+
+    num->p_im[sshelp_order_offset(num->nbases, order) + local_idx] = val;
+
+    if (val != 0.0 && order > num->act_order){
+        num->act_order = order;
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+coeff_t ssoti_get_deriv(imdir_t idx, ord_t order, const ssotinum_t* num){
+
+    coeff_t coef = ssoti_get_item(idx, order, num);
+
+    return coef * ssoti_base_deriv_factor(idx, order);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+double ssoti_density(const ssotinum_t* num){
+
+    ndir_t total = sshelp_ndir_total(num->nbases, num->trc_order);
+    ndir_t nz = 0, i;
+
+    if (total == 0){
+        return 0.0;
+    }
+
+    for (i = 0; i < total; i++){
+
+        if (num->p_im[i] != 0.0){
+            nz++;
         }
 
-        // Distribute memory among the different pointers.
-        res.p_im  = (coeff_t**)memory;
-        memory   += res.trc_order * sizeof(coeff_t*);
-        
-        for ( ordi = 0; ordi < res.trc_order; ordi++){
-            
-            // Distribute memory.
-            res.p_im[ordi] = (coeff_t*)memory;
-            memory += p_nnz[ordi]*sizeof(coeff_t); 
-            
+    }
+
+    return (double)nz / (double)total;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+size_t ssoti_memory_size(const ssotinum_t* num){
+
+    size_t size = sizeof(ssotinum_t);
+    ndir_t nimag_cap;
+
+    if (num->cap_bases == 0){
+        return size;
+    }
+
+    nimag_cap = sshelp_ndir_total(num->cap_bases, num->trc_order);
+
+    size += (size_t)num->cap_bases * sizeof(bases_t);
+    size += (size_t)nimag_cap * sizeof(coeff_t);
+
+    return size;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void ssoti_print(const ssotinum_t* num){
+
+    bases_t gg[_MAXORDER_OTI];
+    bases_t i;
+    ord_t p, j;
+    ndir_t off, n, li;
+
+    printf("  act_ord: " _PORDT ", trc_ord: " _PORDT ", nbases: " _PBASEST ", re: " _PCOEFFT "\n",
+        num->act_order, num->trc_order, num->nbases, num->re);
+
+    printf("  active bases: [");
+
+    for (i = 0; i < num->nbases; i++){
+
+        if (i > 0){
+            printf(", ");
         }
 
-    } 
+        printf(_PBASEST, num->p_bases[i]);
 
-    // Raise memory ownership flag for OTI number.
-    res.flag = 1;
+    }
+
+    printf("]\n");
+
+    printf("      VALUE   ,    IMDIR  \n");
+    printf("  " _PCOEFFT " , [0]\n", num->re);
+
+    for (p = 1; p <= num->act_order; p++){
+
+        off = sshelp_order_offset(num->nbases, p);
+        n   = sshelp_ndir_order(num->nbases, p);
+
+        for (li = 0; li < n; li++){
+
+            if (num->p_im[off + li] == 0.0){
+                continue;
+            }
+
+            printf("  " _PCOEFFT " , ", num->p_im[off + li]);
+
+            sshelp_unrank(li, p, gg);
+
+            for (j = 0; j < p; j++){
+                gg[j] = num->p_bases[gg[j]];
+            }
+
+            printArrayUI16(gg, p);
+
+            printf("\n");
+
+        }
+
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     CONVERSION     --------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+// *******************************************************************************************************
+ssotinum_t ssoti_from_soti(const sotinum_t* num, dhelpl_t dhl){
+
+    sshelp_ws_t* ws = ssoti_ws();
+    bases_t g[_MAXORDER_OTI];
+    bases_t* p_raw;
+    ndir_t total_raw = 0, pos = 0, nk = 0, i;
+    ord_t ordi, p, j;
+    ssotinum_t res;
+
+    (void)dhl;
+
+    for (ordi = 0; ordi < num->act_order; ordi++){
+        total_raw += (ndir_t)num->p_nnz[ordi] * (ordi + 1);
+    }
+
+    if (total_raw > 0){
+        ssoti_ws_need(ws, 0, 0, (size_t)total_raw);
+    }
+
+    p_raw = ws->p_bases;
+
+    for (ordi = 0; ordi < num->act_order; ordi++){
+
+        p = ordi + 1;
+
+        for (i = 0; i < num->p_nnz[ordi]; i++){
+
+            sshelp_global_unrank(num->p_idx[ordi][i], p, g);
+
+            for (j = 0; j < p; j++){
+                p_raw[pos++] = g[j];
+            }
+
+        }
+
+    }
+
+    if (total_raw > 1){
+        qsort(p_raw, total_raw, sizeof(bases_t), ssoti_base_cmp_bases);
+    }
+
+    for (i = 0; i < total_raw; i++){
+
+        if (nk == 0 || p_raw[nk - 1] != p_raw[i]){
+            p_raw[nk++] = p_raw[i];
+        }
+
+    }
+
+    res = ssoti_create_empty(p_raw, (bases_t)nk, num->trc_order);
+    res.re = num->re;
+
+    for (ordi = 0; ordi < num->act_order; ordi++){
+
+        p = ordi + 1;
+
+        for (i = 0; i < num->p_nnz[ordi]; i++){
+            ssoti_set_item(num->p_im[ordi][i], num->p_idx[ordi][i], p, &res);
+        }
+
+    }
 
     return res;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-semiotin_t ssoti_createEmpty_like( semiotin_t* other, dhelpl_t dhl){
-    
-    // This function assumes that 'other' is correctly allocated.
-    semiotin_t res = ssoti_createEmpty(other->tot_nbases, other->trc_order, dhl);
+
+// *******************************************************************************************************
+sotinum_t ssoti_to_soti(const ssotinum_t* num, dhelpl_t dhl){
+
+    ndir_t p_nnz[_MAXORDER_OTI];
+    ord_t ordi, p, act_order = 0;
+    ndir_t off, n, li, pos;
+    coeff_t val;
+    imdir_t gidx;
+    int status;
+    sotinum_t res;
+
+    for (ordi = 0; ordi < num->trc_order; ordi++){
+
+        p   = ordi + 1;
+        off = sshelp_order_offset(num->nbases, p);
+        n   = sshelp_ndir_order(num->nbases, p);
+        p_nnz[ordi] = 0;
+
+        for (li = 0; li < n; li++){
+
+            if (num->p_im[off + li] != 0.0){
+                p_nnz[ordi]++;
+            }
+
+        }
+
+        if (p_nnz[ordi] > 0){
+            act_order = p;
+        }
+
+    }
+
+    res = soti_createEmpty_predef(p_nnz, num->trc_order, dhl);
+    res.re = num->re;
+    res.act_order = act_order;
+
+    for (ordi = 0; ordi < act_order; ordi++){
+
+        p   = ordi + 1;
+        off = sshelp_order_offset(num->nbases, p);
+        n   = sshelp_ndir_order(num->nbases, p);
+        pos = 0;
+
+        for (li = 0; li < n; li++){
+
+            val = num->p_im[off + li];
+
+            if (val != 0.0){
+
+                status = sshelp_local_to_global(li, p, num->p_bases, num->nbases, &gidx);
+
+                if (status != SSHELP_OK){
+                    printf("ERROR: Semi-sparse to sparse conversion: global index overflow.\n");
+                    exit(OTI_OutOfMemory);
+                }
+
+                res.p_im[ordi][pos]  = val;
+                res.p_idx[ordi][pos] = gidx;
+                pos++;
+
+            }
+
+        }
+
+        res.p_nnz[ordi] = pos;
+
+    }
 
     return res;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
 
-// ****************************************************************************************************
-semiotin_t ssoti_createEmpty_predef( bases_t nbases, ord_t trc_order, dhelpl_t dhl){
-    
-    semiotin_t res = ssoti_createEmpty(nbases, trc_order, dhl);
+
+// -------------------------------------------------------------------------------------------------------
+// ---------------------------------------     TRUNCATION     --------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+// *******************************************************************************************************
+ssotinum_t ssoti_truncate_im(imdir_t idx, ord_t order, const ssotinum_t* num){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_truncate_im_to(idx, order, num, &res);
 
     return res;
 
 }
-// ----------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void ssoti_truncate_im_to(imdir_t idx, ord_t order, const ssotinum_t* num, ssotinum_t* res){
+
+    bases_t u_target[_MAXORDER_OTI];
+    bases_t v[_MAXORDER_OTI];
+    ndir_t target_local, off, n, li, total;
+    ord_t dord, i;
+    int found;
+
+    // Safe regardless of aliasing: a no-op when res == num, a full copy otherwise. Every
+    // remaining read/write below happens on res, never on num.
+    ssoti_copy_to(num, res);
+
+    if (order == 0){
+
+        total = sshelp_ndir_total(res->nbases, res->trc_order);
+
+        if (total > 0){
+            memset(res->p_im, 0, total * sizeof(coeff_t));
+        }
+
+        res->re        = 0.0;
+        res->act_order = 0;
+
+        return;
+
+    }
+
+    found = sshelp_global_to_local(idx, order, res->p_bases, res->nbases, &target_local);
+
+    if (found != 1 || order > res->act_order){
+        // Either idx uses a base outside the active set (nothing can contain it), or nothing
+        // at or above 'order' is active: no truncation needed.
+        return;
+    }
+
+    sshelp_unrank(target_local, order, u_target);
+
+    for (dord = order; dord <= res->act_order; dord++){
+
+        off = sshelp_order_offset(res->nbases, dord);
+        n   = sshelp_ndir_order(res->nbases, dord);
+
+        for (i = 0; i < dord; i++){
+            v[i] = 0;
+        }
+
+        for (li = 0; li < n; li++){
+
+            if (ssoti_base_contains(v, dord, u_target, order)){
+                res->p_im[off + li] = 0.0;
+            }
+
+            if (li + 1 < n){
+                sshelp_next_dir(v, dord, res->nbases);
+            }
+
+        }
+
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+ssotinum_t ssoti_truncate_order(ord_t order, const ssotinum_t* num){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_truncate_order_to(order, num, &res);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void ssoti_truncate_order_to(ord_t order, const ssotinum_t* num, ssotinum_t* res){
+
+    ndir_t off, nimag;
+
+    ssoti_copy_to(num, res);
+
+    // Order 0 removes everything, the real part included (soti_truncate_order).
+    if (order == 0){
+
+        ssoti_set_r(0.0, res);
+        return;
+
+    }
+
+    if (order > res->trc_order){
+        return;
+    }
+
+    // Keep trc_order; zero orders >= order so that orders above act_order hold zeros.
+    off   = sshelp_order_offset(res->nbases, order);
+    nimag = sshelp_ndir_total(res->nbases, res->trc_order);
+
+    if (nimag > off){
+        memset(res->p_im + off, 0, (nimag - off) * sizeof(coeff_t));
+    }
+
+    res->act_order = (res->act_order < order - 1) ? res->act_order : (ord_t)(order - 1);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+ssotinum_t ssoti_get_order_im(ord_t order, const ssotinum_t* num){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_get_order_im_to(order, num, &res);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void ssoti_get_order_im_to(ord_t order, const ssotinum_t* num, ssotinum_t* res){
+
+    ord_t p;
+    ndir_t off, n, total;
+
+    ssoti_copy_to(num, res);
+
+    if (order == 0){
+
+        total = sshelp_ndir_total(res->nbases, res->trc_order);
+
+        if (total > 0){
+            memset(res->p_im, 0, total * sizeof(coeff_t));
+        }
+
+        res->act_order = 0;
+
+        return;
+
+    }
+
+    res->re = 0.0;
+
+    for (p = 1; p <= res->trc_order; p++){
+
+        if (p == order){
+            continue;
+        }
+
+        off = sshelp_order_offset(res->nbases, p);
+        n   = sshelp_ndir_order(res->nbases, p);
+
+        if (n > 0){
+            memset(res->p_im + off, 0, n * sizeof(coeff_t));
+        }
+
+    }
+
+    res->act_order = (order <= res->trc_order) ? order : 0;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+ssotinum_t ssoti_compact(const ssotinum_t* num){
+
+    ssotinum_t res = ssoti_init();
+
+    ssoti_compact_to(num, &res);
+
+    return res;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+void ssoti_compact_to(const ssotinum_t* num, ssotinum_t* res){
+
+    sshelp_ws_t* ws;
+    bases_t old_k = num->nbases, new_k = 0, i;
+    bases_t *keep, *new_bases, *pos, *v;
+    ord_t p, new_act = 0;
+    ndir_t off_old, off_new, n, li, nimag_new, nimag_bound, new_li;
+    coeff_t* p_new_im;
+    coeff_t val;
+
+    if (old_k == 0){
+
+        if (res != num){
+            ssoti_copy_to(num, res);
+        }
+
+        return;
+
+    }
+
+    ws = ssoti_ws();
+    nimag_bound = sshelp_ndir_total(old_k, num->trc_order);
+
+    ssoti_ws_need(ws, (size_t)nimag_bound, 0, (size_t)old_k * 3 + (size_t)num->trc_order);
+
+    keep      = ws->p_bases;
+    new_bases = ws->p_bases + old_k;
+    pos       = ws->p_bases + 2 * old_k;
+    v         = ws->p_bases + 3 * old_k;
+    p_new_im  = ws->p_coef;
+
+    for (i = 0; i < old_k; i++){
+        keep[i] = 0;
+    }
+
+    // Pass 1: mark every base used by any nonzero coefficient, and the highest such order.
+    for (p = 1; p <= num->act_order; p++){
+
+        n       = sshelp_ndir_order(old_k, p);
+        off_old = sshelp_order_offset(old_k, p);
+
+        for (i = 0; i < p; i++){
+            v[i] = 0;
+        }
+
+        for (li = 0; li < n; li++){
+
+            if (num->p_im[off_old + li] != 0.0){
+
+                new_act = p;
+
+                for (i = 0; i < p; i++){
+                    keep[v[i]] = 1;
+                }
+
+            }
+
+            if (li + 1 < n){
+                sshelp_next_dir(v, p, old_k);
+            }
+
+        }
+
+    }
+
+    for (i = 0; i < old_k; i++){
+
+        if (keep[i]){
+
+            pos[i] = new_k;
+            new_bases[new_k] = num->p_bases[i];
+            new_k++;
+
+        }
+
+    }
+
+    nimag_new = sshelp_ndir_total(new_k, num->trc_order);
+    memset(p_new_im, 0, (size_t)nimag_new * sizeof(coeff_t));
+
+    // Pass 2: move every kept nonzero to its new local index (colex rank of the mapped tuple).
+    for (p = 1; p <= new_act; p++){
+
+        n       = sshelp_ndir_order(old_k, p);
+        off_old = sshelp_order_offset(old_k, p);
+        off_new = sshelp_order_offset(new_k, p);
+
+        for (i = 0; i < p; i++){
+            v[i] = 0;
+        }
+
+        for (li = 0; li < n; li++){
+
+            val = num->p_im[off_old + li];
+
+            if (val != 0.0){
+
+                new_li = 0;
+
+                for (i = 0; i < p; i++){
+                    new_li += (ndir_t)sshelp_comb((uint64_t)pos[v[i]] + i, i + 1);
+                }
+
+                p_new_im[off_new + new_li] = val;
+
+            }
+
+            if (li + 1 < n){
+                sshelp_next_dir(v, p, old_k);
+            }
+
+        }
+
+    }
+
+    // Every read of num above is done: safe now even when res aliases num.
+    ssoti_reserve(res, new_k, num->trc_order);
+
+    memcpy(res->p_bases, new_bases, (size_t)new_k * sizeof(bases_t));
+
+    if (nimag_new > 0){
+        memcpy(res->p_im, p_new_im, (size_t)nimag_new * sizeof(coeff_t));
+    }
+
+    res->re        = num->re;
+    res->nbases    = new_k;
+    res->act_order = new_act;
+    res->trc_order = num->trc_order;
+
+}
+// -------------------------------------------------------------------------------------------------------

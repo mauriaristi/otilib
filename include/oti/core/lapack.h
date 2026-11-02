@@ -105,4 +105,29 @@ void oti_dtrmm(char side, char uplo, char transa, char diag, int m, int n, doubl
                const double* a, int lda, double* b, int ldb);
 // ----------------------------------------------------------------------------------------------------
 
+
+/**************************************************************************************************//**
+@brief General matrix product (BLAS dgemm).
+
+C = alpha op(A) op(B) + beta C, op(X) = X ('N') or X^T ('T'). op(A) is m x k, op(B) is k x n,
+C is m x n.
+
+@param[in]    transa  'N' or 'T', applied to a.
+@param[in]    transb  'N' or 'T', applied to b.
+@param[in]    m       Rows of op(A) and of c.
+@param[in]    n       Columns of op(B) and of c.
+@param[in]    k       Columns of op(A) and rows of op(B).
+@param[in]    alpha   Scalar factor of op(A) op(B).
+@param[in]    a       Column-major matrix, op(A) is m x k.
+@param[in]    lda     Leading dimension of a (>= m if transa == 'N', >= k otherwise).
+@param[in]    b       Column-major matrix, op(B) is k x n.
+@param[in]    ldb     Leading dimension of b (>= k if transb == 'N', >= n otherwise).
+@param[in]    beta    Scalar factor of c on entry. beta == 0 need not leave c initialized.
+@param[in,out] c      Column-major matrix, m x n; overwritten by the result.
+@param[in]    ldc     Leading dimension of c (>= m).
+******************************************************************************************************/
+void oti_dgemm(char transa, char transb, int m, int n, int k, double alpha, const double* a,
+               int lda, const double* b, int ldb, double beta, double* c, int ldc);
+// ----------------------------------------------------------------------------------------------------
+
 #endif

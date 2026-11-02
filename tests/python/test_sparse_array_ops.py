@@ -120,6 +120,7 @@ SCALAR = (1.5, 0.5, -0.25, 0.1)
 REAL_MATRIX = [[1.0, 2.0], [3.0, 4.0]]
 
 
+# ********************************************************************************************************
 def _directions(max_order=ORDER):
     """
     Lists every bivariate derivative direction up to a total order, including the real part.
@@ -142,8 +143,10 @@ def _directions(max_order=ORDER):
     return [(a, b) for a in range(max_order + 1) for b in range(max_order + 1 - a)]
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _humdir(a, b):
     """
     Builds the human-readable imaginary direction for d^(a+b) / dx^a dy^b.
@@ -168,8 +171,10 @@ def _humdir(a, b):
     return [[basis, exp] for basis, exp in ((1, a), (2, b)) if exp > 0]
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _oti_value(obj, a, b):
     """
     Extracts the real part or the derivative d^(a+b) / dx^a dy^b of an OTI object.
@@ -207,8 +212,10 @@ def _oti_value(obj, a, b):
     return np.asarray(value, dtype=float)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _sym_q():
     """
     Returns the nonlinear polynomial ``q(x, y) = x y + x^3 + x^2 y^2 + y^4`` multiplying A3.
@@ -226,8 +233,10 @@ def _sym_q():
     return X_SYM * Y_SYM + X_SYM**3 + X_SYM**2 * Y_SYM**2 + Y_SYM**4
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _oti_matrix(name):
     """
     Builds the OTI array ``A0 + x A1 + y A2 + q(x, y) A3`` for an entry of ``MATRICES``.
@@ -256,8 +265,10 @@ def _oti_matrix(name):
     return oti.array(a0) + x * oti.array(a1) + y * oti.array(a2) + q * oti.array(a3)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _sym_matrix(name):
     """
     Builds the sympy matrix ``A0 + x A1 + y A2 + q(x, y) A3`` for an entry of ``MATRICES``.
@@ -282,8 +293,10 @@ def _sym_matrix(name):
     return a0 + X_SYM * a1 + Y_SYM * a2 + _sym_q() * a3
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _oti_scalar():
     """
     Builds the OTI scalar operand ``s(x, y)`` from ``SCALAR``.
@@ -305,8 +318,10 @@ def _oti_scalar():
     return s0 + s1 * x + s2 * y + s3 * (x * y)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _sym_scalar():
     """
     Builds the sympy expression of the scalar operand ``s(x, y)``.
@@ -326,8 +341,10 @@ def _sym_scalar():
     return s0 + s1 * X_SYM + s2 * Y_SYM + s3 * X_SYM * Y_SYM
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _oti_operands():
     """
     Builds every OTI operand used by the operation tables.
@@ -349,8 +366,10 @@ def _oti_operands():
     return operands
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _sym_operands():
     """
     Builds the sympy counterpart of every operand returned by ``_oti_operands``.
@@ -372,8 +391,10 @@ def _sym_operands():
     return operands
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _sym_elementwise(func, *args):
     """
     Applies a scalar sympy function elementwise, broadcasting scalars against matrices.
@@ -397,6 +418,7 @@ def _sym_elementwise(func, *args):
     """
     shape = next(arg.shape for arg in args if isinstance(arg, sympy.MatrixBase))
 
+    # ****************************************************************************************************
     def entry(i, j):
         """
         Evaluates ``func`` at entry ``(i, j)``.
@@ -423,12 +445,15 @@ def _sym_elementwise(func, *args):
         return func(*values)
 
     # end function
+    # ----------------------------------------------------------------------------------------------------
 
     return sympy.Matrix(shape[0], shape[1], entry)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _sym_derivs(expr):
     """
     Computes the reference real part and derivatives of a symbolic result at (0, 0).
@@ -479,8 +504,10 @@ def _sym_derivs(expr):
     return {key: np.array(values).reshape(shape) for key, values in derivs.items()}
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _assert_matches_sympy(result, expr, label):
     """
     Asserts that an OTI result matches every derivative of a symbolic reference.
@@ -510,8 +537,10 @@ def _assert_matches_sympy(result, expr, label):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _assert_oti_equal(result, expected, label):
     """
     Asserts that two OTI objects agree in the real part and every derivative up to ``ORDER``.
@@ -550,8 +579,10 @@ def _assert_oti_equal(result, expected, label):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _max_coeff(obj, a, b):
     """
     Largest absolute value of the real part (``a = b = 0``) or of d^(a+b) / dx^a dy^b of an OTI
@@ -579,8 +610,10 @@ def _max_coeff(obj, a, b):
     return float(np.max(np.abs(_oti_value(obj, a, b))))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _product_scale(lhs, rhs, a, b):
     """
     Magnitude of the terms of d^(a+b) (lhs rhs) / dx^a dy^b, the scale of its rounding error.
@@ -616,8 +649,10 @@ def _product_scale(lhs, rhs, a, b):
     )
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _assert_product_residual(lhs, rhs, expected, label):
     """
     Asserts ``lhs rhs = expected`` in every direction, each within ``RES_TOL`` times the scale of
@@ -650,8 +685,10 @@ def _assert_product_residual(lhs, rhs, expected, label):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _entries(arr):
     """
     Returns the entries of an OTI array as an object array of ``sotinum``.
@@ -687,8 +724,10 @@ def _entries(arr):
     return out
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _map_entries(func, arr):
     """
     Applies a scalar OTI function to every entry of an OTI array.
@@ -713,8 +752,10 @@ def _map_entries(func, arr):
     return np.vectorize(func, otypes=[object])(_entries(arr))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _stale_holder(shape):
     """
     Creates an output holder prefilled with nonzero coefficients in every direction up to ORDER.
@@ -741,8 +782,10 @@ def _stale_holder(shape):
     return stale if shape is None else oti.ones(shape) * stale
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _iadd(lhs, rhs):
     """
     Applies ``+=`` to a copy of ``lhs``.
@@ -770,8 +813,10 @@ def _iadd(lhs, rhs):
     return res
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _isub(lhs, rhs):
     """
     Applies ``-=`` to a copy of ``lhs``.
@@ -799,8 +844,10 @@ def _isub(lhs, rhs):
     return res
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _imul(lhs, rhs):
     """
     Applies ``*=`` to a copy of ``lhs``.
@@ -828,8 +875,10 @@ def _imul(lhs, rhs):
     return res
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _with_out(func, shape):
     """
     Wraps a module function so that it writes into a prefilled (stale) ``out`` holder.
@@ -852,6 +901,7 @@ def _with_out(func, shape):
     array([[1.]])
     """
 
+    # ****************************************************************************************************
     def wrapped(*args):
         """
         Calls ``func(*args, out=out)`` and returns ``out``.
@@ -877,10 +927,12 @@ def _with_out(func, shape):
         return out
 
     # end function
+    # ----------------------------------------------------------------------------------------------------
 
     return wrapped
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------------------------
@@ -1073,6 +1125,7 @@ LINALG = [
      lambda o: o["M3"].LUsolve(o["b3"])),
 ]
 
+# ********************************************************************************************************
 def _sym_abs(value):
     """
     Returns ``|value|`` as a polynomial valid near (0, 0), assuming ``value(0, 0) != 0``.
@@ -1098,8 +1151,10 @@ def _sym_abs(value):
     return value if value.subs({X_SYM: 0, Y_SYM: 0}) > 0 else -value
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _sym_pnorm(mat, p):
     """
     Symbolic elementwise p-norm ``(sum |a_ij|^p)^(1/p)``, the definition used by ``oti.norm``.
@@ -1124,11 +1179,13 @@ def _sym_pnorm(mat, p):
     return sum(_sym_abs(v)**p for v in mat)**sympy.Rational(1, p)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 SYMPY_CASES = {name: sym_op for name, _, sym_op in ARITHMETIC + POWERS + LINALG}
 
 
+# ********************************************************************************************************
 @functools.lru_cache(maxsize=None)
 def _reference(name):
     """
@@ -1152,8 +1209,10 @@ def _reference(name):
     return _sym_derivs(SYMPY_CASES[name](_sym_operands()))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _case_params(cases):
     """
     Converts an operation table into pytest parameters.
@@ -1176,8 +1235,10 @@ def _case_params(cases):
     return [pytest.param(name, oti_op, id=name) for name, oti_op, _ in cases]
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("name, oti_op", _case_params(ARITHMETIC))
 def test_elementwise_arithmetic(name, oti_op):
     """
@@ -1193,8 +1254,10 @@ def test_elementwise_arithmetic(name, oti_op):
     _assert_matches_sympy(oti_op(_oti_operands()), _reference(name), name)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("name, oti_op", _case_params(POWERS))
 def test_elementwise_powers(name, oti_op):
     """
@@ -1210,8 +1273,10 @@ def test_elementwise_powers(name, oti_op):
     _assert_matches_sympy(oti_op(_oti_operands()), _reference(name), name)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("name, oti_op", _case_params(LINALG))
 def test_linear_algebra(name, oti_op):
     """
@@ -1227,6 +1292,7 @@ def test_linear_algebra(name, oti_op):
     _assert_matches_sympy(oti_op(_oti_operands()), _reference(name), name)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------------------------
@@ -1264,6 +1330,7 @@ MATH_FUNCTIONS = [
 MATH_PARAMS = [pytest.param(*entry, id=entry[0]) for entry in MATH_FUNCTIONS]
 
 
+# ********************************************************************************************************
 def _math_input(x0):
     """
     Builds a 2x3 OTI array with entries near ``x0`` and mixed sparsity in both bases.
@@ -1293,8 +1360,10 @@ def _math_input(x0):
     return oti.array(base) + x * oti.array(dx) + y * oti.array(dy) + (x * y) * oti.array(dxy)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("name, func, x0", MATH_PARAMS)
 def test_math_function_on_array(name, func, x0):
     """
@@ -1314,8 +1383,10 @@ def test_math_function_on_array(name, func, x0):
     _assert_oti_equal(func(arr), _map_entries(func, arr), name)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("name, func, x0", MATH_PARAMS)
 def test_math_function_on_array_out(name, func, x0):
     """
@@ -1338,12 +1409,14 @@ def test_math_function_on_array_out(name, func, x0):
     _assert_oti_equal(out, func(arr), name)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------------------------
 # Construction, attributes and indexing.
 # ------------------------------------------------------------------------------------------------
 
+# ********************************************************************************************************
 def test_array_constructors():
     """
     Test array, zeros, ones and eye shapes and real values.
@@ -1359,8 +1432,10 @@ def test_array_constructors():
     np.testing.assert_array_equal(oti.eye(3).real, np.eye(3))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_attributes():
     """
     Test shape, nrows, ncols, size, order and real of an OTI array.
@@ -1375,8 +1450,10 @@ def test_array_attributes():
     np.testing.assert_array_equal(arr.real, np.array(MATRICES["C"][0]))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_getitem():
     """
     Test element access and row/column slicing, including imaginary parts.
@@ -1410,8 +1487,10 @@ def test_array_getitem():
     _assert_oti_equal(col, _entries(arr)[:, 2:3], "column slice")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_setitem():
     """
     Test assigning real and OTI values to single entries and to a row slice.
@@ -1427,8 +1506,10 @@ def test_array_setitem():
     np.testing.assert_array_equal(arr.get_im([2]), np.array([[0.0, 1.0], [0.0, 0.0]]))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_from_oti_entries():
     """
     Test building an array from a nested list mixing OTI numbers and reals.
@@ -1440,8 +1521,10 @@ def test_array_from_oti_entries():
     _assert_oti_equal(arr, expected, "array from OTI entries")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_2d_slicing_and_slice_assignment():
     """
     Test stepped 2-D slicing and assigning an OTI array into a sub-block.
@@ -1459,8 +1542,10 @@ def test_array_2d_slicing_and_slice_assignment():
     _assert_oti_equal(arr, entries, "slice assignment")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_set():
     """
     Test matso.set from another array, an OTI scalar and a real.
@@ -1478,8 +1563,10 @@ def test_array_set():
     _assert_oti_equal(arr, np.full((2, 2), oti.number(2.5), dtype=object), "set real")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_copy_is_independent():
     """
     Test that copy() duplicates every coefficient and that mutating the copy in place leaves the
@@ -1498,6 +1585,7 @@ def test_array_copy_is_independent():
     _assert_oti_equal(arr, original, "original after copy mutation")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------------------------
@@ -1525,6 +1613,7 @@ UTILITY_FUNCTIONS = {
 }
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "name, method", [pytest.param(name, method, id=name) for name, method in UTILITIES],
 )
@@ -1544,8 +1633,10 @@ def test_array_utility_methods(name, method):
     _assert_oti_equal(method(arr), _map_entries(method, arr), name)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "name, func", [pytest.param(name, func, id=name) for name, func in UTILITY_FUNCTIONS.items()],
 )
@@ -1566,8 +1657,10 @@ def test_array_utility_functions(name, func):
     _assert_oti_equal(func(arr), _entries(method(arr)), name)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "name, func", [pytest.param(name, func, id=name) for name, func in UTILITY_FUNCTIONS.items()],
 )
@@ -1590,8 +1683,10 @@ def test_array_utility_functions_out(name, func):
     _assert_oti_equal(out, _entries(func(arr)), name)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @functools.lru_cache(maxsize=None)
 def _exp_a_reference():
     """
@@ -1610,8 +1705,10 @@ def _exp_a_reference():
     return _sym_derivs(_sym_elementwise(sympy.exp, _sym_matrix("A")))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("ma, mb", [(1, 0), (2, 0), (1, 1), (0, 2)])
 def test_array_extract_explicit(ma, mb):
     """
@@ -1647,8 +1744,10 @@ def test_array_extract_explicit(ma, mb):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_get_all_derivs_and_ims():
     """
     Test get_all_derivs / get_all_ims ordering and factorial scaling for two bases up to order 2.
@@ -1674,8 +1773,10 @@ def test_array_get_all_derivs_and_ims():
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("order", range(ORDER + 1))
 def test_trunc_sub(order):
     """
@@ -1695,8 +1796,10 @@ def test_trunc_sub(order):
     _assert_oti_equal(out, (lhs - rhs).get_order_im(order), f"trunc_sub order {order}")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_get_im_and_deriv():
     """
     Test get_im / get_deriv (method, module function and ``out=``) in every direction up to ORDER.
@@ -1741,8 +1844,10 @@ def test_array_get_im_and_deriv():
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_get_active_bases():
     """
     Test get_active_bases on arrays with two, one and no imaginary bases.
@@ -1754,8 +1859,10 @@ def test_array_get_active_bases():
     assert list(oti.array([[1.0, 2.0]]).get_active_bases()) == []
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_rom_eval():
     """
     Test Taylor evaluation of an array against the exact polynomial and per-entry rom_eval.
@@ -1774,12 +1881,14 @@ def test_array_rom_eval():
     np.testing.assert_allclose(inv_arr.rom_eval([1, 2], [dx, dy]).real, rom_ref, rtol=REL_TOL)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------------------------
 # Interpolation and filtering.
 # ------------------------------------------------------------------------------------------------
 
+# ********************************************************************************************************
 def _interp_ref(x, xvals, yvals):
     """
     Reference linear interpolation built from OTI arithmetic on the bracketing segment.
@@ -1809,8 +1918,10 @@ def _interp_ref(x, xvals, yvals):
     return yvals[k, 0] + (x - xvals[k]) * slope
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_interp1d():
     """
     Test interp1d for OTI scalar and OTI array query points with OTI ordinates.
@@ -1837,8 +1948,10 @@ def test_interp1d():
     _assert_oti_equal(array_out, expected, "interp1d array out")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("size", [3, 4])
 def test_moving_average(size):
     """
@@ -1869,6 +1982,7 @@ def test_moving_average(size):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------------------------
@@ -1880,6 +1994,7 @@ DATA_4X4 = np.array([[4.0, 1.0, 0.0, 0.5], [1.0, 3.0, 1.0, 0.0], [0.0, 1.0, 2.0,
                      [0.5, 0.2, 0.3, 5.0]])
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("use_out", [False, True], ids=["alloc", "out"])
 def test_solve_multiple_rhs(use_out):
     """
@@ -1913,8 +2028,10 @@ def test_solve_multiple_rhs(use_out):
     _assert_oti_equal(oti.dot(kmat, res) - rhs, _entries(oti.zeros((3, 2))), "K u - b")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_inv_block_4x4():
     """
     Test inv_block on a 4x4 nonsymmetric OTI array through the identity K inv(K) = I.
@@ -1927,8 +2044,10 @@ def test_inv_block_4x4():
     _assert_oti_equal(oti.dot(kmat, oti.inv_block(kmat)), _entries(oti.eye(4)), "K inv(K)")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_inv_block_out():
     """
     Test the ``out=`` path of inv_block against its allocating path.
@@ -1941,8 +2060,10 @@ def test_inv_block_out():
     _assert_oti_equal(out, oti.inv_block(arr), "inv_block out")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _oti_square(n):
     """
     Builds a nonsymmetric n x n OTI array with every derivative up to ``ORDER`` populated and a zero
@@ -1974,8 +2095,10 @@ def _oti_square(n):
             + y * oti.array(0.5 * np.sin(i + 5.0 * j)) + q * oti.array(0.25 * np.cos(3.0 * i - j)))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _oti_rhs(n, ncols):
     """
     Builds an n x ncols OTI right-hand side with derivatives in both bases.
@@ -2005,8 +2128,10 @@ def _oti_rhs(n, ncols):
             + x**2 * oti.array(0.3 * np.sin(i + 2.0 * j)))
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _lu_parts(lu, piv):
     """
     Splits the packed output of ``lu_factor`` into L, U and the row permutation.
@@ -2062,8 +2187,10 @@ def _lu_parts(lu, piv):
     return lmat, umat, perm
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _permute_rows(arr, perm):
     """
     Returns ``arr`` with its rows reordered: row k of the result is row ``perm[k]`` of ``arr``.
@@ -2093,8 +2220,10 @@ def _permute_rows(arr, perm):
     return oti.dot(oti.array(pmat), arr)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_inv_4x4():
     """
     Test inversion of a 4x4 real-valued OTI array against NumPy (formerly bug C: all zeros).
@@ -2104,8 +2233,10 @@ def test_inv_4x4():
     np.testing.assert_allclose(res, np.linalg.inv(DATA_4X4), rtol=REL_TOL)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_det_4x4():
     """
     Test the determinant of a 4x4 real-valued OTI array against NumPy (formerly bug G: generalized
@@ -2116,8 +2247,10 @@ def test_det_4x4():
     assert res == pytest.approx(np.linalg.det(DATA_4X4), rel=REL_TOL)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("n", [3, 4, 5, 8])
 @pytest.mark.parametrize("use_out", [False, True], ids=["alloc", "out"])
 def test_inv_identity(n, use_out):
@@ -2139,8 +2272,10 @@ def test_inv_identity(n, use_out):
     _assert_product_residual(kmat, res, oti.eye(n), f"K inv(K), n={n}")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("n", [3, 4, 6])
 def test_det_matches_lu_diagonal(n):
     """
@@ -2166,8 +2301,10 @@ def test_det_matches_lu_diagonal(n):
     _assert_oti_equal(oti.det(kmat), ref, f"det, n={n}")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_solve_5x5_matches_inv_block():
     """
     Test the C block solver against the Python block inverse on a 5x5 array at 4th order.
@@ -2178,8 +2315,10 @@ def test_solve_5x5_matches_inv_block():
     _assert_oti_equal(oti.solve(kmat, rhs), oti.dot(oti.inv_block(kmat), rhs), "solve 5x5")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_solve_rhs_is_out():
     """
     Test solve() writing its result into the right-hand-side array itself.
@@ -2193,8 +2332,10 @@ def test_solve_rhs_is_out():
     _assert_oti_equal(rhs, ref, "solve out=b")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("n", [2, 4, 6])
 def test_lu_factor_real_part_matches_scipy(n):
     """
@@ -2214,8 +2355,10 @@ def test_lu_factor_real_part_matches_scipy(n):
     np.testing.assert_allclose(lu.real, lu_ref, rtol=REL_TOL, atol=ABS_TOL)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("n", [2, 4, 6])
 def test_lu_factor_reconstruction(n):
     """
@@ -2232,8 +2375,10 @@ def test_lu_factor_reconstruction(n):
     _assert_oti_equal(oti.dot(lmat, umat), _permute_rows(kmat, perm), f"L U, n={n}")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_lu_factor_out():
     """
     Test the ``out=`` path of lu_factor, into a stale holder and into the input array itself.
@@ -2253,8 +2398,10 @@ def test_lu_factor_out():
     _assert_oti_equal(kmat, lu_ref, "lu_factor out=A")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("ncols", [1, 3])
 @pytest.mark.parametrize("use_out", [False, True], ids=["alloc", "out"])
 def test_lu_solve_matches_solve(ncols, use_out):
@@ -2287,8 +2434,10 @@ def test_lu_solve_matches_solve(ncols, use_out):
     _assert_oti_equal(oti.dot(kmat, res) - rhs, _entries(oti.zeros((5, ncols))), "K u - b")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_lu_solve_accepts_scipy_style_pivots():
     """
     Test that lu_solve accepts pivots as a list or as another integer dtype.
@@ -2302,8 +2451,10 @@ def test_lu_solve_accepts_scipy_style_pivots():
     _assert_oti_equal(oti.lu_solve((lu, piv.astype(np.int64)), rhs), ref, "int64 pivots")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def _fe_array(n, nip):
     """
     Builds an FE (Gauss) array whose integration points hold different OTI arrays.
@@ -2345,8 +2496,10 @@ def _fe_array(n, nip):
     return fe_arr
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("n", [3, 4])
 def test_fe_inv_det(n):
     """
@@ -2381,12 +2534,14 @@ def test_fe_inv_det(n):
     # end for
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------------------------
 # Singular real part.
 # ------------------------------------------------------------------------------------------------
 
+# ********************************************************************************************************
 def _singular_diag(n):
     """
     Builds ``diag(x, 1, ..., 1)``: its real part is singular, its determinant is ``x``.
@@ -2413,8 +2568,10 @@ def _singular_diag(n):
     return arr
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "call",
     [
@@ -2446,8 +2603,10 @@ def test_singular_real_part_raises(call):
     # end with
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("n", [1, 2, 3])
 def test_det_singular_real_part_closed_form(n):
     """
@@ -2461,12 +2620,14 @@ def test_det_singular_real_part_closed_form(n):
     _assert_oti_equal(oti.det(_singular_diag(n)), oti.e(1, order=ORDER), f"det, n={n}")
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # Rank-3 real part plus x I: the determinant is a nonzero polynomial in x without a constant term.
 RANK3_4X4 = [[1.0, 2.0, 3.0, 4.0], [2.0, 4.0, 6.0, 8.0], [1.0, 0.0, 1.0, 0.0], [0.0, 1.0, 0.0, 1.0]]
 
 
+# ********************************************************************************************************
 @pytest.mark.xfail(raises=np.linalg.LinAlgError, strict=True,
                    reason="Known limitation: det of an OTI array larger than 3x3 with a singular "
                           "real part (bug-report.md)")
@@ -2496,12 +2657,14 @@ def test_det_singular_real_part_4x4(case):
     # end if
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------------------------
 # Shape validation: invalid shapes raise ValueError instead of reaching the C core's exit().
 # ------------------------------------------------------------------------------------------------
 
+# ********************************************************************************************************
 def _shape_error_cases():
     """
     Builds the invalid-shape calls checked by ``test_shape_errors_raise``.
@@ -2619,8 +2782,10 @@ def _shape_error_cases():
     return [pytest.param(call, match, id=name) for name, call, match in cases]
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize("call, match", _shape_error_cases())
 def test_shape_errors_raise(call, match):
     """
@@ -2641,8 +2806,10 @@ def test_shape_errors_raise(call, match):
     # end with
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "func", [pytest.param(oti.det, id="det"), pytest.param(oti.norm, id="norm")],
 )
@@ -2668,8 +2835,10 @@ def test_real_array_out_raises(func):
     # end with
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 @pytest.mark.parametrize(
     "call",
     [
@@ -2698,8 +2867,10 @@ def test_real_input_out_raises(call):
     # end with
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_array_fe_broadcasting():
     """
     Test that the shape checks keep FE (Gauss) arrays broadcasting against non-FE operands.
@@ -2711,6 +2882,7 @@ def test_array_fe_broadcasting():
     assert oti.gauss_integrate(res, oti.zero(nip=3) + 0.5).shape == (2, 2)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":

@@ -8,6 +8,7 @@ import pytest
 import pyoti.sparse as oti
 
 
+# ********************************************************************************************************
 def test_scalar_creation():
     """
     Test creating scalar OTI numbers and perturbations.
@@ -17,8 +18,10 @@ def test_scalar_creation():
     assert float(x.get_im(1)) == pytest.approx(1.0)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_arithmetic_oti_oti():
     """
     Test addition, subtraction, multiplication and division between two OTI numbers.
@@ -52,8 +55,10 @@ def test_arithmetic_oti_oti():
     assert float(res_div.get_deriv([2])) == pytest.approx(-0.75)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
+# ********************************************************************************************************
 def test_arithmetic_real_oti():
     """
     Test addition, subtraction, multiplication and division between real and OTI numbers.
@@ -110,6 +115,7 @@ def test_arithmetic_real_oti():
     assert float(res_div.get_deriv([2])) == pytest.approx(0.25)
 
 # end function
+# --------------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":

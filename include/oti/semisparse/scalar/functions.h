@@ -1,211 +1,605 @@
 #ifndef OTI_SEMISPARSE_SCALAR_FUNCTIONS_H
 #define OTI_SEMISPARSE_SCALAR_FUNCTIONS_H
 
-/**************************************************************************************************//**
-@brief Evaluation of inverse hyperbolic tangent function at (num).
+// Semi-sparse scalar functions. Conventions in include/oti/semisparse/scalar/base.h.
+//
+// Every function is a truncated Taylor series in the imaginary part d = num - num.re,
+// f(num) = sum_i f^(i)(re) / i! * d^i (same algorithm as soti_feval()). All powers of d share
+// the input's active set, so only the same-set kernel runs.
 
-@param[in] num: Oti number.
-@param[in] dhl: Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_atanh(semiotin_t* num, dhelpl_t dhl);
-void ssoti_atanh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of inverse hyperbolic sine function at (num).
+/**
+ * @name Semi-sparse Taylor series evaluation
+ * @{
+ */
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_asinh(semiotin_t* num, dhelpl_t dhl);
-void ssoti_asinh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Evaluates a function from its derivatives at the real part (allocating variant).
+ *
+ * @param[in] derivs Derivatives f(re), f'(re), ..., f^(trc)(re); num->trc_order + 1 values.
+ * @param[in] num    Argument.
+ * @param[in] dhl    Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_feval(const coeff_t* derivs, const ssotinum_t* num, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of inverse hyperbolic cosine function at (num).
+/**
+ * @brief Evaluates a function from its derivatives into an existing number.
+ *
+ * @param[in]     derivs Derivatives f(re), ..., f^(trc)(re); num->trc_order + 1 values.
+ * @param[in]     num    Argument.
+ * @param[in,out] res    Result; may alias @p num.
+ * @param[in]     dhl    Direction helper list.
+ */
+void ssoti_feval_to(const coeff_t* derivs, const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_acosh(semiotin_t* num, dhelpl_t dhl);
-void ssoti_acosh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of hiperbolic tangent function at (num).
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_tanh(semiotin_t* num, dhelpl_t dhl);
-void ssoti_tanh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @name Semi-sparse exponential
+ * @{
+ */
 
-/**************************************************************************************************//**
-@brief Evaluation of square root function at (num).
+/**
+ * @brief Exponential of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_exp(const ssotinum_t* num, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_sqrt(semiotin_t* num, dhelpl_t dhl);
-void ssoti_sqrt_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Exponential of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_exp_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of cubic root function at (num).
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_cbrt(semiotin_t* num, dhelpl_t dhl);
-void ssoti_cbrt_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of hiperbolic cosine function at (num).
+/**
+ * @name Semi-sparse natural logarithm
+ * @{
+ */
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_cosh(semiotin_t* num, dhelpl_t dhl);
-void ssoti_cosh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Natural logarithm of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_log(const ssotinum_t* num, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of hiperbolic sine function at (num).
+/**
+ * @brief Natural logarithm of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_log_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_sinh(semiotin_t* num, dhelpl_t dhl);
-void ssoti_sinh_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of arcsine function at (num).
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_asin(semiotin_t* num, dhelpl_t dhl);
-void ssoti_asin_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @name Semi-sparse base-10 logarithm
+ * @{
+ */
 
-/**************************************************************************************************//**
-@brief Evaluation of arccosine function at (num).
+/**
+ * @brief Base-10 logarithm of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_log10(const ssotinum_t* num, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_acos(semiotin_t* num, dhelpl_t dhl);
-void ssoti_acos_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Base-10 logarithm of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_log10_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of arctangent function at (num).
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_atan(semiotin_t* num, dhelpl_t dhl);
-void ssoti_atan_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of the tangent function at (num).
+/**
+ * @name Semi-sparse square root
+ * @{
+ */
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_tan(semiotin_t* num, dhelpl_t dhl);
-void ssoti_tan_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Square root of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_sqrt(const ssotinum_t* num, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of function cosine at (num).
+/**
+ * @brief Square root of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_sqrt_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_cos(semiotin_t* num, dhelpl_t dhl);
-void ssoti_cos_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of function sine at (num).
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_sin(semiotin_t* num, dhelpl_t dhl );
-void ssoti_sin_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @name Semi-sparse cube root
+ * @{
+ */
 
-/**************************************************************************************************//**
-@brief Evaluation of Logarithm at base b function at (num).
+/**
+ * @brief Cube root of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_cbrt(const ssotinum_t* num, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_logb(semiotin_t* num, double base, dhelpl_t dhl);
-void ssoti_logb_to(semiotin_t* num, double base, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Cube root of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_cbrt_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of Logarithm at base 10 function at (num).
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_log10(semiotin_t* num, dhelpl_t dhl);
-void ssoti_log10_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of natural logarithm function at (num).
+/**
+ * @name Semi-sparse sine
+ * @{
+ */
 
-@param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_log(semiotin_t* num, dhelpl_t dhl);
-void ssoti_log_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @brief Sine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_sin(const ssotinum_t* num, dhelpl_t dhl);
 
-/**************************************************************************************************//**
-@brief Evaluation of natural logarithm function at (num).
+/**
+ * @brief Sine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_sin_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
 
-@param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_exp(semiotin_t* num, dhelpl_t dhl);
-void ssoti_exp_to(semiotin_t* num, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
-/**************************************************************************************************//**
-@brief Evaluation of natural logarithm function at (num).
 
-@param[in] num Oti number.
-@param[in] b Real number. Base of the logarithm to be evaluated.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_pow(semiotin_t* num, double e, dhelpl_t dhl);
-void ssoti_pow_to(semiotin_t* num, coeff_t e, semiotin_t* res, dhelpl_t dhl);
-// ----------------------------------------------------------------------------------------------------
+/**
+ * @name Semi-sparse cosine
+ * @{
+ */
 
-/**************************************************************************************************//**
-@brief Evaluation of a function f at (num).
+/**
+ * @brief Cosine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_cos(const ssotinum_t* num, dhelpl_t dhl);
 
-@param[in] feval_re Function, and its derivatives, evaluated at the real coefficient of num.
-@param[in] num Oti number.
-@param[in] dhl Direction helper list object.
-******************************************************************************************************/ 
-semiotin_t ssoti_feval(coeff_t* feval_re, semiotin_t* num, dhelpl_t dhl );
-semiotin_t ssoti_base_feval(coeff_t* feval_re, semiotin_t* num, dhelpl_t dhl );
+/**
+ * @brief Cosine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_cos_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
 
-void ssoti_feval_to(coeff_t* feval_re, semiotin_t* num, semiotin_t* res, dhelpl_t dhl );
-// ----------------------------------------------------------------------------------------------------
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse tangent
+ * @{
+ */
+
+/**
+ * @brief Tangent of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_tan(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Tangent of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_tan_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse arcsine
+ * @{
+ */
+
+/**
+ * @brief Arcsine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_asin(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Arcsine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_asin_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse arccosine
+ * @{
+ */
+
+/**
+ * @brief Arccosine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_acos(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Arccosine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_acos_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse arctangent
+ * @{
+ */
+
+/**
+ * @brief Arctangent of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_atan(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Arctangent of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_atan_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse hyperbolic sine
+ * @{
+ */
+
+/**
+ * @brief Hyperbolic sine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_sinh(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Hyperbolic sine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_sinh_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse hyperbolic cosine
+ * @{
+ */
+
+/**
+ * @brief Hyperbolic cosine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_cosh(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Hyperbolic cosine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_cosh_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse hyperbolic tangent
+ * @{
+ */
+
+/**
+ * @brief Hyperbolic tangent of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_tanh(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Hyperbolic tangent of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_tanh_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse inverse hyperbolic sine
+ * @{
+ */
+
+/**
+ * @brief Inverse hyperbolic sine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_asinh(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Inverse hyperbolic sine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_asinh_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse inverse hyperbolic cosine
+ * @{
+ */
+
+/**
+ * @brief Inverse hyperbolic cosine of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_acosh(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Inverse hyperbolic cosine of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_acosh_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse inverse hyperbolic tangent
+ * @{
+ */
+
+/**
+ * @brief Inverse hyperbolic tangent of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_atanh(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Inverse hyperbolic tangent of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_atanh_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse error function
+ * @{
+ */
+
+/**
+ * @brief Error function of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_erf(const ssotinum_t* num, dhelpl_t dhl);
+
+/**
+ * @brief Error function of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_erf_to(const ssotinum_t* num, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse power
+ * @{
+ */
+
+/**
+ * @brief Power of a number (allocating variant).
+ *
+ * @param[in] num Argument.
+ * @param[in] e   Real exponent.
+ * @param[in] dhl Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_pow(const ssotinum_t* num,coeff_t e, dhelpl_t dhl);
+
+/**
+ * @brief Power of a number into an existing one.
+ *
+ * @param[in]     num Argument.
+ * @param[in]     e   Real exponent.
+ * @param[in,out] res Result; may alias @p num.
+ * @param[in]     dhl Direction helper list.
+ */
+void ssoti_pow_to(const ssotinum_t* num,coeff_t e, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Semi-sparse logarithm in a given base
+ * @{
+ */
+
+/**
+ * @brief Logarithm in a given base of a number (allocating variant).
+ *
+ * @param[in] num  Argument.
+ * @param[in] base Logarithm base.
+ * @param[in] dhl  Direction helper list.
+ *
+ * @return Newly allocated result. Caller must free via ssoti_free().
+ */
+ssotinum_t ssoti_logb(const ssotinum_t* num,coeff_t base, dhelpl_t dhl);
+
+/**
+ * @brief Logarithm in a given base of a number into an existing one.
+ *
+ * @param[in]     num  Argument.
+ * @param[in]     base Logarithm base.
+ * @param[in,out] res  Result; may alias @p num.
+ * @param[in]     dhl  Direction helper list.
+ */
+void ssoti_logb_to(const ssotinum_t* num,coeff_t base, ssotinum_t* res, dhelpl_t dhl);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
 
 #endif

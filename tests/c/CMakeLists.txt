@@ -35,3 +35,32 @@ add_test(NAME c_sparse_linalg_test COMMAND test_c_sparse_linalg)
 add_executable(test_c_dhelp test_dhelp.c)
 target_link_libraries(test_c_dhelp oti oticwrap ${LINK_TARGET_OMP_C})
 add_test(NAME c_dhelp_test COMMAND test_c_dhelp)
+
+# Semi-sparse OTI numbers (PLAN-semisparse.md):
+#   core   index helpers (unions, local/global ranks, remaps, table sub-block vs rank);
+#   scalar ssotinum_t against the sotinum_t oracle;
+#   soa    oarrss_t (SoA arrays) against the arrso_t oracle;
+#   aos    arrss_t (AoS arrays) against the arrso_t oracle.
+# A test whose source is not written yet is skipped, so the tree always configures.
+foreach(ss_test core scalar soa aos review utils io gauss csr)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_semisparse_${ss_test}.c")
+        add_executable(test_c_semisparse_${ss_test} test_semisparse_${ss_test}.c)
+        target_link_libraries(test_c_semisparse_${ss_test} oti oticwrap ${LINK_TARGET_OMP_C})
+        add_test(NAME c_semisparse_${ss_test}_test COMMAND test_c_semisparse_${ss_test})
+    endif()
+endforeach()
+
+# Dense OTI numbers (PLAN-dense-update.md), each against the sotinum_t / arrso_t oracle and
+# cross-checked with semi-sparse:
+#   scalar otinum_t;   soa    oarr_t (SoA);        linalg LU, solve, inv, det;
+#   aos    arro_t;     utils  order plumbing, truncated products, rom_eval;
+#   io     save/read;  gauss  feoarr_t;            csr    lilo_t / csro_t;
+#   review edge cases found in review.
+# A test whose source is not written yet is skipped, so the tree always configures.
+foreach(dn_test scalar soa linalg aos utils io gauss csr review)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_dense_${dn_test}.c")
+        add_executable(test_c_dense_${dn_test} test_dense_${dn_test}.c)
+        target_link_libraries(test_c_dense_${dn_test} oti oticwrap ${LINK_TARGET_OMP_C})
+        add_test(NAME c_dense_${dn_test}_test COMMAND test_c_dense_${dn_test})
+    endif()
+endforeach()

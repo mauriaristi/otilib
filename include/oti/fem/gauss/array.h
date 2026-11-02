@@ -12,8 +12,7 @@
 // Finite Element real Array.
 #include "array/fedarr.h"
 
-// Finite Element dense OTI number array.
-#include "array/feoarr.h"
+// Gauss dense OTI arrays are feoarr_t in include/oti/dense/gauss/gauss.h (PLAN-dense-update.md).
 
 
 

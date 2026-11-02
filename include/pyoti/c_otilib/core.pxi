@@ -98,16 +98,6 @@ cdef extern from "oti/oti.h" nogil:
 
   float    array2d_getel_f32_t( float*    arr,uint64_t ncols, uint64_t i, uint64_t j );
 
-  void dhelp_dense_mult(coeff_t* p_im1, ndir_t ndir1, ord_t ord1, 
-                        coeff_t* p_im2, ndir_t ndir2, ord_t ord2, 
-                        coeff_t* p_imres, ndir_t ndirres,         
-                        dhelpl_t dhl);
-
-  void dhelp_dense_mult_real(coeff_t* p_im1, ndir_t ndir1,
-                        coeff_t a,                        
-                        coeff_t* p_imres, ndir_t ndirres, 
-                        dhelpl_t dhl);                     
-
   ndir_t dhelp_extract_ndirOrder(bases_t nbases, ord_t order,dhelpl_t dhl);
 
   ndir_t dhelp_extract_ndirTotal(bases_t nbases, ord_t order,dhelpl_t dhl);

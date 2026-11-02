@@ -103,3 +103,27 @@ subroutine oti_dtrmm(side, uplo, transa, diag, m, n, alpha, a, lda, b, ldb) bind
 
 end subroutine oti_dtrmm
 ! ----------------------------------------------------------------------------------------------------
+
+
+! ****************************************************************************************************
+subroutine oti_dgemm(transa, transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc) &
+    bind(C, name="oti_dgemm")
+  ! General matrix product: C = alpha op(A) op(B) + beta C (BLAS dgemm).
+  use, intrinsic :: iso_c_binding, only: c_int, c_double, c_char
+  implicit none
+  character(kind=c_char), value :: transa, transb
+  integer(c_int), value         :: m, n, k, lda, ldb, ldc
+  real(c_double), value         :: alpha, beta
+  real(c_double), intent(in)    :: a(lda, *)
+  real(c_double), intent(in)    :: b(ldb, *)
+  real(c_double), intent(inout) :: c(ldc, *)
+  character(len=1)              :: f_transa, f_transb
+  external :: dgemm
+
+  f_transa = transa
+  f_transb = transb
+
+  call dgemm(f_transa, f_transb, m, n, k, alpha, a, lda, b, ldb, beta, c, ldc)
+
+end subroutine oti_dgemm
+! ----------------------------------------------------------------------------------------------------

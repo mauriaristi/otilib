@@ -86,6 +86,8 @@ test:
   source_files:
     - VERSION
     - tests/python
+    # tests/python/test_fem_twc.py imports the FEM example as examples.python.fem_twc.
+    - examples/python/fem_twc.py
 
   requires:
     - pytest

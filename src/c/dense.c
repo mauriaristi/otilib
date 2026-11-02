@@ -1,3 +1,10 @@
+// fseeko / ftello (dense/io/io.c) are POSIX, not C99: glibc hides them under the Release build's
+// -std=c99 unless a feature-test macro is defined before the first system header. Not defined on
+// Apple, where _POSIX_C_SOURCE would instead hide non-POSIX declarations.
+#if !defined(__APPLE__) && !defined(_POSIX_C_SOURCE)
+#define _POSIX_C_SOURCE 200809L
+#endif
+
 #include "oti/dense.h"
 
 // Dense OTI numbers (PLAN-dense-update.md): dense over the global bases 1..nact, per-number truncation

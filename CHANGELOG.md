@@ -11,6 +11,8 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-02
+
 ### Added
 
 - A semi-sparse OTI type (`PLAN-semisparse.md`), alongside the sparse types (`sotinum_t` /

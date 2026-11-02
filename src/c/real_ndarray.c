@@ -22,3 +22,14 @@
 #include "real/ndarray/iter.c"
 #include "real/ndarray/elementwise.c"
 #include "real/ndarray/functions.c"
+
+// Phase 2: reductions, comparisons and masks.
+#include "real/ndarray/reduce.c"
+#include "real/ndarray/mask.c"
+
+// Phase 3: BLAS dispatch and linear algebra (tier 1).
+#include "real/ndarray/blas.c"
+#include "real/ndarray/linalg.c"
+
+// Phase 6a: zero-copy adapters to the legacy darr_t.
+#include "real/ndarray/compat_darr.c"

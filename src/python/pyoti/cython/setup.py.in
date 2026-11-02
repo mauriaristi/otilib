@@ -61,10 +61,12 @@ if compile_static:
   libraries    += ['oticwrap','otistatic']
 # end if 
 
-# LAPACK wrappers (libotilapack.a) and the LAPACK found by CMake. Always needed: liboti calls them.
-dependencies    += ["@CYTHONIZE_BUILD_DIR@/../lib/libotilapack.a"]
-libraries       += ['otilapack']
+# The LAPACK found by CMake. Always needed: liboti's C wrappers (src/c/core/lapack.c) call it. The
+# provider probe (src/c/core/lapack_provider.c) uses dladdr / dlopen, in libdl on older glibc.
 extra_link_args += @OTI_LAPACK_LINK_ARGS_PY@
+if platform.system() == 'Linux':
+  libraries += ['dl']
+# end if
 
 if compile_intel:
   libraries += ['ifcore','ifcoremt','svml','intlc']

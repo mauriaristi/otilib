@@ -5,6 +5,10 @@ include "common/directives.pxi"
 # Append included libraries
 include "real/include.pxi"
 
+# ndarray interop (PLAN-ndarray.md, Phase 4): nd_from_object / nd_to_numpy and the private _ndtest.
+include "real/ndarray/base.pxi"
+include "real/ndarray/ndtest.pxi"
+
 # Append real array structure.
 include "real/array/base.pxi"
 

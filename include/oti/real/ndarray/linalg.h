@@ -17,7 +17,13 @@
 //   - Statuses: info > 0 from dgetrf (an EXACTLY zero pivot) is returned as a positive status by
 //     solve and inv (LinAlgError); det and slogdet return OTI_OK with det = 0.0 and
 //     slogdet = (0.0, -inf). A numerically singular matrix (tiny pivot) is not detected.
-//   - Stacked inputs (..., n, n) loop over the batch axes with oti_parallel_for_blas().
+//   - Stacked inputs (..., n, n) loop over the batch axes with oti_parallel_for_blas(); a stack's
+//     factors are compact per-matrix F blocks of one buffer with one ipiv array (S29).
+//   - The _to forms (S29) write an existing `out` of exactly the result shape: in place when each
+//     result matrix is 'N'-usable (stride 1 down a column, column stride >= n), else through a
+//     per-matrix F temporary. out may be b itself (then nothing is copied before the solve); a
+//     partial overlap of out with b goes through a snapshot of b; out overlapping a factor that is
+//     read in place (nd_cho_solve_to, nd_solve_triangular_to) makes a private copy of the factor.
 //   - det = sign * exp(logabsdet), reconstructed from slogdet as NumPy does: the plain product of U's
 //     diagonal would overflow for diag(1e200, 1e200, 1e-200, 1e-200), whose determinant is 1.0.
 //   - Empty matrices: det of 0 x 0 is 1, slogdet (1, 0); solve / inv of 0 x 0 (or with k = 0
@@ -42,12 +48,19 @@ extern "C" {
  * @brief LU factorization of a real n x n matrix, with its orientation.
  */
 typedef struct {
-    ndarr_t  lu;    ///< F-order n x n factors: retained private buffer, or (overwrite) the input itself
-                    ///< (retained when the input has a control block, else a temporary).
-    int*     ipiv;  ///< 1-based pivots from dgetrf, length n; owned (malloc), freed by nd_lu_free().
-    int64_t  n;     ///< Order of the matrix.
-    int32_t  trans; ///< 0: factors of A; 1: factors of A^T (a C-order input read as A^T).
-    int32_t  info;  ///< dgetrf info: 0, or i > 0 when U(i, i) is exactly zero.
+    ndarr_t  lu;     ///< Factors, shape (..., n, n), every matrix F (column stride n): a retained
+                     ///< private buffer of compact per-matrix F blocks, or (overwrite) a view of the
+                     ///< input (retained when the input has a control block, else a temporary).
+    int*     ipiv;   ///< 1-based pivots from dgetrf, nbatch * n (matrix i at ipiv + i * n); owned
+                     ///< (malloc), freed by nd_lu_free().
+    int64_t  n;      ///< Order of the matrices.
+    int32_t  trans;  ///< 0: factors of A; 1: factors of A^T (C-order matrices read as A^T); shared by
+                     ///< every matrix of a stack.
+    int32_t  info;   ///< First positive dgetrf info in C order of the batch (U(i, i) exactly zero), else
+                     ///< 0.
+    int64_t  nbatch; ///< Number of matrices (product of the batch extents; 1 for a 2-D input).
+    int*     infos;  ///< dgetrf info of every matrix, nbatch entries; owned (malloc), freed by
+                     ///< nd_lu_free().
 } nd_lu_t;
 
 // -------------------------------------------------------------------------------------------------------
@@ -68,32 +81,51 @@ typedef struct {
 void nd_lu_init(nd_lu_t* lu);
 
 /**
- * @brief Factors a square matrix (dgetrf), with the orientation rules above.
+ * @brief Factors a square matrix or a stack (..., n, n) of them (dgetrf), with the orientation rules
+ *        above.
  *
  * @param[in,out] ctx       Context, or NULL.
- * @param[in,out] a         2-D OTI_F64 n x n. Overwritten (unspecified) only with overwrite = 1.
- * @param[in]     overwrite 1 to factor @p a in place when it is writeable and C- or F-contiguous.
- * @param[out]    lu        Factorization; must be empty (nd_lu_init()) on entry.
+ * @param[in,out] a         OTI_F64 (..., n, n). Overwritten (unspecified) only with overwrite = 1.
+ * @param[in]     overwrite 1 to factor @p a in place when it is writeable, every matrix is C- or
+ *                          F-contiguous and the array has no internal overlap.
+ * @param[out]    lu        Factorization; overwritten without being freed (nd_lu_init() first).
  *
- * @return OTI_OK; info > 0 (exactly singular: lu is complete and usable by nd_det(), not by solves);
- *         OTI_ERR_SHAPE (not square 2-D); OTI_ERR_DTYPE; OTI_ERR_SIZE; OTI_ERR_MEMORY; OTI_ERR_BUSY
+ * @return OTI_OK; the first positive info in C order of the batch (exactly singular: lu is complete,
+ *         lu->infos says which matrices; usable by determinants, not by solves); OTI_ERR_SHAPE (not a
+ *         stack of square matrices); OTI_ERR_DTYPE; OTI_ERR_SIZE; OTI_ERR_MEMORY; OTI_ERR_BUSY
  *         (overwrite = 1 and the input's buffer is growing, so it cannot be retained). On a negative
  *         status @p lu is left empty. Caller must free @p lu via nd_lu_free() in every case.
  */
 int nd_lu_factor(oti_ctx* ctx, ndarr_t* a, int32_t overwrite, nd_lu_t* lu);
 
 /**
- * @brief Solves A x = b with a factorization (dgetrs, 'T' when lu->trans is 1).
+ * @brief Solves A x = b with a factorization (dgetrs, 'T' when lu->trans is 1), NumPy 2 rules: b of
+ *        ndim 1 is one vector (n,), otherwise (..., n, k) broadcasting against the factors' batch.
  *
  * @param[in,out] ctx Context, or NULL.
  * @param[in]     lu  Factorization with info == 0.
- * @param[in]     b   OTI_F64, shape (n,) or (n, k).
- * @param[out]    res New retained array of b's shape (F-order for 2-D).
+ * @param[in]     b   OTI_F64 (n,) or (..., n, k).
+ * @param[out]    res New retained array (per-matrix F blocks; a vector result is C-contiguous).
  *
  * @return OTI_OK; lu->info when it is > 0 (nothing solved); OTI_ERR_SHAPE; OTI_ERR_DTYPE;
  *         OTI_ERR_SIZE; OTI_ERR_MEMORY. Caller must release @p res via nd_release().
  */
 int nd_lu_solve(oti_ctx* ctx, const nd_lu_t* lu, const ndarr_t* b, ndarr_t* res);
+
+/**
+ * @brief nd_lu_solve() into an existing output (S29): in place when out's matrices are 'N'-usable;
+ *        b == out solves in place with no copy.
+ *
+ * @param[in,out] ctx Context, or NULL.
+ * @param[in]     lu  Factorization with info == 0.
+ * @param[in]     b   OTI_F64 (n,) or (..., n, k).
+ * @param[in,out] out Writeable OTI_F64 of exactly the result shape, free of internal overlap; may be
+ *                    (or overlap) b; must not overlap lu->lu.
+ *
+ * @return As nd_lu_solve(), plus OTI_ERR_READONLY and OTI_ERR_LAYOUT (internal overlap of out, or out
+ *         overlapping the factors). On failure out holds unspecified values.
+ */
+int nd_lu_solve_to(oti_ctx* ctx, const nd_lu_t* lu, const ndarr_t* b, ndarr_t* out);
 
 /**
  * @brief Frees a factorization (releases lu->lu, frees ipiv) and makes it empty.
@@ -126,6 +158,19 @@ void nd_lu_free(nd_lu_t* lu);
  *         nd_release().
  */
 int nd_solve(oti_ctx* ctx, const ndarr_t* a, const ndarr_t* b, ndarr_t* res);
+
+/**
+ * @brief nd_solve() into an existing output (S29; the Fortran _into forms).
+ *
+ * @param[in,out] ctx Context, or NULL.
+ * @param[in]     a   OTI_F64 (..., n, n); may overlap out (it is factored into a private buffer
+ *                    first).
+ * @param[in]     b   OTI_F64 (n,) or (..., n, k); may be (or overlap) out.
+ * @param[in,out] out Writeable OTI_F64 of exactly the result shape, free of internal overlap.
+ *
+ * @return As nd_solve(), plus OTI_ERR_READONLY and OTI_ERR_LAYOUT (internal overlap of out).
+ */
+int nd_solve_to(oti_ctx* ctx, const ndarr_t* a, const ndarr_t* b, ndarr_t* out);
 
 /**
  * @brief Inverse (numpy.linalg.inv).
@@ -195,8 +240,8 @@ int nd_cholesky(oti_ctx* ctx, const ndarr_t* a, int32_t lower, ndarr_t* res);
  * @param[in,out] ctx   Context, or NULL.
  * @param[in]     c     OTI_F64 n x n factor from nd_cholesky().
  * @param[in]     lower 1 if @p c is lower (L), 0 if upper (U).
- * @param[in]     b     OTI_F64 (n,) or (n, k).
- * @param[out]    res   New retained array of b's shape.
+ * @param[in]     b     OTI_F64 (n,) or (..., n, k) (a stack of right-hand sides).
+ * @param[out]    res   New retained array of b's shape (per-matrix F blocks).
  *
  * @return OTI_OK; OTI_ERR_SHAPE; OTI_ERR_DTYPE; OTI_ERR_SIZE; OTI_ERR_MEMORY. Caller must release
  *         @p res via nd_release().
@@ -204,21 +249,51 @@ int nd_cholesky(oti_ctx* ctx, const ndarr_t* a, int32_t lower, ndarr_t* res);
 int nd_cho_solve(oti_ctx* ctx, const ndarr_t* c, int32_t lower, const ndarr_t* b, ndarr_t* res);
 
 /**
+ * @brief nd_cho_solve() into an existing output (S29).
+ *
+ * @param[in,out] ctx   Context, or NULL.
+ * @param[in]     c     OTI_F64 n x n factor; may overlap out (then it is copied first).
+ * @param[in]     lower 1 if @p c is lower (L), 0 if upper (U).
+ * @param[in]     b     OTI_F64 (n,) or (..., n, k); may be (or overlap) out.
+ * @param[in,out] out   Writeable OTI_F64 of b's shape, free of internal overlap.
+ *
+ * @return As nd_cho_solve(), plus OTI_ERR_READONLY and OTI_ERR_LAYOUT (internal overlap of out).
+ */
+int nd_cho_solve_to(oti_ctx* ctx, const ndarr_t* c, int32_t lower, const ndarr_t* b, ndarr_t* out);
+
+/**
  * @brief Solves op(T) x = b with a triangular T (dtrtrs; scipy.linalg.solve_triangular).
  *
  * @param[in,out] ctx           Context, or NULL.
  * @param[in]     t             OTI_F64 n x n; only the chosen triangle is read.
- * @param[in]     b             OTI_F64 (n,) or (n, k).
+ * @param[in]     b             OTI_F64 (n,) or (..., n, k) (a stack of right-hand sides).
  * @param[in]     lower         1 for lower, 0 for upper.
  * @param[in]     trans         1 to solve T^T x = b.
  * @param[in]     unit_diagonal 1 to take the diagonal as ones (not read).
- * @param[out]    res           New retained array of b's shape.
+ * @param[out]    res           New retained array of b's shape (per-matrix F blocks).
  *
  * @return OTI_OK; info > 0 (exactly zero diagonal entry); OTI_ERR_SHAPE; OTI_ERR_DTYPE; OTI_ERR_SIZE;
  *         OTI_ERR_MEMORY. Caller must release @p res via nd_release().
  */
 int nd_solve_triangular(oti_ctx* ctx, const ndarr_t* t, const ndarr_t* b, int32_t lower,
                         int32_t trans, int32_t unit_diagonal, ndarr_t* res);
+
+/**
+ * @brief nd_solve_triangular() into an existing output (S29).
+ *
+ * @param[in,out] ctx           Context, or NULL.
+ * @param[in]     t             OTI_F64 n x n; may overlap out (then it is copied first).
+ * @param[in]     b             OTI_F64 (n,) or (..., n, k); may be (or overlap) out.
+ * @param[in]     lower         1 for lower, 0 for upper.
+ * @param[in]     trans         1 to solve T^T x = b.
+ * @param[in]     unit_diagonal 1 to take the diagonal as ones.
+ * @param[in,out] out           Writeable OTI_F64 of b's shape, free of internal overlap.
+ *
+ * @return As nd_solve_triangular(), plus OTI_ERR_READONLY and OTI_ERR_LAYOUT (internal overlap of
+ *         out). On info > 0 out holds unspecified values.
+ */
+int nd_solve_triangular_to(oti_ctx* ctx, const ndarr_t* t, const ndarr_t* b, int32_t lower,
+                           int32_t trans, int32_t unit_diagonal, ndarr_t* out);
 
 /** @} */
 // -------------------------------------------------------------------------------------------------------

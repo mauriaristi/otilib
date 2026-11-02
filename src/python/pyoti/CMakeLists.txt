@@ -112,7 +112,7 @@ message(STATUS ">>> CYTHON_CMD_CALL_PREC: ${CYTHON_CMD_CALL_PREC}")
 
 # CMAKE
 ADD_CUSTOM_TARGET(oticython ALL
-	DEPENDS oti otiarrinter otilapack)
+	DEPENDS oti otiarrinter)
 
 # # 2. Execute Cython setup call 
 ADD_CUSTOM_COMMAND (

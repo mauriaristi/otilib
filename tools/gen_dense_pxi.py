@@ -2,8 +2,9 @@
 Generate the Cython declarations of the dense C API from its headers (PLAN-dense-update.md).
 
 Writes ``dense.pxi``, ``dense_utils.pxi``, ``dense_io.pxi``, ``dense_gauss.pxi`` and
-``dense_csr.pxi`` into the output directory. Re-run it whenever a header under
-``include/oti/dense/`` changes; never edit the generated files by hand.
+``dense_csr.pxi`` into the output directory, and (PLAN-ndarray.md, Phase 4) ``real_ndarray.pxi`` from
+the ndarray headers under ``include/oti/real/ndarray/`` and ``include/oti/core/{status,exec}.h``.
+Re-run it whenever one of those headers changes; never edit the generated files by hand.
 
 Usage::
 
@@ -32,6 +33,14 @@ TITLES = {
     "dense_gauss.pxi": "Gauss-point types",
     "dense_csr.pxi": "CSR builder and view",
 }
+
+# Headers of real_ndarray.pxi, relative to include/oti/, in declaration order (a Cython type must be
+# declared before it is used).
+ND_FILE = "real_ndarray.pxi"
+ND_HEADERS = ["core/status.h", "core/exec.h",
+              "real/ndarray/structures.h", "real/ndarray/buffer.h", "real/ndarray/create.h",
+              "real/ndarray/views.h", "real/ndarray/iter.h", "real/ndarray/elementwise.h",
+              "real/ndarray/reduce.h", "real/ndarray/blas.h", "real/ndarray/linalg.h"]
 
 # Python keywords cannot name Cython arguments; they get a trailing underscore.
 KEYWORDS = ("in|is|from|lambda|def|class|pass|del|global|not|and|or|with|as|yield|import|print|"
@@ -280,9 +289,187 @@ def wrap(line, indent=4, width=106):
 
 
 # ********************************************************************************************************
+def nd_defines(text):
+    """
+    List the numeric ``#define`` constants of an ndarray / core header, split by width.
+
+    Parameters
+    ----------
+    text : str
+        Header source (with comments).
+
+    Returns
+    -------
+    tuple of list of str
+        Names of the constants that fit an ``int`` (declared as ``cdef enum`` members) and names of the
+        64-bit ones (``ull`` suffix, declared as ``uint64_t`` externs: a Cython enum would truncate them).
+    """
+
+    small, wide = [], []
+
+    for match in re.finditer(r"^#define[ \t]+([A-Z][A-Z0-9_]*)[ \t]+([(\d\-][^\n]*)$", text, flags=re.M):
+
+        value = re.sub(r"//.*$", "", match.group(2)).strip()
+
+        if re.search(r"ull\b", value, flags=re.I):
+
+            wide.append(match.group(1))
+
+        else:
+
+            small.append(match.group(1))
+
+        # end if
+
+    # end for
+
+    return small, wide
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def nd_typedefs(text):
+    """
+    Translate the structs (tagged or not), opaque struct typedefs and function-pointer typedefs of a
+    header, and strip them from the source so that ``prototypes`` does not see them.
+
+    Parameters
+    ----------
+    text : str
+        Header source without comments.
+
+    Returns
+    -------
+    tuple
+        The Cython ``ctypedef`` lines (indented for a ``cdef extern`` block) and the stripped source.
+    """
+
+    out = []
+
+    for match in re.finditer(r"typedef\s+struct\s+(\w+)\s+(\w+)\s*;", text):
+
+        out.append("    ctypedef struct {}:".format(match.group(1)))
+        out.append("        pass")
+        out.append("    ctypedef {} {}".format(match.group(1), match.group(2)))
+        out.append("")
+
+    # end for
+
+    text = re.sub(r"typedef\s+struct\s+\w+\s+\w+\s*;", "", text)
+
+    for match in re.finditer(r"typedef\s+struct\s*(\w*)\s*\{(.*?)\}\s*(\w+)\s*;", text, flags=re.S):
+
+        out.append("    ctypedef struct {}:".format(match.group(1) or match.group(3)))
+
+        for field in match.group(2).split(";"):
+
+            field = " ".join(field.split())
+
+            if field:
+
+                field = re.sub(r"\s*\*\s*", "* ", field)
+                out.append("        " + field)
+
+            # end if
+
+        # end for
+
+        if match.group(1):
+
+            out.append("    ctypedef {} {}".format(match.group(1), match.group(3)))
+
+        # end if
+
+        out.append("")
+
+    # end for
+
+    text = re.sub(r"typedef\s+struct\s*\w*\s*\{.*?\}\s*\w+\s*;", "", text, flags=re.S)
+
+    for match in re.finditer(r"typedef\s+([\w\s\*]+?)\(\s*\*\s*(\w+)\s*\)\s*\(([^()]*)\)\s*;", text):
+
+        ret = re.sub(r"\s*\*\s*$", "*", " ".join(match.group(1).split()))
+        args = re.sub(r"\s*\*\s*", "* ", " ".join(match.group(3).split())).replace("* ,", "*,")
+        out.append("    ctypedef {} (*{})({})".format(ret, match.group(2), args))
+        out.append("")
+
+    # end for
+
+    text = re.sub(r"typedef\s+[\w\s\*]+?\(\s*\*\s*\w+\s*\)\s*\([^()]*\)\s*;", "", text)
+
+    return out, text
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def write_ndarray(root, outdir):
+    """
+    Write ``real_ndarray.pxi``: the Cython declarations of the ndarray C API.
+
+    Parameters
+    ----------
+    root : Path
+        ``<include root>/oti``.
+    outdir : Path
+        Output directory.
+    """
+
+    lines = ["# Real ndarray C declarations: ndarr_t, buffers, creators, views, elementwise, reductions,",
+             "# BLAS and linear algebra, statuses and the execution context.",
+             "# GENERATED from include/oti/real/ndarray/*.h and include/oti/core/{status,exec}.h",
+             "# (PLAN-ndarray.md, Phase 4) by tools/gen_dense_pxi.py; re-run it when one changes.",
+             "# Do not edit by hand.",
+             'cdef extern from "oti/real/ndarray.h" nogil:', ""]
+
+    for header in ND_HEADERS:
+
+        raw = (root / header).read_text()
+        small, wide = nd_defines(raw)
+        lines.append("    # " + header)
+
+        if small:
+
+            lines.append("    cdef enum:")
+            lines.extend("        " + name for name in small)
+            lines.append("")
+
+        # end if
+
+        lines.extend("    uint64_t " + name for name in wide)
+
+        if wide:
+
+            lines.append("")
+
+        # end if
+
+        typedefs, text = nd_typedefs(strip_comments(raw))
+        lines.extend(typedefs)
+
+        for proto in prototypes(text):
+
+            lines.extend(wrap(proto, width=104))
+
+        # end for
+
+        lines.append("")
+
+    # end for
+
+    (outdir / ND_FILE).write_text("\n".join(lines).rstrip() + "\n")
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
 def main():
     """
-    Write every generated file from the headers under ``<include root>/oti/dense``.
+    Write every generated file from the headers under ``<include root>/oti/dense`` and the ndarray ones.
     """
 
     root = Path(sys.argv[1]) / "oti" / "dense"
@@ -327,6 +514,8 @@ def main():
         (outdir / fname).write_text("\n".join(lines).rstrip() + "\n")
 
     # end for
+
+    write_ndarray(Path(sys.argv[1]) / "oti", outdir)
 
 # end function
 # --------------------------------------------------------------------------------------------------------

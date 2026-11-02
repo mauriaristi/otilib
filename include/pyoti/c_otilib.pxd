@@ -25,6 +25,10 @@ include "c_otilib/dense_io.pxi"
 include "c_otilib/dense_gauss.pxi"
 include "c_otilib/dense_csr.pxi"
 
+# Real ndarray (PLAN-ndarray.md, Phase 4): generated from include/oti/real/ndarray/*.h and
+# include/oti/core/{status,exec}.h by tools/gen_dense_pxi.py.
+include "c_otilib/real_ndarray.pxi"
+
 # Static algebras.
 include "c_otilib/static.pxi"
 

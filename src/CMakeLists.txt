@@ -126,16 +126,6 @@ target_link_libraries(oticwrap
     ${LINK_TARGET_OMP_Fortran})
 
 
-# C-callable LAPACK / BLAS wrappers (BIND(C) external subroutines, no module). Every C consumer of
-# LAPACK goes through them; LAPACK::LAPACK comes from find_package(LAPACK) in the root CMakeLists.
-add_library (otilapack STATIC
-    fortran/core/oti_lapack.f90
-)
-
-target_link_libraries(otilapack PUBLIC
-    LAPACK::LAPACK)
-
-
 file(GLOB array_interface_f90 
     fortran/experimental/array_interface*.f90
     fortran/static/real_utils.f90
@@ -221,6 +211,8 @@ endif()
 add_library (oti    c/version.c
                     c/core.c
                     c/core/exec.c
+                    c/core/lapack.c
+                    c/core/lapack_provider.c
                     c/real_ndarray.c
                     c/real.c
                     c/dense.c
@@ -235,6 +227,9 @@ add_library (oti    c/version.c
 # -fno-wrapv: the project compiles with -fwrapv, which hides signed overflow from UBSan; the ndarray
 # code checks its arithmetic (contracts 2.3) and must not rely on wrapping (critic W1 finding 14).
 set_source_files_properties(c/real_ndarray.c c/core/exec.c
+                            PROPERTIES COMPILE_OPTIONS "-ffp-contract=off;-fno-wrapv")
+# The LAPACK / BLAS C wrappers and the provider table (contracts 8.6, 8.3): same options.
+set_source_files_properties(c/core/lapack.c c/core/lapack_provider.c
                             PROPERTIES COMPILE_OPTIONS "-ffp-contract=off;-fno-wrapv")
 
 
@@ -251,9 +246,10 @@ endif(APPLE)
 
 # Link to math libraries
 # Keyword (PUBLIC) form: CMake rejects mixing it with the plain form for one target, and PUBLIC
-# propagates otilapack / LAPACK::LAPACK to every executable that links oti.
+# propagates LAPACK::LAPACK (called by c/core/lapack.c) and the dl library (dladdr / dlopen of the
+# provider probe, c/core/lapack_provider.c) to every executable that links oti.
 target_link_libraries(oti PUBLIC
-    m  oticwrap otistatic otilapack ${ISOCBIND_Fortran_LFLAG}
+    m  oticwrap otistatic LAPACK::LAPACK ${CMAKE_DL_LIBS} ${ISOCBIND_Fortran_LFLAG}
     ${LINK_TARGET_OMP_C})
 
 # -------------------------------------------------------------------

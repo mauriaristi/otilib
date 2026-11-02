@@ -10,17 +10,23 @@
 //     and a strided fallback. Each element depends only on its own operands, and the build has no
 //     FMA contraction (-ffp-contract=off) and no vector math library, so the vector body, the scalar
 //     tail and any traversal order give bit-identical values;
-//   - the driver: nd_iter_init() over (out, inputs) in ND_ITER_ORDER_K, then the iteration space cut
-//     into fixed logical chunks of OTI_EXEC_CHUNK_ELEMS linear indices, each walked by nd_iter_run()
-//     (nde_run). Phase 1 runs the chunks with oti_serial_for(); Phase 2 hands the same chunks to
-//     oti_parallel_for() (nde_chunk is already a valid chunk function: it writes only its own range
-//     and records no error);
+//   - the trivial path (NumPy's PyArray_TRIVIALLY_ITERABLE, critic W1 finding 5): when the output
+//     is dense (C, F or any compact layout with positive strides, e.g. the SoA block layout) and
+//     every input has its shape and strides or is a single element, the kernel runs over `size`
+//     elements in memory order with no iterator (nde_try_flat);
+//   - otherwise the driver: nd_iter_init() over (out, inputs) in ND_ITER_ORDER_K, then the
+//     iteration space cut into fixed logical chunks of OTI_EXEC_CHUNK_ELEMS linear indices, each
+//     walked by nd_iter_run() (nde_run);
+//   - both run the same fixed chunks through nde_for(): oti_parallel_for() when oti_exec_plan()
+//     gives >= 2 workers for the kernel family's cost per element (contracts S27; NDE_NS_*),
+//     oti_serial_for() otherwise. A chunk writes only its own elements and records no error, so
+//     values are bit-identical at every thread count;
 //   - aliasing (contracts 3.4): an input that is exactly `out` (ND_SHARE_EXACT) is computed in place;
 //     any other possible overlap (ND_SHARE_MAYBE) computes into a temporary charged to the temp
 //     budget, then copies it into `out`. Assignment copies a possibly overlapping source first
 //     (snapshot semantics); an exact alias is a no-op.
-// Comparisons and mask operators (ND_OP_EQ ... ND_OP_XOR, ND_FN_NOT) are Phase 2 (mask.c): until then
-// they are OTI_ERR_ARGUMENT, the status documented for an unknown operation.
+// Comparisons and mask operators (ND_OP_EQ ... ND_OP_XOR, ND_FN_NOT) have their kernels in mask.c
+// (forward-declared below); this file dispatches them like the arithmetic operations.
 
 #include <math.h>
 #include <string.h>
@@ -42,6 +48,40 @@ typedef struct {
     nd_inner_fn      fn;
     void*            arg;
 } nde_job_t;
+
+// One trivially iterable job: per operand its element 0 and its step (the itemsize, or 0 for a
+// single-element operand), walked linearly over `size` elements.
+typedef struct {
+    nd_inner_fn fn;
+    void*       arg;
+    int32_t     nop;
+    int32_t     reserved;
+    int64_t     size;
+    char*       data[ND_ITER_MAXOPS];
+    int64_t     step[ND_ITER_MAXOPS];
+} nde_flat_t;
+
+// A binary operation: kernel, operand and result dtypes, cost per element for oti_exec_plan().
+typedef struct {
+    nd_inner_fn fn;
+    int32_t     in_dtype;
+    int32_t     out_dtype;
+    double      ns;
+} nde_opinfo_t;
+
+// Cost per element (ns, one core) of the kernel families, for oti_exec_plan() (contracts S27).
+// Measured serially on 2^20 contiguous doubles (Apple M-series, build-orch/w2-scratch/nd-kern/
+// bench_ns.c): add / mul / copy / fill / compare / neg / floor / sign 0.1-0.2; div, sqrt, reciprocal
+// 0.13-0.25 and maximum / minimum 0.8 (the NaN and signed-zero branches); libm functions 1.5-2.9;
+// pow 4.9. Strided or broadcast operands cost more per element; the constants are the contiguous
+// floor, which errs towards serial for small loops.
+#define NDE_NS_ARITH   0.15
+#define NDE_NS_DIV     0.3
+#define NDE_NS_LIBM    2.0
+#define NDE_NS_POW     5.0
+
+// mask.c (included after this file and functions.c): comparison and logical operations.
+static int ndm_binary_info(int32_t op, nde_opinfo_t* info);
 
 
 // *******************************************************************************************************
@@ -74,6 +114,35 @@ static inline void nde_debug_res(const ndarr_t* res){
 
 
 // *******************************************************************************************************
+// Runs n_chunks fixed chunks of fn: in parallel when oti_exec_plan() gives >= 2 workers for n_items
+// items of ns nanoseconds each (with exactly that many workers, through a copy of the context),
+// serially otherwise. The chunks, hence the values, do not depend on the choice.
+static int nde_for(oti_ctx* ctx, int64_t n_items, int64_t chunk_items, double ns, int64_t n_chunks,
+                   oti_chunk_fn fn, void* arg){
+
+    if (n_chunks >= 2){
+
+        int32_t w = oti_exec_plan(ctx, n_items, chunk_items, ns);
+
+        if (w >= 2){
+
+            oti_ctx run = *(ctx != NULL ? ctx : oti_ctx_default());
+
+            run.exec.nthreads = w;
+
+            return oti_parallel_for(&run, n_chunks, fn, arg);
+
+        }
+
+    }
+
+    return oti_serial_for(n_chunks, fn, arg);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 // Chunk function: walks the linear range of chunk c (an oti_chunk_fn; safe to run concurrently on
 // distinct chunks, since the kernels write only the elements of their run).
 static int nde_chunk(void* arg, int64_t c, int32_t worker){
@@ -95,18 +164,179 @@ static int nde_chunk(void* arg, int64_t c, int32_t worker){
 
 
 // *******************************************************************************************************
-// Runs a prepared iterator in fixed logical chunks. Phase 1 is serial; Phase 2 switches to
-// oti_parallel_for() when oti_exec_parallel_ok(ctx, it->size, 0) holds, with the same chunks.
-static int nde_run(oti_ctx* ctx, const nd_iter_t* it, nd_inner_fn fn, void* arg){
+// Runs a prepared iterator in fixed logical chunks of OTI_EXEC_CHUNK_ELEMS elements (nde_for).
+static int nde_run(oti_ctx* ctx, const nd_iter_t* it, nd_inner_fn fn, void* arg, double ns){
 
     nde_job_t job;
 
-    (void)ctx;
     job.it  = it;
     job.fn  = fn;
     job.arg = arg;
 
-    return oti_serial_for(oti_exec_nchunks(it->size, OTI_EXEC_CHUNK_ELEMS), nde_chunk, &job);
+    return nde_for(ctx, it->size, OTI_EXEC_CHUNK_ELEMS, ns,
+                   oti_exec_nchunks(it->size, OTI_EXEC_CHUNK_ELEMS), nde_chunk, &job);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Chunk function of the trivial path: elements [c*CH, min((c+1)*CH, size)) as one run.
+static int nde_flat_chunk(void* arg, int64_t c, int32_t worker){
+
+    const nde_flat_t* f = (const nde_flat_t*)arg;
+    char* p[ND_ITER_MAXOPS];
+    int64_t start = c * OTI_EXEC_CHUNK_ELEMS;
+    int64_t n = f->size - start;
+    int32_t i;
+
+    (void)worker;
+
+    if (n > OTI_EXEC_CHUNK_ELEMS){
+        n = OTI_EXEC_CHUNK_ELEMS;
+    }
+
+    for (i = 0; i < f->nop; i++){
+        p[i] = f->data[i] + start * f->step[i];
+    }
+
+    return f->fn(f->arg, n, p, f->step);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Nonzero when a (size >= 1 elements) occupies exactly `size` consecutive elements upward from data:
+// C or F contiguous, or a compact layout with positive strides on its axes of extent > 1 (the SoA
+// block layout); such a layout can be walked linearly in memory order.
+static int nde_dense_up(const ndarr_t* a, int64_t size){
+
+    int64_t last = 0;
+    int32_t k;
+
+    if (a->flags & (ND_C_CONTIG | ND_F_CONTIG)){
+        return 1;
+    }
+
+    for (k = 0; k < a->ndim; k++){
+
+        if (a->shape[k] <= 1){
+            continue;
+        }
+
+        if (a->strides[k] <= 0){
+            return 0;
+        }
+
+        last += (a->shape[k] - 1) * a->strides[k];      // bounded by the validated span.
+
+    }
+
+    return last == size - 1 && !nd_internal_overlap(a);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Nonzero when a has o's shape and o's strides on every axis of extent > 1.
+static int nde_same_layout(const ndarr_t* a, const ndarr_t* o){
+
+    int32_t k;
+
+    if (a->ndim != o->ndim){
+        return 0;
+    }
+
+    for (k = 0; k < o->ndim; k++){
+        if (a->shape[k] != o->shape[k] || (o->shape[k] > 1 && a->strides[k] != o->strides[k])){
+            return 0;
+        }
+    }
+
+    return 1;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// The trivial path (NumPy's PyArray_TRIVIALLY_ITERABLE): ops[io] is the output. Taken when the
+// output is writeable, non-empty and dense (nde_dense_up), and every input has the output's layout
+// (nde_same_layout) or is a single element broadcast with step 0; an input may be the output itself
+// (same data and dtype: in place), any other byte-range overlap leaves the case to the general path
+// (and its temporary). Returns 1 with *status set when it ran, 0 when the general path must run
+// (which also produces every error status).
+static int nde_try_flat(oti_ctx* ctx, nd_inner_fn fn, void* arg, double ns, int32_t nop,
+                        const ndarr_t* const* ops, int32_t io, int* status){
+
+    const ndarr_t* o = ops[io];
+    nde_flat_t f;
+    uintptr_t olo, ohi;
+    int64_t size;
+    int32_t i;
+
+    if (!(o->flags & ND_WRITEABLE)){
+        return 0;
+    }
+
+    size = nd_size(o);
+
+    if (size == 0 || !nde_dense_up(o, size)){
+        return 0;
+    }
+
+    olo = (uintptr_t)o->data;
+    ohi = olo + (uintptr_t)size * (uintptr_t)nd_itemsize(o->dtype);
+
+    for (i = 0; i < nop; i++){
+
+        const ndarr_t* a = ops[i];
+        int64_t isz = nd_itemsize(a->dtype);
+        uintptr_t lo = (uintptr_t)a->data, hi;
+
+        f.data[i] = (char*)a->data;
+
+        if (i == io){
+            f.step[i] = isz;
+            continue;
+        }
+
+        if (nde_same_layout(a, o)){
+
+            f.step[i] = isz;
+
+            if (a->data == o->data && a->dtype == o->dtype){
+                continue;                               // exact alias: in place.
+            }
+
+            hi = lo + (uintptr_t)size * (uintptr_t)isz;
+
+        } else if (a->ndim <= o->ndim && nd_size(a) == 1){
+
+            f.step[i] = 0;
+            hi = lo + (uintptr_t)isz;
+
+        } else {
+            return 0;
+        }
+
+        if (lo < ohi && olo < hi){
+            return 0;
+        }
+
+    }
+
+    f.fn   = fn;
+    f.arg  = arg;
+    f.nop  = nop;
+    f.size = size;
+
+    *status = nde_for(ctx, size, OTI_EXEC_CHUNK_ELEMS, ns,
+                      oti_exec_nchunks(size, OTI_EXEC_CHUNK_ELEMS), nde_flat_chunk, &f);
+
+    return 1;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -177,14 +407,16 @@ static int nde_alloc_k(oti_ctx* ctx, int32_t dtype, int32_t nin, const ndarr_t* 
 
 
 // *******************************************************************************************************
-// A rank-0 temporary descriptor over a caller variable (a scalar operand); valid while *s lives.
-static void nde_scalar_desc(const double* s, ndarr_t* d){
+// A rank-0 temporary descriptor over a caller variable (a scalar operand of the given dtype); valid
+// while *s lives.
+static void nde_scalar_desc(const void* s, int32_t dtype, ndarr_t* d){
 
-    memset(d, 0, sizeof(*d));
     d->data  = (void*)s;
+    d->buf   = NULL;
     d->ndim  = 0;
-    d->dtype = OTI_F64;
-    d->flags = ND_C_CONTIG | ND_F_CONTIG;
+    d->dtype = dtype;
+    d->flags    = ND_C_CONTIG | ND_F_CONTIG;
+    d->reserved = 0;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -453,18 +685,24 @@ static int nde_copy_into(oti_ctx* ctx, const ndarr_t* src, ndarr_t* dst){
     const ndarr_t* ops[2];
     int32_t flags[2] = {ND_ITER_OUT, ND_ITER_IN};
     nde_karg_t k = {0, 1, 1, 0, 0.0};
+    nd_inner_fn fn = nde_copy_kernel(dst->dtype);
     nd_iter_t it;
     int status;
 
     ops[0] = dst;
     ops[1] = src;
+
+    if (nde_try_flat(ctx, fn, &k, NDE_NS_ARITH, 2, ops, 0, &status)){
+        return status;
+    }
+
     status = nd_iter_init(&it, 2, ops, flags, ND_ITER_ORDER_K);
 
     if (status != OTI_OK){
         return status;
     }
 
-    return nde_run(ctx, &it, nde_copy_kernel(dst->dtype), &k);
+    return nde_run(ctx, &it, fn, &k, NDE_NS_ARITH);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -472,15 +710,16 @@ static int nde_copy_into(oti_ctx* ctx, const ndarr_t* src, ndarr_t* dst){
 
 // *******************************************************************************************************
 // out = fn(in0[, in1]) with the aliasing rules of 3.4: in place for exact aliases, through a temporary
-// for any other possible overlap. nin is 1 or 2. Statuses only (the public caller records errors).
-static int nde_apply_to(oti_ctx* ctx, nd_inner_fn fn, int32_t nin, const ndarr_t* in0,
+// (out's dtype, its K layout) for any other possible overlap. nin is 1 or 2; ns is the kernel
+// family's cost per element. Statuses only (the public caller records errors).
+static int nde_apply_to(oti_ctx* ctx, nd_inner_fn fn, double ns, int32_t nin, const ndarr_t* in0,
                         const ndarr_t* in1, ndarr_t* out){
 
     const ndarr_t* ops[3];
     int32_t flags[3] = {ND_ITER_OUT, ND_ITER_IN, ND_ITER_IN};
     nde_karg_t k = {0, 1, 2, 0, 0.0};
-    nd_iter_t it;
     const ndarr_t* like = out;
+    nd_iter_t it;
     ndarr_t tmp;
     int status, need_tmp;
 
@@ -491,6 +730,11 @@ static int nde_apply_to(oti_ctx* ctx, nd_inner_fn fn, int32_t nin, const ndarr_t
     ops[0] = out;
     ops[1] = in0;
     ops[2] = in1;
+
+    if (nde_try_flat(ctx, fn, &k, ns, 1 + nin, ops, 0, &status)){
+        return status;
+    }
+
     status = nd_iter_init(&it, 1 + nin, ops, flags, ND_ITER_ORDER_K);
 
     if (status != OTI_OK){
@@ -501,22 +745,27 @@ static int nde_apply_to(oti_ctx* ctx, nd_inner_fn fn, int32_t nin, const ndarr_t
                || (nin == 2 && nd_may_share_memory(out, in1) == ND_SHARE_MAYBE);
 
     if (!need_tmp){
-        return nde_run(ctx, &it, fn, &k);
+        return nde_run(ctx, &it, fn, &k, ns);
     }
 
     // Partial overlap: compute into a fresh array in out's K layout, then copy it into out.
     nd_init_empty(&tmp);
-    status = nde_alloc_k(ctx, OTI_F64, 1, &like, out->ndim, out->shape, 1, &tmp);
+    status = nde_alloc_k(ctx, out->dtype, 1, &like, out->ndim, out->shape, 1, &tmp);
 
     if (status != OTI_OK){
         return status;
     }
 
     ops[0] = &tmp;
-    status = nd_iter_init(&it, 1 + nin, ops, flags, ND_ITER_ORDER_K);
 
-    if (status == OTI_OK){
-        status = nde_run(ctx, &it, fn, &k);
+    if (!nde_try_flat(ctx, fn, &k, ns, 1 + nin, ops, 0, &status)){
+
+        status = nd_iter_init(&it, 1 + nin, ops, flags, ND_ITER_ORDER_K);
+
+        if (status == OTI_OK){
+            status = nde_run(ctx, &it, fn, &k, ns);
+        }
+
     }
 
     if (status == OTI_OK){
@@ -532,12 +781,12 @@ static int nde_apply_to(oti_ctx* ctx, nd_inner_fn fn, int32_t nin, const ndarr_t
 
 
 // *******************************************************************************************************
-// res = fn(ins[0][, ins[1]]) in a new OTI_F64 array of the broadcast shape in the K layout of the
-// inputs (contracts S24, nde_alloc_k); the result is the iterator's last operand, so the driving
+// res = fn(ins[0][, ins[1]]) in a new array of dtype odt and the broadcast shape, in the K layout of
+// the inputs (contracts S24, nde_alloc_k); the result is the iterator's last operand, so the driving
 // input of the allocation also drives the walk. `swap` makes the kernel read ins[1] as its left
 // operand (scalar-left variants, where ins[0] is the array). res is empty on failure.
-static int nde_apply_new(oti_ctx* ctx, nd_inner_fn fn, int32_t nin, const ndarr_t* const* ins,
-                         int32_t swap, ndarr_t* res){
+static int nde_apply_new(oti_ctx* ctx, nd_inner_fn fn, double ns, int32_t odt, int32_t nin,
+                         const ndarr_t* const* ins, int32_t swap, ndarr_t* res){
 
     const ndarr_t* ops[3];
     int32_t flags[3] = {ND_ITER_IN, ND_ITER_IN, ND_ITER_OUT};
@@ -556,7 +805,7 @@ static int nde_apply_new(oti_ctx* ctx, nd_inner_fn fn, int32_t nin, const ndarr_
         return status;
     }
 
-    status = nde_alloc_k(ctx, OTI_F64, nin, ins, ndim, shape, 0, res);
+    status = nde_alloc_k(ctx, odt, nin, ins, ndim, shape, 0, res);
 
     if (status != OTI_OK){
         return status;
@@ -572,10 +821,14 @@ static int nde_apply_new(oti_ctx* ctx, nd_inner_fn fn, int32_t nin, const ndarr_
     k.i0       = swap ? 1 : 0;
     k.i1       = (nin == 1) ? 0 : (swap ? 0 : 1);
 
-    status = nd_iter_init(&it, nin + 1, ops, flags, ND_ITER_ORDER_K);
+    if (!nde_try_flat(ctx, fn, &k, ns, nin + 1, ops, nin, &status)){
 
-    if (status == OTI_OK){
-        status = nde_run(ctx, &it, fn, &k);
+        status = nd_iter_init(&it, nin + 1, ops, flags, ND_ITER_ORDER_K);
+
+        if (status == OTI_OK){
+            status = nde_run(ctx, &it, fn, &k, ns);
+        }
+
     }
 
     if (status != OTI_OK){
@@ -589,26 +842,42 @@ static int nde_apply_new(oti_ctx* ctx, nd_inner_fn fn, int32_t nin, const ndarr_
 
 
 // *******************************************************************************************************
-// Kernel of a binary arithmetic operation, or NULL (unknown, or a Phase 2 comparison / mask operator).
-static nd_inner_fn nde_binary_kernel(int32_t op){
+// The kernel, dtypes and cost of a binary operation: arithmetic here (OTI_F64 -> OTI_F64),
+// comparisons and logical operations in mask.c. Returns 0 for an unknown operation.
+static int nde_binary_info(int32_t op, nde_opinfo_t* info){
+
+    info->in_dtype  = OTI_F64;
+    info->out_dtype = OTI_F64;
+    info->ns        = NDE_NS_ARITH;
 
     switch (op){
     case ND_OP_ADD:
-        return nde_k_add;
+        info->fn = nde_k_add;
+        return 1;
     case ND_OP_SUB:
-        return nde_k_sub;
+        info->fn = nde_k_sub;
+        return 1;
     case ND_OP_MUL:
-        return nde_k_mul;
+        info->fn = nde_k_mul;
+        return 1;
     case ND_OP_DIV:
-        return nde_k_div;
+        info->fn = nde_k_div;
+        info->ns = NDE_NS_DIV;
+        return 1;
     case ND_OP_POW:
-        return nde_k_pow;
+        info->fn = nde_k_pow;
+        info->ns = NDE_NS_POW;
+        return 1;
     case ND_OP_MAXIMUM:
-        return nde_k_maximum;
+        info->fn = nde_k_maximum;
+        info->ns = NDE_NS_DIV;
+        return 1;
     case ND_OP_MINIMUM:
-        return nde_k_minimum;
+        info->fn = nde_k_minimum;
+        info->ns = NDE_NS_DIV;
+        return 1;
     default:
-        return NULL;
+        return ndm_binary_info(op, info);
     }
 
 }
@@ -616,7 +885,8 @@ static nd_inner_fn nde_binary_kernel(int32_t op){
 
 
 // *******************************************************************************************************
-// Unary kernel of a scalar exponent with a NumPy fast path (elementwise.h), or NULL.
+// Unary kernel of a scalar exponent with a NumPy fast path (elementwise.h), or NULL. All run at
+// the cost of arithmetic except sqrt (NDE_NS_DIV, set by the caller).
 static nd_inner_fn nde_pow_fast_kernel(double s){
 
     if (s == 2.0){
@@ -646,10 +916,12 @@ static nd_inner_fn nde_pow_fast_kernel(double s){
 
 
 // *******************************************************************************************************
-// Argument checks shared by the binary entry points: operands present, operation known, OTI_F64.
-static int nde_binary_check(int32_t op, const ndarr_t* a, const ndarr_t* b, const ndarr_t* out){
+// Argument checks shared by the binary entry points: operands present, operation known, operand
+// dtypes as the operation takes them (out is NULL for the allocating variants).
+static int nde_binary_check(int32_t op, const ndarr_t* a, const ndarr_t* b, const ndarr_t* out,
+                            nde_opinfo_t* info){
 
-    if (a == NULL || b == NULL || out == NULL || nde_binary_kernel(op) == NULL){
+    if (a == NULL || b == NULL || !nde_binary_info(op, info)){
         return OTI_ERR_ARGUMENT;
     }
 
@@ -657,7 +929,8 @@ static int nde_binary_check(int32_t op, const ndarr_t* a, const ndarr_t* b, cons
     nde_debug_input(b);
     nde_debug_input(out);
 
-    if (a->dtype != OTI_F64 || b->dtype != OTI_F64 || out->dtype != OTI_F64){
+    if (a->dtype != info->in_dtype || b->dtype != info->in_dtype
+        || (out != NULL && out->dtype != info->out_dtype)){
         return OTI_ERR_DTYPE;
     }
 
@@ -670,14 +943,15 @@ static int nde_binary_check(int32_t op, const ndarr_t* a, const ndarr_t* b, cons
 // *******************************************************************************************************
 int nd_binary_to(oti_ctx* ctx, int32_t op, const ndarr_t* a, const ndarr_t* b, ndarr_t* out){
 
+    nde_opinfo_t info;
     int status = oti_ctx_check(ctx);
 
     if (status == OTI_OK){
-        status = nde_binary_check(op, a, b, out);
+        status = (out == NULL) ? OTI_ERR_ARGUMENT : nde_binary_check(op, a, b, out, &info);
     }
 
     if (status == OTI_OK){
-        status = nde_apply_to(ctx, nde_binary_kernel(op), 2, a, b, out);
+        status = nde_apply_to(ctx, info.fn, info.ns, 2, a, b, out);
     }
 
     if (status != OTI_OK){
@@ -694,24 +968,24 @@ int nd_binary_to(oti_ctx* ctx, int32_t op, const ndarr_t* a, const ndarr_t* b, n
 int nd_binary(oti_ctx* ctx, int32_t op, const ndarr_t* a, const ndarr_t* b, ndarr_t* res){
 
     const ndarr_t* ins[2];
+    nde_opinfo_t info;
     int status;
 
     if (res == NULL){
         status = OTI_ERR_ARGUMENT;
     } else {
 
-        // out stands in for res in the dtype check; res is overwritten anyway.
         nde_debug_res(res);
         status = oti_ctx_check(ctx);
 
         if (status == OTI_OK){
-            status = (a == NULL) ? OTI_ERR_ARGUMENT : nde_binary_check(op, a, b, a);
+            status = nde_binary_check(op, a, b, NULL, &info);
         }
 
         if (status == OTI_OK){
             ins[0] = a;
             ins[1] = b;
-            status = nde_apply_new(ctx, nde_binary_kernel(op), 2, ins, 0, res);
+            status = nde_apply_new(ctx, info.fn, info.ns, info.out_dtype, 2, ins, 0, res);
         } else {
             nd_init_empty(res);
         }
@@ -729,17 +1003,18 @@ int nd_binary(oti_ctx* ctx, int32_t op, const ndarr_t* a, const ndarr_t* b, ndar
 
 
 // *******************************************************************************************************
-// Checks of the scalar variants (out may be NULL for the allocating one).
-static int nde_scalar_check(int32_t op, const ndarr_t* a, int32_t scalar_left, const ndarr_t* out){
+// Checks of the scalar variants (out is NULL for the allocating one).
+static int nde_scalar_check(int32_t op, const ndarr_t* a, int32_t scalar_left, const ndarr_t* out,
+                            nde_opinfo_t* info){
 
-    if (a == NULL || nde_binary_kernel(op) == NULL || (scalar_left != 0 && scalar_left != 1)){
+    if (a == NULL || !nde_binary_info(op, info) || (scalar_left != 0 && scalar_left != 1)){
         return OTI_ERR_ARGUMENT;
     }
 
     nde_debug_input(a);
     nde_debug_input(out);
 
-    if (a->dtype != OTI_F64 || (out != NULL && out->dtype != OTI_F64)){
+    if (a->dtype != info->in_dtype || (out != NULL && out->dtype != info->out_dtype)){
         return OTI_ERR_DTYPE;
     }
 
@@ -750,15 +1025,34 @@ static int nde_scalar_check(int32_t op, const ndarr_t* a, int32_t scalar_left, c
 
 
 // *******************************************************************************************************
+// The scalar operand of a scalar variant as a rank-0 descriptor of the operation's input dtype: the
+// double itself, or for the logical operations its truth value (NaN is true, as bool(nan)). *u8 is
+// the storage of the latter.
+static void nde_scalar_operand(const nde_opinfo_t* info, const double* s, uint8_t* u8, ndarr_t* sd){
+
+    if (info->in_dtype == OTI_U8){
+        *u8 = (uint8_t)(*s != 0.0);
+        nde_scalar_desc(u8, OTI_U8, sd);
+    } else {
+        nde_scalar_desc(s, OTI_F64, sd);
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int nd_binary_scalar_to(oti_ctx* ctx, int32_t op, const ndarr_t* a, double s, int32_t scalar_left,
                         ndarr_t* out){
 
     nd_inner_fn fast = NULL;
+    nde_opinfo_t info;
     ndarr_t sd;
+    uint8_t u8;
     int status = oti_ctx_check(ctx);
 
     if (status == OTI_OK){
-        status = (out == NULL) ? OTI_ERR_ARGUMENT : nde_scalar_check(op, a, scalar_left, out);
+        status = (out == NULL) ? OTI_ERR_ARGUMENT : nde_scalar_check(op, a, scalar_left, out, &info);
     }
 
     if (status == OTI_OK){
@@ -768,11 +1062,11 @@ int nd_binary_scalar_to(oti_ctx* ctx, int32_t op, const ndarr_t* a, double s, in
         }
 
         if (fast != NULL){
-            status = nde_apply_to(ctx, fast, 1, a, NULL, out);
+            status = nde_apply_to(ctx, fast, (s == 0.5) ? NDE_NS_DIV : NDE_NS_ARITH, 1, a, NULL, out);
         } else {
-            nde_scalar_desc(&s, &sd);
-            status = scalar_left ? nde_apply_to(ctx, nde_binary_kernel(op), 2, &sd, a, out)
-                                 : nde_apply_to(ctx, nde_binary_kernel(op), 2, a, &sd, out);
+            nde_scalar_operand(&info, &s, &u8, &sd);
+            status = scalar_left ? nde_apply_to(ctx, info.fn, info.ns, 2, &sd, a, out)
+                                 : nde_apply_to(ctx, info.fn, info.ns, 2, a, &sd, out);
         }
 
     }
@@ -793,7 +1087,9 @@ int nd_binary_scalar(oti_ctx* ctx, int32_t op, const ndarr_t* a, double s, int32
 
     nd_inner_fn fast = NULL;
     const ndarr_t* ins[2];
+    nde_opinfo_t info;
     ndarr_t sd;
+    uint8_t u8;
     int status;
 
     if (res == NULL){
@@ -804,7 +1100,7 @@ int nd_binary_scalar(oti_ctx* ctx, int32_t op, const ndarr_t* a, double s, int32
         status = oti_ctx_check(ctx);
 
         if (status == OTI_OK){
-            status = nde_scalar_check(op, a, scalar_left, NULL);
+            status = nde_scalar_check(op, a, scalar_left, NULL, &info);
         }
 
         if (status == OTI_OK){
@@ -816,11 +1112,13 @@ int nd_binary_scalar(oti_ctx* ctx, int32_t op, const ndarr_t* a, double s, int32
             ins[0] = a;
 
             if (fast != NULL){
-                status = nde_apply_new(ctx, fast, 1, ins, 0, res);
+                status = nde_apply_new(ctx, fast, (s == 0.5) ? NDE_NS_DIV : NDE_NS_ARITH, OTI_F64, 1,
+                                       ins, 0, res);
             } else {
-                nde_scalar_desc(&s, &sd);
+                nde_scalar_operand(&info, &s, &u8, &sd);
                 ins[1] = &sd;
-                status = nde_apply_new(ctx, nde_binary_kernel(op), 2, ins, scalar_left, res);
+                status = nde_apply_new(ctx, info.fn, info.ns, info.out_dtype, 2, ins, scalar_left,
+                                       res);
             }
 
         } else {
@@ -919,13 +1217,20 @@ static int nde_assign(oti_ctx* ctx, const ndarr_t* src, ndarr_t* dst){
         return OTI_ERR_DTYPE;
     }
 
+    // Trivial path: same layout or a single element, no overlap except dst being src itself.
+    ops[0] = dst;
+    ops[1] = src;
+
+    if (nde_try_flat(ctx, fn, &k, NDE_NS_ARITH, 2, ops, 0, &status)){
+        return status;
+    }
+
     status = nde_broadcast_view(src, dst, &view);
 
     if (status != OTI_OK){
         return status;
     }
 
-    ops[0] = dst;
     ops[1] = &view;
     status = nd_iter_init(&it, 2, ops, flags, ND_ITER_ORDER_K);
 
@@ -940,7 +1245,7 @@ static int nde_assign(oti_ctx* ctx, const ndarr_t* src, ndarr_t* dst){
     }
 
     if (share == ND_SHARE_NONE){
-        return nde_run(ctx, &it, fn, &k);
+        return nde_run(ctx, &it, fn, &k, NDE_NS_ARITH);
     }
 
     // Snapshot semantics: copy src first, then assign from the copy.
@@ -962,7 +1267,7 @@ static int nde_assign(oti_ctx* ctx, const ndarr_t* src, ndarr_t* dst){
     }
 
     if (status == OTI_OK){
-        status = nde_run(ctx, &it, fn, &k);
+        status = nde_run(ctx, &it, fn, &k, NDE_NS_ARITH);
     }
 
     nd_release(&tmp);
@@ -1031,10 +1336,15 @@ int nd_fill(oti_ctx* ctx, ndarr_t* dst, double value){
 
         ops[0] = dst;
         k.s    = value;
-        status = nd_iter_init(&it, 1, ops, flags, ND_ITER_ORDER_K);
 
-        if (status == OTI_OK){
-            status = nde_run(ctx, &it, nde_k_fill, &k);
+        if (!nde_try_flat(ctx, nde_k_fill, &k, NDE_NS_ARITH, 1, ops, 0, &status)){
+
+            status = nd_iter_init(&it, 1, ops, flags, ND_ITER_ORDER_K);
+
+            if (status == OTI_OK){
+                status = nde_run(ctx, &it, nde_k_fill, &k, NDE_NS_ARITH);
+            }
+
         }
 
     }

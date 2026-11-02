@@ -7,11 +7,15 @@
 // Determinism (5.4): each element is one libm call (or one IEEE operation) on its own value, with no
 // vector math library and no FMA contraction (-ffp-contract=off on the unity), so results do not
 // depend on the traversal, the chunking or the thread count. No `omp simd` around libm calls.
-// ND_FN_NOT (a mask operator) is Phase 2: OTI_ERR_ARGUMENT until then.
+// ND_FN_NOT (OTI_U8 -> OTI_U8) has its kernel in mask.c. Each function carries the cost per element
+// of its family for oti_exec_plan() (NDE_NS_*, elementwise.c).
 
 #include <math.h>
 
 #include "oti/real/ndarray.h"
+
+// mask.c: logical not of an OTI_U8 mask.
+static int ndm_k_not(void* arg, int64_t n, char* const* p, const int64_t* bs);
 
 
 // *******************************************************************************************************
@@ -63,15 +67,22 @@ NDE_UNARY_KERNEL(ndf_k_sign, ndf_sign(x_))
 
 
 // *******************************************************************************************************
-// Kernel of an ND_FN_* code, or NULL (unknown, or the Phase 2 ND_FN_NOT).
-static nd_inner_fn ndf_kernel(int32_t fn){
+// Kernel, dtype (operand and result) and cost per element of an ND_FN_* code; kernel NULL when the
+// code is unknown.
+static nd_inner_fn ndf_kernel(int32_t fn, int32_t* dtype, double* ns){
+
+    *dtype = OTI_F64;
+    *ns    = NDE_NS_LIBM;
 
     switch (fn){
     case ND_FN_NEG:
+        *ns = NDE_NS_ARITH;
         return nde_u_neg;
     case ND_FN_ABS:
+        *ns = NDE_NS_ARITH;
         return nde_u_abs;
     case ND_FN_SQRT:
+        *ns = NDE_NS_DIV;
         return nde_u_sqrt;
     case ND_FN_CBRT:
         return ndf_k_cbrt;
@@ -114,19 +125,30 @@ static nd_inner_fn ndf_kernel(int32_t fn){
     case ND_FN_ATANH:
         return ndf_k_atanh;
     case ND_FN_FLOOR:
+        *ns = NDE_NS_ARITH;
         return ndf_k_floor;
     case ND_FN_CEIL:
+        *ns = NDE_NS_ARITH;
         return ndf_k_ceil;
     case ND_FN_TRUNC:
+        *ns = NDE_NS_ARITH;
         return ndf_k_trunc;
     case ND_FN_RINT:
+        *ns = NDE_NS_ARITH;
         return ndf_k_rint;
     case ND_FN_SQUARE:
+        *ns = NDE_NS_ARITH;
         return nde_u_square;
     case ND_FN_RECIPROCAL:
+        *ns = NDE_NS_DIV;
         return nde_u_reciprocal;
     case ND_FN_SIGN:
+        *ns = NDE_NS_ARITH;
         return ndf_k_sign;
+    case ND_FN_NOT:
+        *dtype = OTI_U8;
+        *ns    = NDE_NS_ARITH;
+        return ndm_k_not;
     default:
         return NULL;
     }
@@ -136,9 +158,9 @@ static nd_inner_fn ndf_kernel(int32_t fn){
 
 
 // *******************************************************************************************************
-// Argument checks of the unary entry points: operands present, function known, OTI_F64 (out is NULL
-// for the allocating variant).
-static int ndf_unary_check(nd_inner_fn kernel, const ndarr_t* a, const ndarr_t* out){
+// Argument checks of the unary entry points: operands present, function known, operand dtype as the
+// function takes it (out is NULL for the allocating variant).
+static int ndf_unary_check(nd_inner_fn kernel, int32_t dtype, const ndarr_t* a, const ndarr_t* out){
 
     if (a == NULL || kernel == NULL){
         return OTI_ERR_ARGUMENT;
@@ -147,7 +169,7 @@ static int ndf_unary_check(nd_inner_fn kernel, const ndarr_t* a, const ndarr_t* 
     nde_debug_input(a);
     nde_debug_input(out);
 
-    return (a->dtype != OTI_F64 || (out != NULL && out->dtype != OTI_F64)) ? OTI_ERR_DTYPE : OTI_OK;
+    return (a->dtype != dtype || (out != NULL && out->dtype != dtype)) ? OTI_ERR_DTYPE : OTI_OK;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -156,15 +178,17 @@ static int ndf_unary_check(nd_inner_fn kernel, const ndarr_t* a, const ndarr_t* 
 // *******************************************************************************************************
 int nd_unary_to(oti_ctx* ctx, int32_t fn, const ndarr_t* a, ndarr_t* out){
 
-    nd_inner_fn kernel = ndf_kernel(fn);
+    int32_t dtype;
+    double ns;
+    nd_inner_fn kernel = ndf_kernel(fn, &dtype, &ns);
     int status = oti_ctx_check(ctx);
 
     if (status == OTI_OK){
-        status = (out == NULL) ? OTI_ERR_ARGUMENT : ndf_unary_check(kernel, a, out);
+        status = (out == NULL) ? OTI_ERR_ARGUMENT : ndf_unary_check(kernel, dtype, a, out);
     }
 
     if (status == OTI_OK){
-        status = nde_apply_to(ctx, kernel, 1, a, NULL, out);
+        status = nde_apply_to(ctx, kernel, ns, 1, a, NULL, out);
     }
 
     if (status != OTI_OK){
@@ -180,7 +204,9 @@ int nd_unary_to(oti_ctx* ctx, int32_t fn, const ndarr_t* a, ndarr_t* out){
 // *******************************************************************************************************
 int nd_unary(oti_ctx* ctx, int32_t fn, const ndarr_t* a, ndarr_t* res){
 
-    nd_inner_fn kernel = ndf_kernel(fn);
+    int32_t dtype;
+    double ns;
+    nd_inner_fn kernel = ndf_kernel(fn, &dtype, &ns);
     const ndarr_t* ins[1];
     int status;
 
@@ -192,12 +218,12 @@ int nd_unary(oti_ctx* ctx, int32_t fn, const ndarr_t* a, ndarr_t* res){
         status = oti_ctx_check(ctx);
 
         if (status == OTI_OK){
-            status = ndf_unary_check(kernel, a, NULL);
+            status = ndf_unary_check(kernel, dtype, a, NULL);
         }
 
         if (status == OTI_OK){
             ins[0] = a;
-            status = nde_apply_new(ctx, kernel, 1, ins, 0, res);
+            status = nde_apply_new(ctx, kernel, ns, dtype, 1, ins, 0, res);
         } else {
             nd_init_empty(res);
         }

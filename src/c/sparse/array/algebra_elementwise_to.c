@@ -45,32 +45,6 @@ void arrso_abs_to(arrso_t* arr, arrso_t* res, dhelpl_t dhl){
 
 
 
-#ifdef _OPENMP
-
-// Parallel implementation
-#define _SOTI_CHUNCK_SIZE 8
-int nthrds_global;
-
-void setup_global_omp_dist(void){
-    
-    nthrds_global=omp_get_max_threads();
-    omp_set_num_threads(nthrds_global/2);
-
-}
-
-int setup_omp_parallel_elementwise( int totalnIter ){
-
-    int nthrds_prev=omp_get_max_threads();
-    int N = totalnIter, nthrds_toset;
-    int estThrds_performance = (N/_SOTI_CHUNCK_SIZE)+1;
-    
-
-    nthrds_toset = MIN(nthrds_prev,estThrds_performance);
-    omp_set_num_threads(nthrds_toset);
-    return nthrds_prev;
-}
-#endif
-
 // 1.2. Addition.
 // ****************************************************************************************************
 void arrso_sum_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
@@ -81,14 +55,6 @@ void arrso_sum_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     arrso_dimCheck_OO_elementwise(arr1,arr2,res);
 
     
-    // int nthrds_prev = setup_omp_parallel_elementwise(arr1->size);
-
-    // printf("Received size: %d\n",N);
-    // printf("Nthrds: %d\n",nthrds_prev);
-    // printf("Nthrds estimated: %d\n",estThrds_performance);
-    // printf("Setting up with:  %d\n",nthrds_toset);
-
-
     // Loop for every element and add real to the oti number.
     #ifdef _OPENMP
     #pragma omp parallel
@@ -119,11 +85,6 @@ void arrso_sum_OO_to(arrso_t* arr1, arrso_t* arr2, arrso_t* res, dhelpl_t dhl){
     }
 
     }
-
-    // omp_set_num_threads(nthrds_prev);
-    // nthrds_toset = omp_get_max_threads();
-
-    // printf("Reset nthreads to: %d\n",nthrds_toset);
 
 }
 // ----------------------------------------------------------------------------------------------------

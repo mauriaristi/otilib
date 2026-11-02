@@ -1,3 +1,5 @@
+// Statuses: OTI_OK / OTI_ERR_* (contracts 4.1); the legacy enum oti_errors is retired here (Phase 6a).
+#include "oti/core/status.h"
 
 // Memory management.
 // ****************************************************************************************************
@@ -29,7 +31,7 @@ int64_t elem_free( elem_t* elem ) {
 
     }
     
-    return OTI_success;
+    return OTI_OK;
 
 } 
 // ----------------------------------------------------------------------------------------------------
@@ -110,8 +112,7 @@ int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase,
         elem->p_evalBasis = (darr_t*  ) malloc( elem->nder*sizeof(darr_t  ) ) ;
 
         if( elem->p_evalBasis == NULL ){
-            printf("--- MemoryError ---\n");
-            exit(1);
+            return OTI_ERR_MEMORY;    // was printf + exit(1)
         }        
 
         // Evaluate all basis functions at integration points.
@@ -127,7 +128,7 @@ int64_t elem_start(elem_t* elem, uint64_t nbasis, int64_t geomBase,
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 } 
 // ----------------------------------------------------------------------------------------------------
@@ -159,7 +160,7 @@ int64_t elem_end(elem_t* elem) {
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 } 
 // ----------------------------------------------------------------------------------------------------
@@ -202,7 +203,7 @@ int64_t elem_allocate(elem_t* elem, uint64_t intorder ) {
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 } 
 // ----------------------------------------------------------------------------------------------------

@@ -2964,6 +2964,415 @@ static void test_fix3_ufunc(void){
 
 
 // *******************************************************************************************************
+// Phase 2: comparisons and mask operators, ND_FN_NOT.
+static int ref_cmp(int32_t op, double a, double b){
+
+    switch (op){
+        case ND_OP_EQ: return a == b;
+        case ND_OP_NE: return a != b;
+        case ND_OP_LT: return a < b;
+        case ND_OP_LE: return a <= b;
+        case ND_OP_GT: return a > b;
+        default: return a >= b;
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+static void test_comparisons_and_masks(void){
+
+    static const int32_t cmp[6] = {ND_OP_EQ, ND_OP_NE, ND_OP_LT, ND_OP_LE, ND_OP_GT, ND_OP_GE};
+    double xv[8] = {NAN, 1.0, NAN, 2.0, -0.0, 0.0, INFINITY, -INFINITY};
+    double yv[8] = {1.0, NAN, NAN, 2.0, 0.0, -0.0, INFINITY, INFINITY};
+    int64_t s8[1] = {8};
+    ndarr_t x = {0}, y = {0}, r = {0};
+    int c, i, ok, iter, fails = 0, fails_to = 0;
+
+    make_from(1, s8, ND_LAYOUT_C, xv, &x);
+    make_from(1, s8, ND_LAYOUT_C, yv, &y);
+    for (c = 0; c < 6; c++){
+        char msg[96];
+        ok = (nd_binary(NULL, cmp[c], &x, &y, &r) == OTI_OK && r.dtype == OTI_U8 && r.ndim == 1 &&
+                r.shape[0] == 8);
+        for (i = 0; ok && i < 8; i++){
+            ok = ok && ((uint8_t*)r.data)[i] == (uint8_t)ref_cmp(cmp[c], xv[i], yv[i]);
+        }
+        snprintf(msg, sizeof(msg), "comparison op %d with NaN, +-0, inf: U8 0/1 as IEEE", cmp[c]);
+        check(ok, msg);
+        if (r.buf != NULL){
+            nd_release(&r);
+        }
+    }
+    // hand-derived NaN rules: NaN == NaN is 0, NaN != NaN is 1, every ordered comparison with NaN is 0
+    nd_init_empty(&r);
+    nd_binary(NULL, ND_OP_EQ, &x, &y, &r);
+    check(r.buf != NULL && ((uint8_t*)r.data)[2] == 0 && ((uint8_t*)r.data)[4] == 1,
+          "NaN == NaN is 0; -0.0 == 0.0 is 1");
+    nd_release(&r);
+    nd_binary(NULL, ND_OP_NE, &x, &y, &r);
+    check(r.buf != NULL && ((uint8_t*)r.data)[2] == 1 && ((uint8_t*)r.data)[0] == 1,
+          "NaN != NaN is 1; NaN != 1 is 1");
+    nd_release(&r);
+    nd_binary(NULL, ND_OP_LE, &x, &y, &r);
+    check(r.buf != NULL && ((uint8_t*)r.data)[0] == 0 && ((uint8_t*)r.data)[1] == 0 &&
+          ((uint8_t*)r.data)[2] == 0 &&
+          ((uint8_t*)r.data)[3] == 1, "NaN <= anything is 0");
+    nd_release(&r);
+
+    // scalar comparisons, both operand orders
+    for (c = 0; c < 6; c++){
+        int left;
+        for (left = 0; left < 2; left++){
+            ok = (nd_binary_scalar(NULL, cmp[c], &x, 1.0, left, &r) == OTI_OK && r.dtype == OTI_U8);
+            for (i = 0; ok && i < 8; i++){
+                ok = ok && ((uint8_t*)r.data)[i] ==
+                     (uint8_t)(left ? ref_cmp(cmp[c], 1.0, xv[i]) : ref_cmp(cmp[c], xv[i], 1.0));
+            }
+            if (!ok){
+                fprintf(stderr, "  scalar comparison op %d left %d wrong\n", cmp[c], left);
+            }
+            check(ok, "comparison with a scalar (both orders) into a new U8 array");
+            if (r.buf != NULL){
+                nd_release(&r);
+            }
+        }
+    }
+    {
+        ndarr_t o = {0};
+        nd_alloc(NULL, OTI_U8, 1, s8, ND_LAYOUT_C, ND_ALLOC_ZERO, &o);
+        check(nd_binary_scalar_to(NULL, ND_OP_GT, &x, 0.5, 0, &o) == OTI_OK &&
+                ((uint8_t*)o.data)[1] == 1 &&
+              ((uint8_t*)o.data)[0] == 0, "nd_binary_scalar_to comparison into a U8 out");
+        nd_release(&o);
+    }
+
+    // random shapes, layouts, output views
+    rng_seed(6502);
+    for (iter = 0; iter < 600; iter++){
+        int32_t nd, nda, ndb;
+        int64_t S[OTI_ND_MAXDIM], sa[OTI_ND_MAXDIM], sb[OTI_ND_MAXDIM];
+        ndarr_t ba = {0}, va = {0}, bb = {0}, vb = {0}, bo = {0}, vo = {0}, res = {0};
+        int32_t op = cmp[iter % 6];
+        int64_t n, q;
+        int st, good = 1;
+
+        random_shapes(&nd, S, &nda, sa, &ndb, sb, 400);
+        n = shape_size(nd, S);
+        make_view(nda, sa, (int)rng_int(3), OTI_F64, &ba, &va);
+        make_view(ndb, sb, (int)rng_int(3), OTI_F64, &bb, &vb);
+        fill_random(&va);
+        fill_random(&vb);
+        ref_binary_array(ND_OP_ADD, &va, &vb, nd, S,
+                g_ref);       // positions only: recompute operands below
+        {
+            int64_t lin;
+            for (lin = 0; lin < n; lin++){
+                int64_t cc[OTI_ND_MAXDIM], rem = lin, la = 0, lb = 0;
+                int32_t k;
+                for (k = nd - 1; k >= 0; k--){
+                    cc[k] = rem % S[k];
+                    rem /= S[k];
+                }
+                for (k = 0; k < va.ndim; k++){
+                    la = la * va.shape[k] + (va.shape[k] == 1 ? 0 : cc[nd - va.ndim + k]);
+                }
+                for (k = 0; k < vb.ndim; k++){
+                    lb = lb * vb.shape[k] + (vb.shape[k] == 1 ? 0 : cc[nd - vb.ndim + k]);
+                }
+                g_ref[lin] = (double)ref_cmp(op, get_f(&va, la), get_f(&vb, lb));
+            }
+        }
+        st = nd_binary(NULL, op, &va, &vb, &res);
+        if (st != OTI_OK || res.dtype != OTI_U8 || res.ndim != nd){
+            good = 0;
+        } else {
+            for (q = 0; q < n; q++){
+                good = good && (double)*(uint8_t*)elem_ptr(&res, q) == g_ref[q];
+            }
+            nd_release(&res);
+        }
+        if (!good){
+            fails++;
+        }
+        make_view(nd, S, (int)rng_int(3), OTI_U8, &bo, &vo);
+        st = nd_binary_to(NULL, op, &va, &vb, &vo);
+        good = (st == OTI_OK);
+        for (q = 0; good && q < n; q++){
+            good = good && (double)*(uint8_t*)elem_ptr(&vo, q) == g_ref[q];
+        }
+        if (!good){
+            fails_to++;
+        }
+        nd_release(&ba);
+        nd_release(&bb);
+        nd_release(&bo);
+    }
+    check(fails == 0, "comparisons: 600 random broadcasts / layouts into new U8 arrays agree with IEEE");
+    check(fails_to == 0, "comparisons into random U8 output views (negative / doubled / F strides)");
+
+    // K layout of a comparison result (S24): F inputs give an F mask
+    {
+        ndarr_t f = {0};
+        int64_t s34[2] = {3, 4};
+        double v12[12] = {0};
+        make_from(2, s34, ND_LAYOUT_F, v12, &f);
+        nd_binary(NULL, ND_OP_EQ, &f, &f, &r);
+        check(r.dtype == OTI_U8 && r.strides[0] == 1 && r.strides[1] == 3,
+                "comparison of F arrays gives an F mask");
+        nd_release(&r);
+        nd_release(&f);
+    }
+
+    // errors
+    {
+        ndarr_t u = {0}, w = {0}, o8 = {0};
+        uint8_t bits[8] = {0, 1, 1, 0, 1, 0, 0, 1};
+        make_desc(&u, bits, OTI_U8, 1, s8, (int64_t[]){1}, ND_WRITEABLE);
+        nd_update_flags(&u);
+        nd_alloc(NULL, OTI_F64, 1, s8, ND_LAYOUT_C, 0, &w);
+        nd_alloc(NULL, OTI_U8, 1, s8, ND_LAYOUT_C, 0, &o8);
+        check(nd_binary_to(NULL, ND_OP_EQ, &x, &y, &w) == OTI_ERR_DTYPE,
+                "comparison into an F64 out -> DTYPE");
+        check(nd_binary_to(NULL, ND_OP_ADD, &x, &y, &o8) == OTI_ERR_DTYPE,
+                "addition into a U8 out -> DTYPE");
+        check(nd_binary(NULL, ND_OP_AND, &x, &y, &r) == OTI_ERR_DTYPE, "AND of F64 operands -> DTYPE");
+        check(nd_binary(NULL, ND_OP_OR, &x, &u, &r) == OTI_ERR_DTYPE, "OR of F64 and U8 -> DTYPE");
+        check(nd_unary(NULL, ND_FN_NOT, &x, &r) == OTI_ERR_DTYPE, "NOT of an F64 array -> DTYPE");
+        check(nd_unary(NULL, ND_FN_SQRT, &u, &r) == OTI_ERR_DTYPE, "sqrt of a U8 array -> DTYPE");
+
+        // mask operators on 0 / 1 masks
+        {
+            uint8_t b2[8] = {1, 1, 0, 0, 1, 0, 1, 0};
+            ndarr_t m2 = {0};
+            make_desc(&m2, b2, OTI_U8, 1, s8, (int64_t[]){1}, ND_WRITEABLE);
+            nd_update_flags(&m2);
+            ok = nd_binary(NULL, ND_OP_AND, &u, &m2, &r) == OTI_OK && r.dtype == OTI_U8;
+            for (i = 0; ok && i < 8; i++){
+                ok = ok && ((uint8_t*)r.data)[i] == (uint8_t)(bits[i] & b2[i]);
+            }
+            check(ok, "AND of two masks");
+            nd_release(&r);
+            ok = nd_binary(NULL, ND_OP_OR, &u, &m2, &r) == OTI_OK;
+            for (i = 0; ok && i < 8; i++){
+                ok = ok && ((uint8_t*)r.data)[i] == (uint8_t)(bits[i] | b2[i]);
+            }
+            check(ok, "OR of two masks");
+            nd_release(&r);
+            ok = nd_binary(NULL, ND_OP_XOR, &u, &m2, &r) == OTI_OK;
+            for (i = 0; ok && i < 8; i++){
+                ok = ok && ((uint8_t*)r.data)[i] == (uint8_t)(bits[i] ^ b2[i]);
+            }
+            check(ok, "XOR of two masks");
+            nd_release(&r);
+            ok = nd_unary(NULL, ND_FN_NOT, &u, &r) == OTI_OK && r.dtype == OTI_U8;
+            for (i = 0; ok && i < 8; i++){
+                ok = ok && ((uint8_t*)r.data)[i] == (uint8_t)(bits[i] ? 0 : 1);
+            }
+            check(ok, "NOT of a mask: 0 -> 1, 1 -> 0");
+            nd_release(&r);
+            check(nd_unary_to(NULL, ND_FN_NOT, &u, &o8) == OTI_OK && ((uint8_t*)o8.data)[0] == 1 &&
+                  ((uint8_t*)o8.data)[1] == 0, "NOT into a U8 out");
+            check(nd_unary_to(NULL, ND_FN_NOT, &u, &u) == OTI_OK && bits[0] == 1 && bits[1] == 0,
+                  "NOT in place (exact alias)");
+            check(nd_unary_to(NULL, ND_FN_NOT, &u, &w) == OTI_ERR_DTYPE, "NOT into an F64 out -> DTYPE");
+        }
+        nd_release(&w);
+        nd_release(&o8);
+    }
+    nd_release(&x);
+    nd_release(&y);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Phase 2: elementwise results bit-identical at 1, 2, N threads above the parallel threshold, and the
+// trivially-iterable fast path against the general path.
+static void test_phase2_threads_and_fast_path(void){
+
+    enum { N = 1100000 };
+    int64_t sh[1];
+    ndarr_t x = {0}, y = {0}, ref = {0}, got = {0};
+    static const int32_t threads[4] = {2, 3, 5, 0};
+    int f, t, bad = 0;
+    oti_ctx serial, par;
+    static const int32_t cmp[4] = {ND_OP_EQ, ND_OP_LT, ND_OP_GE, ND_OP_NE};
+
+    sh[0] = N;
+    nd_alloc(NULL, OTI_F64, 1, sh, ND_LAYOUT_C, 0, &x);
+    nd_alloc(NULL, OTI_F64, 1, sh, ND_LAYOUT_C, 0, &y);
+    fill_adversarial(&x, 31337);
+    fill_adversarial(&y, 4711);
+    oti_ctx_init(&serial);
+    serial.exec.backend = OTI_BACKEND_SERIAL;
+
+    for (f = 0; f < 10; f++){
+        int is_cmp = (f >= 6);
+        int is_un = (f == 5 || f == 4);
+        int32_t code = f < 4 ? k_ops[f] : f == 4 ? ND_FN_EXP : f == 5 ? ND_FN_SIN : cmp[f - 6];
+        int st;
+        nd_init_empty(&ref);
+        nd_init_empty(&got);
+        st = is_un ? nd_unary(&serial, code, &x, &ref) : nd_binary(&serial, code, &x, &y, &ref);
+        if (st != OTI_OK){
+            bad++;
+            continue;
+        }
+        for (t = 0; t < 4; t++){
+            oti_ctx_init(&par);
+            par.exec.nthreads = threads[t];
+            st = is_un ? nd_unary(&par, code, &x, &got) : nd_binary(&par, code, &x, &y, &got);
+            if (st != OTI_OK || ref.buf == NULL || memcmp(ref.data, got.data,
+                    (size_t)N * (size_t)nd_itemsize(ref.dtype)) != 0){
+                bad++;
+                fprintf(stderr, "  threads: op/fn %d nthreads %d differs from serial\n", code,
+                        threads[t]);
+            }
+            if (got.buf != NULL){
+                nd_release(&got);
+            }
+        }
+        // the default context (default threshold, inherited threads)
+        st = is_un ? nd_unary(NULL, code, &x, &got) : nd_binary(NULL, code, &x, &y, &got);
+        if (st != OTI_OK || ref.buf == NULL ||
+            memcmp(ref.data, got.data, (size_t)N * (size_t)nd_itemsize(ref.dtype)) != 0){
+            bad++;
+        }
+        if (got.buf != NULL){
+            nd_release(&got);
+        }
+        nd_release(&ref);
+        (void)is_cmp;
+    }
+    check(bad == 0,
+            "1.1M elements: ADD SUB MUL DIV exp sin comparisons bit-identical at 2, 3, 5, N threads");
+
+    // the fast path (contiguous, same layout) against the general path (strided copies of the same data)
+    {
+        enum { M = 6001 };
+        ndarr_t cx = {0}, cy = {0}, bx = {0}, by = {0}, sx = {0}, sy = {0}, rev = {0}, r1 = {0}, r2 = {0};
+        int64_t msh[1], bsh[1];
+        nd_index_t ix[1];
+        int64_t i;
+        int op, okf = 1;
+
+        msh[0] = M;
+        bsh[0] = 2 * M;
+        nd_alloc(NULL, OTI_F64, 1, msh, ND_LAYOUT_C, 0, &cx);
+        nd_alloc(NULL, OTI_F64, 1, msh, ND_LAYOUT_C, 0, &cy);
+        nd_alloc(NULL, OTI_F64, 1, bsh, ND_LAYOUT_C, 0, &bx);
+        nd_alloc(NULL, OTI_F64, 1, bsh, ND_LAYOUT_C, 0, &by);
+        fill_adversarial(&cx, 11);
+        fill_adversarial(&cy, 12);
+        ix[0] = mk_slice(HT, 0, 0, 2);
+        nd_view_index(&bx, 1, ix, &sx);
+        nd_view_index(&by, 1, ix, &sy);
+        for (i = 0; i < M; i++){
+            set_f(&sx, i, get_f(&cx, i));
+            set_f(&sy, i, get_f(&cy, i));
+        }
+        for (op = 0; op < 7; op++){
+            nd_binary(NULL, k_ops[op], &cx, &cy, &r1);
+            nd_binary(NULL, k_ops[op], &sx, &sy, &r2);
+            okf = okf && memcmp(r1.data, r2.data, (size_t)M * 8) == 0;
+            nd_release(&r1);
+            nd_release(&r2);
+        }
+        for (op = 0; op < 6; op++){
+            static const int32_t c6[6] = {ND_OP_EQ, ND_OP_NE, ND_OP_LT, ND_OP_LE, ND_OP_GT, ND_OP_GE};
+            nd_init_empty(&r1);
+            nd_init_empty(&r2);
+            nd_binary(NULL, c6[op], &cx, &cy, &r1);
+            nd_binary(NULL, c6[op], &sx, &sy, &r2);
+            okf = okf && r1.buf != NULL && r2.buf != NULL && memcmp(r1.data, r2.data, (size_t)M) == 0;
+            nd_release(&r1);
+            nd_release(&r2);
+        }
+        for (op = 0; op < N_UNARY; op++){
+            nd_unary(NULL, k_unary[op].code, &cx, &r1);
+            nd_unary(NULL, k_unary[op].code, &sx, &r2);
+            okf = okf && memcmp(r1.data, r2.data, (size_t)M * 8) == 0;
+            nd_release(&r1);
+            nd_release(&r2);
+        }
+        check(okf,
+                "fast path (contiguous) = general path (stride 2): 7 ops, 6 comparisons, 30 functions");
+
+        // reversed views of reversed data: same values in the same logical order
+        {
+            double* tmp = (double*)malloc(sizeof(double) * M);
+            ndarr_t br = {0}, vr = {0};
+            int64_t one[1] = {M};
+            nd_index_t rx[1];
+            int ok2 = 1;
+            nd_alloc(NULL, OTI_F64, 1, one, ND_LAYOUT_C, 0, &br);
+            rx[0] = mk_slice(HT, 0, 0, -1);
+            nd_view_index(&br, 1, rx, &vr);
+            for (i = 0; i < M; i++){
+                tmp[i] = get_f(&cx, i);
+                set_f(&vr, i, tmp[i]);
+            }
+            nd_binary(NULL, ND_OP_MUL, &cx, &cx, &r1);
+            nd_binary(NULL, ND_OP_MUL, &vr, &vr, &r2);
+            for (i = 0; i < M; i++){
+                ok2 = ok2 && same_bits(get_f(&r1, i), get_f(&r2, i));
+            }
+            check(ok2, "a negative-stride operand gives the contiguous result, bitwise");
+            nd_release(&r1);
+            nd_release(&r2);
+            nd_release(&br);
+            free(tmp);
+        }
+        // a rank-0 / one-element operand against the same value in a full array
+        {
+            ndarr_t sc = {0}, full = {0};
+            double c = 3.25;
+            int64_t i2;
+            int ok3 = 1;
+            make_from(0, NULL, ND_LAYOUT_C, &c, &sc);
+            nd_alloc(NULL, OTI_F64, 1, msh, ND_LAYOUT_C, 0, &full);
+            nd_fill(NULL, &full, c);
+            for (op = 0; op < 7; op++){
+                nd_binary(NULL, k_ops[op], &cx, &sc, &r1);
+                nd_binary(NULL, k_ops[op], &cx, &full, &r2);
+                for (i2 = 0; i2 < M; i2++){
+                    ok3 = ok3 && same_bits(get_f(&r1, i2), get_f(&r2, i2)) ;
+                }
+                nd_release(&r1);
+                nd_release(&r2);
+            }
+            check(ok3, "a rank-0 operand gives the same results as a full array of that value (7 ops)");
+            nd_release(&sc);
+            nd_release(&full);
+        }
+        // in place (exact alias) against out of place
+        {
+            ndarr_t cp = {0};
+            int ok4 = 1;
+            for (op = 0; op < 7; op++){
+                nd_copy(NULL, &cx, ND_LAYOUT_C, &cp);
+                nd_binary_to(NULL, k_ops[op], &cp, &cy, &cp);
+                nd_binary(NULL, k_ops[op], &cx, &cy, &r1);
+                ok4 = ok4 && memcmp(cp.data, r1.data, (size_t)M * 8) == 0;
+                nd_release(&r1);
+                nd_release(&cp);
+            }
+            check(ok4, "in place (out == a) equals out of place, bitwise, 7 ops");
+        }
+        (void)rev;
+        nd_release(&cx); nd_release(&cy); nd_release(&bx); nd_release(&by);
+    }
+    nd_release(&x);
+    nd_release(&y);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int main(void){
 
     test_filled_creators();
@@ -2988,6 +3397,9 @@ int main(void){
     test_fix1_ufunc();
 
     test_fix3_ufunc();
+
+    test_comparisons_and_masks();
+    test_phase2_threads_and_fast_path();
 
     if (n_failed > 0){
         fprintf(stderr, "\n%d check(s) FAILED\n", n_failed);

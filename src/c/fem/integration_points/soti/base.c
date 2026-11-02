@@ -1,3 +1,5 @@
+// Statuses: OTI_OK / OTI_ERR_* (contracts 4.1); the legacy enum oti_errors is retired here (Phase 6a).
+#include "oti/core/status.h"
 // int64_t fem_intPts_soti( uint64_t order, int64_t elementType, 
 //                          fesoti_t*  xi,   fesoti_t*   eta,   fesoti_t* zeta, 
 //                          fesoti_t* weights, dhelpl_t dhl);
@@ -1210,7 +1212,6 @@ int64_t fem_intPts_soti( uint64_t order, int64_t elementType,
 
         // Go for all possible combinations for 
         npoints = xi_tri_tmp.nip * xi_line_tmp.nip;
-        printf("Number of integration points:%d\n",npoints);
 
         // Create as reals
         *xi      = fesoti_zeros_bases( npoints, 0, 0, dhl);
@@ -1260,7 +1261,7 @@ int64_t fem_intPts_soti( uint64_t order, int64_t elementType,
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 } 
 // ----------------------------------------------------------------------------------------------------

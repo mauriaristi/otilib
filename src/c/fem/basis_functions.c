@@ -1,3 +1,68 @@
+// fem basis functions (include/oti/fem/basis_functions.h). Phase 6a (PLAN-ndarray.md): the darr_t
+// arguments are read and written through borrowed ndarr_t views (nd_from_darr(ND_DARR_BORROW),
+// include/oti/real/ndarray/compat_darr.h); errors are OTI_OK / OTI_ERR_* statuses (contracts 4.1),
+// never the legacy enum oti_errors, never printf / exit(). The public signatures are unchanged.
+// File-static prefix: femb_.
+
+#include "oti/real/ndarray.h"
+#include "oti/real/ndarray/compat_darr.h"
+
+
+// *******************************************************************************************************
+// Borrowed views of the coordinates (ncoords x >= ndim) and of the result (>= basisId + 1 rows x
+// >= ncoords columns) of one basis function, with the checks the legacy darr_get / darr_set did by
+// exit(): an unknown basisId is OTI_ERR_INDEX, a coords array with fewer than ndim columns is
+// OTI_ERR_SHAPE, a result without row basisId or without ncoords columns is OTI_ERR_INDEX.
+static int64_t femb_views(int64_t basisId, int64_t nbasis, int64_t ndim, darr_t* coords,
+                          darr_t* evalBasis, ndarr_t* c, ndarr_t* e){
+
+    int st;
+
+    if (basisId < 0 || basisId >= nbasis){
+        return OTI_ERR_INDEX;
+    }
+    nd_init_empty(c);
+    nd_init_empty(e);
+    st = nd_from_darr(NULL, coords, ND_DARR_BORROW, c);
+    if (st == OTI_OK){
+        st = nd_from_darr(NULL, evalBasis, ND_DARR_BORROW, e);
+    }
+    if (st != OTI_OK){
+        return st;
+    }
+    if (c->shape[1] < ndim){
+        return OTI_ERR_SHAPE;
+    }
+    if (e->shape[0] <= basisId || e->shape[1] < c->shape[0]){
+        return OTI_ERR_INDEX;
+    }
+
+    return OTI_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Coordinate k of point i.
+static inline double femb_get(const ndarr_t* c, int64_t i, int64_t k){
+
+    return nd_f64(c)[i * c->strides[0] + k * c->strides[1]];
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// evalBasis(row, col) = v.
+static inline void femb_set(ndarr_t* e, int64_t row, int64_t col, double v){
+
+    nd_f64(e)[row * e->strides[0] + col * e->strides[1]] = v;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -62,20 +127,22 @@ int64_t fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basisDe
     */ 
     // ************************************************************************************************
 
-    uint64_t i, ncoords=coords->nrows;
+    int64_t i, ncoords, st;
+    ndarr_t c, e;
     double xi, eta, evalBasis_i=0.0;
 
-    // Check if the baseId given exceeds the corresponding for this element.
-    if ( basisId > 7 ){
-        printf("--- InvalidBaseId ---");
-        exit(1);
-        // return OTI_FEM_InvalidBaseId;
+    // Borrowed ndarray views of coords and evalBasis (Phase 6a); basisId and the shapes are checked
+    // (statuses instead of the legacy codes and exit()).
+    st = femb_views(basisId, 8, 2, coords, evalBasis, &c, &e);
+    if (st != OTI_OK){
+        return st;
     }
+    ncoords = c.shape[0];
 
     for(i=0; i<ncoords; i++){
 
-        xi  = darr_get_item_ij(coords,i,0);
-        eta = darr_get_item_ij(coords,i,1);
+        xi  = femb_get(&c, i, 0);
+        eta = femb_get(&c, i, 1);
         
         // Detect which basis function is being computed: N1, N2, or N3.
         if (basisId == 0){
@@ -344,11 +411,11 @@ int64_t fem_basisFunctions_N_QuadSerendP2_2Diso(int64_t basisId, int64_t basisDe
 
         }
 
-        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
+        femb_set(&e, basisId, i, evalBasis_i);
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 }   
 // ----------------------------------------------------------------------------------------------------
@@ -411,18 +478,22 @@ int64_t fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, dar
     */ 
     // ************************************************************************************************
 
-    uint64_t i, ncoords=coords->nrows;
+    int64_t i, ncoords, st;
+    ndarr_t c, e;
     double xi, eta, evalBasis_i=0.0;
     
-    // Check if the baseId given exceeds the corresponding for this element.
-    if ( basisId > 3 ){
-        return OTI_FEM_InvalidBaseId;
+    // Borrowed ndarray views of coords and evalBasis (Phase 6a); basisId and the shapes are checked
+    // (statuses instead of the legacy codes and exit()).
+    st = femb_views(basisId, 4, 2, coords, evalBasis, &c, &e);
+    if (st != OTI_OK){
+        return st;
     }
+    ncoords = c.shape[0];
 
     for(i=0; i<ncoords; i++){
 
-        xi  = darr_get_item_ij(coords,i,0);
-        eta = darr_get_item_ij(coords,i,1);
+        xi  = femb_get(&c, i, 0);
+        eta = femb_get(&c, i, 1);
         
         // Detect which basis function is being computed: N1, N2, or N3.
         if (basisId == 0){
@@ -527,11 +598,11 @@ int64_t fem_basisFunctions_N_QuadP1_2Diso(int64_t basisId, int64_t basisDer, dar
 
         }  
 
-        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
+        femb_set(&e, basisId, i, evalBasis_i);
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 }   
 // ----------------------------------------------------------------------------------------------------
@@ -594,19 +665,24 @@ int64_t fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer, d
     */ 
     // ************************************************************************************************
 
-    uint64_t i, ncoords=coords->nrows;
+    int64_t i, ncoords, st;
+    ndarr_t c, e;
     double xi, eta, evalBasis_i=0.0;
     
-    if ( basisId > 5 ){
-        return OTI_FEM_InvalidBaseId;
+    // Borrowed ndarray views of coords and evalBasis (Phase 6a); basisId and the shapes are checked
+    // (statuses instead of the legacy codes and exit()).
+    st = femb_views(basisId, 6, 2, coords, evalBasis, &c, &e);
+    if (st != OTI_OK){
+        return st;
     }
+    ncoords = c.shape[0];
 
     
 
     for(i=0; i<ncoords; i++){
         
-        xi  = darr_get_item_ij(coords,i,0);
-        eta = darr_get_item_ij(coords,i,1);
+        xi  = femb_get(&c, i, 0);
+        eta = femb_get(&c, i, 1);
         
         // Detect which basis function is being computed: N1, N2, or N3.
         if (basisId == 0){
@@ -769,11 +845,11 @@ int64_t fem_basisFunctions_N_TriangP2_2Diso(int64_t basisId, int64_t basisDer, d
 
         }  
 
-        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
+        femb_set(&e, basisId, i, evalBasis_i);
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 }   
 // ----------------------------------------------------------------------------------------------------
@@ -837,18 +913,22 @@ int64_t fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer, d
     */ 
     // ************************************************************************************************
 
-    uint64_t i, ncoords=coords->nrows;
+    int64_t i, ncoords, st;
+    ndarr_t c, e;
     double xi, eta, evalBasis_i=0.0;
     
-    // Check if the baseId given exceeds the corresponding for this element.
-    if ( basisId > 2 ){
-        return OTI_FEM_InvalidBaseId;
+    // Borrowed ndarray views of coords and evalBasis (Phase 6a); basisId and the shapes are checked
+    // (statuses instead of the legacy codes and exit()).
+    st = femb_views(basisId, 3, 2, coords, evalBasis, &c, &e);
+    if (st != OTI_OK){
+        return st;
     }
+    ncoords = c.shape[0];
 
     for(i=0; i<ncoords; i++){
 
-        xi  = darr_get_item_ij(coords,i,0);
-        eta = darr_get_item_ij(coords,i,1);
+        xi  = femb_get(&c, i, 0);
+        eta = femb_get(&c, i, 1);
         
         // Detect which basis function is being computed: N1, N2, or N3.
         if (basisId == 0){
@@ -908,11 +988,11 @@ int64_t fem_basisFunctions_N_TriangP1_2Diso(int64_t basisId, int64_t basisDer, d
 
         } 
 
-        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
+        femb_set(&e, basisId, i, evalBasis_i);
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 }   
 // ----------------------------------------------------------------------------------------------------
@@ -970,14 +1050,18 @@ int64_t fem_basisFunctions_N_TriangP0_2Diso(int64_t basisId, int64_t basisDer, d
     */ 
     // ************************************************************************************************
 
-    uint64_t i, ncoords=coords->nrows;
+    int64_t i, ncoords, st;
+    ndarr_t c, e;
     double  evalBasis_i=0.0;
     
     
-    // Check if the baseId given exceeds the corresponding for this element.
-    if ( basisId > 1 ){
-        return OTI_FEM_InvalidBaseId;
+    // Borrowed ndarray views of coords and evalBasis (Phase 6a); basisId and the shapes are checked
+    // (statuses instead of the legacy codes and exit()).
+    st = femb_views(basisId, 2, 0, coords, evalBasis, &c, &e);
+    if (st != OTI_OK){
+        return st;
     }
+    ncoords = c.shape[0];
 
     
     for(i=0; i<ncoords; i++){
@@ -993,11 +1077,11 @@ int64_t fem_basisFunctions_N_TriangP0_2Diso(int64_t basisId, int64_t basisDer, d
 
         }
 
-        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
+        femb_set(&e, basisId, i, evalBasis_i);
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 }   
 // ----------------------------------------------------------------------------------------------------
@@ -1054,17 +1138,21 @@ int64_t fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, dar
     */ 
     // ************************************************************************************************
 
-    uint64_t i, ncoords = coords->nrows;
+    int64_t i, ncoords, st;
+    ndarr_t c, e;
     double xi, evalBasis_i=0.0;
     
-    // Check if the baseId given exceeds the corresponding for this element.
-    if ( basisId > 2 ){
-        return OTI_FEM_InvalidBaseId;
+    // Borrowed ndarray views of coords and evalBasis (Phase 6a); basisId and the shapes are checked
+    // (statuses instead of the legacy codes and exit()).
+    st = femb_views(basisId, 3, 1, coords, evalBasis, &c, &e);
+    if (st != OTI_OK){
+        return st;
     }
+    ncoords = c.shape[0];
 
     for(i=0; i<ncoords; i++){
 
-        xi = darr_get_item_ij(coords,i,0);
+        xi = femb_get(&c, i, 0);
         
         // Detect which basis function is being computed: N1, N2
         if (basisId == 0){
@@ -1132,11 +1220,11 @@ int64_t fem_basisFunctions_N_LineP2_1Diso(int64_t basisId, int64_t basisDer, dar
 
         }  
 
-        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
+        femb_set(&e, basisId, i, evalBasis_i);
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 }   
 // ----------------------------------------------------------------------------------------------------
@@ -1195,17 +1283,21 @@ int64_t fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, dar
     */ 
     // ************************************************************************************************
 
-    uint64_t i, ncoords = coords->nrows;
+    int64_t i, ncoords, st;
+    ndarr_t c, e;
     double xi, evalBasis_i=0.0;
     
-    // Check if the baseId given exceeds the corresponding for this element.
-    if ( basisId > 1 ){
-        return OTI_FEM_InvalidBaseId;
+    // Borrowed ndarray views of coords and evalBasis (Phase 6a); basisId and the shapes are checked
+    // (statuses instead of the legacy codes and exit()).
+    st = femb_views(basisId, 2, 1, coords, evalBasis, &c, &e);
+    if (st != OTI_OK){
+        return st;
     }
+    ncoords = c.shape[0];
 
     for(i=0; i<ncoords; i++){
 
-        xi = darr_get_item_ij(coords,i,0);
+        xi = femb_get(&c, i, 0);
         
         // Detect which basis function is being computed: N1, N2
         if (basisId == 0){
@@ -1244,11 +1336,11 @@ int64_t fem_basisFunctions_N_LineP1_1Diso(int64_t basisId, int64_t basisDer, dar
 
         }  
 
-        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
+        femb_set(&e, basisId, i, evalBasis_i);
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 }   
 // ----------------------------------------------------------------------------------------------------
@@ -1305,13 +1397,17 @@ int64_t fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, darr
     */ 
     // ************************************************************************************************
 
-    uint64_t i, ncoords = coords->nrows;
+    int64_t i, ncoords, st;
+    ndarr_t c, e;
     double evalBasis_i=0.0;
     
-    // Check if the baseId given exceeds the corresponding for this element.
-    if ( basisId > 0 ){
-        return OTI_FEM_InvalidBaseId;
+    // Borrowed ndarray views of coords and evalBasis (Phase 6a); basisId and the shapes are checked
+    // (statuses instead of the legacy codes and exit()).
+    st = femb_views(basisId, 1, 0, coords, evalBasis, &c, &e);
+    if (st != OTI_OK){
+        return st;
     }
+    ncoords = c.shape[0];
 
     for(i=0; i<ncoords; i++){
         
@@ -1331,11 +1427,11 @@ int64_t fem_basisFunctions_N_PntP0_0Diso(int64_t basisId, int64_t basisDer, darr
 
         }  
 
-        darr_set_item_ij( evalBasis_i, basisId, i, evalBasis);
+        femb_set(&e, basisId, i, evalBasis_i);
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 }   
 // ----------------------------------------------------------------------------------------------------

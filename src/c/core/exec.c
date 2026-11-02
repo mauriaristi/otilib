@@ -18,6 +18,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 #if defined(__APPLE__)
 #include <sys/types.h>
@@ -600,7 +601,10 @@ static void oe_dispense(oe_loop_t* loop, int32_t worker, int64_t* p_fail, int* p
         int64_t c = __atomic_fetch_add(&loop->next, 1, __ATOMIC_RELAXED);
         int status;
 
-        if (c >= loop->n_chunks || c > __atomic_load_n(&loop->first_fail, __ATOMIC_RELAXED)){
+        // Unsigned compare: a counter that wrapped past INT64_MAX (n_chunks within `workers` of it)
+        // reads as huge and stops the worker instead of running a negative chunk.
+        if ((uint64_t)c >= (uint64_t)loop->n_chunks
+            || c > __atomic_load_n(&loop->first_fail, __ATOMIC_RELAXED)){
             return;
         }
 
@@ -627,9 +631,10 @@ static void oe_dispense(oe_loop_t* loop, int32_t worker, int64_t* p_fail, int* p
 static inline void oe_blas_enter(oe_blas_scope_t* scope){
 
 #if defined(OTI_EXEC_BLAS_SCOPES)
-    if (oti_blas_scope_enter(scope) != OTI_OK){
-        scope->kind = 0;
-    }
+    // The return (1: BLAS is single-threaded here, 0: cannot be ensured) is not a status, and the
+    // callee sets scope->kind itself (0 when nothing changed): never overwrite it here, or
+    // oti_blas_scope_exit() would restore nothing.
+    (void)oti_blas_scope_enter(scope);
 #else
     scope->kind = 0;
 #endif
@@ -815,6 +820,214 @@ int oti_parallel_for_blas(oti_ctx* ctx, int64_t n_chunks, oti_chunk_fn fn, void*
 
     // BLAS keeps its own threads; the batch loop runs serially (principle 1).
     return oti_serial_for(n_chunks, fn, arg);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+// ------------------------------------   LOOP PLANNING (S27)   ------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+// The cost model of oti_exec_plan() (documented in exec.h): a team size w is acceptable when the serial
+// time reaches OE_PLAN_K region costs R(w) = oe_region_a + oe_region_b * w nanoseconds.
+#define OE_PLAN_K              4.0
+#define OE_REGION_FLOOR_NS     1000.0   // no region is assumed cheaper (the probe's pre-filter).
+#define OE_REGION_FALLBACK_A   1000.0   // R(w) without a probe: 1 us + 3 us * w (macOS libomp).
+#define OE_REGION_FALLBACK_B   3000.0
+#define OE_PROBE_REPS          3        // timed regions per probed team size (median), after a warm-up.
+
+// Region-cost model, written once by oe_probe_regions() and read-only afterwards.
+static double oe_region_a = OE_REGION_FALLBACK_A;
+static double oe_region_b = OE_REGION_FALLBACK_B;
+#if OE_HAVE_OPENMP
+static int    oe_region_probed;         // 1 when a and b were measured on this machine.
+#endif
+static pthread_once_t oe_region_once = PTHREAD_ONCE_INIT;
+
+
+#if OE_HAVE_OPENMP
+// *******************************************************************************************************
+// Chunk function of the probe: nothing to do.
+static int oe_probe_noop(void* arg, int64_t chunk, int32_t worker){
+
+    (void)arg;
+    (void)chunk;
+    (void)worker;
+
+    return OTI_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Monotonic time in nanoseconds, or a negative value when the clock is unavailable.
+static double oe_now_ns(void){
+
+    struct timespec ts;
+
+    if (clock_gettime(CLOCK_MONOTONIC, &ts) != 0){
+        return -1.0;
+    }
+
+    return (double)ts.tv_sec * 1e9 + (double)ts.tv_nsec;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Cost in nanoseconds of one oti_parallel_for() region of `workers` workers and as many no-op chunks:
+// the median of OE_PROBE_REPS timed regions after one warm-up region. Negative when it cannot measure.
+static double oe_time_region(int32_t workers){
+
+    double t[OE_PROBE_REPS];
+    oti_ctx run;
+    int i, j;
+
+    (void)oti_ctx_init(&run);
+    run.exec.nthreads = workers;
+
+    if (oti_parallel_for(&run, workers, oe_probe_noop, NULL) != OTI_OK){
+        return -1.0;
+    }
+
+    for (i = 0; i < OE_PROBE_REPS; i++){
+
+        double t0 = oe_now_ns();
+        int status = oti_parallel_for(&run, workers, oe_probe_noop, NULL);
+        double t1 = oe_now_ns();
+
+        if (status != OTI_OK || t0 < 0.0 || t1 < 0.0){
+            return -1.0;
+        }
+
+        t[i] = t1 - t0;
+
+    }
+
+    for (i = 1; i < OE_PROBE_REPS; i++){            // insertion sort of three values.
+        double v = t[i];
+        for (j = i - 1; j >= 0 && t[j] > v; j--){
+            t[j + 1] = t[j];
+        }
+        t[j + 1] = v;
+    }
+
+    return t[OE_PROBE_REPS / 2];
+
+}
+// -------------------------------------------------------------------------------------------------------
+#endif
+
+
+// *******************************************************************************************************
+// Measures the region-cost line once per process (through pthread_once): regions of 2 workers and of
+// omp_get_max_threads() workers. Keeps the fallback constants when it cannot measure.
+static void oe_probe_regions(void){
+
+#if OE_HAVE_OPENMP
+    int32_t m = (int32_t)omp_get_max_threads();
+    double c2, cm, a, b;
+
+    c2 = oe_time_region(2);
+    cm = (m > 2) ? oe_time_region(m) : c2;
+
+    if (!(c2 > 0.0) || !(cm > 0.0)){
+        return;
+    }
+
+    if (m > 2){
+        b = (cm - c2) / (double)(m - 2);
+        b = (b > 0.0) ? b : 0.0;
+        a = c2 - 2.0 * b;
+    } else {
+        b = c2 / 2.0;                 // one measured size: proportional to the team.
+        a = 0.0;
+    }
+
+    oe_region_a      = a;
+    oe_region_b      = b;
+    oe_region_probed = 1;
+#endif
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// R(w) in nanoseconds, never below OE_REGION_FLOOR_NS. The model must already be probed.
+static inline double oe_region_cost(int32_t workers){
+
+    double r = oe_region_a + oe_region_b * (double)workers;
+
+    return (r > OE_REGION_FLOOR_NS) ? r : OE_REGION_FLOOR_NS;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+int32_t oti_exec_plan(const oti_ctx* ctx, int64_t n_items, int64_t chunk_items, double ns_per_item){
+
+    int64_t n_chunks;
+    int32_t wmax, w, best = 0;
+    double t_serial, t_chunk, t_best;
+
+    // !(x > 0) also rejects NaN; the upper bound rejects infinity.
+    if (n_items <= 0 || chunk_items <= 0 || !(ns_per_item > 0.0) || ns_per_item > 1e300){
+        return 0;
+    }
+
+    n_chunks = oti_exec_nchunks(n_items, chunk_items);
+
+    if (n_chunks < 2 || oti_ctx_check(ctx) != OTI_OK){
+        return 0;
+    }
+
+    wmax = oe_max_workers(oe_resolve(ctx));         // 1 for SERIAL and inside a region.
+
+    if ((int64_t)wmax > n_chunks){
+        wmax = (int32_t)n_chunks;
+    }
+
+    t_serial = (double)n_items * ns_per_item;
+
+    if (wmax < 2 || t_serial < OE_PLAN_K * OE_REGION_FLOOR_NS){
+        return 0;                                   // never probes for a loop this small.
+    }
+
+    (void)pthread_once(&oe_region_once, oe_probe_regions);
+
+    t_chunk = t_serial / (double)n_chunks;
+    t_best  = t_serial;
+
+    // Candidates 2, 4, 8, ... below wmax, then wmax itself.
+    for (w = 2; ; w = (w > wmax / 2) ? wmax : 2 * w){
+
+        double r = oe_region_cost(w);
+
+        if (t_serial >= OE_PLAN_K * r){
+
+            // ceil(n_chunks / w) without n_chunks + w - 1, which overflows near INT64_MAX.
+            int64_t per_worker = n_chunks / w + (n_chunks % w != 0);
+            double t = (double)per_worker * t_chunk + r;
+
+            if (t < t_best){
+                t_best = t;
+                best   = w;
+            }
+
+        }
+
+        if (w == wmax){
+            break;
+        }
+
+    }
+
+    return best;
 
 }
 // -------------------------------------------------------------------------------------------------------

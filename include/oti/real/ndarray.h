@@ -14,5 +14,6 @@
 #include "oti/real/ndarray/reduce.h"
 #include "oti/real/ndarray/blas.h"
 #include "oti/real/ndarray/linalg.h"
+#include "oti/real/ndarray/compat_darr.h"
 
 #endif // OTI_REAL_NDARRAY_H

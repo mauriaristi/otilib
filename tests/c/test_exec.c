@@ -20,8 +20,10 @@
 #include <string.h>
 #include <stdint.h>
 #include <limits.h>
+#include <math.h>
 #include <pthread.h>
 #include <oti/core/exec.h>
+#include <oti/core/lapack.h>
 #include <oti/core/status.h>
 
 #if defined(_OPENMP)
@@ -1542,6 +1544,262 @@ static void test_fix3_exec(void){
 
 
 // *******************************************************************************************************
+// Phase 2: oti_exec_plan (exec.h): 0 or a team size >= 2, never above min(max_workers, n_chunks).
+static void test_exec_plan(void){
+
+    oti_ctx ctx;
+    int32_t w, prev;
+    int64_t n;
+    int ok_bound = 1, ok_never1 = 1, ok_mono = 1, t;
+    static const int32_t teams[4] = {2, 3, 4, 8};
+
+    make_ctx(&ctx, OTI_BACKEND_SERIAL, 8);
+    check(oti_exec_plan(&ctx, INT64_C(1) << 30, 4096, 1.0) == 0,
+            "plan: the SERIAL backend always gives 0");
+    make_ctx(&ctx, OTI_BACKEND_DEFAULT, 1);
+    check(oti_exec_plan(&ctx, INT64_C(1) << 30, 4096, 1.0) == 0, "plan: one worker available gives 0");
+    make_ctx(&ctx, OTI_BACKEND_DEFAULT, 8);
+    check(oti_exec_plan(&ctx, 4096, 4096, 1000.0) == 0 && oti_exec_plan(&ctx, 1, 4096, 1000.0) == 0 &&
+          oti_exec_plan(&ctx, 0, 4096, 1000.0) == 0, "plan: n_chunks < 2 gives 0 whatever the cost");
+    check(oti_exec_plan(&ctx, INT64_C(1) << 30, 0, 1.0) == 0 && oti_exec_plan(&ctx, INT64_C(1) << 30, -5,
+            1.0) == 0,
+          "plan: chunk_items <= 0 gives 0");
+    check(oti_exec_plan(&ctx, INT64_C(1) << 30, 4096, 0.0) == 0 && oti_exec_plan(&ctx, INT64_C(1) << 30,
+            4096, -1.0) == 0 &&
+          oti_exec_plan(&ctx, INT64_C(1) << 30, 4096, NAN) == 0 &&
+          oti_exec_plan(&ctx, INT64_C(1) << 30, 4096, INFINITY) == 0,
+          "plan: ns_per_item not a positive finite number gives 0");
+    check(oti_exec_plan(&ctx, 100, 4096, 0.1) == 0, "plan: a tiny loop stays serial");
+    {
+        oti_ctx bad = ctx;
+        bad.struct_size = 0;
+        check(oti_exec_plan(&bad, INT64_C(1) << 30, 4096, 1.0) == 0, "plan: an invalid context gives 0");
+    }
+#if TEST_HAVE_OMP && BUILD_HAS_OPENMP
+    for (t = 0; t < 4; t++){
+        int64_t nch;
+        make_ctx(&ctx, OTI_BACKEND_DEFAULT, teams[t]);
+        prev = 0;
+        for (n = 1; n < (INT64_C(1) << 36); n *= 2){
+            w = oti_exec_plan(&ctx, n, 4096, 1.0);
+            nch = oti_exec_nchunks(n, 4096);
+            if (w < 0 || w == 1 || (w > 0 && (w > oti_exec_max_workers(&ctx) || w > nch))){
+                ok_bound = 0;
+                fprintf(stderr, "  plan(n=%lld) = %d with %d workers and %lld chunks\n", (long long)n, w,
+                        oti_exec_max_workers(&ctx), (long long)nch);
+            }
+            if (w == 1){
+                ok_never1 = 0;
+            }
+            if (w < prev){
+                ok_mono = 0;
+                fprintf(stderr, "  plan not monotone: n=%lld gave %d after %d (team %d)\n", (long long)n,
+                        w, prev,
+                        teams[t]);
+            }
+            prev = w;
+        }
+        check(prev >= 2 || teams[t] < 2, "plan: a very large loop gets a team of at least 2");
+    }
+    check(ok_bound, "plan: never above min(max_workers, n_chunks), never negative");
+    check(ok_never1, "plan: never 1");
+    check(ok_mono, "plan: non-decreasing in n_items (n = 1 .. 2^36, teams 2, 3, 4, 8)");
+
+    // inside a parallel region the plan is 0
+    {
+        int inside = -1;
+        make_ctx(&ctx, OTI_BACKEND_DEFAULT, 4);
+        #pragma omp parallel num_threads(2)
+        {
+            #pragma omp master
+            inside = oti_exec_plan(&ctx, INT64_C(1) << 30, 4096, 1.0);
+        }
+        check(inside == 0, "plan: inside a parallel region gives 0");
+    }
+    // a costlier item never makes the plan smaller (same n_items)
+    {
+        int ok = 1;
+        int32_t last = 0;
+        double ns;
+        make_ctx(&ctx, OTI_BACKEND_DEFAULT, 8);
+        for (ns = 0.01; ns < 1e4; ns *= 2.0){
+            w = oti_exec_plan(&ctx, 1 << 22, 4096, ns);
+            ok = ok && w >= last;
+            last = w;
+        }
+        check(ok, "plan: non-decreasing in the cost per item");
+    }
+#else
+    (void)prev; (void)n; (void)t; (void)teams; (void)ok_bound; (void)ok_never1; (void)ok_mono; (void)w;
+    printf("skipped: oti_exec_plan worker bounds (not built with OpenMP)\n");
+#endif
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// W2 fix 1, checker 4: the planner's ceiling division does not overflow at the int64 limit.
+static void test_fix1_plan_max(void){
+
+    oti_ctx ctx;
+    int32_t w;
+    int ok = 1, t;
+    static const int32_t teams[3] = {2, 4, 8};
+
+    for (t = 0; t < 3; t++){
+        make_ctx(&ctx, OTI_BACKEND_DEFAULT, teams[t]);
+        w = oti_exec_plan(&ctx, INT64_MAX, 1, 1.0);
+        ok = ok && (w == 0 || (w >= 2 && w <= oti_exec_max_workers(&ctx)));
+        w = oti_exec_plan(&ctx, INT64_MAX, 4096, 1.0);
+        ok = ok && (w == 0 || (w >= 2 && w <= oti_exec_max_workers(&ctx)));
+        w = oti_exec_plan(&ctx, INT64_MAX, 1, 1e-9);
+        ok = ok && (w == 0 || (w >= 2 && w <= oti_exec_max_workers(&ctx)));
+        w = oti_exec_plan(&ctx, INT64_MAX - 1, 3, 1000.0);
+        ok = ok && (w == 0 || (w >= 2 && w <= oti_exec_max_workers(&ctx)));
+    }
+    check(ok,
+            "fix1.4: oti_exec_plan(ctx, INT64_MAX, 1, 1.0) and neighbours: team or 0, no overflow");
+    make_ctx(&ctx, OTI_BACKEND_DEFAULT, 8);
+#if TEST_HAVE_OMP && BUILD_HAS_OPENMP
+    check(oti_exec_plan(&ctx, INT64_MAX, 1, 1.0) >= 2,
+            "fix1.4: INT64_MAX chunks of real work get a team");
+#endif
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Critic 11 (5.5): BLAS thread scopes with a recording fake provider. The fake set_threads_local keeps a
+// per-thread "BLAS thread count" (the caller's setting is 8) and counts entries (set to 1) and exits
+// (restore).
+static _Thread_local int tl_blas_threads = 8;
+static int g_scope_enters, g_scope_exits, g_scope_bad_inside, g_scope_chunks_inside;
+
+// *******************************************************************************************************
+static int fake_set_threads_local(int n){
+
+    int prev = tl_blas_threads;
+
+    tl_blas_threads = n;
+    if (n == 1){
+        __atomic_fetch_add(&g_scope_enters, 1, __ATOMIC_RELAXED);
+    } else {
+        __atomic_fetch_add(&g_scope_exits, 1, __ATOMIC_RELAXED);
+    }
+    return prev;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Chunk function: BLAS must be single-threaded on the executing thread when the scope is in force.
+static int chunk_scope(void* arg, int64_t c, int32_t worker){
+
+    const int* fail = (const int*)arg;
+
+    (void)worker;
+    spin(500);
+    __atomic_fetch_add(&g_scope_chunks_inside, 1, __ATOMIC_RELAXED);
+    if (tl_blas_threads != 1){
+        __atomic_fetch_add(&g_scope_bad_inside, 1, __ATOMIC_RELAXED);
+    }
+    return (fail != NULL && fail[c]) ? OTI_ERR_INDEX : OTI_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+static void test_fix1_blas_scopes(void){
+
+    oti_lapack_provider_t p = *oti_lapack_provider();
+    oti_ctx ctx;
+    int fail[128];
+    int rep, ok_pairs = 1, ok_inside = 1, ok_restore = 1, ok_status = 1, any_enter = 0, i, st;
+
+    p.set_threads_local = (oti_lapack_fn)fake_set_threads_local;
+    p.blas_set_threading = NULL;
+    p.blas_get_threading = NULL;
+    if (oti_lapack_provider_set(&p) != OTI_OK){
+        check(0, "scopes: the recording provider was accepted");
+        return;
+    }
+    check((oti_blas_caps() & OTI_BLAS_CAP_LOCAL_THREADS) != 0,
+            "scopes: the fake provider has LOCAL_THREADS");
+
+#if TEST_HAVE_OMP && BUILD_HAS_OPENMP
+    for (rep = 0; rep < 60; rep++){
+        int nch = 2 + (rep % 5) * 20;
+        int fail_at = (rep % 3 == 0) ? -1 : (rep * 7) % nch;      // a failing chunk on most repetitions
+        make_ctx(&ctx, OTI_BACKEND_DEFAULT, 4);
+        ctx.exec.blas_policy = OTI_BLAS_SERIAL_IN_REGIONS;
+        for (i = 0; i < 128; i++){
+            fail[i] = (i == fail_at);
+        }
+        g_scope_enters = g_scope_exits = g_scope_bad_inside = g_scope_chunks_inside = 0;
+        tl_blas_threads = 8;
+        st = oti_parallel_for_blas(&ctx, nch, chunk_scope, fail);
+        ok_status = ok_status && (fail_at < 0 ? st == OTI_OK : st == OTI_ERR_INDEX);
+        ok_pairs = ok_pairs && g_scope_enters == g_scope_exits;
+        ok_inside = ok_inside && g_scope_bad_inside == 0;
+        ok_restore = ok_restore && tl_blas_threads == 8;
+        any_enter = any_enter || g_scope_enters > 0;
+    }
+    check(any_enter, "scopes: a parallel BLAS batch loop enters the scope on its workers");
+    check(ok_pairs, "scopes: enters == exits (60 loops, 2..82 chunks, failing chunks included)");
+    check(ok_inside, "scopes: BLAS is single-threaded on the thread that runs every chunk");
+    check(ok_restore, "scopes: the caller's thread count is restored on the calling thread");
+    check(ok_status, "scopes: the lowest failing chunk's status is still returned");
+
+    // a failure in the first chunk: workers that never ran a chunk still leave their scope
+    make_ctx(&ctx, OTI_BACKEND_DEFAULT, 4);
+    for (i = 0; i < 128; i++){
+        fail[i] = (i == 0);
+    }
+    g_scope_enters = g_scope_exits = 0;
+    tl_blas_threads = 8;
+    st = oti_parallel_for_blas(&ctx, 64, chunk_scope, fail);
+    check(st == OTI_ERR_INDEX && g_scope_enters == g_scope_exits && tl_blas_threads == 8,
+          "scopes: chunk 0 failing: every entered scope is left, the caller's value is restored");
+#else
+    (void)rep; (void)ok_pairs; (void)ok_inside; (void)ok_restore; (void)ok_status;
+    (void)any_enter; (void)i;
+    (void)st; (void)ctx; (void)fail;
+    printf("skipped: BLAS scope loops (not built with OpenMP)\n");
+#endif
+
+    // policy INHERIT: batch loops run serially and never touch the BLAS thread count
+    make_ctx(&ctx, OTI_BACKEND_DEFAULT, 4);
+    ctx.exec.blas_policy = OTI_BLAS_INHERIT;
+    for (i = 0; i < 128; i++){
+        fail[i] = 0;
+    }
+    g_scope_enters = g_scope_exits = g_scope_bad_inside = 0;
+    tl_blas_threads = 8;
+    check(oti_parallel_for_blas(&ctx, 40, chunk_scope, fail) == OTI_OK && g_scope_enters == 0 &&
+            g_scope_exits == 0 &&
+          tl_blas_threads == 8, "scopes: OTI_BLAS_INHERIT never changes the BLAS thread count");
+
+    // a provider with no capability: serial loop, no scope calls
+    p.set_threads_local = NULL;
+    check(oti_lapack_provider_set(&p) == OTI_OK && (oti_blas_caps() & OTI_BLAS_CAP_LOCAL_CONTROL) == 0,
+          "scopes: a provider without thread control has no local-control capability");
+    make_ctx(&ctx, OTI_BACKEND_DEFAULT, 4);
+    g_scope_enters = g_scope_exits = 0;
+    check(oti_parallel_for_blas(&ctx, 40, chunk_scope, fail) == OTI_OK && g_scope_enters == 0 &&
+            g_scope_exits == 0,
+          "scopes: without capability the loop runs and makes no scope call");
+
+    oti_lapack_provider_set(NULL);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int main(void){
 
     // Before anything touches the default context (created once, read-only afterwards).
@@ -1581,6 +1839,12 @@ int main(void){
     test_chunk_results_independent_of_threads();
 
     test_fix3_exec();
+
+    test_exec_plan();
+
+    test_fix1_plan_max();
+
+    test_fix1_blas_scopes();
 
     if (n_failed > 0){
         fprintf(stderr, "\n%d check(s) FAILED\n", n_failed);

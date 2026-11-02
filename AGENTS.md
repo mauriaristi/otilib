@@ -850,17 +850,28 @@ Keep inline comments succinct and place them directly above the relevant operati
 
 ### 5. Calling LAPACK / BLAS
 
-- **Never call LAPACK or BLAS symbols (`dgetrf_`, `DGETRF`, `cblas_*`, ...) from C directly**, and
-  never include vendor headers (`<Accelerate/Accelerate.h>`, `lapacke.h`). Use the `oti_d*`
-  wrappers declared in `include/oti/core/lapack.h`. They are Fortran `bind(C)` subroutines
-  (`src/fortran/core/oti_lapack.f90`, library `otilapack`), so the Fortran compiler resolves symbol
-  mangling and the hidden string-length arguments on every platform and vendor.
-- A new routine means a new wrapper in `oti_lapack.f90` (`integer(c_int)` arguments, flags as
-  `character(kind=c_char), value` copied into a default-kind `character(len=1)` local), its
-  prototype and Doxygen block in `lapack.h`, and a case in `tests/c/test_lapack.c`.
-- Size checks, two kinds:
+- **Never call LAPACK or BLAS symbols (`dgetrf_`, `dgetrf$NEWLAPACK`, `cblas_*`, ...) from C
+  directly**, and never include vendor headers (`<Accelerate/Accelerate.h>`, `lapacke.h`). Use the
+  `oti_d*` wrappers declared in `include/oti/core/lapack.h`. They are C functions
+  (`src/c/core/lapack.c`) that call the routine through the provider table and pass every CHARACTER
+  argument's hidden length explicitly (R's `FCONE` pattern) when the provider needs it
+  (`OTI_STRLEN_END_SIZE_T`; Accelerate's `$NEWLAPACK` interface takes none, `OTI_STRLEN_NONE`).
+- A new routine means a slot in `oti_lapack_provider_t`, its symbol in
+  `src/c/core/lapack_provider.c` (the `OLP_ROUTINES` list), a wrapper with both prototypes, its
+  Doxygen block in `lapack.h`, and a case in `tests/c/test_lapack.c` on OpenBLAS and Accelerate
+  (`-DOTI_BLA_VENDOR=Apple`), plus its flags in the fake-provider check of that test.
+- The build-time vendor and convention are generated into `oti/core/lapack_config.h`; the probe
+  (`oti_lapack_provider()`, once) confirms Accelerate through `dladdr` and reads the optional
+  thread controls (`oti_blas_caps()`). Callers pass legal arguments only: reference XERBLA stops the
+  process. Leading dimensions are `>= max(1, rows)` even for empty matrices, and empty problems
+  never reach a wrapper; `-DOTI_LAPACK_DEBUG` asserts the preconditions in the wrappers.
+- Size checks, three kinds:
   - Every value passed to a wrapper as an `int` (dimension, leading dimension, right-hand-side
-    count such as `ncols * N_ord`) goes through `oti_lapack_fits()` before it is narrowed.
+    count such as `ncols * N_ord`) goes through `oti_lapack_fits()` before it is narrowed;
+    signed values (ndarray strides as increments) through `oti_lapack_fits_i64()`, and the ndarray
+    dispatchers also against `oti_lapack_int_limit()` (lowered in tests).
+  - Workspace queries (`lwork = -1`) are converted with `oti_lapack_lwork()` (rejects NaN,
+    negative, above `INT_MAX`).
   - Byte counts of work buffers are checked for `size_t` overflow before `malloc`
     (`lu_buffer_bytes()` in `src/c/sparse/array/algebra_lu.c`); `oti_lapack_fits()` does not
     cover them.

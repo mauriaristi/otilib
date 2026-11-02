@@ -21,3 +21,8 @@ if (APPLE)
     add_executable(bench_semisparse_memory bench_semisparse_memory.c)
     target_link_libraries(bench_semisparse_memory memtrack oti oticwrap ${LINK_TARGET_OMP_C})
 endif ()
+
+# ndarray BLAS batch costs (PLAN-ndarray-contracts.md S28; blas.c's NDBL_COST table), never run by
+# ctest or at gates:  ./tools/bench/bench_blas_batch [--quick]
+add_executable(bench_blas_batch bench_blas_batch.c)
+target_link_libraries(bench_blas_batch oti oticwrap ${LINK_TARGET_OMP_C})

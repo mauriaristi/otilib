@@ -1,3 +1,5 @@
+// Statuses: OTI_OK / OTI_ERR_* (contracts 4.1); the legacy enum oti_errors is retired here (Phase 6a).
+#include "oti/core/status.h"
 
 
 
@@ -1222,7 +1224,7 @@ int64_t fem_intPts_real( uint64_t order, int64_t elementType,
 
     }
 
-    return OTI_success;
+    return OTI_OK;
 
 } 
 // ----------------------------------------------------------------------------------------------------

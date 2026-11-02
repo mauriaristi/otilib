@@ -32,6 +32,9 @@
 #include <oti/real/ndarray/buffer.h>
 #include <oti/real/ndarray/create.h>
 #include <oti/real/ndarray/elementwise.h>
+#include <oti/real/ndarray/views.h>
+#include <oti/real/ndarray/compat_darr.h>
+#include <oti/real/array/base.h>
 
 #if defined(__SANITIZE_THREAD__)
 #define TEST_TSAN 1
@@ -2121,14 +2124,17 @@ static void test_import_swapped_unaligned_strided(void){
         d.has_strides = 1;
         d.bstrides[0] = 4;
         d.bstrides[1] = 8;
+        // S24 (contracts 2.4 step 4): the copy is compact in the K order of the source: byte
+        // strides (4, 8) order the axes as (axis 1 outer, axis 0 inner): element strides (1, 2), F
         ok = (do_import(&d, OTI_F64, 0, &cb, &r) == OTI_OK && r.shape[0] == 2 && r.shape[1] == 3 &&
-              (r.flags & ND_C_CONTIG));
+              r.strides[0] == 1 && r.strides[1] == 2 && (r.flags & ND_F_CONTIG) && cb.count == 1);
         for (i = 0; ok && i < 2; i++){
             for (k = 0; k < 3; k++){
-                ok = ok && (((double*)r.data)[i * 3 + k] == (double)m[k * 2 + i]);
+                ok = ok && (((double*)r.data)[i * r.strides[0] + k * r.strides[1]] ==
+                            (double)m[k * 2 + i]);
             }
         }
-        check(ok, "import f32 transposed view -> C-contiguous f64 in logical order");
+        check(ok, "import f32 transposed view -> f64, logical order, K-order strides (1,2)");
         nd_release(&r);
     }
 
@@ -3248,6 +3254,217 @@ static void test_fix4_core(void){
 
 
 // *******************************************************************************************************
+// Element `lin` (logical C order) of an F64 array.
+static double get_f_core(const ndarr_t* a, int64_t lin){
+
+    int64_t off = 0, rem = lin;
+    int32_t k;
+
+    for (k = a->ndim - 1; k >= 0; k--){
+        off += (rem % a->shape[k]) * a->strides[k];
+        rem /= a->shape[k];
+    }
+    return ((double*)a->data)[off];
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Phase 6a: the darr_t adapters (compat_darr.h): BORROW, RETAIN, TAKE, nd_as_darr.
+static int darr_is_empty(const darr_t* d){
+
+    return d->p_data == NULL && d->nrows == 0 && d->ncols == 0 && d->size == 0;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+static void test_compat(void){
+
+    darr_t d, e;
+    ndarr_t a = {0}, b = {0}, c = {0};
+    int64_t i, j;
+    int ok;
+    oti_ctx ctx;
+
+    // 1: BORROW
+    d = darr_zeros(3, 4);
+    for (i = 0; i < 12; i++){
+        d.p_data[i] = (double)(i + 1);
+    }
+    check(nd_from_darr(NULL, &d, ND_DARR_BORROW, &a) == OTI_OK, "compat BORROW: OK");
+    check(a.ndim == 2 && a.shape[0] == 3 && a.shape[1] == 4 && a.strides[0] == 4 && a.strides[1] == 1 &&
+          a.data == (void*)d.p_data && a.buf == NULL && !(a.flags & ND_RETAINED) &&
+                  (a.flags & ND_WRITEABLE) &&
+          (a.flags & ND_C_CONTIG) && a.dtype == OTI_F64,
+                  "BORROW: (3,4), strides (4,1), C | WRITEABLE, buf NULL, data = p_data");
+    ok = 1;
+    for (i = 0; i < 3; i++){
+        for (j = 0; j < 4; j++){
+            ok = ok && ((double*)a.data)[i * 4 + j] == darr_get_item_ij(&d, (uint64_t)i, (uint64_t)j);
+        }
+    }
+    check(ok, "BORROW: values equal darr_get_item_ij");
+    check(nd_unary_to(NULL, ND_FN_NEG, &a, &a) == OTI_OK && d.p_data[0] == -1.0 && d.p_data[11] == -12.0,
+          "BORROW: an elementwise _to through the view writes the darr");
+    nd_release(&a);
+    check(d.p_data != NULL && d.size == 12 && d.p_data[5] == -6.0,
+            "BORROW: nd_release only resets; the darr is intact");
+    darr_free(&d);
+
+    // 2: RETAIN
+    d = darr_zeros(2, 5);
+    check(nd_from_darr(NULL, &d, ND_DARR_RETAIN, &a) == OTI_OK && (a.flags & ND_RETAINED) &&
+            a.buf != NULL,
+          "compat RETAIN: a retained array");
+    check(nd_buffer_refs(a.buf) == 1 && nd_buffer_base(a.buf) == (const void*)d.p_data &&
+          nd_buffer_nbytes(a.buf) == 8 * 10 && !(nd_buffer_state(a.buf) & ND_STATE_OWNS),
+          "RETAIN: refs 1, base = p_data, nbytes = 8 * size, not OWNS");
+    check(nd_grow(NULL, &a, 4096, 8) == OTI_ERR_BUSY,
+            "RETAIN: nd_grow -> BUSY (the memory belongs to the darr)");
+    nd_release(&a);
+    check(d.p_data != NULL && d.size == 10, "RETAIN: after nd_release the darr is intact");
+    darr_free(&d);
+
+    // 3: TAKE
+    d = darr_zeros(3, 3);
+    for (i = 0; i < 9; i++){
+        d.p_data[i] = (double)i;
+    }
+    check(nd_from_darr(NULL, &d, ND_DARR_TAKE, &a) == OTI_OK && darr_is_empty(&d),
+            "compat TAKE: OK, src emptied");
+    check((a.flags & ND_RETAINED) && nd_buffer_refs(a.buf) == 1 && get_f_core(&a, 4) == 4.0 &&
+          (nd_buffer_state(a.buf) & ND_STATE_WRITEABLE), "TAKE: a retained array holding the values");
+    nd_release(&a);                        // frees the memory: leaks / ASan check it
+    check(a.buf == NULL, "TAKE: the memory is freed at the last release");
+    // failures free the memory and empty src
+    d = darr_zeros(2, 2);
+    nd_test_fail_alloc(1);
+    check(nd_from_darr(NULL, &d, ND_DARR_TAKE, &a) == OTI_ERR_MEMORY && darr_is_empty(&d) &&
+            is_empty_state(&a),
+          "TAKE with an allocation failure -> MEMORY, src emptied, out empty");
+    nd_test_fail_alloc(0);
+    d = darr_zeros(2, 2);
+    d.size = 5;
+    check(nd_from_darr(NULL, &d, ND_DARR_TAKE, &a) == OTI_ERR_ARGUMENT && darr_is_empty(&d) &&
+            is_empty_state(&a),
+          "TAKE with size != nrows * ncols -> ARGUMENT, src emptied");
+    d = darr_zeros(2, 2);
+    oti_ctx_init(&ctx);
+    ctx.device_type = 2;
+    check(nd_from_darr(&ctx, &d, ND_DARR_TAKE, &a) == oti_ctx_check(&ctx) && darr_is_empty(&d) &&
+            is_empty_state(&a),
+          "TAKE with an invalid context -> its oti_ctx_check status, src emptied");
+    d = darr_zeros(2, 2);
+    oti_ctx_init(&ctx);
+    ctx.exec.backend = 77;
+    check(nd_from_darr(&ctx, &d, ND_DARR_TAKE, &a) == OTI_ERR_BACKEND && darr_is_empty(&d),
+            "TAKE with an unavailable backend -> BACKEND");
+    d = darr_zeros(2, 2);
+    check(nd_from_darr(NULL, &d, 9, &a) == OTI_ERR_ARGUMENT && is_empty_state(&a),
+            "unknown mode -> ARGUMENT, out empty");
+    darr_free(&d);
+
+    // 4: empty darr_t and argument errors
+    e = darr_init();
+    check(nd_from_darr(NULL, &e, ND_DARR_BORROW, &a) == OTI_OK && a.ndim == 2 && a.shape[0] == 0 &&
+            a.shape[1] == 0,
+          "an empty darr (darr_init) as BORROW: shape (0, 0)");
+    nd_release(&a);
+    check(nd_from_darr(NULL, &e, ND_DARR_RETAIN, &a) == OTI_OK && a.shape[0] == 0 && a.shape[1] == 0,
+            "empty darr as RETAIN: (0, 0)");
+    nd_release(&a);
+    d = darr_zeros(2, 3);
+    d.size = 7;
+    check(nd_from_darr(NULL, &d, ND_DARR_BORROW, &a) == OTI_ERR_ARGUMENT && is_empty_state(&a),
+            "BORROW with size mismatch -> ARGUMENT");
+    check(nd_from_darr(NULL, &d, ND_DARR_RETAIN, &a) == OTI_ERR_ARGUMENT,
+            "RETAIN with size mismatch -> ARGUMENT");
+    d.size = 6;
+    {
+        double* keep = d.p_data;
+        d.p_data = NULL;
+        check(nd_from_darr(NULL, &d, ND_DARR_BORROW, &a) == OTI_ERR_ARGUMENT,
+                "NULL p_data with size > 0 -> ARGUMENT");
+        d.p_data = keep;
+    }
+    darr_free(&d);
+    e = darr_init();
+    e.nrows = UINT64_MAX;
+    e.ncols = 0;
+    e.size = 0;
+    check(nd_from_darr(NULL, &e, ND_DARR_BORROW, &a) == OTI_ERR_SIZE, "nrows above INT64_MAX -> SIZE");
+    check(nd_from_darr(NULL, NULL, ND_DARR_BORROW, &a) == OTI_ERR_ARGUMENT, "NULL src -> ARGUMENT");
+
+    // 5: nd_as_darr
+    {
+        darr_t v;
+        int64_t sh2[2] = {3, 4}, sh1[1] = {5};
+        nd_alloc(NULL, OTI_F64, 2, sh2, ND_LAYOUT_C, ND_ALLOC_ZERO, &a);
+        check(nd_as_darr(&a, 0, &v) == OTI_OK && v.nrows == 3 && v.ncols == 4 && v.size == 12 &&
+              v.p_data == (double*)a.data, "nd_as_darr of (3,4): 3 x 4 over the same memory");
+        nd_release(&a);
+        nd_alloc(NULL, OTI_F64, 1, sh1, ND_LAYOUT_C, ND_ALLOC_ZERO, &a);
+        check(nd_as_darr(&a, 1, &v) == OTI_OK && v.nrows == 1 && v.ncols == 5 && v.size == 5,
+                "nd_as_darr of (5,): 1 x 5 (a row)");
+        nd_release(&a);
+        nd_alloc(NULL, OTI_F64, 0, NULL, ND_LAYOUT_C, ND_ALLOC_ZERO, &a);
+        check(nd_as_darr(&a, 0, &v) == OTI_OK && v.nrows == 1 && v.ncols == 1 && v.size == 1,
+                "nd_as_darr of rank 0: 1 x 1");
+        nd_release(&a);
+        // transposed / strided -> LAYOUT
+        nd_alloc(NULL, OTI_F64, 2, sh2, ND_LAYOUT_C, 0, &a);
+        nd_view_transpose(&a, 0, NULL, &b);
+        oti_ctx_clear_error(NULL);
+        v.nrows = 99;
+        check(nd_as_darr(&b, 0, &v) == OTI_ERR_LAYOUT && darr_is_empty(&v),
+                "nd_as_darr of a transposed view -> LAYOUT, out the empty darr");
+        check(oti_ctx_last_error(NULL, NULL, NULL) == OTI_ERR_LAYOUT,
+                "nd_as_darr records its failure as the last error");
+        oti_ctx_clear_error(NULL);
+        nd_release(&a);
+        nd_alloc(NULL, OTI_F64, 3, (int64_t[]){2, 2, 2}, ND_LAYOUT_C, 0, &a);
+        check(nd_as_darr(&a, 0, &v) == OTI_ERR_SHAPE && darr_is_empty(&v),
+                "nd_as_darr of rank 3 -> SHAPE");
+        nd_release(&a);
+        nd_alloc(NULL, OTI_I64, 2, sh2, ND_LAYOUT_C, 0, &a);
+        check(nd_as_darr(&a, 0, &v) == OTI_ERR_DTYPE && darr_is_empty(&v), "nd_as_darr of I64 -> DTYPE");
+        nd_release(&a);
+        // read-only arrays: reading is fine, writing is READONLY
+        {
+            double mem[4] = {1, 2, 3, 4};
+            ndarr_t d0 = {0}, ro = {0};
+            int64_t s22[2] = {2, 2};
+            make_desc(&d0, mem, OTI_F64, 2, s22, (int64_t[]){2, 1}, 0);
+            nd_wrap(NULL, &d0, NULL, -1, NULL, NULL, &ro);
+            check(nd_as_darr(&ro, 0, &v) == OTI_OK && v.p_data == mem,
+                    "nd_as_darr of a read-only array for reading: OK");
+            check(nd_as_darr(&ro, 1, &v) == OTI_ERR_READONLY && darr_is_empty(&v),
+                    "nd_as_darr(writeable = 1) of a read-only array -> READONLY");
+            nd_release(&ro);
+        }
+        check(nd_as_darr(NULL, 0, &v) == OTI_ERR_ARGUMENT, "nd_as_darr(NULL) -> ARGUMENT");
+    }
+
+    // 6: round trip
+    {
+        darr_t r;
+        d = darr_zeros(4, 3);
+        nd_from_darr(NULL, &d, ND_DARR_BORROW, &c);
+        check(nd_as_darr(&c, 1, &r) == OTI_OK && r.p_data == d.p_data && r.nrows == d.nrows &&
+                r.ncols == d.ncols &&
+              r.size == d.size, "round trip: nd_as_darr(nd_from_darr(d)) has d's fields");
+        nd_release(&c);
+        darr_free(&d);
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int main(void){
 
     printf("TSan build: %d\n", TEST_TSAN);
@@ -3290,6 +3507,8 @@ int main(void){
     test_fix3_core();
 
     test_fix4_core();
+
+    test_compat();
 
     if (n_failed > 0){
         fprintf(stderr, "\n%d check(s) FAILED\n", n_failed);

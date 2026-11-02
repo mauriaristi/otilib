@@ -5,6 +5,11 @@
 
 #include <string.h>
 
+// create.c (later in the unity): the K order and the K-layout allocator (S24), used by nd_import's
+// converted copy (contracts 2.4 step 4).
+static int ndc_alloc_like(oti_ctx* ctx, const ndarr_t* src, int32_t alloc_flags, int32_t* perm,
+                          ndarr_t* res);
+
 
 // *******************************************************************************************************
 // 1 on a little-endian host.
@@ -533,15 +538,18 @@ static inline void ndv_load(const unsigned char* p, const nd_srctype_t* s, doubl
 
 
 // *******************************************************************************************************
-// Converts the foreign elements, in C order, into the C-contiguous library array dst. Foreign addresses
-// are computed on uintptr_t (contracts 2.3): the index carries with -(shape - 1) * stride, which
-// nd_import() bounded with checked arithmetic, and the walk stops at the last element, so no address
-// outside the accessed span is ever formed.
-static int ndv_convert(const nd_import_t* src, const int64_t* bstr, ndarr_t* dst){
+// Converts the foreign elements into dst, the compact K-layout library array of the source (contracts
+// 2.4 step 4, S24): the source is walked with axis perm[0] outermost and perm[ndim-1] innermost, which
+// is dst's memory order, so dst is written sequentially and the source is read in its own memory order.
+// Foreign addresses are computed on uintptr_t (contracts 2.3): the index carries with
+// -(shape - 1) * stride, which nd_import() bounded with checked arithmetic (and the whole address
+// interval was checked), and the walk stops at the last element, so no address outside the accessed
+// span is ever formed.
+static int ndv_convert(const nd_import_t* src, const int64_t* bstr, const int32_t* perm, ndarr_t* dst){
 
     int64_t idx[OTI_ND_MAXDIM], n = nd_size(dst), e;
     uintptr_t addr = (uintptr_t)src->data;
-    int32_t nd = src->ndim, k;
+    int32_t nd = src->ndim, k, j;
 
     if (n == 0){
         return OTI_OK;
@@ -573,8 +581,9 @@ static int ndv_convert(const nd_import_t* src, const int64_t* bstr, ndarr_t* dst
         if (e + 1 == n){
             break;
         }
-        // Next index in C order (modular uintptr_t arithmetic; every intermediate is in the span).
-        for (k = nd - 1; k >= 0; k--){
+        // Next index in perm order (modular uintptr_t arithmetic; every intermediate is in the span).
+        for (j = nd - 1; j >= 0; j--){
+            k = perm[j];
             if (idx[k] + 1 < src->shape[k]){
                 idx[k]++;
                 addr += (uintptr_t)bstr[k];
@@ -724,12 +733,25 @@ static int ndv_import(oti_ctx* ctx, const nd_import_t* src, int32_t want, int32_
         return ndb_wrap(&desc, NULL, -1, release, release_ctx, res);
     }
 
-    // 4. Converted copy into a new C-contiguous library array.
-    st = ndb_alloc_array(ctx, target, src->ndim, src->shape, ND_LAYOUT_C, 0, res);
-    if (st == OTI_OK){
-        st = ndv_convert(src, bstr, res);
-        if (st != OTI_OK){
-            nd_release(res);
+    // 4. Converted copy into a new library array in the K layout of the source (S24: C for a C
+    //    source, F for an F source, the SoA block layout kept), ordered by the source's byte strides
+    //    with the rule of nd_copy(ND_LAYOUT_K). Only shape, strides, ndim and dtype of the
+    //    descriptor below are read.
+    {
+        int32_t perm[OTI_ND_MAXDIM];
+        ndarr_t kd;
+        kd.ndim = src->ndim;
+        kd.dtype = target;
+        for (k = 0; k < src->ndim; k++){
+            kd.shape[k] = src->shape[k];
+            kd.strides[k] = bstr[k];
+        }
+        st = ndc_alloc_like(ctx, &kd, 0, perm, res);
+        if (st == OTI_OK){
+            st = ndv_convert(src, bstr, perm, res);
+            if (st != OTI_OK){
+                nd_release(res);
+            }
         }
     }
 

@@ -318,6 +318,42 @@ int32_t oti_exec_max_workers(const oti_ctx* ctx);
 int oti_exec_parallel_ok(const oti_ctx* ctx, int64_t work_items, int64_t min_items);
 
 /**
+ * @brief Plans a chunked loop: how many workers make it fastest, from a cost model (S27).
+ *
+ * The model. With n_chunks = oti_exec_nchunks(n_items, chunk_items), the serial time is
+ * T = n_items * ns_per_item and a run on w workers is estimated as
+ * ceil(n_chunks / w) * (T / n_chunks) + R(w), where R(w) is the cost of one parallel region of w
+ * workers. A team size w is acceptable only when T >= 4 * R(w) (the factor k = 4 keeps loops serial
+ * unless the region is a small part of the work, which also absorbs the error of the estimate and the
+ * higher cost of a region whose threads have gone to sleep). The result is the acceptable w with the
+ * smallest estimate that beats T, among w = 2, 4, 8, ... and the largest possible w; 0 if none.
+ *
+ * R(w) = a + b * w, with a and b measured once per process (pthread_once) by timing regions of 2
+ * workers and of omp_get_max_threads() workers (a median of three each, after one warm-up region;
+ * about 0.1-0.5 ms in total). The probe runs only on the first plan whose T reaches 4 * 1 us, so
+ * small loops never start threads. If the probe cannot measure (no clock, a non-positive time) the
+ * OpenMP constants R(w) = 1 us + 3 us * w (macOS libomp, measured 2026-11-02) are used. The plan
+ * affects speed only: library kernels give bit-identical results for every worker count (5.4).
+ *
+ * To run with the planned count, pass it as the num_threads of a user context, e.g.
+ * `oti_ctx run = *(ctx != NULL ? ctx : oti_ctx_default()); run.exec.nthreads = w;` then
+ * oti_parallel_for(&run, n_chunks, fn, arg) (the public caller still records errors in @p ctx);
+ * with w <= 1 call oti_serial_for().
+ *
+ * @param[in] ctx         Context, or NULL.
+ * @param[in] n_items     Items of work in the loop (elements, matrices, ...).
+ * @param[in] chunk_items Items per chunk, as given to oti_exec_nchunks() (fixed, never thread-count
+ *                        dependent).
+ * @param[in] ns_per_item Estimated serial cost of one item in nanoseconds (about 0.1 for a real add on
+ *                        contiguous data; more for libm functions or OTI products).
+ *
+ * @return The number of workers, at most min(oti_exec_max_workers(ctx), n_chunks); 0 means run
+ *         serially (also for the SERIAL backend, inside a parallel region, n_chunks < 2, an invalid
+ *         context, chunk_items <= 0, or ns_per_item not a positive finite number). Never 1.
+ */
+int32_t oti_exec_plan(const oti_ctx* ctx, int64_t n_items, int64_t chunk_items, double ns_per_item);
+
+/**
  * @brief Number of logical chunks of @p chunk_items items covering @p n_items items.
  *
  * @param[in] n_items     Items, >= 0.

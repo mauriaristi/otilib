@@ -7,6 +7,8 @@ import os
 import errno
 
 import re
+import json
+from pathlib import Path
 
 getpath = coti.whereotilib.getpath
 
@@ -36,13 +38,19 @@ class writer:
 
   #***************************************************************************************************
   def __init__(self, nbases, order, tab = "  ", coeff_type = "coeff_t", mdual = False,
-    type_name = None ):
+    type_name = None, source_dir=None, checked_in=False ):
     """
     PORPUSE:  The porpuse of this class is to create Modules that allow dense OTI structures
               to be manipulated in languages like Fortran and Cython. 
+
+    source_dir selects source_conv explicitly instead of the installed package's copy.
+    checked_in selects the historical 17-module profile, including its hand edits and
+    aggregate include lists. Use tools/regen_static.py to generate that complete profile.
     """
 
     global imdir_base_name, h
+    self.source_dir = Path(source_dir or (getpath() + "source_conv/")).resolve()
+    self.checked_in = checked_in
     
     # Only pre-generated data for up to multidual of 10 imbases.
     if mdual and (nbases <= 10) : 
@@ -3115,7 +3123,7 @@ class writer:
     # end if 
 
 
-    src_path = getpath()+"source_conv/"
+    src_path = str(self.source_dir) + os.sep
     files=[]
     
     # Supported extensions.
@@ -3123,7 +3131,8 @@ class writer:
 
     # r=>root, d=>directories, f=>files
     for r, d, f in os.walk(src_path):
-      for item in f:
+      d[:] = sorted(name for name in d if name != 'baseline')
+      for item in sorted(f):
         ext = item.split('.')[-1]
         if ext in supp_ext:
           files.append(os.path.join(r.replace(src_path,""), item))
@@ -3171,6 +3180,10 @@ class writer:
         module_name_upper = mname.upper(), base_src = base_str, algebra_src = algebra_str,
         base_include = base_include, algebra_include = algebra_include, 
         utils_include = "",  num_struct = num_struct, nbases = self.nbases)
+
+      if self.checked_in:
+        f_exp = _checked_in_template(self, file, f_exp)
+      # end if
 
       f = open(exp_file, "w" )
       f.write(f_exp)
@@ -3523,6 +3536,16 @@ class writer:
 
   #***************************************************************************************************
   def process_static_include_files(self, base_dir = ''):
+    if self.checked_in:
+      aggregate_dir = self.source_dir / 'baseline' / 'aggregates'
+      for template in sorted(aggregate_dir.rglob('*.in')):
+        relative = template.relative_to(aggregate_dir).with_suffix('')
+        target = Path(base_dir) / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(template.read_bytes())
+      # end for
+      return
+    # end if
     
     folders = ['include/oti/',
     'include/pyoti/c_otilib/',
@@ -3643,6 +3666,15 @@ class writer:
     InterHeader = """# ========================================================================================="""
          
     for key, files in folders.items():
+      if self.checked_in:
+        order_file = self.source_dir / 'baseline' / 'header_order.json'
+        orders = json.loads(order_file.read_text())
+        profile = 'array_first' if key in (
+          'onumm10n1', 'onumm1n10', 'onumm1n20', 'onumm1n30') else 'scalar_first'
+        prefix = os.path.join(include_path_val, key)
+        rank = {name: index for index, name in enumerate(orders[profile])}
+        files.sort(key=lambda name: (rank.get(os.path.relpath(name, prefix), len(rank)), name))
+      # end if
       structures = {}
       structures['num']   = ""
       structures['fenum'] = ""
@@ -3657,6 +3689,10 @@ class writer:
         f = open(file,"r")
         string = f.read()
         f.close()
+        if self.checked_in:
+          # Preserve the historical comment spelling without embedding the output directory.
+          file = '../../../' + os.path.relpath(file, base_dir)
+        # end if
         if "enums" in file:
           header_out += "\n# From "+file+"\n"
           string =  remove_annotations(string).replace("enum", "cdef enum")
@@ -3800,3 +3836,148 @@ def remove_annotations(string):
 
   return str_nocomm
 
+
+
+# ********************************************************************************************************
+def _checked_in_template(writer, filename, contents):
+    """
+    Apply the historical specializations used by the checked-in static modules.
+
+    Parameters
+    ----------
+    writer : writer
+        Generator configured with the checked-in compatibility profile.
+    filename : str
+        Template path relative to source_conv.
+    contents : str
+        Generated generic implementation.
+
+    Returns
+    -------
+    str
+        Implementation including the original hand edits and their exact formatting.
+    """
+    combo = (writer.nbases, writer.order)
+    wrapped = writer.nbases in (1, 2, 3) and writer.order in (1, 2, 3, 4)
+    profile = writer.source_dir / 'baseline'
+    values = dict(num_type=writer.type_name, num_func=writer.func_name,
+                  arr_type=writer.type_name_arr, arr_func=writer.func_name_arr)
+
+    if wrapped and filename == 'src/c/static/number/array/functions_to.c':
+
+        # Five modules retained this copied name in a disabled line of code.
+        values['pow_comment_func'] = (
+            'onumm2n2' if writer.nbases == 1 or combo == (2, 1) else writer.func_name
+        )
+        return (profile / 'array_functions_to.c.in').read_text().format(**values)
+
+    # end if
+
+    if wrapped and filename == 'src/c/static/number/array/algebra_elementwise_to.c':
+
+        values['div_arg'] = 'arr' if combo == (2, 2) else 'arr1'
+        values['div_call_before'] = (
+            '\n' if combo == (2, 2) else f'    {writer.func_name_arr}_div_aa_f(arr1,arr2,res);\n'
+        )
+        values['div_call_after'] = (
+            f'    {writer.func_name_arr}_div_aa_f( arr1,arr2,res);\n' if combo == (2, 2) else ''
+        )
+        values['div_footer'] = '//'+ '-' * 100 + '\n'
+
+        if combo in ((1, 1), (2, 2)):
+
+            values['div_footer'] = '// ' + '-' * 100 + '\n'
+
+        elif combo == (1, 2):
+
+            values['div_footer'] += '//' + '-' * 98 + '\n'
+
+        elif combo in ((1, 3), (1, 4)):
+
+            values['div_footer'] += '//' + '-' * 55 + '\n'
+
+        # end if
+
+        start = contents.index('// 1.5. Division\n')
+        end = contents.index('// ' + '*' * 100 + '\nvoid ' + writer.func_name_arr + '_div_OR_to', start)
+        fragment = (profile / 'array_div_oo_to.c.in').read_text().format(**values)
+        return contents[:start] + fragment + contents[end:]
+
+    # end if
+
+    if wrapped and filename == 'src/python/pyoti/cython/static/number/utils.pxi':
+
+        if not contents.startswith('\n\n'):
+
+            raise ValueError('Static utils template no longer starts with the expected blank lines')
+
+        # end if
+
+        return f'def size_of_onum():\n    return sizeof({writer.type_name})\n' + contents[1:]
+
+    # end if
+
+    if combo == (1, 1) and filename == 'src/c/static/number/scalar/functions.c':
+
+        for name, derivative in (('cos', '-sin'), ('sin', 'cos')):
+
+            original = f'    der_r_{name}(num->r, 1, derivs);'
+            replacement = (
+                f'    //der_r_{name}(num->r, 1, derivs);\n'
+                f'    derivs[0] = {name}(num->r);\n'
+                f'    derivs[1] = {derivative}(num->r);'
+            )
+            contents = _replace_once(contents, original, replacement)
+
+        # end for
+
+    # end if
+
+    if combo == (1, 1) and filename == 'src/c/static/number/scalar/algebra.c':
+
+        contents = _replace_once(
+            contents,
+            '  onumm1n1_gem_ro_to( coef, &deltax_power, &res, &res);\n\n',
+            '  // onumm1n1_gem_ro_to( coef, &deltax_power, &res, &res);\n'
+            '  res.e1 = coef*deltax_power.e1 + res.e1;\n',
+        )
+        contents = _replace_once(
+            contents,
+            '  onumm1n1_gem_ro_to( coef, &deltax_power, res, res);\n',
+            '  //onumm1n1_gem_ro_to( coef, &deltax_power, res, res);\n'
+            '  res->e1 = coef*deltax_power.e1 + res->e1;\n',
+        )
+    # end if
+
+    return contents
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _replace_once(contents, original, replacement):
+    """
+    Replace one specialization site, rejecting stale or ambiguous templates.
+
+    Parameters
+    ----------
+    contents, original, replacement : str
+        Template output, expected fragment, and its specialized implementation.
+
+    Returns
+    -------
+    str
+        Updated output.
+    """
+
+    if contents.count(original) != 1:
+
+        raise ValueError('Static baseline specialization no longer matches exactly one site')
+
+    # end if
+
+    return contents.replace(original, replacement, 1)
+
+# end function
+# --------------------------------------------------------------------------------------------------------

@@ -29,7 +29,7 @@ SUBROUTINE oarr{mXnY}_sin_f(lhs,res) BIND(C)
 
 END SUBROUTINE oarr{mXnY}_sin_f
 
-SUBROUTINE oarr{mXnY}_div_aa_f(lhs,rhs,res) BIND(C)
+SUBROUTINE oarr{mXnY}_div_aa_f(lhs,rhs,res) BIND(C){division_space}
 
    IMPLICIT NONE
 
@@ -44,7 +44,7 @@ SUBROUTINE oarr{mXnY}_div_aa_f(lhs,rhs,res) BIND(C)
    CALL c_f_pointer( rhs%p_data, rhsarray, [rhs%size])
    CALL c_f_pointer( res%p_data, resarray, [res%size])
    
-   resarray = lhsarray/rhsarray
+   resarray = {division}
 
 
 END SUBROUTINE oarr{mXnY}_div_aa_f
@@ -306,6 +306,20 @@ SUBROUTINE oarr{mXnY}_pow_f(lhs,exponent,res) BIND(C)
 
 END SUBROUTINE oarr{mXnY}_pow_f
 
+SUBROUTINE oarr{mXnY}_sqrt_f(lhs,res) BIND(C)
+ 
+   IMPLICIT NONE
+ 
+   TYPE(oarr{mXnY}_t), INTENT(IN)    :: lhs 
+   TYPE(oarr{mXnY}_t), INTENT(INOUT) :: res 
+   TYPE(onum{mXnY}), POINTER :: lhsarray(:), resarray(:)
+ 
+   ! Associate the c-pointers of the C-structure to an array-like structure in fortran.
+   CALL c_f_pointer( lhs%p_data, lhsarray, [lhs%size])
+   CALL c_f_pointer( res%p_data, resarray, [res%size])
+ 
+   resarray = lhsarray**(0.5d0)
+ 
+END SUBROUTINE oarr{mXnY}_sqrt_f
 
-
-END MODULE cwrap{mXnY}
+{module_spacing}END MODULE cwrap{mXnY}

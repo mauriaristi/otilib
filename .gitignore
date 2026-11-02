@@ -40,3 +40,6 @@ src/python/pyoti/python/_version.py
 
 # Local planning documents
 plans/
+
+# Local reports (dated folders, never committed)
+reports/

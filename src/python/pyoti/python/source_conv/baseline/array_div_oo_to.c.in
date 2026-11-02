@@ -1,0 +1,15 @@
+// 1.5. Division
+extern void {arr_func}_div_aa_f({arr_type}* {div_arg}, {arr_type}* arr2, {arr_type}* res);
+// ****************************************************************************************************
+void {arr_func}_div_OO_to({arr_type}* arr1, {arr_type}* arr2, {arr_type}* res){{
+    // Perform O/O
+    uint64_t i;
+
+    // Check inputs:
+    {arr_func}_dimCheck_OO_elementwise(arr1,arr2,res);
+{div_call_before}    // // Loop for every element and add real to the oti number.
+    // for ( i = 0; i < arr1->size; i++){{
+    //     {num_func}_div_oo_to(&arr1->p_data[i], &arr2->p_data[i], &res->p_data[i]);
+    // }}
+{div_call_after}}}
+{div_footer}

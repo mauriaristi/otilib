@@ -1494,6 +1494,7 @@ inline sotinum_t soti_init(void){
 
     sotinum_t res;
 
+    res.re        = 0.0;
     res.p_im      = NULL;
     res.p_idx     = NULL;
     res.p_nnz     = NULL;

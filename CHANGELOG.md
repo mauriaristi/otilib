@@ -11,6 +11,25 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-11-02
+
+Fixes the 1.3.0 conda deployment, which failed on every platform and published no package.
+
+### Fixed
+
+- Linux Release builds failed to compile `src/c/dense/io/io.c` and `src/c/semisparse/io/io.c`:
+  under `-std=c99` glibc hides the POSIX `fseeko` / `ftello`, and GCC 14+ rejects the resulting
+  implicit declarations (older GCC only warned, and then treated the `off_t` result of `ftello` as
+  `int`, misreporting files over 2 GiB). `src/c/dense.c` and `src/c/semisparse.c` now define
+  `_POSIX_C_SOURCE 200809L` before any system header (not on Apple).
+- `soti_init()` left the real part of a `sotinum_t` uninitialized, so `soti_createEmpty()` returned
+  a number with an indeterminate real coefficient. The sparse reference in the C `moving_average`
+  tests (`c_dense_utils_test`, `c_semisparse_utils_test`) accumulated into such a number and failed
+  at `-O3` on macOS. It is now initialized to `0.0`.
+- The conda recipe's test phase could not import `examples.python.fem_twc`, used by
+  `tests/python/test_fem_twc.py`: the example is now in `test.source_files`, and the test puts the
+  repository root on `sys.path` itself instead of relying on `tests/python/run_tests.py`.
+
 ## [1.3.0] - 2026-11-02
 
 ### Added

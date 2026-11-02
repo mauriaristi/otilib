@@ -2,8 +2,17 @@
 Verify the thick-walled-cylinder FEM example against its Lamé reference solution.
 """
 
+import os
+import sys
+
 import numpy as np
 import pytest
+
+# The example lives at <repo>/examples/python; pytest only puts this directory on sys.path, so add the
+# repository root (also the layout the conda recipe's test.source_files reproduces).
+_REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if _REPO_ROOT not in sys.path:
+    sys.path.insert(0, _REPO_ROOT)
 
 pytest.importorskip("gmsh")
 

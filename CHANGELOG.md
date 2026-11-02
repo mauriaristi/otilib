@@ -11,6 +11,42 @@ header, the Fortran module, the Python package and the conda recipe. Use
 
 ## [Unreleased]
 
+Development toward 2.0.0 (`PLAN-ndarray.md`). Nothing here changes the Python API yet.
+
+### Added
+
+- n-dimensional double arrays in the real module, C only so far (`include/oti/real/ndarray.h`,
+  `src/c/real_ndarray.c`, `src/c/real/ndarray/`):
+  - `ndarr_t` descriptors (rank 0 to 32, strides in elements, possibly negative or zero) over a
+    reference-counted `nd_buffer_t` with an atomic state word, exports and a layout lock for growth;
+  - a descriptor validator, checked size arithmetic, the PEP 3118 / DLPack format table, `nd_import`
+    (zero-copy or converting), overlap queries and the `oti_view` mapping;
+  - creators (`empty`, `empty_like`, `zeros`, `ones`, `full`, `eye`, `arange`, `linspace`), strided
+    allocation (`nd_alloc_strided`, e.g. the dense SoA block layout), a checked relayout after growth
+    (`nd_set_layout`), `copy`, `reshape`, `ascontiguous`, `asfortran`, and basic views (integer, slice, newaxis, ellipsis, transpose,
+    swapaxes, squeeze, expand_dims, read-only broadcast_to and diagonal);
+  - a multi-operand strided iterator; elementwise `+ - * /`, `pow`, `maximum`, `minimum` with
+    broadcasting, scalar operands and `out=` (NumPy aliasing semantics), results in the memory
+    layout of the inputs; 30 unary math functions; `assign` and `fill`;
+  - every buffer the library allocates can grow while it is not shared.
+- Execution layer (`include/oti/core/exec.h`, `src/c/core/exec.c`): `oti_ctx` contexts with byte
+  budgets and per-thread / per-context last errors, `oti_status_string`, and `oti_serial_for` /
+  `oti_parallel_for` with fixed chunking and the lowest-failing-chunk error rule (serial and
+  OpenMP backends).
+- Library-wide status codes, `include/oti/core/status.h`.
+- C tests: `test_real_ndarray_{core,views,iter,ufunc}` and `test_exec`.
+
+### Changed
+
+- The build defines `OTI_PARALLEL_OPENMP` or `OTI_PARALLEL_SERIAL`, and refuses fast-math or
+  vector-math-library compiler flags (results must not change between builds).
+- `src/c/real_ndarray.c` and `src/c/core/exec.c` are compiled with `-ffp-contract=off` and
+  `-fno-wrapv`.
+
+### Removed
+
+- `src/c/real/array/blas_level1.c`, which nothing used.
+
 ## [1.3.1] - 2026-11-02
 
 Fixes the 1.3.0 conda deployment, which failed on every platform and published no package.

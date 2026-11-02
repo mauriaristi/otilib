@@ -37,6 +37,9 @@
 #include "real/array/gauss/functions.h"
 #include "real/array/gauss/utils.h"
 
+// n-dimensional double arrays (PLAN-ndarray.md; src/c/real_ndarray.c).
+#include "oti/real/ndarray.h"
+
 
 
 

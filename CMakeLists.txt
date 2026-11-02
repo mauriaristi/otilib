@@ -160,6 +160,22 @@ else(USE_OPENMP)
   set(CYTHON_OPENMP_COMPILE_FLAG "False")
 
 endif(USE_OPENMP)
+
+# Determinism (PLAN-ndarray-contracts.md 5.4): no fast-math and no vector math library, which would
+# change results between builds.
+foreach(_oti_v CMAKE_C_FLAGS CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELWITHDEBINFO)
+  if("${${_oti_v}}" MATCHES "-ffast-math|-Ofast|-fveclib|-mveclibabi")
+    message(FATAL_ERROR "${_oti_v} must not contain fast-math or a vector math library (contracts 5.4)")
+  endif()
+endforeach()
+
+# Execution-layer backend (PLAN-ndarray-contracts.md 5.6): OpenMP when it was found, otherwise
+# serial. A pthreads backend (Phase P) will add a third value.
+if (LINK_TARGET_OMP_C)
+  add_compile_definitions(OTI_PARALLEL_OPENMP)
+else()
+  add_compile_definitions(OTI_PARALLEL_SERIAL)
+endif()
 # -------------------------------------------------------------------------------------------------
 
 message(STATUS ${LINK_TARGET_OMP})

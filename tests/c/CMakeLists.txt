@@ -64,3 +64,23 @@ foreach(dn_test scalar soa linalg aos utils io gauss csr review)
         add_test(NAME c_dense_${dn_test}_test COMMAND test_c_dense_${dn_test})
     endif()
 endforeach()
+
+# n-dimensional real arrays (PLAN-ndarray.md, contracts section 10), written by the oracle agent:
+#   core   descriptors, state word, ownership, validator, overlap, statuses;
+#   views  basic indexing and view functions;     iter   the multi-operand iterator;
+#   ufunc  elementwise arithmetic and functions;   reduce, blas, linalg, index in later phases.
+# A test whose source is not written yet is skipped, so the tree always configures.
+foreach(nd_test core views iter ufunc reduce blas linalg index)
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_real_ndarray_${nd_test}.c")
+        add_executable(test_c_real_ndarray_${nd_test} test_real_ndarray_${nd_test}.c)
+        target_link_libraries(test_c_real_ndarray_${nd_test} oti oticwrap ${LINK_TARGET_OMP_C})
+        add_test(NAME c_real_ndarray_${nd_test}_test COMMAND test_c_real_ndarray_${nd_test})
+    endif()
+endforeach()
+
+# Execution layer: oti_ctx, oti_parallel_for, determinism (Phase X).
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_exec.c")
+    add_executable(test_c_exec test_exec.c)
+    target_link_libraries(test_c_exec oti oticwrap ${LINK_TARGET_OMP_C})
+    add_test(NAME c_exec_test COMMAND test_c_exec)
+endif()

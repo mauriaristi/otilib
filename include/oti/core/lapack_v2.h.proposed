@@ -1,0 +1,756 @@
+#ifndef OTI_CORE_LAPACK_H
+#define OTI_CORE_LAPACK_H
+
+// -------------------------------------------------------------------------------------------------------
+// PROPOSED replacement of include/oti/core/lapack.h (Phase 3; PLAN-ndarray.md decision 19;
+// PLAN-ndarray-contracts.md section 8). It is renamed to lapack.h in the change that ports the five
+// existing wrappers, removes src/fortran/core/oti_lapack.f90 and the otilapack target, and amends
+// AGENTS.md's "Calling LAPACK / BLAS" section.
+//
+// C interface to the BLAS / LAPACK routines used by otilib.
+//   - The wrappers (src/c/core/lapack.c) are C functions that call the routine through the provider
+//     table (oti_lapack_provider()). They pass every CHARACTER flag by address and, for providers
+//     with OTI_STRLEN_END_SIZE_T, its hidden length as a trailing size_t 1 (R's FCONE pattern).
+//     Providers with OTI_STRLEN_NONE (Accelerate) are called through a prototype without lengths.
+//   - Accelerate is supported through its $NEWLAPACK interface only (minimum macOS deployment target
+//     13.3). Legacy CLAPACK (name_ symbols returning int) is not supported.
+//   - Never call a vendor symbol (dgetrf_, dgetrf$NEWLAPACK, cblas_*, LAPACKE_*) and never include a
+//     vendor header (Accelerate, MKL, LAPACKE, cblas.h) anywhere else.
+//   - LP64: every integer is a 32-bit int. Check every value narrowed to int with oti_lapack_fits() /
+//     oti_lapack_fits_i64(); check byte counts of work buffers for size_t overflow before malloc.
+//   - Matrices are column-major. Pivot indices are 1-based. idamax is 1-based.
+//   - Callers never pass illegal arguments: reference XERBLA stops the process, which liboti must not
+//     allow (no exit()). Every leading dimension is >= max(1, rows) even for empty matrices (LAPACK
+//     checks it before its quick return), and the dispatchers short-circuit empty problems before
+//     any provider call. Debug builds (OTI_LAPACK_DEBUG) check the preconditions in the wrappers.
+//   - Unchanged signatures for the five existing wrappers (dgetrf, dgetrs, dtrsm, dtrmm, dgemm), so no
+//     caller changes when this header replaces lapack.h.
+// -------------------------------------------------------------------------------------------------------
+
+#include <limits.h>
+#include <stddef.h>
+#include <stdint.h>
+
+#include "oti/core/status.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// -------------------------------------------------------------------------------------------------------
+// --------------------------------------      CONSTANTS         -----------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+/**
+ * @name Provider vendors (oti_lapack_provider_t.vendor)
+ * @{
+ */
+#define OTI_LAPACK_VENDOR_UNKNOWN     0 ///< Not recognized (treated as Fortran-built, END_SIZE_T).
+#define OTI_LAPACK_VENDOR_GENERIC     1 ///< Reference / netlib or another Fortran-built LAPACK.
+#define OTI_LAPACK_VENDOR_OPENBLAS    2 ///< OpenBLAS (conda-forge's default libblas / liblapack).
+#define OTI_LAPACK_VENDOR_ACCELERATE  3 ///< Apple Accelerate ($NEWLAPACK symbols).
+#define OTI_LAPACK_VENDOR_MKL         4 ///< Intel oneMKL (later; Linux).
+#define OTI_LAPACK_VENDOR_BLIS        5 ///< BLIS / libFLAME (later).
+#define OTI_LAPACK_VENDOR_HOST        6 ///< Injected by the host (SciPy, MATLAB, Julia) through
+                                        ///< oti_lapack_provider_set().
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Hidden string-length conventions (oti_lapack_provider_t.strlen_convention)
+ * @{
+ */
+#define OTI_STRLEN_NONE        0 ///< No hidden lengths (Accelerate's $NEWLAPACK interface).
+#define OTI_STRLEN_END_SIZE_T  1 ///< One size_t per CHARACTER argument, appended after the last
+                                 ///< argument (gfortran >= 8, LLVM flang, ifx on Linux).
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name BLAS threading capabilities (oti_blas_caps())
+ * A provider has LOCAL CONTROL when any of the first three bits is set. oti_parallel_for_blas() runs
+ * batch loops in parallel with LOCAL CONTROL or OTI_BLAS_CAP_OMP_NESTED.
+ * @{
+ */
+#define OTI_BLAS_CAP_LOCAL_THREADS    0x1 ///< int set_threads_local(int): MKL mkl_set_num_threads_local,
+                                          ///< OpenBLAS openblas_set_num_threads_local (when exported).
+#define OTI_BLAS_CAP_ACCEL_THREADING  0x2 ///< Accelerate BLASSetThreading / BLASGetThreading, per thread
+                                          ///< (macOS >= 15; set only if a test call returns 0).
+#define OTI_BLAS_CAP_SERIAL_BUILD     0x4 ///< Single-threaded build (openblas_get_parallel() == 0).
+#define OTI_BLAS_CAP_OMP_NESTED       0x8 ///< An OpenMP-built OpenBLAS
+                                          ///< (openblas_get_parallel() == 2) whose omp_in_parallel
+                                          ///< resolves to the same image as liboti's, in an
+                                          ///< OTI_PARALLEL_OPENMP build: it serializes itself inside
+                                          ///< an active region, so batch loops may run in parallel.
+#define OTI_BLAS_CAP_LOCAL_CONTROL    0x7 ///< Mask of the bits that give local control.
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+// --------------------------------------      STRUCTURES        -----------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+/**
+ * @brief Generic routine pointer stored in the provider table; the wrapper casts it to the exact
+ *        prototype for the provider's integer size and string-length convention.
+ */
+typedef void (*oti_lapack_fn)(void);
+
+/**
+ * @brief The LAPACK / BLAS provider table.
+ *
+ * Append-only and versioned by struct_size. The default table is built at first use from the LAPACK
+ * linked at build time (symbol names chosen by CMake, see PLAN-ndarray-contracts.md 8.3) and probed
+ * once for threading capabilities. A host may replace it with oti_lapack_provider_set().
+ */
+typedef struct {
+    int32_t        struct_size;       ///< sizeof(oti_lapack_provider_t) of the caller.
+    int32_t        vendor;            ///< OTI_LAPACK_VENDOR_*.
+    int32_t        int_size;          ///< 4 (LP64). 8 (ILP64) is a reserved slot, rejected for now.
+    int32_t        strlen_convention; ///< OTI_STRLEN_*.
+    int32_t        caps;              ///< OTI_BLAS_CAP_* (filled by the probe; ignored on input).
+    int32_t        reserved0;         ///< Zero.
+    const char*    name;              ///< Static description, e.g. "OpenBLAS 0.3.34 (openmp)".
+    // Tier 1, existing wrappers.
+    oti_lapack_fn  dgetrf;            ///< Required.
+    oti_lapack_fn  dgetrs;            ///< Required.
+    oti_lapack_fn  dtrsm;             ///< Required.
+    oti_lapack_fn  dtrmm;             ///< Required.
+    oti_lapack_fn  dgemm;             ///< Required.
+    // Tier 1, Phase 3 BLAS.
+    oti_lapack_fn  ddot;              ///< Required.
+    oti_lapack_fn  daxpy;             ///< Required.
+    oti_lapack_fn  dscal;             ///< Required.
+    oti_lapack_fn  dnrm2;             ///< Required.
+    oti_lapack_fn  dcopy;             ///< Required.
+    oti_lapack_fn  dswap;             ///< Required.
+    oti_lapack_fn  dasum;             ///< Required.
+    oti_lapack_fn  idamax;            ///< Required.
+    oti_lapack_fn  dgemv;             ///< Required.
+    oti_lapack_fn  dger;              ///< Required.
+    oti_lapack_fn  dsyrk;             ///< Required.
+    // Tier 1, Phase 3 LAPACK.
+    oti_lapack_fn  dgesv;             ///< Required.
+    oti_lapack_fn  dgetri;            ///< Required.
+    oti_lapack_fn  dpotrf;            ///< Required.
+    oti_lapack_fn  dpotrs;            ///< Required.
+    oti_lapack_fn  dtrtrs;            ///< Required.
+    // Tier 2 (later phase; may be NULL until then).
+    oti_lapack_fn  dgeqrf;            ///< Optional.
+    oti_lapack_fn  dorgqr;            ///< Optional.
+    oti_lapack_fn  dgelsd;            ///< Optional.
+    oti_lapack_fn  dsyevd;            ///< Optional.
+    oti_lapack_fn  dgeev;             ///< Optional.
+    oti_lapack_fn  dgesdd;            ///< Optional.
+    oti_lapack_fn  reserved_fn[16];   ///< NULL; future routines.
+    // Threading control (optional; NULL when absent).
+    oti_lapack_fn  set_threads_local; ///< int (*)(int n): sets this thread's count, returns the previous.
+    oti_lapack_fn  blas_set_threading;///< int (*)(unsigned): Accelerate BLASSetThreading.
+    oti_lapack_fn  blas_get_threading;///< unsigned (*)(void): Accelerate BLASGetThreading.
+    int64_t        reserved[8];       ///< Zero.
+} oti_lapack_provider_t;
+
+/**
+ * @brief Saved BLAS threading state of one worker (oti_blas_scope_enter() / oti_blas_scope_exit()).
+ */
+typedef struct {
+    int32_t kind;   ///< 0 = nothing changed; else the OTI_BLAS_CAP_* bit used.
+    int32_t saved;  ///< Previous local value to restore.
+} oti_blas_scope_t;
+
+// -------------------------------------------------------------------------------------------------------
+// -------------------------------------    END STRUCTURES      ------------------------------------------
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Size checks
+ * @{
+ */
+
+/**
+ * @brief Tells whether a dimension fits in the 32-bit integers of the LAPACK interface (unchanged).
+ *
+ * @param[in] n Dimension (rows, columns, leading dimension or number of right-hand sides).
+ *
+ * @return 1 if n <= INT_MAX, 0 otherwise.
+ */
+static inline int oti_lapack_fits(uint64_t n){
+    return n <= (uint64_t)INT_MAX;
+}
+
+/**
+ * @brief Signed variant for ndarray sizes, strides and increments (negative increments allowed).
+ *
+ * @param[in] n Value to narrow.
+ *
+ * @return 1 if INT_MIN < n <= INT_MAX, 0 otherwise.
+ */
+static inline int oti_lapack_fits_i64(int64_t n){
+    return n > (int64_t)INT_MIN && n <= (int64_t)INT_MAX;
+}
+
+/**
+ * @brief Converts a workspace-query result (work[0] after lwork = -1) into an lwork.
+ *
+ * Rejects a non-finite or negative value; rounds up (ceil); takes max(value, min_lwork, 1); fails
+ * when the result exceeds INT_MAX. The caller still checks lwork * sizeof(double) against the
+ * context's temp budget.
+ *
+ * @param[in]  query     work[0] returned by the query.
+ * @param[in]  min_lwork Documented minimum of the routine for these sizes.
+ * @param[out] lwork     Workspace length to allocate and pass.
+ *
+ * @return OTI_OK, or OTI_ERR_SIZE.
+ */
+int oti_lapack_lwork(double query, int64_t min_lwork, int* lwork);
+
+/**
+ * @brief Largest value the dispatchers narrow to int: INT_MAX, or the test limit.
+ *
+ * The ndarray dispatchers check every narrowed value against this (after oti_lapack_fits_i64()), so
+ * that the LP64 boundary paths are testable without huge allocations.
+ *
+ * @return The current limit.
+ */
+int64_t oti_lapack_int_limit(void);
+
+/**
+ * @brief Test hook: lowers the dispatchers' int limit (tests/c only); 0 restores INT_MAX.
+ *
+ * @param[in] limit New limit, 1 .. INT_MAX, or 0.
+ */
+void oti_lapack_test_set_int_limit(int64_t limit);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Provider table
+ * @{
+ */
+
+/**
+ * @brief The current provider (default table on first use; thread-safe one-time initialization and
+ *        capability probe).
+ *
+ * The probe locates the image of the linked dgemm with dladdr(). If it lies inside
+ * Accelerate.framework, vendor and convention become OTI_LAPACK_VENDOR_ACCELERATE / OTI_STRLEN_NONE
+ * whatever the build-time value; otherwise the build-time value stays (a static LAPACK reports
+ * liboti itself). It then reads the optional thread-control symbols from that image
+ * (dlopen(path, RTLD_NOLOAD) + dlsym(), RTLD_DEFAULT as fallback).
+ *
+ * @return Pointer to the library's table. Never NULL. Not owned by the caller.
+ */
+const oti_lapack_provider_t* oti_lapack_provider(void);
+
+/**
+ * @brief Replaces the provider (host injection), or restores the default with NULL.
+ *
+ * The table is copied; caps is recomputed by probing set_threads_local / blas_*_threading. Must be
+ * called while no otilib call is running (Python: at import). One table per copy of liboti (one per
+ * Cython module until the shared liboti exists).
+ *
+ * @param[in] p New table, or NULL for the default.
+ *
+ * @return OTI_OK; OTI_ERR_ARGUMENT (struct_size too small, int_size != 4, unknown strlen convention,
+ *         a required slot NULL).
+ */
+int oti_lapack_provider_set(const oti_lapack_provider_t* p);
+
+/**
+ * @brief Threading capabilities of the current provider.
+ *
+ * @return OTI_BLAS_CAP_* bits.
+ */
+int32_t oti_blas_caps(void);
+
+/**
+ * @brief Makes BLAS single-threaded on the calling worker thread, saving the previous setting.
+ *
+ * LOCAL_THREADS: saved = set_threads_local(1). ACCEL_THREADING: saved = BLASGetThreading(), then
+ * BLASSetThreading(SINGLE_THREADED); a non-zero return gives kind 0 (nothing to restore).
+ * SERIAL_BUILD and OMP_NESTED: nothing to do (returns 1). Otherwise kind = 0 and the caller must not
+ * run BLAS-bearing work concurrently (oti_parallel_for_blas() then runs serially).
+ *
+ * @param[out] scope Saved state; pass it to oti_blas_scope_exit() on every path.
+ *
+ * @return 1 if BLAS is now single-threaded on this thread, 0 if that cannot be ensured.
+ */
+int oti_blas_scope_enter(oti_blas_scope_t* scope);
+
+/**
+ * @brief Restores the setting saved by oti_blas_scope_enter() (MKL requires this on every path).
+ *
+ * @param[in,out] scope Saved state; reset to kind 0.
+ */
+void oti_blas_scope_exit(oti_blas_scope_t* scope);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Existing wrappers (signatures unchanged)
+ * @{
+ */
+
+/**
+ * @brief LU factorization with partial pivoting, A = P L U (LAPACK dgetrf).
+ *
+ * @param[in]     m    Rows of a.
+ * @param[in]     n    Columns of a.
+ * @param[in,out] a    Column-major matrix, overwritten by L (unit diagonal not stored) and U.
+ * @param[in]     lda  Leading dimension of a (>= max(1, m)).
+ * @param[out]    ipiv Pivot indices (1-based), length min(m, n).
+ * @param[out]    info 0; i > 0 if U(i, i) is exactly zero (singular; factorization completed).
+ */
+void oti_dgetrf(int m, int n, double* a, int lda, int* ipiv, int* info);
+
+/**
+ * @brief Solves A X = B ('N') or A^T X = B ('T') with the factors of oti_dgetrf (LAPACK dgetrs).
+ *
+ * @param[in]     trans 'N' or 'T'.
+ * @param[in]     n     Order of a.
+ * @param[in]     nrhs  Columns of b.
+ * @param[in]     a     Factors from oti_dgetrf.
+ * @param[in]     lda   Leading dimension of a.
+ * @param[in]     ipiv  Pivots from oti_dgetrf.
+ * @param[in,out] b     Right-hand sides on entry, solutions on exit.
+ * @param[in]     ldb   Leading dimension of b (>= max(1, n)).
+ * @param[out]    info  0.
+ */
+void oti_dgetrs(char trans, int n, int nrhs, const double* a, int lda, const int* ipiv,
+                double* b, int ldb, int* info);
+
+/**
+ * @brief Triangular solve with multiple right-hand sides (BLAS dtrsm).
+ *
+ * B = alpha op(A)^-1 B (side 'L') or B = alpha B op(A)^-1 (side 'R'), op(A) = A ('N') or A^T ('T').
+ *
+ * @param[in]     side   'L' or 'R'.
+ * @param[in]     uplo   'L' or 'U'.
+ * @param[in]     transa 'N' or 'T'.
+ * @param[in]     diag   'U' (unit diagonal, not referenced) or 'N'.
+ * @param[in]     m      Rows of b.
+ * @param[in]     n      Columns of b.
+ * @param[in]     alpha  Scalar.
+ * @param[in]     a      Triangular matrix of order m (side 'L') or n (side 'R').
+ * @param[in]     lda    Leading dimension of a.
+ * @param[in,out] b      Right-hand sides on entry, solutions on exit.
+ * @param[in]     ldb    Leading dimension of b (>= max(1, m)).
+ */
+void oti_dtrsm(char side, char uplo, char transa, char diag, int m, int n, double alpha,
+               const double* a, int lda, double* b, int ldb);
+
+/**
+ * @brief Triangular matrix product (BLAS dtrmm): B = alpha op(A) B or B = alpha B op(A).
+ *
+ * @param[in]     side   'L' or 'R'.
+ * @param[in]     uplo   'L' or 'U'.
+ * @param[in]     transa 'N' or 'T'.
+ * @param[in]     diag   'U' or 'N'.
+ * @param[in]     m      Rows of b.
+ * @param[in]     n      Columns of b.
+ * @param[in]     alpha  Scalar.
+ * @param[in]     a      Triangular matrix.
+ * @param[in]     lda    Leading dimension of a.
+ * @param[in,out] b      Input on entry, product on exit.
+ * @param[in]     ldb    Leading dimension of b (>= max(1, m)).
+ */
+void oti_dtrmm(char side, char uplo, char transa, char diag, int m, int n, double alpha,
+               const double* a, int lda, double* b, int ldb);
+
+/**
+ * @brief General matrix product (BLAS dgemm): C = alpha op(A) op(B) + beta C.
+ *
+ * @param[in]     transa 'N' or 'T'.
+ * @param[in]     transb 'N' or 'T'.
+ * @param[in]     m      Rows of op(A) and C.
+ * @param[in]     n      Columns of op(B) and C.
+ * @param[in]     k      Columns of op(A), rows of op(B).
+ * @param[in]     alpha  Scalar.
+ * @param[in]     a      op(A) is m x k.
+ * @param[in]     lda    >= max(1, m) for 'N', >= max(1, k) for 'T'.
+ * @param[in]     b      op(B) is k x n.
+ * @param[in]     ldb    >= max(1, k) for 'N', >= max(1, n) for 'T'.
+ * @param[in]     beta   Scalar; 0 means C is not read.
+ * @param[in,out] c      m x n.
+ * @param[in]     ldc    >= max(1, m).
+ */
+void oti_dgemm(char transa, char transb, int m, int n, int k, double alpha, const double* a,
+               int lda, const double* b, int ldb, double beta, double* c, int ldc);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name BLAS level 1 (Phase 3)
+ * Negative increments follow the reference BLAS: x points at the LOWEST address of the vector.
+ * @{
+ */
+
+/**
+ * @brief Dot product (BLAS ddot).
+ *
+ * @param[in] n    Length.
+ * @param[in] x    Vector.
+ * @param[in] incx Increment (any sign, non-zero).
+ * @param[in] y    Vector.
+ * @param[in] incy Increment (any sign, non-zero).
+ *
+ * @return sum x_i y_i (0 for n <= 0).
+ */
+double oti_ddot(int n, const double* x, int incx, const double* y, int incy);
+
+/**
+ * @brief y = alpha x + y (BLAS daxpy).
+ *
+ * @param[in]     n     Length.
+ * @param[in]     alpha Scalar.
+ * @param[in]     x     Vector.
+ * @param[in]     incx  Increment (any sign, non-zero).
+ * @param[in,out] y     Vector.
+ * @param[in]     incy  Increment (any sign, non-zero).
+ */
+void oti_daxpy(int n, double alpha, const double* x, int incx, double* y, int incy);
+
+/**
+ * @brief x = alpha x (BLAS dscal).
+ *
+ * @param[in]     n     Length.
+ * @param[in]     alpha Scalar.
+ * @param[in,out] x     Vector.
+ * @param[in]     incx  Increment, > 0.
+ */
+void oti_dscal(int n, double alpha, double* x, int incx);
+
+/**
+ * @brief Euclidean norm (BLAS dnrm2).
+ *
+ * @param[in] n    Length.
+ * @param[in] x    Vector.
+ * @param[in] incx Increment, > 0.
+ *
+ * @return ||x||_2 (0 for n <= 0).
+ */
+double oti_dnrm2(int n, const double* x, int incx);
+
+/**
+ * @brief y = x (BLAS dcopy).
+ *
+ * @param[in]  n    Length.
+ * @param[in]  x    Vector.
+ * @param[in]  incx Increment (any sign, non-zero).
+ * @param[out] y    Vector, not overlapping x.
+ * @param[in]  incy Increment (any sign, non-zero).
+ */
+void oti_dcopy(int n, const double* x, int incx, double* y, int incy);
+
+/**
+ * @brief Swaps x and y (BLAS dswap).
+ *
+ * @param[in]     n    Length.
+ * @param[in,out] x    Vector.
+ * @param[in]     incx Increment (any sign, non-zero).
+ * @param[in,out] y    Vector, not overlapping x.
+ * @param[in]     incy Increment (any sign, non-zero).
+ */
+void oti_dswap(int n, double* x, int incx, double* y, int incy);
+
+/**
+ * @brief Sum of absolute values (BLAS dasum).
+ *
+ * @param[in] n    Length.
+ * @param[in] x    Vector.
+ * @param[in] incx Increment, > 0.
+ *
+ * @return sum |x_i| (0 for n <= 0).
+ */
+double oti_dasum(int n, const double* x, int incx);
+
+/**
+ * @brief Index of the first element of largest |x_i| (BLAS idamax).
+ *
+ * @param[in] n    Length.
+ * @param[in] x    Vector.
+ * @param[in] incx Increment, > 0.
+ *
+ * @return 1-based index; 0 when n < 1 or incx <= 0.
+ */
+int oti_idamax(int n, const double* x, int incx);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name BLAS level 2 and 3 (Phase 3)
+ * @{
+ */
+
+/**
+ * @brief y = alpha op(A) x + beta y (BLAS dgemv).
+ *
+ * @param[in]     trans 'N' or 'T'.
+ * @param[in]     m     Rows of A.
+ * @param[in]     n     Columns of A.
+ * @param[in]     alpha Scalar.
+ * @param[in]     a     m x n matrix.
+ * @param[in]     lda   >= max(1, m).
+ * @param[in]     x     Vector of length n ('N') or m ('T').
+ * @param[in]     incx  Increment, > 0.
+ * @param[in]     beta  Scalar; 0 means y is not read.
+ * @param[in,out] y     Vector of length m ('N') or n ('T').
+ * @param[in]     incy  Increment, > 0.
+ */
+void oti_dgemv(char trans, int m, int n, double alpha, const double* a, int lda, const double* x,
+               int incx, double beta, double* y, int incy);
+
+/**
+ * @brief A = alpha x y^T + A (BLAS dger).
+ *
+ * @param[in]     m     Rows of A.
+ * @param[in]     n     Columns of A.
+ * @param[in]     alpha Scalar.
+ * @param[in]     x     Vector of length m.
+ * @param[in]     incx  Increment, > 0.
+ * @param[in]     y     Vector of length n.
+ * @param[in]     incy  Increment, > 0.
+ * @param[in,out] a     m x n matrix.
+ * @param[in]     lda   >= max(1, m).
+ */
+void oti_dger(int m, int n, double alpha, const double* x, int incx, const double* y, int incy,
+              double* a, int lda);
+
+/**
+ * @brief C = alpha A A^T + beta C ('N') or alpha A^T A + beta C ('T'), one triangle (BLAS dsyrk).
+ *
+ * @param[in]     uplo  'U' or 'L': the triangle of C that is referenced and updated.
+ * @param[in]     trans 'N' (A is n x k) or 'T' (A is k x n).
+ * @param[in]     n     Order of C.
+ * @param[in]     k     Inner dimension.
+ * @param[in]     alpha Scalar.
+ * @param[in]     a     Matrix.
+ * @param[in]     lda   >= max(1, n) for 'N', >= max(1, k) for 'T'.
+ * @param[in]     beta  Scalar; 0 means C is not read.
+ * @param[in,out] c     n x n matrix.
+ * @param[in]     ldc   >= max(1, n).
+ */
+void oti_dsyrk(char uplo, char trans, int n, int k, double alpha, const double* a, int lda,
+               double beta, double* c, int ldc);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name LAPACK tier 1 (Phase 3)
+ * @{
+ */
+
+/**
+ * @brief Solves A X = B by LU (LAPACK dgesv); A and B are overwritten.
+ *
+ * @param[in]     n    Order of A.
+ * @param[in]     nrhs Columns of B.
+ * @param[in,out] a    n x n; overwritten by the factors.
+ * @param[in]     lda  >= max(1, n).
+ * @param[out]    ipiv Pivots (1-based), length n.
+ * @param[in,out] b    n x nrhs; overwritten by the solution.
+ * @param[in]     ldb  >= max(1, n).
+ * @param[out]    info 0; i > 0 if U(i, i) is exactly zero (no solution computed).
+ */
+void oti_dgesv(int n, int nrhs, double* a, int lda, int* ipiv, double* b, int ldb, int* info);
+
+/**
+ * @brief Inverse from the LU factors (LAPACK dgetri).
+ *
+ * @param[in]     n     Order.
+ * @param[in,out] a     Factors from oti_dgetrf on entry, the inverse on exit.
+ * @param[in]     lda   >= max(1, n).
+ * @param[in]     ipiv  Pivots from oti_dgetrf.
+ * @param[out]    work  Workspace of length max(1, lwork); work[0] is the optimal lwork on a query.
+ * @param[in]     lwork >= max(1, n), or -1 for a workspace query.
+ * @param[out]    info  0; i > 0 if U(i, i) is exactly zero.
+ */
+void oti_dgetri(int n, double* a, int lda, const int* ipiv, double* work, int lwork, int* info);
+
+/**
+ * @brief Cholesky factorization (LAPACK dpotrf).
+ *
+ * @param[in]     uplo 'U' (A = U^T U) or 'L' (A = L L^T).
+ * @param[in]     n    Order.
+ * @param[in,out] a    The chosen triangle on entry, the factor on exit.
+ * @param[in]     lda  >= max(1, n).
+ * @param[out]    info 0; i > 0 if the leading minor of order i is not positive definite.
+ */
+void oti_dpotrf(char uplo, int n, double* a, int lda, int* info);
+
+/**
+ * @brief Solves A X = B from a Cholesky factor (LAPACK dpotrs).
+ *
+ * @param[in]     uplo 'U' or 'L', as given to oti_dpotrf.
+ * @param[in]     n    Order.
+ * @param[in]     nrhs Columns of B.
+ * @param[in]     a    Factor from oti_dpotrf.
+ * @param[in]     lda  >= max(1, n).
+ * @param[in,out] b    Right-hand sides on entry, solutions on exit.
+ * @param[in]     ldb  >= max(1, n).
+ * @param[out]    info 0.
+ */
+void oti_dpotrs(char uplo, int n, int nrhs, const double* a, int lda, double* b, int ldb, int* info);
+
+/**
+ * @brief Triangular solve op(A) X = B with a singularity check (LAPACK dtrtrs).
+ *
+ * @param[in]     uplo  'U' or 'L'.
+ * @param[in]     trans 'N' or 'T'.
+ * @param[in]     diag  'N' or 'U' (unit).
+ * @param[in]     n     Order.
+ * @param[in]     nrhs  Columns of B.
+ * @param[in]     a     Triangular matrix.
+ * @param[in]     lda   >= max(1, n).
+ * @param[in,out] b     Right-hand sides on entry, solutions on exit.
+ * @param[in]     ldb   >= max(1, n).
+ * @param[out]    info  0; i > 0 if A(i, i) is exactly zero (no solution computed).
+ */
+void oti_dtrtrs(char uplo, char trans, char diag, int n, int nrhs, const double* a, int lda,
+                double* b, int ldb, int* info);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name LAPACK tier 2 (later phase; signatures fixed now, slots optional until then)
+ * Each needs a workspace query (lwork = -1, and liwork / iwork where present) converted with
+ * oti_lapack_lwork(); info > 0 maps to OTI_ERR_CONVERGE for dsyevd, dgeev and dgesdd, and to the
+ * rank / singular cases documented by LAPACK for dgelsd.
+ * @{
+ */
+
+/**
+ * @brief QR factorization (LAPACK dgeqrf).
+ *
+ * @param[in]     m     Rows.
+ * @param[in]     n     Columns.
+ * @param[in,out] a     Matrix on entry; R and the reflectors on exit.
+ * @param[in]     lda   >= max(1, m).
+ * @param[out]    tau   min(m, n) scalar factors.
+ * @param[out]    work  Workspace.
+ * @param[in]     lwork Workspace length, or -1 for a query.
+ * @param[out]    info  0.
+ */
+void oti_dgeqrf(int m, int n, double* a, int lda, double* tau, double* work, int lwork, int* info);
+
+/**
+ * @brief Forms Q from dgeqrf's reflectors (LAPACK dorgqr).
+ *
+ * @param[in]     m     Rows of Q.
+ * @param[in]     n     Columns of Q (m >= n >= 0).
+ * @param[in]     k     Reflectors (n >= k >= 0).
+ * @param[in,out] a     Reflectors on entry, Q on exit.
+ * @param[in]     lda   >= max(1, m).
+ * @param[in]     tau   k scalar factors.
+ * @param[out]    work  Workspace.
+ * @param[in]     lwork Workspace length, or -1 for a query.
+ * @param[out]    info  0.
+ */
+void oti_dorgqr(int m, int n, int k, double* a, int lda, const double* tau, double* work, int lwork,
+                int* info);
+
+/**
+ * @brief Minimum-norm least squares by SVD, divide and conquer (LAPACK dgelsd).
+ *
+ * @param[in]     m     Rows of A.
+ * @param[in]     n     Columns of A.
+ * @param[in]     nrhs  Columns of B.
+ * @param[in,out] a     Destroyed.
+ * @param[in]     lda   >= max(1, m).
+ * @param[in,out] b     max(m, n) x nrhs; the solution on exit.
+ * @param[in]     ldb   >= max(1, m, n).
+ * @param[out]    s     min(m, n) singular values.
+ * @param[in]     rcond Relative cut-off for the rank (< 0: machine precision).
+ * @param[out]    rank  Effective rank.
+ * @param[out]    work  Workspace.
+ * @param[in]     lwork Workspace length, or -1 for a query.
+ * @param[out]    iwork Integer workspace (its required length is returned in iwork[0] on a query).
+ * @param[out]    info  0; i > 0 if the SVD did not converge.
+ */
+void oti_dgelsd(int m, int n, int nrhs, double* a, int lda, double* b, int ldb, double* s,
+                double rcond, int* rank, double* work, int lwork, int* iwork, int* info);
+
+/**
+ * @brief Symmetric eigenvalues and optionally eigenvectors, divide and conquer (LAPACK dsyevd).
+ *
+ * @param[in]     jobz   'N' (values) or 'V' (values and vectors).
+ * @param[in]     uplo   'U' or 'L'.
+ * @param[in]     n      Order.
+ * @param[in,out] a      The chosen triangle on entry; eigenvectors on exit ('V').
+ * @param[in]     lda    >= max(1, n).
+ * @param[out]    w      n eigenvalues, ascending.
+ * @param[out]    work   Workspace.
+ * @param[in]     lwork  Workspace length, or -1 for a query.
+ * @param[out]    iwork  Integer workspace.
+ * @param[in]     liwork Integer workspace length, or -1 for a query.
+ * @param[out]    info   0; i > 0 if the algorithm failed to converge.
+ */
+void oti_dsyevd(char jobz, char uplo, int n, double* a, int lda, double* w, double* work, int lwork,
+                int* iwork, int liwork, int* info);
+
+/**
+ * @brief General eigenvalues and optionally left / right eigenvectors (LAPACK dgeev).
+ *
+ * @param[in]     jobvl 'N' or 'V'.
+ * @param[in]     jobvr 'N' or 'V'.
+ * @param[in]     n     Order.
+ * @param[in,out] a     Destroyed.
+ * @param[in]     lda   >= max(1, n).
+ * @param[out]    wr    Real parts of the eigenvalues.
+ * @param[out]    wi    Imaginary parts of the eigenvalues.
+ * @param[out]    vl    Left eigenvectors ('V').
+ * @param[in]     ldvl  >= 1, >= n for 'V'.
+ * @param[out]    vr    Right eigenvectors ('V').
+ * @param[in]     ldvr  >= 1, >= n for 'V'.
+ * @param[out]    work  Workspace.
+ * @param[in]     lwork Workspace length, or -1 for a query.
+ * @param[out]    info  0; i > 0 if the QR algorithm failed.
+ */
+void oti_dgeev(char jobvl, char jobvr, int n, double* a, int lda, double* wr, double* wi,
+               double* vl, int ldvl, double* vr, int ldvr, double* work, int lwork, int* info);
+
+/**
+ * @brief Singular value decomposition, divide and conquer (LAPACK dgesdd).
+ *
+ * @param[in]     jobz  'A', 'S', 'O' or 'N'.
+ * @param[in]     m     Rows.
+ * @param[in]     n     Columns.
+ * @param[in,out] a     Destroyed (or U / V^T with 'O').
+ * @param[in]     lda   >= max(1, m).
+ * @param[out]    s     min(m, n) singular values, descending.
+ * @param[out]    u     Left singular vectors.
+ * @param[in]     ldu   Leading dimension of u.
+ * @param[out]    vt    Right singular vectors, transposed.
+ * @param[in]     ldvt  Leading dimension of vt.
+ * @param[out]    work  Workspace.
+ * @param[in]     lwork Workspace length, or -1 for a query.
+ * @param[out]    iwork Integer workspace, 8 * min(m, n).
+ * @param[out]    info  0; i > 0 if the bidiagonal SVD did not converge.
+ */
+void oti_dgesdd(char jobz, int m, int n, double* a, int lda, double* s, double* u, int ldu,
+                double* vt, int ldvt, double* work, int lwork, int* iwork, int* info);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

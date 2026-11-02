@@ -220,6 +220,8 @@ endif()
 
 add_library (oti    c/version.c
                     c/core.c
+                    c/core/exec.c
+                    c/real_ndarray.c
                     c/real.c
                     c/dense.c
                     c/sparse.c
@@ -227,6 +229,13 @@ add_library (oti    c/version.c
                     c/static.c
                     c/fem.c
                     )
+
+# FMA contraction fixed per build (PLAN-ndarray-contracts.md S12): off on the ndarray unity and the
+# execution layer only, so macOS and Linux round the same way.
+# -fno-wrapv: the project compiles with -fwrapv, which hides signed overflow from UBSan; the ndarray
+# code checks its arithmetic (contracts 2.3) and must not rely on wrapping (critic W1 finding 14).
+set_source_files_properties(c/real_ndarray.c c/core/exec.c
+                            PROPERTIES COMPILE_OPTIONS "-ffp-contract=off;-fno-wrapv")
 
 
                     

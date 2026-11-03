@@ -49,6 +49,7 @@ cdef object __sub__FX__(dmatfe Flhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Fres = out
       fedarr_sub_FR_to( &Flhs.arr, &Rrhs.arr, &Fres.arr )
@@ -82,6 +83,7 @@ cdef object __sub__RX__(dmat Rlhs, object rhs, object out = None):
   PORPUSE: Subtraction between dmat and object.
 
   """
+  Rlhs._sync()
   #***************************************************************************************************
 
   # Scalar types:
@@ -118,8 +120,10 @@ cdef object __sub__RX__(dmat Rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sub_RR_to( &Rlhs.arr, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_sub_RR( &Rlhs.arr, &Rrhs.arr )
@@ -129,6 +133,7 @@ cdef object __sub__RX__(dmat Rlhs, object rhs, object out = None):
     rrhs = rhs
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sub_Rr_to( &Rlhs.arr, rrhs, &Rres.arr )
     else:
       cRres = darr_sub_Rr( &Rlhs.arr, rrhs )
@@ -265,8 +270,10 @@ cdef object __sub__rX__(coeff_t rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sub_rR_to( rlhs, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_sub_rR( rlhs, &Rrhs.arr )

@@ -452,6 +452,11 @@ if (OTI_BUILD_BENCH)
   add_subdirectory (tools/bench "${PROJECT_BINARY_DIR}/tools/bench")
 endif (OTI_BUILD_BENCH)
 
+option (OTI_BUILD_STATIC_BLOCK "Build the static block-kernel harness in tools/static_block" OFF)
+if (OTI_BUILD_STATIC_BLOCK)
+  add_subdirectory (tools/static_block "${PROJECT_BINARY_DIR}/tools/static_block")
+endif (OTI_BUILD_STATIC_BLOCK)
+
 # should we do the Fortran part too?
 option (GENERATE_FORTRAN
         "Generate the Fortran library wrapper" OFF) 

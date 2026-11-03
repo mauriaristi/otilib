@@ -54,6 +54,7 @@ cdef __dot_product_FX(feomatm3n1 Flhs, object rhs, object out = None):
     # end if 
   elif trhs is dmat:    # FR
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
 
       fres = out
@@ -129,6 +130,7 @@ cdef __dot_product_OX( omatm3n1 Olhs, object rhs, object out = None):
     # end if 
   elif trhs is dmat:    # OR
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
 
       ores = out
@@ -157,6 +159,7 @@ cdef __dot_product_RX( dmat Rlhs, object rhs, object out = None):
   PURPOSE:  Vector dot product between feomatm3n1 and other array.
 
   """
+  Rlhs._sync()
   #***************************************************************************************************
   cdef omatm3n1      Orhs, Ores
   cdef dmat       Rrhs, Rres

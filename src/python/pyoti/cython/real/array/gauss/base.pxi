@@ -885,6 +885,7 @@ cdef class dmatfe:
     elif ( tlhs  == dmat ):
 
       Dlhs = self
+      Dlhs._sync()
       Frhs = other
 
       res = fedarr_sum_RF(&Dlhs.arr,&Frhs.arr)
@@ -893,6 +894,7 @@ cdef class dmatfe:
 
       Flhs = self
       Drhs = other
+      Drhs._sync()
 
       res = fedarr_sum_RF(&Drhs.arr,&Flhs.arr)
 
@@ -970,6 +972,7 @@ cdef class dmatfe:
     elif ( tlhs  == dmat ):
 
       Dlhs = self
+      Dlhs._sync()
       Frhs = other
 
       res = fedarr_sub_RF(&Dlhs.arr,&Frhs.arr)
@@ -978,6 +981,7 @@ cdef class dmatfe:
 
       Flhs = self
       Drhs = other
+      Drhs._sync()
 
       res = fedarr_sub_FR(&Flhs.arr,&Drhs.arr)
     
@@ -1054,6 +1058,7 @@ cdef class dmatfe:
     elif ( tlhs  == dmat ):
 
       Dlhs = self
+      Dlhs._sync()
       Frhs = other
 
       res = fedarr_mul_RF(&Dlhs.arr,&Frhs.arr)
@@ -1062,6 +1067,7 @@ cdef class dmatfe:
 
       Flhs = self
       Drhs = other
+      Drhs._sync()
 
       res = fedarr_mul_RF(&Drhs.arr,&Flhs.arr)
     
@@ -1139,6 +1145,7 @@ cdef class dmatfe:
     elif ( tlhs  == dmat ): # RF
 
       Dlhs = self
+      Dlhs._sync()
       Frhs = other
 
       res = fedarr_div_RF(&Dlhs.arr,&Frhs.arr)
@@ -1147,6 +1154,7 @@ cdef class dmatfe:
 
       Flhs = self
       Drhs = other
+      Drhs._sync()
 
       res = fedarr_div_FR(&Flhs.arr,&Drhs.arr)
 
@@ -1226,6 +1234,7 @@ cdef class dmatfe:
     elif trhs is dmat:
 
       Rrhs = rhs
+      Rrhs._sync()
       fedarr_set_R( &Rrhs.arr, &self.arr)   
 
     elif trhs is dmatfe:

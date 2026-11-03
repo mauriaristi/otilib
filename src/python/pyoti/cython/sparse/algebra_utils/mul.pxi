@@ -75,6 +75,7 @@ cdef object __mul__FX__(matsofe Flhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Fres = out
       fearrso_mul_RF_to( &Rrhs.arr, &Flhs.arr, &Fres.arr, dhl )
@@ -170,6 +171,7 @@ cdef object __mul__OX__(matso Olhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Ores = out
       arrso_mul_RO_to( &Rrhs.arr, &Olhs.arr, &Ores.arr, dhl )
@@ -203,6 +205,7 @@ cdef object __mul__RX__(dmat Rlhs, object rhs, object out = None):
   PORPUSE: Multiplication between dmat and object.
 
   """
+  Rlhs._sync()
   #***************************************************************************************************
 
   global dhl
@@ -256,8 +259,10 @@ cdef object __mul__RX__(dmat Rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_mul_RR_to( &Rlhs.arr, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_mul_RR( &Rlhs.arr, &Rrhs.arr )
@@ -267,6 +272,7 @@ cdef object __mul__RX__(dmat Rlhs, object rhs, object out = None):
     rrhs = rhs
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_mul_rR_to( rrhs, &Rlhs.arr, &Rres.arr )
     else:
       cRres = darr_mul_rR( rrhs, &Rlhs.arr )
@@ -541,8 +547,10 @@ cdef object __mul__rX__(coeff_t rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_mul_rR_to( rlhs, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_mul_rR( rlhs, &Rrhs.arr )

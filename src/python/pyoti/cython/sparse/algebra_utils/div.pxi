@@ -75,6 +75,7 @@ cdef object __div__FX__(matsofe Flhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Fres = out
       fearrso_div_FR_to( &Flhs.arr, &Rrhs.arr, &Fres.arr, dhl )
@@ -170,6 +171,7 @@ cdef object __div__OX__(matso Olhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Ores = out
       arrso_div_OR_to( &Olhs.arr, &Rrhs.arr, &Ores.arr, dhl )
@@ -203,6 +205,7 @@ cdef object __div__RX__(dmat Rlhs, object rhs, object out = None):
   PORPUSE: Division between dmat and object.
 
   """
+  Rlhs._sync()
   #***************************************************************************************************
 
   global dhl
@@ -256,8 +259,10 @@ cdef object __div__RX__(dmat Rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_div_RR_to( &Rlhs.arr, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_div_RR( &Rlhs.arr, &Rrhs.arr )
@@ -267,6 +272,7 @@ cdef object __div__RX__(dmat Rlhs, object rhs, object out = None):
     rrhs = rhs
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_div_Rr_to( &Rlhs.arr, rrhs, &Rres.arr )
     else:
       cRres = darr_div_Rr( &Rlhs.arr, rrhs )
@@ -541,8 +547,10 @@ cdef object __div__rX__(coeff_t rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_div_rR_to( rlhs, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_div_rR( rlhs, &Rrhs.arr )

@@ -23,3 +23,9 @@ When changing the static generators, update the active profile templates too. A 
 of the supported combinations also requires updating the aggregate lists, the driver,
 and (if necessary) the declaration-order profile selection. Do not normalize historical
 formatting until the checked-in generated output is deliberately regenerated in a later phase.
+
+Layout asserts (Phase 10 item 2) are emitted for every profile, not only the checked-in one:
+`_layout_asserts` in `cmod_writer.py` fills the `{num_layout_asserts}`, `{fenum_layout_asserts}`
+and `{fearr_layout_asserts}` placeholders of the three `structures.h` templates, and
+`_strip_layout_asserts` removes the delimited block before a header becomes Cython declarations, so
+the `.pxi` output does not change.

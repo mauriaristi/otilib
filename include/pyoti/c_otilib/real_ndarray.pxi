@@ -424,16 +424,32 @@ cdef extern from "oti/real/ndarray.h" nogil:
         int64_t n
         int32_t trans
         int32_t info
+        int64_t nbatch
+        int* infos
 
     void nd_lu_init(nd_lu_t* lu)
     int nd_lu_factor(oti_ctx* ctx, ndarr_t* a, int32_t overwrite, nd_lu_t* lu)
     int nd_lu_solve(oti_ctx* ctx, const nd_lu_t* lu, const ndarr_t* b, ndarr_t* res)
+    int nd_lu_solve_to(oti_ctx* ctx, const nd_lu_t* lu, const ndarr_t* b, ndarr_t* out)
     void nd_lu_free(nd_lu_t* lu)
     int nd_solve(oti_ctx* ctx, const ndarr_t* a, const ndarr_t* b, ndarr_t* res)
+    int nd_solve_to(oti_ctx* ctx, const ndarr_t* a, const ndarr_t* b, ndarr_t* out)
     int nd_inv(oti_ctx* ctx, const ndarr_t* a, ndarr_t* res)
     int nd_det(oti_ctx* ctx, const ndarr_t* a, ndarr_t* res)
     int nd_slogdet(oti_ctx* ctx, const ndarr_t* a, ndarr_t* sign, ndarr_t* logabs)
     int nd_cholesky(oti_ctx* ctx, const ndarr_t* a, int32_t lower, ndarr_t* res)
     int nd_cho_solve(oti_ctx* ctx, const ndarr_t* c, int32_t lower, const ndarr_t* b, ndarr_t* res)
+    int nd_cho_solve_to(oti_ctx* ctx, const ndarr_t* c, int32_t lower, const ndarr_t* b, ndarr_t* out)
     int nd_solve_triangular(oti_ctx* ctx, const ndarr_t* t, const ndarr_t* b, int32_t lower,
                             int32_t trans, int32_t unit_diagonal, ndarr_t* res)
+    int nd_solve_triangular_to(oti_ctx* ctx, const ndarr_t* t, const ndarr_t* b, int32_t lower,
+                               int32_t trans, int32_t unit_diagonal, ndarr_t* out)
+
+    # real/ndarray/compat_darr.h
+    cdef enum:
+        ND_DARR_BORROW
+        ND_DARR_RETAIN
+        ND_DARR_TAKE
+
+    int nd_from_darr(oti_ctx* ctx, darr_t* src, int32_t mode, ndarr_t* out)
+    int nd_as_darr(const ndarr_t* a, int32_t writeable, darr_t* out)

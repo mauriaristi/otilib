@@ -187,9 +187,13 @@ cdef bint _nd_is_writeable(object obj):
 
 
 # *****************************************************************************************************
-cdef int _nd_parse_index(object key, nd_index_t* idx, int maxn) except -1:
+cdef int _nd_parse_index(object key, nd_index_t* idx, int maxn, list holders = None) except -1:
     """
-    Fill the index items of a basic-indexing key: ints, slices, None and Ellipsis.
+    Fill the index items of a key: ints, slices, None and Ellipsis (basic indexing), plus, when
+    ``holders`` is a list, index arrays: ndarrays and lists (integer -> OTI_I64 index array, bool ->
+    OTI_U8 mask; floats are passed as OTI_F64 so that the DTYPE status can be tested) and Python
+    bool scalars (a 0-d mask). The imported arrays are appended to ``holders``, which must outlive
+    the items.
 
     Returns
     -------
@@ -254,9 +258,16 @@ cdef int _nd_parse_index(object key, nd_index_t* idx, int maxn) except -1:
 
             # end if
 
+        elif holders is not None and isinstance(obj, (list, np.ndarray, bool, np.bool_)):
+
+            hold = _NdHold(np.asarray(obj), 0, False)
+            holders.append(hold)
+            item.kind = ND_IDX_ARRAY
+            item.arr = &(<_NdHold>hold).arr
+
         elif isinstance(obj, (bool, np.bool_)):
 
-            raise IndexError("boolean indices are advanced indexing (Phase 5)")
+            raise IndexError("boolean indices are advanced indexing: use index_get / index_set")
 
         else:
 
@@ -369,6 +380,41 @@ cdef class _NdRoot:
         """NumPy array exported from the root (a live export until it is released)."""
 
         return nd_to_numpy(&self.arr, 1 if writeable else 0)
+
+    # end def
+
+    def dlpack(self, writeable=True, versioned=True, copy=False):
+        """
+        nd_to_dlpack: a DLPack capsule over the root (a live export until the capsule is consumed
+        and released, or dropped). ``writeable=False`` sets the READ_ONLY flag of a versioned capsule
+        (the legacy capsule cannot say it: BufferError).
+        """
+
+        return nd_to_dlpack(&self.arr, 1 if writeable else 0, 1 if versioned else 0, 1 if copy else 0)
+
+    # end def
+
+    def __dlpack__(self, *, stream = None, max_version = None, dl_device = None, copy = None):
+
+        return nd_dlpack_call(&self.arr, 1, stream, max_version, dl_device, copy)
+
+    # end def
+
+    def __dlpack_device__(self):
+
+        return (_ND_KDLCPU, 0)
+
+    # end def
+
+    def __getbuffer__(self, Py_buffer* buffer, int flags):
+
+        nd_getbuffer(&self.arr, 1, buffer, flags, self)
+
+    # end def
+
+    def __releasebuffer__(self, Py_buffer* buffer):
+
+        nd_releasebuffer(buffer)
 
     # end def
 
@@ -742,6 +788,35 @@ cdef class _NdTest:
 
     # end def
 
+    def trusted_dlpack(self, obj, bint versioned = True, bint writeable = True):
+        """
+        The same trusted temporary (buf == NULL) as ``trusted_copy``, exported as a DLPack capsule:
+        nd_to_dlpack copies it (IS_COPIED flag) because nothing owns its memory.
+        """
+
+        cdef _NdHold hold = _NdHold(obj, 0, False)
+        cdef ndarr_t tmp
+        cdef int status
+
+        nd_init_empty(&tmp)
+        status = nd_wrap_trusted(hold.arr.data, hold.arr.dtype, hold.arr.ndim, hold.arr.shape,
+                                 hold.arr.strides, 1, &tmp)
+        _nd_status("nd_wrap_trusted", status)
+
+        return nd_to_dlpack(&tmp, 1 if writeable else 0, 1 if versioned else 0, 0)
+
+    # end def
+
+    def fail_capsule(self, int countdown = 1):
+        """Test hook: the next ``countdown`` DLPack capsule creations fail with MemoryError (after the
+        managed tensor and the export exist), to check that the failure path releases both."""
+
+        global _nd_test_fail_capsule
+
+        _nd_test_fail_capsule = countdown
+
+    # end def
+
     def root(self, shape, layout = "C"):
         """A growable library array (see ``_NdRoot``)."""
 
@@ -1007,6 +1082,59 @@ cdef class _NdTest:
         _nd_status("nd_view_index", nd_view_index(&src.arr, n, idx, &out))
 
         return nd_to_numpy(&out, 1 if (out.flags & ND_WRITEABLE) else 0)
+
+    # end def
+
+    def index_get(self, a, key):
+        """
+        nd_index_get: NumPy indexing with integer arrays and masks (a copy, C-contiguous). ``key``
+        may mix ints, slices, None, Ellipsis, lists / ndarrays (int or bool) and bool scalars.
+        """
+
+        cdef _NdHold src = _NdHold(a, 0, False)
+        cdef nd_index_t idx[64]
+        cdef list holders = []
+        cdef int n = _nd_parse_index(key, idx, 64, holders)
+        cdef ndarr_t res
+        cdef int status
+
+        nd_init_empty(&res)
+
+        with nogil:
+
+            status = nd_index_get(_nd_ctx, &src.arr, n, idx, &res)
+
+        # end with
+
+        _nd_status("nd_index_get", status)
+
+        return _nd_result(&res)
+
+    # end def
+
+    def index_set(self, a, key, values):
+        """
+        nd_index_set: ``a[key] = values`` with integer arrays and masks. ``a`` must be a writeable
+        array (imported zero-copy); ``values`` is any buffer / DLPack object or Python scalar
+        (broadcast). Returns ``a``.
+        """
+
+        cdef _NdHold dst = _NdHold(a, 0, True)
+        cdef _NdHold val = _NdHold(np.asarray(values), 0, False)
+        cdef nd_index_t idx[64]
+        cdef list holders = []
+        cdef int n = _nd_parse_index(key, idx, 64, holders)
+        cdef int status
+
+        with nogil:
+
+            status = nd_index_set(_nd_ctx, &dst.arr, n, idx, &val.arr)
+
+        # end with
+
+        _nd_status("nd_index_set", status, &dst.arr)
+
+        return a
 
     # end def
 

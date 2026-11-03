@@ -34,6 +34,7 @@ cdef __dot_product_FX(dmatfe Flhs, object rhs, object out = None):
     # end if 
   elif trhs is dmat:    # FR
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       fres = out
       fedarr_dotproduct_RF_to( &Rrhs.arr, &Flhs.arr, &fres.num)
@@ -58,6 +59,7 @@ cdef __dot_product_RX( dmat Rlhs, object rhs, object out = None):
   PURPOSE:  Vector dot product between dmatfe and other array.
 
   """
+  Rlhs._sync()
   #***************************************************************************************************
   
   cdef dmat       Rrhs, Rres
@@ -88,6 +90,7 @@ cdef __dot_product_RX( dmat Rlhs, object rhs, object out = None):
     # end if   
   elif trhs is dmat:    # RR
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       rres = out
       darr_dotproduct_RR_to( &Rrhs.arr, &Rlhs.arr, &rres)

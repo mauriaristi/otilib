@@ -62,6 +62,7 @@ class writer:
     # end if
 
     self.nbases  = nbases
+    self.mdual   = mdual
     self.tab     = tab
     self.coeff_t = coeff_type
 
@@ -3154,6 +3155,10 @@ class writer:
 
     algebra_include = self.write_header( header = 'algebra')
 
+    # Compile-time layout checks of the scalar and Gauss value types (none for multidual types).
+    layout_asserts = _layout_asserts(self) if not self.mdual else {
+      'num': '', 'fenum': '', 'fearr': ''}
+
     for file in files:
       # Write the header file
 
@@ -3179,7 +3184,9 @@ class writer:
         oti_order = self.order, real_str = self.real_str, module_name = mname, 
         module_name_upper = mname.upper(), base_src = base_str, algebra_src = algebra_str,
         base_include = base_include, algebra_include = algebra_include, 
-        utils_include = "",  num_struct = num_struct, nbases = self.nbases)
+        utils_include = "",  num_struct = num_struct, nbases = self.nbases,
+        num_layout_asserts = layout_asserts['num'], fenum_layout_asserts = layout_asserts['fenum'],
+        fearr_layout_asserts = layout_asserts['fearr'])
 
       if self.checked_in:
         f_exp = _checked_in_template(self, file, f_exp)
@@ -3689,6 +3696,8 @@ class writer:
         f = open(file,"r")
         string = f.read()
         f.close()
+        # C-only compile-time checks have no Cython counterpart.
+        string = _strip_layout_asserts(string)
         if self.checked_in:
           # Preserve the historical comment spelling without embedding the output directory.
           file = '../../../' + os.path.relpath(file, base_dir)
@@ -3950,6 +3959,235 @@ def _checked_in_template(writer, filename, contents):
     # end if
 
     return contents
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _binomial(n, k):
+    """
+    Binomial coefficient, zero outside 0 <= k <= n.
+
+    Parameters
+    ----------
+    n, k : int
+        Arguments.
+
+    Returns
+    -------
+    int
+        C(n, k).
+    """
+
+    if k < 0 or n < 0 or k > n:
+
+        return 0
+
+    # end if
+
+    result = 1
+
+    for i in range(k):
+
+        result = result * (n - i) // (i + 1)
+
+    # end for
+
+    return result
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _colex_position(nbases, field):
+    """
+    Coefficient position of a static scalar field in the dense colex layout, real part first.
+
+    The position is computed from the field name alone, independently of the direction helper that
+    orders the generated struct, so the emitted asserts check that order: order p starts at
+    C(m + p - 1, p - 1) (orders 0 .. p-1 hold sum_q C(m + q - 1, q) coefficients), and the sorted
+    bases b_1 <= ... <= b_p (1-based) rank as sum_t C(b_t + t - 2, t) within the order.
+
+    Parameters
+    ----------
+    nbases : int
+        Number of bases m.
+    field : str
+        Field name: 'r' or 'e' followed by one base character per factor ('1'..'9', 'A', ...).
+
+    Returns
+    -------
+    int
+        Position of the coefficient, in coefficients.
+    """
+
+    if field == 'r':
+
+        return 0
+
+    # end if
+
+    bases = sorted(valid_chars.index(char) for char in field[1:])
+    order = len(bases)
+    rank = 0
+
+    for t, base in enumerate(bases, start=1):
+
+        rank += _binomial(base + t - 2, t)
+
+    # end for
+
+    return _binomial(nbases + order - 1, order - 1) + rank
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _assert_lines(condition, message):
+    """
+    Format one layout assert, wrapping the message when the line would pass 106 columns.
+
+    Parameters
+    ----------
+    condition, message : str
+        C condition and diagnostic text.
+
+    Returns
+    -------
+    str
+        Assert statement, newline terminated.
+    """
+    head = 'OTI_STATIC_LAYOUT_ASSERT(' + condition + ','
+    line = head + ' "' + message + '");\n'
+
+    if len(line) <= 107:
+
+        return line
+
+    # end if
+
+    return head + '\n' + ' ' * len('OTI_STATIC_LAYOUT_ASSERT(') + '"' + message + '");\n'
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _layout_asserts(writer):
+    """
+    Generate the compile-time layout checks of a static module's value types (PLAN-ndarray Phase 10).
+
+    For the scalar: its size is C(m + n, n) coefficients (no padding) and every field sits at its
+    colex position (_colex_position). For the Gauss scalar and the Gauss array: their size and every
+    field offset (no padding). C99 has no _Static_assert keyword; the asserts use the project's
+    idiom (include/oti/core/status.h, include/oti/real/ndarray/structures.h): _Static_assert in C,
+    which GCC and Clang accept in -std=c99, and static_assert in C++. The block is delimited so that
+    the Cython declaration writer can drop it (_strip_layout_asserts).
+
+    Parameters
+    ----------
+    writer : writer
+        Generator of one (m, n) module (not multidual).
+
+    Returns
+    -------
+    dict
+        Blocks keyed 'num', 'fenum' and 'fearr', inserted after each structure.
+    """
+    header = (
+        '// Layout checks (generated): {0}.\n'
+        '// BEGIN LAYOUT ASSERTS\n'
+        '#include <stddef.h>\n'
+        '#ifndef OTI_STATIC_LAYOUT_ASSERT\n'
+        '#if defined(__cplusplus)\n'
+        '#define OTI_STATIC_LAYOUT_ASSERT(c, m) static_assert(c, m)\n'
+        '#else\n'
+        '#define OTI_STATIC_LAYOUT_ASSERT(c, m) _Static_assert(c, m)\n'
+        '#endif\n'
+        '#endif\n'
+    )
+    footer = '// END LAYOUT ASSERTS\n'
+    blocks = {}
+
+    # Scalar: every coefficient, in declaration order, at its colex position.
+    num = writer.type_name
+    fields = [name for names in writer.name_imdir for name in names]
+    ncoef = _binomial(writer.nbases + writer.order, writer.order)
+
+    if len(fields) != ncoef:
+
+        raise ValueError(f'{num}: {len(fields)} fields, expected C(m + n, n) = {ncoef}')
+
+    # end if
+
+    body = _assert_lines(f'sizeof({num}) == {ncoef} * sizeof(coeff_t)', f'{num} has padding')
+
+    for field in fields:
+
+        position = _colex_position(writer.nbases, field)
+        body += _assert_lines(f'offsetof({num}, {field}) == {position} * sizeof(coeff_t)',
+                              f'{num}.{field}: colex {position}')
+
+    # end for
+
+    blocks['num'] = header.format('no padding, coefficients in colex order (real part first)') + body
+    blocks['num'] += footer
+
+    # Gauss types: a data pointer followed by uint64_t counters, packed.
+    gauss = {
+        'fenum': (writer.type_name_fe, writer.type_name, ('nip',)),
+        'fearr': (writer.type_name_fearr, writer.type_name_arr, ('nrows', 'ncols', 'size', 'nip')),
+    }
+
+    for key, (name, data_type, counters) in gauss.items():
+
+        pointer = f'sizeof({data_type}*)'
+        body = _assert_lines(
+            f'sizeof({name}) == {pointer} + {len(counters)} * sizeof(uint64_t)', f'{name} has padding'
+        )
+        body += _assert_lines(f'offsetof({name}, p_data) == 0', f'{name}.p_data offset')
+
+        for index, counter in enumerate(counters):
+
+            body += _assert_lines(
+                f'offsetof({name}, {counter}) == {pointer} + {index} * sizeof(uint64_t)',
+                f'{name}.{counter} offset',
+            )
+
+        # end for
+
+        blocks[key] = '\n' + header.format('no padding') + body + footer
+
+    # end for
+
+    return blocks
+
+# end function
+# --------------------------------------------------------------------------------------------------------
+
+
+# ********************************************************************************************************
+def _strip_layout_asserts(string):
+    """
+    Remove the generated layout-assert blocks from a header before its Cython conversion.
+
+    Parameters
+    ----------
+    string : str
+        Header contents.
+
+    Returns
+    -------
+    str
+        Contents without the blocks and their leading comment line.
+    """
+    return re.sub(
+        r'// Layout checks \(generated\)[^\n]*\n// BEGIN LAYOUT ASSERTS\n.*?// END LAYOUT ASSERTS\n',
+        '', string, flags=re.DOTALL,
+    )
 
 # end function
 # --------------------------------------------------------------------------------------------------------

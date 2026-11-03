@@ -136,6 +136,7 @@ cpdef dot(object lhs, object rhs, object out = None):
     elif trhs is dmat:    # FR
 
       Rrhs = rhs
+      Rrhs._sync()
       if res_flag:
         Fres = out
         fedarr_matmul_FR_to( &Flhs.arr, &Rrhs.arr ,&Fres.arr)
@@ -151,6 +152,7 @@ cpdef dot(object lhs, object rhs, object out = None):
   elif tlhs is dmat:
     
     Rlhs = lhs
+    Rlhs._sync()
     if   trhs is dmatfe: # RF
       Frhs = rhs
       if res_flag:
@@ -163,8 +165,10 @@ cpdef dot(object lhs, object rhs, object out = None):
 
     elif tlhs is dmat:    # RR
       Rrhs = rhs
+      Rrhs._sync()
       if res_flag:
         Rres = out
+        Rres._check_out()
         darr_matmul_to( &Rlhs.arr, &Rrhs.arr , &Rres.arr)
       else:
         cRres = darr_matmul( &Rlhs.arr, &Rrhs.arr)
@@ -229,8 +233,10 @@ cpdef transpose(object arr, object out = None):
   elif tarr is dmat:
     
     R = arr
+    R._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_transpose_to( &R.arr, &Rres.arr)
     else:
       cRres = darr_transpose( &R.arr)
@@ -291,6 +297,7 @@ cpdef det(object arr, object out = None):
   elif tarr is dmat:
     
     R = arr
+    R._sync()
     crres = darr_det( &R.arr)
 
     if res_flag:
@@ -358,6 +365,7 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
   elif tarr is dmat:
     
     R = arr
+    R._sync()
     crres = darr_pnorm( &R.arr, p)
     if res_flag:
       out = crres
@@ -421,8 +429,10 @@ cpdef inv(object arr, object out = None):
     # end if 
   elif tarr is dmat:    
     R = arr
+    R._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_invert_to( &R.arr, &Rres.arr)
     else:
       cRres = darr_invert( &R.arr)
@@ -519,14 +529,17 @@ cdef solve_dense(dmat K_in, dmat b_in, dmat out = None, solver = 'SuperLU', solv
   
   if res_flag:
     Rres = out
+    Rres._check_out()
   else:
     Rres = zeros(b_in.shape)
   # end if
 
   lu = lu_factor(K_in.real)
   rhs = b_in.real
-  # Solve the real system of equations, using LU solver:
-  lu_solve(lu,rhs, overwrite_b=True)
+  # Solve the real system of equations, using LU solver. The solution is the RETURNED array: with
+  # overwrite_b=True scipy only works in place when rhs is Fortran-contiguous, which a row-major
+  # (n, k) matrix with k > 1 is not (it was dropped before, so k > 1 columns came back unsolved).
+  rhs = lu_solve(lu, rhs, overwrite_b=True)
 
   # Solve the real coefficient
   for i in range(Rres.nrows):      
@@ -581,6 +594,7 @@ cdef solve_sparse(object K_in, dmat b_in, dmat out = None, solver = 'SuperLU', s
   
   if res_flag:
     Rres = out
+    Rres._check_out()
   else:
     Rres = zeros(b_in.shape)
   # end if

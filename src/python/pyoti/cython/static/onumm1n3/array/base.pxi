@@ -729,6 +729,7 @@ cdef class omatm1n3:
     """
     PURPOSE: Set item from real array.
     """
+    value._sync()
     #*************************************************************************************************
     
 
@@ -927,6 +928,7 @@ cdef class omatm1n3:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = oarrm1n3_sum_RO(&dlhs.arr,&rhs.arr)
@@ -935,6 +937,7 @@ cdef class omatm1n3:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = oarrm1n3_sum_RO(&drhs.arr,&lhs.arr)
 
@@ -1010,6 +1013,7 @@ cdef class omatm1n3:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = oarrm1n3_sub_RO(&dlhs.arr,&rhs.arr)
@@ -1018,6 +1022,7 @@ cdef class omatm1n3:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = oarrm1n3_sub_OR(&lhs.arr, &drhs.arr)
 
@@ -1093,6 +1098,7 @@ cdef class omatm1n3:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = oarrm1n3_mul_RO(&dlhs.arr,&rhs.arr)
@@ -1101,6 +1107,7 @@ cdef class omatm1n3:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = oarrm1n3_mul_RO(&drhs.arr,&lhs.arr)
 
@@ -1178,6 +1185,7 @@ cdef class omatm1n3:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = oarrm1n3_div_RO(&dlhs.arr,&rhs.arr)
@@ -1186,6 +1194,7 @@ cdef class omatm1n3:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = oarrm1n3_div_OR(&lhs.arr, &drhs.arr)
 

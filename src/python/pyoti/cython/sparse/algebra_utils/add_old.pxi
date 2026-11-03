@@ -76,6 +76,7 @@ cdef object __add__FX__(matsofe Flhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Fres = out
       fearrso_sum_RF_to( &Rrhs.arr, &Flhs.arr, &Fres.arr, dhl )
@@ -298,6 +299,7 @@ cdef object __add__OX__(matso Olhs, object rhs, object out = None):
   elif trhs == dmat:
 
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Ores = out
       arrso_sum_RO_to( &Rrhs.arr, &Olhs.arr ,&Ores.arr, dhl)
@@ -344,6 +346,7 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   PURPOSE:  Addition between sotinum and an object.
 
   """
+  Rlhs._sync()
   #***************************************************************************************************
 
   global dhl
@@ -427,8 +430,10 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   elif trhs == dmat:
 
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sum_RR_to( &Rlhs.arr, &Rrhs.arr ,&Rres.arr)
     else:      
       cRres = darr_sum_RR( &Rlhs.arr, &Rrhs.arr)
@@ -440,6 +445,7 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
     rrhs = rhs
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sum_rR_to( rrhs, &Rlhs.arr, &Rres.arr)
     else:      
       cRres = darr_sum_rR( rrhs, &Rlhs.arr)

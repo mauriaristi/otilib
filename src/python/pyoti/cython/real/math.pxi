@@ -63,9 +63,11 @@ cpdef cos(object val, object out = None):
     # end if    
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_cos_to( &R.arr, &Rres.arr)
 
     else:
@@ -162,9 +164,11 @@ cpdef sin(object val, object out = None):
     # end if   
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_sin_to( &R.arr, &Rres.arr)
 
     else:
@@ -264,9 +268,11 @@ cpdef tan(object val, object out = None):
     # end if    
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_tan_to( &R.arr, &Rres.arr)
 
     else:
@@ -368,9 +374,11 @@ cpdef acos(object val, object out = None):
     # end if   
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_acos_to( &R.arr, &Rres.arr)
 
     else:
@@ -472,9 +480,11 @@ cpdef asin(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_asin_to( &R.arr, &Rres.arr)
 
     else:
@@ -573,9 +583,11 @@ cpdef atan(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_atan_to( &R.arr, &Rres.arr)
 
     else:
@@ -706,9 +718,11 @@ cpdef sinh(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_sinh_to( &R.arr, &Rres.arr)
 
     else:
@@ -808,9 +822,11 @@ cpdef cosh(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_cosh_to( &R.arr, &Rres.arr)
 
     else:
@@ -912,9 +928,11 @@ cpdef tanh(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_tanh_to( &R.arr, &Rres.arr)
 
     else:
@@ -1015,9 +1033,11 @@ cpdef acosh(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_acosh_to( &R.arr, &Rres.arr)
 
     else:
@@ -1117,9 +1137,11 @@ cpdef asinh(object val, object out = None):
     # end if  
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_asinh_to( &R.arr, &Rres.arr)
 
     else:
@@ -1218,9 +1240,11 @@ cpdef atanh(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_atanh_to( &R.arr, &Rres.arr)
 
     else:
@@ -1346,9 +1370,11 @@ cpdef exp(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_exp_to( &R.arr, &Rres.arr)
 
     else:
@@ -1455,9 +1481,11 @@ cpdef log(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_log_to( &R.arr, &Rres.arr)
 
     else:
@@ -1564,9 +1592,11 @@ cpdef log10(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_log10_to( &R.arr, &Rres.arr)
 
     else:
@@ -1674,9 +1704,11 @@ cpdef logb(object val, coeff_t b, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_logb_to( &R.arr, b, &Rres.arr)
 
     else:
@@ -1787,9 +1819,11 @@ cpdef sqrt(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_sqrt_to( &R.arr, &Rres.arr)
 
     else:
@@ -1899,9 +1933,11 @@ cpdef cbrt(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_cbrt_to( &R.arr, &Rres.arr)
 
     else:
@@ -2015,9 +2051,11 @@ cpdef pow(object val, coeff_t e, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_pow_to( &R.arr, e, &Rres.arr)
 
     else:
@@ -2110,6 +2148,7 @@ cpdef gauss_integrate(object val, dnumfe w, object out = None ):
     if res_flag:
 
       Rres = out
+      Rres._check_out()
       fedarr_integrate_to( &F.arr, &w.num, &Rres.arr)
 
     else:
@@ -2212,9 +2251,11 @@ cpdef neg(object val, object out = None):
     # end if 
   elif tval is dmat:
     R = val
+    R._sync()
     if res_flag:
       
       Rres = out
+      Rres._check_out()
       darr_neg_to( &R.arr, &Rres.arr)
 
     else:

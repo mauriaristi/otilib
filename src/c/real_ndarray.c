@@ -33,3 +33,6 @@
 
 // Phase 6a: zero-copy adapters to the legacy darr_t.
 #include "real/ndarray/compat_darr.c"
+
+// Phase 5: advanced indexing (integer arrays, masks, scatter).
+#include "real/ndarray/index.c"

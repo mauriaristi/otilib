@@ -51,6 +51,7 @@ cdef object __add__FX__(dmatfe Flhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Fres = out
       fedarr_sum_RF_to( &Rrhs.arr, &Flhs.arr, &Fres.arr )
@@ -84,6 +85,7 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   PORPUSE: Addition between dmat and object.
 
   """
+  Rlhs._sync()
   #***************************************************************************************************
 
   # Scalar types:
@@ -120,8 +122,10 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sum_RR_to( &Rlhs.arr, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_sum_RR( &Rlhs.arr, &Rrhs.arr )
@@ -131,6 +135,7 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
     rrhs = rhs
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sum_rR_to( rrhs, &Rlhs.arr, &Rres.arr )
     else:
       cRres = darr_sum_rR( rrhs, &Rlhs.arr )
@@ -272,8 +277,10 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sum_rR_to( rlhs, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_sum_rR( rlhs, &Rrhs.arr )

@@ -75,6 +75,7 @@ cdef object __add__FX__(feomatm3n4 Flhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Fres = out
       feoarrm3n4_sum_RF_to( &Rrhs.arr, &Flhs.arr, &Fres.arr )
@@ -169,6 +170,7 @@ cdef object __add__OX__(omatm3n4 Olhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Ores = out
       oarrm3n4_sum_RO_to( &Rrhs.arr, &Olhs.arr, &Ores.arr )
@@ -201,6 +203,7 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
   PORPUSE: Addition between dmat and object.
 
   """
+  Rlhs._sync()
   #***************************************************************************************************
 
   
@@ -254,8 +257,10 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sum_RR_to( &Rlhs.arr, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_sum_RR( &Rlhs.arr, &Rrhs.arr )
@@ -265,6 +270,7 @@ cdef object __add__RX__(dmat Rlhs, object rhs, object out = None):
     rrhs = rhs
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sum_rR_to( rrhs, &Rlhs.arr, &Rres.arr )
     else:
       cRres = darr_sum_rR( rrhs, &Rlhs.arr )
@@ -536,8 +542,10 @@ cdef object __add__rX__(coeff_t rlhs, object rhs, object out = None):
     # end if
   elif trhs == dmat:
     Rrhs = rhs
+    Rrhs._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_sum_rR_to( rlhs, &Rrhs.arr, &Rres.arr )
     else:
       cRres = darr_sum_rR( rlhs, &Rrhs.arr )

@@ -951,6 +951,7 @@ cdef class matso:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = arrso_sum_RO(&dlhs.arr,&rhs.arr, dhl)
@@ -959,6 +960,7 @@ cdef class matso:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = arrso_sum_RO(&drhs.arr,&lhs.arr, dhl)
 
@@ -1038,6 +1040,7 @@ cdef class matso:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = arrso_sub_RO(&dlhs.arr,&rhs.arr, dhl)
@@ -1046,6 +1049,7 @@ cdef class matso:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = arrso_sub_OR(&lhs.arr, &drhs.arr, dhl)
 
@@ -1125,6 +1129,7 @@ cdef class matso:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = arrso_mul_RO(&dlhs.arr,&rhs.arr, dhl)
@@ -1133,6 +1138,7 @@ cdef class matso:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = arrso_mul_RO(&drhs.arr,&lhs.arr, dhl)
 
@@ -1214,6 +1220,7 @@ cdef class matso:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = arrso_div_RO(&dlhs.arr,&rhs.arr, dhl)
@@ -1222,6 +1229,7 @@ cdef class matso:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = arrso_div_OR(&lhs.arr, &drhs.arr, dhl)
 

@@ -729,6 +729,7 @@ cdef class {arr_pytype}:
     """
     PURPOSE: Set item from real array.
     """
+    value._sync()
     #*************************************************************************************************
     
 
@@ -927,6 +928,7 @@ cdef class {arr_pytype}:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = {arr_func}_sum_RO(&dlhs.arr,&rhs.arr)
@@ -935,6 +937,7 @@ cdef class {arr_pytype}:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = {arr_func}_sum_RO(&drhs.arr,&lhs.arr)
 
@@ -1010,6 +1013,7 @@ cdef class {arr_pytype}:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = {arr_func}_sub_RO(&dlhs.arr,&rhs.arr)
@@ -1018,6 +1022,7 @@ cdef class {arr_pytype}:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = {arr_func}_sub_OR(&lhs.arr, &drhs.arr)
 
@@ -1093,6 +1098,7 @@ cdef class {arr_pytype}:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = {arr_func}_mul_RO(&dlhs.arr,&rhs.arr)
@@ -1101,6 +1107,7 @@ cdef class {arr_pytype}:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = {arr_func}_mul_RO(&drhs.arr,&lhs.arr)
 
@@ -1178,6 +1185,7 @@ cdef class {arr_pytype}:
     elif ( tlhs  == dmat ):
 
       dlhs = self
+      dlhs._sync()
       rhs = other
 
       res = {arr_func}_div_RO(&dlhs.arr,&rhs.arr)
@@ -1186,6 +1194,7 @@ cdef class {arr_pytype}:
 
       lhs = self
       drhs = other
+      drhs._sync()
 
       res = {arr_func}_div_OR(&lhs.arr, &drhs.arr)
 

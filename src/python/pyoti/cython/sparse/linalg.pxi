@@ -299,6 +299,7 @@ cpdef dot(object lhs, object rhs, object out = None):
     elif trhs is dmat:    # FR
 
       Rrhs = rhs
+      Rrhs._sync()
       if res_flag:
         Fres = out
         fearrso_matmul_FR_to( &Flhs.arr, &Rrhs.arr ,&Fres.arr, dhl)
@@ -338,6 +339,7 @@ cpdef dot(object lhs, object rhs, object out = None):
     elif trhs is dmat:    # OR
     
       Rrhs = rhs
+      Rrhs._sync()
       if res_flag:
         Ores = out
         arrso_matmul_OR_to( &Olhs.arr, &Rrhs.arr ,&Ores.arr, dhl)
@@ -369,6 +371,7 @@ cpdef dot(object lhs, object rhs, object out = None):
   elif tlhs is dmat:
     
     Rlhs = lhs
+    Rlhs._sync()
     if   trhs is matsofe: # RF
       Frhs = rhs
       if res_flag:
@@ -391,8 +394,10 @@ cpdef dot(object lhs, object rhs, object out = None):
 
     elif trhs is dmat:    # RR
       Rrhs = rhs
+      Rrhs._sync()
       if res_flag:
         Rres = out
+        Rres._check_out()
         darr_matmul_to( &Rlhs.arr, &Rrhs.arr , &Rres.arr)
       else:
         cRres = darr_matmul( &Rlhs.arr, &Rrhs.arr)
@@ -536,8 +541,10 @@ cpdef transpose(object arr, object out = None):
   elif tarr is dmat:
     
     R = arr
+    R._sync()
     if res_flag:
       Rres = out
+      Rres._check_out()
       darr_transpose_to( &R.arr, &Rres.arr)
     else:
       cRres = darr_transpose( &R.arr)
@@ -657,6 +664,7 @@ cpdef det(object arr, object out = None):
     # end if
 
     R = arr
+    R._sync()
     return darr_det( &R.arr)
 
   else:
@@ -736,6 +744,7 @@ cpdef norm(object arr, coeff_t p = 2.0, object out = None):
     # end if
 
     R = arr
+    R._sync()
     res = darr_pnorm( &R.arr, p)
 
   else:
@@ -804,8 +813,10 @@ cpdef inv(object arr, object out = None):
     res = Ores
   elif tarr is dmat:    
     R = arr
+    R._sync()
     if out is not None:
       Rres = out
+      Rres._check_out()
       darr_invert_to( &R.arr, &Rres.arr)
     else:
       cRres = darr_invert( &R.arr)

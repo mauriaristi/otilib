@@ -40,7 +40,8 @@ ND_FILE = "real_ndarray.pxi"
 ND_HEADERS = ["core/status.h", "core/exec.h",
               "real/ndarray/structures.h", "real/ndarray/buffer.h", "real/ndarray/create.h",
               "real/ndarray/views.h", "real/ndarray/iter.h", "real/ndarray/elementwise.h",
-              "real/ndarray/reduce.h", "real/ndarray/blas.h", "real/ndarray/linalg.h"]
+              "real/ndarray/reduce.h", "real/ndarray/blas.h", "real/ndarray/linalg.h",
+              "real/ndarray/compat_darr.h"]
 
 # Python keywords cannot name Cython arguments; they get a trailing underscore.
 KEYWORDS = ("in|is|from|lambda|def|class|pass|del|global|not|and|or|with|as|yield|import|print|"

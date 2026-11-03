@@ -242,7 +242,7 @@ int nd_view_reshape(const ndarr_t* src, int32_t ndim, const int64_t* shape, int3
  * @param[in,out] ctx  Context, or NULL.
  * @param[in]     src  Well-formed descriptor.
  * @param[in]     nidx Number of items.
- * @param[in]     idx  Items; at least one ND_IDX_ARRAY.
+ * @param[in]     idx  Items; without an ND_IDX_ARRAY item the result is a copy of the basic view.
  * @param[out]    res  New retained C-contiguous array.
  *
  * @return OTI_OK; OTI_ERR_INDEX (out of range, mask shape mismatch); OTI_ERR_SHAPE; OTI_ERR_DTYPE;
@@ -260,7 +260,7 @@ int nd_index_get(oti_ctx* ctx, const ndarr_t* src, int32_t nidx, const nd_index_
  * @param[in,out] ctx    Context, or NULL.
  * @param[in,out] dst    Writeable destination without internal overlap.
  * @param[in]     nidx   Number of items.
- * @param[in]     idx    Items; at least one ND_IDX_ARRAY.
+ * @param[in]     idx    Items; without an ND_IDX_ARRAY item this assigns through the basic view.
  * @param[in]     values Values (same dtype as dst, or OTI_U8 / OTI_I64 into OTI_F64).
  *
  * @return OTI_OK; OTI_ERR_READONLY; OTI_ERR_LAYOUT; OTI_ERR_INDEX; OTI_ERR_SHAPE; OTI_ERR_DTYPE;

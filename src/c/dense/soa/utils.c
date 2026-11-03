@@ -17,7 +17,7 @@
 // Tells whether res shares its buffer with arr (then results go through a call-local array).
 static int dnou_alias(const oarr_t* res, const oarr_t* arr){
 
-    return (res == arr) || (res->p_data != NULL && res->p_data == arr->p_data);
+    return (res == arr) || (oarr_data(res) != NULL && oarr_data(res) == oarr_data(arr));
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -27,9 +27,7 @@ static int dnou_alias(const oarr_t* res, const oarr_t* arr){
 // Installs a call-local array into res, releasing res's old buffer.
 static void dnou_install(oarr_t* tmp, oarr_t* res){
 
-    free(res->p_data);
-    *res = *tmp;
-    *tmp = oarr_init();
+    dnob_move(tmp, res);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -42,6 +40,11 @@ static int dnou_target(oarr_t* res, int alias, oarr_t* tmp, bases_t nact, uint64
                        uint64_t ncols, ord_t trc, oarr_t** p_out){
 
     *p_out = alias ? tmp : res;
+
+    // The call-local result replaces the buffer of `res`: not that of a view or a shared array.
+    if (alias && !dnob_can_replace(res)){
+        return OTI_ERR_BUSY;
+    }
 
     return oarr_zeros_to(nact, nrows, ncols, trc, *p_out);
 
@@ -90,7 +93,7 @@ static int dnou_zero(const coeff_t* x, uint64_t n){
 // Highest order whose blocks can hold nonzeros.
 static inline ord_t dnou_top(const oarr_t* arr){
 
-    return (arr->act_order < arr->trc_order) ? arr->act_order : arr->trc_order;
+    return (oarr_act_order(arr) < oarr_trc_order(arr)) ? oarr_act_order(arr) : oarr_trc_order(arr);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -105,8 +108,8 @@ static inline ord_t dnou_top(const oarr_t* arr){
 // oti_extract_im_to() / oti_extract_deriv_to().
 static int dnou_extract_common(imdir_t idx, ord_t order, const oarr_t* arr, int deriv, oarr_t* res){
 
-    bases_t k = arr->nact, gl[256], r[256], d[256];
-    uint64_t m = arr->size, e, bs, bd;
+    bases_t k = oarr_nact(arr), gl[256], r[256], d[256];
+    uint64_t m = oarr_size(arr), e, bs, bd;
     ord_t trc_r, act_r, s, so;
     ndir_t Ns, j;
     oarr_t tmp = oarr_init(), *out;
@@ -121,29 +124,29 @@ static int dnou_extract_common(imdir_t idx, ord_t order, const oarr_t* arr, int 
     }
 
     // Order above trc: a real zero array with truncation order 0.
-    if (order > arr->trc_order){
+    if (order > oarr_trc_order(arr)){
 
-        status = dnou_target(res, alias, &tmp, 0, arr->nrows, arr->ncols, 0, &out);
+        status = dnou_target(res, alias, &tmp, 0, oarr_nrows(arr), oarr_ncols(arr), 0, &out);
 
         return dnou_finish(status, alias, &tmp, res);
 
     }
 
-    trc_r  = (ord_t)(arr->trc_order - order);
-    status = dnou_target(res, alias, &tmp, k, arr->nrows, arr->ncols, trc_r, &out);
+    trc_r  = (ord_t)(oarr_trc_order(arr) - order);
+    status = dnou_target(res, alias, &tmp, k, oarr_nrows(arr), oarr_ncols(arr), trc_r, &out);
 
     if (status != DN_OK){
         return dnou_finish(status, alias, &tmp, res);
     }
 
     // A direction above act_order, or with a base above nact, gives zero (in the layout (nact, trc_r)).
-    if (order > arr->act_order || !dnutil_dir_inside(idx, order, k)){
+    if (order > oarr_act_order(arr) || !dnutil_dir_inside(idx, order, k)){
         return dnou_finish(DN_OK, alias, &tmp, res);
     }
 
-    act_r = (ord_t)(arr->act_order - order);
+    act_r = (ord_t)(oarr_act_order(arr) - order);
 
-    if (sshelp_rank_tab_init(&tab, k, arr->trc_order) != SSHELP_OK){
+    if (sshelp_rank_tab_init(&tab, k, oarr_trc_order(arr)) != SSHELP_OK){
 
         oarr_free(&tmp);
         return DN_ERR_MEMORY;
@@ -152,10 +155,10 @@ static int dnou_extract_common(imdir_t idx, ord_t order, const oarr_t* arr, int 
 
     sshelp_unrank((ndir_t)idx, order, gl);
     fg  = deriv ? dnutil_tuple_factor(gl, order) : 1.0;
-    src = arr->p_data + oarr_block_index(k, order, idx) * m;
+    src = oarr_data(arr) + oarr_block_index(k, order, idx) * m;
 
     for (e = 0; e < m; e++){
-        out->p_data[e] = fg * src[e];
+        oarr_data(out)[e] = fg * src[e];
     }
 
     // Every quotient direction r of order s maps to the input direction r * g of order s + order.
@@ -171,8 +174,8 @@ static int dnou_extract_common(imdir_t idx, ord_t order, const oarr_t* arr, int 
         for (j = 0; j < Ns; j++){
 
             dnutil_merge_tuples(r, s, gl, order, d);
-            src = arr->p_data + (bs + sshelp_rank(d, so, &tab)) * m;
-            dst = out->p_data + (bd + j) * m;
+            src = oarr_data(arr) + (bs + sshelp_rank(d, so, &tab)) * m;
+            dst = oarr_data(out) + (bd + j) * m;
             f   = deriv ? dnutil_tuple_factor(d, so) / dnutil_tuple_factor(r, s) : 1.0;
 
             for (e = 0; e < m; e++){
@@ -187,7 +190,7 @@ static int dnou_extract_common(imdir_t idx, ord_t order, const oarr_t* arr, int 
 
     sshelp_rank_tab_free(&tab);
 
-    out->act_order = (k == 0) ? 0 : act_r;
+    oarr_set_act_order(out, (k == 0) ? 0 : act_r);
 
     return dnou_finish(DN_OK, alias, &tmp, res);
 
@@ -221,10 +224,10 @@ int oarr_extract_deriv_to(imdir_t idx, ord_t order, const oarr_t* arr, oarr_t* r
 int oarr_trunc_matmul_OO_to(ord_t orda, const oarr_t* A, ord_t ordb, const oarr_t* B,
                             oarr_t* res, dhelpl_t dhl){
 
-    uint64_t nrows = A->nrows, ninner = A->ncols, ncols = B->ncols;
+    uint64_t nrows = oarr_nrows(A), ninner = oarr_ncols(A), ncols = oarr_ncols(B);
     uint64_t sa = nrows * ninner, sb = ninner * ncols, sr = nrows * ncols, e;
-    bases_t nu = (A->nact > B->nact) ? A->nact : B->nact;
-    ord_t trc = (A->trc_order > B->trc_order) ? A->trc_order : B->trc_order;
+    bases_t nu = (oarr_nact(A) > oarr_nact(B)) ? oarr_nact(A) : oarr_nact(B);
+    ord_t trc = (oarr_trc_order(A) > oarr_trc_order(B)) ? oarr_trc_order(A) : oarr_trc_order(B);
     unsigned ordr = (unsigned)orda + ordb;
     ndir_t Na = 0, Nb = 0, i, j;
     const coeff_t *Ea = NULL, *Eb = NULL;
@@ -234,7 +237,7 @@ int oarr_trunc_matmul_OO_to(ord_t orda, const oarr_t* A, ord_t ordb, const oarr_
     dnok_pairsrc_t src;
     bases_t ui[256], uj[256];
 
-    if (A->ncols != B->nrows){
+    if (!dnob_is_matrix(A) || !dnob_is_matrix(B) || oarr_ncols(A) != oarr_nrows(B)){
         return DN_ERR_SIZE;
     }
 
@@ -249,24 +252,24 @@ int oarr_trunc_matmul_OO_to(ord_t orda, const oarr_t* A, ord_t ordb, const oarr_
         if (orda == 0){
 
             Na = 1;
-            Ea = A->p_data;
+            Ea = oarr_data(A);
 
         } else if (orda <= dnou_top(A)){
 
-            Na = sshelp_ndir_order(A->nact, orda);
-            Ea = A->p_data + oarr_block_index(A->nact, orda, 0) * sa;
+            Na = sshelp_ndir_order(oarr_nact(A), orda);
+            Ea = oarr_data(A) + oarr_block_index(oarr_nact(A), orda, 0) * sa;
 
         }
 
         if (ordb == 0){
 
             Nb = 1;
-            Eb = B->p_data;
+            Eb = oarr_data(B);
 
         } else if (ordb <= dnou_top(B)){
 
-            Nb = sshelp_ndir_order(B->nact, ordb);
-            Eb = B->p_data + oarr_block_index(B->nact, ordb, 0) * sb;
+            Nb = sshelp_ndir_order(oarr_nact(B), ordb);
+            Eb = oarr_data(B) + oarr_block_index(oarr_nact(B), ordb, 0) * sb;
 
         }
 
@@ -284,7 +287,7 @@ int oarr_trunc_matmul_OO_to(ord_t orda, const oarr_t* A, ord_t ordb, const oarr_
 
     if (Ea != NULL && Eb != NULL && Na > 0 && Nb > 0 && sr > 0 && ninner > 0){
 
-        R = out->p_data + oarr_block_index(nu, (ord_t)ordr, 0) * sr;
+        R = oarr_data(out) + oarr_block_index(nu, (ord_t)ordr, 0) * sr;
 
         if (orda == 0){
 
@@ -359,7 +362,7 @@ int oarr_trunc_matmul_OO_to(ord_t orda, const oarr_t* A, ord_t ordb, const oarr_
 
         } // end if
 
-        out->act_order = (ord_t)ordr;
+        oarr_set_act_order(out, (ord_t)ordr);
 
     } // end if
 
@@ -372,19 +375,19 @@ int oarr_trunc_matmul_OO_to(ord_t orda, const oarr_t* A, ord_t ordb, const oarr_
 // *******************************************************************************************************
 int oarr_trunc_sub_OO_to(ord_t order, const oarr_t* A, const oarr_t* B, oarr_t* res){
 
-    bases_t nu = (A->nact > B->nact) ? A->nact : B->nact;
-    ord_t trc = (A->trc_order > B->trc_order) ? A->trc_order : B->trc_order;
-    uint64_t m = A->size, e, i, n;
+    bases_t nu = (oarr_nact(A) > oarr_nact(B)) ? oarr_nact(A) : oarr_nact(B);
+    ord_t trc = (oarr_trc_order(A) > oarr_trc_order(B)) ? oarr_trc_order(A) : oarr_trc_order(B);
+    uint64_t m = oarr_size(A), e, i, n;
     oarr_t tmp = oarr_init(), *out;
     int alias = dnou_alias(res, A) || dnou_alias(res, B), status;
     const coeff_t* S;
     coeff_t* D;
 
-    if (A->nrows != B->nrows || A->ncols != B->ncols){
+    if (oarr_nrows(A) != oarr_nrows(B) || oarr_ncols(A) != oarr_ncols(B)){
         return DN_ERR_SIZE;
     }
 
-    status = dnou_target(res, alias, &tmp, nu, A->nrows, A->ncols, trc, &out);
+    status = dnou_target(res, alias, &tmp, nu, oarr_nrows(A), oarr_ncols(A), trc, &out);
 
     if (status != DN_OK){
         return dnou_finish(status, alias, &tmp, res);
@@ -393,17 +396,17 @@ int oarr_trunc_sub_OO_to(ord_t order, const oarr_t* A, const oarr_t* B, oarr_t* 
     if (order == 0){
 
         for (e = 0; e < m; e++){
-            out->p_data[e] = A->p_data[e] - B->p_data[e];
+            oarr_data(out)[e] = oarr_data(A)[e] - oarr_data(B)[e];
         }
 
     } else if (order <= trc && nu > 0){
 
-        D = out->p_data + oarr_block_index(nu, order, 0) * m;
+        D = oarr_data(out) + oarr_block_index(nu, order, 0) * m;
 
-        if (order <= dnou_top(A) && A->nact > 0){
+        if (order <= dnou_top(A) && oarr_nact(A) > 0){
 
-            n = sshelp_ndir_order(A->nact, order);
-            S = A->p_data + oarr_block_index(A->nact, order, 0) * m;
+            n = sshelp_ndir_order(oarr_nact(A), order);
+            S = oarr_data(A) + oarr_block_index(oarr_nact(A), order, 0) * m;
 
             for (i = 0; i < n * m; i++){
                 D[i] += S[i];
@@ -411,10 +414,10 @@ int oarr_trunc_sub_OO_to(ord_t order, const oarr_t* A, const oarr_t* B, oarr_t* 
 
         }
 
-        if (order <= dnou_top(B) && B->nact > 0){
+        if (order <= dnou_top(B) && oarr_nact(B) > 0){
 
-            n = sshelp_ndir_order(B->nact, order);
-            S = B->p_data + oarr_block_index(B->nact, order, 0) * m;
+            n = sshelp_ndir_order(oarr_nact(B), order);
+            S = oarr_data(B) + oarr_block_index(oarr_nact(B), order, 0) * m;
 
             for (i = 0; i < n * m; i++){
                 D[i] -= S[i];
@@ -422,7 +425,7 @@ int oarr_trunc_sub_OO_to(ord_t order, const oarr_t* A, const oarr_t* B, oarr_t* 
 
         }
 
-        out->act_order = order;
+        oarr_set_act_order(out, order);
 
     } // end if
 
@@ -435,15 +438,15 @@ int oarr_trunc_sub_OO_to(ord_t order, const oarr_t* A, const oarr_t* B, oarr_t* 
 // *******************************************************************************************************
 int oarr_dot_product_OO_to(const oarr_t* A, const oarr_t* B, otinum_t* res, dhelpl_t dhl){
 
-    uint64_t m = A->size, e;
-    bases_t nu = (A->nact > B->nact) ? A->nact : B->nact;
-    ord_t trc = (A->trc_order > B->trc_order) ? A->trc_order : B->trc_order;
+    uint64_t m = oarr_size(A), e;
+    bases_t nu = (oarr_nact(A) > oarr_nact(B)) ? oarr_nact(A) : oarr_nact(B);
+    ord_t trc = (oarr_trc_order(A) > oarr_trc_order(B)) ? oarr_trc_order(A) : oarr_trc_order(B);
     ord_t atop = dnou_top(A), btop = dnou_top(B), p, q;
     otinum_t tmp = oti_init();
     coeff_t s, re;
     int status;
 
-    if (A->size != B->size){
+    if (oarr_size(A) != oarr_size(B)){
         return DN_ERR_SIZE;
     }
 
@@ -456,20 +459,20 @@ int oarr_dot_product_OO_to(const oarr_t* A, const oarr_t* B, otinum_t* res, dhel
     re = 0.0;
 
     for (e = 0; e < m; e++){
-        re += A->p_data[e] * B->p_data[e];
+        re += oarr_data(A)[e] * oarr_data(B)[e];
     }
 
     tmp.re = re;
 
     for (p = 0; p <= atop; p++){
 
-        ndir_t Np = (p == 0) ? 1 : sshelp_ndir_order(A->nact, p), i, j;
-        uint64_t bp = oarr_block_index(A->nact, p, 0);
+        ndir_t Np = (p == 0) ? 1 : sshelp_ndir_order(oarr_nact(A), p), i, j;
+        uint64_t bp = oarr_block_index(oarr_nact(A), p, 0);
 
         for (q = 0; q <= btop && p + q <= trc; q++){
 
-            ndir_t Nq = (q == 0) ? 1 : sshelp_ndir_order(B->nact, q);
-            uint64_t bq = oarr_block_index(B->nact, q, 0);
+            ndir_t Nq = (q == 0) ? 1 : sshelp_ndir_order(oarr_nact(B), q);
+            uint64_t bq = oarr_block_index(oarr_nact(B), q, 0);
             coeff_t* Rq;
             dnok_pairsrc_t src;
             bases_t ui[256], uj[256];
@@ -484,7 +487,7 @@ int oarr_dot_product_OO_to(const oarr_t* A, const oarr_t* B, otinum_t* res, dhel
 
             for (i = 0; i < Np; i++){
 
-                const coeff_t* Ai = A->p_data + (bp + i) * m;
+                const coeff_t* Ai = oarr_data(A) + (bp + i) * m;
 
                 if (!dnou_zero(Ai, m)){
 
@@ -492,7 +495,7 @@ int oarr_dot_product_OO_to(const oarr_t* A, const oarr_t* B, otinum_t* res, dhel
 
                     for (j = 0; j < Nq; j++){
 
-                        const coeff_t* Bj = B->p_data + (bq + j) * m;
+                        const coeff_t* Bj = oarr_data(B) + (bq + j) * m;
 
                         s = 0.0;
 
@@ -540,8 +543,8 @@ int oarr_dot_product_OO_to(const oarr_t* A, const oarr_t* B, otinum_t* res, dhel
 // *******************************************************************************************************
 int oarr_rom_eval_to(const oarr_t* arr, const coeff_t* deltas, oarr_t* res){
 
-    bases_t k = arr->nact, u[256];
-    uint64_t m = arr->size, e, bp;
+    bases_t k = oarr_nact(arr), u[256];
+    uint64_t m = oarr_size(arr), e, bp;
     ord_t top = (k == 0) ? 0 : dnou_top(arr), p, i;
     coeff_t* val;
     int status;
@@ -557,7 +560,7 @@ int oarr_rom_eval_to(const oarr_t* arr, const coeff_t* deltas, oarr_t* res){
     }
 
     if (m > 0){
-        memcpy(val, arr->p_data, (size_t)m * sizeof(coeff_t));
+        memcpy(val, oarr_data(arr), (size_t)m * sizeof(coeff_t));
     }
 
     for (p = 1; p <= top; p++){
@@ -569,7 +572,7 @@ int oarr_rom_eval_to(const oarr_t* arr, const coeff_t* deltas, oarr_t* res){
 
         for (j = 0; j < Np; j++){
 
-            const coeff_t* blk = arr->p_data + (bp + j) * m;
+            const coeff_t* blk = oarr_data(arr) + (bp + j) * m;
             coeff_t mono = 1.0;
 
             for (i = 0; i < p; i++){
@@ -591,10 +594,10 @@ int oarr_rom_eval_to(const oarr_t* arr, const coeff_t* deltas, oarr_t* res){
     } // end for
 
     // Only now touch res (it may alias arr).
-    status = oarr_zeros_to(0, arr->nrows, arr->ncols, 0, res);
+    status = oarr_zeros_to(0, oarr_nrows(arr), oarr_ncols(arr), 0, res);
 
     if (status == DN_OK && m > 0){
-        memcpy(res->p_data, val, (size_t)m * sizeof(coeff_t));
+        memcpy(oarr_data(res), val, (size_t)m * sizeof(coeff_t));
     }
 
     free(val);
@@ -631,8 +634,8 @@ static void dnou_block_to_rowmajor(const coeff_t* blk, uint64_t nrows, uint64_t 
 // *******************************************************************************************************
 int oarr_get_all_ims_to(const oarr_t* arr, bases_t nbasis, ord_t order, int derivs, coeff_t* out){
 
-    bases_t k = arr->nact, kk = (arr->nact < nbasis) ? arr->nact : nbasis, u[256];
-    uint64_t m = arr->size, nr = arr->nrows, nc = arr->ncols, bs, d0;
+    bases_t k = oarr_nact(arr), kk = (oarr_nact(arr) < nbasis) ? oarr_nact(arr) : nbasis, u[256];
+    uint64_t m = oarr_size(arr), nr = oarr_nrows(arr), nc = oarr_ncols(arr), bs, d0;
     ord_t top = (k == 0) ? 0 : dnou_top(arr), p;
     ndir_t ntot, Np, j;
     int status = dnsm_nimag(nbasis, order, &ntot);
@@ -646,7 +649,7 @@ int oarr_get_all_ims_to(const oarr_t* arr, bases_t nbasis, ord_t order, int deri
     }
 
     memset(out, 0, (size_t)((1 + (uint64_t)ntot) * m) * sizeof(coeff_t));
-    dnou_block_to_rowmajor(arr->p_data, nr, nc, 1.0, out, nc);
+    dnou_block_to_rowmajor(oarr_data(arr), nr, nc, 1.0, out, nc);
 
     if (order < top){
         top = order;
@@ -667,7 +670,7 @@ int oarr_get_all_ims_to(const oarr_t* arr, bases_t nbasis, ord_t order, int deri
 
             coeff_t f = derivs ? dnutil_tuple_factor(u, p) : 1.0;
 
-            dnou_block_to_rowmajor(arr->p_data + (bs + j) * m, nr, nc, f, out + (d0 + j) * m, nc);
+            dnou_block_to_rowmajor(oarr_data(arr) + (bs + j) * m, nr, nc, f, out + (d0 + j) * m, nc);
 
             if (derivs){
                 sshelp_next_dir(u, p, kk);
@@ -686,8 +689,8 @@ int oarr_get_all_ims_to(const oarr_t* arr, bases_t nbasis, ord_t order, int deri
 // *******************************************************************************************************
 bases_t oarr_order_max_base(ord_t p, const oarr_t* arr){
 
-    bases_t k = arr->nact;
-    uint64_t m = arr->size, bp;
+    bases_t k = oarr_nact(arr);
+    uint64_t m = oarr_size(arr), bp;
     ndir_t Np, j;
 
     if (p == 0 || p > dnou_top(arr) || k == 0){
@@ -700,7 +703,7 @@ bases_t oarr_order_max_base(ord_t p, const oarr_t* arr){
     // Colex order: the last nonzero direction has the largest last (= largest) base.
     for (j = Np; j > 0; j--){
 
-        if (!dnou_zero(arr->p_data + (bp + j - 1) * m, m)){
+        if (!dnou_zero(oarr_data(arr) + (bp + j - 1) * m, m)){
             return dnsb_max_base(j - 1, p);
         }
 
@@ -715,8 +718,8 @@ bases_t oarr_order_max_base(ord_t p, const oarr_t* arr){
 // *******************************************************************************************************
 int oarr_get_order_im_array_to(ord_t p, const oarr_t* arr, ndir_t width, coeff_t* out){
 
-    bases_t k = arr->nact;
-    uint64_t m = arr->size, nr = arr->nrows, nc = arr->ncols, ldo = nc * width, bp;
+    bases_t k = oarr_nact(arr);
+    uint64_t m = oarr_size(arr), nr = oarr_nrows(arr), nc = oarr_ncols(arr), ldo = nc * width, bp;
     ndir_t Np, j;
 
     if (width != 0 && (ldo / width != nc || m > SIZE_MAX / sizeof(coeff_t) / width)){
@@ -731,7 +734,7 @@ int oarr_get_order_im_array_to(ord_t p, const oarr_t* arr, ndir_t width, coeff_t
 
     if (p == 0){
 
-        dnou_block_to_rowmajor(arr->p_data, nr, nc, 1.0, out, ldo);
+        dnou_block_to_rowmajor(oarr_data(arr), nr, nc, 1.0, out, ldo);
         return DN_OK;
 
     }
@@ -749,7 +752,7 @@ int oarr_get_order_im_array_to(ord_t p, const oarr_t* arr, ndir_t width, coeff_t
     }
 
     for (j = 0; j < Np; j++){
-        dnou_block_to_rowmajor(arr->p_data + (bp + j) * m, nr, nc, 1.0, out + nc * (uint64_t)j, ldo);
+        dnou_block_to_rowmajor(oarr_data(arr) + (bp + j) * m, nr, nc, 1.0, out + nc * (uint64_t)j, ldo);
     }
 
     return DN_OK;
@@ -761,13 +764,13 @@ int oarr_get_order_im_array_to(ord_t p, const oarr_t* arr, ndir_t width, coeff_t
 // *******************************************************************************************************
 int oarr_add_order_im_array(ord_t p, const coeff_t* vals, ndir_t width, oarr_t* arr){
 
-    uint64_t nr = arr->nrows, nc = arr->ncols, ldi = nc * width, r, c, bp;
+    uint64_t nr = oarr_nrows(arr), nc = oarr_ncols(arr), ldi = nc * width, r, c, bp;
     ndir_t g, gmax = 0;
     bases_t gl[256], k;
     coeff_t* blk;
     int any = 0, status;
 
-    if (width == 0 || arr->size == 0){
+    if (width == 0 || oarr_size(arr) == 0){
         return DN_OK;
     }
 
@@ -776,7 +779,7 @@ int oarr_add_order_im_array(ord_t p, const coeff_t* vals, ndir_t width, oarr_t* 
         for (r = 0; r < nr; r++){
 
             for (c = 0; c < nc; c++){
-                arr->p_data[r + c * nr] += vals[r * ldi + c];
+                oarr_data(arr)[r + c * nr] += vals[r * ldi + c];
             }
 
         }
@@ -809,7 +812,7 @@ int oarr_add_order_im_array(ord_t p, const coeff_t* vals, ndir_t width, oarr_t* 
         return DN_ERR_INDEX;
     }
 
-    k = (gl[p - 1] > arr->nact) ? gl[p - 1] : arr->nact;
+    k = (gl[p - 1] > oarr_nact(arr)) ? gl[p - 1] : oarr_nact(arr);
 
     // The sparse sum takes the larger truncation order; capacity for the new layout first.
     status = oarr_reserve(arr, k, nr, nc, p);
@@ -822,11 +825,11 @@ int oarr_add_order_im_array(ord_t p, const coeff_t* vals, ndir_t width, oarr_t* 
         return status;
     }
 
-    bp = oarr_block_index(arr->nact, p, 0);
+    bp = oarr_block_index(oarr_nact(arr), p, 0);
 
     for (g = 0; g <= gmax; g++){
 
-        blk = arr->p_data + (bp + g) * arr->size;
+        blk = oarr_data(arr) + (bp + g) * oarr_size(arr);
 
         for (r = 0; r < nr; r++){
 
@@ -838,8 +841,8 @@ int oarr_add_order_im_array(ord_t p, const coeff_t* vals, ndir_t width, oarr_t* 
 
     } // end for
 
-    if (arr->act_order < p){
-        arr->act_order = p;
+    if (oarr_act_order(arr) < p){
+        oarr_set_act_order(arr, p);
     }
 
     return DN_OK;
@@ -855,7 +858,7 @@ int oarr_add_order_im_array(ord_t p, const coeff_t* vals, ndir_t width, oarr_t* 
 // *******************************************************************************************************
 int oarr_moving_average_to(const oarr_t* arr, uint64_t size, oarr_t* res){
 
-    uint64_t n = arr->size, k, j, b, nblocks;
+    uint64_t n = oarr_size(arr), k, j, b, nblocks;
     int64_t left, right;
     ord_t top = dnou_top(arr);
     coeff_t factor;
@@ -869,10 +872,10 @@ int oarr_moving_average_to(const oarr_t* arr, uint64_t size, oarr_t* res){
     factor  = 1.0 / (coeff_t)size;
     left    = (int64_t)size - (int64_t)(size / 2) - 1;
     right   = (int64_t)size - left;
-    nblocks = 1 + sshelp_ndir_total(arr->nact, top);
+    nblocks = 1 + sshelp_ndir_total(oarr_nact(arr), top);
 
     // res may alias arr: the result is then built in a call-local array.
-    status = dnou_target(res, alias, &tmp, arr->nact, n, 1, arr->trc_order, &out);
+    status = dnou_target(res, alias, &tmp, oarr_nact(arr), n, 1, oarr_trc_order(arr), &out);
 
     if (status != DN_OK){
         return dnou_finish(status, alias, &tmp, res);
@@ -881,8 +884,8 @@ int oarr_moving_average_to(const oarr_t* arr, uint64_t size, oarr_t* res){
     // Same operation order as the sparse filter, so every coefficient matches it exactly.
     for (b = 0; b < nblocks; b++){
 
-        const coeff_t* src = arr->p_data + b * n;
-        coeff_t* dst = out->p_data + b * n;
+        const coeff_t* src = oarr_data(arr) + b * n;
+        coeff_t* dst = oarr_data(out) + b * n;
 
         for (k = 0; k < n; k++){
 
@@ -911,7 +914,7 @@ int oarr_moving_average_to(const oarr_t* arr, uint64_t size, oarr_t* res){
 
     } // end for
 
-    out->act_order = arr->act_order;
+    oarr_set_act_order(out, oarr_act_order(arr));
 
     return dnou_finish(DN_OK, alias, &tmp, res);
 
@@ -923,14 +926,14 @@ int oarr_moving_average_to(const oarr_t* arr, uint64_t size, oarr_t* res){
 int oarr_interp1d_o_to(const oarr_t* xvals, const oarr_t* yvals, const otinum_t* x, otinum_t* res,
                        dhelpl_t dhl){
 
-    uint64_t n = xvals->nrows, start, finish, mid, rang;
-    const coeff_t* xr = xvals->p_data;
+    uint64_t n = oarr_nrows(xvals), start, finish, mid, rang;
+    const coeff_t* xr = oarr_data(xvals);
     coeff_t xv = x->re;
     otinum_t y0 = oti_init(), y1 = oti_init(), x0 = oti_init(), x1 = oti_init(), dy = oti_init();
     otinum_t dx = oti_init(), slope = oti_init(), t = oti_init();
     int status;
 
-    if (n == 0 || xvals->size == 0 || yvals->nrows < n || yvals->ncols == 0){
+    if (n == 0 || oarr_size(xvals) == 0 || oarr_nrows(yvals) < n || oarr_ncols(yvals) == 0){
         return DN_ERR_SIZE;
     }
 
@@ -1018,26 +1021,26 @@ int oarr_interp1d_o_to(const oarr_t* xvals, const oarr_t* yvals, const otinum_t*
 int oarr_interp1d_O_to(const oarr_t* xvals, const oarr_t* yvals, const oarr_t* X, oarr_t* res,
                        dhelpl_t dhl){
 
-    ord_t trc = X->trc_order;
+    ord_t trc = oarr_trc_order(X);
     otinum_t xe = oti_init(), ye = oti_init();
     uint64_t i, j;
     oarr_t tmp = oarr_init(), *out;
     int alias = dnou_alias(res, X) || dnou_alias(res, xvals) || dnou_alias(res, yvals), status;
 
-    if (xvals->trc_order > trc){
-        trc = xvals->trc_order;
+    if (oarr_trc_order(xvals) > trc){
+        trc = oarr_trc_order(xvals);
     }
 
-    if (yvals->trc_order > trc){
-        trc = yvals->trc_order;
+    if (oarr_trc_order(yvals) > trc){
+        trc = oarr_trc_order(yvals);
     }
 
     // res may alias X, xvals or yvals: the result is then built in a call-local array.
-    status = dnou_target(res, alias, &tmp, 0, X->nrows, X->ncols, trc, &out);
+    status = dnou_target(res, alias, &tmp, 0, oarr_nrows(X), oarr_ncols(X), trc, &out);
 
-    for (j = 0; j < X->ncols && status == DN_OK; j++){
+    for (j = 0; j < oarr_ncols(X) && status == DN_OK; j++){
 
-        for (i = 0; i < X->nrows && status == DN_OK; i++){
+        for (i = 0; i < oarr_nrows(X) && status == DN_OK; i++){
 
             status = oarr_get_item_to(i, j, X, &xe);
 

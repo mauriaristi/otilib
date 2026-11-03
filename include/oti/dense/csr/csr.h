@@ -13,8 +13,10 @@
 // does: setting an entry overwrites it, reading a missing entry gives nothing (the caller returns a
 // zero). lilo_to_csr() sorts the entries by row and column and lays them out over the largest nact
 // and the largest truncation order of the entries. Nothing here calls exit(). These functions return
-// only CSRO_* codes: a DN_ERR_* from an inner call is mapped (DN_ERR_SIZE -> CSRO_ERR_SIZE,
-// DN_ERR_MEMORY -> CSRO_ERR_MEMORY, DN_ERR_INDEX -> CSRO_ERR_INDEX).
+// CSRO_* codes: a DN_ERR_* from an inner call is mapped (DN_ERR_SIZE -> CSRO_ERR_SIZE,
+// DN_ERR_MEMORY -> CSRO_ERR_MEMORY, DN_ERR_INDEX -> CSRO_ERR_INDEX). The one exception is
+// OTI_ERR_BUSY, returned unchanged when the result is a view or an array shared with views or exports
+// (contracts 7.3; never the case in 7a).
 
 // -------------------------------------------------------------------------------------------------------
 // ---------------------------------------     STATUS CODES     ------------------------------------------

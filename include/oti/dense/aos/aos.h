@@ -2,25 +2,97 @@
 #define OTI_DENSE_AOS_H
 
 // Dense AoS arrays (arro_t): every element is an otinum_t with its own nact and orders, like
-// arrso_t. Elements are row-major (element (i, j) at p_data[j + i*ncols]). Elementwise operations
-// run the scalar kernels over the elements with OpenMP (per-thread workspaces, oti_ws()); linear
-// algebra goes through the SoA layout (arro_to_oarr()). Conventions in
-// include/oti/dense/scalar/base.h; `_to` variants: @p res may alias any input, and a scalar operand
-// @p num may be an element of @p res or @p arr1 (it is copied first). Shape mismatches return
-// DN_ERR_SIZE.
+// arrso_t. Elements are row-major (element (i, j) at arro_data(arr)[j + i*ncols]). Elementwise
+// operations run the scalar kernels over the elements in fixed chunks through oti_parallel_for()
+// (per-worker workspaces, oti_ws()); linear algebra goes through the SoA layout (arro_to_oarr()).
+// Conventions in include/oti/dense/scalar/base.h; `_to` variants: @p res may alias any input, and a
+// scalar operand @p num may be an element of @p res or @p arr1 (it is copied first). Shape mismatches
+// return DN_ERR_SIZE.
+
+/// Elements of one element struct in reals: the element stride of the descriptor (3).
+#define ARRO_W ((int64_t)(sizeof(otinum_t) / sizeof(coeff_t)))
+
+// The descriptor of an arro_t addresses the `re` field of every element as an OTI_F64 element
+// (request dense-1, proposal A): `re` must open the struct and the struct must be a whole number of
+// reals.
+OTI_ND_STATIC_ASSERT(offsetof(otinum_t, re) == 0, "otinum_t.re must be the first field (arro_t)");
+OTI_ND_STATIC_ASSERT(sizeof(otinum_t) % sizeof(coeff_t) == 0,
+                     "sizeof(otinum_t) must be a multiple of 8 (arro_t element stride)");
 
 /**
- * @brief Dense OTI array, array of structures.
+ * @brief Dense OTI array, array of structures, on ndarr_t (PLAN-ndarray.md "SoA arrays are one
+ * (ndim + 1)-D ndarray": AoS arrays are strided grids of element structs; request dense-1, A).
  *
- * There is no ownership flag: the array owns its elements and arro_free() releases them all.
+ * @p elems is an OTI_F64 descriptor over the `re` fields of the element structs: shape (nrows, ncols),
+ * strides (ncols * ARRO_W, ARRO_W) in reals (row-major elements, compact in 7a), data = &element(0,
+ * 0).re, which is the element itself (`re` is its first field). It is the real-part view of the array:
+ * an nd_* function on it only ever reads or writes `re` slots. Element (i, j) is
+ * `(otinum_t*)(nd_f64(&elems) + i * strides[0] + j * strides[1])`, `arro_data(arr)[j + i * ncols]` for
+ * the compact layout.
+ *
+ * Ownership: an owning array holds one reference on its buffer (elems retained); the buffer wraps the
+ * element store (nd_wrap(), neither OWNS nor GROWABLE) and its release callback oti_free()s every
+ * element, then the store. arro_init() and an empty (0-element) array hold no buffer. Copying an
+ * owning arro_t by struct assignment and keeping both copies is a double release: move it.
  */
 typedef struct {
-    otinum_t* p_data; ///< Elements, row-major.
-    uint64_t   nrows; ///< Number of rows.
-    uint64_t   ncols; ///< Number of columns.
-    uint64_t    size; ///< nrows * ncols.
-} arro_t;             ///< Dense AoS OTI array type.
+    ndarr_t elems; ///< OTI_F64 (nrows, ncols) over the `re` fields; strides (ncols * ARRO_W, ARRO_W).
+} arro_t;          ///< Dense AoS OTI array type.
 
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Dense AoS accessors
+ * Valid on owning arrays and arro_init() (a 0 x 0 array).
+ * @{
+ */
+
+/**
+ * @brief Elements of an array, row-major (the compact 7a layout).
+ *
+ * @param[in] a Array.
+ *
+ * @return The first element (NULL without elements). Not owned by the caller.
+ */
+static inline otinum_t* arro_data(const arro_t* a){
+    return (otinum_t*)a->elems.data;
+}
+
+/**
+ * @brief Number of rows.
+ *
+ * @param[in] a Array.
+ *
+ * @return elems.shape[0].
+ */
+static inline uint64_t arro_nrows(const arro_t* a){
+    return (uint64_t)a->elems.shape[0];
+}
+
+/**
+ * @brief Number of columns.
+ *
+ * @param[in] a Array.
+ *
+ * @return elems.shape[1].
+ */
+static inline uint64_t arro_ncols(const arro_t* a){
+    return (uint64_t)a->elems.shape[1];
+}
+
+/**
+ * @brief Number of elements.
+ *
+ * @param[in] a Array.
+ *
+ * @return nrows * ncols.
+ */
+static inline uint64_t arro_size(const arro_t* a){
+    return arro_nrows(a) * arro_ncols(a);
+}
+
+/** @} */
 // -------------------------------------------------------------------------------------------------------
 
 
@@ -50,14 +122,21 @@ int arro_zeros_to(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* res);
 /**
  * @brief Gives an array a new shape, keeping the first min(size, new size) elements.
  *
- * Elements are stored row-major like arrso_t: element (i, j) is p_data[j + i*ncols].
+ * Elements are stored row-major like arrso_t: element (i, j) is arro_data(arr)[j + i*ncols]. A new
+ * size moves the kept element structs into a new element store (on a failure the array is unchanged).
+ * A shape change is refused while the store is shared (another reference or a live export of the
+ * buffer, compatibility rule G1); the same shape is always accepted (no change). The functions that
+ * build their result apart (matmul, transpose) apply the same rule to @p res.
  *
  * @param[in]     nrows     Number of rows.
  * @param[in]     ncols     Number of columns.
  * @param[in]     trc_order Truncation order of added elements (real zeros).
  * @param[in,out] arr       Array.
  *
- * @return DN_OK, or DN_ERR_MEMORY.
+ * @return DN_OK; DN_ERR_MEMORY (allocation, or a shape not representable in the descriptor: an extent
+ *         above INT64_MAX / sizeof(otinum_t), or more elements than that; also for an empty shape);
+ *         DN_ERR_INDEX;
+ *         OTI_ERR_BUSY (shared store). On a failure the array is unchanged.
  */
 int arro_resize(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* arr);
 // -------------------------------------------------------------------------------------------------------

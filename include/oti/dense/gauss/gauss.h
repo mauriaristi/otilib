@@ -5,9 +5,12 @@
 // layout of src/c/semisparse/gauss/gauss.c).
 //
 // A feoarr_t is an nrows x ncols OTI matrix evaluated at nip integration points. All points share
-// one nact and one truncation order. The coefficients are one oarr_t of shape
-// nip x (nrows * ncols): entry (i, j) of point ip is element (ip, i + j * nrows) of it, so in every
-// direction block the values are column-major over (ip, i, j), points fastest. Consequences:
+// one nact and one truncation order. The coefficients are one oarr_t whose blocks descriptor is
+// (nblocks, nip, nrows, ncols) in F order inside a block (PLAN-ndarray.md "Gauss types"): entry (i, j)
+// of point ip is element ip + nip * (i + nrows * j) of every direction block, points fastest. Its
+// matricized shape (oarr_nrows() x oarr_ncols()) is nip x (nrows * ncols), so the oarr_t functions
+// apply to it directly; their results are 3-D and are relabelled with fearr_set_shape().
+// Consequences:
 //
 // - Elementwise operations and elementary functions between Gauss values of the same shape are the
 //   oarr_t operations applied to the embedded arrays, one batched kernel per call.
@@ -23,14 +26,59 @@
 // ---------------------------------------     STRUCTURE     ---------------------------------------------
 // -------------------------------------------------------------------------------------------------------
 
+/**
+ * @brief Dense OTI matrix at Gauss integration points ("fearr").
+ *
+ * One oarr_t; its blocks descriptor is (nblocks, nip, nrows, ncols) with strides (nip*nrows*ncols, 1,
+ * nip, nip*nrows). The shape is read with fearr_nrows(), fearr_ncols() and fearr_nip().
+ */
 typedef struct {
-    oarr_t     arr; ///< nip x (nrows * ncols) coefficients; entry (i, j) at ip is (ip, i + j*nrows).
-    uint64_t nrows; ///< Rows of the matrix at each point.
-    uint64_t ncols; ///< Columns of the matrix at each point.
-    uint64_t   nip; ///< Number of integration points.
+    oarr_t     arr; ///< Blocks (nblocks, nip, nrows, ncols), F order inside a block, points fastest.
 } feoarr_t;         ///< Dense OTI matrix at Gauss integration points ("fearr").
 
 typedef feoarr_t feotinum_t; ///< Dense OTI scalar at Gauss integration points ("fenum"): 1 x 1.
+
+
+/**
+ * @name Gauss shape accessors
+ * @{
+ */
+
+/**
+ * @brief Rows of the matrix at each point.
+ *
+ * @param[in] fe Gauss array.
+ *
+ * @return blocks.shape[2].
+ */
+static inline uint64_t fearr_nrows(const feoarr_t* fe){
+    return (uint64_t)fe->arr.blocks.shape[2];
+}
+
+/**
+ * @brief Columns of the matrix at each point.
+ *
+ * @param[in] fe Gauss array.
+ *
+ * @return blocks.shape[3].
+ */
+static inline uint64_t fearr_ncols(const feoarr_t* fe){
+    return (uint64_t)fe->arr.blocks.shape[3];
+}
+
+/**
+ * @brief Number of integration points.
+ *
+ * @param[in] fe Gauss array.
+ *
+ * @return blocks.shape[1].
+ */
+static inline uint64_t fearr_nip(const feoarr_t* fe){
+    return (uint64_t)fe->arr.blocks.shape[1];
+}
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
 
 // -------------------------------------------------------------------------------------------------------
 // ---------------------------------------     MEMORY     ------------------------------------------------

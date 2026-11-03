@@ -15,7 +15,7 @@
 // Number of direction blocks (the real one included) of an array.
 static inline uint64_t dngs_nblocks(const oarr_t* a){
 
-    return 1 + (uint64_t)sshelp_ndir_total(a->nact, a->trc_order);
+    return 1 + (uint64_t)sshelp_ndir_total(oarr_nact(a), oarr_trc_order(a));
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ static inline uint64_t dngs_nblocks(const oarr_t* a){
 // act_order of an array as a bound on its nonzero orders (0 for a real array).
 static inline ord_t dngs_act(const oarr_t* a){
 
-    return (a->nact == 0) ? 0 : a->act_order;
+    return (oarr_nact(a) == 0) ? 0 : oarr_act_order(a);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -38,6 +38,48 @@ static void dngs_move(feoarr_t* tmp, feoarr_t* res){
     fearr_free(res);
     *res = *tmp;
     *tmp = fearr_init();
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// DN_OK when the Gauss descriptor (nblocks, nip, nrows, ncols) is representable (dnob_shape_size_s(),
+// dnob_layout_ok(): every extent within int64_t and the product of the nonzero ones, in bytes, too),
+// else DN_ERR_MEMORY. Checked before anything is modified.
+static int dngs_check(uint64_t nblocks, uint64_t nrows, uint64_t ncols, uint64_t nip){
+
+    dnob_shape_t S;
+    uint64_t size;
+
+    S.sdim   = 3;
+    S.ext[0] = nip;
+    S.ext[1] = nrows;
+    S.ext[2] = ncols;
+
+    if (dnob_shape_size_s(&S, &size) != DN_OK){
+        return DN_ERR_MEMORY;
+    }
+
+    return dnob_layout_ok(nblocks, &S);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Labels the embedded array of a Gauss value with its shape: blocks (nblocks, nip, nrows, ncols). The
+// array's matricized shape is nip x (nrows * ncols) (the caller computed it so), which the label keeps.
+static void dngs_label(feoarr_t* fe, uint64_t nrows, uint64_t ncols, uint64_t nip){
+
+    dnob_shape_t S;
+
+    S.sdim   = 3;
+    S.ext[0] = nip;
+    S.ext[1] = nrows;
+    S.ext[2] = ncols;
+
+    dnob_set_layout(&fe->arr, (uint64_t)fe->arr.blocks.shape[0], &S);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -127,22 +169,23 @@ static int dngs_block_cols(uint64_t nrows, uint64_t ncols, uint64_t i0, uint64_t
 // column 0 repeated). res must not alias a.
 static int dngs_gather_cols(const oarr_t* a, const uint64_t* cols, uint64_t n, oarr_t* res){
 
-    uint64_t nip = a->nrows, nb = dngs_nblocks(a), d, c, cs;
+    uint64_t nip = oarr_nrows(a), nb = dngs_nblocks(a), d, c, cs;
     size_t nreal;
-    int status = dnob_result_shape(res, a->nact, nip, n, a->trc_order, &nreal);
+    int status = dnob_result_shape(res, oarr_nact(a), nip, n, oarr_trc_order(a), &nreal);
 
     if (status != DN_OK){
         return status;
     }
 
-    res->act_order = a->act_order;
+    oarr_set_act_order(res, oarr_act_order(a));
 
     for (d = 0; d < nb; d++){
 
         for (c = 0; c < n; c++){
 
             cs = (cols == NULL) ? 0 : cols[c];
-            memcpy(res->p_data + d * res->size + c * nip, a->p_data + d * a->size + cs * nip,
+            memcpy(oarr_data(res) + d * oarr_size(res) + c * nip,
+                   oarr_data(a) + d * oarr_size(a) + cs * nip,
                 (size_t)nip * sizeof(coeff_t));
 
         }
@@ -161,9 +204,9 @@ static int dngs_grow_arr(bases_t nact, ord_t trc, oarr_t* arr){
 
     int status;
 
-    if (trc > arr->trc_order){
+    if (trc > oarr_trc_order(arr)){
 
-        status = oarr_reserve(arr, arr->nact, arr->nrows, arr->ncols, trc);
+        status = oarr_reserve(arr, oarr_nact(arr), oarr_nrows(arr), oarr_ncols(arr), trc);
 
         if (status != DN_OK){
             return status;
@@ -193,26 +236,26 @@ static int dngs_scatter(const oarr_t* src, const uint64_t* src_cols, const uint6
     ord_t p, act = dngs_act(src);
     const coeff_t* S;
     coeff_t* D;
-    int status = dngs_grow_arr(src->nact, src->trc_order, dst);
+    int status = dngs_grow_arr(oarr_nact(src), oarr_trc_order(src), dst);
 
     if (status != DN_OK){
         return status;
     }
 
-    ms = src->nrows;
-    md = dst->nrows;
+    ms = oarr_nrows(src);
+    md = oarr_nrows(dst);
 
-    for (p = 0; p <= dst->trc_order; p++){
+    for (p = 0; p <= oarr_trc_order(dst); p++){
 
         // Block offsets once per order.
-        bd = oarr_block_index(dst->nact, p, 0);
-        bs = oarr_block_index(src->nact, p, 0);
-        Nd = sshelp_ndir_order(dst->nact, p);
-        Ns = (p <= src->trc_order) ? sshelp_ndir_order(src->nact, p) : 0;
+        bd = oarr_block_index(oarr_nact(dst), p, 0);
+        bs = oarr_block_index(oarr_nact(src), p, 0);
+        Nd = sshelp_ndir_order(oarr_nact(dst), p);
+        Ns = (p <= oarr_trc_order(src)) ? sshelp_ndir_order(oarr_nact(src), p) : 0;
 
         for (i = 0; i < Nd; i++){
 
-            D = dst->p_data + (bd + i) * dst->size;
+            D = oarr_data(dst) + (bd + i) * oarr_size(dst);
 
             for (c = 0; c < n; c++){
 
@@ -221,7 +264,7 @@ static int dngs_scatter(const oarr_t* src, const uint64_t* src_cols, const uint6
                 if (i < Ns){
 
                     cs = (src_cols == NULL) ? c : src_cols[c];
-                    S  = src->p_data + (bs + i) * src->size + cs * ms;
+                    S  = oarr_data(src) + (bs + i) * oarr_size(src) + cs * ms;
 
                     for (t = 0; t < ns; t++){
                         Dc[t] = S[t];
@@ -241,8 +284,8 @@ static int dngs_scatter(const oarr_t* src, const uint64_t* src_cols, const uint6
 
     }
 
-    if (act > dst->act_order){
-        dst->act_order = act;
+    if (act > oarr_act_order(dst)){
+        oarr_set_act_order(dst, act);
     }
 
     return DN_OK;
@@ -260,10 +303,8 @@ feoarr_t fearr_init(void){
 
     feoarr_t fe;
 
-    fe.arr   = oarr_init();
-    fe.nrows = 0;
-    fe.ncols = 0;
-    fe.nip   = 0;
+    fe.arr = oarr_init();
+    dngs_label(&fe, 0, 0, 0);
 
     return fe;
 
@@ -276,9 +317,16 @@ int fearr_zeros_to(bases_t nact, uint64_t nrows, uint64_t ncols, uint64_t nip, o
                    feoarr_t* res){
 
     uint64_t m;
+    ndir_t nimag;
     int status;
 
-    if (dnob_shape_size(nrows, ncols, &m) != DN_OK){
+    if (trc_order > _MAXORDER_OTI){
+        return DN_ERR_INDEX;
+    }
+
+    if (dnob_shape_size(nrows, ncols, &m) != DN_OK
+        || sshelp_ndir_total_checked(nact, trc_order, &nimag) != SSHELP_OK || nimag >= (ndir_t)INT64_MAX
+        || dngs_check(1 + nimag, nrows, ncols, nip) != DN_OK){
         return DN_ERR_MEMORY;
     }
 
@@ -288,9 +336,7 @@ int fearr_zeros_to(bases_t nact, uint64_t nrows, uint64_t ncols, uint64_t nip, o
         return status;
     }
 
-    res->nrows = nrows;
-    res->ncols = ncols;
-    res->nip   = nip;
+    dngs_label(res, nrows, ncols, nip);
 
     return DN_OK;
 
@@ -311,23 +357,12 @@ void fearr_free(feoarr_t* fe){
 // *******************************************************************************************************
 int fearr_copy_to(const feoarr_t* fe, feoarr_t* res){
 
-    int status;
-
     if (fe == res){
         return DN_OK;
     }
 
-    status = oarr_copy_to(&fe->arr, &res->arr);
-
-    if (status != DN_OK){
-        return status;
-    }
-
-    res->nrows = fe->nrows;
-    res->ncols = fe->ncols;
-    res->nip   = fe->nip;
-
-    return DN_OK;
+    // The copy keeps the element shape (nip, nrows, ncols).
+    return oarr_copy_to(&fe->arr, &res->arr);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -347,13 +382,13 @@ int fearr_set_shape(uint64_t nrows, uint64_t ncols, uint64_t nip, feoarr_t* fe){
 
     uint64_t m;
 
-    if (dnob_shape_size(nrows, ncols, &m) != DN_OK || fe->arr.nrows != nip || fe->arr.ncols != m){
+    if (dnob_shape_size(nrows, ncols, &m) != DN_OK
+        || dngs_check((uint64_t)fe->arr.blocks.shape[0], nrows, ncols, nip) != DN_OK
+        || oarr_nrows(&fe->arr) != nip || oarr_ncols(&fe->arr) != m){
         return DN_ERR_SIZE;
     }
 
-    fe->nrows = nrows;
-    fe->ncols = ncols;
-    fe->nip   = nip;
+    dngs_label(fe, nrows, ncols, nip);
 
     return DN_OK;
 
@@ -369,7 +404,7 @@ int fearr_set_shape(uint64_t nrows, uint64_t ncols, uint64_t nip, feoarr_t* fe){
 int fearr_get_ip_to(uint64_t ip, const feoarr_t* fe, oarr_t* res){
 
     const oarr_t* a = &fe->arr;
-    uint64_t nip = fe->nip, m = a->ncols, nb = dngs_nblocks(a), d, e;
+    uint64_t nip = fearr_nip(fe), m = oarr_ncols(a), nb = dngs_nblocks(a), d, e;
     const coeff_t* S;
     coeff_t* D;
     size_t nreal;
@@ -383,18 +418,19 @@ int fearr_get_ip_to(uint64_t ip, const feoarr_t* fe, oarr_t* res){
         return DN_ERR_ARGUMENT;
     }
 
-    status = dnob_result_shape(res, a->nact, fe->nrows, fe->ncols, a->trc_order, &nreal);
+    status = dnob_result_shape(res, oarr_nact(a), fearr_nrows(fe), fearr_ncols(fe), oarr_trc_order(a),
+                               &nreal);
 
     if (status != DN_OK){
         return status;
     }
 
-    res->act_order = a->act_order;
+    oarr_set_act_order(res, oarr_act_order(a));
 
     for (d = 0; d < nb; d++){
 
-        S = a->p_data + d * a->size + ip;
-        D = res->p_data + d * m;
+        S = oarr_data(a) + d * oarr_size(a) + ip;
+        D = oarr_data(res) + d * m;
 
         for (e = 0; e < m; e++){
             D[e] = S[e * nip];
@@ -411,15 +447,15 @@ int fearr_get_ip_to(uint64_t ip, const feoarr_t* fe, oarr_t* res){
 // *******************************************************************************************************
 int fearr_set_ip(const oarr_t* val, uint64_t ip, feoarr_t* fe){
 
-    oarr_t row;
-    uint64_t *cols, e, m = fe->arr.ncols;
+    oarr_t row = oarr_init();
+    uint64_t *cols, e, m = oarr_ncols(&fe->arr);
     int status;
 
-    if (val->nrows != fe->nrows || val->ncols != fe->ncols){
+    if (oarr_nrows(val) != fearr_nrows(fe) || oarr_ncols(val) != fearr_ncols(fe)){
         return DN_ERR_SIZE;
     }
 
-    if (ip >= fe->nip){
+    if (ip >= fearr_nip(fe)){
         return DN_ERR_INDEX;
     }
 
@@ -427,10 +463,13 @@ int fearr_set_ip(const oarr_t* val, uint64_t ip, feoarr_t* fe){
         return DN_ERR_ARGUMENT;
     }
 
-    // val's m column-major entries, read as a 1 x m row: its column e goes to point ip of column e.
-    row       = *val;
-    row.nrows = 1;
-    row.ncols = m;
+    // val's m column-major entries, read as a 1 x m row (a view): its column e goes to point ip of
+    // column e.
+    status = oarr_view_matrix(val, 1, m, &row);
+
+    if (status != DN_OK){
+        return status;
+    }
 
     cols = (uint64_t*)malloc((size_t)m * sizeof(uint64_t) + 1);
 
@@ -463,18 +502,20 @@ int fearr_get_slice_to(const feoarr_t* fe, uint64_t i0, uint64_t ni, int64_t ist
         return DN_ERR_ARGUMENT;
     }
 
-    status = dngs_block_cols(fe->nrows, fe->ncols, i0, ni, istep, j0, nj, jstep, &cols);
+    status = dngs_block_cols(fearr_nrows(fe), fearr_ncols(fe), i0, ni, istep, j0, nj, jstep, &cols);
+
+    // The ranges first (DN_ERR_INDEX, as 1.x), then the representability of the result shape (an
+    // empty slice may name a huge extent), before res is touched.
+    if (status == DN_OK && dngs_check(dngs_nblocks(&fe->arr), ni, nj, fearr_nip(fe)) != DN_OK){
+        status = DN_ERR_MEMORY;
+    }
 
     if (status == DN_OK){
         status = dngs_gather_cols(&fe->arr, cols, ni * nj, &res->arr);
     }
 
     if (status == DN_OK){
-
-        res->nrows = ni;
-        res->ncols = nj;
-        res->nip   = fe->nip;
-
+        dngs_label(res, ni, nj, fearr_nip(fe));
     }
 
     free(cols);
@@ -491,14 +532,15 @@ int fearr_set_slice(const feoarr_t* val, uint64_t i0, uint64_t ni, int64_t istep
 
     uint64_t n, c;
     uint64_t *dst_cols, *src_cols = NULL;
-    int bcast = (val->nrows == 1 && val->ncols == 1 && (ni != 1 || nj != 1));
+    int bcast = (fearr_nrows(val) == 1 && fearr_ncols(val) == 1 && (ni != 1 || nj != 1));
     int status;
 
     if (val == fe){
         return DN_ERR_ARGUMENT;
     }
 
-    if (val->nip != fe->nip || (!bcast && (val->nrows != ni || val->ncols != nj))){
+    if (fearr_nip(val) != fearr_nip(fe) || (!bcast && (fearr_nrows(val) != ni
+                                                       || fearr_ncols(val) != nj))){
         return DN_ERR_SIZE;
     }
 
@@ -507,7 +549,7 @@ int fearr_set_slice(const feoarr_t* val, uint64_t i0, uint64_t ni, int64_t istep
         return DN_OK;
     }
 
-    status = dngs_block_cols(fe->nrows, fe->ncols, i0, ni, istep, j0, nj, jstep, &dst_cols);
+    status = dngs_block_cols(fearr_nrows(fe), fearr_ncols(fe), i0, ni, istep, j0, nj, jstep, &dst_cols);
 
     if (status != DN_OK){
         return status;
@@ -534,7 +576,7 @@ int fearr_set_slice(const feoarr_t* val, uint64_t i0, uint64_t ni, int64_t istep
 
     }
 
-    status = dngs_scatter(&val->arr, src_cols, dst_cols, n, 0, fe->nip, &fe->arr);
+    status = dngs_scatter(&val->arr, src_cols, dst_cols, n, 0, fearr_nip(fe), &fe->arr);
 
     free(dst_cols);
     free(src_cols);
@@ -549,11 +591,11 @@ int fearr_set_slice(const feoarr_t* val, uint64_t i0, uint64_t ni, int64_t istep
 int fearr_set_ijk_o(const otinum_t* num, uint64_t i, uint64_t j, uint64_t ip,
                     feoarr_t* fe){
 
-    if (i >= fe->nrows || j >= fe->ncols || ip >= fe->nip){
+    if (i >= fearr_nrows(fe) || j >= fearr_ncols(fe) || ip >= fearr_nip(fe)){
         return DN_ERR_INDEX;
     }
 
-    return oarr_set_item(num, ip, i + j * fe->nrows, &fe->arr);
+    return oarr_set_item(num, ip, i + j * fearr_nrows(fe), &fe->arr);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -562,11 +604,11 @@ int fearr_set_ijk_o(const otinum_t* num, uint64_t i, uint64_t j, uint64_t ip,
 // *******************************************************************************************************
 int fearr_set_ijk_r(coeff_t val, uint64_t i, uint64_t j, uint64_t ip, feoarr_t* fe){
 
-    if (i >= fe->nrows || j >= fe->ncols || ip >= fe->nip){
+    if (i >= fearr_nrows(fe) || j >= fearr_ncols(fe) || ip >= fearr_nip(fe)){
         return DN_ERR_INDEX;
     }
 
-    return oarr_set_item_r(val, ip, i + j * fe->nrows, &fe->arr);
+    return oarr_set_item_r(val, ip, i + j * fearr_nrows(fe), &fe->arr);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -579,24 +621,28 @@ int fearr_set_ijk_r(coeff_t val, uint64_t i, uint64_t j, uint64_t ip, feoarr_t* 
 // *******************************************************************************************************
 int fearr_from_oarr_to(const oarr_t* arr, uint64_t nip, feoarr_t* res){
 
-    uint64_t nb = dngs_nblocks(arr), m = arr->size, d, e, t;
+    uint64_t nb = dngs_nblocks(arr), m = oarr_size(arr), d, e, t;
     feoarr_t tmp = fearr_init();
     feoarr_t* out = (arr == &res->arr) ? &tmp : res;
     const coeff_t* S;
     coeff_t* D;
     size_t nreal;
-    int status = dnob_result_shape(&out->arr, arr->nact, nip, m, arr->trc_order, &nreal);
+    int status = dngs_check(nb, oarr_nrows(arr), oarr_ncols(arr), nip);
+
+    if (status == DN_OK){
+        status = dnob_result_shape(&out->arr, oarr_nact(arr), nip, m, oarr_trc_order(arr), &nreal);
+    }
 
     if (status != DN_OK){
         return status;
     }
 
-    out->arr.act_order = arr->act_order;
+    oarr_set_act_order(&out->arr, oarr_act_order(arr));
 
     for (d = 0; d < nb; d++){
 
-        S = arr->p_data + d * m;
-        D = out->arr.p_data + d * out->arr.size;
+        S = oarr_data(arr) + d * m;
+        D = oarr_data(&out->arr) + d * oarr_size(&out->arr);
 
         for (e = 0; e < m; e++){
 
@@ -608,9 +654,7 @@ int fearr_from_oarr_to(const oarr_t* arr, uint64_t nip, feoarr_t* res){
 
     }
 
-    out->nrows = arr->nrows;
-    out->ncols = arr->ncols;
-    out->nip   = nip;
+    dngs_label(out, oarr_nrows(arr), oarr_ncols(arr), nip);
 
     if (out == &tmp){
         dngs_move(&tmp, res);
@@ -632,18 +676,18 @@ int fearr_bcast_to(const feoarr_t* num, uint64_t nrows, uint64_t ncols, feoarr_t
         return DN_ERR_ARGUMENT;
     }
 
-    if (num->nrows != 1 || num->ncols != 1 || dnob_shape_size(nrows, ncols, &n) != DN_OK){
+    if (fearr_nrows(num) != 1 || fearr_ncols(num) != 1 || dnob_shape_size(nrows, ncols, &n) != DN_OK){
         return DN_ERR_SIZE;
+    }
+
+    if (dngs_check(dngs_nblocks(&num->arr), nrows, ncols, fearr_nip(num)) != DN_OK){
+        return DN_ERR_MEMORY;
     }
 
     status = dngs_gather_cols(&num->arr, NULL, n, &res->arr);
 
     if (status == DN_OK){
-
-        res->nrows = nrows;
-        res->ncols = ncols;
-        res->nip   = num->nip;
-
+        dngs_label(res, nrows, ncols, fearr_nip(num));
     }
 
     return status;
@@ -659,7 +703,7 @@ int fearr_bcast_to(const feoarr_t* num, uint64_t nrows, uint64_t ncols, feoarr_t
 // *******************************************************************************************************
 int fearr_transpose_to(const feoarr_t* fe, feoarr_t* res){
 
-    uint64_t n = fe->nrows, m = fe->ncols, r, c, nm;
+    uint64_t n = fearr_nrows(fe), m = fearr_ncols(fe), r, c, nm;
     uint64_t* cols;
     feoarr_t tmp = fearr_init();
     int status;
@@ -687,9 +731,7 @@ int fearr_transpose_to(const feoarr_t* fe, feoarr_t* res){
 
     if (status == DN_OK){
 
-        tmp.nrows = m;
-        tmp.ncols = n;
-        tmp.nip   = fe->nip;
+        dngs_label(&tmp, m, n, fearr_nip(fe));
         dngs_move(&tmp, res);
 
     }
@@ -739,9 +781,11 @@ static void dngs_block_matmul(const coeff_t* A, const coeff_t* B, uint64_t n, ui
 // *******************************************************************************************************
 int fearr_matmul_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res, dhelpl_t dhl){
 
-    uint64_t n = a->nrows, q = a->ncols, m = b->ncols, nip = a->nip, sa, sb, sr, bp, bq, bpq, nm;
-    bases_t ka = a->arr.nact, kb = b->arr.nact, k = (ka > kb) ? ka : kb, ui[256], uj[256];
-    ord_t trc = (a->arr.trc_order > b->arr.trc_order) ? a->arr.trc_order : b->arr.trc_order;
+    uint64_t n = fearr_nrows(a), q = fearr_ncols(a), m = fearr_ncols(b), nip = fearr_nip(a);
+    uint64_t sa, sb, sr, bp, bq, bpq, nm;
+    bases_t ka = oarr_nact(&a->arr), kb = oarr_nact(&b->arr), k = (ka > kb) ? ka : kb, ui[256], uj[256];
+    ord_t trc = (oarr_trc_order(&a->arr) > oarr_trc_order(&b->arr)) ? oarr_trc_order(&a->arr)
+                                                                      : oarr_trc_order(&b->arr);
     ord_t atop = dngs_act(&a->arr), btop = dngs_act(&b->arr), p, pq;
     ndir_t i, j, Np, Nq;
     unsigned act;
@@ -751,7 +795,7 @@ int fearr_matmul_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res, dhel
     size_t nreal;
     int status;
 
-    if (b->nrows != q || b->nip != nip){
+    if (fearr_nrows(b) != q || fearr_nip(b) != nip){
         return DN_ERR_SIZE;
     }
 
@@ -765,11 +809,11 @@ int fearr_matmul_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res, dhel
         return status;
     }
 
-    memset(out->arr.p_data, 0, nreal * sizeof(coeff_t));
+    memset(oarr_data(&out->arr), 0, nreal * sizeof(coeff_t));
 
-    sa = a->arr.size;
-    sb = b->arr.size;
-    sr = out->arr.size;
+    sa = oarr_size(&a->arr);
+    sb = oarr_size(&b->arr);
+    sr = oarr_size(&out->arr);
 
     for (p = 0; p <= atop; p++){
 
@@ -788,7 +832,7 @@ int fearr_matmul_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res, dhel
 
             for (i = 0; i < Np; i++){
 
-                const coeff_t* Ai = a->arr.p_data + (bp + i) * sa;
+                const coeff_t* Ai = oarr_data(&a->arr) + (bp + i) * sa;
 
                 if (!dnok_all_zero(Ai, sa)){
 
@@ -796,8 +840,8 @@ int fearr_matmul_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res, dhel
 
                     for (j = 0; j < Nq; j++){
 
-                        dngs_block_matmul(Ai, b->arr.p_data + (bq + j) * sb, n, q, m, nip,
-                            out->arr.p_data + (bpq + dnok_pair_idx(&src, i, ui, j, uj)) * sr);
+                        dngs_block_matmul(Ai, oarr_data(&b->arr) + (bq + j) * sb, n, q, m, nip,
+                            oarr_data(&out->arr) + (bpq + dnok_pair_idx(&src, i, ui, j, uj)) * sr);
 
                         if (pq > 0){
                             sshelp_next_dir(uj, pq, k);
@@ -820,10 +864,8 @@ int fearr_matmul_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res, dhel
     }
 
     act = (unsigned)atop + btop;
-    out->arr.act_order = (k == 0) ? 0 : (ord_t)((act < trc) ? act : trc);
-    out->nrows = n;
-    out->ncols = m;
-    out->nip   = nip;
+    oarr_set_act_order(&out->arr, (k == 0) ? 0 : (ord_t)((act < trc) ? act : trc));
+    dngs_label(out, n, m, nip);
 
     if (out == &tmp){
         dngs_move(&tmp, res);
@@ -838,12 +880,12 @@ int fearr_matmul_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res, dhel
 // *******************************************************************************************************
 int fearr_matmul_FO_to(const feoarr_t* a, const oarr_t* b, feoarr_t* res, dhelpl_t dhl){
 
-    uint64_t n = a->nrows, q = a->ncols, m = b->ncols, nip = a->nip, nn, nm;
-    oarr_t av;
+    uint64_t n = fearr_nrows(a), q = fearr_ncols(a), m = oarr_ncols(b), nip = fearr_nip(a), nn, nm;
+    oarr_t av = oarr_init();
     feoarr_t out = fearr_init();
     int status;
 
-    if (b->nrows != q){
+    if (oarr_nrows(b) != q){
         return DN_ERR_SIZE;
     }
 
@@ -852,11 +894,11 @@ int fearr_matmul_FO_to(const feoarr_t* a, const oarr_t* b, feoarr_t* res, dhelpl
     }
 
     // a.arr (nip x n*q, column-major over (ip, r, s)) is the same memory as an (nip*n) x q matrix.
-    av       = a->arr;
-    av.nrows = nn;
-    av.ncols = q;
+    status = oarr_view_matrix(&a->arr, nn, q, &av);
 
-    status = oarr_matmul_OO_to(&av, b, &out.arr, dhl);
+    if (status == DN_OK){
+        status = oarr_matmul_OO_to(&av, b, &out.arr, dhl);
+    }
 
     if (status != DN_OK){
 
@@ -866,11 +908,7 @@ int fearr_matmul_FO_to(const feoarr_t* a, const oarr_t* b, feoarr_t* res, dhelpl
     }
 
     // The (nip*n) x m product is the nip x (n*m) layout of the per-point results.
-    out.arr.nrows = nip;
-    out.arr.ncols = nm;
-    out.nrows     = n;
-    out.ncols     = m;
-    out.nip       = nip;
+    dngs_label(&out, n, m, nip);
 
     dngs_move(&out, res);
 
@@ -887,7 +925,7 @@ int fearr_matmul_OF_to(const oarr_t* a, const feoarr_t* b, feoarr_t* res, dhelpl
     oarr_t at = oarr_init();
     int status;
 
-    if (a->ncols != b->nrows){
+    if (oarr_ncols(a) != fearr_nrows(b)){
         return DN_ERR_SIZE;
     }
 
@@ -920,21 +958,25 @@ int fearr_matmul_OF_to(const oarr_t* a, const feoarr_t* b, feoarr_t* res, dhelpl
 int fearr_dot_product_FO_to(const feoarr_t* a, const oarr_t* b, feoarr_t* res,
                             dhelpl_t dhl){
 
-    uint64_t N = a->arr.ncols;
-    oarr_t bv;
+    uint64_t N = oarr_ncols(&a->arr);
+    oarr_t bv = oarr_init(), av = oarr_init();
     feoarr_t out = fearr_init();
     int status;
 
-    if (b->size != N){
+    if (oarr_size(b) != N){
         return DN_ERR_SIZE;
     }
 
-    // b's column-major entries as an N x 1 vector.
-    bv       = *b;
-    bv.nrows = N;
-    bv.ncols = 1;
+    // b's column-major entries as an N x 1 vector, a's array as an nip x N matrix (views).
+    status = oarr_view_matrix(b, N, 1, &bv);
 
-    status = oarr_matmul_OO_to(&a->arr, &bv, &out.arr, dhl);
+    if (status == DN_OK){
+        status = oarr_view_matrix(&a->arr, fearr_nip(a), N, &av);
+    }
+
+    if (status == DN_OK){
+        status = oarr_matmul_OO_to(&av, &bv, &out.arr, dhl);
+    }
 
     if (status != DN_OK){
 
@@ -943,9 +985,7 @@ int fearr_dot_product_FO_to(const feoarr_t* a, const oarr_t* b, feoarr_t* res,
 
     }
 
-    out.nrows = 1;
-    out.ncols = 1;
-    out.nip   = a->nip;
+    dngs_label(&out, 1, 1, fearr_nip(a));
     dngs_move(&out, res);
 
     return DN_OK;
@@ -958,20 +998,20 @@ int fearr_dot_product_FO_to(const feoarr_t* a, const oarr_t* b, feoarr_t* res,
 int fearr_dot_product_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res,
                             dhelpl_t dhl){
 
-    uint64_t N = a->arr.ncols, nip = a->nip, nb, d, e, t;
+    uint64_t N = oarr_ncols(&a->arr), nip = fearr_nip(a), nb, d, e, t;
     feoarr_t prod = fearr_init(), out = fearr_init();
     const coeff_t* S;
     coeff_t* D;
     int status;
 
-    if (b->arr.ncols != N || b->nip != nip){
+    if (oarr_ncols(&b->arr) != N || fearr_nip(b) != nip){
         return DN_ERR_SIZE;
     }
 
     status = oarr_mul_OO_to(&a->arr, &b->arr, &prod.arr, dhl);
 
     if (status == DN_OK){
-        status = fearr_zeros_to(prod.arr.nact, 1, 1, nip, prod.arr.trc_order, &out);
+        status = fearr_zeros_to(oarr_nact(&prod.arr), 1, 1, nip, oarr_trc_order(&prod.arr), &out);
     }
 
     if (status != DN_OK){
@@ -984,12 +1024,12 @@ int fearr_dot_product_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res,
 
     // Sum of the N columns of the product.
     nb = dngs_nblocks(&prod.arr);
-    out.arr.act_order = prod.arr.act_order;
+    oarr_set_act_order(&out.arr, oarr_act_order(&prod.arr));
 
     for (d = 0; d < nb; d++){
 
-        S = prod.arr.p_data + d * prod.arr.size;
-        D = out.arr.p_data + d * nip;
+        S = oarr_data(&prod.arr) + d * oarr_size(&prod.arr);
+        D = oarr_data(&out.arr) + d * nip;
 
         for (e = 0; e < N; e++){
 
@@ -1013,27 +1053,31 @@ int fearr_dot_product_FF_to(const feoarr_t* a, const feoarr_t* b, feoarr_t* res,
 // *******************************************************************************************************
 int fearr_integrate_to(const feoarr_t* val, const feoarr_t* w, oarr_t* res, dhelpl_t dhl){
 
-    oarr_t wv;
+    oarr_t wv = oarr_init(), vv = oarr_init();
     int status;
 
-    if (w->nrows != 1 || w->ncols != 1 || w->nip != val->nip){
+    if (fearr_nrows(w) != 1 || fearr_ncols(w) != 1 || fearr_nip(w) != fearr_nip(val)){
         return DN_ERR_SIZE;
     }
 
-    // w (nip x 1) is the same memory as the 1 x nip row w^T.
-    wv       = w->arr;
-    wv.nrows = 1;
-    wv.ncols = w->nip;
+    // w (nip x 1) is the same memory as the 1 x nip row w^T, val's array an nip x (nrows * ncols)
+    // matrix (views).
+    status = oarr_view_matrix(&w->arr, 1, fearr_nip(w), &wv);
 
-    status = oarr_matmul_OO_to(&wv, &val->arr, res, dhl);
+    if (status == DN_OK){
+        status = oarr_view_matrix(&val->arr, fearr_nip(val), oarr_ncols(&val->arr), &vv);
+    }
+
+    if (status == DN_OK){
+        status = oarr_matmul_OO_to(&wv, &vv, res, dhl);
+    }
 
     if (status != DN_OK){
         return status;
     }
 
     // The 1 x (nrows*ncols) row is the column-major nrows x ncols matrix.
-    res->nrows = val->nrows;
-    res->ncols = val->ncols;
+    dnob_reshape2(res, fearr_nrows(val), fearr_ncols(val));
 
     return DN_OK;
 
@@ -1071,7 +1115,7 @@ static int dngs_cross2(const oarr_t* x, const oarr_t* y, const oarr_t* u, const 
 // entry is an nip x 1 array and the cofactors are products and differences of them.
 static int dngs_closed_form(const feoarr_t* fe, feoarr_t* det, feoarr_t* inv, dhelpl_t dhl){
 
-    uint64_t n = fe->nrows, r, c, r1, r2, c1, c2, col, nip = fe->nip;
+    uint64_t n = fearr_nrows(fe), r, c, r1, r2, c1, c2, col, nip = fearr_nip(fe);
     oarr_t E[9], C[9], d = oarr_init(), rd = oarr_init(), t = oarr_init();
     feoarr_t out = fearr_init();
     int status = DN_OK;
@@ -1104,7 +1148,7 @@ static int dngs_closed_form(const feoarr_t* fe, feoarr_t* det, feoarr_t* inv, dh
         }
 
         for (r = 0; status == DN_OK && r < nip; r++){
-            C[0].p_data[r] = 1.0;
+            oarr_data(&C[0])[r] = 1.0;
         }
 
     } else if (status == DN_OK && n == 2){
@@ -1158,10 +1202,8 @@ static int dngs_closed_form(const feoarr_t* fe, feoarr_t* det, feoarr_t* inv, dh
 
             // act_order of a determinant is trc (0 for a real result), as on the LU path, not the
             // tighter product bound of the cofactor expansion.
-            out.arr.act_order = (out.arr.nact == 0) ? 0 : out.arr.trc_order;
-            out.nrows = 1;
-            out.ncols = 1;
-            out.nip   = nip;
+            oarr_set_act_order(&out.arr, (oarr_nact(&out.arr) == 0) ? 0 : oarr_trc_order(&out.arr));
+            dngs_label(&out, 1, 1, nip);
             dngs_move(&out, det);
 
         }
@@ -1218,13 +1260,13 @@ static int dngs_closed_form(const feoarr_t* fe, feoarr_t* det, feoarr_t* inv, dh
 // *******************************************************************************************************
 int fearr_det_to(const feoarr_t* fe, feoarr_t* res, dhelpl_t dhl){
 
-    uint64_t n = fe->nrows, ip;
+    uint64_t n = fearr_nrows(fe), ip;
     feoarr_t out = fearr_init();
     oarr_t A = oarr_init();
     otinum_t dnum = oti_init();
     int status;
 
-    if (fe->ncols != n){
+    if (fearr_ncols(fe) != n){
         return DN_ERR_SIZE;
     }
 
@@ -1234,17 +1276,17 @@ int fearr_det_to(const feoarr_t* fe, feoarr_t* res, dhelpl_t dhl){
 
     // n = 0 gives det 1 at every point (the empty product); n > 3 is an LU per point. The result keeps
     // the operand's nact and truncation order, as the closed forms do (also with no point to process).
-    status = fearr_zeros_to(fe->arr.nact, 1, 1, fe->nip, fe->arr.trc_order, &out);
+    status = fearr_zeros_to(oarr_nact(&fe->arr), 1, 1, fearr_nip(fe), oarr_trc_order(&fe->arr), &out);
 
-    if (status == DN_OK && n > 0 && fe->arr.nact > 0){
-        out.arr.act_order = fe->arr.trc_order;
+    if (status == DN_OK && n > 0 && oarr_nact(&fe->arr) > 0){
+        oarr_set_act_order(&out.arr, oarr_trc_order(&fe->arr));
     }
 
-    for (ip = 0; ip < fe->nip && status == DN_OK; ip++){
+    for (ip = 0; ip < fearr_nip(fe) && status == DN_OK; ip++){
 
         if (n == 0){
 
-            out.arr.p_data[ip] = 1.0;
+            oarr_data(&out.arr)[ip] = 1.0;
             continue;
 
         }
@@ -1278,12 +1320,12 @@ int fearr_det_to(const feoarr_t* fe, feoarr_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int fearr_inv_to(const feoarr_t* fe, feoarr_t* res, dhelpl_t dhl){
 
-    uint64_t n = fe->nrows, ip;
+    uint64_t n = fearr_nrows(fe), ip;
     feoarr_t out = fearr_init();
     oarr_t A = oarr_init(), Ai = oarr_init();
     int status;
 
-    if (fe->ncols != n){
+    if (fearr_ncols(fe) != n){
         return DN_ERR_SIZE;
     }
 
@@ -1293,13 +1335,13 @@ int fearr_inv_to(const feoarr_t* fe, feoarr_t* res, dhelpl_t dhl){
 
     // The result keeps the operand's nact and truncation order (also with no point to process);
     // act_order is trc, as for every linear-algebra result.
-    status = fearr_zeros_to(fe->arr.nact, n, n, fe->nip, fe->arr.trc_order, &out);
+    status = fearr_zeros_to(oarr_nact(&fe->arr), n, n, fearr_nip(fe), oarr_trc_order(&fe->arr), &out);
 
-    if (status == DN_OK && fe->arr.nact > 0){
-        out.arr.act_order = fe->arr.trc_order;
+    if (status == DN_OK && oarr_nact(&fe->arr) > 0){
+        oarr_set_act_order(&out.arr, oarr_trc_order(&fe->arr));
     }
 
-    for (ip = 0; ip < fe->nip && status == DN_OK && n > 0; ip++){
+    for (ip = 0; ip < fearr_nip(fe) && status == DN_OK && n > 0; ip++){
 
         status = fearr_get_ip_to(ip, fe, &A);
 

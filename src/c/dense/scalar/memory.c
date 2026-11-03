@@ -6,20 +6,6 @@
 
 #include <pthread.h>
 #include <stdlib.h>
-#include <unistd.h>
-#if defined(__APPLE__)
-#include <sys/types.h>
-#include <sys/sysctl.h>
-#endif
-
-// Budget of one dense coefficient buffer when the physical memory cannot be queried: 64 GiB.
-#define DNSM_BUDGET_FALLBACK_BYTES (64ull << 30)
-
-// Largest coefficient buffer, in bytes, a dense allocation may request (dnsm_budget()). Set once, from
-// OTI_DENSE_MAX_MB or the physical memory: a request far above the memory would otherwise get a
-// successful malloc on systems that overcommit (macOS) and be killed while it is zero-filled.
-static uint64_t dnsm_budget_bytes;
-static pthread_once_t dnsm_budget_once = PTHREAD_ONCE_INIT;
 
 // Scratch workspace of each thread. It lives on the heap (allocated on the first use of the thread) so
 // that the thread-exit destructor of the key below can still reach it: thread-local storage itself may
@@ -39,73 +25,17 @@ static _Thread_local int dnsm_tls_held;
 
 
 // *******************************************************************************************************
-// Physical memory of the machine in bytes, or 0 when it cannot be queried.
-static uint64_t dnsm_physical_bytes(void){
-
-#if defined(__APPLE__)
-    uint64_t mem = 0;
-    size_t len = sizeof(mem);
-
-    if (sysctlbyname("hw.memsize", &mem, &len, NULL, 0) == 0 && len == sizeof(mem)){
-        return mem;
-    }
-
-    return 0;
-#elif defined(_SC_PHYS_PAGES) && defined(_SC_PAGE_SIZE)
-    long pages = sysconf(_SC_PHYS_PAGES), page = sysconf(_SC_PAGE_SIZE);
-
-    if (pages > 0 && page > 0 && (uint64_t)pages <= UINT64_MAX / (uint64_t)page){
-        return (uint64_t)pages * (uint64_t)page;
-    }
-
-    return 0;
-#else
-    return 0;
-#endif
-
-}
-// -------------------------------------------------------------------------------------------------------
-
-
-// *******************************************************************************************************
-// Sets dnsm_budget_bytes (once, through pthread_once): OTI_DENSE_MAX_MB when it is a positive integer,
-// else the physical memory, else DNSM_BUDGET_FALLBACK_BYTES.
-static void dnsm_budget_init(void){
-
-    const char* env = getenv("OTI_DENSE_MAX_MB");
-    uint64_t phys;
-
-    if (env != NULL && env[0] >= '0' && env[0] <= '9'){
-
-        char* end = NULL;
-        unsigned long long mb = strtoull(env, &end, 10);
-
-        if (*end == '\0' && mb > 0){
-            dnsm_budget_bytes = (mb > (UINT64_MAX >> 20)) ? UINT64_MAX : (uint64_t)mb << 20;
-            return;
-        }
-
-    }
-
-    phys = dnsm_physical_bytes();
-    dnsm_budget_bytes = (phys != 0) ? phys : DNSM_BUDGET_FALLBACK_BYTES;
-
-}
-// -------------------------------------------------------------------------------------------------------
-
-
-// *******************************************************************************************************
-// DN_ERR_MEMORY when a buffer of nreals coefficients exceeds the dense byte budget (OTI_DENSE_MAX_MB,
-// default the physical memory), else DN_OK. Called by the size gates dnsm_nimag() and dnob_nreals().
+// DN_ERR_MEMORY when a buffer of nreals coefficients exceeds the byte budget of the default context
+// (oti_ctx_check_alloc(): OTI_DENSE_MAX_MB, default the physical memory, else 64 GiB; the 1.x dense
+// rule, contracts 5.1), else DN_OK. Called by the size gates dnsm_nimag() and dnob_nreals().
 static int dnsm_budget(uint64_t nreals){
 
-    pthread_once(&dnsm_budget_once, dnsm_budget_init);
-
-    if (nreals > dnsm_budget_bytes / sizeof(coeff_t)){
+    if (nreals > (uint64_t)INT64_MAX / sizeof(coeff_t)){
         return DN_ERR_MEMORY;
     }
 
-    return DN_OK;
+    return (oti_ctx_check_alloc(NULL, (int64_t)(nreals * sizeof(coeff_t))) == OTI_OK) ? DN_OK
+                                                                                       : DN_ERR_MEMORY;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -333,9 +263,9 @@ void oti_ws_release(void){
 // *******************************************************************************************************
 size_t dn_max_bytes(void){
 
-    pthread_once(&dnsm_budget_once, dnsm_budget_init);
+    int64_t b = oti_ctx_default()->max_alloc_bytes;
 
-    return (dnsm_budget_bytes > (uint64_t)SIZE_MAX) ? SIZE_MAX : (size_t)dnsm_budget_bytes;
+    return ((uint64_t)b > (uint64_t)SIZE_MAX) ? SIZE_MAX : (size_t)b;
 
 }
 // -------------------------------------------------------------------------------------------------------

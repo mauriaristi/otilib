@@ -80,21 +80,21 @@ static int approx_equal(coeff_t a, coeff_t b, double tol){
  * a plain array). */
 static void fill_random(oarr_t* a, uint64_t rows, uint64_t nip, ord_t maxorder, coeff_t diag){
 
-    uint64_t nb = 1 + sshelp_ndir_total(a->nact, maxorder), e, i, t;
+    uint64_t nb = 1 + sshelp_ndir_total(oarr_nact(a), maxorder), e, i, t;
 
-    for (e = 0; e < nb * a->size; e++){
-        a->p_data[e] = rng_range(-0.4, 0.4);
+    for (e = 0; e < nb * oarr_size(a); e++){
+        oarr_data(a)[e] = rng_range(-0.4, 0.4);
     }
 
-    for (i = 0; i < rows && i * rows + i < a->size / nip; i++){
+    for (i = 0; i < rows && i * rows + i < oarr_size(a) / nip; i++){
 
         for (t = 0; t < nip; t++){
-            a->p_data[(i + i * rows) * nip + t] += diag;
+            oarr_data(a)[(i + i * rows) * nip + t] += diag;
         }
 
     }
 
-    a->act_order = (a->nact == 0) ? 0 : maxorder;
+    oarr_set_act_order(a, (oarr_nact(a) == 0) ? 0 : maxorder);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -137,14 +137,14 @@ static oarrss_t ss_from_oarr(const oarr_t* a){
     bases_t b[256], i;
     oarrss_t s;
 
-    for (i = 0; i < a->nact; i++){
+    for (i = 0; i < oarr_nact(a); i++){
         b[i] = (bases_t)(i + 1);
     }
 
-    s = oarrss_zeros(b, a->nact, a->nrows, a->ncols, a->trc_order);
-    memcpy(s.p_data, a->p_data, (1 + sshelp_ndir_total(a->nact, a->trc_order)) * a->size
+    s = oarrss_zeros(b, oarr_nact(a), oarr_nrows(a), oarr_ncols(a), oarr_trc_order(a));
+    memcpy(s.p_data, oarr_data(a), (1 + sshelp_ndir_total(oarr_nact(a), oarr_trc_order(a))) * oarr_size(a)
         * sizeof(coeff_t));
-    s.act_order = a->act_order;
+    s.act_order = oarr_act_order(a);
 
     return s;
 
@@ -158,9 +158,9 @@ static feoarrss_t ss_from_fe(const feoarr_t* fe){
     feoarrss_t s = feoarrss_init();
 
     s.arr   = ss_from_oarr(&fe->arr);
-    s.nrows = fe->nrows;
-    s.ncols = fe->ncols;
-    s.nip   = fe->nip;
+    s.nrows = fearr_nrows(fe);
+    s.ncols = fearr_ncols(fe);
+    s.nip   = fearr_nip(fe);
 
     return s;
 
@@ -176,11 +176,11 @@ static feoarrss_t ss_from_fe(const feoarr_t* fe){
 /* Value of element e of the direction (order p, index i) of an array; 0 outside its layout. */
 static coeff_t oarr_val(const oarr_t* a, ord_t p, ndir_t i, uint64_t e){
 
-    if (p > a->trc_order || i >= sshelp_ndir_order(a->nact, p)){
+    if (p > oarr_trc_order(a) || i >= sshelp_ndir_order(oarr_nact(a), p)){
         return 0.0;
     }
 
-    return a->p_data[oarr_block_index(a->nact, p, i) * a->size + e];
+    return oarr_data(a)[oarr_block_index(oarr_nact(a), p, i) * oarr_size(a) + e];
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -191,17 +191,18 @@ static coeff_t oarr_val(const oarr_t* a, ord_t p, ndir_t i, uint64_t e){
 static int oarr_valid(const oarr_t* a){
 
     uint64_t start, end, e;
-    int ok = a->act_order <= a->trc_order && a->nbases >= a->nact && a->size == a->nrows * a->ncols;
+    int ok = oarr_act_order(a) <= oarr_trc_order(a) && a->nbases >= oarr_nact(a)
+             && oarr_size(a) == oarr_nrows(a) * oarr_ncols(a);
 
-    if (a->nact == 0){
+    if (oarr_nact(a) == 0){
         return ok;
     }
 
-    start = (1 + sshelp_order_offset(a->nact, (ord_t)(a->act_order + 1))) * a->size;
-    end   = (1 + sshelp_ndir_total(a->nact, a->trc_order)) * a->size;
+    start = (1 + sshelp_order_offset(oarr_nact(a), (ord_t)(oarr_act_order(a) + 1))) * oarr_size(a);
+    end   = (1 + sshelp_ndir_total(oarr_nact(a), oarr_trc_order(a))) * oarr_size(a);
 
     for (e = start; e < end; e++){
-        ok = ok && a->p_data[e] == 0.0;
+        ok = ok && oarr_data(a)[e] == 0.0;
     }
 
     return ok;
@@ -214,11 +215,12 @@ static int oarr_valid(const oarr_t* a){
 /* Two plain arrays through global directions (layouts may differ): shape, trc and every value. */
 static int same_oarr(const oarr_t* a, const oarr_t* b, double tol){
 
-    bases_t k = (a->nact > b->nact) ? a->nact : b->nact;
-    ord_t p, trc = (a->trc_order > b->trc_order) ? a->trc_order : b->trc_order;
+    bases_t k = (oarr_nact(a) > oarr_nact(b)) ? oarr_nact(a) : oarr_nact(b);
+    ord_t p, trc = (oarr_trc_order(a) > oarr_trc_order(b)) ? oarr_trc_order(a) : oarr_trc_order(b);
     ndir_t i, n;
     uint64_t e;
-    int ok = a->nrows == b->nrows && a->ncols == b->ncols && a->trc_order == b->trc_order
+    int ok = oarr_nrows(a) == oarr_nrows(b) && oarr_ncols(a) == oarr_ncols(b)
+             && oarr_trc_order(a) == oarr_trc_order(b)
              && oarr_valid(a) && oarr_valid(b);
 
     for (p = 0; ok && p <= trc; p++){
@@ -227,7 +229,7 @@ static int same_oarr(const oarr_t* a, const oarr_t* b, double tol){
 
         for (i = 0; ok && i < n; i++){
 
-            for (e = 0; ok && e < a->size; e++){
+            for (e = 0; ok && e < oarr_size(a); e++){
                 ok = approx_equal(oarr_val(a, p, i, e), oarr_val(b, p, i, e), tol);
             }
 
@@ -247,10 +249,10 @@ static int fe_matches_points(const feoarr_t* fe, const oarr_t* oracle, double to
 
     oarr_t P = oarr_init();
     uint64_t ip;
-    int ok = oarr_valid(&fe->arr) && fe->arr.nrows == fe->nip
-             && fe->arr.ncols == fe->nrows * fe->ncols;
+    int ok = oarr_valid(&fe->arr) && oarr_nrows(&fe->arr) == fearr_nip(fe)
+             && oarr_ncols(&fe->arr) == fearr_nrows(fe) * fearr_ncols(fe);
 
-    for (ip = 0; ok && ip < fe->nip; ip++){
+    for (ip = 0; ok && ip < fearr_nip(fe); ip++){
         ok = fearr_get_ip_to(ip, fe, &P) == DN_OK && same_oarr(&P, &oracle[ip], tol);
     }
 
@@ -268,18 +270,19 @@ static int fe_matches_ss(const feoarr_t* fe, const feoarrss_t* s, double tol){
 
     uint64_t n, e;
     bases_t i;
-    int ok = fe->arr.nact == s->arr.nbases && fe->arr.trc_order == s->arr.trc_order
-             && fe->nrows == s->nrows && fe->ncols == s->ncols && fe->nip == s->nip
-             && fe->arr.size == s->arr.size;
+    int ok = oarr_nact(&fe->arr) == s->arr.nbases && oarr_trc_order(&fe->arr) == s->arr.trc_order
+             && fearr_nrows(fe) == s->nrows && fearr_ncols(fe) == s->ncols && fearr_nip(fe) == s->nip
+             && oarr_size(&fe->arr) == s->arr.size;
 
     for (i = 0; ok && i < s->arr.nbases; i++){
         ok = s->arr.p_bases[i] == i + 1;
     }
 
-    n = ok ? (1 + sshelp_ndir_total(fe->arr.nact, fe->arr.trc_order)) * fe->arr.size : 0;
+    n = ok ? (1 + sshelp_ndir_total(oarr_nact(&fe->arr),
+                                    oarr_trc_order(&fe->arr))) * oarr_size(&fe->arr) : 0;
 
     for (e = 0; ok && e < n; e++){
-        ok = approx_equal(fe->arr.p_data[e], s->arr.p_data[e], tol);
+        ok = approx_equal(oarr_data(&fe->arr)[e], s->arr.p_data[e], tol);
     }
 
     return ok;
@@ -292,10 +295,10 @@ static int fe_matches_ss(const feoarr_t* fe, const feoarrss_t* s, double tol){
 /* The matrix of every point of a Gauss array (points[ip], released by free_points()). */
 static oarr_t* get_points(const feoarr_t* fe){
 
-    oarr_t* pts = (oarr_t*)malloc((fe->nip + 1) * sizeof(oarr_t));
+    oarr_t* pts = (oarr_t*)malloc((fearr_nip(fe) + 1) * sizeof(oarr_t));
     uint64_t ip;
 
-    for (ip = 0; ip < fe->nip; ip++){
+    for (ip = 0; ip < fearr_nip(fe); ip++){
 
         pts[ip] = oarr_init();
         fearr_get_ip_to(ip, fe, &pts[ip]);
@@ -335,8 +338,10 @@ static void test_memory(dhelpl_t dhl){
     oarr_t P = oarr_init();
     int ok;
 
-    check(fearr_zeros_to(2, 3, 2, 4, 2, &z) == DN_OK && z.nrows == 3 && z.ncols == 2 && z.nip == 4
-          && z.arr.nrows == 4 && z.arr.ncols == 6 && z.arr.nact == 2 && z.arr.act_order == 0,
+    check(fearr_zeros_to(2, 3, 2, 4, 2, &z) == DN_OK && fearr_nrows(&z) == 3 && fearr_ncols(&z) == 2
+          && fearr_nip(&z) == 4
+          && oarr_nrows(&z.arr) == 4 && oarr_ncols(&z.arr) == 6 && oarr_nact(&z.arr) == 2
+              && oarr_act_order(&z.arr) == 0,
           "zeros_to shape");
     check(fearr_zeros_to(65535, 1000, 1000, 1000, 20, &z) == DN_ERR_MEMORY, "zeros_to oversized");
     check(fearr_zeros_to(1, 1, 1, 1, 151, &z) == DN_ERR_INDEX, "zeros_to trc 151");
@@ -345,7 +350,8 @@ static void test_memory(dhelpl_t dhl){
           "copy_to, and onto itself");
 
     // Growing keeps every value (zero-extension).
-    check(fearr_grow(5, 5, &b) == DN_OK && b.arr.nact == 5 && b.arr.trc_order == 5, "grow layout");
+    check(fearr_grow(5, 5, &b) == DN_OK && oarr_nact(&b.arr) == 5 && oarr_trc_order(&b.arr) == 5,
+          "grow layout");
     ok = 1;
 
     {
@@ -359,7 +365,7 @@ static void test_memory(dhelpl_t dhl){
             oarr_copy_to(&pa[ip], &e);
             oarr_reserve(&e, 5, 2, 3, 5);
             oarr_add_bases(5, &e);
-            ok = ok && P.nact == 5 && same_oarr(&P, &e, 0.0);
+            ok = ok && oarr_nact(&P) == 5 && same_oarr(&P, &e, 0.0);
             oarr_free(&e);
 
         }
@@ -367,7 +373,8 @@ static void test_memory(dhelpl_t dhl){
 
     check(ok, "grow keeps the values");
 
-    check(fearr_set_shape(3, 2, 4, &b) == DN_OK && b.nrows == 3 && b.ncols == 2, "set_shape");
+    check(fearr_set_shape(3, 2, 4, &b) == DN_OK && fearr_nrows(&b) == 3 && fearr_ncols(&b) == 2,
+          "set_shape");
     check(fearr_set_shape(4, 2, 4, &b) == DN_ERR_SIZE, "set_shape mismatch gives DN_ERR_SIZE");
     check(fearr_get_ip_to(4, &a, &P) == DN_ERR_INDEX, "get_ip out of range");
 
@@ -377,7 +384,7 @@ static void test_memory(dhelpl_t dhl){
     fearr_free(&z);
     free_points(pa, 4);
     oarr_free(&P);
-    check(a.arr.p_data == NULL && a.nip == 0, "free resets");
+    check(oarr_data(&a.arr) == NULL && fearr_nip(&a) == 0, "free resets");
     (void)dhl;
 
 }
@@ -395,8 +402,8 @@ static void test_set_ip_ijk(dhelpl_t dhl){
     int ok = 1;
 
     // Point 1 gets a value with larger nact and trc; the others keep theirs, zero-extended.
-    check(fearr_set_ip(&v, 1, &fe) == DN_OK && fe.arr.nact == 4 && fe.arr.trc_order == 3
-          && fe.arr.act_order == 3, "set_ip grows nact, trc and act");
+    check(fearr_set_ip(&v, 1, &fe) == DN_OK && oarr_nact(&fe.arr) == 4 && oarr_trc_order(&fe.arr) == 3
+          && oarr_act_order(&fe.arr) == 3, "set_ip grows nact, trc and act");
 
     for (ip = 0; ip < 4; ip++){
 
@@ -432,7 +439,8 @@ static void test_set_ip_ijk(dhelpl_t dhl){
 
     // Single entries.
     num.re = 2.0;
-    check(fearr_set_ijk_o(&num, 1, 0, 3, &fe) == DN_OK && fe.arr.nact == 6 && fe.arr.trc_order == 4,
+    check(fearr_set_ijk_o(&num, 1, 0, 3, &fe) == DN_OK && oarr_nact(&fe.arr) == 6
+          && oarr_trc_order(&fe.arr) == 4,
           "set_ijk_o grows nact and trc");
     fearr_get_ip_to(3, &fe, &P);
     check(oarr_val(&P, 0, 0, 1) == 2.0 && oarr_val(&P, 1, 5, 1) == 1.0 && oarr_val(&P, 1, 0, 1) == 0.0,
@@ -484,7 +492,8 @@ static void test_slices(dhelpl_t dhl){
             fearr_copy_to(&fe, &dst);
 
             st = fearr_get_slice_to(&fe, S[s].i0, S[s].ni, S[s].is, S[s].j0, S[s].nj, S[s].js, &sl);
-            ok = st == DN_OK && sl.nrows == S[s].ni && sl.ncols == S[s].nj && sl.nip == 4;
+            ok = st == DN_OK && fearr_nrows(&sl) == S[s].ni && fearr_ncols(&sl) == S[s].nj
+                 && fearr_nip(&sl) == 4;
 
             for (ip = 0; ok && ip < 4; ip++){
 
@@ -519,14 +528,15 @@ static void test_slices(dhelpl_t dhl){
 
             // Set the slice from a larger layout: the block takes val's values, the rest is kept.
             st = fearr_set_slice(&val, S[s].i0, S[s].ni, S[s].is, S[s].j0, S[s].nj, S[s].js, &dst);
-            ok = st == DN_OK && dst.arr.nact == 5 && dst.arr.trc_order == val.arr.trc_order;
+            ok = st == DN_OK && oarr_nact(&dst.arr) == 5
+                 && oarr_trc_order(&dst.arr) == oarr_trc_order(&val.arr);
 
             for (ip = 0; ok && ip < 4; ip++){
 
                 oarr_t E = oarr_init();
 
                 oarr_copy_to(&pts[ip], &E);
-                oarr_reserve(&E, 5, 4, 3, val.arr.trc_order);
+                oarr_reserve(&E, 5, 4, 3, oarr_trc_order(&val.arr));
                 oarr_add_bases(5, &E);
 
                 for (jj = 0; jj < S[s].nj; jj++){
@@ -604,18 +614,19 @@ static void test_slices(dhelpl_t dhl){
                   && fearr_get_slice_to(&fe, 0, 2, INT64_MAX, 0, 1, 1, &bad) == DN_ERR_INDEX
                   && fearr_get_slice_to(&fe, 3, 5, -1, 0, 1, 1, &bad) == DN_ERR_INDEX,
                   "slice ranges: out of range (huge length, extreme steps) -> DN_ERR_INDEX");
-            check(fearr_get_slice_to(&fe, 3, 4, -1, 2, 3, -1, &bad) == DN_OK && bad.nrows == 4
-                  && bad.ncols == 3 && fearr_get_slice_to(&fe, 1, 3, 0, 0, 1, 1, &bad) == DN_OK
-                  && bad.nrows == 3, "slice ranges: exact fit with negative and zero steps");
+            check(fearr_get_slice_to(&fe, 3, 4, -1, 2, 3, -1, &bad) == DN_OK && fearr_nrows(&bad) == 4
+                  && fearr_ncols(&bad) == 3 && fearr_get_slice_to(&fe, 1, 3, 0, 0, 1, 1, &bad) == DN_OK
+                  && fearr_nrows(&bad) == 3, "slice ranges: exact fit with negative and zero steps");
 
             // An empty assignment changes nothing, not even the layout.
             {
                 feoarr_t empty = build_fe(0, 3, 4, 6, 5, 5, 0.0);
-                bases_t k0 = dst.arr.nact;
-                ord_t t0 = dst.arr.trc_order, a0 = dst.arr.act_order;
+                bases_t k0 = oarr_nact(&dst.arr);
+                ord_t t0 = oarr_trc_order(&dst.arr), a0 = oarr_act_order(&dst.arr);
 
-                check(fearr_set_slice(&empty, 0, 0, 1, 0, 3, 1, &dst) == DN_OK && dst.arr.nact == k0
-                      && dst.arr.trc_order == t0 && dst.arr.act_order == a0,
+                check(fearr_set_slice(&empty, 0, 0, 1, 0, 3, 1, &dst) == DN_OK
+                      && oarr_nact(&dst.arr) == k0
+                      && oarr_trc_order(&dst.arr) == t0 && oarr_act_order(&dst.arr) == a0,
                       "empty set_slice: no change");
                 fearr_free(&empty);
             }
@@ -647,7 +658,8 @@ static void test_broadcasts(dhelpl_t dhl){
     uint64_t ip, e;
     int ok;
 
-    ok = fearr_from_oarr_to(&a, 9, &fe) == DN_OK && fe.nrows == 2 && fe.ncols == 3 && fe.nip == 9;
+    ok = fearr_from_oarr_to(&a, 9, &fe) == DN_OK && fearr_nrows(&fe) == 2 && fearr_ncols(&fe) == 3
+         && fearr_nip(&fe) == 9;
 
     for (ip = 0; ok && ip < 9; ip++){
         ok = fearr_get_ip_to(ip, &fe, &P) == DN_OK && same_oarr(&P, &a, 0.0);
@@ -655,7 +667,8 @@ static void test_broadcasts(dhelpl_t dhl){
 
     check(ok, "from_oarr repeats the array at every point");
 
-    ok = fearr_bcast_to(&one, 3, 2, &bc) == DN_OK && bc.nrows == 3 && bc.ncols == 2 && bc.nip == 4;
+    ok = fearr_bcast_to(&one, 3, 2, &bc) == DN_OK && fearr_nrows(&bc) == 3 && fearr_ncols(&bc) == 2
+         && fearr_nip(&bc) == 4;
 
     for (ip = 0; ok && ip < 4; ip++){
 
@@ -811,7 +824,7 @@ static void check_matmul(const scen_t* sc, ord_t T, uint64_t n, uint64_t q, uint
     }
 
     ok = fearr_matmul_FF_to(&a, &b, &r, dhl) == DN_OK && fe_matches_points(&r, ex, TOL)
-         && r.arr.nact == ((sc->ka > sc->kb) ? sc->ka : sc->kb);
+         && oarr_nact(&r.arr) == ((sc->ka > sc->kb) ? sc->ka : sc->kb);
     feoarrss_matmul_FF_to(&qa, &qb, &qr, dhl);
     ok = ok && fe_matches_ss(&r, &qr, TOL_SS);
     fearr_copy_to(&a, &al);
@@ -828,19 +841,19 @@ static void check_matmul(const scen_t* sc, ord_t T, uint64_t n, uint64_t q, uint
             oarr_t so = oarr_init();
 
             oarr_from_arrso_to(&sr, &so, dhl);
-            oarr_reserve(&so, so.nact, so.nrows, so.ncols, r.arr.trc_order);
+            oarr_reserve(&so, oarr_nact(&so), oarr_nrows(&so), oarr_ncols(&so), oarr_trc_order(&r.arr));
             ok = ok && fearr_get_ip_to(ip, &r, &ex[ip]) == DN_OK;
             {
-                bases_t kk = (so.nact > ex[ip].nact) ? so.nact : ex[ip].nact;
+                bases_t kk = (oarr_nact(&so) > oarr_nact(&ex[ip])) ? oarr_nact(&so) : oarr_nact(&ex[ip]);
                 ord_t p;
                 ndir_t d;
                 uint64_t e;
 
-                for (p = 0; p <= r.arr.trc_order; p++){
+                for (p = 0; p <= oarr_trc_order(&r.arr); p++){
 
                     for (d = 0; d < sshelp_ndir_order(kk, p); d++){
 
-                        for (e = 0; e < so.size; e++){
+                        for (e = 0; e < oarr_size(&so); e++){
                             ok = ok && approx_equal(oarr_val(&so, p, d, e), oarr_val(&ex[ip], p, d, e),
                                                     TOL);
                         }
@@ -1007,7 +1020,8 @@ static void test_dot_integrate(dhelpl_t dhl){
 
             }
 
-            ok = fearr_dot_product_FO_to(&a, &bo, &r, dhl) == DN_OK && r.nrows == 1 && r.ncols == 1
+            ok = fearr_dot_product_FO_to(&a, &bo, &r,
+                                         dhl) == DN_OK && fearr_nrows(&r) == 1 && fearr_ncols(&r) == 1
                  && fe_matches_points(&r, ex, TOL);
             feoarrss_dot_product_FO_to(&qa, &qbo, &qr, dhl);
             ok = ok && fe_matches_ss(&r, &qr, TOL_SS);
@@ -1176,8 +1190,10 @@ static void test_det_inv(dhelpl_t dhl){
             }
 
             st = fearr_det_to(&fe, &r, dhl);
-            ok = st == DN_OK && r.nrows == 1 && r.ncols == 1 && fe_matches_points(&r, ex, TOL_LU);
-            ok = ok && r.arr.nact == k && r.arr.trc_order == T && r.arr.act_order == act_expect;
+            ok = st == DN_OK && fearr_nrows(&r) == 1 && fearr_ncols(&r) == 1 && fe_matches_points(&r, ex,
+                                                                                                  TOL_LU);
+            ok = ok && oarr_nact(&r.arr) == k && oarr_trc_order(&r.arr) == T
+                 && oarr_act_order(&r.arr) == act_expect;
             feoarrss_det_to(&q, &qr, dhl);
             ok = ok && fe_matches_ss(&r, &qr, tol_ss);
             fearr_copy_to(&fe, &al);
@@ -1192,8 +1208,10 @@ static void test_det_inv(dhelpl_t dhl){
             }
 
             st = fearr_inv_to(&fe, &r, dhl);
-            ok = st == DN_OK && r.nrows == n && r.ncols == n && fe_matches_points(&r, ex, TOL_LU);
-            ok = ok && r.arr.nact == k && r.arr.trc_order == T && r.arr.act_order == act_expect;
+            ok = st == DN_OK && fearr_nrows(&r) == n && fearr_ncols(&r) == n && fe_matches_points(&r, ex,
+                                                                                                  TOL_LU);
+            ok = ok && oarr_nact(&r.arr) == k && oarr_trc_order(&r.arr) == T
+                 && oarr_act_order(&r.arr) == act_expect;
             feoarrss_inv_to(&q, &qr, dhl);
             ok = ok && fe_matches_ss(&r, &qr, tol_ss);
             fearr_copy_to(&fe, &al);
@@ -1224,15 +1242,18 @@ static void test_det_inv(dhelpl_t dhl){
         check(fearr_zeros_to(2, 0, 0, 2, 3, &z) == DN_OK && fearr_zeros_to(3, 3, 3, 0, 3, &e3) == DN_OK
               && fearr_zeros_to(3, 4, 4, 0, 3, &e4) == DN_OK, "degenerate det / inv: setup");
 
-        check(fearr_det_to(&z, &r, dhl) == DN_OK && r.arr.nact == 2 && r.arr.trc_order == 3
-              && r.arr.act_order == 0 && r.nip == 2 && r.arr.p_data[0] == 1.0 && r.arr.p_data[1] == 1.0,
+        check(fearr_det_to(&z, &r, dhl) == DN_OK && oarr_nact(&r.arr) == 2 && oarr_trc_order(&r.arr) == 3
+              && oarr_act_order(&r.arr) == 0 && fearr_nip(&r) == 2 && oarr_data(&r.arr)[0] == 1.0
+                  && oarr_data(&r.arr)[1] == 1.0,
               "det 0 x 0 keeps nact and trc (real 1)");
-        check(fearr_det_to(&e3, &r, dhl) == DN_OK && r.arr.nact == 3 && r.arr.trc_order == 3,
+        check(fearr_det_to(&e3, &r, dhl) == DN_OK && oarr_nact(&r.arr) == 3
+              && oarr_trc_order(&r.arr) == 3,
               "det 3 x 3 at nip 0 keeps nact and trc");
-        check(fearr_det_to(&e4, &r, dhl) == DN_OK && r.arr.nact == 3 && r.arr.trc_order == 3
-              && r.nip == 0, "det 4 x 4 at nip 0 keeps nact and trc");
-        check(fearr_inv_to(&e4, &r, dhl) == DN_OK && r.arr.nact == 3 && r.arr.trc_order == 3
-              && r.nrows == 4 && r.ncols == 4 && r.nip == 0, "inv 4 x 4 at nip 0 keeps nact and trc");
+        check(fearr_det_to(&e4, &r, dhl) == DN_OK && oarr_nact(&r.arr) == 3 && oarr_trc_order(&r.arr) == 3
+              && fearr_nip(&r) == 0, "det 4 x 4 at nip 0 keeps nact and trc");
+        check(fearr_inv_to(&e4, &r, dhl) == DN_OK && oarr_nact(&r.arr) == 3 && oarr_trc_order(&r.arr) == 3
+              && fearr_nrows(&r) == 4 && fearr_ncols(&r) == 4
+                  && fearr_nip(&r) == 0, "inv 4 x 4 at nip 0 keeps nact and trc");
 
         fearr_free(&z); fearr_free(&e3); fearr_free(&e4); fearr_free(&r);
     }
@@ -1250,9 +1271,10 @@ static void test_det_inv(dhelpl_t dhl){
               "singular point (n = 4): info > 0");
 
         fearr_zeros_to(0, 0, 0, 3, 1, &z);
-        check(fearr_det_to(&z, &r, dhl) == DN_OK && r.nip == 3 && r.arr.p_data[2] == 1.0,
+        check(fearr_det_to(&z, &r, dhl) == DN_OK && fearr_nip(&r) == 3 && oarr_data(&r.arr)[2] == 1.0,
               "det of 0 x 0 is 1");
-        check(fearr_inv_to(&z, &r, dhl) == DN_OK && r.nrows == 0 && r.nip == 3, "inv of 0 x 0");
+        check(fearr_inv_to(&z, &r, dhl) == DN_OK && fearr_nrows(&r) == 0 && fearr_nip(&r) == 3,
+              "inv of 0 x 0");
 
         fearr_free(&z);
         fearr_zeros_to(1, 2, 3, 2, 1, &z);
@@ -1385,6 +1407,26 @@ static void test_threads(dhelpl_t dhl){
 
 
 // *******************************************************************************************************
+/* W3 fix round 1 (checker finding 1): a Gauss shape whose extents do not fit int64_t is rejected
+ * before the value is touched, also when it is empty. */
+static void test_fix1_shapes(void){
+
+    feoarr_t g = fearr_init();
+
+    check(fearr_zeros_to(0, 0, UINT64_MAX, 0, 0, &g) == DN_ERR_MEMORY && fearr_nip(&g) == 0
+          && fearr_nrows(&g) == 0 && fearr_ncols(&g) == 0, "fix1: zeros (0, 2^64-1) at nip 0");
+    check(fearr_zeros_to(1, 2, 3, 4, 1, &g) == DN_OK, "fix1: zeros 2 x 3 at nip 4");
+    check(fearr_zeros_to(0, UINT64_MAX, 0, 4, 0, &g) == DN_ERR_MEMORY && fearr_nrows(&g) == 2
+          && fearr_ncols(&g) == 3 && fearr_nip(&g) == 4, "fix1: rejected zeros leaves g");
+    check(fearr_set_shape(0, UINT64_MAX, 4, &g) == DN_ERR_SIZE && fearr_nrows(&g) == 2,
+          "fix1: set_shape (0, 2^64-1)");
+    fearr_free(&g);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int main(int argc, char** argv){
 
     dhelpl_t dhl;
@@ -1408,6 +1450,7 @@ int main(int argc, char** argv){
         test_det_inv(dhl);
         test_fallback(dhl, "table cache");
         test_threads(dhl);
+        test_fix1_shapes();
 
         // The k = 11 tests again without the local-table cache: the rank fallback path.
         if (getenv("OTI_SS_TABLE_CACHE_MB") == NULL){

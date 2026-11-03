@@ -318,30 +318,30 @@ static void compare_arro(const char* tag, const arro_t* a, arrso_t* o, const arr
     char label[256];
     int before = n_failed;
 
-    if (a->nrows != o->nrows || a->ncols != o->ncols){
+    if (arro_nrows(a) != o->nrows || arro_ncols(a) != o->ncols){
 
         fprintf(stderr, "FAILED %s: shape mismatch (%llux%llu vs %llux%llu)\n", tag,
-                (unsigned long long)a->nrows, (unsigned long long)a->ncols,
+                (unsigned long long)arro_nrows(a), (unsigned long long)arro_ncols(a),
                 (unsigned long long)o->nrows, (unsigned long long)o->ncols);
         n_failed++;
         return;
 
     }
 
-    for (e = 0; e < a->size; e++){
+    for (e = 0; e < arro_size(a); e++){
 
         snprintf(label, sizeof(label), "%s elem %llu", tag, (unsigned long long)e);
-        compare_num_vs_soti(label, &a->p_data[e], &o->p_data[e], TOL_SPARSE, dhl);
+        compare_num_vs_soti(label, &arro_data(a)[e], &o->p_data[e], TOL_SPARSE, dhl);
 
         if (s != NULL){
-            compare_num_vs_ssoti(label, &a->p_data[e], &s->p_data[e], TOL_SEMI);
+            compare_num_vs_ssoti(label, &arro_data(a)[e], &s->p_data[e], TOL_SEMI);
         }
 
     }
 
     if (n_failed == before){
         printf("passed: %s (%llu elements, exhaustive over %d-label universe up to order %d)\n", tag,
-               (unsigned long long)a->size, UNIV_N, MAXORD);
+               (unsigned long long)arro_size(a), UNIV_N, MAXORD);
     }
 
 }
@@ -359,7 +359,7 @@ static void compare_arro_dense(const char* tag, const arro_t* a, const arro_t* b
     char label[256];
     int before = n_failed;
 
-    if (a->nrows != b->nrows || a->ncols != b->ncols){
+    if (arro_nrows(a) != arro_nrows(b) || arro_ncols(a) != arro_ncols(b)){
 
         fprintf(stderr, "FAILED %s: shape mismatch\n", tag);
         n_failed++;
@@ -367,9 +367,9 @@ static void compare_arro_dense(const char* tag, const arro_t* a, const arro_t* b
 
     }
 
-    for (e = 0; e < a->size; e++){
+    for (e = 0; e < arro_size(a); e++){
 
-        const otinum_t *x = &a->p_data[e], *y = &b->p_data[e];
+        const otinum_t *x = &arro_data(a)[e], *y = &arro_data(b)[e];
         bases_t kmax = (x->nact > y->nact) ? x->nact : y->nact;
         ord_t trc = (x->trc_order > y->trc_order) ? x->trc_order : y->trc_order;
 
@@ -403,7 +403,7 @@ static void compare_arro_dense(const char* tag, const arro_t* a, const arro_t* b
     }
 
     if (n_failed == before){
-        printf("passed: %s (%llu elements)\n", tag, (unsigned long long)a->size);
+        printf("passed: %s (%llu elements)\n", tag, (unsigned long long)arro_size(a));
     }
 
 }
@@ -487,9 +487,9 @@ static void check_order_rules(const char* tag, char kind, const arro_t* a, const
     uint64_t e;
     int bad = 0;
 
-    for (e = 0; e < res->size; e++){
+    for (e = 0; e < arro_size(res); e++){
 
-        const otinum_t *x = &a->p_data[e], *y = &b->p_data[e], *r = &res->p_data[e];
+        const otinum_t *x = &arro_data(a)[e], *y = &arro_data(b)[e], *r = &arro_data(res)[e];
         ord_t trc = (x->trc_order > y->trc_order) ? x->trc_order : y->trc_order;
         bases_t k = (x->nact > y->nact) ? x->nact : y->nact;
 
@@ -530,15 +530,17 @@ static void test_memory(dhelpl_t dhl){
 
     (void)dhl;
 
-    check(z.p_data == NULL && z.nrows == 0 && z.ncols == 0 && z.size == 0, "arro_init is empty");
+    check(arro_data(&z) == NULL && arro_nrows(&z) == 0 && arro_ncols(&z) == 0 && arro_size(&z) == 0,
+          "arro_init is empty");
     arro_free(&z);
-    check(z.p_data == NULL, "arro_free of an empty array is a no-op");
+    check(arro_data(&z) == NULL, "arro_free of an empty array is a no-op");
 
     status = arro_zeros_to(2, 3, 3, &z);
-    ok = (status == DN_OK && z.nrows == 2 && z.ncols == 3 && z.size == 6);
+    ok = (status == DN_OK && arro_nrows(&z) == 2 && arro_ncols(&z) == 3 && arro_size(&z) == 6);
 
-    for (e = 0; e < z.size; e++){
-        ok = ok && z.p_data[e].re == 0.0 && z.p_data[e].nact == 0 && z.p_data[e].trc_order == 3;
+    for (e = 0; e < arro_size(&z); e++){
+        ok = ok && arro_data(&z)[e].re == 0.0 && arro_data(&z)[e].nact == 0
+             && arro_data(&z)[e].trc_order == 3;
     }
 
     check(ok, "arro_zeros_to: real zeros with the requested trc");
@@ -548,62 +550,66 @@ static void test_memory(dhelpl_t dhl){
     num.re = 1.5;
     check(arro_set_item(&num, 1, 2, &z) == DN_OK, "arro_set_item status");
     num.re = -9.0;
-    check(z.p_data[2 + 1 * 3].re == 1.5 && z.p_data[2 + 1 * 3].nact == num.nact &&
-          z.p_data[2 + 1 * 3].p_im != num.p_im, "arro_set_item stores an independent copy");
+    check(arro_data(&z)[2 + 1 * 3].re == 1.5 && arro_data(&z)[2 + 1 * 3].nact == num.nact &&
+          arro_data(&z)[2 + 1 * 3].p_im != num.p_im, "arro_set_item stores an independent copy");
     check(arro_set_item(&num, 2, 0, &z) == DN_ERR_INDEX && arro_set_item(&num, 0, 3, &z) == DN_ERR_INDEX,
           "arro_set_item out of range: DN_ERR_INDEX");
-    check(arro_set_item_r(7.0, 1, 2, &z) == DN_OK && z.p_data[5].re == 7.0 && z.p_data[5].nact == 0 &&
-          z.p_data[5].trc_order == 4, "arro_set_item_r: real value, element's trc kept as it was");
+    check(arro_set_item_r(7.0, 1, 2, &z) == DN_OK && arro_data(&z)[5].re == 7.0
+          && arro_data(&z)[5].nact == 0 &&
+          arro_data(&z)[5].trc_order == 4, "arro_set_item_r: real value, element's trc kept as it was");
     check(arro_set_item_r(1.0, 2, 0, &z) == DN_ERR_INDEX, "arro_set_item_r out of range: DN_ERR_INDEX");
-    check(arro_get_item_ptr(1, 2, &z) == &z.p_data[5] && arro_get_item_ptr(2, 0, &z) == NULL &&
+    check(arro_get_item_ptr(1, 2, &z) == &arro_data(&z)[5] && arro_get_item_ptr(2, 0, &z) == NULL &&
           arro_get_item_ptr(0, 3, &z) == NULL, "arro_get_item_ptr: pointer or NULL out of range");
 
     // Zeros into an array that has content: every element reset.
     check(arro_zeros_to(3, 3, 2, &z) == DN_OK, "arro_zeros_to over an existing array");
-    ok = (z.size == 9);
+    ok = (arro_size(&z) == 9);
 
-    for (e = 0; e < z.size; e++){
-        ok = ok && z.p_data[e].re == 0.0 && z.p_data[e].nact == 0 && z.p_data[e].trc_order == 2;
+    for (e = 0; e < arro_size(&z); e++){
+        ok = ok && arro_data(&z)[e].re == 0.0 && arro_data(&z)[e].nact == 0
+             && arro_data(&z)[e].trc_order == 2;
     }
 
     check(ok, "arro_zeros_to resets every element");
 
     // Resize keeps the first elements, new ones are real zeros with the given trc.
-    for (e = 0; e < z.size; e++){
-        z.p_data[e].re = (double)(e + 1);
+    for (e = 0; e < arro_size(&z); e++){
+        arro_data(&z)[e].re = (double)(e + 1);
     }
 
-    check(arro_resize(3, 4, 4, &z) == DN_OK && z.size == 12, "arro_resize grows");
+    check(arro_resize(3, 4, 4, &z) == DN_OK && arro_size(&z) == 12, "arro_resize grows");
     ok = 1;
 
     for (e = 0; e < 9; e++){
-        ok = ok && z.p_data[e].re == (double)(e + 1);
+        ok = ok && arro_data(&z)[e].re == (double)(e + 1);
     }
 
     for (e = 9; e < 12; e++){
-        ok = ok && z.p_data[e].re == 0.0 && z.p_data[e].trc_order == 4 && z.p_data[e].nact == 0;
+        ok = ok && arro_data(&z)[e].re == 0.0 && arro_data(&z)[e].trc_order == 4
+             && arro_data(&z)[e].nact == 0;
     }
 
     check(ok, "arro_resize keeps the old elements and adds real zeros");
-    check(arro_resize(1, 2, 0, &z) == DN_OK && z.size == 2 && z.p_data[0].re == 1.0 &&
-          z.p_data[1].re == 2.0 && z.nrows == 1 && z.ncols == 2, "arro_resize shrinks");
+    check(arro_resize(1, 2, 0, &z) == DN_OK && arro_size(&z) == 2 && arro_data(&z)[0].re == 1.0 &&
+          arro_data(&z)[1].re == 2.0 && arro_nrows(&z) == 1
+              && arro_ncols(&z) == 2, "arro_resize shrinks");
 
     // Copy.
     check(arro_copy_to(&z, &z) == DN_OK, "arro_copy_to onto itself is a no-op");
-    z.p_data[1] = oti_copy(&num);
+    arro_data(&z)[1] = oti_copy(&num);
     check(arro_copy_to(&z, &c) == DN_OK, "arro_copy_to status");
     compare_arro_dense("arro_copy_to", &z, &c, 0.0, 1);
-    check(c.p_data[1].p_im != z.p_data[1].p_im, "arro_copy_to is deep");
+    check(arro_data(&c)[1].p_im != arro_data(&z)[1].p_im, "arro_copy_to is deep");
 
     // Failures leave a valid array.
-    check(arro_resize(1ULL << 40, 1ULL << 40, 0, &z) == DN_ERR_MEMORY && z.size == 2,
+    check(arro_resize(1ULL << 40, 1ULL << 40, 0, &z) == DN_ERR_MEMORY && arro_size(&z) == 2,
           "arro_resize: shape overflow gives DN_ERR_MEMORY, array unchanged");
-    check(arro_resize(1ULL << 60, 4, 0, &z) == DN_ERR_MEMORY && z.size == 2,
+    check(arro_resize(1ULL << 60, 4, 0, &z) == DN_ERR_MEMORY && arro_size(&z) == 2,
           "arro_resize: byte-count overflow gives DN_ERR_MEMORY, array unchanged");
-    check(arro_resize(3, 3, 151, &z) == DN_ERR_INDEX && z.size == 2,
+    check(arro_resize(3, 3, 151, &z) == DN_ERR_INDEX && arro_size(&z) == 2,
           "arro_resize: new elements above the maximum order give DN_ERR_INDEX");
     check(arro_zeros_to(2, 2, 151, &c) == DN_ERR_INDEX, "arro_zeros_to: trc 151 gives DN_ERR_INDEX");
-    check(arro_zeros_to(2, 2, 150, &c) == DN_OK && c.p_data[0].trc_order == 150,
+    check(arro_zeros_to(2, 2, 150, &c) == DN_OK && arro_data(&c)[0].trc_order == 150,
           "arro_zeros_to: trc 150 works");
 
     arro_free(&z);
@@ -664,14 +670,15 @@ static void compare_arrso_arrso(const char* tag, arrso_t* a, arrso_t* b, dhelpl_
 static coeff_t oarr_coef(const oarr_t* A, uint64_t i, uint64_t j, imdir_t idx, ord_t p){
 
     if (p == 0){
-        return A->p_data[i + j * A->nrows];
+        return oarr_data(A)[i + j * oarr_nrows(A)];
     }
 
-    if (p > A->trc_order || idx >= sshelp_ndir_order(A->nact, p)){
+    if (p > oarr_trc_order(A) || idx >= sshelp_ndir_order(oarr_nact(A), p)){
         return 0.0;
     }
 
-    return A->p_data[(1 + sshelp_order_offset(A->nact, p) + idx) * A->size + i + j * A->nrows];
+    return oarr_data(A)[(1 + sshelp_order_offset(oarr_nact(A),
+                                                 p) + idx) * oarr_size(A) + i + j * oarr_nrows(A)];
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -725,7 +732,7 @@ static void test_conversions(dhelpl_t dhl){
         check(back.nrows == op.so.nrows && back.ncols == op.so.ncols, "arro_to_arrso keeps the shape");
 
         // Every element has its own nact (the largest base it uses) and its own trc.
-        for (e = 0; e < op.dn.size; e++){
+        for (e = 0; e < arro_size(&op.dn); e++){
 
             const sotinum_t* x = &op.so.p_data[e];
             bases_t k = 0;
@@ -747,9 +754,10 @@ static void test_conversions(dhelpl_t dhl){
 
             }
 
-            bad_nact += (op.dn.p_data[e].nact != k || op.dn.p_data[e].trc_order != x->trc_order);
-            kmax = (op.dn.p_data[e].nact > kmax) ? op.dn.p_data[e].nact : kmax;
-            trc  = (op.dn.p_data[e].trc_order > trc) ? op.dn.p_data[e].trc_order : trc;
+            bad_nact += (arro_data(&op.dn)[e].nact != k
+                         || arro_data(&op.dn)[e].trc_order != x->trc_order);
+            kmax = (arro_data(&op.dn)[e].nact > kmax) ? arro_data(&op.dn)[e].nact : kmax;
+            trc  = (arro_data(&op.dn)[e].trc_order > trc) ? arro_data(&op.dn)[e].trc_order : trc;
 
         }
 
@@ -757,16 +765,16 @@ static void test_conversions(dhelpl_t dhl){
 
         // AoS -> SoA: nact and trc are the maxima; every element zero-extended.
         check(arro_to_oarr(&op.dn, &S) == DN_OK, "arro_to_oarr status");
-        check(S.nact == kmax && S.trc_order == trc && S.nrows == shapes[s][0] &&
-              S.ncols == shapes[s][1], "arro_to_oarr: nact and trc are the element maxima");
+        check(oarr_nact(&S) == kmax && oarr_trc_order(&S) == trc && oarr_nrows(&S) == shapes[s][0] &&
+              oarr_ncols(&S) == shapes[s][1], "arro_to_oarr: nact and trc are the element maxima");
 
-        for (i = 0; i < S.nrows; i++){
+        for (i = 0; i < oarr_nrows(&S); i++){
 
-            for (j = 0; j < S.ncols; j++){
+            for (j = 0; j < oarr_ncols(&S); j++){
 
-                const otinum_t* x = &op.dn.p_data[j + i * S.ncols];
+                const otinum_t* x = &arro_data(&op.dn)[j + i * oarr_ncols(&S)];
 
-                ok = ok && S.p_data[i + j * S.nrows] == x->re;
+                ok = ok && oarr_data(&S)[i + j * oarr_nrows(&S)] == x->re;
 
                 for (p = 1; p <= trc; p++){
 
@@ -788,9 +796,9 @@ static void test_conversions(dhelpl_t dhl){
         arrss_to_oarrss(&op.ss, &Sss);
         ok = 1;
 
-        for (i = 0; i < S.nrows; i++){
+        for (i = 0; i < oarr_nrows(&S); i++){
 
-            for (j = 0; j < S.ncols; j++){
+            for (j = 0; j < oarr_ncols(&S); j++){
 
                 for (p = 1; p <= trc; p++){
 
@@ -811,12 +819,13 @@ static void test_conversions(dhelpl_t dhl){
 
         // SoA -> AoS: every element gets the SoA nact and orders.
         check(arro_from_oarr(&S, &from) == DN_OK, "arro_from_oarr status");
-        ok = (from.nrows == S.nrows && from.ncols == S.ncols);
+        ok = (arro_nrows(&from) == oarr_nrows(&S) && arro_ncols(&from) == oarr_ncols(&S));
 
-        for (e = 0; e < from.size; e++){
+        for (e = 0; e < arro_size(&from); e++){
 
-            ok = ok && from.p_data[e].nact == S.nact && from.p_data[e].trc_order == S.trc_order &&
-                 from.p_data[e].act_order == S.act_order;
+            ok = ok && arro_data(&from)[e].nact == oarr_nact(&S)
+                 && arro_data(&from)[e].trc_order == oarr_trc_order(&S) &&
+                 arro_data(&from)[e].act_order == oarr_act_order(&S);
 
         }
 
@@ -836,15 +845,18 @@ static void test_conversions(dhelpl_t dhl){
         arro_t e0 = arro_init(), r = arro_init(), back = arro_init();
         oarr_t S = oarr_init();
 
-        check(arro_to_oarr(&e0, &S) == DN_OK && S.size == 0 && S.nact == 0,
+        check(arro_to_oarr(&e0, &S) == DN_OK && oarr_size(&S) == 0 && oarr_nact(&S) == 0,
               "arro_to_oarr of an empty array");
-        check(arro_from_oarr(&S, &back) == DN_OK && back.size == 0, "arro_from_oarr of an empty array");
+        check(arro_from_oarr(&S, &back) == DN_OK && arro_size(&back) == 0,
+              "arro_from_oarr of an empty array");
 
         arro_zeros_to(2, 2, 3, &r);
-        r.p_data[1].re = 4.0;
-        check(arro_to_oarr(&r, &S) == DN_OK && S.nact == 0 && S.trc_order == 3 && S.act_order == 0 &&
-              S.p_data[2] == 4.0, "arro_to_oarr of real elements: nact 0, act_order 0");
-        check(arro_from_oarr(&S, &back) == DN_OK && back.p_data[1].re == 4.0 && back.p_data[0].nact == 0,
+        arro_data(&r)[1].re = 4.0;
+        check(arro_to_oarr(&r, &S) == DN_OK && oarr_nact(&S) == 0 && oarr_trc_order(&S) == 3
+              && oarr_act_order(&S) == 0 &&
+              oarr_data(&S)[2] == 4.0, "arro_to_oarr of real elements: nact 0, act_order 0");
+        check(arro_from_oarr(&S, &back) == DN_OK && arro_data(&back)[1].re == 4.0
+              && arro_data(&back)[0].nact == 0,
               "arro_from_oarr of a real array");
 
         arro_free(&r);
@@ -1186,18 +1198,18 @@ static void test_truncation_compact(dhelpl_t dhl){
         arrss_truncate_order_to(2, &a1.ss, &got_ss, dhl);
         check(arro_truncate_order_to(2, &a1.dn, &got, dhl) == DN_OK, "truncate_order status");
 
-        for (e = 0; e < got.size; e++){
+        for (e = 0; e < arro_size(&got); e++){
 
-            nact_before += got.p_data[e].nact;
-            trc_kept = trc_kept && got.p_data[e].trc_order == a1.dn.p_data[e].trc_order;
+            nact_before += arro_data(&got)[e].nact;
+            trc_kept = trc_kept && arro_data(&got)[e].trc_order == arro_data(&a1.dn)[e].trc_order;
 
         }
 
         check(trc_kept, "truncate_order keeps every element's trc");
         check(arro_compact_to(&got, &cmp, dhl) == DN_OK, "compact status");
 
-        for (e = 0; e < cmp.size; e++){
-            nact_after += cmp.p_data[e].nact;
+        for (e = 0; e < arro_size(&cmp); e++){
+            nact_after += arro_data(&cmp)[e].nact;
         }
 
         compare_arro("truncate_order(2)+compact 3x3", &cmp, &exp, &got_ss, dhl);
@@ -1235,9 +1247,10 @@ static void test_truncation_compact(dhelpl_t dhl){
         arro_set_item(&n1, 0, 0, &z);
         oti_set_r(1.0, &n1);
         arro_set_item(&n1, 0, 1, &z);
-        check(arro_compact_to(&z, &c, dhl) == DN_OK && c.p_data[0].nact == 2 && c.p_data[1].nact == 0,
+        check(arro_compact_to(&z, &c, dhl) == DN_OK && arro_data(&c)[0].nact == 2
+              && arro_data(&c)[1].nact == 0,
               "compact trims trailing zero bases only (nact 5 -> 2, real -> 0)");
-        check(c.p_data[0].trc_order == 3 && num_coef(&c.p_data[0], 1, 1) == 2.0,
+        check(arro_data(&c)[0].trc_order == 3 && num_coef(&arro_data(&c)[0], 1, 1) == 2.0,
               "compact keeps trc and values");
 
         arro_free(&z);
@@ -1269,11 +1282,11 @@ static void test_matmul(dhelpl_t dhl){
     check(arro_matmul_OO_to(&a1.dn, &a2.dn, &got, dhl) == DN_OK, "matmul status");
 
     compare_arro("matmul 2x4 . 4x3", &got, &exp, &got_ss, dhl);
-    check(got.nrows == 2 && got.ncols == 3, "matmul_OO result shape 2x3");
+    check(arro_nrows(&got) == 2 && arro_ncols(&got) == 3, "matmul_OO result shape 2x3");
 
     // Shape mismatch.
     check(arro_matmul_OO_to(&a2.dn, &a2.dn, &got, dhl) == DN_ERR_SIZE, "matmul rejects unaligned shapes");
-    check(got.nrows == 2 && got.ncols == 3, "a failed matmul leaves res untouched");
+    check(arro_nrows(&got) == 2 && arro_ncols(&got) == 3, "a failed matmul leaves res untouched");
 
     // Regression (review M2): elements of different trc, and the inner order must not matter.
     // x1 = y1 = 1 + e1 at trc 1 and x3 = 1 at trc 3: the trc-1 product x1 * y1 has no e1^2.
@@ -1312,8 +1325,8 @@ static void test_matmul(dhelpl_t dhl){
             check(arro_matmul_OO_to(&drow, &dcol, &dgot, dhl) == DN_OK, "matmul mixed trc status");
             compare_arro(order == 0 ? "matmul mixed trc [x3 x1] . [y1; y1]"
                                     : "matmul mixed trc [x1 x3] . [y1; y1]", &dgot, &rexp, NULL, dhl);
-            check(dgot.p_data[0].trc_order == 3 && num_coef(&dgot.p_data[0], 0, 2) == 0.0
-                  && num_coef(&dgot.p_data[0], 0, 1) == 3.0, "matmul mixed trc: no e1^2, 2 + 3 e1");
+            check(arro_data(&dgot)[0].trc_order == 3 && num_coef(&arro_data(&dgot)[0], 0, 2) == 0.0
+                  && num_coef(&arro_data(&dgot)[0], 0, 1) == 3.0, "matmul mixed trc: no e1^2, 2 + 3 e1");
 
         }
 
@@ -1335,8 +1348,9 @@ static void test_matmul(dhelpl_t dhl){
 
         arro_zeros_to(2, 0, 0, &e1);
         arro_zeros_to(0, 3, 0, &e2);
-        check(arro_matmul_OO_to(&e1, &e2, &r, dhl) == DN_OK && r.nrows == 2 && r.ncols == 3 &&
-              r.p_data[5].re == 0.0, "matmul with an empty inner dimension gives zeros");
+        check(arro_matmul_OO_to(&e1, &e2, &r, dhl) == DN_OK && arro_nrows(&r) == 2
+              && arro_ncols(&r) == 3 &&
+              arro_data(&r)[5].re == 0.0, "matmul with an empty inner dimension gives zeros");
         arro_free(&e1);
         arro_free(&e2);
         arro_free(&r);
@@ -1373,8 +1387,10 @@ static void test_review_fixes(dhelpl_t dhl){
 
         check(oarr_zeros_to(200, 1, 10, 1, &res) == DN_OK, "M1: previous result over 200 bases");
         check(arro_to_oarr(&src, &res) == DN_OK, "M1: arro_to_oarr status");
-        check(res.nact == 1 && res.trc_order == 4 && res.nbases == 1, "M1: capacity is nact, not 200");
-        check(res.nrows == 1 && res.ncols == 10 && res.p_data[0] == 0.0, "M1: shape and real part");
+        check(oarr_nact(&res) == 1 && oarr_trc_order(&res) == 4 && res.nbases == 1,
+              "M1: capacity is nact, not 200");
+        check(oarr_nrows(&res) == 1 && oarr_ncols(&res) == 10 && oarr_data(&res)[0] == 0.0,
+              "M1: shape and real part");
 
         oarr_free(&res);
         oti_free(&unit);
@@ -1402,8 +1418,8 @@ static void test_review_fixes(dhelpl_t dhl){
         check(arro_mul_oO_to(arro_get_item_ptr(0, 0, &a), &a, &a, dhl) == DN_OK, "m2: mul status");
 
         for (e = 0; e < 100; e++){
-            ok = ok && a.p_data[e].re == 4.0 && num_coef(&a.p_data[e], 0, 1) == 4.0
-                    && num_coef(&a.p_data[e], 0, 2) == 1.0;
+            ok = ok && arro_data(&a)[e].re == 4.0 && num_coef(&arro_data(&a)[e], 0, 1) == 4.0
+                    && num_coef(&arro_data(&a)[e], 0, 2) == 1.0;
         }
 
         check(ok, "m2: arro_mul_oO_to with num inside res == arr1");
@@ -1412,10 +1428,10 @@ static void test_review_fixes(dhelpl_t dhl){
         check(arro_zeros_to(1, 3, 2, &c) == DN_OK, "m2: small result");
         arro_set_item(&x, 0, 0, &c);
         check(arro_sum_oO_to(arro_get_item_ptr(0, 0, &c), &b, &c, dhl) == DN_OK, "m2: sum status");
-        ok = c.size == 100;
+        ok = arro_size(&c) == 100;
 
-        for (e = 0; e < c.size && ok; e++){
-            ok = c.p_data[e].re == 4.0 && num_coef(&c.p_data[e], 0, 1) == 2.0;
+        for (e = 0; e < arro_size(&c) && ok; e++){
+            ok = arro_data(&c)[e].re == 4.0 && num_coef(&arro_data(&c)[e], 0, 1) == 2.0;
         }
 
         check(ok, "m2: arro_sum_oO_to with num inside a resized res");
@@ -1426,7 +1442,7 @@ static void test_review_fixes(dhelpl_t dhl){
         ok = 1;
 
         for (e = 0; e < 100; e++){
-            ok = ok && a.p_data[e].re == 0.0 && num_coef(&a.p_data[e], 0, 1) == 0.0;
+            ok = ok && arro_data(&a)[e].re == 0.0 && num_coef(&arro_data(&a)[e], 0, 1) == 0.0;
         }
 
         check(ok, "m2: arro_sub_Oo_to with num inside res == arr1");
@@ -1468,7 +1484,7 @@ static void test_transpose(dhelpl_t dhl){
         snprintf(tag, sizeof(tag), "transpose %llux%llu (aliased)", (unsigned long long)shapes[s][0],
                  (unsigned long long)shapes[s][1]);
         compare_arro(tag, &a1.dn, &exp, NULL, dhl);
-        check(a1.dn.nrows == shapes[s][1] && a1.dn.ncols == shapes[s][0],
+        check(arro_nrows(&a1.dn) == shapes[s][1] && arro_ncols(&a1.dn) == shapes[s][0],
               "transpose swaps the shape in place");
 
         arrso_free(&exp);
@@ -1584,13 +1600,14 @@ static void test_shape_errors(dhelpl_t dhl){
     int st;
 
     arro_zeros_to(1, 1, 2, &res);
-    res.p_data[0].re = 5.0;
+    arro_data(&res)[0].re = 5.0;
 
     check(arro_sum_OO_to(&a.dn, &b.dn, &res, dhl) == DN_ERR_SIZE, "sum_OO shape mismatch: DN_ERR_SIZE");
     check(arro_sub_OO_to(&a.dn, &b.dn, &res, dhl) == DN_ERR_SIZE, "sub_OO shape mismatch: DN_ERR_SIZE");
     check(arro_mul_OO_to(&a.dn, &b.dn, &res, dhl) == DN_ERR_SIZE, "mul_OO shape mismatch: DN_ERR_SIZE");
     check(arro_div_OO_to(&a.dn, &b.dn, &res, dhl) == DN_ERR_SIZE, "div_OO shape mismatch: DN_ERR_SIZE");
-    check(res.size == 1 && res.p_data[0].re == 5.0, "a failed elementwise call leaves res untouched");
+    check(arro_size(&res) == 1 && arro_data(&res)[0].re == 5.0,
+          "a failed elementwise call leaves res untouched");
 
     // Non-square K and mismatched b for the linear algebra.
     st = arro_solve_to(&b.dn, &a.dn, &res, dhl);
@@ -1716,7 +1733,7 @@ static void test_linalg(dhelpl_t dhl){
         arro_copy_to(&dK, &Ks);
 
         for (j = 0; j < 3; j++){
-            Ks.p_data[1 * 3 + j].re = 0.0;              // row 1 real part = 0.
+            arro_data(&Ks)[1 * 3 + j].re = 0.0;              // row 1 real part = 0.
         }
 
         {
@@ -1728,7 +1745,7 @@ static void test_linalg(dhelpl_t dhl){
 
         st    = arro_solve_to(&Ks, &db, &x, dhl);
         st_ss = arrss_solve_to(&sKs, &sb, &sx, dhl);
-        check(st > 0 && st == st_ss && x.size == 0,
+        check(st > 0 && st == st_ss && arro_size(&x) == 0,
               "singular solve: status > 0 equal to semi-sparse's, x untouched");
         check(arro_inv_to(&Ks, &inv, dhl) > 0, "singular inv: status > 0");
         check(arro_det_to(&Ks, &d, dhl) > 0 && d.nact == 2 && d.trc_order == 2,
@@ -1804,14 +1821,16 @@ static void test_fallback_k11(dhelpl_t dhl){
     arro_to_oarr(&B, &sB);
     check(oarr_mul_OO_to(&sA, &sB, &sP, dhl) == DN_OK, "k = 11: SoA product status");
     arro_to_oarr(&P, &tP);
-    check(tP.nact == 11 && sP.nact == 11 && tP.trc_order == 5, "k = 11 product: nact 11, trc 5");
+    check(oarr_nact(&tP) == 11 && oarr_nact(&sP) == 11 && oarr_trc_order(&tP) == 5,
+          "k = 11 product: nact 11, trc 5");
 
     {
-        uint64_t n = (1 + sshelp_ndir_total(11, 5)) * sP.size, bad = 0;
+        uint64_t n = (1 + sshelp_ndir_total(11, 5)) * oarr_size(&sP), bad = 0;
 
         for (e = 0; e < n; e++){
 
-            bad += !(fabs(tP.p_data[e] - sP.p_data[e]) <= 1e-13 * fmax(1.0, fabs(sP.p_data[e])));
+            bad += !(fabs(oarr_data(&tP)[e] - oarr_data(&sP)[e])
+                     <= 1e-13 * fmax(1.0, fabs(oarr_data(&sP)[e])));
 
         }
 
@@ -1824,13 +1843,14 @@ static void test_fallback_k11(dhelpl_t dhl){
     arro_to_oarr(&M, &tM);
 
     {
-        uint64_t n = (1 + sshelp_ndir_total(11, 5)) * sM.size, bad = 0;
+        uint64_t n = (1 + sshelp_ndir_total(11, 5)) * oarr_size(&sM), bad = 0;
 
-        check(tM.nact == 11 && tM.trc_order == 5, "k = 11 matmul: nact 11, trc 5");
+        check(oarr_nact(&tM) == 11 && oarr_trc_order(&tM) == 5, "k = 11 matmul: nact 11, trc 5");
 
         for (e = 0; e < n; e++){
 
-            bad += !(fabs(tM.p_data[e] - sM.p_data[e]) <= 1e-13 * fmax(1.0, fabs(sM.p_data[e])));
+            bad += !(fabs(oarr_data(&tM)[e] - oarr_data(&sM)[e])
+                     <= 1e-13 * fmax(1.0, fabs(oarr_data(&sM)[e])));
 
         }
 
@@ -1898,6 +1918,28 @@ static void test_threads(dhelpl_t dhl){
 
 
 // *******************************************************************************************************
+/* W3 fix round 1 (checker finding 1): an AoS shape whose extents or descriptor strides do not fit
+ * int64_t is rejected before the array is touched, also when it is empty. */
+static void test_fix1_shapes(void){
+
+    arro_t b = arro_init();
+
+    check(arro_resize(0, UINT64_MAX, 0, &b) == DN_ERR_MEMORY && arro_data(&b) == NULL
+          && arro_nrows(&b) == 0 && arro_ncols(&b) == 0, "fix1: resize (0, 2^64-1)");
+    check(arro_resize(0, (uint64_t)INT64_MAX, 0, &b) == DN_ERR_MEMORY && arro_ncols(&b) == 0,
+          "fix1: resize (0, 2^63-1): the row stride overflows");
+    check(arro_resize(2, 2, 1, &b) == DN_OK, "fix1: resize 2 x 2");
+    check(arro_resize(0, UINT64_MAX, 0, &b) == DN_ERR_MEMORY && arro_nrows(&b) == 2
+          && arro_ncols(&b) == 2 && arro_data(&b)[3].trc_order == 1, "fix1: rejected resize leaves b");
+    check(arro_zeros_to((uint64_t)INT64_MAX, 0, 0, &b) == DN_ERR_MEMORY && arro_size(&b) == 4,
+          "fix1: zeros (2^63-1, 0)");
+    arro_free(&b);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int main(void){
 
     dhelpl_t dhl;
@@ -1918,6 +1960,7 @@ int main(void){
     test_linalg(dhl);
     test_fallback_k11(dhl);
     test_threads(dhl);
+    test_fix1_shapes();
 
     oti_ws_release();
     ssoti_ws_release();

@@ -124,14 +124,14 @@ static oarr_t make_soa(bases_t k, uint64_t nrows, uint64_t ncols, ord_t trc, ord
 
     check(oarr_zeros_to(k, nrows, ncols, trc, &arr) == DN_OK, "make_soa: status");
 
-    for (e = 0; e < arr.size; e++){
-        arr.p_data[e] = rng_value();
+    for (e = 0; e < oarr_size(&arr); e++){
+        oarr_data(&arr)[e] = rng_value();
     }
 
     for (p = 1; p <= act && p <= trc && k > 0; p++){
 
-        size_t n = (size_t)sshelp_ndir_order(k, p) * arr.size, i;
-        coeff_t* b0 = arr.p_data + oarr_block_index(k, p, 0) * arr.size;
+        size_t n = (size_t)sshelp_ndir_order(k, p) * oarr_size(&arr), i;
+        coeff_t* b0 = oarr_data(&arr) + oarr_block_index(k, p, 0) * oarr_size(&arr);
 
         for (i = 0; i < n; i++){
             b0[i] = 0.5 * rng_value();
@@ -139,7 +139,7 @@ static oarr_t make_soa(bases_t k, uint64_t nrows, uint64_t ncols, ord_t trc, ord
 
     }
 
-    arr.act_order = (k > 0 && act < trc) ? act : ((k > 0) ? trc : 0);
+    oarr_set_act_order(&arr, (k > 0 && act < trc) ? act : ((k > 0) ? trc : 0));
 
     return arr;
 
@@ -172,14 +172,15 @@ static ssotinum_t ss_num(const otinum_t* num){
 // Semi-sparse twin of a dense array: active set [1..nact], identical blocks.
 static oarrss_t ss_soa(const oarr_t* arr){
 
-    oarrss_t s = oarrss_zeros(g_bases, arr->nact, arr->nrows, arr->ncols, arr->trc_order);
-    size_t n = (size_t)(1 + sshelp_ndir_total(arr->nact, arr->trc_order)) * arr->size;
+    oarrss_t s = oarrss_zeros(g_bases, oarr_nact(arr), oarr_nrows(arr), oarr_ncols(arr),
+                              oarr_trc_order(arr));
+    size_t n = (size_t)(1 + sshelp_ndir_total(oarr_nact(arr), oarr_trc_order(arr))) * oarr_size(arr);
 
     if (n > 0){
-        memcpy(s.p_data, arr->p_data, n * sizeof(coeff_t));
+        memcpy(s.p_data, oarr_data(arr), n * sizeof(coeff_t));
     }
 
-    s.act_order = arr->act_order;
+    s.act_order = oarr_act_order(arr);
 
     return s;
 
@@ -343,14 +344,14 @@ static void ss_hold_free(ss_hold_t* h){
 static coeff_t soa_coef(const oarr_t* a, uint64_t e, ord_t p, ndir_t idx){
 
     if (p == 0){
-        return a->p_data[e];
+        return oarr_data(a)[e];
     }
 
-    if (p > a->trc_order || idx >= sshelp_ndir_order(a->nact, p)){
+    if (p > oarr_trc_order(a) || idx >= sshelp_ndir_order(oarr_nact(a), p)){
         return 0.0;
     }
 
-    return a->p_data[(oarr_block_index(a->nact, p, 0) + idx) * a->size + e];
+    return oarr_data(a)[(oarr_block_index(oarr_nact(a), p, 0) + idx) * oarr_size(a) + e];
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -360,16 +361,16 @@ static coeff_t soa_coef(const oarr_t* a, uint64_t e, ord_t p, ndir_t idx){
 // max |a - b| / max(1, max |b|) over the union of the two layouts; -1 on a shape mismatch.
 static double soa_rel_diff(const oarr_t* a, const oarr_t* b){
 
-    bases_t k = (a->nact > b->nact) ? a->nact : b->nact;
-    ord_t trc = (a->trc_order > b->trc_order) ? a->trc_order : b->trc_order, p;
+    bases_t k = (oarr_nact(a) > oarr_nact(b)) ? oarr_nact(a) : oarr_nact(b);
+    ord_t trc = (oarr_trc_order(a) > oarr_trc_order(b)) ? oarr_trc_order(a) : oarr_trc_order(b), p;
     double diff = 0.0, scale = 1.0;
     uint64_t e;
 
-    if (a->nrows != b->nrows || a->ncols != b->ncols){
+    if (oarr_nrows(a) != oarr_nrows(b) || oarr_ncols(a) != oarr_ncols(b)){
         return -1.0;
     }
 
-    for (e = 0; e < a->size; e++){
+    for (e = 0; e < oarr_size(a); e++){
 
         for (p = 0; p <= trc; p++){
 
@@ -400,8 +401,8 @@ static void compare_vs_ss(const oarr_t* a, const oarrss_t* s, double tol, const 
 
     size_t n, i, bad = 0;
     char name[256];
-    int same = (a->nrows == s->nrows && a->ncols == s->ncols && a->nact == s->nbases
-                && a->trc_order == s->trc_order);
+    int same = (oarr_nrows(a) == s->nrows && oarr_ncols(a) == s->ncols && oarr_nact(a) == s->nbases
+                && oarr_trc_order(a) == s->trc_order);
     bases_t u;
 
     for (u = 0; same && u < s->nbases; u++){
@@ -411,23 +412,23 @@ static void compare_vs_ss(const oarr_t* a, const oarrss_t* s, double tol, const 
     if (!same){
 
         snprintf(name, sizeof(name), "%s: layout (dense nact %u trc %u, ss k %u trc %u)", ctx,
-                 (unsigned)a->nact, (unsigned)a->trc_order, (unsigned)s->nbases,
+                 (unsigned)oarr_nact(a), (unsigned)oarr_trc_order(a), (unsigned)s->nbases,
                  (unsigned)s->trc_order);
         check(0, name);
         return;
 
     }
 
-    n = (size_t)(1 + sshelp_ndir_total(a->nact, a->trc_order)) * a->size;
+    n = (size_t)(1 + sshelp_ndir_total(oarr_nact(a), oarr_trc_order(a))) * oarr_size(a);
 
     for (i = 0; i < n; i++){
 
-        double sc = fmax(1.0, fmax(fabs(a->p_data[i]), fabs(s->p_data[i])));
+        double sc = fmax(1.0, fmax(fabs(oarr_data(a)[i]), fabs(s->p_data[i])));
 
-        if (fabs(a->p_data[i] - s->p_data[i]) > tol * sc){
+        if (fabs(oarr_data(a)[i] - s->p_data[i]) > tol * sc){
 
             if (bad < 5){
-                fprintf(stderr, "  mismatch %s at %zu: dense=%.17g ss=%.17g\n", ctx, i, a->p_data[i],
+                fprintf(stderr, "  mismatch %s at %zu: dense=%.17g ss=%.17g\n", ctx, i, oarr_data(a)[i],
                         s->p_data[i]);
             }
 
@@ -600,23 +601,23 @@ static void real_solve(double* A, uint64_t n, double* B, uint64_t nrhs){
 static oarr_t block_solve(const csro_t* K, const oarr_t* b, dhelpl_t dhl){
 
     oarr_t u = oarr_init(), dense = oarr_init();
-    uint64_t n = K->nrows, m = b->ncols;
+    uint64_t n = K->nrows, m = oarr_ncols(b);
     double* A = (double*)malloc((size_t)(n * n) * sizeof(double) + 1);
     ord_t p;
 
     check(csro_solve_init(K, b, &u) == CSRO_OK, "block solve: init status");
     check(csro_to_dense(K, &dense) == CSRO_OK, "block solve: to_dense status");
 
-    memcpy(A, dense.p_data, (size_t)(n * n) * sizeof(double));
-    real_solve(A, n, u.p_data, m);
+    memcpy(A, oarr_data(&dense), (size_t)(n * n) * sizeof(double));
+    real_solve(A, n, oarr_data(&u), m);
 
-    for (p = 1; p <= u.trc_order; p++){
+    for (p = 1; p <= oarr_trc_order(&u); p++){
 
-        ndir_t Np = sshelp_ndir_order(u.nact, p);
+        ndir_t Np = sshelp_ndir_order(oarr_nact(&u), p);
 
         check(csro_solve_rhs(K, &u, p, dhl) == CSRO_OK, "block solve: rhs status");
-        memcpy(A, dense.p_data, (size_t)(n * n) * sizeof(double));
-        real_solve(A, n, u.p_data + oarr_block_index(u.nact, p, 0) * u.size, m * Np);
+        memcpy(A, oarr_data(&dense), (size_t)(n * n) * sizeof(double));
+        real_solve(A, n, oarr_data(&u) + oarr_block_index(oarr_nact(&u), p, 0) * oarr_size(&u), m * Np);
 
     }
 
@@ -903,8 +904,8 @@ static void test_to_csr(dhelpl_t dhl){
     to_csr(&lil, &h);
     to_csr_ss(&ss, &hs);
 
-    check(h.val.nrows == 5 && h.val.ncols == 1, "to_csr: values are nnz x 1");
-    check(h.val.nact == 4 && h.val.trc_order == 3 && h.val.act_order == 3,
+    check(oarr_nrows(&h.val) == 5 && oarr_ncols(&h.val) == 1, "to_csr: values are nnz x 1");
+    check(oarr_nact(&h.val) == 4 && oarr_trc_order(&h.val) == 3 && oarr_act_order(&h.val) == 3,
           "to_csr: largest nact, order and act_order");
     check(h.indptr[0] == 0 && h.indptr[1] == 2 && h.indptr[2] == 3 && h.indptr[3] == 3
           && h.indptr[4] == 5, "to_csr: indptr (explicit zeros kept, empty row)");
@@ -924,7 +925,8 @@ static void test_to_csr(dhelpl_t dhl){
         oarr_t dense = oarr_init();
         otinum_t e = oti_init();
 
-        check(csro_to_dense(&h.K, &dense) == CSRO_OK && dense.nrows == 4 && dense.ncols == 5,
+        check(csro_to_dense(&h.K, &dense) == CSRO_OK && oarr_nrows(&dense) == 4
+              && oarr_ncols(&dense) == 5,
               "to_dense: shape");
         check(oarr_get_item_to(3, 4, &dense, &e) == DN_OK && same_value(&e, &v1),
               "to_dense: entry (3,4)");
@@ -955,7 +957,7 @@ static void test_to_csr(dhelpl_t dhl){
 
         to_csr(&em, &he);
 
-        check(he.val.size == 0 && he.indptr[0] == 0 && he.indptr[3] == 0, "to_csr: empty builder");
+        check(oarr_size(&he.val) == 0 && he.indptr[0] == 0 && he.indptr[3] == 0, "to_csr: empty builder");
         check(csro_check(&he.K) == CSRO_OK, "check: empty matrix");
         hold_free(&he);
         lilo_free(&em);
@@ -1120,12 +1122,13 @@ static void test_matmul(dhelpl_t dhl){
                 check(csro_to_dense(&h.K, &dense) == CSRO_OK
                       && oarr_matmul_OO_to(&dense, &x, &ref, dhl) == DN_OK, ctx);
                 d = soa_rel_diff(&res, &ref);
-                check(d >= 0.0 && d <= TOL_ORACLE && res.nact == ref.nact
-                      && res.trc_order == ref.trc_order && res.act_order == ref.act_order, ctx);
+                check(d >= 0.0 && d <= TOL_ORACLE && oarr_nact(&res) == oarr_nact(&ref)
+                      && oarr_trc_order(&res) == oarr_trc_order(&ref)
+                          && oarr_act_order(&res) == oarr_act_order(&ref), ctx);
                 check(csrss_matmul_to(&hs.K, &xs, &rs, dhl) == CSRSS_OK, ctx);
 
                 // A real result has an empty semi-sparse set; only compare layouts that exist.
-                if (res.nact > 0){
+                if (oarr_nact(&res) > 0){
                     compare_vs_ss(&res, &rs, TOL_SS, ctx);
                 }
 
@@ -1173,11 +1176,13 @@ static void test_matmul_patterns(dhelpl_t dhl){
     // Dirty destination (larger layout) gives the same bits.
     {
         oarr_t dd = make_soa(6, 7, 7, 4, 4);
-        size_t n = (size_t)(1 + sshelp_ndir_total(res.nact, res.trc_order)) * res.size;
+        size_t n = (size_t)(1 + sshelp_ndir_total(oarr_nact(&res),
+                                                  oarr_trc_order(&res))) * oarr_size(&res);
 
-        check(csro_matmul_to(&K, &x, &dd, dhl) == CSRO_OK && dd.nact == res.nact
-              && dd.trc_order == res.trc_order && dd.nrows == 4 && dd.ncols == 2
-              && memcmp(dd.p_data, res.p_data, n * sizeof(coeff_t)) == 0,
+        check(csro_matmul_to(&K, &x, &dd, dhl) == CSRO_OK && oarr_nact(&dd) == oarr_nact(&res)
+              && oarr_trc_order(&dd) == oarr_trc_order(&res) && oarr_nrows(&dd) == 4
+                  && oarr_ncols(&dd) == 2
+              && memcmp(oarr_data(&dd), oarr_data(&res), n * sizeof(coeff_t)) == 0,
               "patterns: dirty destination");
         oarr_free(&dd);
     }
@@ -1197,10 +1202,11 @@ static void test_matmul_patterns(dhelpl_t dhl){
     // Shape error leaves res unchanged.
     {
         oarr_t y = make_soa(2, 4, 2, 3, 3);
-        coeff_t* before = res.p_data;
+        coeff_t* before = oarr_data(&res);
 
-        check(csro_matmul_to(&K, &y, &res, dhl) == CSRO_ERR_SIZE && res.p_data == before
-              && res.nrows == 4 && res.ncols == 2, "matmul: shape mismatch -> CSRO_ERR_SIZE");
+        check(csro_matmul_to(&K, &y, &res, dhl) == CSRO_ERR_SIZE && oarr_data(&res) == before
+              && oarr_nrows(&res) == 4
+                  && oarr_ncols(&res) == 2, "matmul: shape mismatch -> CSRO_ERR_SIZE");
         oarr_free(&y);
     }
 
@@ -1213,9 +1219,10 @@ static void test_matmul_patterns(dhelpl_t dhl){
 
         check(oarr_zeros_to(2, 0, 0, 2, &x0) == DN_OK, "0x0 setup");
         to_csr(&e0, &h0);
-        check(csro_matmul_to(&h0.K, &x0, &r, dhl) == CSRO_OK && r.nrows == 0 && r.ncols == 0,
+        check(csro_matmul_to(&h0.K, &x0, &r, dhl) == CSRO_OK && oarr_nrows(&r) == 0
+              && oarr_ncols(&r) == 0,
               "matmul 0x0");
-        check(csro_solve_init(&h0.K, &x0, &r) == CSRO_OK && r.nrows == 0, "solve_init 0x0");
+        check(csro_solve_init(&h0.K, &x0, &r) == CSRO_OK && oarr_nrows(&r) == 0, "solve_init 0x0");
         check(csro_solve_rhs(&h0.K, &r, 1, dhl) == CSRO_OK, "solve_rhs 0x0");
 
         lilo_set(&e1, 0, 0, &v);
@@ -1286,11 +1293,12 @@ static void test_solve(dhelpl_t dhl){
             check(csro_to_dense(&h.K, &dense) == CSRO_OK && oarr_solve_to(&dense, &b, &ref, dhl) == 0,
                   ctx);
             d = soa_rel_diff(&u, &ref);
-            check(d >= 0.0 && d <= 1e-12 && u.nact == ref.nact && u.trc_order == ref.trc_order, ctx);
+            check(d >= 0.0 && d <= 1e-12 && oarr_nact(&u) == oarr_nact(&ref)
+                  && oarr_trc_order(&u) == oarr_trc_order(&ref), ctx);
 
             su = block_solve_ss(&hs.K, &sb, dhl);
 
-            if (u.nact > 0){
+            if (oarr_nact(&u) > 0){
                 compare_vs_ss(&u, &su, TOL_SS, ctx);
             }
 
@@ -1313,11 +1321,11 @@ static void test_solve(dhelpl_t dhl){
         make_system(6, 3, 2, &lil, &ss);
         to_csr(&lil, &h);
 
-        check(csro_solve_init(&h.K, &b, &u) == CSRO_OK && u.nact == 3 && u.trc_order == 2,
+        check(csro_solve_init(&h.K, &b, &u) == CSRO_OK && oarr_nact(&u) == 3 && oarr_trc_order(&u) == 2,
               "solve_init: layout max(nact), max(trc)");
         check(oarr_copy_to(&b, &v) == DN_OK && csro_solve_init(&h.K, &v, &v) == CSRO_OK
-              && soa_rel_diff(&u, &v) == 0.0 && v.nact == 3, "solve_init: in place");
-        check(csro_solve_init(&h.K, &r, &u) == CSRO_ERR_SIZE && u.nrows == 6,
+              && soa_rel_diff(&u, &v) == 0.0 && oarr_nact(&v) == 3, "solve_init: in place");
+        check(csro_solve_init(&h.K, &r, &u) == CSRO_ERR_SIZE && oarr_nrows(&u) == 6,
               "solve_init: wrong rows -> CSRO_ERR_SIZE, u unchanged");
         check(csro_solve_rhs(&h.K, &u, 0, dhl) == CSRO_ERR_ORDER, "solve_rhs: order 0");
         check(csro_solve_rhs(&h.K, &u, 3, dhl) == CSRO_ERR_ORDER, "solve_rhs: order above trc");
@@ -1452,7 +1460,7 @@ static void test_fem_like(dhelpl_t dhl){
             for (a = 0; a < 4; a++){
 
                 for (b = 0; b < 4; b++){
-                    ke.p_data[a + 4 * b] = KE[a][b] + ((a == b) ? 0.5 : 0.0);
+                    oarr_data(&ke)[a + 4 * b] = KE[a][b] + ((a == b) ? 0.5 : 0.0);
                 }
 
             }
@@ -1475,7 +1483,7 @@ static void test_fem_like(dhelpl_t dhl){
     x  = make_soa(3, nn, 1, 2, 2);
     sx = ss_soa(&x);
 
-    check(h.val.size == hs.val.size && csro_check(&h.K) == CSRO_OK, "fem: pattern");
+    check(oarr_size(&h.val) == hs.val.size && csro_check(&h.K) == CSRO_OK, "fem: pattern");
 
     for (i = 0; i <= nn; i++){
 
@@ -1608,7 +1616,7 @@ static void test_review_fixes(dhelpl_t dhl){
         check(oarr_zeros_to(3, 0, 1, 2, &val) == DN_OK, "F4 setup");
         K.p_val = &val; K.p_indices = dummy; K.p_indptr = dummy; K.nrows = 1ULL << 42; K.ncols = 4;
         check(csro_matmul_to(&K, &x, &res, dhl) == CSRO_ERR_MEMORY, "F4: mapped DN_ERR_MEMORY");
-        check(res.nrows == 2 && res.ncols == 2, "F4: res unchanged and freeable");
+        check(oarr_nrows(&res) == 2 && oarr_ncols(&res) == 2, "F4: res unchanged and freeable");
 
         oarr_free(&val); oarr_free(&x); oarr_free(&res);
     }
@@ -1624,7 +1632,7 @@ static void test_review_fixes(dhelpl_t dhl){
         check(oarr_copy_to(&val, &cp) == DN_OK, "F5 setup");
         check(csro_matmul_to(&K, &val, &res, dhl) == CSRO_ERR_SIZE, "F5: x is K's values");
         check(csro_solve_init(&K, &b, &val) == CSRO_ERR_SIZE && soa_rel_diff(&val, &cp) == 0.0
-              && val.nrows == 3 && val.ncols == 1, "F5: u is K's values, K unchanged");
+              && oarr_nrows(&val) == 3 && oarr_ncols(&val) == 1, "F5: u is K's values, K unchanged");
 
         oarr_free(&val); oarr_free(&b); oarr_free(&res); oarr_free(&cp);
     }

@@ -26,3 +26,12 @@ endif ()
 # ctest or at gates:  ./tools/bench/bench_blas_batch [--quick]
 add_executable(bench_blas_batch bench_blas_batch.c)
 target_link_libraries(bench_blas_batch oti oticwrap ${LINK_TARGET_OMP_C})
+
+# Phase 7a per-call costs of the dense SoA / AoS API (critic W3 finding 1; tools/bench/bench_7a.c),
+# compiled against the 7a structs (-DOTI7A); never run by ctest or at gates:
+#   OMP_NUM_THREADS=1 ./tools/bench/bench_7a          (FEM sizes, one thread)
+#   ./tools/bench/bench_7a large                     (large arrays, default threads)
+# Its Python counterpart is tools/bench/bench_7a_py.py (run standalone, see its header).
+add_executable(bench_7a bench_7a.c)
+target_compile_definitions(bench_7a PRIVATE OTI7A)
+target_link_libraries(bench_7a oti oticwrap ${LINK_TARGET_OMP_C})

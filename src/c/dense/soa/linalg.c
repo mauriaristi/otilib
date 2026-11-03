@@ -72,7 +72,7 @@ int oarr_lu_factor(const oarr_t* A, oarr_lu_t* lu){
         return DN_ERR_ARGUMENT;
     }
 
-    if (A->nrows != A->ncols || !oti_lapack_fits(A->nrows)){
+    if (!dnob_is_matrix(A) || oarr_nrows(A) != oarr_ncols(A) || !oti_lapack_fits(oarr_nrows(A))){
         return DN_ERR_SIZE;
     }
 
@@ -82,15 +82,16 @@ int oarr_lu_factor(const oarr_t* A, oarr_lu_t* lu){
         return status;
     }
 
-    lu->p_ipiv = (int*)malloc((size_t)A->nrows * sizeof(int) + 1);
+    lu->p_ipiv = (int*)malloc((size_t)oarr_nrows(A) * sizeof(int) + 1);
 
     if (lu->p_ipiv == NULL){
         return DN_ERR_MEMORY;
     }
 
-    if (A->nrows > 0){
+    if (oarr_nrows(A) > 0){
 
-        oti_dgetrf((int)A->nrows, (int)A->nrows, lu->A.p_data, (int)A->nrows, lu->p_ipiv, &info);
+        oti_dgetrf((int)oarr_nrows(A), (int)oarr_nrows(A), oarr_data(&lu->A), (int)oarr_nrows(A),
+                   lu->p_ipiv, &info);
 
         if (info < 0){
             return DN_ERR_ARGUMENT;
@@ -138,10 +139,11 @@ int oarr_lu_solve(const oarr_lu_t* lu, const oarr_t* b, oarr_t* x, dhelpl_t dhl)
     }
 
     A = &lu->A;
-    n = A->nrows;
-    m = b->ncols;
+    n = oarr_nrows(A);
+    m = oarr_ncols(b);
 
-    if (A->nrows != A->ncols || b->nrows != n || !oti_lapack_fits(n) || !oti_lapack_fits(m)){
+    if (!dnob_is_matrix(A) || !dnob_is_matrix(b) || oarr_nrows(A) != oarr_ncols(A) || oarr_nrows(b) != n
+        || !oti_lapack_fits(n) || !oti_lapack_fits(m)){
         return DN_ERR_SIZE;
     }
 
@@ -160,7 +162,7 @@ int oarr_lu_solve(const oarr_lu_t* lu, const oarr_t* b, oarr_t* x, dhelpl_t dhl)
     // A factorization of a singular matrix: info > 0 as dgetrf gives it (the first zero pivot, 1-based).
     for (i = 0; i < n; i++){
 
-        if (A->p_data[i + i * n] == 0.0){
+        if (oarr_data(A)[i + i * n] == 0.0){
             return (int)(i + 1);
         }
 
@@ -168,20 +170,20 @@ int oarr_lu_solve(const oarr_lu_t* lu, const oarr_t* b, oarr_t* x, dhelpl_t dhl)
 
     sa  = n * n;
     sx  = n * m;
-    nu  = (A->nact > b->nact) ? A->nact : b->nact;
-    trc = (A->trc_order > b->trc_order) ? A->trc_order : b->trc_order;
+    nu  = (oarr_nact(A) > oarr_nact(b)) ? oarr_nact(A) : oarr_nact(b);
+    trc = (oarr_trc_order(A) > oarr_trc_order(b)) ? oarr_trc_order(A) : oarr_trc_order(b);
 
     if (sshelp_ndir_total_checked(nu, trc, &nimag) != SSHELP_OK){
         return DN_ERR_MEMORY;
     }
 
-    atop = (A->act_order < trc) ? A->act_order : trc;
-    act  = (atop > 0) ? trc : ((b->act_order < trc) ? b->act_order : trc);
+    atop = (oarr_act_order(A) < trc) ? oarr_act_order(A) : trc;
+    act  = (atop > 0) ? trc : ((oarr_act_order(b) < trc) ? oarr_act_order(b) : trc);
 
     // The solution scratch X and the expanded A go through the dense byte budget (dnob_nreals())
     // before anything is allocated or zero-filled.
     if (dnob_nreals(nu, trc, sx, &nreals) != DN_OK ||
-        (atop != 0 && A->nact != nu && dnob_nreals(nu, trc, sa, &nreals) != DN_OK)){
+        (atop != 0 && oarr_nact(A) != nu && dnob_nreals(nu, trc, sa, &nreals) != DN_OK)){
         return DN_ERR_MEMORY;
     }
 
@@ -197,8 +199,8 @@ int oarr_lu_solve(const oarr_lu_t* lu, const oarr_t* b, oarr_t* x, dhelpl_t dhl)
     X    = dnol_alloc(1 + nimag, sx);
     work = dnol_alloc(dnol_max_ndir(nu, trc), sx);
 
-    if (atop == 0 || A->nact == nu){
-        Au = A->p_data;                     // A is used in place (only its real block when atop = 0).
+    if (atop == 0 || oarr_nact(A) == nu){
+        Au = oarr_data(A);                     // A is used in place (only its real block when atop = 0).
     } else {
         Aexp = dnol_alloc(1 + nimag, sa);
         Au   = Aexp;
@@ -252,13 +254,18 @@ int oarr_lu_solve(const oarr_lu_t* lu, const oarr_t* b, oarr_t* x, dhelpl_t dhl)
         goto cleanup;
     }
 
-    if (sx > 0){
-        memcpy(x->p_data, X, (size_t)((1 + nimag) * sx) * sizeof(coeff_t));
+    status = dnob_set_nact_trc(x, nu, trc);
+
+    if (status != DN_OK){
+        goto cleanup;
     }
 
-    x->nact      = nu;
-    x->trc_order = trc;
-    x->act_order = (atop == 0 && b->act_order == 0) ? 0 : trc;     // conventions: trc (0 if real).
+    if (sx > 0){
+        memcpy(oarr_data(x), X, (size_t)((1 + nimag) * sx) * sizeof(coeff_t));
+    }
+
+    // Conventions: trc (0 for a real result).
+    oarr_set_act_order(x, (atop == 0 && oarr_act_order(b) == 0) ? 0 : trc);
 
 cleanup:
 
@@ -300,11 +307,11 @@ int oarr_inv_to(const oarr_t* A, oarr_t* res, dhelpl_t dhl){
         return DN_ERR_ARGUMENT;
     }
 
-    if (A->nrows != A->ncols || !oti_lapack_fits(A->nrows)){
+    if (!dnob_is_matrix(A) || oarr_nrows(A) != oarr_ncols(A) || !oti_lapack_fits(oarr_nrows(A))){
         return DN_ERR_SIZE;
     }
 
-    status = oarr_eye_to(A->nrows, A->trc_order, &eye);
+    status = oarr_eye_to(oarr_nrows(A), oarr_trc_order(A), &eye);
 
     if (status == DN_OK){
         status = oarr_solve_to(A, &eye, res, dhl);
@@ -361,16 +368,16 @@ int oarr_det_to(const oarr_t* A, otinum_t* res, dhelpl_t dhl){
         return DN_ERR_ARGUMENT;
     }
 
-    n   = A->nrows;
+    n   = oarr_nrows(A);
     sa  = n * n;
-    k   = A->nact;
-    trc = A->trc_order;
+    k   = oarr_nact(A);
+    trc = oarr_trc_order(A);
 
-    if (A->nrows != A->ncols || !oti_lapack_fits(n)){
+    if (!dnob_is_matrix(A) || oarr_nrows(A) != oarr_ncols(A) || !oti_lapack_fits(n)){
         return DN_ERR_SIZE;
     }
 
-    atop = (A->act_order < trc) ? A->act_order : trc;
+    atop = (oarr_act_order(A) < trc) ? oarr_act_order(A) : trc;
 
     if (sshelp_ndir_total_checked(k, trc, &nimag) != SSHELP_OK){
         return DN_ERR_MEMORY;
@@ -392,7 +399,7 @@ int oarr_det_to(const oarr_t* A, otinum_t* res, dhelpl_t dhl){
 
     // det of the real part from its LU factors.
     if (sa > 0){
-        memcpy(LU, A->p_data, (size_t)sa * sizeof(coeff_t));
+        memcpy(LU, oarr_data(A), (size_t)sa * sizeof(coeff_t));
     }
 
     if (n > 0){
@@ -406,6 +413,9 @@ int oarr_det_to(const oarr_t* A, otinum_t* res, dhelpl_t dhl){
 
     }
 
+    // 7c: det0 moves to nd_slogdet's rule, sign * exp(sum log|u_ii|) (contracts S20, 9.4; critic W2
+    // finding 3), so that det(omat).real equals numpy.linalg.det on diag(1e200, 1e200, 1e-200,
+    // 1e-200). 7a keeps the plain product of the pivots, bit for bit.
     for (r = 0; r < n; r++){
 
         det0 *= LU[r + r * n];
@@ -441,7 +451,7 @@ int oarr_det_to(const oarr_t* A, otinum_t* res, dhelpl_t dhl){
     }
 
     memset(M, 0, (size_t)((1 + nimag) * sa) * sizeof(coeff_t));
-    memcpy(M + sa, A->p_data + sa, (size_t)(nimag_a * sa) * sizeof(coeff_t));
+    memcpy(M + sa, oarr_data(A) + sa, (size_t)(nimag_a * sa) * sizeof(coeff_t));
     oti_dgetrs('N', (int)n, (int)(n * nimag_a), LU, (int)n, ipiv, M + sa, (int)n, &info);
 
     // t = sum_m (-1)^(m+1) tr(M^m) / m. P holds M^(m-1), with orders m-1 .. trc.

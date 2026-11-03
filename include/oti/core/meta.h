@@ -85,15 +85,21 @@ typedef struct oti_meta_s {
 /**
  * @brief Creates a metadata block (refs 1).
  *
+ * act_order starts at 0. A dense meta keeps cap_bases = 0 (the dense SoA array records the capacity
+ * of its buffer itself, oarr_t.nbases).
+ *
  * @param[in]  kind      OTI_META_DENSE or OTI_META_BASES.
  * @param[in]  trc_order Truncation order, 0 .. _MAXORDER_OTI.
- * @param[in]  nbases    Layout bases (dense nact, or the number of labels).
- * @param[in]  bases     Sorted, distinct labels (OTI_META_BASES), copied; NULL for dense.
- * @param[in]  cap_bases Capacity of the labels array, >= nbases (OTI_META_BASES); ignored for dense.
+ * @param[in]  nbases    Layout bases (dense nact, or the number of labels), 0 .. 65535 (bases_t).
+ * @param[in]  bases     Sorted, distinct labels (OTI_META_BASES), copied; NULL for dense (a non-NULL
+ *                       pointer is rejected). May be NULL when nbases is 0.
+ * @param[in]  cap_bases Capacity of the labels array, nbases .. 65535 (OTI_META_BASES); ignored for
+ *                       dense.
  * @param[out] res       New metadata block.
  *
- * @return OTI_OK; OTI_ERR_ARGUMENT (kind, unsorted or duplicate labels, NULL); OTI_ERR_INDEX (order
- *         above the maximum); OTI_ERR_MEMORY. Caller owns the reference and must release it via
+ * @return OTI_OK; OTI_ERR_ARGUMENT (kind, nbases or cap_bases out of range, unsorted or duplicate
+ *         labels, labels given for dense, NULL); OTI_ERR_INDEX (order negative or above the
+ *         maximum); OTI_ERR_MEMORY. Caller owns the reference and must release it via
  *         oti_meta_release(). On failure *res is NULL.
  */
 int oti_meta_create(int32_t kind, int32_t trc_order, int32_t nbases, const bases_t* bases,
@@ -140,22 +146,26 @@ int oti_meta_shared(const oti_meta_t* m);
  * @param[in,out] buf The root array's control block.
  *
  * @return OTI_OK (the lock is held until oti_meta_layout_end()); OTI_ERR_BUSY when OTI views share
- *         the meta, or the buffer has other references, exports, or a held lock.
+ *         the meta, or the buffer has other references, exports, or a held lock; OTI_ERR_ARGUMENT
+ *         when @p m or @p buf is NULL. Nothing is held on failure.
  */
 int oti_meta_layout_begin(oti_meta_t* m, nd_buffer_t* buf);
 
 /**
  * @brief Changes the layout fields inside a transaction (after the blocks were moved).
  *
- * Replaces trc_order, nbases and (OTI_META_BASES) the labels, growing the labels array when needed,
- * and rebuilds bases_i64. act_order is clipped to the new trc_order.
+ * Replaces trc_order, nbases and (OTI_META_BASES) the labels, growing the labels array when needed
+ * (cap_bases becomes nbases then), and rebuilds bases_i64. act_order is clipped to the new trc_order.
+ * The kind does not change. @p bases may point into the meta's own labels. Debug builds
+ * (OTI_ND_DEBUG) assert refs == 1.
  *
  * @param[in,out] m         Metadata block whose transaction is open.
  * @param[in]     trc_order New truncation order.
  * @param[in]     nbases    New layout bases.
  * @param[in]     bases     New sorted labels (OTI_META_BASES), copied; NULL for dense.
  *
- * @return OTI_OK; OTI_ERR_ARGUMENT; OTI_ERR_INDEX; OTI_ERR_MEMORY (the fields are unchanged).
+ * @return OTI_OK; OTI_ERR_ARGUMENT (as oti_meta_create()); OTI_ERR_INDEX; OTI_ERR_MEMORY (the fields
+ *         are unchanged on every failure).
  */
 int oti_meta_relayout(oti_meta_t* m, int32_t trc_order, int32_t nbases, const bases_t* bases);
 
@@ -179,6 +189,8 @@ void oti_meta_layout_end(oti_meta_t* m, nd_buffer_t* buf);
 /**
  * @brief Raises act_order to max(act_order, min(act, trc_order)). Never lowers it.
  *
+ * A plain store: one host thread mutates an array at a time (contracts 1.7).
+ *
  * @param[in,out] m   Metadata block.
  * @param[in]     act Highest order that may now hold nonzeros.
  */
@@ -190,7 +202,7 @@ void oti_meta_raise_act(oti_meta_t* m, int32_t act);
  * Only for an unshared meta (debug builds assert refs == 1); through a view use oti_meta_raise_act().
  *
  * @param[in,out] m   Metadata block, not shared.
- * @param[in]     act New active order, 0 .. trc_order.
+ * @param[in]     act New active order, 0 .. trc_order (clipped to that range).
  */
 void oti_meta_set_act(oti_meta_t* m, int32_t act);
 
@@ -203,9 +215,28 @@ void oti_meta_set_act(oti_meta_t* m, int32_t act);
  * @param[in] bases  The value's sorted labels (OTI_META_BASES), or NULL for dense.
  *
  * @return 1 if trc <= m->trc_order and the value's bases are a subset of the meta's (dense:
- *         nbases <= m->nbases), else 0.
+ *         nbases <= m->nbases), else 0. A dense value (bases NULL) has the labels 1..nbases; so does a
+ *         dense meta. Negative trc or nbases give 0.
  */
 int oti_meta_fits(const oti_meta_t* m, int32_t trc, int32_t nbases, const bases_t* bases);
+
+/** @} */
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @name Test hooks
+ * For tests/c only; never called by the library or the Python layer.
+ * @{
+ */
+
+/**
+ * @brief Makes the @p countdown-th allocation made by the oti_meta_* functions from now on fail (the
+ *        block, the labels arrays); 0 disables. Process-wide, thread-safe (atomic).
+ *
+ * @param[in] countdown 1 fails the next allocation, 2 the one after, ...; 0 disables.
+ */
+void oti_meta_test_fail_alloc(int64_t countdown);
 
 /** @} */
 // -------------------------------------------------------------------------------------------------------

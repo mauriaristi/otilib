@@ -43,6 +43,11 @@ ND_HEADERS = ["core/status.h", "core/exec.h",
               "real/ndarray/reduce.h", "real/ndarray/blas.h", "real/ndarray/linalg.h",
               "real/ndarray/compat_darr.h"]
 
+# Field types of the dense structs that are declared only later in c_otilib.pxd (real_ndarray.pxi is
+# included after the dense files): such fields are written as comments. Cython needs only the fields
+# it accesses; the Python layer reads these through the oarr_* accessors (PLAN-ndarray.md, Phase 7a).
+DEFERRED_TYPES = ("ndarr_t", "oti_meta_t")
+
 # Python keywords cannot name Cython arguments; they get a trailing underscore.
 KEYWORDS = ("in|is|from|lambda|def|class|pass|del|global|not|and|or|with|as|yield|import|print|"
             "exec|async|await|None|True|False")
@@ -91,7 +96,10 @@ def defines(text):
 
     out = []
 
-    for match in re.finditer(r"^#define\s+([A-Z][A-Z0-9_]+)\s+\(?-?\s*\d+\)?", text, flags=re.M):
+    # Integer constants, and aliases of the library-wide statuses (DN_OK -> OTI_OK, Phase 7a).
+    pattern = r"^#define\s+([A-Z][A-Z0-9_]+)\s+(?:\(?-?\s*\d+\)?|OTI_(?:OK|ERR_[A-Z]+)\b)"
+
+    for match in re.finditer(pattern, text, flags=re.M):
 
         if not match.group(1).startswith("OTI_DENSE_"):
 
@@ -127,7 +135,8 @@ def structs(text):
 
     for match in re.finditer(r"typedef\s+struct\s*\{(.*?)\}\s*(\w+)\s*;", text, flags=re.S):
 
-        out.append("    ctypedef struct {}:".format(match.group(2)))
+        header = "    ctypedef struct {}:".format(match.group(2))
+        out.append(header)
 
         for field in match.group(1).split(";"):
 
@@ -136,11 +145,24 @@ def structs(text):
             if field:
 
                 field = re.sub(r"\s*\*\s*", "* ", field)
+
+                if field.split()[0].rstrip("*") in DEFERRED_TYPES:
+
+                    field = "# " + field + " (declared later; use the accessors)"
+
+                # end if
+
                 out.append("        " + field)
 
             # end if
 
         # end for
+
+        if all(line.lstrip().startswith("#") for line in out[out.index(header) + 1:]):
+
+            out.append("        pass")
+
+        # end if
 
         out.append("")
 

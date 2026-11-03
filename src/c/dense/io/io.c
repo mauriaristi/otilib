@@ -647,23 +647,25 @@ int oarr_save(const char* filename, const oarr_t* arr){
     uint64_t payload = 0, nreal;
     int status;
 
-    if (filename == NULL || arr == NULL || arr->act_order > arr->trc_order
-        || (arr->nrows != 0 && arr->ncols > UINT64_MAX / arr->nrows)
-        || arr->size != arr->nrows * arr->ncols
-        || dnis_soa_bytes(arr->nact, arr->trc_order, arr->nrows, arr->ncols, &payload) != DNIO_OK){
+    if (filename == NULL || arr == NULL || oarr_act_order(arr) > oarr_trc_order(arr)
+        || (oarr_nrows(arr) != 0 && oarr_ncols(arr) > UINT64_MAX / oarr_nrows(arr))
+        || oarr_size(arr) != oarr_nrows(arr) * oarr_ncols(arr)
+        || dnis_soa_bytes(oarr_nact(arr), oarr_trc_order(arr), oarr_nrows(arr), oarr_ncols(arr),
+                          &payload) != DNIO_OK){
         return DNIO_ERR_ARGUMENT;
     }
 
     nreal = payload / sizeof(coeff_t);
 
-    if (nreal > 0 && arr->p_data == NULL){
+    if (nreal > 0 && oarr_data(arr) == NULL){
         return DNIO_ERR_ARGUMENT;
     }
 
     // Blocks above the active order must be zero, or the file would not read back.
-    if (arr->act_order < arr->trc_order && nreal > 0
-        && !dnis_all_zero(arr->p_data,
-               (1 + (uint64_t)sshelp_order_offset(arr->nact, (ord_t)(arr->act_order + 1))) * arr->size,
+    if (oarr_act_order(arr) < oarr_trc_order(arr) && nreal > 0
+        && !dnis_all_zero(oarr_data(arr),
+               (1 + (uint64_t)sshelp_order_offset(oarr_nact(arr),
+                                                  (ord_t)(oarr_act_order(arr) + 1))) * oarr_size(arr),
                nreal)){
         return DNIO_ERR_ARGUMENT;
     }
@@ -674,11 +676,12 @@ int oarr_save(const char* filename, const oarr_t* arr){
         return status;
     }
 
-    status = dnis_header_write(file, DNIO_TYPE_SOA, arr->trc_order, arr->act_order, arr->nact,
-        arr->nrows, arr->ncols, payload);
+    status = dnis_header_write(file, DNIO_TYPE_SOA, oarr_trc_order(arr), oarr_act_order(arr),
+                               oarr_nact(arr),
+        oarr_nrows(arr), oarr_ncols(arr), payload);
 
     if (status == DNIO_OK){
-        status = dnis_write(file, arr->p_data, (size_t)nreal * sizeof(coeff_t));
+        status = dnis_write(file, oarr_data(arr), (size_t)nreal * sizeof(coeff_t));
     }
 
     return dnis_finish_save(file, tmp, filename, status);
@@ -731,12 +734,12 @@ int oarr_read(const char* filename, oarr_t* res){
 
     if (status == DNIO_OK){
 
-        nreal  = (uint64_t)(1 + sshelp_ndir_total(k, info.trc_order)) * arr.size;
-        status = dnis_read(file, arr.p_data, (size_t)nreal * sizeof(coeff_t));
+        nreal  = (uint64_t)(1 + sshelp_ndir_total(k, info.trc_order)) * oarr_size(&arr);
+        status = dnis_read(file, oarr_data(&arr), (size_t)nreal * sizeof(coeff_t));
 
         if (status == DNIO_OK && info.act_order < info.trc_order && nreal > 0
-            && !dnis_all_zero(arr.p_data,
-                   (1 + (uint64_t)sshelp_order_offset(k, (ord_t)(info.act_order + 1))) * arr.size,
+            && !dnis_all_zero(oarr_data(&arr),
+                   (1 + (uint64_t)sshelp_order_offset(k, (ord_t)(info.act_order + 1))) * oarr_size(&arr),
                    nreal)){
             status = DNIO_ERR_FORMAT;
         }
@@ -752,7 +755,7 @@ int oarr_read(const char* filename, oarr_t* res){
 
     }
 
-    arr.act_order = info.act_order;
+    oarr_set_act_order(&arr, info.act_order);
     *res          = arr;
 
     return DNIO_OK;
@@ -771,15 +774,17 @@ int arro_save(const char* filename, const arro_t* arr){
     bases_t nact = 0;
     int status = DNIO_OK;
 
-    if (filename == NULL || arr == NULL || (arr->nrows != 0 && arr->ncols > UINT64_MAX / arr->nrows)
-        || arr->size != arr->nrows * arr->ncols || (arr->size > 0 && arr->p_data == NULL)){
+    if (filename == NULL || arr == NULL || (arro_nrows(arr) != 0
+                                            && arro_ncols(arr) > UINT64_MAX / arro_nrows(arr))
+        || arro_size(arr) != arro_nrows(arr) * arro_ncols(arr) || (arro_size(arr) > 0
+                                                                   && arro_data(arr) == NULL)){
         return DNIO_ERR_ARGUMENT;
     }
 
     // Validate every element and gather the payload size and the maxima for the header.
-    for (i = 0; i < arr->size; i++){
+    for (i = 0; i < arro_size(arr); i++){
 
-        const otinum_t* num = &arr->p_data[i];
+        const otinum_t* num = &arro_data(arr)[i];
 
         if (dnis_scalar_check(num, &bytes) != DNIO_OK || bytes > UINT64_MAX - 8 - payload){
             return DNIO_ERR_ARGUMENT;
@@ -798,11 +803,12 @@ int arro_save(const char* filename, const arro_t* arr){
         return status;
     }
 
-    status = dnis_header_write(file, DNIO_TYPE_AOS, trc, act, nact, arr->nrows, arr->ncols, payload);
+    status = dnis_header_write(file, DNIO_TYPE_AOS, trc, act, nact, arro_nrows(arr), arro_ncols(arr),
+                               payload);
 
-    for (i = 0; i < arr->size && status == DNIO_OK; i++){
+    for (i = 0; i < arro_size(arr) && status == DNIO_OK; i++){
 
-        const otinum_t* num = &arr->p_data[i];
+        const otinum_t* num = &arro_data(arr)[i];
         uint8_t head[8] = {0, 0, 0, 0, 0, 0, 0, 0};
         uint16_t k = (uint16_t)num->nact;
 
@@ -863,7 +869,7 @@ int arro_read(const char* filename, arro_t* res){
         status = dnis_map(arro_zeros_to(info.nrows, info.ncols, 0, &arr));
     }
 
-    size = arr.size;
+    size = arro_size(&arr);
 
     for (i = 0; i < size && status == DNIO_OK; i++){
 
@@ -903,7 +909,7 @@ int arro_read(const char* filename, arro_t* res){
 
         }
 
-        status = dnis_scalar_read(file, k, trc, act, &arr.p_data[i]);
+        status = dnis_scalar_read(file, k, trc, act, &arro_data(&arr)[i]);
 
         if (status != DNIO_OK){
             break;

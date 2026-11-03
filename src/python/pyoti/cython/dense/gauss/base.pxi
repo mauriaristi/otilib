@@ -13,8 +13,9 @@
 # _fe_zeros, _fe_scalar, _fe_store, _fe_unary, _fe_binary, _fe_dot, _fe_dot_product, _fe_det, _fe_inv,
 # _fe_transpose, _fe_arith.
 #
-# Views: _fe_view() wraps the embedded array in a non-owning omat (FLAGS bit 0 clear). A view is only
-# ever an input of a C call, never its result (the C structs carry no ownership flag).
+# Views: _fe_view() wraps a view of the embedded array (oarr_view_matrix(): a temporary descriptor
+# over the same buffer, borrowing its meta) in a non-owning omat (FLAGS bit 0 clear). A view is only
+# ever an input of a C call, never its result.
 
 import operator as _operator
 
@@ -130,7 +131,8 @@ cdef _dnfe _fe_shaped(feoarr_t *res, _dnfe like, bint array):
         Wrapped result.
     """
 
-    _fe_ok("shape", fearr_set_shape(like.fe.nrows, like.fe.ncols, like.fe.nip, res), res)
+    _fe_ok("shape", fearr_set_shape(fearr_nrows(&like.fe), fearr_ncols(&like.fe), fearr_nip(&like.fe),
+                                    res), res)
 
     return _fe_take(res, array)
 
@@ -156,7 +158,9 @@ cdef omat _fe_view(_dnfe value):
 
     cdef omat view = omat.__new__(omat)
 
-    view.arr   = value.fe.arr
+    # A view descriptor (contracts 7.1; never a struct copy of the retained array).
+    _status("view", oarr_view_matrix(&value.fe.arr, oarr_nrows(&value.fe.arr), oarr_ncols(&value.fe.arr),
+                                     &view.arr))
     view.FLAGS = 0
 
     return view
@@ -352,7 +356,7 @@ cdef object _fe_binary(_dnfe left, object other, str op, bint reverse):
         B = &g.fe
         array = array or _fe_is_array(g)
 
-        if B.nip != A.nip:
+        if fearr_nip(B) != fearr_nip(A):
 
             raise ValueError("Gauss-point operands have different numbers of integration points")
 
@@ -361,7 +365,7 @@ cdef object _fe_binary(_dnfe left, object other, str op, bint reverse):
     elif isinstance(other, omat):
 
         plain = other
-        _fe_ok(op, fearr_from_oarr_to(&plain.arr, A.nip, &tmp_b), &tmp_b)
+        _fe_ok(op, fearr_from_oarr_to(&plain.arr, fearr_nip(A), &tmp_b), &tmp_b)
         B = &tmp_b
         array = True
 
@@ -372,23 +376,23 @@ cdef object _fe_binary(_dnfe left, object other, str op, bint reverse):
     # end if
 
     # Broadcast a 1 x 1 operand over the other's shape (into its own temporary).
-    if A.nrows != B.nrows or A.ncols != B.ncols:
+    if fearr_nrows(A) != fearr_nrows(B) or fearr_ncols(A) != fearr_ncols(B):
 
-        if A.nrows == 1 and A.ncols == 1:
+        if fearr_nrows(A) == 1 and fearr_ncols(A) == 1:
 
-            status = fearr_bcast_to(A, B.nrows, B.ncols, &tmp_a)
+            status = fearr_bcast_to(A, fearr_nrows(B), fearr_ncols(B), &tmp_a)
             A = &tmp_a
 
-        elif B.nrows == 1 and B.ncols == 1:
+        elif fearr_nrows(B) == 1 and fearr_ncols(B) == 1:
 
             if B == &tmp_b:
 
-                status = fearr_bcast_to(B, A.nrows, A.ncols, &tmp_a)
+                status = fearr_bcast_to(B, fearr_nrows(A), fearr_ncols(A), &tmp_a)
                 B = &tmp_a
 
             else:
 
-                status = fearr_bcast_to(B, A.nrows, A.ncols, &tmp_b)
+                status = fearr_bcast_to(B, fearr_nrows(A), fearr_ncols(A), &tmp_b)
                 B = &tmp_b
 
             # end if
@@ -397,7 +401,7 @@ cdef object _fe_binary(_dnfe left, object other, str op, bint reverse):
 
             # The message first: B may be one of the temporaries freed below.
             message = ("Gauss-point operands have incompatible shapes ({}, {}) and ({}, {})"
-                       .format(A.nrows, A.ncols, B.nrows, B.ncols))
+                       .format(fearr_nrows(A), fearr_ncols(A), fearr_nrows(B), fearr_ncols(B)))
             fearr_free(&tmp_a)
             fearr_free(&tmp_b)
             raise ValueError(message)
@@ -440,7 +444,7 @@ cdef object _fe_binary(_dnfe left, object other, str op, bint reverse):
 
     if status == DN_OK:
 
-        status = fearr_set_shape(A.nrows, A.ncols, A.nip, &res)
+        status = fearr_set_shape(fearr_nrows(A), fearr_ncols(A), fearr_nip(A), &res)
 
     # end if
 
@@ -636,21 +640,21 @@ cdef object _fe_block(_dnfe value, object direction):
 
     if _fe_is_array(value):
 
-        shape = (value.fe.nip, value.fe.nrows, value.fe.ncols)
+        shape = (fearr_nip(&value.fe), fearr_nrows(&value.fe), fearr_ncols(&value.fe))
 
     else:
 
-        shape = (value.fe.nip,)
+        shape = (fearr_nip(&value.fe),)
 
     # end if
 
-    if block == NULL or value.fe.arr.size == 0:
+    if block == NULL or oarr_size(&value.fe.arr) == 0:
 
         return np.zeros(shape)
 
     # end if
 
-    dims[0] = value.fe.arr.size
+    dims[0] = oarr_size(&value.fe.arr)
     flat = np.PyArray_SimpleNewFromData(1, dims, np.NPY_DOUBLE, <void *>block)
 
     return flat.reshape(shape, order="F").copy()
@@ -703,7 +707,7 @@ cdef class _dnfe:
             Number of points.
         """
 
-        return self.fe.nip
+        return fearr_nip(&self.fe)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -720,7 +724,7 @@ cdef class _dnfe:
             Truncation order.
         """
 
-        return self.fe.arr.trc_order
+        return oarr_trc_order(&self.fe.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -737,7 +741,7 @@ cdef class _dnfe:
             Active order.
         """
 
-        return self.fe.arr.act_order
+        return oarr_act_order(&self.fe.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -754,7 +758,7 @@ cdef class _dnfe:
             nact.
         """
 
-        return self.fe.arr.nact
+        return oarr_nact(&self.fe.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -771,7 +775,7 @@ cdef class _dnfe:
             nact.
         """
 
-        return self.fe.arr.nact
+        return oarr_nact(&self.fe.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -788,7 +792,7 @@ cdef class _dnfe:
             Active bases.
         """
 
-        return list(range(1, self.fe.arr.nact + 1))
+        return list(range(1, oarr_nact(&self.fe.arr) + 1))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -804,7 +808,7 @@ cdef class _dnfe:
             Active bases.
         """
 
-        return list(range(1, self.fe.arr.nact + 1))
+        return list(range(1, oarr_nact(&self.fe.arr) + 1))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1032,19 +1036,21 @@ cdef class _dnfe:
 
             g = rhs
 
-            if g.fe.nip != self.fe.nip:
+            if fearr_nip(&g.fe) != fearr_nip(&self.fe):
 
                 raise ValueError("Gauss-point operands have different numbers of integration points")
 
             # end if
 
-            if g.fe.nrows == self.fe.nrows and g.fe.ncols == self.fe.ncols:
+            if (fearr_nrows(&g.fe) == fearr_nrows(&self.fe)
+                    and fearr_ncols(&g.fe) == fearr_ncols(&self.fe)):
 
                 _fe_ok("set", fearr_copy_to(&g.fe, &res), &res)
 
-            elif g.fe.nrows == 1 and g.fe.ncols == 1:
+            elif fearr_nrows(&g.fe) == 1 and fearr_ncols(&g.fe) == 1:
 
-                _fe_ok("set", fearr_bcast_to(&g.fe, self.fe.nrows, self.fe.ncols, &res), &res)
+                _fe_ok("set", fearr_bcast_to(&g.fe, fearr_nrows(&self.fe), fearr_ncols(&self.fe), &res),
+                       &res)
 
             else:
 
@@ -1056,18 +1062,20 @@ cdef class _dnfe:
 
             plain = rhs
 
-            if plain.arr.nrows != self.fe.nrows or plain.arr.ncols != self.fe.ncols:
+            if (oarr_nrows(&plain.arr) != fearr_nrows(&self.fe)
+                    or oarr_ncols(&plain.arr) != fearr_ncols(&self.fe)):
 
                 raise ValueError("shape mismatch in set()")
 
             # end if
 
-            _fe_ok("set", fearr_from_oarr_to(&plain.arr, self.fe.nip, &res), &res)
+            _fe_ok("set", fearr_from_oarr_to(&plain.arr, fearr_nip(&self.fe), &res), &res)
 
         elif isinstance(rhs, (otinum, Real)):
 
-            _fe_ok("set", fearr_zeros_to(self.fe.arr.nact, self.fe.nrows, self.fe.ncols,
-                                         self.fe.nip, self.fe.arr.trc_order, &zero), &zero)
+            _fe_ok("set", fearr_zeros_to(oarr_nact(&self.fe.arr), fearr_nrows(&self.fe),
+                                         fearr_ncols(&self.fe),
+                                         fearr_nip(&self.fe), oarr_trc_order(&self.fe.arr), &zero), &zero)
 
             if isinstance(rhs, otinum):
 
@@ -1076,7 +1084,8 @@ cdef class _dnfe:
 
                 if status == DN_OK:
 
-                    status = fearr_set_shape(self.fe.nrows, self.fe.ncols, self.fe.nip, &res)
+                    status = fearr_set_shape(fearr_nrows(&self.fe), fearr_ncols(&self.fe),
+                                             fearr_nip(&self.fe), &res)
 
                 # end if
 
@@ -1085,9 +1094,9 @@ cdef class _dnfe:
 
             else:
 
-                for e in range(zero.arr.size):
+                for e in range(oarr_size(&zero.arr)):
 
-                    zero.arr.p_data[e] = rhs
+                    oarr_data(&zero.arr)[e] = rhs
 
                 # end for
 
@@ -1102,7 +1111,7 @@ cdef class _dnfe:
         # end if
 
         # Like pyoti.sparse, the value never lowers self's nact or truncation order.
-        _fe_ok("set", fearr_grow(self.fe.arr.nact, self.fe.arr.trc_order, &res), &res)
+        _fe_ok("set", fearr_grow(oarr_nact(&self.fe.arr), oarr_trc_order(&self.fe.arr), &res), &res)
         fearr_free(&self.fe)
         self.fe = res
 
@@ -1194,7 +1203,7 @@ cdef class _dnfe:
             Representation.
         """
 
-        return "{}< nip: {}, re:\n{}>".format(type(self).__name__, self.fe.nip, repr(self.real))
+        return "{}< nip: {}, re:\n{}>".format(type(self).__name__, fearr_nip(&self.fe), repr(self.real))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1211,8 +1220,8 @@ cdef class _dnfe:
         """
 
         return "{}< shape: {}, nip: {}, bases: {}, order: {}, re:\n{}>".format(
-            type(self).__name__, (self.fe.nrows, self.fe.ncols), self.fe.nip,
-            self.get_active_bases(), self.fe.arr.trc_order, repr(self.real))
+            type(self).__name__, (fearr_nrows(&self.fe), fearr_ncols(&self.fe)), fearr_nip(&self.fe),
+            self.get_active_bases(), oarr_trc_order(&self.fe.arr), repr(self.real))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1229,9 +1238,9 @@ cdef class _dnfe:
         """
 
         cdef uint64_t ip
-        cdef str out = "{}< nip: {}, \n".format(type(self).__name__, self.fe.nip)
+        cdef str out = "{}< nip: {}, \n".format(type(self).__name__, fearr_nip(&self.fe))
 
-        for ip in range(self.fe.nip):
+        for ip in range(fearr_nip(&self.fe)):
 
             out += "({0:d}) {1}\n".format(ip, str(self.get_ip(ip)))
 
@@ -1588,6 +1597,9 @@ cdef class _dnfe:
 
 
 # ********************************************************************************************************
+# Freelist (critic W3 finding 1): the object embeds a 560-byte struct, above CPython's 512-byte small-
+# object limit, so freed objects are recycled instead of going back to malloc (exact type only).
+@cython.freelist(32)
 cdef class otife(_dnfe):
     """
     Dense OTI scalar at nip integration points (counterpart of pyoti.sparse.sotife).
@@ -1668,9 +1680,9 @@ cdef class otife(_dnfe):
         import pyoti.sparse as _sparse
 
         cdef uint64_t ip
-        res = _sparse.zero(nip=self.fe.nip)
+        res = _sparse.zero(nip=fearr_nip(&self.fe))
 
-        for ip in range(self.fe.nip):
+        for ip in range(fearr_nip(&self.fe)):
 
             res[ip] = self[ip].to_sparse()
 
@@ -1735,7 +1747,7 @@ cdef class otife(_dnfe):
             Independent copy of the value at ip.
         """
 
-        cdef int64_t k = _fe_point(ip, self.fe.nip)
+        cdef int64_t k = _fe_point(ip, fearr_nip(&self.fe))
         cdef oarr_t one = oarr_init()
         cdef otinum_t num = oti_init()
         cdef int status = fearr_get_ip_to(k, &self.fe, &one)
@@ -1773,7 +1785,7 @@ cdef class otife(_dnfe):
             New value (nact and the order of the whole Gauss scalar grow to the value's).
         """
 
-        cdef int64_t k = _fe_point(ip, self.fe.nip)
+        cdef int64_t k = _fe_point(ip, fearr_nip(&self.fe))
         cdef otinum o
 
         value = _fe_plain(value)
@@ -1808,7 +1820,8 @@ cdef class otife(_dnfe):
         """
 
         return "otife(nip={}, nact={}, order={}, real={})".format(
-            self.fe.nip, self.fe.arr.nact, self.fe.arr.trc_order, self.real.tolist())
+            fearr_nip(&self.fe), oarr_nact(&self.fe.arr), oarr_trc_order(&self.fe.arr),
+            self.real.tolist())
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -1954,6 +1967,9 @@ cdef tuple _fe_key(object key, uint64_t nrows, uint64_t ncols):
 
 
 # ********************************************************************************************************
+# Freelist (critic W3 finding 1): the object embeds a 560-byte struct, above CPython's 512-byte small-
+# object limit, so freed objects are recycled instead of going back to malloc (exact type only).
+@cython.freelist(32)
 cdef class omatfe(_dnfe):
     """
     Dense OTI matrix at nip integration points (counterpart of pyoti.sparse.matsofe).
@@ -2076,15 +2092,15 @@ cdef class omatfe(_dnfe):
         cdef uint64_t ip, i, j
         cdef omat point
 
-        res = _sparse.zeros((self.fe.nrows, self.fe.ncols), nip=self.fe.nip)
+        res = _sparse.zeros((fearr_nrows(&self.fe), fearr_ncols(&self.fe)), nip=fearr_nip(&self.fe))
 
-        for ip in range(self.fe.nip):
+        for ip in range(fearr_nip(&self.fe)):
 
             point = self.get_ip(ip)
 
-            for i in range(self.fe.nrows):
+            for i in range(fearr_nrows(&self.fe)):
 
-                for j in range(self.fe.ncols):
+                for j in range(fearr_ncols(&self.fe)):
 
                     res.set_ijk(point[i, j].to_sparse(), i, j, ip)
 
@@ -2111,7 +2127,7 @@ cdef class omatfe(_dnfe):
             (nrows, ncols).
         """
 
-        return (self.fe.nrows, self.fe.ncols)
+        return (fearr_nrows(&self.fe), fearr_ncols(&self.fe))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -2128,7 +2144,7 @@ cdef class omatfe(_dnfe):
             Rows.
         """
 
-        return self.fe.nrows
+        return fearr_nrows(&self.fe)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -2145,7 +2161,7 @@ cdef class omatfe(_dnfe):
             Columns.
         """
 
-        return self.fe.ncols
+        return fearr_ncols(&self.fe)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -2162,7 +2178,7 @@ cdef class omatfe(_dnfe):
             nrows * ncols.
         """
 
-        return self.fe.nrows * self.fe.ncols
+        return fearr_nrows(&self.fe) * fearr_ncols(&self.fe)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -2220,7 +2236,7 @@ cdef class omatfe(_dnfe):
             Independent plain matrix.
         """
 
-        cdef int64_t k = _fe_point(ip, self.fe.nip)
+        cdef int64_t k = _fe_point(ip, fearr_nip(&self.fe))
         cdef oarr_t res = oarr_init()
 
         _soa_ok("get_ip", fearr_get_ip_to(k, &self.fe, &res), &res)
@@ -2244,7 +2260,7 @@ cdef class omatfe(_dnfe):
             the value's).
         """
 
-        cdef int64_t k = _fe_point(ip, self.fe.nip)
+        cdef int64_t k = _fe_point(ip, fearr_nip(&self.fe))
         cdef omat plain
 
         value = _fe_plain(value)
@@ -2257,7 +2273,8 @@ cdef class omatfe(_dnfe):
 
         plain = value
 
-        if plain.arr.nrows != self.fe.nrows or plain.arr.ncols != self.fe.ncols:
+        if (oarr_nrows(&plain.arr) != fearr_nrows(&self.fe)
+                or oarr_ncols(&plain.arr) != fearr_ncols(&self.fe)):
 
             raise ValueError("shape mismatch in set_ip()")
 
@@ -2292,10 +2309,11 @@ cdef class omatfe(_dnfe):
         j = _operator.index(j)
         k = _operator.index(k)
 
-        if i < 0 or j < 0 or k < 0 or i >= self.fe.nrows or j >= self.fe.ncols or k >= self.fe.nip:
+        if (i < 0 or j < 0 or k < 0 or i >= fearr_nrows(&self.fe) or j >= fearr_ncols(&self.fe)
+                or k >= fearr_nip(&self.fe)):
 
             raise IndexError("set_ijk index ({}, {}, {}) out of range for shape {} at nip={}".format(
-                i, j, k, (self.fe.nrows, self.fe.ncols), self.fe.nip))
+                i, j, k, (fearr_nrows(&self.fe), fearr_ncols(&self.fe)), fearr_nip(&self.fe)))
 
         # end if
 
@@ -2358,7 +2376,7 @@ cdef class omatfe(_dnfe):
             A Gauss scalar for two integer indices, otherwise a Gauss sub-matrix.
         """
 
-        cdef tuple parsed = _fe_key(key, self.fe.nrows, self.fe.ncols)
+        cdef tuple parsed = _fe_key(key, fearr_nrows(&self.fe), fearr_ncols(&self.fe))
         cdef tuple rows = parsed[0]
         cdef tuple cols = parsed[1]
         cdef feoarr_t res = fearr_init()
@@ -2386,7 +2404,7 @@ cdef class omatfe(_dnfe):
             Gauss matrix grow to the value's.
         """
 
-        cdef tuple parsed = _fe_key(key, self.fe.nrows, self.fe.ncols)
+        cdef tuple parsed = _fe_key(key, fearr_nrows(&self.fe), fearr_ncols(&self.fe))
         cdef tuple rows = parsed[0]
         cdef tuple cols = parsed[1]
         cdef feoarr_t tmp = fearr_init()
@@ -2400,14 +2418,14 @@ cdef class omatfe(_dnfe):
 
             g = value
 
-            if g.fe.nip != self.fe.nip:
+            if fearr_nip(&g.fe) != fearr_nip(&self.fe):
 
                 raise ValueError("Gauss-point operands have different numbers of integration points")
 
             # end if
 
-            if not ((g.fe.nrows == rows[1] and g.fe.ncols == cols[1])
-                    or (g.fe.nrows == 1 and g.fe.ncols == 1)):
+            if not ((fearr_nrows(&g.fe) == rows[1] and fearr_ncols(&g.fe) == cols[1])
+                    or (fearr_nrows(&g.fe) == 1 and fearr_ncols(&g.fe) == 1)):
 
                 raise ValueError("shape mismatch in Gauss-array assignment")
 
@@ -2433,13 +2451,13 @@ cdef class omatfe(_dnfe):
 
             plain = value
 
-            if plain.arr.nrows != rows[1] or plain.arr.ncols != cols[1]:
+            if oarr_nrows(&plain.arr) != rows[1] or oarr_ncols(&plain.arr) != cols[1]:
 
                 raise ValueError("shape mismatch in Gauss-array assignment")
 
             # end if
 
-            _fe_ok("setitem", fearr_from_oarr_to(&plain.arr, self.fe.nip, &tmp), &tmp)
+            _fe_ok("setitem", fearr_from_oarr_to(&plain.arr, fearr_nip(&self.fe), &tmp), &tmp)
             status = fearr_set_slice(&tmp, rows[0], rows[1], rows[2], cols[0], cols[1], cols[2],
                                      &self.fe)
             fearr_free(&tmp)
@@ -2447,7 +2465,7 @@ cdef class omatfe(_dnfe):
 
         elif isinstance(value, (Real, otinum)):
 
-            g = _fe_scalar(value, (), 0, self.fe.nip)
+            g = _fe_scalar(value, (), 0, fearr_nip(&self.fe))
             _status("setitem", fearr_set_slice(&g.fe, rows[0], rows[1], rows[2], cols[0], cols[1],
                                                cols[2], &self.fe))
 
@@ -2567,7 +2585,8 @@ cdef class omatfe(_dnfe):
         """
 
         return "omatfe(shape={}, nip={}, nact={}, order={})\nreal =\n{}".format(
-            self.shape, self.fe.nip, self.fe.arr.nact, self.fe.arr.trc_order, repr(self.real))
+            self.shape, fearr_nip(&self.fe), oarr_nact(&self.fe.arr), oarr_trc_order(&self.fe.arr),
+            repr(self.real))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -2714,7 +2733,7 @@ def _fe_scalar(value, bases, order, nip):
 
         for ip in range(nip):
 
-            zero.arr.p_data[ip] = value
+            oarr_data(&zero.arr)[ip] = value
 
         # end for
 
@@ -2757,7 +2776,8 @@ def gauss_integrate(val, w, out=None):
     if isinstance(w, otife) and isinstance(val, (Real, otinum, sotinum)):
 
         # A constant integrand: val times the sum of the weights.
-        return _fe_store(_fe_plain(val) * gauss_integrate(_fe_scalar(1.0, (), 0, (<otife>w).fe.nip), w),
+        return _fe_store(_fe_plain(val) * gauss_integrate(_fe_scalar(1.0, (), 0,
+                                                                     fearr_nip(&(<otife>w).fe)), w),
                          out)
 
     # end if
@@ -2827,7 +2847,7 @@ def _fe_dot(left, right, out=None):
         a = left
         b = right
 
-        if a.fe.nip != b.fe.nip:
+        if fearr_nip(&a.fe) != fearr_nip(&b.fe):
 
             raise ValueError("Gauss-point operands have different numbers of integration points")
 
@@ -2920,7 +2940,7 @@ def _fe_dot_product(left, right, out=None):
         a = left
         b = right
 
-        if a.fe.nip != b.fe.nip:
+        if fearr_nip(&a.fe) != fearr_nip(&b.fe):
 
             raise ValueError("Gauss-point operands have different numbers of integration points")
 

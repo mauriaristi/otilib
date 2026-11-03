@@ -5,17 +5,21 @@
 // ---------------------------------------     STATUS CODES     ------------------------------------------
 // -------------------------------------------------------------------------------------------------------
 
-// Every dense function that can allocate returns one of these (never exit()). The negative codes
-// share their values with OTI_LINALG_ERR_* (include/oti/sparse/array/algebra_lu.h), so a linear
+// Every dense function that can allocate returns one of these (never exit()). They are aliases of the
+// library-wide statuses (include/oti/core/status.h, PLAN-ndarray-contracts.md 4.2) with unchanged
+// values, also shared with OTI_LINALG_ERR_* (include/oti/sparse/array/algebra_lu.h), so a linear
 // algebra status and a memory status are read the same way; linear algebra adds info > 0 from dgetrf
-// when the real part is singular.
+// when the real part is singular. Dense functions may also return other OTI_ERR_* codes (OTI_ERR_BUSY
+// when a layout change meets a live view or export of the buffer, which 7a never creates).
 
-#define DN_OK              0  ///< Success.
-#define DN_ERR_SIZE      (-1) ///< Incompatible shapes, or a dimension too large for LAPACK integers.
-#define DN_ERR_MEMORY    (-2) ///< An allocation failed, or a coefficient count overflows.
-#define DN_ERR_PIVOT     (-3) ///< Invalid pivot indices (LU solve).
-#define DN_ERR_INDEX     (-4) ///< Index, direction or order out of range.
-#define DN_ERR_ARGUMENT  (-5) ///< Invalid argument (NULL pointer, bad value).
+#include "oti/core/status.h"
+
+#define DN_OK            OTI_OK            ///< Success (0).
+#define DN_ERR_SIZE      OTI_ERR_SIZE      ///< (-1) Incompatible shapes, or too large for LAPACK ints.
+#define DN_ERR_MEMORY    OTI_ERR_MEMORY    ///< (-2) An allocation failed, or a count overflows.
+#define DN_ERR_PIVOT     OTI_ERR_PIVOT     ///< (-3) Invalid pivot indices (LU solve).
+#define DN_ERR_INDEX     OTI_ERR_INDEX     ///< (-4) Index, direction or order out of range.
+#define DN_ERR_ARGUMENT  OTI_ERR_ARGUMENT  ///< (-5) Invalid argument (NULL pointer, bad value).
 
 
 // -------------------------------------------------------------------------------------------------------

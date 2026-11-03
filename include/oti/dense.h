@@ -13,6 +13,8 @@
 #include "oti/core.h"
 #include "oti/real.h"
 #include "oti/sparse.h"
+#include "oti/core/exec.h"
+#include "oti/core/meta.h"
 
 // -------------------------------------------------------------------------------------------------------
 // ---------------------------------     SCALAR DECLARATIONS     -----------------------------------------

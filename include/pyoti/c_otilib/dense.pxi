@@ -131,19 +131,24 @@ cdef extern from "oti/dense.h" nogil:
 
     # soa/structures.h
     ctypedef struct oarr_t:
-        coeff_t* p_data
+        # ndarr_t blocks (declared later; use the accessors)
+        # oti_meta_t* meta (declared later; use the accessors)
         bases_t nbases
-        bases_t nact
-        ord_t trc_order
-        ord_t act_order
-        uint64_t nrows
-        uint64_t ncols
-        uint64_t size
 
     ctypedef struct oarr_lu_t:
         oarr_t A
         int* p_ipiv
 
+    coeff_t* oarr_data(const oarr_t* a)
+    uint64_t oarr_nrows(const oarr_t* a)
+    uint64_t oarr_ncols(const oarr_t* a)
+    uint64_t oarr_size(const oarr_t* a)
+    int64_t oarr_bstride(const oarr_t* a)
+    bases_t oarr_nact(const oarr_t* a)
+    ord_t oarr_trc_order(const oarr_t* a)
+    ord_t oarr_act_order(const oarr_t* a)
+    void oarr_set_act_order(oarr_t* a, ord_t act)
+    int oarr_owns(const oarr_t* a)
 
     # soa/base.h
     uint64_t oarr_block_index(bases_t k, ord_t p, ndir_t i)
@@ -157,6 +162,7 @@ cdef extern from "oti/dense.h" nogil:
     int oarr_copy_to(const oarr_t* arr, oarr_t* res)
     int oarr_add_bases(bases_t nact, oarr_t* arr)
     void oarr_kernel_expand(const oarr_t* arr, bases_t ku, ord_t trc, coeff_t* dst)
+    int oarr_view_matrix(const oarr_t* arr, uint64_t nrows, uint64_t ncols, oarr_t* view)
     coeff_t* oarr_get_block(imdir_t idx, ord_t order, const oarr_t* arr)
     int oarr_get_item_to(uint64_t i, uint64_t j, const oarr_t* arr, otinum_t* res)
     int oarr_set_item(const otinum_t* num, uint64_t i, uint64_t j, oarr_t* arr)
@@ -227,11 +233,13 @@ cdef extern from "oti/dense.h" nogil:
 
     # aos/aos.h
     ctypedef struct arro_t:
-        otinum_t* p_data
-        uint64_t nrows
-        uint64_t ncols
-        uint64_t size
+        # ndarr_t elems (declared later; use the accessors)
+        pass
 
+    otinum_t* arro_data(const arro_t* a)
+    uint64_t arro_nrows(const arro_t* a)
+    uint64_t arro_ncols(const arro_t* a)
+    uint64_t arro_size(const arro_t* a)
     arro_t arro_init()
     int arro_zeros_to(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* res)
     int arro_resize(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* arr)

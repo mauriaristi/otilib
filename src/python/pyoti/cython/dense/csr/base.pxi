@@ -36,8 +36,9 @@ cdef csro_t _csr_view(csr_matrix K) except *:
     cdef np.ndarray indptr = K._indptr
 
     if (K._val is None or indptr is None or K._indices is None
-            or <uint64_t>indptr.shape[0] != K._nrows + 1 or indptr[K._nrows] != <int64_t>K._val.arr.size
-            or <uint64_t>len(K._indices) != K._val.arr.size):
+            or <uint64_t>indptr.shape[0] != K._nrows + 1
+            or indptr[K._nrows] != <int64_t>oarr_size(&K._val.arr)
+            or <uint64_t>len(K._indices) != oarr_size(&K._val.arr)):
 
         raise ValueError("csr_matrix: inconsistent pattern and values")
 
@@ -90,6 +91,11 @@ cdef void _csr_status(str operation, int status) except *:
     elif status == CSRO_ERR_ORDER:
 
         raise ValueError("{}: order out of range".format(operation))
+
+    elif status == OTI_ERR_BUSY:
+
+        raise BufferError("{}: the result array is a view or shared with views or exports".format(
+            operation))
 
     # end if
 
@@ -709,9 +715,9 @@ def _csr_solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
 
     # end if
 
-    if b.arr.nrows != K._nrows:
+    if oarr_nrows(&b.arr) != K._nrows:
 
-        raise ValueError("solve: right-hand side has {} rows, expected {}".format(b.arr.nrows,
+        raise ValueError("solve: right-hand side has {} rows, expected {}".format(oarr_nrows(&b.arr),
                                                                                   K._nrows))
 
     # end if
@@ -721,17 +727,18 @@ def _csr_solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
     _csr_status("solve", csro_solve_init(&view, &b.arr, &u.arr))
     solve_fn = _csr_factor(K, solver, {} if solver_args is None else dict(solver_args))
 
-    if u.arr.size > 0:
+    if oarr_size(&u.arr) > 0:
 
         blocks = _soa_blocks(u)
-        _csr_solve_blocks(solve_fn, blocks[0:1], u.arr.nrows, u.arr.ncols)
+        _csr_solve_blocks(solve_fn, blocks[0:1], oarr_nrows(&u.arr), oarr_ncols(&u.arr))
 
-        for n in range(1, u.arr.trc_order + 1):
+        for n in range(1, oarr_trc_order(&u.arr) + 1):
 
             _csr_status("solve", csro_solve_rhs(&view, &u.arr, n, _dhl))
-            start = 1 + sshelp_order_offset(u.arr.nact, n)
-            count = sshelp_ndir_order(u.arr.nact, n)
-            _csr_solve_blocks(solve_fn, blocks[start:start + count], u.arr.nrows, u.arr.ncols)
+            start = 1 + sshelp_order_offset(oarr_nact(&u.arr), n)
+            count = sshelp_ndir_order(oarr_nact(&u.arr), n)
+            _csr_solve_blocks(solve_fn, blocks[start:start + count], oarr_nrows(&u.arr),
+                              oarr_ncols(&u.arr))
 
         # end for
 
@@ -916,10 +923,11 @@ cdef class csr_matrix:
 
         # end if
 
-        if new._indptr[new._nrows] != new._val.arr.size or len(new._indices) != new._val.arr.size:
+        if (new._indptr[new._nrows] != oarr_size(&new._val.arr)
+                or len(new._indices) != oarr_size(&new._val.arr)):
 
             raise ValueError("csr_matrix: indptr[nrows] = {} and {} indices for {} values".format(
-                int(new._indptr[new._nrows]), len(new._indices), new._val.arr.size))
+                int(new._indptr[new._nrows]), len(new._indices), oarr_size(&new._val.arr)))
 
         # end if
 
@@ -1039,7 +1047,7 @@ cdef class csr_matrix:
             Truncation order of the values.
         """
 
-        return self._val.arr.trc_order
+        return oarr_trc_order(&self._val.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------

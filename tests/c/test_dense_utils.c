@@ -108,25 +108,25 @@ static oarr_t build_dense(uint64_t nrows, uint64_t ncols, bases_t k, ord_t trc, 
 
     }
 
-    for (i = 0; i < A.size; i++){
-        A.p_data[i] = rng_range(0.5, 1.5);
+    for (i = 0; i < oarr_size(&A); i++){
+        oarr_data(&A)[i] = rng_range(0.5, 1.5);
     }
 
     nblocks = 1 + sshelp_ndir_total(k, act);
 
     for (b = 1; b < nblocks; b++){
 
-        for (i = 0; i < A.size; i++){
+        for (i = 0; i < oarr_size(&A); i++){
 
             if (rng_uniform() < density){
-                A.p_data[b * A.size + i] = rng_range(-0.7, 0.7);
+                oarr_data(&A)[b * oarr_size(&A) + i] = rng_range(-0.7, 0.7);
             }
 
         }
 
     }
 
-    A.act_order = (k == 0) ? 0 : act;
+    oarr_set_act_order(&A, (k == 0) ? 0 : act);
 
     return A;
 
@@ -139,14 +139,15 @@ static oarr_t build_dense(uint64_t nrows, uint64_t ncols, bases_t k, ord_t trc, 
 static coeff_t arr_coef(const oarr_t* A, uint64_t i, uint64_t j, imdir_t idx, ord_t p){
 
     if (p == 0){
-        return A->p_data[i + j * A->nrows];
+        return oarr_data(A)[i + j * oarr_nrows(A)];
     }
 
-    if (p > A->trc_order || idx >= sshelp_ndir_order(A->nact, p)){
+    if (p > oarr_trc_order(A) || idx >= sshelp_ndir_order(oarr_nact(A), p)){
         return 0.0;
     }
 
-    return A->p_data[(1 + sshelp_order_offset(A->nact, p) + idx) * A->size + i + j * A->nrows];
+    return oarr_data(A)[(1 + sshelp_order_offset(oarr_nact(A),
+                                                 p) + idx) * oarr_size(A) + i + j * oarr_nrows(A)];
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -194,22 +195,22 @@ static coeff_t ss_coef(const oarrss_t* S, uint64_t i, uint64_t j, imdir_t idx, o
 /* The same values as an arrso_t (row-major), through soti_set_item on every nonzero direction. */
 static arrso_t to_arrso(const oarr_t* A, dhelpl_t dhl){
 
-    arrso_t arr = arrso_zeros_bases(A->nrows, A->ncols, 0, A->trc_order, dhl);
+    arrso_t arr = arrso_zeros_bases(oarr_nrows(A), oarr_ncols(A), 0, oarr_trc_order(A), dhl);
     uint64_t i, j;
     imdir_t idx;
     ord_t p;
 
-    for (i = 0; i < A->nrows; i++){
+    for (i = 0; i < oarr_nrows(A); i++){
 
-        for (j = 0; j < A->ncols; j++){
+        for (j = 0; j < oarr_ncols(A); j++){
 
-            sotinum_t* e = &arr.p_data[j + i * A->ncols];
+            sotinum_t* e = &arr.p_data[j + i * oarr_ncols(A)];
 
-            e->re = A->p_data[i + j * A->nrows];
+            e->re = oarr_data(A)[i + j * oarr_nrows(A)];
 
-            for (p = 1; p <= A->trc_order; p++){
+            for (p = 1; p <= oarr_trc_order(A); p++){
 
-                ndir_t np = sshelp_ndir_order(A->nact, p);
+                ndir_t np = sshelp_ndir_order(oarr_nact(A), p);
 
                 for (idx = 0; idx < np; idx++){
 
@@ -240,18 +241,19 @@ static oarrss_t to_oarrss(const oarr_t* A){
     bases_t bases[64], u;
     oarrss_t s;
 
-    for (u = 0; u < A->nact && u < 64; u++){
+    for (u = 0; u < oarr_nact(A) && u < 64; u++){
         bases[u] = u + 1;
     }
 
-    s = oarrss_zeros(bases, A->nact, A->nrows, A->ncols, A->trc_order);
+    s = oarrss_zeros(bases, oarr_nact(A), oarr_nrows(A), oarr_ncols(A), oarr_trc_order(A));
 
-    if (A->size > 0){
-        memcpy(s.p_data, A->p_data,
-               (size_t)((1 + sshelp_ndir_total(A->nact, A->trc_order)) * A->size) * sizeof(coeff_t));
+    if (oarr_size(A) > 0){
+        memcpy(s.p_data, oarr_data(A),
+               (size_t)((1 + sshelp_ndir_total(oarr_nact(A),
+                                               oarr_trc_order(A))) * oarr_size(A)) * sizeof(coeff_t));
     }
 
-    s.act_order = A->act_order;
+    s.act_order = oarr_act_order(A);
 
     return s;
 
@@ -274,7 +276,7 @@ static void compare_vs_arrso(const char* tag, const oarr_t* a, arrso_t* o, bases
     ord_t p;
     char name[256];
 
-    if (a->nrows != o->nrows || a->ncols != o->ncols){
+    if (oarr_nrows(a) != o->nrows || oarr_ncols(a) != o->ncols){
 
         snprintf(name, sizeof(name), "%s: same shape as the sparse oracle", tag);
         check(0, name);
@@ -282,13 +284,13 @@ static void compare_vs_arrso(const char* tag, const oarr_t* a, arrso_t* o, bases
 
     }
 
-    for (i = 0; i < a->nrows; i++){
+    for (i = 0; i < oarr_nrows(a); i++){
 
-        for (j = 0; j < a->ncols; j++){
+        for (j = 0; j < oarr_ncols(a); j++){
 
             sotinum_t* e = &o->p_data[j + i * o->ncols];
 
-            for (p = 0; p <= a->trc_order; p++){
+            for (p = 0; p <= oarr_trc_order(a); p++){
 
                 ndir_t np = (p == 0) ? 1 : sshelp_ndir_order(kmax, p);
 
@@ -334,10 +336,10 @@ static void compare_vs_ss(const char* tag, const oarr_t* a, const oarrss_t* s, b
 
     uint64_t i, j, n_checked = 0, n_bad = 0;
     imdir_t idx;
-    ord_t p, trc = (a->trc_order > s->trc_order) ? a->trc_order : s->trc_order;
+    ord_t p, trc = (oarr_trc_order(a) > s->trc_order) ? oarr_trc_order(a) : s->trc_order;
     char name[256];
 
-    if (a->nrows != s->nrows || a->ncols != s->ncols){
+    if (oarr_nrows(a) != s->nrows || oarr_ncols(a) != s->ncols){
 
         snprintf(name, sizeof(name), "%s: same shape as the semi-sparse result", tag);
         check(0, name);
@@ -345,9 +347,9 @@ static void compare_vs_ss(const char* tag, const oarr_t* a, const oarrss_t* s, b
 
     }
 
-    for (i = 0; i < a->nrows; i++){
+    for (i = 0; i < oarr_nrows(a); i++){
 
-        for (j = 0; j < a->ncols; j++){
+        for (j = 0; j < oarr_ncols(a); j++){
 
             for (p = 0; p <= trc; p++){
 
@@ -395,25 +397,25 @@ static void compare_dense(const char* tag, const oarr_t* a, const oarr_t* b, dou
 
     uint64_t i, j, n_checked = 0, n_bad = 0;
     imdir_t idx;
-    ord_t p, trc = (a->trc_order > b->trc_order) ? a->trc_order : b->trc_order;
-    bases_t kmax = (a->nact > b->nact) ? a->nact : b->nact;
+    ord_t p, trc = (oarr_trc_order(a) > oarr_trc_order(b)) ? oarr_trc_order(a) : oarr_trc_order(b);
+    bases_t kmax = (oarr_nact(a) > oarr_nact(b)) ? oarr_nact(a) : oarr_nact(b);
     char name[256];
 
-    if (a->nrows != b->nrows || a->ncols != b->ncols ||
-        (same_layout && (a->nact != b->nact || a->trc_order != b->trc_order))){
+    if (oarr_nrows(a) != oarr_nrows(b) || oarr_ncols(a) != oarr_ncols(b) ||
+        (same_layout && (oarr_nact(a) != oarr_nact(b) || oarr_trc_order(a) != oarr_trc_order(b)))){
 
         snprintf(name, sizeof(name), "%s: same shape/layout (%llux%llu k=%u trc=%u vs %llux%llu k=%u "
-                 "trc=%u)", tag, (unsigned long long)a->nrows, (unsigned long long)a->ncols,
-                 (unsigned)a->nact, (unsigned)a->trc_order, (unsigned long long)b->nrows,
-                 (unsigned long long)b->ncols, (unsigned)b->nact, (unsigned)b->trc_order);
+                 "trc=%u)", tag, (unsigned long long)oarr_nrows(a), (unsigned long long)oarr_ncols(a),
+                 (unsigned)oarr_nact(a), (unsigned)oarr_trc_order(a), (unsigned long long)oarr_nrows(b),
+                 (unsigned long long)oarr_ncols(b), (unsigned)oarr_nact(b), (unsigned)oarr_trc_order(b));
         check(0, name);
         return;
 
     }
 
-    for (i = 0; i < a->nrows; i++){
+    for (i = 0; i < oarr_nrows(a); i++){
 
-        for (j = 0; j < a->ncols; j++){
+        for (j = 0; j < oarr_ncols(a); j++){
 
             for (p = 0; p <= trc; p++){
 
@@ -590,8 +592,9 @@ static void test_extract(dhelpl_t dhl){
 
                         snprintf(ctx, sizeof(ctx), "extract_im layout %s (%llu, %u)", CASES[c].label,
                                  (unsigned long long)idx, (unsigned)p);
-                        check(res_im.nact == A.nact && res_im.trc_order == A.trc_order - p &&
-                              res_im.nrows == 3 && res_im.ncols == 2, ctx);
+                        check(oarr_nact(&res_im) == oarr_nact(&A)
+                              && oarr_trc_order(&res_im) == oarr_trc_order(&A) - p &&
+                              oarr_nrows(&res_im) == 3 && oarr_ncols(&res_im) == 2, ctx);
 
                     }
 
@@ -605,8 +608,9 @@ static void test_extract(dhelpl_t dhl){
                     // Order above trc: a real zero array with truncation order 0.
                     snprintf(ctx, sizeof(ctx), "extract_im order %u above trc %s", (unsigned)p,
                              CASES[c].label);
-                    check(res_im.nact == 0 && res_im.trc_order == 0 && res_im.size == 6 &&
-                          res_im.act_order == 0 && arr_coef(&res_im, 2, 1, 0, 0) == 0.0, ctx);
+                    check(oarr_nact(&res_im) == 0 && oarr_trc_order(&res_im) == 0
+                          && oarr_size(&res_im) == 6 &&
+                          oarr_act_order(&res_im) == 0 && arr_coef(&res_im, 2, 1, 0, 0) == 0.0, ctx);
 
                 }
 
@@ -660,7 +664,8 @@ static void test_trunc_sub(dhelpl_t dhl){
             arrso_t ref = arrso_zeros_bases(2, 3, 0, 4, dhl);
             oarrss_t sres = oarrss_init();
             oarr_t res = oarr_init(), al1 = oarr_init(), al2 = oarr_init();
-            ord_t trc = (A.trc_order > B.trc_order) ? A.trc_order : B.trc_order;
+            ord_t trc = (oarr_trc_order(&A) > oarr_trc_order(&B)) ? oarr_trc_order(&A)
+                                                                  : oarr_trc_order(&B);
 
             arrso_trunc_sub_OO_to(o, &Aso, &Bso, &ref, dhl);
             oarrss_trunc_sub_OO_to(o, &SA, &SB, &sres);
@@ -674,7 +679,8 @@ static void test_trunc_sub(dhelpl_t dhl){
             snprintf(ctx, sizeof(ctx), "trunc_sub %s order %u", sc->label, (unsigned)o);
             compare_vs_arrso(ctx, &res, &ref, kq, TOL_SPARSE, dhl);
             compare_vs_ss(ctx, &res, &sres, kq, TOL_SEMI);
-            check(res.nact == kq && res.trc_order == trc, "trunc_sub: nact = max, trc = max");
+            check(oarr_nact(&res) == kq && oarr_trc_order(&res) == trc,
+                  "trunc_sub: nact = max, trc = max");
 
             snprintf(ctx, sizeof(ctx), "trunc_sub aliased (res = A) %s order %u", sc->label,
                      (unsigned)o);
@@ -698,7 +704,8 @@ static void test_trunc_sub(dhelpl_t dhl){
 
             check(oarr_trunc_sub_OO_to(1, &A, &bad, &res) == DN_ERR_SIZE,
                   "trunc_sub rejects a shape mismatch");
-            check(res.p_data == NULL && res.size == 0, "a failed trunc_sub leaves res untouched");
+            check(oarr_data(&res) == NULL && oarr_size(&res) == 0,
+                  "a failed trunc_sub leaves res untouched");
             oarr_free(&res);
         }
 
@@ -761,10 +768,11 @@ static void test_trunc_matmul(dhelpl_t dhl){
                 // Orders past the truncation order give zero (the oracle is truncated the same way).
                 compare_vs_arrso(ctx, &res, &ref, kq, TOL_SPARSE, dhl);
                 compare_vs_ss(ctx, &res, &sres, kq, TOL_SEMI);
-                check(res.nact == kq && res.trc_order == trc && res.nrows == 3 && res.ncols == 4,
+                check(oarr_nact(&res) == kq && oarr_trc_order(&res) == trc && oarr_nrows(&res) == 3
+                      && oarr_ncols(&res) == 4,
                       "trunc_matmul: nact = max, trc = max, shape");
 
-                check(res.act_order == 0 || res.act_order == (ord_t)(oa + ob),
+                check(oarr_act_order(&res) == 0 || oarr_act_order(&res) == (ord_t)(oa + ob),
                       "trunc_matmul: act_order is the order computed (0 for an empty product)");
 
                 if (oa == 1 && ob == 1){
@@ -809,7 +817,7 @@ static void test_trunc_matmul(dhelpl_t dhl){
 
             check(oarr_trunc_matmul_OO_to(1, &B, 1, &A, &res, dhl) == DN_ERR_SIZE,
                   "trunc_matmul rejects unaligned shapes");
-            check(res.p_data == NULL, "a failed trunc_matmul leaves res untouched");
+            check(oarr_data(&res) == NULL, "a failed trunc_matmul leaves res untouched");
             oarr_free(&res);
         }
 
@@ -995,23 +1003,24 @@ static void test_rom_eval(dhelpl_t dhl){
     for (i = 0; i < 2; i++){
 
         for (j = 0; j < 3; j++){
-            bad += !approx_equal(R.p_data[i + j * 2], ref.p_data[j + i * 3].re, 1e-14);
+            bad += !approx_equal(oarr_data(&R)[i + j * 2], ref.p_data[j + i * 3].re, 1e-14);
         }
 
     }
 
-    check(bad == 0 && R.nact == 0 && R.trc_order == 0 && R.act_order == 0 && R.nrows == 2 && R.ncols == 3,
+    check(bad == 0 && oarr_nact(&R) == 0 && oarr_trc_order(&R) == 0 && oarr_act_order(&R) == 0
+          && oarr_nrows(&R) == 2 && oarr_ncols(&R) == 3,
           "rom_eval vs arrso_taylor_integrate, real result (nact 0, trc 0)");
 
-    check(oarr_rom_eval_to(&A, gdel, &A) == DN_OK && A.nact == 0 &&
-          approx_equal(A.p_data[1], ref.p_data[3].re, 1e-14), "rom_eval aliased");
+    check(oarr_rom_eval_to(&A, gdel, &A) == DN_OK && oarr_nact(&A) == 0 &&
+          approx_equal(oarr_data(&A)[1], ref.p_data[3].re, 1e-14), "rom_eval aliased");
 
     // A real array needs no deltas.
     {
         oarr_t Rr = build_dense(2, 2, 0, 2, 0, 0.0);
 
-        check(oarr_rom_eval_to(&Rr, NULL, &R) == DN_OK && R.nact == 0 && R.nrows == 2 &&
-              R.p_data[3] == Rr.p_data[3], "rom_eval of a real array");
+        check(oarr_rom_eval_to(&Rr, NULL, &R) == DN_OK && oarr_nact(&R) == 0 && oarr_nrows(&R) == 2 &&
+              oarr_data(&R)[3] == oarr_data(&Rr)[3], "rom_eval of a real array");
         oarr_free(&Rr);
     }
 
@@ -1046,8 +1055,8 @@ static void test_layouts(dhelpl_t dhl){
     for (l = 0; l < sizeof(LAY) / sizeof(LAY[0]); l++){
 
         ndir_t ntot = (ndir_t)dhelp_ndirTotal(LAY[l].nbasis, LAY[l].order) - 1;  // without the real part
-        coeff_t* out = (coeff_t*)malloc((1 + (size_t)ntot) * A.size * sizeof(coeff_t));
-        coeff_t* sout = (coeff_t*)malloc((1 + (size_t)ntot) * A.size * sizeof(coeff_t));
+        coeff_t* out = (coeff_t*)malloc((1 + (size_t)ntot) * oarr_size(&A) * sizeof(coeff_t));
+        coeff_t* sout = (coeff_t*)malloc((1 + (size_t)ntot) * oarr_size(&A) * sizeof(coeff_t));
         coeff_t* col = (coeff_t*)malloc((1 + (size_t)ntot) * sizeof(coeff_t));
         char ctx[128];
 
@@ -1087,7 +1096,7 @@ static void test_layouts(dhelpl_t dhl){
             snprintf(ctx, sizeof(ctx), "%s layout (nbasis %u, order %u) is byte-identical to semi-sparse",
                      derivs ? "get_all_derivs" : "get_all_ims", (unsigned)LAY[l].nbasis,
                      (unsigned)LAY[l].order);
-            check(memcmp(out, sout, (1 + (size_t)ntot) * A.size * sizeof(coeff_t)) == 0, ctx);
+            check(memcmp(out, sout, (1 + (size_t)ntot) * oarr_size(&A) * sizeof(coeff_t)) == 0, ctx);
 
         } // end for
 
@@ -1103,7 +1112,7 @@ static void test_layouts(dhelpl_t dhl){
         bases_t mb = (p == 0) ? 0 : oarr_order_max_base(p, &A);
         bases_t smb = (p == 0) ? 0 : oarrss_order_max_base(p, &S);
         ndir_t width = (p == 0) ? 1 : sshelp_ndir_order((mb > 0) ? mb : 1, p);
-        uint64_t nb = A.size * width;
+        uint64_t nb = oarr_size(&A) * width;
         coeff_t* buf = (coeff_t*)malloc(nb * sizeof(coeff_t) + 1);
         coeff_t* sbuf = (coeff_t*)malloc(nb * sizeof(coeff_t) + 1);
         arrso_t part = arrso_get_order_im(p, &Aso, dhl);
@@ -1123,18 +1132,19 @@ static void test_layouts(dhelpl_t dhl){
         // Narrower and wider layouts: the extra global directions are zero / skipped.
         {
             ndir_t wide = width + 3;
-            coeff_t* b2 = (coeff_t*)malloc(A.size * wide * sizeof(coeff_t) + 1);
-            coeff_t* s2 = (coeff_t*)malloc(A.size * wide * sizeof(coeff_t) + 1);
+            coeff_t* b2 = (coeff_t*)malloc(oarr_size(&A) * wide * sizeof(coeff_t) + 1);
+            coeff_t* s2 = (coeff_t*)malloc(oarr_size(&A) * wide * sizeof(coeff_t) + 1);
             ndir_t narrow = (width > 1) ? width - 1 : 1;
-            coeff_t* b3 = (coeff_t*)malloc(A.size * narrow * sizeof(coeff_t) + 1);
-            coeff_t* s3 = (coeff_t*)malloc(A.size * narrow * sizeof(coeff_t) + 1);
+            coeff_t* b3 = (coeff_t*)malloc(oarr_size(&A) * narrow * sizeof(coeff_t) + 1);
+            coeff_t* s3 = (coeff_t*)malloc(oarr_size(&A) * narrow * sizeof(coeff_t) + 1);
 
             oarr_get_order_im_array_to(p, &A, wide, b2);
             oarrss_get_order_im_array_to(p, &S, wide, s2);
-            check(memcmp(b2, s2, A.size * wide * sizeof(coeff_t)) == 0, "get_order_im_array wide layout");
+            check(memcmp(b2, s2, oarr_size(&A) * wide * sizeof(coeff_t)) == 0,
+                  "get_order_im_array wide layout");
             oarr_get_order_im_array_to(p, &A, narrow, b3);
             oarrss_get_order_im_array_to(p, &S, narrow, s3);
-            check(memcmp(b3, s3, A.size * narrow * sizeof(coeff_t)) == 0,
+            check(memcmp(b3, s3, oarr_size(&A) * narrow * sizeof(coeff_t)) == 0,
                   "get_order_im_array narrow layout");
 
             free(b2);
@@ -1155,11 +1165,11 @@ static void test_layouts(dhelpl_t dhl){
 
         if (p >= 1){
 
-            check(fresh.nact == mb && fresh.trc_order == p && fresh.act_order == p,
+            check(oarr_nact(&fresh) == mb && oarr_trc_order(&fresh) == p && oarr_act_order(&fresh) == p,
                   "add_order_im_array: nact = largest base, trc raised to p, act_order p");
 
         } else {
-            check(fresh.nact == 0 && fresh.trc_order == 0,
+            check(oarr_nact(&fresh) == 0 && oarr_trc_order(&fresh) == 0,
                   "add_order_im_array order 0 adds to the real part");
         }
 
@@ -1167,7 +1177,8 @@ static void test_layouts(dhelpl_t dhl){
         if (p >= 1){
 
             oarr_add_order_im_array(p, buf, width, &fresh);
-            check(arr_coef(&fresh, 1, 1, 0, p) == 2.0 * arr_coef(&A, 1, 1, 0, p) || A.act_order < p,
+            check(arr_coef(&fresh, 1, 1, 0, p) == 2.0 * arr_coef(&A, 1, 1, 0, p)
+                  || oarr_act_order(&A) < p,
                   "add_order_im_array accumulates");
 
         }
@@ -1194,7 +1205,7 @@ static void test_layouts(dhelpl_t dhl){
         oarr_copy_to(&big, &ref);
         check(oarr_add_order_im_array(2, vals, 3, &big) == DN_OK,
               "add_order_im_array into a larger array");
-        check(big.nact == 5 && big.trc_order == 4 &&
+        check(oarr_nact(&big) == 5 && oarr_trc_order(&big) == 4 &&
               approx_equal(arr_coef(&big, 0, 0, 0, 2), arr_coef(&ref, 0, 0, 0, 2) + vals[0], 1e-15) &&
               approx_equal(arr_coef(&big, 1, 1, 2, 2),
                            arr_coef(&ref, 1, 1, 2, 2) + vals[1 * 6 + 1 + 2 * 2], 1e-15),
@@ -1293,8 +1304,10 @@ static void test_moving_average(dhelpl_t dhl){
         snprintf(ctx, sizeof(ctx), "moving_average size %llu", (unsigned long long)size);
         compare_vs_arrso(ctx, &R, &ref, 2, 1e-15, dhl);
         compare_vs_ss(ctx, &R, &SR, 2, 1e-15);
-        check(R.nact == A.nact && R.trc_order == A.trc_order && R.act_order == A.act_order &&
-              R.nrows == 7 && R.ncols == 1, "moving_average keeps nact, trc and act_order; n x 1");
+        check(oarr_nact(&R) == oarr_nact(&A) && oarr_trc_order(&R) == oarr_trc_order(&A)
+              && oarr_act_order(&R) == oarr_act_order(&A) &&
+              oarr_nrows(&R) == 7
+                  && oarr_ncols(&R) == 1, "moving_average keeps nact, trc and act_order; n x 1");
 
         // Aliasing is supported (built in a call-local array).
         oarr_copy_to(&A, &al);
@@ -1334,7 +1347,7 @@ static void test_interp1d(dhelpl_t dhl){
     Y = build_dense(4, 1, 3, 3, 3, 0.8);
 
     for (i = 0; i < 4; i++){
-        X.p_data[i] = reals[i];
+        oarr_data(&X)[i] = reals[i];
     }
 
     Xso = to_arrso(&X, dhl);
@@ -1347,7 +1360,7 @@ static void test_interp1d(dhelpl_t dhl){
         otinum_t x = oti_init(), res = oti_init(), xal = oti_init();
         sotinum_t ref;
 
-        xa.p_data[0] = probes[t];
+        oarr_data(&xa)[0] = probes[t];
         xas = to_arrso(&xa, dhl);
         oarr_get_item_to(0, 0, &xa, &x);
 
@@ -1408,13 +1421,14 @@ static void test_interp1d(dhelpl_t dhl){
         oarr_t R = oarr_init(), al = oarr_init();
         uint64_t bad = 0, r, c;
 
-        Xt.p_data[0] = 0.5;
-        Xt.p_data[1] = 3.0;
-        Xt.p_data[2] = -2.0;
-        Xt.p_data[3] = 2.0;
+        oarr_data(&Xt)[0] = 0.5;
+        oarr_data(&Xt)[1] = 3.0;
+        oarr_data(&Xt)[2] = -2.0;
+        oarr_data(&Xt)[3] = 2.0;
 
         check(oarr_interp1d_O_to(&X, &Y, &Xt, &R, dhl) == DN_OK, "interp1d array status");
-        check(R.nrows == 2 && R.ncols == 2 && R.trc_order == 3, "interp1d array shape and trc");
+        check(oarr_nrows(&R) == 2 && oarr_ncols(&R) == 2 && oarr_trc_order(&R) == 3,
+              "interp1d array shape and trc");
 
         for (r = 0; r < 2; r++){
 

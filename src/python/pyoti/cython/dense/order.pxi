@@ -142,11 +142,11 @@ cdef bases_t _order_aos_nact(arro value):
     cdef bases_t top = 0
     cdef uint64_t e
 
-    for e in range(value.arr.size):
+    for e in range(arro_size(&value.arr)):
 
-        if value.arr.p_data[e].nact > top:
+        if arro_data(&value.arr)[e].nact > top:
 
-            top = value.arr.p_data[e].nact
+            top = arro_data(&value.arr)[e].nact
 
         # end if
 
@@ -309,17 +309,17 @@ cdef object _order_extract(object humdir, object val, object out, bint deriv):
     # end if
 
     A = val
-    R = _order_aos_zeros(A.arr.nrows, A.arr.ncols, op)
+    R = _order_aos_zeros(arro_nrows(&A.arr), arro_ncols(&A.arr), op)
 
-    for e in range(A.arr.size):
+    for e in range(arro_size(&A.arr)):
 
         if deriv:
 
-            status = oti_extract_deriv_to(idx, order, &A.arr.p_data[e], &R.arr.p_data[e])
+            status = oti_extract_deriv_to(idx, order, &arro_data(&A.arr)[e], &arro_data(&R.arr)[e])
 
         else:
 
-            status = oti_extract_im_to(idx, order, &A.arr.p_data[e], &R.arr.p_data[e])
+            status = oti_extract_im_to(idx, order, &arro_data(&A.arr)[e], &arro_data(&R.arr)[e])
 
         # end if
 
@@ -460,8 +460,8 @@ def get_order_im_array(ordi, tmp):
         # end if
 
         width = _order_width(ordi, mb)
-        _order_check_bytes(S.arr.nrows * S.arr.ncols * width, "get_order_im_array")
-        res = np.empty((S.arr.nrows, S.arr.ncols * width), dtype=np.float64)
+        _order_check_bytes(oarr_nrows(&S.arr) * oarr_ncols(&S.arr) * width, "get_order_im_array")
+        res = np.empty((oarr_nrows(&S.arr), oarr_ncols(&S.arr) * width), dtype=np.float64)
 
         if res.size > 0:
 
@@ -475,14 +475,14 @@ def get_order_im_array(ordi, tmp):
     # end if
 
     A = tmp
-    nr = A.arr.nrows
-    nc = A.arr.ncols
+    nr = arro_nrows(&A.arr)
+    nc = arro_ncols(&A.arr)
 
     if ordi > 0:
 
-        for i in range(A.arr.size):
+        for i in range(arro_size(&A.arr)):
 
-            mbe = oti_order_max_base(ordi, &A.arr.p_data[i])
+            mbe = oti_order_max_base(ordi, &arro_data(&A.arr)[i])
             mb = mbe if mbe > mb else mb
 
         # end for
@@ -497,7 +497,7 @@ def get_order_im_array(ordi, tmp):
 
         for j in range(nc):
 
-            oti_scatter_order_im(ordi, &A.arr.p_data[j + i * nc], width, &res[i, j], nc)
+            oti_scatter_order_im(ordi, &arro_data(&A.arr)[j + i * nc], width, &res[i, j], nc)
 
         # end for
 
@@ -545,8 +545,8 @@ def set_order_im_from_array(ordi, arr, tmp):
 
     if isinstance(tmp, omat):
 
-        nr = (<omat>tmp).arr.nrows
-        nc = (<omat>tmp).arr.ncols
+        nr = oarr_nrows(&(<omat>tmp).arr)
+        nc = oarr_ncols(&(<omat>tmp).arr)
 
         if not (<omat>tmp).FLAGS & 1:
 
@@ -556,8 +556,8 @@ def set_order_im_from_array(ordi, arr, tmp):
 
     elif isinstance(tmp, arro):
 
-        nr = (<arro>tmp).arr.nrows
-        nc = (<arro>tmp).arr.ncols
+        nr = arro_nrows(&(<arro>tmp).arr)
+        nc = arro_ncols(&(<arro>tmp).arr)
 
         if not (<arro>tmp).FLAGS & 1:
 
@@ -598,8 +598,8 @@ def set_order_im_from_array(ordi, arr, tmp):
         # at a global index beyond the directions of order ordi over bases 1..nact.
         nonzero = np.flatnonzero(np.any(vals.reshape((nr, width, nc)) != 0.0, axis=(0, 2)))
 
-        if ordi > S.arr.trc_order or (ordi > 0 and nonzero.size > 0
-                                      and nonzero[-1] >= sshelp_ndir_order(S.arr.nact, ordi)):
+        if ordi > oarr_trc_order(&S.arr) or (ordi > 0 and nonzero.size > 0
+                                      and nonzero[-1] >= sshelp_ndir_order(oarr_nact(&S.arr), ordi)):
 
             _check_no_block_views(S)
 
@@ -618,7 +618,7 @@ def set_order_im_from_array(ordi, arr, tmp):
 
                 _status("set_order_im_from_array",
                         oti_add_order_im_global(ordi, &vals[i, j], width, nc,
-                                                &A.arr.p_data[j + i * nc]))
+                                                &arro_data(&A.arr)[j + i * nc]))
 
             # end for
 
@@ -688,10 +688,10 @@ def trunc_dot(ordlhs, lhs, ordrhs, rhs, out=None):
     L = _order_to_soa(lhs, "trunc_dot")
     R = _order_to_soa(rhs, "trunc_dot")
 
-    if L.arr.ncols != R.arr.nrows:
+    if oarr_ncols(&L.arr) != oarr_nrows(&R.arr):
 
         raise ValueError("trunc_dot: shapes {0} and {1} not aligned".format(
-            (L.arr.nrows, L.arr.ncols), (R.arr.nrows, R.arr.ncols)))
+            (oarr_nrows(&L.arr), oarr_ncols(&L.arr)), (oarr_nrows(&R.arr), oarr_ncols(&R.arr))))
 
     # end if
 
@@ -768,19 +768,19 @@ def trunc_sub(order, Olhs, Orhs, out=None):
         A = Olhs
         B = Orhs
 
-        if A.arr.nrows != B.arr.nrows or A.arr.ncols != B.arr.ncols:
+        if arro_nrows(&A.arr) != arro_nrows(&B.arr) or arro_ncols(&A.arr) != arro_ncols(&B.arr):
 
             raise ValueError("trunc_sub: shapes {0} and {1} differ".format(
-                (A.arr.nrows, A.arr.ncols), (B.arr.nrows, B.arr.ncols)))
+                (arro_nrows(&A.arr), arro_ncols(&A.arr)), (arro_nrows(&B.arr), arro_ncols(&B.arr))))
 
         # end if
 
-        C = _order_aos_zeros(A.arr.nrows, A.arr.ncols, "trunc_sub")
+        C = _order_aos_zeros(arro_nrows(&A.arr), arro_ncols(&A.arr), "trunc_sub")
 
-        for e in range(A.arr.size):
+        for e in range(arro_size(&A.arr)):
 
-            _status("trunc_sub", oti_trunc_sub_to(order, &A.arr.p_data[e], &B.arr.p_data[e],
-                                                  &C.arr.p_data[e]))
+            _status("trunc_sub", oti_trunc_sub_to(order, &arro_data(&A.arr)[e], &arro_data(&B.arr)[e],
+                                                  &arro_data(&C.arr)[e]))
 
         # end for
 
@@ -851,15 +851,16 @@ def dot_product(lhs, rhs, out=None):
     L = _order_to_soa(lhs, "dot_product")
     R = _order_to_soa(rhs, "dot_product")
 
-    if L.arr.size != R.arr.size:
+    if oarr_size(&L.arr) != oarr_size(&R.arr):
 
         raise ValueError("dot_product: operands have different sizes, shapes {0} and {1}.".format(
-            (L.arr.nrows, L.arr.ncols), (R.arr.nrows, R.arr.ncols)))
+            (oarr_nrows(&L.arr), oarr_ncols(&L.arr)), (oarr_nrows(&R.arr), oarr_ncols(&R.arr))))
 
     # end if
 
-    same = L.arr.nrows == R.arr.nrows and L.arr.ncols == R.arr.ncols
-    vectors = (L.arr.nrows == 1 or L.arr.ncols == 1) and (R.arr.nrows == 1 or R.arr.ncols == 1)
+    same = oarr_nrows(&L.arr) == oarr_nrows(&R.arr) and oarr_ncols(&L.arr) == oarr_ncols(&R.arr)
+    vectors = (oarr_nrows(&L.arr) == 1 or oarr_ncols(&L.arr) == 1) and (oarr_nrows(&R.arr) == 1
+                                                                        or oarr_ncols(&R.arr) == 1)
     res = otinum.__new__(otinum)
 
     if same or vectors:
@@ -1064,7 +1065,7 @@ def inv_block(arr, out=None):
 
     if isinstance(arr, omat):
 
-        if (<omat>arr).arr.nrows != (<omat>arr).arr.ncols:
+        if oarr_nrows(&(<omat>arr).arr) != oarr_ncols(&(<omat>arr).arr):
 
             raise ValueError("inv_block: matrix must be square")
 
@@ -1075,7 +1076,7 @@ def inv_block(arr, out=None):
 
     elif isinstance(arr, arro):
 
-        if (<arro>arr).arr.nrows != (<arro>arr).arr.ncols:
+        if arro_nrows(&(<arro>arr).arr) != arro_ncols(&(<arro>arr).arr):
 
             raise ValueError("inv_block: matrix must be square")
 
@@ -1181,7 +1182,7 @@ def _order_rom_eval(value, bases, deltas):
 
     elif isinstance(value, (omat, arro)):
 
-        nact = (<omat>value).arr.nact if isinstance(value, omat) else _order_aos_nact(value)
+        nact = oarr_nact(&(<omat>value).arr) if isinstance(value, omat) else _order_aos_nact(value)
 
         if bases is None or isinstance(deltas, Real):
 
@@ -1202,12 +1203,13 @@ def _order_rom_eval(value, bases, deltas):
 
         # Every element is a prefix of bases 1..nact, so the same deltas serve all of them.
         A = value
-        R = _order_aos_zeros(A.arr.nrows, A.arr.ncols, "rom_eval")
+        R = _order_aos_zeros(arro_nrows(&A.arr), arro_ncols(&A.arr), "rom_eval")
 
-        for e in range(A.arr.size):
+        for e in range(arro_size(&A.arr)):
 
-            val = oti_rom_eval(&A.arr.p_data[e], <coeff_t *>loc.data)
-            _status("rom_eval", arro_set_item_r(val, e // A.arr.ncols, e % A.arr.ncols, &R.arr))
+            val = oti_rom_eval(&arro_data(&A.arr)[e], <coeff_t *>loc.data)
+            _status("rom_eval", arro_set_item_r(val, e // arro_ncols(&A.arr), e % arro_ncols(&A.arr),
+                                                &R.arr))
 
         # end for
 
@@ -1431,8 +1433,8 @@ def _order_get_all_ims(value, nbasis, order, bint derivs):
     elif isinstance(value, omat):
 
         S = value
-        _order_check_bytes(ndir * S.arr.nrows * S.arr.ncols, "get_all_ims")
-        res = np.empty((ndir, S.arr.nrows, S.arr.ncols), dtype=np.float64)
+        _order_check_bytes(ndir * oarr_nrows(&S.arr) * oarr_ncols(&S.arr), "get_all_ims")
+        res = np.empty((ndir, oarr_nrows(&S.arr), oarr_ncols(&S.arr)), dtype=np.float64)
 
         if res.size > 0:
 
@@ -1446,8 +1448,8 @@ def _order_get_all_ims(value, nbasis, order, bint derivs):
     elif isinstance(value, arro):
 
         A = value
-        nr = A.arr.nrows
-        nc = A.arr.ncols
+        nr = arro_nrows(&A.arr)
+        nc = arro_ncols(&A.arr)
         _order_check_bytes(ndir * nr * nc, "get_all_ims")
         res = np.zeros((ndir, nr, nc), dtype=np.float64)
 
@@ -1455,7 +1457,7 @@ def _order_get_all_ims(value, nbasis, order, bint derivs):
 
             for j in range(nc):
 
-                oti_get_all_ims_to(&A.arr.p_data[j + i * nc], nbasis, order, derivs, &res[0, i, j],
+                oti_get_all_ims_to(&arro_data(&A.arr)[j + i * nc], nbasis, order, derivs, &res[0, i, j],
                                    nr * nc)
 
             # end for

@@ -7,12 +7,12 @@ cdef extern from "oti/dense.h" nogil:
     # gauss/gauss.h
     ctypedef struct feoarr_t:
         oarr_t arr
-        uint64_t nrows
-        uint64_t ncols
-        uint64_t nip
 
     ctypedef feoarr_t feotinum_t
 
+    uint64_t fearr_nrows(const feoarr_t* fe)
+    uint64_t fearr_ncols(const feoarr_t* fe)
+    uint64_t fearr_nip(const feoarr_t* fe)
     feoarr_t fearr_init()
     int fearr_zeros_to(bases_t nact, uint64_t nrows, uint64_t ncols, uint64_t nip, ord_t trc_order,
                        feoarr_t* res)

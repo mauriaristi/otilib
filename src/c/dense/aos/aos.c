@@ -3,24 +3,185 @@
 //
 // Owner: WP4 (dense-port). Unity-included from src/c/dense.c, so every static helper here carries
 // the prefix dnaa_ (all dense sources share one translation unit). Elements are independent
-// otinum_t: elementwise operations run the scalar `_to` kernels over them with OpenMP (each thread
-// has its own oti_ws() workspace), and the first error status of any element is returned.
+// otinum_t: elementwise operations run the scalar `_to` kernels over them in fixed chunks through
+// oti_parallel_for() (each worker has its own oti_ws() workspace), and the status of the lowest
+// failing chunk is returned (contracts 5.3).
+
+
+/// Elementwise loops may run in parallel from this many elements (the 1.x threshold, contracts 5.8).
+#define DNAA_MIN_ELEMS 64
+
+/// Fixed logical chunk of the elementwise loops, in elements. 1.x used `schedule(dynamic, 16)`; the
+/// library dispenser claims a chunk with one atomic operation on a shared counter plus a call, so a
+/// chunk of 256 elements (tens of microseconds of scalar OTI work) keeps that cost negligible (critic
+/// W3 finding 2). Elements are independent: the chunk changes no value.
+#define DNAA_CHUNK_ELEMS 256
+
+/// matmul runs in parallel from this many output elements (the 1.x threshold), in chunks of this many.
+/// An output element costs ncols(A) scalar products (gem), at least about 1 us at FEM sizes, so 16
+/// outputs per chunk are >= 10 us of work per claim while an n x p result still has n * p / 16
+/// chunks to balance (1.x: `dynamic, 4`).
+#define DNAA_MATMUL_MIN_ELEMS 16
+#define DNAA_MATMUL_CHUNK_ELEMS 16
+
+/// Cost classes of an element operation (dnaa_ns()).
+#define DNAA_LINEAR  0 ///< Sums, scalings, truncations: linear in the coefficients.
+#define DNAA_PRODUCT 1 ///< Products, divisions, functions: about quadratic in the coefficients.
+
+// Element operation of a chunked loop: which arguments it takes (dnaa_elem()).
+#define DNAA_OO   0 ///< f_oo(a[e], b[e], r[e], dhl).
+#define DNAA_NO   1 ///< f_oo(num, a[e], r[e], dhl).
+#define DNAA_ON   2 ///< f_oo(a[e], num, r[e], dhl).
+#define DNAA_OR   3 ///< f_or(a[e], val, r[e], dhl).
+#define DNAA_RO   4 ///< f_ro(val, a[e], r[e], dhl).
+#define DNAA_U    5 ///< f_u(a[e], r[e], dhl).
+#define DNAA_TIM  6 ///< oti_truncate_im_to(idx, order, a[e], r[e]).
+#define DNAA_TOR  7 ///< f_to(order, a[e], r[e]).
+#define DNAA_C    8 ///< oti_compact_to(a[e], r[e]).
 
 
 // *******************************************************************************************************
-// Records the first non-OK status of an element (called from inside OpenMP loops).
-static void dnaa_record(int st, int* p_status){
+// An elementwise loop over the elements of an AoS array, for oti_parallel_for() (contracts 5.3).
+typedef struct {
+    int (*f_oo)(const otinum_t*, const otinum_t*, otinum_t*, dhelpl_t); ///< DNAA_OO, NO, ON.
+    int (*f_or)(const otinum_t*, coeff_t, otinum_t*, dhelpl_t);         ///< DNAA_OR.
+    int (*f_ro)(coeff_t, const otinum_t*, otinum_t*, dhelpl_t);         ///< DNAA_RO.
+    int (*f_u)(const otinum_t*, otinum_t*, dhelpl_t);                   ///< DNAA_U.
+    int (*f_to)(ord_t, const otinum_t*, otinum_t*);                     ///< DNAA_TOR.
+    const otinum_t*   a; ///< First array operand (elements).
+    const otinum_t*   b; ///< Second array operand (DNAA_OO).
+    const otinum_t* num; ///< Scalar operand (DNAA_NO, DNAA_ON).
+    otinum_t*         r; ///< Result elements.
+    uint64_t          n; ///< Number of elements.
+    dhelpl_t        dhl; ///< Direction helper.
+    coeff_t         val; ///< Real operand (DNAA_OR, DNAA_RO).
+    imdir_t         idx; ///< Direction (DNAA_TIM).
+    int            kind; ///< DNAA_*.
+    ord_t         order; ///< Order (DNAA_TIM, DNAA_TOR).
+} dnaa_job_t;
+// -------------------------------------------------------------------------------------------------------
 
-    if (st != DN_OK){
 
-        #pragma omp critical(dnaa_status)
-        {
-            if (*p_status == DN_OK){
-                *p_status = st;
-            }
+// *******************************************************************************************************
+// A job of the given kind over the elements of a into r (the other fields zero).
+static dnaa_job_t dnaa_job(int kind, const arro_t* a, arro_t* r){
+
+    dnaa_job_t j;
+
+    memset(&j, 0, sizeof(j));
+    j.kind = kind;
+    j.a    = arro_data(a);
+    j.r    = arro_data(r);
+    j.n    = arro_size(a);
+
+    return j;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Runs the operation of a job on element e.
+static inline int dnaa_elem(const dnaa_job_t* j, uint64_t e){
+
+    switch (j->kind){
+    case DNAA_OO:  return j->f_oo(&j->a[e], &j->b[e], &j->r[e], j->dhl);
+    case DNAA_NO:  return j->f_oo(j->num, &j->a[e], &j->r[e], j->dhl);
+    case DNAA_ON:  return j->f_oo(&j->a[e], j->num, &j->r[e], j->dhl);
+    case DNAA_OR:  return j->f_or(&j->a[e], j->val, &j->r[e], j->dhl);
+    case DNAA_RO:  return j->f_ro(j->val, &j->a[e], &j->r[e], j->dhl);
+    case DNAA_U:   return j->f_u(&j->a[e], &j->r[e], j->dhl);
+    case DNAA_TIM: return oti_truncate_im_to(j->idx, j->order, &j->a[e], &j->r[e]);
+    case DNAA_TOR: return j->f_to(j->order, &j->a[e], &j->r[e]);
+    default:       return oti_compact_to(&j->a[e], &j->r[e]);
+    }
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Chunk of an elementwise loop: elements [chunk * DNAA_CHUNK_ELEMS, ...), stopping at the first
+// failure (the lowest failing chunk decides the status of the loop, contracts 5.3).
+static int dnaa_chunk(void* arg, int64_t chunk, int32_t worker){
+
+    const dnaa_job_t* j = (const dnaa_job_t*)arg;
+    uint64_t e = (uint64_t)chunk * DNAA_CHUNK_ELEMS, e1 = e + DNAA_CHUNK_ELEMS;
+    int st = DN_OK;
+
+    (void)worker;
+
+    if (e1 > j->n){
+        e1 = j->n;
+    }
+
+    for (; e < e1 && st == DN_OK; e++){
+        st = dnaa_elem(j, e);
+    }
+
+    return st;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Estimated serial cost (ns, one core) of one element operation on numbers like `num`, for
+// oti_exec_plan() (contracts S27): a fixed call cost plus the coefficients (linear class) or their
+// pairs (product class). An estimate only: it decides the worker count, never the values.
+static double dnaa_ns(const otinum_t* num, int cls){
+
+    double c = 1.0;
+
+    if (num != NULL && num->trc_order <= _MAXORDER_OTI){
+        c += (double)sshelp_ndir_total(num->nact, num->trc_order);
+    }
+
+    return (cls == DNAA_LINEAR) ? 30.0 + 0.5 * c : 50.0 + 0.15 * c * c;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Runs fn over the n_items items of a loop in fixed chunks of `chunk` items (contracts 5.3, 5.8; S27):
+// in parallel with the worker count of oti_exec_plan() for ns nanoseconds per item, when n_items
+// reaches the loop's 1.x threshold `floor` and the plan gives >= 2 workers; serially otherwise. The
+// items are independent, so the values do not depend on the choice; the status is that of the lowest
+// failing chunk.
+static int dnaa_for(int64_t n_items, int64_t floor, int64_t chunk, double ns, oti_chunk_fn fn,
+                    void* arg){
+
+    int64_t nch = oti_exec_nchunks(n_items, chunk);
+
+    if (n_items >= floor && nch >= 2){
+
+        int32_t w = oti_exec_plan(NULL, n_items, chunk, ns);
+
+        if (w >= 2){
+
+            oti_ctx run = *oti_ctx_default();
+
+            run.exec.nthreads = w;
+
+            return oti_parallel_for(&run, nch, fn, arg);
+
         }
 
     }
+
+    return oti_serial_for(nch, fn, arg);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Runs an elementwise job over its elements; ns from the first element of `like` and the class.
+static int dnaa_run(dnaa_job_t* j, const otinum_t* like, int cls){
+
+    return dnaa_for((int64_t)j->n, DNAA_MIN_ELEMS, DNAA_CHUNK_ELEMS, dnaa_ns(j->n > 0 ? like : NULL, cls),
+                    dnaa_chunk, j);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -30,9 +191,10 @@ static void dnaa_record(int st, int* p_status){
 // True when num points at an element of arr.
 static int dnaa_inside(const otinum_t* num, const arro_t* arr){
 
-    uintptr_t n = (uintptr_t)num, lo = (uintptr_t)arr->p_data;
+    uintptr_t n = (uintptr_t)num, lo = (uintptr_t)arro_data(arr);
 
-    return arr->p_data != NULL && arr->size > 0 && n >= lo && n < lo + arr->size * sizeof(otinum_t);
+    return arro_data(arr) != NULL && arro_size(arr) > 0 && n >= lo
+        && n < lo + arro_size(arr) * sizeof(otinum_t);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -56,14 +218,162 @@ static const otinum_t* dnaa_stable(const otinum_t* num, const arro_t* arr1, cons
 
 
 // *******************************************************************************************************
+// Element store of an AoS array: one allocation holding a count and the element structs. It is the
+// release context of the array's nd_buffer_t (nd_wrap()); dnaa_store_release() frees its first n
+// elements, then the store, exactly once when the last reference goes.
+typedef struct {
+    uint64_t    n; ///< Elements owned by the store (freed with it).
+    otinum_t e[1]; ///< Elements (at least one slot is allocated, also for an empty array).
+} dnaa_store_t;
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+static void dnaa_store_release(void* ctx){
+
+    dnaa_store_t* st = (dnaa_store_t*)ctx;
+    uint64_t e;
+
+    for (e = 0; e < st->n; e++){
+        oti_free(&st->e[e]);
+    }
+
+    free(st);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Bytes of a store with `size` element slots (at least one); 0 when that overflows size_t.
+static size_t dnaa_store_bytes(uint64_t size){
+
+    uint64_t slots = (size > 0) ? size : 1;
+
+    if (slots > (SIZE_MAX - offsetof(dnaa_store_t, e)) / sizeof(otinum_t)){
+        return 0;
+    }
+
+    return offsetof(dnaa_store_t, e) + (size_t)slots * sizeof(otinum_t);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// The store of an owning array (the span base given to nd_wrap()).
+static inline dnaa_store_t* dnaa_store_of(const arro_t* arr){
+
+    return (dnaa_store_t*)nd_buffer_base(arr->elems.buf);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Writes the compact row-major layout (nrows, ncols) over the `re` fields into a descriptor whose data
+// is already set.
+static void dnaa_set_layout(ndarr_t* d, uint64_t nrows, uint64_t ncols){
+
+    d->ndim       = 2;
+    d->dtype      = OTI_F64;
+    d->shape[0]   = (int64_t)nrows;
+    d->shape[1]   = (int64_t)ncols;
+    d->strides[0] = (int64_t)ncols * ARRO_W;
+    d->strides[1] = ARRO_W;
+    nd_update_flags(d);
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// A new store of `size` slots holding no element yet (n = 0), wrapped in a retained descriptor of shape
+// (nrows, ncols). On a failure (DN_ERR_MEMORY) nothing remains allocated.
+static int dnaa_store_new(uint64_t nrows, uint64_t ncols, uint64_t size, ndarr_t* out){
+
+    size_t nbytes = dnaa_store_bytes(size);
+    dnaa_store_t* st;
+    ndarr_t d;
+
+    nd_init_empty(out);
+
+    if (nbytes == 0 || nbytes > (size_t)INT64_MAX){
+        return DN_ERR_MEMORY;
+    }
+
+    st = (dnaa_store_t*)malloc(nbytes);
+
+    if (st == NULL){
+        return DN_ERR_MEMORY;
+    }
+
+    st->n = 0;
+
+    nd_init_empty(&d);
+    d.data  = &st->e[0].re;
+    d.flags = ND_WRITEABLE;
+    dnaa_set_layout(&d, nrows, ncols);
+
+    // Ownership of the store passes to the buffer: a failed wrap releases it through the callback.
+    return (nd_wrap(NULL, &d, st, (int64_t)nbytes, dnaa_store_release, st, out) == OTI_OK) ? DN_OK
+                                                                                          : DN_ERR_MEMORY;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// DN_OK when an nrows x ncols AoS shape is representable in its descriptor: both extents and their
+// product, times the element struct size (the row stride and the span in bytes), within int64_t, also
+// for an empty shape such as (0, 2^63 - 1) whose row stride would overflow; else DN_ERR_MEMORY.
+// Checked before anything is modified.
+static int dnaa_check_shape(uint64_t nrows, uint64_t ncols){
+
+    uint64_t lim = (uint64_t)INT64_MAX / sizeof(otinum_t);
+
+    if (nrows > lim || ncols > lim){
+        return DN_ERR_MEMORY;
+    }
+
+    if (nrows != 0 && ncols != 0 && nrows > lim / ncols){
+        return DN_ERR_MEMORY;
+    }
+
+    return DN_OK;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// OTI_ERR_BUSY when the element store of an owning array is shared (another reference or a live export
+// of its buffer, e.g. a 7b `.real` export): its elements must not be moved or freed under it
+// (compatibility rule G1, contracts 7.2). DN_OK otherwise (also for an array without a buffer).
+static int dnaa_check_unshared(const arro_t* arr){
+
+    if (!(arr->elems.flags & ND_RETAINED)){
+        return DN_OK;
+    }
+
+    if (nd_buffer_refs(arr->elems.buf) == 1 && nd_buffer_exports(arr->elems.buf) == 0){
+        return DN_OK;
+    }
+
+    return OTI_ERR_BUSY;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 arro_t arro_init(void){
 
     arro_t arr;
 
-    arr.p_data = NULL;
-    arr.nrows  = 0;
-    arr.ncols  = 0;
-    arr.size   = 0;
+    nd_init_empty(&arr.elems);
+    arr.elems.flags = ND_C_CONTIG | ND_F_CONTIG | ND_WRITEABLE;
+    dnaa_set_layout(&arr.elems, 0, 0);
 
     return arr;
 
@@ -74,21 +384,14 @@ arro_t arro_init(void){
 // *******************************************************************************************************
 void arro_free(arro_t* arr){
 
-    uint64_t e;
-
     if (arr == NULL){
         return;
     }
 
-    if (arr->p_data != NULL){
-
-        for (e = 0; e < arr->size; e++){
-            oti_free(&arr->p_data[e]);
-        }
-
+    // The buffer's callback frees every element and the store.
+    if (arr->elems.flags & ND_RETAINED){
+        nd_release(&arr->elems);
     }
-
-    free(arr->p_data);
 
     *arr = arro_init();
 
@@ -99,57 +402,90 @@ void arro_free(arro_t* arr){
 // *******************************************************************************************************
 int arro_resize(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* arr){
 
-    uint64_t e, size = nrows * ncols, old = arr->size;
-    otinum_t* p_data;
+    uint64_t e, size = nrows * ncols, old, keep;
+    int owns = (arr->elems.flags & ND_RETAINED) != 0;
+    dnaa_store_t *st_old, *st_new;
+    ndarr_t d;
+    int status;
 
     if (nrows != 0 && size / nrows != ncols){
         return DN_ERR_MEMORY;
     }
 
-    if (size != old){
+    if (dnaa_check_shape(nrows, ncols) != DN_OK){
+        return DN_ERR_MEMORY;
+    }
 
-        if (size > old && trc_order > _MAXORDER_OTI){
-            return DN_ERR_INDEX;
-        }
+    old = owns ? arro_size(arr) : 0;
 
-        if (size >= SIZE_MAX / sizeof(otinum_t)){
-            return DN_ERR_MEMORY;
-        }
+    // The same shape: nothing changes.
+    if (nrows == arro_nrows(arr) && ncols == arro_ncols(arr) && (owns || size == 0)){
+        return DN_OK;
+    }
 
-        // Shrinking: the elements past the new size go first; a failed realloc keeps the (smaller) array.
-        for (e = size; e < old; e++){
-            oti_free(&arr->p_data[e]);
-        }
+    // Any other shape is a layout change: refused while the store is shared.
+    status = dnaa_check_unshared(arr);
 
-        if (size < old){
-            arr->size = size;
-        }
+    if (status != DN_OK){
+        return status;
+    }
 
-        p_data = (otinum_t*)realloc(arr->p_data, (size_t)size * sizeof(otinum_t) + 1);
+    // The same number of elements: only the shape changes (a buffer-less array keeps none).
+    if (size == old){
 
-        if (p_data == NULL){
+        dnaa_set_layout(&arr->elems, nrows, ncols);
 
-            if (size < old){
-                arr->nrows = size;          // consistent (size x 1) shape after a failed shrink.
-                arr->ncols = 1;
-                return DN_ERR_MEMORY;
-            }
-
-            return DN_ERR_MEMORY;
-
-        }
-
-        for (e = old; e < size; e++){
-            p_data[e] = oti_create_r(0.0, trc_order);
-        }
-
-        arr->p_data = p_data;
+        return DN_OK;
 
     }
 
-    arr->nrows = nrows;
-    arr->ncols = ncols;
-    arr->size  = size;
+    if (size > old && trc_order > _MAXORDER_OTI){
+        return DN_ERR_INDEX;
+    }
+
+    if (size >= SIZE_MAX / sizeof(otinum_t)){
+        return DN_ERR_MEMORY;
+    }
+
+    // The new store first, so that a failure leaves the array unchanged.
+    status = dnaa_store_new(nrows, ncols, size, &d);
+
+    if (status != DN_OK){
+        return status;
+    }
+
+    // Move the kept element structs (their coefficient buffers change owner), add real zeros.
+    st_new = (dnaa_store_t*)nd_buffer_base(d.buf);
+    keep   = (size < old) ? size : old;
+
+    if (keep > 0){
+        memcpy(st_new->e, arro_data(arr), (size_t)keep * sizeof(otinum_t));
+    }
+
+    st_new->n = keep;
+
+    for (e = keep; e < size; e++){
+
+        st_new->e[e] = oti_create_r(0.0, trc_order);
+        st_new->n    = e + 1;
+
+    }
+
+    // The old store frees the elements past the new size; the moved ones are no longer its own.
+    if (owns){
+
+        st_old = dnaa_store_of(arr);
+
+        for (e = size; e < old; e++){
+            oti_free(&st_old->e[e]);
+        }
+
+        st_old->n = 0;
+        nd_release(&arr->elems);
+
+    }
+
+    nd_move(&d, &arr->elems);
 
     return DN_OK;
 
@@ -167,9 +503,9 @@ int arro_zeros_to(uint64_t nrows, uint64_t ncols, ord_t trc_order, arro_t* res){
         return status;
     }
 
-    for (e = 0; e < res->size; e++){
+    for (e = 0; e < arro_size(res); e++){
 
-        status = oti_create_empty_to(0, trc_order, &res->p_data[e]);
+        status = oti_create_empty_to(0, trc_order, &arro_data(res)[e]);
 
         if (status != DN_OK){
             return status;
@@ -193,15 +529,15 @@ int arro_copy_to(const arro_t* arr1, arro_t* res){
         return DN_OK;
     }
 
-    status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    for (e = 0; e < arr1->size; e++){
+    for (e = 0; e < arro_size(arr1); e++){
 
-        status = oti_copy_to(&arr1->p_data[e], &res->p_data[e]);
+        status = oti_copy_to(&arro_data(arr1)[e], &arro_data(res)[e]);
 
         if (status != DN_OK){
             return status;
@@ -218,11 +554,11 @@ int arro_copy_to(const arro_t* arr1, arro_t* res){
 // *******************************************************************************************************
 const otinum_t* arro_get_item_ptr(uint64_t i, uint64_t j, const arro_t* arr1){
 
-    if (i >= arr1->nrows || j >= arr1->ncols){
+    if (i >= arro_nrows(arr1) || j >= arro_ncols(arr1)){
         return NULL;
     }
 
-    return &arr1->p_data[j + i * arr1->ncols];
+    return &arro_data(arr1)[j + i * arro_ncols(arr1)];
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -231,11 +567,11 @@ const otinum_t* arro_get_item_ptr(uint64_t i, uint64_t j, const arro_t* arr1){
 // *******************************************************************************************************
 int arro_set_item(const otinum_t* num, uint64_t i, uint64_t j, arro_t* arr1){
 
-    if (i >= arr1->nrows || j >= arr1->ncols){
+    if (i >= arro_nrows(arr1) || j >= arro_ncols(arr1)){
         return DN_ERR_INDEX;
     }
 
-    return oti_copy_to(num, &arr1->p_data[j + i * arr1->ncols]);
+    return oti_copy_to(num, &arro_data(arr1)[j + i * arro_ncols(arr1)]);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -244,11 +580,11 @@ int arro_set_item(const otinum_t* num, uint64_t i, uint64_t j, arro_t* arr1){
 // *******************************************************************************************************
 int arro_set_item_r(coeff_t val, uint64_t i, uint64_t j, arro_t* arr1){
 
-    if (i >= arr1->nrows || j >= arr1->ncols){
+    if (i >= arro_nrows(arr1) || j >= arro_ncols(arr1)){
         return DN_ERR_INDEX;
     }
 
-    oti_set_r(val, &arr1->p_data[j + i * arr1->ncols]);
+    oti_set_r(val, &arro_data(arr1)[j + i * arro_ncols(arr1)]);
 
     return DN_OK;
 
@@ -268,7 +604,7 @@ int arro_from_arrso_to(const arrso_t* arr1, arro_t* res, dhelpl_t dhl){
 
     for (e = 0; e < arr1->size; e++){
 
-        status = oti_from_soti_to(&arr1->p_data[e], &res->p_data[e], dhl);
+        status = oti_from_soti_to(&arr1->p_data[e], &arro_data(res)[e], dhl);
 
         if (status != DN_OK){
             return status;
@@ -288,23 +624,23 @@ arrso_t arro_to_arrso(const arro_t* arr1, dhelpl_t dhl){
     arrso_t res = arrso_init();
     uint64_t e;
 
-    if (arr1->size >= SIZE_MAX / sizeof(sotinum_t)){
+    if (arro_size(arr1) >= SIZE_MAX / sizeof(sotinum_t)){
         return res;
     }
 
-    res.p_data = (sotinum_t*)malloc((size_t)arr1->size * sizeof(sotinum_t) + 1);
+    res.p_data = (sotinum_t*)malloc((size_t)arro_size(arr1) * sizeof(sotinum_t) + 1);
 
     if (res.p_data == NULL){
         return res;
     }
 
-    for (e = 0; e < arr1->size; e++){
-        res.p_data[e] = oti_to_soti(&arr1->p_data[e], dhl);
+    for (e = 0; e < arro_size(arr1); e++){
+        res.p_data[e] = oti_to_soti(&arro_data(arr1)[e], dhl);
     }
 
-    res.nrows = arr1->nrows;
-    res.ncols = arr1->ncols;
-    res.size  = arr1->size;
+    res.nrows = arro_nrows(arr1);
+    res.ncols = arro_ncols(arr1);
+    res.size  = arro_size(arr1);
     res.flag  = 1;
 
     return res;
@@ -316,7 +652,7 @@ arrso_t arro_to_arrso(const arro_t* arr1, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_to_oarr(const arro_t* arr1, oarr_t* res){
 
-    uint64_t e, i, j, s, size = arr1->size, bp[_MAXORDER_OTI + 1];
+    uint64_t e, i, j, s, size = arro_size(arr1), bp[_MAXORDER_OTI + 1];
     bases_t k = 0;
     ord_t trc = 0, act = 0, p, top;
     ndir_t np, idx, src;
@@ -324,20 +660,20 @@ int arro_to_oarr(const arro_t* arr1, oarr_t* res){
 
     for (e = 0; e < size; e++){
 
-        k   = (arr1->p_data[e].nact > k) ? arr1->p_data[e].nact : k;
-        trc = (arr1->p_data[e].trc_order > trc) ? arr1->p_data[e].trc_order : trc;
-        act = (arr1->p_data[e].act_order > act) ? arr1->p_data[e].act_order : act;
+        k   = (arro_data(arr1)[e].nact > k) ? arro_data(arr1)[e].nact : k;
+        trc = (arro_data(arr1)[e].trc_order > trc) ? arro_data(arr1)[e].trc_order : trc;
+        act = (arro_data(arr1)[e].act_order > act) ? arro_data(arr1)[e].act_order : act;
 
     }
 
     // The capacity rule and the zero fill of exactly the new layout (never the old layout of res).
-    status = oarr_zeros_to(k, arr1->nrows, arr1->ncols, trc, res);
+    status = oarr_zeros_to(k, arro_nrows(arr1), arro_ncols(arr1), trc, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    res->act_order = (act < trc) ? act : trc;
+    oarr_set_act_order(res, (act < trc) ? act : trc);
 
     for (p = 1; p <= trc; p++){
         bp[p] = 1 + sshelp_order_offset(k, p);
@@ -347,13 +683,13 @@ int arro_to_oarr(const arro_t* arr1, oarr_t* res){
     // nact or lower trc is a prefix of the layout: the order-p coefficients keep their index.
     for (e = 0; e < size; e++){
 
-        const otinum_t* x = &arr1->p_data[e];
+        const otinum_t* x = &arro_data(arr1)[e];
 
-        i = e / arr1->ncols;
-        j = e % arr1->ncols;
-        s = i + j * arr1->nrows;
+        i = e / arro_ncols(arr1);
+        j = e % arro_ncols(arr1);
+        s = i + j * arro_nrows(arr1);
 
-        res->p_data[s] = x->re;
+        oarr_data(res)[s] = x->re;
         top            = (x->trc_order < trc) ? x->trc_order : trc;
 
         for (p = 1; p <= top; p++){
@@ -362,7 +698,7 @@ int arro_to_oarr(const arro_t* arr1, oarr_t* res){
             src = sshelp_order_offset(x->nact, p);
 
             for (idx = 0; idx < np; idx++){
-                res->p_data[(bp[p] + idx) * size + s] = x->p_im[src + idx];
+                oarr_data(res)[(bp[p] + idx) * size + s] = x->p_im[src + idx];
             }
 
         } // end for
@@ -378,45 +714,45 @@ int arro_to_oarr(const arro_t* arr1, oarr_t* res){
 // *******************************************************************************************************
 int arro_from_oarr(const oarr_t* arr1, arro_t* res){
 
-    uint64_t e, i, j, s, size = arr1->size, bp[_MAXORDER_OTI + 1];
-    ord_t p, trc = arr1->trc_order;
+    uint64_t e, i, j, s, size = oarr_size(arr1), bp[_MAXORDER_OTI + 1];
+    ord_t p, trc = oarr_trc_order(arr1);
     ndir_t np, idx, off;
     int status;
 
-    status = arro_resize(arr1->nrows, arr1->ncols, trc, res);
+    status = arro_resize(oarr_nrows(arr1), oarr_ncols(arr1), trc, res);
 
     if (status != DN_OK){
         return status;
     }
 
     for (p = 1; p <= trc; p++){
-        bp[p] = 1 + sshelp_order_offset(arr1->nact, p);
+        bp[p] = 1 + sshelp_order_offset(oarr_nact(arr1), p);
     }
 
     for (e = 0; e < size; e++){
 
-        otinum_t* x = &res->p_data[e];
+        otinum_t* x = &arro_data(res)[e];
 
-        i = e / arr1->ncols;
-        j = e % arr1->ncols;
-        s = i + j * arr1->nrows;
+        i = e / oarr_ncols(arr1);
+        j = e % oarr_ncols(arr1);
+        s = i + j * oarr_nrows(arr1);
 
-        status = oti_create_empty_to(arr1->nact, trc, x);
+        status = oti_create_empty_to(oarr_nact(arr1), trc, x);
 
         if (status != DN_OK){
             return status;
         }
 
-        x->re        = arr1->p_data[s];
-        x->act_order = (arr1->act_order < trc) ? arr1->act_order : trc;
+        x->re        = oarr_data(arr1)[s];
+        x->act_order = (oarr_act_order(arr1) < trc) ? oarr_act_order(arr1) : trc;
 
         for (p = 1; p <= trc; p++){
 
-            np  = sshelp_ndir_order(arr1->nact, p);
-            off = sshelp_order_offset(arr1->nact, p);
+            np  = sshelp_ndir_order(oarr_nact(arr1), p);
+            off = sshelp_order_offset(oarr_nact(arr1), p);
 
             for (idx = 0; idx < np; idx++){
-                x->p_im[off + idx] = arr1->p_data[(bp[p] + idx) * size + s];
+                x->p_im[off + idx] = oarr_data(arr1)[(bp[p] + idx) * size + s];
             }
 
         } // end for
@@ -432,23 +768,25 @@ int arro_from_oarr(const oarr_t* arr1, arro_t* res){
 // *******************************************************************************************************
 int arro_sum_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     int status;
 
-    if (arr1->nrows != arr2->nrows || arr1->ncols != arr2->ncols){
+    if (arro_nrows(arr1) != arro_nrows(arr2) || arro_ncols(arr1) != arro_ncols(arr2)){
         return DN_ERR_SIZE;
     }
 
-    status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sum_oo_to(&arr1->p_data[e], &arr2->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_OO, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_sum_oo_to;
+    j.b    = arro_data(arr2);
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -459,23 +797,25 @@ int arro_sum_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t
 // *******************************************************************************************************
 int arro_sub_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     int status;
 
-    if (arr1->nrows != arr2->nrows || arr1->ncols != arr2->ncols){
+    if (arro_nrows(arr1) != arro_nrows(arr2) || arro_ncols(arr1) != arro_ncols(arr2)){
         return DN_ERR_SIZE;
     }
 
-    status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sub_oo_to(&arr1->p_data[e], &arr2->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_OO, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_sub_oo_to;
+    j.b    = arro_data(arr2);
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -486,23 +826,25 @@ int arro_sub_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t
 // *******************************************************************************************************
 int arro_mul_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     int status;
 
-    if (arr1->nrows != arr2->nrows || arr1->ncols != arr2->ncols){
+    if (arro_nrows(arr1) != arro_nrows(arr2) || arro_ncols(arr1) != arro_ncols(arr2)){
         return DN_ERR_SIZE;
     }
 
-    status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_mul_oo_to(&arr1->p_data[e], &arr2->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_OO, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_mul_oo_to;
+    j.b    = arro_data(arr2);
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -513,23 +855,25 @@ int arro_mul_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t
 // *******************************************************************************************************
 int arro_div_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     int status;
 
-    if (arr1->nrows != arr2->nrows || arr1->ncols != arr2->ncols){
+    if (arro_nrows(arr1) != arro_nrows(arr2) || arro_ncols(arr1) != arro_ncols(arr2)){
         return DN_ERR_SIZE;
     }
 
-    status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_div_oo_to(&arr1->p_data[e], &arr2->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_OO, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_div_oo_to;
+    j.b    = arro_data(arr2);
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -540,10 +884,11 @@ int arro_div_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t
 // *******************************************************************************************************
 int arro_sum_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+                                                               res);
 
     if (status != DN_OK){
 
@@ -552,10 +897,12 @@ int arro_sum_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sum_oo_to(p_num, &arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_NO, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_sum_oo_to;
+    j.num  = p_num;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     oti_free(&local);
 
@@ -568,17 +915,19 @@ int arro_sum_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 // *******************************************************************************************************
 int arro_sum_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sum_or_to(&arr1->p_data[e], val, &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_OR, arr1, res);
+    j.dhl  = dhl;
+    j.f_or = oti_sum_or_to;
+    j.val  = val;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -589,10 +938,11 @@ int arro_sum_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_sub_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+                                                               res);
 
     if (status != DN_OK){
 
@@ -601,10 +951,12 @@ int arro_sub_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sub_oo_to(p_num, &arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_NO, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_sub_oo_to;
+    j.num  = p_num;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     oti_free(&local);
 
@@ -617,17 +969,19 @@ int arro_sub_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 // *******************************************************************************************************
 int arro_sub_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sub_ro_to(val, &arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_RO, arr1, res);
+    j.dhl  = dhl;
+    j.f_ro = oti_sub_ro_to;
+    j.val  = val;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -638,10 +992,11 @@ int arro_sub_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_sub_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+                                                               res);
 
     if (status != DN_OK){
 
@@ -650,10 +1005,12 @@ int arro_sub_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_
 
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sub_oo_to(&arr1->p_data[e], p_num, &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_ON, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_sub_oo_to;
+    j.num  = p_num;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     oti_free(&local);
 
@@ -666,17 +1023,19 @@ int arro_sub_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_
 // *******************************************************************************************************
 int arro_sub_Or_to(const arro_t* arr1, coeff_t val, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sub_or_to(&arr1->p_data[e], val, &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_OR, arr1, res);
+    j.dhl  = dhl;
+    j.f_or = oti_sub_or_to;
+    j.val  = val;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -687,10 +1046,11 @@ int arro_sub_Or_to(const arro_t* arr1, coeff_t val, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_mul_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+                                                               res);
 
     if (status != DN_OK){
 
@@ -699,10 +1059,12 @@ int arro_mul_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_mul_oo_to(p_num, &arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_NO, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_mul_oo_to;
+    j.num  = p_num;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     oti_free(&local);
 
@@ -715,17 +1077,19 @@ int arro_mul_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 // *******************************************************************************************************
 int arro_mul_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_mul_or_to(&arr1->p_data[e], val, &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_OR, arr1, res);
+    j.dhl  = dhl;
+    j.f_or = oti_mul_or_to;
+    j.val  = val;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -736,10 +1100,11 @@ int arro_mul_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_div_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+                                                               res);
 
     if (status != DN_OK){
 
@@ -748,10 +1113,12 @@ int arro_div_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_div_oo_to(p_num, &arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_NO, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_div_oo_to;
+    j.num  = p_num;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     oti_free(&local);
 
@@ -764,17 +1131,19 @@ int arro_div_oO_to(const otinum_t* num, const arro_t* arr1, arro_t* res, dhelpl_
 // *******************************************************************************************************
 int arro_div_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_div_ro_to(val, &arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_RO, arr1, res);
+    j.dhl  = dhl;
+    j.f_ro = oti_div_ro_to;
+    j.val  = val;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -785,10 +1154,11 @@ int arro_div_rO_to(coeff_t val, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_div_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
+    dnaa_job_t j;
     otinum_t local = oti_init();
     const otinum_t* p_num = dnaa_stable(num, arr1, res, &local);
-    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    int status = (p_num == NULL) ? DN_ERR_MEMORY : arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0,
+                                                               res);
 
     if (status != DN_OK){
 
@@ -797,10 +1167,12 @@ int arro_div_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_
 
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_div_oo_to(&arr1->p_data[e], p_num, &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_ON, arr1, res);
+    j.dhl  = dhl;
+    j.f_oo = oti_div_oo_to;
+    j.num  = p_num;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     oti_free(&local);
 
@@ -813,17 +1185,19 @@ int arro_div_Oo_to(const arro_t* arr1, const otinum_t* num, arro_t* res, dhelpl_
 // *******************************************************************************************************
 int arro_div_Or_to(const arro_t* arr1, coeff_t val, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_div_or_to(&arr1->p_data[e], val, &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_OR, arr1, res);
+    j.dhl  = dhl;
+    j.f_or = oti_div_or_to;
+    j.val  = val;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -834,17 +1208,18 @@ int arro_div_Or_to(const arro_t* arr1, coeff_t val, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_neg_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_neg_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_neg_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -855,17 +1230,18 @@ int arro_neg_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_exp_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_exp_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_exp_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -876,17 +1252,18 @@ int arro_exp_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_log_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_log_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_log_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -897,17 +1274,18 @@ int arro_log_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_log10_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_log10_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_log10_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -918,17 +1296,18 @@ int arro_log10_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_sqrt_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sqrt_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_sqrt_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -939,17 +1318,18 @@ int arro_sqrt_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_cbrt_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_cbrt_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_cbrt_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -960,17 +1340,18 @@ int arro_cbrt_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_sin_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sin_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_sin_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -981,17 +1362,18 @@ int arro_sin_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_cos_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_cos_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_cos_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1002,17 +1384,18 @@ int arro_cos_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_tan_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_tan_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_tan_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1023,17 +1406,18 @@ int arro_tan_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_asin_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_asin_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_asin_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1044,17 +1428,18 @@ int arro_asin_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_acos_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_acos_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_acos_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1065,17 +1450,18 @@ int arro_acos_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_atan_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_atan_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_atan_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1086,17 +1472,18 @@ int arro_atan_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_sinh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_sinh_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_sinh_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1107,17 +1494,18 @@ int arro_sinh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_cosh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_cosh_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_cosh_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1128,17 +1516,18 @@ int arro_cosh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_tanh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_tanh_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_tanh_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1149,17 +1538,18 @@ int arro_tanh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_asinh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_asinh_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_asinh_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1170,17 +1560,18 @@ int arro_asinh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_acosh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_acosh_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_acosh_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1191,17 +1582,18 @@ int arro_acosh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_atanh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_atanh_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_atanh_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1212,17 +1604,18 @@ int arro_atanh_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_erf_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_erf_to(&arr1->p_data[e], &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_U, arr1, res);
+    j.dhl  = dhl;
+    j.f_u  = oti_erf_to;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1233,17 +1626,19 @@ int arro_erf_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_pow_to(const arro_t* arr1, coeff_t ex, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_pow_to(&arr1->p_data[e], ex, &res->p_data[e], dhl), &status);
-    } // end for
+    j = dnaa_job(DNAA_OR, arr1, res);
+    j.dhl  = dhl;
+    j.f_or = oti_pow_to;
+    j.val  = ex;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_PRODUCT);
 
     return status;
 
@@ -1254,17 +1649,18 @@ int arro_pow_to(const arro_t* arr1, coeff_t ex, arro_t* res, dhelpl_t dhl){
 // *******************************************************************************************************
 int arro_truncate_im_to(imdir_t idx, ord_t order, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_truncate_im_to(idx, order, &arr1->p_data[e], &res->p_data[e]), &status);
-    } // end for
+    j = dnaa_job(DNAA_TIM, arr1, res);
+    j.idx   = idx;
+    j.order = order;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -1275,17 +1671,18 @@ int arro_truncate_im_to(imdir_t idx, ord_t order, const arro_t* arr1, arro_t* re
 // *******************************************************************************************************
 int arro_truncate_order_to(ord_t order, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_truncate_order_to(order, &arr1->p_data[e], &res->p_data[e]), &status);
-    } // end for
+    j = dnaa_job(DNAA_TOR, arr1, res);
+    j.f_to  = oti_truncate_order_to;
+    j.order = order;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -1296,17 +1693,18 @@ int arro_truncate_order_to(ord_t order, const arro_t* arr1, arro_t* res, dhelpl_
 // *******************************************************************************************************
 int arro_get_order_im_to(ord_t order, const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_get_order_im_to(order, &arr1->p_data[e], &res->p_data[e]), &status);
-    } // end for
+    j = dnaa_job(DNAA_TOR, arr1, res);
+    j.f_to  = oti_get_order_im_to;
+    j.order = order;
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -1317,17 +1715,16 @@ int arro_get_order_im_to(ord_t order, const arro_t* arr1, arro_t* res, dhelpl_t 
 // *******************************************************************************************************
 int arro_compact_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
-    int64_t e;
-    int status = arro_resize(arr1->nrows, arr1->ncols, 0, res);
+    dnaa_job_t j;
+    int status = arro_resize(arro_nrows(arr1), arro_ncols(arr1), 0, res);
 
     if (status != DN_OK){
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 16) if (arr1->size >= 64)
-    for (e = 0; e < (int64_t)arr1->size; e++){
-        dnaa_record(oti_compact_to(&arr1->p_data[e], &res->p_data[e]), &status);
-    } // end for
+    j = dnaa_job(DNAA_C, arr1, res);
+
+    status = dnaa_run(&j, arro_data(arr1), DNAA_LINEAR);
 
     return status;
 
@@ -1336,15 +1733,72 @@ int arro_compact_to(const arro_t* arr1, arro_t* res, dhelpl_t dhl){
 
 
 // *******************************************************************************************************
+// The output elements of a matmul, for oti_parallel_for().
+typedef struct {
+    const otinum_t* a; ///< First factor, n x m, row-major.
+    const otinum_t* b; ///< Second factor, m x p, row-major.
+    otinum_t*       r; ///< Result, n x p, row-major (zeros on entry).
+    uint64_t        m; ///< Inner dimension.
+    uint64_t        p; ///< Result columns.
+    uint64_t        n; ///< Number of output elements, n * p.
+    dhelpl_t      dhl; ///< Direction helper.
+} dnaa_mm_job_t;
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
+// Output elements [chunk * DNAA_MATMUL_CHUNK_ELEMS, ...): each accumulates its products (gem: acc =
+// a * b + acc), stopping at the first failure.
+static int dnaa_matmul_chunk(void* arg, int64_t chunk, int32_t worker){
+
+    const dnaa_mm_job_t* j = (const dnaa_mm_job_t*)arg;
+    uint64_t e = (uint64_t)chunk * DNAA_MATMUL_CHUNK_ELEMS, e1 = e + DNAA_MATMUL_CHUNK_ELEMS, l;
+    int st = DN_OK;
+
+    (void)worker;
+
+    if (e1 > j->n){
+        e1 = j->n;
+    }
+
+    for (; e < e1 && st == DN_OK; e++){
+
+        uint64_t i = e / j->p, c = e % j->p;
+        otinum_t* acc = &j->r[e];
+
+        if (j->m > 0){
+            st = oti_mul_oo_to(&j->a[i * j->m], &j->b[c], acc, j->dhl);
+        }
+
+        for (l = 1; l < j->m && st == DN_OK; l++){
+            st = oti_gem_oo_to(&j->a[l + i * j->m], &j->b[c + l * j->p], acc, acc, j->dhl);
+        }
+
+    }
+
+    return st;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 int arro_matmul_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelpl_t dhl){
 
-    uint64_t n = arr1->nrows, m = arr1->ncols, p = arr2->ncols;
-    int64_t e;
+    uint64_t n = arro_nrows(arr1), m = arro_ncols(arr1), p = arro_ncols(arr2);
+    dnaa_mm_job_t j;
     arro_t tmp = arro_init();
     int status;
 
-    if (arr2->nrows != m){
+    if (arro_nrows(arr2) != m){
         return DN_ERR_SIZE;
+    }
+
+    // The result replaces the store of res: refused while that store is shared.
+    status = dnaa_check_unshared(res);
+
+    if (status != DN_OK){
+        return status;
     }
 
     // Each output element accumulates its products (gem: acc = a * b + acc); nact and trc grow to the
@@ -1356,22 +1810,17 @@ int arro_matmul_OO_to(const arro_t* arr1, const arro_t* arr2, arro_t* res, dhelp
         return status;
     }
 
-    #pragma omp parallel for schedule(dynamic, 4) if (n * p >= 16)
-    for (e = 0; e < (int64_t)(n * p); e++){
+    j.a   = arro_data(arr1);
+    j.b   = arro_data(arr2);
+    j.r   = arro_data(&tmp);
+    j.m   = m;
+    j.p   = p;
+    j.n   = n * p;
+    j.dhl = dhl;
 
-        uint64_t i = (uint64_t)e / p, j = (uint64_t)e % p, l;
-        otinum_t* acc = &tmp.p_data[e];
-
-        if (m > 0){
-            dnaa_record(oti_mul_oo_to(&arr1->p_data[i * m], &arr2->p_data[j], acc, dhl), &status);
-        }
-
-        for (l = 1; l < m; l++){
-            dnaa_record(oti_gem_oo_to(&arr1->p_data[l + i * m], &arr2->p_data[j + l * p], acc, acc,
-                                      dhl), &status);
-        } // end for
-
-    } // end for
+    status = dnaa_for((int64_t)(n * p), DNAA_MATMUL_MIN_ELEMS, DNAA_MATMUL_CHUNK_ELEMS,
+                      (double)m * dnaa_ns((m > 0 && n * p > 0) ? arro_data(arr1) : NULL, DNAA_PRODUCT),
+                      dnaa_matmul_chunk, &j);
 
     if (status == DN_OK){
 
@@ -1393,12 +1842,20 @@ int arro_transpose_to(const arro_t* arr1, arro_t* res){
 
     uint64_t i, j;
     arro_t tmp = arro_init();
-    int status = arro_zeros_to(arr1->ncols, arr1->nrows, 0, &tmp);
+    int status = dnaa_check_unshared(res);
 
-    for (i = 0; i < arr1->nrows && status == DN_OK; i++){
+    // The result replaces the store of res: refused while that store is shared.
+    if (status != DN_OK){
+        return status;
+    }
 
-        for (j = 0; j < arr1->ncols && status == DN_OK; j++){
-            status = oti_copy_to(&arr1->p_data[j + i * arr1->ncols], &tmp.p_data[i + j * arr1->nrows]);
+    status = arro_zeros_to(arro_ncols(arr1), arro_nrows(arr1), 0, &tmp);
+
+    for (i = 0; i < arro_nrows(arr1) && status == DN_OK; i++){
+
+        for (j = 0; j < arro_ncols(arr1) && status == DN_OK; j++){
+            status = oti_copy_to(&arro_data(arr1)[j + i * arro_ncols(arr1)],
+                                 &arro_data(&tmp)[i + j * arro_nrows(arr1)]);
         } // end for
 
     } // end for

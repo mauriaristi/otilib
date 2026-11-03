@@ -1,7 +1,12 @@
 # Dense structure-of-arrays matrix class (omat).
 
+cimport cython
+
 
 # ********************************************************************************************************
+# Freelist (critic W3 finding 1): the object embeds a 560-byte struct, above CPython's 512-byte small-
+# object limit, so freed objects are recycled instead of going back to malloc (exact type only).
+@cython.freelist(32)
 cdef class omat:
     """
     Column-major structure-of-arrays dense OTI matrix.
@@ -207,7 +212,7 @@ cdef class omat:
             Number of rows and columns.
         """
 
-        return self.arr.nrows, self.arr.ncols
+        return oarr_nrows(&self.arr), oarr_ncols(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -224,7 +229,7 @@ cdef class omat:
             Highest allocated order.
         """
 
-        return self.arr.trc_order
+        return oarr_trc_order(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -241,7 +246,7 @@ cdef class omat:
             Basis labels.
         """
 
-        return tuple(range(1, self.arr.nact + 1))
+        return tuple(range(1, oarr_nact(&self.arr) + 1))
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -258,7 +263,7 @@ cdef class omat:
             Number of active bases.
         """
 
-        return self.arr.nact
+        return oarr_nact(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -349,12 +354,12 @@ cdef class omat:
         cdef _BlockExport export = _BlockExport(self)
         cdef object view = _soa_block_view(self, pair[0], pair[1], export)
 
-        if view is None and self.arr.size == 0:
+        if view is None and oarr_size(&self.arr) == 0:
 
             # A zero-size array has no native buffer: the block of a direction inside the layout
             # (order 0, or an index below N_order(nact) at an order up to the truncation order) is empty.
-            if pair[1] == 0 or (pair[1] <= self.arr.trc_order and
-                                pair[0] < comb(self.arr.nact + pair[1] - 1, pair[1])):
+            if pair[1] == 0 or (pair[1] <= oarr_trc_order(&self.arr) and
+                                pair[0] < comb(oarr_nact(&self.arr) + pair[1] - 1, pair[1])):
 
                 return np.empty(self.shape, dtype=np.float64)
 
@@ -389,7 +394,7 @@ cdef class omat:
             Row count.
         """
 
-        return self.arr.nrows
+        return oarr_nrows(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -406,7 +411,7 @@ cdef class omat:
             Column count.
         """
 
-        return self.arr.ncols
+        return oarr_ncols(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -423,7 +428,7 @@ cdef class omat:
             Rows times columns.
         """
 
-        return self.arr.size
+        return oarr_size(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -782,7 +787,7 @@ cdef class omat:
         cdef omat result = self.copy()
         cdef np.ndarray blocks
 
-        if self.arr.size > 0:
+        if oarr_size(&self.arr) > 0:
 
             blocks = _soa_blocks(result)
             blocks *= np.where(blocks[0] < 0, -1.0, 1.0)
@@ -1225,7 +1230,7 @@ cdef class omat:
 
         # end if
 
-        if self.arr.ncols != (<omat>other).arr.nrows:
+        if oarr_ncols(&self.arr) != oarr_nrows(&(<omat>other).arr):
 
             raise ValueError("matmul: incompatible matrix dimensions")
 

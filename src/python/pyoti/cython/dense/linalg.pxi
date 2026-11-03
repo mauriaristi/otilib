@@ -34,7 +34,7 @@ def lu_factor(omat A, out=None):
     cdef _LU factor = _LU()
     cdef oarr_t copy
 
-    if A.arr.nrows != A.arr.ncols:
+    if oarr_nrows(&A.arr) != oarr_ncols(&A.arr):
 
         raise ValueError("lu_factor: matrix must be square")
 
@@ -83,7 +83,7 @@ def lu_solve(_LU lu_and_piv, omat b, out=None):
 
     cdef oarr_t result = oarr_init()
 
-    if lu_and_piv.factor.A.nrows != b.arr.nrows:
+    if oarr_nrows(&lu_and_piv.factor.A) != oarr_nrows(&b.arr):
 
         raise ValueError("lu_solve: incompatible right-hand-side rows")
 
@@ -154,8 +154,8 @@ def solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
         aos_matrix = K_in
         aos_rhs = b_in
 
-        if aos_matrix.arr.nrows != aos_matrix.arr.ncols or (
-            aos_matrix.arr.nrows != aos_rhs.arr.nrows
+        if arro_nrows(&aos_matrix.arr) != arro_ncols(&aos_matrix.arr) or (
+            arro_nrows(&aos_matrix.arr) != arro_nrows(&aos_rhs.arr)
         ):
 
             raise ValueError("solve: matrix must be square and match the right-hand-side rows")
@@ -177,7 +177,8 @@ def solve(K_in, b_in, out=None, solver='SuperLU', solver_args=None):
     soa_matrix = K_in
     soa_rhs = b_in
 
-    if soa_matrix.arr.nrows != soa_matrix.arr.ncols or soa_matrix.arr.nrows != soa_rhs.arr.nrows:
+    if (oarr_nrows(&soa_matrix.arr) != oarr_ncols(&soa_matrix.arr)
+            or oarr_nrows(&soa_matrix.arr) != oarr_nrows(&soa_rhs.arr)):
 
         raise ValueError("solve: matrix must be square and match the right-hand-side rows")
 
@@ -232,7 +233,7 @@ def inv(arr, out=None):
 
         aos_matrix = arr
 
-        if aos_matrix.arr.nrows != aos_matrix.arr.ncols:
+        if arro_nrows(&aos_matrix.arr) != arro_ncols(&aos_matrix.arr):
 
             raise ValueError("inv: matrix must be square")
 
@@ -251,7 +252,7 @@ def inv(arr, out=None):
 
     soa_matrix = arr
 
-    if soa_matrix.arr.nrows != soa_matrix.arr.ncols:
+    if oarr_nrows(&soa_matrix.arr) != oarr_ncols(&soa_matrix.arr):
 
         raise ValueError("inv: matrix must be square")
 
@@ -306,7 +307,7 @@ def det(arr, out=None):
 
         aos_matrix = arr
 
-        if aos_matrix.arr.nrows != aos_matrix.arr.ncols:
+        if arro_nrows(&aos_matrix.arr) != arro_ncols(&aos_matrix.arr):
 
             raise ValueError("det: matrix must be square")
 
@@ -318,7 +319,7 @@ def det(arr, out=None):
 
         soa_matrix = arr
 
-        if soa_matrix.arr.nrows != soa_matrix.arr.ncols:
+        if oarr_nrows(&soa_matrix.arr) != oarr_ncols(&soa_matrix.arr):
 
             raise ValueError("det: matrix must be square")
 

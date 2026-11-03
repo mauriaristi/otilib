@@ -102,14 +102,15 @@ static int approx_equal(coeff_t a, coeff_t b, double tol){
 static coeff_t arr_coef(const oarr_t* A, uint64_t i, uint64_t j, imdir_t idx, ord_t p){
 
     if (p == 0){
-        return A->p_data[i + j * A->nrows];
+        return oarr_data(A)[i + j * oarr_nrows(A)];
     }
 
-    if (p > A->trc_order || idx >= sshelp_ndir_order(A->nact, p)){
+    if (p > oarr_trc_order(A) || idx >= sshelp_ndir_order(oarr_nact(A), p)){
         return 0.0;
     }
 
-    return A->p_data[(1 + sshelp_order_offset(A->nact, p) + idx) * A->size + i + j * A->nrows];
+    return oarr_data(A)[(1 + sshelp_order_offset(oarr_nact(A),
+                                                 p) + idx) * oarr_size(A) + i + j * oarr_nrows(A)];
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -137,7 +138,7 @@ static coeff_t num_coef(const otinum_t* t, imdir_t idx, ord_t p){
 /* Number of reals in the buffer of an array (all blocks). */
 static uint64_t arr_nreals(const oarr_t* A){
 
-    return (1 + sshelp_ndir_total(A->nact, A->trc_order)) * A->size;
+    return (1 + sshelp_ndir_total(oarr_nact(A), oarr_trc_order(A))) * oarr_size(A);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -152,11 +153,11 @@ static double arr_max_abs(const oarr_t* A){
 
     for (i = 0; i < n; i++){
 
-        if (isnan(A->p_data[i])){
+        if (isnan(oarr_data(A)[i])){
             return NAN;
         }
 
-        res = fmax(res, fabs(A->p_data[i]));
+        res = fmax(res, fabs(oarr_data(A)[i]));
 
     }
 
@@ -191,10 +192,10 @@ static oarr_t build_dense(uint64_t nrows, uint64_t ncols, bases_t k, ord_t trc, 
 
         for (i = 0; i < nrows; i++){
 
-            A.p_data[i + j * nrows] = rng_range(-0.5, 0.5);
+            oarr_data(&A)[i + j * nrows] = rng_range(-0.5, 0.5);
 
             if (diag && i == j){
-                A.p_data[i + j * nrows] += 0.5 * (double)nrows + 1.0;
+                oarr_data(&A)[i + j * nrows] += 0.5 * (double)nrows + 1.0;
             }
 
         }
@@ -210,7 +211,7 @@ static oarr_t build_dense(uint64_t nrows, uint64_t ncols, bases_t k, ord_t trc, 
             for (i = 0; i < nrows; i++){
 
                 if (rng_uniform() < density){
-                    A.p_data[b * A.size + i + j * nrows] = rng_range(-0.3, 0.3);
+                    oarr_data(&A)[b * oarr_size(&A) + i + j * nrows] = rng_range(-0.3, 0.3);
                 }
 
             }
@@ -219,7 +220,7 @@ static oarr_t build_dense(uint64_t nrows, uint64_t ncols, bases_t k, ord_t trc, 
 
     }
 
-    A.act_order = (k == 0) ? 0 : act;
+    oarr_set_act_order(&A, (k == 0) ? 0 : act);
 
     return A;
 
@@ -231,7 +232,7 @@ static oarr_t build_dense(uint64_t nrows, uint64_t ncols, bases_t k, ord_t trc, 
 /* Sets the coefficient of block b at element (i, j) of a dense array. */
 static void set_coef(oarr_t* A, uint64_t b, uint64_t i, uint64_t j, coeff_t v){
 
-    A->p_data[b * A->size + i + j * A->nrows] = v;
+    oarr_data(A)[b * oarr_size(A) + i + j * oarr_nrows(A)] = v;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -241,22 +242,22 @@ static void set_coef(oarr_t* A, uint64_t b, uint64_t i, uint64_t j, coeff_t v){
 /* The same values as an arrso_t (row-major), through soti_set_item on every nonzero direction. */
 static arrso_t to_arrso(const oarr_t* A, dhelpl_t dhl){
 
-    arrso_t arr = arrso_zeros_bases(A->nrows, A->ncols, 0, A->trc_order, dhl);
+    arrso_t arr = arrso_zeros_bases(oarr_nrows(A), oarr_ncols(A), 0, oarr_trc_order(A), dhl);
     uint64_t i, j;
     imdir_t idx;
     ord_t p;
 
-    for (i = 0; i < A->nrows; i++){
+    for (i = 0; i < oarr_nrows(A); i++){
 
-        for (j = 0; j < A->ncols; j++){
+        for (j = 0; j < oarr_ncols(A); j++){
 
-            sotinum_t* e = &arr.p_data[j + i * A->ncols];
+            sotinum_t* e = &arr.p_data[j + i * oarr_ncols(A)];
 
-            e->re = A->p_data[i + j * A->nrows];
+            e->re = oarr_data(A)[i + j * oarr_nrows(A)];
 
-            for (p = 1; p <= A->trc_order; p++){
+            for (p = 1; p <= oarr_trc_order(A); p++){
 
-                ndir_t np = sshelp_ndir_order(A->nact, p);
+                ndir_t np = sshelp_ndir_order(oarr_nact(A), p);
 
                 for (idx = 0; idx < np; idx++){
 
@@ -289,17 +290,17 @@ static oarrss_t to_oarrss(const oarr_t* A){
     bases_t u;
     oarrss_t s;
 
-    for (u = 0; u < A->nact && u < 64; u++){
+    for (u = 0; u < oarr_nact(A) && u < 64; u++){
         bases[u] = u + 1;
     }
 
-    s = oarrss_zeros(bases, A->nact, A->nrows, A->ncols, A->trc_order);
+    s = oarrss_zeros(bases, oarr_nact(A), oarr_nrows(A), oarr_ncols(A), oarr_trc_order(A));
 
-    if (A->size > 0){
-        memcpy(s.p_data, A->p_data, (size_t)arr_nreals(A) * sizeof(coeff_t));
+    if (oarr_size(A) > 0){
+        memcpy(s.p_data, oarr_data(A), (size_t)arr_nreals(A) * sizeof(coeff_t));
     }
 
-    s.act_order = A->act_order;
+    s.act_order = oarr_act_order(A);
 
     return s;
 
@@ -321,30 +322,31 @@ static void compare_dense_vs_dense(const oarr_t* a, const oarr_t* b, double tol,
     ord_t p;
     char name[256];
 
-    if (a->nrows != b->nrows || a->ncols != b->ncols || a->nact != b->nact ||
-        a->trc_order != b->trc_order){
+    if (oarr_nrows(a) != oarr_nrows(b) || oarr_ncols(a) != oarr_ncols(b)
+        || oarr_nact(a) != oarr_nact(b) ||
+        oarr_trc_order(a) != oarr_trc_order(b)){
 
         snprintf(name, sizeof(name), "%s: same shape, nact and trc (%llux%llu k=%u trc=%u vs "
-                 "%llux%llu k=%u trc=%u)", ctx, (unsigned long long)a->nrows,
-                 (unsigned long long)a->ncols, (unsigned)a->nact, (unsigned)a->trc_order,
-                 (unsigned long long)b->nrows, (unsigned long long)b->ncols, (unsigned)b->nact,
-                 (unsigned)b->trc_order);
+                 "%llux%llu k=%u trc=%u)", ctx, (unsigned long long)oarr_nrows(a),
+                 (unsigned long long)oarr_ncols(a), (unsigned)oarr_nact(a), (unsigned)oarr_trc_order(a),
+                 (unsigned long long)oarr_nrows(b), (unsigned long long)oarr_ncols(b),
+                 (unsigned)oarr_nact(b), (unsigned)oarr_trc_order(b));
         check(0, name);
         return;
 
     }
 
-    kmax = a->nact;
+    kmax = oarr_nact(a);
 
-    for (p = 0; p <= a->trc_order; p++){
+    for (p = 0; p <= oarr_trc_order(a); p++){
 
         ndir_t np = (p == 0) ? 1 : sshelp_ndir_order(kmax, p);
 
         for (idx = 0; idx < np; idx++){
 
-            for (j = 0; j < a->ncols; j++){
+            for (j = 0; j < oarr_ncols(a); j++){
 
-                for (i = 0; i < a->nrows; i++){
+                for (i = 0; i < oarr_nrows(a); i++){
 
                     coeff_t v1 = arr_coef(a, i, j, idx, p), v2 = arr_coef(b, i, j, idx, p);
 
@@ -394,38 +396,38 @@ static void compare_dense_vs_ss(const oarr_t* a, const oarrss_t* s, double tol, 
         prefix = prefix && (s->p_bases[u] == u + 1);
     }
 
-    if (a->nrows != s->nrows || a->ncols != s->ncols || a->nact != s->nbases ||
-        a->trc_order != s->trc_order || !prefix){
+    if (oarr_nrows(a) != s->nrows || oarr_ncols(a) != s->ncols || oarr_nact(a) != s->nbases ||
+        oarr_trc_order(a) != s->trc_order || !prefix){
 
         snprintf(name, sizeof(name), "%s: dense and semi-sparse have the same shape, set, trc "
-                 "(k=%u/%u trc=%u/%u)", ctx, (unsigned)a->nact, (unsigned)s->nbases,
-                 (unsigned)a->trc_order, (unsigned)s->trc_order);
+                 "(k=%u/%u trc=%u/%u)", ctx, (unsigned)oarr_nact(a), (unsigned)s->nbases,
+                 (unsigned)oarr_trc_order(a), (unsigned)s->trc_order);
         check(0, name);
         return;
 
     }
 
-    for (p = 0; p <= a->trc_order; p++){
+    for (p = 0; p <= oarr_trc_order(a); p++){
 
-        ndir_t np = (p == 0) ? 1 : sshelp_ndir_order(a->nact, p);
-        uint64_t bp = oarr_block_index(a->nact, p, 0);
+        ndir_t np = (p == 0) ? 1 : sshelp_ndir_order(oarr_nact(a), p);
+        uint64_t bp = oarr_block_index(oarr_nact(a), p, 0);
 
         for (idx = 0; idx < np; idx++){
 
-            for (j = 0; j < a->ncols; j++){
+            for (j = 0; j < oarr_ncols(a); j++){
 
-                for (i = 0; i < a->nrows; i++){
+                for (i = 0; i < oarr_nrows(a); i++){
 
-                    e = (bp + idx) * a->size + i + j * a->nrows;
+                    e = (bp + idx) * oarr_size(a) + i + j * oarr_nrows(a);
                     n_checked++;
 
-                    if (!approx_equal(a->p_data[e], s->p_data[e], tol) &&
-                        !(isnan(a->p_data[e]) && isnan(s->p_data[e]))){
+                    if (!approx_equal(oarr_data(a)[e], s->p_data[e], tol) &&
+                        !(isnan(oarr_data(a)[e]) && isnan(s->p_data[e]))){
 
                         if (n_mismatch < 5){
                             fprintf(stderr, "  mismatch %s (%llu,%llu) p=%u idx=%llu: %.17g vs %.17g\n",
                                     ctx, (unsigned long long)i, (unsigned long long)j, (unsigned)p,
-                                    (unsigned long long)idx, a->p_data[e], s->p_data[e]);
+                                    (unsigned long long)idx, oarr_data(a)[e], s->p_data[e]);
                         }
 
                         n_mismatch++;
@@ -445,8 +447,8 @@ static void compare_dense_vs_ss(const oarr_t* a, const oarrss_t* s, double tol, 
     check(n_mismatch == 0, name);
 
     snprintf(name, sizeof(name), "%s: act_order %u covers semi-sparse's %u", ctx,
-             (unsigned)a->act_order, (unsigned)s->act_order);
-    check(a->act_order >= s->act_order && a->act_order <= a->trc_order, name);
+             (unsigned)oarr_act_order(a), (unsigned)s->act_order);
+    check(oarr_act_order(a) >= s->act_order && oarr_act_order(a) <= oarr_trc_order(a), name);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -465,7 +467,7 @@ static void compare_dense_vs_arrso(const oarr_t* a, arrso_t* o, bases_t kmax, do
     int trc_ok = 1;
     char name[256];
 
-    if (a->nrows != o->nrows || a->ncols != o->ncols){
+    if (oarr_nrows(a) != o->nrows || oarr_ncols(a) != o->ncols){
 
         snprintf(name, sizeof(name), "%s: same shape as the sparse oracle", ctx);
         check(0, name);
@@ -473,15 +475,15 @@ static void compare_dense_vs_arrso(const oarr_t* a, arrso_t* o, bases_t kmax, do
 
     }
 
-    for (i = 0; i < a->nrows; i++){
+    for (i = 0; i < oarr_nrows(a); i++){
 
-        for (j = 0; j < a->ncols; j++){
+        for (j = 0; j < oarr_ncols(a); j++){
 
             sotinum_t* e = &o->p_data[j + i * o->ncols];
 
-            trc_ok = trc_ok && (e->trc_order == a->trc_order || a->act_order == 0);
+            trc_ok = trc_ok && (e->trc_order == oarr_trc_order(a) || oarr_act_order(a) == 0);
 
-            for (p = 0; p <= a->trc_order; p++){
+            for (p = 0; p <= oarr_trc_order(a); p++){
 
                 ndir_t np = (p == 0) ? 1 : sshelp_ndir_order(kmax, p);
 
@@ -652,8 +654,8 @@ static double solve_residual(const oarr_t* K, const oarr_t* x, const oarr_t* b, 
 static void run_case(const oarr_t* K, const oarr_t* b, int with_sparse, dhelpl_t dhl,
                      const char* ctx){
 
-    uint64_t n = K->nrows;
-    bases_t kmax = (K->nact > b->nact) ? K->nact : b->nact;
+    uint64_t n = oarr_nrows(K);
+    bases_t kmax = (oarr_nact(K) > oarr_nact(b)) ? oarr_nact(K) : oarr_nact(b);
     oarrss_t sK = to_oarrss(K), sb = to_oarrss(b);
     arrso_t aK, ab;
     oarr_lu_t lu;
@@ -685,10 +687,12 @@ static void run_case(const oarr_t* K, const oarr_t* b, int with_sparse, dhelpl_t
     compare_dense_vs_dense(&x, &x_lu, 0.0, name);
 
     snprintf(name, sizeof(name), "%s: solve act_order %u = trc, or 0 for a real result", ctx,
-             (unsigned)x.act_order);
-    check(x.act_order == ((K->act_order == 0 && b->act_order == 0) ? 0 : x.trc_order), name);
-    check(x.nact == kmax, "solve: nact = max(nact_K, nact_b)");
-    check(x.trc_order == ((K->trc_order > b->trc_order) ? K->trc_order : b->trc_order),
+             (unsigned)oarr_act_order(&x));
+    check(oarr_act_order(&x) == ((oarr_act_order(K) == 0
+                                  && oarr_act_order(b) == 0) ? 0 : oarr_trc_order(&x)), name);
+    check(oarr_nact(&x) == kmax, "solve: nact = max(nact_K, nact_b)");
+    check(oarr_trc_order(&x) == ((oarr_trc_order(K) > oarr_trc_order(b)) ? oarr_trc_order(K)
+                                                                          : oarr_trc_order(b)),
           "solve: trc = max(trc_K, trc_b)");
 
     {
@@ -703,7 +707,7 @@ static void run_case(const oarr_t* K, const oarr_t* b, int with_sparse, dhelpl_t
 
     if (with_sparse){
 
-        arrso_t xo = arrso_zeros_bases(n, b->ncols, 0, 0, dhl);
+        arrso_t xo = arrso_zeros_bases(n, oarr_ncols(b), 0, 0, dhl);
         int st = arrso_solve_to(&aK, &ab, &xo, dhl);
 
         check(st == 0, "sparse solve status");
@@ -726,8 +730,8 @@ static void run_case(const oarr_t* K, const oarr_t* b, int with_sparse, dhelpl_t
         check(status == 0, name);
 
         snprintf(name, sizeof(name), "%s: inv act_order %u = trc, or 0 for a real matrix", ctx,
-                 (unsigned)inv.act_order);
-        check(inv.act_order == ((K->act_order == 0) ? 0 : inv.trc_order), name);
+                 (unsigned)oarr_act_order(&inv));
+        check(oarr_act_order(&inv) == ((oarr_act_order(K) == 0) ? 0 : oarr_trc_order(&inv)), name);
 
         {
             oarrss_t is = oarrss_init();
@@ -746,12 +750,12 @@ static void run_case(const oarr_t* K, const oarr_t* b, int with_sparse, dhelpl_t
 
             check(st == 0, "sparse inv status");
             snprintf(name, sizeof(name), "%s: inv vs sparse", ctx);
-            compare_dense_vs_arrso(&inv, &io, K->nact, 1e-13, dhl, name);
+            compare_dense_vs_arrso(&inv, &io, oarr_nact(K), 1e-13, dhl, name);
             arrso_free(&io);
 
         }
 
-        oarr_eye_to(n, K->trc_order, &eye);
+        oarr_eye_to(n, oarr_trc_order(K), &eye);
         res = solve_residual(K, &inv, &eye, dhl);
         snprintf(name, sizeof(name), "%s: residual K inv(K) - I = %.2e", ctx, res);
         check(res < 1e-11, name);
@@ -783,8 +787,8 @@ static void run_case(const oarr_t* K, const oarr_t* b, int with_sparse, dhelpl_t
 
             snprintf(name, sizeof(name), "%s: det nact = nact_A, act_order %u = trc (0 if real)", ctx,
                      (unsigned)det.act_order);
-            check(det.nact == K->nact &&
-                  det.act_order == ((K->act_order == 0) ? 0 : det.trc_order), name);
+            check(det.nact == oarr_nact(K) &&
+                  det.act_order == ((oarr_act_order(K) == 0) ? 0 : det.trc_order), name);
             snprintf(name, sizeof(name), "%s: det", ctx);
             compare_oti_vs_oracles(&det, &ds, with_sparse ? &dor : NULL, 1e-14, 1e-13, dhl, name);
 
@@ -961,22 +965,22 @@ static void test_hand_4x4(dhelpl_t dhl){
 
     set_coef(&T, 1, 0, 0, 1.0);
     set_coef(&T, 1, 2, 2, -1.0);
-    T.act_order = 2;
+    oarr_set_act_order(&T, 2);
 
     for (j = 0; j < 4; j++){
 
         for (i = 0; i < 4; i++){
 
             r = (i == 0) ? 1 : ((i == 1) ? 0 : i);
-            A.p_data[i + j * 4] = T.p_data[r + j * 4];
-            A.p_data[16 + i + j * 4] = T.p_data[16 + r + j * 4];
-            A.p_data[32 + i + j * 4] = T.p_data[32 + r + j * 4];
+            oarr_data(&A)[i + j * 4] = oarr_data(&T)[r + j * 4];
+            oarr_data(&A)[16 + i + j * 4] = oarr_data(&T)[16 + r + j * 4];
+            oarr_data(&A)[32 + i + j * 4] = oarr_data(&T)[32 + r + j * 4];
 
         }
 
     }
 
-    A.act_order = 2;
+    oarr_set_act_order(&A, 2);
 
     status = oarr_det_to(&A, &det, dhl);
     check(status == 0, "hand 4x4: det status");
@@ -1024,9 +1028,12 @@ static void test_real_and_empty(dhelpl_t dhl){
     status = oarr_det_to(&A, &det, dhl);
     check(status == 0 && det.nact == 0 && det.trc_order == 2 && det.act_order == 0,
           "real 3x3 det: real result, nact 0, trc 2");
-    check(fabs(det.re - (A.p_data[0] * (A.p_data[4] * A.p_data[8] - A.p_data[7] * A.p_data[5])
-                        - A.p_data[3] * (A.p_data[1] * A.p_data[8] - A.p_data[7] * A.p_data[2])
-                        + A.p_data[6] * (A.p_data[1] * A.p_data[5] - A.p_data[4] * A.p_data[2]))) < 1e-12,
+    check(fabs(det.re - (oarr_data(&A)[0] * (oarr_data(&A)[4] * oarr_data(&A)[8]
+                                             - oarr_data(&A)[7] * oarr_data(&A)[5])
+                        - oarr_data(&A)[3] * (oarr_data(&A)[1] * oarr_data(&A)[8]
+                                              - oarr_data(&A)[7] * oarr_data(&A)[2])
+                        + oarr_data(&A)[6] * (oarr_data(&A)[1] * oarr_data(&A)[5]
+                                              - oarr_data(&A)[4] * oarr_data(&A)[2]))) < 1e-12,
           "real 3x3 det: cofactor expansion");
 
     // Matrix with bases but no nonzero imaginary part (act_order 0).
@@ -1036,7 +1043,7 @@ static void test_real_and_empty(dhelpl_t dhl){
           "act_order 0 with bases: real det keeps nact 2, act_order 0");
 
     status = oarr_inv_to(&b, &inv, dhl);
-    check(status == 0 && inv.act_order == 0 && inv.trc_order == 3 && inv.nact == 2,
+    check(status == 0 && oarr_act_order(&inv) == 0 && oarr_trc_order(&inv) == 3 && oarr_nact(&inv) == 2,
           "act_order 0 with bases: inverse is real with nact 2");
     oarr_free(&b);
 
@@ -1045,9 +1052,9 @@ static void test_real_and_empty(dhelpl_t dhl){
     status = oarr_det_to(&e0, &det, dhl);
     check(status == 0 && det.re == 1.0 && det.nact == 0, "0x0 det is 1");
     status = oarr_inv_to(&e0, &inv, dhl);
-    check(status == 0 && inv.nrows == 0 && inv.ncols == 0, "0x0 inverse is empty");
+    check(status == 0 && oarr_nrows(&inv) == 0 && oarr_ncols(&inv) == 0, "0x0 inverse is empty");
     status = oarr_solve_to(&e0, &e0, &x, dhl);
-    check(status == 0 && x.nrows == 0, "0x0 solve is empty");
+    check(status == 0 && oarr_nrows(&x) == 0, "0x0 solve is empty");
 
     oarr_free(&A);
     oarr_free(&one);
@@ -1163,7 +1170,8 @@ static void test_lu_reuse(dhelpl_t dhl){
 
     status = oarr_lu_factor(&K, &lu);
     check(status == 0, "lu reuse: factor status");
-    check(lu.A.nrows == 6 && lu.p_ipiv != NULL, "lu reuse: factorization holds the matrix and pivots");
+    check(oarr_nrows(&lu.A) == 6 && lu.p_ipiv != NULL,
+          "lu reuse: factorization holds the matrix and pivots");
 
     for (c = 0; c < 4; c++){
 
@@ -1195,7 +1203,7 @@ static void test_lu_reuse(dhelpl_t dhl){
     }
 
     oarr_lu_free(&lu);
-    check(lu.p_ipiv == NULL && lu.A.p_data == NULL, "lu_free leaves the factorization empty");
+    check(lu.p_ipiv == NULL && oarr_data(&lu.A) == NULL, "lu_free leaves the factorization empty");
     oarr_lu_free(&lu);      // twice: no-op.
 
     oarr_free(&K);
@@ -1309,11 +1317,11 @@ static void test_singular(dhelpl_t dhl){
         b = build_dense(n, 2, 2, 3, 3, 0.7, 0);
 
         if (n == 1){
-            K.p_data[0] = 0.0;
+            oarr_data(&K)[0] = 0.0;
         } else {
 
             for (j = 0; j < n; j++){
-                K.p_data[1 + j * n] = 0.0;
+                oarr_data(&K)[1 + j * n] = 0.0;
             }
 
         }
@@ -1345,7 +1353,8 @@ static void test_singular(dhelpl_t dhl){
             snprintf(name, sizeof(name), "singular n=%llu: lu_solve on the factors gives %d = %d",
                      (unsigned long long)n, st_lu, st);
             check(st_lu == st, name);
-            check(xs.p_data == NULL && xs.nrows == 0 && xs.nact == 0, "singular: lu_solve leaves x");
+            check(oarr_data(&xs) == NULL && oarr_nrows(&xs) == 0 && oarr_nact(&xs) == 0,
+                  "singular: lu_solve leaves x");
 
             oarr_copy_to(&b, &xs);
             st_lu = oarr_lu_solve(&lu, &xs, &xs, dhl);
@@ -1387,11 +1396,37 @@ static void test_singular(dhelpl_t dhl){
 
 
 // *******************************************************************************************************
+/* A shell with no buffer: an nrows x ncols array whose layout (nact, trc) is held by *meta (created
+ * when nact or trc > 0; the caller releases it with oti_meta_release()). Only for size checks, which
+ * reject it before any buffer is touched. */
+static oarr_t make_shell(uint64_t nrows, uint64_t ncols, bases_t nact, ord_t trc, oti_meta_t** meta){
+
+    oarr_t a = oarr_init();
+
+    a.blocks.shape[1] = (int64_t)nrows;
+    a.blocks.shape[2] = (int64_t)ncols;
+    *meta = NULL;
+
+    if (nact > 0 || trc > 0){
+
+        check(oti_meta_create(OTI_META_DENSE, trc, nact, NULL, 0, meta) == OTI_OK, "shell meta");
+        a.meta = *meta;
+
+    }
+
+    return a;
+
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// *******************************************************************************************************
 /* Shape, size, pivot and argument errors. Sizes past the LAPACK integer range and coefficient counts
  * past size_t are rejected before any buffer is touched, so the operands can be shells. */
 static void test_errors(dhelpl_t dhl){
 
     oarr_t A, R, b, b_bad, x = oarr_init(), inv = oarr_init(), huge = oarr_init();
+    oti_meta_t* hmeta = NULL;
     oarr_lu_t lu, lu2;
     otinum_t det = oti_init();
     int st;
@@ -1433,38 +1468,29 @@ static void test_errors(dhelpl_t dhl){
     oarr_lu_free(NULL);
 
     // Dimensions past the LAPACK integers (2^32): shells with no buffers.
-    huge        = oarr_init();
-    huge.nrows  = 1ULL << 32;
-    huge.ncols  = 1ULL << 32;
+    huge = make_shell(1ULL << 32, 1ULL << 32, 0, 0, &hmeta);
     check(oarr_lu_factor(&huge, &lu2) == DN_ERR_SIZE, "n = 2^32: lu_factor DN_ERR_SIZE");
     oarr_lu_free(&lu2);
     check(oarr_det_to(&huge, &det, dhl) == DN_ERR_SIZE, "n = 2^32: det_to DN_ERR_SIZE");
     check(oarr_inv_to(&huge, &inv, dhl) == DN_ERR_SIZE, "n = 2^32: inv_to DN_ERR_SIZE");
 
-    huge       = oarr_init();
-    huge.nrows = 3;
-    huge.ncols = 1ULL << 32;
+    huge = make_shell(3, 1ULL << 32, 0, 0, &hmeta);
     oarr_lu_factor(&A, &lu);
     check(oarr_lu_solve(&lu, &huge, &x, dhl) == DN_ERR_SIZE,
           "b with 2^32 columns: lu_solve DN_ERR_SIZE");
 
     // Coefficient counts past size_t: nact 60000 at order 5 (C(60005, 5) > 2^64).
-    huge        = oarr_init();
-    huge.nrows  = 3;
-    huge.ncols  = 1;
-    huge.size   = 3;
-    huge.nact   = 60000;
+    huge        = make_shell(3, 1, 60000, 5, &hmeta);
     huge.nbases = 60000;
-    huge.trc_order = 5;
     check(oarr_lu_solve(&lu, &huge, &x, dhl) == DN_ERR_MEMORY,
           "coefficient count overflow: lu_solve DN_ERR_MEMORY");
     oarr_lu_free(&lu);
 
-    huge.nrows = 3;
-    huge.ncols = 3;
-    huge.size  = 9;
+    huge.blocks.shape[1] = 3;
+    huge.blocks.shape[2] = 3;
     check(oarr_det_to(&huge, &det, dhl) == DN_ERR_MEMORY,
           "coefficient count overflow: det_to DN_ERR_MEMORY");
+    oti_meta_release(&hmeta);
 
     // After every failure the outputs are still valid and freeable.
     oarr_free(&x);
@@ -1585,8 +1611,10 @@ static void test_concurrent(dhelpl_t dhl){
     for (i = 0; i < NSYS; i++){
 
         bad += (st_s[i] != 0 || st_p[i] != 0 || dst_s[i] != 0 || dst_p[i] != 0);
-        bad += (xs[i].nact != xp[i].nact || xs[i].trc_order != xp[i].trc_order ||
-                memcmp(xs[i].p_data, xp[i].p_data, (size_t)arr_nreals(&xs[i]) * sizeof(coeff_t)) != 0);
+        bad += (oarr_nact(&xs[i]) != oarr_nact(&xp[i])
+                || oarr_trc_order(&xs[i]) != oarr_trc_order(&xp[i]) ||
+                memcmp(oarr_data(&xs[i]), oarr_data(&xp[i]),
+                       (size_t)arr_nreals(&xs[i]) * sizeof(coeff_t)) != 0);
         bad += (ds[i].nact != dp[i].nact || ds[i].trc_order != dp[i].trc_order ||
                 memcmp(ds[i].p_im, dp[i].p_im,
                        (size_t)sshelp_ndir_total(ds[i].nact, ds[i].trc_order) * sizeof(coeff_t)) != 0 ||
@@ -1627,18 +1655,18 @@ static void test_budget_child(dhelpl_t dhl){
     b_many = build_dense(2, 1, 300, 2, 0, 0.0, 0);        // 45451 blocks of 2 reals; A expanded: 181804.
     oarr_zeros_to(0, 2, 100, 0, &b_wide);                 // X = 5152 * 200 reals = 1.03 M > budget.
     oarr_zeros_to(0, 2, 1, 0, &b_ok);
-    b_ok.p_data[0] = 1.0;
-    b_ok.p_data[1] = 2.0;
+    oarr_data(&b_ok)[0] = 1.0;
+    oarr_data(&b_ok)[1] = 2.0;
 
     check(oarr_lu_factor(&K, &lu) == DN_OK, "budget 1 MB: lu_factor within the budget");
-    check(oarr_lu_solve(&lu, &b_wide, &x, dhl) == DN_ERR_MEMORY && x.p_data == NULL,
+    check(oarr_lu_solve(&lu, &b_wide, &x, dhl) == DN_ERR_MEMORY && oarr_data(&x) == NULL,
           "budget 1 MB: wide right-hand side refused (X above the budget), x untouched");
-    check(oarr_solve_to(&K, &b_wide, &x, dhl) == DN_ERR_MEMORY && x.p_data == NULL,
+    check(oarr_solve_to(&K, &b_wide, &x, dhl) == DN_ERR_MEMORY && oarr_data(&x) == NULL,
           "budget 1 MB: solve_to with a wide right-hand side refused");
-    check(oarr_lu_solve(&lu, &b_many, &x, dhl) == DN_ERR_MEMORY && x.p_data == NULL,
+    check(oarr_lu_solve(&lu, &b_many, &x, dhl) == DN_ERR_MEMORY && oarr_data(&x) == NULL,
           "budget 1 MB: expanded A above the budget refused, x untouched");
     status = oarr_lu_solve(&lu, &b_ok, &x, dhl);
-    check(status == DN_OK && x.nact == 100 && x.nrows == 2 && x.ncols == 1,
+    check(status == DN_OK && oarr_nact(&x) == 100 && oarr_nrows(&x) == 2 && oarr_ncols(&x) == 1,
           "budget 1 MB: a solve within the budget works");
 
     oarr_lu_free(&lu);

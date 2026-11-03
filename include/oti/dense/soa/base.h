@@ -12,6 +12,18 @@
 // No coefficient-sized buffer outlives a call: SoA operations write straight into @p res, and when
 // @p res aliases an operand the result is built in a call-local buffer (malloc/free inside the call)
 // and moved in. Only small index buffers live in the per-thread workspace (oti_ws()).
+//
+// Shapes: every extent and the product of the nonzero extents must fit int64_t (the descriptor's
+// type), also for an empty shape; otherwise DN_ERR_MEMORY with @p res unchanged. The matrix functions
+// (products, transpose, linear algebra, CSR) take arrays of element rank 2 only (DN_ERR_SIZE
+// otherwise); a Gauss array passes them an oarr_view_matrix() view.
+//
+// Views as results (contracts 7.3): a view (oarr_view_matrix()) passed as @p res is written in place
+// when the result has exactly its layout (nact, truncation order, shape) and the operation writes
+// straight into @p res; anything that would relayout it, regrow it or replace its buffer (an aliased
+// result built in a call-local buffer) returns OTI_ERR_BUSY. The same status is returned when a call-
+// local result would replace a buffer shared with views or exports (never the case in 7a). Through a
+// view act_order is only raised.
 
 
 /**
@@ -162,6 +174,26 @@ int oarr_add_bases(bases_t nact, oarr_t* arr);
  * @param[out] dst (1 + sshelp_ndir_total(ku, trc)) * arr->size reals. Must not alias arr->p_data.
  */
 void oarr_kernel_expand(const oarr_t* arr, bases_t ku, ord_t trc, coeff_t* dst);
+// -------------------------------------------------------------------------------------------------------
+
+
+/**
+ * @brief Builds a view of an array as an nrows x ncols matrix of the same size (a reshape).
+ *
+ * The view's blocks descriptor is a temporary over the same data (no reference is taken) and it
+ * borrows the array's meta: it must not outlive @p arr, is only ever an input of a C call (never a
+ * `res`), and oarr_free() on it only resets it. Used for the Gauss products on reinterpreted shapes
+ * (contracts 7.1: views instead of struct copies of a retained descriptor).
+ *
+ * @param[in]  arr   Array (owning or a view), compact.
+ * @param[in]  nrows Rows of the view.
+ * @param[in]  ncols Columns of the view; nrows * ncols must equal the array's size.
+ * @param[out] view  View; overwritten without being released. May be @p arr only when that is a view.
+ *
+ * @return DN_OK, DN_ERR_SIZE (another size, or a non-compact array) or DN_ERR_ARGUMENT (NULL, or
+ *         @p view == @p arr for an owning array).
+ */
+int oarr_view_matrix(const oarr_t* arr, uint64_t nrows, uint64_t ncols, oarr_t* view);
 // -------------------------------------------------------------------------------------------------------
 
 

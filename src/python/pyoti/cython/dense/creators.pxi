@@ -633,7 +633,7 @@ cdef object _array_from_lists(object arr, ord_t order):
 
             else:
 
-                result.arr.p_data[i + j * nr] = item
+                oarr_data(&result.arr)[i + j * nr] = item
 
             # end if
 

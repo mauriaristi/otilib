@@ -31,8 +31,8 @@ cdef omat _fe_take_rows(omat src, object rows, int64_t ncols=-1):
     """
 
     cdef np.ndarray[np.int64_t, ndim=1] idx = np.asarray(rows, dtype=np.int64).ravel()
-    cdef uint64_t nr = idx.shape[0], m = src.arr.ncols, n = src.arr.nrows
-    cdef uint64_t nb = 1 + sshelp_ndir_total(src.arr.nact, src.arr.trc_order)
+    cdef uint64_t nr = idx.shape[0], m = oarr_ncols(&src.arr), n = oarr_nrows(&src.arr)
+    cdef uint64_t nb = 1 + sshelp_ndir_total(oarr_nact(&src.arr), oarr_trc_order(&src.arr))
     cdef oarr_t res = oarr_init()
     cdef uint64_t d, c, i, r
 
@@ -52,7 +52,7 @@ cdef omat _fe_take_rows(omat src, object rows, int64_t ncols=-1):
 
     # end for
 
-    _soa_ok("get_local", oarr_zeros_to(src.arr.nact, nr, m, src.arr.trc_order, &res), &res)
+    _soa_ok("get_local", oarr_zeros_to(oarr_nact(&src.arr), nr, m, oarr_trc_order(&src.arr), &res), &res)
 
     for d in range(nb):
 
@@ -61,7 +61,8 @@ cdef omat _fe_take_rows(omat src, object rows, int64_t ncols=-1):
             for i in range(nr):
 
                 r = idx[i]
-                res.p_data[d * res.size + i + c * nr] = src.arr.p_data[d * src.arr.size + r + c * n]
+                oarr_data(&res)[d * oarr_size(&res) + i + c * nr] = (
+                    oarr_data(&src.arr)[d * oarr_size(&src.arr) + r + c * n])
 
             # end for
 
@@ -69,7 +70,7 @@ cdef omat _fe_take_rows(omat src, object rows, int64_t ncols=-1):
 
     # end for
 
-    res.act_order = src.arr.act_order
+    oarr_set_act_order(&res, oarr_act_order(&src.arr))
 
     return omat.wrap(res)
 

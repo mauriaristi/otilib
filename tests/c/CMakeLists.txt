@@ -84,3 +84,17 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_exec.c")
     target_link_libraries(test_c_exec oti oticwrap ${LINK_TARGET_OMP_C})
     add_test(NAME c_exec_test COMMAND test_c_exec)
 endif()
+
+# OTI layout metadata oti_meta_t (Phase 7a, contracts section 7), written by the oracle agent.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_oti_meta.c")
+    add_executable(test_c_oti_meta test_oti_meta.c)
+    target_link_libraries(test_c_oti_meta oti oticwrap ${LINK_TARGET_OMP_C})
+    add_test(NAME c_oti_meta_test COMMAND test_c_oti_meta)
+endif()
+
+# Phase 7b readiness and non-finite zero-skip checks of the dense 7a arrays, written by the oracle agent.
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/test_dense_7b_ready.c")
+    add_executable(test_c_dense_7b_ready test_dense_7b_ready.c)
+    target_link_libraries(test_c_dense_7b_ready oti oticwrap ${LINK_TARGET_OMP_C})
+    add_test(NAME c_dense_7b_ready_test COMMAND test_c_dense_7b_ready)
+endif()

@@ -26,8 +26,9 @@
 //     DN_ERR_* code (include/oti/dense/scalar/structures.h). After a failure the result is valid
 //     (safe to free) but its value is unspecified.
 //   - Byte budget: no single coefficient buffer (a number's imaginary part, an array's blocks) may
-//     exceed OTI_DENSE_MAX_MB megabytes (environment variable, read once per process; default the
-//     physical memory, or 64 GiB when it cannot be queried). A larger but representable request
+//     exceed the max_alloc_bytes of the default context (include/oti/core/exec.h): OTI_DENSE_MAX_MB
+//     megabytes (environment variable, read once per process; default the physical memory, or 64 GiB
+//     when it cannot be queried). A larger but representable request
 //     returns DN_ERR_MEMORY before allocating, instead of an overcommitted malloc that is killed
 //     while it is zero-filled.
 //   - `_to` variants write into an existing number @p res, grow its buffers as needed and replace
@@ -52,8 +53,9 @@
 /**
  * @brief Byte budget of a single dense coefficient buffer (see "Byte budget" above).
  *
- * OTI_DENSE_MAX_MB megabytes when that environment variable holds a positive integer, else the
- * physical memory, else 64 GiB. Read once per process; thread-safe. Callers that allocate buffers
+ * The max_alloc_bytes of the default context (oti_ctx_default()): OTI_DENSE_MAX_MB megabytes when
+ * that environment variable holds a positive integer, else the physical memory, else 64 GiB. Read once
+ * per process; thread-safe. Callers that allocate buffers
  * derived from dense values (for example the Python get_all_ims output) use it to refuse oversized
  * requests before allocating.
  *

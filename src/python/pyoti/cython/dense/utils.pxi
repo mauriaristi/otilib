@@ -466,7 +466,7 @@ cdef void _status(str operation, int status) except *:
     operation : str
         Name of the failing operation.
     status : int
-        Native ``DN_*`` code, or a positive LAPACK ``info``.
+        Native ``DN_*`` / ``OTI_ERR_*`` code, or a positive LAPACK ``info``.
     """
 
     if status == DN_OK:
@@ -497,6 +497,23 @@ cdef void _status(str operation, int status) except *:
     elif status == DN_ERR_ARGUMENT:
 
         raise ValueError("{}: invalid argument".format(operation))
+
+    elif status == OTI_ERR_BUSY:
+
+        raise BufferError("{}: the array's layout is fixed while views or exports of it live "
+                          "(reserve(...), or nbases= / order= at creation)".format(operation))
+
+    elif status == OTI_ERR_SHAPE or status == OTI_ERR_LAYOUT or status == OTI_ERR_READONLY:
+
+        raise ValueError("{}: {}".format(operation, oti_status_string(status).decode()))
+
+    elif status == OTI_ERR_DTYPE:
+
+        raise TypeError("{}: {}".format(operation, oti_status_string(status).decode()))
+
+    elif status == OTI_ERR_CONVERGE or status == OTI_ERR_NOTPD:
+
+        raise np.linalg.LinAlgError("{}: {}".format(operation, oti_status_string(status).decode()))
 
     # end if
 
@@ -651,17 +668,17 @@ cdef np.ndarray _soa_blocks(omat value):
 
     cdef np.npy_intp dims[2]
     cdef np.ndarray flat
-    cdef uint64_t nblocks = 1 + sshelp_ndir_total(value.arr.nact, value.arr.trc_order)
+    cdef uint64_t nblocks = 1 + sshelp_ndir_total(oarr_nact(&value.arr), oarr_trc_order(&value.arr))
 
-    if value.arr.size == 0 or value.arr.p_data == NULL:
+    if oarr_size(&value.arr) == 0 or oarr_data(&value.arr) == NULL:
 
-        return np.zeros((nblocks, value.arr.size), dtype=np.float64)
+        return np.zeros((nblocks, oarr_size(&value.arr)), dtype=np.float64)
 
     # end if
 
     dims[0] = nblocks
-    dims[1] = value.arr.size
-    flat = np.PyArray_SimpleNewFromData(2, dims, np.NPY_DOUBLE, <void *>value.arr.p_data)
+    dims[1] = oarr_size(&value.arr)
+    flat = np.PyArray_SimpleNewFromData(2, dims, np.NPY_DOUBLE, <void *>oarr_data(&value.arr))
     np.set_array_base(flat, value)
     return flat
 
@@ -776,7 +793,7 @@ cdef int _check_growth(omat value, bases_t nact, ord_t order) except -1:
         If the layout would change and a view returned by ``get_block`` is still alive.
     """
 
-    if nact > value.arr.nact or order > value.arr.trc_order:
+    if nact > oarr_nact(&value.arr) or order > oarr_trc_order(&value.arr):
 
         _check_no_block_views(value)
 
@@ -807,11 +824,11 @@ cdef void _raise_soa_order(omat value, ord_t order) except *:
 
     # end if
 
-    if order > value.arr.trc_order:
+    if order > oarr_trc_order(&value.arr):
 
         _check_no_block_views(value)
-        _status("raise order", oarr_reserve(&value.arr, value.arr.nact, value.arr.nrows,
-                                            value.arr.ncols, order))
+        _status("raise order", oarr_reserve(&value.arr, oarr_nact(&value.arr), oarr_nrows(&value.arr),
+                                            oarr_ncols(&value.arr), order))
 
     # end if
 
@@ -877,13 +894,13 @@ cdef object _assign_out(object out, object result):
 
         # end if
 
-        if (<omat>out).arr.nrows != (<omat>result).arr.nrows or (
-            (<omat>out).arr.ncols != (<omat>result).arr.ncols
+        if oarr_nrows(&(<omat>out).arr) != oarr_nrows(&(<omat>result).arr) or (
+            oarr_ncols(&(<omat>out).arr) != oarr_ncols(&(<omat>result).arr)
         ):
 
             raise ValueError("out has shape {}, expected {}".format(
-                ((<omat>out).arr.nrows, (<omat>out).arr.ncols),
-                ((<omat>result).arr.nrows, (<omat>result).arr.ncols)))
+                (oarr_nrows(&(<omat>out).arr), oarr_ncols(&(<omat>out).arr)),
+                (oarr_nrows(&(<omat>result).arr), oarr_ncols(&(<omat>result).arr))))
 
         # end if
 
@@ -905,13 +922,13 @@ cdef object _assign_out(object out, object result):
 
         # end if
 
-        if (<arro>out).arr.nrows != (<arro>result).arr.nrows or (
-            (<arro>out).arr.ncols != (<arro>result).arr.ncols
+        if arro_nrows(&(<arro>out).arr) != arro_nrows(&(<arro>result).arr) or (
+            arro_ncols(&(<arro>out).arr) != arro_ncols(&(<arro>result).arr)
         ):
 
             raise ValueError("out has shape {}, expected {}".format(
-                ((<arro>out).arr.nrows, (<arro>out).arr.ncols),
-                ((<arro>result).arr.nrows, (<arro>result).arr.ncols)))
+                (arro_nrows(&(<arro>out).arr), arro_ncols(&(<arro>out).arr)),
+                (arro_nrows(&(<arro>result).arr), arro_ncols(&(<arro>result).arr))))
 
         # end if
 
@@ -1063,9 +1080,9 @@ cdef otinum _soa_sum_all(omat value):
     cdef np.ndarray[np.float64_t, ndim=1] sums = _soa_blocks(value).sum(axis=1)
     cdef otinum total = otinum.__new__(otinum)
     cdef ndir_t i
-    cdef ndir_t nimag = sshelp_ndir_total(value.arr.nact, value.arr.trc_order)
+    cdef ndir_t nimag = sshelp_ndir_total(oarr_nact(&value.arr), oarr_trc_order(&value.arr))
 
-    _status("sum", oti_create_empty_to(value.arr.nact, value.arr.trc_order, &total.num))
+    _status("sum", oti_create_empty_to(oarr_nact(&value.arr), oarr_trc_order(&value.arr), &total.num))
     total.num.re = sums[0]
 
     for i in range(nimag):
@@ -1074,7 +1091,7 @@ cdef otinum _soa_sum_all(omat value):
 
     # end for
 
-    total.num.act_order = value.arr.act_order
+    total.num.act_order = oarr_act_order(&value.arr)
     return total
 
 # end function

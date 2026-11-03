@@ -2,6 +2,9 @@
 
 
 # ********************************************************************************************************
+# Freelist (critic W3 finding 1): the object embeds a 544-byte struct, above CPython's 512-byte small-
+# object limit, so freed objects are recycled instead of going back to malloc (exact type only).
+@cython.freelist(32)
 cdef class arro:
     """
     Array-of-structures dense matrix with an active set per element.
@@ -194,7 +197,7 @@ cdef class arro:
             Matrix shape.
         """
 
-        return self.arr.nrows, self.arr.ncols
+        return arro_nrows(&self.arr), arro_ncols(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -214,11 +217,11 @@ cdef class arro:
         cdef uint64_t index
         cdef ord_t top = 0
 
-        for index in range(self.arr.size):
+        for index in range(arro_size(&self.arr)):
 
-            if self.arr.p_data[index].trc_order > top:
+            if arro_data(&self.arr)[index].trc_order > top:
 
-                top = self.arr.p_data[index].trc_order
+                top = arro_data(&self.arr)[index].trc_order
 
             # end if
 
@@ -244,9 +247,9 @@ cdef class arro:
         cdef uint64_t index
         cdef size_t total = sizeof(arro_t)
 
-        for index in range(self.arr.size):
+        for index in range(arro_size(&self.arr)):
 
-            total += oti_memory_size(&self.arr.p_data[index])
+            total += oti_memory_size(&arro_data(&self.arr)[index])
 
         # end for
 
@@ -290,7 +293,7 @@ cdef class arro:
             Row count.
         """
 
-        return self.arr.nrows
+        return arro_nrows(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -307,7 +310,7 @@ cdef class arro:
             Column count.
         """
 
-        return self.arr.ncols
+        return arro_ncols(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -324,7 +327,7 @@ cdef class arro:
             Rows times columns.
         """
 
-        return self.arr.size
+        return arro_size(&self.arr)
 
     # end function
     # ----------------------------------------------------------------------------------------------------
@@ -683,11 +686,11 @@ cdef class arro:
         cdef arro result = self.copy()
         cdef uint64_t index
 
-        for index in range(result.arr.size):
+        for index in range(arro_size(&result.arr)):
 
-            if result.arr.p_data[index].re < 0:
+            if arro_data(&result.arr)[index].re < 0:
 
-                _status("abs", oti_neg_to(&result.arr.p_data[index], &result.arr.p_data[index],
+                _status("abs", oti_neg_to(&arro_data(&result.arr)[index], &arro_data(&result.arr)[index],
                                           _dhl))
 
             # end if
@@ -1129,7 +1132,7 @@ cdef class arro:
 
         # end if
 
-        if (<arro>self).arr.ncols != (<arro>other).arr.nrows:
+        if arro_ncols(&(<arro>self).arr) != arro_nrows(&(<arro>other).arr):
 
             raise ValueError("matmul: incompatible matrix dimensions")
 

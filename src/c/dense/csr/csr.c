@@ -18,6 +18,7 @@ static int dncs_status(int status){
         case DN_OK:         return CSRO_OK;
         case DN_ERR_SIZE:   return CSRO_ERR_SIZE;
         case DN_ERR_MEMORY: return CSRO_ERR_MEMORY;
+        case OTI_ERR_BUSY:  return OTI_ERR_BUSY;    // a view or shared result (7a: never).
         default:            return CSRO_ERR_INDEX;
     }
 
@@ -329,7 +330,7 @@ static void dncs_acc(otinum_t* v, coeff_t re, const coeff_t* im, size_t stride, 
 // True when `a` is the array `v` or shares its buffer.
 static inline int dncs_same_array(const oarr_t* a, const oarr_t* v){
 
-    return a == v || (a->p_data != NULL && a->p_data == v->p_data);
+    return a == v || (oarr_data(a) != NULL && oarr_data(a) == oarr_data(v));
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -377,19 +378,19 @@ static int dncs_kernel_acc(const csro_t* K, ord_t plo, ord_t phi, const oarr_t* 
                            dhelpl_t dhl){
 
     const oarr_t* V = K->p_val;
-    bases_t kK = V->nact, kX = X->nact;
-    uint64_t nnz = V->size, m = X->ncols, ldx = X->size, ldr = K->nrows * X->ncols;
+    bases_t kK = oarr_nact(V), kX = oarr_nact(X);
+    uint64_t nnz = oarr_size(V), m = oarr_ncols(X), ldx = oarr_size(X), ldr = K->nrows * oarr_ncols(X);
     uint8_t* xnz;
     size_t nxb, b;
     ord_t p, q;
     bases_t ui[256], uj[256];
 
-    if (qhi > X->trc_order){
-        qhi = X->trc_order;
+    if (qhi > oarr_trc_order(X)){
+        qhi = oarr_trc_order(X);
     }
 
-    if (phi > V->trc_order){
-        phi = V->trc_order;
+    if (phi > oarr_trc_order(V)){
+        phi = oarr_trc_order(V);
     }
 
     // Nonzero flag of every X block up to order qhi (one byte per block).
@@ -401,7 +402,7 @@ static int dncs_kernel_acc(const csro_t* K, ord_t plo, ord_t phi, const oarr_t* 
     }
 
     for (b = 0; b < nxb; b++){
-        xnz[b] = !dnok_all_zero(X->p_data + b * ldx, ldx);
+        xnz[b] = !dnok_all_zero(oarr_data(X) + b * ldx, ldx);
     }
 
     for (p = plo; p <= phi; p++){
@@ -427,7 +428,7 @@ static int dncs_kernel_acc(const csro_t* K, ord_t plo, ord_t phi, const oarr_t* 
 
             for (i = 0; i < Np; i++){
 
-                const coeff_t* Ki = V->p_data + (bp + i) * nnz;
+                const coeff_t* Ki = oarr_data(V) + (bp + i) * nnz;
 
                 if (!dnok_all_zero(Ki, nnz)){
 
@@ -439,7 +440,7 @@ static int dncs_kernel_acc(const csro_t* K, ord_t plo, ord_t phi, const oarr_t* 
 
                             ndir_t d = dnok_pair_idx(&src, i, ui, j, uj);
 
-                            dncs_spmm_block(K, Ki, X->p_data + (bq + j) * ldx, K->ncols, m, alpha,
+                            dncs_spmm_block(K, Ki, oarr_data(X) + (bq + j) * ldx, K->ncols, m, alpha,
                                             R + (bpq + d) * ldr, K->nrows);
 
                         }
@@ -707,14 +708,14 @@ int lilo_add(lilo_t* lil, uint64_t i, uint64_t j, const otinum_t* val, dhelpl_t 
 int lilo_add_block(lilo_t* lil, const uint64_t* rows, uint64_t nr, const uint64_t* cols,
                    uint64_t nc, const oarr_t* blk, dhelpl_t dhl){
 
-    uint64_t a, b, m = blk->size;
-    ord_t top = (blk->act_order < blk->trc_order) ? blk->act_order : blk->trc_order;
+    uint64_t a, b, m = oarr_size(blk);
+    ord_t top = (oarr_act_order(blk) < oarr_trc_order(blk)) ? oarr_act_order(blk) : oarr_trc_order(blk);
     const coeff_t* im;
     int status;
 
     (void)dhl;
 
-    if (blk->nrows != nr || blk->ncols != nc){
+    if (oarr_nrows(blk) != nr || oarr_ncols(blk) != nc){
         return CSRO_ERR_SIZE;
     }
 
@@ -736,7 +737,7 @@ int lilo_add_block(lilo_t* lil, const uint64_t* rows, uint64_t nr, const uint64_
 
     // Entry and hash capacity for every block element up front: from here on only a value
     // allocation can fail. One check per call when the builder already has room.
-    status = dncs_reserve(lil, blk->size);
+    status = dncs_reserve(lil, oarr_size(blk));
 
     if (status != CSRO_OK){
         return status;
@@ -744,7 +745,7 @@ int lilo_add_block(lilo_t* lil, const uint64_t* rows, uint64_t nr, const uint64_
 
     // The addend's coefficients (block 1 + n of element t is coefficient n); none for a real block,
     // whose buffer holds only the real block.
-    im = (blk->nact > 0 && blk->trc_order > 0) ? blk->p_data + m : NULL;
+    im = (oarr_nact(blk) > 0 && oarr_trc_order(blk) > 0) ? oarr_data(blk) + m : NULL;
 
     // Column by column, the order of the SoA elements. A new entry is written straight from the
     // block; a stored one is grown to the block's layout when needed and takes the block's
@@ -777,14 +778,15 @@ int lilo_add_block(lilo_t* lil, const uint64_t* rows, uint64_t nr, const uint64_
 
             }
 
-            status = dncs_grow_value(&lil->p_val[e], blk->nact, blk->trc_order);
+            status = dncs_grow_value(&lil->p_val[e], oarr_nact(blk), oarr_trc_order(blk));
 
             if (status != DN_OK){
                 return dncs_status(status);
             }
 
-            dncs_acc(&lil->p_val[e], blk->p_data[t], (im != NULL) ? im + t : NULL, (size_t)m, blk->nact,
-                     top, blk->act_order);
+            dncs_acc(&lil->p_val[e], oarr_data(blk)[t], (im != NULL) ? im + t : NULL, (size_t)m,
+                     oarr_nact(blk),
+                     top, oarr_act_order(blk));
 
         }
 
@@ -1010,14 +1012,14 @@ int lilo_to_csr(const lilo_t* lil, oarr_t* val, int64_t* indices, int64_t* indpt
         ord_t top = (v->act_order < v->trc_order) ? v->act_order : v->trc_order;
 
         indices[t]     = (int64_t)lil->p_col[perm[t]];
-        val->p_data[t] = v->re;
+        oarr_data(val)[t] = v->re;
 
         // Prefix property: the entry's order-p direction i is direction i of the layout.
         for (p = 1; p <= top && v->nact > 0; p++){
 
             ndir_t Np = sshelp_ndir_order(v->nact, p), i;
             const coeff_t* S = v->p_im + sshelp_order_offset(v->nact, p);
-            coeff_t* D = val->p_data + oarr_block_index(k, p, 0) * n + t;
+            coeff_t* D = oarr_data(val) + oarr_block_index(k, p, 0) * n + t;
 
             for (i = 0; i < Np; i++){
                 D[i * n] = S[i];
@@ -1027,7 +1029,7 @@ int lilo_to_csr(const lilo_t* lil, oarr_t* val, int64_t* indices, int64_t* indpt
 
     }
 
-    val->act_order = act;
+    oarr_set_act_order(val, act);
     free(perm);
 
     return CSRO_OK;
@@ -1044,10 +1046,10 @@ int lilo_to_csr(const lilo_t* lil, oarr_t* val, int64_t* indices, int64_t* indpt
 int csro_check(const csro_t* K){
 
     const oarr_t* V = K->p_val;
-    uint64_t nnz = V->size, r;
+    uint64_t nnz = oarr_size(V), r;
     int64_t t;
 
-    if (V->ncols != 1 && nnz > 0){
+    if (oarr_ncols(V) != 1 && nnz > 0){
         return CSRO_ERR_SIZE;
     }
 
@@ -1085,25 +1087,30 @@ int csro_check(const csro_t* K){
 int csro_to_dense(const csro_t* K, oarr_t* res){
 
     const oarr_t* V = K->p_val;
-    uint64_t nnz = V->size, r, size;
+    uint64_t nnz = oarr_size(V), r, size;
     size_t nb, b;
     oarr_t out = oarr_init();
     int status;
 
-    // Built apart and moved in, so res may be the matrix's own value array.
-    status = dncs_status(oarr_zeros_to(V->nact, K->nrows, K->ncols, V->trc_order, &out));
+    // Built apart and moved in, so res may be the matrix's own value array (not a view or a shared
+    // array: OTI_ERR_BUSY, contracts 7.3).
+    if (!dnob_can_replace(res)){
+        return OTI_ERR_BUSY;
+    }
+
+    status = dncs_status(oarr_zeros_to(oarr_nact(V), K->nrows, K->ncols, oarr_trc_order(V), &out));
 
     if (status != CSRO_OK){
         return status;
     }
 
-    size = out.size;
-    nb   = (size_t)(1 + sshelp_ndir_total(V->nact, V->trc_order));
+    size = oarr_size(&out);
+    nb   = (size_t)(1 + sshelp_ndir_total(oarr_nact(V), oarr_trc_order(V)));
 
     for (b = 0; b < nb && size > 0 && nnz > 0; b++){
 
-        const coeff_t* src = V->p_data + b * nnz;
-        coeff_t* dst = out.p_data + b * size;
+        const coeff_t* src = oarr_data(V) + b * nnz;
+        coeff_t* dst = oarr_data(&out) + b * size;
 
         for (r = 0; r < K->nrows; r++){
 
@@ -1117,7 +1124,7 @@ int csro_to_dense(const csro_t* K, oarr_t* res){
 
     }
 
-    out.act_order = V->act_order;
+    oarr_set_act_order(&out, oarr_act_order(V));
 
     oarr_free(res);
     *res = out;
@@ -1132,35 +1139,39 @@ int csro_to_dense(const csro_t* K, oarr_t* res){
 int csro_matmul_to(const csro_t* K, const oarr_t* x, oarr_t* res, dhelpl_t dhl){
 
     const oarr_t* V = K->p_val;
-    bases_t k = (V->nact > x->nact) ? V->nact : x->nact;
-    ord_t trc = (V->trc_order > x->trc_order) ? V->trc_order : x->trc_order;
-    ord_t aK = (V->act_order < V->trc_order) ? V->act_order : V->trc_order;
-    ord_t ax = (x->act_order < x->trc_order) ? x->act_order : x->trc_order;
+    bases_t k = (oarr_nact(V) > oarr_nact(x)) ? oarr_nact(V) : oarr_nact(x);
+    ord_t trc = (oarr_trc_order(V) > oarr_trc_order(x)) ? oarr_trc_order(V) : oarr_trc_order(x);
+    ord_t aK = (oarr_act_order(V) < oarr_trc_order(V)) ? oarr_act_order(V) : oarr_trc_order(V);
+    ord_t ax = (oarr_act_order(x) < oarr_trc_order(x)) ? oarr_act_order(x) : oarr_trc_order(x);
     oarr_t local = oarr_init();
     oarr_t* out = (res == V) ? &local : res;
     size_t n;
     int status;
 
-    if (K->ncols != x->nrows || dncs_same_array(x, V)){
+    if (!dnob_is_matrix(x) || K->ncols != oarr_nrows(x) || dncs_same_array(x, V)){
         return CSRO_ERR_SIZE;
     }
 
     // Straight into res; into a local array when res is the matrix's own value array.
-    status = dncs_status(dnob_result_shape(out, k, K->nrows, x->ncols, trc, &n));
+    if (out == &local && !dnob_can_replace(res)){
+        return OTI_ERR_BUSY;
+    }
+
+    status = dncs_status(dnob_result_shape(out, k, K->nrows, oarr_ncols(x), trc, &n));
 
     if (status != CSRO_OK){
         return status;
     }
 
     if (n > 0){
-        memset(out->p_data, 0, n * sizeof(coeff_t));
+        memset(oarr_data(out), 0, n * sizeof(coeff_t));
     }
 
-    if (n > 0 && V->size > 0){
-        status = dncs_kernel_acc(K, 0, aK, x, 0, ax, k, 0, trc, 1.0, out->p_data, dhl);
+    if (n > 0 && oarr_size(V) > 0){
+        status = dncs_kernel_acc(K, 0, aK, x, 0, ax, k, 0, trc, 1.0, oarr_data(out), dhl);
     }
 
-    out->act_order = ((unsigned)aK + ax > trc) ? trc : (ord_t)(aK + ax);
+    oarr_set_act_order(out, ((unsigned)aK + ax > trc) ? trc : (ord_t)(aK + ax));
 
     if (out == &local){
 
@@ -1187,19 +1198,20 @@ int csro_matmul_to(const csro_t* K, const oarr_t* x, oarr_t* res, dhelpl_t dhl){
 int csro_solve_init(const csro_t* K, const oarr_t* b, oarr_t* u){
 
     const oarr_t* V = K->p_val;
-    bases_t k = (V->nact > b->nact) ? V->nact : b->nact;
-    ord_t trc = (V->trc_order > b->trc_order) ? V->trc_order : b->trc_order;
-    ord_t act = b->act_order;
+    bases_t k = (oarr_nact(V) > oarr_nact(b)) ? oarr_nact(V) : oarr_nact(b);
+    ord_t trc = (oarr_trc_order(V) > oarr_trc_order(b)) ? oarr_trc_order(V) : oarr_trc_order(b);
+    ord_t act = oarr_act_order(b);
     int status;
 
-    if (K->nrows != K->ncols || K->nrows != b->nrows || dncs_same_array(u, V)){
+    if (!dnob_is_matrix(b) || K->nrows != K->ncols || K->nrows != oarr_nrows(b)
+        || dncs_same_array(u, V)){
         return CSRO_ERR_SIZE;
     }
 
     if (u == b){
 
         // In place: raise the order (new orders zero), then zero-extend the bases.
-        status = oarr_reserve(u, k, u->nrows, u->ncols, trc);
+        status = oarr_reserve(u, k, oarr_nrows(u), oarr_ncols(u), trc);
 
         if (status == DN_OK){
             status = oarr_add_bases(k, u);
@@ -1207,10 +1219,10 @@ int csro_solve_init(const csro_t* K, const oarr_t* b, oarr_t* u){
 
     } else {
 
-        status = dnob_result_shape(u, k, b->nrows, b->ncols, trc, NULL);
+        status = dnob_result_shape(u, k, oarr_nrows(b), oarr_ncols(b), trc, NULL);
 
         if (status == DN_OK){
-            oarr_kernel_expand(b, k, trc, u->p_data);
+            oarr_kernel_expand(b, k, trc, oarr_data(u));
         }
 
     }
@@ -1219,7 +1231,7 @@ int csro_solve_init(const csro_t* K, const oarr_t* b, oarr_t* u){
         return dncs_status(status);
     }
 
-    u->act_order = (act < trc) ? act : trc;
+    oarr_set_act_order(u, (act < trc) ? act : trc);
 
     return CSRO_OK;
 
@@ -1231,29 +1243,30 @@ int csro_solve_init(const csro_t* K, const oarr_t* b, oarr_t* u){
 int csro_solve_rhs(const csro_t* K, oarr_t* u, ord_t n, dhelpl_t dhl){
 
     const oarr_t* V = K->p_val;
-    ord_t aK = (V->act_order < V->trc_order) ? V->act_order : V->trc_order;
+    ord_t aK = (oarr_act_order(V) < oarr_trc_order(V)) ? oarr_act_order(V) : oarr_trc_order(V);
     ord_t phi = (aK < n) ? aK : n;
     int status = CSRO_OK;
 
-    if (K->nrows != K->ncols || K->ncols != u->nrows){
+    if (!dnob_is_matrix(u) || K->nrows != K->ncols || K->ncols != oarr_nrows(u)){
         return CSRO_ERR_SIZE;
     }
 
-    if (n == 0 || n > u->trc_order){
+    if (n == 0 || n > oarr_trc_order(u)){
         return CSRO_ERR_ORDER;
     }
 
-    if (V->nact > u->nact){
+    if (oarr_nact(V) > oarr_nact(u)){
         return CSRO_ERR_NACT;
     }
 
-    if (phi >= 1 && u->size > 0 && V->size > 0){
+    if (phi >= 1 && oarr_size(u) > 0 && oarr_size(V) > 0){
 
         // Reads orders 0 .. n-1 of u, writes order n only: no overlap.
-        status = dncs_kernel_acc(K, 1, phi, u, 0, (ord_t)(n - 1), u->nact, n, n, -1.0, u->p_data, dhl);
+        status = dncs_kernel_acc(K, 1, phi, u, 0, (ord_t)(n - 1), oarr_nact(u), n, n, -1.0, oarr_data(u),
+                                 dhl);
 
-        if (status == CSRO_OK && u->act_order < n){
-            u->act_order = n;
+        if (status == CSRO_OK && oarr_act_order(u) < n){
+            oarr_set_act_order(u, n);
         }
 
     }

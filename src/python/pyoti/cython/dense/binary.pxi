@@ -200,22 +200,22 @@ cdef object _soa_block_view(omat a, uint64_t index, ord_t order, object base=Non
     cdef coeff_t *block
     cdef np.ndarray flat
 
-    if order > a.arr.trc_order:
+    if order > oarr_trc_order(&a.arr):
 
         return None
 
     # end if
 
-    block = a.arr.p_data if order == 0 else oarr_get_block(index, order, &a.arr)
+    block = oarr_data(&a.arr) if order == 0 else oarr_get_block(index, order, &a.arr)
 
-    if block == NULL or a.arr.size == 0:
+    if block == NULL or oarr_size(&a.arr) == 0:
 
-        return None if block == NULL else np.zeros((a.arr.nrows, a.arr.ncols), order="F")
+        return None if block == NULL else np.zeros((oarr_nrows(&a.arr), oarr_ncols(&a.arr)), order="F")
 
     # end if
 
-    dims[0] = a.arr.ncols
-    dims[1] = a.arr.nrows
+    dims[0] = oarr_ncols(&a.arr)
+    dims[1] = oarr_nrows(&a.arr)
     flat = np.PyArray_SimpleNewFromData(2, dims, np.NPY_DOUBLE, <void *>block)
     np.set_array_base(flat, a if base is None else base)
     return flat.T
@@ -255,7 +255,7 @@ cdef object _array_binary(omat left, object other, str op, bint reverse):
 
         rhs = other
 
-        if left.arr.nrows != rhs.arr.nrows or left.arr.ncols != rhs.arr.ncols:
+        if oarr_nrows(&left.arr) != oarr_nrows(&rhs.arr) or oarr_ncols(&left.arr) != oarr_ncols(&rhs.arr):
 
             raise ValueError("{}: array shapes must match".format(op))
 
@@ -413,7 +413,7 @@ cdef object _aos_binary(arro left, object other, str op, bint reverse):
 
         rhs = other
 
-        if left.arr.nrows != rhs.arr.nrows or left.arr.ncols != rhs.arr.ncols:
+        if arro_nrows(&left.arr) != arro_nrows(&rhs.arr) or arro_ncols(&left.arr) != arro_ncols(&rhs.arr):
 
             raise ValueError("{}: array shapes must match".format(op))
 
@@ -655,18 +655,18 @@ cdef np.ndarray _array_real(object a):
 
         soa = a
         return np.ascontiguousarray(
-            _soa_blocks(soa)[0].reshape(soa.arr.ncols, soa.arr.nrows).T)
+            _soa_blocks(soa)[0].reshape(oarr_ncols(&soa.arr), oarr_nrows(&soa.arr)).T)
 
     # end if
 
     aos = a
-    result = np.empty((aos.arr.nrows, aos.arr.ncols), dtype=np.float64)
+    result = np.empty((arro_nrows(&aos.arr), arro_ncols(&aos.arr)), dtype=np.float64)
 
-    for i in range(aos.arr.nrows):
+    for i in range(arro_nrows(&aos.arr)):
 
-        for j in range(aos.arr.ncols):
+        for j in range(arro_ncols(&aos.arr)):
 
-            result[i, j] = aos.arr.p_data[j + i * aos.arr.ncols].re
+            result[i, j] = arro_data(&aos.arr)[j + i * arro_ncols(&aos.arr)].re
 
         # end for
 
@@ -711,7 +711,7 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
 
         if view is None:
 
-            return np.zeros(((<omat>a).arr.nrows, (<omat>a).arr.ncols), dtype=np.float64)
+            return np.zeros((oarr_nrows(&(<omat>a).arr), oarr_ncols(&(<omat>a).arr)), dtype=np.float64)
 
         # end if
 
@@ -728,13 +728,14 @@ cdef np.ndarray _array_get_im(object a, object direction, bint deriv):
     # end if
 
     aos = a
-    result = np.empty((aos.arr.nrows, aos.arr.ncols), dtype=np.float64)
+    result = np.empty((arro_nrows(&aos.arr), arro_ncols(&aos.arr)), dtype=np.float64)
 
-    for i in range(aos.arr.nrows):
+    for i in range(arro_nrows(&aos.arr)):
 
-        for j in range(aos.arr.ncols):
+        for j in range(arro_ncols(&aos.arr)):
 
-            result[i, j] = oti_get_item(pair[0], pair[1], &aos.arr.p_data[j + i * aos.arr.ncols])
+            result[i, j] = oti_get_item(pair[0], pair[1],
+                                        &arro_data(&aos.arr)[j + i * arro_ncols(&aos.arr)])
             result[i, j] *= factor
 
         # end for
@@ -775,11 +776,11 @@ cdef void _array_set_im(object a, object value, object direction, bint deriv) ex
 
     if isinstance(a, omat):
 
-        rows, cols = (<omat>a).arr.nrows, (<omat>a).arr.ncols
+        rows, cols = oarr_nrows(&(<omat>a).arr), oarr_ncols(&(<omat>a).arr)
 
     else:
 
-        rows, cols = (<arro>a).arr.nrows, (<arro>a).arr.ncols
+        rows, cols = arro_nrows(&(<arro>a).arr), arro_ncols(&(<arro>a).arr)
 
     # end if
 
@@ -809,9 +810,9 @@ cdef void _array_set_im(object a, object value, object direction, bint deriv) ex
         view = _soa_block_view(soa, pair[0], pair[1])
         view[...] = data
 
-        if pair[1] > soa.arr.act_order:
+        if pair[1] > oarr_act_order(&soa.arr):
 
-            soa.arr.act_order = pair[1]
+            oarr_set_act_order(&soa.arr, pair[1])
 
         # end if
 
@@ -826,7 +827,7 @@ cdef void _array_set_im(object a, object value, object direction, bint deriv) ex
         for j in range(cols):
 
             _status("set_im", oti_set_item(data[i, j], pair[0], pair[1],
-                                           &aos.arr.p_data[j + i * aos.arr.ncols]))
+                                           &arro_data(&aos.arr)[j + i * arro_ncols(&aos.arr)]))
 
         # end for
 
@@ -858,18 +859,18 @@ cdef list _array_active_bases(object a):
 
     if isinstance(a, omat):
 
-        return list(range(1, (<omat>a).arr.nact + 1))
+        return list(range(1, oarr_nact(&(<omat>a).arr) + 1))
 
     # end if
 
     aos = a
     top = 0
 
-    for index in range(aos.arr.size):
+    for index in range(arro_size(&aos.arr)):
 
-        if aos.arr.p_data[index].nact > top:
+        if arro_data(&aos.arr)[index].nact > top:
 
-            top = aos.arr.p_data[index].nact
+            top = arro_data(&aos.arr)[index].nact
 
         # end if
 
@@ -1071,12 +1072,12 @@ cdef object _soa_getitem(omat a, object key):
     """
 
     cdef Py_ssize_t r0, rs, rn, c0, cs, cn, block
-    cdef Py_ssize_t nrows = a.arr.nrows
+    cdef Py_ssize_t nrows = oarr_nrows(&a.arr)
     cdef uint64_t nblocks
     cdef otinum element
     cdef omat result
 
-    if _parse_key_c(key, nrows, a.arr.ncols, &r0, &rs, &rn, &c0, &cs, &cn):
+    if _parse_key_c(key, nrows, oarr_ncols(&a.arr), &r0, &rs, &rn, &c0, &cs, &cn):
 
         element = otinum.__new__(otinum)
         _status("getitem", oarr_get_item_to(r0, c0, &a.arr, &element.num))
@@ -1084,22 +1085,22 @@ cdef object _soa_getitem(omat a, object key):
 
     # end if
 
-    result = _soa_zeros((rn, cn), a.arr.nact, a.arr.trc_order)
+    result = _soa_zeros((rn, cn), oarr_nact(&a.arr), oarr_trc_order(&a.arr))
 
     if rn * cn > 0:
 
-        nblocks = 1 + sshelp_ndir_total(a.arr.nact, a.arr.trc_order)
+        nblocks = 1 + sshelp_ndir_total(oarr_nact(&a.arr), oarr_trc_order(&a.arr))
 
         for block in range(nblocks):
 
-            _copy_strided(result.arr.p_data + block * result.arr.size, rn, 0, 1, 0, 1,
-                          a.arr.p_data + block * a.arr.size, nrows, r0, rs, c0, cs, rn, cn)
+            _copy_strided(oarr_data(&result.arr) + block * oarr_size(&result.arr), rn, 0, 1, 0, 1,
+                          oarr_data(&a.arr) + block * oarr_size(&a.arr), nrows, r0, rs, c0, cs, rn, cn)
 
         # end for
 
     # end if
 
-    result.arr.act_order = a.arr.act_order
+    oarr_set_act_order(&result.arr, oarr_act_order(&a.arr))
     return result
 
 # end function
@@ -1125,8 +1126,8 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
     """
 
     cdef Py_ssize_t r0, rs, rn, c0, cs, cn, block, ii, jj
-    cdef Py_ssize_t nrows = a.arr.nrows
-    cdef Py_ssize_t size = a.arr.size
+    cdef Py_ssize_t nrows = oarr_nrows(&a.arr)
+    cdef Py_ssize_t size = oarr_size(&a.arr)
     cdef uint64_t nblocks
     cdef otinum scalar
     cdef omat source
@@ -1144,7 +1145,7 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
     # end if
 
-    is_item = _parse_key_c(key, nrows, a.arr.ncols, &r0, &rs, &rn, &c0, &cs, &cn)
+    is_item = _parse_key_c(key, nrows, oarr_ncols(&a.arr), &r0, &rs, &rn, &c0, &cs, &cn)
 
     if is_item:
 
@@ -1172,10 +1173,10 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
         source = value
 
-        if source.arr.nrows != rn or source.arr.ncols != cn:
+        if oarr_nrows(&source.arr) != rn or oarr_ncols(&source.arr) != cn:
 
             raise ValueError("slice assignment: value has shape {}, the slice has shape {}.".format(
-                (source.arr.nrows, source.arr.ncols), (rn, cn)))
+                (oarr_nrows(&source.arr), oarr_ncols(&source.arr)), (rn, cn)))
 
         # end if
 
@@ -1190,7 +1191,7 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
     if isinstance(value, Real):
 
         real_value = value
-        nblocks = 1 + sshelp_ndir_total(a.arr.nact, a.arr.trc_order)
+        nblocks = 1 + sshelp_ndir_total(oarr_nact(&a.arr), oarr_trc_order(&a.arr))
 
         for block in range(nblocks):
 
@@ -1198,7 +1199,7 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
                 for ii in range(rn):
 
-                    a.arr.p_data[block * size + (c0 + jj * cs) * nrows + r0 + ii * rs] = (
+                    oarr_data(&a.arr)[block * size + (c0 + jj * cs) * nrows + r0 + ii * rs] = (
                         real_value if block == 0 else 0.0)
 
                 # end for
@@ -1217,7 +1218,7 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
         _check_growth(a, scalar.num.nact, scalar.num.trc_order)
         _raise_soa_order(a, scalar.num.trc_order)
         _status("setitem", oarr_add_bases(scalar.num.nact, &a.arr))
-        nblocks = 1 + sshelp_ndir_total(a.arr.nact, a.arr.trc_order)
+        nblocks = 1 + sshelp_ndir_total(oarr_nact(&a.arr), oarr_trc_order(&a.arr))
         buffer = <coeff_t *>malloc(nblocks * sizeof(coeff_t))
 
         if buffer == NULL:
@@ -1232,7 +1233,7 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
             if nblocks > 1:
 
-                oti_kernel_expand(&scalar.num, a.arr.nact, a.arr.trc_order, buffer + 1)
+                oti_kernel_expand(&scalar.num, oarr_nact(&a.arr), oarr_trc_order(&a.arr), buffer + 1)
 
             # end if
 
@@ -1242,7 +1243,7 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
                     for ii in range(rn):
 
-                        a.arr.p_data[block * size + (c0 + jj * cs) * nrows + r0 + ii * rs] = (
+                        oarr_data(&a.arr)[block * size + (c0 + jj * cs) * nrows + r0 + ii * rs] = (
                             buffer[block])
 
                     # end for
@@ -1257,11 +1258,12 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
         # end try
 
-        top = scalar.num.act_order if scalar.num.act_order < a.arr.trc_order else a.arr.trc_order
+        top = (scalar.num.act_order if scalar.num.act_order < oarr_trc_order(&a.arr)
+               else oarr_trc_order(&a.arr))
 
-        if top > a.arr.act_order:
+        if top > oarr_act_order(&a.arr):
 
-            a.arr.act_order = top
+            oarr_set_act_order(&a.arr, top)
 
         # end if
 
@@ -1269,21 +1271,22 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
     # end if
 
-    _check_growth(a, source.arr.nact, source.arr.trc_order)
-    _raise_soa_order(a, source.arr.trc_order)
-    _status("setitem", oarr_add_bases(source.arr.nact, &a.arr))
-    nblocks = 1 + sshelp_ndir_total(a.arr.nact, a.arr.trc_order)
-    size = a.arr.size
+    _check_growth(a, oarr_nact(&source.arr), oarr_trc_order(&source.arr))
+    _raise_soa_order(a, oarr_trc_order(&source.arr))
+    _status("setitem", oarr_add_bases(oarr_nact(&source.arr), &a.arr))
+    nblocks = 1 + sshelp_ndir_total(oarr_nact(&a.arr), oarr_trc_order(&a.arr))
+    size = oarr_size(&a.arr)
 
-    same_layout = source.arr.nact == a.arr.nact and source.arr.trc_order == a.arr.trc_order
+    same_layout = (oarr_nact(&source.arr) == oarr_nact(&a.arr)
+                   and oarr_trc_order(&source.arr) == oarr_trc_order(&a.arr))
 
     if same_layout:
 
-        table = source.arr.p_data
+        table = oarr_data(&source.arr)
 
     else:
 
-        buffer = <coeff_t *>malloc(nblocks * source.arr.size * sizeof(coeff_t))
+        buffer = <coeff_t *>malloc(nblocks * oarr_size(&source.arr) * sizeof(coeff_t))
 
         if buffer == NULL:
 
@@ -1291,7 +1294,7 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
         # end if
 
-        oarr_kernel_expand(&source.arr, a.arr.nact, a.arr.trc_order, buffer)
+        oarr_kernel_expand(&source.arr, oarr_nact(&a.arr), oarr_trc_order(&a.arr), buffer)
         table = buffer
 
     # end if
@@ -1300,8 +1303,8 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
         for block in range(nblocks):
 
-            _copy_strided(a.arr.p_data + block * size, nrows, r0, rs, c0, cs,
-                          table + block * source.arr.size, rn, 0, 1, 0, 1, rn, cn)
+            _copy_strided(oarr_data(&a.arr) + block * size, nrows, r0, rs, c0, cs,
+                          table + block * oarr_size(&source.arr), rn, 0, 1, 0, 1, rn, cn)
 
         # end for
 
@@ -1311,11 +1314,12 @@ cdef int _soa_setitem(omat a, object key, object value) except -1:
 
     # end try
 
-    top = source.arr.act_order if source.arr.act_order < a.arr.trc_order else a.arr.trc_order
+    top = (oarr_act_order(&source.arr) if oarr_act_order(&source.arr) < oarr_trc_order(&a.arr)
+           else oarr_trc_order(&a.arr))
 
-    if top > a.arr.act_order:
+    if top > oarr_act_order(&a.arr):
 
-        a.arr.act_order = top
+        oarr_set_act_order(&a.arr, top)
 
     # end if
 
@@ -1348,7 +1352,7 @@ cdef object _aos_getitem(arro a, object key):
     cdef arro_t native
     cdef arro result
 
-    if _parse_key_c(key, a.arr.nrows, a.arr.ncols, &r0, &rs, &rn, &c0, &cs, &cn):
+    if _parse_key_c(key, arro_nrows(&a.arr), arro_ncols(&a.arr), &r0, &rs, &rn, &c0, &cs, &cn):
 
         element = otinum.__new__(otinum)
         _status("getitem", oti_copy_to(arro_get_item_ptr(r0, c0, &a.arr), &element.num))
@@ -1406,7 +1410,7 @@ cdef int _aos_setitem(arro a, object key, object value) except -1:
 
     # end if
 
-    is_item = _parse_key_c(key, a.arr.nrows, a.arr.ncols, &r0, &rs, &rn, &c0, &cs, &cn)
+    is_item = _parse_key_c(key, arro_nrows(&a.arr), arro_ncols(&a.arr), &r0, &rs, &rn, &c0, &cs, &cn)
 
     if is_item and kind is otinum:
 
@@ -1422,10 +1426,10 @@ cdef int _aos_setitem(arro a, object key, object value) except -1:
 
         source = value
 
-        if source.arr.nrows != rn or source.arr.ncols != cn:
+        if arro_nrows(&source.arr) != rn or arro_ncols(&source.arr) != cn:
 
             raise ValueError("slice assignment: value has shape {}, the slice has shape {}.".format(
-                (source.arr.nrows, source.arr.ncols), (rn, cn)))
+                (arro_nrows(&source.arr), arro_ncols(&source.arr)), (rn, cn)))
 
         # end if
 

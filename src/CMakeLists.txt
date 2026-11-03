@@ -211,6 +211,7 @@ endif()
 add_library (oti    c/version.c
                     c/core.c
                     c/core/exec.c
+                    c/core/meta.c
                     c/core/lapack.c
                     c/core/lapack_provider.c
                     c/real_ndarray.c
@@ -226,7 +227,7 @@ add_library (oti    c/version.c
 # execution layer only, so macOS and Linux round the same way.
 # -fno-wrapv: the project compiles with -fwrapv, which hides signed overflow from UBSan; the ndarray
 # code checks its arithmetic (contracts 2.3) and must not rely on wrapping (critic W1 finding 14).
-set_source_files_properties(c/real_ndarray.c c/core/exec.c
+set_source_files_properties(c/real_ndarray.c c/core/exec.c c/core/meta.c
                             PROPERTIES COMPILE_OPTIONS "-ffp-contract=off;-fno-wrapv")
 # The LAPACK / BLAS C wrappers and the provider table (contracts 8.6, 8.3): same options.
 set_source_files_properties(c/core/lapack.c c/core/lapack_provider.c

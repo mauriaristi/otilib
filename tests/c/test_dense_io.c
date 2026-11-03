@@ -184,14 +184,14 @@ static oarr_t make_soa(bases_t k, uint64_t nrows, uint64_t ncols, ord_t trc, ord
         exit(2);
     }
 
-    n   = (1 + (uint64_t)sshelp_ndir_total(k, trc)) * arr.size;
-    lim = (act >= trc) ? n : (1 + (uint64_t)sshelp_order_offset(k, (ord_t)(act + 1))) * arr.size;
+    n   = (1 + (uint64_t)sshelp_ndir_total(k, trc)) * oarr_size(&arr);
+    lim = (act >= trc) ? n : (1 + (uint64_t)sshelp_order_offset(k, (ord_t)(act + 1))) * oarr_size(&arr);
 
     for (i = 0; i < lim; i++){
-        arr.p_data[i] = rng_value();
+        oarr_data(&arr)[i] = rng_value();
     }
 
-    arr.act_order = (act < trc) ? act : trc;
+    oarr_set_act_order(&arr, (act < trc) ? act : trc);
 
     return arr;
 
@@ -212,17 +212,17 @@ static arro_t make_aos(uint64_t nrows, uint64_t ncols){
         exit(2);
     }
 
-    for (i = 0; i < arr.size; i++){
+    for (i = 0; i < arro_size(&arr); i++){
 
         ord_t trc = (ord_t)(i % 6);
         ord_t act = (ord_t)((i * 5 + 1) % (trc + 1));
 
-        if (oti_create_empty_to(KS[(i * 7) % 6], trc, &arr.p_data[i]) != DN_OK){
+        if (oti_create_empty_to(KS[(i * 7) % 6], trc, &arro_data(&arr)[i]) != DN_OK){
             fprintf(stderr, "test harness: oti_create_empty_to failed\n");
             exit(2);
         }
 
-        fill_scalar(&arr.p_data[i], act);
+        fill_scalar(&arro_data(&arr)[i], act);
 
     }
 
@@ -256,14 +256,16 @@ static int same_soa(const oarr_t* a, const oarr_t* b){
 
     size_t nreal;
 
-    if (a->nact != b->nact || a->trc_order != b->trc_order || a->act_order != b->act_order
-        || a->nrows != b->nrows || a->ncols != b->ncols || a->size != b->size){
+    if (oarr_nact(a) != oarr_nact(b) || oarr_trc_order(a) != oarr_trc_order(b)
+        || oarr_act_order(a) != oarr_act_order(b)
+        || oarr_nrows(a) != oarr_nrows(b) || oarr_ncols(a) != oarr_ncols(b)
+            || oarr_size(a) != oarr_size(b)){
         return 0;
     }
 
-    nreal = (size_t)(1 + sshelp_ndir_total(a->nact, a->trc_order)) * a->size;
+    nreal = (size_t)(1 + sshelp_ndir_total(oarr_nact(a), oarr_trc_order(a))) * oarr_size(a);
 
-    return nreal == 0 || memcmp(a->p_data, b->p_data, nreal * sizeof(coeff_t)) == 0;
+    return nreal == 0 || memcmp(oarr_data(a), oarr_data(b), nreal * sizeof(coeff_t)) == 0;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -274,13 +276,13 @@ static int same_aos(const arro_t* a, const arro_t* b){
 
     uint64_t i;
 
-    if (a->nrows != b->nrows || a->ncols != b->ncols || a->size != b->size){
+    if (arro_nrows(a) != arro_nrows(b) || arro_ncols(a) != arro_ncols(b) || arro_size(a) != arro_size(b)){
         return 0;
     }
 
-    for (i = 0; i < a->size; i++){
+    for (i = 0; i < arro_size(a); i++){
 
-        if (!same_scalar(&a->p_data[i], &b->p_data[i])){
+        if (!same_scalar(&arro_data(a)[i], &arro_data(b)[i])){
             return 0;
         }
 
@@ -317,8 +319,8 @@ static int is_init_scalar(const otinum_t* n){
 // *******************************************************************************************************
 static int is_init_soa(const oarr_t* o){
 
-    return o->p_data == NULL && o->nact == 0 && o->nbases == 0 && o->trc_order == 0
-        && o->act_order == 0 && o->nrows == 0 && o->ncols == 0 && o->size == 0;
+    return oarr_data(o) == NULL && oarr_nact(o) == 0 && o->nbases == 0 && oarr_trc_order(o) == 0
+        && oarr_act_order(o) == 0 && oarr_nrows(o) == 0 && oarr_ncols(o) == 0 && oarr_size(o) == 0;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -327,7 +329,7 @@ static int is_init_soa(const oarr_t* o){
 // *******************************************************************************************************
 static int is_init_aos(const arro_t* a){
 
-    return a->p_data == NULL && a->nrows == 0 && a->ncols == 0 && a->size == 0;
+    return arro_data(a) == NULL && arro_nrows(a) == 0 && arro_ncols(a) == 0 && arro_size(a) == 0;
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -444,9 +446,13 @@ static void read_all(const char* path, int st[3]){
     otinum_t s = oti_create_r(7.0, 3);
     arro_t a = arro_init();
     oarr_t o = oarr_init();
+    oti_meta_t* poison = NULL;
 
-    a.nrows = 2; a.ncols = 2; a.size = 4;
-    o.nrows = 2; o.ncols = 2; o.size = 4; o.nact = 3; o.trc_order = 2;
+    // Poison the SoA result: a 2 x 2 shape and a (nact 3, trc 2) layout it does not own.
+    a.elems.shape[0] = 2; a.elems.shape[1] = 2;
+    o.blocks.shape[1] = 2; o.blocks.shape[2] = 2;
+    check(oti_meta_create(OTI_META_DENSE, 2, 3, NULL, 0, &poison) == OTI_OK, "poison meta");
+    o.meta = poison;
 
     st[0] = oti_read(path, &s);
     st[1] = arro_read(path, &a);
@@ -469,6 +475,8 @@ static void read_all(const char* path, int st[3]){
     } else {
         check(is_init_soa(&o), "failed oarr_read leaves init");
     }
+
+    oti_meta_release(&poison);
 
 }
 // -------------------------------------------------------------------------------------------------------
@@ -585,12 +593,12 @@ static void roundtrip_soa(bases_t k, uint64_t nrows, uint64_t ncols, ord_t trc, 
     snprintf(name, sizeof(name), "SoA %llux%llu k=%u trc=%u act=%u", (unsigned long long)nrows,
         (unsigned long long)ncols, (unsigned)k, (unsigned)trc, (unsigned)act);
 
-    expect = 8 * (1 + (uint64_t)sshelp_ndir_total(k, trc)) * arr.size;
+    expect = 8 * (1 + (uint64_t)sshelp_ndir_total(k, trc)) * oarr_size(&arr);
 
     check(oarr_save(g_path, &arr) == DNIO_OK, name);
     check(oarr_read(g_path, &back) == DNIO_OK && same_soa(&arr, &back), name);
     check(dnio_peek(g_path, &info) == DNIO_OK && info.type == DNIO_TYPE_SOA
-        && info.trc_order == trc && info.act_order == arr.act_order && info.nact == k
+        && info.trc_order == trc && info.act_order == oarr_act_order(&arr) && info.nact == k
         && info.nrows == nrows && info.ncols == ncols && info.payload == expect, name);
 
     oarr_free(&back);
@@ -654,9 +662,9 @@ static void roundtrip_aos(uint64_t nrows, uint64_t ncols){
     snprintf(name, sizeof(name), "AoS %llux%llu", (unsigned long long)nrows,
         (unsigned long long)ncols);
 
-    for (i = 0; i < arr.size; i++){
+    for (i = 0; i < arro_size(&arr); i++){
 
-        const otinum_t* e = &arr.p_data[i];
+        const otinum_t* e = &arro_data(&arr)[i];
 
         trc     = (e->trc_order > trc) ? e->trc_order : trc;
         act     = (e->act_order > act) ? e->act_order : act;
@@ -697,10 +705,10 @@ static void test_aos_roundtrip(void){
 
         check(arro_zeros_to(2, 3, 0, &arr) == DN_OK, "AoS uniform: zeros");
 
-        for (i = 0; i < arr.size; i++){
+        for (i = 0; i < arro_size(&arr); i++){
 
-            check(oti_create_empty_to(3, 4, &arr.p_data[i]) == DN_OK, "AoS uniform: element");
-            fill_scalar(&arr.p_data[i], 4);
+            check(oti_create_empty_to(3, 4, &arro_data(&arr)[i]) == DN_OK, "AoS uniform: element");
+            fill_scalar(&arro_data(&arr)[i], 4);
 
         }
 
@@ -711,8 +719,9 @@ static void test_aos_roundtrip(void){
         arro_free(&arr);
 
         check(arro_zeros_to(1, 1, 0, &arr) == DN_OK
-            && oti_create_empty_to(1, _MAXORDER_OTI, &arr.p_data[0]) == DN_OK, "AoS max order: build");
-        fill_scalar(&arr.p_data[0], _MAXORDER_OTI);
+            && oti_create_empty_to(1, _MAXORDER_OTI,
+                                   &arro_data(&arr)[0]) == DN_OK, "AoS max order: build");
+        fill_scalar(&arro_data(&arr)[0], _MAXORDER_OTI);
         check(arro_save(g_path, &arr) == DNIO_OK && arro_read(g_path, &back) == DNIO_OK
             && same_aos(&arr, &back), "AoS element at the maximum order");
 
@@ -740,9 +749,9 @@ static void test_special_values(void){
     check(oti_save(g_path, &num) == DNIO_OK && oti_read(g_path, &back) == DNIO_OK
         && same_scalar(&num, &back), "scalar with NaN, inf, -0.0 and a denormal");
 
-    soa.p_data[0] = NAN;
-    soa.p_data[5] = -0.0;
-    soa.p_data[9] = INFINITY;
+    oarr_data(&soa)[0] = NAN;
+    oarr_data(&soa)[5] = -0.0;
+    oarr_data(&soa)[9] = INFINITY;
 
     check(oarr_save(g_path, &soa) == DNIO_OK && oarr_read(g_path, &sback) == DNIO_OK
         && same_soa(&soa, &sback), "SoA with NaN, inf and -0.0");
@@ -768,7 +777,7 @@ static void test_zero_bases_kept(void){
         "zero scalar keeps its bases");
 
     check(oarr_zeros_to(3, 2, 2, 2, &arr) == DN_OK && oarr_save(g_path, &arr) == DNIO_OK
-        && oarr_read(g_path, &aback) == DNIO_OK && aback.nact == 3 && same_soa(&arr, &aback),
+        && oarr_read(g_path, &aback) == DNIO_OK && oarr_nact(&aback) == 3 && same_soa(&arr, &aback),
         "zero SoA keeps its bases");
 
     oti_free(&back);
@@ -889,7 +898,7 @@ static void test_soa_layout(void){
     check(n == 64 + 8 * 6 * (1 + 5), "layout: SoA file size");
     check(buf[6] == DNIO_TYPE_SOA && buf[10] == 2 && buf[11] == 2 && peek_u64(buf, 16) == 2
         && peek_u64(buf, 24) == 3 && peek_u64(buf, 32) == 8 * 6 * 6, "layout: SoA header");
-    check(memcmp(buf + 64, arr.p_data, 8 * 6 * 6) == 0, "layout: SoA blocks in memory order");
+    check(memcmp(buf + 64, oarr_data(&arr), 8 * 6 * 6) == 0, "layout: SoA blocks in memory order");
 
     // Element (1, 2), order 2 direction 1: block 1 + offset(2, 2) + 1 = 4, at 1 + 2 * 2 in the block.
     check(oarr_get_item_to(1, 2, &arr, &item) == DN_OK, "layout: get_item");
@@ -899,7 +908,7 @@ static void test_soa_layout(void){
     free(buf);
     oti_free(&item);
 
-    check(oarr_reserve(&arr, 25, 2, 3, 2) == DN_OK && arr.nact == 2, "layout: SoA reserve slack");
+    check(oarr_reserve(&arr, 25, 2, 3, 2) == DN_OK && oarr_nact(&arr) == 2, "layout: SoA reserve slack");
     check(oarr_save(g_path, &arr) == DNIO_OK && oarr_read(g_path, &back) == DNIO_OK
         && same_soa(&arr, &back), "layout: SoA with capacity slack round trips");
 
@@ -923,10 +932,10 @@ static void test_aos_layout(void){
     uint16_t k16;
 
     check(arro_zeros_to(1, 2, 0, &arr) == DN_OK
-        && oti_create_empty_to(1, 1, &arr.p_data[0]) == DN_OK
-        && oti_create_empty_to(2, 2, &arr.p_data[1]) == DN_OK, "layout: AoS build");
-    fill_scalar(&arr.p_data[0], 1);
-    fill_scalar(&arr.p_data[1], 1);
+        && oti_create_empty_to(1, 1, &arro_data(&arr)[0]) == DN_OK
+        && oti_create_empty_to(2, 2, &arro_data(&arr)[1]) == DN_OK, "layout: AoS build");
+    fill_scalar(&arro_data(&arr)[0], 1);
+    fill_scalar(&arro_data(&arr)[1], 1);
 
     check(arro_save(g_path, &arr) == DNIO_OK && arro_read(g_path, &back) == DNIO_OK
         && same_aos(&arr, &back), "layout: AoS round trip");
@@ -948,13 +957,13 @@ static void test_aos_layout(void){
     memcpy(&k16, buf + 64 + 2, sizeof(k16));
     check(buf[64] == 1 && buf[65] == 1 && k16 == 1 && buf[68] == 0 && buf[69] == 0 && buf[70] == 0
         && buf[71] == 0, "layout: first record header (trc, act, k, zeros)");
-    check(memcmp(buf + 72, &arr.p_data[0].re, 8) == 0
-        && memcmp(buf + 80, arr.p_data[0].p_im, 8) == 0, "layout: first record data");
+    check(memcmp(buf + 72, &arro_data(&arr)[0].re, 8) == 0
+        && memcmp(buf + 80, arro_data(&arr)[0].p_im, 8) == 0, "layout: first record data");
 
     memcpy(&k16, buf + 64 + 24 + 2, sizeof(k16));
     check(buf[88] == 2 && buf[89] == 1 && k16 == 2, "layout: second record header");
-    check(memcmp(buf + 96, &arr.p_data[1].re, 8) == 0
-        && memcmp(buf + 104, arr.p_data[1].p_im, 8 * 5) == 0, "layout: second record data");
+    check(memcmp(buf + 96, &arro_data(&arr)[1].re, 8) == 0
+        && memcmp(buf + 104, arro_data(&arr)[1].p_im, 8 * 5) == 0, "layout: second record data");
 
     free(buf);
     arro_free(&back);
@@ -1349,9 +1358,9 @@ static void test_missing_and_foreign_files(dhelpl_t dhl){
     remove(g_path);
     s = oti_create_r(7.0, 3);
     check(oti_read(g_path, &s) == DNIO_ERR_OPEN && is_init_scalar(&s), "scalar read: missing file");
-    a = arro_init(); a.size = 3; a.nrows = 3; a.ncols = 1;
+    a = arro_init(); a.elems.shape[0] = 3; a.elems.shape[1] = 1;
     check(arro_read(g_path, &a) == DNIO_ERR_OPEN && is_init_aos(&a), "AoS read: missing file");
-    o = oarr_init(); o.size = 3; o.nrows = 3; o.ncols = 1;
+    o = oarr_init(); o.blocks.shape[1] = 3; o.blocks.shape[2] = 1;
     check(oarr_read(g_path, &o) == DNIO_ERR_OPEN && is_init_soa(&o), "SoA read: missing file");
     check(dnio_peek(g_path, &info) == DNIO_ERR_OPEN, "peek: missing file");
 
@@ -1530,9 +1539,10 @@ static void test_bad_payload(void){
     free(buf);
 
     // AoS: one element, act patched down in the record and in the header.
-    check(arro_zeros_to(1, 1, 0, &aos) == DN_OK && oti_create_empty_to(3, 3, &aos.p_data[0]) == DN_OK,
+    check(arro_zeros_to(1, 1, 0, &aos) == DN_OK && oti_create_empty_to(3, 3,
+                                                                       &arro_data(&aos)[0]) == DN_OK,
         "payload: build AoS");
-    fill_scalar(&aos.p_data[0], 3);
+    fill_scalar(&arro_data(&aos)[0], 3);
     check(arro_save(g_path, &aos) == DNIO_OK, "payload: save AoS");
     buf = slurp(g_path, &n);
 
@@ -1644,50 +1654,48 @@ static void test_save_refuses(void){
     check(oti_save(g_path, &bad) == DNIO_ERR_ARGUMENT, "save scalar: 17 GB layout with no buffer");
 
     // SoA.
+    // (A copy of soa with its own meta, so that soa keeps its act_order; the 1.x case "size != nrows *
+    // ncols" cannot be built any more: the size is the product of the descriptor's extents.)
     sbad = soa;
-    sbad.act_order = 3;
+    check(oti_meta_create(OTI_META_DENSE, oarr_trc_order(&soa), oarr_nact(&soa), NULL, 0, &sbad.meta)
+          == OTI_OK, "act above trc: meta");
+    sbad.meta->act_order = 3;
     check(oarr_save(g_path, &sbad) == DNIO_ERR_ARGUMENT, "save SoA: act above trc");
+    oti_meta_release(&sbad.meta);
 
     sbad = soa;
-    sbad.size = 5;
-    check(oarr_save(g_path, &sbad) == DNIO_ERR_ARGUMENT, "save SoA: size != nrows * ncols");
-
-    sbad = soa;
-    sbad.p_data = NULL;
+    sbad.blocks.data = NULL;
     check(oarr_save(g_path, &sbad) == DNIO_ERR_ARGUMENT, "save SoA: missing buffer");
 
     sbad = soa;
-    sbad.p_data[sbad.size * (1 + sshelp_order_offset(2, 2)) + 1] = 1.0;
+    oarr_data(&sbad)[oarr_size(&sbad) * (1 + sshelp_order_offset(2, 2)) + 1] = 1.0;
     check(oarr_save(g_path, &sbad) == DNIO_ERR_ARGUMENT, "save SoA: nonzero above act");
-    sbad.p_data[sbad.size * (1 + sshelp_order_offset(2, 2)) + 1] = 0.0;
+    oarr_data(&sbad)[oarr_size(&sbad) * (1 + sshelp_order_offset(2, 2)) + 1] = 0.0;
 
     sbad = soa;
-    sbad.nrows = 1ULL << 40;
-    sbad.ncols = 1ULL << 40;
-    sbad.size  = 0;
+    sbad.blocks.shape[1] = (int64_t)(1ULL << 40);
+    sbad.blocks.shape[2] = (int64_t)(1ULL << 40);
     check(oarr_save(g_path, &sbad) == DNIO_ERR_ARGUMENT, "save SoA: shape overflows");
 
     // AoS: an invalid element anywhere, a missing buffer, a wrong size.
-    for (i = 0; i < aos.size; i++){
+    for (i = 0; i < arro_size(&aos); i++){
 
         abad = aos;
-        elem = aos.p_data[i];
+        elem = arro_data(&aos)[i];
         elem.act_order = (ord_t)(elem.trc_order + 1);
-        abad.p_data = (otinum_t*)malloc(aos.size * sizeof(otinum_t));
-        memcpy(abad.p_data, aos.p_data, aos.size * sizeof(otinum_t));
-        abad.p_data[i] = elem;
+        abad.elems.data = malloc(arro_size(&aos) * sizeof(otinum_t));
+        memcpy(arro_data(&abad), arro_data(&aos), arro_size(&aos) * sizeof(otinum_t));
+        arro_data(&abad)[i] = elem;
         check(arro_save(g_path, &abad) == DNIO_ERR_ARGUMENT, "save AoS: an element with act above trc");
-        free(abad.p_data);
+        free(arro_data(&abad));
 
     }
 
+    // (The 1.x case "size != nrows * ncols" cannot be built any more: the size is the product of the
+    // descriptor's extents.)
     abad = aos;
-    abad.p_data = NULL;
+    abad.elems.data = NULL;
     check(arro_save(g_path, &abad) == DNIO_ERR_ARGUMENT, "save AoS: missing buffer");
-
-    abad = aos;
-    abad.size = 3;
-    check(arro_save(g_path, &abad) == DNIO_ERR_ARGUMENT, "save AoS: size != nrows * ncols");
 
     check(!file_exists(g_path), "save: refused objects create no file");
 
@@ -1949,7 +1957,7 @@ static void test_sparse_oracle(dhelpl_t dhl){
                 && same_aos(&aos, &aback), name);
 
             for (e = 0; e < arr.size; e++){
-                ok = ok && matches_soti(&aback.p_data[e], &arr.p_data[e], k, trc, dhl);
+                ok = ok && matches_soti(&arro_data(&aback)[e], &arr.p_data[e], k, trc, dhl);
             }
 
             check(ok, name);
@@ -2067,8 +2075,8 @@ static void test_fuzz(void){
 
                     nok++;
 
-                    for (e = 0; e < a.size; e++){
-                        bad_ok += !valid_scalar(&a.p_data[e]);
+                    for (e = 0; e < arro_size(&a); e++){
+                        bad_ok += !valid_scalar(&arro_data(&a)[e]);
                     }
 
                     bad_resave += !(arro_save(g_path, &a) == DNIO_OK
